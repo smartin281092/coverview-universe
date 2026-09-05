@@ -25,16 +25,18 @@ JAMAIS copiées telles quelles en local (DATA-14). Si un jeu réaliste est néce
 En complément de G-04/G-05/G-07/G-08 :
 
 - NE JAMAIS écrire un secret réel dans un fichier, y compris `.env`, un test, un exemple ou un commentaire. Utiliser des placeholders.
-- NE JAMAIS exécuter sans confirmation explicite de l'utilisateur : `DROP`/`TRUNCATE`, suppression de données, `db:reset` hors local, `rm -rf` hors du workspace, `git push --force`, commandes touchant un environnement distant.
+- NE JAMAIS exécuter sans autorisation explicite applicable : `DROP`/`TRUNCATE`, suppression de données, `db:reset` hors local, `rm -rf` hors du workspace, `git push --force`, mutations d'un environnement distant. Une lecture distante utile à la tâche ne crée pas à elle seule une demande de confirmation ; les protections spécifiques CoverView relèvent de HOST-01/03.
 - Ne pas modifier le lockfile à la main (DEP-02) ; ne pas éditer ou supprimer le `.env` de l'utilisateur.
 - Ne pas lancer de commandes bloquantes en mode watch dans un contexte d'agent ; préférer les exécutions ponctuelles (`pnpm test <path>`).
-- Rester dans le workspace du projet ; ne pas lire ni écrire ailleurs.
+- Garder les mutations du projet dans son workspace. Les lectures nécessaires de compétences/runtime et des pièces jointes explicitement fournies sont permises ; ne pas explorer les données privées étrangères à la tâche.
 - Ne jamais « réparer » la CI en désactivant l'outil qui échoue (TEST-09).
 - En cas de doute sur la portée destructive d'une commande : demander (G-01).
 
 ## ENV-06 — Gates techniques (origine HRN-SEC-004/007, G-15)
 
 Le bras armé de G-05 et G-17 est la configuration de l'outil, jamais la prose : une règle écrite en langage naturel se viole silencieusement. Ce qui est livré avec le harness :
+
+Les deux mécanismes ci-dessous concernent **Claude Code**. Ils ne sont pas activés par leur seule présence dans une session Codex ; voir `docs/codex.md` pour les capacités effectivement observées et la portée des protections, notamment sous PowerShell.
 
 - **`.claude/settings.json`** — `deny` : suppression récursive de la racine ou du home, `git push -f`, lecture/écriture de `.env`. `ask` : push, `curl` et `wget`, `db:migrate`, `db:reset`, `docker compose down`, `ssh`/`scp`.
 - **`.claude/hooks/guard-bash.mjs`** — hook `PreToolUse` sur `Bash` : bloque (exit 2, motif renvoyé au modèle) les suppressions récursives visant hors du workspace, le DDL destructif (`DROP`, `TRUNCATE`, `DELETE` non borné), le force push sous toutes ses formes, la destruction de volumes Docker et l'écriture directe dans un `.env`. Écrit en Node pour rester portable Windows/macOS/Linux.
@@ -59,7 +61,7 @@ Un gate DOIT présenter l'action exacte, son effet et sa réversibilité avant a
 
 Une persona par rôle ne suffit pas à tester un SaaS multi-locataire : avec une seule organisation, **l'isolation est intestable**, alors que c'est la classe de bug la plus coûteuse du modèle (DATA-09, PERM-02). Les états de facturation manquent tout autant, sans quoi les entitlements ne se vérifient pas (BILL-05).
 
-Les seeds DOIVENT exporter un module `personas` — un objet par compte avec `email`, `password`, `org`, `role`, `state` et `tests` (ce que la persona permet de vérifier). Matrice minimale :
+Les seeds DOIVENT exporter un module `personas` — un objet par compte avec `email`, `org`, `role`, `state` et `tests` (ce que la persona permet de vérifier), et un moyen d'accès local identifié. `password` ne s'applique qu'aux fixtures locales qui l'utilisent ; aucun mot de passe WorkOS réel n'est exporté (AUTH-11). Adapter le panneau de preview lors de la slice de socle si le contrat du script livré impose encore `password`. Matrice de sécurité de référence, à traduire en personas métier de la bible, sans inventer des offres ni rôles de production :
 
 | Persona | Org | Rôle | État | Débloque |
 |---|---|---|---|---|
@@ -84,3 +86,11 @@ Les seeds DOIVENT exporter un module `personas` — un objet par compte avec `em
 - La commande NE DOIT PAS exécuter `db:reset` ni de migration destructive (ENV-05). Schéma en retard ⇒ le signaler et proposer, pas exécuter.
 - `.preview/` DOIT être dans `.gitignore` : logs et PID sont du transitoire local.
 - Limite à connaître : les URLs sont en `localhost`. Elles ne sont atteignables que par un navigateur tournant **sur la même machine** que la stack. Depuis un appareil distant, il faut un tunnel — hors périmètre du harness.
+
+## ENV-09 — Données fictives au démarrage de CoverView
+
+Demande utilisateur du 2026-09-05 : commencer avec des données fictives. Construire des fixtures déterministes, datées de façon contrôlable et rejouables, cohérentes avec les règles connues de la bible. Inclure plusieurs espaces indépendants et les personas nécessaires aux refus d'accès. Les champs financiers ou droits dont la règle reste ouverte restent des exemples de démonstration explicitement étiquetés, jamais des décisions de production.
+
+Mettre les fixtures derrière la même frontière de contrats que les futurs services. Des seeds locaux persistants peuvent vérifier un parcours métier ; un retour codé en dur dans le composant ne le peut pas (G-06/G-11). Le sélecteur de persona est local/développement uniquement, protégé par une validation serveur qui refuse ce mode en environnement déployé. Aucun contournement d'authentification distribué en production.
+
+Email via Mailpit, fichiers fictifs sans PII, événements et intégrations externes simulés explicitement. Aucun envoi, débit, OCR/LLM externe ou création de comptes distants par défaut. Les méthodes WorkOS réelles et leurs secrets restent séparés des fixtures (AUTH-11). Chaque slice indique les parties simulées, les oracles permis et l'intégration restante ; aucune fixture ne prouve la connexion WorkOS ou le déploiement Infomaniak.

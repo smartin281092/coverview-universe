@@ -68,7 +68,7 @@ Temps ou budget épuisé ⇒ livrer l'état atteint + un reste-à-faire structur
 
 Chaque DoD déclare l'oracle **le plus fort disponible** par critère. Une tâche sans oracle machine est explicitement marquée `oracle: humain` — elle ne se conclut jamais en autonomie (origine HRN-VER-001). Après 2 échecs de vérification sur la même cible : changer de mode, pas de retry identique (CLAUDE.md §6.4).
 
-**Le plus fort *disponible*, pas le plus fort imaginable.** Un critère NE DOIT PAS déclarer un oracle V3 ou V5 lorsqu'un V2 le couvre entièrement : chaque V3/V5 inscrit dans une DoD est une interruption humaine, et une DoD qui en fabrique par excès de zèle transforme le gate en formalité qu'on finit par expédier. Une slice purement backend se clôt légitimement en V2 (PROG-18) ; réserver V3 à ce qu'un test ne peut pas constater — un rendu, un parcours multi-écrans, un comportement de tiers réel.
+**Le plus fort disponible, pas le plus fort imaginable.** Un critère NE DOIT PAS déclarer un oracle V3 ou V5 lorsqu'un V2 le couvre entièrement. V3 exige un parcours réellement observé, par l'agent outillé ou l'humain selon PROG-18 ; V5 exige la validation humaine. Une slice purement backend se clôt légitimement en V2. Réserver V3 au rendu, aux parcours multi-écrans et aux comportements de tiers que les tests disponibles ne couvrent pas entièrement.
 
 ## PROG-11 — Revue de roadmap (origine HRN-PROG-006)
 
@@ -76,37 +76,13 @@ Chaque DoD déclare l'oracle **le plus fort disponible** par critère. Une tâch
 
 ## PROG-12 — Session recommandée : modèle et effort
 
-Chaque plan de slice et chaque proposition de slice suivante DOIT porter une ligne **Session recommandée** : modèle + niveau d'effort + justification en une ligne.
+Décision utilisateur du 2026-09-05 : **chaque slice CoverView utilise GPT-6 Astra (`gpt-6-astra`) avec l'effort `ultra`**. Le plan et le prompt portent cette paire explicitement ; les anciennes tables de tiers Claude ne s'appliquent plus à ce projet. Ce choix explicite de modèle n'est pas soumis à BOOT-05, qui concerne les versions des dépendances applicatives.
 
-- Niveaux d'effort : `low` · `medium` · `high` · `xhigh` · `max` (réglables par `/effort` ou le sélecteur de `/model` ; l'échelle est **calibrée par modèle** — un même nom ne représente pas la même profondeur d'un modèle à l'autre, d'où la recommandation en **paire** modèle+effort). `ultrathink` est un mot-clé de tour, à réserver à un blocage ponctuel — il ne remplace pas le réglage de session.
-- La recommandation s'ancre sur des **traits objectifs de la slice**, jamais sur une impression : surface touchée, réversibilité, ambiguïté, criticité.
+Le réglage est un paramètre réel de la tâche dans l'app, pas un mot-clé inséré dans le texte. Le prompt peut rappeler le réglage attendu mais ne peut pas l'activer. Vérifier les capacités de la surface utilisée selon `docs/codex.md` ; aucun repli silencieux vers un autre modèle ou effort si la surface ne supporte pas Ultra. Enregistrer la session **réelle** à la livraison ; si elle n'est pas observable, écrire « non observable », jamais déduire la réalité de la préférence.
 
-La recommandation s'exprime en **tiers**, jamais en noms de modèles : les noms se périment en quelques mois et figer une génération dans le référentiel reproduit exactement l'erreur que BOOT-05 interdit pour les dépendances. Une seule table de correspondance, datée, vit en fin de section — c'est le seul endroit à mettre à jour.
+Optimiser l'effort par la portée : un résultat utilisateur cohérent par slice, un paquet de contexte ciblé, des critères d'acceptation concrets, des dépendances explicites et un journal des essais. Budget cible : une session principale par slice ; si l'objectif ne tient pas, scinder à une frontière utilisateur, sans créer artificiellement une slice par couche technique. Le socle initial reste l'exception nommée BOOT-04. Les sous-agents peuvent analyser ou vérifier un sous-périmètre indépendant de la même slice ; ils ne lancent pas une deuxième slice (PROG-04).
 
-| Profil de slice | Tier · effort |
-|---|---|
-| Contenu, libellés, style local, correction triviale | `T-rapide` · low–medium |
-| Slice CRUD suivant des motifs déjà présents dans le repo | `T-standard` · medium–high |
-| Schéma, permissions, tenancy, billing, autorisation temps réel, contrat public | `T-profond` · high–xhigh |
-| Architecture ambiguë, migration transverse, debug bloqué après 2 échecs (§6.4) | `T-profond` · xhigh–max |
-| Problème réellement inhabituel, hors motifs connus | `T-frontière` · high–xhigh |
-| Bootstrap `S-000a` (socle outillé, fichiers livrés) | `T-standard` · medium–high |
-| Bootstrap `S-000b`/`S-000c` (auth réelle, mise en ligne) | `T-profond` · high–xhigh |
-
-**Escalade en cours de session** — deux signaux distincts : l'agent a sauté un fichier, n'a pas lancé les tests, ou a abandonné un refactor en route ⇒ monter l'**effort** ; l'agent avait tout le contexte, a réellement essayé et s'est trompé quand même ⇒ changer de **modèle**.
-
-**Ce que la recommandation ne fait jamais** : abaisser la barre. Les gates (G-17), les oracles de la DoD (PROG-10) et le ledger (G-18) sont identiques quel que soit le couple choisi. Un modèle moins coûteux ne dispense d'aucune vérification — il change le budget, pas la définition de terminé.
-
-**Correspondance tiers → modèles** — *unique point de mise à jour, à revoir à chaque génération de modèles* :
-
-| Tier | Rôle | Modèles (constaté au 2026-08) |
-|---|---|---|
-| `T-rapide` | volume, faible enjeu, motifs évidents | Haiku 4.5, Sonnet 5 |
-| `T-standard` | travail courant sur motifs connus du repo | Sonnet 5 |
-| `T-profond` | raisonnement long, enjeu irréversible | Opus 5 |
-| `T-frontière` | problème hors motifs, dernier recours | Fable 5 (repli automatique sur Opus 5 sur certains sujets) |
-
-Un tier vide dans une organisation donnée retombe sur le tier immédiatement inférieur — jamais sur « on verra ».
+Deux échecs sur une même cible déclenchent un diagnostic et un changement de stratégie, pas une nouvelle boucle coûteuse ni un changement de modèle non demandé. Les gates (G-17), les oracles (PROG-10) et le ledger (G-18) restent applicables.
 
 ## PROG-13 — Journal du programme (origine HRN-STATE-001, profil minimal HRN-INFRA-009)
 
@@ -171,7 +147,7 @@ Une réponse à une question bloquante est une **règle métier que tu viens d'�
 `/preview` rend opérationnels les niveaux de vérification que la machine ne couvre pas (PROG-09, V3 et V5) : elle lance les apps, affiche les identifiants et convertit les critères de DoD observables en points à vérifier, persona par persona.
 
 - Elle est appelable **à tout moment**, indépendamment de l'état du backlog — y compris pour explorer un projet ou reprendre après une interruption. Elle n'est requise en fin de slice que si la DoD porte un critère V3 ou V5 ; une slice purement backend est close par V2.
-- **L'agent ne conclut jamais.** Il ne voit pas l'écran : il produit le panneau, puis s'arrête. Classer un point en « vérifié » sur la foi d'un `/preview` sans retour de l'opérateur est une violation de G-18, pas un raccourci.
+- Le démarrage de `/preview` ne prouve aucun parcours. Un agent disposant d'un navigateur peut exécuter un parcours et consigner ses observations comme V3 ; s'il ne peut pas observer l'écran, il fournit le panneau et laisse ces critères non vérifiés. Les critères V5 exigent le retour humain. Ne jamais confondre processus démarré, page chargée et parcours réussi (G-18).
 - Verdict conforme ⇒ `/ship`. Verdict négatif ⇒ l'observation est consignée dans le **journal de vérification** du plan (§6.4) : deux échecs sur la même cible imposent un changement de stratégie (HRN-LOOP-006).
 - Le panneau se termine par le sujet de la prochaine slice `ready` — la boucle programme se referme ici comme au `/ship` (PROG-11).
 
@@ -199,4 +175,14 @@ Une slice **standard** (aucune touche à l'argent, aux droits, au schéma, à un
 - étape 4 **uniquement si la slice suivante n'est pas déjà `ready`** avec un plan écrit.
 
 Ce qui ne s'allège **jamais**, quelle que soit la taille : le ledger et son honnêteté (G-18), l'état committé (DEL-01), et le statut du backlog. Ce sont les trois porteurs du journal (PROG-13) — les retirer ne fait pas gagner du temps, ça efface la trace.
+
+## PROG-21 — De la bible au prompt exécutable
+
+Chaque exigence de l'inventaire dérivé conserve son ancrage source (DOC-16). À la planification, affecter toutes les exigences à au moins une slice avec critères d'acceptation, ou signaler explicitement l'arbitrage qui manque. Un jalon générique « autres » ne vaut pas couverture. Les mentions « futur » de la bible ne justifient aucune suppression du périmètre demandé.
+
+Une slice significative possède un plan selon PROG-07 et un prompt dans `roadmap/prompts/` depuis `templates/slice.prompt.md`. Le prompt référence le plan et un paquet ciblé de sources ; il ne recopie pas le harness ni toute la bible. Distinguer contexte produit, consignes opératoires, faits vérifiés et questions à résoudre. Chaque parcours va de l'intention de la persona jusqu'au résultat observable : UI, contrat, permissions, persistance et erreurs selon son besoin.
+
+La première phase utilise les données fictives selon ENV-09. Les oracles sur fixtures ne valident pas les services externes : chaque capacité simulée garde un travail d'intégration explicite avant l'acceptation de la v1 complète. Une démo n'est pas une fonctionnalité de production terminée.
+
+Pour chaque prompt : objectif et non-objectifs de la slice, IDs de couverture, sources exactes, dépendances, modes réel/simulé, parcours nominal et refus, DoD mesurable, budget, état de reprise et autorisation effective. Le seuil et le mécanisme de reprise de session relèvent de `docs/codex.md`.
 

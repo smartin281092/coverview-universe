@@ -7,8 +7,10 @@
 Dans chaque app React (`client`, `admin`, apps additionnelles), l'UI s'initialise avec le preset du harness :
 
 ```bash
-pnpm dlx shadcn@latest init --preset b39inAzXN --template vite --pointer
+pnpm dlx shadcn@latest apply --preset b38oXC5rf
 ```
+
+Commande exacte demandée le 2026-09-05 (ADR-0004). `apply` vise un projet déjà initialisé : préparer l'app Vite et sa configuration shadcn dans la slice UI avant de l'appliquer. Vérifier le diff du preset puis appliquer les tokens CoverView de `docs/brand.md` ; ne pas conserver silencieusement ses couleurs par défaut. La commande est enregistrée, pas exécutée pendant l'initialisation documentaire. Référence : [CLI officielle shadcn](https://ui.shadcn.com/docs/cli#apply), consultée le 2026-09-05.
 
 Les composants s'ajoutent uniquement via `pnpm dlx shadcn@latest add <composant>`. Une seule bibliothèque de composants par app — JAMAIS une deuxième en parallèle. Commande de référence à maintenir si la CLI shadcn évolue ; tout changement de preset passe par un ADR.
 

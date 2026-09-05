@@ -14,6 +14,18 @@ Format : [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) · Versionneme
 
 ---
 
+## [3.0.0-coverview.1] — 2026-09-05
+
+Adaptation locale CoverView du harness reçu en 2.1.0 ; ne désigne pas une release amont. Les changements de fournisseur, modèle et mode d'initialisation justifient un changement majeur local.
+
+- **CDX-01 à CDX-05** : entrée Codex, procédures communes, capacités réellement observées, checkpoint de reprise et limite de détection du contexte à 70 %.
+- **PROG-12/18/21, BOOT-10, DOC-16** : Astra Ultra demandé, preuve navigateur distinguée de validation humaine, préparation documentaire et traçabilité de la bible complète jusqu'aux futurs prompts.
+- **AUTH-11, DSN-01, FRONT-14, HOST-01 à HOST-03, ENV-09** : WorkOS, preset utilisateur, interactions compactes, cible Infomaniak protégée, données fictives au départ. ADR fondateurs et PROJECT initialisés.
+- **BRD-01 à BRD-04** : couleurs source, extensions accessibles proposées, tokens et intégrité des assets vérifiables.
+- **ENV-05/06, SEC-08/09** : portée réelle des hooks et autorisations selon l'hôte ; pièces jointes distinguées des instructions opératoires.
+- **EVAL-01** : runner Codex/Claude sans concaténation shell, fixture hors ligne distincte d'une campagne, tests Node. Linter étendu aux namespaces des nouvelles règles.
+- **ARCH-02, BOOT-04** : cohérence du socle, temps réel au premier besoin métier. Anciennes incohérences d'exécution preview et de défauts VPS signalées pendant l'audit et corrigées dans cette adaptation.
+
 ## [2.1.0] — 2026-08-05
 
 Traite les constats P2 d'`AUDIT.md`. Additif : un projet en 2.0.0 reste conforme, il est seulement moins outillé.

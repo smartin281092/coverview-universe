@@ -19,7 +19,7 @@
 <B2B organisations (défaut) | B2C comptes personnels> — voir ADR-0002.
 
 ## Authentification
-<email + mot de passe, sessions cookie ; OAuth : … ; MFA : admin obligatoire ; magic link : …> — voir ADR-0003.
+<Fournisseur et méthodes de connexion selon AUTH-11 ; état réel de connexion et paramètres encore ouverts> — voir ADR-0003.
 
 ## Modules et parcours v1
 1. <Parcours 1>
@@ -56,7 +56,7 @@ Paiements : <Stripe oui/non>
 - <Hypothèse explicite issue de l'interview>
 
 ## Déploiement
-Cible : <VPS Docker + Caddy (défaut) | autre> — domaine(s) : <…>
+Cible et domaine(s) : <décisions explicites selon HOST-01 ; distinguer cible retenue et déploiement réalisé>.
 
 ## Décisions
 ADR-0001 (harness/stack) · ADR-0002 (tenancy) · ADR-0003 (auth)

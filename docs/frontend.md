@@ -70,3 +70,11 @@ HTML sémantique, labels, navigation clavier, focus visible, messages d'erreur a
 ## FRONT-13 — Doubles soumissions
 
 Action en cours : afficher l'état, désactiver si pertinent, s'appuyer sur l'idempotence backend (API-04), retries prudents.
+
+## FRONT-14 — Contenus de page bornés, détails dans une autre surface
+
+Décision utilisateur CoverView du 2026-09-05, applicable à toutes les pages, y compris `www`. Ne pas allonger les contenus des pages. Les boutons qui ouvrent du contenu ou des détails utilisent une popup/popover, une modal/dialog, un panneau latéral/sheet ou une nouvelle page. Aucun accordéon, « lire plus », bloc dépliable ou détails ajoutés sous la page, **sauf les FAQ**, qui peuvent se déplier.
+
+Choisir un popover pour une explication courte, une modal pour une action bornée, un panneau latéral pour consulter/modifier sans perdre la liste, une page avec URL pour un parcours long ou partageable. Les commandes directes (enregistrer, filtrer, paginer, fermer) gardent leur effet naturel sans ajouter une surface vide. Pagination ou remplacement du contenu pour les listes longues ; pas d'ajout infini qui rallonge la page. La règle ne supprime aucun contenu obligatoire de la bible : il est accessible sur une surface dédiée.
+
+Clavier, focus initial/restauré, fermeture Échap, libellé accessible et retour arrière sont couverts par FRONT-12 et FRONT-11. Dans chaque slice UI, l'oracle vérifie la destination de chaque action d'ouverture et l'absence d'expansion hors FAQ.

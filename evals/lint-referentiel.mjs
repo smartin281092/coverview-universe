@@ -66,7 +66,7 @@ const ILLUSTRATIVE = new Map([
 
 const PREFIXES =
   "G|ARCH|CONV|PAT|BACK|FRONT|DSN|INTL|MKT|SEO|GEO|CTR|DATA|API|AUTH|PERM|EVT|RT|JOB|" +
-  "STOR|BILL|CAT|MAIL|LLM|SEC|OBS|TEST|PERF|EVO|DEL|DEP|ENV|DOC|MEM|PROG|BOOT|EVAL";
+  "STOR|BILL|CAT|MAIL|LLM|SEC|OBS|TEST|PERF|EVO|DEL|DEP|ENV|DOC|MEM|PROG|BOOT|EVAL|LAUNCH|CDX|HOST|BRD";
 
 // ── 1. Identifiants définis ────────────────────────────────────────────────
 const defined = new Map(); // id -> [fichiers]
@@ -76,6 +76,10 @@ for (const f of scoped.filter((f) => f.endsWith(".md"))) {
   const t = readFileSync(f, "utf8");
   for (const m of t.matchAll(new RegExp(`^#{2,4}\\s+((?:${PREFIXES})-\\d{2,3})\\s+—`, "gm"))) addDef(m[1], f);
   for (const m of t.matchAll(/^-\s+\*\*(G-\d{2})\s+—/gm)) addDef(m[1], f);
+  // Les entrées mémoire réelles suivent MEM-02, sans titre de règle satellite.
+  if (rel(f) === 'MEMORY.md') {
+    for (const m of t.matchAll(/^- (MEM-\d{3}) ·/gm)) addDef(m[1], f);
+  }
 }
 
 for (const [id, where] of defined) {

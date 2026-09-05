@@ -6,6 +6,8 @@
 
 `PROJECT.md` absent à la racine ⇒ projet non initialisé ⇒ dérouler cette procédure **intégralement** avant tout autre travail. Si `PROJECT.md` existe : NE PAS relancer l'interview — proposer une revue de roadmap (PROG-11) ou traiter la demande normalement.
 
+Si l'utilisateur demande de préparer le harness et la bible avant de travailler la roadmap, appliquer le mode documentaire BOOT-10. Une réponse déjà donnée ou présente sans ambiguïté dans la référence désignée n'est pas redemandée.
+
 ## BOOT-02 — Interview bornée (la vitesse d'abord)
 
 - **5 blocs, ~16 décisions, en 2 messages maximum.** Le chiffre qui compte n'est pas le nombre de questions mais le nombre de réponses **obligatoires** : zéro. Tout porte un défaut, « défauts » accepte un bloc entier, et un bootstrap intégralement par défaut est un chemin nominal — pas un raccourci.
@@ -17,10 +19,10 @@
 **Blocs :**
 
 1. **Produit** — nom, problème résolu, personas ; apps à activer (défaut : `api + client + admin + www` — `client` est l'application cliente authentifiée, `www` le site public) ; apps frontend additionnelles éventuelles (ex. portail tiers, app mobile), nommées ici — mêmes règles pour toutes (ARCH-13) ; langues (défaut : français, i18n prêt dès le jour 1).
-2. **Données et tenancy** — B2B par organisations (défaut, plugin organizations) ou B2C comptes personnels ; données sensibles / PII particulières ; résidence des données **uniquement si une contrainte est déjà connue** (ne pas la poser « au cas où » : elle contraint le fournisseur LLM et l'hébergement, LLM-06).
-3. **Authentification** — défaut : email + mot de passe, sessions cookie httpOnly (Better Auth), MFA TOTP obligatoire pour l'admin (AUTH-08). Questions : fournisseurs OAuth (Google ? Microsoft ? autre ?) ; magic link.
+2. **Données et tenancy** — suivre les espaces métier et les droits décrits dans la bible ; distinguer comptes personnels, foyers, conseillers et organisations professionnelles ; ne pas imposer des organisations B2B à un produit B2C. Résidence des données uniquement si une contrainte est connue (LLM-06).
+3. **Authentification** — fournisseur CoverView défini dans AUTH-11 ; reprendre les parcours de connexion de la bible, vérifier leur configuration réelle à la slice d'intégration. MFA des comptes à privilèges : AUTH-08.
 4. **Périmètre v1** — 3 à 5 parcours utilisateur ; paiements Stripe (oui/non — `billing.md`) et, si oui, les plans de départ avec leurs entitlements, sans les prix (`catalog.md`) ; fonctionnalités IA (oui/non — `llm.md`) ; hors-périmètre v1 explicite.
-5. **Déploiement et dépôt** — défaut : VPS Docker + Caddy ; URL du dépôt Git distant (GitHub — la CI en dépend ; peut être fournie plus tard) ; fournisseur d'email transactionnel (défaut : Resend — SPF/DKIM/DMARC à la mise en production, MAIL-05). Le ou les domaines se décident à `S-000c`, pas ici.
+5. **Déploiement et dépôt** — cible et domaine déjà fixés pour CoverView : HOST-01 ; dépôt distant : PROJECT.md. Le fournisseur d'email sera choisi au plan concerné ; Mailpit en local. Ne pas redemander les informations déjà fournies.
 
 ## BOOT-03 — Sorties, dans l'ordre
 
@@ -43,12 +45,12 @@ Critère de fin du jalon (ARCH-02) : *un utilisateur crée un compte, se connect
 - Monorepo ARCH-06 : pnpm workspaces + Turborepo, TypeScript strict, ESLint + Prettier, dependency-cruiser + knip câblés (`pnpm boundaries`), CI GitHub Actions (DEL-04).
 - `docker-compose.yml` **à la racine** : postgres, redis, minio, mailpit — pour que `docker compose up -d` (§0bis, ENV-01) fonctionne sans `-f`, et pour que le nom de projet Docker soit celui du dépôt et non `infra` (collision entre produits). `infra/` ne porte que le déploiement (ARCH-06).
 - `.env.example` exhaustif + validation d'environnement au démarrage (BACK-07, ENV-02), **dont `APP_ENV=local`** — sans quoi `/preview` refuse de démarrer (ENV-08).
-- Drizzle : migration 0 (schéma Better Auth — users, sessions, organizations, memberships) ; seeds par persona (ENV-03) exportant le module `personas` de la matrice ENV-07 ; `preview.config.mjs` complété (ports réels, chemin du module de personas) ; `.preview/` dans le `.gitignore`.
+- Drizzle : migration 0 du modèle applicatif validé (identités externes, espaces et appartenances selon ADR-0002/0003 ; aucun schéma de mots de passe local) ; seeds par persona (ENV-03/09) exportant le module `personas` de la matrice ENV-07 ; `preview.config.mjs` complété (ports réels, chemin du module de personas) ; `.preview/` dans le `.gitignore`.
 - **Oracle de fin** : `pnpm install && pnpm lint && pnpm typecheck && pnpm build` passe, `docker compose up -d` démarre les quatre services, `pnpm db:migrate && pnpm db:seed` est rejouable (V1/V2). Aucune UI à regarder : cette slice se clôt sans `/preview`.
 
 ### S-000b — Parcours d'authentification réel
 
-- `apps/api` : Fastify + Zod, health checks (OBS-04), Better Auth monté avec les options du bloc 3, première route protégée.
+- `apps/api` : Fastify + Zod, health checks (OBS-04), WorkOS intégré selon AUTH-11 et le bloc 3, première route protégée.
 - `apps/client` : inscription, connexion, déconnexion, page protégée « dashboard » vide.
 - `apps/admin` : connexion (MFA si défaut conservé), page protégée vide.
 - UI : shadcn/ui initialisé via le preset imposé (DSN-01) dans `client` et `admin` ; primitives d'états partagées (chargement, vide, erreur — DSN-03).
@@ -57,7 +59,7 @@ Critère de fin du jalon (ARCH-02) : *un utilisateur crée un compte, se connect
 
 ### S-000c — Mise en ligne
 
-- Déploiement : Dockerfiles, compose de production, Caddy (TLS), pipeline vers la cible du bloc 5 ; domaine(s) décidés ici, quand la question devient réelle.
+- Déploiement : Dockerfiles, compose de production, Caddy (TLS), pipeline vers la cible du bloc 5 ; compléter uniquement les détails encore ouverts selon HOST-01/03, le domaine principal étant déjà fixé.
 - Dépôt : premier push vers le remote après confirmation (ENV-06) — la CI s'exécute dès ce push.
 - **Oracle de fin** : le critère ARCH-02 complet, exécuté sur l'URL déployée (V3/V5).
 
@@ -101,3 +103,11 @@ Le harness est **copié** dans chaque projet. Sans marqueur, chaque copie devien
 C'est HRN-P-001 appliqué au bootstrap : *tout ce qui peut être déterministe sort du prompt et entre dans le code*. Régénérer une CI à chaque projet produit une CI différente à chaque projet, et fait de `pnpm boundaries` une commande documentée qui n'existe que si le modèle a pensé à la câbler.
 
 Ce qui reste au modèle : le contenu propre au produit (noms, ports, variables réelles, services du compose) et l'installation des dépendances aux **dernières versions stables** (BOOT-05) — c'est pourquoi aucun fichier livré ne porte de numéro de version.
+
+## BOOT-10 — Préparation documentaire avant roadmap
+
+Pour CoverView, demande explicite du 2026-09-05 : initialiser le harness et analyser la bible, puis annoncer être prêt à travailler la roadmap et les prompts. Ce mode produit Git, PROJECT, ADR, MEMORY, index/extraction/inventaire de référence, cadre ROADMAP/backlog et gabarit de prompt. Il ne copie pas le scaffold, n'installe pas l'application et ne lance pas S-000a.
+
+Les jalons et futurs IDs de slices sont des propositions à préciser à l'étape de planification ; aucun plan d'exécution n'est réputé approuvé par la préparation. La présence de PROJECT signifie ici « cadrage initialisé », avec état applicatif explicitement **non implémenté**. Les inconnues métier sont inventoriées et réservées aux slices qu'elles bloquent ; elles ne bloquent pas la lecture des références ni l'adaptation autorisée du harness.
+
+La bible est la référence métier maître selon DOC-16. La préparation complète est tracée dans `roadmap/plans/INIT-harness.plan.md` et `roadmap/initialisation.md`.

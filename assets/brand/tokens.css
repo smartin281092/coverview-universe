@@ -1,0 +1,58 @@
+/* Genere depuis tokens.json par node scripts/verify-brand.mjs --write-css.
+ * Reference light, avant implementation. Derivations : docs/brand.md.
+ * A integrer apres le preset : docs/design.md DSN-01.
+ * Ne definit ni typographie, ni rayons, ni theme sombre. */
+:root {
+  --brand-surface: #F6F6F7;
+  --brand-border: #EEEEEF;
+  --brand-body: #84869C;
+  --brand-title: #16153D;
+  --brand-primary: #5356DA;
+
+  --background: #F6F6F7;
+  --foreground: #16153D;
+  --card: #FFFFFF;
+  --card-foreground: #16153D;
+  --popover: #FFFFFF;
+  --popover-foreground: #16153D;
+  --primary: #5356DA;
+  --primary-foreground: #FFFFFF;
+  --primary-hover: #494CC6;
+  --secondary: #EEEEF3;
+  --secondary-foreground: #16153D;
+  --muted: #EEEEF3;
+  --muted-foreground: #66687E;
+  --accent: #EEEEFD;
+  --accent-foreground: #16153D;
+  --destructive: #B42318;
+  --destructive-foreground: #FFFFFF;
+  --destructive-soft: #FEF3F2;
+  --destructive-soft-foreground: #B42318;
+  --border: #EEEEEF;
+  --border-strong: #84869C;
+  --input: #84869C;
+  --ring: #5356DA;
+  --body: #66687E;
+  --link: #5356DA;
+  --cta: #16153D;
+  --cta-foreground: #FFFFFF;
+  --success: #F0FDF4;
+  --success-foreground: #166534;
+  --warning: #FFFBEB;
+  --warning-foreground: #92400E;
+  --info: #EFF6FF;
+  --info-foreground: #3155A4;
+  --chart-1: #5356DA;
+  --chart-2: #16153D;
+  --chart-3: #166534;
+  --chart-4: #92400E;
+  --chart-5: #B42318;
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #16153D;
+  --sidebar-primary: #5356DA;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #EEEEFD;
+  --sidebar-accent-foreground: #16153D;
+  --sidebar-border: #EEEEEF;
+  --sidebar-ring: #5356DA;
+}

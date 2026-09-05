@@ -193,6 +193,33 @@ export const cases = [
     exclude: ["marketing-web.md", "seo.md", "geo.md", "design.md"],
   },
 
+  // Régressions observées pendant l'adaptation CoverView : anciens défauts
+  // de fournisseur, de preset, de cible et commandes seulement Claude.
+  {
+    id: "R-028",
+    task: "Adapter la connexion CoverView au projet WorkOS demandé, en préservant les sessions protégées.",
+    load: ["auth.md"],
+    exclude: ["marketing-web.md", "seo.md", "geo.md"],
+  },
+  {
+    id: "R-029",
+    task: "Appliquer la palette fournie et le preset shadcn CoverView aux boutons ouvrant les détails de Wallet.",
+    load: ["brand.md", "design.md", "frontend.md"],
+    exclude: ["billing.md", "jobs.md"],
+  },
+  {
+    id: "R-030",
+    task: "Préparer le déploiement dédié Infomaniak Horizon sur coverview.ch en protégeant les instances présentes.",
+    load: ["hosting.md", "delivery.md"],
+    exclude: ["design.md", "frontend.md"],
+  },
+  {
+    id: "R-031",
+    task: "Préparer une nouvelle session Codex à contexte propre pour continuer une slice Astra Ultra.",
+    load: ["codex.md", "program.md"],
+    exclude: ["billing.md", "realtime.md", "jobs.md"],
+  },
+
   // — Couche programme ———————————————————————————————————
   {
     id: "R-019",

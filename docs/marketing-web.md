@@ -4,6 +4,8 @@
 
 Ce fichier gouverne les surfaces publiques de contenu (`apps/www` : site marketing, blog, landing pages, éventuellement documentation publique). Les règles de l'application (multi-tenant, idempotence, temps réel) ne s'y appliquent PAS — sauf à la frontière des formulaires (MKT-08). Réciproquement, les règles de ce fichier ne s'appliquent pas à l'app.
 
+Pour les interactions d'ouverture de contenu CoverView, charger FRONT-14 dans `docs/frontend.md` ; pour l'identité visuelle, charger `docs/brand.md`.
+
 ## MKT-01 — Ordre de priorité propre
 
 1. Exactitude du contenu ; 2. Crawlabilité et SEO (`seo.md`, `geo.md`) ; 3. Performance (Core Web Vitals) ; 4. Accessibilité ; 5. Conformité (consentement, RGPD) ; 6. Simplicité ; 7. Maintenabilité éditoriale.

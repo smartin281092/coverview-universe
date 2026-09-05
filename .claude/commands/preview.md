@@ -13,10 +13,10 @@ Objectif : permettre de tout tester depuis un navigateur, sans ouvrir de termina
    - reprends le parcours de fumée du script uniquement si aucune slice n'est en cours.
 
 4. Termine par **Suite à donner**, en deux lignes copiables :
-   - si tout est conforme → `/ship S-xxx`
+   - si tout est conforme → `/ship S-xxx` sous Claude ; sous Codex : `Applique .claude/commands/ship.md pour S-xxx`
    - sinon → une ligne prête à compléter : `Échec preview S-xxx : <ce que tu as observé> sur <persona> à <URL>` — l'échec sera consigné dans le journal de vérification du plan (PROG-18, §6.4), et deux échecs sur la même cible imposent un changement de stratégie.
    Ajoute ensuite le sujet de la **prochaine slice** : première entrée `ready` de `roadmap/backlog.yaml`, titre et objectif en une ligne.
 
-**Tu ne vois pas l'écran.** Ne déclare jamais qu'une vérification est passée, ne classe rien en « vérifié », ne conclus pas que la slice fonctionne : c'est un oracle humain (V5). Termine le panneau et attends le verdict de l'opérateur (G-18, PROG-18).
+Applique PROG-18 pour distinguer le démarrage du panneau, un parcours V3 réellement observé avec les outils disponibles et une validation humaine V5. Ne classe rien en « vérifié » sans l'oracle correspondant.
 
 Aucun `db:reset` ni migration destructive dans cette commande. Si le schéma est en retard, dis-le et propose la commande — ne l'exécute pas d'office (ENV-05, G-05).

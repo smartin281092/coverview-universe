@@ -10,7 +10,7 @@ Une fonctionnalité n'est PAS terminée parce qu'un écran existe, qu'une route 
 
 ## ARCH-02 — Walking skeleton
 
-Construire d'abord un parcours minimal complet traversant tout le système : authentification réelle, une page fonctionnelle, une API réelle, une persistance réelle, un premier événement temps réel, un premier déploiement accessible. Cela prime sur l'accumulation de composants et d'écrans de démonstration.
+Construire d'abord un parcours minimal complet traversant tout le système : authentification réelle, une page fonctionnelle, une API réelle, une persistance réelle et un premier déploiement accessible. Le temps réel arrive avec le premier besoin métier, selon BOOT-04 et ARCH-04. La préparation sur fixtures (ENV-09) est une étape explicite, pas une preuve que le walking skeleton réel est achevé.
 
 ## ARCH-03 — Monolithe modulaire par défaut
 

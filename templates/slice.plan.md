@@ -1,7 +1,7 @@
 # Plan — S-xxx : <titre>
 
 > Statut : brouillon | soumis | approuvé (« GO S-xxx ») | rejeté — diff_from : <plan précédent si itération>
-> **Session recommandée** (PROG-12) : <tier T-rapide|T-standard|T-profond|T-frontière> · effort <low|medium|high|xhigh|max> — <justification en une ligne>
+> **Session requise** (PROG-12) : GPT-6 Astra (`gpt-6-astra`) · effort `ultra` — <objectif qui justifie le périmètre de cette session>
 > **Session réelle** (renseignée à la livraison, PROG-08) : <modèle + effort effectivement utilisés>
 > **Budget** (PROG-14) : <N sessions attendues> — au-delà, redécouper plutôt que prolonger
 
@@ -18,6 +18,14 @@
 
 ## Objectif (reformulé)
 <Résultat utilisateur concret. Une phrase de critère de fin.>
+
+## Couverture et paquet de contexte (PROG-21)
+
+- Exigences : <IDs inventaire + ancrages de la bible, sans recopier tout le document>
+- Prompt : <roadmap/prompts/S-xxx.prompt.md>
+- Dépendances : <slices done requises>
+- Mode : <données fictives / services réels ; intégrations encore simulées nommées>
+- Reprise : <roadmap/handoffs/…> — protocole `docs/codex.md`
 
 ## Hypothèses posées (réversibles uniquement — PROG-15)
 - <Hypothèse explicite — à invalider si fausse> · rayon d'impact : <ce qu'il faut changer si elle est fausse>

@@ -1,6 +1,6 @@
 # Harness SaaS — Racine
 
-Ce fichier est chargé en permanence par l'agent (Claude Code, Codex…). Il contient l'essentiel ; le détail vit dans `docs/` et DOIT être chargé à la demande via la table de routage (§5). Ne jamais tout précharger.
+Ce fichier est le référentiel commun : chargé directement par Claude Code, lu par Codex via le pointeur `AGENTS.md`. Il contient l'essentiel ; le détail vit dans `docs/` et DOIT être chargé à la demande via la table de routage (§5). Ne jamais tout précharger. Au début d'une tâche CoverView, lire aussi `PROJECT.md` s'il existe ; sous Codex, lire `docs/codex.md` (CDX-01).
 
 Ce harness cible un **développeur solo** construisant un SaaS complet. La vitesse de livraison d'un parcours utilisateur réel prime — dans le respect des règles ci-dessous, jamais à leur place.
 
@@ -21,7 +21,7 @@ Ce harness cible un **développeur solo** construisant un SaaS complet. La vites
 - Queue / jobs : BullMQ
 - Event bus : bus in-process typé + outbox Postgres (EVT-07) — broker externe uniquement sur besoin réel démontré (ARCH-04)
 - Temps réel : Socket.IO (gateway dédié, rooms côté serveur — `realtime.md`) ; SSE pour les flux unidirectionnels simples (RT-01)
-- Authentification : Better Auth — sessions cookie httpOnly (AUTH-01), plugin organizations (tenancy DATA-09), email + mot de passe par défaut, OAuth/MFA selon bootstrap
+- Authentification : WorkOS AuthKit, projet `coverview` — sessions web protégées côté serveur (AUTH-01), intégration et responsabilités AUTH-11 ; dérogation demandée, ADR-0003
 - Frontends applicatifs (`client`, `admin`, + apps additionnelles selon PROJECT.md) : React + Vite + TanStack Router + TanStack Query + Tailwind CSS + shadcn/ui — initialisation via le preset imposé (DSN-01, `design.md`)
 - Site marketing (`www`) : Astro + MDX + Tailwind, îlots React (`marketing-web.md`)
 - i18n : clés externalisées dès le jour 1 — i18next (apps), contenus par locale (www)
@@ -31,10 +31,12 @@ Ce harness cible un **développeur solo** construisant un SaaS complet. La vites
 - IA / LLM (module optionnel) : adapter fournisseur (`llm.md`)
 - Tests : Vitest + Testcontainers (PostgreSQL réel — TEST-06) + Playwright (E2E principal)
 - Qualité : ESLint + Prettier + dependency-cruiser + knip (ARCH-14)
-- CI : GitHub Actions — Déploiement : images Docker + Caddy sur VPS (défaut), toute cible conteneurisée possible
+- CI : GitHub Actions — Déploiement : images Docker + Caddy sur Infomaniak Public Cloud / Horizon ; périmètre protégé et domaine dans `docs/hosting.md` (HOST-01)
 - Observabilité : pino (logs structurés OBS-01) ; métriques/APM plus tard, sur mesure réelle (PERF-01)
 
 ## 0bis. Commandes
+
+Avant le scaffold : `node evals/lint-referentiel.mjs`. Les commandes pnpm applicatives ci-dessous sont la cible après S-000a, pas des commandes déjà disponibles.
 
 ```bash
 pnpm install
@@ -54,7 +56,6 @@ pnpm boundaries                # dependency-cruiser + knip
 ---
 
 ## 1. Modalités normatives
-
 - **DOIT / NE DOIT JAMAIS** : obligatoire. Une violation est une non-conformité à signaler.
 - **DEVRAIT** : comportement par défaut. Dérogation possible uniquement avec justification explicite dans le compte rendu.
 - **PEUT** : optionnel, laissé au jugement.
@@ -62,7 +63,6 @@ pnpm boundaries                # dependency-cruiser + knip
 Chaque règle a un identifiant stable (`ARCH-03`, `RT-06`, `PROG-04`…). Cite les identifiants pertinents dans tes plans et comptes rendus. Les règles issues du harness générique portent leur origine (`HRN-*`) en référence.
 
 ## 2. Ordre de priorité canonique
-
 1. Exactitude métier
 2. Sécurité
 3. Isolation et intégrité des données
@@ -80,7 +80,6 @@ Entre « ajouter une abstraction / un pattern / un test non critique / refactore
 L'objectif n'est jamais de maximiser le nombre de fichiers, classes, couches, patterns, tests, mocks ou lignes de documentation. L'objectif est une application réelle, sécurisée, cohérente, déployable, observable et facile à faire évoluer — livrée vite.
 
 ## 3. Règles d'or
-
 - **G-01 — Demander plutôt qu'inventer.** Règle métier, permission ou comportement ambigu : poser la question et bloquer la partie concernée. NE JAMAIS inventer une règle métier plausible. Une inconnue **bloquante** (PROG-15) DOIT devenir une question, JAMAIS une hypothèse posée — et elle ne compte pas dans le plafond de 3 questions, qui ne s'applique qu'aux inconnues réversibles.
 - **G-02 — Autorisation côté serveur, à chaque frontière** : API, WebSocket (connexion, subscription, diffusion), worker, fichier, commande.
 - **G-03 — Isolation tenant systématique.** Toute requête multi-tenant DOIT être bornée au tenant autorisé.
@@ -101,7 +100,6 @@ L'objectif n'est jamais de maximiser le nombre de fichiers, classes, couches, pa
 - **G-18 — Ledger de livraison.** Chaque élément du compte rendu porte un statut **vérifié / fait non vérifié / supposé**. « Vérifié » exige un oracle passé — jamais une déclaration. Un élément « supposé » DOIT nommer l'hypothèse et son **rayon d'impact** : ce qu'il faudrait changer si elle est fausse (origine HRN-DLV-003/006).
 
 ## 4. Résolution de conflits
-
 1. Instructions explicites de la tâche / de l'utilisateur.
 2. Ce harness (racine, puis satellites).
 3. Conventions existantes du repo.
@@ -117,6 +115,8 @@ Charger uniquement les fichiers pertinents pour la tâche, plus le `README.md` d
 | Si la tâche touche… | Lire |
 |---|---|
 | Projet non initialisé, « Start project », interview | `docs/bootstrap.md` |
+| Codex, équivalents des commandes Claude, Astra Ultra, contexte et reprise | `docs/codex.md` |
+| Bible CoverView, exigences produit, périmètre v1 et traçabilité | `docs/product/README.md` puis uniquement les domaines et ancrages concernés |
 | Roadmap, backlog, slices, plans, preview et vérification de fin de slice, livraison | `docs/program.md` |
 | Mise en vente : pages légales, droits RGPD exerçables, mesure d'activation, runbooks, support | `docs/launch.md` |
 | Mémoire projet : learnings, pièges, promotion | `docs/memory.md` |
@@ -126,6 +126,8 @@ Charger uniquement les fichiers pertinents pour la tâche, plus le `README.md` d
 | Backend Node.js, handlers, timeouts, arrêt, gestion d'erreurs | `docs/backend.md` |
 | Frontend applicatif, pages, composants, state, cache, accessibilité | `docs/frontend.md` |
 | UI des apps : composants shadcn, tokens, états, formulaires | `docs/design.md` |
+| Identité CoverView, palette, logo, fonds, contraste | `docs/brand.md` |
+| Interaction ouvrant des détails sur toute surface, y compris publique | `docs/frontend.md` (FRONT-14) |
 | Traductions, locales, pluriels, formatage dates/nombres/montants | `docs/i18n.md` |
 | Site marketing, blog, landings, rendu SSG/SSR, îlots, consentement | `docs/marketing-web.md` |
 | SEO technique : metadata, sitemap, redirections, JSON-LD, hreflang | `docs/seo.md` |
@@ -149,6 +151,7 @@ Charger uniquement les fichiers pertinents pour la tâche, plus le `README.md` d
 | Performance, cache, limites | `docs/performance.md` |
 | Modification d'un contrat existant, versionnement, feature flags | `docs/evolution.md` |
 | Git, commits, PR, CI, déploiement, rollback, backups | `docs/delivery.md` |
+| Infomaniak Public Cloud / Horizon, ressources et DNS coverview.ch | `docs/hosting.md` |
 | Ajout ou mise à jour d'une dépendance | `docs/dependencies.md` |
 | Environnement local, .env, seeds, personas de test, preview, garde-fous agent | `docs/environment.md` |
 | README de module, ADR, **où placer une règle** (racine / satellite / commande / skill / hook) | `docs/documentation.md` |

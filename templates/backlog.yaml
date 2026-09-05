@@ -9,8 +9,7 @@
   depends_on: []
   plan: roadmap/plans/S-000a.plan.md
   session: ""              # PROG-06 — modèle + effort RÉELLEMENT utilisés, renseigné à la livraison.
-                           # La recommandation vit dans le plan, en tier (PROG-12) : un nom de
-                           # modèle ici figerait une génération, ce que PROG-12 interdit.
+                           # La paire requise vit dans PROG-12 et le plan ; ce champ reste factuel.
   notes: []
 - id: S-000b
   title: "Authentification réelle : api, client, admin, www coquille"

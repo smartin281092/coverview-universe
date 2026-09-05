@@ -45,3 +45,13 @@ Authorization Code + PKCE pour tout client public. `state` et `nonce` vérifiés
 ## AUTH-10 — WebSocket et jobs
 
 La connexion temps réel s'authentifie avec la même session/token que l'API (RT-05). Un worker agissant pour un utilisateur transporte l'identité d'origine, jamais un contournement (JOB-05).
+
+## AUTH-11 — Fournisseur CoverView : WorkOS
+
+WorkOS AuthKit, projet nommé `coverview`, remplace le fournisseur d'authentification du harness générique à la demande de l'utilisateur (ADR-0003). L'identifiant WorkOS, l'environnement test/production, les URI de retour et les méthodes déjà activées restent à vérifier lors de la slice d'intégration. Un nom de projet n'est ni un client ID ni une organisation métier.
+
+WorkOS détient les identités, les moyens d'authentification et leur cycle de sécurité. L'application ne crée pas sa propre base de mots de passe, reset ou MFA : AUTH-03, AUTH-05, AUTH-07 et AUTH-08 sont des exigences à vérifier dans le flux du fournisseur, pas une invitation à dupliquer son stockage. L'API garde la session web sensible hors JavaScript (AUTH-01/02), vérifie les callbacks et applique les permissions métier à chaque accès (PERM-02). La stratégie concrète de révocation et de synchronisation sera testée dans la slice d'intégration.
+
+Les organisations WorkOS peuvent référencer les espaces métier, mais ne donnent jamais automatiquement accès à toutes leurs données. La frontière de tenancy et les appartenances autorisées sont définies dans ADR-0002 puis dans les policies applicatives. Ne pas fabriquer des organisations, comptes ni credentials distants pour amorcer des fixtures ; voir ENV-09.
+
+Source technique : [WorkOS Users and Organizations](https://workos.com/docs/authkit/users-organizations), consultée le 2026-09-05. Connexion au compte `coverview` non vérifiée pendant cette préparation.
