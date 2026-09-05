@@ -24,7 +24,7 @@
  * Zéro dépendance, zéro installation : mêmes contraintes qu'evals/run.mjs.
  */
 
-import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
+import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { join, relative } from "node:path";
 

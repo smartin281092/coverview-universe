@@ -1,0 +1,21 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+allowBuilds:
+  cpu-features: false # Accélérateur SSH optionnel, sans besoin pour Docker local.
+  esbuild: true # Installe et vérifie le binaire de compilation officiel.
+  protobufjs: false # Postinstall émet seulement un conseil de version.
+  ssh2: false # Binding crypto SSH optionnel ; aucun transport SSH utilisé.
+minimumReleaseAgeExclude:
+  - "@playwright/test@1.63.0"
+  - playwright-core@1.63.0
+  - playwright@1.63.0
+
+# Réseau observé lent pendant le bootstrap ; délais bornés.
+fetchTimeout: 300000
+networkConcurrency: 8
+verifyDepsBeforeRun: error
+# DEP-04 : ancien esbuild transitif de drizzle-kit, vulnérable en mode serve.
+# Le remplacement reste borné à ce parent ; génération/migration vérifiées.
+overrides:
+  "@esbuild-kit/core-utils>esbuild": 0.28.2

@@ -1,0 +1,34 @@
+{
+  "date": "2026-09-05",
+  "preset": "b38oXC5rf",
+  "source": "https://ui.shadcn.com/create?preset=b38oXC5rf",
+  "executions": [
+    {
+      "target": "client",
+      "command": "pnpm dlx shadcn@latest apply --preset b38oXC5rf --yes",
+      "exitCode": 0
+    },
+    {
+      "target": "admin",
+      "command": "pnpm dlx shadcn@latest apply --preset b38oXC5rf --yes",
+      "exitCode": 0
+    },
+    {
+      "target": "shared primitives",
+      "command": "pnpm dlx shadcn@latest add button skeleton --yes",
+      "exitCode": 0
+    }
+  ],
+  "resolved": {
+    "style": "radix-mira",
+    "font": "geist",
+    "iconLibrary": "lucide",
+    "radius": "default",
+    "menuColor": "inverted-translucent",
+    "menuAccent": "subtle",
+    "theme": "mist",
+    "chartColor": "indigo"
+  },
+  "adaptation": "Replace generated color tokens with assets/brand/tokens.css; remove generated dark palette; retain typography, radius and structure; opaque spaced focus, primary hover token, stronger control border.",
+  "executionContext": "Two isolated initialized Vite projects inside ignored packages/ui/.preset-work. Generated artifacts copied into owned app/UI files. No preset installation touched the root manifest or lockfile."
+}

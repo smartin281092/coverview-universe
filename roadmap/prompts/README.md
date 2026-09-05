@@ -8,7 +8,7 @@ Chaque prompt cible une session principale et indique son redécoupage. Reprise 
 
 [Ordre topologique](../index.md) · [Décisions](../decisions.md) · [Workflows](../workflows.md)
 
-- [S-000a — Démarrer un socle local reproductible et une preview fictive](S-000a.prompt.md) · [plan](../plans/S-000a.plan.md) · ready · foundation.
+- [S-000a — Démarrer un socle local reproductible et une preview fictive](S-000a.prompt.md) · [plan](../plans/S-000a.plan.md) · running · foundation.
 - [S-000b — Se connecter avec WorkOS et retrouver son espace protégé](S-000b.prompt.md) · [plan](../plans/S-000b.plan.md) · specified · integration.
 - [S-013 — Reprendre un parcours anonyme dans Wallet avec un profil central](S-013.prompt.md) · [plan](../plans/S-013.plan.md) · specified · local-fixtures.
 - [S-010 — Ouvrir les trois parcours CoverView depuis un site public compact](S-010.prompt.md) · [plan](../plans/S-010.plan.md) · specified · local-fixtures.

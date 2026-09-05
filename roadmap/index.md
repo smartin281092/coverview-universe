@@ -10,7 +10,7 @@ L’ordre est topologique ; les identifiants restent stables. Vérifier dépenda
 
 | Ordre | Slice | Jalon | Mode | État | Dépendances | Prompt |
 |---|---|---|---|---|---|---|
-| 1 | [S-000a — Démarrer un socle local reproductible et une preview fictive](plans/S-000a.plan.md) | M0 | foundation | ready | — | [prompt](prompts/S-000a.prompt.md) |
+| 1 | [S-000a — Démarrer un socle local reproductible et une preview fictive](plans/S-000a.plan.md) | M0 | foundation | running | — | [prompt](prompts/S-000a.prompt.md) |
 | 2 | [S-000b — Se connecter avec WorkOS et retrouver son espace protégé](plans/S-000b.plan.md) | M0 | integration | specified | [S-000a](plans/S-000a.plan.md) | [prompt](prompts/S-000b.prompt.md) |
 | 3 | [S-013 — Reprendre un parcours anonyme dans Wallet avec un profil central](plans/S-013.plan.md) | M1 | local-fixtures | specified | [S-000b](plans/S-000b.plan.md) | [prompt](prompts/S-013.prompt.md) |
 | 4 | [S-010 — Ouvrir les trois parcours CoverView depuis un site public compact](plans/S-010.plan.md) | M1 | local-fixtures | specified | [S-000a](plans/S-000a.plan.md) | [prompt](prompts/S-010.prompt.md) |

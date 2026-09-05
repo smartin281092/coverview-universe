@@ -1,0 +1,32 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HomeContent, { frontmatter } from '../content/fr/home.mdx';
+import { content } from '../content/fr/interface';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'Organization', name: content.brand, url: Astro.site?.href },
+    { '@type': 'WebSite', name: content.brand, url: Astro.site?.href, inLanguage: 'fr-CH', description: frontmatter.description },
+  ],
+};
+---
+<Layout title={frontmatter.title} description={frontmatter.description}>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">{content.eyebrow}</p>
+      <h1>{content.heading}</h1>
+      <div class="intro"><HomeContent /></div>
+      {import.meta.env.DEV && <a href="http://127.0.0.1:4101" class="primary-link">{content.wallet}<span aria-hidden="true">→</span></a>}
+      <p class="preview-note">{content.note}</p>
+    </div>
+    <section class="overview-card" aria-labelledby="overview-title">
+      <p class="eyebrow">{content.cardLabel}</p>
+      <h2 id="overview-title">{content.cardTitle}</h2>
+      <ol>
+        {content.points.map((point) => <li><span class="point-number" aria-hidden="true">{point.number}</span><div><h3>{point.title}</h3><p>{point.description}</p></div></li>)}
+      </ol>
+    </section>
+  </section>
+</Layout>

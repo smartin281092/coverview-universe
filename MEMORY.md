@@ -9,4 +9,9 @@ Aucune entrée activée. L'identité du projet vit dans PROJECT.md ; les décisi
 - MEM-101 · piège · La CLI locale et l'application Codex exposent des efforts différents ; consulter CDX-02 avant de lancer une slice avec la préférence PROG-12. (Initialisation, 2026-09-05 · confiance haute · revoir avant 2026-12-04 · candidat)
 - MEM-102 · fait · La reprise à contexte propre possède un checkpoint validable, mais aucun compteur de contexte consommable par l'agent n'a été identifié ; voir CDX-03 pour la limite précise. (Initialisation, 2026-09-05 · confiance haute · revoir avant 2026-12-04 · candidat)
 
+- MEM-103 · piège · Les ports libres peuvent appartenir à une plage exclue Windows ; la décision de ports isolés et son diagnostic sont dans le ledger S-000a. Ne pas modifier les réservations système pour contourner ce cas. (S-000a, 2026-09-05 · confiance haute · revoir avant 2026-12-04 · candidat)
+- MEM-104 · piège · Les exécutions agent d’Astro peuvent se détacher automatiquement ; le wrapper et la preview gardent un seul superviseur, voir apps/www/README.md et scripts/preview.mjs. (S-000a, 2026-09-05 · confiance haute · revoir avant 2026-12-04 · candidat)
+- MEM-105 · décision · La compatibilité de TypeScript avec les outils imposés et la provenance du preset sont documentées au ledger S-000a ; conserver une exception explicite plutôt que désactiver un contrôle. (S-000a, 2026-09-05 · confiance haute · revoir avant 2026-12-04 · candidat)
+- MEM-106 · piège · Sous Windows, le watcher API natif Node et le binaire pnpm épinglé ont été nécessaires à pnpm dev via Turbo ; voir apps/api/README.md et README.md. (S-000a, 2026-09-05 · confiance haute · revoir avant 2026-12-04 · candidat)
+
 Ces candidats attendent une revue ; ils ne constituent pas des règles concurrentes des références citées.

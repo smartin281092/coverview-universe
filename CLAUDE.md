@@ -36,7 +36,7 @@ Ce harness cible un **développeur solo** construisant un SaaS complet. La vites
 
 ## 0bis. Commandes
 
-Avant le scaffold : `node evals/lint-referentiel.mjs`. Les commandes pnpm applicatives ci-dessous sont la cible après S-000a, pas des commandes déjà disponibles.
+Le scaffold S-000a expose les commandes ci-dessous. Installation, configuration locale et limites de vérification : `README.md` et `roadmap/evidence/S-000a.md`.
 
 ```bash
 pnpm install

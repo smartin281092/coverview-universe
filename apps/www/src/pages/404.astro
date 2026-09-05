@@ -1,0 +1,8 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { content } from '../content/fr/interface';
+const copy = content.notFound;
+---
+<Layout title={copy.title} description={copy.description}>
+  <section class="missing-page"><h1>{copy.heading}</h1><p>{copy.body}</p><a href="/" class="primary-link">{copy.action}</a></section>
+</Layout>

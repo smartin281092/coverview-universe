@@ -1,0 +1,42 @@
+{
+  "$schema": "https://unpkg.com/knip@latest/schema.json",
+  "workspaces": {
+    ".": {
+      "entry": [
+        "preview.config.mjs",
+        "scripts/verify-brand.mjs",
+        "scripts/verify-planning.mjs",
+        ".claude/hooks/guard-bash.mjs"
+      ],
+      "project": [
+        "*.mjs",
+        "scripts/**/*.mjs",
+        "evals/**/*.mjs",
+        "tests/**/*.mjs",
+        ".claude/hooks/*.mjs"
+      ]
+    },
+    "apps/api": {
+      "entry": ["src/**/*.test.ts"],
+      "project": ["src/**/*.ts", "*.ts", "*.mjs"]
+    },
+    "apps/client": {
+      "project": ["src/**/*.{ts,tsx,css}"]
+    },
+    "apps/admin": {
+      "project": ["src/**/*.{ts,tsx,css}"]
+    },
+    "apps/www": {
+      "project": ["src/**/*.{ts,tsx,astro,mdx,css}"]
+    },
+    "packages/ui": {
+      "project": ["src/**/*.{ts,tsx,css}"]
+    },
+    "packages/contracts": {
+      "project": ["src/**/*.ts"]
+    },
+    "packages/api-client": {
+      "project": ["src/**/*.ts"]
+    }
+  }
+}

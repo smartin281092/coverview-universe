@@ -1,0 +1,47 @@
+{
+  "name": "coverview",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "vitest run",
+    "lint": "eslint .",
+    "format": "prettier --write --ignore-unknown .",
+    "typecheck": "turbo run typecheck",
+    "db:generate": "pnpm --filter api run db:generate",
+    "db:migrate": "pnpm --filter api run db:migrate",
+    "db:seed": "pnpm --filter api run db:seed",
+    "db:reset": "pnpm --filter api run db:reset",
+    "boundaries": "depcruise --config .dependency-cruiser.cjs apps packages && knip",
+    "preview": "node scripts/preview.mjs start",
+    "preview:stop": "node scripts/preview.mjs stop",
+    "lint:docs": "node evals/lint-referentiel.mjs",
+    "test:guard": "node evals/guard-bash.test.mjs",
+    "test:tooling": "node --test scripts/*.test.mjs evals/*.test.mjs",
+    "test:e2e": "playwright test",
+    "check:bundles": "node scripts/check-bundles.mjs",
+    "check:env": "pnpm --filter api run check:env",
+    "check:roadmap": "node scripts/build-roadmap.mjs --check --require-complete"
+  },
+  "packageManager": "pnpm@12.3.4",
+  "engines": {
+    "node": ">=24.20.0 <25"
+  },
+  "devDependencies": {
+    "typescript": "^6.0.3",
+    "turbo": "^2.10.12",
+    "eslint": "^10.10.0",
+    "@eslint/js": "^10.0.1",
+    "prettier": "^3.9.6",
+    "dependency-cruiser": "^18.2.0",
+    "knip": "^6.34.0",
+    "typescript-eslint": "^8.69.0",
+    "eslint-plugin-unicorn": "^74.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.12.0",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^24.0.0",
+    "vitest": "^5.0.0"
+  }
+}

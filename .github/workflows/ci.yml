@@ -1,0 +1,44 @@
+# DEL-04 : même chaîne exécutable en local, aucun service de production.
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.0.0
+        with:
+          node-version-file: .node-version
+      - uses: pnpm/action-setup@v6.1.0
+      - run: pnpm install --frozen-lockfile
+      - name: Configuration locale isolée
+        run: cp .env.example .env
+      - run: docker compose up -d --wait
+      - run: pnpm check:env
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm test:tooling
+      - run: pnpm build
+      - name: Migration et seeds rejoués sur les services jetables du job
+        run: pnpm db:migrate && pnpm db:seed && pnpm db:seed
+      - run: pnpm boundaries
+      - run: pnpm check:bundles
+      - run: pnpm lint:docs
+      - run: pnpm check:roadmap
+      - run: pnpm audit --audit-level=critical
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Preview et parcours réels
+        run: node scripts/preview.mjs start && pnpm test:e2e
+      - name: Arrêt des seuls services du job
+        if: always()
+        run: node scripts/preview.mjs stop --all

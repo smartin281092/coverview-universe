@@ -17,7 +17,6 @@
  * Sans dépendance, sans installation — mêmes contraintes que evals/run.mjs.
  */
 
-import { readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { join } from "node:path";

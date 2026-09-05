@@ -1,0 +1,7 @@
+# Fichiers exécutables/déterministes identiques sous Windows et Linux.
+* text=auto eol=lf
+*.png -text
+*.docx -text
+*.woff2 -text
+# Les empreintes de marque sont calculées sur les octets du fichier versionné.
+assets/*.svg -text

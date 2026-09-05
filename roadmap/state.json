@@ -2,19 +2,127 @@
   "schema_version": 1,
   "slices": {
     "S-000a": {
-      "status": "ready",
+      "status": "running",
       "approval": "Mandat utilisateur du 2026-09-05 : lancement et enchaînement autorisés — roadmap/execution-policy.md",
-      "decisions": [],
-      "verification_attempts": [],
-      "session": "",
-      "cost": "",
+      "decisions": [
+        {
+          "ref": "S-000a-local-ports",
+          "question": "Éviter les services locaux existants ?",
+          "answer": "Services CoverView sur ports 55432, 56379, 59000/59001, 51025/48025 ; apps 4100 à 4103 et volumes compose dédiés par worktree.",
+          "evidence": "Inventaire Docker du 2026-09-05 : ports standards occupés par taliq ; mandat PROG-23. Aucun service existant modifié."
+        },
+        {
+          "ref": "S-000a-compatible-toolchain",
+          "question": "Comment appliquer les versions stables sans casser les outils imposés ?",
+          "answer": "Dernière LTS Node isolée au projet, pnpm stable via binaire Windows ; TypeScript dernière stable compatible avec le peer range officiel de typescript-eslint. Aucun outil de vérification désactivé. Images stables téléchargées et digests fixés.",
+          "evidence": "Registre npm officiel et docs Node/Postgres consultés le 2026-09-05 ; metadata gardées au ledger. Écart de compatibilité TypeScript explicitement consigné."
+        }
+      ],
+      "verification_attempts": [
+        {
+          "target": "Préconditions",
+          "oracle": "V0",
+          "observed": "SHA ancêtre de HEAD, checkout propre, Node/pnpm et Docker Engine répondent ; linter référentiel 0 erreur.",
+          "decision": "Démarrer S-000a autorisée ; isoler les ports des autres projets."
+        },
+        {
+          "target": "Compose local",
+          "oracle": "V1",
+          "observed": "Premier démarrage : 3 services healthy, Mailpit refusé sur 58025. netsh démontre exclusion Windows58012-58111. Port48025 libre choisi. Après correction et pull des images stables, quatre services healthy.",
+          "decision": "Conserver ports dédiés ; aucun changement de réservations Windows ni arrêt de services étrangers."
+        },
+        {
+          "target": "Installation",
+          "oracle": "V0",
+          "observed": "Shim pnpm global échoue ; téléchargements initiaux lents. Node LTS vérifié SHA256 et pnpm natif isolés, puis installation aboutie.",
+          "decision": "PATH du binaire natif ; aucune configuration globale changée ; timeouts bornés."
+        },
+        {
+          "target": "Qualité et build",
+          "oracle": "V1",
+          "observed": "Configurations initiales du scaffold non adaptées à TSX/Astro et imports inutilisés. Après corrections des entrées/types : lint, typecheck, build, knip et frontières passent.",
+          "decision": "Aucun contrôle désactivé ; avertissement orphelin Astro et taille Vite documentés."
+        },
+        {
+          "target": "Audit dépendances",
+          "oracle": "V2",
+          "observed": "esbuild transitif de drizzle-kit initialement vulnérable. Override limité, génération sans diff, migrations/tests réussis, audit final sans vulnérabilité connue.",
+          "decision": "Provenance officielle ; aucun scan des images Docker revendiqué."
+        },
+        {
+          "target": "Marque Windows",
+          "oracle": "V1",
+          "observed": "CRLF du checkout initial refusé par vérificateur. Blobs Git conformes ; restauration exacte depuis HEAD puis 46 tokens,18 contrastes,6 sources validés.",
+          "decision": ".gitattributes stabilise les octets ; aucun artwork modifié."
+        },
+        {
+          "target": "API et base réelle",
+          "oracle": "V2",
+          "observed": "26 tests passés dont PostgreSQL Testcontainers vierge, migrations/seeds deux fois, local et refus production-fixture. Compose dédié : deux personas après rejeu.",
+          "decision": "Aucun schéma métier anticipé ; reset destructif non exécuté."
+        },
+        {
+          "target": "Preview premier essai",
+          "oracle": "V3",
+          "observed": "Astro se détache automatiquement en contexte agent, démarrage preview échoué ; tentative E2E après ce prérequis échoué ne vaut pas preuve.",
+          "decision": "Statut Astro officiel puis arrêt du PID créé ; wrapper empêche second détachement."
+        },
+        {
+          "target": "Preview et navigateur",
+          "oracle": "V3",
+          "observed": "Cinq parcours Playwright passent ; clavier, personas persistées, erreur/retry, mobile. Deux cycles start/start/status/stop conservent PID et libèrent ports.",
+          "decision": "Captures inspectées et conservées ; démo sans session ni droits."
+        },
+        {
+          "target": "Panne réelle",
+          "oracle": "V3",
+          "observed": "Arrêt Redis du compose CoverView : live200 ready503 et erreur Wallet. Redis rétabli, Réessayer donne API disponible.",
+          "decision": "Rétablissement dans finally ; aucun service étranger touché."
+        },
+        {
+          "target": "Revue de sécurité",
+          "oracle": "V2",
+          "observed": "Défauts détectés : HTTP400/413 transformés500, chemins frontières trop courts, rediss absent du scan. Correctifs/tests négatifs puis nominaux passés.",
+          "decision": "Canari frontend vers API, core Node et dépendance dev refusé puis retiré."
+        },
+        {
+          "target": "pnpm dev et watch",
+          "oracle": "V3",
+          "observed": "Turbo/Windows+tsx watch ne lance pas API ; commandes directes fonctionnent et env-mode loose échoue aussi. Node watch+tsx : démarrage filtré, rechargement PID, quatre apps2xx et arrêt libérant quatre ports.",
+          "decision": "Watcher Node natif conservé ; cause interne non inventée."
+        },
+        {
+          "target": "Outillage Windows",
+          "oracle": "V2",
+          "observed": "pnpm lint et test:tooling réussissent :47 tests dont huit preview et canaris bundles.",
+          "decision": "Checkout vierge et revue Linux à terminer avant done."
+        },
+        {
+          "target": "Preview cross-platform",
+          "oracle": "V2",
+          "observed": "La revue détecte un socket Unix trop long pour Linux dans les chemins GitHub Actions. Endpoint temporaire privé borné corrigé ; neuf tests preview passent sous Windows et Linux (conteneur Node officiel non-root, réseau désactivé, sources lecture seule), dont deux cycles en chemin long et cleanup. Format et lint ciblés passent.",
+          "decision": "Conserver les pipes Windows et la preuve de propriété ; aucune suppression récursive. Recette propre complète reste le dernier oracle."
+        }
+      ],
+      "session": "Création demandée et transmise par outil : gpt-6-astra / ultra ; modèle hôte GPT-6, effort réel non observable indépendamment du paramètre transmis.",
+      "cost": "Non disponible",
       "notes": [
-        "Lancement préparé dans une nouvelle tâche gpt-6-astra / ultra. Aucun critère d’implémentation encore vérifié."
+        "Propriétaire unique : tâche 01a07358-17eb-7f33-ad10-7d59aab07e9d, worktree 10c1. Commit requis 8a644c4fff48cf874673f3f0113805510414c9f2 vérifié ancêtre de HEAD.",
+        "Livraison et dépendances : roadmap/evidence/S-000a.md ; reproduction propre et revueLinux à terminer avant clôture."
       ],
       "ledger": {
-        "verified": [],
-        "done_unverified": [],
-        "assumed": []
+        "verified": [
+          "26 tests API/client et PostgreSQL réel ; voir roadmap/evidence/S-000a.md.",
+          "Quatre apps par pnpm dev, watch API, cinq parcours navigateur, panneRedis et deux cycles preview validés.",
+          "Canaris frontières/bundles, marque intacte, audit npm sans vulnérabilité connue."
+        ],
+        "done_unverified": [
+          "Recette CI depuis nouveau checkout en attente au commit implémentation.",
+          "CI distante, reset destructif, WorkOS et déploiement non exécutés."
+        ],
+        "assumed": [
+          "Français initial et ports réversibles : impact catalogues i18n et configuration locale."
+        ]
       }
     }
   },

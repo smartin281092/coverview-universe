@@ -1,51 +1,59 @@
-/**
- * Configuration de `/preview` — complétée à l'initialisation du projet (S-000).
- *
- * Les personas NE SONT PAS définies ici : elles sont importées des seeds, qui en
- * sont la source de vérité unique (DOC-10). Une matrice recopiée ici divergerait
- * au premier rôle ajouté.
- */
+/** Source unique des fixtures : module partagé avec les seeds (ENV-03/07). */
+export { personas } from "./apps/api/src/platform/db/seed/personas.mjs";
 
-// Chemin du module de personas exporté par les seeds — ajusté à S-000 si besoin.
-// Emplacement par défaut aligné sur l'arborescence ARCH-06 (`apps/api/src/platform/db`).
-// Le fichier est en `.mjs` volontairement : ce script tourne sans build, il ne peut
-// pas importer du TypeScript. Les seeds TS importent ce module, jamais l'inverse —
-// il reste la source de vérité unique des identifiants de test (ENV-03, DOC-10).
-const PERSONAS_MODULE = "./apps/api/src/platform/db/seed/personas.mjs";
+const project = process.env.COMPOSE_PROJECT_NAME ?? "coverview-local";
+if (!/^[a-z0-9][a-z0-9_-]*$/.test(project)) throw new Error("COMPOSE_PROJECT_NAME invalide.");
+
+export const infrastructure = {
+  command: "docker",
+  args: ["compose", "--project-name", project],
+};
 
 export const apps = [
-  { key: "client", label: "App client", dir: "apps/client", port: 3000 },
-  { key: "admin", label: "Console admin", dir: "apps/admin", port: 3001 },
-  { key: "www", label: "Site marketing", dir: "apps/www", port: 3002 },
-  { key: "api", label: "API", dir: "apps/api", port: 4000, health: "/health" },
+  {
+    key: "api",
+    label: "API — santé des dépendances",
+    dir: "apps/api",
+    port: 4100,
+    health: "/health",
+    tool: "tsx",
+    args: ["watch", "src/main.ts"],
+  },
+  {
+    key: "client",
+    label: "Wallet — coquille",
+    dir: "apps/client",
+    port: 4101,
+    tool: "vite",
+    args: ["--host", "127.0.0.1", "--port", "4101", "--strictPort"],
+  },
+  {
+    key: "admin",
+    label: "Console admin — coquille",
+    dir: "apps/admin",
+    port: 4102,
+    tool: "vite",
+    args: ["--host", "127.0.0.1", "--port", "4102", "--strictPort"],
+  },
+  {
+    key: "www",
+    label: "Site public — coquille",
+    dir: "apps/www",
+    port: 4103,
+    tool: "astro",
+    args: ["dev", "--host", "127.0.0.1", "--port", "4103"],
+  },
 ];
 
 export const services = [
-  { label: "Mailpit — emails transactionnels", url: "http://localhost:8025" },
-  { label: "MinIO — console de stockage", url: "http://localhost:9001", note: "minioadmin / minioadmin" },
+  { label: "Mailpit — boîte locale", url: "http://127.0.0.1:48025" },
+  { label: "MinIO — console locale", url: "http://127.0.0.1:59001" },
 ];
 
-/** Moyens de paiement de test — Stripe test mode uniquement (BILL-10). */
-export const testPayments = {
-  "Paiement accepté": "4242 4242 4242 4242",
-  "3D Secure requis": "4000 0025 0000 3155",
-  "Carte refusée": "4000 0000 0000 9995",
-  "Expiration / CVC / code postal": "n'importe quelle date future, n'importe quel CVC, n'importe quel code postal",
-};
-
-/** Parcours de fumée minimal, valable quelle que soit la slice. */
 export const smokeChecks = [
-  "Créer un compte depuis l'app client, puis se connecter",
-  "Vérifier l'e-mail de bienvenue dans Mailpit",
-  "Se connecter en `outsider` : aucune donnée d'une autre organisation ne doit apparaître",
-  "Se connecter en `viewer` : les actions d'écriture doivent être absentes, pas seulement désactivées",
-  "Ouvrir la console admin avec la persona plateforme",
+  "Ouvrir /health : la réponse indique l'état réel des dépendances locales (200 si prêtes, 503 sinon).",
+  "Ouvrir Wallet, la console admin et le site public : chaque coquille est accessible et signale son périmètre.",
+  "Ouvrir /preview dans Wallet ou la console admin : les fixtures persistées se chargent; choisir une persona affiche son e-mail sans créer de session ni de droit.",
+  "Ouvrir Mailpit et MinIO : leurs consoles locales répondent. Aucun e-mail métier ni upload n'est encore implémenté.",
+  "Relancer start : les superviseurs existants sont conservés. stop puis un nouveau start doivent libérer puis reprendre les ports.",
 ];
-
-export let personas = [];
-export let personasError = null;
-try {
-  ({ personas } = await import(PERSONAS_MODULE));
-} catch (e) {
-  personasError = `Personas indisponibles (${PERSONAS_MODULE}) — lancer les seeds ou corriger PERSONAS_MODULE dans preview.config.mjs.`;
-}

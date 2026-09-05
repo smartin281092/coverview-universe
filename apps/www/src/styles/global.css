@@ -1,0 +1,108 @@
+@import "tailwindcss";
+@import "@fontsource-variable/geist";
+@import "../../../../assets/brand/tokens.css";
+
+@theme inline {
+  --font-sans: "Geist Variable", sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+}
+@layer base {
+  html {
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+  body {
+    @apply m-0 min-w-80;
+  }
+  a {
+    @apply focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring;
+  }
+  h1,
+  h2,
+  h3,
+  p {
+    @apply m-0;
+  }
+}
+@layer components {
+  .skip-link {
+    @apply sr-only z-50 rounded-md bg-primary p-3 text-primary-foreground focus:not-sr-only focus:fixed focus:left-4 focus:top-4;
+  }
+  .site-header {
+    @apply mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-5 border-b border-border px-6 py-7 sm:px-10;
+  }
+  .logo {
+    @apply h-7 w-auto;
+  }
+  .site-header nav {
+    @apply flex flex-wrap items-center gap-5;
+  }
+  .stage-label {
+    @apply rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground;
+  }
+  .text-link {
+    @apply inline-flex items-center gap-2 text-sm font-medium text-primary;
+  }
+  .hero {
+    @apply mx-auto grid max-w-7xl items-center gap-12 px-6 py-16 sm:px-10 sm:py-20 lg:grid-cols-2 lg:gap-20;
+  }
+  .hero-copy {
+    @apply space-y-7;
+  }
+  .eyebrow {
+    @apply text-sm font-medium text-primary;
+  }
+  h1 {
+    @apply max-w-xl text-4xl leading-tight font-semibold tracking-tight sm:text-5xl lg:text-6xl;
+  }
+  .intro {
+    @apply max-w-xl space-y-4 text-base leading-relaxed text-muted-foreground;
+  }
+  .primary-link {
+    @apply inline-flex min-h-11 items-center justify-center gap-5 rounded-lg bg-primary px-5 py-3 text-sm font-medium text-primary-foreground hover:bg-primary-hover;
+  }
+  .preview-note {
+    @apply max-w-lg text-sm leading-relaxed text-muted-foreground;
+  }
+  .overview-card {
+    @apply rounded-2xl border border-border bg-card p-7 sm:p-10;
+  }
+  .overview-card h2 {
+    @apply mt-5 max-w-sm text-3xl leading-tight font-semibold tracking-tight;
+  }
+  .overview-card ol {
+    @apply mt-9 list-none space-y-6 p-0;
+  }
+  .overview-card li {
+    @apply flex items-start gap-5 border-t border-border pt-6;
+  }
+  .point-number {
+    @apply inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-accent text-xs font-medium text-primary;
+  }
+  .overview-card h3 {
+    @apply mb-2 text-base font-semibold;
+  }
+  .overview-card li p {
+    @apply text-sm leading-relaxed text-muted-foreground;
+  }
+  .site-footer {
+    @apply mx-auto flex max-w-7xl flex-wrap justify-between gap-4 border-t border-border px-6 py-7 text-xs text-muted-foreground sm:px-10;
+  }
+  .site-footer a {
+    @apply text-primary;
+  }
+  .missing-page {
+    @apply mx-auto max-w-4xl space-y-8 px-6 py-20;
+  }
+  .missing-page p {
+    @apply leading-relaxed text-muted-foreground;
+  }
+}

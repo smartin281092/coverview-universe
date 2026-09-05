@@ -2,7 +2,7 @@
 # Couverture de planification uniquement ; aucun GO ou résultat de test déduit.
 - id: S-000a
   title: "Démarrer un socle local reproductible et une preview fictive"
-  status: ready
+  status: running
   milestone: M0
   depends_on: []
   plan: roadmap/plans/S-000a.plan.md
@@ -12,10 +12,10 @@
   recommended_effort: ultra
   session_budget: 1
   approval: "Mandat utilisateur du 2026-09-05 : lancement et enchaînement autorisés — roadmap/execution-policy.md"
-  session: ""
-  cost: ""
-  decisions: []
-  notes: ["Lancement préparé dans une nouvelle tâche gpt-6-astra / ultra. Aucun critère d’implémentation encore vérifié."]
+  session: "Création demandée et transmise par outil : gpt-6-astra / ultra ; modèle hôte GPT-6, effort réel non observable indépendamment du paramètre transmis."
+  cost: "Non disponible"
+  decisions: [{"ref":"S-000a-local-ports","question":"Éviter les services locaux existants ?","answer":"Services CoverView sur ports 55432, 56379, 59000/59001, 51025/48025 ; apps 4100 à 4103 et volumes compose dédiés par worktree.","evidence":"Inventaire Docker du 2026-09-05 : ports standards occupés par taliq ; mandat PROG-23. Aucun service existant modifié."},{"ref":"S-000a-compatible-toolchain","question":"Comment appliquer les versions stables sans casser les outils imposés ?","answer":"Dernière LTS Node isolée au projet, pnpm stable via binaire Windows ; TypeScript dernière stable compatible avec le peer range officiel de typescript-eslint. Aucun outil de vérification désactivé. Images stables téléchargées et digests fixés.","evidence":"Registre npm officiel et docs Node/Postgres consultés le 2026-09-05 ; metadata gardées au ledger. Écart de compatibilité TypeScript explicitement consigné."}]
+  notes: ["Propriétaire unique : tâche 01a07358-17eb-7f33-ad10-7d59aab07e9d, worktree 10c1. Commit requis 8a644c4fff48cf874673f3f0113805510414c9f2 vérifié ancêtre de HEAD.","Livraison et dépendances : roadmap/evidence/S-000a.md ; reproduction propre et revueLinux à terminer avant clôture."]
 - id: S-000b
   title: "Se connecter avec WorkOS et retrouver son espace protégé"
   status: specified

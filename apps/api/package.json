@@ -1,0 +1,36 @@
+{
+  "name": "api",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch --import tsx src/main.ts",
+    "start": "node dist/main.js",
+    "build": "node build.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "check:env": "tsx src/platform/config.check.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx src/platform/db/maintenance.ts migrate",
+    "db:seed": "tsx src/platform/db/maintenance.ts seed",
+    "db:reset": "tsx src/platform/db/maintenance.ts reset"
+  },
+  "dependencies": {
+    "@coverview/contracts": "workspace:*",
+    "@fastify/cors": "^11.3.0",
+    "@fastify/helmet": "^13.1.1",
+    "drizzle-orm": "0.45.2",
+    "fastify": "5.12.3",
+    "fastify-type-provider-zod": "7.0.0",
+    "pg": "8.23.0",
+    "redis": "6.2.1",
+    "zod": "4.5.4"
+  },
+  "devDependencies": {
+    "@testcontainers/postgresql": "^12.1.0",
+    "@types/pg": "^8.23.1",
+    "drizzle-kit": "0.31.10",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.23.13"
+  }
+}

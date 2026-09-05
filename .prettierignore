@@ -1,0 +1,14 @@
+pnpm-lock.yaml
+templates/
+docs/product/
+roadmap/plans/
+roadmap/prompts/
+roadmap/backlog.yaml
+roadmap/coverage.json
+.planning-local/
+.preview/
+**/dist/
+**/node_modules/
+
+**/.preset-work/
+assets/brand/tokens.css

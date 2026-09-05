@@ -1,0 +1,47 @@
+---
+import '../styles/global.css';
+import logo from '../../../../assets/logo-coverview.svg?url';
+import favicon from '../../../../assets/favicon.png?url';
+import { content } from '../content/fr/interface';
+
+interface Props { title: string; description: string; }
+const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const image = new URL('/og-preview.svg', Astro.site);
+---
+<!doctype html>
+<html lang="fr-CH">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" href={favicon} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="fr_CH" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">{content.skip}</a>
+    <header class="site-header">
+      <a href="/" aria-label={content.home}><img src={logo} alt={content.brand} width="444" height="73" class="logo" /></a>
+      <nav aria-label={content.navigation}>
+        {import.meta.env.DEV && <a href="http://127.0.0.1:4102" class="text-link">{content.team}<span aria-hidden="true">↗</span></a>}
+        <span class="stage-label">{import.meta.env.DEV ? content.local : content.construction}</span>
+      </nav>
+    </header>
+    <main id="main" tabindex="-1"><slot /></main>
+    <footer class="site-footer"><p>{content.footer}</p><a href="/">{content.home}</a></footer>
+  </body>
+</html>

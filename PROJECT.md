@@ -1,6 +1,6 @@
 # CoverView — identité et état du projet
 
-Initialisation documentaire : 5 septembre 2026, mode BOOT-10. **Harness et roadmap préparés ; lancement de S-000a autorisé.** L'utilisateur a autorisé l'implémentation séquentielle, une nouvelle tâche Astra Ultra par slice et le choix des meilleurs défauts. [Le mandat et le protocole de relais](roadmap/execution-policy.md) sont canoniques ; l'état réel et les preuves restent dans la roadmap.
+Initialisation documentaire : 5 septembre 2026, mode BOOT-10. **Socle local S-000a implémenté ; état et preuves dans [son ledger](roadmap/evidence/S-000a.md).** L'utilisateur a autorisé l'implémentation séquentielle, une nouvelle tâche Astra Ultra par slice et le choix des meilleurs défauts. [Le mandat et le protocole de relais](roadmap/execution-policy.md) sont canoniques ; l'état réel et les preuves restent dans la roadmap.
 
 ## Problème et valeur
 
@@ -20,7 +20,7 @@ La [bible v1.5](references/CoverView_Bible_Produit_Plateforme_v1.5.docx) est la 
 | Professionnel · `intelligence` | Catalogue, benchmarks, analyses et scénarios professionnels autorisés |
 | Participants à Exchange · `exchange` | Domaine séparé à spécifier ; aucune opération financière réelle au cadrage |
 
-Source : bible §7–12, §66–71 et R2/R14. `api` désigne CoverView Core commun. Les dossiers applicatifs sont **planifiés**, pas créés. Retire reste un module de Wallet ; les domaines publics nommés dans la bible restent des cibles, aucun DNS n'est configuré.
+Source : bible §7–12, §66–71 et R2/R14. `api` désigne CoverView Core commun. `api`, `client`, `admin` et `www` possèdent leurs coquilles techniques ; les autres surfaces restent planifiées. Retire reste un module de Wallet ; les domaines publics nommés dans la bible restent des cibles, aucun DNS n'est configuré.
 
 ## Langues et données
 
@@ -47,7 +47,7 @@ Données fictives au démarrage : ENV-09. Les exemples financiers ne deviennent 
 
 La [carte fonctionnelle](docs/product/capabilities.md) porte l'inventaire dérivé des capacités, leurs dépendances et les workflows A–M. Elle couvre notamment acquisition/3P, catalogue et gouvernance, contrats/documents/signature, Wallet/Retire, assistance, fidélité, opérations, copilotes, partenaires, Intelligence et Exchange. Elle sert au découpage ; elle n'est pas une carte de modules déjà réalisés.
 
-Carte des modules implémentés : **aucun**. Les frontières seront fixées progressivement au plan des slices, avec README propriétaire selon DOC-01. Une seule base métier commune aux applications principales ; Exchange conserve la frontière distincte décrite par §12. Aucun frontend ne lit directement la base.
+Module implémenté : [platform](apps/api/src/platform/README.md), santé et persistance des seules personas techniques locales. Les frontières métier seront fixées progressivement au plan des slices, avec README propriétaire selon DOC-01. Une seule base métier commune aux applications principales ; Exchange conserve la frontière distincte décrite par §12. Aucun frontend ne lit directement la base.
 
 ## Offre et intégrations
 
