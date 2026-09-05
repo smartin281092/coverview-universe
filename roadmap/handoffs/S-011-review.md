@@ -9,7 +9,7 @@ Poursuivre CoverView selon [execution-policy](../execution-policy.md), meilleurs
 
 ## État du dépôt
 
-Source de livraison : `C:/Users/sebm1/.codex/worktrees/9b02/coverview-astra`, branche `codex/s-011-editorial`. Base vérifiée propre au départ : `ace91c9cb965bf12034545c82219b55594a6cdac`. SHA final de livraison à récupérer depuis cette branche ou le compte rendu de tâche ; vérifier sa présence avec `git merge-base --is-ancestor SHA_REQUIS HEAD` avant toute mutation. Les contrôles de préservation locale et le SHA exact sont donnés dans le compte rendu final.
+Source de livraison : `C:/Users/sebm1/.codex/worktrees/9b02/coverview-astra`, branche `codex/s-011-editorial`. Base vérifiée propre au départ : `ace91c9cb965bf12034545c82219b55594a6cdac`. **Commit de code et preuves : `0b31d4e77602de419f17dd877922484c6a691623`** ; vérifier `git merge-base --is-ancestor 0b31d4e77602de419f17dd877922484c6a691623 HEAD` avant toute mutation. Le commit de checkpoint ultérieur ne modifie pas le code testé. Les contrôles de préservation locale et le SHA final sont donnés dans le compte rendu final.
 
 Checkout enregistré observé : `D:/Projects/coverview-astra`, main, propre au SHA de base ci-dessus avant intégration. Intégration autorisée par fast-forward seulement si cet état reste propre et sans divergence ; aucun push requis. Ne jamais reset/nettoyer/stasher le travail d’un tiers. Les anciens worktrees S-010/S-000b sont conservés.
 
