@@ -231,6 +231,11 @@ export const plannedPages = [
 ] as const;
 
 export const acquisition = {
+  editorialLinks: [
+    { href: "/outils", label: "Guide des outils" },
+    { href: "/glossaire", label: "Glossaire" },
+    { href: "/sources", label: "Sources et provenance" },
+  ],
   availabilityTitle: "{{label}} : disponibilité — CoverView",
   overview: "Comment ça marche",
   explore: "Explorer CoverView",
@@ -289,7 +294,7 @@ export const acquisition = {
       "Retrouvez les pages de présentation, les futurs outils et les espaces CoverView. Leur état est indiqué avant toute démarche ou connexion.",
     heading: "Tous vos points de repère.",
     introduction:
-      "Les pages de présentation sont à lire librement. Les outils, contenus détaillés et services en préparation indiquent ce qui reste indisponible.",
+      "Les pages et exemples de préversion sont à lire librement. Les outils et services en préparation indiquent ce qui reste indisponible.",
     navigation: "Toutes les destinations CoverView",
     understand: "Comprendre CoverView",
     tools: "Outils & démarches",

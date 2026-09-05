@@ -1,0 +1,10 @@
+---
+import { editorialCopy as copy } from '../content/fr/editorial-interface';
+const label = Astro.url.pathname === '/modeles' ? copy.compareTable : copy.referenceTable;
+---
+<div>
+  <p class="table-hint" data-editorial-ui>{copy.tableHint}</p>
+  <div class="table-region" role="region" aria-label={label} tabindex="0">
+    <table><slot /></table>
+  </div>
+</div>

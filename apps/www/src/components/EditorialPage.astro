@@ -1,0 +1,32 @@
+---
+import Layout from '../layouts/Layout.astro';
+import EditorialTable from './EditorialTable.astro';
+import { structuredEditorial, editorialIndexes, editorialAnchor, type Editorial } from '../content/editorial';
+import { editorialCopy as copy } from '../content/fr/editorial-interface';
+import { acquisition } from '../content/fr/acquisition';
+interface Props { entry: Editorial; }
+const { entry } = Astro.props;
+const { data, Content } = entry;
+const canonical = new URL(`/${data.slug}`, Astro.site).href;
+const formatDate = (value: string) => new Intl.DateTimeFormat('fr-CH', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(`${value}T00:00:00Z`));
+const listing = editorialIndexes.find((index) => index.entries.some((item) => item.data.slug === data.slug));
+const index = listing ? `/${listing.slug}#${editorialAnchor(data.slug)}` : '/explorer';
+---
+<Layout title={data.title} description={data.description} markdown={`/${data.slug}.md`} structuredData={structuredEditorial(entry, canonical)}>
+  <article class:list={['reading-page', 'editorial-page', { 'comparison-page': data.slug === 'modeles' }]}>
+    <a href={index} class="text-link">← {index === '/explorer' ? acquisition.returnExplore : copy.returnIndex}</a>
+    <div class="editorial-meta">
+      <p class="eyebrow">{copy.author} · {copy.authorNote}</p>
+      <p>{copy.created} <time datetime={data.date}>{formatDate(data.date)}</time> · {copy.updated} <time datetime={data.updatedAt}>{formatDate(data.updatedAt)}</time> · {copy.version} {data.version}</p>
+      <p>{copy.preview}</p>
+    </div>
+    {data.fictional && <p class="fiction-notice">{copy.fictional}</p>}
+    <div class="prose-content editorial-body" data-editorial-body><Content components={{ table: EditorialTable }} /></div>
+    <aside class="editorial-sources" aria-label={copy.sources}>
+      <p class="source-title">{copy.sources}</p>
+      <ul>{data.sources.map((source) => <li><a href="/sources#bible-v15">{source.label}</a></li>)}</ul>
+      <p>{copy.sourceNote}</p>
+      <a href={`/${data.slug}.md`} class="text-link">{copy.markdown}</a>
+    </aside>
+  </article>
+</Layout>

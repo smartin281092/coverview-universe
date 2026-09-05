@@ -1,0 +1,61 @@
+{
+  "checkedAt": "2026-09-06",
+  "sliceCount": 120,
+  "review": [
+    "S-000b",
+    "S-011"
+  ],
+  "running": [],
+  "eligible": [],
+  "frontier": [
+    {
+      "id": "S-012",
+      "title": "Répondre aux FAQ et conserver la provenance déclarée des prospects",
+      "depends_on": [
+        {
+          "id": "S-011",
+          "status": "review"
+        },
+        {
+          "id": "S-080",
+          "status": "specified"
+        }
+      ]
+    },
+    {
+      "id": "S-013",
+      "title": "Reprendre un parcours anonyme dans Wallet avec un profil central",
+      "depends_on": [
+        {
+          "id": "S-000b",
+          "status": "review"
+        }
+      ]
+    },
+    {
+      "id": "S-080",
+      "title": "Qualifier un entrant et suivre plusieurs opportunités distinctes",
+      "depends_on": [
+        {
+          "id": "S-000b",
+          "status": "review"
+        },
+        {
+          "id": "S-013",
+          "status": "specified"
+        }
+      ]
+    },
+    {
+      "id": "S-081",
+      "title": "Délivrer un dossier avec tâches, prochaine action et Kanban",
+      "depends_on": [
+        {
+          "id": "S-000b",
+          "status": "review"
+        }
+      ]
+    }
+  ],
+  "decision": "Aucune nouvelle slice indépendante. Reprise après preuves réelles, sans déclarer done une tranche incomplète."
+}

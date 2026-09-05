@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { editorialIndexes, editorialAnchor } from '../content/editorial';
+import { editorialCopy as copy } from '../content/fr/editorial-interface';
+import { acquisition } from '../content/fr/acquisition';
+interface Props { listing: (typeof editorialIndexes)[number]; }
+const { listing } = Astro.props;
+const { index, page, total, root, entries } = listing;
+const pageLabel = copy.pageNumber.replace('{{page}}', new Intl.NumberFormat('fr-CH').format(page)).replace('{{total}}', new Intl.NumberFormat('fr-CH').format(total));
+const url = (n: number) => n === 1 ? `/${root}` : `/${root}/page/${n}`;
+---
+<Layout title={page === 1 ? index.title : `${index.title} · ${pageLabel}`} description={page === 1 ? index.description : `${index.description} ${pageLabel}.`}>
+  <section class="reading-page">
+    <a href="/explorer" class="text-link">← {acquisition.returnExplore}</a>
+    <h1>{index.heading}</h1>
+    <p class="intro">{index.description}</p>
+    <p class="preview-note">{copy.preview}</p>
+    <div class="editorial-list">{entries.map(({ data }) => <article class="reading-card">
+      <h2><a id={editorialAnchor(data.slug)} href={`/${data.slug}`} class="text-link">{data.title}</a></h2>
+      <p>{data.description}</p>
+      {data.fictional && <p class="preview-note">{copy.fictional}</p>}
+    </article>)}</div>
+    <nav class="pagination" aria-label={copy.pagination}>
+      {page > 1 && <a href={url(page - 1)} class="text-link" rel="prev">← {copy.previous}</a>}
+      <span aria-current="page">{pageLabel}</span>
+      {page < total && <a href={url(page + 1)} class="text-link" rel="next">{copy.next} →</a>}
+    </nav>
+  </section>
+</Layout>

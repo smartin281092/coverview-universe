@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* global document, window, requestAnimationFrame */
+/* global document, window, requestAnimationFrame, DOMParser */
 // Oracle du build livré : HTML/JS et mesures synthétiques locales, jamais du RUM.
 import assert from "node:assert/strict";
 import { readdir, readFile, realpath } from "node:fs/promises";
@@ -10,7 +10,19 @@ import { gzipSync } from "node:zlib";
 import { chromium } from "@playwright/test";
 
 const dist = fileURLToPath(new URL("../apps/www/dist/", import.meta.url));
-const representatives = ["/", "/overview", "/analyser-3p", "/explorer", "/methode"];
+const representatives = [
+  "/",
+  "/overview",
+  "/analyser-3p",
+  "/explorer",
+  "/methode",
+  "/modeles",
+  "/articles",
+  "/articles/page/2",
+  "/etudes-de-cas/maintien",
+  "/rapports/exemple",
+  "/sebastien-martin",
+];
 const limits = { javascriptGzipBytes: 100 * 1024, lcpMs: 2500, cls: 0.1 };
 const mime = {
   ".html": "text/html; charset=utf-8",
@@ -26,7 +38,158 @@ const mime = {
   ".woff": "font/woff",
   ".woff2": "font/woff2",
   ".txt": "text/plain; charset=utf-8",
+  ".md": "text/markdown; charset=utf-8",
+  ".xml": "application/xml; charset=utf-8",
 };
+
+const normalize = (text) => text.replace(/\s+/g, " ").trim();
+
+// Le corpus autorisé emploie du Markdown standard. Cet oracle n'importe ni le
+// catalogue ni la fonction de miroir de l'application : il relit les sources.
+async function editorialSources() {
+  const sources = new Map();
+  async function visit(directory) {
+    for (const entry of await readdir(directory, { withFileTypes: true })) {
+      const path = join(directory, entry.name);
+      if (entry.isDirectory()) await visit(path);
+      else if (entry.name.endsWith(".mdx")) {
+        const source = (await readFile(path, "utf8")).replaceAll("\r\n", "\n");
+        const frontmatter = source.match(/^---\n([\s\S]*?)\n---\n/);
+        if (!frontmatter || !/^status: ["']?preview["']?$/m.test(frontmatter[1])) continue;
+        const slug = frontmatter[1].match(/^slug: ["']?([^\s"']+)["']?$/m)?.[1];
+        assert(slug, `${path} : slug de préversion absent`);
+        assert(!sources.has(`/${slug}`), `${path} : slug de préversion dupliqué`);
+        sources.set(`/${slug}`, source.slice(frontmatter[0].length).trim());
+      }
+    }
+  }
+  await visit(fileURLToPath(new URL("../apps/www/src/content/", import.meta.url)));
+  assert(sources.size > 0, "Corpus éditorial de préversion absent");
+  return sources;
+}
+
+function markdownText(body) {
+  return normalize(
+    body
+      .replace(/^\|(?:[\s:|-]+)\|\s*$/gm, "")
+      .replace(/^#{1,6}\s+/gm, "")
+      .replace(/^\s*(?:[-*+]|\d+\.)\s+/gm, "")
+      .replace(/^>\s?/gm, "")
+      .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+      .replace(/\*\*|__|`/g, "")
+      .replaceAll("|", " "),
+  );
+}
+
+function structuredNodes(value) {
+  if (!value || typeof value !== "object") return [];
+  return [
+    value,
+    ...Object.values(value).flatMap((child) =>
+      Array.isArray(child) ? child.flatMap(structuredNodes) : structuredNodes(child),
+    ),
+  ];
+}
+
+function checkStructured(html, route) {
+  const nodes = html.structured.flatMap(structuredNodes);
+  for (const node of nodes) {
+    const types = Array.isArray(node["@type"]) ? node["@type"] : [node["@type"]];
+    for (const type of types) {
+      assert(
+        ![
+          "FinancialService",
+          "Offer",
+          "Product",
+          "SoftwareApplication",
+          "Review",
+          "AggregateRating",
+        ].includes(type),
+        `${route} : donnée structurée de capacité ou preuve non livrée (${type})`,
+      );
+      if (type === "Organization")
+        assert(normalize(html.mainText).includes(node.name), `${route} : organisation invisible`);
+      if (type === "Person") {
+        assert.equal(route, "/sebastien-martin", "Person limitée à la page de la personne");
+        assert.equal(node.name, "Sébastien Martin");
+        assert(normalize(html.mainText).includes(node.name), `${route} : personne invisible`);
+        for (const field of ["sameAs", "award", "hasCredential", "jobTitle"])
+          assert.equal(node[field], undefined, `${route} : preuve personnelle absente (${field})`);
+      }
+      if (type === "Article") {
+        assert.equal(node.url, html.canonical, route);
+        assert.equal(node.headline, html.title, route);
+        assert.match(node.dateCreated ?? "", /^\d{4}-\d{2}-\d{2}/, `${route} : date de création`);
+        assert.match(
+          node.dateModified ?? "",
+          /^\d{4}-\d{2}-\d{2}/,
+          `${route} : date de modification`,
+        );
+        assert.equal(
+          node.datePublished,
+          undefined,
+          `${route} : aucune publication externe validée`,
+        );
+        assert(
+          html.dates.includes(node.dateCreated) && html.dates.includes(node.dateModified),
+          `${route} : dates structurées invisibles`,
+        );
+        const author = node.author?.["@id"]
+          ? nodes.find((candidate) => candidate["@id"] === node.author["@id"] && candidate.name)
+          : node.author;
+        assert(
+          author?.name && normalize(html.mainText).includes(author.name),
+          `${route} : auteur invisible`,
+        );
+      }
+      if (type === "FAQPage") {
+        assert(Array.isArray(node.mainEntity) && node.mainEntity.length > 0, `${route} : FAQ vide`);
+        for (const question of node.mainEntity) {
+          assert(html.headings.includes(question.name), `${route} : question FAQ invisible`);
+          assert(
+            normalize(html.mainText).includes(normalize(question.acceptedAnswer?.text ?? "")),
+            `${route} : réponse FAQ différente`,
+          );
+          assert(question.acceptedAnswer?.text?.trim(), `${route} : réponse FAQ vide`);
+        }
+      }
+    }
+  }
+  if (route === "/sebastien-martin")
+    assert(
+      nodes.some((node) => node["@type"] === "Person"),
+      "Person absente",
+    );
+  if (/^\/(?:etudes-de-cas|rapports)\/.+/.test(route) || /^\/articles\/(?!page\/).+/.test(route))
+    assert(
+      nodes.some((node) => node["@type"] === "Article" || node["@type"] === "FAQPage"),
+      `${route} : type éditorial absent`,
+    );
+  return nodes.filter((node) => node["@type"]).length;
+}
+
+function checkIndexes(files) {
+  for (const path of ["/sitemap.xml", "/feed.xml", "/llms.txt"])
+    assert(files.has(path), `${path} : sortie générée absente`);
+  const sitemap = files.get("/sitemap.xml").toString();
+  const feed = files.get("/feed.xml").toString();
+  const llms = files.get("/llms.txt").toString();
+  assert.match(sitemap, /<urlset[\s>]/, "Sitemap XML incomplet");
+  assert.doesNotMatch(sitemap, /<loc[\s>]|<url[\s>]/, "Aucune page noindex dans le sitemap");
+  assert.match(feed, /<(?:rss|feed)[\s>]/, "Flux XML incomplet");
+  assert.doesNotMatch(feed, /<(?:item|entry)[\s>]/, "Aucun article noindex dans le flux");
+  assert.doesNotMatch(
+    llms,
+    /\]\(https?:\/\/|https?:\/\//,
+    "Aucune URL de préversion annoncée aux LLM",
+  );
+  assert.match(
+    files.get("/robots.txt")?.toString() ?? "",
+    /User-agent:\s*\*[\s\S]*Disallow:\s*\//i,
+    "Robots de préversion refusés",
+  );
+  return { sitemapPages: 0, feedEntries: 0, llmsLinks: 0 };
+}
 
 async function buildFiles() {
   const root = await realpath(dist);
@@ -96,6 +259,7 @@ async function serve(files) {
 }
 
 async function checkHtml(browser, files, origin) {
+  const sources = await editorialSources();
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
   page.setDefaultTimeout(10000);
@@ -105,7 +269,10 @@ async function checkHtml(browser, files, origin) {
     .sort();
   const titles = new Set();
   const descriptions = new Set();
+  const pages = new Map();
   let inlineGzipBytes = 0;
+  let structuredEntities = 0;
+  let mirrors = 0;
   try {
     for (const route of routes) {
       const response = await page.goto(`${origin}${route}?utm_source=build-check`);
@@ -126,6 +293,23 @@ async function checkHtml(browser, files, origin) {
           ogImage: meta('meta[property="og:image"]'),
           twitter: meta('meta[name="twitter:card"]'),
           h1: document.querySelectorAll("h1").length,
+          mainText: document.querySelector("main")?.innerText ?? "",
+          bodyText: document.querySelector("[data-editorial-body]")?.innerText,
+          bodyUi: [...document.querySelectorAll("[data-editorial-body] [data-editorial-ui]")].map(
+            (element) => element.innerText,
+          ),
+          headings: [...document.querySelectorAll("main h2, main h3")].map((heading) =>
+            heading.textContent.trim(),
+          ),
+          dates: [...document.querySelectorAll("main time[datetime]")].map((date) =>
+            date.getAttribute("datetime"),
+          ),
+          links: [...document.querySelectorAll("a[href]")].map((link) => link.getAttribute("href")),
+          ids: [...document.querySelectorAll("[id]")].map((element) => element.id),
+          mirror: meta('link[rel="alternate"][type="text/markdown"]', "href"),
+          structured: [...document.querySelectorAll('script[type="application/ld+json"]')].map(
+            (script) => JSON.parse(script.textContent),
+          ),
           scripts: scripts.map((script) => ({ src: script.src, body: script.textContent })),
           activeAttributes: [...document.querySelectorAll("*")].some((element) =>
             [...element.attributes].some(
@@ -150,6 +334,31 @@ async function checkHtml(browser, files, origin) {
       assert.equal(html.ogTitle, html.title, route);
       assert.equal(html.ogUrl, html.canonical, route);
       assert(html.ogImage && html.twitter, `${route} : partage incomplet`);
+      assert.equal(new Set(html.ids).size, html.ids.length, `${route} : ancre dupliquée`);
+      structuredEntities += checkStructured(html, route);
+      pages.set(route, html);
+      if (sources.has(route)) {
+        assert.equal(html.mirror, `${route}.md`, `${route} : lien miroir`);
+        const markdown = files.get(`${route}.md`)?.toString();
+        assert(markdown, `${route} : miroir absent du build`);
+        assert(markdown.includes(html.canonical), `${route} : canonical absent du miroir`);
+        assert(markdown.includes(sources.get(route)), `${route} : corps MDX et miroir différents`);
+        const bodyText = html.bodyUi.reduce(
+          (body, text) => body.replace(text, ""),
+          html.bodyText ?? "",
+        );
+        assert.equal(
+          normalize(bodyText),
+          markdownText(sources.get(route)),
+          `${route} : corps MDX et HTML différents`,
+        );
+        for (const date of html.dates)
+          assert(markdown.includes(date), `${route} : date absente du miroir`);
+        const mirrorResponse = await context.request.get(`${origin}${route}.md`);
+        assert.equal(mirrorResponse.status(), 200, `${route} : miroir inaccessible`);
+        assert.equal(await mirrorResponse.text(), markdown, `${route} : corps du miroir servi`);
+        mirrors++;
+      }
       if (route !== "/account") {
         assert.equal(
           html.scripts.length,
@@ -168,8 +377,66 @@ async function checkHtml(browser, files, origin) {
         } else inlineGzipBytes += gzipSync(script.body).length;
       }
     }
+    assert.equal(mirrors, sources.size, "Chaque contenu de préversion possède HTML et miroir");
+    let localLinks = 0;
+    let localAnchors = 0;
+    const edges = new Map(routes.map((route) => [route, new Set()]));
+    for (const [route, html] of pages) {
+      for (const href of html.links) {
+        assert(!/^(?:javascript|data):/i.test(href.trim()), `${route} : lien actif interdit`);
+        const url = new URL(href, `${origin}${route}`);
+        if (![origin, "https://coverview.ch"].includes(url.origin)) continue;
+        const pathname = decodeURIComponent(url.pathname);
+        const target = pathname.replace(/\/$/, "") || "/";
+        assert(files.has(pathname) || pages.has(target), `${route} : lien local absent ${href}`);
+        localLinks++;
+        if (pages.has(target)) {
+          edges.get(route).add(target);
+          if (url.hash) {
+            assert(
+              pages.get(target).ids.includes(decodeURIComponent(url.hash.slice(1))),
+              `${route} : ancre locale absente ${href}`,
+            );
+            localAnchors++;
+          }
+        }
+      }
+    }
+    const reachable = new Set(["/"]);
+    const queue = ["/"];
+    for (const route of queue) {
+      for (const target of edges.get(route)) {
+        if (reachable.has(target)) continue;
+        reachable.add(target);
+        queue.push(target);
+      }
+    }
+    assert.deepEqual(
+      routes.filter((route) => !reachable.has(route)),
+      [],
+      "Pages orphelines depuis l'accueil",
+    );
+    for (const path of ["/sitemap.xml", "/feed.xml"]) {
+      const validXml = await page.evaluate(
+        (xml) =>
+          !new DOMParser().parseFromString(xml, "application/xml").querySelector("parsererror"),
+        files.get(path).toString(),
+      );
+      assert(validXml, `${path} : XML invalide`);
+      assert.equal((await context.request.get(`${origin}${path}`)).status(), 200, path);
+    }
     assert.equal((await page.goto(`${origin}/page-absente-build-check`)).status(), 404);
-    return { pages: routes.length, nonAccountExecutableScripts: 0, inlineGzipBytes, real404: true };
+    return {
+      pages: routes.length,
+      nonAccountExecutableScripts: 0,
+      inlineGzipBytes,
+      real404: true,
+      mirrors,
+      structuredEntities,
+      localLinks,
+      localAnchors,
+      orphanPages: 0,
+    };
   } finally {
     await context.close();
   }
@@ -274,6 +541,7 @@ let server;
 let browser;
 try {
   const files = await buildFiles();
+  const indexes = checkIndexes(files);
   const hosted = await serve(files);
   server = hosted.server;
   browser = await chromium.launch({ timeout: 15000 });
@@ -294,6 +562,7 @@ try {
     JSON.stringify({
       status: "passed",
       html,
+      indexes,
       javascript: { files: jsFiles.length, gzipBytes: javascriptGzipBytes },
       limits,
       method:

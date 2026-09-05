@@ -1,0 +1,16 @@
+---
+import EditorialPage from '../components/EditorialPage.astro';
+import EditorialIndex from '../components/EditorialIndex.astro';
+import { editorials, editorialIndexes } from '../content/editorial';
+import type { InferGetStaticPropsType } from 'astro';
+export function getStaticPaths() {
+  return [
+    ...editorials.filter((entry) => entry.data.slug.includes('/')).map((entry) => ({ params: { path: entry.data.slug }, props: { entry, listing: undefined } })),
+    ...editorialIndexes.filter((listing) => listing.slug.includes('/')).map((listing) => ({ params: { path: listing.slug }, props: { listing, entry: undefined } })),
+  ];
+}
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { entry, listing } = Astro.props;
+---
+{entry && <EditorialPage entry={entry} />}
+{listing && <EditorialIndex listing={listing} />}

@@ -7,6 +7,7 @@ export default defineConfig({
       "apps/api/src/**/*.test.ts",
       "apps/client/src/**/*.test.ts",
       "apps/admin/src/**/*.test.ts",
+      "apps/www/src/**/*.test.ts",
       "packages/api-client/src/**/*.test.ts",
     ],
     testTimeout: 30000,

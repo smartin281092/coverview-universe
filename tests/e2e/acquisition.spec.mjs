@@ -99,7 +99,8 @@ test("l’explorateur couvre les destinations produit avec des pages, metadata u
       })),
     );
     expect(new Set(destinations.map(({ href }) => href)).size).toBe(destinations.length);
-    // Seules ces lectures et la continuité du compte appartiennent au périmètre livré.
+    // S-011 rend ces lectures éditoriales accessibles. Les outils et prestations
+    // Retire/Miles/contact gardent leur disponibilité opérationnelle S-010.
     // Une étiquette de disponibilité manquante ne doit pas retirer son propre oracle.
     const readableEntries = new Set([
       "/",
@@ -107,6 +108,16 @@ test("l’explorateur couvre les destinations produit avec des pages, metadata u
       "/methode",
       "/sebastien-martin",
       "/account",
+      "/vision",
+      "/services",
+      "/modeles",
+      "/benchmark",
+      "/outils",
+      "/etudes-de-cas",
+      "/rapports",
+      "/articles",
+      "/sources",
+      "/glossaire",
     ]);
     for (const { href, planned } of destinations)
       expect(planned, `Disponibilité annoncée : ${href}`).toBe(!readableEntries.has(href));
@@ -145,7 +156,12 @@ test("l’explorateur couvre les destinations produit avec des pages, metadata u
         description,
       );
       if (planned) {
-        await expect(page.getByRole("main")).toContainText(/en préparation/i);
+        const unavailable =
+          {
+            "/retire": /Retire Check et le plan retraite ne sont pas encore disponibles/i,
+            "/miles": /n[’']est pas encore actif.*aucun Mile ni avantage n[’']est attribué/i,
+          }[href] ?? /en préparation/i;
+        await expect(page.getByRole("main")).toContainText(unavailable);
         await expect(page.getByRole("main").locator("form, input, textarea")).toHaveCount(0);
       }
     }
@@ -222,7 +238,7 @@ test("lecture publique : aucune requête API, collecte, stockage ou tiers hors d
   page,
   context,
 }) => {
-  test.setTimeout(60000);
+  test.setTimeout(90000);
   const unexpectedRequests = [];
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
@@ -241,7 +257,21 @@ test("lecture publique : aucune requête API, collecte, stockage ou tiers hors d
     .getByRole("navigation", { name: "Toutes les destinations CoverView" })
     .getByRole("link")
     .evaluateAll((links) => links.map((link) => link.getAttribute("href")));
-  for (const path of [...new Set([...routes, "/demonstration"])].filter(
+  const editorialDetails = [
+    "/demonstration",
+    "/modeles",
+    "/outils",
+    "/sources",
+    "/glossaire",
+    "/articles/page/2",
+    "/articles/lire-un-benchmark",
+    "/articles/pourquoi-conserver",
+    "/articles/questions-frequentes",
+    "/etudes-de-cas/maintien",
+    "/etudes-de-cas/comparaison",
+    "/rapports/exemple",
+  ];
+  for (const path of [...new Set([...routes, ...editorialDetails])].filter(
     (path) => path !== "/account",
   )) {
     await page.goto(`${origin}${path}`);

@@ -1,0 +1,124 @@
+{
+  "status": "passed",
+  "html": {
+    "pages": 38,
+    "nonAccountExecutableScripts": 0,
+    "inlineGzipBytes": 0,
+    "real404": true,
+    "mirrors": 18,
+    "structuredEntities": 87,
+    "localLinks": 468,
+    "localAnchors": 82,
+    "orphanPages": 0
+  },
+  "indexes": {
+    "sitemapPages": 0,
+    "feedEntries": 0,
+    "llmsLinks": 0
+  },
+  "javascript": {
+    "files": 1,
+    "gzipBytes": 24087
+  },
+  "limits": {
+    "javascriptGzipBytes": 102400,
+    "lcpMs": 2500,
+    "cls": 0.1
+  },
+  "method": "Chromium headless, HTTP loopback, contexte neuf par page, 1280x900, sans throttling, observation 750 ms après polices/images",
+  "synthetic": [
+    {
+      "route": "/",
+      "lcpMs": 84,
+      "cls": 0.0075,
+      "skipLink": "passed",
+      "observedInteractionEvents": 3,
+      "maxObservedEventDurationMs": 16
+    },
+    {
+      "route": "/overview",
+      "lcpMs": 48,
+      "cls": 0.0007,
+      "skipLink": "passed",
+      "observedInteractionEvents": 0,
+      "maxObservedEventDurationMs": null
+    },
+    {
+      "route": "/analyser-3p",
+      "lcpMs": 40,
+      "cls": 0.0006,
+      "skipLink": "passed",
+      "observedInteractionEvents": 0,
+      "maxObservedEventDurationMs": null
+    },
+    {
+      "route": "/explorer",
+      "lcpMs": 48,
+      "cls": 0.0006,
+      "skipLink": "passed",
+      "observedInteractionEvents": 0,
+      "maxObservedEventDurationMs": null
+    },
+    {
+      "route": "/methode",
+      "lcpMs": 56,
+      "cls": 0.0136,
+      "skipLink": "passed",
+      "observedInteractionEvents": 0,
+      "maxObservedEventDurationMs": null
+    },
+    {
+      "route": "/modeles",
+      "lcpMs": 60,
+      "cls": 0.0017,
+      "skipLink": "passed",
+      "observedInteractionEvents": 0,
+      "maxObservedEventDurationMs": null
+    },
+    {
+      "route": "/articles",
+      "lcpMs": 48,
+      "cls": 0.0006,
+      "skipLink": "passed",
+      "observedInteractionEvents": 0,
+      "maxObservedEventDurationMs": null
+    },
+    {
+      "route": "/articles/page/2",
+      "lcpMs": 40,
+      "cls": 0.0006,
+      "skipLink": "passed",
+      "observedInteractionEvents": 0,
+      "maxObservedEventDurationMs": null
+    },
+    {
+      "route": "/etudes-de-cas/maintien",
+      "lcpMs": 48,
+      "cls": 0.001,
+      "skipLink": "passed",
+      "observedInteractionEvents": 0,
+      "maxObservedEventDurationMs": null
+    },
+    {
+      "route": "/rapports/exemple",
+      "lcpMs": 48,
+      "cls": 0.0007,
+      "skipLink": "passed",
+      "observedInteractionEvents": 0,
+      "maxObservedEventDurationMs": null
+    },
+    {
+      "route": "/sebastien-martin",
+      "lcpMs": 52,
+      "cls": 0.0039,
+      "skipLink": "passed",
+      "observedInteractionEvents": 0,
+      "maxObservedEventDurationMs": null
+    }
+  ],
+  "unmeasured": [
+    "INP terrain",
+    "RUM",
+    "conditions réelles de réseau et appareils"
+  ]
+}

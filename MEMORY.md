@@ -22,4 +22,7 @@ Aucune entrée activée. L'identité du projet vit dans PROJECT.md ; les décisi
 - MEM-110 · piège · L’ajout direct de Sharp a initialement produit une jonction pnpm sans son suffixe de peer ; résolution outillée de la même version et vérification frozen/build dans le ledger S-010. (S-010, 2026-09-06 · confiance haute · revoir avant 2026-12-05 · candidat)
 - MEM-111 · décision · S-011 reprend le français initial déjà fixé par PROJECT ; réponse déléguée à bible.question.004 consignée dans state, sans preuve éditoriale externe ni locale additionnelle déduite. (Relais S-011, 2026-09-06 · confiance haute · revoir avant 2026-12-05 · candidat)
 
+- MEM-112 · décision · La mécanique éditoriale S-011 reste en préversion non indexable ; provenance et gardes, types JSON-LD conditionnels et limites de validation sont décrits dans le README www et le ledger S-011. Le choix local ne fournit ni biographie validée, ni source Instagram, ni collecte CRM. (S-011, 2026-09-06 · confiance haute · revoir avant 2026-12-05 · candidat)
+- MEM-113 · piège · Un retour de détail vers l’index racine perd la position d’une liste paginée ; le retour vers la page calculée et une ancre focalisable est vérifié en S-011. La restauration native du focus par retour navigateur reste distincte de cet oracle explicite. (S-011, 2026-09-06 · confiance haute · revoir avant 2026-12-05 · candidat)
+
 Ces candidats attendent une revue ; ils ne constituent pas des règles concurrentes des références citées.

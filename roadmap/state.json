@@ -137,7 +137,9 @@
           "S-000a-C01..C06 : recette complète depuis checkout vierge 4f04808f2201af5603a54d27fdbbf8a175ba800c passée ; proof roadmap/evidence/S-000a-clean-check.json.",
           "Neuf tests de preview passent aussi dans Linux non-root avec source read-only et réseau désactivé."
         ],
-        "done_unverified": ["CI distante, reset destructif, WorkOS et déploiement non exécutés."],
+        "done_unverified": [
+          "CI distante, reset destructif, WorkOS et déploiement non exécutés."
+        ],
         "assumed": [
           "Français initial et ports réversibles : impact catalogues i18n et configuration locale."
         ]
@@ -298,7 +300,7 @@
       "approval": "Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md"
     },
     "S-011": {
-      "status": "ready",
+      "status": "review",
       "approval": "Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md",
       "decisions": [
         {
@@ -306,15 +308,81 @@
           "question": "Publier initialement tous ces contenus en français avec clés et architecture i18n extensibles ?",
           "answer": "(a) Oui, français initial comme PROJECT. Réutiliser les contenus FR et conserver une architecture extensible ; aucune locale supplémentaire fournie.",
           "evidence": "PROJECT.md, Langues et données ; décision déléguée de préparation du 2026-09-06 selon roadmap/execution-policy.md / PROG-23."
+        },
+        {
+          "ref": "S-011.editorial-preview",
+          "question": "Comment livrer les contenus locaux sans fabriquer les preuves éditoriales et intégrations absentes ?",
+          "answer": "Conserver la préversion FR non indexable, sources/auteur/dates explicites, cas et rapport entièrement fictifs ; aucun état published activable. Réaliser les pages et gardes sans retirer C01/C04/C06 : bio externe, Instagram fourni et collecte CRM demeurent non vérifiés.",
+          "evidence": "PROJECT, ENV-09, SEO-04/06/08, G-06 et mandat PROG-23 ; audit source S-011 du 2026-09-06, roadmap/evidence/S-011.md."
         }
       ],
-      "verification_attempts": [],
-      "ledger": { "assumed": [], "done_unverified": [], "verified": [] },
-      "session": "Nouvelle tâche gpt-6-astra / ultra requise ; S-011 non exécutée dans la session S-010.",
+      "verification_attempts": [
+        {
+          "target": "Préconditions et sources",
+          "oracle": "V0",
+          "observed": "Checkout propre, ace91c9cb965bf12034545c82219b55594a6cdac ancêtre de HEAD ; S-010 done. Bible ciblée lue, aucun fait externe ajouté.",
+          "decision": "Propriétaire unique worktree9b02, branche codex/s-011-editorial ; S-000b review conservé."
+        },
+        {
+          "target": "Garde éditorial et source du miroir",
+          "oracle": "V2",
+          "observed": "Premiers types/build et quatre tests passent ; revue repère chiffres devise préfixée/metadonnées non contrôlés et lecture YAML cité manquante.",
+          "decision": "Garde renforcé avec refus ciblés ; oracle source accepte les deux syntaxes YAML et couvre 18 miroirs. Aucun chiffre validé inventé."
+        },
+        {
+          "target": "Qualité et formatage",
+          "oracle": "V0/V1/V2",
+          "observed": "82 tests applicatifs et48 outillage passent ; formatage TS/MDX/CSS exécuté, parser Astro absent. Knip détecte un export sans consommateur.",
+          "decision": "Export retiré sans changer validation ; Astro Check/lint/build et frontières/knip finaux passent. Aucun plugin ni dépendance ajouté."
+        },
+        {
+          "target": "Première recette navigateur",
+          "oracle": "V3",
+          "observed": "22/25 : deux attentes du libellé générique de disponibilité, et défaut réel de retour FAQ à index racine au lieu de page2 ; focus natif non restauré.",
+          "decision": "Oracles alignés sur les états opérationnels précis ; retour explicite calculé vers page2 et ancre focalisable. Retour navigateur limité à URL/visibilité, focus prouvé sur retour explicite."
+        },
+        {
+          "target": "Recette navigateur et build finaux",
+          "oracle": "V3 local",
+          "observed": "25/25 passent ;38 pages+404,18 miroirs égaux source/HTML,468liens/82ancres,zéro orphelin. JS gzip24087B ;11gabarits LCP40–84ms,CLS<=0,0136. Six captures inspectées.",
+          "decision": "Conserver JSON S-011-build-check ; mesures locales uniquement. Neuf transports identité restent simulés ; aucun oracle WorkOS réel."
+        },
+        {
+          "target": "Revue indépendante et clôture",
+          "oracle": "V2/V3 local",
+          "observed": "Revue source/code/correctif retour close sans finding local ; sept axes bio sourcés,12 dimensions complètes,2cas fictifs et rapport structurés. Références externes/Instagram et CRM restent absents.",
+          "decision": "S-011 review ; C01/C04/C06 partiels, aucune dépendance libérée artificiellement."
+        },
+        {
+          "target": "Éligibilité du relais",
+          "oracle": "V0",
+          "observed": "Tous les depends_on des120 slices évalués contre état final : aucune nouvelle slice éligible. Les branches restantes attendent S-000b ou ses descendants.",
+          "decision": "Appliquer exception obstacle réel de execution-policy ; checkpoint S-011-review préparé, aucun relais factice ni tâche incapable de progresser créée."
+        }
+      ],
+      "ledger": {
+        "verified": [
+          "C02/C03 et mécanique locale C05 : pages sourcées, tableau12x3 exact,18miroirs équivalents, metadata/JSON-LD honnêtes et sorties indexables vides.",
+          "Parties locales C01/C04/C06 : sept axes attribués à source, garde de preuves, deux cas fictifs/rapport5–10sections, pagination et retour explicite ancré focalisé.",
+          "82tests applicatifs,48outillage,25navigateur ; lint/typecheck/build/frontières/knip/check:env/check:bundles/marque passent. Revue indépendante close. Voir roadmap/evidence/S-011.md."
+        ],
+        "done_unverified": [
+          "C01 validation biographique externe absente ; C04 source Instagram et liens réciproques absents ; C06 collecte/reprise/raccord CRM non livrés. Slice review, non done.",
+          "Aucun WorkOS réel, push, déploiement Infomaniak, DNS, CI distante, Search Console, RUM ou INP terrain. Neuf transports identité simulés conservés.",
+          "Aucune prochaine slice indépendante aux dépendances done ; checkpoint roadmap/handoffs/S-011-review.md avant reprise sur préconditions réelles."
+        ],
+        "assumed": [
+          "Pagination de deux entrées et nouveaux slugs éditoriaux locaux ; impact si changement : retours d’index à recalculer, redirections301 après exposition ; aucun droit ni calcul."
+        ]
+      },
+      "session": "Tâche S-011 créée selon relais gpt-6-astra / ultra ; modèle hôte GPT-6, effort non observable indépendamment des paramètres transmis.",
       "notes": [
-        "Seule dépendance S-010 réellement done ; checkpoint roadmap/handoffs/S-011.md. S-000b reste review et ses dépendantes fermées.",
-        "Préserver les URLs et disponibilités S-010. Ne pas inventer bio/statut/avis/track record, référence Instagram ou raccord CRM réellement absent. Lire les limites au checkpoint avant mutation."
-      ]
+        "Propriétaire unique S-011 : worktree9b02, branche codex/s-011-editorial ; préconditions propres et ascendance requise vérifiées avant mutation.",
+        "Ledger complet/captures : roadmap/evidence/S-011.md ; JSON de build S-011-build-check.json. Aucun nouveau package, schéma, permission ou secret.",
+        "S-011 review conserve C01/C04/C06 non vérifiés ; S-000b review inchangé. Aucune nouvelle slice éligible, preuve S-011-next-eligibility.json ; exception obstacle réel du mandat, pas de relais factice.",
+        "Chevauchement contact à réconcilier : S-080 possède l’entrée publique CRM ; après S-013/S-080 done, reprendre C06 S-011 avant S-012 qui enrichit le contact existant. Exiger S-012 avant S-011 créerait une boucle sémantique ; voir checkpoint/README www."
+      ],
+      "cost": "Non disponible ; une session principale et trois sous-tâches bornées."
     }
   },
   "execution": {

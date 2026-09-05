@@ -2,14 +2,17 @@
 import Layout from '../layouts/Layout.astro';
 import { acquisition as copy, journeys, plannedPages } from '../content/fr/acquisition';
 import { content } from '../content/fr/interface';
+import { readableEditorialPaths } from '../content/editorial';
 const page = copy.explorer;
+const status = (slug: string) => readableEditorialPaths.has(slug) && !['contact', 'retire', 'miles'].includes(slug) ? copy.readable : copy.coming;
 const groups = [
   { label: page.understand, links: [
     { href: '/', label: content.home, status: copy.readable },
     { href: '/overview', label: copy.overview, status: copy.readable },
     { href: '/methode', label: copy.method, status: copy.readable },
     { href: '/sebastien-martin', label: copy.founder, status: copy.readable },
-    ...plannedPages.filter((p) => p.group === 'understand').map((p) => ({ href: `/${p.slug}`, label: p.label, status: copy.coming })),
+    ...plannedPages.filter((p) => p.group === 'understand').map((p) => ({ href: `/${p.slug}`, label: p.label, status: status(p.slug) })),
+    ...copy.editorialLinks.map((link) => ({ ...link, status: copy.readable })),
   ] },
   { label: page.tools, links: [
     ...journeys.map((p) => ({ href: `/${p.slug}`, label: p.label, status: copy.coming })),

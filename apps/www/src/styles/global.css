@@ -217,6 +217,56 @@
   .site-footer {
     @apply mx-auto flex max-w-7xl flex-wrap justify-between gap-4 border-t border-border px-6 py-7 text-xs text-muted-foreground sm:px-10;
   }
+  .editorial-body {
+    @apply space-y-5;
+  }
+  .editorial-meta,
+  .editorial-sources {
+    @apply space-y-2 text-sm leading-relaxed text-muted-foreground;
+  }
+  .editorial-sources {
+    @apply border-t border-border pt-5;
+  }
+  .editorial-sources ul {
+    @apply list-disc space-y-1 pl-5;
+  }
+  .editorial-sources a {
+    @apply text-primary underline underline-offset-4;
+  }
+  .source-title {
+    @apply font-semibold text-foreground;
+  }
+  .fiction-notice {
+    @apply rounded-lg border border-border bg-accent p-4 text-sm font-medium text-foreground;
+  }
+  .comparison-page {
+    @apply max-w-6xl;
+  }
+  .table-hint {
+    @apply mb-3 text-sm text-muted-foreground;
+  }
+  .table-region {
+    @apply max-w-full overflow-x-auto rounded-lg border border-border focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring;
+  }
+  .table-region table {
+    @apply w-full min-w-180 border-collapse bg-card text-left text-sm;
+  }
+  .table-region th,
+  .table-region td {
+    @apply border-b border-border p-4 align-top;
+  }
+  .table-region th {
+    @apply font-semibold;
+  }
+  .table-region thead {
+    @apply bg-accent;
+  }
+  .editorial-list {
+    @apply space-y-4;
+  }
+  .pagination {
+    @apply flex min-h-11 flex-wrap items-center justify-between gap-4 text-sm;
+  }
   .site-footer a {
     @apply text-primary;
   }

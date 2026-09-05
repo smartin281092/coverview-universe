@@ -2,13 +2,22 @@
 import type { InferGetStaticPropsType } from 'astro';
 import Layout from '../layouts/Layout.astro';
 import { acquisition as copy, journeys, plannedPages } from '../content/fr/acquisition';
+import EditorialPage from '../components/EditorialPage.astro';
+import EditorialIndex from '../components/EditorialIndex.astro';
+import { editorials, editorialIndexes, readableEditorialPaths } from '../content/editorial';
 export function getStaticPaths() {
-  return [...journeys, ...plannedPages].map((page) => ({ params: { slug: page.slug }, props: { page } }));
+  return [
+    ...[...journeys, ...plannedPages].filter((page) => !readableEditorialPaths.has(page.slug)).map((page) => ({ params: { slug: page.slug }, props: { page, entry: undefined, listing: undefined } })),
+    ...editorials.filter((entry) => !entry.data.slug.includes('/') && !['methode', 'sebastien-martin'].includes(entry.data.slug)).map((entry) => ({ params: { slug: entry.data.slug }, props: { entry, page: undefined, listing: undefined } })),
+    ...editorialIndexes.filter((listing) => !listing.slug.includes('/')).map((listing) => ({ params: { slug: listing.slug }, props: { listing, page: undefined, entry: undefined } })),
+  ];
 }
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
-const { page } = Astro.props;
+const { page, entry, listing } = Astro.props;
 ---
-<Layout title={copy.availabilityTitle.replace('{{label}}', page.label)} description={page.description}>
+{entry && <EditorialPage entry={entry} />}
+{listing && <EditorialIndex listing={listing} />}
+{page && <Layout title={copy.availabilityTitle.replace('{{label}}', page.label)} description={page.description}>
   <section class="reading-page">
     <a href="/overview" class="text-link">← {copy.returnOverview}</a>
     <p class="stage-label">{copy.coming}</p>
@@ -18,4 +27,4 @@ const { page } = Astro.props;
     <div class="resume-entry"><h2>{copy.resume}</h2><p>{copy.resumeNote}</p><a href={`/${page.slug}`} class="text-link">{`/${page.slug}`}</a></div>
     <a href="/explorer" class="text-link">{copy.returnExplore}<span aria-hidden="true">→</span></a>
   </section>
-</Layout>
+</Layout>}

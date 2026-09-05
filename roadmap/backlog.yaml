@@ -130,7 +130,7 @@
   notes: []
 - id: S-011
   title: "Publier les pages de méthode, preuves et contenus de référence"
-  status: ready
+  status: review
   milestone: M1
   depends_on: ["S-010"]
   plan: roadmap/plans/S-011.plan.md
@@ -140,10 +140,10 @@
   recommended_effort: ultra
   session_budget: 1
   approval: "Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md"
-  session: "Nouvelle tâche gpt-6-astra / ultra requise ; S-011 non exécutée dans la session S-010."
-  cost: ""
-  decisions: [{"ref":"bible.question.004","question":"Publier initialement tous ces contenus en français avec clés et architecture i18n extensibles ?","answer":"(a) Oui, français initial comme PROJECT. Réutiliser les contenus FR et conserver une architecture extensible ; aucune locale supplémentaire fournie.","evidence":"PROJECT.md, Langues et données ; décision déléguée de préparation du 2026-09-06 selon roadmap/execution-policy.md / PROG-23."}]
-  notes: ["Seule dépendance S-010 réellement done ; checkpoint roadmap/handoffs/S-011.md. S-000b reste review et ses dépendantes fermées.","Préserver les URLs et disponibilités S-010. Ne pas inventer bio/statut/avis/track record, référence Instagram ou raccord CRM réellement absent. Lire les limites au checkpoint avant mutation."]
+  session: "Tâche S-011 créée selon relais gpt-6-astra / ultra ; modèle hôte GPT-6, effort non observable indépendamment des paramètres transmis."
+  cost: "Non disponible ; une session principale et trois sous-tâches bornées."
+  decisions: [{"ref":"bible.question.004","question":"Publier initialement tous ces contenus en français avec clés et architecture i18n extensibles ?","answer":"(a) Oui, français initial comme PROJECT. Réutiliser les contenus FR et conserver une architecture extensible ; aucune locale supplémentaire fournie.","evidence":"PROJECT.md, Langues et données ; décision déléguée de préparation du 2026-09-06 selon roadmap/execution-policy.md / PROG-23."},{"ref":"S-011.editorial-preview","question":"Comment livrer les contenus locaux sans fabriquer les preuves éditoriales et intégrations absentes ?","answer":"Conserver la préversion FR non indexable, sources/auteur/dates explicites, cas et rapport entièrement fictifs ; aucun état published activable. Réaliser les pages et gardes sans retirer C01/C04/C06 : bio externe, Instagram fourni et collecte CRM demeurent non vérifiés.","evidence":"PROJECT, ENV-09, SEO-04/06/08, G-06 et mandat PROG-23 ; audit source S-011 du 2026-09-06, roadmap/evidence/S-011.md."}]
+  notes: ["Propriétaire unique S-011 : worktree9b02, branche codex/s-011-editorial ; préconditions propres et ascendance requise vérifiées avant mutation.","Ledger complet/captures : roadmap/evidence/S-011.md ; JSON de build S-011-build-check.json. Aucun nouveau package, schéma, permission ou secret.","S-011 review conserve C01/C04/C06 non vérifiés ; S-000b review inchangé. Aucune nouvelle slice éligible, preuve S-011-next-eligibility.json ; exception obstacle réel du mandat, pas de relais factice.","Chevauchement contact à réconcilier : S-080 possède l’entrée publique CRM ; après S-013/S-080 done, reprendre C06 S-011 avant S-012 qui enrichit le contact existant. Exiger S-012 avant S-011 créerait une boucle sémantique ; voir checkpoint/README www."]
 - id: S-012
   title: "Répondre aux FAQ et conserver la provenance déclarée des prospects"
   status: specified

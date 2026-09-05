@@ -51,7 +51,7 @@ Lire [AGENTS.md](AGENTS.md), son référentiel [CLAUDE.md](CLAUDE.md), puis [PRO
 | WorkOS et cible cloud protégée        | [Authentification](docs/auth.md), [hébergement](docs/hosting.md)                                     |
 | Décisions d'initialisation            | [ADR-0001](adr/0001-harness.md) puis ADR liés depuis PROJECT                                         |
 | Résultat et vérifications             | [Livraison de la roadmap](roadmap/review.md), [initialisation historique](roadmap/initialisation.md) |
-| Prochaine session                     | [Relais S-011](roadmap/handoffs/S-011.md)                                                            |
+| Reprise après preuves manquantes       | [Checkpoint S-011 review](roadmap/handoffs/S-011-review.md)                                         |
 
 ## Vérifier le cadrage
 
@@ -69,6 +69,6 @@ node scripts/context-handoff.mjs check roadmap/handoffs/roadmap.md
 
 Le runtime Python embarqué et les limites de l'extraction sont documentés dans l'index produit. `node evals/run.mjs --dry` vérifie aussi la génération du prompt d'évaluation ; une campagne modèle réelle est distincte et reste à exécuter sur une surface compatible.
 
-Le site public ouvre les trois parcours S-010, une démonstration fictive et la navigation vers des destinations dont la disponibilité est explicite : [preuves S-010](roadmap/evidence/S-010.md). Les apps conservent le socle technique et le parcours compte de S-000b. L’implémentation WorkOS est présente ; son activation, les parcours réellement exécutés et les obstacles externes sont consignés dans [le ledger S-000b](roadmap/evidence/S-000b.md). Aucun compte autorisé, droit administratif, déploiement ou DNS n’est prouvé par ces fichiers.
+Le site public ouvre les trois parcours S-010, une démonstration fictive et la navigation vers des destinations dont la disponibilité est explicite : [preuves S-010](roadmap/evidence/S-010.md). Les pages de méthode, comparaison et exemples de [S-011](roadmap/evidence/S-011.md) sont lisibles localement ; la slice reste review faute de références éditoriales/Instagram et collecte CRM complètes. Les apps conservent le socle technique et le parcours compte de S-000b. L’implémentation WorkOS est présente ; son activation, les parcours réellement exécutés et les obstacles externes sont consignés dans [le ledger S-000b](roadmap/evidence/S-000b.md). Aucun compte autorisé, droit administratif, déploiement ou DNS n’est prouvé par ces fichiers. Aucune nouvelle slice n’a actuellement toutes ses dépendances done ; reprendre selon le checkpoint lorsque les préconditions réelles sont disponibles.
 
 Dépôt distant : [smartin281092/coverview-universe](https://github.com/smartin281092/coverview-universe), configuré comme `origin`. État de synchronisation dans PROJECT et le journal. Version reçue du harness : 2.1.0 ; adaptation locale documentée dans [CHANGELOG](CHANGELOG.md).
