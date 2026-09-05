@@ -1,0 +1,31 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { acquisition as copy, journeys, plannedPages } from '../content/fr/acquisition';
+import { content } from '../content/fr/interface';
+const page = copy.explorer;
+const groups = [
+  { label: page.understand, links: [
+    { href: '/', label: content.home, status: copy.readable },
+    { href: '/overview', label: copy.overview, status: copy.readable },
+    { href: '/methode', label: copy.method, status: copy.readable },
+    { href: '/sebastien-martin', label: copy.founder, status: copy.readable },
+    ...plannedPages.filter((p) => p.group === 'understand').map((p) => ({ href: `/${p.slug}`, label: p.label, status: copy.coming })),
+  ] },
+  { label: page.tools, links: [
+    ...journeys.map((p) => ({ href: `/${p.slug}`, label: p.label, status: copy.coming })),
+    ...plannedPages.filter((p) => p.group === 'tools').map((p) => ({ href: `/${p.slug}`, label: p.label, status: copy.coming })),
+  ] },
+  { label: page.spaces, links: [
+    { href: '/account', label: page.wallet, status: page.accountStatus },
+    ...plannedPages.filter((p) => p.group === 'spaces').map((p) => ({ href: `/${p.slug}`, label: p.label, status: copy.coming })),
+  ] },
+];
+---
+<Layout title={page.title} description={page.description}>
+  <section class="content-page">
+    <div class="page-intro"><h1>{page.heading}</h1><p>{page.introduction}</p></div>
+    <nav class="explorer-grid" aria-label={page.navigation}>
+      {groups.map((group) => <section><h2>{group.label}</h2><ul>{group.links.map((link) => <li><a href={link.href}><span>{link.label}</span><small>{link.status}</small></a></li>)}</ul></section>)}
+    </nav>
+  </section>
+</Layout>

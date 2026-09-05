@@ -50,7 +50,7 @@
   notes: []
 - id: S-010
   title: "Ouvrir les trois parcours CoverView depuis un site public compact"
-  status: ready
+  status: done
   milestone: M1
   depends_on: ["S-000a"]
   plan: roadmap/plans/S-010.plan.md
@@ -60,10 +60,10 @@
   recommended_effort: ultra
   session_budget: 1
   approval: "Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md"
-  session: "Nouvelle tâche requise gpt-6-astra / ultra ; non exécutée à ce checkpoint."
-  cost: ""
-  decisions: []
-  notes: ["Prochaine slice indépendante de S-000b review : seule dépendance S-000a réellement done. Lire roadmap/handoffs/S-010.md avant mutation."]
+  session: "Tâche S-010 créée selon relais gpt-6-astra / ultra ; modèle hôte GPT-6, effort non observable indépendamment des paramètres transmis."
+  cost: "Non disponible ; une session principale et sous-tâches bornées de lecture/revue/tests."
+  decisions: [{"ref":"S-010.public-entry","question":"Comment ouvrir honnêtement les parcours dont les outils ne sont pas livrés ?","answer":"Pages SSG de disponibilité avec URL stable, question traitée et liens utiles ; aucun formulaire, prospect, session anonyme ni événement d’entrée d’outil avant un outil réellement disponible. Navigation complète sur /explorer, détails sur pages dédiées. Préversion locale noindex conservée.","evidence":"Mandat PROG-23 ; S-010-C02/C03 autorisent la disponibilité précise ; MKT-02/03/09 et FRONT-14 ; dépendances S-025/S-028/S-030 non done constatées le 2026-09-06."}]
+  notes: ["Propriétaire unique : worktree 8b6a, branche codex/s-010-public ; préconditions propres et ascendance 94f6939b35f0b5e009d7a615776bba8e8b99a2fe vérifiées avant mutation.","Ledger et captures : roadmap/evidence/S-010.md ; preuve synthétique build : roadmap/evidence/S-010-build-check.json.","Revue indépendante close après correction des propriétaires S-013/S-032 et du titre FR ; aucune validation WorkOS déduite. S-000b reste review."]
 - id: S-081
   title: "Délivrer un dossier avec tâches, prochaine action et Kanban"
   status: specified
@@ -130,7 +130,7 @@
   notes: []
 - id: S-011
   title: "Publier les pages de méthode, preuves et contenus de référence"
-  status: specified
+  status: ready
   milestone: M1
   depends_on: ["S-010"]
   plan: roadmap/plans/S-011.plan.md
@@ -139,11 +139,11 @@
   recommended_model: gpt-6-astra
   recommended_effort: ultra
   session_budget: 1
-  approval: ""
-  session: ""
+  approval: "Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md"
+  session: "Nouvelle tâche gpt-6-astra / ultra requise ; S-011 non exécutée dans la session S-010."
   cost: ""
-  decisions: []
-  notes: []
+  decisions: [{"ref":"bible.question.004","question":"Publier initialement tous ces contenus en français avec clés et architecture i18n extensibles ?","answer":"(a) Oui, français initial comme PROJECT. Réutiliser les contenus FR et conserver une architecture extensible ; aucune locale supplémentaire fournie.","evidence":"PROJECT.md, Langues et données ; décision déléguée de préparation du 2026-09-06 selon roadmap/execution-policy.md / PROG-23."}]
+  notes: ["Seule dépendance S-010 réellement done ; checkpoint roadmap/handoffs/S-011.md. S-000b reste review et ses dépendantes fermées.","Préserver les URLs et disponibilités S-010. Ne pas inventer bio/statut/avis/track record, référence Instagram ou raccord CRM réellement absent. Lire les limites au checkpoint avant mutation."]
 - id: S-012
   title: "Répondre aux FAQ et conserver la provenance déclarée des prospects"
   status: specified

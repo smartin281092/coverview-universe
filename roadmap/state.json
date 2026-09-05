@@ -137,9 +137,7 @@
           "S-000a-C01..C06 : recette complète depuis checkout vierge 4f04808f2201af5603a54d27fdbbf8a175ba800c passée ; proof roadmap/evidence/S-000a-clean-check.json.",
           "Neuf tests de preview passent aussi dans Linux non-root avec source read-only et réseau désactivé."
         ],
-        "done_unverified": [
-          "CI distante, reset destructif, WorkOS et déploiement non exécutés."
-        ],
+        "done_unverified": ["CI distante, reset destructif, WorkOS et déploiement non exécutés."],
         "assumed": [
           "Français initial et ports réversibles : impact catalogues i18n et configuration locale."
         ]
@@ -236,18 +234,87 @@
     },
     "S-010": {
       "notes": [
-        "Prochaine slice indépendante de S-000b review : seule dépendance S-000a réellement done. Lire roadmap/handoffs/S-010.md avant mutation."
+        "Propriétaire unique : worktree 8b6a, branche codex/s-010-public ; préconditions propres et ascendance 94f6939b35f0b5e009d7a615776bba8e8b99a2fe vérifiées avant mutation.",
+        "Ledger et captures : roadmap/evidence/S-010.md ; preuve synthétique build : roadmap/evidence/S-010-build-check.json.",
+        "Revue indépendante close après correction des propriétaires S-013/S-032 et du titre FR ; aucune validation WorkOS déduite. S-000b reste review."
+      ],
+      "verification_attempts": [
+        {
+          "target": "Build Astro avec fond fourni",
+          "oracle": "V1",
+          "observed": "Deux échecs Sharp : absent de la résolution de l’app, puis jonction vers une cible sans peer inexistante.",
+          "decision": "Diagnostic import/jonction ; résolution outillée ciblée sharp même version avec peer, aucune édition manuelle du lockfile. Build final 29 pages et WebP réussi."
+        },
+        {
+          "target": "S-010-C01/C02/C03/C04/C05",
+          "oracle": "V3",
+          "observed": "Cinq nouveaux tests sans simulation passent ; HTML sans JS, clics trois parcours, disponibilité, navigation/404/metadata, focus/retour, mobile et absence API/stockage. Captures réellement inspectées.",
+          "decision": "Revue indépendante statique close ; conserver disponibilité future et preuve fictive explicite."
+        },
+        {
+          "target": "Recette navigateur complète",
+          "oracle": "V3",
+          "observed": "Premier passage 19/20 : contexte détruit pendant l’attente brute des polices après rechargement dev ; attente Playwright adaptée sans enlever les assertions ; second passage 20/20.",
+          "decision": "Parcours socle et compte préservés ; neuf transports identité simulés restent distincts du fournisseur réel."
+        },
+        {
+          "target": "Qualité et non-régression",
+          "oracle": "V2",
+          "observed": "78 tests applicatifs, 48 outillage, lint/typecheck/build/frontières/knip, scan 37 fichiers frontend et check:env passent.",
+          "decision": "Aucun contrôle désactivé. Avertissements Vite et catalogue Astro conservés."
+        },
+        {
+          "target": "Build public et budgets",
+          "oracle": "V3",
+          "observed": "28 HTML +404, aucun JS exécutable hors compte ; JS global gzip 24087 octets. Cinq gabarits : LCP local 44–64ms, CLS<=0,0156. Résultat JSON conservé.",
+          "decision": "Contrôle ajouté en CI ; mesures synthétiques uniquement, INP terrain/RUM non mesurés."
+        }
+      ],
+      "status": "done",
+      "decisions": [
+        {
+          "ref": "S-010.public-entry",
+          "question": "Comment ouvrir honnêtement les parcours dont les outils ne sont pas livrés ?",
+          "answer": "Pages SSG de disponibilité avec URL stable, question traitée et liens utiles ; aucun formulaire, prospect, session anonyme ni événement d’entrée d’outil avant un outil réellement disponible. Navigation complète sur /explorer, détails sur pages dédiées. Préversion locale noindex conservée.",
+          "evidence": "Mandat PROG-23 ; S-010-C02/C03 autorisent la disponibilité précise ; MKT-02/03/09 et FRONT-14 ; dépendances S-025/S-028/S-030 non done constatées le 2026-09-06."
+        }
+      ],
+      "ledger": {
+        "assumed": [
+          "Organisation de navigation et slugs réservés localement ; si modifiés après publication, redirections 301 nécessaires. Aucun impact droit ou calcul."
+        ],
+        "done_unverified": [
+          "Aucun déploiement, DNS, CI distante, Search Console, INP terrain ou RUM.",
+          "Aucun parcours WorkOS réel ; S-000b reste review. Outils futurs indisponibles."
+        ],
+        "verified": [
+          "C01-C05 : Home/Overview, navigation complète et destinations précises, exemple fictif, lecture anonyme et méthode/personne distinctes contrôlés en navigateur.",
+          "78 tests applicatifs, 48 outillage, 20 navigateur ; build 29 pages et contrôles qualité locaux passent.",
+          "Revue indépendante close, marque intacte et aucune collecte publique ajoutée ; preuve build synthétique dans roadmap/evidence/S-010-build-check.json."
+        ]
+      },
+      "cost": "Non disponible ; une session principale et sous-tâches bornées de lecture/revue/tests.",
+      "session": "Tâche S-010 créée selon relais gpt-6-astra / ultra ; modèle hôte GPT-6, effort non observable indépendamment des paramètres transmis.",
+      "approval": "Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md"
+    },
+    "S-011": {
+      "status": "ready",
+      "approval": "Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md",
+      "decisions": [
+        {
+          "ref": "bible.question.004",
+          "question": "Publier initialement tous ces contenus en français avec clés et architecture i18n extensibles ?",
+          "answer": "(a) Oui, français initial comme PROJECT. Réutiliser les contenus FR et conserver une architecture extensible ; aucune locale supplémentaire fournie.",
+          "evidence": "PROJECT.md, Langues et données ; décision déléguée de préparation du 2026-09-06 selon roadmap/execution-policy.md / PROG-23."
+        }
       ],
       "verification_attempts": [],
-      "status": "ready",
-      "decisions": [],
-      "ledger": {
-        "assumed": [],
-        "done_unverified": [],
-        "verified": []
-      },
-      "session": "Nouvelle tâche requise gpt-6-astra / ultra ; non exécutée à ce checkpoint.",
-      "approval": "Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md"
+      "ledger": { "assumed": [], "done_unverified": [], "verified": [] },
+      "session": "Nouvelle tâche gpt-6-astra / ultra requise ; S-011 non exécutée dans la session S-010.",
+      "notes": [
+        "Seule dépendance S-010 réellement done ; checkpoint roadmap/handoffs/S-011.md. S-000b reste review et ses dépendantes fermées.",
+        "Préserver les URLs et disponibilités S-010. Ne pas inventer bio/statut/avis/track record, référence Instagram ou raccord CRM réellement absent. Lire les limites au checkpoint avant mutation."
+      ]
     }
   },
   "execution": {

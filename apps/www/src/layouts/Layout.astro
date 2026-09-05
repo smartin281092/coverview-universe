@@ -3,11 +3,13 @@ import '../styles/global.css';
 import logo from '../../../../assets/logo-coverview.svg?url';
 import favicon from '../../../../assets/favicon.png?url';
 import { content } from '../content/fr/interface';
+import { acquisition } from '../content/fr/acquisition';
 
 interface Props { title: string; description: string; }
 const { title, description } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const image = new URL('/og-preview.svg', Astro.site);
+const walletUrl = import.meta.env.PUBLIC_WALLET_URL ?? (import.meta.env.DEV ? 'http://127.0.0.1:4101' : undefined);
 ---
 <!doctype html>
 <html lang="fr-CH">
@@ -37,12 +39,19 @@ const image = new URL('/og-preview.svg', Astro.site);
     <header class="site-header">
       <a href="/" aria-label={content.home}><img src={logo} alt={content.brand} width="444" height="73" class="logo" /></a>
       <nav aria-label={content.navigation}>
+        <a href="/overview" class="text-link" aria-current={Astro.url.pathname === '/overview' ? 'page' : undefined}>{acquisition.overview}</a>
+        <a href="/explorer" class="text-link" aria-current={Astro.url.pathname === '/explorer' ? 'page' : undefined}>{acquisition.explore}</a>
         <a href="/account" class="text-link">{content.accountLink}</a>
-        {import.meta.env.DEV && <a href="http://127.0.0.1:4102" class="text-link">{content.team}<span aria-hidden="true">↗</span></a>}
-        <span class="stage-label">{import.meta.env.DEV ? (Astro.url.pathname === "/account" ? content.account.local : content.local) : content.construction}</span>
       </nav>
     </header>
     <main id="main" tabindex="-1"><slot /></main>
-    <footer class="site-footer"><p>{content.footer}</p><a href="/">{content.home}</a></footer>
+    <footer class="site-footer">
+      <div><p>{content.footer}</p><p>{import.meta.env.DEV ? content.account.local : content.construction}</p></div>
+      <div class="account-actions">
+        {walletUrl && <a href={walletUrl} class="text-link">{content.wallet}<span aria-hidden="true">↗</span></a>}
+        {import.meta.env.DEV && <a href="http://127.0.0.1:4102" class="text-link">{content.team}<span aria-hidden="true">↗</span></a>}
+        <a href="/explorer" class="text-link">{acquisition.explore}</a>
+      </div>
+    </footer>
   </body>
 </html>

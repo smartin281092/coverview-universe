@@ -1,0 +1,18 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { acquisition as copy, journeys } from '../content/fr/acquisition';
+const page = copy.overviewPage;
+---
+<Layout title={page.title} description={page.description}>
+  <section class="content-page">
+    <div class="page-intro"><p class="eyebrow">{copy.overview}</p><h1>{page.heading}</h1><p>{page.introduction}</p></div>
+    <div class="journey-grid">
+      {journeys.map((journey) => <article class="journey-card">
+        <span class="stage-label">{copy.coming}</span>
+        <h2>{journey.title}</h2><p>{journey.question}</p>
+        <a href={`/${journey.slug}`} class="text-link">{journey.action}<span aria-hidden="true">→</span></a>
+      </article>)}
+    </div>
+    <section class="convergence" aria-labelledby="convergence-title"><h2 id="convergence-title">{page.convergenceTitle}</h2><p>{page.convergence}</p><p>{page.status}</p><a href="/methode" class="text-link">{copy.home.methodAction}<span aria-hidden="true">→</span></a></section>
+  </section>
+</Layout>

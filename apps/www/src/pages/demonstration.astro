@@ -1,0 +1,5 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Content, { frontmatter } from '../content/fr/demonstration.mdx';
+---
+<Layout title={frontmatter.title} description={frontmatter.description}><article class="reading-page prose-content"><Content /></article></Layout>

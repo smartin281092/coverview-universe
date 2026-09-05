@@ -1,0 +1,21 @@
+---
+import type { InferGetStaticPropsType } from 'astro';
+import Layout from '../layouts/Layout.astro';
+import { acquisition as copy, journeys, plannedPages } from '../content/fr/acquisition';
+export function getStaticPaths() {
+  return [...journeys, ...plannedPages].map((page) => ({ params: { slug: page.slug }, props: { page } }));
+}
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { page } = Astro.props;
+---
+<Layout title={copy.availabilityTitle.replace('{{label}}', page.label)} description={page.description}>
+  <section class="reading-page">
+    <a href="/overview" class="text-link">← {copy.returnOverview}</a>
+    <p class="stage-label">{copy.coming}</p>
+    <h1>{'heading' in page ? page.heading : page.label}</h1>
+    <p class="intro">{page.unavailable}</p>
+    <section class="reading-card"><h2>{copy.preparation}</h2><p>{'preparation' in page ? page.preparation : page.description}</p><a href="/methode" class="text-link">{copy.home.methodAction}<span aria-hidden="true">→</span></a></section>
+    <div class="resume-entry"><h2>{copy.resume}</h2><p>{copy.resumeNote}</p><a href={`/${page.slug}`} class="text-link">{`/${page.slug}`}</a></div>
+    <a href="/explorer" class="text-link">{copy.returnExplore}<span aria-hidden="true">→</span></a>
+  </section>
+</Layout>

@@ -1,0 +1,50 @@
+{
+  "status": "passed",
+  "html": { "pages": 28, "nonAccountExecutableScripts": 0, "inlineGzipBytes": 0, "real404": true },
+  "javascript": { "files": 1, "gzipBytes": 24087 },
+  "limits": { "javascriptGzipBytes": 102400, "lcpMs": 2500, "cls": 0.1 },
+  "method": "Chromium headless, HTTP loopback, contexte neuf par page, 1280x900, sans throttling, observation 750 ms après polices/images",
+  "synthetic": [
+    {
+      "route": "/",
+      "lcpMs": 64,
+      "cls": 0.0075,
+      "skipLink": "passed",
+      "observedInteractionEvents": 0,
+      "maxObservedEventDurationMs": null
+    },
+    {
+      "route": "/overview",
+      "lcpMs": 48,
+      "cls": 0.0007,
+      "skipLink": "passed",
+      "observedInteractionEvents": 2,
+      "maxObservedEventDurationMs": 16
+    },
+    {
+      "route": "/analyser-3p",
+      "lcpMs": 44,
+      "cls": 0.0006,
+      "skipLink": "passed",
+      "observedInteractionEvents": 0,
+      "maxObservedEventDurationMs": null
+    },
+    {
+      "route": "/explorer",
+      "lcpMs": 48,
+      "cls": 0.0006,
+      "skipLink": "passed",
+      "observedInteractionEvents": 2,
+      "maxObservedEventDurationMs": 16
+    },
+    {
+      "route": "/methode",
+      "lcpMs": 48,
+      "cls": 0.0156,
+      "skipLink": "passed",
+      "observedInteractionEvents": 2,
+      "maxObservedEventDurationMs": 16
+    }
+  ],
+  "unmeasured": ["INP terrain", "RUM", "conditions réelles de réseau et appareils"]
+}

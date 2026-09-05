@@ -37,6 +37,7 @@ jobs:
       - run: pnpm check:roadmap
       - run: pnpm audit --audit-level=critical
       - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm check:www
       - name: Preview et parcours réels
         run: node scripts/preview.mjs start && pnpm test:e2e
       - name: Arrêt des seuls services du job

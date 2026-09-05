@@ -60,9 +60,9 @@ Aucune réponse à cette question exacte.
 
 Bloque : Liste des traductions publiables, sans bloquer la structure FR
 
-Autorisation : aucune enregistrée. Réponse : **non enregistrée**.
+Autorisation : Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md. Réponse : enregistrée ci-dessous.
 
-Aucune réponse à cette question exacte.
+- `bible.question.004` · Publier initialement tous ces contenus en français avec clés et architecture i18n extensibles ? → **(a) Oui, français initial comme PROJECT. Réutiliser les contenus FR et conserver une architecture extensible ; aucune locale supplémentaire fournie.** · preuve : PROJECT.md, Langues et données ; décision déléguée de préparation du 2026-09-06 selon roadmap/execution-policy.md / PROG-23.
 
 ### S-099 — question 2
 

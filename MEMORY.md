@@ -19,4 +19,7 @@ Aucune entrée activée. L'identité du projet vit dans PROJECT.md ; les décisi
 - MEM-108 · piège · Les horloges fournisseur et locale ne suffisent pas à sélectionner les sessions d’une révocation globale ; les corrections et oracles bornés sont dans le ledger S-000b et le module identity. (S-000b, 2026-09-06 · confiance haute · revoir avant 2026-12-05 · candidat)
 - MEM-109 · fait · Le projet WorkOS a été identifié en lecture seule ; l’état et le diff exact préparé sont au ledger S-000b. L’absence de clé process et d’identités autorisées conserve la tranche en review et n’autorise que les suites indépendantes. (S-000b, 2026-09-06 · confiance haute · revoir avant 2026-12-05 · candidat)
 
+- MEM-110 · piège · L’ajout direct de Sharp a initialement produit une jonction pnpm sans son suffixe de peer ; résolution outillée de la même version et vérification frozen/build dans le ledger S-010. (S-010, 2026-09-06 · confiance haute · revoir avant 2026-12-05 · candidat)
+- MEM-111 · décision · S-011 reprend le français initial déjà fixé par PROJECT ; réponse déléguée à bible.question.004 consignée dans state, sans preuve éditoriale externe ni locale additionnelle déduite. (Relais S-011, 2026-09-06 · confiance haute · revoir avant 2026-12-05 · candidat)
+
 Ces candidats attendent une revue ; ils ne constituent pas des règles concurrentes des références citées.

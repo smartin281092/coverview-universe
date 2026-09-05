@@ -21,6 +21,7 @@
     "test:tooling": "node --test scripts/*.test.mjs evals/*.test.mjs",
     "test:e2e": "playwright test",
     "check:bundles": "node scripts/check-bundles.mjs",
+    "check:www": "node scripts/check-www.mjs",
     "check:env": "pnpm --filter api run check:env",
     "check:roadmap": "node scripts/build-roadmap.mjs --check --require-complete"
   },

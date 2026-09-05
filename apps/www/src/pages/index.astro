@@ -1,5 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import dawn from '../../../../assets/dawn-bg.png';
+import { acquisition as copy } from '../content/fr/acquisition';
 import HomeContent, { frontmatter } from '../content/fr/home.mdx';
 import { content } from '../content/fr/interface';
 
@@ -14,19 +17,36 @@ const schema = {
 <Layout title={frontmatter.title} description={frontmatter.description}>
   <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
   <section class="hero">
-    <div class="hero-copy">
-      <p class="eyebrow">{content.eyebrow}</p>
-      <h1>{content.heading}</h1>
-      <div class="intro"><HomeContent /></div>
-      {import.meta.env.DEV && <a href="http://127.0.0.1:4101" class="primary-link">{content.wallet}<span aria-hidden="true">→</span></a>}
-      <p class="preview-note">{content.note}</p>
+    <div class="hero-heading">
+      <p class="eyebrow">{copy.home.eyebrow}</p>
+      <h1>{copy.home.heading}</h1>
     </div>
-    <section class="overview-card" aria-labelledby="overview-title">
-      <p class="eyebrow">{content.cardLabel}</p>
-      <h2 id="overview-title">{content.cardTitle}</h2>
-      <ol>
-        {content.points.map((point) => <li><span class="point-number" aria-hidden="true">{point.number}</span><div><h3>{point.title}</h3><p>{point.description}</p></div></li>)}
-      </ol>
-    </section>
+    <div class="demo-frame">
+      <Image src={dawn} alt="" width={700} format="webp" loading="eager" class="demo-background" />
+      <section class="demo-card" aria-labelledby="demo-title">
+        <p class="demo-label">{copy.demo.label}</p>
+        <h2 id="demo-title">{copy.demo.title}</h2>
+        <dl class="demo-metrics">
+          <div><dt>{copy.demo.target}</dt><dd>{copy.demo.targetValue}</dd></div>
+          <div><dt>{copy.demo.trajectory}</dt><dd>{copy.demo.trajectoryValue}</dd></div>
+          <div class="demo-gap"><dt>{copy.demo.gap}</dt><dd>{copy.demo.gapValue}</dd></div>
+        </dl>
+        <p class="demo-question">{copy.demo.question}</p>
+        <p class="preview-note">{copy.demo.note}</p>
+        <a href="/demonstration" class="text-link" id="demo-details">{copy.demo.action}<span aria-hidden="true">↗</span></a>
+      </section>
+    </div>
+    <div class="hero-copy">
+      <div class="intro"><HomeContent /></div>
+      <div class="hero-actions">
+        <a href="/analyser-3p" class="primary-link">{copy.home.analyse}<span aria-hidden="true">→</span></a>
+        <a href="/calculer-retraite" class="secondary-link">{copy.home.calculate}</a>
+      </div>
+      <p class="preview-note">{copy.home.note}</p>
+    </div>
+  </section>
+  <section class="method-strip" aria-labelledby="method-title">
+    <div><h2 id="method-title">{copy.home.methodTeaser}</h2><p>{copy.home.methodText}</p></div>
+    <div class="account-actions"><a href="/methode" class="text-link">{copy.home.methodAction}<span aria-hidden="true">→</span></a><a href="/overview" class="text-link">{copy.choose}<span aria-hidden="true">→</span></a></div>
   </section>
 </Layout>

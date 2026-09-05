@@ -1,12 +1,16 @@
-# Site public CoverView — préversion
+# Site public CoverView — parcours d’entrée
 
 ## Résumé
 
-Accueil statique, en français, présentant le projet en construction. HTML généré avec Astro et contenu MDX, lisible sans JavaScript et sans dépendance à l’API.
+Accueil, trois parcours et présentation courte du projet, en français. HTML Astro/MDX intégralement statique, lisible sans JavaScript et sans dépendance à l’API. État vérifié S-010 dans [son ledger](../../roadmap/evidence/S-010.md).
 
 ## Périmètre
 
-Une page d’accueil bornée, une vraie page 404, une page `/account` et des liens locaux vers Wallet/l’espace équipe. Aucun calculateur, comparateur ou tracker. Les contenus par locale vivent dans `src/content/fr/`. Assets de marque importés depuis leur source, sans copie des fonds ni des logos. Le site ne dépend pas de `packages/ui` (MKT-02).
+`/` présente la question retraite et l’exemple fictif ; `/overview` expose analyser, préparer et comparer. `/explorer` porte la navigation complète des §22/66 sur desktop et mobile. Les approfondissements s’ouvrent sur `/demonstration`, `/methode` et `/sebastien-martin` ; retour natif et lien ancré vers l’exemple, sans contenu déplié (FRONT-14). La vraie 404, `/account` et les liens locaux Wallet/équipe sont conservés.
+
+Les destinations futures sont générées depuis `src/content/fr/acquisition.ts`. Chaque entrée conserve son propriétaire de slice (et les propriétaires associés si nécessaire) ; ces IDs ne sont pas affichés aux visiteurs. Les URLs stables donnent l’état exact, un repère de lecture et un lien de retour. Une page de disponibilité ne déclenche aucune collecte, session anonyme ou événement d’entrée d’outil. Ces effets attendent l’outil propriétaire ; aucun faux événement d’usage n’est émis pour une simple lecture. Les nouveaux contenus restent sous `src/content/fr/`, les textes longs en MDX.
+
+Assets de marque importés depuis leur source sans altération des originaux ; Astro produit le dérivé WebP du fond au build. Le site ne dépend pas de `packages/ui` (MKT-02).
 
 ## Règles métier et invariants
 
@@ -20,7 +24,7 @@ Contenu public sans dossier privé ni credential. Les seules lectures d’identi
 
 ## État réel
 
-Coquille statique écrite. Les vérifications build et navigateur sont consignées dans le ledger S-000a. Pas de site publié, pas de Search Console ni de mesure RUM réelle dans cette slice locale.
+Parcours de lecture et de navigation S-010 vérifiés localement ; aucun calculateur, analyse de contrat, comparateur, formulaire commercial ou tracker actif. L’exemple 65/71/+6 illustre uniquement les notions objectif/trajectoire/écart. Il ne provient d’aucun calcul et n’est pas une référence à l’âge légal. Les contenus détaillés et preuves éditoriales appartiennent à S-011. Le compte S-000b reste soumis à son activation externe non vérifiée. Pas de site publié, Search Console, mesure RUM ou INP terrain.
 
 ## Indexation et bots
 
@@ -33,3 +37,11 @@ Décision réversible S-000a : **tous les robots sont refusés** via `robots.txt
 Documentation officielle consultée le 2026-09-05 : [Astro MDX](https://docs.astro.build/en/guides/integrations-guide/mdx/), [Tailwind dans Astro](https://docs.astro.build/en/guides/styling/). Versions stables vérifiées via le registre npm et conservées dans le lockfile.
 
 `PUBLIC_API_URL` définit l’origine publique de l’API (défaut local `http://127.0.0.1:4100`, origine du site en build). `PUBLIC_WALLET_URL` définit l’origine de Wallet ; défaut local `http://127.0.0.1:4101`, aucun domaine de déploiement inventé en build. Sans cette valeur en build, le lien Wallet est omis. Ces URLs doivent correspondre aux origines approuvées côté serveur ; elles ne prouvent ni continuité déployée ni droit externe.
+
+Sharp est déclaré directement pour le service d’images Astro, uniquement au build/développement. Déjà présent transitivement dans le lockfile, il ne crée aucun traitement de fichiers soumis par un visiteur. Nom/provenance et licence Apache-2.0 contrôlés ; justification et diagnostic d’installation dans le ledger S-010.
+
+## Vérifier les parcours
+
+Après `pnpm build` et installation du Chromium Playwright : `pnpm check:www` sert le build seul sur loopback éphémère puis s’arrête. Il contrôle HTML, metadata, absence de JS exécutable hors compte, budget JS gzip et LCP/CLS synthétiques locaux sur cinq gabarits. Ces mesures ne sont ni du RUM ni une preuve de performance du futur hébergement. Le contrôle est branché en CI après l’installation de Chromium.
+
+Preview démarrée : `pnpm exec playwright test tests/e2e/acquisition.spec.mjs` vérifie les vraies destinations, HTML sans JS, focus et retour, reflow 320/390/640 px, absence de requêtes API/tiers et stockage sur les lectures publiques. La suite complète conserve aussi les oracles S-000a et les transports d’identité explicitement simulés S-000b. Pour remplacer une disponibilité lors d’une prochaine slice, préserver l’URL, mettre à jour l’inventaire et les tests selon la capacité réellement livrée.
