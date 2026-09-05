@@ -1,0 +1,32 @@
+# Cadre initial ; le détail de la roadmap et les prompts restent à écrire.
+# Source métier et traçabilité : docs/product/README.md et roadmap/coverage.json.
+- id: S-000a
+  title: "Socle local outillé avec données fictives"
+  status: idea
+  milestone: M0
+  depends_on: []
+  plan: null
+  prompt: null
+  session: ""
+  cost: ""
+  notes: ["Réservation BOOT-04 ; aucun plan d'exécution approuvé."]
+- id: S-000b
+  title: "Compte WorkOS et accès à son espace protégé"
+  status: idea
+  milestone: M0
+  depends_on: [S-000a]
+  plan: null
+  prompt: null
+  session: ""
+  cost: ""
+  notes: ["AUTH-11 ; parcours et configuration à spécifier."]
+- id: S-000c
+  title: "Déploiement dédié Infomaniak et premier parcours en ligne"
+  status: idea
+  milestone: M0
+  depends_on: [S-000b]
+  plan: null
+  prompt: null
+  session: ""
+  cost: ""
+  notes: ["HOST-01 à HOST-03 ; aucune opération sur l'existant."]
