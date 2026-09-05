@@ -14,4 +14,6 @@ Aucune entrée activée. L'identité du projet vit dans PROJECT.md ; les décisi
 - MEM-105 · décision · La compatibilité de TypeScript avec les outils imposés et la provenance du preset sont documentées au ledger S-000a ; conserver une exception explicite plutôt que désactiver un contrôle. (S-000a, 2026-09-05 · confiance haute · revoir avant 2026-12-04 · candidat)
 - MEM-106 · piège · Sous Windows, le watcher API natif Node et le binaire pnpm épinglé ont été nécessaires à pnpm dev via Turbo ; voir apps/api/README.md et README.md. (S-000a, 2026-09-05 · confiance haute · revoir avant 2026-12-04 · candidat)
 
+- MEM-107 · décision · Les défauts de préparation WorkOS S-000b sont consignés dans state.json sous project.workos et project.auth-methods ; cette sélection ne prouve aucun accès ni habilitation externe. (S-000b préparation, 2026-09-05 · confiance haute · revoir avant 2026-12-04 · candidat)
+
 Ces candidats attendent une revue ; ils ne constituent pas des règles concurrentes des références citées.

@@ -48,7 +48,7 @@ Lire [AGENTS.md](AGENTS.md), son référentiel [CLAUDE.md](CLAUDE.md), puis [PRO
 | WorkOS et cible cloud protégée | [Authentification](docs/auth.md), [hébergement](docs/hosting.md) |
 | Décisions d'initialisation | [ADR-0001](adr/0001-harness.md) puis ADR liés depuis PROJECT |
 | Résultat et vérifications | [Livraison de la roadmap](roadmap/review.md), [initialisation historique](roadmap/initialisation.md) |
-| Prochaine session | [Checkpoint roadmap](roadmap/handoffs/roadmap.md) |
+| Prochaine session | [Relais S-000b](roadmap/handoffs/S-000b.md) |
 
 ## Vérifier le cadrage
 

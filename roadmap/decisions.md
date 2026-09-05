@@ -2652,9 +2652,9 @@ Aucune réponse à cette question exacte.
 
 Bloque : Modification WorkOS des méthodes ou callbacks, seulement si un écart réel est constaté.
 
-Autorisation : aucune enregistrée. Réponse : **non enregistrée**.
+Autorisation : Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md. Réponse : enregistrée ci-dessous.
 
-Aucune réponse à cette question exacte.
+- `project.auth-methods` · Si les méthodes constatées diffèrent du parcours email/OTP, quel changement appliquer ? → **Option a : si un écart est réellement constaté, préparer et présenter le diff exact des méthodes et callbacks pour configurer email/OTP et MFA admin dans l’environnement de développement identifié. Conserver les configurations sans rapport avec ce parcours.** · preuve : Choix délégué par PROG-23 ; email/OTP exigé par bible.v15.p0743, continuité par p0230, MFA privilégiée par AUTH-08/11. Aucun écart de configuration ni changement distant n’a encore été constaté ou exécuté.
 
 ## project.git-push
 
@@ -2742,6 +2742,6 @@ Aucune réponse à cette question exacte.
 
 Bloque : Connexion tierce et attribution administrative ; un nom de projet ne vaut pas client ID.
 
-Autorisation : aucune enregistrée. Réponse : **non enregistrée**.
+Autorisation : Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md. Réponse : enregistrée ci-dessous.
 
-Aucune réponse à cette question exacte.
+- `project.workos` · Quel environnement et quelles identités WorkOS utiliser pour vérifier les flux réels ? → **Option a : utiliser l’environnement de développement du projet coverview et des identités de test explicitement autorisées. Identifier d’abord cet environnement en lecture seule ; ne déduire aucun client ID, compte autorisé ou droit administratif du nom du projet.** · preuve : Choix délégué par PROG-23, conforme à AUTH-11, ADR-0003 et ENV-09. Ce choix ne prouve encore ni accès WorkOS, ni identités disponibles, ni habilitation administrative.

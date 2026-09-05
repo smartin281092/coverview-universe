@@ -1,0 +1,164 @@
+{
+  "observedAt": "2026-09-05T21:34:34.588Z",
+  "platform": "win32",
+  "checkout": "fresh detached Git worktree, isolated compose coverview-s000a-clean",
+  "commands": [
+    {
+      "command": "git rev-parse HEAD",
+      "exitCode": 0,
+      "durationMs": 58
+    },
+    {
+      "command": "git status --porcelain",
+      "exitCode": 0,
+      "durationMs": 192
+    },
+    {
+      "command": "node --version",
+      "exitCode": 0,
+      "durationMs": 37
+    },
+    {
+      "command": "pnpm --version",
+      "exitCode": 0,
+      "durationMs": 71
+    },
+    {
+      "command": "pnpm install --frozen-lockfile",
+      "exitCode": 0,
+      "durationMs": 16896
+    },
+    {
+      "command": "docker compose up -d --wait",
+      "exitCode": 0,
+      "durationMs": 4801
+    },
+    {
+      "command": "pnpm check:env",
+      "exitCode": 0,
+      "durationMs": 637
+    },
+    {
+      "command": "pnpm lint",
+      "exitCode": 0,
+      "durationMs": 17559
+    },
+    {
+      "command": "pnpm typecheck",
+      "exitCode": 0,
+      "durationMs": 9387
+    },
+    {
+      "command": "pnpm test",
+      "exitCode": 0,
+      "durationMs": 7187
+    },
+    {
+      "command": "pnpm test:tooling",
+      "exitCode": 0,
+      "durationMs": 14019
+    },
+    {
+      "command": "pnpm build",
+      "exitCode": 0,
+      "durationMs": 3718
+    },
+    {
+      "command": "pnpm db:generate",
+      "exitCode": 0,
+      "durationMs": 1187
+    },
+    {
+      "command": "pnpm db:migrate",
+      "exitCode": 0,
+      "durationMs": 1203
+    },
+    {
+      "command": "pnpm db:migrate",
+      "exitCode": 0,
+      "durationMs": 1064
+    },
+    {
+      "command": "pnpm db:seed",
+      "exitCode": 0,
+      "durationMs": 1097
+    },
+    {
+      "command": "pnpm db:seed",
+      "exitCode": 0,
+      "durationMs": 1094
+    },
+    {
+      "command": "pnpm boundaries",
+      "exitCode": 0,
+      "durationMs": 2891
+    },
+    {
+      "command": "pnpm check:bundles",
+      "exitCode": 0,
+      "durationMs": 159
+    },
+    {
+      "command": "pnpm lint:docs",
+      "exitCode": 0,
+      "durationMs": 2440
+    },
+    {
+      "command": "pnpm check:roadmap",
+      "exitCode": 0,
+      "durationMs": 1271
+    },
+    {
+      "command": "node scripts/verify-brand.mjs",
+      "exitCode": 0,
+      "durationMs": 99
+    },
+    {
+      "command": "node scripts/verify-planning.mjs --require-complete",
+      "exitCode": 0,
+      "durationMs": 1171
+    },
+    {
+      "command": "pnpm audit --audit-level=critical",
+      "exitCode": 0,
+      "durationMs": 607
+    },
+    {
+      "command": "pnpm exec playwright install chromium",
+      "exitCode": 0,
+      "durationMs": 695
+    },
+    {
+      "command": "node scripts/preview.mjs start",
+      "exitCode": 0,
+      "durationMs": 5173
+    },
+    {
+      "command": "node scripts/preview.mjs status",
+      "exitCode": 0,
+      "durationMs": 164
+    },
+    {
+      "command": "pnpm test:e2e",
+      "exitCode": 0,
+      "durationMs": 6651
+    },
+    {
+      "command": "node scripts/preview.mjs stop --all",
+      "exitCode": 0,
+      "durationMs": 2853
+    }
+  ],
+  "sha": "4f04808f2201af5603a54d27fdbbf8a175ba800c",
+  "node": "v24.20.0",
+  "pnpm": "12.3.4",
+  "finalTrackedStatus": "clean: git status --porcelain empty after commands",
+  "results": {
+    "applicationTests": 26,
+    "toolingTests": 48,
+    "browserTests": 5,
+    "audit": "No known vulnerabilities found",
+    "boundaries": "0 errors; 1 orphan warning for Astro content import, knip passed"
+  },
+  "retainedCheckout": "C:/Users/sebm1/.codex/worktrees/10c1/coverview-s000a-verified"
+}

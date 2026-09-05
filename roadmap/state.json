@@ -2,7 +2,7 @@
   "schema_version": 1,
   "slices": {
     "S-000a": {
-      "status": "running",
+      "status": "done",
       "approval": "Mandat utilisateur du 2026-09-05 : lancement et enchaînement autorisés — roadmap/execution-policy.md",
       "decisions": [
         {
@@ -102,28 +102,77 @@
           "oracle": "V2",
           "observed": "La revue détecte un socket Unix trop long pour Linux dans les chemins GitHub Actions. Endpoint temporaire privé borné corrigé ; neuf tests preview passent sous Windows et Linux (conteneur Node officiel non-root, réseau désactivé, sources lecture seule), dont deux cycles en chemin long et cleanup. Format et lint ciblés passent.",
           "decision": "Conserver les pipes Windows et la preuve de propriété ; aucune suppression récursive. Recette propre complète reste le dernier oracle."
+        },
+        {
+          "target": "S-000a-C01 à C06 — checkout vierge",
+          "oracle": "V3",
+          "observed": "Commit 4f04808f2201af5603a54d27fdbbf8a175ba800c extrait dans un worktree Git initialement propre, sans node_modules ni .env. Installation frozen, compose séparé neuf, recette locale CI complète,26 tests applicatifs/48 outillage/5 navigateur passent. Migrations et seeds deux fois, audit sans vulnérabilité connue ; statut Git final propre. Services de ce test arrêtés, volumes conservés.",
+          "decision": "Reproduction prouvée dans roadmap/evidence/S-000a-clean-check.json ; passage en revue déléguée PROG-23. Exécution GitHub Actions distante toujours non revendiquée."
+        },
+        {
+          "target": "Revue de clôture déléguée",
+          "oracle": "V3",
+          "observed": "Relecteur API indépendant : six critères couverts ; code identique au SHA du checkout vérifié. Capture finale client/www/mobile inspectée. Note transitoire obsolète retirée. CI distante et recette Linux complète restent explicitement non exécutées.",
+          "decision": "Clore S-000a selon PROG-23 ; préparer uniquement S-000b ready et créer sa nouvelle tâche après commit/fast-forward vérifiés."
+        },
+        {
+          "target": "Documents de clôture",
+          "oracle": "V0",
+          "observed": "Le linter racine a initialement inclus le worktree de vérification imbriqué et signalé des copies de règles. Ce checkout propre a été déplacé par git worktree move vers un dossier frère explicite, sans suppression ni modification du linter ; 478 fichiers,0 erreur,0 avertissement. Roadmap et checkpoint valides.",
+          "decision": "Conserver le checkout de preuve hors du dépôt source ; commit de relais limité à état/preuves/docs."
         }
       ],
       "session": "Création demandée et transmise par outil : gpt-6-astra / ultra ; modèle hôte GPT-6, effort réel non observable indépendamment du paramètre transmis.",
       "cost": "Non disponible",
       "notes": [
         "Propriétaire unique : tâche 01a07358-17eb-7f33-ad10-7d59aab07e9d, worktree 10c1. Commit requis 8a644c4fff48cf874673f3f0113805510414c9f2 vérifié ancêtre de HEAD.",
-        "Livraison et dépendances : roadmap/evidence/S-000a.md ; reproduction propre et revueLinux à terminer avant clôture."
+        "Commit de code testé : 4f04808f2201af5603a54d27fdbbf8a175ba800c. Checkout de vérification reste propre ; détails au dossier evidence.",
+        "Revue déléguée PROG-23 achevée : C01-C06 couverts, aucun blocage restant. Suite S-000b ready ; checkpoint roadmap/handoffs/S-000b.md."
       ],
       "ledger": {
         "verified": [
           "26 tests API/client et PostgreSQL réel ; voir roadmap/evidence/S-000a.md.",
           "Quatre apps par pnpm dev, watch API, cinq parcours navigateur, panneRedis et deux cycles preview validés.",
-          "Canaris frontières/bundles, marque intacte, audit npm sans vulnérabilité connue."
+          "Canaris frontières/bundles, marque intacte, audit npm sans vulnérabilité connue.",
+          "S-000a-C01..C06 : recette complète depuis checkout vierge 4f04808f2201af5603a54d27fdbbf8a175ba800c passée ; proof roadmap/evidence/S-000a-clean-check.json.",
+          "Neuf tests de preview passent aussi dans Linux non-root avec source read-only et réseau désactivé."
         ],
         "done_unverified": [
-          "Recette CI depuis nouveau checkout en attente au commit implémentation.",
           "CI distante, reset destructif, WorkOS et déploiement non exécutés."
         ],
         "assumed": [
           "Français initial et ports réversibles : impact catalogues i18n et configuration locale."
         ]
       }
+    },
+    "S-000b": {
+      "status": "ready",
+      "approval": "Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md",
+      "decisions": [
+        {
+          "ref": "project.workos",
+          "question": "Quel environnement et quelles identités WorkOS utiliser pour vérifier les flux réels ?",
+          "answer": "Option a : utiliser l’environnement de développement du projet coverview et des identités de test explicitement autorisées. Identifier d’abord cet environnement en lecture seule ; ne déduire aucun client ID, compte autorisé ou droit administratif du nom du projet.",
+          "evidence": "Choix délégué par PROG-23, conforme à AUTH-11, ADR-0003 et ENV-09. Ce choix ne prouve encore ni accès WorkOS, ni identités disponibles, ni habilitation administrative."
+        },
+        {
+          "ref": "project.auth-methods",
+          "question": "Si les méthodes constatées diffèrent du parcours email/OTP, quel changement appliquer ?",
+          "answer": "Option a : si un écart est réellement constaté, préparer et présenter le diff exact des méthodes et callbacks pour configurer email/OTP et MFA admin dans l’environnement de développement identifié. Conserver les configurations sans rapport avec ce parcours.",
+          "evidence": "Choix délégué par PROG-23 ; email/OTP exigé par bible.v15.p0743, continuité par p0230, MFA privilégiée par AUTH-08/11. Aucun écart de configuration ni changement distant n’a encore été constaté ou exécuté."
+        }
+      ],
+      "verification_attempts": [],
+      "ledger": {
+        "verified": [],
+        "done_unverified": [],
+        "assumed": []
+      },
+      "notes": [
+        "Entrée préparée après clôture prouvée de S-000a. Environnement WorkOS à inspecter avant configuration.",
+        "Les personas locales S-000a ne sont ni des comptes WorkOS, ni des sessions, ni des habilitations.",
+        "Aucun oracle S-000b exécuté pendant la préparation du relais."
+      ]
     }
   },
   "execution": {
