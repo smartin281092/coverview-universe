@@ -1,0 +1,22 @@
+{
+  "name": "app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "eslint .",
+    "format": "prettier --write --ignore-unknown .",
+    "typecheck": "turbo run typecheck",
+    "db:generate": "pnpm --filter api exec drizzle-kit generate",
+    "db:migrate": "pnpm --filter api exec drizzle-kit migrate",
+    "db:seed": "pnpm --filter api run db:seed",
+    "db:reset": "pnpm --filter api run db:reset",
+    "boundaries": "depcruise --config .dependency-cruiser.cjs apps packages && knip",
+    "preview": "node scripts/preview.mjs start",
+    "preview:stop": "node scripts/preview.mjs stop",
+    "lint:docs": "node evals/lint-referentiel.mjs",
+    "test:guard": "node evals/guard-bash.test.mjs"
+  }
+}

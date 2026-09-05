@@ -1,0 +1,27 @@
+{
+  "$schema": "https://unpkg.com/knip@latest/schema.json",
+  "workspaces": {
+    "apps/api": {
+      "entry": ["src/main.ts", "src/**/*.test.ts", "drizzle.config.ts"],
+      "project": "src/**/*.ts"
+    },
+    "apps/client": {
+      "entry": ["src/main.tsx", "src/**/*.test.{ts,tsx}"],
+      "project": "src/**/*.{ts,tsx}"
+    },
+    "apps/admin": {
+      "entry": ["src/main.tsx", "src/**/*.test.{ts,tsx}"],
+      "project": "src/**/*.{ts,tsx}"
+    },
+    "apps/www": {
+      "entry": ["src/pages/**/*.{astro,ts}", "astro.config.mjs"],
+      "project": "src/**/*.{ts,tsx,astro}"
+    },
+    "packages/*": {
+      "entry": ["src/index.ts"],
+      "project": "src/**/*.ts"
+    }
+  },
+  "ignoreDependencies": [],
+  "ignore": ["**/dist/**", "**/build/**", "**/.astro/**"]
+}

@@ -1,0 +1,35 @@
+# Dépendances
+node_modules/
+.pnpm-store/
+
+# Secrets — BOOT-07, G-04. `.env.example` est la SEULE exception, et il est committé.
+.env
+.env.*
+!.env.example
+
+# Build
+dist/
+build/
+.turbo/
+*.tsbuildinfo
+apps/www/.astro/
+
+# Tests
+coverage/
+playwright-report/
+test-results/
+
+# Preview locale — ENV-08 : logs et PID sont du transitoire local
+.preview/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json

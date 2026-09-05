@@ -1,0 +1,104 @@
+# CI — DEL-04. Étapes minimales : install → lint + typecheck → tests → build
+# → migrations sur base jetable → frontières + audit de dépendances.
+# Reproductible en local par les commandes de CLAUDE.md §0bis : c'est la
+# condition pour qu'un échec de CI soit diagnosticable sans pousser dix fois.
+#
+# Conditions de merge : DEL-03 (CI verte, migrations relues, tests non affaiblis).
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  APP_ENV: test
+  NODE_ENV: test
+
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    # PostgreSQL réel, même moteur qu'en production — TEST-06. Jamais SQLite en
+    # substitut : les comportements SQL qui comptent (contraintes, index
+    # partiels, RLS) ne s'y testent pas.
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: app
+          POSTGRES_PASSWORD: app
+          POSTGRES_DB: app_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U app -d app_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+      redis:
+        image: redis:8-alpine
+        ports: ["6379:6379"]
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          # lts/* plutôt qu'un numéro : le harness n'inscrit jamais de version
+          # (BOOT-05). Épingler ici quand le projet a une raison de le faire.
+          node-version: lts/*
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Lint et typecheck
+        run: pnpm lint && pnpm typecheck
+
+      - name: Tests
+        run: pnpm test
+        env:
+          DATABASE_URL: postgresql://app:app@localhost:5432/app_test
+          REDIS_URL: redis://localhost:6379
+
+      - name: Build
+        run: pnpm build
+
+      # DATA-08 — les migrations DOIVENT être reproductibles depuis zéro.
+      # Une migration qui ne passe que sur une base déjà peuplée est une
+      # migration qui échouera en production.
+      - name: Migrations sur base jetable
+        run: pnpm db:migrate
+        env:
+          DATABASE_URL: postgresql://app:app@localhost:5432/app_test
+
+      # ARCH-14 — frontières de modules et code mort. Bloquant : une règle en
+      # prose se viole silencieusement, une erreur de lint non.
+      - name: Frontières et code mort
+        run: pnpm boundaries
+
+      # DEP-04 — vulnérabilités critiques bloquantes, exceptions documentées
+      # avec échéance.
+      - name: Audit de dépendances
+        run: pnpm audit --audit-level=critical
+
+  # Le référentiel est du code : il se lint comme du code (G-15).
+  # Gratuit, aucun appel modèle — contrairement à /eval-routing, qui reste
+  # manuel en pré-merge (EVAL-02).
+  referentiel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - run: node evals/lint-referentiel.mjs
+      - run: node evals/guard-bash.test.mjs

@@ -1,0 +1,38 @@
+# roadmap/backlog.yaml — slices, statuts, dépendances (docs/program.md)
+# Statuts : idea → specified → ready → running → review → done
+# Le walking skeleton est en trois slices (BOOT-04) : un seul gate sur plusieurs
+# milliers de lignes n'est pas un gate (DEL-02, PROG-14).
+- id: S-000a
+  title: "Socle outillé : monorepo, qualité, CI, compose, migration 0, seeds"
+  status: specified
+  milestone: M0
+  depends_on: []
+  plan: roadmap/plans/S-000a.plan.md
+  session: ""              # PROG-06 — modèle + effort RÉELLEMENT utilisés, renseigné à la livraison.
+                           # La recommandation vit dans le plan, en tier (PROG-12) : un nom de
+                           # modèle ici figerait une génération, ce que PROG-12 interdit.
+  notes: []
+- id: S-000b
+  title: "Authentification réelle : api, client, admin, www coquille"
+  status: idea
+  milestone: M0
+  depends_on: [S-000a]
+  plan: null
+  session: ""
+  notes: []
+- id: S-000c
+  title: "Mise en ligne : Docker, Caddy, pipeline, premier push"
+  status: idea
+  milestone: M0
+  depends_on: [S-000b]
+  plan: null
+  session: ""
+  notes: []
+- id: S-001
+  title: "<Première slice de valeur — dérivée du parcours v1 n°1>"
+  status: idea
+  milestone: M1
+  depends_on: [S-000c]
+  plan: null
+  session: ""
+  notes: []
