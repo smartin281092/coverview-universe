@@ -2,7 +2,7 @@
 # Couverture de planification uniquement ; aucun GO ou résultat de test déduit.
 - id: S-000a
   title: "Démarrer un socle local reproductible et une preview fictive"
-  status: specified
+  status: ready
   milestone: M0
   depends_on: []
   plan: roadmap/plans/S-000a.plan.md
@@ -11,11 +11,11 @@
   recommended_model: gpt-6-astra
   recommended_effort: ultra
   session_budget: 1
-  approval: ""
+  approval: "Mandat utilisateur du 2026-09-05 : lancement et enchaînement autorisés — roadmap/execution-policy.md"
   session: ""
   cost: ""
   decisions: []
-  notes: []
+  notes: ["Lancement préparé dans une nouvelle tâche gpt-6-astra / ultra. Aucun critère d’implémentation encore vérifié."]
 - id: S-000b
   title: "Se connecter avec WorkOS et retrouver son espace protégé"
   status: specified

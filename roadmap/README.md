@@ -1,6 +1,6 @@
 # Utiliser la roadmap CoverView
 
-La roadmap complète est rédigée depuis la bible épinglée dans [l'inventaire produit](../docs/product/README.md). [L'index ordonné](index.md) donne un plan et un prompt Astra Ultra pour chaque slice. Les plans sont soumis ; leur rédaction ne lance aucune implémentation.
+La roadmap complète est rédigée depuis la bible épinglée dans [l'inventaire produit](../docs/product/README.md). [L'index ordonné](index.md) donne un plan et un prompt Astra Ultra pour chaque slice. L'utilisateur a ensuite autorisé l'exécution séquentielle et le choix des meilleurs défauts : [mandat courant](execution-policy.md), PROG-23. Consigner les décisions au début de chaque slice et créer la suivante dans une nouvelle tâche après la clôture vérifiée.
 
 ## Sources et vues
 
@@ -21,7 +21,7 @@ Les IDs sont stables ; ne pas renuméroter pour modifier l'ordre. Le tri respect
 2. Réutiliser les décisions et autorisations existantes. Résoudre uniquement les questions encore ouvertes au périmètre concerné ; les options recommandées ne sont pas des réponses déjà approuvées.
 3. Régler réellement la tâche sur `gpt-6-astra` / `ultra` selon [Codex](../docs/codex.md). Le prompt ne modifie pas le sélecteur ; WIP=1 et une session principale cible avec frontière de redécoupage.
 4. Réaliser le parcours avec le paquet source ciblé, les guards dès la première écriture et les oracles propres au plan. Un tiers simulé garde sa slice d'intégration réelle. Tout nouvel objet privé persistant rejoint le manifeste export/rétention des services S-130/S-131, ou son contrat si ces services ne sont pas encore livrés ; aucune durée juridique n'est inventée.
-5. Mettre à jour l'entrée de state.json, les documents propriétaires et le journal Git, puis régénérer les vues. Consigner les preuves, passer en review et appliquer PROG-08 avant done. La slice suivante n'est pas exécutée automatiquement.
+5. Mettre à jour l'entrée de state.json, les documents propriétaires et le journal Git, puis régénérer les vues. Consigner les preuves, passer en review et appliquer PROG-08/PROG-23 avant done. Lorsque le mandat est actif, créer la tâche de la slice suivante selon execution-policy.md ; aucune nouvelle demande de GO pour le périmètre déjà autorisé.
 
 Format d'une entrée d'état, à renseigner avec des faits réels (les clés absentes gardent leurs valeurs vides, le statut absent reste specified) :
 

@@ -32,6 +32,8 @@ La configuration projet est chargée seulement dans les projets reconnus comme f
 
 ## CDX-03 — Relais à 70 % du contexte
 
+La demande ultérieure d'enchaînement ajoute un **relais systématique à chaque slice**, indépendamment du pourcentage de contexte. Elle autorise les nouvelles tâches de slices suivantes selon PROG-23 et [le protocole courant](../roadmap/execution-policy.md). Les restrictions de l'ancien mandat de reprise ci-dessous décrivent le relais en cours d'une même slice ; elles ne suppriment pas cette nouvelle autorisation.
+
 L'utilisateur a autorisé à l'avance une **nouvelle tâche à contexte propre** quand le contexte atteint 70 %. Cette autorisation couvre la continuation de la même mission ; elle n'autorise pas une nouvelle slice, une modification d'infrastructure ou un élargissement du périmètre.
 
 **Limite constatée ici** : aucun outil exposé à l'agent ne fournit le pourcentage de remplissage du contexte actif. Le compteur de quotas du compte n'est pas ce compteur. Le compteur interne de budget d'une tâche n'est pas la fenêtre du modèle. La capacité maximale annoncée pour l'API n'est pas une mesure de cette session. Le script ci-dessous ne mesure aucun de ces éléments. Sans valeur observable, l'agent ne DOIT PAS annoncer une bascule automatique exactement à 70 %.

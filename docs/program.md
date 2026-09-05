@@ -1,5 +1,7 @@
 # Programme, slices et livraison
 
+Pour la séquence CoverView autorisée le 2026-09-05, **PROG-23** s'applique aux gates, décisions et relais décrits ci-dessous : aucun GO redondant ni arrêt systématique après une slice vérifiée.
+
 > **Résumé** : la planification vit dans des artefacts versionnés (`ROADMAP.md`, `roadmap/backlog.yaml`), jamais en tête ni en conversation. L'unité de travail est la vertical slice, une seule en cours à la fois, avec plan persisté validé avant exécution et livraison classée vérifié / fait non vérifié / supposé.
 
 ## PROG-01 — Deux artefacts versionnés (origine HRN-PROG-001)
@@ -191,4 +193,8 @@ Pour chaque prompt : objectif et non-objectifs de la slice, IDs de couverture, s
 La roadmap détaillée applique DOC-10 avec des sources de rédaction dans `roadmap/specs/*.json` et un état durable dans `roadmap/state.json`. Les plans, prompts, index, couverture et backlog de PROG-01/PROG-06 sont des vues versionnées générées par `scripts/build-roadmap.mjs`. Le journal de vérification du plan provient de l'état et n'est jamais écrasé par la génération. Modifier ces sources puis régénérer les vues ; ne pas maintenir une seconde version manuelle.
 
 Le statut par défaut est `specified`, sans approbation. Une autorisation et les réponses aux questions du plan sont nécessaires avant `ready` ; leur présence structurelle est contrôlée, leur vérité doit être vérifiée par l'agent. Une preuve de décision déjà acquise s'applique sans nouvelle demande utilisateur. Le [mode d'emploi](../roadmap/README.md) décrit le format de l'état, les liens complémentaires à la source et les vérifications. La couverture complète reste une preuve documentaire, distincte des résultats d'implémentation de PROG-08.
+
+## PROG-23 — Séquence autorisée et décisions déléguées
+
+Le [mandat utilisateur et protocole de relais](../roadmap/execution-policy.md) autorise le lancement de S-000a puis l'enchaînement des slices dans de nouvelles tâches Astra Ultra, avec choix documenté des meilleurs défauts. Ce document est la source unique de cette exception à PROG-03/07/08/15/16/17/22 et aux procédures associées. Consigner l'autorisation et les réponses effectives au début de chaque slice, garder WIP=1, les dépendances done et les oracles. Une preuve métier ou externe manquante n'est jamais remplacée par un défaut choisi.
 

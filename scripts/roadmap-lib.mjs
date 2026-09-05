@@ -57,6 +57,7 @@ export function validateModel(slices, units, state, questionText, root) {
   }
   const order=sortSlices(slices);
   if (!state||state.schema_version!==1||typeof state.slices!=='object'||Array.isArray(state.slices)) fail('État de programme invalide.');
+  if (state.execution && (typeof state.execution.active!=='boolean'||state.execution.mode!=='sequential-fresh-tasks'||!state.execution.authorization?.trim()||!state.execution.evidence?.trim())) fail('Mandat d’exécution séquentielle incomplet.');
   let running=0;
   for (const [id,v] of Object.entries(state.slices)) {
     if (!ids.has(id)||!['idea','specified','ready','running','review','done'].includes(v.status)) fail(`État de slice inconnu/invalide : ${id}`);

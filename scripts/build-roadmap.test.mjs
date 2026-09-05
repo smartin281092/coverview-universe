@@ -114,3 +114,26 @@ test('décisions, journal et ledger persistent ; CRLF équivaut à LF pour --che
   assert.deepEqual(build(f.root,{check:true,requireComplete:true}).changed,[]);
   assert.equal(readFileSync(f.local('roadmap/state.json'),'utf8'),stateBefore);
 });
+
+test('mandat séquentiel : relais explicite sans GO répété ni réponse inventée',t=>{
+  const execution={active:true,mode:'sequential-fresh-tasks',authorization:'Exécuter la roadmap et choisir les meilleurs défauts.',evidence:'Message utilisateur autorisant la séquence.'};
+  const state={schema_version:1,execution,slices:{}};
+  const f=fixture(t,{state});build(f.root);
+  const prompt=readFileSync(f.local('roadmap/prompts/S-001.prompt.md'),'utf8');
+  assert.match(prompt,/mandat séquentiel PROG-23/);
+  assert.match(prompt,/sélectionner et justifier les réponses restantes/);
+  assert.match(prompt,/créer immédiatement la tâche suivante gpt-6-astra \/ ultra/);
+  assert.ok(!prompt.includes('Répondre « GO S-001'));
+  assert.ok(!prompt.includes('sans l’exécuter automatiquement'));
+  assert.deepEqual(JSON.parse(readFileSync(f.local('roadmap/state.json'),'utf8')),state);
+  f.putJSON('roadmap/state.json',{...state,slices:{'S-001':{status:'ready',approval:'Mandat utilisateur délégué',decisions:[]}}});
+  assert.throws(()=>build(f.root),/réponse et preuve absentes/);
+});
+
+test('un mandat désactivé ou incomplet ne déclenche pas un relais autorisé',t=>{
+  const execution={active:false,mode:'sequential-fresh-tasks',authorization:'Ancien mandat.',evidence:'Message de test.'};
+  const f=fixture(t,{state:{schema_version:1,execution,slices:{}}});build(f.root);
+  assert.match(readFileSync(f.local('roadmap/prompts/S-001.prompt.md'),'utf8'),/Répondre « GO S-001/);
+  f.putJSON('roadmap/state.json',{schema_version:1,execution:{...execution,active:true,evidence:''},slices:{}});
+  assert.throws(()=>build(f.root),/Mandat d’exécution séquentielle incomplet/);
+});

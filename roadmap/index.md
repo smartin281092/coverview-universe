@@ -2,7 +2,7 @@
 
 > Vue générée depuis les spécifications et `roadmap/state.json`. Modifier les sources canoniques puis régénérer. La planification ne prouve aucune implémentation.
 
-L’ordre est topologique ; les identifiants restent stables et ne constituent pas une séquence. Dépendances done, décisions et GO sont requis ; budget d’une session principale par slice.
+L’ordre est topologique ; les identifiants restent stables. Vérifier dépendances done, décisions et autorisation effective ; le mandat PROG-23 remplace les GO répétés lorsqu’il est actif. Budget d’une session principale par slice.
 
 [Roadmap](../ROADMAP.md) · [Workflows](workflows.md) · [Décisions](decisions.md) · [Prompts](prompts/README.md) · [État](state.json)
 
@@ -10,7 +10,7 @@ L’ordre est topologique ; les identifiants restent stables et ne constituent p
 
 | Ordre | Slice | Jalon | Mode | État | Dépendances | Prompt |
 |---|---|---|---|---|---|---|
-| 1 | [S-000a — Démarrer un socle local reproductible et une preview fictive](plans/S-000a.plan.md) | M0 | foundation | specified | — | [prompt](prompts/S-000a.prompt.md) |
+| 1 | [S-000a — Démarrer un socle local reproductible et une preview fictive](plans/S-000a.plan.md) | M0 | foundation | ready | — | [prompt](prompts/S-000a.prompt.md) |
 | 2 | [S-000b — Se connecter avec WorkOS et retrouver son espace protégé](plans/S-000b.plan.md) | M0 | integration | specified | [S-000a](plans/S-000a.plan.md) | [prompt](prompts/S-000b.prompt.md) |
 | 3 | [S-013 — Reprendre un parcours anonyme dans Wallet avec un profil central](plans/S-013.plan.md) | M1 | local-fixtures | specified | [S-000b](plans/S-000b.plan.md) | [prompt](prompts/S-013.prompt.md) |
 | 4 | [S-010 — Ouvrir les trois parcours CoverView depuis un site public compact](plans/S-010.plan.md) | M1 | local-fixtures | specified | [S-000a](plans/S-000a.plan.md) | [prompt](prompts/S-010.prompt.md) |

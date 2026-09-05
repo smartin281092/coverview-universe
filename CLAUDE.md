@@ -2,7 +2,7 @@
 
 Ce fichier est le référentiel commun : chargé directement par Claude Code, lu par Codex via le pointeur `AGENTS.md`. Il contient l'essentiel ; le détail vit dans `docs/` et DOIT être chargé à la demande via la table de routage (§5). Ne jamais tout précharger. Au début d'une tâche CoverView, lire aussi `PROJECT.md` s'il existe ; sous Codex, lire `docs/codex.md` (CDX-01).
 
-Ce harness cible un **développeur solo** construisant un SaaS complet. La vitesse de livraison d'un parcours utilisateur réel prime — dans le respect des règles ci-dessous, jamais à leur place.
+Ce harness cible un **développeur solo** construisant un SaaS complet. La vitesse de livraison d'un parcours utilisateur réel prime dans le respect des règles. **Mandat courant CoverView** : PROG-23 et `roadmap/execution-policy.md` autorisent l'enchaînement, les meilleurs défauts et une nouvelle tâche par slice. Ils remplacent les GO répétés et les arrêts après livraison ci-dessous ; les preuves et la protection de l'existant restent requises.
 
 **État du projet** : si `PROJECT.md` est absent à la racine, le projet n'est PAS initialisé. Lire `docs/bootstrap.md` et dérouler la procédure (« Start project » / `/start-project`) avant tout autre travail.
 

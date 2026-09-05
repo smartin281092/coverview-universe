@@ -1,6 +1,6 @@
 # CoverView
 
-Harness Claude Code / Codex et roadmap complète préparés pour la v1 décrite dans la bible. **Aucune application n'est encore implémentée.** [L'index des slices](roadmap/index.md) donne les objectifs détaillés, les plans et les prompts Astra Ultra dans l'ordre proposé.
+Harness Claude Code / Codex et roadmap complète préparés pour la v1 décrite dans la bible. **Lancement et enchaînement des slices autorisés**, avec les meilleurs défauts et une nouvelle tâche Astra Ultra par slice selon [le mandat](roadmap/execution-policy.md). [L'index des slices](roadmap/index.md) donne les plans, prompts et états réels.
 
 ## Commencer
 

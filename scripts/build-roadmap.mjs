@@ -19,6 +19,8 @@ const criterionId=(s,i)=>`${s.id}-C${String(i+1).padStart(2,'0')}`;
 const plan=(id,prefix='')=>`[${id}](${prefix}plans/${id}.plan.md)`;
 const prompt=(id,prefix='')=>`[prompt](${prefix}prompts/${id}.prompt.md)`;
 const stateFor=(ctx,id)=>({status:'specified',approval:'',session:'',cost:'',decisions:[],verification_attempts:[],notes:[],ledger:{verified:[],done_unverified:[],assumed:[]},...(ctx.state.slices[id]??{})});
+const sequence=ctx=>ctx.state.execution?.active===true&&ctx.state.execution.mode==='sequential-fresh-tasks';
+const continuation=ctx=>sequence(ctx)?'Après clôture réellement prouvée, appliquer PROG-23 et roadmap/execution-policy.md : commiter, préparer le checkpoint, transmettre le SHA testé et créer immédiatement la tâche suivante gpt-6-astra / ultra avec contexte propre. Attendre son premier état puis cesser les écritures ; aucune simple promesse de relais ne remplace la création effective.':'Préparer la slice suivante sans l’exécuter automatiquement, sauf nouvelle autorisation utilisateur.';
 const manifest='Tout nouvel objet privé persistant déclare sa catégorie, son propriétaire et ses règles d’export/rétention via S-130/S-131, ou leur contrat manifeste si ces services ne sont pas encore livrés. Aucune durée légale n’est inventée ; la campagne finale S-139 vérifie toutes les catégories.';
 function makeIndex(ctx){return{units:new Map(ctx.inventory.units.map(u=>[u.id,u])),criteria:new Map(ctx.coverage.assignments.filter(a=>a.disposition==='implementation').map(a=>[a.id,a])),positions:new Map(ctx.order.map((s,i)=>[s.id,i+1]))};}
 function sourceLink(u,prefix='../../'){return `${prefix}docs/product/${u.source_link||`bible.extracted.md#${u.source_anchors[0]}`}`;}
@@ -35,8 +37,8 @@ function decisionText(d){
   if(typeof d!=='object'||!d)return show(d);
   return `${d.ref?`\`${d.ref}\` · `:''}${d.question?`${d.question} → `:''}**${show(d.answer??'réponse absente')}**${d.evidence?` · preuve : ${show(d.evidence)}`:''}`;
 }
-function questions(s,state){
-  if(!s.questions.length)return 'Aucune question bloquante identifiée. Toute nouvelle inconnue métier relève de G-01/PROG-15.';
+function questions(s,state,delegated=false){
+  if(!s.questions.length)return 'Aucune question bloquante identifiée. Traiter toute nouvelle inconnue selon G-01/PROG-15 et le mandat PROG-23 lorsqu’il est actif.';
   const blocks=s.questions.map((q,i)=>{
     const answers=(state.decisions??[]).filter(d=>d&&typeof d==='object'&&d.ref===q.ref&&d.question===q.question);
     return text([`${i+1}. **${q.question}** — \`${q.ref}\` ([registre](../decisions.md))`,
@@ -45,7 +47,7 @@ function questions(s,state){
       `   - État : ${answers.length?'réponse enregistrée ci-dessous ; portée et preuve à vérifier':'**sans réponse enregistrée**'}.`,
       ...answers.map(d=>`   - ${decisionText(d)}`)]);
   });
-  return blocks.join('\n')+`\nUn défaut proposé n’est pas approuvé. Répondre « GO ${s.id} · 1a … » ou « GO ${s.id} · défauts » après examen ; un GO nu ne résout pas les questions. Une réponse doit être enregistrée avec ref, question exacte, answer et evidence.`;
+  return blocks.join('\n')+(delegated?'\nLe mandat PROG-23 délègue le choix des défauts les mieux adaptés au projet. Réutiliser les décisions acquises, sélectionner et justifier les réponses restantes au début de la slice, puis enregistrer ref, question exacte, answer et evidence sans redemander GO. Le choix d’une procédure de validation ne vaut pas preuve externe acquise.':`\nUn défaut proposé n’est pas approuvé. Répondre « GO ${s.id} · 1a … » ou « GO ${s.id} · défauts » après examen ; un GO nu ne résout pas les questions. Une réponse doit être enregistrée avec ref, question exacte, answer et evidence.`);
 }
 function criteria(s,ix,{compactSources=false}={}){return s.criteria.map((c,i)=>text([`### ${criterionId(s,i)}`,'',c.criterion,'',`- Oracle : **${c.oracle}**.`,`- Vérification à exécuter : ${c.test}`,`- Sources : ${compactSources?`[ancrages exacts du critère dans le plan](../plans/${s.id}.plan.md#${criterionId(s,i).toLowerCase()})`:sources(s,i,ix)}`])).join('\n');}
 function integration(s){return text([
@@ -66,14 +68,14 @@ function renderPlan(s,ctx,ix){
   const st=stateFor(ctx,s.id);
   return text([
     `# Plan — ${s.id} : ${s.title}`,'',generated,'',
-    `> Programme : **${st.status}** · plan ${st.approval?'avec autorisation enregistrée':'soumis, non approuvé'}.`,
+    `> Programme : **${st.status}** · plan ${st.approval?'avec autorisation enregistrée':sequence(ctx)?'couvert par le mandat PROG-23 ; décisions à consigner à son entrée':'soumis, non approuvé'}.`,
     '> Session requise (PROG-12) : GPT-6 Astra (`gpt-6-astra`) · effort `ultra`.',
     `> Session réelle : ${flat(st.session||'non exécutée / non observable à ce stade')}.`,
     `> Budget indicatif (PROG-14) : **${s.session_budget} session principale** ; redécouper au-delà, sans promesse de durée/coût.`,
     `> Coût constaté : ${flat(st.cost||'non renseigné')}.`,'',
-    '## Questions bloquantes — avant objectif et autorisation','',questions(s,st),'',
+    '## Questions bloquantes — avant objectif et autorisation','',questions(s,st,sequence(ctx)),'',
     '## Autorisation et décisions enregistrées','',
-    `Autorisation effective : ${st.approval?`\`${flat(st.approval)}\``:'**aucune**. La demande de roadmap autorise la planification, pas l’implémentation de cette slice.'}`,'',
+    `Autorisation effective : ${st.approval?`\`${flat(st.approval)}\``:sequence(ctx)?'[mandat séquentiel PROG-23](../execution-policy.md), à référencer dans l’état à l’entrée de cette slice.':'**aucune**. La demande de roadmap autorise la planification, pas l’implémentation de cette slice.'}`,'',
     list(st.decisions.map(decisionText),'Aucune décision propre à cette slice enregistrée.'),'',
     '## Objectif','',s.objective,'',
     '## Couverture et paquet de contexte','',
@@ -104,7 +106,7 @@ function renderPlan(s,ctx,ix){
     '## Hors-périmètre','',list(s.out_of_scope),'',
     '## Budget, reprise et livraison','',s.split_trigger,'',
     'WIP = 1. Appliquer CDX-03 à chaque reprise et avant relais : aucun compteur accessible ne prouve ici le seuil de 70 %. Préserver décisions et essais ; ne pas inventer une mesure de contexte.','',
-    'À la livraison, renseigner `roadmap/state.json`, les preuves et la session réellement utilisée, puis régénérer les vues. Appliquer PROG-08 et le journal Git ; préparer la suite sans la lancer automatiquement. Ne pas redemander une autorisation déjà consignée pour le même périmètre.'
+    'À la livraison, renseigner `roadmap/state.json`, les preuves et la session réellement utilisée, puis régénérer les vues. Appliquer PROG-08 et le journal Git. Ne pas redemander une autorisation déjà consignée pour le même périmètre.','',continuation(ctx)
   ]);
 }
 function renderPrompt(s,ctx,ix){
@@ -113,9 +115,9 @@ function renderPrompt(s,ctx,ix){
     `# Prompt — ${s.id} : ${s.title}`,'',generated,'',
     'Paramètres réels de lancement : modèle **`gpt-6-astra`**, effort **`ultra`** (PROG-12). Ce texte ne règle pas le sélecteur ; contrôler la surface selon `docs/codex.md`, sans substitution silencieuse.','',
     `Travaille dans le dépôt CoverView pour **${s.id} uniquement**. Lis AGENTS.md, le référentiel qu’il désigne, PROJECT.md et les entrées actives de MEMORY.md. Lis le [plan](../plans/${s.id}.plan.md), ses questions et son journal avant toute mutation.`, '',
-    `État : **${st.status}**. Autorisation : ${st.approval?`\`${flat(st.approval)}\``:'**aucune enregistrée**'}. ${st.approval?'Vérifie que son périmètre et les décisions restent applicables ; ne redemande pas un accord déjà consigné.':'Ce prompt prépare la future slice ; ne pas exécuter avant GO explicite et réponses bloquantes requis par le plan.'}`,'',
+    `État : **${st.status}**. Autorisation : ${st.approval?`\`${flat(st.approval)}\``:sequence(ctx)?'[mandat séquentiel PROG-23](../execution-policy.md)':'**aucune enregistrée**'}. ${st.approval||sequence(ctx)?'Vérifie le périmètre et les dépendances, consigne les décisions déléguées à l’entrée ; ne redemande pas l’accord déjà donné.':'Ce prompt prépare la future slice ; ne pas exécuter avant GO explicite et réponses bloquantes requis par le plan.'}`,'',
     '## Objectif concret','',s.objective,'',
-    '## Décisions préalables','',questions(s,st),'',
+    '## Décisions préalables','',questions(s,st,sequence(ctx)),'',
     'Réponses enregistrées :','',list(st.decisions.map(decisionText),'Aucune ; les recommandations d’options ne sont pas des décisions.'),'',
     '## Paquet de contexte ciblé','',
     `- [Paquet de sources ciblé du plan](../plans/${s.id}.plan.md#couverture-et-paquet-de-contexte) : suivre les ancrages des critères ci-dessous selon le comportement travaillé, sans précharger toutes les sections listées. Le plan et la couverture conservent les IDs exhaustifs.`,
@@ -138,7 +140,7 @@ function renderPrompt(s,ctx,ix){
     'Les lectures et audits indépendants peuvent être délégués avec propriété de fichiers et livrable borné ; une seule slice reste en cours. Toute déviation majeure revient en revue du plan.','',
     '## Reprise et livraison','',
     'Relire plan et journal après compaction. Suivre CDX-03 pour un checkpoint optimisé et un contexte propre ; aucun pourcentage fiable n’est fourni ici, donc ne pas annoncer de bascule mesurée à 70 %. Le relais continue la même autorisation sans ouvrir une autre slice.','',
-    'Livrer faits vérifiés / faits non vérifiés / suppositions avec preuves, limites, migrations, permissions, intégrations encore simulées, session réelle et coût observable seulement. Mettre à jour `roadmap/state.json`, les sources canoniques et preuves puis régénérer les vues ; ne pas éditer directement plans/prompts/backlog générés. Appliquer PROG-08 et consigner dans Git. Préparer la slice suivante sans l’exécuter automatiquement.'
+    'Livrer faits vérifiés / faits non vérifiés / suppositions avec preuves, limites, migrations, permissions, intégrations encore simulées, session réelle et coût observable seulement. Mettre à jour `roadmap/state.json`, les sources canoniques et preuves puis régénérer les vues ; ne pas éditer directement plans/prompts/backlog générés. Appliquer PROG-08 et consigner dans Git.','',continuation(ctx)
   ]);
 }
 function backlog(ctx){
@@ -147,7 +149,7 @@ function backlog(ctx){
   return text(out);
 }
 function indexPage(ctx,ix){
-  const out=['# Index des slices Astra Ultra','',generated,'','L’ordre est topologique ; les identifiants restent stables et ne constituent pas une séquence. Dépendances done, décisions et GO sont requis ; budget d’une session principale par slice.','',
+  const out=['# Index des slices Astra Ultra','',generated,'','L’ordre est topologique ; les identifiants restent stables. Vérifier dépendances done, décisions et autorisation effective ; le mandat PROG-23 remplace les GO répétés lorsqu’il est actif. Budget d’une session principale par slice.','',
     '[Roadmap](../ROADMAP.md) · [Workflows](workflows.md) · [Décisions](decisions.md) · [Prompts](prompts/README.md) · [État](state.json)','',
     '## Ordre de travail','','| Ordre | Slice | Jalon | Mode | État | Dépendances | Prompt |','|---|---|---|---|---|---|---|'];
   for(const s of ctx.order)out.push(`| ${ix.positions.get(s.id)} | [${s.id} — ${cell(s.title)}](plans/${s.id}.plan.md) | ${s.milestone} | ${s.mode} | ${stateFor(ctx,s.id).status} | ${s.depends_on.map(id=>plan(id)).join(', ')||'—'} | ${prompt(s.id)} |`);
@@ -177,7 +179,7 @@ function decisions(ctx){
   for(const [ref,es]of [...grouped].sort(([a],[b])=>a.localeCompare(b))){out.push(`## ${ref}`,'');for(const {s,i,q}of es){const st=stateFor(ctx,s.id),answers=st.decisions.filter(d=>d&&typeof d==='object'&&d.ref===q.ref&&d.question===q.question);out.push(`### ${s.id} — question ${i+1}`,'',`${plan(s.id)} · ${q.question}`,'',...q.options.map((v,j)=>`- (${letter(j)}) ${v}${j===q.recommended?' — défaut proposé':''}`),'',`Bloque : ${q.blocks}`,'',`Autorisation : ${flat(st.approval||'aucune enregistrée')}. Réponse : ${answers.length?'enregistrée ci-dessous':'**non enregistrée**'}.`,'',list(answers.map(decisionText),'Aucune réponse à cette question exacte.'),'');}}
   return text(out);
 }
-function promptsIndex(ctx){return text(['# Prompts — GPT-6 Astra Ultra','',generated,'','Utiliser les paramètres réels `model: gpt-6-astra`, `thinking: ultra` dans une surface compatible selon [CDX-02](../../docs/codex.md). Le mot Ultra ne configure pas la tâche. Vérifier décisions, dépendances done et GO ; WIP = 1.','',
+function promptsIndex(ctx){return text(['# Prompts — GPT-6 Astra Ultra','',generated,'','Utiliser les paramètres réels `model: gpt-6-astra`, `thinking: ultra` dans une surface compatible selon [CDX-02](../../docs/codex.md). Le mot Ultra ne configure pas la tâche. Vérifier décisions, dépendances done et autorisation effective selon PROG-23 ; WIP = 1.','',
   'Chaque prompt cible une session principale et indique son redécoupage. Reprise CDX-03 : aucun compteur actuel ne déclenche exactement à 70 % ; checkpoint ciblé, sans copier toute la conversation.','',
   '[Ordre topologique](../index.md) · [Décisions](../decisions.md) · [Workflows](../workflows.md)','',...ctx.order.map(s=>`- [${s.id} — ${s.title}](${s.id}.prompt.md) · [plan](../plans/${s.id}.plan.md) · ${stateFor(ctx,s.id).status} · ${s.mode}.`)]);}
 function mainPage(ctx){
@@ -186,14 +188,14 @@ function mainPage(ctx){
     `Le programme contient **${ctx.slices.length} slices** et **${sum.criteria} critères d’acceptation**. Traçabilité : **${sum.assigned_units}/${sum.total_units} unités source** affectées, dont ${sum.implementation_units} liées aux critères et ${sum.context_units} qualifiées comme contexte ; **${ctx.coverage.unassigned.length} non affectées**. Ce sont des preuves de planification, aucune fonctionnalité n’est déclarée implémentée par ce décompte.`,'',
     `État enregistré : ${Object.entries(counts).sort(([a],[b])=>a.localeCompare(b)).map(([k,v])=>`${v} ${k}`).join(', ')}. Les intégrations réelles et décisions métier ont des slices explicites ; aucun mock critique ne satisfait l’acceptation complète.`,'',
     '- [Index topologique et jalons](roadmap/index.md)', '- [Prompts détaillés](roadmap/prompts/README.md)', '- [Parcours A–M et étapes tracées](roadmap/workflows.md)', '- [Décisions avec options et périmètre](roadmap/decisions.md)', '- [Backlog](roadmap/backlog.yaml) · [Couverture](roadmap/coverage.json) · [État canonique](roadmap/state.json)','',
-    `Départ prévu : ${ctx.slices.some(s=>s.id==='S-000a')?'[S-000a](roadmap/plans/S-000a.plan.md)':ctx.order[0]?plan(ctx.order[0].id,'roadmap/'):'aucune slice'}. L’ordre suit les dépendances, pas les seuls numéros. Les plans attendent GO et réponses nécessaires avant exécution.`,'',
+    `Départ prévu : ${ctx.slices.some(s=>s.id==='S-000a')?'[S-000a](roadmap/plans/S-000a.plan.md)':ctx.order[0]?plan(ctx.order[0].id,'roadmap/'):'aucune slice'}. L’ordre suit les dépendances, pas les seuls numéros. ${sequence(ctx)?'Exécution séquentielle et choix des meilleurs défauts autorisés : [mandat et relais entre tâches](roadmap/execution-policy.md). Les décisions sont consignées à l’entrée de chaque slice ; aucun GO répété.':'Les plans attendent GO et réponses nécessaires avant exécution.'}`,'',
     ctx.slices.some(s=>s.id==='S-021')?'La recherche LPP apparaît tôt : [S-021 demande/signature](roadmap/plans/S-021.plan.md), [S-022 suivi/résultats](roadmap/plans/S-022.plan.md), puis [S-036 transmission réelle](roadmap/plans/S-036.plan.md) et [S-041 réponses réelles](roadmap/plans/S-041.plan.md). Pièces, institutions, avoirs et prochaines démarches font partie du parcours ; un formulaire seul ne suffit pas.':'','',
     'Chaque slice vise GPT-6 Astra (`gpt-6-astra`) effort `ultra`, une session principale et un point de redécoupage. Ce budget ne promet ni coût ni calendrier. Le contexte propre suit [CDX-03](docs/codex.md), sans inventer de mesure exacte de 70 %.','',
     'La v1 n’est complète qu’après la recette [S-139](roadmap/plans/S-139.plan.md), les intégrations réelles, les décisions et clôtures requises, puis l’ouverture [S-140](roadmap/plans/S-140.plan.md) sur de nouvelles ressources dédiées. Une couverture documentaire complète ne remplace aucune de ces preuves.','',
     '## Jalons','',...Object.entries(milestones).filter(([id])=>ctx.slices.some(s=>s.milestone===id)).map(([id,name])=>`- **${id} — ${name}** : ${ctx.slices.filter(s=>s.milestone===id).length} slices ; dépendances et livrables dans l’index.`),'',
     '## Maintenance','',
     'Modifier `roadmap/specs/*.json`, les liens/qualifications source et `roadmap/state.json`, puis exécuter `node scripts/build-roadmap.mjs`. Ne pas éditer les vues générées. `node scripts/verify-planning.mjs --require-complete` contrôle cohérence, fraîcheur et couverture documentaire ; aucune application ou intégration n’est lancée.','',
-    'Les choix de [PROJECT](PROJECT.md) restent canoniques : WorkOS coverview, preset/charte, contenus bornés, fixtures et Infomaniak protégé. La roadmap ne lance ni slice, push, déploiement, modification d’instance ou DNS.'
+    'Les choix de [PROJECT](PROJECT.md) restent canoniques : WorkOS coverview, preset/charte, contenus bornés, fixtures et Infomaniak protégé. Le générateur de documents ne réalise aucune action applicative ou externe.','',continuation(ctx)
   ]);
 }
 

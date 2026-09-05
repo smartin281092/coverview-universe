@@ -1,5 +1,7 @@
 # Livraison de la roadmap complète
 
+Compte rendu historique de rédaction. L'autorisation ultérieure de lancement et d'enchaînement est dans [le mandat d'exécution](execution-policy.md).
+
 Date : 2026-09-05. Périmètre autorisé : rédaction de la roadmap et des objectifs/prompts Astra Ultra selon [le plan de travail](plans/ROADMAP-authoring.plan.md). Application, intégrations et infrastructure restent à réaliser.
 
 ## Résultat

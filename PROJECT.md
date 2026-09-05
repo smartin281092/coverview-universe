@@ -1,6 +1,6 @@
 # CoverView — identité et état du projet
 
-Initialisation documentaire : 5 septembre 2026, mode BOOT-10. **Harness préparé ; application non implémentée.** La [roadmap détaillée](ROADMAP.md) et ses prompts Astra Ultra sont rédigés. L'autorisation reçue couvre leur rédaction ; les plans d'implémentation restent soumis.
+Initialisation documentaire : 5 septembre 2026, mode BOOT-10. **Harness et roadmap préparés ; lancement de S-000a autorisé.** L'utilisateur a autorisé l'implémentation séquentielle, une nouvelle tâche Astra Ultra par slice et le choix des meilleurs défauts. [Le mandat et le protocole de relais](roadmap/execution-policy.md) sont canoniques ; l'état réel et les preuves restent dans la roadmap.
 
 ## Problème et valeur
 

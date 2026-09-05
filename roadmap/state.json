@@ -1,4 +1,29 @@
 {
   "schema_version": 1,
-  "slices": {}
+  "slices": {
+    "S-000a": {
+      "status": "ready",
+      "approval": "Mandat utilisateur du 2026-09-05 : lancement et enchaînement autorisés — roadmap/execution-policy.md",
+      "decisions": [],
+      "verification_attempts": [],
+      "session": "",
+      "cost": "",
+      "notes": [
+        "Lancement préparé dans une nouvelle tâche gpt-6-astra / ultra. Aucun critère d’implémentation encore vérifié."
+      ],
+      "ledger": {
+        "verified": [],
+        "done_unverified": [],
+        "assumed": []
+      }
+    }
+  },
+  "execution": {
+    "active": true,
+    "mode": "sequential-fresh-tasks",
+    "authorized_at": "2026-09-05",
+    "authorization": "Lancer S-000a puis enchaîner les slices dans une nouvelle tâche à contexte propre ; choisir les réponses par défaut les mieux adaptées au projet.",
+    "evidence": "Message utilisateur 01a0734f-fd18-76a0-a2e5-d0cf7ddd7c78 dans la tâche 01a072f8-6263-7ed0-8b49-0b384c54bf9d ; roadmap/execution-policy.md",
+    "policy": "roadmap/execution-policy.md"
+  }
 }

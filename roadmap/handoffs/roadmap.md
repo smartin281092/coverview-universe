@@ -1,5 +1,7 @@
 # Reprise de travail — roadmap
 
+Checkpoint historique de rédaction ; l'exécution est désormais autorisée par [le mandat](../execution-policy.md) et démarre avec [S-000a](S-000a-start.md).
+
 Créé : 2026-09-05.
 Contexte observé : non disponible ; checkpoint préventif, aucun seuil de 70 % mesuré.
 
