@@ -23,7 +23,16 @@ async function main() {
   });
   try {
     if (operation === "reset") {
-      // Explicit opt-in, loopback-only, fixed database and fixed technical table.
+      // The original fixture-only reset must never silently remove identities or audit.
+      if (!process.argv.includes("--confirm-identity-reset")) {
+        throw new Error(
+          "Reset now also requires --confirm-identity-reset for identity and audit data",
+        );
+      }
+      // Explicit opt-in, loopback-only, fixed CoverView tables; no cascade into unrelated schemas.
+      await database.pool.query(
+        "DROP TABLE IF EXISTS identity_mfa_challenges, identity_audit_events, identity_admin_permissions, identity_sessions, identity_profiles, identity_logins, identity_users",
+      );
       await database.pool.query("DROP TABLE IF EXISTS local_preview_personas");
       await database.pool.query("DROP SCHEMA IF EXISTS drizzle CASCADE");
     }

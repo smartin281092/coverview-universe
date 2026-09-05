@@ -105,4 +105,22 @@
   .missing-page p {
     @apply leading-relaxed text-muted-foreground;
   }
+  .account-page {
+    @apply mx-auto max-w-4xl space-y-8 px-6 py-16 sm:px-10;
+  }
+  .account-page h1 {
+    @apply mb-6 text-3xl sm:text-4xl;
+  }
+  .account-card {
+    @apply space-y-5 rounded-xl border border-border bg-card p-6;
+  }
+  .account-actions {
+    @apply flex flex-wrap items-center gap-5;
+  }
+  button {
+    @apply cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring;
+  }
+  [hidden] {
+    display: none !important;
+  }
 }

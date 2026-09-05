@@ -20,6 +20,24 @@
       "cache": false,
       "persistent": true
     },
+    "api#dev": {
+      "cache": false,
+      "persistent": true,
+      "passThroughEnv": [
+        "AUTH_*",
+        "WORKOS_*",
+        "DATABASE_URL",
+        "REDIS_URL",
+        "CORS_ORIGINS",
+        "API_*",
+        "FIXTURE_MODE",
+        "EXTERNAL_ADAPTER_MODE",
+        "LOG_LEVEL",
+        "MINIO_ENDPOINT",
+        "MAILPIT_URL",
+        "DEPENDENCY_TIMEOUT_MS"
+      ]
+    },
     "@coverview/contracts#build": {
       "outputs": []
     },

@@ -11,9 +11,9 @@ L’ordre est topologique ; les identifiants restent stables. Vérifier dépenda
 | Ordre | Slice | Jalon | Mode | État | Dépendances | Prompt |
 |---|---|---|---|---|---|---|
 | 1 | [S-000a — Démarrer un socle local reproductible et une preview fictive](plans/S-000a.plan.md) | M0 | foundation | done | — | [prompt](prompts/S-000a.prompt.md) |
-| 2 | [S-000b — Se connecter avec WorkOS et retrouver son espace protégé](plans/S-000b.plan.md) | M0 | integration | ready | [S-000a](plans/S-000a.plan.md) | [prompt](prompts/S-000b.prompt.md) |
+| 2 | [S-000b — Se connecter avec WorkOS et retrouver son espace protégé](plans/S-000b.plan.md) | M0 | integration | review | [S-000a](plans/S-000a.plan.md) | [prompt](prompts/S-000b.prompt.md) |
 | 3 | [S-013 — Reprendre un parcours anonyme dans Wallet avec un profil central](plans/S-013.plan.md) | M1 | local-fixtures | specified | [S-000b](plans/S-000b.plan.md) | [prompt](prompts/S-013.prompt.md) |
-| 4 | [S-010 — Ouvrir les trois parcours CoverView depuis un site public compact](plans/S-010.plan.md) | M1 | local-fixtures | specified | [S-000a](plans/S-000a.plan.md) | [prompt](prompts/S-010.prompt.md) |
+| 4 | [S-010 — Ouvrir les trois parcours CoverView depuis un site public compact](plans/S-010.plan.md) | M1 | local-fixtures | ready | [S-000a](plans/S-000a.plan.md) | [prompt](prompts/S-010.prompt.md) |
 | 5 | [S-081 — Délivrer un dossier avec tâches, prochaine action et Kanban](plans/S-081.plan.md) | M5 | local-fixtures | specified | [S-000b](plans/S-000b.plan.md) | [prompt](prompts/S-081.prompt.md) |
 | 6 | [S-017 — Générer et archiver les documents de démarches à partir du profil](plans/S-017.plan.md) | M2 | local-fixtures | specified | [S-013](plans/S-013.plan.md) | [prompt](prompts/S-017.prompt.md) |
 | 7 | [S-018 — Signer un document de test et suivre son dossier de preuve](plans/S-018.plan.md) | M2 | local-fixtures | specified | [S-017](plans/S-017.plan.md) | [prompt](prompts/S-018.prompt.md) |

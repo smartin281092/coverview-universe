@@ -54,11 +54,86 @@ export const environmentSchema = z
           .max(10),
       ),
     DEPENDENCY_TIMEOUT_MS: z.coerce.number().int().min(100).max(10000).default(2000),
+    AUTH_ENABLED: z
+      .enum(["true", "false"])
+      .default("false")
+      .transform((value) => value === "true"),
+    WORKOS_API_KEY: z.string().min(1).optional(),
+    WORKOS_CLIENT_ID: z.string().startsWith("client_").optional(),
+    WORKOS_ISSUER: httpUrl.default("https://api.workos.com/"),
+    AUTH_SESSION_SECRET: z.string().optional(),
+    AUTH_API_ORIGIN: httpUrl.default("http://127.0.0.1:4100"),
+    AUTH_WALLET_ORIGIN: httpUrl.default("http://127.0.0.1:4101"),
+    AUTH_ADMIN_ORIGIN: httpUrl.default("http://127.0.0.1:4102"),
+    AUTH_WWW_ORIGIN: httpUrl.default("http://127.0.0.1:4103"),
+    AUTH_SESSION_TTL_SECONDS: z.coerce.number().int().min(60).max(86400).default(28800),
+    WORKOS_TIMEOUT_MS: z.coerce.number().int().min(100).max(5000).default(3000),
   })
   .superRefine((config, context) => {
     const isLocal =
       ["local", "development"].includes(config.APP_ENV) && config.NODE_ENV !== "production";
     const usesLocalFeatures = config.FIXTURE_MODE || config.EXTERNAL_ADAPTER_MODE === "local";
+    if (config.AUTH_ENABLED) {
+      if (URL.canParse(config.WORKOS_ISSUER) && new URL(config.WORKOS_ISSUER).protocol !== "https:")
+        context.addIssue({
+          code: "custom",
+          path: ["WORKOS_ISSUER"],
+          message: "WorkOS issuer must use HTTPS",
+        });
+      for (const key of ["WORKOS_API_KEY", "WORKOS_CLIENT_ID", "AUTH_SESSION_SECRET"] as const) {
+        if (
+          !config[key] ||
+          (key === "AUTH_SESSION_SECRET" && !/^[A-Za-z0-9+/]{43}=$/.test(config[key]))
+        ) {
+          context.addIssue({
+            code: "custom",
+            path: [key],
+            message: "Authentication requires server credentials and a base64 32-byte key",
+          });
+        }
+      }
+      for (const key of [
+        "AUTH_API_ORIGIN",
+        "AUTH_WALLET_ORIGIN",
+        "AUTH_ADMIN_ORIGIN",
+        "AUTH_WWW_ORIGIN",
+      ] as const) {
+        if (!URL.canParse(config[key])) continue;
+        const url = new URL(config[key]);
+        if (
+          url.origin !== config[key] ||
+          (url.protocol !== "https:" && !(isLocal && isLoopback(url.hostname)))
+        ) {
+          context.addIssue({
+            code: "custom",
+            path: [key],
+            message: "An exact HTTPS origin is required outside local loopback",
+          });
+        }
+        if (key !== "AUTH_API_ORIGIN" && !config.CORS_ORIGINS.includes(config[key])) {
+          context.addIssue({
+            code: "custom",
+            path: [key],
+            message: "The surface must be present in the exact CORS allowlist",
+          });
+        }
+      }
+      // Local cookies are host-only: mixing localhost and 127.0.0.1 loses the shared session.
+      if (
+        isLocal &&
+        [config.AUTH_WALLET_ORIGIN, config.AUTH_ADMIN_ORIGIN, config.AUTH_WWW_ORIGIN].some(
+          (origin) =>
+            URL.canParse(origin) &&
+            URL.canParse(config.AUTH_API_ORIGIN) &&
+            new URL(origin).hostname !== new URL(config.AUTH_API_ORIGIN).hostname,
+        )
+      )
+        context.addIssue({
+          code: "custom",
+          path: ["AUTH_API_ORIGIN"],
+          message: "Local surfaces must use the same host",
+        });
+    }
     if (usesLocalFeatures && !isLocal) {
       context.addIssue({
         code: "custom",

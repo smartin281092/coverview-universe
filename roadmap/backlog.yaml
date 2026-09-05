@@ -18,7 +18,7 @@
   notes: ["Propriétaire unique : tâche 01a07358-17eb-7f33-ad10-7d59aab07e9d, worktree 10c1. Commit requis 8a644c4fff48cf874673f3f0113805510414c9f2 vérifié ancêtre de HEAD.","Commit de code testé : 4f04808f2201af5603a54d27fdbbf8a175ba800c. Checkout de vérification reste propre ; détails au dossier evidence.","Revue déléguée PROG-23 achevée : C01-C06 couverts, aucun blocage restant. Suite S-000b ready ; checkpoint roadmap/handoffs/S-000b.md."]
 - id: S-000b
   title: "Se connecter avec WorkOS et retrouver son espace protégé"
-  status: ready
+  status: review
   milestone: M0
   depends_on: ["S-000a"]
   plan: roadmap/plans/S-000b.plan.md
@@ -28,10 +28,10 @@
   recommended_effort: ultra
   session_budget: 1
   approval: "Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md"
-  session: ""
+  session: "Tâche créée gpt-6-astra / ultra ; modèle hôte GPT-6, effort non observable indépendamment du paramètre transmis."
   cost: ""
-  decisions: [{"ref":"project.workos","question":"Quel environnement et quelles identités WorkOS utiliser pour vérifier les flux réels ?","answer":"Option a : utiliser l’environnement de développement du projet coverview et des identités de test explicitement autorisées. Identifier d’abord cet environnement en lecture seule ; ne déduire aucun client ID, compte autorisé ou droit administratif du nom du projet.","evidence":"Choix délégué par PROG-23, conforme à AUTH-11, ADR-0003 et ENV-09. Ce choix ne prouve encore ni accès WorkOS, ni identités disponibles, ni habilitation administrative."},{"ref":"project.auth-methods","question":"Si les méthodes constatées diffèrent du parcours email/OTP, quel changement appliquer ?","answer":"Option a : si un écart est réellement constaté, préparer et présenter le diff exact des méthodes et callbacks pour configurer email/OTP et MFA admin dans l’environnement de développement identifié. Conserver les configurations sans rapport avec ce parcours.","evidence":"Choix délégué par PROG-23 ; email/OTP exigé par bible.v15.p0743, continuité par p0230, MFA privilégiée par AUTH-08/11. Aucun écart de configuration ni changement distant n’a encore été constaté ou exécuté."}]
-  notes: ["Entrée préparée après clôture prouvée de S-000a. Environnement WorkOS à inspecter avant configuration.","Les personas locales S-000a ne sont ni des comptes WorkOS, ni des sessions, ni des habilitations.","Aucun oracle S-000b exécuté pendant la préparation du relais."]
+  decisions: [{"ref":"project.workos","question":"Quel environnement et quelles identités WorkOS utiliser pour vérifier les flux réels ?","answer":"Option a : utiliser l’environnement de développement du projet coverview et des identités de test explicitement autorisées. Identifier d’abord cet environnement en lecture seule ; ne déduire aucun client ID, compte autorisé ou droit administratif du nom du projet.","evidence":"Inspection réelle du dashboard le 2026-09-05/06 : coverview, LocalHost badge Staging, client et application identifiés dans roadmap/evidence/S-000b.md. Aucun secret process ni identité de test autorisée ; attribution admin non réalisée."},{"ref":"project.auth-methods","question":"Si les méthodes constatées diffèrent du parcours email/OTP, quel changement appliquer ?","answer":"Option a : si un écart est réellement constaté, préparer et présenter le diff exact des méthodes et callbacks pour configurer email/OTP et MFA admin dans l’environnement de développement identifié. Conserver les configurations sans rapport avec ce parcours.","evidence":"Écart constaté : Magic Auth et MFA désactivés, callbacks absents. Diff concret préparé dans roadmap/evidence/S-000b.md ; aucun changement distant effectué. C01/C03/C05 restent non vérifiés."}]
+  notes: ["Propriétaire unique : tâche 01a07385-bfec-7021-b1d0-1df3708cd86b, worktree 4133, branche codex/s-000b-workos. SHA requis vérifié ancêtre de HEAD ; checkout initial propre.","Implémentation détaillée et observation WorkOS : roadmap/evidence/S-000b.md. Aucun oracle WorkOS de connexion exécuté.","Ledger définitif, sources et diff externe non exécuté : roadmap/evidence/S-000b.md. README identity contient manifeste données et activation opérateur.","Relais indépendant S-010 ready ; checkpoint roadmap/handoffs/S-010.md. S-013 et toutes les dépendantes S-000b restent fermées.","Avertissements bundles Vite >500kB ; RLS non activée (DEVRAIT DATA-09), reprises distantes à la commande/prochaine connexion, bornes fournisseur documentées."]
 - id: S-013
   title: "Reprendre un parcours anonyme dans Wallet avec un profil central"
   status: specified
@@ -50,7 +50,7 @@
   notes: []
 - id: S-010
   title: "Ouvrir les trois parcours CoverView depuis un site public compact"
-  status: specified
+  status: ready
   milestone: M1
   depends_on: ["S-000a"]
   plan: roadmap/plans/S-010.plan.md
@@ -59,11 +59,11 @@
   recommended_model: gpt-6-astra
   recommended_effort: ultra
   session_budget: 1
-  approval: ""
-  session: ""
+  approval: "Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md"
+  session: "Nouvelle tâche requise gpt-6-astra / ultra ; non exécutée à ce checkpoint."
   cost: ""
   decisions: []
-  notes: []
+  notes: ["Prochaine slice indépendante de S-000b review : seule dépendance S-000a réellement done. Lire roadmap/handoffs/S-010.md avant mutation."]
 - id: S-081
   title: "Délivrer un dossier avec tâches, prochaine action et Kanban"
   status: specified

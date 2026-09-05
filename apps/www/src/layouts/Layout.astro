@@ -37,8 +37,9 @@ const image = new URL('/og-preview.svg', Astro.site);
     <header class="site-header">
       <a href="/" aria-label={content.home}><img src={logo} alt={content.brand} width="444" height="73" class="logo" /></a>
       <nav aria-label={content.navigation}>
+        <a href="/account" class="text-link">{content.accountLink}</a>
         {import.meta.env.DEV && <a href="http://127.0.0.1:4102" class="text-link">{content.team}<span aria-hidden="true">↗</span></a>}
-        <span class="stage-label">{import.meta.env.DEV ? content.local : content.construction}</span>
+        <span class="stage-label">{import.meta.env.DEV ? (Astro.url.pathname === "/account" ? content.account.local : content.local) : content.construction}</span>
       </nav>
     </header>
     <main id="main" tabindex="-1"><slot /></main>

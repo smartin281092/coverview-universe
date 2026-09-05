@@ -1,8 +1,8 @@
 # API CoverView Core
 
-Le socle et ses limites sont documentés dans [platform/README.md](src/platform/README.md).
+Le socle et ses limites sont documentés dans [platform/README.md](src/platform/README.md). La connexion WorkOS, les sessions et habilitations appartiennent à [identity](src/modules/identity/README.md), qui documente leur activation et les preuves encore manquantes.
 
-Depuis la racine, `pnpm --filter api dev` lance Fastify et `pnpm --filter api build` produit le serveur Node ESM. Les commandes DB passent par une validation locale stricte ; `pnpm --filter api db:reset --confirm-local-reset` supprime la table des personas et le schéma du journal Drizzle, puis rejoue migration et seeds. Cette opération destructive volontaire est réservée à la base locale nommée par la configuration.
+Depuis la racine, `pnpm --filter api dev` lance Fastify et `pnpm --filter api build` produit le serveur Node ESM. Les commandes DB passent par une validation locale stricte. Le reset détruit également identités et audit, exige deux confirmations et ne fait pas partie du démarrage : [procédure propriétaire](src/platform/README.md#données-et-exploitation).
 
 Le développement utilise le watcher natif de Node avec le chargeur TypeScript `tsx`. Ce choix conserve le redémarrage automatique et résout le blocage observé sous Turborepo/Windows avec la commande `tsx watch`, alors que son lancement direct fonctionnait. Le lancement filtré `pnpm dev --filter api`, le redémarrage après modification et le lancement global des quatre applications ont été exécutés.
 

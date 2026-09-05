@@ -146,33 +146,108 @@
       }
     },
     "S-000b": {
-      "status": "ready",
+      "status": "review",
       "approval": "Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md",
       "decisions": [
         {
           "ref": "project.workos",
           "question": "Quel environnement et quelles identités WorkOS utiliser pour vérifier les flux réels ?",
           "answer": "Option a : utiliser l’environnement de développement du projet coverview et des identités de test explicitement autorisées. Identifier d’abord cet environnement en lecture seule ; ne déduire aucun client ID, compte autorisé ou droit administratif du nom du projet.",
-          "evidence": "Choix délégué par PROG-23, conforme à AUTH-11, ADR-0003 et ENV-09. Ce choix ne prouve encore ni accès WorkOS, ni identités disponibles, ni habilitation administrative."
+          "evidence": "Inspection réelle du dashboard le 2026-09-05/06 : coverview, LocalHost badge Staging, client et application identifiés dans roadmap/evidence/S-000b.md. Aucun secret process ni identité de test autorisée ; attribution admin non réalisée."
         },
         {
           "ref": "project.auth-methods",
           "question": "Si les méthodes constatées diffèrent du parcours email/OTP, quel changement appliquer ?",
           "answer": "Option a : si un écart est réellement constaté, préparer et présenter le diff exact des méthodes et callbacks pour configurer email/OTP et MFA admin dans l’environnement de développement identifié. Conserver les configurations sans rapport avec ce parcours.",
-          "evidence": "Choix délégué par PROG-23 ; email/OTP exigé par bible.v15.p0743, continuité par p0230, MFA privilégiée par AUTH-08/11. Aucun écart de configuration ni changement distant n’a encore été constaté ou exécuté."
+          "evidence": "Écart constaté : Magic Auth et MFA désactivés, callbacks absents. Diff concret préparé dans roadmap/evidence/S-000b.md ; aucun changement distant effectué. C01/C03/C05 restent non vérifiés."
         }
       ],
-      "verification_attempts": [],
+      "verification_attempts": [
+        {
+          "target": "Préconditions et inspection WorkOS en lecture seule",
+          "oracle": "V3",
+          "observed": "S-000a done et preuves lues ; dashboard coverview, environnement LocalHost badge Staging, client ID visible. Magic Auth et MFA désactivés, callbacks absents. Aucune identité de test autorisée ni secret process disponible.",
+          "decision": "Implémenter le périmètre local autorisé. Préparer diff exact externe et conserver oracles externes ouverts."
+        },
+        {
+          "target": "Persistance et protocole fournisseur",
+          "observed": "Sept tables additives Drizzle, contraintes et tests PostgreSQL réels. SDK officiel testé avec réponses HTTP/JWKS fictives, aucun appel réel WorkOS.",
+          "decision": "Conserver séparation des oracles locaux et externes ; aucun mode auth simulé runtime.",
+          "oracle": "V2"
+        },
+        {
+          "target": "Revue sécurité locale",
+          "observed": "Relecteurs indépendants : rejeu logout lié à source, cutoff atomique, refus après réseau, MFA relue/rotée ; deux défauts horloges/backlog reproduits puis corrigés et couverts par HTTP/PostgreSQL.",
+          "decision": "Revue locale close sans finding ouvert ; aucune preuve fournisseur substituée.",
+          "oracle": "V2"
+        },
+        {
+          "target": "Vérifications initiales et diagnostic",
+          "observed": "Types, callbacks sans await et parenthèses de test corrigés. Cache TanStack : assertion adaptée à AbortSignal/cache final ; knip export retiré. Test récent séparé du logout par instant strictement postérieur après échec même milliseconde.",
+          "decision": "Pas de relance identique sans diagnostic, aucun contrôle désactivé ; recettes finales passées.",
+          "oracle": "V0/V2"
+        },
+        {
+          "target": "Recette finale applicative et qualité",
+          "observed": "78 tests applicatifs et 48 tests outillage passés. Lint, sept typechecks, six builds, frontières109modules et knip, scan11fichiers frontend passent. Migration locale dédiée rejouée sans erreur ; audit sans vulnérabilité connue.",
+          "decision": "Implémentation locale vérifiée. CI distante, reset et déploiement non exécutés.",
+          "oracle": "V0/V1/V2"
+        },
+        {
+          "target": "Navigateur et confidentialité",
+          "observed": "15 parcours Playwright passent :5socle réels,1config identité désactivée réelle sur3surfaces,9transports identité simulés. Captures inspectées ; stockage identité absent. Correction test pour seule clé technique scroll autorisée.",
+          "decision": "C02/C04 vérifiés V2 local ; C01/C03/C05 gardent leur oracle WorkOS manquant.",
+          "oracle": "V2/V3 local"
+        },
+        {
+          "target": "Clôture externe",
+          "observed": "WorkOS accessible en lecture seule, aucune identité autorisée ou clé serveur process fournie ; méthodes/callback non modifiés, aucun login/OTP/MFA ou logout fournisseur réel.",
+          "decision": "S-000b review et non done ; relais S-010 indépendante autorisé par execution-policy, aucune dépendance identity libérée.",
+          "oracle": "V3"
+        },
+        {
+          "target": "Configuration documentée et gouvernance finale",
+          "decision": "Aucune valeur secrète ajoutée à .env ; préserver tables additives au rollback et suivre reset double confirmation documenté.",
+          "oracle": "V0",
+          "observed": "check:env initialement refuse les clés process-only commentées ; reconnaissance des déclarations documentées puis validation indépendante des valeurs actives corrigées, lint/typecheck/check:env passent. Installation frozen confirme lockfile ; roadmap/planning/checkpoint/lint docs et marque passent."
+        }
+      ],
       "ledger": {
-        "verified": [],
-        "done_unverified": [],
-        "assumed": []
+        "assumed": [],
+        "done_unverified": [
+          "C01/C03/C05 : intégration présente mais aucun parcours WorkOS réel ; identités test et admin autorisé, secrets process et configuration distante encore requis.",
+          "CI distante, environnement déployé, cookies entre sous-domaines réels et reset destructif non exécutés."
+        ],
+        "verified": [
+          "C02 : utilisateur/profil canonique, cookies opaques, DTO minimal, cache et stockage contrôlés V2.",
+          "C04 : logout appareil/global et refus suivant, panne/reprise distante et rejeu sûr contrôlés HTTP/PostgreSQL avec fournisseur doublé V2.",
+          "Migration additive appliquée/rejouée ;78tests applicatifs,48outillage,15navigateur passent, limites des transports documentées.",
+          "Lint/typecheck/build/frontières/knip/scan bundles et audit npm passent ; revue de sécurité locale close."
+        ]
       },
       "notes": [
-        "Entrée préparée après clôture prouvée de S-000a. Environnement WorkOS à inspecter avant configuration.",
-        "Les personas locales S-000a ne sont ni des comptes WorkOS, ni des sessions, ni des habilitations.",
-        "Aucun oracle S-000b exécuté pendant la préparation du relais."
-      ]
+        "Propriétaire unique : tâche 01a07385-bfec-7021-b1d0-1df3708cd86b, worktree 4133, branche codex/s-000b-workos. SHA requis vérifié ancêtre de HEAD ; checkout initial propre.",
+        "Implémentation détaillée et observation WorkOS : roadmap/evidence/S-000b.md. Aucun oracle WorkOS de connexion exécuté.",
+        "Ledger définitif, sources et diff externe non exécuté : roadmap/evidence/S-000b.md. README identity contient manifeste données et activation opérateur.",
+        "Relais indépendant S-010 ready ; checkpoint roadmap/handoffs/S-010.md. S-013 et toutes les dépendantes S-000b restent fermées.",
+        "Avertissements bundles Vite >500kB ; RLS non activée (DEVRAIT DATA-09), reprises distantes à la commande/prochaine connexion, bornes fournisseur documentées."
+      ],
+      "session": "Tâche créée gpt-6-astra / ultra ; modèle hôte GPT-6, effort non observable indépendamment du paramètre transmis."
+    },
+    "S-010": {
+      "notes": [
+        "Prochaine slice indépendante de S-000b review : seule dépendance S-000a réellement done. Lire roadmap/handoffs/S-010.md avant mutation."
+      ],
+      "verification_attempts": [],
+      "status": "ready",
+      "decisions": [],
+      "ledger": {
+        "assumed": [],
+        "done_unverified": [],
+        "verified": []
+      },
+      "session": "Nouvelle tâche requise gpt-6-astra / ultra ; non exécutée à ce checkpoint.",
+      "approval": "Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md"
     }
   },
   "execution": {

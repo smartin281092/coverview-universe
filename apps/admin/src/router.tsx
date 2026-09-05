@@ -3,9 +3,17 @@ import { AppShell } from "./AppShell";
 import { HomePage } from "./pages/HomePage";
 import { PreviewPage } from "./pages/PreviewPage";
 import { MissingPage, StatesPage } from "./pages/StatesPage";
+import { AccountPage } from "./pages/AccountPage";
+import { MfaPage } from "./pages/MfaPage";
 
 const rootRoute = createRootRoute({ component: AppShell, notFoundComponent: MissingPage });
 const homeRoute = createRoute({ getParentRoute: () => rootRoute, path: "/", component: HomePage });
+const accountRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/account",
+  component: AccountPage,
+});
+const mfaRoute = createRoute({ getParentRoute: () => rootRoute, path: "/mfa", component: MfaPage });
 const previewRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/preview",
@@ -17,7 +25,7 @@ const statesRoute = createRoute({
   component: StatesPage,
 });
 export const router = createRouter({
-  routeTree: rootRoute.addChildren([homeRoute, previewRoute, statesRoute]),
+  routeTree: rootRoute.addChildren([homeRoute, previewRoute, statesRoute, accountRoute, mfaRoute]),
   defaultPreload: "intent",
   scrollRestoration: true,
 });

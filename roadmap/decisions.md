@@ -2654,7 +2654,7 @@ Bloque : Modification WorkOS des méthodes ou callbacks, seulement si un écart 
 
 Autorisation : Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md. Réponse : enregistrée ci-dessous.
 
-- `project.auth-methods` · Si les méthodes constatées diffèrent du parcours email/OTP, quel changement appliquer ? → **Option a : si un écart est réellement constaté, préparer et présenter le diff exact des méthodes et callbacks pour configurer email/OTP et MFA admin dans l’environnement de développement identifié. Conserver les configurations sans rapport avec ce parcours.** · preuve : Choix délégué par PROG-23 ; email/OTP exigé par bible.v15.p0743, continuité par p0230, MFA privilégiée par AUTH-08/11. Aucun écart de configuration ni changement distant n’a encore été constaté ou exécuté.
+- `project.auth-methods` · Si les méthodes constatées diffèrent du parcours email/OTP, quel changement appliquer ? → **Option a : si un écart est réellement constaté, préparer et présenter le diff exact des méthodes et callbacks pour configurer email/OTP et MFA admin dans l’environnement de développement identifié. Conserver les configurations sans rapport avec ce parcours.** · preuve : Écart constaté : Magic Auth et MFA désactivés, callbacks absents. Diff concret préparé dans roadmap/evidence/S-000b.md ; aucun changement distant effectué. C01/C03/C05 restent non vérifiés.
 
 ## project.git-push
 
@@ -2744,4 +2744,4 @@ Bloque : Connexion tierce et attribution administrative ; un nom de projet ne va
 
 Autorisation : Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md. Réponse : enregistrée ci-dessous.
 
-- `project.workos` · Quel environnement et quelles identités WorkOS utiliser pour vérifier les flux réels ? → **Option a : utiliser l’environnement de développement du projet coverview et des identités de test explicitement autorisées. Identifier d’abord cet environnement en lecture seule ; ne déduire aucun client ID, compte autorisé ou droit administratif du nom du projet.** · preuve : Choix délégué par PROG-23, conforme à AUTH-11, ADR-0003 et ENV-09. Ce choix ne prouve encore ni accès WorkOS, ni identités disponibles, ni habilitation administrative.
+- `project.workos` · Quel environnement et quelles identités WorkOS utiliser pour vérifier les flux réels ? → **Option a : utiliser l’environnement de développement du projet coverview et des identités de test explicitement autorisées. Identifier d’abord cet environnement en lecture seule ; ne déduire aucun client ID, compte autorisé ou droit administratif du nom du projet.** · preuve : Inspection réelle du dashboard le 2026-09-05/06 : coverview, LocalHost badge Staging, client et application identifiés dans roadmap/evidence/S-000b.md. Aucun secret process ni identité de test autorisée ; attribution admin non réalisée.

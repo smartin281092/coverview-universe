@@ -4,6 +4,13 @@ import { describe, expect, it } from "vitest";
 import { assertLocalDatabase, parseEnvironment } from "./config.js";
 
 const local = parseEnv(readFileSync(new URL("../../../../.env.example", import.meta.url), "utf8"));
+const auth = {
+  ...local,
+  AUTH_ENABLED: "true",
+  WORKOS_API_KEY: "fixture_not_real",
+  WORKOS_CLIENT_ID: "client_fixture",
+  AUTH_SESSION_SECRET: Buffer.alloc(32, 7).toString("base64"),
+};
 
 describe("environment safety boundary", () => {
   it("accepts the documented local fixture configuration", () => {
@@ -62,5 +69,54 @@ describe("environment safety boundary", () => {
       DATABASE_URL: "postgres://fixture:fixture@127.0.0.1/unrelated_database",
     });
     expect(() => assertLocalDatabase(config)).toThrow("Database maintenance requires");
+  });
+  it("requires authentication credentials and an exact 32-byte server key", () => {
+    expect(parseEnvironment(auth).AUTH_ENABLED).toBe(true);
+    for (const key of ["WORKOS_API_KEY", "WORKOS_CLIENT_ID", "AUTH_SESSION_SECRET"]) {
+      expect(() => parseEnvironment({ ...auth, [key]: undefined })).toThrow(key);
+    }
+    expect(() => parseEnvironment({ ...auth, AUTH_SESSION_SECRET: "fixture_too_short" })).toThrow(
+      "AUTH_SESSION_SECRET",
+    );
+  });
+  it.each([
+    "AUTH_API_ORIGIN",
+    "AUTH_WALLET_ORIGIN",
+    "AUTH_ADMIN_ORIGIN",
+    "AUTH_WWW_ORIGIN",
+    "WORKOS_ISSUER",
+  ])("never reveals a malformed authentication URL in %s", (key) => {
+    expect(() => parseEnvironment({ ...auth, [key]: "invalid-sensitive-value" })).toThrow(
+      "Invalid environment configuration",
+    );
+    expect(() => parseEnvironment({ ...auth, [key]: "invalid-sensitive-value" })).not.toThrow(
+      "invalid-sensitive-value",
+    );
+  });
+  it("rejects nonexact, cross-host or nonallowlisted authentication surfaces", () => {
+    for (const AUTH_WALLET_ORIGIN of [
+      "http://127.0.0.1:4101/path",
+      "http://127.0.0.1:4199",
+      "http://localhost:4101",
+      "http://foreign.example.test",
+    ]) {
+      expect(() => parseEnvironment({ ...auth, AUTH_WALLET_ORIGIN })).toThrow(
+        "Invalid environment",
+      );
+    }
+    expect(() => parseEnvironment({ ...auth, WORKOS_ISSUER: "http://api.workos.com" })).toThrow(
+      "WORKOS_ISSUER",
+    );
+  });
+  it("requires HTTPS for enabled authentication outside local development", () => {
+    expect(() =>
+      parseEnvironment({
+        ...auth,
+        APP_ENV: "production",
+        NODE_ENV: "production",
+        FIXTURE_MODE: "false",
+        EXTERNAL_ADAPTER_MODE: "disabled",
+      }),
+    ).toThrow("AUTH_API_ORIGIN");
   });
 });

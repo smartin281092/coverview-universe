@@ -9,9 +9,9 @@ Chaque prompt cible une session principale et indique son redécoupage. Reprise 
 [Ordre topologique](../index.md) · [Décisions](../decisions.md) · [Workflows](../workflows.md)
 
 - [S-000a — Démarrer un socle local reproductible et une preview fictive](S-000a.prompt.md) · [plan](../plans/S-000a.plan.md) · done · foundation.
-- [S-000b — Se connecter avec WorkOS et retrouver son espace protégé](S-000b.prompt.md) · [plan](../plans/S-000b.plan.md) · ready · integration.
+- [S-000b — Se connecter avec WorkOS et retrouver son espace protégé](S-000b.prompt.md) · [plan](../plans/S-000b.plan.md) · review · integration.
 - [S-013 — Reprendre un parcours anonyme dans Wallet avec un profil central](S-013.prompt.md) · [plan](../plans/S-013.plan.md) · specified · local-fixtures.
-- [S-010 — Ouvrir les trois parcours CoverView depuis un site public compact](S-010.prompt.md) · [plan](../plans/S-010.plan.md) · specified · local-fixtures.
+- [S-010 — Ouvrir les trois parcours CoverView depuis un site public compact](S-010.prompt.md) · [plan](../plans/S-010.plan.md) · ready · local-fixtures.
 - [S-081 — Délivrer un dossier avec tâches, prochaine action et Kanban](S-081.prompt.md) · [plan](../plans/S-081.plan.md) · specified · local-fixtures.
 - [S-017 — Générer et archiver les documents de démarches à partir du profil](S-017.prompt.md) · [plan](../plans/S-017.plan.md) · specified · local-fixtures.
 - [S-018 — Signer un document de test et suivre son dossier de preuve](S-018.prompt.md) · [plan](../plans/S-018.plan.md) · specified · local-fixtures.

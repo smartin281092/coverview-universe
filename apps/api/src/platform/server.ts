@@ -15,8 +15,17 @@ import {
 } from "fastify-type-provider-zod";
 import { isLoopback, type Environment } from "./config.js";
 import { createPlatformDependencies, type PlatformDependencies } from "./dependencies.js";
+import {
+  IdentityError,
+  registerIdentity,
+  type IdentityService,
+} from "../modules/identity/index.js";
 
-export async function buildServer(config: Environment, dependencies?: PlatformDependencies) {
+export async function buildServer(
+  config: Environment,
+  dependencies?: PlatformDependencies,
+  identityService?: IdentityService,
+) {
   const app = Fastify({
     logger: {
       level: config.LOG_LEVEL,
@@ -66,10 +75,10 @@ export async function buildServer(config: Environment, dependencies?: PlatformDe
   await app.register(helmet);
   await app.register(cors, {
     origin: config.CORS_ORIGINS,
-    methods: ["GET"],
-    allowedHeaders: ["Accept", "X-Request-Id"],
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Accept", "Content-Type", "X-Request-Id", "X-CSRF-Token", "Idempotency-Key"],
     exposedHeaders: ["X-Request-Id"],
-    credentials: false,
+    credentials: true,
     maxAge: 0,
   });
 
@@ -84,9 +93,24 @@ export async function buildServer(config: Environment, dependencies?: PlatformDe
       Number.isInteger(errorStatus) &&
       errorStatus >= 400 &&
       errorStatus < 500;
-    const status = isClientError ? errorStatus : isValidation ? 400 : 500;
-    const code = status < 500 ? "PLATFORM_INVALID_REQUEST" : "PLATFORM_INTERNAL_ERROR";
-    if (status >= 500) request.log.error({ err: error }, "Request failed");
+    const status =
+      error instanceof IdentityError
+        ? error.statusCode
+        : isClientError
+          ? errorStatus
+          : isValidation
+            ? 400
+            : 500;
+    const code =
+      error instanceof IdentityError
+        ? error.code
+        : status === 429
+          ? "IDENTITY_RATE_LIMITED"
+          : status < 500
+            ? "PLATFORM_INVALID_REQUEST"
+            : "PLATFORM_INTERNAL_ERROR";
+    if (error instanceof IdentityError) request.log.warn({ code }, "Identity request refused");
+    else if (status >= 500) request.log.error({ err: error }, "Request failed");
     void reply.code(status).send({ error: { code, message: code, requestId: request.id } });
   });
   app.setNotFoundHandler((request, reply) => {
@@ -136,5 +160,6 @@ export async function buildServer(config: Environment, dependencies?: PlatformDe
     );
   }
 
+  await registerIdentity(app, config, identityService);
   return app;
 }

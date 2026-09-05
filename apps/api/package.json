@@ -17,8 +17,11 @@
   },
   "dependencies": {
     "@coverview/contracts": "workspace:*",
+    "@fastify/cookie": "11.1.2",
     "@fastify/cors": "^11.3.0",
     "@fastify/helmet": "^13.1.1",
+    "@fastify/rate-limit": "11.2.0",
+    "@workos-inc/node": "10.13.0",
     "drizzle-orm": "0.45.2",
     "fastify": "5.12.3",
     "fastify-type-provider-zod": "7.0.0",

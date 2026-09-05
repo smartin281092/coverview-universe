@@ -1,0 +1,27 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { content } from "../content/fr/interface";
+
+const walletUrl = import.meta.env.PUBLIC_WALLET_URL ?? (import.meta.env.DEV ? "http://127.0.0.1:4101" : undefined);
+---
+<Layout title={content.account.title} description={content.account.description}>
+  <section class="account-page">
+    <div class="intro">
+      <h1>{content.account.heading}</h1>
+      <p>{content.account.introduction}</p>
+    </div>
+    <div id="account-status" class="account-card" aria-busy="true">
+      <p id="account-message" role="status" aria-live="polite">{content.account.loading}</p>
+      <p id="account-error" role="alert" hidden></p>
+      <div class="account-actions">
+        <a id="account-login" class="primary-link" hidden>{content.account.login}</a>
+        <button id="account-retry" type="button" class="primary-link" hidden>{content.account.retry}</button>
+        {walletUrl && <a href={new URL("/account", walletUrl).href} class="text-link">{content.account.wallet}<span aria-hidden="true">→</span></a>}
+      </div>
+      <noscript><p>{content.account.noScript}</p></noscript>
+    </div>
+  </section>
+</Layout>
+<script>
+  import "../account";
+</script>

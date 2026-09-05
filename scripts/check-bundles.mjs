@@ -3,7 +3,7 @@ import { readdir, readFile } from "node:fs/promises";
 import { extname, join } from "node:path";
 
 const FORBIDDEN =
-  /postgres(?:ql)?:\/\/|rediss?:\/\/|DATABASE_URL|REDIS_URL|MINIO_ROOT_PASSWORD|WORKOS_API_KEY|WORKOS_COOKIE_PASSWORD|coverview-local-storage/iu;
+  /postgres(?:ql)?:\/\/|rediss?:\/\/|DATABASE_URL|REDIS_URL|MINIO_ROOT_PASSWORD|WORKOS_API_KEY|WORKOS_COOKIE_PASSWORD|AUTH_SESSION_SECRET|coverview-local-storage/iu;
 let inspected = 0;
 async function inspect(dir) {
   const entries = await readdir(dir, { withFileTypes: true });

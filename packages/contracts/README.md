@@ -6,7 +6,7 @@ Schémas Zod exécutables consommés par Fastify et le client HTTP commun.
 
 ## Périmètre
 
-Santé et projection des personas fictives locales. Aucun modèle ORM, accès réseau ou secret.
+Santé, projection des personas fictives locales et DTO d’identité : configuration, profil/session sans token durable, espace du propriétaire, accès admin, liste bornée d’appareils, déconnexion, challenge/vérification MFA. Aucun modèle ORM, accès réseau ou secret.
 
 ## Règles métier et invariants
 
@@ -18,4 +18,4 @@ L'exposition des personas est contrôlée par `apps/api/src/platform/config.ts` 
 
 ## État réel
 
-Contrats techniques du socle ; aucune API métier déclarée.
+Contrats du socle et d’identité ; l’existence d’un schéma ne prouve aucun accès WorkOS. Les entrées de mutation sont strictes, les dates en ISO et les codes d’erreur stables. Le code MFA est borné à six chiffres.

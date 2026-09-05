@@ -1,28 +1,36 @@
-# Wallet — coquille cliente
+# Wallet — espace personnel
 
 ## Résumé
 
-Première interface de Wallet : navigation, état vide et disponibilité réelle du socle. Français dès le départ, textes externalisés dans `src/locales/fr/common.json`.
+Wallet conserve la coquille et ajoute le compte, l’espace privé et les appareils connectés. Français dès le départ, textes externalisés dans `src/locales/fr/common.json`.
 
 ## Périmètre
 
 `/` affiche une coquille sans contrat, analyse ni document. `/preview` présente les personas fictives renvoyées par le backend local ; une sélection radio ne change que l’affichage de cette page. `/states` montre les primitives d’états. Les deux dernières routes sont réservées à `import.meta.env.DEV`. Les liens ouvrent une autre page et aucun contenu hors FAQ ne se déplie (FRONT-14).
 
+`/account` vérifie la disponibilité de la connexion puis la session serveur ; il affiche le profil, ouvre `/workspace/:userId`, `/devices` et le compte du site public. Le serveur contrôle la propriété de l’espace. La liste des appareils remplace ses pages de 20 entrées maximum, permet de fermer un appareil et propose les déconnexions locale/globale. Les données métier demeurent absentes.
+
 ## Règles métier et invariants
 
-Aucune règle métier, aucun identifiant de base ni secret frontend. Le réseau passe par `@coverview/api-client` ; les réponses sont validées par ses schémas. Source canonique : [API platform](../api/src/platform/README.md). TanStack Query conserve santé/personas fraîches 15 secondes, libère le cache inutilisé après une minute, relit au retour de focus et ne relance pas automatiquement les erreurs. Le bouton de retry montre l’action en cours et empêche les doubles clics. Aucun événement, mutation, job ni stockage local.
+Aucune règle métier ni secret de session durable frontend. Le réseau passe par `@coverview/api-client` ; les réponses sont validées par ses schémas. Source du socle : [API platform](../api/src/platform/README.md). TanStack Query conserve santé/personas fraîches 15 secondes et libère leur cache inutilisé après une minute.
+
+L’identité est relue à chaque montage/focus, sans retry automatique. Pendant cette vérification, les données privées ne sont pas affichées. Le cache privé inclut identité et session, est périmé immédiatement et supprimé dès qu’il n’a plus d’observateur. Tout changement d’identité/session, refus d’authentification ou déconnexion annule les requêtes privées et les retire. Un résultat tardif d’une requête annulée ne modifie pas le cache de l’identité suivante. Les mutations ont un CSRF en mémoire et une clé d’idempotence conservée lors d’un retry ; aucune persistance navigateur.
+
+La demande de déconnexion place immédiatement la commande exacte en mémoire hors du parcours privé et efface son cache. Un résultat perdu reste « à confirmer », sans prétendre que le serveur a fermé l’accès ; une réponse pending confirme la fermeture CoverView et permet de terminer la fermeture distante. Le bouton de reprise conserve CSRF, portée et clé. Fermer/recharger la page ou revenir au compte abandonne cette reprise locale ; cela ne prouve pas la fermeture distante. Aucun événement, room ou job frontend.
 
 ## Permissions
 
-Aucune authentification réelle dans S-000a. Le profil fictif ne constitue ni une session ni un droit ; le serveur reste seul responsable de l’exposition locale des données. La connexion WorkOS `coverview` appartient à S-000b.
+WorkOS s’ouvre via la route serveur de connexion, avec retour fixé côté API. Les cookies sensibles restent HttpOnly et les droits viennent du serveur. Aucun ID, email ou permission ne peut être défini par une persona locale. Lorsque l’API annonce la connexion désactivée, le compte affiche son indisponibilité et n’invente aucun login.
 
 ## État réel
 
-Code de coquille livré ; aucune fonctionnalité métier présentée comme active. Les tests et la preuve navigateur sont consignés dans le ledger S-000a. Les exemples de refus/expiration sont explicitement marqués comme exemples locaux.
+Coquille S-000a et parcours d’identité S-000b implémentés. Les oracles et limites sont consignés dans les preuves de chaque slice ; ce code ne prouve aucune connexion WorkOS réelle. Les exemples de refus/expiration sont explicitement marqués comme exemples locaux.
 
 ## Développement et dépendances
 
 `pnpm --filter client dev` écoute uniquement sur `127.0.0.1:4101` avec port strict. `build` produit le bundle Vite ; `typecheck` vérifie TypeScript strict. `VITE_API_URL` est une URL publique optionnelle : par défaut `http://127.0.0.1:4100` en développement, origine de la page en build. Un déploiement avec API séparée doit fournir son origine explicite ; aucun déploiement n’est réalisé ici.
+
+`VITE_WEBSITE_URL` peut définir l’origine du site ; défaut local `http://127.0.0.1:4103`, cible de projet `https://coverview.ch` en build. Ces URLs publiques doivent correspondre aux origines réellement approuvées côté identité ; elles n’accordent aucun droit.
 
 Stack imposée : React/Vite, TanStack Router (routes par code), TanStack Query (server state), i18next/react-i18next (catalogues), Tailwind et [UI shadcn partagée](../../packages/ui/README.md). Les packages directs ont des licences MIT, sauf Lucide ISC. Aucun store global ni bibliothèque de formulaires ajouté sans formulaire réel.
 

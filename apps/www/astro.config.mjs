@@ -8,6 +8,6 @@ export default defineConfig({
   trailingSlash: "never",
   integrations: [mdx()],
   server: { host: "127.0.0.1", port: 4103 },
-  vite: { plugins: [tailwindcss()], server: { strictPort: true } },
+  vite: { envDir: "../..", plugins: [tailwindcss()], server: { strictPort: true } },
   devToolbar: { enabled: false },
 });

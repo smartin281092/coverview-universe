@@ -1,10 +1,14 @@
-import { Link, Outlet } from "@tanstack/react-router";
+import { Link, Outlet, useLocation } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { ArrowUpRight, House, PanelsTopLeft, Users } from "lucide-react";
+import { ArrowUpRight, House, PanelsTopLeft, Users, UserRound } from "lucide-react";
 import logo from "../../../assets/logo-coverview.svg";
+import { LogoutFeedback } from "./features/identity/LogoutFeedback";
 
 export function AppShell() {
   const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const identityPage =
+    ["/account", "/devices", "/mfa"].includes(pathname) || pathname.startsWith("/workspace/");
   const websiteUrl = import.meta.env.DEV ? "http://127.0.0.1:4103" : "https://coverview.ch";
   return (
     <div className="min-h-screen">
@@ -43,6 +47,14 @@ export function AppShell() {
               <House className="size-4" aria-hidden="true" />
               {t("home")}
             </Link>
+            <Link
+              to="/account"
+              className="inline-flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted"
+              activeProps={{ className: "bg-accent text-primary", "aria-current": "page" }}
+            >
+              <UserRound className="size-4" aria-hidden="true" />
+              {t("identity.accountTitle")}
+            </Link>
             {import.meta.env.DEV && (
               <>
                 <Link
@@ -68,9 +80,11 @@ export function AppShell() {
         <div className="min-w-0">
           <main id="main" tabIndex={-1} className="space-y-8 px-5 py-8 sm:px-10 sm:py-10">
             <p className="inline-flex rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
-              {t(import.meta.env.DEV ? "local" : "production")}
+              {t(import.meta.env.DEV ? (identityPage ? "identity.local" : "local") : "production")}
             </p>
-            <Outlet />
+            <LogoutFeedback>
+              <Outlet />
+            </LogoutFeedback>
           </main>
           <footer className="px-5 pb-8 text-xs text-muted-foreground sm:px-10">
             {t("footer")}

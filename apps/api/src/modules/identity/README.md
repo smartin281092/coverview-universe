@@ -1,0 +1,73 @@
+# Module `identity`
+
+## Résumé
+
+Le module porte l’identité canonique CoverView et la session serveur commune aux surfaces Wallet, équipe et site public. WorkOS conserve les moyens d’authentification ; CoverView applique la propriété personnelle et l’habilitation administrative explicite.
+
+## Périmètre
+
+**Géré ici** : transactions de connexion, association de l’identité WorkOS à un utilisateur et profil uniques, appareils et révocations, preuve MFA de session et audit de sécurité. Le module est propriétaire de cette capacité transverse pour les applications consommatrices.
+
+**Non géré ici** : organisations et partage foyer (slices propriétaires), rattachement anonyme (S-013), règles d’effacement/export et conservation définitives (S-130/S-131). Les personas `platform` restent des fixtures techniques sans habilitation.
+
+## Règles métier et invariants
+
+- **`identity.canonical.1`** — Une identité WorkOS correspond à un utilisateur applicatif et un profil uniques. Une même adresse email ne fusionne jamais deux identités ; [ADR-0002](../../../../../adr/0002-tenancy.md) fixe leur séparation des espaces métier.
+- **`identity.session.1`** — La consommation de la transaction de connexion est atomique et liée au navigateur. Les appareils appartiennent à l’utilisateur canonique ; leur consultation et révocation sont bornées à ce propriétaire.
+- **`identity.session.2`** — Le retrait local précède la révocation distante. Un échec distant conserve l’état « en attente ». La déconnexion globale sérialise les callbacks via la ligne utilisateur et invalide les connexions commencées avant elle ; un ancien acquittement distant ne peut terminer une nouvelle révocation.
+- **`identity.admin.1`** — L’habilitation administrative est absente par défaut et relue à chaque accès. La preuve MFA concerne une seule session et ne crée jamais la permission. Un challenge consommé est à usage unique ; la validation réussie renouvelle le handle de session.
+
+## Permissions
+
+L’espace personnel utilise l’identité et la propriété, sans accès implicite d’un foyer ni d’une organisation WorkOS. `administration.access` exige une attribution locale explicite avec sa preuve ; aucune fixture, interface, adresse email ou nom de projet ne l’attribue. Il n’existe pas de route publique d’attribution. Les règles MFA et l’intégration fournisseur suivent [AUTH-11](../../../../../docs/auth.md#auth-11--fournisseur-coverview--workos).
+
+## État réel
+
+Implémentation locale présente : adapter WorkOS, API protégée, persistance et parcours compte dans Wallet, équipe et www. `AUTH_ENABLED=false` conserve un état d’indisponibilité explicite. Les tests avec fournisseur simulé ne constituent pas un login WorkOS réel ni une habilitation administrative externe ; les résultats exécutés, la revue et les obstacles d’activation restent centralisés dans [le ledger S-000b](../../../../../roadmap/evidence/S-000b.md). Aucune diffusion externe ni connexion réelle n’est prouvée par la présence de ce code.
+
+## Activer et vérifier localement
+
+1. Identifier en lecture seule l’environnement WorkOS autorisé, son application, son client ID et les identités de test autorisées. Le constat courant et le diff de configuration à préparer sont dans le ledger. Vérifier Magic Auth (email/OTP) et MFA dans cet environnement ; tout changement distant doit rester dans le périmètre autorisé.
+2. Après démarrage de l’infrastructure locale, appliquer `pnpm db:migrate`. Le seed ne crée aucun compte WorkOS ni droit d’administration. Configurer les origines non secrètes de [`.env.example`](../../../../../.env.example) selon le tableau ci-dessous ; conserver `127.0.0.1` sur toutes les surfaces, sans le mélanger avec `localhost`.
+3. Injecter `AUTH_ENABLED=true`, le `WORKOS_CLIENT_ID` constaté, `WORKOS_API_KEY` et `AUTH_SESSION_SECRET` dans l’environnement du seul processus API. L’opérateur fournit la clé WorkOS et une clé aléatoire de 32 octets encodée en base64 pour `AUTH_SESSION_SECRET`. Aucune valeur secrète ne doit être écrite dans `.env`, un script, l’historique du shell, le dépôt ou une variable de build navigateur. Utiliser le mécanisme d’injection de secrets de l’opérateur ; aucune valeur réelle n’est fournie ici.
+4. Vérifier `WORKOS_ISSUER` contre l’émetteur attendu dans l’environnement identifié. La valeur d’exemple `https://api.workos.com/` n’est pas la preuve de cet émetteur ; ne pas déduire celui-ci du domaine Hosted UI. L’API vérifie la signature avec le SDK, puis l’émetteur et l’identité de la session.
+5. Depuis le contexte API recevant ces variables, lancer `pnpm --filter api check:env`, puis `pnpm --filter api dev`. Lancer les surfaces dans un autre contexte sans secrets : `pnpm --filter client --filter admin --filter www dev`. Le contrôle de configuration ne prouve ni la validité des credentials ni une connexion WorkOS.
+
+| Usage                                  | Valeur locale exacte                                                |
+| -------------------------------------- | ------------------------------------------------------------------- |
+| `AUTH_API_ORIGIN`                      | `http://127.0.0.1:4100`                                             |
+| Redirect URI à enregistrer dans WorkOS | `http://127.0.0.1:4100/auth/callback`                               |
+| `AUTH_WALLET_ORIGIN` et retour Wallet  | `http://127.0.0.1:4101` → `/account`                                |
+| `AUTH_ADMIN_ORIGIN` et retour équipe   | `http://127.0.0.1:4102` → `/account`                                |
+| `AUTH_WWW_ORIGIN` et retour www        | `http://127.0.0.1:4103` → `/account`                                |
+| `CORS_ORIGINS`                         | `http://127.0.0.1:4101,http://127.0.0.1:4102,http://127.0.0.1:4103` |
+
+Les trois destinations sont sélectionnées côté serveur ; elles ne sont pas trois callbacks WorkOS. Les éventuelles URL de build `VITE_API_URL`, `PUBLIC_API_URL`, `VITE_WEBSITE_URL` et `PUBLIC_WALLET_URL` doivent correspondre aux mêmes origines. Hors loopback local, HTTPS est exigé. Le cookie est HttpOnly, SameSite=Lax et Secure en HTTPS ; les mutations contrôlent l’origine, le CSRF et une clé d’idempotence.
+
+Ouvrir `/account` dans Wallet, se connecter par email/OTP avec une identité autorisée et vérifier la continuité avec www. Un second profil navigateur avec une autre identité doit conserver un autre ID et recevoir un refus sur l’espace du premier. Vérifier les appareils, la révocation individuelle et la déconnexion globale ; si WorkOS échoue, l’accès local est déjà retiré et l’interface conserve la révocation distante en attente. Reprendre l’opération avec la même clé d’idempotence. Consigner les résultats dans le ledger sans cookie, code OTP, token ni credential.
+
+La session locale expire au plus tard avec la session distante, et au plus après `AUTH_SESSION_TTL_SECONDS` (huit heures par défaut). Aucun refresh token n’est conservé. WorkOS est interrogé à chaque authentification ; une indisponibilité ou une liste distante tronquée entraîne un refus. La preuve MFA vaut quinze minutes, son challenge au plus cinq minutes ; un nouvel essai nécessite un nouveau challenge.
+
+## Procédure opérateur d’habilitation administrative
+
+Cette procédure prépare une attribution explicite ; elle n’en exécute aucune. L’opérateur doit déjà être habilité à modifier les permissions dans l’environnement concerné. Une adresse email, un rôle de fixture, l’accès à l’interface équipe ou une organisation WorkOS ne fournit pas cette autorisation (`identity.admin.1`).
+
+1. Faire établir une session normale par l’identité autorisée. Relever l’ID canonique retourné par `/identity/me`, puis vérifier en lecture seule que `identity_users.id` et `identity_users.workos_user_id` correspondent ensemble à cette même identité WorkOS constatée dans le bon environnement. Ne pas sélectionner le bénéficiaire par email seul.
+2. Préparer une trace d’intervention précisant environnement, opérateur autorisé, bénéficiaire canonique et WorkOS, permission `administration.access`, motif et référence de preuve de l’autorisation. Cette référence non secrète sera conservée dans `identity_admin_permissions.evidence` ; une chaîne arbitraire non vide ne prouve pas l’autorisation.
+3. Dans l’outil SQL déjà autorisé de l’opérateur, préparer une transaction paramétrée : créer un ID d’habilitation non séquentiel, puis insérer la permission seulement si la paire d’identifiants canonique/WorkOS correspond encore et qu’aucune habilitation active identique n’existe. Conserver la référence de preuve, contrôler qu’exactement une ligne est concernée et relire le résultat avant validation. Si le contrôle diverge, annuler la transaction et résoudre l’identité ou l’autorisation. S-000b n’ajoute ni CLI d’attribution ni route publique à cette fin.
+4. Vérifier qu’un facteur TOTP de cette identité est déjà inscrit par un parcours WorkOS autorisé : l’application lance et vérifie un challenge, elle n’inscrit pas elle-même le facteur. Sans facteur, `IDENTITY_MFA_NOT_ENROLLED` reste un refus attendu. Tester `/account` côté équipe : habilitation seule insuffisante, accès après MFA valide, refus de l’identité ordinaire et d’une requête falsifiant rôle ou application.
+5. Consigner l’intervention et sa vérification dans la trace approuvée, sans secret. Pour un retrait autorisé, renseigner `revokedAt` sur l’habilitation exacte et conserver la ligne avec sa preuve ; vérifier le refus sur la requête suivante. Une révocation de permission n’exige pas la suppression des identités ou de leur audit.
+
+## Données et persistance
+
+| Catégorie / tables           | Propriétaire et classification                                          | Export, effacement et conservation                                                                                                                                                                                                    |
+| ---------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Utilisateur et profil        | Personne canonique ; email identifiant, ID fournisseur pseudonyme       | Contrat S-130/S-131 : export propriétaire, rectification via identité, effacement coordonné fournisseur et relations. Aucune durée juridique définie ici ; pas de suppression publique dans S-000b.                                   |
+| Sessions                     | Utilisateur ; appareil et dates techniques, hash du handle sensible     | Révocation persistante ; aucune session brute ni refresh token conservé. Export futur des appareils et dates, jamais des hashes. Purge/anonymisation à raccorder à S-131.                                                             |
+| Connexions et challenges MFA | Navigateur puis session ; données techniques sensibles temporaires      | State et navigateur hashés, vérificateur PKCE chiffré. Suppression à consommation ; purge des expirés par lots de 100 au démarrage d’une connexion. Aucun secret dans l’export. Sans activité, une purge planifiée reste à raccorder. |
+| Habilitations                | Utilisateur concerné ; permission et référence de preuve administrative | Retrait par `revokedAt`, conservation auditée ; export/effacement selon S-130/S-131, sans durée inventée.                                                                                                                             |
+| Audit                        | Acteur canonique ; action, ressource, corrélation et instant techniques | Login, MFA et révocations persistés sans secret ni email. Export/anonymisation et durée selon S-130/S-131 ; pas de suppression silencieuse.                                                                                           |
+
+La migration ajoute sept tables sans altérer les personas. Les contraintes SQL assurent unicité, intégrité référentielle, forme des hashes et preuve d’attribution non vide. Les mises à jour de sécurité sont transactionnelles, sans appel réseau sous verrou. Les requêtes personnelles sont explicitement bornées au propriétaire ; RLS n’est pas activée dans S-000b (écart à DATA-09 DEVRAIT, contrôles applicatifs et tests d’isolation présents).
+
+Le retour à l’application N-1 conserve les tables additives ; les supprimer ferait perdre identités et audit. Le reset local est destructif pour ces tables et requiert désormais les deux confirmations décrites dans [platform](../../platform/README.md#données-et-exploitation). Il n’est pas une procédure de rollback. Un retrait de schéma nécessiterait un export/restauration vérifié et une autorisation distincte, avant toute donnée réelle.
