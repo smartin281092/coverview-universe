@@ -1,0 +1,2954 @@
+[
+  {
+    "criterion_ref": "S-000a-C02",
+    "source_ranges": [
+      [
+        11,
+        11
+      ],
+      [
+        215,
+        218
+      ],
+      [
+        311,
+        311
+      ]
+    ],
+    "reason": "Invariants de base unique et API commune, également formulés dans les encadrés et principes généraux."
+  },
+  {
+    "criterion_ref": "S-015-C04",
+    "source_ranges": [
+      [
+        19,
+        19
+      ]
+    ],
+    "reason": "Le résumé impose la même donnée catalogue sous les projections adaptées aux surfaces."
+  },
+  {
+    "criterion_ref": "S-015-C02",
+    "source_ranges": [
+      [
+        20,
+        20
+      ]
+    ],
+    "reason": "Immutabilité historique du résumé portée par le snapshot et la publication versionnée."
+  },
+  {
+    "criterion_ref": "S-010-C04",
+    "source_ranges": [
+      [
+        21,
+        21
+      ]
+    ],
+    "reason": "Valeur avant identité, identique au parcours public détaillé."
+  },
+  {
+    "criterion_ref": "S-029-C01",
+    "source_ranges": [
+      [
+        22,
+        22
+      ]
+    ],
+    "reason": "Distribution non garantie et N effectif du principe transversal : vérifier la concordance du critère détaillé lors de la revue."
+  },
+  {
+    "criterion_ref": "S-028-C02",
+    "source_ranges": [
+      [
+        23,
+        23
+      ]
+    ],
+    "reason": "Inflation et distinction réel/nominal du résumé."
+  },
+  {
+    "criterion_ref": "S-027-C05",
+    "source_ranges": [
+      [
+        24,
+        24
+      ]
+    ],
+    "reason": "Gamification au service de la compréhension avec rigueur et absence de garantie."
+  },
+  {
+    "criterion_ref": "S-033-C01",
+    "source_ranges": [
+      [
+        27,
+        27
+      ]
+    ],
+    "reason": "Continuité du site vers la relation Wallet et suivi durable."
+  },
+  {
+    "criterion_ref": "S-050-C04",
+    "source_ranges": [
+      [
+        30,
+        30
+      ]
+    ],
+    "reason": "Retire et ses hypothèses restent dans le Wallet et la base commune ; sources détaillées contrôlées dans les slices Retire."
+  },
+  {
+    "criterion_ref": "S-019-C05",
+    "source_ranges": [
+      [
+        32,
+        32
+      ]
+    ],
+    "reason": "Question client d’inventaire de la situation actuelle, servie par ses contrats centralisés."
+  },
+  {
+    "criterion_ref": "S-030-C03",
+    "source_ranges": [
+      [
+        33,
+        33
+      ]
+    ],
+    "reason": "Évaluation et positionnement face aux alternatives de marché."
+  },
+  {
+    "criterion_ref": "S-029-C01",
+    "source_ranges": [
+      [
+        34,
+        34
+      ]
+    ],
+    "reason": "Projection probabiliste face à l’objectif retraite, inflation conservée par la dépendance S-028."
+  },
+  {
+    "criterion_ref": "S-033-C01",
+    "source_ranges": [
+      [
+        35,
+        36
+      ]
+    ],
+    "reason": "Amélioration et suivi, conclusion de la boucle utilisateur qui réutilise comparaison et optimisation."
+  },
+  {
+    "criterion_ref": "S-050-C02",
+    "source_ranges": [
+      [
+        41,
+        41
+      ]
+    ],
+    "reason": "Question centrale du niveau de vie du foyer Retire, approfondie par Range et contraintes."
+  },
+  {
+    "criterion_ref": "S-010-C03",
+    "source_ranges": [
+      [
+        46,
+        48
+      ],
+      [
+        242,
+        245
+      ]
+    ],
+    "reason": "Vue de synthèse de la surface publique et responsabilités typiques ; les capacités s’ouvrent par leurs slices dédiées."
+  },
+  {
+    "criterion_ref": "S-010-C05",
+    "source_ranges": [
+      [
+        66,
+        71
+      ]
+    ],
+    "reason": "Formulation de promesse et différenciation : contenu de marque, pas nouvelle formule de calcul."
+  },
+  {
+    "criterion_ref": "S-139-C07",
+    "source_ranges": [
+      [
+        15,
+        15
+      ],
+      [
+        3056,
+        3056
+      ]
+    ],
+    "reason": "Résumé inter-applications et conclusion : vérification de composition des parcours, implémentations détaillées dans les slices propriétaires."
+  },
+  {
+    "criterion_ref": "S-070-C04",
+    "source_ranges": [
+      [
+        30,
+        30
+      ]
+    ],
+    "reason": "Hypothèses Retire et non-garantie complètent la liaison au Wallet."
+  },
+  {
+    "criterion_ref": "S-000b-C02",
+    "source_ranges": [
+      [
+        268,
+        268
+      ]
+    ],
+    "reason": "Service identité commun dans la liste des services."
+  },
+  {
+    "criterion_ref": "S-050-C06",
+    "source_ranges": [
+      [
+        383,
+        384
+      ]
+    ],
+    "reason": "Le domaine retraite et ses objets restent reliés aux sources canoniques."
+  },
+  {
+    "criterion_ref": "S-051-C01",
+    "source_ranges": [
+      [
+        385,
+        386
+      ]
+    ],
+    "reason": "Commerce/offres/droits réutilisés sans ledger Miles parallèle."
+  },
+  {
+    "criterion_ref": "S-050-C03",
+    "source_ranges": [
+      [
+        925,
+        926
+      ]
+    ],
+    "reason": "Entrée Retire Check dans la table des pages du parcours retraite."
+  },
+  {
+    "criterion_ref": "S-015-C03",
+    "source_ranges": [
+      [
+        2214,
+        2219
+      ]
+    ],
+    "reason": "Matrice de projections et de droits inter-surfaces ; appliquer la ligne complète et vérifier le refus côté serveur, en coordination avec les portails consommateurs."
+  },
+  {
+    "criterion_ref": "S-019-C04",
+    "source_ranges": [
+      [
+        2220,
+        2225
+      ]
+    ],
+    "reason": "Matrice de projections et de droits inter-surfaces ; appliquer la ligne complète et vérifier le refus côté serveur, en coordination avec les portails consommateurs."
+  },
+  {
+    "criterion_ref": "S-029-C04",
+    "source_ranges": [
+      [
+        2226,
+        2231
+      ]
+    ],
+    "reason": "Matrice de projections et de droits inter-surfaces ; appliquer la ligne complète et vérifier le refus côté serveur, en coordination avec les portails consommateurs."
+  },
+  {
+    "criterion_ref": "S-017-C04",
+    "source_ranges": [
+      [
+        2232,
+        2237
+      ]
+    ],
+    "reason": "Matrice de projections et de droits inter-surfaces ; appliquer la ligne complète et vérifier le refus côté serveur, en coordination avec les portails consommateurs."
+  },
+  {
+    "criterion_ref": "S-026-C03",
+    "source_ranges": [
+      [
+        2244,
+        2249
+      ]
+    ],
+    "reason": "Matrice de projections et de droits inter-surfaces ; appliquer la ligne complète et vérifier le refus côté serveur, en coordination avec les portails consommateurs."
+  },
+  {
+    "criterion_ref": "S-016-C04",
+    "source_ranges": [
+      [
+        2256,
+        2261
+      ]
+    ],
+    "reason": "Matrice de projections et de droits inter-surfaces ; appliquer la ligne complète et vérifier le refus côté serveur, en coordination avec les portails consommateurs."
+  },
+  {
+    "criterion_ref": "S-050-C06",
+    "source_ranges": [
+      [
+        2316,
+        2321
+      ]
+    ],
+    "reason": "Matrice de projections et de droits inter-surfaces ; appliquer la ligne complète et vérifier le refus côté serveur, en coordination avec les portails consommateurs."
+  },
+  {
+    "criterion_ref": "S-051-C06",
+    "source_ranges": [
+      [
+        2322,
+        2327
+      ]
+    ],
+    "reason": "Matrice de projections et de droits inter-surfaces ; appliquer la ligne complète et vérifier le refus côté serveur, en coordination avec les portails consommateurs."
+  },
+  {
+    "criterion_ref": "S-030-C02",
+    "source_ranges": [
+      [
+        2344,
+        2345
+      ]
+    ],
+    "reason": "Service Strategy : compatibilité et alternatives, optimisation et compromis détaillés par le parcours."
+  },
+  {
+    "criterion_ref": "S-029-C05",
+    "source_ranges": [
+      [
+        2428,
+        2429
+      ]
+    ],
+    "reason": "Événement simulation.completed : persistance, partage et Wallet consomment le même résultat archivé."
+  },
+  {
+    "criterion_ref": "S-010-C03",
+    "source_ranges": [
+      [
+        2604,
+        2604
+      ]
+    ],
+    "reason": "Étape du workflow A raccordée au résultat et à l’oracle du parcours propriétaire ; la composition finale est vérifiée en S-139."
+  },
+  {
+    "criterion_ref": "S-025-C01",
+    "source_ranges": [
+      [
+        2605,
+        2605
+      ]
+    ],
+    "reason": "Étape du workflow A raccordée au résultat et à l’oracle du parcours propriétaire ; la composition finale est vérifiée en S-139."
+  },
+  {
+    "criterion_ref": "S-023-C01",
+    "source_ranges": [
+      [
+        2606,
+        2606
+      ]
+    ],
+    "reason": "Étape du workflow A raccordée au résultat et à l’oracle du parcours propriétaire ; la composition finale est vérifiée en S-139."
+  },
+  {
+    "criterion_ref": "S-025-C04",
+    "source_ranges": [
+      [
+        2607,
+        2607
+      ]
+    ],
+    "reason": "Étape du workflow A raccordée au résultat et à l’oracle du parcours propriétaire ; la composition finale est vérifiée en S-139."
+  },
+  {
+    "criterion_ref": "S-026-C01",
+    "source_ranges": [
+      [
+        2608,
+        2608
+      ]
+    ],
+    "reason": "Étape du workflow A raccordée au résultat et à l’oracle du parcours propriétaire ; la composition finale est vérifiée en S-139."
+  },
+  {
+    "criterion_ref": "S-026-C02",
+    "source_ranges": [
+      [
+        2608,
+        2608
+      ]
+    ],
+    "reason": "Étape du workflow A raccordée au résultat et à l’oracle du parcours propriétaire ; la composition finale est vérifiée en S-139."
+  },
+  {
+    "criterion_ref": "S-026-C04",
+    "source_ranges": [
+      [
+        2608,
+        2608
+      ]
+    ],
+    "reason": "Étape du workflow A raccordée au résultat et à l’oracle du parcours propriétaire ; la composition finale est vérifiée en S-139."
+  },
+  {
+    "criterion_ref": "S-028-C02",
+    "source_ranges": [
+      [
+        2609,
+        2609
+      ]
+    ],
+    "reason": "Étape du workflow A raccordée au résultat et à l’oracle du parcours propriétaire ; la composition finale est vérifiée en S-139."
+  },
+  {
+    "criterion_ref": "S-029-C03",
+    "source_ranges": [
+      [
+        2609,
+        2609
+      ]
+    ],
+    "reason": "Étape du workflow A raccordée au résultat et à l’oracle du parcours propriétaire ; la composition finale est vérifiée en S-139."
+  },
+  {
+    "criterion_ref": "S-027-C01",
+    "source_ranges": [
+      [
+        2610,
+        2610
+      ]
+    ],
+    "reason": "Étape du workflow A raccordée au résultat et à l’oracle du parcours propriétaire ; la composition finale est vérifiée en S-139."
+  },
+  {
+    "criterion_ref": "S-030-C03",
+    "source_ranges": [
+      [
+        2611,
+        2611
+      ]
+    ],
+    "reason": "Étape du workflow A raccordée au résultat et à l’oracle du parcours propriétaire ; la composition finale est vérifiée en S-139."
+  },
+  {
+    "criterion_ref": "S-013-C04",
+    "source_ranges": [
+      [
+        2612,
+        2613
+      ]
+    ],
+    "reason": "Étape du workflow A raccordée au résultat et à l’oracle du parcours propriétaire ; la composition finale est vérifiée en S-139."
+  },
+  {
+    "criterion_ref": "S-031-C04",
+    "source_ranges": [
+      [
+        2614,
+        2614
+      ]
+    ],
+    "reason": "Étape du workflow A raccordée au résultat et à l’oracle du parcours propriétaire ; la composition finale est vérifiée en S-139."
+  },
+  {
+    "criterion_ref": "S-033-C04",
+    "source_ranges": [
+      [
+        2615,
+        2615
+      ]
+    ],
+    "reason": "Étape du workflow A raccordée au résultat et à l’oracle du parcours propriétaire ; la composition finale est vérifiée en S-139."
+  },
+  {
+    "criterion_ref": "S-050-C06",
+    "source_ranges": [
+      [
+        2903,
+        2903
+      ]
+    ],
+    "reason": "Arbitrage foyer : autorisation explicite requise avant persistance et partage des plans."
+  },
+  {
+    "criterion_ref": "S-067-C06",
+    "source_ranges": [
+      [
+        2936,
+        2936
+      ]
+    ],
+    "reason": "Renvoi de §94 vers les douze questions R16, maintenues au registre des paramètres Retire."
+  },
+  {
+    "criterion_ref": "S-000b-C02",
+    "source_ranges": [
+      [
+        2748,
+        2750
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-014-C01",
+    "source_ranges": [
+      [
+        2748,
+        2750
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-000a-C02",
+    "source_ranges": [
+      [
+        2748,
+        2750
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-010-C01",
+    "source_ranges": [
+      [
+        2751,
+        2753
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-011-C02",
+    "source_ranges": [
+      [
+        2751,
+        2753
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-011-C05",
+    "source_ranges": [
+      [
+        2751,
+        2753
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-012-C01",
+    "source_ranges": [
+      [
+        2751,
+        2753
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-013-C01",
+    "source_ranges": [
+      [
+        2754,
+        2756
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-042-C01",
+    "source_ranges": [
+      [
+        2754,
+        2756
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-017-C01",
+    "source_ranges": [
+      [
+        2754,
+        2756
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-035-C01",
+    "source_ranges": [
+      [
+        2754,
+        2756
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-080-C01",
+    "source_ranges": [
+      [
+        2757,
+        2759
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-081-C01",
+    "source_ranges": [
+      [
+        2757,
+        2759
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-082-C01",
+    "source_ranges": [
+      [
+        2757,
+        2759
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-088-C01",
+    "source_ranges": [
+      [
+        2757,
+        2759
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-094-C01",
+    "source_ranges": [
+      [
+        2760,
+        2762
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-095-C01",
+    "source_ranges": [
+      [
+        2760,
+        2762
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-098-C01",
+    "source_ranges": [
+      [
+        2760,
+        2762
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-099-C01",
+    "source_ranges": [
+      [
+        2760,
+        2762
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-121-C01",
+    "source_ranges": [
+      [
+        2760,
+        2762
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-021-C02",
+    "source_ranges": [
+      [
+        2763,
+        2765
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-022-C02",
+    "source_ranges": [
+      [
+        2763,
+        2765
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-020-C02",
+    "source_ranges": [
+      [
+        2763,
+        2765
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-023-C01",
+    "source_ranges": [
+      [
+        2763,
+        2765
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-025-C01",
+    "source_ranges": [
+      [
+        2766,
+        2768
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-026-C02",
+    "source_ranges": [
+      [
+        2766,
+        2768
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-027-C01",
+    "source_ranges": [
+      [
+        2766,
+        2768
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-024-C01",
+    "source_ranges": [
+      [
+        2766,
+        2768
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-028-C02",
+    "source_ranges": [
+      [
+        2769,
+        2771
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-029-C01",
+    "source_ranges": [
+      [
+        2769,
+        2771
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-029-C03",
+    "source_ranges": [
+      [
+        2769,
+        2771
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-029-C04",
+    "source_ranges": [
+      [
+        2769,
+        2771
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-030-C02",
+    "source_ranges": [
+      [
+        2772,
+        2774
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-030-C04",
+    "source_ranges": [
+      [
+        2772,
+        2774
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-031-C01",
+    "source_ranges": [
+      [
+        2772,
+        2774
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-031-C04",
+    "source_ranges": [
+      [
+        2772,
+        2774
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-091-C01",
+    "source_ranges": [
+      [
+        2775,
+        2777
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-092-C01",
+    "source_ranges": [
+      [
+        2775,
+        2777
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-093-C01",
+    "source_ranges": [
+      [
+        2775,
+        2777
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-033-C01",
+    "source_ranges": [
+      [
+        2778,
+        2780
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-033-C02",
+    "source_ranges": [
+      [
+        2778,
+        2780
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-033-C03",
+    "source_ranges": [
+      [
+        2778,
+        2780
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-033-C04",
+    "source_ranges": [
+      [
+        2778,
+        2780
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-102-C01",
+    "source_ranges": [
+      [
+        2781,
+        2783
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-103-C01",
+    "source_ranges": [
+      [
+        2781,
+        2783
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-104-C01",
+    "source_ranges": [
+      [
+        2781,
+        2783
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-106-C01",
+    "source_ranges": [
+      [
+        2781,
+        2783
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-108-C01",
+    "source_ranges": [
+      [
+        2781,
+        2783
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-109-C01",
+    "source_ranges": [
+      [
+        2781,
+        2783
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-110-C01",
+    "source_ranges": [
+      [
+        2784,
+        2786
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-111-C01",
+    "source_ranges": [
+      [
+        2784,
+        2786
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-112-C01",
+    "source_ranges": [
+      [
+        2784,
+        2786
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-119-C01",
+    "source_ranges": [
+      [
+        2784,
+        2786
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-114-C01",
+    "source_ranges": [
+      [
+        2787,
+        2789
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-115-C01",
+    "source_ranges": [
+      [
+        2787,
+        2789
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-116-C01",
+    "source_ranges": [
+      [
+        2787,
+        2789
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-120-C01",
+    "source_ranges": [
+      [
+        2787,
+        2789
+      ]
+    ],
+    "reason": "La phase indicative de §91 regroupe ces parcours détaillés ; plusieurs critères couvrent sa conjonction de livrables. Son numéro ne fixe pas l’ordre de lancement."
+  },
+  {
+    "criterion_ref": "S-081-C05",
+    "source_ranges": [
+      [
+        25,
+        25
+      ]
+    ],
+    "reason": "Le suivi obligatoire de chaque actif est vérifié par les six informations, l’absence de prochaine action et la détection des retards."
+  },
+  {
+    "criterion_ref": "S-085-C07",
+    "source_ranges": [
+      [
+        25,
+        25
+      ]
+    ],
+    "reason": "Les automatismes répétitifs et leur reprise conservent une exception explicite et une prochaine action humaine."
+  },
+  {
+    "criterion_ref": "S-095-C01",
+    "source_ranges": [
+      [
+        26,
+        26
+      ]
+    ],
+    "reason": "Le registre typé interdit SQL direct et actions hors droits au modèle."
+  },
+  {
+    "criterion_ref": "S-095-C04",
+    "source_ranges": [
+      [
+        26,
+        26
+      ]
+    ],
+    "reason": "La confirmation porte sur un aperçu exact des effets sensibles."
+  },
+  {
+    "criterion_ref": "S-095-C07",
+    "source_ranges": [
+      [
+        26,
+        26
+      ]
+    ],
+    "reason": "Le journal couvre paramètres, contexte, décision, approbation, version et résultat."
+  },
+  {
+    "criterion_ref": "S-096-C01",
+    "source_ranges": [
+      [
+        26,
+        26
+      ]
+    ],
+    "reason": "Les pièces jointes restent conservées avec preuve et limites dans le pipeline contrôlé."
+  },
+  {
+    "criterion_ref": "S-091-C03",
+    "source_ranges": [
+      [
+        28,
+        28
+      ]
+    ],
+    "reason": "La réponse utilise les contrats applicables à la date des faits, sélectionnés dans le périmètre autorisé."
+  },
+  {
+    "criterion_ref": "S-092-C04",
+    "source_ranges": [
+      [
+        28,
+        28
+      ]
+    ],
+    "reason": "Citations réellement récupérées, déclaration, donnée vérifiée et inférence sont distinguées."
+  },
+  {
+    "criterion_ref": "S-092-C03",
+    "source_ranges": [
+      [
+        28,
+        28
+      ],
+      [
+        39,
+        39
+      ]
+    ],
+    "reason": "La formulation prudente datée indique prochaine action et absence de décision définitive d’indemnisation."
+  },
+  {
+    "criterion_ref": "S-101-C05",
+    "source_ranges": [
+      [
+        29,
+        29
+      ]
+    ],
+    "reason": "Le jeton opaque est contrôlé serveur sans réutilisation ni portée excessive."
+  },
+  {
+    "criterion_ref": "S-103-C05",
+    "source_ranges": [
+      [
+        29,
+        29
+      ]
+    ],
+    "reason": "Le ledger transactionnel et les oracles concurrents empêchent double dépense et solde négatif non autorisé."
+  },
+  {
+    "criterion_ref": "S-104-C04",
+    "source_ranges": [
+      [
+        29,
+        29
+      ]
+    ],
+    "reason": "Les règles et campagnes gardent leur version pour chaque événement historique."
+  },
+  {
+    "criterion_ref": "S-104-C06",
+    "source_ranges": [
+      [
+        29,
+        29
+      ]
+    ],
+    "reason": "La pertinence du conseil reste prioritaire sur le gain et les catégories sensibles sont sous validation humaine."
+  },
+  {
+    "criterion_ref": "S-092-C02",
+    "source_ranges": [
+      [
+        39,
+        39
+      ]
+    ],
+    "reason": "Le client lit son contrat, les motifs, limites et preuves du scénario concret."
+  },
+  {
+    "criterion_ref": "S-103-C06",
+    "source_ranges": [
+      [
+        40,
+        40
+      ]
+    ],
+    "reason": "Wallet restitue les Miles acquis et leur historique complet."
+  },
+  {
+    "criterion_ref": "S-105-C05",
+    "source_ranges": [
+      [
+        40,
+        40
+      ]
+    ],
+    "reason": "Le reward acquis devient entitlement/voucher avec statut et conditions consultables."
+  },
+  {
+    "criterion_ref": "S-106-C01",
+    "source_ranges": [
+      [
+        40,
+        40
+      ]
+    ],
+    "reason": "L’utilisateur peut effectivement utiliser l’avantage par vérification et consommation partenaire."
+  },
+  {
+    "criterion_ref": "S-117-C01",
+    "source_ranges": [
+      [
+        49,
+        51
+      ],
+      [
+        246,
+        249
+      ]
+    ],
+    "reason": "Wallet centralise contrats, audits, démarches, documents et Retire par navigation vers les propriétaires canoniques."
+  },
+  {
+    "criterion_ref": "S-117-C02",
+    "source_ranges": [
+      [
+        49,
+        51
+      ],
+      [
+        246,
+        249
+      ]
+    ],
+    "reason": "Wallet expose couverture, carte, Miles, shop/récompenses et relation client avec les mêmes droits."
+  },
+  {
+    "criterion_ref": "S-117-C07",
+    "source_ranges": [
+      [
+        246,
+        249
+      ]
+    ],
+    "reason": "Les lectures et écritures des parcours Wallet restent des projections et commandes Core autorisées."
+  },
+  {
+    "criterion_ref": "S-088-C05",
+    "source_ranges": [
+      [
+        52,
+        54
+      ],
+      [
+        250,
+        253
+      ]
+    ],
+    "reason": "La navigation Admin relie CRM, catalogue, intégrations, paramètres et domaines structurés existants."
+  },
+  {
+    "criterion_ref": "S-118-C01",
+    "source_ranges": [
+      [
+        52,
+        54
+      ],
+      [
+        250,
+        253
+      ]
+    ],
+    "reason": "Le cockpit commun rassemble couverture, fidélité, cartes, redemptions, validations et exceptions."
+  },
+  {
+    "criterion_ref": "S-121-C07",
+    "source_ranges": [
+      [
+        52,
+        54
+      ],
+      [
+        250,
+        253
+      ]
+    ],
+    "reason": "Admin peut piloter ses objets par chat sans état parallèle et conserve les interfaces structurées."
+  },
+  {
+    "criterion_ref": "S-110-C01",
+    "source_ranges": [
+      [
+        55,
+        57
+      ],
+      [
+        254,
+        257
+      ]
+    ],
+    "reason": "Partners transmet des leads dans le CRM commun avec attribution et déduplication."
+  },
+  {
+    "criterion_ref": "S-110-C03",
+    "source_ranges": [
+      [
+        55,
+        57
+      ],
+      [
+        254,
+        257
+      ]
+    ],
+    "reason": "Partners lit commissions, règles, dus et paiements depuis les objets canoniques autorisés."
+  },
+  {
+    "criterion_ref": "S-111-C01",
+    "source_ranges": [
+      [
+        55,
+        57
+      ],
+      [
+        254,
+        257
+      ]
+    ],
+    "reason": "Partners propose offres/avantages/campagnes avec conditions et validation Admin."
+  },
+  {
+    "criterion_ref": "S-106-C01",
+    "source_ranges": [
+      [
+        55,
+        57
+      ],
+      [
+        254,
+        257
+      ]
+    ],
+    "reason": "Le partenaire scanne ou saisit un jeton et vérifie le droit auprès du serveur."
+  },
+  {
+    "criterion_ref": "S-119-C04",
+    "source_ranges": [
+      [
+        55,
+        57
+      ],
+      [
+        254,
+        257
+      ]
+    ],
+    "reason": "Le paiement du partenaire a une preuve externe et des statuts exacts consultables."
+  },
+  {
+    "criterion_ref": "S-112-C01",
+    "source_ranges": [
+      [
+        58,
+        60
+      ],
+      [
+        258,
+        261
+      ]
+    ],
+    "reason": "Intelligence donne catalogue professionnel, historiques, données de fonds et provenance."
+  },
+  {
+    "criterion_ref": "S-112-C02",
+    "source_ranges": [
+      [
+        58,
+        60
+      ],
+      [
+        258,
+        261
+      ]
+    ],
+    "reason": "Les benchmarks, projections et comparaisons pro consomment les moteurs et snapshots communs."
+  },
+  {
+    "criterion_ref": "S-112-C05",
+    "source_ranges": [
+      [
+        258,
+        261
+      ]
+    ],
+    "reason": "Les corrections professionnelles passent par proposition sourcée puis publication gouvernée."
+  },
+  {
+    "criterion_ref": "S-114-C01",
+    "source_ranges": [
+      [
+        61,
+        63
+      ]
+    ],
+    "reason": "Exchange reste une surface isolée annoncée comme démonstration avant qualification réglementaire."
+  },
+  {
+    "criterion_ref": "S-114-C04",
+    "source_ranges": [
+      [
+        262,
+        265
+      ]
+    ],
+    "reason": "Exchange possède positions, ledger et settlement propres avec partage minimal et autorisé de l’identité."
+  },
+  {
+    "criterion_ref": "S-115-C04",
+    "source_ranges": [
+      [
+        262,
+        265
+      ]
+    ],
+    "reason": "Les événements et règlements sont enregistrés dans le ledger Exchange et ouverts avec preuve."
+  },
+  {
+    "criterion_ref": "S-116-C01",
+    "source_ranges": [
+      [
+        61,
+        63
+      ]
+    ],
+    "reason": "La disponibilité commerciale Exchange est conditionnée à la qualification et au périmètre exact validé."
+  },
+  {
+    "criterion_ref": "S-080-C01",
+    "source_ranges": [
+      [
+        280,
+        280
+      ]
+    ],
+    "reason": "Le service CRM commun reçoit les leads et leur attribution."
+  },
+  {
+    "criterion_ref": "S-087-C02",
+    "source_ranges": [
+      [
+        280,
+        280
+      ]
+    ],
+    "reason": "Le service commissions lie règles et paiements aux contrats/opportunités/partenaires."
+  },
+  {
+    "criterion_ref": "S-081-C01",
+    "source_ranges": [
+      [
+        281,
+        281
+      ],
+      [
+        355,
+        356
+      ]
+    ],
+    "reason": "Dossier/projet, tâche et prochaine action sont des objets distincts du service workflow."
+  },
+  {
+    "criterion_ref": "S-081-C03",
+    "source_ranges": [
+      [
+        281,
+        281
+      ],
+      [
+        355,
+        356
+      ]
+    ],
+    "reason": "Checklist, sous-tâches, pièces attendues, statuts, délais/SLA et dépendances gouvernent le workflow."
+  },
+  {
+    "criterion_ref": "S-082-C01",
+    "source_ranges": [
+      [
+        282,
+        282
+      ],
+      [
+        369,
+        370
+      ]
+    ],
+    "reason": "L’activité canonique est reliée une seule fois à plusieurs vues/timelines."
+  },
+  {
+    "criterion_ref": "S-089-C03",
+    "source_ranges": [
+      [
+        282,
+        282
+      ],
+      [
+        2358,
+        2359
+      ]
+    ],
+    "reason": "Gmail réel rattache messages/pièces au dossier et à l’activité commune."
+  },
+  {
+    "criterion_ref": "S-090-C06",
+    "source_ranges": [
+      [
+        282,
+        282
+      ],
+      [
+        2358,
+        2359
+      ]
+    ],
+    "reason": "Calendar réel gère reprise, curseurs, notifications répétées et erreurs sans doublons."
+  },
+  {
+    "criterion_ref": "S-086-C01",
+    "source_ranges": [
+      [
+        283,
+        283
+      ],
+      [
+        371,
+        372
+      ]
+    ],
+    "reason": "ForecastItem/snapshot, pipeline brut et pondéré sont distincts des revenus réalisés."
+  },
+  {
+    "criterion_ref": "S-086-C03",
+    "source_ranges": [
+      [
+        283,
+        283
+      ],
+      [
+        371,
+        372
+      ]
+    ],
+    "reason": "Le service objectifs compare métriques validées, réalisé et forecast sans valeurs implicites."
+  },
+  {
+    "criterion_ref": "S-087-C01",
+    "source_ranges": [
+      [
+        283,
+        283
+      ],
+      [
+        371,
+        372
+      ]
+    ],
+    "reason": "Les états financiers signé/acquis/facturé/attendu/encaissé/reversé sont des données séparées."
+  },
+  {
+    "criterion_ref": "S-094-C07",
+    "source_ranges": [
+      [
+        284,
+        284
+      ],
+      [
+        286,
+        286
+      ]
+    ],
+    "reason": "Le contexte/retrieval IA utilise seulement objets autorisés, références et versions sans SQL ni mémoire parallèle."
+  },
+  {
+    "criterion_ref": "S-095-C01",
+    "source_ranges": [
+      [
+        284,
+        285
+      ]
+    ],
+    "reason": "Le Tool Gateway et registre versionné valident les schémas avant services domaine."
+  },
+  {
+    "criterion_ref": "S-095-C04",
+    "source_ranges": [
+      [
+        285,
+        285
+      ]
+    ],
+    "reason": "Approval/Policy attache la confirmation à un aperçu immuable exact."
+  },
+  {
+    "criterion_ref": "S-095-C06",
+    "source_ranges": [
+      [
+        285,
+        285
+      ]
+    ],
+    "reason": "Reversibility est portée par l’annulation/compensation liée au résultat original."
+  },
+  {
+    "criterion_ref": "S-094-C06",
+    "source_ranges": [
+      [
+        286,
+        286
+      ],
+      [
+        363,
+        364
+      ]
+    ],
+    "reason": "Conversations/messages/context bindings et historique restent liés aux objets selon droits."
+  },
+  {
+    "criterion_ref": "S-096-C01",
+    "source_ranges": [
+      [
+        286,
+        286
+      ],
+      [
+        363,
+        364
+      ]
+    ],
+    "reason": "Les attachments IA utilisent fichier original et extraction contrôlée."
+  },
+  {
+    "criterion_ref": "S-095-C07",
+    "source_ranges": [
+      [
+        363,
+        364
+      ]
+    ],
+    "reason": "Commandes/actions/outils/approbations/traces modèles possèdent un journal vérifiable."
+  },
+  {
+    "criterion_ref": "S-099-C02",
+    "source_ranges": [
+      [
+        287,
+        287
+      ],
+      [
+        363,
+        364
+      ]
+    ],
+    "reason": "Le service voix distingue transcription de dictée et commande vers registre contrôlé."
+  },
+  {
+    "criterion_ref": "S-085-C07",
+    "source_ranges": [
+      [
+        288,
+        288
+      ]
+    ],
+    "reason": "Workflow/jobs/outbox et audit de causalité garantissent la reprise des effets asynchrones."
+  },
+  {
+    "criterion_ref": "S-089-C04",
+    "source_ranges": [
+      [
+        288,
+        288
+      ]
+    ],
+    "reason": "L’email opérationnel réellement envoyé est vérifié avec ID fournisseur et timeline."
+  },
+  {
+    "criterion_ref": "S-091-C03",
+    "source_ranges": [
+      [
+        289,
+        289
+      ],
+      [
+        373,
+        374
+      ],
+      [
+        2368,
+        2369
+      ]
+    ],
+    "reason": "Coverage sélectionne scénario et contrats applicables avant récupération des preuves autorisées."
+  },
+  {
+    "criterion_ref": "S-092-C01",
+    "source_ranges": [
+      [
+        289,
+        289
+      ],
+      [
+        373,
+        374
+      ],
+      [
+        2368,
+        2369
+      ]
+    ],
+    "reason": "La hiérarchie, les règles et contrôles déterministes produisent réponse ou revue explicite."
+  },
+  {
+    "criterion_ref": "S-092-C02",
+    "source_ranges": [
+      [
+        373,
+        374
+      ],
+      [
+        2368,
+        2369
+      ]
+    ],
+    "reason": "La réponse contient preuves citées, limites, confiance/incertitude et informations manquantes."
+  },
+  {
+    "criterion_ref": "S-093-C01",
+    "source_ranges": [
+      [
+        290,
+        290
+      ],
+      [
+        375,
+        376
+      ],
+      [
+        2370,
+        2371
+      ]
+    ],
+    "reason": "Support/ClaimAssistance est un dossier autonome lié à conversation, sans opportunité artificielle."
+  },
+  {
+    "criterion_ref": "S-093-C03",
+    "source_ranges": [
+      [
+        290,
+        290
+      ],
+      [
+        375,
+        376
+      ],
+      [
+        2370,
+        2371
+      ]
+    ],
+    "reason": "Support conserve tâches, responsable, SLA/priorité et prochaine action issus de règles approuvées."
+  },
+  {
+    "criterion_ref": "S-093-C04",
+    "source_ranges": [
+      [
+        375,
+        376
+      ],
+      [
+        2370,
+        2371
+      ]
+    ],
+    "reason": "Le suivi Wallet expose pièces, messages, statuts et résolution autorisés."
+  },
+  {
+    "criterion_ref": "S-101-C04",
+    "source_ranges": [
+      [
+        291,
+        291
+      ],
+      [
+        381,
+        382
+      ]
+    ],
+    "reason": "Le service pass suit appareils, mise à jour, suspension et révocation par instance."
+  },
+  {
+    "criterion_ref": "S-101-C05",
+    "source_ranges": [
+      [
+        291,
+        291
+      ],
+      [
+        381,
+        382
+      ]
+    ],
+    "reason": "Jetons opaques/deep links portent portée/expiration/rotation et contrôle serveur."
+  },
+  {
+    "criterion_ref": "S-103-C01",
+    "source_ranges": [
+      [
+        292,
+        292
+      ],
+      [
+        377,
+        378
+      ]
+    ],
+    "reason": "Loyalty est un compte et un ledger append-only, jamais un compteur mutable."
+  },
+  {
+    "criterion_ref": "S-104-C04",
+    "source_ranges": [
+      [
+        292,
+        292
+      ],
+      [
+        377,
+        378
+      ]
+    ],
+    "reason": "Le moteur gagne avec règles/campagnes/tiers/plafonds/expiration versionnés."
+  },
+  {
+    "criterion_ref": "S-105-C01",
+    "source_ranges": [
+      [
+        293,
+        293
+      ],
+      [
+        379,
+        380
+      ]
+    ],
+    "reason": "Le catalogue rewards conserve types, éligibilité, stock, financeur et mode d’exécution."
+  },
+  {
+    "criterion_ref": "S-105-C05",
+    "source_ranges": [
+      [
+        293,
+        293
+      ],
+      [
+        379,
+        380
+      ]
+    ],
+    "reason": "La redemption crée entitlement/voucher avec statut et conditions liés au ledger."
+  },
+  {
+    "criterion_ref": "S-107-C06",
+    "source_ranges": [
+      [
+        293,
+        293
+      ],
+      [
+        379,
+        380
+      ]
+    ],
+    "reason": "Annulation/consommation se rapprochent aux écritures et montants de règlement partenaire."
+  },
+  {
+    "criterion_ref": "S-110-C01",
+    "source_ranges": [
+      [
+        357,
+        358
+      ]
+    ],
+    "reason": "Partenaire, lead et attribution sont des relations canoniques réutilisées par le portail."
+  },
+  {
+    "criterion_ref": "S-110-C03",
+    "source_ranges": [
+      [
+        357,
+        358
+      ]
+    ],
+    "reason": "Commissions et paiements du partenaire sont projetés depuis le Core, sans duplication métier."
+  },
+  {
+    "criterion_ref": "S-114-C04",
+    "source_ranges": [
+      [
+        365,
+        366
+      ]
+    ],
+    "reason": "Le domaine/stockage Exchange reste réservé et isolé avec identité minimale autorisée."
+  },
+  {
+    "criterion_ref": "S-080-C03",
+    "source_ranges": [
+      [
+        367,
+        368
+      ]
+    ],
+    "reason": "Le CRM persiste étapes/probabilités/estimations/dates/next action et motifs par opportunité."
+  },
+  {
+    "criterion_ref": "S-082-C04",
+    "source_ranges": [
+      [
+        369,
+        370
+      ]
+    ],
+    "reason": "Emails/threads/appels/réunions/calendrier/notes/pièces sont des types d’activité traçables."
+  },
+  {
+    "criterion_ref": "S-080-C03",
+    "source_ranges": [
+      [
+        2238,
+        2241
+      ]
+    ],
+    "reason": "La projection Admin donne pipeline/probabilité/prochaine action, avec statut client limité et origine publique conservés."
+  },
+  {
+    "criterion_ref": "S-110-C02",
+    "source_ranges": [
+      [
+        2242,
+        2243
+      ]
+    ],
+    "reason": "La projection Partners limite le suivi commercial aux leads attribués et statuts autorisés."
+  },
+  {
+    "criterion_ref": "S-112-C02",
+    "source_ranges": [
+      [
+        2244,
+        2249
+      ]
+    ],
+    "reason": "La contribution Intelligence de la matrice benchmark est complète sur données autorisées, via moteur commun ; les extraits publics et paramètres restent aux propriétaires acquisition."
+  },
+  {
+    "criterion_ref": "S-087-C05",
+    "source_ranges": [
+      [
+        2250,
+        2255
+      ]
+    ],
+    "reason": "Commissions visibles Admin autorisé et partenaire propre, masquées aux surfaces/site/client/pro non autorisées."
+  },
+  {
+    "criterion_ref": "S-112-C05",
+    "source_ranges": [
+      [
+        2256,
+        2261
+      ]
+    ],
+    "reason": "Intelligence lit/simule et soumet correction ; l’édition/publication Admin reste un droit séparé du calcul consommateur."
+  },
+  {
+    "criterion_ref": "S-081-C04",
+    "source_ranges": [
+      [
+        2262,
+        2265
+      ]
+    ],
+    "reason": "La partie Admin projets/tâches fournit création, Kanban, priorités, exceptions et vues partagées du Core."
+  },
+  {
+    "criterion_ref": "S-110-C02",
+    "source_ranges": [
+      [
+        2266,
+        2266
+      ]
+    ],
+    "reason": "Le partenaire ne suit que les éléments autorisés de ses leads transmis, sans vue exhaustive des tâches client."
+  },
+  {
+    "criterion_ref": "S-090-C01",
+    "source_ranges": [
+      [
+        2268,
+        2273
+      ]
+    ],
+    "reason": "Calendar est borné aux comptes/calendriers et projections de rendez-vous explicitement autorisés ; aucune donnée privée vers autres surfaces."
+  },
+  {
+    "criterion_ref": "S-089-C03",
+    "source_ranges": [
+      [
+        2268,
+        2273
+      ]
+    ],
+    "reason": "La synchronisation Gmail et la timeline Admin sont reliées au dossier sans copie d’une boîte privée."
+  },
+  {
+    "criterion_ref": "S-082-C05",
+    "source_ranges": [
+      [
+        2274,
+        2279
+      ]
+    ],
+    "reason": "Les projections de timeline appliquent droit/champ avant affichage ou compteurs, y compris vues limitées/anonymisées."
+  },
+  {
+    "criterion_ref": "S-086-C06",
+    "source_ranges": [
+      [
+        2280,
+        2285
+      ]
+    ],
+    "reason": "Revenus et forecast n’atteignent que les personnes/surfaces ayant des droits financiers explicites."
+  },
+  {
+    "criterion_ref": "S-087-C05",
+    "source_ranges": [
+      [
+        2280,
+        2285
+      ]
+    ],
+    "reason": "La seule projection financière partenaire concerne ses commissions et données minimales autorisées."
+  },
+  {
+    "criterion_ref": "S-094-C01",
+    "source_ranges": [
+      [
+        2286,
+        2289
+      ]
+    ],
+    "reason": "Le copilote global/contextuel Admin est accessible sans remplacer l’interface structurée ; les autres surfaces gardent leurs assistants propres."
+  },
+  {
+    "criterion_ref": "S-095-C02",
+    "source_ranges": [
+      [
+        2289,
+        2289
+      ]
+    ],
+    "reason": "Le registre couvre lecture, brouillons, mutations faibles/sensibles et interdictions, sous permissions."
+  },
+  {
+    "criterion_ref": "S-097-C02",
+    "source_ranges": [
+      [
+        2289,
+        2289
+      ]
+    ],
+    "reason": "La voix Admin sépare dictée et commande sans action implicite."
+  },
+  {
+    "criterion_ref": "S-091-C01",
+    "source_ranges": [
+      [
+        2292,
+        2294
+      ]
+    ],
+    "reason": "Wallet expose le chat personnalisé et lié à l’identité ; la surface publique reste entrée descriptive."
+  },
+  {
+    "criterion_ref": "S-092-C07",
+    "source_ranges": [
+      [
+        2295,
+        2295
+      ]
+    ],
+    "reason": "Admin reçoit revue de couverture, sources, confiance, urgence et motif avec audit."
+  },
+  {
+    "criterion_ref": "S-112-C06",
+    "source_ranges": [
+      [
+        2296,
+        2297
+      ]
+    ],
+    "reason": "Les preuves contractuelles/rapports sont servis selon droits explicites et aucune projection partenaire non autorisée n’est donnée."
+  },
+  {
+    "criterion_ref": "S-101-C01",
+    "source_ranges": [
+      [
+        2298,
+        2300
+      ]
+    ],
+    "reason": "Activation/consultation de la carte s’effectue après connexion et dépend de plateforme compatible."
+  },
+  {
+    "criterion_ref": "S-101-C04",
+    "source_ranges": [
+      [
+        2300,
+        2301
+      ]
+    ],
+    "reason": "Wallet/Admin permettent les opérations de révocation/suspension/mise à jour autorisées par instance."
+  },
+  {
+    "criterion_ref": "S-106-C01",
+    "source_ranges": [
+      [
+        2302,
+        2303
+      ]
+    ],
+    "reason": "Partners valide un jeton autorisé serveur ; pas d’exposition de carte aux professionnels sans ce droit."
+  },
+  {
+    "criterion_ref": "S-117-C06",
+    "source_ranges": [
+      [
+        2304,
+        2305
+      ],
+      [
+        2310,
+        2311
+      ]
+    ],
+    "reason": "Le site présente fidélité/avantages et renvoie aux parcours connectés sans exposer données privées."
+  },
+  {
+    "criterion_ref": "S-103-C06",
+    "source_ranges": [
+      [
+        2306,
+        2307
+      ]
+    ],
+    "reason": "Wallet lit solde/historique et Admin rapproche ledger/comptes selon leurs droits."
+  },
+  {
+    "criterion_ref": "S-104-C03",
+    "source_ranges": [
+      [
+        2308,
+        2308
+      ]
+    ],
+    "reason": "Les événements de gain partenaire exigent sa preuve, son financement et les droits correspondants."
+  },
+  {
+    "criterion_ref": "S-112-C06",
+    "source_ranges": [
+      [
+        2309,
+        2309
+      ],
+      [
+        2315,
+        2315
+      ]
+    ],
+    "reason": "Un entitlement analytique donne seulement le rapport ou service Intelligence explicitement autorisé."
+  },
+  {
+    "criterion_ref": "S-105-C05",
+    "source_ranges": [
+      [
+        2312,
+        2312
+      ]
+    ],
+    "reason": "Wallet expose shop/voucher/redemption et leurs états réels."
+  },
+  {
+    "criterion_ref": "S-108-C02",
+    "source_ranges": [
+      [
+        2313,
+        2313
+      ]
+    ],
+    "reason": "Admin traite stock, éligibilité, fraude et litiges dans le contexte commun auditable."
+  },
+  {
+    "criterion_ref": "S-111-C04",
+    "source_ranges": [
+      [
+        2314,
+        2314
+      ]
+    ],
+    "reason": "Partners voit offres, consommations, annulations et règlements uniquement dans son périmètre."
+  },
+  {
+    "criterion_ref": "S-086-C05",
+    "source_ranges": [
+      [
+        2448,
+        2449
+      ]
+    ],
+    "reason": "Les changements de forecast alimentent snapshots et agrégats datés afin d’évaluer l’écart historique."
+  },
+  {
+    "criterion_ref": "S-094-C07",
+    "source_ranges": [
+      [
+        2452,
+        2453
+      ]
+    ],
+    "reason": "ai.message.received alimente contexte et retrieval autorisé avant formulation."
+  },
+  {
+    "criterion_ref": "S-091-C02",
+    "source_ranges": [
+      [
+        2464,
+        2465
+      ]
+    ],
+    "reason": "coverage.question.asked normalise les faits puis prépare matching/retrieval/analyse."
+  },
+  {
+    "criterion_ref": "S-092-C07",
+    "source_ranges": [
+      [
+        2466,
+        2467
+      ]
+    ],
+    "reason": "Réponse générée ou revue requise alimente Wallet/Admin, audit et métriques."
+  },
+  {
+    "criterion_ref": "S-093-C03",
+    "source_ranges": [
+      [
+        2468,
+        2469
+      ]
+    ],
+    "reason": "L’escalade crée dossier, tâche, SLA/prochaine action et projections client/Admin une seule fois."
+  },
+  {
+    "criterion_ref": "S-101-C06",
+    "source_ranges": [
+      [
+        2470,
+        2471
+      ]
+    ],
+    "reason": "Émission/mise à jour/révocation pass alimentent fournisseur, Wallet, journal sécurité et notifications."
+  },
+  {
+    "criterion_ref": "S-104-C07",
+    "source_ranges": [
+      [
+        2472,
+        2473
+      ]
+    ],
+    "reason": "Gain pending/disponible alimente ledger/projection Wallet/pass et rapprochement campagne."
+  },
+  {
+    "criterion_ref": "S-103-C06",
+    "source_ranges": [
+      [
+        2474,
+        2475
+      ]
+    ],
+    "reason": "Débit/expiration/reversal/adjustment alimente historique, reporting, notifications et contrôles sans effacer écritures."
+  },
+  {
+    "criterion_ref": "S-080-C01",
+    "source_ranges": [
+      [
+        2649,
+        2649
+      ]
+    ],
+    "reason": "Workflow E entrée multicanale conserve API canonique et attribution."
+  },
+  {
+    "criterion_ref": "S-080-C02",
+    "source_ranges": [
+      [
+        2650,
+        2650
+      ]
+    ],
+    "reason": "Workflow E déduplication distingue personne existante et opportunité nouvelle."
+  },
+  {
+    "criterion_ref": "S-080-C03",
+    "source_ranges": [
+      [
+        2651,
+        2651
+      ]
+    ],
+    "reason": "Workflow E initialisation étape/probabilité/revenu/date/prochaine action explicites."
+  },
+  {
+    "criterion_ref": "S-085-C01",
+    "source_ranges": [
+      [
+        2652,
+        2652
+      ]
+    ],
+    "reason": "L’entrant crée la tâche premier contact une seule fois liée à l’opportunité."
+  },
+  {
+    "criterion_ref": "S-084-C01",
+    "source_ranges": [
+      [
+        2652,
+        2652
+      ]
+    ],
+    "reason": "La variante rendez-vous de prise de contact lie le calendrier et le dossier canonique."
+  },
+  {
+    "criterion_ref": "S-082-C04",
+    "source_ranges": [
+      [
+        2653,
+        2653
+      ]
+    ],
+    "reason": "Les interactions multitypes alimentent la timeline canonique du lead/client."
+  },
+  {
+    "criterion_ref": "S-085-C02",
+    "source_ranges": [
+      [
+        2654,
+        2654
+      ]
+    ],
+    "reason": "Après rendez-vous/interactions, résultat et prochaine action sont demandés ; objet sans suite devient anomalie."
+  },
+  {
+    "criterion_ref": "S-121-C01",
+    "source_ranges": [
+      [
+        2654,
+        2654
+      ]
+    ],
+    "reason": "Les mises à jour étape/probabilité/estimation/prochaine action suivent le CRM canonique et la politique sensible."
+  },
+  {
+    "criterion_ref": "S-088-C01",
+    "source_ranges": [
+      [
+        2655,
+        2655
+      ]
+    ],
+    "reason": "Admin expose retards, rendez-vous sans compte rendu et dossiers bloqués avec prochaine action."
+  },
+  {
+    "criterion_ref": "S-086-C01",
+    "source_ranges": [
+      [
+        2656,
+        2656
+      ]
+    ],
+    "reason": "Pipeline brut/pondéré/attendu se recalculent à partir des opportunités datées, distincts des encaissements."
+  },
+  {
+    "criterion_ref": "S-085-C05",
+    "source_ranges": [
+      [
+        2657,
+        2658
+      ]
+    ],
+    "reason": "Gain ouvre onboarding, met à jour forecast puis confirmation de commission distingue les états financiers réels."
+  },
+  {
+    "criterion_ref": "S-110-C02",
+    "source_ranges": [
+      [
+        2659,
+        2659
+      ]
+    ],
+    "reason": "L’apporteur reçoit uniquement progression/signature/contrat autorisés."
+  },
+  {
+    "criterion_ref": "S-110-C03",
+    "source_ranges": [
+      [
+        2659,
+        2659
+      ]
+    ],
+    "reason": "Commission règle/dû/payé provient du Core partagé et reste limitée au partenaire."
+  },
+  {
+    "criterion_ref": "S-080-C03",
+    "source_ranges": [
+      [
+        2660,
+        2660
+      ]
+    ],
+    "reason": "Perte/report/sommeil et motifs/date/horizon restent dans le formulaire/historique configurables ; la réactivation éventuelle dépend du workflow approuvé."
+  },
+  {
+    "criterion_ref": "S-112-C05",
+    "source_ranges": [
+      [
+        2904,
+        2904
+      ]
+    ],
+    "reason": "L’arbitrage d’édition Intelligence est porté par question 008 et le critère brouillon/proposition/publication distincte."
+  },
+  {
+    "criterion_ref": "S-085-C07",
+    "source_ranges": [
+      [
+        2905,
+        2905
+      ]
+    ],
+    "reason": "Les choix techniques workflow/email ingress du harness réalisent reprise outbox ; règles métier restent question 009."
+  },
+  {
+    "criterion_ref": "S-116-C01",
+    "source_ranges": [
+      [
+        2907,
+        2907
+      ]
+    ],
+    "reason": "La qualification Exchange est explicitement exigée avant périmètre activable, question 019 bloquante."
+  },
+  {
+    "criterion_ref": "S-096-C04",
+    "source_ranges": [
+      [
+        2908,
+        2908
+      ]
+    ],
+    "reason": "Seuils de confiance/extraction conflictuelle exigent décision et revue avant mise à jour."
+  },
+  {
+    "criterion_ref": "S-080-C03",
+    "source_ranges": [
+      [
+        2909,
+        2909
+      ]
+    ],
+    "reason": "Étapes et probabilités configurables requièrent définition question 010, pas barème inventé."
+  },
+  {
+    "criterion_ref": "S-087-C01",
+    "source_ranges": [
+      [
+        2910,
+        2910
+      ]
+    ],
+    "reason": "Question 010 bloque états et calculs financiers réels, distincts du pipeline de fixture."
+  },
+  {
+    "criterion_ref": "S-081-C03",
+    "source_ranges": [
+      [
+        2911,
+        2911
+      ]
+    ],
+    "reason": "Question 009 oblige templates/SLA/transitions/conditions/prochaines actions avant automatisation réelle."
+  },
+  {
+    "criterion_ref": "S-089-C01",
+    "source_ranges": [
+      [
+        2912,
+        2912
+      ]
+    ],
+    "reason": "Question 011 délimite comptes/alias/labels/scopes et rétention Gmail avant OAuth."
+  },
+  {
+    "criterion_ref": "S-090-C01",
+    "source_ranges": [
+      [
+        2912,
+        2912
+      ]
+    ],
+    "reason": "Question 011 impose calendriers/projections professionnels explicitement sélectionnés."
+  },
+  {
+    "criterion_ref": "S-083-C02",
+    "source_ranges": [
+      [
+        2913,
+        2913
+      ]
+    ],
+    "reason": "Rapprochement et déduplication email utilisent preuves ou file ambiguë validée."
+  },
+  {
+    "criterion_ref": "S-090-C03",
+    "source_ranges": [
+      [
+        2913,
+        2913
+      ]
+    ],
+    "reason": "Conflits de synchro Calendar/ETag exigent arbitrage, sans écrasement silencieux."
+  },
+  {
+    "criterion_ref": "S-086-C03",
+    "source_ranges": [
+      [
+        2914,
+        2914
+      ]
+    ],
+    "reason": "Question 010 bloque granularité/fréquence/gouvernance des objectifs avant calcul réel."
+  },
+  {
+    "criterion_ref": "S-082-C05",
+    "source_ranges": [
+      [
+        2915,
+        2915
+      ]
+    ],
+    "reason": "Question 008 détermine droits activités/finances, projections et compteurs appliqués avant envoi."
+  },
+  {
+    "criterion_ref": "S-094-C01",
+    "source_ranges": [
+      [
+        2916,
+        2916
+      ]
+    ],
+    "reason": "Question 012 porte nom/emplacement du copilote, panel/détachage/raccourci/mobile vérifiables."
+  },
+  {
+    "criterion_ref": "S-098-C02",
+    "source_ranges": [
+      [
+        2917,
+        2917
+      ]
+    ],
+    "reason": "Choix fournisseur/résidence/rétention/réutilisation et partage nécessitent preuve humaine avant appels réels."
+  },
+  {
+    "criterion_ref": "S-095-C01",
+    "source_ranges": [
+      [
+        2918,
+        2918
+      ]
+    ],
+    "reason": "Question 013 gouverne registre initial et schémas des actions typées."
+  },
+  {
+    "criterion_ref": "S-095-C02",
+    "source_ranges": [
+      [
+        2918,
+        2918
+      ]
+    ],
+    "reason": "Question 013 distingue lecture/brouillon/exécution/confirmation/interdiction avant activation."
+  },
+  {
+    "criterion_ref": "S-094-C06",
+    "source_ranges": [
+      [
+        2919,
+        2919
+      ]
+    ],
+    "reason": "Question 012 règle mémoire/partage/portée ; conversations restent liées aux IDs et aux droits d’équipe/objet."
+  },
+  {
+    "criterion_ref": "S-094-C05",
+    "source_ranges": [
+      [
+        2920,
+        2920
+      ]
+    ],
+    "reason": "Ancien/contradictoire/base/document/inférence sont identifiés, avec sources plutôt qu’arbitrage libre."
+  },
+  {
+    "criterion_ref": "S-098-C05",
+    "source_ranges": [
+      [
+        2921,
+        2921
+      ]
+    ],
+    "reason": "Le corpus réel teste injection/fuite/action dangereuse/citation, pas simple consigne de confiance au modèle."
+  },
+  {
+    "criterion_ref": "S-099-C01",
+    "source_ranges": [
+      [
+        2922,
+        2922
+      ]
+    ],
+    "reason": "Question 014 et 004 conditionnent fournisseur/langues/résidence/rétention à validation explicite."
+  },
+  {
+    "criterion_ref": "S-099-C04",
+    "source_ranges": [
+      [
+        2922,
+        2922
+      ]
+    ],
+    "reason": "Vocabulaire/noms/montants/dates sont évalués sur corpus approuvé, correction utilisateur préservée."
+  },
+  {
+    "criterion_ref": "S-097-C01",
+    "source_ranges": [
+      [
+        2923,
+        2923
+      ]
+    ],
+    "reason": "Mobile/PWA dépend de l’arbitrage explicite ; parcours responsive reste utilisable."
+  },
+  {
+    "criterion_ref": "S-097-C05",
+    "source_ranges": [
+      [
+        2923,
+        2923
+      ]
+    ],
+    "reason": "Brouillons/reconnexion n’exécutent pas une action incertaine hors ligne ; option offline exige décision."
+  },
+  {
+    "criterion_ref": "S-095-C06",
+    "source_ranges": [
+      [
+        2924,
+        2924
+      ]
+    ],
+    "reason": "Fenêtre d’annulation/compensation question 013, statut de l’action et liens à l’original empêchent fausse annulation."
+  },
+  {
+    "criterion_ref": "S-095-C02",
+    "source_ranges": [
+      [
+        2925,
+        2925
+      ]
+    ],
+    "reason": "Seuils d’escalade de la question 013 déterminent proposition/confirmation/interdiction au registre."
+  },
+  {
+    "criterion_ref": "S-091-C01",
+    "source_ranges": [
+      [
+        2926,
+        2926
+      ]
+    ],
+    "reason": "Question 015 porte nom/ton/emplacement client et page identifiable, distinct du copilote interne."
+  },
+  {
+    "criterion_ref": "S-092-C01",
+    "source_ranges": [
+      [
+        2927,
+        2927
+      ]
+    ],
+    "reason": "Question 015 exige hiérarchie contractuelle explicite/configurable avant conclusion."
+  },
+  {
+    "criterion_ref": "S-092-C05",
+    "source_ranges": [
+      [
+        2927,
+        2927
+      ]
+    ],
+    "reason": "Question 015 définit catégories sensibles et escalades obligatoires, testées avec urgence et contradiction."
+  },
+  {
+    "criterion_ref": "S-093-C02",
+    "source_ranges": [
+      [
+        2928,
+        2928
+      ]
+    ],
+    "reason": "Question 006 gouverne visibilité support et choix explicite résumé/conversation complète prévisualisée."
+  },
+  {
+    "criterion_ref": "S-089-C06",
+    "source_ranges": [
+      [
+        2928,
+        2928
+      ]
+    ],
+    "reason": "La politique validée de rétention/export/suppression est exerçable sur messages/pièces partagés."
+  },
+  {
+    "criterion_ref": "S-102-C01",
+    "source_ranges": [
+      [
+        2929,
+        2929
+      ]
+    ],
+    "reason": "Question 016 exige fournisseur/design/champs/deep links/certificats pour Apple/Google réels."
+  },
+  {
+    "criterion_ref": "S-102-C05",
+    "source_ranges": [
+      [
+        2929,
+        2929
+      ]
+    ],
+    "reason": "Révocation/mise à jour effective est vérifiée sur pass installé et validation serveur."
+  },
+  {
+    "criterion_ref": "S-101-C05",
+    "source_ranges": [
+      [
+        2930,
+        2930
+      ]
+    ],
+    "reason": "Question 016 gouverne QR opaque, expiration/rotation/portée ; aucun avantage sensible validé hors ligne."
+  },
+  {
+    "criterion_ref": "S-119-C06",
+    "source_ranges": [
+      [
+        2930,
+        2930
+      ]
+    ],
+    "reason": "Le scanner/POS réel autorisé consomme le droit serveur et rejoint le règlement partenaire."
+  },
+  {
+    "criterion_ref": "S-104-C04",
+    "source_ranges": [
+      [
+        2931,
+        2931
+      ]
+    ],
+    "reason": "Question 017 conditionne unité/barèmes/tiers/plafonds/expiration, tous versionnés et sans modification du passé."
+  },
+  {
+    "criterion_ref": "S-103-C07",
+    "source_ranges": [
+      [
+        2931,
+        2931
+      ]
+    ],
+    "reason": "Transférabilité et valeur monétaire restent interdites par défaut source sans décision contraire approuvée."
+  },
+  {
+    "criterion_ref": "S-108-C04",
+    "source_ranges": [
+      [
+        2932,
+        2932
+      ]
+    ],
+    "reason": "Question 017 bloque méthode comptable/responsabilité/financement/settlement, avec drill-down sans taux CHF inventé."
+  },
+  {
+    "criterion_ref": "S-109-C03",
+    "source_ranges": [
+      [
+        2933,
+        2933
+      ]
+    ],
+    "reason": "Question 018 gouverne Miles+cash/taxes/arrondi ; paiement refusé et réservation sont testés."
+  },
+  {
+    "criterion_ref": "S-107-C01",
+    "source_ranges": [
+      [
+        2933,
+        2933
+      ]
+    ],
+    "reason": "Question 018 rend conditions annulation/no-show/stock/voucher/support explicites et figées à réservation."
+  },
+  {
+    "criterion_ref": "S-108-C06",
+    "source_ranges": [
+      [
+        2934,
+        2934
+      ]
+    ],
+    "reason": "Avantages contractuels, assurance offerte et cashback nécessitent validation juridique/fiscale/comptable avant activation."
+  },
+  {
+    "criterion_ref": "S-111-C03",
+    "source_ranges": [
+      [
+        2935,
+        2935
+      ]
+    ],
+    "reason": "Question 018 couvre onboarding/validation/droits/suspension partenaire et refus de consommation."
+  },
+  {
+    "criterion_ref": "S-108-C01",
+    "source_ranges": [
+      [
+        2935,
+        2935
+      ]
+    ],
+    "reason": "Fraude partenaire est explicable et basée sur règles versionnées validées."
+  },
+  {
+    "criterion_ref": "S-107-C04",
+    "source_ranges": [
+      [
+        2935,
+        2935
+      ]
+    ],
+    "reason": "Litige partenaire/client est un dossier avec preuves/responsable/prochaine action et accès restreint."
+  },
+  {
+    "criterion_ref": "S-122-C01",
+    "source_ranges": [
+      [
+        2286,
+        2291
+      ]
+    ],
+    "reason": "Le chat partagé est réellement rendu dans Partners et Intelligence avec contexte propre et registre commun."
+  },
+  {
+    "criterion_ref": "S-122-C02",
+    "source_ranges": [
+      [
+        2290,
+        2290
+      ]
+    ],
+    "reason": "L’assistant partenaire ne consulte que ses leads, avantages et commissions autorisés."
+  },
+  {
+    "criterion_ref": "S-122-C03",
+    "source_ranges": [
+      [
+        2291,
+        2291
+      ]
+    ],
+    "reason": "L’assistant professionnel reste limité aux analyses et sources autorisées sans accès foyer implicite."
+  },
+  {
+    "criterion_ref": "S-122-C04",
+    "source_ranges": [
+      [
+        2262,
+        2267
+      ]
+    ],
+    "reason": "Intelligence peut créer et suivre une tâche d’analyse autorisée du workflow Core, visible aussi Admin."
+  }
+]

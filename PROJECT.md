@@ -1,12 +1,12 @@
 # CoverView — identité et état du projet
 
-Initialisation documentaire : 5 septembre 2026, mode BOOT-10. **Harness préparé ; application non implémentée.** La roadmap détaillée et les prompts de slices sont la prochaine étape demandée, pas des plans déjà approuvés.
+Initialisation documentaire : 5 septembre 2026, mode BOOT-10. **Harness préparé ; application non implémentée.** La [roadmap détaillée](ROADMAP.md) et ses prompts Astra Ultra sont rédigés. L'autorisation reçue couvre leur rédaction ; les plans d'implémentation restent soumis.
 
 ## Problème et valeur
 
 CoverView aide à comprendre, comparer et piloter la prévoyance, l'assurance et la retraite. Un visiteur obtient une première valeur sans compte, conserve ses résultats dans Wallet, puis suit ses contrats, analyses, démarches et décisions. Le même socle alimente les équipes internes, apporteurs et professionnels, selon leurs droits.
 
-La [bible v1.5](references/CoverView_Bible_Produit_Plateforme_v1.5.docx) est la référence maître. [L'index produit](docs/product/README.md) donne accès à son extraction, à la carte fonctionnelle et aux questions ouvertes. Priorité des sources et traitement des instructions embarquées : DOC-16. Objectif demandé : couvrir **l'intégralité** de cette bible ; ses mentions « futur » restent à planifier.
+La [bible v1.5](references/CoverView_Bible_Produit_Plateforme_v1.5.docx) est la référence maître. [L'index produit](docs/product/README.md) donne accès à son extraction, à la carte fonctionnelle et aux questions ouvertes. Priorité des sources et traitement des instructions embarquées : DOC-16. Objectif demandé : couvrir **l'intégralité** de cette bible ; ses mentions « futur » sont conservées dans la roadmap avec leurs conditions d'activation.
 
 ## Personas et surfaces
 

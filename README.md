@@ -1,6 +1,6 @@
 # CoverView
 
-Harness Claude Code / Codex initialisé pour préparer la v1 complète décrite dans la bible. **Aucune application n'est encore implémentée.** La prochaine étape est l'écriture de la roadmap détaillée et des prompts de slices Astra Ultra.
+Harness Claude Code / Codex et roadmap complète préparés pour la v1 décrite dans la bible. **Aucune application n'est encore implémentée.** [L'index des slices](roadmap/index.md) donne les objectifs détaillés, les plans et les prompts Astra Ultra dans l'ordre proposé.
 
 ## Commencer
 
@@ -16,8 +16,8 @@ Lire [AGENTS.md](AGENTS.md), son référentiel [CLAUDE.md](CLAUDE.md), puis [PRO
 | Identité visuelle et assets | [Charte](docs/brand.md) |
 | WorkOS et cible cloud protégée | [Authentification](docs/auth.md), [hébergement](docs/hosting.md) |
 | Décisions d'initialisation | [ADR-0001](adr/0001-harness.md) puis ADR liés depuis PROJECT |
-| Résultat et vérifications | [Journal d'initialisation](roadmap/initialisation.md) |
-| Prochaine session | [Checkpoint](roadmap/handoffs/initialisation.md) |
+| Résultat et vérifications | [Livraison de la roadmap](roadmap/review.md), [initialisation historique](roadmap/initialisation.md) |
+| Prochaine session | [Checkpoint roadmap](roadmap/handoffs/roadmap.md) |
 
 ## Vérifier le cadrage
 
@@ -26,9 +26,11 @@ node evals/lint-referentiel.mjs
 node --test evals/run.test.mjs scripts/context-handoff.test.mjs
 node evals/guard-bash.test.mjs
 node scripts/verify-brand.mjs
-node scripts/verify-planning.mjs
+node --test scripts/roadmap.test.mjs scripts/build-roadmap.test.mjs
+node scripts/build-roadmap.mjs --check --require-complete
+node scripts/verify-planning.mjs --require-complete
 python scripts/extract-bible.py --check
-node scripts/context-handoff.mjs check roadmap/handoffs/initialisation.md
+node scripts/context-handoff.mjs check roadmap/handoffs/roadmap.md
 ```
 
 Le runtime Python embarqué et les limites de l'extraction sont documentés dans l'index produit. `node evals/run.mjs --dry` vérifie aussi la génération du prompt d'évaluation ; une campagne modèle réelle est distincte et reste à exécuter sur une surface compatible.

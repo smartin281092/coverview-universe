@@ -1,0 +1,1399 @@
+[
+  {
+    "id": "S-130",
+    "title": "Exporter et rectifier ses données avec une preuve de traitement",
+    "milestone": "M9",
+    "objective": "Un client demande un export de ses données ou leur rectification, suit le dossier et reçoit uniquement les objets auxquels il a droit.",
+    "depends_on": [
+      "S-013",
+      "S-081",
+      "S-082"
+    ],
+    "apps": [
+      "api",
+      "client",
+      "admin"
+    ],
+    "modules": [
+      "assurance"
+    ],
+    "mode": "local-fixtures",
+    "priority": 190,
+    "session_budget": 1,
+    "criteria": [
+      {
+        "criterion": "L’export assemble les objets autorisés, pièces et consentements avec provenance ; aucune donnée d’un autre membre ou conversation privée n’est ajoutée.",
+        "source_ranges": [
+          [
+            2516,
+            2517
+          ]
+        ],
+        "test": "Deux foyers, un objet partagé puis révoqué : comparer le manifeste et les fichiers exportés aux droits effectifs.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "La rectification préserve versions et preuves antérieures nécessaires ; le dossier montre propriétaire, prochaine action et résultat au demandeur.",
+        "source_ranges": [
+          [
+            2513,
+            2513
+          ]
+        ],
+        "test": "Modifier une donnée mutable puis une donnée historisée : nouvelle version liée, audit et tâche close ; aucune réécriture silencieuse d’un snapshot.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "Le téléchargement d’export est temporaire, audité et refusé après expiration ou révocation de session.",
+        "source_ranges": [
+          [
+            2512,
+            2512
+          ]
+        ],
+        "test": "Copier le lien vers une autre identité, attendre son expiration et tester une session révoquée : refus sans fuite.",
+        "oracle": "V2"
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.006",
+        "question": "Quel périmètre et quelle remise adopter pour les exports et rectifications ?",
+        "options": [
+          "Valider une matrice par catégorie de données et un téléchargement authentifié temporaire",
+          "Fournir une autre procédure documentée de remise et correction"
+        ],
+        "recommended": 0,
+        "blocks": "Catégories exportables, destinataires et durée de lien ; aucun délai légal inventé."
+      }
+    ],
+    "satellites": [
+      "data.md",
+      "storage.md",
+      "jobs.md",
+      "permissions.md",
+      "security.md",
+      "api.md",
+      "testing.md",
+      "frontend.md"
+    ],
+    "exclusions": [
+      "geo.md"
+    ],
+    "integrations": {
+      "simulated": [],
+      "real": [],
+      "activation_slices": []
+    },
+    "out_of_scope": [
+      "Effacement/rétention S-131 ; procédure légale et engagements validés S-137."
+    ],
+    "risks": [
+      "Export trop large : réévaluer l’autorisation à l’exécution et au téléchargement."
+    ],
+    "journey": [
+      "Demander export ou rectification depuis le profil.",
+      "Suivre le dossier et fournir une précision si requise.",
+      "Télécharger le paquet ou vérifier la correction et son historique."
+    ],
+    "data": [
+      "DataSubjectRequest, manifeste d’export versionné et référence vers Case/Activity existants.",
+      "Manifeste extensible des catégories privées déjà livrées ; chaque nouvelle slice déclare export/rétention et propriétaire, sans délai légal inventé."
+    ],
+    "permissions": [
+      "Propriétaire et agent explicitement habilité ; droits par objet au moment de l’export."
+    ],
+    "events_jobs": [
+      "Job d’export idempotent, événement de disponibilité et audit de téléchargement sans contenu sensible."
+    ],
+    "fixtures": [
+      "Deux personnes du même foyer sans partage automatique, document partagé révoqué, export expiré."
+    ],
+    "split_trigger": "Séparer la rectification multi-objets de l’export si un parcours complet ne tient pas dans la session."
+  },
+  {
+    "id": "S-131",
+    "title": "Appliquer la conservation et une demande de suppression contrôlée",
+    "milestone": "M9",
+    "objective": "Un client suit sa demande de suppression et un opérateur justifie ce qui est supprimé, conservé légalement ou bloqué, sans détruire les preuves financières.",
+    "depends_on": [
+      "S-130",
+      "S-132"
+    ],
+    "apps": [
+      "api",
+      "client",
+      "admin"
+    ],
+    "modules": [
+      "assurance"
+    ],
+    "mode": "local-fixtures",
+    "priority": 192,
+    "session_budget": 1,
+    "criteria": [
+      {
+        "criterion": "Une politique versionnée couvre identité, médical, contrats, conversations, audio, exports et backups, avec durée et fondement approuvés avant exécution.",
+        "source_ranges": [
+          [
+            2515,
+            2515
+          ],
+          [
+            2539,
+            2539
+          ],
+          [
+            2898,
+            2898
+          ],
+          [
+            2928,
+            2928
+          ]
+        ],
+        "test": "Horloge contrôlée : avant/après chaque échéance, legal hold, absence de politique ; aucun effacement au défaut arbitraire.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "La suppression est un workflow prévisualisé, autorisé et idempotent ; elle conserve les obligations d’audit/ledger sous la forme validée sans promettre un effacement impossible.",
+        "source_ranges": [
+          [
+            2516,
+            2516
+          ]
+        ],
+        "test": "Demande puis annulation avant exécution, retry après panne, enregistrement sous rétention légale : état final exact et preuve par catégorie.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "La restauration d’une sauvegarde rejoue les demandes exécutées et ne ressuscite pas des données effacées.",
+        "source_ranges": [
+          [
+            2523,
+            2523
+          ]
+        ],
+        "test": "Restaurer dans environnement isolé un backup antérieur à la suppression et réappliquer le journal de tombstones ; contrôler l’absence de données concernées.",
+        "oracle": "V2"
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.006",
+        "question": "Quelle politique de conservation et quelles exceptions appliquer ?",
+        "options": [
+          "Faire valider la matrice complète et les legal holds avant activation des purges",
+          "Fournir une politique déjà validée à transcrire et vérifier"
+        ],
+        "recommended": 0,
+        "blocks": "Suppression réelle, délais et conservation après restauration."
+      }
+    ],
+    "satellites": [
+      "data.md",
+      "storage.md",
+      "jobs.md",
+      "permissions.md",
+      "security.md",
+      "observability.md",
+      "testing.md"
+    ],
+    "exclusions": [
+      "geo.md"
+    ],
+    "integrations": {
+      "simulated": [],
+      "real": [],
+      "activation_slices": []
+    },
+    "out_of_scope": [
+      "Avis juridique S-137 ; aucune purge d’instance existante Infomaniak."
+    ],
+    "risks": [
+      "Les règles financières et preuves peuvent imposer une conservation : aucune durée ou anonymisation universelle inventée."
+    ],
+    "journey": [
+      "Demander la suppression et lire ses conséquences exactes.",
+      "Faire examiner les exceptions de conservation par un opérateur habilité.",
+      "Exécuter puis consulter le bilan par catégorie."
+    ],
+    "data": [
+      "RetentionPolicyVersion, demandes, legal holds, tombstones et traces minimisées.",
+      "La première activation vise les catégories déjà implémentées ; chaque domaine ajouté rejoint le manifeste et ses oracles de suppression/conservation."
+    ],
+    "permissions": [
+      "Client sur ses objets ; exception légale validée humainement ; worker scoped."
+    ],
+    "events_jobs": [
+      "Jobs de purge par catégorie, déduplication, compensation limitée et audit."
+    ],
+    "fixtures": [
+      "Conversation avec audio, pièce médicale, ledger lié, hold actif, backup ancien."
+    ],
+    "split_trigger": "Isoler le traitement des backups si la suppression des objets actifs est livrable et que la restauration demande une campagne supplémentaire."
+  },
+  {
+    "id": "S-132",
+    "title": "Reprendre un dossier après panne sans doubler les effets",
+    "milestone": "M9",
+    "objective": "Un opérateur voit les travaux en échec et relance un dossier long sans perdre son état ni répéter une signature, un envoi ou une opération de valeur.",
+    "depends_on": [
+      "S-021",
+      "S-023",
+      "S-082"
+    ],
+    "apps": [
+      "api",
+      "client",
+      "admin"
+    ],
+    "modules": [
+      "assurance"
+    ],
+    "mode": "local-fixtures",
+    "priority": 191,
+    "session_budget": 1,
+    "criteria": [
+      {
+        "criterion": "Les travaux longs exposent progression, retry borné et dead-letter queue ; un opérateur reprend le travail avec les mêmes clés d’idempotence.",
+        "source_ranges": [
+          [
+            2566,
+            2569
+          ]
+        ],
+        "test": "Couper un worker entre effet et accusé ; redémarrer et vérifier un seul effet, progression stable et reprise de DLQ sans action perdue.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "Les uploads appliquent quotas et antivirus ; les erreurs restent visibles dans le dossier et ne déclenchent pas l’analyse d’un fichier interdit.",
+        "source_ranges": [
+          [
+            2514,
+            2514
+          ],
+          [
+            2570,
+            2570
+          ]
+        ],
+        "test": "Fichier test antivirus inoffensif, archive trop volumineuse et dépassement quota : refus documenté, aucun job aval.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "Un backup chiffré est restauré dans une cible isolée et les objets/document references restent cohérents ; les objectifs de reprise sont mesurés.",
+        "source_ranges": [
+          [
+            2510,
+            2511
+          ],
+          [
+            2523,
+            2523
+          ]
+        ],
+        "test": "Restaurer DB et objets dans une nouvelle cible de test ; comparer comptes, hashes et liens, mesurer durée/perte sans revendiquer un objectif non convenu.",
+        "oracle": "V3"
+      },
+      {
+        "criterion": "Les alertes techniques portent un correlation ID et rejoignent un dossier opérationnel avec responsable et prochaine action.",
+        "source_ranges": [
+          [
+            2572,
+            2575
+          ],
+          [
+            2580,
+            2583
+          ]
+        ],
+        "test": "Injecter panne OCR, échec synchronisation et retard de job ; naviguer de l’alerte au job, puis au dossier et à sa prochaine action.",
+        "oracle": "V3"
+      }
+    ],
+    "questions": [
+      {
+        "ref": "project.recovery",
+        "question": "Quels objectifs de reprise et quelles cibles dédiées utiliser ?",
+        "options": [
+          "Mesurer sur environnement isolé puis faire approuver RPO/RTO et fréquence de sauvegarde avant production",
+          "Fournir les objectifs opérationnels déjà convenus"
+        ],
+        "recommended": 0,
+        "blocks": "Engagements de disponibilité, fréquence/stockage facturables et campagne distante."
+      }
+    ],
+    "satellites": [
+      "jobs.md",
+      "events.md",
+      "storage.md",
+      "security.md",
+      "observability.md",
+      "performance.md",
+      "testing.md"
+    ],
+    "exclusions": [
+      "geo.md"
+    ],
+    "integrations": {
+      "simulated": [
+        "Effets externes des dossiers de test"
+      ],
+      "real": [
+        "Workers et stockage de test"
+      ],
+      "activation_slices": [
+        "S-000c",
+        "S-140"
+      ]
+    },
+    "out_of_scope": [
+      "Campagnes cloud uniquement après S-000c ; validation finale de production S-140."
+    ],
+    "risks": [
+      "Une reprise sans idempotence peut doubler un effet : couper aux frontières transactionnelles dans les tests."
+    ],
+    "journey": [
+      "Constater un dossier bloqué et son alerte.",
+      "Diagnostiquer job et tentative via correlation ID.",
+      "Relancer ou restaurer en cible isolée.",
+      "Vérifier reprise et absence de doublon dans la timeline."
+    ],
+    "data": [
+      "Tentatives, clés d’idempotence, DLQ et rapports de restauration ; ne pas créer un second moteur de dossier."
+    ],
+    "permissions": [
+      "Relance/restauration réservées aux opérateurs désignés et aux ressources dédiées."
+    ],
+    "events_jobs": [
+      "Outbox et workers existants réutilisés ; compensation explicite des effets non annulables."
+    ],
+    "fixtures": [
+      "Crash après effet externe simulé, indisponibilité objet, message poison, fichier de test antivirus."
+    ],
+    "split_trigger": "Séparer restauration et reprise de jobs si la campagne dépasse une session, en conservant un résultat opérateur vérifiable pour chacune."
+  },
+  {
+    "id": "S-133",
+    "title": "Lire les parcours d’acquisition et de traitement avec leurs dénominateurs",
+    "milestone": "M9",
+    "objective": "Un responsable suit l’entrée anonyme, la sauvegarde et les dossiers LPP/documents, puis ouvre les événements expliquant chaque indicateur.",
+    "depends_on": [
+      "S-012",
+      "S-020",
+      "S-022",
+      "S-027",
+      "S-031",
+      "S-032",
+      "S-033"
+    ],
+    "apps": [
+      "api",
+      "client",
+      "admin",
+      "www"
+    ],
+    "modules": [
+      "assurance"
+    ],
+    "mode": "local-fixtures",
+    "priority": 983,
+    "session_budget": 1,
+    "criteria": [
+      {
+        "criterion": "Le dictionnaire définit événement, population, dénominateur, fenêtre, déduplication et consentement pour entrée, upload, reveal, Wallet, audit expert et partage.",
+        "source_ranges": [
+          [
+            2796,
+            2802
+          ]
+        ],
+        "test": "Jeu déterministe avec visite répétée, refus analytics, merge anonyme et lien partagé ; recompter chaque taux depuis les événements.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "Les indicateurs documentaires et LPP distinguent classification, matching, audit, cycle, validation humaine, réponse organisme et relance.",
+        "source_ranges": [
+          [
+            2804,
+            2810
+          ]
+        ],
+        "test": "Dossiers ouverts/terminés/abandonnés et une relance dupliquée : durée et compte exacts, drilldown vers dossier sans pièce privée.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "Les indicateurs de suivi montrent ouverture, action, retour Wallet, validation humaine, source vérifiée et résultat reproductible.",
+        "source_ranges": [
+          [
+            2812,
+            2817
+          ]
+        ],
+        "test": "Cohortes avec monitoring non activé et données manquantes : afficher non disponible distinct de zéro et ne pas compter une estimation comme preuve.",
+        "oracle": "V2"
+      }
+    ],
+    "questions": [],
+    "satellites": [
+      "observability.md",
+      "events.md",
+      "data.md",
+      "permissions.md",
+      "marketing-web.md",
+      "testing.md",
+      "frontend.md"
+    ],
+    "exclusions": [
+      "geo.md"
+    ],
+    "integrations": {
+      "simulated": [],
+      "real": [],
+      "activation_slices": []
+    },
+    "out_of_scope": [
+      "Métriques operations/IA/fidélité S-134 ; Retire S-073."
+    ],
+    "risks": [
+      "Taux trompeur après fusion d’identité : règle de déduplication documentée et testée."
+    ],
+    "journey": [
+      "Choisir une période et un indicateur.",
+      "Lire sa définition et son dénominateur.",
+      "Ouvrir la liste autorisée des parcours sources."
+    ],
+    "data": [
+      "Dictionnaire de métriques versionné et agrégats dérivés d’événements, sans deuxième source de vérité."
+    ],
+    "permissions": [
+      "Accès agrégé et drilldown limités au rôle ; anonymat et consentement préservés."
+    ],
+    "events_jobs": [
+      "Consommation dédupliquée des événements existants ; aucun tracker tiers par défaut."
+    ],
+    "fixtures": [
+      "Cohorte déterministe de visites et dossiers avec résultats attendus calculables à la main."
+    ],
+    "split_trigger": "Isoler les métriques de traitement LPP/documents si le dictionnaire et le premier parcours d’acquisition suffisent à la session."
+  },
+  {
+    "id": "S-134",
+    "title": "Mesurer opérations, copilotes et fidélité sans confusion de valeur",
+    "milestone": "M9",
+    "objective": "Un responsable relie pipeline, actions IA et engagements Miles à leurs dossiers et distingue les chiffres estimés des effets constatés.",
+    "depends_on": [
+      "S-088",
+      "S-100",
+      "S-109",
+      "S-118"
+    ],
+    "apps": [
+      "api",
+      "client",
+      "admin",
+      "partners",
+      "intelligence",
+      "exchange"
+    ],
+    "modules": [
+      "assurance"
+    ],
+    "mode": "local-fixtures",
+    "priority": 984,
+    "session_budget": 1,
+    "criteria": [
+      {
+        "criterion": "Le dashboard opérations définit source/étape/owner, conversion, prochaine action, inactivité, SLA, pipeline, signé, encaissé, objectifs et forecast 30/60/90.",
+        "source_ranges": [
+          [
+            2819,
+            2828
+          ]
+        ],
+        "test": "Rejouer cohortes avec stage changé, revenu annulé et commission non encaissée ; comparer agrégats et drilldowns aux lignes autorisées.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "Les métriques IA couvrent adoption, durée mesurée, latence/coût, tools, états d’actions, pièces jointes, voix corrigée et incidents.",
+        "source_ranges": [
+          [
+            2585,
+            2590
+          ],
+          [
+            2830,
+            2837
+          ]
+        ],
+        "test": "Dialogue avec action refusée, confirmée puis échouée, reprise et correction voix : comptes distincts et pas de temps économisé causal inventé.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "Les métriques couverture/pass/Miles/rewards relient citations, escalades, satisfaction, pass, soldes, passif, stocks/coûts, fraude et litiges.",
+        "source_ranges": [
+          [
+            2596,
+            2602
+          ],
+          [
+            2839,
+            2846
+          ]
+        ],
+        "test": "Dépense annulée et reward réservé puis expiré : rapprochement ledger/stock/passif ; absence de réponse satisfaction visible et corrélation explicitement non causale.",
+        "oracle": "V2"
+      }
+    ],
+    "questions": [],
+    "satellites": [
+      "observability.md",
+      "events.md",
+      "data.md",
+      "permissions.md",
+      "llm.md",
+      "billing.md",
+      "testing.md",
+      "frontend.md"
+    ],
+    "exclusions": [
+      "geo.md"
+    ],
+    "integrations": {
+      "simulated": [],
+      "real": [],
+      "activation_slices": []
+    },
+    "out_of_scope": [
+      "Modèles causaux d’effet rétention ; Retire S-073."
+    ],
+    "risks": [
+      "La pluralité des métriques impose des définitions avant affichage : intégrer des dictionnaires existants et auditer les écarts, sans fabriquer une nouvelle BI complète."
+    ],
+    "journey": [
+      "Consulter les indicateurs et leur définition.",
+      "Filtrer par période/périmètre permis.",
+      "Ouvrir les objets sources puis rapprocher la valeur constatée."
+    ],
+    "data": [
+      "Métriques dérivées ; registre de coûts et états existants, jamais recopiés en ledger concurrent."
+    ],
+    "permissions": [
+      "Les finances, conversations privées et contenus de foyer restent limités au rôle autorisé."
+    ],
+    "events_jobs": [
+      "Agrégations idempotentes, reprise après délai d’ingestion et provenance de calcul."
+    ],
+    "fixtures": [
+      "Pipeline fermé perdu, paiement retourné, LLM désactivé, pass révoqué, Miles repris, stock réservé expiré."
+    ],
+    "split_trigger": "Séparer reporting IA et rapprochement fidélité si leurs dictionnaires ne permettent pas une revue en une session."
+  },
+  {
+    "id": "S-135",
+    "title": "Éprouver les assistants contre les fuites et actions indues",
+    "milestone": "M9",
+    "objective": "Un utilisateur et un opérateur obtiennent des réponses sourcées et des actions contrôlées même face à un document hostile, un contexte privé ou un fournisseur indisponible.",
+    "depends_on": [
+      "S-039",
+      "S-093",
+      "S-100"
+    ],
+    "apps": [
+      "api",
+      "client",
+      "admin"
+    ],
+    "modules": [
+      "assurance"
+    ],
+    "mode": "local-fixtures",
+    "priority": 985,
+    "session_budget": 1,
+    "criteria": [
+      {
+        "criterion": "Le LLM passe exclusivement par une gateway et des outils typés autorisés ; les données utilisateur, documents et sorties outils ne deviennent pas des instructions.",
+        "source_ranges": [
+          [
+            2533,
+            2536
+          ]
+        ],
+        "test": "Corpus adversarial versionné : instruction injectée dans CGA/PDF/email, demande SQL/secrets et exfiltration ; aucune donnée hors droits ni action induite.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "Les effets sensibles exigent une confirmation du contenu exact courant, expirent si celui-ci change et laissent une trace sans chaîne de pensée privée.",
+        "source_ranges": [
+          [
+            2537,
+            2538
+          ],
+          [
+            2541,
+            2541
+          ]
+        ],
+        "test": "Changer destinataire ou montant après aperçu puis confirmer l’ancien : refus ; confirmer la bonne version une fois puis rejouer : un seul effet.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "Sans LLM, les parcours manuels fonctionnent ; réponses de couverture distinguent fait, inférence et déclaration, citent la bonne version et escaladent l’incertitude.",
+        "source_ranges": [
+          [
+            2540,
+            2540
+          ],
+          [
+            2543,
+            2550
+          ]
+        ],
+        "test": "LLM indisponible, contrat expiré, exclusion manquante et question ambiguë : UI manuelle utilisable, pas de garantie inventée, sources valides et dossier créé.",
+        "oracle": "V3"
+      }
+    ],
+    "questions": [],
+    "satellites": [
+      "llm.md",
+      "api.md",
+      "contracts.md",
+      "permissions.md",
+      "security.md",
+      "storage.md",
+      "testing.md"
+    ],
+    "exclusions": [
+      "geo.md"
+    ],
+    "integrations": {
+      "simulated": [
+        "Attaques et dossiers synthétiques"
+      ],
+      "real": [
+        "Gateway fournisseur de test autorisé"
+      ],
+      "activation_slices": [
+        "S-140"
+      ]
+    },
+    "out_of_scope": [
+      "Choix fournisseur S-100 ; activation et évaluation métier des conclusions S-136/S-137."
+    ],
+    "risks": [
+      "Les guards sont implantés dans les slices propriétaires ; cette campagne vérifie leur composition, elle ne reporte pas la sécurité à la fin."
+    ],
+    "journey": [
+      "Ouvrir un contexte client autorisé et joindre un document hostile de test.",
+      "Poser une question ou demander une action sensible.",
+      "Contrôler citations, refus, confirmation et fallback manuel."
+    ],
+    "data": [
+      "Jeu adversarial pseudonyme, décisions policy et résultats de campagne versionnés."
+    ],
+    "permissions": [
+      "Matrice multi-rôles, contexte minimal, aucun privilège dérivé du texte envoyé au modèle."
+    ],
+    "events_jobs": [
+      "Audit des propositions/confirmations/effets et incidents ; pas de conservation de raisonnement privé."
+    ],
+    "fixtures": [
+      "Prompt injection CGA, faux rôle admin, objet d’un autre foyer, callback rejoué, source contradictoire."
+    ],
+    "split_trigger": "Scinder la campagne couverture des tests d’actions opérateur si les échecs nécessitent une correction substantielle et un nouveau plan."
+  },
+  {
+    "id": "S-136",
+    "title": "Autoriser les résultats calculés après validation indépendante",
+    "milestone": "M9",
+    "objective": "Un responsable modèle examine des cas de référence, leurs paramètres et écarts, puis autorise une version de méthode dont les résultats restent explicables et reproductibles.",
+    "depends_on": [
+      "S-038",
+      "S-068",
+      "S-067"
+    ],
+    "apps": [
+      "api",
+      "client",
+      "admin"
+    ],
+    "modules": [
+      "assurance"
+    ],
+    "mode": "local-fixtures",
+    "priority": 986,
+    "session_budget": 1,
+    "criteria": [
+      {
+        "criterion": "Chaque indicateur publié a définition, unité, sens, version et cas indépendants ; source historique, hypothèse, simulation et projection restent distinguées.",
+        "source_ranges": [
+          [
+            2525,
+            2531
+          ]
+        ],
+        "test": "Comparer cas analytiques et jeux indépendants à l’implémentation ; refuser version sans méthode ou avec tolérance non approuvée.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "Les campagnes archivent moteur, données, hash, seed, N demandé et N exécuté, incertitude et conversions réel/nominal ; le modèle dégradé ne passe pas silencieusement.",
+        "source_ranges": [
+          [
+            2578,
+            2579
+          ],
+          [
+            2862,
+            2863
+          ],
+          [
+            2866,
+            2866
+          ]
+        ],
+        "test": "Réexécuter un snapshot, modifier une source, interrompre avant N cible : résultat cohérent, nouvelle version ou échec explicite selon cas.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "Une validation humaine compétente clôt les écarts d’accumulation, LPP, EMS, Lombard et décaissement avant qualification de résultat crédible.",
+        "source_ranges": [
+          [
+            2561,
+            2561
+          ],
+          [
+            2895,
+            2895
+          ]
+        ],
+        "test": "Dossier de revue des méthodes et résultats extrêmes avec décisions datées ; absence de sign-off maintient publication réelle bloquée.",
+        "oracle": "V5"
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.007",
+        "question": "Qui valide les méthodes et quelles tolérances constituent une acceptation ?",
+        "options": [
+          "Nommer un validateur compétent et approuver les cas/tolérances avant publication",
+          "Fournir une validation indépendante existante et vérifier sa correspondance exacte"
+        ],
+        "recommended": 0,
+        "blocks": "Statut validé et crédibilité publique des métriques ; pas la démonstration sur fixtures."
+      }
+    ],
+    "satellites": [
+      "data.md",
+      "testing.md",
+      "catalog.md",
+      "permissions.md",
+      "observability.md"
+    ],
+    "exclusions": [
+      "geo.md"
+    ],
+    "integrations": {
+      "simulated": [],
+      "real": [],
+      "activation_slices": []
+    },
+    "out_of_scope": [
+      "Définition des méthodes et sources S-038/S-068 ; aucun conseil personnalisé ou exécution d’investissement automatisée."
+    ],
+    "risks": [
+      "Un test qui recopie le moteur ne constitue pas une validation indépendante ; conserver cas analytiques et source distincte."
+    ],
+    "journey": [
+      "Choisir une version candidate et ses méthodes.",
+      "Comparer résultats et oracles indépendants.",
+      "Qualifier écarts/limites puis autoriser ou rejeter la version."
+    ],
+    "data": [
+      "ModelValidationRun, cas et sign-off liés à versions immuables."
+    ],
+    "permissions": [
+      "Auteur et validateur identifiés ; aucune auto-validation déduite de tests verts."
+    ],
+    "events_jobs": [
+      "Campagnes de validation et alertes drift ; pas de transaction financière."
+    ],
+    "fixtures": [
+      "Zéro rendement, inflation nulle/non nulle, décès couple, EMS, marge stressée, N partiel et changement de source."
+    ],
+    "split_trigger": "Si la campagne détecte des écarts métier, créer les correctifs bornés nécessaires et repasser la version concernée ; ne pas masquer la dette dans la release."
+  },
+  {
+    "id": "S-137",
+    "title": "Publier les conditions et consentements validés par parcours",
+    "milestone": "M9",
+    "objective": "Un utilisateur connaît les conditions réellement applicables à son mandat, ses données, son achat ou ses avantages et retrouve la version acceptée.",
+    "depends_on": [
+      "S-017",
+      "S-051",
+      "S-093",
+      "S-109",
+      "S-116",
+      "S-131"
+    ],
+    "apps": [
+      "api",
+      "client",
+      "admin",
+      "www",
+      "partners",
+      "intelligence",
+      "exchange"
+    ],
+    "modules": [
+      "assurance"
+    ],
+    "mode": "local-fixtures",
+    "priority": 987,
+    "session_budget": 1,
+    "criteria": [
+      {
+        "criterion": "Les mandats, contrats, consentements et conditions ont auteur, version, date et validation compétente avant publication ou utilisation réelle.",
+        "source_ranges": [
+          [
+            2517,
+            2518
+          ],
+          [
+            2897,
+            2898
+          ],
+          [
+            2906,
+            2907
+          ]
+        ],
+        "test": "Accepter une version, publier sa suivante et vérifier preuve antérieure inchangée ; version non validée non utilisable pour envoi ou achat.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "Les conditions des récompenses exposent règles, financement, reprises, passif et settlement ; assurances offertes et cashback attendent qualification explicite.",
+        "source_ranges": [
+          [
+            2556,
+            2558
+          ],
+          [
+            2931,
+            2935
+          ]
+        ],
+        "test": "Lire conditions depuis offre, pass et redemption ; retirer validation d’une nouvelle offre : activation refusée, historiques conservés.",
+        "oracle": "V3"
+      },
+      {
+        "criterion": "La revue juridique/commerciale identifie responsables, sous-traitants, conservation, droits et limites des modèles/assistants, puis signe chaque activation concernée.",
+        "source_ranges": [
+          [
+            2518,
+            2518
+          ],
+          [
+            2547,
+            2547
+          ],
+          [
+            2895,
+            2895
+          ]
+        ],
+        "test": "Matrice parcours → pièces validées → approbateur → version ; toute case manquante bloque seulement son activation.",
+        "oracle": "V5"
+      }
+    ],
+    "questions": [
+      {
+        "ref": "project.legal-review",
+        "question": "Quelle personne habilitée valide les textes et les activations concernées ?",
+        "options": [
+          "Faire valider une matrice de textes/version/parcours par les responsables juridique et métier désignés",
+          "Réutiliser des textes déjà validés avec preuve de leur périmètre applicable"
+        ],
+        "recommended": 0,
+        "blocks": "Publication juridique et commerciale, pas création des écrans fictifs."
+      }
+    ],
+    "satellites": [
+      "launch.md",
+      "marketing-web.md",
+      "seo.md",
+      "geo.md",
+      "catalog.md",
+      "data.md",
+      "permissions.md",
+      "security.md",
+      "testing.md"
+    ],
+    "exclusions": [],
+    "integrations": {
+      "simulated": [],
+      "real": [],
+      "activation_slices": []
+    },
+    "out_of_scope": [
+      "Aucune prestation juridique prétendue ; Exchange et offres restent bloqués à l’activation tant que leur validation manque."
+    ],
+    "risks": [
+      "Le présent plan ne remplace aucune revue juridique ; les formulations et obligations applicables sont à vérifier au moment de rédaction avec sources officielles."
+    ],
+    "journey": [
+      "Lire les conditions exactes au point d’engagement.",
+      "Donner ou refuser le consentement requis.",
+      "Retrouver preuve et version dans son espace."
+    ],
+    "data": [
+      "LegalDocumentVersion et Consent existants, matrice d’activation liée aux offres/méthodes."
+    ],
+    "permissions": [
+      "Publication réservée au rôle convenu ; consentement explicite et traçable, aucune case précochée présumée."
+    ],
+    "events_jobs": [
+      "Publication et acceptation auditables, retrait/expiration d’une validation."
+    ],
+    "fixtures": [
+      "Conditions expirées, consentement refusé, nouvelle version, offre juridiquement non validée."
+    ],
+    "split_trigger": "Découper par famille de contrats si des textes nouveaux demandent plusieurs validations ; garder la matrice complète des activations."
+  },
+  {
+    "id": "S-138",
+    "title": "Vérifier accès, mobile et parcours sur toutes les surfaces",
+    "milestone": "M9",
+    "objective": "Un testeur parcourt CoverView au clavier et sur mobile avec chaque rôle et confirme la cohérence des refus, états et interfaces entre les apps.",
+    "depends_on": [
+      "S-034",
+      "S-071",
+      "S-117",
+      "S-116",
+      "S-135"
+    ],
+    "apps": [
+      "api",
+      "client",
+      "admin",
+      "www",
+      "partners",
+      "intelligence",
+      "exchange"
+    ],
+    "modules": [
+      "assurance"
+    ],
+    "mode": "local-fixtures",
+    "priority": 988,
+    "session_budget": 1,
+    "criteria": [
+      {
+        "criterion": "La matrice inter-surfaces exerce identités, foyers, organisations et rôles sur accès direct API et navigation ; absence d’autorisation produit un refus sûr.",
+        "source_ranges": [
+          [
+            2512,
+            2513
+          ],
+          [
+            2854,
+            2856
+          ]
+        ],
+        "test": "Deux utilisateurs, foyer non partagé, partenaire et opérateur : tester lecture/écriture, URL devinée, rôle client falsifié et accès révoqué.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "Les parcours restent utilisables au clavier et sur tailles mobiles ; focus, erreurs, chargement et fermeture des modals/sheets ne perdent pas la saisie.",
+        "source_ranges": [
+          [
+            2563,
+            2565
+          ]
+        ],
+        "test": "Campagne navigateur par surface et composant réutilisé : tabulation, lecteur de libellés, zoom, retour, réseau coupé et reprise.",
+        "oracle": "V3"
+      },
+      {
+        "criterion": "La charte et le preset shadcn sont cohérents ; seuls les FAQ déplient les contenus, les autres détails ouvrent modal/sheet/popover ou page distincte.",
+        "source_ranges": [],
+        "test": "Comparer les parcours représentatifs à docs/brand.md et FRONT-14 ; contrôler focus et contrastes, logo et tokens sans modifier les assets originaux.",
+        "oracle": "V3"
+      },
+      {
+        "criterion": "Les familles API illustrées par la bible possèdent des contrats exécutables cohérents avec leurs consommateurs ; une évolution ou projection incompatible est détectée.",
+        "source_ranges": [
+          [
+            2386,
+            2387
+          ],
+          [
+            2576,
+            2576
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Exécuter les tests contractuels API/app par famille existante du manifeste ; comparer schémas et versions, rejeter payload invalide et fuite de champ interne. Les routes illustratives de la bible ne figent pas une URL non décidée."
+      }
+    ],
+    "questions": [],
+    "satellites": [
+      "frontend.md",
+      "design.md",
+      "brand.md",
+      "auth.md",
+      "permissions.md",
+      "security.md",
+      "testing.md",
+      "marketing-web.md"
+    ],
+    "exclusions": [
+      "geo.md"
+    ],
+    "integrations": {
+      "simulated": [],
+      "real": [],
+      "activation_slices": []
+    },
+    "out_of_scope": [
+      "Corrections majeures réinjectées dans une slice bornée ; les exigences a11y et permissions sont appliquées dès chaque slice."
+    ],
+    "risks": [
+      "Les surfaces nombreuses nécessitent une couverture représentative complétée par tests de composants ; aucun “toutes testées” sans manifeste exécuté."
+    ],
+    "journey": [
+      "Choisir rôle et surface dans le manifeste de campagne.",
+      "Accomplir un parcours au clavier puis sur mobile.",
+      "Tester refus par UI et appel direct.",
+      "Consigner l’écart avec reproduction et slice propriétaire."
+    ],
+    "data": [
+      "Manifeste de campagne et preuves par rôle/surface, sans screenshots de données réelles."
+    ],
+    "permissions": [
+      "Matrice de droits approuvée dans les plans propriétaires ; aucune nouvelle permission créée par la campagne."
+    ],
+    "events_jobs": [
+      "Vérification des traces d’accès ; aucun nouvel événement produit requis."
+    ],
+    "fixtures": [
+      "Personas synthétiques de chaque rôle, contenus longs de test, API indisponible et accès révoqué."
+    ],
+    "split_trigger": "Séparer campagnes surfaces publiques/client et portails professionnels si le manifeste dépasse une session."
+  },
+  {
+    "id": "S-139",
+    "title": "Accepter la v1 complète par les workflows et les invariants de la bible",
+    "milestone": "M9",
+    "objective": "Le porteur du projet suit les workflows A à M avec preuves liées et peut distinguer chaque capacité réalisée, validée sur fixtures et réellement intégrée.",
+    "depends_on": [
+      "S-035",
+      "S-036",
+      "S-037",
+      "S-040",
+      "S-041",
+      "S-042",
+      "S-073",
+      "S-089",
+      "S-090",
+      "S-102",
+      "S-109",
+      "S-111",
+      "S-113",
+      "S-116",
+      "S-130",
+      "S-131",
+      "S-132",
+      "S-133",
+      "S-134",
+      "S-135",
+      "S-136",
+      "S-137",
+      "S-138",
+      "S-122"
+    ],
+    "apps": [
+      "api",
+      "client",
+      "admin",
+      "www",
+      "partners",
+      "intelligence",
+      "exchange"
+    ],
+    "modules": [
+      "assurance"
+    ],
+    "mode": "release",
+    "priority": 989,
+    "session_budget": 1,
+    "criteria": [
+      {
+        "criterion": "Identité, permissions serveur, audit, provenance, snapshots et fusion anonyme sont vérifiés par preuves existantes et un parcours de composition.",
+        "source_ranges": [
+          [
+            2854,
+            2859
+          ]
+        ],
+        "test": "Référencer les preuves de slices, puis créer anonyme → compte → partage révoqué → relecture snapshot ; aucun objet sans ID/provenance.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "Exceptions, notification bloquée, distinction historique/projection/garantie, réel/nominal, bonne surface, métriques et N exécuté restent exacts de bout en bout.",
+        "source_ranges": [
+          [
+            2860,
+            2866
+          ]
+        ],
+        "test": "Parcours avec job incomplet et projection à N partiel ; contrôler écran, notification, version et événement sans repasser toutes les campagnes unitaires.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "Dossiers, timeline, drilldown, revenus et synchronisation disposent de responsable/prochaine action et preuves distinctes attendu/signé/facturé/encaissé.",
+        "source_ranges": [
+          [
+            2867,
+            2871
+          ]
+        ],
+        "test": "Une opportunité avec email non rapproché devient dossier, se résout et produit un revenu ; chaque état source est inspectable.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "Actions IA, contextes, pièces et voix sont autorisés, prévisualisés, tracés et compensés quand possible ; le mode manuel fonctionne sans fournisseur.",
+        "source_ranges": [
+          [
+            2872,
+            2878
+          ]
+        ],
+        "test": "Réutiliser campagne S-135 et prouver un workflow opérateur complet voix → brouillon édité → confirmation exacte → objet lié.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "Couverture, pass, ledger, redemption et settlement satisfont sources/prudence, escalade, jeton opaque, atomicité, reprise et activation validée.",
+        "source_ranges": [
+          [
+            2879,
+            2885
+          ]
+        ],
+        "test": "Question incertaine → dossier humain puis reward réservé/annulé ; contrôler citations, droits, stock et bilan Miles sans double effet.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "Retire partage la base et le Wallet, couvre R1–R13, caisses, EMS, métriques, N, snapshots, droits commerciaux et monitoring sans ordre financier.",
+        "source_ranges": [
+          [
+            2886,
+            2895
+          ]
+        ],
+        "test": "Réutiliser matrice R1–R13 et campagne S-136 ; Check → Plan → scénario → Care → Review → Wallet avec conditions validées.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "Chacun des workflows A–M a une trace entrée/action/résultat/exception, ses slices propriétaires et la preuve d’intégration réelle requise.",
+        "source_ranges": [
+          [
+            3058,
+            3060
+          ]
+        ],
+        "test": "Ouvrir la matrice workflow générée et les preuves : toute lacune crée un reste à faire, jamais une v1 déclarée complète par nombre de fichiers.",
+        "oracle": "V5"
+      },
+      {
+        "criterion": "Le manifeste des données couvre tous les domaines réellement livrés ; export, rectification, conservation et suppression appliquent droits et politiques approuvées à chaque catégorie.",
+        "source_ranges": [
+          [
+            2515,
+            2517
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Comparer le manifeste aux modules persistants et tester les adaptateurs de chaque catégorie, y compris conversations/audio, Retire, ledger, partenaires et Exchange ; aucune catégorie omise et aucun effacement de preuve sous hold."
+      }
+    ],
+    "questions": [],
+    "satellites": [
+      "launch.md",
+      "testing.md",
+      "program.md",
+      "permissions.md",
+      "security.md",
+      "observability.md",
+      "data.md"
+    ],
+    "exclusions": [
+      "geo.md"
+    ],
+    "integrations": {
+      "simulated": [
+        "Données personnelles de recette seulement"
+      ],
+      "real": [
+        "Intégrations testées par les slices dédiées"
+      ],
+      "activation_slices": [
+        "S-140"
+      ]
+    },
+    "out_of_scope": [
+      "Pas de grand développement final ; corrections retournent aux parcours responsables."
+    ],
+    "risks": [
+      "La couverture documentaire n’est pas une implémentation : le verdict dépend exclusivement des preuves d’exécution."
+    ],
+    "journey": [
+      "Lire le manifeste de preuves par workflow.",
+      "Rejouer les liaisons entre domaines avec personas de test.",
+      "Qualifier les écarts et vérifier les conditions d’activation.",
+      "Soumettre la v1 avec ledger exact au porteur."
+    ],
+    "data": [
+      "Manifest de preuves lié aux commits, versions de méthode et identifiants de campagne ; source de preuve dans les journaux."
+    ],
+    "permissions": [
+      "Aucune augmentation de droits pour faciliter une démo."
+    ],
+    "events_jobs": [
+      "Contrôler les événements et jobs existants sur parcours composés."
+    ],
+    "fixtures": [
+      "Jeu cohérent A–M multi-rôles, erreurs/annulations/reprises et comptes tiers de test autorisés."
+    ],
+    "split_trigger": "Si les preuves préparées par chaque slice ne permettent pas cette revue en une session, isoler les workflows manquants et réviser la campagne au lieu d’étendre une session indéfiniment."
+  },
+  {
+    "id": "S-140",
+    "title": "Ouvrir CoverView au public sur le cloud dédié et vérifier le rollback",
+    "milestone": "M9",
+    "objective": "Un client réel accède à coverview.ch et aux capacités validées sur les seules ressources Infomaniak dédiées, avec alertes, sauvegardes et retour arrière éprouvés.",
+    "depends_on": [
+      "S-000c",
+      "S-139"
+    ],
+    "apps": [
+      "api",
+      "client",
+      "admin",
+      "www",
+      "partners",
+      "intelligence",
+      "exchange"
+    ],
+    "modules": [
+      "assurance"
+    ],
+    "mode": "release",
+    "priority": 2000,
+    "session_budget": 1,
+    "criteria": [
+      {
+        "criterion": "Le manifeste de release bloque chaque intégration ou offre dépourvue de credentials réels autorisés, validation métier et preuve de recette ; aucun mock ne passe pour un service actif.",
+        "source_ranges": [
+          [
+            2895,
+            2895
+          ]
+        ],
+        "test": "Build de release avec provider manquant ou AUTH_MODE fixture : refus explicite ; comparer flags et preuves avant activation.",
+        "oracle": "V2"
+      },
+      {
+        "criterion": "La release utilise le commit et les images testés ; diff DNS/TLS et ressources préserve toutes les instances existantes et leurs dépendances.",
+        "source_ranges": [],
+        "test": "Comparer inventaires IDs avant/après, endpoints HTTPS et enregistrements non concernés ; vérifier le certificat et la résolution de coverview.ch.",
+        "oracle": "V3"
+      },
+      {
+        "criterion": "Un parcours client réel autorisé, une alerte d’échec et une restauration/rollback sont observés sur les nouvelles ressources avec procédure opérable.",
+        "source_ranges": [
+          [
+            2523,
+            2523
+          ],
+          [
+            2572,
+            2575
+          ]
+        ],
+        "test": "Compte de recette, login WorkOS, objet test marqué puis panne contrôlée/rollback ; rapport santé et preuve de récupération.",
+        "oracle": "V3"
+      },
+      {
+        "criterion": "L’ouverture commerciale et la disponibilité des fonctionnalités sont approuvées avec conditions, limites connues et procédure de support visibles.",
+        "source_ranges": [
+          [
+            2517,
+            2518
+          ]
+        ],
+        "test": "Revue de la release et de son registre de validations ; activation publique uniquement au périmètre explicitement autorisé.",
+        "oracle": "V5"
+      }
+    ],
+    "questions": [
+      {
+        "ref": "project.release",
+        "question": "Autoriser l’ouverture du commit testé et des capacités validées sur coverview.ch ?",
+        "options": [
+          "Approuver le manifeste, le diff DNS et les seules ressources dédiées après la recette complète",
+          "Conserver l’environnement de test privé jusqu’à une date d’ouverture choisie"
+        ],
+        "recommended": 0,
+        "blocks": "Ouverture publique, DNS final et activation commerciale effective ; l’autorisation de planifier ne vaut pas lancement."
+      }
+    ],
+    "satellites": [
+      "hosting.md",
+      "delivery.md",
+      "launch.md",
+      "auth.md",
+      "environment.md",
+      "security.md",
+      "observability.md",
+      "testing.md"
+    ],
+    "exclusions": [
+      "geo.md"
+    ],
+    "integrations": {
+      "simulated": [],
+      "real": [
+        "WorkOS coverview",
+        "Infomaniak Public Cloud/Horizon et DNS coverview.ch",
+        "Fournisseurs approuvés dans le manifeste"
+      ],
+      "activation_slices": []
+    },
+    "out_of_scope": [
+      "Toute instance préexistante ; envois commerciaux à une liste de tiers non autorisée."
+    ],
+    "risks": [
+      "Le domaine peut déjà porter d’autres services : contrôler le diff exact et conserver leur configuration."
+    ],
+    "journey": [
+      "Vérifier le manifeste de release et préparer le diff de déploiement.",
+      "Déployer sur ressources dédiées et contrôler le parcours réel.",
+      "Vérifier alertes/rollback et absence de mutation de l’existant.",
+      "Ouvrir les capacités validées et consigner l’état de production."
+    ],
+    "data": [
+      "Manifest versionné, IDs dédiés/protégés et registre d’activation sans secrets."
+    ],
+    "permissions": [
+      "Droits cloud limités au périmètre autorisé ; accès client réel WorkOS."
+    ],
+    "events_jobs": [
+      "Alertes et procédures d’exploitation actives, tests d’envoi bornés aux destinataires autorisés."
+    ],
+    "fixtures": [
+      "Objets de recette non sensibles sous comptes autorisés ; pas de faux clients commerciaux."
+    ],
+    "split_trigger": "En présence d’un incident ou d’une preuve manquante, maintenir la release privée et créer le correctif identifié avant une nouvelle tentative."
+  }
+]

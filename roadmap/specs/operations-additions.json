@@ -1,0 +1,231 @@
+[
+  {
+    "id": "S-122",
+    "title": "Interroger ses objets Partners et Intelligence et suivre une tâche d’analyse",
+    "milestone": "M8",
+    "objective": "Le partenaire ou professionnel pose une question sur son périmètre et suit une tâche reliée à ses objets autorisés grâce au chat et au registre communs.",
+    "depends_on": [
+      "S-081",
+      "S-110",
+      "S-112",
+      "S-121"
+    ],
+    "apps": [
+      "api",
+      "partners",
+      "intelligence",
+      "admin"
+    ],
+    "modules": [
+      "ai-orchestration",
+      "partners",
+      "intelligence",
+      "workflow"
+    ],
+    "mode": "integration",
+    "priority": 822,
+    "session_budget": 1,
+    "journey": [
+      "Depuis un lead/avantage Partners ou une analyse Intelligence, ouvrir le chat partagé et vérifier son contexte explicite.",
+      "Poser une question puis ouvrir les lignes ou sources autorisées ; les détails hors périmètre restent refusés.",
+      "Préparer une action permise ou créer une tâche d’analyse, suivre son état et retrouver le même objet dans le workflow commun."
+    ],
+    "data": [
+      "ContextBinding avec surface, identité, partenaire/espace professionnel et références canoniques autorisées ; conversation et policy existantes réutilisées.",
+      "Tâche d’analyse du Core liée au run/rapport/dossier autorisé, avec responsable, échéance et prochaine action selon template approuvé.",
+      "Proposition/action/confirmation/résultat via registre existant, sans seconde mémoire IA ni duplication de l’analyse ou du ledger."
+    ],
+    "permissions": [
+      "Le chat Partners ne dépasse aucun droit de suivi commercial, avantage ou commission propre déjà approuvé ; pas de données médicales, patrimoniales ou solde détaillé.",
+      "Intelligence lit uniquement analyses, sources et plans explicitement autorisés ; présence d’un rôle professionnel ne crée aucun accès au foyer.",
+      "Lectures, pièces, citations, actions et tâches recontrôlent la policy serveur, y compris après changement de surface et retrait de droit."
+    ],
+    "events_jobs": [
+      "Messages/actions et tâches passent par événements communs S094/S095/S081 ; aucune queue, mémoire ou registre parallèle par frontend."
+    ],
+    "fixtures": [
+      "Partenaire A et B avec leads distincts d’un même client ; commission propre visible mais détail patrimonial interdit.",
+      "Professionnel avec un run synthétique autorisé et un plan de foyer non partagé ; source devenue inaccessible après ouverture du chat.",
+      "Tâche d’analyse ouverte depuis Intelligence puis reprise Admin ; injection dans document et commande de paiement non autorisée."
+    ],
+    "integrations": {
+      "simulated": [],
+      "real": [
+        "LLM et registre S098/S121 déjà connectés",
+        "Objets Partners/Intelligence et tâches Core réellement persistants"
+      ],
+      "activation_slices": []
+    },
+    "criteria": [
+      {
+        "criterion": "Le même chat et registre sont rendus dans Partners et Intelligence avec contexte actif visible, sans réimplémenter le copilote global ni élargir ses permissions.",
+        "source_ranges": [
+          [
+            2286,
+            2291
+          ],
+          [
+            524,
+            524
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Ouvrir un lead Partners puis un run Intelligence ; même contrat conversation/action et contexte exact affiché, aucun mode Admin implicite."
+      },
+      {
+        "criterion": "L’assistant Partners répond uniquement sur les objets autorisés : leads/statuts/commissions propres et avantages/transactions propres ; les données du client non nécessaires sont absentes même des extraits et citations.",
+        "source_ranges": [
+          [
+            2290,
+            2290
+          ],
+          [
+            2171,
+            2179
+          ],
+          [
+            2181,
+            2185
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Demander le montant dû au partenaire A puis les actifs du client et les commissions de B : première réponse renvoie ses lignes exactes, les deux autres sont refusées sans fuite."
+      },
+      {
+        "criterion": "L’assistant Intelligence interroge les analyses autorisées avec sources et snapshots communs, distingue résultat/inférence et ne peut publier une correction ou accéder à un foyer sans droit explicite.",
+        "source_ranges": [
+          [
+            2291,
+            2291
+          ],
+          [
+            2193,
+            2196
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Expliquer le run synthétique autorisé, ouvrir ses sources puis demander le plan du foyer non partagé ; réponse sourcée pour le premier et refus du second, correction éventuelle en proposition gouvernée."
+      },
+      {
+        "criterion": "Le professionnel crée et suit une tâche d’analyse autorisée dans le workflow commun, avec contexte run/rapport, responsable, échéance, état et prochaine action ; aucune tâche parallèle n’est créée par le chat.",
+        "source_ranges": [
+          [
+            2262,
+            2267
+          ],
+          [
+            2092,
+            2093
+          ],
+          [
+            2030,
+            2038
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Créer une tâche de revue d’analyse depuis Intelligence, retrouver le même Task ID en Admin et en chat contextuel, puis la compléter selon les conditions approuvées."
+      },
+      {
+        "criterion": "Brouillons et actions suivent le registre déjà validé et ses confirmations exactes ; demander publication, paiement, adjustment ou action externe depuis une surface limitée n’accorde aucun droit supplémentaire.",
+        "source_ranges": [
+          [
+            2099,
+            2105
+          ],
+          [
+            2534,
+            2537
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Un partenaire demande de payer sa commission ou d’ajuster ses Miles : refus faute de permission ; une tâche autorisée utilise le même aperçu/payload/idempotence que l’interface structurée."
+      },
+      {
+        "criterion": "Conversations et pièces respectent la portée professionnelle et la rétention approuvée ; changement de surface, retrait de droit et injection dans une source ne permettent aucune lecture/action inter-clients.",
+        "source_ranges": [
+          [
+            2131,
+            2131
+          ],
+          [
+            2534,
+            2541
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Retirer l’accès au run après réponse puis rouvrir citation/historique ; accès désormais refusé, document adversarial incapable d’ouvrir le dossier d’un autre client."
+      },
+      {
+        "criterion": "Une commande reprise depuis Partners, Intelligence ou Admin autorisé conserve ses identifiants, citations, statut proposé/exécuté et résultat sans double tâche ou calcul de montant libre par le LLM.",
+        "source_ranges": [
+          [
+            2088,
+            2088
+          ],
+          [
+            2125,
+            2130
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Rejouer la même commande de tâche après timeout puis consulter depuis Admin ; une tâche, un résultat, mêmes sources et montants du service propriétaire."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.008",
+        "question": "Quelle portée métier explicite autoriser aux assistants Partners et Intelligence au-delà des lectures déjà permises ?",
+        "options": [
+          "Conserver strictement leurs droits existants, avec tâches d’analyse sur objets explicitement partagés",
+          "Accorder des mutations supplémentaires seulement après ajout à la matrice de droits approuvée"
+        ],
+        "recommended": 0,
+        "blocks": "Nouvelles mutations et tâches professionnelles dont la permission n’est pas encore définie ; ne pas redemander les droits déjà validés par S110/S112."
+      },
+      {
+        "ref": "bible.question.012",
+        "question": "Quel partage de conversation professionnelle autoriser si ce cas n’a pas encore été tranché ?",
+        "options": [
+          "Conversation personnelle ou liée à l’objet explicitement partagé, sans accès automatique de toute l’équipe",
+          "Partage d’équipe selon une matrice explicite approuvée pour les objets concernés"
+        ],
+        "recommended": 0,
+        "blocks": "Partage d’historique professionnel nouveau uniquement ; fournisseur et rétention déjà validés sont réutilisés."
+      },
+      {
+        "ref": "bible.question.013",
+        "question": "Quel sous-ensemble du registre existant rendre disponible aux nouvelles surfaces ?",
+        "options": [
+          "Lectures autorisées, brouillons et tâches d’analyse permises, tous effets sensibles conservant leurs politiques existantes",
+          "Autres actions nommées après validation explicite des schémas, droits et confirmations par surface"
+        ],
+        "recommended": 0,
+        "blocks": "Actions nouvelles dont l’exposition Partners/Intelligence n’a pas été approuvée ; aucun nouveau pouvoir financier implicite."
+      }
+    ],
+    "satellites": [
+      "llm.md",
+      "permissions.md",
+      "security.md",
+      "data.md",
+      "api.md",
+      "frontend.md",
+      "i18n.md",
+      "events.md",
+      "testing.md"
+    ],
+    "exclusions": [
+      "marketing-web.md",
+      "seo.md",
+      "geo.md",
+      "billing.md"
+    ],
+    "risks": [
+      "Un assistant partagé pourrait hériter du contexte Admin : surface et objet restent des entrées de policy serveur, jamais un rôle choisi par le navigateur."
+    ],
+    "out_of_scope": [
+      "Aucune nouvelle mutation de paiement, publication catalogue ou droit de foyer ; les services et le registre existants restent propriétaires."
+    ],
+    "split_trigger": "Si les deux surfaces ne tiennent pas dans une session, séparer Partners puis Intelligence à leur parcours question sourcée→action autorisée sans reconstruire le chat ou le registre."
+  }
+]

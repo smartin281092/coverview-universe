@@ -1,5 +1,7 @@
 # Reprise de travail — initialisation
 
+État historique, remplacé pour la reprise courante par [le checkpoint roadmap](roadmap.md). Les faits ci-dessous décrivent la fin de l'initialisation.
+
 Créé : 2026-09-05
 Contexte observé : non disponible ; checkpoint préventif, aucun seuil de 70 % mesuré.
 

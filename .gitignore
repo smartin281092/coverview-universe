@@ -22,6 +22,9 @@ test-results/
 # Preview locale — ENV-08 : logs et PID sont du transitoire local
 .preview/
 
+# Brouillons de génération locaux, hors artefacts canoniques de roadmap
+.planning-local/
+
 # Logs
 *.log
 npm-debug.log*

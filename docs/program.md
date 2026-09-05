@@ -186,3 +186,9 @@ La première phase utilise les données fictives selon ENV-09. Les oracles sur f
 
 Pour chaque prompt : objectif et non-objectifs de la slice, IDs de couverture, sources exactes, dépendances, modes réel/simulé, parcours nominal et refus, DoD mesurable, budget, état de reprise et autorisation effective. Le seuil et le mécanisme de reprise de session relèvent de `docs/codex.md`.
 
+## PROG-22 — Sources de rédaction et vues générées CoverView
+
+La roadmap détaillée applique DOC-10 avec des sources de rédaction dans `roadmap/specs/*.json` et un état durable dans `roadmap/state.json`. Les plans, prompts, index, couverture et backlog de PROG-01/PROG-06 sont des vues versionnées générées par `scripts/build-roadmap.mjs`. Le journal de vérification du plan provient de l'état et n'est jamais écrasé par la génération. Modifier ces sources puis régénérer les vues ; ne pas maintenir une seconde version manuelle.
+
+Le statut par défaut est `specified`, sans approbation. Une autorisation et les réponses aux questions du plan sont nécessaires avant `ready` ; leur présence structurelle est contrôlée, leur vérité doit être vérifiée par l'agent. Une preuve de décision déjà acquise s'applique sans nouvelle demande utilisateur. Le [mode d'emploi](../roadmap/README.md) décrit le format de l'état, les liens complémentaires à la source et les vérifications. La couverture complète reste une preuve documentaire, distincte des résultats d'implémentation de PROG-08.
+

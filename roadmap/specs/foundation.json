@@ -1,0 +1,437 @@
+[
+  {
+    "id": "S-000a",
+    "title": "Démarrer un socle local reproductible et une preview fictive",
+    "milestone": "M0",
+    "objective": "Le développeur démarre CoverView sur une machine propre, accède aux coquilles des quatre surfaces initiales et peut rejouer les vérifications et les données de démonstration sans service externe.",
+    "depends_on": [],
+    "apps": [
+      "api",
+      "client",
+      "admin",
+      "www"
+    ],
+    "modules": [
+      "platform"
+    ],
+    "mode": "foundation",
+    "priority": 0,
+    "session_budget": 1,
+    "journey": [
+      "Copier le scaffold livré et configurer les noms CoverView.",
+      "Démarrer l’infrastructure locale et les quatre applications minimales.",
+      "Rejouer migration/seeds puis ouvrir les coquilles.",
+      "Exécuter les contrôles et consigner la procédure reproductible."
+    ],
+    "data": [
+      "Schéma technique minimal ; aucune matrice de foyer ni modèle de catalogue complet créé prématurément.",
+      "Seeds techniques déterministes et personas locales ; les rôles produit détaillés arrivent aux slices consommatrices."
+    ],
+    "permissions": [
+      "Refus de tout mode persona fictive hors local/development.",
+      "Aucune route métier publique ; le health check ne divulgue ni secrets ni détails de connexion."
+    ],
+    "events_jobs": [
+      "Aucun worker métier ni gateway Socket.IO à créer à ce stade."
+    ],
+    "fixtures": [
+      "Deux identités fictives indépendantes ; coquilles vides ; API indisponible pour vérifier état erreur."
+    ],
+    "integrations": {
+      "simulated": [
+        "Authentification de preview strictement locale",
+        "Toutes les API externes"
+      ],
+      "real": [
+        "PostgreSQL/Redis/MinIO/Mailpit locaux"
+      ],
+      "activation_slices": [
+        "S-000b",
+        "S-000c"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Le monorepo copie les configurations livrées, installe les versions stables vérifiées et expose des commandes exécutables de développement, qualité, build et frontières.",
+        "source_ranges": [],
+        "oracle": "V1",
+        "test": "Depuis un checkout propre : pnpm install, pnpm lint, pnpm typecheck, pnpm build et pnpm boundaries réussissent sans placeholder de package."
+      },
+      {
+        "criterion": "Fastify expose une API de santé et les trois surfaces www/client/admin consomment seulement les interfaces prévues ; aucun frontend ne dispose de credential PostgreSQL.",
+        "source_ranges": [
+          [
+            17,
+            18
+          ],
+          [
+            219,
+            228
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Un contrôle des dépendances et une recherche de variables sensibles dans les bundles empêchent un import DB dans les frontends."
+      },
+      {
+        "criterion": "Postgres, Redis, MinIO et Mailpit locaux démarrent dans le compose du dépôt ; la migration minimale technique et les seeds se rejouent sans doublon.",
+        "source_ranges": [
+          [
+            2510,
+            2511
+          ]
+        ],
+        "oracle": "V1",
+        "test": "Démarrage et redémarrage du compose local ; migration à blanc et deux seeds successifs laissent le même nombre de données fictives, sans reset distant."
+      },
+      {
+        "criterion": "Le mode de persona fictive et les adaptateurs sans effet externe sont réservés à local/development et la validation de configuration refuse ce mode en environnement déployé.",
+        "source_ranges": [
+          [
+            2577,
+            2577
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Les configurations local-fixture et production-demo sont testées : la première démarre, la seconde refuse au boot ; aucun mot de passe connu déployé."
+      },
+      {
+        "criterion": "Les coquilles Vite et Astro, la preview Windows détachée et les états vide/erreur sont visibles ; les modèles de données métier et moteurs n’apparaissent qu’au premier parcours consommateur.",
+        "source_ranges": [
+          [
+            2563,
+            2564
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Ouvrir www/client/admin, vérifier liens et accessibilité clavier minimale, démarrer/arrêter deux fois la preview sans créer de processus en double."
+      },
+      {
+        "criterion": "Le pipeline CI reproduit les contrôles locaux et l’exemple d’environnement est synchronisé au schéma, sans secret réel ni dépendance cachée.",
+        "source_ranges": [],
+        "oracle": "V2",
+        "test": "Contrôler variables requises/manquantes et pipeline sur checkout vierge ; chaque commande documentée a son script exécutable."
+      }
+    ],
+    "questions": [],
+    "satellites": [
+      "architecture.md",
+      "backend.md",
+      "contracts.md",
+      "environment.md",
+      "dependencies.md",
+      "testing.md",
+      "delivery.md",
+      "design.md",
+      "frontend.md"
+    ],
+    "exclusions": [
+      "billing.md",
+      "llm.md",
+      "realtime.md"
+    ],
+    "risks": [
+      "Un bootstrap gigantesque rendrait la revue illisible : garder uniquement api/client/admin/www minimaux ; les portails supplémentaires apparaîtront avec leur première slice.",
+      "Le template preview peut imposer password : adapter son contrat au moyen d’accès fixture, sans afficher de credential WorkOS."
+    ],
+    "out_of_scope": [
+      "Login WorkOS S-000b ; déploiement S-000c ; données produit et charte complète S-010 et parcours consommateurs."
+    ],
+    "split_trigger": "Si le parcours ne passe pas en revue après une session principale, isoler le résultat utilisateur restant et réviser le plan ; ne pas multiplier les reprises sans borne."
+  },
+  {
+    "id": "S-000b",
+    "title": "Se connecter avec WorkOS et retrouver son espace protégé",
+    "milestone": "M0",
+    "objective": "Un utilisateur du projet WorkOS coverview se connecte, consulte une page privée et se déconnecte ; une autre identité et une session révoquée ne peuvent accéder à cet espace.",
+    "depends_on": [
+      "S-000a"
+    ],
+    "apps": [
+      "api",
+      "client",
+      "admin",
+      "www"
+    ],
+    "modules": [
+      "identity"
+    ],
+    "mode": "integration",
+    "priority": 10,
+    "session_budget": 1,
+    "journey": [
+      "Inspecter le projet WorkOS coverview et les paramètres disponibles.",
+      "Ouvrir le flux email/OTP, revenir sur une surface privée.",
+      "Changer de surface sans perdre l’identité.",
+      "Révoquer la session et constater le refus côté API."
+    ],
+    "data": [
+      "Utilisateur canonique associé à workosUserId ; sessions sensibles gérées selon AUTH-11.",
+      "Habilitation administrative et audit d’accès, sans modèle de partage foyer implicite."
+    ],
+    "permissions": [
+      "Propriétaire uniquement pour le premier espace personnel.",
+      "Admin explicitement habilité et MFA ; aucun accès global accordé par un nom de domaine."
+    ],
+    "events_jobs": [
+      "Audit login/logout/révocation ; aucun email transactionnel métier requis."
+    ],
+    "fixtures": [
+      "Identités de test distinctes WorkOS non publiques ; données métier fictives locales."
+    ],
+    "integrations": {
+      "simulated": [
+        "Données métier du dashboard"
+      ],
+      "real": [
+        "WorkOS AuthKit dans l’environnement choisi"
+      ],
+      "activation_slices": []
+    },
+    "criteria": [
+      {
+        "criterion": "Le projet et l’environnement WorkOS sont identifiés en lecture seule avant configuration ; les callbacks exacts des surfaces autorisées sont documentés et contrôlés.",
+        "source_ranges": [
+          [
+            229,
+            230
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Tester le login/callback avec l’environnement WorkOS choisi ; rejeter state invalide, URI non autorisée et rejeu de callback."
+      },
+      {
+        "criterion": "L’identité externe correspond à un utilisateur canonique et à un profil unique ; le frontend ne reçoit aucun refresh token ni secret de session durable.",
+        "source_ranges": [
+          [
+            231,
+            232
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Deux connexions de la même identité conservent le même ID applicatif ; aucune donnée sensible de session dans localStorage ou bundle."
+      },
+      {
+        "criterion": "La connexion email/OTP exigée par le parcours est éprouvée et sa continuité entre www et Wallet est conservée sans imposer un nouveau compte.",
+        "source_ranges": [
+          [
+            233,
+            233
+          ],
+          [
+            743,
+            743
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Connexion et retour www vers Wallet puis inversement ; OTP expiré ou invalide ; aucun second profil ni accès à une autre personne."
+      },
+      {
+        "criterion": "La déconnexion locale et globale ainsi que la liste/révocation des appareils retirent effectivement l’accès aux requêtes suivantes.",
+        "source_ranges": [
+          [
+            236,
+            236
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Créer deux sessions, révoquer une puis toutes, tester les routes protégées et conserver l’audit sans token en clair."
+      },
+      {
+        "criterion": "L’accès administratif reste réservé à une identité explicitement habilitée avec MFA ; un rôle déclaré par le navigateur ne produit jamais ce droit.",
+        "source_ranges": [
+          [
+            2512,
+            2513
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Identité admin test vérifiée, MFA au login sensible ; client ordinaire et requête falsifiant app/role reçoivent un refus serveur."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "project.workos",
+        "question": "Quel environnement et quelles identités WorkOS utiliser pour vérifier les flux réels ?",
+        "options": [
+          "Utiliser l’environnement de développement du projet coverview et des identités de test explicitement autorisées",
+          "Fournir un autre environnement isolé et les identités autorisées"
+        ],
+        "recommended": 0,
+        "blocks": "Connexion tierce et attribution administrative ; un nom de projet ne vaut pas client ID."
+      },
+      {
+        "ref": "project.auth-methods",
+        "question": "Si les méthodes constatées diffèrent du parcours email/OTP, quel changement appliquer ?",
+        "options": [
+          "Configurer le parcours email/OTP et MFA admin dans cet environnement de test après présentation du diff",
+          "Conserver les méthodes actuelles et faire valider une modification du parcours source avant intégration"
+        ],
+        "recommended": 0,
+        "blocks": "Modification WorkOS des méthodes ou callbacks, seulement si un écart réel est constaté."
+      }
+    ],
+    "satellites": [
+      "auth.md",
+      "permissions.md",
+      "security.md",
+      "backend.md",
+      "api.md",
+      "data.md",
+      "frontend.md",
+      "design.md",
+      "environment.md",
+      "testing.md"
+    ],
+    "exclusions": [
+      "billing.md",
+      "geo.md"
+    ],
+    "risks": [
+      "L’environnement tiers n’est pas encore inspecté ; aucun identifiant ni méthode activée ne doit être inventé.",
+      "Le domaine commun ne suffit pas à révoquer toutes les sessions : tester le mécanisme réel WorkOS."
+    ],
+    "out_of_scope": [
+      "Partage foyer et délégation professionnelle aux slices propriétaires ; S-013 rattache les objets anonymes et consentements."
+    ],
+    "split_trigger": "Si le parcours ne passe pas en revue après une session principale, isoler le résultat utilisateur restant et réviser le plan ; ne pas multiplier les reprises sans borne."
+  },
+  {
+    "id": "S-000c",
+    "title": "Ouvrir le premier parcours sur une infrastructure Infomaniak dédiée",
+    "milestone": "M0",
+    "objective": "Un utilisateur autorisé ouvre une URL de test déployée et accède à son espace WorkOS ; l’inventaire des instances Infomaniak préexistantes reste identique.",
+    "depends_on": [
+      "S-000b"
+    ],
+    "apps": [
+      "api",
+      "client",
+      "admin",
+      "www"
+    ],
+    "modules": [
+      "deployment"
+    ],
+    "mode": "integration",
+    "priority": 650,
+    "session_budget": 1,
+    "journey": [
+      "Inventorier Horizon et le DNS en lecture seule.",
+      "Présenter le diff de nouvelles ressources et la cible URL isolée.",
+      "Déployer le commit vérifié avec WorkOS réel.",
+      "Exécuter le login sur URL puis contrôler l’existant et le rollback."
+    ],
+    "data": [
+      "Manifest d’IDs des ressources nouvelles et protégées, configurations sans secrets.",
+      "PostgreSQL dédié sans reprise de données d’une instance existante."
+    ],
+    "permissions": [
+      "Accès cloud limité aux ressources autorisées du projet constaté.",
+      "AUTH_MODE de production refuse l’authentification de démonstration."
+    ],
+    "events_jobs": [
+      "Logs de santé et historique de déploiement ; aucun job financier ni envoi tiers métier."
+    ],
+    "fixtures": [
+      "Données de test non sensibles sous comptes réels autorisés ; aucun compte à mot de passe public."
+    ],
+    "integrations": {
+      "simulated": [],
+      "real": [
+        "Infomaniak Public Cloud/Horizon",
+        "DNS Infomaniak",
+        "WorkOS"
+      ],
+      "activation_slices": []
+    },
+    "criteria": [
+      {
+        "criterion": "Un inventaire en lecture seule fixe les IDs protégés et le plan ne cible que de nouvelles ressources CoverView dédiées.",
+        "source_ranges": [],
+        "oracle": "V3",
+        "test": "Comparer IDs et état des ressources existantes avant/après ; aucune modification indirecte réseau/volume/IP partagée."
+      },
+      {
+        "criterion": "Le diff d’infrastructure décrit nouvelles ressources, coût estimé, réseau, accès, backups et rollback avant toute création facturable.",
+        "source_ranges": [
+          [
+            2523,
+            2523
+          ]
+        ],
+        "oracle": "V5",
+        "test": "Revue du plan concret contre le compte Horizon et autorisation du périmètre exact ; aucun choix de région/taille inventé."
+      },
+      {
+        "criterion": "Des images Docker reproductibles, Caddy/TLS, validation env et health checks mettent en ligne les quatre coquilles avec authentification réelle et sans bypass de persona.",
+        "source_ranges": [
+          [
+            2510,
+            2511
+          ],
+          [
+            2563,
+            2564
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Ouvrir les URLs autorisées, vérifier HTTPS et cookies, refus anonyme, redémarrage du service et absence de variables secrètes dans le frontend."
+      },
+      {
+        "criterion": "Le dépôt distant et le pipeline sont raccordés au commit testé ; le premier push et les secrets de déploiement suivent les autorisations déjà données pour leur portée exacte.",
+        "source_ranges": [],
+        "oracle": "V1",
+        "test": "Build CI depuis commit identifié, images liées au SHA ; aucun secret dans Git ou logs ; preuve distincte si premier push pas encore autorisé."
+      },
+      {
+        "criterion": "Le DNS ne modifie que les enregistrements convenus vers les nouvelles ressources, préserve les services existants et dispose d’un retour arrière réellement vérifiable.",
+        "source_ranges": [],
+        "oracle": "V3",
+        "test": "Diff minimal de DNS, tests de résolution/TLS et rollback sur l’URL de test ; MX/SPF/DKIM/DMARC existants préservés."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "project.hosting-target",
+        "question": "Quel projet/région, quelles nouvelles ressources et quelle URL de test approuver après l’inventaire ?",
+        "options": [
+          "Présenter et autoriser le plan minimal de ressources dédiées et un sous-domaine isolé de coverview.ch",
+          "Indiquer un autre dimensionnement ou sous-domaine dans le même cloud"
+        ],
+        "recommended": 0,
+        "blocks": "Provisioning, coût et DNS ; aucune instance déjà présente ne devient réutilisable."
+      },
+      {
+        "ref": "project.git-push",
+        "question": "Publier le commit testé sur origin et activer le pipeline préparé ?",
+        "options": [
+          "Autoriser le premier push normal du commit revu vers main",
+          "Conserver les commits locaux jusqu’à instruction explicite"
+        ],
+        "recommended": 0,
+        "blocks": "Premier push uniquement si l’autorisation n’est pas encore acquise."
+      }
+    ],
+    "satellites": [
+      "hosting.md",
+      "delivery.md",
+      "environment.md",
+      "auth.md",
+      "security.md",
+      "observability.md",
+      "dependencies.md"
+    ],
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "risks": [
+      "Mutation d’un composant partagé : s’arrêter avant toute action visant une ressource préexistante protégée.",
+      "Ne pas détourner coverview.ch principal vers une démo ni affirmer que la connexion déclarée par l’utilisateur a été vérifiée."
+    ],
+    "out_of_scope": [
+      "Ouverture publique et activation commerciale finale S-140 ; aucun service tierce partie métier activé."
+    ],
+    "split_trigger": "Si le parcours ne passe pas en revue après une session principale, isoler le résultat utilisateur restant et réviser le plan ; ne pas multiplier les reprises sans borne."
+  }
+]

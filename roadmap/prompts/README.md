@@ -1,3 +1,130 @@
-# Prompts de slices
+# Prompts — GPT-6 Astra Ultra
 
-Les prompts détaillés seront écrits à la prochaine étape demandée. Format : `S-xxx.prompt.md`, depuis `templates/slice.prompt.md`, lié au plan correspondant et à la couverture PROG-21. Session requise : PROG-12. Aucun prompt de développement n'est encore exécutable.
+> Vue générée depuis les spécifications et `roadmap/state.json`. Modifier les sources canoniques puis régénérer. La planification ne prouve aucune implémentation.
+
+Utiliser les paramètres réels `model: gpt-6-astra`, `thinking: ultra` dans une surface compatible selon [CDX-02](../../docs/codex.md). Le mot Ultra ne configure pas la tâche. Vérifier décisions, dépendances done et GO ; WIP = 1.
+
+Chaque prompt cible une session principale et indique son redécoupage. Reprise CDX-03 : aucun compteur actuel ne déclenche exactement à 70 % ; checkpoint ciblé, sans copier toute la conversation.
+
+[Ordre topologique](../index.md) · [Décisions](../decisions.md) · [Workflows](../workflows.md)
+
+- [S-000a — Démarrer un socle local reproductible et une preview fictive](S-000a.prompt.md) · [plan](../plans/S-000a.plan.md) · specified · foundation.
+- [S-000b — Se connecter avec WorkOS et retrouver son espace protégé](S-000b.prompt.md) · [plan](../plans/S-000b.plan.md) · specified · integration.
+- [S-013 — Reprendre un parcours anonyme dans Wallet avec un profil central](S-013.prompt.md) · [plan](../plans/S-013.plan.md) · specified · local-fixtures.
+- [S-010 — Ouvrir les trois parcours CoverView depuis un site public compact](S-010.prompt.md) · [plan](../plans/S-010.plan.md) · specified · local-fixtures.
+- [S-081 — Délivrer un dossier avec tâches, prochaine action et Kanban](S-081.prompt.md) · [plan](../plans/S-081.plan.md) · specified · local-fixtures.
+- [S-017 — Générer et archiver les documents de démarches à partir du profil](S-017.prompt.md) · [plan](../plans/S-017.plan.md) · specified · local-fixtures.
+- [S-018 — Signer un document de test et suivre son dossier de preuve](S-018.prompt.md) · [plan](../plans/S-018.plan.md) · specified · local-fixtures.
+- [S-080 — Qualifier un entrant et suivre plusieurs opportunités distinctes](S-080.prompt.md) · [plan](../plans/S-080.plan.md) · specified · local-fixtures.
+- [S-011 — Publier les pages de méthode, preuves et contenus de référence](S-011.prompt.md) · [plan](../plans/S-011.plan.md) · specified · local-fixtures.
+- [S-012 — Répondre aux FAQ et conserver la provenance déclarée des prospects](S-012.prompt.md) · [plan](../plans/S-012.plan.md) · specified · local-fixtures.
+- [S-014 — Créer et documenter un produit de catalogue canonique dans Admin](S-014.prompt.md) · [plan](../plans/S-014.plan.md) · specified · local-fixtures.
+- [S-015 — Valider et publier le catalogue sans modifier les analyses passées](S-015.prompt.md) · [plan](../plans/S-015.plan.md) · specified · local-fixtures.
+- [S-016 — Versionner et modifier les hypothèses de calcul depuis Admin](S-016.prompt.md) · [plan](../plans/S-016.plan.md) · specified · local-fixtures.
+- [S-019 — Centraliser les contrats et leurs documents dans Wallet](S-019.prompt.md) · [plan](../plans/S-019.plan.md) · specified · local-fixtures.
+- [S-082 — Lire la vue client 360 et une timeline commune](S-082.prompt.md) · [plan](../plans/S-082.plan.md) · specified · local-fixtures.
+- [S-021 — Initier et signer une recherche d’avoirs LPP perdus](S-021.prompt.md) · [plan](../plans/S-021.plan.md) · specified · local-fixtures.
+- [S-022 — Suivre la recherche LPP jusqu’aux avoirs identifiés et prochaines démarches](S-022.prompt.md) · [plan](../plans/S-022.plan.md) · specified · local-fixtures.
+- [S-020 — Demander et suivre la récupération de contrats par compagnie](S-020.prompt.md) · [plan](../plans/S-020.plan.md) · specified · local-fixtures.
+- [S-023 — Transformer une pièce en données contractuelles avec revue des conflits](S-023.prompt.md) · [plan](../plans/S-023.plan.md) · specified · local-fixtures.
+- [S-025 — Analyser un 3P sans compte depuis un document ou une saisie minimale](S-025.prompt.md) · [plan](../plans/S-025.plan.md) · specified · local-fixtures.
+- [S-026 — Expliquer le score 3P, son allocation et son benchmark](S-026.prompt.md) · [plan](../plans/S-026.plan.md) · specified · local-fixtures.
+- [S-024 — Déclencher un audit de contrat complet et rendre les exceptions traitables](S-024.prompt.md) · [plan](../plans/S-024.plan.md) · specified · local-fixtures.
+- [S-028 — Calculer son besoin retraite en CHF actuels et futurs](S-028.prompt.md) · [plan](../plans/S-028.plan.md) · specified · local-fixtures.
+- [S-029 — Explorer des probabilités et un âge cible reproductibles](S-029.prompt.md) · [plan](../plans/S-029.plan.md) · specified · local-fixtures.
+- [S-030 — Comparer des stratégies compatibles avec son objectif](S-030.prompt.md) · [plan](../plans/S-030.plan.md) · specified · local-fixtures.
+- [S-027 — Découvrir puis rejouer son Reveal et son Retirement World explicables](S-027.prompt.md) · [plan](../plans/S-027.plan.md) · specified · local-fixtures.
+- [S-031 — Sauvegarder un Full Audit et demander une validation experte](S-031.prompt.md) · [plan](../plans/S-031.plan.md) · specified · local-fixtures.
+- [S-032 — Partager un Wrapped révocable et comparer des métriques consenties](S-032.prompt.md) · [plan](../plans/S-032.plan.md) · specified · local-fixtures.
+- [S-033 — Suivre une stratégie par Health Check, Wrapped annuel et timeline](S-033.prompt.md) · [plan](../plans/S-033.plan.md) · specified · local-fixtures.
+- [S-034 — Explorer un royaume retraite persistant en mode bonus](S-034.prompt.md) · [plan](../plans/S-034.plan.md) · specified · local-fixtures.
+- [S-130 — Exporter et rectifier ses données avec une preuve de traitement](S-130.prompt.md) · [plan](../plans/S-130.plan.md) · specified · local-fixtures.
+- [S-132 — Reprendre un dossier après panne sans doubler les effets](S-132.prompt.md) · [plan](../plans/S-132.plan.md) · specified · local-fixtures.
+- [S-131 — Appliquer la conservation et une demande de suppression contrôlée](S-131.prompt.md) · [plan](../plans/S-131.plan.md) · specified · local-fixtures.
+- [S-050 — Retire Check : première valeur puis sauvegarde du foyer dans Wallet](S-050.prompt.md) · [plan](../plans/S-050.plan.md) · specified · local-fixtures.
+- [S-051 — Retirement Plan : achat simulé et accès durable au même dossier](S-051.prompt.md) · [plan](../plans/S-051.plan.md) · specified · local-fixtures.
+- [S-052 — Options LPP autorisées et demande des règles manquantes](S-052.prompt.md) · [plan](../plans/S-052.plan.md) · specified · local-fixtures.
+- [S-054 — Life Engine : budgets de phase, couple, dépendance et transmission](S-054.prompt.md) · [plan](../plans/S-054.plan.md) · specified · local-fixtures.
+- [S-056 — Profil Monte-Carlo Retire dans le moteur commun](S-056.prompt.md) · [plan](../plans/S-056.plan.md) · specified · local-fixtures.
+- [S-053 — Aujourd'hui : Retirement Range et indicateurs explicables](S-053.prompt.md) · [plan](../plans/S-053.plan.md) · specified · local-fixtures.
+- [S-055 — Explorer et Timeline : variantes de vie comparables sans écraser le plan](S-055.prompt.md) · [plan](../plans/S-055.plan.md) · specified · local-fixtures.
+- [S-057 — Stress tests Retire : comprendre les crises sans fausser les probabilités](S-057.prompt.md) · [plan](../plans/S-057.plan.md) · specified · local-fixtures.
+- [S-058 — Growth : politique de référence et expositions look-through](S-058.prompt.md) · [plan](../plans/S-058.plan.md) · specified · local-fixtures.
+- [S-059 — Income et Safety : missions de revenu et réserve dynamique](S-059.prompt.md) · [plan](../plans/S-059.plan.md) · specified · local-fixtures.
+- [S-060 — Lombard Bridge : stress de secours et risque de marge](S-060.prompt.md) · [plan](../plans/S-060.plan.md) · specified · local-fixtures.
+- [S-061 — Growth Cascade : flux de crise, récupération, bonus et non-intervention](S-061.prompt.md) · [plan](../plans/S-061.plan.md) · specified · local-fixtures.
+- [S-062 — Optimiser revenu et mix rente/capital sous contraintes](S-062.prompt.md) · [plan](../plans/S-062.plan.md) · specified · local-fixtures.
+- [S-064 — Care : abonnement ou inclusion explicite et droits cohérents](S-064.prompt.md) · [plan](../plans/S-064.plan.md) · specified · local-fixtures.
+- [S-067 — Admin : gouverner les paramètres Retire et leurs versions publiées](S-067.prompt.md) · [plan](../plans/S-067.plan.md) · specified · local-fixtures.
+- [S-083 — Traiter une boîte de réception orientée dossiers avec emails fictifs](S-083.prompt.md) · [plan](../plans/S-083.plan.md) · specified · local-fixtures.
+- [S-084 — Planifier un rendez-vous et assurer sa suite dans Admin](S-084.prompt.md) · [plan](../plans/S-084.plan.md) · specified · local-fixtures.
+- [S-063 — Strategy : crédit Plan unique, dossier expert et décision conservée](S-063.prompt.md) · [plan](../plans/S-063.plan.md) · specified · local-fixtures.
+- [S-086 — Expliquer le pipeline pondéré et ses écarts aux objectifs](S-086.prompt.md) · [plan](../plans/S-086.plan.md) · specified · local-fixtures.
+- [S-087 — Suivre revenus acquis, commissions dues et encaissements distincts](S-087.prompt.md) · [plan](../plans/S-087.plan.md) · specified · local-fixtures.
+- [S-085 — Enchaîner les événements métier sans perdre la prochaine action](S-085.prompt.md) · [plan](../plans/S-085.plan.md) · specified · local-fixtures.
+- [S-065 — Care : événement de vie, recalcul, alerte et prochaine action](S-065.prompt.md) · [plan](../plans/S-065.plan.md) · specified · local-fixtures.
+- [S-066 — Annual/Event Review : service ponctuel et nouveau plan comparable](S-066.prompt.md) · [plan](../plans/S-066.plan.md) · specified · local-fixtures.
+- [S-088 — Piloter la charge, les exceptions et le revenu depuis le cockpit](S-088.prompt.md) · [plan](../plans/S-088.plan.md) · specified · local-fixtures.
+- [S-091 — Poser une question de couverture et retrouver les contrats applicables](S-091.prompt.md) · [plan](../plans/S-091.plan.md) · specified · local-fixtures.
+- [S-092 — Lire une réponse de couverture prudente, citée et contrôlée](S-092.prompt.md) · [plan](../plans/S-092.plan.md) · specified · local-fixtures.
+- [S-093 — Transformer la conversation en assistance suivie dans Wallet](S-093.prompt.md) · [plan](../plans/S-093.plan.md) · specified · local-fixtures.
+- [S-094 — Interroger Admin depuis un chat global ou lié à un objet](S-094.prompt.md) · [plan](../plans/S-094.plan.md) · specified · local-fixtures.
+- [S-095 — Exécuter une action IA typée avec aperçu et confirmation exacte](S-095.prompt.md) · [plan](../plans/S-095.plan.md) · specified · local-fixtures.
+- [S-096 — Matérialiser les pièces du chat en données et tâches sourcées](S-096.prompt.md) · [plan](../plans/S-096.plan.md) · specified · local-fixtures.
+- [S-097 — Dicter, commander et capturer une pièce depuis Admin mobile](S-097.prompt.md) · [plan](../plans/S-097.plan.md) · specified · local-fixtures.
+- [S-101 — Créer et révoquer une carte de membre à jeton opaque](S-101.prompt.md) · [plan](../plans/S-101.plan.md) · specified · local-fixtures.
+- [S-103 — Consulter un compte Miles adossé à un ledger immuable](S-103.prompt.md) · [plan](../plans/S-103.plan.md) · specified · local-fixtures.
+- [S-104 — Gagner des Miles par règles et campagnes versionnées](S-104.prompt.md) · [plan](../plans/S-104.plan.md) · specified · local-fixtures.
+- [S-105 — Réserver une récompense dans le shop avec débit atomique](S-105.prompt.md) · [plan](../plans/S-105.plan.md) · specified · local-fixtures.
+- [S-106 — Valider et consommer un avantage chez le partenaire autorisé](S-106.prompt.md) · [plan](../plans/S-106.plan.md) · specified · local-fixtures.
+- [S-107 — Annuler, rembourser et rapprocher une redemption](S-107.prompt.md) · [plan](../plans/S-107.plan.md) · specified · local-fixtures.
+- [S-108 — Contrôler fraude et responsabilité financière de la fidélité](S-108.prompt.md) · [plan](../plans/S-108.plan.md) · specified · local-fixtures.
+- [S-110 — Apporter un lead et suivre sa progression autorisée dans Partners](S-110.prompt.md) · [plan](../plans/S-110.plan.md) · specified · local-fixtures.
+- [S-111 — Proposer une offre partenaire et suivre ses transactions propres](S-111.prompt.md) · [plan](../plans/S-111.plan.md) · specified · local-fixtures.
+- [S-114 — Définir un risque paramétrique isolé et simuler des engagements](S-114.prompt.md) · [plan](../plans/S-114.plan.md) · specified · local-fixtures.
+- [S-115 — Observer un paramètre et régler un risque Exchange en démonstration](S-115.prompt.md) · [plan](../plans/S-115.plan.md) · specified · local-fixtures.
+- [S-000c — Ouvrir le premier parcours sur une infrastructure Infomaniak dédiée](S-000c.prompt.md) · [plan](../plans/S-000c.plan.md) · specified · integration.
+- [S-035 — Activer la signature réelle des documents et ses preuves](S-035.prompt.md) · [plan](../plans/S-035.plan.md) · specified · integration.
+- [S-037 — Classer et extraire réellement des documents avec un adapter approuvé](S-037.prompt.md) · [plan](../plans/S-037.plan.md) · specified · integration.
+- [S-039 — Répondre réellement aux FAQ à partir du corpus public cité](S-039.prompt.md) · [plan](../plans/S-039.plan.md) · specified · integration.
+- [S-040 — Alimenter le catalogue et les marchés par des sources réelles validées](S-040.prompt.md) · [plan](../plans/S-040.plan.md) · specified · integration.
+- [S-112 — Analyser le catalogue et publier une proposition professionnelle sourcée](S-112.prompt.md) · [plan](../plans/S-112.plan.md) · specified · local-fixtures.
+- [S-042 — Scanner une pièce d’identité pour enrichir le profil confirmé](S-042.prompt.md) · [plan](../plans/S-042.plan.md) · specified · integration.
+- [S-043 — Valider l'accumulation et ses probabilités sur un corpus indépendant](S-043.prompt.md) · [plan](../plans/S-043.plan.md) · specified · integration.
+- [S-044 — Valider Score, Investment Age, Freshness et cohortes comparables](S-044.prompt.md) · [plan](../plans/S-044.plan.md) · specified · integration.
+- [S-045 — Valider compatibilité stratégique et traduction Retirement World](S-045.prompt.md) · [plan](../plans/S-045.plan.md) · specified · integration.
+- [S-038 — Composer et activer les méthodes accumulation, score et compatibilité validées](S-038.prompt.md) · [plan](../plans/S-038.plan.md) · specified · integration.
+- [S-069 — Stripe réel : Plan, crédit Strategy, Care et Review en environnement test](S-069.prompt.md) · [plan](../plans/S-069.plan.md) · specified · integration.
+- [S-089 — Connecter Gmail professionnel et traiter un vrai thread de test](S-089.prompt.md) · [plan](../plans/S-089.plan.md) · specified · integration.
+- [S-036 — Transmettre réellement les demandes LPP et de récupération de contrats](S-036.prompt.md) · [plan](../plans/S-036.plan.md) · specified · integration.
+- [S-041 — Rapprocher les réponses réelles des organismes et clôturer les demandes](S-041.prompt.md) · [plan](../plans/S-041.plan.md) · specified · integration.
+- [S-074 — Qualifier les sources Retire : caisse, vie, EMS et conditions Lombard](S-074.prompt.md) · [plan](../plans/S-074.plan.md) · specified · integration.
+- [S-075 — Valider les flux Cascade et l'optimisation sur cas indépendants](S-075.prompt.md) · [plan](../plans/S-075.plan.md) · specified · integration.
+- [S-076 — Valider sampling, indicateurs, Retirement Range et stress Retire](S-076.prompt.md) · [plan](../plans/S-076.plan.md) · specified · integration.
+- [S-068 — Composer et activer les sources et méthodes Retire validées](S-068.prompt.md) · [plan](../plans/S-068.plan.md) · specified · integration.
+- [S-113 — Comparer des stratégies Retire dans Intelligence avec sources communes](S-113.prompt.md) · [plan](../plans/S-113.plan.md) · specified · local-fixtures.
+- [S-070 — Valider le périmètre Retire réellement commercialisable](S-070.prompt.md) · [plan](../plans/S-070.plan.md) · specified · release.
+- [S-071 — Distribuer Retire aux partenaires, employeurs et clients B2B](S-071.prompt.md) · [plan](../plans/S-071.plan.md) · specified · local-fixtures.
+- [S-090 — Synchroniser Google Calendar et le rendez-vous de suivi réel](S-090.prompt.md) · [plan](../plans/S-090.plan.md) · specified · integration.
+- [S-098 — Brancher le LLM réel pour copilote et couverture avec évaluations](S-098.prompt.md) · [plan](../plans/S-098.plan.md) · specified · integration.
+- [S-072 — Copilote Retire : expliquer un run et préparer une action autorisée](S-072.prompt.md) · [plan](../plans/S-072.plan.md) · specified · integration.
+- [S-099 — Transcrire réellement la voix Admin et la question de couverture](S-099.prompt.md) · [plan](../plans/S-099.plan.md) · specified · integration.
+- [S-100 — Résoudre un dossier support par copilote de bout en bout](S-100.prompt.md) · [plan](../plans/S-100.plan.md) · specified · integration.
+- [S-102 — Installer et mettre à jour les pass Apple et Google réels](S-102.prompt.md) · [plan](../plans/S-102.plan.md) · specified · integration.
+- [S-109 — Activer les rewards et gains approuvés avec exécution réelle](S-109.prompt.md) · [plan](../plans/S-109.plan.md) · specified · integration.
+- [S-119 — Rapprocher et payer un partenaire via le prestataire validé](S-119.prompt.md) · [plan](../plans/S-119.plan.md) · specified · integration.
+- [S-120 — Admettre un participant Exchange et garantir son engagement réel](S-120.prompt.md) · [plan](../plans/S-120.plan.md) · specified · integration.
+- [S-116 — Activer les métriques et le règlement Exchange réellement qualifiés](S-116.prompt.md) · [plan](../plans/S-116.plan.md) · specified · release.
+- [S-121 — Étendre le copilote aux actions métier CRM, catalogue et fidélité](S-121.prompt.md) · [plan](../plans/S-121.plan.md) · specified · integration.
+- [S-118 — Traiter les exceptions finales et observer les parcours croisés](S-118.prompt.md) · [plan](../plans/S-118.plan.md) · specified · integration.
+- [S-122 — Interroger ses objets Partners et Intelligence et suivre une tâche d’analyse](S-122.prompt.md) · [plan](../plans/S-122.plan.md) · specified · integration.
+- [S-133 — Lire les parcours d’acquisition et de traitement avec leurs dénominateurs](S-133.prompt.md) · [plan](../plans/S-133.plan.md) · specified · local-fixtures.
+- [S-134 — Mesurer opérations, copilotes et fidélité sans confusion de valeur](S-134.prompt.md) · [plan](../plans/S-134.plan.md) · specified · local-fixtures.
+- [S-135 — Éprouver les assistants contre les fuites et actions indues](S-135.prompt.md) · [plan](../plans/S-135.plan.md) · specified · local-fixtures.
+- [S-136 — Autoriser les résultats calculés après validation indépendante](S-136.prompt.md) · [plan](../plans/S-136.plan.md) · specified · local-fixtures.
+- [S-073 — Activer Retire et vérifier les parcours payants, Care et distribution](S-073.prompt.md) · [plan](../plans/S-073.plan.md) · specified · release.
+- [S-117 — Retrouver tous ses résultats, démarches et avantages dans Wallet](S-117.prompt.md) · [plan](../plans/S-117.plan.md) · specified · local-fixtures.
+- [S-137 — Publier les conditions et consentements validés par parcours](S-137.prompt.md) · [plan](../plans/S-137.plan.md) · specified · local-fixtures.
+- [S-138 — Vérifier accès, mobile et parcours sur toutes les surfaces](S-138.prompt.md) · [plan](../plans/S-138.plan.md) · specified · local-fixtures.
+- [S-139 — Accepter la v1 complète par les workflows et les invariants de la bible](S-139.prompt.md) · [plan](../plans/S-139.plan.md) · specified · release.
+- [S-140 — Ouvrir CoverView au public sur le cloud dédié et vérifier le rollback](S-140.prompt.md) · [plan](../plans/S-140.plan.md) · specified · release.

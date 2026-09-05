@@ -1,0 +1,5322 @@
+[
+  {
+    "session_budget": 1,
+    "mode": "local-fixtures",
+    "priority": 250,
+    "id": "S-050",
+    "title": "Retire Check : première valeur puis sauvegarde du foyer dans Wallet",
+    "milestone": "M4",
+    "objective": "Un visiteur renseigne son projet retraite, obtient gratuitement un revenu estimé et un gap, puis retrouve le même dossier dans l'entrée Retraite de Wallet après connexion WorkOS.",
+    "depends_on": [
+      "S-000b",
+      "S-013",
+      "S-028"
+    ],
+    "apps": [
+      "www",
+      "client",
+      "api"
+    ],
+    "modules": [
+      "retirement",
+      "identity-profile",
+      "simulation"
+    ],
+    "journey": [
+      "Ouvrir la landing Retire depuis www et commencer sans compte.",
+      "Renseigner âge, canton, foyer, logement, départ souhaité, AVS/LPP, patrimoine et niveaux de vie.",
+      "Voir revenu, gap, rente estimée, capital, premier diagnostic et préparation avec provenance fictive.",
+      "Se connecter pour sauvegarder ; retrouver le même plan et ses prochaines étapes dans Wallet."
+    ],
+    "data": [
+      "Check et version de plan liés à la session anonyme puis à l'identité autorisée, avec provenance des champs.",
+      "Références aux profils et contrats canoniques, jamais copies autonomes ; consentement membre pour toute agrégation de foyer."
+    ],
+    "permissions": [
+      "La session anonyme ne lit que son résultat ; rattachement serveur après authentification WorkOS.",
+      "Appartenir au foyer ne confère aucun droit implicite de lire revenus, actifs ou pièces d'un autre membre."
+    ],
+    "events_jobs": [
+      "Création/version de plan via outbox selon contrat validé ; adoption anonyme idempotente et auditée."
+    ],
+    "fixtures": [
+      "Visiteur célibataire puis foyer à deux membres avec autorisations différentes.",
+      "Données incomplètes, deux tentatives de sauvegarde, session expirée et tentative d'accès à un Check tiers."
+    ],
+    "integrations": {
+      "simulated": [
+        "AVS/LPP rapide et revenus de démonstration ; aucun revenu réel conseillé."
+      ],
+      "real": [
+        "Session WorkOS issue du socle, API et persistance du dossier."
+      ],
+      "activation_slices": [
+        "S-068",
+        "S-070",
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Le Check livre une valeur avant connexion, conserve le parcours 3P et n'introduit aucune plateforme Retire séparée.",
+        "source_ranges": [
+          [
+            1399,
+            1399
+          ],
+          [
+            1416,
+            1424
+          ],
+          [
+            1614,
+            1616
+          ],
+          [
+            1638,
+            1638
+          ],
+          [
+            1665,
+            1666
+          ],
+          [
+            1789,
+            1790
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Exécuter landing → saisie → résultat sans compte → connexion → même résultat Wallet ; vérifier que les détails ouvrent une page/modal/panneau."
+      },
+      {
+        "criterion": "Les étapes couvrent revenus garantis, patrimoine détaillé, priorités et trois budgets ; chaque valeur indique saisie, document ou estimation.",
+        "source_ranges": [
+          [
+            1417,
+            1422
+          ],
+          [
+            1685,
+            1687
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Valider profil incomplet, 3a/3b, immobilier/hypothèque et budget minimum/confort/idéal ; aucun champ manquant n'est silencieusement confirmé."
+      },
+      {
+        "criterion": "Le Check gratuit présente revenu/gap, rente estimée, capital, premier diagnostic et score de préparation ; les calculs fixtures portent une mention de démonstration.",
+        "source_ranges": [
+          [
+            1425,
+            1436
+          ],
+          [
+            1614,
+            1616
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Observer les cinq sorties avec leurs limites et l'accès au détail ; un score non calibré reste un exemple explicite."
+      },
+      {
+        "criterion": "Le rattachement après WorkOS conserve données, sources et hypothèses une seule fois, sans remplacer un autre plan ni dupliquer les contrats.",
+        "source_ranges": [
+          [
+            1424,
+            1424
+          ],
+          [
+            1438,
+            1438
+          ],
+          [
+            1714,
+            1714
+          ],
+          [
+            2714,
+            2716
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Rejouer la sauvegarde et vérifier un seul plan ; tester conflit de profils et accès à une identité tierce."
+      },
+      {
+        "criterion": "L'entrée Retraite expose Aujourd'hui, Mon plan, Explorer, Stress tests et Timeline ; les capacités non encore disponibles sont explicites et partagent le dossier canonique.",
+        "source_ranges": [
+          [
+            1400,
+            1413
+          ],
+          [
+            1667,
+            1668
+          ],
+          [
+            1969,
+            1970
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Revenir dans Wallet, ouvrir le plan puis sa source ; aucune navigation ne crée un historique secondaire."
+      },
+      {
+        "criterion": "Créer et versionner le plan passe par l'API et l'autorisation explicite du foyer ; la mutation produit une trace exploitable.",
+        "source_ranges": [
+          [
+            1697,
+            1700
+          ],
+          [
+            2391,
+            2395
+          ],
+          [
+            2482,
+            2483
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Membre non autorisé, URL falsifiée et adoption rejouée refusés ; création autorisée suivie dans l'audit."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.008",
+        "question": "Pour le premier foyer, retenir le partage nominatif explicite de chaque membre avant d'agréger ses données ?",
+        "options": [
+          "Partage explicite par membre, avec périmètres à valider avant activation.",
+          "Définir et approuver une autre matrice d'accès avant d'implémenter l'agrégation."
+        ],
+        "recommended": 0,
+        "blocks": "Schéma de consentement, agrégation et consultation du foyer."
+      },
+      {
+        "ref": "bible.question.007",
+        "question": "Comment traiter le score de préparation tant que sa méthode n'est pas validée ?",
+        "options": [
+          "Afficher un exemple fictif étiqueté et bloquer tout score personnel réel.",
+          "Fournir et approuver la formule calibrée avant le score personnel."
+        ],
+        "recommended": 0,
+        "blocks": "Calcul personnel du score de préparation."
+      }
+    ],
+    "satellites": [
+      "frontend.md",
+      "marketing-web.md",
+      "seo.md",
+      "geo.md",
+      "auth.md",
+      "permissions.md",
+      "data.md",
+      "api.md",
+      "i18n.md",
+      "design.md",
+      "brand.md"
+    ],
+    "exclusions": [
+      "billing.md",
+      "realtime.md",
+      "llm.md"
+    ],
+    "risks": [
+      "Assimiler l'unité économique du foyer à une autorisation ; tester chaque relation et refuser par défaut.",
+      "Faire passer l'estimation rapide pour le modèle Retire complet ; libellés et disponibilité vérifiés."
+    ],
+    "out_of_scope": [
+      "Achat/droits Plan : S-051 ; modèle de rente réel : S-052/S-068 ; choix des probabilités : S-056."
+    ],
+    "split_trigger": "Si la sauvegarde complète ne tient pas, scinder après le Check anonyme persistant en gardant une seconde tranche dédiée au rattachement Wallet."
+  },
+  {
+    "session_budget": 1,
+    "mode": "local-fixtures",
+    "priority": 251,
+    "id": "S-051",
+    "title": "Retirement Plan : achat simulé et accès durable au même dossier",
+    "milestone": "M4",
+    "objective": "Un client passe du Check au Plan par une commande de démonstration et retrouve le même dossier avec ses droits explicites, tandis qu'Admin suit l'offre et la commande communes.",
+    "depends_on": [
+      "S-050"
+    ],
+    "apps": [
+      "www",
+      "client",
+      "admin",
+      "api"
+    ],
+    "modules": [
+      "commerce-entitlements",
+      "retirement"
+    ],
+    "journey": [
+      "Lire l'offre et son périmètre effectivement disponible.",
+      "Créer une commande Plan de démonstration depuis son Check.",
+      "Attendre l'événement de paiement simulé, puis ouvrir le même plan détaillé.",
+      "Consulter côté Admin l'offre, la commande et la raison du droit."
+    ],
+    "data": [
+      "Catalogue exécutable commun : clés d'offres et entitlements, versions de prix provenant de l'adapter de paiement.",
+      "Commande, paiement projeté, droit Plan et lien au plan ; aucune somme décidée par le navigateur."
+    ],
+    "permissions": [
+      "Le droit commercial complète l'autorisation de lire le foyer ; acheter ne donne aucun accès supplémentaire aux membres.",
+      "Administration d'offres et attribution manuelle réservées aux rôles explicitement approuvés."
+    ],
+    "events_jobs": [
+      "Projection de paiement simulée utilisant le contrat de webhook futur ; service.order.paid et entitlement.granted idempotents."
+    ],
+    "fixtures": [
+      "Check gratuit, Plan payé, paiement en attente/échoué, utilisateur sans droit, doublon d'événement et offre retirée."
+    ],
+    "integrations": {
+      "simulated": [
+        "Adapter Stripe local, checkout et événements de paiement sans argent réel."
+      ],
+      "real": [
+        "Catalogue, commandes, projections et contrôles d'accès persistants."
+      ],
+      "activation_slices": [
+        "S-069",
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Les offres gratuites et Plan sont tirées du catalogue partagé ; le prix stratégique de référence CHF 390 reste un prix de fixture jusqu'à validation commerciale.",
+        "source_ranges": [
+          [
+            1610,
+            1619
+          ],
+          [
+            1634,
+            1634
+          ],
+          [
+            1711,
+            1712
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Afficher la même offre dans www, Wallet et Admin ; modifier le prix fixture via l'autorité de paiement et observer la cohérence."
+      },
+      {
+        "criterion": "L'achat active le droit Plan uniquement après confirmation côté serveur ; le retour de checkout et un identifiant de prix falsifié ne l'activent jamais.",
+        "source_ranges": [
+          [
+            1634,
+            1634
+          ],
+          [
+            1688,
+            1688
+          ],
+          [
+            2404,
+            2405
+          ],
+          [
+            2490,
+            2491
+          ],
+          [
+            2717,
+            2717
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Événement valide, signature invalide simulée, doublon et retour prématuré ; vérifier droits et une seule commande payée."
+      },
+      {
+        "criterion": "Check, Plan et offres suivantes conservent le même objet d'analyse, les sources, les hypothèses et l'historique.",
+        "source_ranges": [
+          [
+            1438,
+            1438
+          ],
+          [
+            1634,
+            1634
+          ],
+          [
+            1687,
+            1688
+          ],
+          [
+            1969,
+            1970
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Comparer identifiants et versions avant/après achat ; aucune copie de contrat ou remise à zéro des saisies."
+      },
+      {
+        "criterion": "Les capacités détaillées sont affichées selon le périmètre réellement livré : mixes, soutenabilité, break-even, Monte-Carlo, EMS/succession/stress/Cascade ; aucun droit ne prétend rendre un moteur absent disponible.",
+        "source_ranges": [
+          [
+            1427,
+            1436
+          ],
+          [
+            1656,
+            1656
+          ],
+          [
+            2718,
+            2718
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Persona Plan voit la liste cohérente des fonctions actives et en préparation, avec sources de méthode accessibles."
+      },
+      {
+        "criterion": "La politique de conservation et de recalcul respecte l'interdiction de facturer chaque simulation ; l'ambiguïté Commerce est résolue explicitement avant d'instaurer les droits.",
+        "source_ranges": [
+          [
+            1632,
+            1632
+          ],
+          [
+            1638,
+            1638
+          ],
+          [
+            1726,
+            1727
+          ],
+          [
+            1747,
+            1748
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Après achat rejouer des calculs autorisés sans ligne de facturation par simulation ; tester lecture des résultats conservés suivant décision approuvée."
+      },
+      {
+        "criterion": "Un entitlement ne contourne pas les permissions de foyer et chaque attribution a sa cause auditable.",
+        "source_ranges": [
+          [
+            1697,
+            1698
+          ],
+          [
+            1711,
+            1712
+          ],
+          [
+            2391,
+            2391
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Utilisateur Plan tiers refusé à l'API de résultats ; droit accordé au bon sujet et retrouvé dans la projection."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.002",
+        "question": "Confirmer que « facturation séparée des simulations » n'autorise aucune facturation par simulation après achat ?",
+        "options": [
+          "Conserver l'interdiction de facturer à la simulation ; facturer uniquement les services définis.",
+          "Réviser explicitement la bible avant toute politique contradictoire."
+        ],
+        "recommended": 0,
+        "blocks": "Modèle de facturation et droits Plan."
+      },
+      {
+        "ref": "bible.question.027",
+        "question": "Quels droits permanents et recalculs le Plan doit-il conserver ?",
+        "options": [
+          "Conserver les résultats achetés ; documenter les recalculs inclus avant toute restriction, sans frais par simulation.",
+          "Fournir une autre matrice contractuelle conforme à l'accès permanent et sans facturation à la simulation."
+        ],
+        "recommended": 0,
+        "blocks": "Accès permanent, recalculs et articulation avec Care."
+      },
+      {
+        "ref": "bible.question.030",
+        "question": "Les prix source doivent-ils rester des fixtures tant que TVA, annulation et contenu vendable ne sont pas approuvés ?",
+        "options": [
+          "Oui, checkout explicitement simulé jusqu'à S-069/S-073.",
+          "Valider un catalogue commercial complet avant une activation réelle."
+        ],
+        "recommended": 0,
+        "blocks": "Vente réelle et règles de taxe/annulation."
+      }
+    ],
+    "satellites": [
+      "catalog.md",
+      "billing.md",
+      "permissions.md",
+      "data.md",
+      "api.md",
+      "events.md",
+      "jobs.md",
+      "security.md",
+      "frontend.md",
+      "i18n.md"
+    ],
+    "exclusions": [
+      "llm.md",
+      "storage.md"
+    ],
+    "risks": [
+      "Droit accordé sur retour navigateur ou événement rejoué ; projection serveur et idempotence.",
+      "Confondre version de prix stratégique et offre commercialisée ; autorité adapter clairement fictive."
+    ],
+    "out_of_scope": [
+      "Paiement réel Stripe : S-069 ; crédit Strategy : S-063 ; abonnement Care : S-064."
+    ],
+    "split_trigger": "Scinder à la confirmation de la première commande Plan si l'administration étendue des offres dépasse une session."
+  },
+  {
+    "session_budget": 1,
+    "mode": "local-fixtures",
+    "priority": 252,
+    "id": "S-052",
+    "title": "Options LPP autorisées et demande des règles manquantes",
+    "milestone": "M4",
+    "objective": "Un foyer retrouve ses certificats et avoirs LPP dans son plan, compare les options que sa caisse autorise et obtient une demande documentaire quand un paramètre manque.",
+    "depends_on": [
+      "S-050",
+      "S-019",
+      "S-022",
+      "S-023",
+      "S-081"
+    ],
+    "apps": [
+      "client",
+      "admin",
+      "api"
+    ],
+    "modules": [
+      "retirement",
+      "contracts",
+      "documents",
+      "workflow"
+    ],
+    "journey": [
+      "Ouvrir le plan et relier les certificats/avoirs déjà présents.",
+      "Vérifier les règles datées de la caisse du membre concerné.",
+      "Choisir une option rente, capital ou mix autorisé ; voir les paramètres utilisés.",
+      "Recevoir une demande de pièce ou tâche de vérification si une règle manque."
+    ],
+    "data": [
+      "PensionOption et RuleVersion sourcées, datées et rattachées au membre autorisé.",
+      "Liens certificat/contrat/avoir retrouvé, statut vérifié ou manquant ; aucune transformation silencieuse d'estimation en fait."
+    ],
+    "permissions": [
+      "Les droits de chaque certificat restent ceux du membre propriétaire ; l'agrégation exige son autorisation.",
+      "La modification d'une règle produit une nouvelle version, revue selon les droits de gouvernance validés."
+    ],
+    "events_jobs": [
+      "Demande documentaire idempotente liée au même dossier ; nouvelle donnée marque les versions à recalculer sans les modifier."
+    ],
+    "fixtures": [
+      "Deux caisses fictives avec mixes et règles de conversion différents.",
+      "Certificat absent, règle expirée, fonds retrouvé après une première simulation, membre sans consentement."
+    ],
+    "integrations": {
+      "simulated": [
+        "Règlements de caisse et certificats LPP fictifs ; aucun retrait ou mandat transmis."
+      ],
+      "real": [
+        "Réutilisation des objets contrats/documents/LPP et tâches déjà persistés."
+      ],
+      "activation_slices": [
+        "S-068",
+        "S-070",
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Rente, capital et mixes respectent les possibilités propres à la caisse du membre ; aucune option interdite n'est soumise au calcul.",
+        "source_ranges": [
+          [
+            1392,
+            1393
+          ],
+          [
+            1586,
+            1587
+          ],
+          [
+            1703,
+            1704
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Deux caisses à règles divergentes ; rejeter un mix non autorisé et comparer les entrées réellement utilisées."
+      },
+      {
+        "criterion": "La rente partielle utilise les paramètres de conversion autorisés et non une règle de trois universelle.",
+        "source_ranges": [
+          [
+            1586,
+            1587
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Jeu de référence fictif où conversion partielle est non linéaire ; vérifier résultat attendu et blocage si paramètre absent."
+      },
+      {
+        "criterion": "Chaque règle garde provenance, validité et membre ; les données manquantes déclenchent une demande documentaire ou vérification, sans fallback silencieux à 60 %.",
+        "source_ranges": [
+          [
+            1418,
+            1418
+          ],
+          [
+            1587,
+            1587
+          ],
+          [
+            1675,
+            1676
+          ],
+          [
+            1687,
+            1687
+          ],
+          [
+            2716,
+            2716
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Ouvrir une règle depuis le plan, constater source/validité ; retirer le certificat et suivre la demande jusqu'à réception simulée."
+      },
+      {
+        "criterion": "LPP retrouvée ou nouveau certificat enrichit une nouvelle version ; le scénario antérieur reste reproductible.",
+        "source_ranges": [
+          [
+            1474,
+            1474
+          ],
+          [
+            1699,
+            1706
+          ],
+          [
+            1714,
+            1715
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Importer un avoir trouvé et vérifier un nouvel input/version ; relire l'ancien résultat avec ses sources originales."
+      },
+      {
+        "criterion": "La comparaison restitue longévité, inflation, risque de marché, transmission et flexibilité sans désigner de gagnant universel.",
+        "source_ranges": [
+          [
+            1473,
+            1473
+          ],
+          [
+            1567,
+            1584
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Observer rente/capital et différences explicables en page distincte ; aucun texte ne présente un choix comme une garantie."
+      },
+      {
+        "criterion": "Les règles LPP, survivants et options réelles restent bloquées tant que la validation métier manque ; une simulation ne déclenche aucun retrait.",
+        "source_ranges": [
+          [
+            1542,
+            1542
+          ],
+          [
+            1642,
+            1642
+          ],
+          [
+            1751,
+            1752
+          ],
+          [
+            2561,
+            2561
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Paramètre non validé refusé en mode réel ; absence de commande financière dans les effets du calcul."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.029",
+        "question": "En l'absence de règle officielle complète pour une caisse, faut-il bloquer ses options réelles et demander les pièces ?",
+        "options": [
+          "Oui, garder uniquement l'exemple fictif et ouvrir une demande documentaire.",
+          "Limiter explicitement les options à un sous-ensemble documenté et validé."
+        ],
+        "recommended": 0,
+        "blocks": "Calcul réel de rente partielle, mix et prestations survivants."
+      }
+    ],
+    "satellites": [
+      "data.md",
+      "contracts.md",
+      "permissions.md",
+      "api.md",
+      "storage.md",
+      "events.md",
+      "jobs.md",
+      "frontend.md",
+      "i18n.md"
+    ],
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "risks": [
+      "Règle de caisse générique appliquée à tort à tout le foyer ; provenance, datation et membre obligatoires."
+    ],
+    "out_of_scope": [
+      "Collecte réelle organismes : S-036/S-041 ; ingestion OCR : S-037 ; validation externe des règles : S-068/S-070."
+    ],
+    "split_trigger": "Scinder après le parcours complet « règle manquante → demande → nouvelle version » si les variantes de caisse excèdent la session."
+  },
+  {
+    "session_budget": 1,
+    "mode": "local-fixtures",
+    "priority": 253,
+    "id": "S-053",
+    "title": "Aujourd'hui : Retirement Range et indicateurs explicables",
+    "milestone": "M4",
+    "objective": "Un titulaire du Plan lit son niveau de vie modélisé, les compromis du plan et les risques de queue, puis ouvre les définitions et sources du résultat sauvegardé.",
+    "depends_on": [
+      "S-051",
+      "S-052",
+      "S-056"
+    ],
+    "apps": [
+      "client",
+      "api"
+    ],
+    "modules": [
+      "retirement",
+      "simulation"
+    ],
+    "journey": [
+      "Ouvrir Aujourd'hui à partir d'un run achevé et autorisé.",
+      "Lire plancher sécurisé, recommandé et prospérité avec montants réels/nominaux.",
+      "Explorer une métrique, sa définition, ses hypothèses et les facteurs de réussite/échec.",
+      "Revenir au plan et à ses prochaines décisions sans perdre la version du résultat."
+    ],
+    "data": [
+      "Projection de résultats issue du SimulationRun commun immuable, avec mapping Range versionné après approbation.",
+      "Définitions de métriques référencées, N exécuté, diagnostics et provenance ; aucun calcul frontend parallèle."
+    ],
+    "permissions": [
+      "Lecture du run bornée au foyer autorisé et aux droits Plan ; le cache ne partage pas les résultats entre ménages."
+    ],
+    "events_jobs": [
+      "Consommer la fin de simulation pour rafraîchir la lecture ; pas de nouveau job au simple rendu d'une métrique."
+    ],
+    "fixtures": [
+      "Plans de démonstration robustes/fragiles, risque de queue, run incomplet et métrique indisponible.",
+      "Deux foyers avec même budget mais droits et sources différents."
+    ],
+    "integrations": {
+      "simulated": [
+        "Probabilités et modèles de démonstration tant que la calibration n'est pas validée."
+      ],
+      "real": [
+        "Affichage des résultats calculés sur fixtures et références au snapshot persistant."
+      ],
+      "activation_slices": [
+        "S-068",
+        "S-070",
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Le Range présente trois niveaux de vie et associe le « plancher sécurisé » à une probabilité modélisée, sans garantie ni mapping arbitraire.",
+        "source_ranges": [
+          [
+            1386,
+            1391
+          ],
+          [
+            1439,
+            1451
+          ],
+          [
+            1743,
+            1744
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Ouvrir un résultat et sa définition ; vérifier correspondance au mapping approuvé ou état non calculable si non défini."
+      },
+      {
+        "criterion": "Les sept métriques demandées sont disponibles ou explicitement indisponibles selon les données : succès réel, valeur économique à vie, break-even, patrimoine P10/P50/P90, dépendance, vente forcée, Lombard.",
+        "source_ranges": [
+          [
+            1452,
+            1467
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Comparer les sorties au fixture de référence de chaque métrique ; aucune division par zéro, unité ambiguë ou valeur calculée côté UI."
+      },
+      {
+        "criterion": "Le résultat distingue réel/nominal, essentiel/confort/idéal, fait/hypothèse/probabilité/recommandation, et montre les raisons de gain comme d'échec.",
+        "source_ranges": [
+          [
+            1639,
+            1641
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Inspecter scénario favorable puis défavorable et risque de queue ; ouvrir les explications sur une surface dédiée."
+      },
+      {
+        "criterion": "Une mention visible unique donne le N réellement exécuté et mène aux détails de méthode ; elle ne répète pas N sous chaque indicateur.",
+        "source_ranges": [
+          [
+            1441,
+            1441
+          ],
+          [
+            1469,
+            1469
+          ],
+          [
+            2719,
+            2719
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Observer résultat complet et panneau méthode ; N demandé différent de N exécuté reste visible dans le détail."
+      },
+      {
+        "criterion": "Aujourd'hui restitue Range, réussite, mix et prochaines décisions dans la même version de plan, via l'API autorisée.",
+        "source_ranges": [
+          [
+            1402,
+            1403
+          ],
+          [
+            1667,
+            1668
+          ],
+          [
+            2391,
+            2391
+          ],
+          [
+            2400,
+            2401
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Lire résultat d'une ancienne version, contrôler sa stabilité et refuser un identifiant de run tiers."
+      },
+      {
+        "criterion": "La soutenabilité Retire ne réutilise pas la sémantique 50 % du Target Age ; les définitions des événements, horizon, fiscalité et patrimoine sont approuvées ou bloquées.",
+        "source_ranges": [
+          [
+            1608,
+            1608
+          ],
+          [
+            1735,
+            1736
+          ],
+          [
+            1749,
+            1750
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Un modèle sans définition d'événement/horizon ne produit pas de probabilité personnelle réelle ; vérifier provenance de la méthode approuvée."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.025",
+        "question": "Comment associer Range aux niveaux 80/90/95/99 % ?",
+        "options": [
+          "Bloquer le mapping personnel tant qu'une table explicite n'est pas validée ; fixtures identifiées uniquement.",
+          "Faire approuver une table et ses événements/horizons avant publication."
+        ],
+        "recommended": 0,
+        "blocks": "Calcul et libellés personnalisés du Range."
+      },
+      {
+        "ref": "bible.question.021",
+        "question": "Quelle définition utiliser pour la réussite du revenu réel ?",
+        "options": [
+          "Soumettre une définition explicite de maintien du revenu sur l'horizon Retire, sans reprendre Target Age 50 %.",
+          "Fournir une définition métier alternative avant calcul."
+        ],
+        "recommended": 0,
+        "blocks": "Real Income Success Rate et niveaux de soutenabilité."
+      },
+      {
+        "ref": "bible.question.028",
+        "question": "Autoriser les métriques réelles uniquement avec fiscalité, coûts/dettes, actualisation et événements formellement définis ?",
+        "options": [
+          "Oui ; données fictives et états indisponibles jusqu'à validation.",
+          "Fournir immédiatement les méthodes validées et leurs jeux de référence."
+        ],
+        "recommended": 0,
+        "blocks": "Métriques économiques et probabilités personnelles."
+      }
+    ],
+    "satellites": [
+      "frontend.md",
+      "design.md",
+      "brand.md",
+      "i18n.md",
+      "data.md",
+      "api.md",
+      "permissions.md",
+      "performance.md"
+    ],
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "risks": [
+      "Nom « sécurisé » interprété comme garantie ; associer niveau modélisé et limites visibles.",
+      "Réutiliser une formule d'accumulation incompatible avec le décaissement ; définitions versionnées."
+    ],
+    "out_of_scope": [
+      "Méthodes externes et calibration : S-068 ; validation commerciale : S-070 ; exploration : S-055."
+    ],
+    "split_trigger": "Scinder après le Range et ses définitions si les sept métriques nécessitent des modèles encore non bornés."
+  },
+  {
+    "session_budget": 1,
+    "mode": "local-fixtures",
+    "priority": 254,
+    "id": "S-054",
+    "title": "Life Engine : budgets de phase, couple, dépendance et transmission",
+    "milestone": "M4",
+    "objective": "Un foyer décrit ses phases de vie et événements, voit comment les dépenses et revenus évoluent jusqu'aux décès simulés, et compare un stress EMS sans doubler ses dépenses remplacées.",
+    "depends_on": [
+      "S-050",
+      "S-052"
+    ],
+    "apps": [
+      "client",
+      "api"
+    ],
+    "modules": [
+      "retirement",
+      "identity-profile",
+      "simulation"
+    ],
+    "journey": [
+      "Ouvrir Mon plan et renseigner budgets essentiel/confort/idéal.",
+      "Décrire retraite active, ralentissement, aide à domicile et EMS.",
+      "Ajouter conjoint, ordre de décès simulé, logement/hypothèque, donation et objectif de transmission.",
+      "Vérifier les phases et dépenses remplacées, puis enregistrer une version exploitable par le moteur."
+    ],
+    "data": [
+      "BudgetPhase et LifeEvent versionnés, revenus/actifs/engagements par membre autorisé.",
+      "Budgets nets EMS avec dépenses remplacées explicites ; source de longévité, dépendance et survivants."
+    ],
+    "permissions": [
+      "Chaque champ du conjoint nécessite autorisation ; un événement du foyer ne divulgue pas une pièce privée.",
+      "Modification concurrente produit conflit explicite ou nouvelle version, jamais écrasement silencieux."
+    ],
+    "events_jobs": [
+      "Version de plan créée et événement typé après validation ; le calcul reste un job demandé explicitement."
+    ],
+    "fixtures": [
+      "Célibataire, couple aux départs décalés, décès inversés, aide à domicile puis EMS.",
+      "Logement vendu, donation, coûts remplacés incomplets, horizon 100+ et pièce survivant manquante."
+    ],
+    "integrations": {
+      "simulated": [
+        "Longévité, coûts EMS, prestations et fiscalité fictifs nommés."
+      ],
+      "real": [
+        "Édition/persistance du modèle Life relié aux données du foyer."
+      ],
+      "activation_slices": [
+        "S-068",
+        "S-070",
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Le budget couvre les quatre phases de vie ; EMS est calculé net des dépenses remplacées et ne s'ajoute pas mécaniquement au budget antérieur.",
+        "source_ranges": [
+          [
+            1472,
+            1472
+          ],
+          [
+            1701,
+            1702
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Cas avec logement/repas remplacés puis aide distincte ; vérifier le budget net et refuser une dépense remplacée comptée deux fois."
+      },
+      {
+        "criterion": "Le modèle conserve essentiel, confort, idéal, couple, ordre des décès et transmission dans la version du plan.",
+        "source_ranges": [
+          [
+            1474,
+            1474
+          ],
+          [
+            1639,
+            1641
+          ],
+          [
+            1647,
+            1648
+          ],
+          [
+            1701,
+            1702
+          ],
+          [
+            1718,
+            1719
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Comparer deux ordres de décès et vérifier que droits survivants et dépenses proviennent de la version autorisée."
+      },
+      {
+        "criterion": "EMS est activé par défaut dans le parcours cible ; l'expérience fixture identifie la profondeur disponible et aucune prestation non validée ne devient un fait.",
+        "source_ranges": [
+          [
+            1422,
+            1422
+          ],
+          [
+            1656,
+            1656
+          ],
+          [
+            1745,
+            1746
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Ouvrir un nouveau plan, inspecter stress EMS activé et détails de source ; traiter un coût manquant sans chiffre substitué."
+      },
+      {
+        "criterion": "La durée rapide de 25 ans n'est pas une longévité ; distributions, couple, décès et horizon doivent être approuvés avant simulation réelle.",
+        "source_ranges": [
+          [
+            1737,
+            1738
+          ],
+          [
+            1751,
+            1752
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Refuser le mode réel si distribution/horizon manque ; cas fictif de longévité 100+ conserve le profil distinct."
+      },
+      {
+        "criterion": "Immobilier, succession, donation, aide et dépendance sont modifiables par événements datés ; chaque modification crée une version et ne détruit pas le scénario précédent.",
+        "source_ranges": [
+          [
+            1404,
+            1407
+          ],
+          [
+            1474,
+            1474
+          ],
+          [
+            1647,
+            1648
+          ],
+          [
+            1689,
+            1689
+          ],
+          [
+            2378,
+            2379
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Créer une donation et entrée en EMS dans un panneau ou page, sauvegarder puis comparer aux événements antérieurs."
+      },
+      {
+        "criterion": "Les absences de consentement et de règle survivant refusent l'agrégation concernée et déclenchent des données à compléter.",
+        "source_ranges": [
+          [
+            1413,
+            1413
+          ],
+          [
+            1587,
+            1587
+          ],
+          [
+            1697,
+            1698
+          ],
+          [
+            2561,
+            2561
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Conjoint sans partage, source expirée et document privé : refus sans fuite dans timeline, erreurs ni cache."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.022",
+        "question": "Avant paramètres démographiques validés, conserver des profils de vie fictifs explicitement choisis sans assimiler 25 ans à l'espérance de vie ?",
+        "options": [
+          "Oui, données de démonstration et mode personnel réel bloqué.",
+          "Fournir distributions, horizon et règles de couple approuvés avant le moteur personnel."
+        ],
+        "recommended": 0,
+        "blocks": "Longévité réelle, ordre des décès et horizon de calcul."
+      },
+      {
+        "ref": "bible.question.026",
+        "question": "Comment livrer EMS initialement ?",
+        "options": [
+          "Stress activé par défaut avec budget net documenté de démonstration, puis sources validées avant vente.",
+          "Attendre des coûts/prestations validés pour rendre EMS personnel disponible."
+        ],
+        "recommended": 0,
+        "blocks": "Profondeur EMS et périmètre vendable initial."
+      },
+      {
+        "ref": "bible.question.008",
+        "question": "Les événements et budgets communs doivent-ils être éditables uniquement selon des droits explicites de chaque membre ?",
+        "options": [
+          "Oui, matrice nominative à valider et refus par défaut.",
+          "Définir un autre modèle documenté de consentement avant l'édition partagée."
+        ],
+        "recommended": 0,
+        "blocks": "Édition du foyer et lecture des données du conjoint."
+      }
+    ],
+    "satellites": [
+      "frontend.md",
+      "design.md",
+      "i18n.md",
+      "data.md",
+      "api.md",
+      "permissions.md",
+      "events.md"
+    ],
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "risks": [
+      "Double compte EMS ou accès global au conjoint ; tableaux de dépenses remplacées et scénarios de refus."
+    ],
+    "out_of_scope": [
+      "Sources démographiques/EMS validées : S-068 ; calcul probabiliste : S-056 ; ordonnance ou démarche financière réelle hors calcul."
+    ],
+    "split_trigger": "Scinder après le budget par phase et sa version si les scénarios de couple/survivants nécessitent une nouvelle décision métier."
+  },
+  {
+    "session_budget": 1,
+    "mode": "local-fixtures",
+    "priority": 255,
+    "id": "S-055",
+    "title": "Explorer et Timeline : variantes de vie comparables sans écraser le plan",
+    "milestone": "M4",
+    "objective": "Un foyer teste une retraite plus tôt, un changement de dépenses, une maison ou une donation, puis compare une variante identifiable au plan conservé et à ses flux annuels.",
+    "depends_on": [
+      "S-053",
+      "S-054"
+    ],
+    "apps": [
+      "client",
+      "api"
+    ],
+    "modules": [
+      "retirement",
+      "simulation"
+    ],
+    "journey": [
+      "Depuis Explorer choisir un changement et les variables autorisées.",
+      "Créer une variante nommée reliée à la version de départ.",
+      "Lancer le calcul commun, suivre son état et comparer les résultats.",
+      "Consulter flux annuels et événements jusqu'au décès simulé, revenir à l'original intact."
+    ],
+    "data": [
+      "Scenario et version de plan distincts, parentage et différences d'inputs.",
+      "Timeline dérivée du run figé et événements Life ; décision explicite distincte d'une simulation exploratoire."
+    ],
+    "permissions": [
+      "Création/lecture de variantes limitées au foyer autorisé ; aucun partage supplémentaire par duplication de scénario."
+    ],
+    "events_jobs": [
+      "Créer/versionner plan et lancer/réutiliser SimulationRun idempotent ; annulation et erreur visibles."
+    ],
+    "fixtures": [
+      "Retraite anticipée, nouvelle maison/hypothèque, donation et budget abaissé.",
+      "Deux variantes concurrentes, échec de calcul, scénario incomplet, décès simulé précoce/tardif."
+    ],
+    "integrations": {
+      "simulated": [
+        "Hypothèses et sources financières de démonstration."
+      ],
+      "real": [
+        "Création API de variantes, queue de calcul commune, timeline issue de données persistées."
+      ],
+      "activation_slices": [
+        "S-068",
+        "S-070",
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Explorer couvre retraite plus tôt, dépenses, maison, donation, mix et événements via des détails en page/modal/panneau.",
+        "source_ranges": [
+          [
+            1406,
+            1407
+          ],
+          [
+            1689,
+            1689
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Créer les variantes depuis l'interface, vérifier le retour au contexte et l'absence d'allongement inline de contenu."
+      },
+      {
+        "criterion": "Toute variation est identifiable et conserve sa version de départ ; un recalcul n'écrase pas l'original.",
+        "source_ranges": [
+          [
+            1689,
+            1689
+          ],
+          [
+            1699,
+            1706
+          ],
+          [
+            2396,
+            2397
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Modifier puis recalculer deux scénarios ; comparer parentage, inputs et hash/version de l'original."
+      },
+      {
+        "criterion": "Timeline montre flux annuels et événements jusqu'au décès simulé, rattachés aux mêmes hypothèses et résultats.",
+        "source_ranges": [
+          [
+            1410,
+            1411
+          ],
+          [
+            1701,
+            1706
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Naviguer de la maison à l'EMS puis aux décès simulés ; ouvrir source et montant réel/nominal de l'année sélectionnée."
+      },
+      {
+        "criterion": "La comparaison met en évidence changements de budgets, robustesse et réserves, sans proclamer un gagnant universel.",
+        "source_ranges": [
+          [
+            1473,
+            1474
+          ],
+          [
+            1640,
+            1641
+          ],
+          [
+            1691,
+            1692
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Vérifier différences attendues pour un input changé ; un run incomplet n'est pas comparé comme équivalent."
+      },
+      {
+        "criterion": "Lancement, réutilisation et lecture passent par l'API commune ; état pending/failed/completed permet de reprendre après rechargement.",
+        "source_ranges": [
+          [
+            2391,
+            2401
+          ],
+          [
+            1715,
+            1715
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Double clic puis refresh : un seul job ; échec visible, résultat tiers refusé et nouvelle source invalidant le cache."
+      },
+      {
+        "criterion": "Explorer ne confirme aucune décision et ne déclenche ni retrait LPP, ni ordre, ni crédit.",
+        "source_ranges": [
+          [
+            1714,
+            1714
+          ],
+          [
+            2561,
+            2561
+          ],
+          [
+            2722,
+            2722
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Inspecter effets de scénario, simulation et lecture ; aucune commande d'exécution financière autorisée."
+      }
+    ],
+    "questions": [],
+    "satellites": [
+      "frontend.md",
+      "design.md",
+      "i18n.md",
+      "data.md",
+      "api.md",
+      "permissions.md",
+      "jobs.md",
+      "events.md",
+      "performance.md"
+    ],
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "risks": [
+      "Comparaison de modèles ou unités incompatibles ; afficher changements de méthode/source et empêcher une différence trompeuse."
+    ],
+    "out_of_scope": [
+      "Confirmation expert : S-063 ; revue humaine : S-066 ; moteurs financiers supplémentaires : S-058 à S-062."
+    ],
+    "split_trigger": "Scinder après la variante « retraite plus tôt → comparaison » si la timeline multi-événements dépasse une session."
+  },
+  {
+    "session_budget": 1,
+    "mode": "local-fixtures",
+    "priority": 256,
+    "id": "S-056",
+    "title": "Profil Monte-Carlo Retire dans le moteur commun",
+    "milestone": "M4",
+    "objective": "Un titulaire du Plan lance une simulation Retire, suit le job et retrouve un résultat reproductible avec méthode, N exécuté, seed, horizon et diagnostics sans attendre dans une requête longue.",
+    "depends_on": [
+      "S-029",
+      "S-052",
+      "S-054"
+    ],
+    "apps": [
+      "client",
+      "api"
+    ],
+    "modules": [
+      "simulation",
+      "retirement"
+    ],
+    "journey": [
+      "Choisir une version de plan et le profil Retire autorisé.",
+      "Lancer ou retrouver le job existant et observer progression/erreur.",
+      "Lire le résultat terminé et ses diagnostics.",
+      "Rejouer exactement le snapshot ou créer un nouveau run après changement de source."
+    ],
+    "data": [
+      "Extension du SimulationRun commun : composition autorisée du foyer, règles caisse, Life, politique Cascade, sources et objectifs.",
+      "N demandé/exécuté, méthode, bootstrap/statistique, scénarios forcés séparés, seed, horizon, modèle et résultats immuables."
+    ],
+    "permissions": [
+      "Vérifier droit du foyer au lancement, à la lecture, dans le worker et au cache ; pas de déduction de droits par plan partagé."
+    ],
+    "events_jobs": [
+      "Job BullMQ idempotent et borné, progression/persistance et échec explicites.",
+      "retirement.simulation.completed ou contrat canonique équivalent alimente les résultats sans diffuser d'inputs privés."
+    ],
+    "fixtures": [
+      "Seeds fixes, profils 10 000 et cible 100 000 sur données fictives, run interrompu et non convergent.",
+      "Deux foyers aux inputs identiques, même plan aux sources différentes, bootstrap sans série suffisante."
+    ],
+    "integrations": {
+      "simulated": [
+        "Distributions, corrélations et données de marché/vie fictives explicitement non calibrées."
+      ],
+      "real": [
+        "Moteur statistique local, queue, persistence du run et diagnostics réellement calculés."
+      ],
+      "activation_slices": [
+        "S-068",
+        "S-070",
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Retire étend le même Simulation Engine que le profil général ; la cible 100 000 est distincte du N effectivement exécuté.",
+        "source_ranges": [
+          [
+            1590,
+            1590
+          ],
+          [
+            1607,
+            1608
+          ],
+          [
+            1733,
+            1734
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Lancer deux profils avec seeds fixes ; vérifier méthodes/N réels et qu'aucun second moteur ou snapshot concurrent n'apparaît."
+      },
+      {
+        "criterion": "Le snapshot conserve marchés, macro, vie et décisions : rendements/volatilités/corrélations/dividendes, inflation/taux/devises utiles, couple/décès/EMS, budgets/héritage/mix/politique.",
+        "source_ranges": [
+          [
+            1591,
+            1600
+          ],
+          [
+            1705,
+            1706
+          ],
+          [
+            1715,
+            1715
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Inspection d'un run complet et reproduction exacte ; une dimension requise absente bloque le profil concerné."
+      },
+      {
+        "criterion": "Le job supporte lancement idempotent, réutilisation, erreur et reprise ; l'API ne garde pas une requête ouverte durant le calcul lourd.",
+        "source_ranges": [
+          [
+            1715,
+            1715
+          ],
+          [
+            1722,
+            1723
+          ],
+          [
+            2398,
+            2399
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Double lancement/retry worker, interruption et redémarrage ; un résultat final et état cohérent sans duplication."
+      },
+      {
+        "criterion": "La clé de cache inclut plan versionné, foyer/droits, Life, règles de caisse, politique, méthode, N et sources ; aucune lecture croisée ne réutilise un résultat privé.",
+        "source_ranges": [
+          [
+            2506,
+            2507
+          ],
+          [
+            1715,
+            1715
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Changer chaque composante critique puis révoquer un partage ; cache invalidé/lecture refusée et ancien run intact."
+      },
+      {
+        "criterion": "Les diagnostics distinguent convergence, coût/durée, N demandé/exécuté et méthode réelle ; atteindre le nombre cible seul ne certifie aucune queue de distribution.",
+        "source_ranges": [
+          [
+            1590,
+            1590
+          ],
+          [
+            1733,
+            1734
+          ],
+          [
+            2850,
+            2850
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Jeu non convergent et N interrompu : diagnostic visible, aucune mention « calibré » fondée uniquement sur le nombre."
+      },
+      {
+        "criterion": "Les événements de réussite et horizons Retire restent distincts de Target Age 50 % ; les stress forcés ne sont pas injectés silencieusement dans la probabilité.",
+        "source_ranges": [
+          [
+            1607,
+            1608
+          ],
+          [
+            1735,
+            1738
+          ],
+          [
+            2507,
+            2507
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Un résultat distingue estimation statistique, bootstrap et stress imposé ; test de rejet d'un poids de stress absent."
+      },
+      {
+        "criterion": "La fin de calcul notifie un résultat et archive son snapshot ; les écrans reprennent le run sauvegardé après rechargement.",
+        "source_ranges": [
+          [
+            2484,
+            2485
+          ],
+          [
+            2718,
+            2719
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Lancer puis quitter/revenir ; retrouver le run, l'état, N, méthode et les sources via la même API."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.020",
+        "question": "Comment autoriser le profil Retire cible 100 000 ?",
+        "options": [
+          "Exécuter un profil configurable sur fixtures puis exiger mesures de convergence/coût/seuils avant promesse réelle.",
+          "Faire approuver directement les profils et seuils à partir d'une étude fournie."
+        ],
+        "recommended": 0,
+        "blocks": "Profil personnel réel, coût admis et critères de convergence."
+      },
+      {
+        "ref": "bible.question.021",
+        "question": "Définir les événements de soutenabilité Retire séparément du Target Age à 50 % ?",
+        "options": [
+          "Oui, aucune réutilisation implicite ; approuver événement et horizon avant probabilités réelles.",
+          "Fournir une autre correspondance explicitement validée."
+        ],
+        "recommended": 0,
+        "blocks": "Probabilités 80/90/95/99 % et événement de succès."
+      },
+      {
+        "ref": "bible.question.028",
+        "question": "En l'absence de distributions, calibration et fréquence validées, garder les modèles fixtures et bloquer les runs dits fiables ?",
+        "options": [
+          "Oui, définir/valider la méthode avant activation.",
+          "Fournir la méthode complète, jeux de référence et calibration à intégrer."
+        ],
+        "recommended": 0,
+        "blocks": "Simulation réelle présentée comme décision utilisable."
+      }
+    ],
+    "satellites": [
+      "backend.md",
+      "data.md",
+      "api.md",
+      "contracts.md",
+      "permissions.md",
+      "jobs.md",
+      "events.md",
+      "performance.md",
+      "observability.md",
+      "testing.md",
+      "frontend.md",
+      "i18n.md"
+    ],
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "risks": [
+      "Coût 100 000 non borné et précision inventée ; diagnostics, limites et seuils documentés.",
+      "Cache du foyer insuffisamment isolé ; tests de révoquation et de sources."
+    ],
+    "out_of_scope": [
+      "Nouvelles distributions financières non fournies ; calibration réelle S-068 ; stress UI S-057 ; optimisation S-062."
+    ],
+    "split_trigger": "Scinder à « lancement → run reproductible → diagnostic » si la convergence avancée exige une étude distincte ; conserver toute activation bloquée."
+  },
+  {
+    "session_budget": 1,
+    "mode": "local-fixtures",
+    "priority": 257,
+    "id": "S-057",
+    "title": "Stress tests Retire : comprendre les crises sans fausser les probabilités",
+    "milestone": "M4",
+    "objective": "Un foyer applique les stress nommés dans la bible à son plan, lit l'effet sur budgets, flux et robustesse, et distingue ces scénarios forcés de la distribution Monte-Carlo.",
+    "depends_on": [
+      "S-053",
+      "S-054",
+      "S-056"
+    ],
+    "apps": [
+      "client",
+      "api"
+    ],
+    "modules": [
+      "retirement",
+      "simulation"
+    ],
+    "journey": [
+      "Ouvrir Stress tests et choisir une crise ou un stress de vie.",
+      "Lancer un run lié au même snapshot de départ.",
+      "Lire impacts, réserves épuisées, budgets et événements.",
+      "Comparer au scénario central et consulter les hypothèses forcées."
+    ],
+    "data": [
+      "Définition versionnée de chaque stress, données et périodes sources, inputs forcés et run parent.",
+      "Résultats et diagnostics distinguant scénario imposé, historique simulé et trajectoire tirée."
+    ],
+    "permissions": [
+      "Droits Plan et du foyer contrôlés à chaque accès/run ; un stress ne change aucune donnée du plan actif."
+    ],
+    "events_jobs": [
+      "Réutiliser la queue SimulationRun avec clé incluant version de stress ; résultat et erreurs persistés."
+    ],
+    "fixtures": [
+      "Crises synthétiques explicitement inspirées des noms 2000–2002/2008, sans les déclarer séries historiques réelles.",
+      "Inflation, décennie médiocre, hausse puis crash, crash tardif, longévité 100+, baisse dividendes, EMS et contraction Lombard."
+    ],
+    "integrations": {
+      "simulated": [
+        "Séries historiques et paramètres de stress fictifs ; conditions de marché non validées."
+      ],
+      "real": [
+        "Calcul des scénarios forcés sur les snapshots et comparaison persistée."
+      ],
+      "activation_slices": [
+        "S-068",
+        "S-070",
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Le catalogue propose 2000–2002, 2008, inflation élevée, décennie médiocre, hausse puis crash, crash tardif et longévité 100+.",
+        "source_ranges": [
+          [
+            1408,
+            1409
+          ],
+          [
+            1602,
+            1604
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Ouvrir chaque stress, consulter période/provenance et lancer au moins un cas de marché et un cas de vie."
+      },
+      {
+        "criterion": "EMS, baisse des dividendes et contraction Lombard ont leurs entrées et impacts visibles ; un moteur manquant marque le résultat partiel au lieu d'inventer un effet.",
+        "source_ranges": [
+          [
+            1394,
+            1395
+          ],
+          [
+            1422,
+            1422
+          ],
+          [
+            1541,
+            1542
+          ],
+          [
+            1605,
+            1605
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Activer stress dépendance puis revenu puis collatéral ; vérifier dimensions appliquées et états indisponibles."
+      },
+      {
+        "criterion": "Les scénarios forcés sont identifiables séparément ; aucune probabilité combinée sans convention de pondération approuvée.",
+        "source_ranges": [
+          [
+            1607,
+            1608
+          ],
+          [
+            2507,
+            2507
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Tenter un agrégat avec poids manquant : refus ; résultat séparé conserve ses propres diagnostics."
+      },
+      {
+        "criterion": "Les résultats racontent les conséquences sur niveau de vie, risques de queue et raison de gain/perte sans convertir une crise testée en fréquence observée.",
+        "source_ranges": [
+          [
+            1441,
+            1441
+          ],
+          [
+            1473,
+            1473
+          ],
+          [
+            1639,
+            1641
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Comparer résultat central et crise en interface ; ouvrir sources et réserves sans contenu déroulé inline."
+      },
+      {
+        "criterion": "La référence de plan et les variantes restent immuables ; changer le stress génère un run identifiable et des différences explicables.",
+        "source_ranges": [
+          [
+            1689,
+            1689
+          ],
+          [
+            1705,
+            1706
+          ],
+          [
+            1715,
+            1715
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Rejouer seed et version ; vérifier stabilité de l'original et nouvel ID pour la définition de stress modifiée."
+      },
+      {
+        "criterion": "Les stress historiques réels attendent la source, la méthode, calibration et droits d'utilisation ; les fixtures ne sont jamais appelées un backtest validé.",
+        "source_ranges": [
+          [
+            1590,
+            1590
+          ],
+          [
+            1602,
+            1608
+          ],
+          [
+            1751,
+            1752
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Un dataset marqué fictif ne peut passer au mode personnel réel ; le statut se propage aux exports/résultats."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.028",
+        "question": "Faut-il séparer entièrement les stress forcés des probabilités jusqu'à validation d'une méthode de pondération ?",
+        "options": [
+          "Oui, résultats distincts et aucune fréquence combinée.",
+          "Fournir et faire valider les poids/calibration avant agrégation."
+        ],
+        "recommended": 0,
+        "blocks": "Probabilités combinant stress historiques/forcés et Monte-Carlo."
+      }
+    ],
+    "satellites": [
+      "frontend.md",
+      "design.md",
+      "i18n.md",
+      "data.md",
+      "api.md",
+      "permissions.md",
+      "jobs.md",
+      "performance.md",
+      "testing.md"
+    ],
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "risks": [
+      "Stress synthétique étiqueté historique réel ; provenance obligatoire et mode fictif propagé."
+    ],
+    "out_of_scope": [
+      "Fourniture des séries réellement utilisées : S-068 ; Lombard complet : S-060 ; publication : S-070/S-073."
+    ],
+    "split_trigger": "Scinder après un stress marché et un stress Life complets si l'ajout de toutes les familles dépasse la session."
+  },
+  {
+    "session_budget": 1,
+    "mode": "local-fixtures",
+    "priority": 258,
+    "id": "S-058",
+    "title": "Growth : politique de référence et expositions look-through",
+    "milestone": "M4",
+    "objective": "Un foyer ouvre la politique Growth de son scénario et comprend allocations de référence, expositions économiques et limites indicatives, tandis qu'un opérateur versionne les paramètres fictifs sans modifier les runs existants.",
+    "depends_on": [
+      "S-052",
+      "S-056",
+      "S-015"
+    ],
+    "apps": [
+      "client",
+      "admin",
+      "api"
+    ],
+    "modules": [
+      "retirement",
+      "catalog",
+      "simulation"
+    ],
+    "journey": [
+      "Ouvrir la politique Growth liée au plan.",
+      "Lire ses composantes, leur mission et les expositions sous-jacentes.",
+      "Contrôler les limites selon la taxonomie approuvée et les données disponibles.",
+      "Sauvegarder une variante de politique pour un nouveau scénario."
+    ],
+    "data": [
+      "GrowthCascadePolicy immuable, référence 80/17/3 et missions distinctes.",
+      "Taxonomie d'expositions, entreprises et poids look-through sourcés ; version de chaque limite et périmètre."
+    ],
+    "permissions": [
+      "Le client explore une politique autorisée ; seules les personnes habilitées proposent/publient ses paramètres de référence.",
+      "Les contenus génériques de catalogue ne donnent aucun accès aux positions privées d'un foyer."
+    ],
+    "events_jobs": [
+      "Nouvelle version de politique invalide les prochains calculs concernés ; aucun rebalance/ordre externe."
+    ],
+    "fixtures": [
+      "Portefeuille ETF fictif avec doublons de sociétés, chaîne de valeur et catalyseur commun.",
+      "Données look-through incomplètes, entreprise au seuil indicatif, poids non totalisant 100 %."
+    ],
+    "integrations": {
+      "simulated": [
+        "Composition ETF, expositions et classifications fictives ; aucun portefeuille recommandé ou ordre."
+      ],
+      "real": [
+        "Lecture/persistance des politiques et calcul look-through sur données fixtures."
+      ],
+      "activation_slices": [
+        "S-068",
+        "S-070",
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Growth, Income et Safety gardent la référence 80/17/3 et leurs missions ; Lombard reste hors allocation et aucune pondération n'est traitée comme universelle.",
+        "source_ranges": [
+          [
+            1387,
+            1387
+          ],
+          [
+            1477,
+            1493
+          ],
+          [
+            1739,
+            1740
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Vérifier sommes, missions et absence de règle de rééquilibrage automatique ; variante de flux conserve la référence explicite."
+      },
+      {
+        "criterion": "Les sept composantes Growth sont représentées avec les parts du document : 27,5/17,5/15/15/10/10/5 %, sans transformer la référence en conseil personnalisé.",
+        "source_ranges": [
+          [
+            1494,
+            1510
+          ],
+          [
+            1518,
+            1518
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Inspecter le détail de la politique et les poids, avec label référence à tester et provenance."
+      },
+      {
+        "criterion": "Les plafonds indicatifs entreprise ~8 %, moteur ~35 %, prérevenus/déficitaires ~5 % et frontier ~5 % restent liés à leur périmètre approuvé.",
+        "source_ranges": [
+          [
+            1512,
+            1515
+          ],
+          [
+            1518,
+            1518
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Fixture d'exposition excédant chaque plafond ; statut indéterminé si taxonomie ou périmètre manque."
+      },
+      {
+        "criterion": "La répartition indicative 70 % infrastructures/rentables, 25 % croissance à revenus visibles, 5 % frontier et la diversification look-through par entreprise/chaîne/catalyseur sont contrôlables.",
+        "source_ranges": [
+          [
+            1516,
+            1517
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Agrégation de deux ETF partageant la même société et un moteur économique ; absence de double comptage des actifs."
+      },
+      {
+        "criterion": "Chaque politique utilisée par un run est immuable et versionnée ; nouvelle politique ne réécrit pas l'ancien résultat.",
+        "source_ranges": [
+          [
+            1707,
+            1708
+          ],
+          [
+            1720,
+            1721
+          ],
+          [
+            2380,
+            2381
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Modifier un plafond en nouvelle version ; ancien snapshot et résultat inchangés, nouveau calcul lié à la nouvelle version."
+      },
+      {
+        "criterion": "La mission Capital Engine est livrée comme aide à la décision ; aucune exposition ne devient un compte, un ordre ou une autorisation d'investir.",
+        "source_ranges": [
+          [
+            1649,
+            1650
+          ],
+          [
+            1714,
+            1714
+          ],
+          [
+            2380,
+            2381
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Tracer les effets de publication/exploration : événements de version seulement, aucune commande financière."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.023",
+        "question": "Comment concilier 80/17/3 avec Income en CHF et Safety en années ?",
+        "options": [
+          "Conserver les références côte à côte ; bloquer toute initialisation/recalibrage personnel jusqu'à règle de priorité approuvée.",
+          "Fournir la priorité, l'initialisation et les règles de recalibrage validées."
+        ],
+        "recommended": 0,
+        "blocks": "Allocation personnelle et calibrage des poches."
+      },
+      {
+        "ref": "bible.question.028",
+        "question": "Utiliser les plafonds seulement après validation de la taxonomie look-through et de leur périmètre ?",
+        "options": [
+          "Oui, contrôle fixture ; exposition réelle indéterminée si taxonomie/source manque.",
+          "Fournir taxonomie et limites applicables validées avant publication."
+        ],
+        "recommended": 0,
+        "blocks": "Contrôle réel des plafonds et classifications Growth."
+      }
+    ],
+    "satellites": [
+      "data.md",
+      "api.md",
+      "permissions.md",
+      "contracts.md",
+      "events.md",
+      "frontend.md",
+      "design.md",
+      "i18n.md",
+      "testing.md"
+    ],
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "risks": [
+      "Poids indicatifs pris pour recommandation et sociétés communes masquées ; provenance/qualifications et agrégation look-through."
+    ],
+    "out_of_scope": [
+      "Méthodes publiées/gouvernance : S-067 ; données expositions réelles S-068/S-113 ; flux et arbitrages S-061."
+    ],
+    "split_trigger": "Scinder après une politique lisible/versionnée et un contrôle d'entreprise commun si les autres taxonomies exigent un contrat supplémentaire."
+  },
+  {
+    "session_budget": 1,
+    "mode": "local-fixtures",
+    "priority": 259,
+    "id": "S-059",
+    "title": "Income et Safety : missions de revenu et réserve dynamique",
+    "milestone": "M4",
+    "objective": "Un foyer voit le revenu structurel et la durée de réserve de son plan, puis observe dans un scénario comment Income et Safety couvrent le besoin résiduel sans transferts automatiques injustifiés depuis Growth.",
+    "depends_on": [
+      "S-054",
+      "S-058"
+    ],
+    "apps": [
+      "client",
+      "api"
+    ],
+    "modules": [
+      "retirement",
+      "simulation"
+    ],
+    "journey": [
+      "Lire les besoins annuels du scénario et revenus garantis.",
+      "Inspecter Quality Income et distinguer dividende ordinaire/exceptionnel.",
+      "Consulter Safety en CHF et années de besoin résiduel.",
+      "Tester une crise puis une récupération et sauvegarder la variante."
+    ],
+    "data": [
+      "Income target en CHF annuels, rendement structurel et qualité des dividendes avec sources.",
+      "Besoin résiduel et seuils Safety versionnés ; valeurs monétaires et dates issues du plan."
+    ],
+    "permissions": [
+      "Lecture/modification des paramètres d'exploration limitée au foyer ; aucune modification implicite des références publiées."
+    ],
+    "events_jobs": [
+      "Version de scénario et calcul partagé ; aucun versement ni achat de titres."
+    ],
+    "fixtures": [
+      "Dividende ordinaire/exceptionnel, baisse de dividende, revenu cible atteint ou manquant.",
+      "Besoin résiduel nul, Safety au plancher/cible/plafond, crise prolongée puis reprise."
+    ],
+    "integrations": {
+      "simulated": [
+        "Dividendes, données financières d'entreprises et rendements fixtures."
+      ],
+      "real": [
+        "Calcul des flux Income/Safety sur version persistée et rendu des missions."
+      ],
+      "activation_slices": [
+        "S-068",
+        "S-070",
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Quality Income expose la cible indicative 3,5–4,5 % sans recherche du yield maximal et vérifie historique ordinaire, couverture bénéfices/free cash-flow et dette supportable selon paramètres approuvés.",
+        "source_ranges": [
+          [
+            1521,
+            1523
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Fixture à rendement exceptionnel élevé mais faible couverture : distinguer rendement structurel et signal de qualité."
+      },
+      {
+        "criterion": "Les dividendes exceptionnels sont exclus du rendement structurel et la cible est exprimée en CHF/an.",
+        "source_ranges": [
+          [
+            1524,
+            1525
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Même entreprise avec/sans dividende exceptionnel : rendement structurel invariant et revenu cible explicite."
+      },
+      {
+        "criterion": "Une fois la cible Income atteinte, Growth ne l'alimente pas automatiquement.",
+        "source_ranges": [
+          [
+            1525,
+            1525
+          ],
+          [
+            1493,
+            1493
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Scénario avec cible atteinte puis insuffisante ; vérifier aucune alimentation automatique non prévue."
+      },
+      {
+        "criterion": "Safety exprime les repères ~0,5/1,5/2,5 années de besoin résiduel, tout en conservant la référence d'allocation 3 % sans priorité inventée.",
+        "source_ranges": [
+          [
+            1527,
+            1536
+          ],
+          [
+            1486,
+            1493
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Lire CHF/années et seuils dans le plan ; besoin résiduel nul/incomplet produit un état défini sans division par zéro."
+      },
+      {
+        "criterion": "La réserve se consomme en crise et se reconstitue après récupération selon la politique versionnée, sans supprimer les besoins essentiels.",
+        "source_ranges": [
+          [
+            1536,
+            1536
+          ],
+          [
+            1561,
+            1561
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Parcours annuel de crise puis reprise avec conservation des flux et respect des seuils approuvés."
+      },
+      {
+        "criterion": "Les cibles, données et politique sont sauvegardées dans le même scénario ; toute donnée manquante reste explicite dans la comparaison.",
+        "source_ranges": [
+          [
+            1699,
+            1708
+          ],
+          [
+            1720,
+            1721
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Changer un revenu cible et inspecter nouvelle version ; ancien scénario reproductible et source manquante visible."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.023",
+        "question": "Comment définir besoin résiduel et priorité des seuils Safety face aux 3 % ?",
+        "options": [
+          "Faire approuver la définition et la priorité avant allocation personnelle ; conserver les deux références en fixtures.",
+          "Fournir une méthode de dimensionnement validée à intégrer."
+        ],
+        "recommended": 0,
+        "blocks": "Dimensionnement réel Income/Safety."
+      },
+      {
+        "ref": "bible.question.028",
+        "question": "Les critères de dette supportable et de couverture du dividende doivent-ils rester non concluants sans seuils approuvés ?",
+        "options": [
+          "Oui, montrer les données et un état indéterminé jusqu'à validation.",
+          "Fournir les seuils de qualité et leur calibration avant un diagnostic réel."
+        ],
+        "recommended": 0,
+        "blocks": "Diagnostic de qualité Income."
+      }
+    ],
+    "satellites": [
+      "data.md",
+      "api.md",
+      "permissions.md",
+      "frontend.md",
+      "design.md",
+      "i18n.md",
+      "testing.md"
+    ],
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "risks": [
+      "Assimiler dividende exceptionnel à revenu stable ; contrôle explicite et séparation des flux."
+    ],
+    "out_of_scope": [
+      "Cascade complète et bonus : S-061 ; sources financières validées : S-068 ; décision d'investissement réelle hors moteur."
+    ],
+    "split_trigger": "Scinder après le parcours revenu annuel Income si Safety dynamique révèle une règle de priorité non bornée."
+  },
+  {
+    "session_budget": 1,
+    "mode": "local-fixtures",
+    "priority": 260,
+    "id": "S-060",
+    "title": "Lombard Bridge : stress de secours et risque de marge",
+    "milestone": "M4",
+    "objective": "Un foyer explore un scénario de ligne Lombard de secours, voit dette maximale et marge sous stress, et comprend les situations où le scénario devient impossible sans qu'aucun crédit soit disponible ou tiré.",
+    "depends_on": [
+      "S-056",
+      "S-058",
+      "S-059"
+    ],
+    "apps": [
+      "client",
+      "api"
+    ],
+    "modules": [
+      "retirement",
+      "simulation"
+    ],
+    "journey": [
+      "Activer une variante de scénario Lombard explicitement simulé.",
+      "Renseigner les conditions hypothétiques validées pour le fixture.",
+      "Stresser taux, haircuts, collatéral et réduction de ligne.",
+      "Lire dette, marge et limites, puis comparer une variante sans Lombard."
+    ],
+    "data": [
+      "Conditions de ligne versionnées/sourcées avec taux, haircuts, collatéral et limites approuvées.",
+      "Dette simulée, remboursement, marge et diagnostics par trajectoire ; aucune créance ou compte financier réel."
+    ],
+    "permissions": [
+      "L'autorisation de simuler ne confère jamais une autorisation de tirage ; aucun endpoint d'exécution de crédit."
+    ],
+    "events_jobs": [
+      "Run commun pour stress Lombard et version du scénario ; aucun appel à un prêteur."
+    ],
+    "fixtures": [
+      "Growth fortement en drawdown et Safety proche du plancher, collatéral en baisse.",
+      "Réduction de ligne, hausse taux, haircut extrême, dette nulle, remboursement avant bonus."
+    ],
+    "integrations": {
+      "simulated": [
+        "Conditions et disponibilité de crédit fictives ; aucun prêteur branché."
+      ],
+      "real": [
+        "Calcul des impacts du scénario de crédit et comparaison persistée."
+      ],
+      "activation_slices": [
+        "S-068",
+        "S-070",
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Lombard est hors allocation et présenté comme ligne de secours, jamais levier de performance ni capacité de crédit disponible.",
+        "source_ranges": [
+          [
+            1489,
+            1491
+          ],
+          [
+            1537,
+            1538
+          ],
+          [
+            1542,
+            1542
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Ouvrir la variante et lire ses conditions/limites ; aucune promesse de prêteur ou de crédit préapprouvé."
+      },
+      {
+        "criterion": "Le scénario envisage son utilisation seulement selon les conditions approuvées de drawdown Growth et Safety proche du plancher.",
+        "source_ranges": [
+          [
+            1539,
+            1539
+          ],
+          [
+            1564,
+            1564
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Parcours à la frontière des conditions ; refuser toute règle personnelle tant que base/seuils ne sont pas définis."
+      },
+      {
+        "criterion": "Taux, haircuts, baisse du collatéral et réduction de ligne sont stressés séparément et conjointement, avec marge et dette maximale visibles.",
+        "source_ranges": [
+          [
+            1541,
+            1542
+          ],
+          [
+            1466,
+            1467
+          ],
+          [
+            1605,
+            1605
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Jeux de référence pour chacun des quatre chocs ; contrainte dépassée produit une alerte explicite plutôt qu'une dette sans limite."
+      },
+      {
+        "criterion": "Tout remboursement prévu précède le bonus et la comparaison conserve l'ordre des flux.",
+        "source_ranges": [
+          [
+            1540,
+            1540
+          ],
+          [
+            1561,
+            1562
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Reprise avec dette et excédent : remboursement avant toute allocation bonus ; insuffisance conserve la dette simulée."
+      },
+      {
+        "criterion": "Le plan compare avec/sans Lombard en conservant coûts, dettes, marge et sources ; les métriques restent indisponibles si une condition requise manque.",
+        "source_ranges": [
+          [
+            1466,
+            1467
+          ],
+          [
+            1749,
+            1752
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Comparer deux variantes et ouvrir définition des coûts/marges ; aucun taux réel inventé."
+      },
+      {
+        "criterion": "Aucun calcul, décision ou chat ne déclenche un tirage ; le périmètre réglementaire et les conditions réelles sont requis avant commercialisation du scénario personnel.",
+        "source_ranges": [
+          [
+            1542,
+            1542
+          ],
+          [
+            1642,
+            1642
+          ],
+          [
+            1714,
+            1714
+          ],
+          [
+            2561,
+            2561
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Vérifier le registre des effets autorisés et tester une demande de tirage par API ; refus sans appel tiers."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.029",
+        "question": "Garder Lombard exclusivement comme scénario sans prêteur ni capacité de tirage, jusqu'à validation des conditions et du périmètre ?",
+        "options": [
+          "Oui, aucun crédit disponible ni exécution dans cette roadmap Retire.",
+          "Définir séparément un périmètre de crédit avec prestataire et autorisations explicites avant toute extension."
+        ],
+        "recommended": 0,
+        "blocks": "Commercialisation des scénarios Lombard réels ; toute exécution de crédit."
+      },
+      {
+        "ref": "bible.question.028",
+        "question": "Les seuils de drawdown, plancher et marge doivent-ils rester fixtures avant formalisation ?",
+        "options": [
+          "Oui, blocage des conclusions personnelles tant que seuils/coûts ne sont pas validés.",
+          "Fournir la méthode et les bornes validées à intégrer."
+        ],
+        "recommended": 0,
+        "blocks": "Utilisation simulée personnelle et Max Lombard Usage."
+      }
+    ],
+    "satellites": [
+      "data.md",
+      "api.md",
+      "permissions.md",
+      "security.md",
+      "frontend.md",
+      "design.md",
+      "i18n.md",
+      "testing.md"
+    ],
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "risks": [
+      "Scénario interprété comme crédit accordé ; absence d'exécution technique et disponibilité fictive explicitée."
+    ],
+    "out_of_scope": [
+      "Aucun compte de courtage, ordre, ligne réelle ni tirage ; validation du scénario S-068/S-070."
+    ],
+    "split_trigger": "Scinder après la comparaison avec/sans ligne si les chocs combinés de collatéral exigent un modèle supplémentaire."
+  },
+  {
+    "session_budget": 1,
+    "mode": "local-fixtures",
+    "priority": 261,
+    "id": "S-061",
+    "title": "Growth Cascade : flux de crise, récupération, bonus et non-intervention",
+    "milestone": "M4",
+    "objective": "Un foyer parcourt les flux annuels de sa politique Cascade et voit pourquoi le modèle utilise dividendes, réserve ou secours, réduit le budget, rembourse la dette ou conclut qu'aucune intervention n'est nécessaire.",
+    "depends_on": [
+      "S-054",
+      "S-058",
+      "S-059",
+      "S-060"
+    ],
+    "apps": [
+      "client",
+      "api"
+    ],
+    "modules": [
+      "retirement",
+      "simulation"
+    ],
+    "journey": [
+      "Choisir une politique versionnée et un parcours de marché fixture.",
+      "Inspecter l'état Growth d'une année et la cascade de financement des dépenses.",
+      "Passer à une année favorable et vérifier l'ordre de récupération.",
+      "Lire bonus éventuel ou décision de non-intervention, puis conserver le scénario."
+    ],
+    "data": [
+      "Politique de flux/bandes, cadence, base drawdown et inclusivité approuvées.",
+      "High-water mark avec traitement d'inflation/apports/retraits, besoin/budget et journal de flux par année."
+    ],
+    "permissions": [
+      "Les flux simulés restent un résultat de scénario ; aucune mutation des actifs réels ou instruction de négociation."
+    ],
+    "events_jobs": [
+      "Calcul de la politique via le Simulation Engine commun ; snapshot et traces de règles appliquées."
+    ],
+    "fixtures": [
+      "Années vert/orange/rouge/noir, exactes frontières −10/−25/−50 % après décision d'inclusivité.",
+      "Simple récupération, nouveau high-water mark, apports/retraits, dette, réserve basse et situation de non-intervention."
+    ],
+    "integrations": {
+      "simulated": [
+        "Trajectoires, rendements et conditions de crédit fictifs ; paramètres ouverts non réputés validés."
+      ],
+      "real": [
+        "Application calculée de la politique versionnée, trace de flux et restitution explicable."
+      ],
+      "activation_slices": [
+        "S-068",
+        "S-070",
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Les états vert/orange/rouge/noir conservent les bandes et cascades décrites, avec budgets correspondants et traitement explicite des frontières approuvées.",
+        "source_ranges": [
+          [
+            1545,
+            1559
+          ],
+          [
+            1564,
+            1564
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Tester années ordinaires et chaque frontière : vert dividendes/vente minimale, orange dividendes/Safety, rouge ajout Lombard, noir dernier recours validé."
+      },
+      {
+        "criterion": "L'année favorable suit dépenses normales → remboursement Lombard → recharge Safety → restauration Income → bonus ; le reste demeure Growth.",
+        "source_ranges": [
+          [
+            1561,
+            1561
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Journal d'une année avec toutes obligations puis excédent : ordre, conservation des montants et résiduel exacts."
+      },
+      {
+        "criterion": "Le bonus conserve la référence 20–25 % de richesse réelle nouvelle, high-water mark corrigé de l'inflation de référence et plafond approximatif d'une année de budget ; les paramètres restent approuvés explicitement.",
+        "source_ranges": [
+          [
+            1562,
+            1562
+          ],
+          [
+            1741,
+            1742
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Comparer nouvelle richesse et récupération ; absence de bonus en récupération, prise en compte des apports/retraits selon règle décidée."
+      },
+      {
+        "criterion": "La règle de non-intervention est observable quand cash suffisant, Lombard nul, Growth dans ses bandes et thèses intactes.",
+        "source_ranges": [
+          [
+            1563,
+            1563
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Ouvrir l'année compatible et lire chaque condition ; modifier une condition et voir la justification changer sans ordre envoyé."
+      },
+      {
+        "criterion": "Le dernier recours, réduction discrétionnaire et plancher essentiel n'ont aucune règle inventée ; la simulation bloque ce chemin quand une décision manque.",
+        "source_ranges": [
+          [
+            1554,
+            1559
+          ],
+          [
+            1564,
+            1564
+          ],
+          [
+            1739,
+            1742
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Trajectoire noire avec dernière ressource non spécifiée : résultat incomplet signalé, pas de vente fictive silencieuse."
+      },
+      {
+        "criterion": "Politique, déclencheurs et flux appliqués sont conservés dans le run et restent consultables sans exécution financière implicite.",
+        "source_ranges": [
+          [
+            1707,
+            1708
+          ],
+          [
+            1720,
+            1721
+          ],
+          [
+            2380,
+            2381
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Modifier politique puis relire ancienne année ; règle ancienne inchangée et aucun compte/ordre/retrait créé."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.028",
+        "question": "Comment traiter base du drawdown, inclusivité, cadence et dernier recours avant formalisation ?",
+        "options": [
+          "Soumettre une table explicite de transitions et bloquer les chemins personnels non définis ; fixtures seulement.",
+          "Fournir toutes les conventions validées avant implémentation personnelle."
+        ],
+        "recommended": 0,
+        "blocks": "Machine de flux, réductions budgétaires et dernier recours."
+      },
+      {
+        "ref": "bible.question.024",
+        "question": "L'indexation du high-water mark doit-elle suivre l'inflation personnalisée ou une règle propre de 4 % ?",
+        "options": [
+          "Ne pas trancher implicitement ; faire approuver la règle, apports/retraits et bonus avant calcul personnel.",
+          "Adopter une règle propre à 4 % uniquement après validation explicite et documentée."
+        ],
+        "recommended": 0,
+        "blocks": "High-water mark, bonus et comparaisons de pouvoir d'achat."
+      },
+      {
+        "ref": "bible.question.023",
+        "question": "La restauration Income/Safety doit-elle utiliser la même priorité approuvée que leur dimensionnement ?",
+        "options": [
+          "Oui, un seul jeu de priorités versionnées ; aucune nouvelle règle locale.",
+          "Définir une priorité de récupération distincte, explicitement validée."
+        ],
+        "recommended": 0,
+        "blocks": "Initialisation et récupération cohérentes des poches."
+      }
+    ],
+    "satellites": [
+      "data.md",
+      "api.md",
+      "permissions.md",
+      "frontend.md",
+      "design.md",
+      "i18n.md",
+      "testing.md"
+    ],
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "risks": [
+      "Frontière de drawdown ambiguë pouvant changer les ventes ; tests des bornes après décision.",
+      "Bonus généré par apport ou simple récupération ; trace HWM et cas de référence."
+    ],
+    "out_of_scope": [
+      "Nouveaux arbitrages de placement et exécution financière ; calibration réelle S-068 et validation S-070."
+    ],
+    "split_trigger": "Scinder après les états de crise et leurs flux si le high-water mark et le bonus demandent un modèle encore non validé."
+  },
+  {
+    "session_budget": 1,
+    "mode": "local-fixtures",
+    "priority": 262,
+    "id": "S-062",
+    "title": "Optimiser revenu et mix rente/capital sous contraintes",
+    "milestone": "M4",
+    "objective": "Un foyer compare les mixes autorisés et les compromis de revenu réel ou valeur économique à vie, comprend les contraintes qui limitent chaque scénario et retrouve le break-even calculé sans recommandation universelle.",
+    "depends_on": [
+      "S-052",
+      "S-053",
+      "S-054",
+      "S-056",
+      "S-057",
+      "S-061"
+    ],
+    "apps": [
+      "client",
+      "api"
+    ],
+    "modules": [
+      "retirement",
+      "simulation"
+    ],
+    "journey": [
+      "Choisir un objectif et les contraintes validées du scénario.",
+      "Demander les mixes autorisés et l'optimisation.",
+      "Lire solutions faisables, frontière de compromis ou absence de solution.",
+      "Comparer les résultats, le break-even et les risques avant de conserver une option exploratoire."
+    ],
+    "data": [
+      "Objectif et contraintes versionnés : dépenses essentielles, ruine, vente forcée, marge, transmission.",
+      "Jeu de mixes caisse admissibles, run/seed/méthode, diagnostics de convergence/faisabilité et critères économiques."
+    ],
+    "permissions": [
+      "Le moteur n'élargit jamais les mixes autorisés par caisse ni les droits du membre.",
+      "Une solution optimisée reste une simulation ; décision explicite et expert distincts."
+    ],
+    "events_jobs": [
+      "Job d'optimisation borné réutilisant SimulationRun ; temps/coût/erreur et annulation suivis."
+    ],
+    "fixtures": [
+      "100 % rente, 100 % capital, mixes limités par deux caisses, ensemble vide et solution frontière.",
+      "Revenus nominaux vs réels, longévité/EMS, coût dette, transmission prioritaire et contraintes incompatibles."
+    ],
+    "integrations": {
+      "simulated": [
+        "Modèles de rendement, fiscalité et longévité fictifs tant que non approuvés."
+      ],
+      "real": [
+        "Recherche numérique et diagnostics sur les modèles fixtures versionnés."
+      ],
+      "activation_slices": [
+        "S-068",
+        "S-070",
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Le moteur cherche revenu réel ou valeur économique à vie sous les cinq contraintes source : essentiel, ruine, vente forcée, marge Lombard et transmission.",
+        "source_ranges": [
+          [
+            1454,
+            1467
+          ],
+          [
+            1606,
+            1606
+          ],
+          [
+            1749,
+            1750
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Jeux de référence faisable/non faisable ; aucune contrainte violée présentée comme optimum admissible."
+      },
+      {
+        "criterion": "Seuls les mixes autorisés par la caisse sont évalués et la rente partielle conserve les paramètres réels de conversion lorsqu'ils sont validés.",
+        "source_ranges": [
+          [
+            1392,
+            1393
+          ],
+          [
+            1586,
+            1587
+          ],
+          [
+            1703,
+            1704
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Caisse excluant certains mixes ; vérifier espace de recherche et refus d'une option injectée côté client."
+      },
+      {
+        "criterion": "Le break-even de conversion compare rente et capital selon la définition économique approuvée, avec horizon, fiscalité, dettes/coûts et actualisation explicites.",
+        "source_ranges": [
+          [
+            1431,
+            1432
+          ],
+          [
+            1458,
+            1459
+          ],
+          [
+            1606,
+            1608
+          ],
+          [
+            1749,
+            1750
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Résultat connu sur fixture simple, absence de solution et paramètre manquant ; aucune équivalence approximée sans diagnostic."
+      },
+      {
+        "criterion": "Les compromis longévité, inflation, marchés, transmission et flexibilité sont visibles ; les raisons de gain et de perte demeurent accessibles.",
+        "source_ranges": [
+          [
+            1473,
+            1473
+          ],
+          [
+            1567,
+            1584
+          ],
+          [
+            1640,
+            1641
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Comparer deux options sous longévité/crise/transmission ; observer critères favorables et défavorables dans une page dédiée."
+      },
+      {
+        "criterion": "L'optimisation conserve méthode, versions, N réel, seed et contraintes ; budget de calcul et stabilité sont mesurés sans proclamer convergence au seul N cible.",
+        "source_ranges": [
+          [
+            1590,
+            1590
+          ],
+          [
+            1607,
+            1608
+          ],
+          [
+            1715,
+            1715
+          ],
+          [
+            1733,
+            1734
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Rejouer le même run et modifier une contrainte ; identifiants/cache corrects, diagnostic de stabilité et limites de coût."
+      },
+      {
+        "criterion": "Les niveaux 80/90/95/99 % sont traités selon la soutenabilité Retire et ne se substituent pas au 50 % du Target Age.",
+        "source_ranges": [
+          [
+            1429,
+            1430
+          ],
+          [
+            1608,
+            1608
+          ],
+          [
+            1735,
+            1736
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Comparer méthodes formelles et événements utilisés ; absence de correspondance implicite dans résultats ou API."
+      },
+      {
+        "criterion": "Conserver une solution crée une variante traçable, sans retrait LPP, ordre de marché ou tirage Lombard.",
+        "source_ranges": [
+          [
+            1689,
+            1689
+          ],
+          [
+            1714,
+            1714
+          ],
+          [
+            2722,
+            2722
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Choisir une option calculée, retrouver scénario/différences et constater qu'une décision expert reste distincte."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.028",
+        "question": "Comment activer l'optimisation personnelle tant que objectifs, ruine, coûts, fiscalité et break-even ne sont pas formalisés ?",
+        "options": [
+          "Exiger définitions et jeux de référence approuvés ; calcul fixture explicitement limité jusque-là.",
+          "Fournir le modèle complet validé avant le développement du mode personnel."
+        ],
+        "recommended": 0,
+        "blocks": "Objectifs/contraintes, break-even et optimum réel."
+      },
+      {
+        "ref": "bible.question.021",
+        "question": "Les événements et horizons de succès doivent-ils être partagés avec le Range approuvé ?",
+        "options": [
+          "Oui, une définition canonique commune à Range et optimisation.",
+          "Fournir des événements distincts justifiés avant implémentation."
+        ],
+        "recommended": 0,
+        "blocks": "Interprétation cohérente des niveaux de soutenabilité."
+      }
+    ],
+    "satellites": [
+      "data.md",
+      "api.md",
+      "permissions.md",
+      "jobs.md",
+      "performance.md",
+      "observability.md",
+      "testing.md",
+      "frontend.md",
+      "design.md",
+      "i18n.md"
+    ],
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "risks": [
+      "Optimisation sur méthode non définie ou espace illégal de mixes ; validateurs préalables et état non calculable.",
+      "Coût combinatoire ; limites mesurées et diagnostics avant lancement."
+    ],
+    "out_of_scope": [
+      "Désignation automatique d'un gagnant ou action financière ; revue expert S-063/S-066 ; méthodes réelles S-068/S-070."
+    ],
+    "split_trigger": "Scinder après comparaison des mixes admissibles si l'optimiseur multi-objectifs ne peut atteindre ses diagnostics dans une session."
+  },
+  {
+    "session_budget": 1,
+    "mode": "local-fixtures",
+    "priority": 263,
+    "id": "S-063",
+    "title": "Strategy : crédit Plan unique, dossier expert et décision conservée",
+    "milestone": "M4",
+    "objective": "Un client Plan demande Strategy, bénéficie une seule fois du crédit prévu et suit ses pièces, rendez-vous et décision expert dans le même dossier Wallet.",
+    "depends_on": [
+      "S-051",
+      "S-052",
+      "S-062",
+      "S-081",
+      "S-084"
+    ],
+    "apps": [
+      "client",
+      "admin",
+      "api"
+    ],
+    "modules": [
+      "commerce-entitlements",
+      "retirement",
+      "workflow",
+      "activities"
+    ],
+    "journey": [
+      "Depuis le Plan lire le service Strategy et son complément de prix.",
+      "Créer la commande simulée après vérification du Plan effectivement payé.",
+      "Suivre dossier expert, responsable, prochaine action, pièces et rendez-vous.",
+      "Consulter puis confirmer la décision autorisée avec ses raisons/réserves, conservée dans la timeline."
+    ],
+    "data": [
+      "Commande Strategy, référence du paiement Plan éligible et consommation unique du crédit.",
+      "Même plan/dossier et Decision avec version, auteur, date, raisons, réserves et preuve de confirmation."
+    ],
+    "permissions": [
+      "Éligibilité financière contrôlée côté serveur ; cadeau/droit non payé ne devient pas automatiquement un crédit de paiement.",
+      "Droits expert/foyer et confirmation explicite contrôlés ; aucune action financière déclenchée."
+    ],
+    "events_jobs": [
+      "Paiement simulé → entitlement et dossier expert idempotents ; décision confirmée → timeline/suivi.",
+      "Tâches/rendez-vous utilisent les activités communes et identifiants existants."
+    ],
+    "fixtures": [
+      "Plan payé CHF 390, achat Strategy direct, faux retour paiement, double upgrade concurrent.",
+      "Expert affecté/non affecté, certificat manquant, rendez-vous reporté, décision révisée."
+    ],
+    "integrations": {
+      "simulated": [
+        "Checkout, email et Calendar locaux ; prestation expert fictive identifiée."
+      ],
+      "real": [
+        "Crédit, dossier, tâches, liens calendrier et décision persistants."
+      ],
+      "activation_slices": [
+        "S-069",
+        "S-089",
+        "S-090",
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "La référence Strategy CHF 1 290 et le crédit Plan CHF 390 donnent le complément CHF 900 uniquement après preuve du Plan payé, selon les conditions commerciales approuvées.",
+        "source_ranges": [
+          [
+            1620,
+            1622
+          ],
+          [
+            1630,
+            1630
+          ],
+          [
+            1634,
+            1634
+          ],
+          [
+            2720,
+            2720
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Fixture Plan payé puis deux upgrades simultanés : un seul crédit ; sans paiement éligible aucun crédit inventé."
+      },
+      {
+        "criterion": "L'upgrade conserve le même objet d'analyse, ses versions, contrats, sources et hypothèses.",
+        "source_ranges": [
+          [
+            1438,
+            1438
+          ],
+          [
+            1634,
+            1634
+          ],
+          [
+            1690,
+            1692
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Comparer identifiants avant/après : aucun plan parallèle ni perte du Check."
+      },
+      {
+        "criterion": "La commande confirmée ouvre ou complète un dossier avec responsable, statut, pièces, prochaine action et rendez-vous.",
+        "source_ranges": [
+          [
+            1669,
+            1670
+          ],
+          [
+            1677,
+            1678
+          ],
+          [
+            1690,
+            1690
+          ],
+          [
+            2168,
+            2168
+          ],
+          [
+            2490,
+            2491
+          ],
+          [
+            2721,
+            2721
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Du client à Admin : suivre paiement simulé, pièce manquante, tâche et réservation du rendez-vous ; refresh conserve état."
+      },
+      {
+        "criterion": "Calendar, Gmail et Kanban réutilisent le même dossier et les mêmes identifiants, avec états d'échec des adapters visibles.",
+        "source_ranges": [
+          [
+            1677,
+            1678
+          ],
+          [
+            2168,
+            2168
+          ],
+          [
+            2721,
+            2721
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Échec puis retry calendrier fixture : pas de second rendez-vous ni activité autonome."
+      },
+      {
+        "criterion": "La décision validée garde auteur, date, version, raisons et réserves ; simulation, validation et exécution restent distinctes.",
+        "source_ranges": [
+          [
+            1709,
+            1710
+          ],
+          [
+            2488,
+            2489
+          ],
+          [
+            2722,
+            2722
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Valider une décision autorisée, la retrouver dans timeline puis créer une révision sans effacer la première."
+      },
+      {
+        "criterion": "Les vues Admin distinguent revenu Strategy, crédit appliqué et commission d'assurance ; un service fictif n'est pas un revenu réel.",
+        "source_ranges": [
+          [
+            1635,
+            1635
+          ],
+          [
+            2168,
+            2168
+          ],
+          [
+            2848,
+            2848
+          ],
+          [
+            2852,
+            2852
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Rejouer événements et contrôler un revenu fixture unique ; aucun ajout au ledger de commissions d'assurance."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.030",
+        "question": "Avant activation Strategy, faire approuver nombre/durée de rendez-vous, livrable expert, annulation, TVA et facturation ?",
+        "options": [
+          "Oui, garder le service fictif jusqu'à conditions complètes validées.",
+          "Fournir les conditions de service approuvées avant activation."
+        ],
+        "recommended": 0,
+        "blocks": "Exécution et vente réelles de Strategy."
+      },
+      {
+        "ref": "bible.question.027",
+        "question": "Le crédit de CHF 390 doit-il exiger un Plan payé et non remboursé vérifiable ?",
+        "options": [
+          "Oui, lien unique au paiement éligible ; traiter les exceptions par règle explicite approuvée.",
+          "Définir une autre règle d'éligibilité documentée avant le crédit."
+        ],
+        "recommended": 0,
+        "blocks": "Éligibilité, reprise et unicité du crédit Plan → Strategy."
+      },
+      {
+        "ref": "bible.question.009",
+        "question": "Réutiliser les états/tâches/responsabilités du dossier commun pour Strategy ?",
+        "options": [
+          "Oui, préciser le template Strategy sans second workflow autonome.",
+          "Faire approuver un template distinct relié au même dossier."
+        ],
+        "recommended": 0,
+        "blocks": "Template, responsable et prochaines actions du dossier expert."
+      }
+    ],
+    "satellites": [
+      "catalog.md",
+      "billing.md",
+      "data.md",
+      "api.md",
+      "permissions.md",
+      "events.md",
+      "jobs.md",
+      "email.md",
+      "frontend.md",
+      "i18n.md",
+      "security.md"
+    ],
+    "exclusions": [
+      "llm.md"
+    ],
+    "risks": [
+      "Double crédit en concurrence ; contrainte transactionnelle et test de replay.",
+      "Expert donnant accès à tout le patrimoine sans autorisation ; vérifications de périmètre."
+    ],
+    "out_of_scope": [
+      "Stripe réel S-069 ; Gmail/Calendar réels S-089/S-090 ; revue ponctuelle S-066 ; aucune exécution financière."
+    ],
+    "split_trigger": "Scinder après « upgrade → crédit unique → dossier expert » si la boucle décision/rendez-vous dépasse une session."
+  },
+  {
+    "session_budget": 1,
+    "mode": "local-fixtures",
+    "priority": 264,
+    "id": "S-064",
+    "title": "Care : abonnement ou inclusion explicite et droits cohérents",
+    "milestone": "M4",
+    "objective": "Un foyer choisit Care ou reçoit une inclusion commerciale explicite et comprend durée, monitoring disponible, état de paiement et accès conservé au Plan lors de la fin de Care.",
+    "depends_on": [
+      "S-051"
+    ],
+    "apps": [
+      "client",
+      "admin",
+      "api"
+    ],
+    "modules": [
+      "commerce-entitlements",
+      "retirement"
+    ],
+    "journey": [
+      "Lire l'offre Care et ses différences avec Plan et Review.",
+      "Souscrire via checkout simulé ou recevoir une inclusion Admin motivée.",
+      "Consulter échéance, état actif/payé/inclus et droits de monitoring.",
+      "Résilier ou atteindre la fin d'inclusion en conservant les résultats selon la matrice approuvée."
+    ],
+    "data": [
+      "Abonnement projeté, entitlement Care, raison/durée d'inclusion et audit.",
+      "Lien foyer/Plan, dates et décisions de conservation/recalcul approuvées ; pas de revenu fictif pour une inclusion."
+    ],
+    "permissions": [
+      "Accorder Care reste une action Admin autorisée et auditée ; entitlement ne partage pas les données du foyer.",
+      "La fin de Care coupe uniquement les capacités prévues par la matrice validée."
+    ],
+    "events_jobs": [
+      "retirement.care.status_changed déclenche synchronisation des droits et monitoring ; idempotence et ordre des événements."
+    ],
+    "fixtures": [
+      "Care CHF 290/an/foyer, inclus avec date/motif, renouvelé, impayé, résilié et inclusion expirée."
+    ],
+    "integrations": {
+      "simulated": [
+        "Paiements, cycles d'abonnement et rappels locaux."
+      ],
+      "real": [
+        "Projection d'abonnement et politique d'accès persistante."
+      ],
+      "activation_slices": [
+        "S-069",
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Care conserve la référence CHF 290/an/foyer et son rôle monitoring/recalculs/alertes, distinct du Plan et de la revue humaine CHF 290.",
+        "source_ranges": [
+          [
+            1623,
+            1628
+          ],
+          [
+            1632,
+            1632
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Lire comparatif issu du catalogue ; aucun abonnement ne promet automatiquement une revue humaine."
+      },
+      {
+        "criterion": "L'inclusion Care est un droit explicite avec motif et durée ; elle ne crée pas d'encaissement fictif.",
+        "source_ranges": [
+          [
+            1631,
+            1635
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Accorder/expirer inclusion et inspecter droit/audit ; revenu réalisé reste nul."
+      },
+      {
+        "criterion": "Renouvellement, résiliation, impayé et expiration suivent la politique contractuelle approuvée sans retirer silencieusement les résultats permanents du Plan.",
+        "source_ranges": [
+          [
+            1632,
+            1632
+          ],
+          [
+            1747,
+            1748
+          ],
+          [
+            2849,
+            2849
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Tester chaque état et date avec une horloge contrôlée ; vérifier lecture des résultats et droits de recalcul/monitoring séparés."
+      },
+      {
+        "criterion": "Le droit Care actif ou inclus est vérifié côté serveur avant le monitoring ; un entitlement ne remplace pas le consentement des membres.",
+        "source_ranges": [
+          [
+            1697,
+            1698
+          ],
+          [
+            2382,
+            2383
+          ],
+          [
+            2725,
+            2725
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Abonné tiers et membre non partagé refusés ; plan concerné lié au droit correct."
+      },
+      {
+        "criterion": "Les changements de statut Care mettent à jour droits, calendrier, dossier et notifications par effets idempotents selon le template approuvé.",
+        "source_ranges": [
+          [
+            2492,
+            2493
+          ],
+          [
+            2724,
+            2725
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Replay/désordre de deux événements : état final courant, aucun double rappel."
+      },
+      {
+        "criterion": "Les tableaux différencient Care payant/inclus, renouvellements, résiliations et marge par foyer ; les simulations ne sont pas facturées individuellement.",
+        "source_ranges": [
+          [
+            1632,
+            1635
+          ],
+          [
+            2849,
+            2849
+          ],
+          [
+            2852,
+            2852
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Une inclusion, un paiement et un recalcul : revenus et volumes séparés ; aucune facture par run."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.027",
+        "question": "À la fin de Care, conserver le Plan et ses résultats tout en arrêtant seulement le monitoring défini contractuellement ?",
+        "options": [
+          "Oui, matrice de droits/recalculs à approuver avant implementation ; aucune facture à la simulation.",
+          "Fournir une autre matrice compatible avec le Plan permanent et la bible."
+        ],
+        "recommended": 0,
+        "blocks": "Fin de Care, conservation, recalculs et monitoring."
+      },
+      {
+        "ref": "bible.question.030",
+        "question": "Valider renouvellement, grâce impayé, résiliation et conditions de Care avant un abonnement réel ?",
+        "options": [
+          "Oui, cycles fixtures tant que ces conditions manquent.",
+          "Fournir les conditions complètes à appliquer dans Stripe."
+        ],
+        "recommended": 0,
+        "blocks": "Abonnement réel et effets financiers des transitions."
+      }
+    ],
+    "satellites": [
+      "catalog.md",
+      "billing.md",
+      "data.md",
+      "api.md",
+      "permissions.md",
+      "events.md",
+      "jobs.md",
+      "frontend.md",
+      "i18n.md"
+    ],
+    "exclusions": [
+      "llm.md"
+    ],
+    "risks": [
+      "Care inclus pris pour chiffre d'affaires ou résiliation supprimant Plan ; séparation droit/paiement et tests d'échéance."
+    ],
+    "out_of_scope": [
+      "Monitoring métier S-065 ; Review S-066 ; Stripe réel S-069."
+    ],
+    "split_trigger": "Scinder après souscription/inclusion et lecture des droits si tous les cas de fin d'accès nécessitent une décision supplémentaire."
+  },
+  {
+    "session_budget": 1,
+    "mode": "local-fixtures",
+    "priority": 265,
+    "id": "S-065",
+    "title": "Care : événement de vie, recalcul, alerte et prochaine action",
+    "milestone": "M4",
+    "objective": "Un foyer bénéficiant de Care est averti d'un changement significatif de son plan, comprend les écarts entre versions et retrouve une prochaine action prise en charge côté Admin.",
+    "depends_on": [
+      "S-055",
+      "S-062",
+      "S-064",
+      "S-081",
+      "S-085"
+    ],
+    "apps": [
+      "client",
+      "admin",
+      "api"
+    ],
+    "modules": [
+      "retirement",
+      "workflow",
+      "simulation"
+    ],
+    "journey": [
+      "Recevoir une échéance ou enregistrer une modification autorisée de données.",
+      "Vérifier droit Care et évaluer le plan versionné.",
+      "Produire un nouveau run et expliquer les écarts.",
+      "Consulter l'alerte dans Wallet et sa tâche Admin avec responsable, échéance et prochaine action."
+    ],
+    "data": [
+      "Règle de monitoring approuvée/versionnée, événement déclencheur et version ciblée.",
+      "MonitoringAlert, comparaison, tâche/dossier et statut de traitement ; historique antérieur conservé."
+    ],
+    "permissions": [
+      "Vérification du droit Care actif/inclus et des données autorisées au déclenchement et dans le worker.",
+      "Une modification non autorisée ne crée ni alerte contenant des données privées ni recalcul."
+    ],
+    "events_jobs": [
+      "Évaluation idempotente sur échéance/événement, job commun, retirement.monitoring.alert_raised et review.due selon règle.",
+      "Notification Wallet et tâche Admin reliées au même identifiant d'alerte."
+    ],
+    "fixtures": [
+      "Anniversaire de revue, nouveau certificat LPP, budget modifié, dépendance/donation/succession.",
+      "Care expiré, événement doublé, calcul échoué, alerte sans changement significatif et tâche en retard."
+    ],
+    "integrations": {
+      "simulated": [
+        "Flux de données, rappels et notifications tiers locaux ; seuils fixtures tant que non approuvés."
+      ],
+      "real": [
+        "Monitoring, jobs, versions, alertes et tâches effectivement persistants."
+      ],
+      "activation_slices": [
+        "S-068",
+        "S-069",
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "L'échéance ou la modification autorisée déclenche l'évaluation du plan visé uniquement après contrôle de Care actif/inclus.",
+        "source_ranges": [
+          [
+            2724,
+            2725
+          ],
+          [
+            2382,
+            2383
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Déclencheurs autorisés, doublons et Care expiré ; un seul job éligible et aucun calcul privé indu."
+      },
+      {
+        "criterion": "Le recalcul crée une nouvelle version et explique les écarts de budget et robustesse sans effacer l'analyse antérieure.",
+        "source_ranges": [
+          [
+            1691,
+            1692
+          ],
+          [
+            1714,
+            1715
+          ],
+          [
+            2726,
+            2726
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Comparer avant/après un nouveau certificat et une variation de budget ; ouvrir les sources qui ont changé."
+      },
+      {
+        "criterion": "L'alerte visible Wallet devient une tâche Admin avec responsable, échéance et prochaine action ; erreurs et prise en charge restent auditables.",
+        "source_ranges": [
+          [
+            1709,
+            1710
+          ],
+          [
+            1724,
+            1725
+          ],
+          [
+            2486,
+            2487
+          ],
+          [
+            2727,
+            2727
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Ouvrir l'alerte, suivre sa tâche, assigner puis résoudre ; retrouver le statut depuis les deux surfaces."
+      },
+      {
+        "criterion": "Les événements de foyer, budget, succession et dépendance peuvent requérir pièces et revue, selon un template explicite au même dossier.",
+        "source_ranges": [
+          [
+            1651,
+            1652
+          ],
+          [
+            2168,
+            2168
+          ],
+          [
+            2728,
+            2728
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Événement EMS avec source manquante : demande documentaire et prochaine action ; aucun avis validé automatique."
+      },
+      {
+        "criterion": "La vision du plan vivant et la question annuelle sur le niveau de vie sont traduites en changements de décisions et hypothèses, pas en simple performance de portefeuille.",
+        "source_ranges": [
+          [
+            1659,
+            1660
+          ],
+          [
+            1691,
+            1692
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Lire le résumé de suivi : budget prévu, ce qui reste possible, réserves et décision à revoir référencent les deux versions."
+      },
+      {
+        "criterion": "Alertes utiles, délai de prise en charge, taux de revue et décisions actualisées sont mesurables sans confondre probabilités ou revenus.",
+        "source_ranges": [
+          [
+            2849,
+            2852
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Fixture alerte traitée/non pertinente/en retard : événements et durées dédupliqués, aucune conversion financière supposée."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.027",
+        "question": "Déclencher Care seulement sur échéances et changements expressément approuvés, en conservant toujours les versions ?",
+        "options": [
+          "Oui, configurer règles/fréquences/seuils avant activation ; fixtures jusque-là.",
+          "Fournir directement un calendrier et des règles d'alerte validées."
+        ],
+        "recommended": 0,
+        "blocks": "Déclenchement personnel et fréquence des recalculs."
+      },
+      {
+        "ref": "bible.question.009",
+        "question": "Utiliser un template de tâche Care avec responsable, échéance et prochaine action explicitement définis ?",
+        "options": [
+          "Oui, réutiliser le workflow commun après validation du template.",
+          "Fournir un workflow Care distinct lié au même dossier."
+        ],
+        "recommended": 0,
+        "blocks": "Escalade, SLA et prise en charge des alertes."
+      }
+    ],
+    "satellites": [
+      "data.md",
+      "api.md",
+      "permissions.md",
+      "events.md",
+      "jobs.md",
+      "email.md",
+      "observability.md",
+      "frontend.md",
+      "i18n.md"
+    ],
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "risks": [
+      "Boucles de recalcul ou alertes dupliquées ; clé d'événement/version et politique de pertinence.",
+      "Métrique de probabilité présentée comme variation économique certaine ; séparation des familles."
+    ],
+    "out_of_scope": [
+      "Service humain de Review S-066 ; consentement/données nouvelles non autorisés restent bloqués."
+    ],
+    "split_trigger": "Scinder après « nouveau certificat → version → alerte → tâche » si les autres déclencheurs requièrent des règles supplémentaires."
+  },
+  {
+    "session_budget": 1,
+    "mode": "local-fixtures",
+    "priority": 266,
+    "id": "S-066",
+    "title": "Annual/Event Review : service ponctuel et nouveau plan comparable",
+    "milestone": "M4",
+    "objective": "Un foyer demande une revue humaine annuelle ou liée à un événement, suit son rendez-vous et ses pièces, puis retrouve la décision actualisée et la comparaison avec le plan précédent.",
+    "depends_on": [
+      "S-063",
+      "S-065",
+      "S-084"
+    ],
+    "apps": [
+      "client",
+      "admin",
+      "api"
+    ],
+    "modules": [
+      "retirement",
+      "workflow",
+      "commerce-entitlements",
+      "activities"
+    ],
+    "journey": [
+      "Ouvrir une alerte ou demander directement une revue.",
+      "Lire conditions et prix du service ponctuel puis créer la commande simulée.",
+      "Suivre rendez-vous, échanges et pièces sur le dossier commun.",
+      "Consulter et confirmer la décision actualisée, en comparant l'ancien plan."
+    ],
+    "data": [
+      "Order Review ponctuelle, dossier et rendez-vous reliés au foyer et versions du plan.",
+      "Preuve de décision/revue, réserves, auteur et date ; lien à alerte ou motif d'événement."
+    ],
+    "permissions": [
+      "Review n'est pas implicitement comprise dans Care ; droits/conditions sont vérifiés.",
+      "Expert autorisé seulement sur le dossier et les documents explicitement partagés."
+    ],
+    "events_jobs": [
+      "Commande confirmée ouvre/complète la revue ; tâche/rendez-vous et notification idempotents.",
+      "Confirmation de décision conserve preuve/timeline et prépare un suivi autorisé."
+    ],
+    "fixtures": [
+      "Revue annuelle CHF 290, événement dépendance, revue sans Care, Care inclus sans Review.",
+      "Commande échouée, report, document manquant, révision de décision et tentative expert tiers."
+    ],
+    "integrations": {
+      "simulated": [
+        "Paiement, rendez-vous, échanges externes et prestation expert de démonstration."
+      ],
+      "real": [
+        "Commande/dossier/revue/version/décision persistants."
+      ],
+      "activation_slices": [
+        "S-069",
+        "S-089",
+        "S-090",
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Annual/Event Review demeure un service humain ponctuel de référence CHF 290, distinct de Care et soumis aux conditions approuvées.",
+        "source_ranges": [
+          [
+            1626,
+            1628
+          ],
+          [
+            1692,
+            1692
+          ],
+          [
+            2729,
+            2729
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Client avec/sans Care lit la même nature de service et son droit réel ; aucune inclusion automatique."
+      },
+      {
+        "criterion": "La demande API crée une revue liée au plan et au même dossier Admin, avec motif, responsable et prochaine action.",
+        "source_ranges": [
+          [
+            1669,
+            1670
+          ],
+          [
+            1677,
+            1678
+          ],
+          [
+            2402,
+            2403
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Double demande avec même clé : une revue ; client tiers refusé ; motif et alerte parent conservés."
+      },
+      {
+        "criterion": "Changement de foyer, budget, succession ou dépendance entraîne les pièces et contrôles prévus, sans inventer une décision faute de source.",
+        "source_ranges": [
+          [
+            2728,
+            2728
+          ],
+          [
+            1751,
+            1752
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Déclencher événement dépendance, fournir pièce, suivre état de vérification et rendez-vous."
+      },
+      {
+        "criterion": "Rendez-vous, échanges et décision sont rattachés aux mêmes identifiants et restent consultables dans Wallet.",
+        "source_ranges": [
+          [
+            1677,
+            1678
+          ],
+          [
+            2168,
+            2168
+          ],
+          [
+            2730,
+            2730
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Lire échange et rendez-vous depuis Admin puis Wallet ; liens cohérents et documents privés non partagés invisibles."
+      },
+      {
+        "criterion": "La nouvelle décision conserve auteur/date/raisons/réserves, compare les versions et ne lance aucune opération financière.",
+        "source_ranges": [
+          [
+            1691,
+            1692
+          ],
+          [
+            1709,
+            1710
+          ],
+          [
+            2488,
+            2489
+          ],
+          [
+            2722,
+            2722
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Confirmer deux versions de décision puis relire l'ancienne ; aucune mutation d'actif/retrait/ordre/crédit."
+      },
+      {
+        "criterion": "Les ventes de revue, coût du service et suivi de traitement alimentent leurs indicateurs propres ; une invitation ou revue en attente ne compte pas comme encaissée.",
+        "source_ranges": [
+          [
+            1635,
+            1635
+          ],
+          [
+            2849,
+            2852
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Cas payée/annulée/en attente et temps de revue fixture : projections financières et opérationnelles distinctes."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.030",
+        "question": "Définir avant vente la durée, le livrable, l'annulation et la facturation de Review séparément de Care ?",
+        "options": [
+          "Oui, maintenir une revue fixture tant que les conditions manquent.",
+          "Fournir des conditions approuvées et le périmètre du service."
+        ],
+        "recommended": 0,
+        "blocks": "Prestation et paiement Review réels."
+      },
+      {
+        "ref": "bible.question.009",
+        "question": "Rattacher toute revue au dossier existant avec un template annuel/événement approuvé ?",
+        "options": [
+          "Oui, même dossier et types de revue explicites.",
+          "Fournir un autre regroupement de dossiers autorisé et ses règles."
+        ],
+        "recommended": 0,
+        "blocks": "États, responsable, échéance et documents de Review."
+      }
+    ],
+    "satellites": [
+      "catalog.md",
+      "billing.md",
+      "data.md",
+      "api.md",
+      "permissions.md",
+      "events.md",
+      "jobs.md",
+      "email.md",
+      "frontend.md",
+      "i18n.md"
+    ],
+    "exclusions": [
+      "llm.md"
+    ],
+    "risks": [
+      "Care pris pour droit à une prestation humaine illimitée ; offre/droit/commande séparés.",
+      "Historique remplacé à la revue ; versions et décision append-only."
+    ],
+    "out_of_scope": [
+      "Exécution financière hors produit ; intégrations paiement/calendar/email réelles S-069/S-089/S-090."
+    ],
+    "split_trigger": "Scinder après « demander → commander → suivre revue » si la comparaison de décision requiert un nouveau modèle métier."
+  },
+  {
+    "session_budget": 1,
+    "mode": "local-fixtures",
+    "priority": 267,
+    "id": "S-067",
+    "title": "Admin : gouverner les paramètres Retire et leurs versions publiées",
+    "milestone": "M4",
+    "objective": "Un responsable autorisé révise une source LPP/EMS, une politique Cascade ou un profil de calcul, fait approuver sa version puis voit quels plans nécessitent une nouvelle évaluation sans réécrire leurs résultats.",
+    "depends_on": [
+      "S-052",
+      "S-056",
+      "S-058",
+      "S-059",
+      "S-060",
+      "S-061",
+      "S-062",
+      "S-081"
+    ],
+    "apps": [
+      "admin",
+      "client",
+      "api"
+    ],
+    "modules": [
+      "retirement",
+      "catalog",
+      "simulation",
+      "workflow"
+    ],
+    "journey": [
+      "Ouvrir un paramètre avec sa source, validité et usages.",
+      "Proposer une nouvelle version et vérifier champs/risques.",
+      "Soumettre à la validation métier autorisée puis publier le périmètre approuvé.",
+      "Consulter les plans impactés et les nouvelles évaluations autorisées ; ancien résultat intact."
+    ],
+    "data": [
+      "Référentiel versionné : caisse, survivants, EMS/longévité, méthodes/calibrations, politiques/bandes et Range.",
+      "Statut brouillon/revu/publié/retiré selon workflow approuvé, sources/preuves, auteur et décision.",
+      "Liens de dépendance vers runs/plans et motif de remplacement."
+    ],
+    "permissions": [
+      "Rôles de proposition, validation et publication définis explicitement ; refus par défaut sur publication.",
+      "Un paramètre générique n'autorise pas l'accès au patrimoine privé de tous les plans consommateurs."
+    ],
+    "events_jobs": [
+      "Publication versionnée et audit ; signal d'impact vers monitoring sans recalcul automatique hors Care/règle autorisée."
+    ],
+    "fixtures": [
+      "Règle expirée, source contradictoire, politique avec plafond invalide, version publiée révisée.",
+      "Auteur non habilité, revue rejetée, deux publications concurrentes, anciens runs consommateurs."
+    ],
+    "integrations": {
+      "simulated": [
+        "Sources métier et décisions de validation fixtures, non assimilées à un aval expert réel."
+      ],
+      "real": [
+        "Workflow de gouvernance, versions immuables et liens d'impact persistants."
+      ],
+      "activation_slices": [
+        "S-068",
+        "S-070",
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Admin gère règles/sources caisse, longévité/EMS, politiques Growth, profils Monte-Carlo, versions et liens au catalogue de droits/prix commun.",
+        "source_ranges": [
+          [
+            1669,
+            1670
+          ],
+          [
+            2168,
+            2168
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Modifier une règle caisse et un profil dans Admin, consulter source/version/usages ; aucun prix copié dans une table parallèle."
+      },
+      {
+        "criterion": "Le modèle conserve Rules, PlanVersion, Policy, Run, Decision et entitlement comme objets reliés ; noms/routes indicatifs sont stabilisés par contrats sans multiplication de services.",
+        "source_ranges": [
+          [
+            1693,
+            1712
+          ],
+          [
+            1718,
+            1727
+          ],
+          [
+            2378,
+            2383
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Vérifier contrats Zod et liens d'intégrité ; publier une version sans duplicata d'objet métier ni compte financier."
+      },
+      {
+        "criterion": "Publication conserve auteur, preuve, validité et diff ; paramètres non approuvés, expirés ou contradictoires ne sont pas sélectionnés par le mode réel.",
+        "source_ranges": [
+          [
+            1587,
+            1587
+          ],
+          [
+            1641,
+            1642
+          ],
+          [
+            1751,
+            1752
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Tentative de publication non autorisée/contradictoire refusée ; choix de règle effective conforme à date et source."
+      },
+      {
+        "criterion": "Une nouvelle source, règle ou politique produit un nouveau calcul et invalide seulement les clés concernées ; anciens snapshots restent reproductibles.",
+        "source_ranges": [
+          [
+            1715,
+            1715
+          ],
+          [
+            2507,
+            2507
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Modifier règle LPP, budget puis politique ; cache invalide pour prochains runs et replay ancien intact."
+      },
+      {
+        "criterion": "L'impact de publication mène à une prochaine action ou alerte selon droits Care, sans indiscrétion sur les foyers hors périmètre.",
+        "source_ranges": [
+          [
+            1724,
+            1725
+          ],
+          [
+            2168,
+            2168
+          ],
+          [
+            2724,
+            2727
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Publier source affectant deux foyers : opérateur voit son périmètre, client voit seulement son alerte et son plan."
+      },
+      {
+        "criterion": "Le registre conserve toutes les inconnues R16 avec réponse datée ou blocage explicite ; une proposition de défaut n'est jamais publiée comme décision.",
+        "source_ranges": [
+          [
+            1729,
+            1756
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Passer en revue les douze sujets et vérifier référence question, statut/décision/preuve ; activation refusée si sujet concerné demeure ouvert."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.008",
+        "question": "Quels droits appliquer à la publication de méthodes et paramètres ?",
+        "options": [
+          "Rôles explicites de proposition/validation/publication à approuver, refus par défaut ; aucune permission tirée de l'appartenance au foyer.",
+          "Fournir une autre matrice nominative avant gouvernance."
+        ],
+        "recommended": 0,
+        "blocks": "Publication et lecture transversale des paramètres/usages."
+      },
+      {
+        "ref": "bible.question.028",
+        "question": "Toute version de modèle destinée au réel doit-elle avoir méthodes, sources, jeux de référence et preuve de validation ?",
+        "options": [
+          "Oui, publication réelle bloquée si l'un manque.",
+          "Définir un périmètre validé plus restreint, documenté paramètre par paramètre."
+        ],
+        "recommended": 0,
+        "blocks": "Gouvernance de méthodes et sources réelles."
+      }
+    ],
+    "satellites": [
+      "data.md",
+      "contracts.md",
+      "api.md",
+      "permissions.md",
+      "events.md",
+      "jobs.md",
+      "security.md",
+      "frontend.md",
+      "i18n.md",
+      "evolution.md"
+    ],
+    "exclusions": [
+      "llm.md",
+      "billing.md"
+    ],
+    "risks": [
+      "Version publiée modifiée ou approbation fictive présentée réelle ; immutabilité, preuve et statut distincts."
+    ],
+    "out_of_scope": [
+      "Choix ou validation de nouvelles règles non fournies ; collecte de sources réelles S-068 ; recherche pro Intelligence S-113."
+    ],
+    "split_trigger": "Scinder après « règle caisse → proposition → publication → impact » si les autres familles demandent une matrice différente."
+  },
+  {
+    "session_budget": 1,
+    "mode": "integration",
+    "priority": 768,
+    "id": "S-068",
+    "title": "Composer et activer les sources et méthodes Retire validées",
+    "milestone": "M8",
+    "objective": "Un validateur assemble les paquets et preuves S-074/S-075/S-076, vérifie leur cohérence sur un plan de recette et publie uniquement la version Retire couverte avant validation commerciale.",
+    "depends_on": [
+      "S-074",
+      "S-075",
+      "S-076"
+    ],
+    "apps": [
+      "admin",
+      "client",
+      "api"
+    ],
+    "modules": [
+      "retirement",
+      "simulation",
+      "catalog",
+      "documents"
+    ],
+    "journey": [
+      "Réunir sources qualifiées, politique/optimisation et sampling/indicateurs approuvés.",
+      "Vérifier la composition exacte sur le même plan/run et refuser une version non couverte.",
+      "Publier le manifeste et remettre le périmètre technique validé à S-070."
+    ],
+    "data": [
+      "Manifeste immuable des versions, preuves et domaines de validité S-074/S-075/S-076 ; aucun corpus dupliqué."
+    ],
+    "permissions": [
+      "Secrets/adapters côté serveur ; données réelles privées limitées au consentement et aux rôles approuvés.",
+      "Accès source ne vaut pas publication commerciale ; activation dépend des validations de S-070."
+    ],
+    "events_jobs": [
+      "Imports/actualisations idempotents, timeout/retry, quarantaine des erreurs et publication versionnée.",
+      "Invalidation ciblée cache puis nouvelles évaluations selon droits ; jamais remplacement rétroactif."
+    ],
+    "fixtures": [
+      "Conserver fixtures de non-régression ; ajouter échantillons réels autorisés dont résultats attendus validés.",
+      "Source révoquée/périmée/incomplète, taux/FX manquant, série courte, erreur réseau et coût excessif."
+    ],
+    "integrations": {
+      "simulated": [
+        "Aucun substitut fictif silencieux dans un run réel ; jeux de démonstration restent dans leur mode séparé."
+      ],
+      "real": [
+        "Composition contrôlée des sources/méthodes qualifiées S-074/S-075/S-076, run de recette et publication du manifeste."
+      ],
+      "activation_slices": [
+        "S-070",
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Le plan composé référence le paquet de sources S-074 effectivement qualifié ; aucune source absente, non autorisée ou d’une autre version n’entre dans un résultat réel.",
+        "source_ranges": [
+          [
+            1591,
+            1600
+          ],
+          [
+            1607,
+            1608
+          ],
+          [
+            1715,
+            1715
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Ouvrir le paquet réel et ses références depuis un run de composition ; aucun nouvel import ou calibration globale."
+      },
+      {
+        "criterion": "Les preuves compétentes caisse/survivants/EMS/Lombard acquises en S-074 couvrent exactement les règles du plan composé.",
+        "source_ranges": [
+          [
+            1542,
+            1542
+          ],
+          [
+            1586,
+            1587
+          ],
+          [
+            1642,
+            1642
+          ],
+          [
+            1751,
+            1752
+          ]
+        ],
+        "oracle": "V5",
+        "test": "Revue du manifeste et des avis acquis ; absence ou périmètre différent bloque l’activation."
+      },
+      {
+        "criterion": "Statistique, bootstrap et stress composés utilisent les versions validées S-076 ; scénarios forcés et pondérations éventuelles restent séparés.",
+        "source_ranges": [
+          [
+            1590,
+            1590
+          ],
+          [
+            1602,
+            1608
+          ],
+          [
+            2507,
+            2507
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Contrôler méthode/profil/stress d’un run contre le rapport S-076 sans refaire sa campagne."
+      },
+      {
+        "criterion": "Profil N, longévité, événements/horizons et mapping Range correspondent aux décisions et diagnostics approuvés S-074/S-076.",
+        "source_ranges": [
+          [
+            1733,
+            1738
+          ],
+          [
+            1743,
+            1746
+          ],
+          [
+            2850,
+            2850
+          ]
+        ],
+        "oracle": "V5",
+        "test": "Revue des décisions et diagnostics acquis ; refuser profil ou mapping non couvert."
+      },
+      {
+        "criterion": "Métriques/break-even et optimisation publiés composent S-075/S-076 avec fiscalité, coûts/dettes, unités et contraintes inchangés.",
+        "source_ranges": [
+          [
+            1454,
+            1467
+          ],
+          [
+            1606,
+            1608
+          ],
+          [
+            1749,
+            1750
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Comparer versions économiques et résultat d’un cas de composition aux oracles acceptés ; aucune nouvelle formule."
+      },
+      {
+        "criterion": "Growth/look-through, Income, Safety, HWM/bonus et Lombard utilisent la politique et le domaine validés S-075, sans paramètres indicatifs substitués.",
+        "source_ranges": [
+          [
+            1493,
+            1493
+          ],
+          [
+            1512,
+            1518
+          ],
+          [
+            1522,
+            1525
+          ],
+          [
+            1536,
+            1542
+          ],
+          [
+            1564,
+            1564
+          ],
+          [
+            1739,
+            1742
+          ]
+        ],
+        "oracle": "V5",
+        "test": "Contrôler références de politique/preuves et rejeter une version non approuvée sans rejouer toute calibration."
+      },
+      {
+        "criterion": "Erreur, source périmée/révoquée ou méthode non validée empêche un résultat réel fiable ; nouvel import conserve versions/runs précédents et leur audit trail.",
+        "source_ranges": [
+          [
+            1640,
+            1642
+          ],
+          [
+            1715,
+            1715
+          ],
+          [
+            2507,
+            2507
+          ],
+          [
+            2850,
+            2850
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Retirer une source ou substituer une méthode au manifeste : activation refusée, ancien run intact et diagnostic de version explicite."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.029",
+        "question": "Quelles sources de caisse, survivants, longévité et EMS utiliser avant les résultats réels ?",
+        "options": [
+          "Fournir/autoriser des documents et datasets officiels datés, puis validation métier par périmètre ; aucun fournisseur choisi implicitement.",
+          "Valider explicitement un prestataire de données et son périmètre avant connexion."
+        ],
+        "recommended": 0,
+        "blocks": "Accès réel aux données LPP/Life/EMS et conditions Lombard."
+      },
+      {
+        "ref": "bible.question.028",
+        "question": "Les méthodes et calibrations doivent-elles passer des cas de référence approuvés indépendamment du code ?",
+        "options": [
+          "Oui, résultats personnels non activables avant ces preuves.",
+          "Fournir un dossier de validation équivalent avec ses critères documentés."
+        ],
+        "recommended": 0,
+        "blocks": "Fiabilité annoncée des calculs réels."
+      },
+      {
+        "ref": "bible.question.020",
+        "question": "Autoriser la cible 100 000 seulement après seuils de convergence, temps et coût explicitement approuvés ?",
+        "options": [
+          "Oui, profil limité à ce qui est mesuré et validé.",
+          "Fournir des plafonds et critères validés avant les essais."
+        ],
+        "recommended": 0,
+        "blocks": "Coût et promesse de précision du profil Retire."
+      }
+    ],
+    "satellites": [
+      "data.md",
+      "api.md",
+      "permissions.md",
+      "security.md",
+      "jobs.md",
+      "events.md",
+      "performance.md",
+      "observability.md",
+      "testing.md",
+      "dependencies.md",
+      "frontend.md",
+      "i18n.md"
+    ],
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "risks": [
+      "Source officielle mais inadéquate à la caisse/persona ; validité et domaine d'application contrôlés.",
+      "Calibration auto-validée par le même code ; oracles métiers indépendants et revue V5."
+    ],
+    "out_of_scope": [
+      "Sources et qualification S-074 ; flux/optimisation S-075 ; sampling/indicateurs/stress S-076 ; validation commerciale S-070 ; aucun ordre financier."
+    ],
+    "split_trigger": "Une preuve manquante ou incompatible retourne à S-074/S-075/S-076 ; conserver la composition non activée au lieu de relancer une campagne globale."
+  },
+  {
+    "session_budget": 1,
+    "mode": "integration",
+    "priority": 769,
+    "id": "S-069",
+    "title": "Stripe réel : Plan, crédit Strategy, Care et Review en environnement test",
+    "milestone": "M8",
+    "objective": "Un client de test paie réellement via Stripe en mode test, reçoit les droits exacts, utilise son crédit Plan une seule fois et gère Care ou une Review tandis qu'Admin rapproche les événements et revenus.",
+    "depends_on": [
+      "S-051",
+      "S-063",
+      "S-064",
+      "S-066"
+    ],
+    "apps": [
+      "www",
+      "client",
+      "admin",
+      "api"
+    ],
+    "modules": [
+      "commerce-entitlements",
+      "retirement"
+    ],
+    "journey": [
+      "Raccorder les clés et catalogues de l'environnement Stripe test autorisé.",
+      "Acheter Plan dans Checkout puis attendre confirmation serveur.",
+      "Passer à Strategy, tester Care et commander une Review.",
+      "Utiliser le portail client, simuler cycles/échecs/remboursements et rapprocher la projection Admin."
+    ],
+    "data": [
+      "Prix/lookupKeys provenant de Stripe, offres/entitlements canoniques, clients/commandes/subscriptions projetés.",
+      "Événements Stripe signés, credit unique relié à l'achat, inclusions Care auditables et revenus projetés."
+    ],
+    "permissions": [
+      "Secrets test/live séparés et côté serveur ; aucun montant ou droit déterminé par le client.",
+      "Actions de remboursement/inclusion réservées aux rôles approuvés et auditées."
+    ],
+    "events_jobs": [
+      "Webhooks signés/idempotents et réconciliation bornée ; désordre/retry traités.",
+      "service.order.paid/entitlement.granted et Care status_changed ont une seule conséquence métier."
+    ],
+    "fixtures": [
+      "Cartes et horloges Stripe test ; scénario de doublon/désordre, impayé, annulation, remboursement.",
+      "Plan réellement payé en mode test, inclusion Care sans encaissement, deux upgrades simultanés."
+    ],
+    "integrations": {
+      "simulated": [
+        "Aucun argent live ; les données de carte sont exclusivement celles du mode test Stripe."
+      ],
+      "real": [
+        "Stripe Checkout, Customer Portal, prix, webhooks et cycles de vie effectivement intégrés en test."
+      ],
+      "activation_slices": [
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Offres et montants proviennent de Stripe avec clés du catalogue commun ; les références source 390/1 290/290 sont appliquées uniquement selon conditions commerciales approuvées.",
+        "source_ranges": [
+          [
+            1610,
+            1628
+          ],
+          [
+            1634,
+            1634
+          ],
+          [
+            1711,
+            1712
+          ],
+          [
+            1753,
+            1754
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Lire prix depuis Stripe test, ouvrir les mêmes offres dans les trois surfaces et rejeter un prix arbitraire envoyé par client."
+      },
+      {
+        "criterion": "Le retour Checkout laisse l'accès en attente jusqu'au webhook signé ; doublon, désordre et signature invalide n'accordent pas de droit indu.",
+        "source_ranges": [
+          [
+            1634,
+            1634
+          ],
+          [
+            2404,
+            2405
+          ],
+          [
+            2490,
+            2491
+          ],
+          [
+            2717,
+            2717
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Rejouer événements réels de test, simuler retour anticipé et payload modifié ; état courant unique et signé."
+      },
+      {
+        "criterion": "Le crédit Plan → Strategy est unique, vérifie le paiement éligible et facture le complément de référence CHF 900 dans le cas source approuvé.",
+        "source_ranges": [
+          [
+            1620,
+            1622
+          ],
+          [
+            1630,
+            1634
+          ],
+          [
+            2720,
+            2720
+          ],
+          [
+            2848,
+            2848
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Acheter Plan puis Strategy dans Stripe test ; confirmer facture et crédit uniques après deux tentatives simultanées."
+      },
+      {
+        "criterion": "Care couvre paiement, renouvellement, impayé, résiliation et inclusion motivée ; portail et projection respectent la conservation Plan et les droits approuvés.",
+        "source_ranges": [
+          [
+            1623,
+            1625
+          ],
+          [
+            1631,
+            1632
+          ],
+          [
+            1747,
+            1748
+          ],
+          [
+            2849,
+            2849
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Horloge test et portail : vérifier droits à chaque date, facture réelle test pour Care payé et aucune pour l'inclusion."
+      },
+      {
+        "criterion": "Review reste une commande ponctuelle distincte ; paiements Retire/Care/revues et commissions d'assurance sont rapprochés séparément.",
+        "source_ranges": [
+          [
+            1626,
+            1628
+          ],
+          [
+            1635,
+            1635
+          ],
+          [
+            2168,
+            2168
+          ],
+          [
+            2849,
+            2852
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Rapprocher événements test avec commandes, revenus et coûts ; aucun doublon ni assimilation simulation/conversion/encaissement."
+      },
+      {
+        "criterion": "TVA, factures, annulation, remboursement et crédit repris suivent les règles approuvées ; aucun paiement par simulation n'est créé.",
+        "source_ranges": [
+          [
+            1632,
+            1632
+          ],
+          [
+            1726,
+            1727
+          ],
+          [
+            1753,
+            1754
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Matrice des transitions approuvée testée avec droits exacts ; plusieurs runs ne produisent aucune commande/facture supplémentaire."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.030",
+        "question": "Les conditions commerciales complètes doivent-elles être validées avant toute configuration live ?",
+        "options": [
+          "Oui, intégrer/tester d'abord Stripe test, puis n'activer que le catalogue approuvé.",
+          "Fournir le catalogue et conditions live déjà approuvés avant cette slice."
+        ],
+        "recommended": 0,
+        "blocks": "Prix vendables, TVA, annulation, remboursement et facturation réels."
+      },
+      {
+        "ref": "bible.question.027",
+        "question": "Faut-il valider les effets du remboursement et des impayés sur crédit/droits tout en préservant le contrat d'accès permanent ?",
+        "options": [
+          "Oui, matrice explicite avant tests/activation des transitions financières.",
+          "Fournir une matrice contractuelle existante à appliquer."
+        ],
+        "recommended": 0,
+        "blocks": "Reprise de crédit, impayés et droits après remboursement."
+      }
+    ],
+    "satellites": [
+      "billing.md",
+      "catalog.md",
+      "data.md",
+      "api.md",
+      "permissions.md",
+      "security.md",
+      "jobs.md",
+      "events.md",
+      "observability.md",
+      "testing.md",
+      "frontend.md",
+      "i18n.md"
+    ],
+    "exclusions": [
+      "llm.md"
+    ],
+    "risks": [
+      "Test réussi confondu avec paiement live ; environnements et preuves distincts.",
+      "Crédit/remboursement ou webhook en concurrence ; transactions, déduplication et réconciliation."
+    ],
+    "out_of_scope": [
+      "Encaissement live et activation commerciale : S-073 ; choix de prestataire concurrent à Stripe hors scope."
+    ],
+    "split_trigger": "Scinder après achat Plan réel test et crédit Strategy si les cycles Care/Review demandent une autre session."
+  },
+  {
+    "session_budget": 1,
+    "mode": "release",
+    "priority": 770,
+    "id": "S-070",
+    "title": "Valider le périmètre Retire réellement commercialisable",
+    "milestone": "M8",
+    "objective": "Un responsable métier examine les preuves de calcul et les validations nécessaires par capacité, approuve un périmètre vendable précis et empêche toute offre ou recommandation non couverte d'être activée.",
+    "depends_on": [
+      "S-062",
+      "S-067",
+      "S-068",
+      "S-069"
+    ],
+    "apps": [
+      "admin",
+      "www",
+      "client",
+      "api"
+    ],
+    "modules": [
+      "retirement",
+      "commerce-entitlements",
+      "workflow"
+    ],
+    "journey": [
+      "Ouvrir le dossier de préparation Retire et ses preuves par domaine.",
+      "Faire enregistrer les validations humaines requises et leurs réserves.",
+      "Comparer capacités livrées/validées avec promesses et droits de chaque offre.",
+      "Approuver un périmètre daté ou maintenir un blocage explicite, visible dans les surfaces commerciales."
+    ],
+    "data": [
+      "Dossier de validation par méthode/capacité/offre avec version, preuve, validateur, date, domaine et réserve.",
+      "Matrice de périmètre disponible et activation autorisée ; toutes les mentions futures restent planifiées."
+    ],
+    "permissions": [
+      "Le développeur et les fixtures n'auto-approuvent pas une validation humaine ; rôles de validation explicitement mandatés.",
+      "Publication et activation contrôlées côté serveur ; simulation/décision/exécution techniquement distinctes."
+    ],
+    "events_jobs": [
+      "Changement de validation/périmètre audité ; retrait d'autorisation désactive les nouvelles opérations concernées sans effacer historique."
+    ],
+    "fixtures": [
+      "Validation limitée à une caisse/un profil, validation expirée/rejetée, EMS ou Lombard non approuvé.",
+      "Offre promettant une capacité absente, revue expert manquante, dossier complet autorisé."
+    ],
+    "integrations": {
+      "simulated": [
+        "Aucune approbation réglementaire fictive n'est recevable comme preuve."
+      ],
+      "real": [
+        "Dossier de preuves et décisions humaines effectivement enregistrées ; sources/méthodes S-068 et Stripe test S-069."
+      ],
+      "activation_slices": [
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Le dossier couvre périmètre réglementaire, formulation des recommandations personnalisées, Lombard, fiscalité, règles LPP, survivants, EMS et prestations complémentaires avant commercialisation.",
+        "source_ranges": [
+          [
+            1642,
+            1642
+          ],
+          [
+            1751,
+            1752
+          ],
+          [
+            2560,
+            2561
+          ]
+        ],
+        "oracle": "V5",
+        "test": "Obtenir une validation humaine datée pour chaque domaine vendu avec sources et réserves ; absence d'avis maintient le domaine bloqué."
+      },
+      {
+        "criterion": "Les phases Decision/Life/Capital/Monitoring/Distribution restent toutes présentes et le niveau EMS réellement livré est cohérent avec la promesse Plan.",
+        "source_ranges": [
+          [
+            1643,
+            1656
+          ],
+          [
+            2792,
+            2793
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Comparer inventaire de capacités actives et offres ; interdire un entitlement commercial promettant une capacité absente/non validée."
+      },
+      {
+        "criterion": "Les douze arbitrages R16 et l'ambiguïté de facturation ont une décision ou un blocage circonscrit ; aucune proposition n'est prise pour approbation.",
+        "source_ranges": [
+          [
+            1729,
+            1756
+          ],
+          [
+            1726,
+            1727
+          ]
+        ],
+        "oracle": "V5",
+        "test": "Valider le dossier de décisions datées ; les items ouverts apparaissent dans le périmètre non activable."
+      },
+      {
+        "criterion": "Faits, hypothèses, probabilités et recommandations sont distingués ; une donnée absente reste manquante/à valider, une référence reste hypothèse et l'optimisation n'est ni décision de caisse, ni garantie, ni instruction d'exécution.",
+        "source_ranges": [
+          [
+            1441,
+            1451
+          ],
+          [
+            1639,
+            1641
+          ],
+          [
+            1758,
+            1758
+          ]
+        ],
+        "oracle": "V5",
+        "test": "Revue humaine des écrans Range, comparaison, stress, export et offre ; réserves de méthode visibles et compréhensibles."
+      },
+      {
+        "criterion": "La séparation simulation/décision/exécution est démontrée à l'API et dans le registre IA ; aucun calcul ni chat ne peut déclencher retrait, ordre ou tirage.",
+        "source_ranges": [
+          [
+            1714,
+            1714
+          ],
+          [
+            2169,
+            2169
+          ],
+          [
+            2561,
+            2561
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Tests de refus sur commandes financières et inspection des effets autorisés ; aucun accès tiers de courtage/crédit."
+      },
+      {
+        "criterion": "La validation porte sur versions et périmètres précis ; changer une méthode/règle/source réouvre le contrôle concerné sans valider automatiquement la nouvelle version.",
+        "source_ranges": [
+          [
+            1641,
+            1642
+          ],
+          [
+            1715,
+            1715
+          ],
+          [
+            2507,
+            2507
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Publier une source ou méthode modifiée et constater nouvelle preuve requise, ancien résultat restant accessible avec son statut."
+      },
+      {
+        "criterion": "La première commercialisation est conditionnée aux preuves réellement disponibles et ne déclare aucun jalon déjà livré sans oracle.",
+        "source_ranges": [
+          [
+            1656,
+            1656
+          ],
+          [
+            2793,
+            2793
+          ]
+        ],
+        "oracle": "V5",
+        "test": "Faire approuver la matrice finale et l'offre effective ; les zones non approuvées restent visibles dans la roadmap complète."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.029",
+        "question": "N'activer que les domaines LPP/EMS/Lombard couverts par une validation humaine documentée et datée ?",
+        "options": [
+          "Oui, blocage ciblé si preuve absente ; aucune validation déduite du code.",
+          "Fournir un dossier de validation existant avec périmètre et responsables identifiés."
+        ],
+        "recommended": 0,
+        "blocks": "Commercialisation et recommandations personnelles Retire."
+      },
+      {
+        "ref": "bible.question.026",
+        "question": "Le périmètre Plan vendu doit-il correspondre exactement aux phases et à l'EMS effectivement disponibles et validés ?",
+        "options": [
+          "Oui, toutes les capacités restent planifiées mais seules celles validées sont commercialisées.",
+          "Attendre validation de l'intégralité de Retire avant toute première vente."
+        ],
+        "recommended": 0,
+        "blocks": "Périmètre vendable et phase d'ouverture commerciale."
+      }
+    ],
+    "satellites": [
+      "launch.md",
+      "catalog.md",
+      "data.md",
+      "permissions.md",
+      "security.md",
+      "frontend.md",
+      "i18n.md",
+      "evolution.md"
+    ],
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "risks": [
+      "Cadrage ou test pris pour validation juridique ; preuve humaine obligatoire.",
+      "Vendre tout le Plan alors que seules certaines phases sont actives ; matrice effective liée aux offres."
+    ],
+    "out_of_scope": [
+      "Cette slice ne fournit pas d'avis juridique/financier nouveau ; activation live S-073 ; recherche pro S-113."
+    ],
+    "split_trigger": "Scinder par périmètre commercial validable si tous les avis ne peuvent être réunis ; aucun blocage n'est masqué par clôture artificielle."
+  },
+  {
+    "session_budget": 1,
+    "mode": "local-fixtures",
+    "priority": 271,
+    "id": "S-071",
+    "title": "Distribuer Retire aux partenaires, employeurs et clients B2B",
+    "milestone": "M4",
+    "objective": "Un partenaire ou employeur autorisé propose Retire dans le périmètre de son accord, suit les leads et services autorisés, puis utilise un parcours API/white-label borné sans accéder automatiquement au patrimoine des foyers.",
+    "depends_on": [
+      "S-050",
+      "S-063",
+      "S-067",
+      "S-070",
+      "S-087",
+      "S-110"
+    ],
+    "apps": [
+      "www",
+      "partners",
+      "admin",
+      "client",
+      "api"
+    ],
+    "modules": [
+      "retirement",
+      "partners",
+      "commerce-entitlements",
+      "content-acquisition"
+    ],
+    "journey": [
+      "Configurer un accord de distribution et ses droits après validation commerciale.",
+      "Ouvrir le parcours d'acquisition Retire attribué au partenaire/employeur.",
+      "Le client reçoit son Check puis poursuit dans Wallet ; le partenaire voit seulement le suivi autorisé.",
+      "Tester un client API/white-label isolé et tracer ses accès selon scopes approuvés."
+    ],
+    "data": [
+      "Accord de distribution/version/périmètre/durée, attribution du lead et liens aux services Retire.",
+      "Accès API bornés et identité de présentation autorisée ; objets Plan/Run/Order restent communs.",
+      "Commissions/remises/Miles uniquement si règle approuvée, avec référence au ledger propriétaire."
+    ],
+    "permissions": [
+      "Aucun accès automatique au patrimoine/foyer pour partenaire, employeur ou client API.",
+      "Scopes, consentements, identités de service et visibilité du suivi définis avant activation ; refus par défaut."
+    ],
+    "events_jobs": [
+      "Attribution et suivi reliés aux événements communs ; aucune commission/récompense créée sans barème validé."
+    ],
+    "fixtures": [
+      "Partenaire et employeur fictifs, deux clients B2B isolés, foyer ayant refusé le partage.",
+      "Accord expiré, clé/scopes invalides, lead attribué deux fois, demande de patrimoine non autorisée."
+    ],
+    "integrations": {
+      "simulated": [
+        "Accords, clients employeurs, domaines white-label et barèmes commerciaux fictifs identifiés."
+      ],
+      "real": [
+        "API et parcours applicatifs utilisant services communs, authentification WorkOS et restrictions serveur."
+      ],
+      "activation_slices": [
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Distribution SEO/partenaires/employeurs puis API/white-label B2B reste planifiée intégralement ; activation dépend de cas réels et validations préalables, sans supprimer la phase future.",
+        "source_ranges": [
+          [
+            1653,
+            1656
+          ],
+          [
+            1673,
+            1674
+          ],
+          [
+            2793,
+            2793
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Exécuter les parcours fixtures partenaire, employeur et client API ; disponibilité réelle indique le gate de validation."
+      },
+      {
+        "criterion": "La première valeur reste un Check public et la sauvegarde rejoint le même Wallet sans plateforme Retire parallèle ni ressaisie des sources.",
+        "source_ranges": [
+          [
+            1399,
+            1399
+          ],
+          [
+            1665,
+            1668
+          ],
+          [
+            1685,
+            1688
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Parcours depuis le lien distribué → Check → WorkOS → même plan Wallet ; attribution conservée."
+      },
+      {
+        "criterion": "Le suivi partenaire se limite au commercial autorisé ; aucun accord de distribution ne dévoile actifs, revenus ou documents du foyer.",
+        "source_ranges": [
+          [
+            1413,
+            1413
+          ],
+          [
+            1673,
+            1674
+          ],
+          [
+            1697,
+            1698
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Partenaire/employeur/API tente lecture patrimoine et scénario d'un autre client : refus sans fuite ; partage explicite limité vérifié."
+      },
+      {
+        "criterion": "API et présentation white-label consomment les objets communs avec scopes approuvés ; pas de fork des moteurs ni d'historique privé parallèle.",
+        "source_ranges": [
+          [
+            1653,
+            1654
+          ],
+          [
+            1714,
+            1715
+          ],
+          [
+            2391,
+            2405
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Client API crée/lit uniquement un plan autorisé ; comparaison avec Wallet retrouve mêmes IDs/versions et audit d'accès."
+      },
+      {
+        "criterion": "Commissions, accords employeurs, white-label et fidélité ont leurs décisions commerciales ; aucun Miles, reward ou remise Retire automatique.",
+        "source_ranges": [
+          [
+            1635,
+            1635
+          ],
+          [
+            1681,
+            1682
+          ],
+          [
+            1755,
+            1756
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Commande Retire sans règle : aucun gain ni commission ; règle explicitement approuvée appelle le ledger commun une seule fois."
+      },
+      {
+        "criterion": "Prix/droits et statistiques de distribution distinguent ventes, conversion et résultats de simulation ; un accord expiré coupe seulement les accès futurs prévus.",
+        "source_ranges": [
+          [
+            1634,
+            1635
+          ],
+          [
+            2848,
+            2852
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Comparer deux canaux ; revenus payés et funnel séparés, accord expiré refusé sans supprimer les résultats permanents du client."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.031",
+        "question": "Comment activer distribution/employeurs/white-label et éventuelle fidélité Retire ?",
+        "options": [
+          "Accords et barèmes explicites validés, aucune commission/Miles/remise par défaut ; fixtures jusque-là.",
+          "Fournir des accords approuvés couvrant chaque canal et ses conditions."
+        ],
+        "recommended": 0,
+        "blocks": "Règles commerciales, droits distributeurs et gains/rewards."
+      },
+      {
+        "ref": "bible.question.008",
+        "question": "Limiter par défaut partenaires/employeurs/API au suivi commercial sans patrimoine de foyer ?",
+        "options": [
+          "Oui, chaque scope de données supplémentaire exige consentement et matrice approuvés.",
+          "Fournir un modèle de partage explicite plus restreint par canal."
+        ],
+        "recommended": 0,
+        "blocks": "Permissions API, accès employeurs et partage de patrimoine."
+      },
+      {
+        "ref": "bible.question.001",
+        "question": "Activer API/white-label B2B après validation documentée sur cas réels, tout en développant le parcours fixture maintenant ?",
+        "options": [
+          "Oui, implémenter intégralement puis activer seulement les accords/périmètres validés.",
+          "Attendre les cas réels pour développer aussi l'interface B2B ; conserver néanmoins toutes les slices au backlog."
+        ],
+        "recommended": 0,
+        "blocks": "Moment d'activation de la distribution avancée."
+      }
+    ],
+    "satellites": [
+      "permissions.md",
+      "auth.md",
+      "api.md",
+      "data.md",
+      "security.md",
+      "catalog.md",
+      "marketing-web.md",
+      "seo.md",
+      "geo.md",
+      "frontend.md",
+      "i18n.md"
+    ],
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "risks": [
+      "Distribution transformée en accès global au patrimoine ; scopes et consentements explicites.",
+      "White-label dupliquant un moteur ; contrats communs et tests d'identités."
+    ],
+    "out_of_scope": [
+      "DNS/domaines réels non approuvés ; activation S-073 ; commissions partenaires génériques S-087 ; aucun barème Retire inventé."
+    ],
+    "split_trigger": "Scinder après parcours partenaire complet si employeurs ou API/white-label requièrent une matrice commerciale distincte."
+  },
+  {
+    "session_budget": 1,
+    "mode": "integration",
+    "priority": 772,
+    "id": "S-072",
+    "title": "Copilote Retire : expliquer un run et préparer une action autorisée",
+    "milestone": "M8",
+    "objective": "Un conseiller autorisé interroge un résultat Retire sauvegardé, reçoit une explication référencée puis prépare un scénario ou une tâche de revue avec confirmation, sans calcul inventé ni exécution financière.",
+    "depends_on": [
+      "S-056",
+      "S-062",
+      "S-067",
+      "S-081",
+      "S-094",
+      "S-095",
+      "S-098"
+    ],
+    "apps": [
+      "admin",
+      "client",
+      "api"
+    ],
+    "modules": [
+      "retirement",
+      "ai-orchestration",
+      "workflow",
+      "simulation"
+    ],
+    "journey": [
+      "Ouvrir le copilote depuis le dossier ou résultat autorisé.",
+      "Demander la signification d'une métrique ou différence de versions.",
+      "Vérifier citations, limites et contexte utilisé.",
+      "Préparer une variante ou tâche, relire le brouillon puis confirmer l'action autorisée."
+    ],
+    "data": [
+      "Conversation/contexte selon politiques IA communes, références précises au plan/run/méthode/source.",
+      "Brouillon d'action conforme au registre et preuve de confirmation ; variante/tâche reliée au dossier."
+    ],
+    "permissions": [
+      "Retrieval borné aux droits présents de l'utilisateur et du foyer ; révocation effective même en conversation existante.",
+      "Registre distingue lire/préparer/confirmer/exécuter/interdire ; aucune action financière disponible."
+    ],
+    "events_jobs": [
+      "Actions confirmées utilisent API/moteurs/tâches communs et idempotence ; appels LLM bornés/audités selon module IA."
+    ],
+    "fixtures": [
+      "Question sur run absent/partiel, sources contradictoires, injection dans une pièce, foyer tiers.",
+      "Brouillon scénario, tâche Review, double confirmation et demande de tirage/retrait/ordre."
+    ],
+    "integrations": {
+      "simulated": [
+        "Jeux de test adversariaux et modèles financiers fixtures conservés comme tels."
+      ],
+      "real": [
+        "Adapter LLM autorisé de S-098, retrieval/registre commun et actions réellement persistées après confirmation."
+      ],
+      "activation_slices": [
+        "S-073"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "L'explication cite le résultat sauvegardé, sa méthode, ses versions et sources ; le LLM n'invente aucun calcul ni probabilité.",
+        "source_ranges": [
+          [
+            1679,
+            1680
+          ],
+          [
+            2169,
+            2169
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Interroger une différence et une métrique ; ouvrir références exactes et comparer nombres au run."
+      },
+      {
+        "criterion": "Sources manquantes/contradictoires, run incomplet et statut fictif sont visibles ; le copilote ne transforme pas l'incertitude en recommandation assurée.",
+        "source_ranges": [
+          [
+            1640,
+            1641
+          ],
+          [
+            1715,
+            1715
+          ],
+          [
+            2169,
+            2169
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Suite adversariale : aucun chiffre ajouté, état de démonstration propagé et refus/clarification appropriée."
+      },
+      {
+        "criterion": "Préparer un scénario appelle les contrats de variante et le moteur existant ; aucune règle financière n'est exécutée dans le texte du chat.",
+        "source_ranges": [
+          [
+            1679,
+            1680
+          ],
+          [
+            1705,
+            1706
+          ],
+          [
+            2396,
+            2399
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Créer un brouillon, confirmer, retrouver le scénario identifié et son run commun ; double confirmation dédupliquée."
+      },
+      {
+        "criterion": "La tâche de revue est rattachée au même dossier et conserve responsable, prochaine action et raison conformément au registre.",
+        "source_ranges": [
+          [
+            1677,
+            1680
+          ],
+          [
+            1724,
+            1725
+          ],
+          [
+            2169,
+            2169
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Relire puis confirmer le brouillon ; tâche visible dans Kanban et liée au plan, sans rendez-vous externe non autorisé."
+      },
+      {
+        "criterion": "Aucune simulation, réponse ou commande du copilote ne déclenche retrait LPP, ordre de marché ou tirage Lombard.",
+        "source_ranges": [
+          [
+            1714,
+            1714
+          ],
+          [
+            2169,
+            2169
+          ],
+          [
+            2561,
+            2561
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Demandes directes/injections pour les trois actes : refus et absence de commande d'exécution."
+      },
+      {
+        "criterion": "Les données du foyer sont autorisées au retrieval et à l'action, y compris après révocation ; les citations ne donnent pas un lien public à une pièce privée.",
+        "source_ranges": [
+          [
+            1413,
+            1413
+          ],
+          [
+            1697,
+            1698
+          ],
+          [
+            2561,
+            2561
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Révoquer le partage entre deux messages puis demander l'ancien résultat ; accès et action refusés sans fuite."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.013",
+        "question": "Limiter les premières actions Retire IA à lecture, brouillon de scénario et tâche de revue avec confirmation ?",
+        "options": [
+          "Oui, registre explicite approuvé ; actes financiers interdits.",
+          "Fournir un registre plus restreint avant activation."
+        ],
+        "recommended": 0,
+        "blocks": "Actions Retire autorisées et niveau de confirmation."
+      },
+      {
+        "ref": "bible.question.012",
+        "question": "Réutiliser strictement fournisseur, rétention et périmètre de contexte IA déjà validés pour S-098 ?",
+        "options": [
+          "Oui, aucun nouveau fournisseur ni extension de données sans décision explicite.",
+          "Définir un périmètre Retire plus restreint avant activation."
+        ],
+        "recommended": 0,
+        "blocks": "Contexte financier transmis au LLM réel."
+      }
+    ],
+    "satellites": [
+      "llm.md",
+      "security.md",
+      "permissions.md",
+      "data.md",
+      "api.md",
+      "events.md",
+      "jobs.md",
+      "frontend.md",
+      "i18n.md"
+    ],
+    "exclusions": [
+      "billing.md"
+    ],
+    "risks": [
+      "Explication de simulation confondue avec ordre ; registre fermé et tests d'interdiction.",
+      "Citation ou mémoire divulguant un foyer révoqué ; vérification au moment de chaque lecture/action."
+    ],
+    "out_of_scope": [
+      "Fournisseur LLM commun S-098 ; voix S-099 ; stratégie personnelle non validée et toute exécution financière."
+    ],
+    "split_trigger": "Scinder après « question → réponse citée » si les deux actions confirmées requièrent une extension du registre."
+  },
+  {
+    "session_budget": 1,
+    "mode": "release",
+    "priority": 773,
+    "id": "S-073",
+    "title": "Activer Retire et vérifier les parcours payants, Care et distribution",
+    "milestone": "M8",
+    "objective": "Un client du périmètre approuvé réalise Check → Plan → Strategy puis Care/Review avec les intégrations réelles, tandis que l'équipe vérifie les droits, les résultats, le suivi et les indicateurs avant d'ouvrir les canaux validés.",
+    "depends_on": [
+      "S-000c",
+      "S-055",
+      "S-065",
+      "S-066",
+      "S-068",
+      "S-069",
+      "S-070",
+      "S-071",
+      "S-072",
+      "S-089",
+      "S-090",
+      "S-113",
+      "S-136"
+    ],
+    "apps": [
+      "www",
+      "client",
+      "admin",
+      "partners",
+      "intelligence",
+      "api"
+    ],
+    "modules": [
+      "retirement",
+      "commerce-entitlements",
+      "workflow",
+      "simulation",
+      "partners"
+    ],
+    "journey": [
+      "Vérifier le périmètre approuvé, les sources réelles, le catalogue et les intégrations.",
+      "Exécuter le parcours complet d'un foyer autorisé avec preuves de paiement et rendez-vous.",
+      "Déclencher un événement Care, suivre alerte/revue et comparer les décisions.",
+      "Ouvrir les canaux de distribution autorisés, observer les métriques et conserver procédure de retrait ciblé."
+    ],
+    "data": [
+      "Preuves de release par parcours/persona/version, décisions de périmètre, données de test réelles autorisées.",
+      "Funnel, revenus projetés, coûts/durée de calcul/service, alertes et suivi ; agrégations distinctes et sans PII superflue."
+    ],
+    "permissions": [
+      "Toutes les frontières foyer/Plan/Care/expert/partenaire restent testées sur l'environnement cible.",
+      "Activation limitée au périmètre validé ; ressources Infomaniak préexistantes exclues conformément au socle."
+    ],
+    "events_jobs": [
+      "Vérifier la chaîne paiement→droit→dossier, calcul→résultat, Care→alerte→tâche→Review.",
+      "Supervision des jobs/échecs et rapprochement des événements ; rollback de disponibilité sans effacer données."
+    ],
+    "fixtures": [
+      "Comptes/personas de test clairement séparés des clients ; fixtures financières exclues des parcours dits réels.",
+      "Foyer partagé/restreint, abonnement actif/inclus/résilié, partenaire limité et visiteur."
+    ],
+    "integrations": {
+      "simulated": [
+        "Aucun tiers critique présenté comme réel s'il reste simulé ; cas non validés restent explicitement indisponibles."
+      ],
+      "real": [
+        "WorkOS coverview, sources/méthodes approuvées, Stripe live selon autorisation d'activation, Gmail/Calendar autorisés, LLM approuvé et API B2B autorisée."
+      ],
+      "activation_slices": []
+    },
+    "criteria": [
+      {
+        "criterion": "Le workflow L complet conserve Check gratuit avant compte, sources/avoirs LPP, Plan, options/Range/N, crédit Strategy, dossier/rendez-vous et décision sans acte financier.",
+        "source_ranges": [
+          [
+            2713,
+            2722
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Parcourir depuis www jusqu'à décision Wallet avec preuves des APIs réelles, paiement/droit et rendez-vous ; annoter toute capacité non activée."
+      },
+      {
+        "criterion": "Le workflow M vérifie Care, produit une nouvelle version, crée alerte/tâche, propose Review distincte et conserve rendez-vous/échanges/décisions.",
+        "source_ranges": [
+          [
+            2724,
+            2730
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Déclencher un événement autorisé puis traiter la revue ; comparer ancien/nouveau plan et preuve de droit à chaque étape."
+      },
+      {
+        "criterion": "Les connexions réelles et le périmètre commercial correspondent aux validations ; aucune fixture, source non approuvée, offre indisponible ou méthode non calibrée ne devient un résultat réel.",
+        "source_ranges": [
+          [
+            1642,
+            1642
+          ],
+          [
+            1656,
+            1656
+          ],
+          [
+            1751,
+            1754
+          ],
+          [
+            2793,
+            2793
+          ]
+        ],
+        "oracle": "V5",
+        "test": "Responsable approuve la liste effective sources/offres/capacités et les preuves de parcours ; éléments non validés restent bloqués."
+      },
+      {
+        "criterion": "Le funnel mesure Check→Wallet→Plan→Strategy et crédit effectivement déduit, en séparant conversions d'usage, probabilités et revenus encaissés.",
+        "source_ranges": [
+          [
+            2848,
+            2848
+          ],
+          [
+            2852,
+            2852
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Scénarios dupliqués, abandonnés et payés : événements dédupliqués, dénominateurs documentés, zéro revenu pour abandon."
+      },
+      {
+        "criterion": "Care payé/inclus, renouvellement, résiliation, revues, coût de service/marge par foyer et coût/durée/stabilité de calcul sont observables dans les vues autorisées.",
+        "source_ranges": [
+          [
+            1635,
+            1635
+          ],
+          [
+            2168,
+            2168
+          ],
+          [
+            2849,
+            2850
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Comparer dashboard avec commandes, abonnements, coûts et runs source ; inclusion n'est pas revenu et coût manquant n'est pas zéro."
+      },
+      {
+        "criterion": "Alertes utiles, délai de prise en charge, taux de revue et décisions actualisées sont calculés à partir du workflow réel, avec explication des versions.",
+        "source_ranges": [
+          [
+            2851,
+            2852
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Vérifier cas pris en charge/non pertinent/en retard ; chaque mesure rejoint alerte/tâche/décision et sa date."
+      },
+      {
+        "criterion": "Partenaires/employeurs/API/white-label et recherche pro consomment les mêmes plans/méthodes autorisés ; un partenaire ne reçoit aucun patrimoine sans consentement et les gains commerciaux suivent uniquement les règles validées.",
+        "source_ranges": [
+          [
+            1653,
+            1654
+          ],
+          [
+            1671,
+            1674
+          ],
+          [
+            1681,
+            1682
+          ],
+          [
+            1755,
+            1756
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Exécuter un canal et une validation pro approuvés ; tester scopes expirés, accès tiers et absence de Miles/commission sans barème."
+      },
+      {
+        "criterion": "Les contrôles de refus et de reprise couvrent foyer tiers, droit révoqué, webhook rejoué, source retirée, job échoué et interdiction d'actes financiers ; l'historique reste consultable.",
+        "source_ranges": [
+          [
+            1697,
+            1698
+          ],
+          [
+            1714,
+            1715
+          ],
+          [
+            2507,
+            2507
+          ],
+          [
+            2561,
+            2561
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Matrice de pannes/refus sur cible isolée ; aucune fuite, double crédit, suppression de résultat ou exécution implicite."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.030",
+        "question": "Autoriser le catalogue live uniquement pour offres et conditions effectivement validées ?",
+        "options": [
+          "Oui, activation circonscrite après preuves et identifiants live autorisés ; aucune vente implicite pendant les tests.",
+          "Attendre une ouverture simultanée de toutes les offres validées."
+        ],
+        "recommended": 0,
+        "blocks": "Encaissements live et ouverture commerciale."
+      },
+      {
+        "ref": "bible.question.031",
+        "question": "Quels canaux ouvrir après les essais sur cas réels ?",
+        "options": [
+          "Seulement partenaires/employeurs/API/white-label couverts par accords et scopes approuvés.",
+          "Conserver tous les canaux fermés jusqu'à un lancement conjoint validé."
+        ],
+        "recommended": 0,
+        "blocks": "Activation réelle de la distribution et de ses règles commerciales."
+      }
+    ],
+    "satellites": [
+      "launch.md",
+      "delivery.md",
+      "hosting.md",
+      "billing.md",
+      "catalog.md",
+      "permissions.md",
+      "security.md",
+      "observability.md",
+      "performance.md",
+      "testing.md",
+      "frontend.md",
+      "i18n.md"
+    ],
+    "exclusions": [],
+    "risks": [
+      "Réussite en test assimilée à release live ; preuves d'environnement et approbation de périmètre obligatoires.",
+      "Ouverture de canaux non contractés ou modification d'instances existantes ; périmètre et cible contrôlés."
+    ],
+    "out_of_scope": [
+      "Aucune modification d'instance Horizon existante ni DNS non validé ; aucun ordre, retrait ou crédit réel.",
+      "Les zones non validées restent planifiées et bloquées explicitement ; la v1 complète ne se déclare pas terminée sur une activation partielle."
+    ],
+    "split_trigger": "Scinder la release par parcours et canal réellement validé si la matrice complète ne tient pas dans une session ; ne pas réduire silencieusement la couverture."
+  }
+]

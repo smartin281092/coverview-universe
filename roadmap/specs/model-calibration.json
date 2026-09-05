@@ -1,0 +1,1208 @@
+[
+  {
+    "mode": "integration",
+    "milestone": "M8",
+    "priority": 743,
+    "session_budget": 1,
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "id": "S-043",
+    "title": "Valider l'accumulation et ses probabilités sur un corpus indépendant",
+    "objective": "Un validateur obtient une version du moteur d'accumulation dont les montants, probabilités et âges cibles concordent avec un corpus indépendant approuvé, puis remet les preuves nécessaires à son activation.",
+    "depends_on": [
+      "S-028",
+      "S-029",
+      "S-040"
+    ],
+    "apps": [
+      "api",
+      "admin",
+      "client"
+    ],
+    "modules": [
+      "simulation-engine",
+      "retirement-accumulation"
+    ],
+    "journey": [
+      "Ouvrir la méthode d'accumulation proposée avec ses paramètres, sources et décisions.",
+      "Exécuter le corpus indépendant et les études de stabilité du profil.",
+      "Examiner chaque écart, limite et abstention ; corriger ou maintenir le blocage.",
+      "Enregistrer la preuve de validation de la version pour consolidation S-038."
+    ],
+    "data": [
+      "Méthode d'accumulation versionnée, sources de marché autorisées, définitions de capital cible et événements/horizon.",
+      "Corpus indépendant avec sorties attendues et tolérances approuvées, méthode/seed/N demandé-exécuté et diagnostics."
+    ],
+    "permissions": [
+      "Validation réservée aux personnes explicitement habilitées ; données du corpus autorisées et isolées.",
+      "Valider une méthode n'accorde pas lecture des portefeuilles ni activation commerciale automatique."
+    ],
+    "events_jobs": [
+      "Campagne de calcul bornée sur les jobs existants ; rapport versionné et statut de validation audité."
+    ],
+    "fixtures": [
+      "Inflation/rendement nuls, versement fixe/indexé, plafond atteint, caisse inconnue et objectif jamais atteint.",
+      "Séries corrélées, marché manquant, seeds fixes, profil interrompu et seuil de confiance différent."
+    ],
+    "integrations": {
+      "simulated": [
+        "Corpus de démonstration conservé pour les refus, sans validation financière déduite."
+      ],
+      "real": [
+        "Sources autorisées S-040 et corpus d'oracles indépendants effectivement comparés au moteur."
+      ],
+      "activation_slices": [
+        "S-038",
+        "S-136"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Les données âge/salaire/revenu/cotisation/inflation/AVS-LPP/capital/stratégie produisent les montants réels et nominaux, effort fixe/indexé et capital nécessaire selon des sources et paramètres approuvés.",
+        "source_ranges": [
+          [
+            1099,
+            1143
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Comparer cas analytiques et bornes/plafonds aux résultats attendus ; caisse ou plafond manquant empêche la conclusion concernée."
+      },
+      {
+        "criterion": "La méthode probabiliste et les corrélations sont définies, versionnées et approuvées avant toute qualification réelle ; aucun paramètre manquant n'est une hypothèse réversible.",
+        "source_ranges": [
+          [
+            1144,
+            1145
+          ],
+          [
+            2899,
+            2899
+          ],
+          [
+            2908,
+            2908
+          ]
+        ],
+        "oracle": "V5",
+        "test": "Valider fiche méthode et domaine d'application avec corpus indépendant ; décision explicite pour chaque paramètre requis."
+      },
+      {
+        "criterion": "Goal Probability et Target Age suivent les définitions à âge donné et premier âge au seuil ; absence d'atteinte et confiance restent exactes et distinctes de la soutenabilité Retire.",
+        "source_ranges": [
+          [
+            1181,
+            1206
+          ],
+          [
+            1735,
+            1736
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Cas à objectif jamais atteint, cible atteinte exactement à une borne et plusieurs confiances ; vérifier sémantique et libellé sans faux zéro."
+      },
+      {
+        "criterion": "Les runs conservent N réellement exécuté, méthode, seed, horizon, données et corrélations ; quantiles et probabilités passent les tolérances indépendantes et l'étude de convergence/coût.",
+        "source_ranges": [
+          [
+            1145,
+            1180
+          ],
+          [
+            1733,
+            1734
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Reproduire même seed et données puis comparer quantiles/courbes de stabilité aux seuils approuvés ; N demandé n'est pas une preuve."
+      },
+      {
+        "criterion": "Une nouvelle méthode ou source génère un nouveau run sans requalifier les anciennes démonstrations ; historique/projection/hypothèse et réel/nominal sont explicités dans le rapport remis.",
+        "source_ranges": [
+          [
+            1370,
+            1377
+          ],
+          [
+            2524,
+            2531
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Ouvrir rapport d'un cas ambigu puis ancienne version ; vérifier provenance, limites et absence de garantie ou conseil tiré du passé."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.007",
+        "question": "Les méthodes d'accumulation, capital cible, corrélations et corpus ont-elles des paramètres exacts approuvés ?",
+        "options": [
+          "Conserver le périmètre réel bloqué tant que décisions et corpus ne sont pas joints.",
+          "Joindre la méthode, les paramètres et le corpus validés au GO."
+        ],
+        "recommended": 0,
+        "blocks": "Équations et paramètres du moteur d'accumulation réel."
+      },
+      {
+        "ref": "bible.question.020",
+        "question": "Le profil N, diagnostics et seuils de convergence de l'accumulation sont-ils approuvés ?",
+        "options": [
+          "Conserver le moteur en démonstration jusqu'à configuration et corpus approuvés.",
+          "Joindre explicitement configuration, tolérances et diagnostics validés."
+        ],
+        "recommended": 0,
+        "blocks": "Probabilités réelles et promesse de précision."
+      },
+      {
+        "ref": "bible.question.021",
+        "question": "L'événement de réussite accumulation et l'horizon sont-ils approuvés selon §56.3 ?",
+        "options": [
+          "Faire approuver cible à âge donné et premier âge au seuil avant sortie réelle.",
+          "Fournir une convention différente explicitement validée avant calcul réel."
+        ],
+        "recommended": 0,
+        "blocks": "Sémantique du calcul réel."
+      }
+    ],
+    "satellites": [
+      "data.md",
+      "api.md",
+      "contracts.md",
+      "jobs.md",
+      "performance.md",
+      "security.md",
+      "permissions.md",
+      "testing.md",
+      "frontend.md",
+      "i18n.md"
+    ],
+    "risks": [
+      "Tolérances dérivées du même code que le moteur ; corpus indépendant et validation humaine.",
+      "Nombre élevé de trajectoires pris pour preuve de convergence ; diagnostics séparés."
+    ],
+    "out_of_scope": [
+      "Scores/cohortes S-044 ; compatibilité/World S-045 ; consolidation d'activation S-038 ; décaissement Retire S-074 à S-076."
+    ],
+    "split_trigger": "Si le corpus révèle deux modèles distincts non validés, borner la revue au moteur déterministe puis conserver le profil probabiliste explicitement non validé avec reste à faire."
+  },
+  {
+    "mode": "integration",
+    "milestone": "M8",
+    "priority": 744,
+    "session_budget": 1,
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "id": "S-044",
+    "title": "Valider Score, Investment Age, Freshness et cohortes comparables",
+    "objective": "Un validateur examine un contrat du corpus et obtient des sous-scores, un Investment Age et un benchmark explicables et reproductibles, ou une abstention justifiée lorsque données ou cohorte sont insuffisantes.",
+    "depends_on": [
+      "S-026",
+      "S-040"
+    ],
+    "apps": [
+      "api",
+      "admin",
+      "client"
+    ],
+    "modules": [
+      "scoring-benchmark"
+    ],
+    "journey": [
+      "Ouvrir les définitions et pondérations proposées de chaque métrique.",
+      "Comparer les contrats du corpus aux résultats et contributions attendus.",
+      "Examiner filtres, taille/date de cohorte et cas insuffisants.",
+      "Consigner la validation ou le blocage par métrique pour S-038."
+    ],
+    "data": [
+      "Versions de Score/DNA/Investment Age/Freshness, pondérations et dimensions appliquées.",
+      "Cohortes sourcées, filtres/taille/date, seuil de suffisance approuvé et corpus de contributions/rangs attendus."
+    ],
+    "permissions": [
+      "Seuls validateurs habilités signent une version ; cohortes n'exposent pas de données privées dans leurs explications.",
+      "Administrer les pondérations ne donne aucun accès supplémentaire aux dossiers individuels."
+    ],
+    "events_jobs": [
+      "Campagne de validation réutilise le moteur de scoring ; version/preuve auditée, pas de recalcul rétroactif."
+    ],
+    "fixtures": [
+      "Portefeuilles concentrés/corrélés, frais/protections/flexibilité différents et données manquantes.",
+      "Cohorte suffisante/insuffisante, filtre/date divergents, dernière revue inconnue, deux méthodes d'âge successives."
+    ],
+    "integrations": {
+      "simulated": [
+        "Notes et années illustratives de la bible restent exemples, jamais valeurs attendues universelles."
+      ],
+      "real": [
+        "Données autorisées S-040 et comparaison aux oracles de scoring/benchmark validés indépendamment."
+      ],
+      "activation_slices": [
+        "S-038",
+        "S-136"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Score et DNA couvrent les dimensions source, dont performance, frais, diversification, allocation, protection, flexibilité et adaptabilité ; notes et poids disposent de définitions et validations explicites.",
+        "source_ranges": [
+          [
+            118,
+            127
+          ],
+          [
+            995,
+            1012
+          ],
+          [
+            2900,
+            2900
+          ]
+        ],
+        "oracle": "V5",
+        "test": "Revue du corpus et des contributions par dimension ; aucun poids ou score illustratif n'est adopté sans décision."
+      },
+      {
+        "criterion": "Chaque note expose des contributions et actions possibles compatibles avec les faits ; frais/performance/risque/protections/flexibilité concordent avec les oracles approuvés.",
+        "source_ranges": [
+          [
+            995,
+            1012
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Comparer plusieurs contrats de corpus et retirer une donnée ; retrouver contributions attendues ou abstention documentée."
+      },
+      {
+        "criterion": "Le benchmark exige une cohorte comparable et suffisante ; taille, filtres et date sont accessibles et rangs reproductibles sans exposer de membre privé.",
+        "source_ranges": [
+          [
+            1013,
+            1014
+          ],
+          [
+            2902,
+            2902
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Cohorte trop petite puis filtre changé : aucun rang assuré ; cohorte valide produit le rang attendu et sa provenance."
+      },
+      {
+        "criterion": "Investment Age et Freshness distinguent époque de l'allocation, dernière revue connue/inconnue, univers, adaptabilité et suivi ; leurs définitions ne découlent pas des exemples chiffrés.",
+        "source_ranges": [
+          [
+            1015,
+            1029
+          ],
+          [
+            2901,
+            2901
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Ouvrir explications de deux contrats du corpus dont revue inconnue ; année et sous-dimensions concordent avec méthode et sources."
+      },
+      {
+        "criterion": "La complétude et les seuils d'escalade humaine sont calibrés séparément de la précision statistique ; méthode modifiée crée une nouvelle version sans requalifier un ancien score de démonstration.",
+        "source_ranges": [
+          [
+            1208,
+            1222
+          ],
+          [
+            2524,
+            2531
+          ],
+          [
+            2908,
+            2908
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Ajouter un certificat puis changer de méthode ; comparer complétude/note et statut de preuve, avec ancienne version intacte."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.007",
+        "question": "Les définitions Score/DNA/Investment Age/Freshness, pondérations, cohortes et seuils d'abstention sont-ils approuvés ?",
+        "options": [
+          "Maintenir chaque métrique réelle non activée tant que sa définition et son corpus indépendant manquent.",
+          "Joindre les décisions exactes et les corpus approuvés au GO."
+        ],
+        "recommended": 0,
+        "blocks": "Chaque famille de score/benchmark réelle concernée."
+      },
+      {
+        "ref": "bible.question.007",
+        "question": "Les gains de complétude et seuils de revue humaine sont-ils validés séparément de toute précision statistique ?",
+        "options": [
+          "Bloquer la qualification de précision et l'escalade automatique jusqu'aux règles approuvées.",
+          "Fournir gains/seuils et preuves de calibration validés."
+        ],
+        "recommended": 0,
+        "blocks": "Complétude, abstention et escalade humaine."
+      }
+    ],
+    "satellites": [
+      "data.md",
+      "api.md",
+      "contracts.md",
+      "security.md",
+      "permissions.md",
+      "testing.md",
+      "frontend.md",
+      "i18n.md"
+    ],
+    "risks": [
+      "Cohorte de petite taille donnant une certitude ou révélant un contrat ; seuils approuvés et restrictions d'accès.",
+      "Exemples source transformés en calibration ; références explicitement illustratives."
+    ],
+    "out_of_scope": [
+      "Probabilités/capital S-043 ; compatibilité et World S-045 ; activation des versions S-038."
+    ],
+    "split_trigger": "Si une famille révèle une définition manquante, conserver sa validation ouverte et borner la session aux métriques dont le corpus est entièrement défini."
+  },
+  {
+    "mode": "integration",
+    "milestone": "M8",
+    "priority": 745,
+    "session_budget": 1,
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "id": "S-045",
+    "title": "Valider compatibilité stratégique et traduction Retirement World",
+    "objective": "Un validateur compare les stratégies admissibles d'un profil, vérifie le nombre de solutions et l'effort complémentaire, puis contrôle que Retirement World explique fidèlement la même trajectoire sans transformer l'illustration en verdict financier.",
+    "depends_on": [
+      "S-027",
+      "S-030",
+      "S-043",
+      "S-044"
+    ],
+    "apps": [
+      "api",
+      "www",
+      "client",
+      "admin"
+    ],
+    "modules": [
+      "strategy-engine",
+      "scoring-benchmark",
+      "retirement-accumulation"
+    ],
+    "journey": [
+      "Choisir un profil et ses contraintes validées sur le corpus.",
+      "Comparer solutions compatibles et complément de cotisation au résultat indépendant.",
+      "Inspecter score de trajectoire et passage aux scènes World.",
+      "Signer les preuves ou maintenir le périmètre non activé pour S-038."
+    ],
+    "data": [
+      "Définition/version de compatibilité, contraintes contractuelles et paramètres de profil.",
+      "Pondérations du score World, règles de traduction visuelle et lien aux métriques/runs sources ; corpus de décisions attendues."
+    ],
+    "permissions": [
+      "Le valideur contrôle des données autorisées ; une stratégie hors univers/droits contractuels n'entre pas dans le nombre affiché.",
+      "Publication de la règle suit le rôle validé et ne donne pas permission de recommander/exécuter un investissement."
+    ],
+    "events_jobs": [
+      "Validation de méthode/politique versionnée ; recompositions futures uniquement après activation canonique."
+    ],
+    "fixtures": [
+      "Aucune stratégie compatible, contraintes contradictoires, cotisation au plafond, risque inacceptable.",
+      "Même profil à inflation/confiance/âge différents ; scènes aux frontières, données insuffisantes et reprise d'un run antérieur."
+    ],
+    "integrations": {
+      "simulated": [
+        "Montants et scènes d'exemple de la bible ne définissent pas une conversion universelle de cotisation en niveau de vie."
+      ],
+      "real": [
+        "Versions validées S-043/S-044 et corpus indépendant de compatibilité/World réellement comparés."
+      ],
+      "activation_slices": [
+        "S-038",
+        "S-136"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Compatibilité dépend d'inflation, âge, revenu souhaité, confiance, risque acceptable et contraintes contractuelles ; le moteur ne déduit pas ses règles des nombres d'exemple.",
+        "source_ranges": [
+          [
+            1224,
+            1235
+          ]
+        ],
+        "oracle": "V5",
+        "test": "Faire approuver la définition et un corpus aux contraintes contradictoires ; chaque dimension dispose de paramètres exacts."
+      },
+      {
+        "criterion": "Nombre de stratégies admissibles et cotisation complémentaire concordent avec l'oracle et les plafonds applicables ; une solution absente n'est ni promesse ni diagnostic universel.",
+        "source_ranges": [
+          [
+            1111,
+            1113
+          ],
+          [
+            1224,
+            1235
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Cas zéro/plusieurs solutions et plafond bloquant : comparer admissibilité, comptes et effort calculé au corpus."
+      },
+      {
+        "criterion": "Le score World combine Goal Probability, Target Age, capital, risque, volatilité, drawdown, frais, diversification et horizon avec poids approuvés/versionnés.",
+        "source_ranges": [
+          [
+            1054,
+            1054
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Contrôler contributions et sensibilité sur deux trajectoires connues ; aucun poids manquant remplacé silencieusement."
+      },
+      {
+        "criterion": "La scène et actuel/optimisé reflètent les mêmes métriques validées, restent une simplification explicable et ne ridiculisent pas l'utilisateur.",
+        "source_ranges": [
+          [
+            1054,
+            1095
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Faire varier les inputs du corpus puis ouvrir les métriques justifiant la scène ; comparer au run figé et vérifier les frontières approuvées."
+      },
+      {
+        "criterion": "Historique, simulation, projection et recommandation restent distincts ; données insuffisantes, méthode périmée ou score incomplet empêchent une compatibilité/World personnel trompeur.",
+        "source_ranges": [
+          [
+            1208,
+            1222
+          ],
+          [
+            1370,
+            1377
+          ],
+          [
+            2524,
+            2531
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Source manquante puis méthode remplacée : abstention/limite visible, ancien résultat conservé et nouveau run distinct."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.007",
+        "question": "Les règles de compatibilité, pondérations World et corpus attendus sont-ils explicitement validés ?",
+        "options": [
+          "Conserver compatibilité/World personnels non activés tant que règles et corpus manquent.",
+          "Joindre les définitions, limites et corpus approuvés au GO."
+        ],
+        "recommended": 0,
+        "blocks": "Compatibilité réelle, effort complémentaire et score de trajectoire World."
+      }
+    ],
+    "satellites": [
+      "data.md",
+      "api.md",
+      "contracts.md",
+      "permissions.md",
+      "security.md",
+      "testing.md",
+      "frontend.md",
+      "design.md",
+      "i18n.md",
+      "marketing-web.md",
+      "seo.md",
+      "geo.md"
+    ],
+    "risks": [
+      "Scène spectaculaire déconnectée du résultat réel ; métriques communes et trace de version.",
+      "Cotisation suggérée au-delà d'un plafond ou produit incompatible ; contrainte serveur et corpus de refus."
+    ],
+    "out_of_scope": [
+      "Moteur accumulation S-043 ; scoring/cohortes S-044 ; activation finale S-038 ; aucun nouvel avis ou ordre financier."
+    ],
+    "split_trigger": "Si World et compatibilité ne peuvent partager une validation finie, clore la preuve de compatibilité et conserver World non validé avec un reste à faire explicite."
+  },
+  {
+    "mode": "integration",
+    "milestone": "M8",
+    "priority": 774,
+    "session_budget": 1,
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "id": "S-074",
+    "title": "Qualifier les sources Retire : caisse, vie, EMS et conditions Lombard",
+    "objective": "Un validateur constitue un paquet de sources Retire datées et autorisées, vérifie sa pertinence pour un foyer de recette et fournit les règles réelles admissibles aux campagnes de calcul, ou une liste explicite des données manquantes.",
+    "depends_on": [
+      "S-038",
+      "S-040",
+      "S-041",
+      "S-052",
+      "S-054",
+      "S-067"
+    ],
+    "apps": [
+      "api",
+      "admin",
+      "client"
+    ],
+    "modules": [
+      "retirement",
+      "catalog",
+      "documents"
+    ],
+    "journey": [
+      "Sélectionner les sources explicitement autorisées et leurs périmètres.",
+      "Importer ou connecter règles de caisse/survivants, paramètres de vie/dépendance et conditions de ligne utiles au scénario.",
+      "Vérifier date, validité, droits d'usage et cohérence sur un foyer de recette autorisé.",
+      "Enregistrer paquet qualifié et preuves humaines pour les campagnes S-075/S-076."
+    ],
+    "data": [
+      "Version/empreinte/source/date/domaine d'application de chaque règle/dataset ; réutilisation des adapters S-040.",
+      "Options de conversion partielle et survivants, longévité/couple, coûts nets EMS/prestations complémentaires, conditions Lombard sans ligne réelle."
+    ],
+    "permissions": [
+      "Sources privées et certificats bornés au membre et au consentement effectif ; secrets côté serveur.",
+      "Une qualification de source ne vaut ni permission de lecture du foyer entier ni autorisation commerciale."
+    ],
+    "events_jobs": [
+      "Import/actualisation idempotent, timeout/retry/quarantaine ; version publiée dans le référentiel sans modifier les anciennes analyses."
+    ],
+    "fixtures": [
+      "Règle expirée, caisse différente, certificat reçu après un ancien run, coûts remplacés incomplets.",
+      "Licence révoquée, ordre de décès indéfini, source réseau indisponible, taux/haircut de ligne absent."
+    ],
+    "integrations": {
+      "simulated": [
+        "Aucune source personnelle manquante remplacée par fixture ; démonstrations isolées conservées pour les tests."
+      ],
+      "real": [
+        "Documents/datasets ou prestataire expressément autorisés, importés/consultés réellement avec provenance et preuve de validité."
+      ],
+      "activation_slices": [
+        "S-068",
+        "S-070"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Les sources de marchés/macro réutilisées et les données de vie sont fournies ou connectées avec droit d'usage, date, empreinte et domaine ; chaque dimension absente reste manquante.",
+        "source_ranges": [
+          [
+            1591,
+            1600
+          ],
+          [
+            1607,
+            1608
+          ],
+          [
+            1715,
+            1715
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Exécuter un import ou appel réel autorisé, ouvrir son paquet et vérifier données/dates/licence dans le dossier de recette."
+      },
+      {
+        "criterion": "Les règles de caisse et conversion partielle correspondent au membre et aux options autorisées ; certificat ou règle absent déclenche une demande sans estimation silencieuse.",
+        "source_ranges": [
+          [
+            1586,
+            1587
+          ],
+          [
+            1751,
+            1752
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Deux caisses aux règles distinctes et certificat manquant : sélection exacte par validité/membre et blocage du mix non documenté."
+      },
+      {
+        "criterion": "Longévité/couple/survivants, EMS net et prestations complémentaires disposent de données et validation compétente ; 25 ans ne devient pas une distribution de durée de vie.",
+        "source_ranges": [
+          [
+            1472,
+            1474
+          ],
+          [
+            1642,
+            1642
+          ],
+          [
+            1737,
+            1738
+          ],
+          [
+            1745,
+            1746
+          ],
+          [
+            1751,
+            1752
+          ]
+        ],
+        "oracle": "V5",
+        "test": "Valider le domaine démographique et les coûts/prestations sur cas sourcés ; conserver tout périmètre non approuvé bloqué."
+      },
+      {
+        "criterion": "Les conditions Lombard nécessaires au scénario sont documentées, dont taux/haircuts/collatéral/limites pertinents, sans prêteur choisi implicitement ni disponibilité de crédit affirmée.",
+        "source_ranges": [
+          [
+            1541,
+            1542
+          ],
+          [
+            1642,
+            1642
+          ],
+          [
+            1751,
+            1752
+          ]
+        ],
+        "oracle": "V5",
+        "test": "Faire qualifier le paquet de conditions utilisable par le simulateur ; aucune autorisation de tirage ni promesse de crédit."
+      },
+      {
+        "criterion": "Source retirée/périmée, erreur d'import ou validation absente empêche son utilisation réelle ; les versions/runs antérieurs conservent sources et statut d'origine.",
+        "source_ranges": [
+          [
+            1640,
+            1642
+          ],
+          [
+            1715,
+            1715
+          ],
+          [
+            2507,
+            2507
+          ],
+          [
+            2850,
+            2850
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Révoquer une source puis importer un correctif : aucune substitution fixture, nouveaux inputs versionnés et ancien snapshot intact."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.029",
+        "question": "Quelles sources de caisse, survivants, longévité et EMS utiliser avant les résultats réels ?",
+        "options": [
+          "Fournir/autoriser des documents et datasets officiels datés, puis validation métier par périmètre ; aucun fournisseur choisi implicitement.",
+          "Valider explicitement un prestataire de données et son périmètre avant connexion."
+        ],
+        "recommended": 0,
+        "blocks": "Accès réel aux données LPP/Life/EMS et conditions Lombard."
+      },
+      {
+        "ref": "bible.question.022",
+        "question": "Le paquet de longévité comprend-il distributions, couple, décès et horizon explicitement validés ?",
+        "options": [
+          "Maintenir la vie personnelle non activable jusqu'à ces décisions documentées.",
+          "Joindre le modèle démographique et son domaine validés au GO."
+        ],
+        "recommended": 0,
+        "blocks": "Admissibilité des données de vie pour simulation Retire."
+      }
+    ],
+    "satellites": [
+      "data.md",
+      "api.md",
+      "permissions.md",
+      "security.md",
+      "storage.md",
+      "jobs.md",
+      "events.md",
+      "observability.md",
+      "dependencies.md",
+      "testing.md",
+      "frontend.md",
+      "i18n.md"
+    ],
+    "risks": [
+      "Une source authentique mais incompatible avec une caisse ou un profil ; contrôler domaine/validité et membre.",
+      "Données réglementaires ou démographiques non validées ; preuve humaine spécifique."
+    ],
+    "out_of_scope": [
+      "Calibration des flux/optimisation S-075 ; distributions/indicateurs/stress S-076 ; activation composée S-068 ; aucun crédit/retrait/ordre réel."
+    ],
+    "split_trigger": "Si plusieurs fournisseurs ou familles source exigent des raccordements distincts, borner la session au paquet entièrement qualifiable et consigner les manques ; ne déclarer aucune couverture globale."
+  },
+  {
+    "mode": "integration",
+    "milestone": "M8",
+    "priority": 775,
+    "session_budget": 1,
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "id": "S-075",
+    "title": "Valider les flux Cascade et l'optimisation sur cas indépendants",
+    "objective": "Un validateur explique chaque flux d'un plan de recette, contrôle l'effet des contraintes et du bonus, puis obtient une preuve indépendante que la politique et l'optimisation appliquent uniquement les conventions approuvées.",
+    "depends_on": [
+      "S-074",
+      "S-058",
+      "S-059",
+      "S-060",
+      "S-061",
+      "S-062",
+      "S-067"
+    ],
+    "apps": [
+      "api",
+      "admin",
+      "client"
+    ],
+    "modules": [
+      "retirement",
+      "simulation"
+    ],
+    "journey": [
+      "Ouvrir la politique et les conventions exactes validées.",
+      "Exécuter les cas indépendants de crise, récupération, HWM, poche et contraintes.",
+      "Comparer flux, solutions admissibles et coûts aux oracles de référence.",
+      "Signer le périmètre de politique/optimisation validé et transmettre ses preuves à S-076/S-068."
+    ],
+    "data": [
+      "Versions de politique/exposition, définitions besoin résiduel/HWM/drawdown et objectifs/contraintes.",
+      "Corpus indépendant de flux, coûts, allocation, cas faisables/impossibles et diagnostics d'optimisation ; aucune règle créée par le test."
+    ],
+    "permissions": [
+      "Validation par rôle habilité et données de recette autorisées ; politique ne confère jamais d'ordre d'investissement.",
+      "Les résultats restent des scénarios jusqu'aux validations et activations requises."
+    ],
+    "events_jobs": [
+      "Campagne bornée de calcul commun, traces des règles appliquées et preuve liée à la version."
+    ],
+    "fixtures": [
+      "Seuils drawdown exacts, réserve nulle/plancher/cible, besoin résiduel nul, cible Income atteinte.",
+      "Dette/bonus simultanés, simple récupération/apport/retrait, marge violée, contraintes incompatibles, plafond d'exposition et solution frontière."
+    ],
+    "integrations": {
+      "simulated": [
+        "Scénarios adversariaux fictifs clairement identifiés ; aucune ligne de crédit ni ordre réel."
+      ],
+      "real": [
+        "Sources qualifiées S-074 et corpus/paramètres métier approuvés, comparés indépendamment à la politique calculée."
+      ],
+      "activation_slices": [
+        "S-068",
+        "S-070"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Référence 80/17/3, cibles Income en CHF/Safety en années et recalibrage appliquent une priorité explicitement approuvée ; plafonds/taxonomie look-through n'adoptent pas les valeurs indicatives sans validation.",
+        "source_ranges": [
+          [
+            1493,
+            1493
+          ],
+          [
+            1512,
+            1518
+          ],
+          [
+            1739,
+            1740
+          ]
+        ],
+        "oracle": "V5",
+        "test": "Revue de politique et corpus d'exposition ; chaque limite/priorité a périmètre exact et décision, sinon calcul personnel bloqué."
+      },
+      {
+        "criterion": "Qualité Income, exclusion des dividendes exceptionnels, seuils Safety et conditions Lombard concordent avec les règles/source qualifiées ; donnée manquante produit un diagnostic.",
+        "source_ranges": [
+          [
+            1522,
+            1525
+          ],
+          [
+            1536,
+            1542
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Comparer revenu structurel, besoin/réserve et marge aux cas indépendants avec source manquante puis validée."
+      },
+      {
+        "criterion": "Flux de crise/récupération, base drawdown, bornes inclusives, dernier recours et cadence sont testés selon conventions approuvées ; aucune règle de secours n'est inventée.",
+        "source_ranges": [
+          [
+            1545,
+            1561
+          ],
+          [
+            1564,
+            1564
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Vérifier frontières et conservation de flux dans chaque état, remboursement avant bonus et état bloqué pour dernier recours indéfini."
+      },
+      {
+        "criterion": "HWM/bonus, inflation propre ou personnalisée et apports/retraits concordent avec les décisions ; la simple récupération ne produit aucun bonus.",
+        "source_ranges": [
+          [
+            1562,
+            1564
+          ],
+          [
+            1741,
+            1742
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Corpus indépendant nouvelle richesse/récupération/apport/retrait : HWM, assiette et plafond exacts selon méthode approuvée."
+      },
+      {
+        "criterion": "Optimisation utilise objectifs et contraintes approuvés, fiscalité/actualisation/coûts/dettes définis et options admissibles ; solution infaisable, ruine/vente forcée/marge/transmission restent explicites.",
+        "source_ranges": [
+          [
+            1606,
+            1608
+          ],
+          [
+            1749,
+            1750
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Comparer solutions connues et contraintes contradictoires à un oracle indépendant ; aucune violation masquée comme optimum."
+      },
+      {
+        "criterion": "Une personne compétente valide le domaine de la politique et de l'optimiseur avec les écarts résolus ; anciennes versions restent reproductibles et aucune exécution financière n'est déclenchée.",
+        "source_ranges": [
+          [
+            1640,
+            1642
+          ],
+          [
+            1714,
+            1715
+          ],
+          [
+            2507,
+            2507
+          ]
+        ],
+        "oracle": "V5",
+        "test": "Signer le rapport versionné et vérifier un ancien run ; preuve attachée au périmètre exact, pas à toutes stratégies."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.023",
+        "question": "La priorité 80/17/3 versus cibles de flux, l'initialisation et le recalibrage sont-ils explicitement approuvés ?",
+        "options": [
+          "Bloquer la calibration personnelle concernée tant que la politique exacte manque.",
+          "Joindre politique, périmètre et corpus approuvés au GO."
+        ],
+        "recommended": 0,
+        "blocks": "Dimensionnement et recalibrage réels des poches."
+      },
+      {
+        "ref": "bible.question.024",
+        "question": "L'indexation HWM, le traitement des apports/retraits et le bonus ont-ils une règle validée ?",
+        "options": [
+          "Conserver ce chemin non activable sans décision explicite, sans choisir entre 4 % et inflation personnalisée.",
+          "Joindre les conventions et oracles indépendants approuvés."
+        ],
+        "recommended": 0,
+        "blocks": "High-water mark et bonus personnels."
+      },
+      {
+        "ref": "bible.question.028",
+        "question": "Les flux, objectifs d'optimisation, fiscalité, coûts/dettes et contraintes disposent-ils de cas indépendants validés ?",
+        "options": [
+          "Oui uniquement après définitions et preuves jointes ; sinon maintenir le périmètre bloqué.",
+          "Fournir un dossier de validation équivalent avec critères exacts."
+        ],
+        "recommended": 0,
+        "blocks": "Fiabilité des flux, contraintes et optimisation réelle."
+      }
+    ],
+    "satellites": [
+      "data.md",
+      "api.md",
+      "permissions.md",
+      "security.md",
+      "jobs.md",
+      "performance.md",
+      "observability.md",
+      "testing.md",
+      "frontend.md",
+      "i18n.md"
+    ],
+    "risks": [
+      "Oracle reproduisant le même algorithme erroné ; résultats de référence indépendants et revue des conventions.",
+      "Cas de crise incomplet assimilé à solution viable ; diagnostics de faisabilité obligatoires."
+    ],
+    "out_of_scope": [
+      "Sampling/probabilités/Range et métriques S-076 ; activation composée S-068 ; aucun conseil ou acte financier nouveau."
+    ],
+    "split_trigger": "Si les flux ne sont pas validés dans la session, arrêter avant la preuve d'optimisation et conserver le reste à faire par cas critique ; ne pas relancer une calibration globale."
+  },
+  {
+    "mode": "integration",
+    "milestone": "M8",
+    "priority": 776,
+    "session_budget": 1,
+    "exclusions": [
+      "billing.md",
+      "llm.md"
+    ],
+    "id": "S-076",
+    "title": "Valider sampling, indicateurs, Retirement Range et stress Retire",
+    "objective": "Un validateur reproduit une simulation Retire complète sur sources et politiques qualifiées, explique le Range et les risques de queue, puis remet une preuve de convergence et de définition de chaque indicateur publié.",
+    "depends_on": [
+      "S-075",
+      "S-053",
+      "S-056",
+      "S-057"
+    ],
+    "apps": [
+      "api",
+      "admin",
+      "client"
+    ],
+    "modules": [
+      "retirement",
+      "simulation"
+    ],
+    "journey": [
+      "Choisir le profil, les événements/horizons et méthodes déjà formalisés.",
+      "Exécuter corpus indépendant et études de stabilité/coût avec sources qualifiées.",
+      "Comparer indicateurs, Range et stress, puis vérifier leur restitution.",
+      "Signer la version validée ou isoler chaque sortie bloquée avant S-068."
+    ],
+    "data": [
+      "Méthode sampling/bootstrap/stress et profil N avec diagnostics ; sources/policy/Life/règles de caisse liées au run.",
+      "Définitions des événements et des sept métriques, mapping Range, oracles indépendants et tolérances approuvées."
+    ],
+    "permissions": [
+      "Validateurs habilités uniquement ; runs et preuves bornés aux données de recette autorisées.",
+      "Une validation de profil ne modifie pas les droits du foyer ni l'autorisation commerciale."
+    ],
+    "events_jobs": [
+      "Campagne bornée sur SimulationRun existant avec seed, N réel et rapport ; pas de second moteur ou historique."
+    ],
+    "fixtures": [
+      "N demandé non atteint, queue instable, bootstrap à série courte, stress réel/forcé, poids absent.",
+      "Aucune solution au break-even, patrimoine transmis avec dette, EMS prolongé, longévité 100+, source révoquée et métrique indisponible."
+    ],
+    "integrations": {
+      "simulated": [
+        "Cas artificiels pour tests de limites maintenus séparés ; aucun stress forcé présenté comme observation aléatoire."
+      ],
+      "real": [
+        "Méthodes/paquets validés S-074/S-075 et campagnes statistiques réellement exécutées avec oracles indépendants."
+      ],
+      "activation_slices": [
+        "S-068",
+        "S-070"
+      ]
+    },
+    "criteria": [
+      {
+        "criterion": "Statistique, bootstrap et stress historiques 2000–2002/2008 utilisent des données/méthodes vérifiables ; scénarios forcés et pondérations éventuelles restent identifiables séparément.",
+        "source_ranges": [
+          [
+            1590,
+            1590
+          ],
+          [
+            1602,
+            1608
+          ],
+          [
+            2507,
+            2507
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Reproduire même seed et stress source ; poids absent interdit toute probabilité combinée, cas forcé toujours distinct."
+      },
+      {
+        "criterion": "Les profils 10 000/100 000 conservent N demandé/exécuté, convergence, stabilité des queues, durée et coût approuvés ; atteindre N seul ne certifie pas un résultat.",
+        "source_ranges": [
+          [
+            1590,
+            1590
+          ],
+          [
+            1733,
+            1734
+          ],
+          [
+            2850,
+            2850
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Comparer courbes et diagnostics à seuils indépendants, exécution interrompue et profil non convergent refusés pour activation."
+      },
+      {
+        "criterion": "Événement/horizon de soutenabilité, longévité et mapping Range sont explicitement approuvés ; Target Age 50 % reste distinct et aucun niveau Range n'est déduit arbitrairement de 80/90/95/99 %.",
+        "source_ranges": [
+          [
+            1735,
+            1738
+          ],
+          [
+            1743,
+            1746
+          ],
+          [
+            1608,
+            1608
+          ]
+        ],
+        "oracle": "V5",
+        "test": "Valider définitions, domaine démographique et table de mapping avec preuves ; conserver toute sortie non définie indisponible."
+      },
+      {
+        "criterion": "Les sept indicateurs et le break-even concordent avec des oracles indépendants intégrant fiscalité, actualisation, coûts/dettes, ruine, transmission, vente forcée et marge, avec unités réelles/nominales explicites.",
+        "source_ranges": [
+          [
+            1454,
+            1467
+          ],
+          [
+            1606,
+            1608
+          ],
+          [
+            1749,
+            1750
+          ]
+        ],
+        "oracle": "V2",
+        "test": "Comparer résultats attendus et tolérances de chaque métrique ; absence de solution ou paramètre manquant n'est jamais masquée par zéro."
+      },
+      {
+        "criterion": "Le rapport et le Range affichent sources/versions, N réel et limites ; probabilité n'est pas garantie et stress/estimation restent distincts jusque dans l'interface.",
+        "source_ranges": [
+          [
+            1640,
+            1642
+          ],
+          [
+            1715,
+            1715
+          ],
+          [
+            2507,
+            2507
+          ]
+        ],
+        "oracle": "V3",
+        "test": "Ouvrir un cas fragile puis un stress et une source manquante ; données identiques au run, statut et limites visibles."
+      },
+      {
+        "criterion": "Une validation compétente associe chaque profil/métrique à ses preuves et versions ; source retirée ou méthode modifiée invalide l'admissibilité future sans altérer l'historique.",
+        "source_ranges": [
+          [
+            1642,
+            1642
+          ],
+          [
+            1715,
+            1715
+          ],
+          [
+            2507,
+            2507
+          ],
+          [
+            2850,
+            2850
+          ]
+        ],
+        "oracle": "V5",
+        "test": "Signer le paquet de résultats, puis examiner un changement de source et les blocages attendus ; ancien run reste reproductible."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.020",
+        "question": "Autoriser la cible 100 000 seulement après seuils de convergence, temps et coût explicitement approuvés ?",
+        "options": [
+          "Oui, profil limité à ce qui est mesuré et validé.",
+          "Fournir des plafonds et critères validés avant les essais."
+        ],
+        "recommended": 0,
+        "blocks": "Coût et promesse de précision du profil Retire."
+      },
+      {
+        "ref": "bible.question.021",
+        "question": "Les événements et horizons de réussite Retire sont-ils approuvés séparément du Target Age d'accumulation ?",
+        "options": [
+          "Maintenir les probabilités Retire bloquées jusqu'à définition explicite.",
+          "Joindre événements/horizons et cas attendus validés."
+        ],
+        "recommended": 0,
+        "blocks": "Probabilités personnelles de maintien du revenu réel."
+      },
+      {
+        "ref": "bible.question.025",
+        "question": "La table plancher/recommandé/prospérité possède-t-elle un mapping explicitement approuvé ?",
+        "options": [
+          "Garder Range personnel indisponible tant que la table n'est pas validée.",
+          "Joindre le mapping et son domaine de validité au GO."
+        ],
+        "recommended": 0,
+        "blocks": "Correspondance entre Range et niveaux de réussite."
+      },
+      {
+        "ref": "bible.question.028",
+        "question": "Les méthodes et calibrations doivent-elles passer des cas de référence approuvés indépendamment du code ?",
+        "options": [
+          "Oui, résultats personnels non activables avant ces preuves.",
+          "Fournir un dossier de validation équivalent avec ses critères documentés."
+        ],
+        "recommended": 0,
+        "blocks": "Fiabilité annoncée des métriques et stress réels."
+      }
+    ],
+    "satellites": [
+      "data.md",
+      "api.md",
+      "permissions.md",
+      "security.md",
+      "jobs.md",
+      "performance.md",
+      "observability.md",
+      "testing.md",
+      "frontend.md",
+      "i18n.md"
+    ],
+    "risks": [
+      "Queues convergentes prétendues sur seul N élevé ; études et tolérances approuvées.",
+      "Même chiffre étiqueté succès retraite ou Target Age ; événements/horizons distincts et versionnés."
+    ],
+    "out_of_scope": [
+      "Collecte/qualification sources S-074 ; flux et optimisation S-075 ; composition et activation de version S-068 ; avis commercial S-070."
+    ],
+    "split_trigger": "Si un profil ne converge pas ou une métrique manque de définition, isoler son blocage et livrer les preuves finies ; aucune validation globale faute de temps."
+  }
+]

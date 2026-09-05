@@ -1,5 +1,7 @@
 # Livraison de l'initialisation CoverView
 
+Journal historique. L'état après rédaction des slices est dans [la livraison de roadmap](review.md).
+
 Date : 2026-09-05. Périmètre autorisé : plan `roadmap/plans/INIT-harness.plan.md` et demande utilisateur ; phase documentaire BOOT-10.
 
 ## Résultat
