@@ -247,7 +247,8 @@
         "Reprise explicite du 2026-09-06 après rejet utilisateur de la preview obsolète et non fonctionnelle. Plan borné roadmap/handoffs/S-000b-recovery.md ; compte prioritaire, correction UI et activation WorkOS réelle à reprendre.",
         "Correction utilisateur fixtures/smoke/surface enregistrée dans execution-policy.md. Fenêtre interactive dédiée prête pour injection ; copie dans le presse-papiers du navigateur ne prouve pas le presse-papiers système. Ne pas solliciter la clé dans le chat ni dans une invite shell normale.",
         "Refonte supplémentaire explicitement demandée : fond blanc, sections ouvertes, bentos illustrés et bibliothèque commune. ADR-0006 et roadmap/evidence/marketing-redesign.md décrivent le résultat réel. L’identité reste en cours, clé serveur et login réel encore attendus.",
-        "La référence xAI fournie ensuite remplace la direction visuelle précédente : ADR-0007, source intacte references/xai-style-reference.md et ledger roadmap/evidence/xai-redesign.md. Refonte commune www/Wallet/équipe et navigation éditoriale relues ; aucune connexion réelle WorkOS déduite. Statut running conservé."
+        "La référence xAI fournie ensuite remplace la direction visuelle précédente : ADR-0007, source intacte references/xai-style-reference.md et ledger roadmap/evidence/xai-redesign.md. Refonte commune www/Wallet/équipe et navigation éditoriale relues ; aucune connexion réelle WorkOS déduite. Statut running conservé.",
+        "Correction utilisateur suivante : preset shadcn b38oXC5rf effectivement réappliqué, Geist titres/corps et MONTECH V.02 fourni pour les métadonnées ; composants partagés réutilisés, fond blanc/cards en aplat sans cadre. ADR-0008 et roadmap/evidence/shadcn-typography.md. Statut et limites fonctionnelles conservés."
       ],
       "session": "Tâche créée gpt-6-astra / ultra ; modèle hôte GPT-6, effort non observable indépendamment du paramètre transmis."
     },
@@ -399,7 +400,8 @@
         "S-011 review conserve C01/C04/C06 non vérifiés ; S-000b review inchangé. Aucune nouvelle slice éligible, preuve S-011-next-eligibility.json ; exception obstacle réel du mandat, pas de relais factice.",
         "Chevauchement contact à réconcilier : S-080 possède l’entrée publique CRM ; après S-013/S-080 done, reprendre C06 S-011 avant S-012 qui enrichit le contact existant. Exiger S-012 avant S-011 créerait une boucle sémantique ; voir checkpoint/README www.",
         "Les gabarits et contenus ont été repris à la demande de l’utilisateur : voir roadmap/evidence/marketing-redesign.md et ADR-0006. Statut review conservé, collecte commerciale et preuves externes toujours absentes.",
-        "Refonte xAI demandée après rejet de la version f8e1e07 : nouveau rendu et limites dans roadmap/evidence/xai-redesign.md. Statut review et dépendance à la collecte persistante conservés."
+        "Refonte xAI demandée après rejet de la version f8e1e07 : nouveau rendu et limites dans roadmap/evidence/xai-redesign.md. Statut review et dépendance à la collecte persistante conservés.",
+        "Correction utilisateur suivante : preset shadcn b38oXC5rf effectivement réappliqué, Geist titres/corps et MONTECH V.02 fourni pour les métadonnées ; composants partagés réutilisés, fond blanc/cards en aplat sans cadre. ADR-0008 et roadmap/evidence/shadcn-typography.md. Statut et limites fonctionnelles conservés."
       ],
       "cost": "Non disponible ; une session principale et trois sous-tâches bornées."
     }

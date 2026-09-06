@@ -1,6 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { SectionHeading, TextLink } from "@coverview/ui";
+import { SectionHeading, TextLink, Button, ButtonLink } from "@coverview/ui";
 import { content } from "../content/fr/interface";
 import { marketing } from "../content/fr/marketing";
 import icon from "../../../../assets/icon-coverview.svg?url";
@@ -18,8 +18,8 @@ const walletUrl = import.meta.env.PUBLIC_WALLET_URL ?? (import.meta.env.DEV ? "h
       <p id="account-message" role="status" aria-live="polite">{content.account.loading}</p>
       <p id="account-error" role="alert" hidden></p>
       <div class="account-entry-actions">
-        <a id="account-login" class="cv-button" hidden>{content.account.login}</a>
-        <button id="account-retry" type="button" class="cv-button" hidden>{content.account.retry}</button>
+        <ButtonLink id="account-login" hidden>{content.account.login}</ButtonLink>
+        <Button id="account-retry" type="button" hidden>{content.account.retry}</Button>
         {walletUrl && <TextLink href={new URL("/account", walletUrl).href}>{content.account.wallet}</TextLink>}
       </div>
       <p class="account-privacy">{content.account.privacy}</p>

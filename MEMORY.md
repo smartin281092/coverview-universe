@@ -31,4 +31,6 @@ Aucune entrée activée. L'identité du projet vit dans PROJECT.md ; les décisi
 
 - MEM-116 · correction utilisateur · La référence xAI fournie remplace la direction précédente : source intacte dans references/xai-style-reference.md, décision et substitutions de fontes dans ADR-0007, résultat et limites dans roadmap/evidence/xai-redesign.md. Aucune validation esthétique humaine ni connexion WorkOS réelle déduite de la refonte. (Refonte xAI, 2026-09-06 · confiance haute · revoir avant 2026-12-05 · candidat)
 
+- MEM-117 · correction utilisateur · Preset shadcn et Geist réaffirmés ; MONTECH V.02 fourni remplace les rôles Geist Mono, fond blanc/cards en aplat sans bordure ni ombre. ADR-0008 gouverne les composants et la typographie, résultat dans roadmap/evidence/shadcn-typography.md. (Typographie, 2026-09-06 · confiance haute · revoir avant 2026-12-05 · candidat)
+
 Ces candidats attendent une revue ; ils ne constituent pas des règles concurrentes des références citées.

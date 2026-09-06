@@ -1,6 +1,6 @@
 # Site marketing, blog et contenu public
 
-> **Direction actuelle** : [ADR-0007](../adr/0007-xai-design-reference.md) et la [référence xAI fournie](../references/xai-style-reference.md) gouvernent le rendu. L’autorisation de partager les composants statiques du système [UI](../packages/ui/README.md) dans Astro reste portée par [ADR-0006](../adr/0006-marketing-design-system.md), dont la direction visuelle est remplacée. Cette exception prévaut sur la restriction de package UI de MKT-02, sans modifier les frontières métier ni l’absence d’hydratation des composants statiques.
+> **Direction actuelle** : [ADR-0008](../adr/0008-shadcn-geist-montech.md) gouverne le preset, les composants et la typographie ; [ADR-0007](../adr/0007-xai-design-reference.md) conserve la composition ouverte de la [référence xAI fournie](../references/xai-style-reference.md). Le partage des composants statiques du système [UI](../packages/ui/README.md) dans Astro reste autorisé par [ADR-0006](../adr/0006-marketing-design-system.md). Cette exception prévaut sur la restriction de package UI de MKT-02, sans modifier les frontières métier ni l’absence d’hydratation des composants statiques.
 
 > **Résumé** : Surfaces publiques à priorités propres : SSG par défaut, SPA client-only interdit, îlots opt-in, contenu Markdown/CMS, budgets Core Web Vitals en CI, formulaires via l'API leads, consentement RGPD.
 

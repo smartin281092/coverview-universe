@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { identityMfaVerifyInputSchema } from "@coverview/contracts";
 import type { z } from "zod";
 import { ApiError, type IdentityMe } from "@coverview/api-client";
-import { AccessDeniedState, Button } from "@coverview/ui";
+import { AccessDeniedState, Button, Input, Label } from "@coverview/ui";
 import { api } from "../api";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { IdentityFailure } from "../features/identity/IdentityFailure";
@@ -109,17 +109,17 @@ function Verification({ identity }: { identity: IdentityMe }) {
           className="space-y-4"
         >
           <div className="space-y-2">
-            <label htmlFor="mfa-code" className="block text-sm font-medium">
+            <Label htmlFor="mfa-code" className="text-sm">
               {t("identity.mfaCode")}
-            </label>
-            <input
+            </Label>
+            <Input
               id="mfa-code"
               type="text"
               inputMode="numeric"
               autoComplete="one-time-code"
               maxLength={6}
               autoFocus
-              className="flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-base outline-offset-4 focus-visible:outline-2 focus-visible:outline-ring disabled:opacity-50"
+              className="h-11 px-3 py-2 text-base md:text-base"
               aria-invalid={Boolean(form.formState.errors.code) || code === "IDENTITY_MFA_INVALID"}
               aria-describedby={
                 form.formState.errors.code || code === "IDENTITY_MFA_INVALID"

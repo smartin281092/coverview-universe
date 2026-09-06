@@ -1,6 +1,6 @@
 # Marque CoverView
 
-> **Direction actuelle** : appliquer [ADR-0007](../adr/0007-xai-design-reference.md) et la [référence xAI fournie](../references/xai-style-reference.md), avec le système commun décrit dans [UI](../packages/ui/README.md). La direction visuelle d’ADR-0006 est remplacée ; son autorisation de partager la présentation statique reste acquise. Le reste de ce document conserve l’historique des sources et leurs empreintes, sans imposer leur ancien thème.
+> **Direction actuelle** : [ADR-0008](../adr/0008-shadcn-geist-montech.md) gouverne le preset, les composants et les fontes Geist/Montech du système [UI](../packages/ui/README.md). [ADR-0007](../adr/0007-xai-design-reference.md) conserve la composition ouverte de la [référence xAI fournie](../references/xai-style-reference.md). L’autorisation de partager la présentation statique d’ADR-0006 reste acquise. Le reste de ce document conserve l’historique des sources et leurs empreintes, sans imposer leur ancien thème.
 
 État au 5 septembre 2026 : références initialisées ; aucune interface applicative encore réalisée. Les cinq aplats fournis sont la source de marque. Les compléments sémantiques sont une proposition dérivée, explicitement distinguée de cette source. Leur vérification numérique ne vaut pas validation du rendu d'un écran.
 

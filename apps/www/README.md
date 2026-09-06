@@ -2,13 +2,13 @@
 
 ## Résumé
 
-Site marketing en français pour la Suisse, construit autour de la compréhension des contrats, de la prévoyance et de l’objectif retraite. La direction actuelle suit [ADR-0007](../../adr/0007-xai-design-reference.md) et la [référence xAI fournie](../../references/xai-style-reference.md). [ADR-0006](../../adr/0006-marketing-design-system.md) conserve la décision de partager les composants de présentation avec les apps. Le contenu public reste statique, lisible sans JavaScript et sans dépendance à l’API pour sa lecture. Les ledgers [S-010](../../roadmap/evidence/S-010.md) et [S-011](../../roadmap/evidence/S-011.md) conservent l’historique et les limites des versions antérieures ; ils ne valent pas validation de cette refonte.
+Site marketing en français pour la Suisse, construit autour de la compréhension des contrats, de la prévoyance et de l’objectif retraite. [ADR-0008](../../adr/0008-shadcn-geist-montech.md) gouverne le preset shadcn et la typographie Geist/Montech ; [ADR-0007](../../adr/0007-xai-design-reference.md) conserve la composition ouverte de la [référence xAI fournie](../../references/xai-style-reference.md). [ADR-0006](../../adr/0006-marketing-design-system.md) conserve la décision de partager les composants de présentation avec les apps. Le contenu public reste statique, lisible sans JavaScript et sans dépendance à l’API pour sa lecture. Les ledgers [S-010](../../roadmap/evidence/S-010.md) et [S-011](../../roadmap/evidence/S-011.md) conservent l’historique et les limites des versions antérieures ; ils ne valent pas validation de cette correction.
 
 ## Périmètre
 
 `src/content/fr/marketing.ts` porte les six sections de l’accueil : hero centré avec texte court, deux bentos de guides, méthode, ressources, FAQ et appel à l’action final. Le bento contrat ouvre `/services#3e-pilier` ; le bento retraite ouvre `/retire`. Leurs aperçus sont des repères issus des lectures disponibles, explicitement étiquetés « Guide de lecture ». Ils ne représentent ni des captures de Wallet, ni des résultats personnels.
 
-Le contenu expose aussi les libellés de navigation, la narration de l’orientation et les introductions des services et du compte. Les CTA ouvrent une orientation, une lecture existante ou la page de connexion ; aucun bouton ne promet une analyse ou un calcul actuellement indisponible. Le rendu exclut les images 3D et illustrations bleues de la tentative précédente. Aucun dossier fictif, rendement ou témoignage n’alimente le hero. Les règles visuelles restent dans la référence xAI et le système commun, sans copie locale de leur palette.
+Le contenu expose aussi les libellés de navigation, la narration de l’orientation et les introductions des services et du compte. Les CTA ouvrent une orientation, une lecture existante ou la page de connexion ; aucun bouton ne promet une analyse ou un calcul actuellement indisponible. Le rendu exclut les images 3D et illustrations bleues de la tentative précédente. Aucun dossier fictif, rendement ou témoignage n’alimente le hero. ADR-0008 et le système commun portent les règles visuelles actuelles, sans copie locale de leur palette.
 
 `/overview` oriente selon un contrat à comprendre, une retraite à préparer ou des options à comparer. `/services` relie 3e pilier, LPP, assurances, retraite et documents ; les ancrages stables sont notamment `#3e-pilier`, `#lpp` et `#assurances`. `/methode` développe l’objectif initial puis les six étapes canoniques. Les approfondissements gardent leurs URLs propres. L’explorateur conserve l’accès aux destinations des §22/66, dont les outils futurs restent qualifiés. La démonstration historique reste à `/demonstration` ; la vraie 404 et `/account` sont conservés.
 
@@ -18,11 +18,11 @@ Les 18 contenus éditoriaux se trouvent dans `src/content/fr/editorial/`, plus l
 
 Le frontmatter porte slug, auteur, création/mise à jour, version, état, type, sources et indicateur fictif. `editorial-schema.ts` bloque un auteur non autorisé, les dates incohérentes, un état de publication externe, une structure cas/rapport incomplète et les formats financiers usuels sans preuve approuvée. Le registre de preuves est vide : renseigner des métadonnées dans un MDX ne suffit pas à valider un chiffre. Ce garde mécanique ne remplace pas la revue du sens, des faits ou des formulations en toutes lettres.
 
-Le système de présentation partagé vit dans `packages/ui`. `@astrojs/react` permet le rendu serveur statique des composants de présentation React, sans hydratation ajoutée pour le contenu public. ADR-0006 a remplacé le précédent défaut d’isolation de la présentation ; ADR-0007 fixe désormais la direction visuelle. Les assets historiques restent conservés et n’imposent pas le rendu actuel.
+Le système de présentation partagé vit dans `packages/ui`. `@astrojs/react` permet le rendu serveur statique des composants de présentation React, sans hydratation ajoutée pour le contenu public. Les actions utilisent `ButtonLink` et ses variantes communes avec `Button` ; les bentos composent la primitive `Card` autour d’un `article`. ADR-0006 a remplacé le précédent défaut d’isolation de la présentation ; ADR-0008 fixe la typographie et les composants actuels. Les assets historiques restent conservés et n’imposent pas le rendu actuel.
 
 ## Narration, SEO et sources
 
-La référence xAI gouverne la composition actuelle : priorité au texte, hiérarchie sobre et deux guides en bento suivis de contenus ouverts. La tentative IM8/Apple appartient à l’historique d’ADR-0006. Le contenu métier et ses sources restent propres à CoverView ; aucune preuve commerciale, capacité produit ou affirmation financière n’est déduite d’une référence de style.
+La composition issue de la référence xAI reste conservée : priorité au texte, hiérarchie sobre et deux guides en bento suivis de contenus ouverts. Ses fontes et composants ont été remplacés selon ADR-0008. La tentative IM8/Apple appartient à l’historique d’ADR-0006. Le contenu métier et ses sources restent propres à CoverView ; aucune preuve commerciale, capacité produit ou affirmation financière n’est déduite d’une référence de style.
 
 | Page | Intention de lecture et de recherche |
 | --- | --- |
@@ -66,7 +66,9 @@ Chaque contenu lisible possède `/<slug>.md`, annoncé par un lien alternatif, a
 
 ## Développement et dépendances
 
-`pnpm --filter www dev` : `127.0.0.1:4103`, port strict. `build` : HTML/CSS/assets sous `dist`. `typecheck` : Astro Check. Astro, MDX, Tailwind et le plugin Vite sont imposés (MIT). La typographie et les composants partagés sont documentés dans [UI](../../packages/ui/README.md). La refonte ajoute `@astrojs/react` pour le rendu statique de `@coverview/ui` ; aucun CMS ni accès direct à une base applicative n’est ajouté.
+`pnpm --filter www dev` : `127.0.0.1:4103`, port strict. `build` : HTML/CSS/assets sous `dist`. `typecheck` : Astro Check. Astro, MDX, Tailwind et le plugin Vite sont imposés (MIT). `@astrojs/react` assure le rendu statique de `@coverview/ui` ; aucun CMS ni accès direct à une base applicative n’est ajouté.
+
+`src/styles/global.css` importe `@coverview/ui/styles.css` et déclare `@source "../../../../packages/ui/src"` pour compiler les utilitaires des composants partagés. Tailwind est porté par UI ; le plugin Vite reste déclaré dans `www`, sans dépendance Tailwind directe redondante. Le thème charge Geist Variable via Fontsource pour les titres et le corps, puis les OTF locaux Montech aux graisses 400/500 pour les usages précédents de Geist Mono. Montech n’est pas à chasse fixe. Le [README UI](../../packages/ui/README.md) porte la provenance du preset réellement généré, les primitives `button`, `skeleton`, `card`, `input`, `label` et les sources des fontes. Les paquets Inter et Geist Mono sont remplacés par Geist via pnpm ; aucune autre bibliothèque UI n’est introduite.
 
 Documentation officielle consultée lors des étapes précédentes : [Astro MDX](https://docs.astro.build/en/guides/integrations-guide/mdx/), [Tailwind dans Astro](https://docs.astro.build/en/guides/styling/), puis [imports Markdown](https://docs.astro.build/en/guides/markdown-content/) et [Zod exposé par Astro](https://docs.astro.build/en/reference/modules/astro-zod/) pour S-011 le 2026-09-06. S-011 n’ajoutait aucun paquet ; l’intégration React appartient à la refonte ADR-0006.
 
@@ -76,7 +78,7 @@ Sharp est déclaré directement pour le service d’images Astro, uniquement au 
 
 ## Vérifier les parcours
 
-Le [ledger de refonte](../../roadmap/evidence/xai-redesign.md) décrit les vérifications effectivement réalisées le 6 septembre et leurs limites. L’aperçu social `/og.png` et la variante `/og-preview.svg` sont générés depuis `src/content/social.ts` et le texte de l’accueil. La provenance du visuel de la tentative précédente reste conservée dans `src/assets/README.md` ; elle ne prouve pas son utilisation dans le rendu xAI.
+Le [ledger shadcn et typographie](../../roadmap/evidence/shadcn-typography.md) porte les vérifications courantes et leurs limites. Le [ledger xAI](../../roadmap/evidence/xai-redesign.md) conserve l’étape précédente. L’aperçu social `/og.png` et la variante `/og-preview.svg` sont générés depuis `src/content/social.ts` et le texte de l’accueil. La provenance du visuel de la tentative précédente reste conservée dans `src/assets/README.md` ; elle ne prouve pas son utilisation dans le rendu actuel.
 
 Après `pnpm build` et installation du Chromium Playwright : `pnpm check:www` sert le build seul sur loopback éphémère puis s’arrête. Il contrôle HTML, metadata, graphe JSON-LD, miroirs comparés à la source et au HTML, liens/ancres/orphelins, sorties d’indexation vides, absence de JS exécutable hors compte, budget JS gzip et LCP/CLS sur onze gabarits. Ces mesures synthétiques ne sont ni du RUM ni une preuve du futur hébergement. Le contrôle est branché en CI après l’installation de Chromium.
 

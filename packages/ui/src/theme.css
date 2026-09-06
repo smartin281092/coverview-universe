@@ -1,24 +1,30 @@
-@import "@fontsource-variable/inter";
-@import "@fontsource-variable/geist-mono";
+@import "@fontsource-variable/geist";
+@import "./preset.css";
+
+@font-face {
+  font-family: "MONTECH V.02";
+  src: url("./fonts/montech/MONTECHV02-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "MONTECH V.02";
+  src: url("./fonts/montech/MONTECHV02-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   color-scheme: light;
-  --color-jet-ink: #0a0a0a;
-  --color-charcoal: #151515;
-  --color-fog: #858585;
-  --color-pewter: #9d9d9d;
-  --color-steel: #545454;
-  --color-dove: #d5d9e2;
-  --color-cream: #f9f8f6;
-  --color-paper: #ffffff;
-  --color-sand: #f2ede5;
-  --color-slate: #3b3b3b;
-  --color-ember: #ff5f57;
-  --color-sunbeam: #ffbd2e;
-  --color-sprout: #28c840;
-  --font-universalsans: "Inter Variable", Inter, system-ui, sans-serif;
-  --font-universalsansdisplay: "Inter Variable", "Inter Display", Inter, system-ui, sans-serif;
-  --font-geistmono: "Geist Mono Variable", "Geist Mono", ui-monospace, monospace;
+  --cv-font-sans: "Geist Variable", Geist, system-ui, sans-serif;
+  --cv-font-mono: "MONTECH V.02", ui-monospace, monospace;
+  --background: #ffffff;
+  --card: var(--muted);
+  --primary-hover: color-mix(in oklch, var(--primary), transparent 20%);
+  --success: var(--muted);
+  --success-foreground: var(--foreground);
   --text-caption: 12px;
   --text-body-sm: 14px;
   --text-body: 16px;
@@ -54,49 +60,11 @@
   --section-gap: 80px;
   --card-padding: 40px;
   --element-gap: 12px;
-  --radius-cards: 16px;
-  --radius-pills: 9999px;
-  --radius-inputs: 6px;
-  --radius-buttons: 9999px;
-  --radius-smallcards: 8px;
-  --shadow-subtle: 0 0 0 1px rgb(10 10 10 / 15%);
-  --background: var(--color-paper);
-  --foreground: var(--color-jet-ink);
-  --card: var(--color-cream);
-  --card-foreground: var(--color-jet-ink);
-  --popover: var(--color-paper);
-  --popover-foreground: var(--color-jet-ink);
-  --primary: var(--color-jet-ink);
-  --primary-foreground: var(--color-paper);
-  --primary-hover: var(--color-charcoal);
-  --secondary: var(--color-cream);
-  --secondary-foreground: var(--color-jet-ink);
-  --muted: var(--color-cream);
-  --muted-foreground: var(--color-steel);
-  --accent: var(--color-cream);
-  --accent-foreground: var(--color-jet-ink);
-  --destructive: var(--color-jet-ink);
-  --border: var(--color-dove);
-  --input: var(--color-dove);
-  --ring: var(--color-dove);
-  --success: var(--color-cream);
-  --success-foreground: var(--color-jet-ink);
-  --sidebar: var(--color-paper);
-  --sidebar-foreground: var(--color-jet-ink);
-  --sidebar-primary: var(--color-jet-ink);
-  --sidebar-primary-foreground: var(--color-paper);
-  --sidebar-accent: var(--color-cream);
-  --sidebar-accent-foreground: var(--color-jet-ink);
-  --sidebar-border: var(--color-dove);
-  --sidebar-ring: var(--color-dove);
-  --chart-1: var(--color-jet-ink);
-  --chart-2: var(--color-charcoal);
-  --chart-3: var(--color-steel);
-  --chart-4: var(--color-fog);
-  --chart-5: var(--color-pewter);
-  --radius: var(--radius-cards);
-  --cv-font: var(--font-universalsans);
-  --cv-link: var(--color-jet-ink);
+  --radius-cards: var(--radius);
+  --radius-inputs: calc(var(--radius) * 0.8);
+  --radius-smallcards: calc(var(--radius) * 0.6);
+  --cv-font: var(--cv-font-sans);
+  --cv-link: var(--foreground);
   --cv-page-width: var(--page-max-width);
   --cv-reading-width: 720px;
   --cv-page-gutter: 24px;
@@ -107,7 +75,7 @@ body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-universalsans);
+  font-family: var(--cv-font-sans);
   font-size: var(--text-body);
   font-weight: 400;
   line-height: 1.5;
@@ -133,11 +101,11 @@ body {
   padding-block: var(--spacing-48);
 }
 .cv-section--soft {
-  background: var(--color-cream);
+  background: var(--card);
 }
 .cv-section--dark {
-  background: var(--color-charcoal);
-  color: var(--color-paper);
+  background: var(--primary);
+  color: var(--background);
 }
 .cv-stack {
   display: flex;
@@ -166,7 +134,7 @@ body {
 }
 .cv-heading__eyebrow {
   margin: 0 0 var(--spacing-24);
-  color: var(--color-steel);
+  color: var(--muted-foreground);
   font-size: var(--text-body-sm);
   font-weight: 500;
   line-height: var(--leading-body-sm);
@@ -174,7 +142,7 @@ body {
 .cv-heading__title,
 .cv-app-heading {
   margin: 0;
-  font-family: var(--font-universalsansdisplay);
+  font-family: var(--cv-font-sans);
   font-size: var(--text-heading);
   font-weight: 400;
   font-optical-sizing: auto;
@@ -195,7 +163,7 @@ body {
 .cv-heading__description {
   max-width: 640px;
   margin: var(--spacing-24) 0 0;
-  color: var(--color-steel);
+  color: var(--muted-foreground);
   font-size: var(--text-body-lg);
   font-weight: 400;
   line-height: 1.5;
@@ -206,14 +174,14 @@ body {
 }
 .cv-section--dark .cv-heading__eyebrow,
 .cv-section--dark .cv-heading__description {
-  color: var(--color-dove);
+  color: var(--border);
 }
 .cv-text-link {
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-8);
   min-height: 44px;
-  color: var(--color-jet-ink);
+  color: var(--foreground);
   font-size: var(--text-body-sm);
   font-weight: 500;
   line-height: var(--leading-body-sm);
@@ -221,7 +189,7 @@ body {
   text-underline-offset: 4px;
 }
 .cv-text-link:hover {
-  color: var(--color-steel);
+  color: var(--muted-foreground);
 }
 .cv-text-link svg {
   width: 16px;
@@ -232,93 +200,6 @@ body {
   outline: none;
   text-decoration: underline;
 }
-.cv-button:focus-visible {
-  outline: 1px solid var(--color-dove);
-  outline-offset: 4px;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.cv-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-8);
-  min-height: 44px;
-  max-width: 100%;
-  padding: 12px 20px;
-  border: 0;
-  border-radius: var(--radius-buttons);
-  background: var(--color-jet-ink);
-  color: var(--color-paper);
-  font-family: var(--font-universalsans);
-  font-size: var(--text-body-sm);
-  font-weight: 500;
-  line-height: var(--leading-body-sm);
-  text-align: center;
-  text-decoration: none;
-  cursor: pointer;
-  transition:
-    background-color 160ms ease,
-    box-shadow 160ms ease;
-}
-.cv-button:hover {
-  background: var(--color-charcoal);
-}
-.cv-button--outline {
-  padding: 11px 19px;
-  border: 1px solid var(--color-dove);
-  background: var(--color-paper);
-  color: var(--color-jet-ink);
-}
-.cv-button--outline:hover {
-  background: var(--color-cream);
-}
-.cv-button--secondary {
-  background: var(--color-cream);
-  color: var(--color-jet-ink);
-}
-.cv-button--secondary:hover {
-  background: var(--color-sand);
-}
-.cv-button--ghost,
-.cv-button--link {
-  background: transparent;
-  color: var(--color-jet-ink);
-}
-.cv-button--ghost:hover,
-.cv-button--link:hover {
-  background: transparent;
-  box-shadow: 0 0 0 1px var(--color-dove);
-}
-.cv-button--destructive {
-  padding: 11px 19px;
-  border: 1px solid var(--color-dove);
-  background: transparent;
-  color: var(--color-jet-ink);
-}
-.cv-button--destructive:hover {
-  background: var(--color-jet-ink);
-  color: var(--color-paper);
-}
-.cv-button--sm,
-.cv-button--xs {
-  min-height: 34px;
-  padding: 6px 12px;
-}
-.cv-button--icon {
-  width: 44px;
-  padding: 12px;
-}
-.cv-button svg {
-  width: 16px;
-  height: 16px;
-  flex: none;
-}
-.cv-button:disabled,
-.cv-button[aria-disabled="true"] {
-  opacity: 0.45;
-  pointer-events: none;
-}
 .cv-bento {
   display: flex;
   min-width: 0;
@@ -327,13 +208,13 @@ body {
   gap: var(--spacing-40);
   overflow: hidden;
   border-radius: var(--radius-cards);
-  background: var(--color-cream);
+  background: var(--card);
   padding: var(--card-padding);
 }
 .cv-bento__title,
 .cv-app-subheading {
   margin: 0;
-  font-family: var(--font-universalsansdisplay);
+  font-family: var(--cv-font-sans);
   font-size: var(--text-heading-sm);
   font-weight: 400;
   letter-spacing: -0.025em;
@@ -342,13 +223,13 @@ body {
 .cv-bento__description {
   margin: var(--spacing-16) 0 0;
   max-width: 480px;
-  color: var(--color-steel);
+  color: var(--muted-foreground);
   font-size: var(--text-body);
   line-height: 1.5;
 }
 .cv-bento__value {
   margin: 0;
-  font-family: var(--font-universalsansdisplay);
+  font-family: var(--cv-font-sans);
   font-size: var(--text-display);
   font-weight: 400;
   letter-spacing: -0.025em;
@@ -356,8 +237,8 @@ body {
 }
 .cv-bento__label {
   margin: var(--spacing-12) 0 0;
-  color: var(--color-steel);
-  font-family: var(--font-geistmono);
+  color: var(--muted-foreground);
+  font-family: var(--cv-font-mono);
   font-size: var(--text-caption);
   line-height: 1.5;
 }
@@ -380,7 +261,7 @@ body {
   padding-block: var(--spacing-16);
 }
 .cv-state__icon {
-  color: var(--color-fog);
+  color: var(--muted-foreground);
 }
 .cv-state__icon svg {
   width: 32px;
@@ -389,7 +270,7 @@ body {
 }
 .cv-state__title {
   margin: 0;
-  font-family: var(--font-universalsansdisplay);
+  font-family: var(--cv-font-sans);
   font-size: var(--text-subheading);
   font-weight: 400;
   letter-spacing: -0.025em;
@@ -399,7 +280,7 @@ body {
 .cv-state__description {
   margin: 0;
   max-width: 496px;
-  color: var(--color-steel);
+  color: var(--muted-foreground);
   font-size: var(--text-body);
   line-height: 1.5;
 }
@@ -415,7 +296,7 @@ body {
 .cv-skeleton {
   min-height: 16px;
   border-radius: var(--radius-smallcards);
-  background: var(--color-cream);
+  background: var(--card);
   animation: cv-pulse 1.8s ease-in-out infinite;
 }
 .cv-loading__title {
@@ -458,7 +339,7 @@ body {
   gap: var(--spacing-16);
 }
 .cv-account-layout__detail-icon {
-  color: var(--color-fog);
+  color: var(--muted-foreground);
   flex: none;
   padding-top: 2px;
 }
@@ -476,7 +357,7 @@ body {
 .cv-account-layout__detail p {
   margin: var(--spacing-8) 0 0;
   max-width: 400px;
-  color: var(--color-steel);
+  color: var(--muted-foreground);
   font-size: var(--text-body-sm);
   font-weight: 400;
   line-height: var(--leading-body-sm);
@@ -488,19 +369,19 @@ body {
   font-size: var(--text-body-sm);
   font-weight: 500;
   line-height: var(--leading-body-sm);
-  color: var(--color-steel);
+  color: var(--muted-foreground);
   text-decoration: none;
 }
 .cv-app-nav-link:hover,
 .cv-app-nav-link[aria-current="page"] {
-  color: var(--color-jet-ink);
+  color: var(--foreground);
 }
 .cv-app-nav-link:focus-visible {
   text-decoration: underline;
   text-underline-offset: 4px;
 }
 .cv-meta {
-  font-family: var(--font-geistmono);
+  font-family: var(--cv-font-mono);
   font-size: var(--text-caption);
   font-weight: 400;
   line-height: 1.5;

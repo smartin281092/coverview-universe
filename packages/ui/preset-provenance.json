@@ -1,21 +1,16 @@
 {
-  "date": "2026-09-05",
+  "date": "2026-09-06",
   "preset": "b38oXC5rf",
   "source": "https://ui.shadcn.com/create?preset=b38oXC5rf",
   "executions": [
     {
-      "target": "client",
-      "command": "pnpm dlx shadcn@latest apply --preset b38oXC5rf --yes",
-      "exitCode": 0
-    },
-    {
-      "target": "admin",
-      "command": "pnpm dlx shadcn@latest apply --preset b38oXC5rf --yes",
+      "target": "shared design system source",
+      "command": "pnpm dlx shadcn@latest apply --preset b38oXC5rf --yes --cwd .planning-local/preset-shadcn",
       "exitCode": 0
     },
     {
       "target": "shared primitives",
-      "command": "pnpm dlx shadcn@latest add button skeleton --yes",
+      "command": "pnpm dlx shadcn@latest add button skeleton card input label --yes --cwd .planning-local/preset-shadcn",
       "exitCode": 0
     }
   ],
@@ -29,6 +24,35 @@
     "theme": "mist",
     "chartColor": "indigo"
   },
-  "adaptation": "Replace generated color tokens with assets/brand/tokens.css; remove generated dark palette; retain typography, radius and structure; opaque spaced focus, primary hover token, stronger control border.",
-  "executionContext": "Two isolated initialized Vite projects inside ignored packages/ui/.preset-work. Generated artifacts copied into owned app/UI files. No preset installation touched the root manifest or lockfile."
+  "adaptation": "Light preset tokens retained in src/preset.css; white background, card uses muted flat fill and no border/ring/shadow. Geist body/headings, supplied MONTECH V.02 in former mono roles. ButtonLink shares generated Button variants; Bento composes generated Card with article. Large public CTA and OTP retain 44px targets.",
+  "executionContext": "Applied in an isolated initialized Vite generation project under ignored .planning-local/preset-shadcn; generated token, component and radius outputs integrated in packages/ui. Manifests and lockfile updated using pnpm, not copied from the generation project.",
+  "previousInitialization": {
+    "date": "2026-09-05",
+    "executions": [
+      {
+        "target": "client",
+        "command": "pnpm dlx shadcn@latest apply --preset b38oXC5rf --yes",
+        "exitCode": 0
+      },
+      {
+        "target": "admin",
+        "command": "pnpm dlx shadcn@latest apply --preset b38oXC5rf --yes",
+        "exitCode": 0
+      },
+      {
+        "target": "shared primitives",
+        "command": "pnpm dlx shadcn@latest add button skeleton --yes",
+        "exitCode": 0
+      }
+    ],
+    "adaptation": "Replace generated color tokens with assets/brand/tokens.css; remove generated dark palette; retain typography, radius and structure; opaque spaced focus, primary hover token, stronger control border.",
+    "executionContext": "Two isolated initialized Vite projects inside ignored packages/ui/.preset-work. Generated artifacts copied into owned app/UI files. No preset installation touched the root manifest or lockfile."
+  },
+  "generatedSources": {
+    "button": "40dcea12cc5c9a357df10b6d56dfde7907cd84d076887fa4b56ac0a39f9e55b7",
+    "skeleton": "4c2af7fa9c645358a0fb188779deab6f0b981733b62befc25e18aaebea1350dc",
+    "card": "5e7040289fff160d6ef96afcb52a7ef9d4bd01e44a144adf80b0c1957fb5fa47",
+    "input": "9755070826f002a98bce851abadeab05568a3e771383866e0677358cbb4e04bb",
+    "label": "d998d18a30e592449cb5eeaa17ab6e6d19450afeaf4d9ad6721e018e5350c761"
+  }
 }

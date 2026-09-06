@@ -2,11 +2,13 @@
 
 ## Résumé
 
-Source commune des tokens et primitives de présentation de Wallet, de l’espace équipe et du site Astro. La direction actuelle suit [ADR-0007](../../adr/0007-xai-design-reference.md) et la [référence xAI fournie](../../references/xai-style-reference.md). ADR-0006 conserve la décision de partage statique avec Astro. Les surfaces fermées sont réservées aux bentos courts avec illustration ou chiffre justifié.
+Source commune des tokens et primitives de présentation de Wallet, de l’espace équipe et du site Astro. [ADR-0008](../../adr/0008-shadcn-geist-montech.md) gouverne le preset shadcn et les fontes Geist/Montech. La composition ouverte d’[ADR-0007](../../adr/0007-xai-design-reference.md) et le partage statique avec Astro d’[ADR-0006](../../adr/0006-marketing-design-system.md) restent applicables.
 
-## Consommation
+## Périmètre et consommation
 
-Les applications React importent `@coverview/ui/styles.css`, qui branche Tailwind et le thème commun. Astro importe `@coverview/ui/theme.css` : CSS ordinaire, fontes Inter et Geist Mono auto-hébergées, tokens et classes de présentation autonomes. Inter remplace les fontes propriétaires pour le corps et l’affichage éditorial ; Geist Mono est réservé aux métadonnées et contenus techniques. Ce chemin ne nécessite pas Tailwind. Les assets et tokens historiques de `assets/brand` sont conservés mais ne sont plus importés par ce package.
+Les trois frontends importent `@coverview/ui/styles.css`, qui branche Tailwind et le thème commun. Dans `apps/www/src/styles/global.css`, la directive `@source "../../../../packages/ui/src"` permet à Astro de compiler les utilitaires des composants partagés. Importer uniquement `theme.css` ne suffit pas à leur rendu complet. Les assets et tokens historiques de `assets/brand` sont conservés mais ne sont plus importés par ce package.
+
+`src/theme.css` charge Geist Variable via Fontsource pour les titres et le corps, ainsi que les OTF locaux MONTECH V.02 Regular et Medium pour les usages auparavant attribués à Geist Mono. L’alias `--cv-font-mono` reste compatible avec les consommateurs ; Montech n’est toutefois pas une fonte à chasse fixe. Les fichiers, graisses 400/500, métadonnées et provenance sont décrits dans le [README Montech](src/fonts/montech/README.md).
 
 Les composants de présentation ne contiennent aucun hook, accès réseau ou référence au navigateur. Astro peut les rendre côté serveur sans directive `client:*`. L’intégration de rendu React appartient à l’application Astro ; une page statique n’exige aucune hydratation.
 
@@ -17,17 +19,20 @@ Les composants de présentation ne contiennent aucun hook, accès réseau ou ré
 | `Stack`          | `gap="sm"`, `"md"` ou `"lg"` ; direction verticale/horizontale ; alignement start/center                              |
 | `SectionHeading` | `title`, `eyebrow?`, `description?`, `level={1\|2\|3}`, taille display/large/medium, alignement start/center, `id?`   |
 | `TextLink`       | Props anchor, enfants, flèche right/up/false                                                                          |
-| `ButtonLink`     | Props anchor et variantes du bouton ; destiné notamment au rendu Astro statique                                       |
-| `Button`         | Bouton React accessible ; composition `asChild` existante conservée pour les liens TanStack                           |
-| `Bento`          | Titre et texte courts ; `level={2\|3}` (défaut 3) ; `illustration` ou `value` porte l’objet visuel ; label facultatif |
+| `ButtonLink`     | Props anchor et mêmes `buttonVariants` que `Button` ; destiné notamment au rendu Astro statique                       |
+| `Button`         | Primitive shadcn générée ; composition `asChild` conservée pour les liens TanStack                                     |
+| `Card`           | Primitive générée avec ses slots de contenu ; composition `asChild`, aplat clair sans bordure ni ombre                  |
+| `Skeleton`       | Primitive générée de chargement, utilisée par les états partagés                                                       |
+| `Input`, `Label` | Primitives générées ; valeurs, association accessible et validation restent à la charge du formulaire                  |
+| `Bento`          | Compose `Card` autour d’un `article` ; titre et texte courts, `level={2\|3}`, illustration ou valeur justifiée         |
 | `AccountLayout`  | Titres, explications et liste de repères injectés par l’app ; aucun état d’identité                                   |
 | États            | Chargement, vide, erreur avec reprise, refus, introuvable et session expirée ; libellés et actions injectés           |
 
-Les mêmes classes `cv-container`, `cv-section`, `cv-heading`, `cv-text-link`, `cv-button` et `cv-bento` sont utilisables dans du HTML Astro lorsque son emplacement de contenu le nécessite. `SectionHeading` reçoit l’ID sur le titre pour la relation `aria-labelledby` de la section.
+Les classes de composition `cv-container`, `cv-section`, `cv-heading` et `cv-text-link` restent utilisables dans du HTML Astro lorsque son emplacement de contenu le nécessite. Les actions composent `Button` ou `ButtonLink` pour conserver les variantes communes. `SectionHeading` reçoit l’ID sur le titre pour la relation `aria-labelledby` de la section.
 
-## Règles de présentation
+## Règles de présentation et invariants
 
-`src/theme.css` expose les tokens nommés xAI et les alias shadcn correspondants. Steel porte le petit texte essentiel ; Fog/Pewter restent aux éléments décoratifs ou désaccentués adaptés. Les états sont ouverts, sans fond, bordure ou ombre de card. Un bento n’emballe jamais une longue section, un formulaire ou un état vide. Les boutons principaux mesurent au minimum 44 px ; les variantes compactes de navigation suivent la référence. Focus visible et réduction des animations sont conservés. Les consommateurs gardent leur hiérarchie sémantique, leurs catalogues et leurs responsabilités d’accessibilité.
+`src/preset.css` conserve les tokens clairs Mist générés ; `src/theme.css` porte les fontes et adaptations communes, et `src/styles.css` leur raccord Tailwind, notamment les rayons du preset. Ces fichiers exécutables font autorité sur les valeurs. Les règles visuelles courantes sont celles d’ADR-0008 ; les sections et états restent ouverts, les cards rares. Un bento n’emballe pas une longue section, un formulaire ou un état vide. Les consommateurs gardent leur hiérarchie sémantique, leurs catalogues, le focus visible et leurs responsabilités d’accessibilité.
 
 ## Permissions et données
 
@@ -35,10 +40,10 @@ Aucune règle métier, autorisation, identité, donnée privée, cache ou appel 
 
 ## Provenance et évolution
 
-Le bouton et le skeleton partent des primitives shadcn déjà installées ; Radix et la composition `asChild` sont conservés. Le preset historique exécuté figure dans `preset-provenance.json` et dans le ledger S-000a. ADR-0007 gouverne le rendu actuel, sans ajouter une autre bibliothèque de composants.
+La génération du 6 septembre utilise réellement `apply --preset b38oXC5rf --yes`, puis `add button skeleton card input label`, dans `.planning-local/preset-shadcn`. Les composants intégrés proviennent de cette sortie, avec les adaptations décrites dans ADR-0008 ; Radix et la composition `asChild` sont conservés. [preset-provenance.json](preset-provenance.json) consigne ces exécutions, leurs sources générées et l’initialisation précédente ; le ledger S-000a conserve les vérifications de cette première étape.
 
-`shadcn`, `radix-ui`, `class-variance-authority`, `cn`, `lucide-react` et `tw-animate-css` sont les dépendances déjà issues de cette initialisation. Fontsource Inter et Geist Mono sont ajoutés pour les substitutions autorisées, sous licence OFL-1.1. Installation et lockfile sont gérés par la tâche racine ; versions exécutables et provenance restent attachées à ces artefacts.
+`shadcn`, `radix-ui`, `class-variance-authority`, `cn`, `lucide-react` et `tw-animate-css` restent les dépendances de ce système ; aucune deuxième bibliothèque UI n’est ajoutée. `@fontsource-variable/geist` remplace les paquets Inter et Geist Mono via pnpm. Montech est fourni par les fichiers locaux documentés ci-dessus. Les manifestes et le lockfile portent les dépendances et leurs versions résolues.
 
 ## État réel
 
-La refonte est locale. Les vérifications et l’inspection des écrans réels sont consignées par la tâche propriétaire dans le journal de reprise. Un typecheck ou le rendu d’un état ne prouve ni une connexion WorkOS, ni une habilitation externe.
+La refonte est locale. Les vérifications et l’inspection des écrans réels sont consignées par la tâche propriétaire dans le [ledger shadcn et typographie](../../roadmap/evidence/shadcn-typography.md). Un typecheck ou le rendu d’un état ne prouve ni une connexion WorkOS, ni une habilitation externe.

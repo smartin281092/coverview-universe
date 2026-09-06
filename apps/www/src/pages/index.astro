@@ -20,8 +20,8 @@ const schema = {
     <Container>
       <SectionHeading id="hero-title" level={1} size="display" align="center" eyebrow={copy.hero.eyebrow} title={copy.hero.title} description={copy.hero.description} />
       <div class="hero-actions">
-        <ButtonLink href={copy.hero.primary.href}>{copy.hero.primary.label}</ButtonLink>
-        <ButtonLink href={copy.hero.secondary.href} variant="ghost">{copy.hero.secondary.label}<span aria-hidden="true">↗</span></ButtonLink>
+        <ButtonLink href={copy.hero.primary.href} className="h-11 px-5 text-sm">{copy.hero.primary.label}</ButtonLink>
+        <ButtonLink href={copy.hero.secondary.href} className="h-11 px-5 text-sm" variant="ghost">{copy.hero.secondary.label}<span aria-hidden="true">↗</span></ButtonLink>
       </div>
       <p class="hero-note">{copy.hero.note}</p>
     </Container>
