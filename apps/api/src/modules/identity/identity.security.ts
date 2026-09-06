@@ -24,6 +24,7 @@ const identityDiagnosticSchema = z.object({
     "remote_revocation",
     "mfa_challenge",
     "mfa_verification",
+    "mfa_enrollment",
   ]),
   reason: z.enum([
     "operation_failed",

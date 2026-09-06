@@ -12,6 +12,8 @@ Les outils de développement restent accessibles par leur adresse directe, hors 
 
 `/account` vérifie la disponibilité de la connexion puis la session serveur ; il affiche le profil, ouvre `/workspace/:userId`, `/devices` et le compte du site public. Le serveur contrôle la propriété de l’espace. La liste des appareils remplace ses pages de 20 entrées maximum, permet de fermer un appareil et propose les déconnexions locale/globale. Les données métier demeurent absentes.
 
+L’action Authenticator ouvre la page dédiée de l’espace équipe en développement. En build, elle passe par le retour de connexion équipe fixé par l’API, puis le compte donne accès à Authenticator ; aucune origine d’administration déployée n’est inventée. L’inscription reste une action du propriétaire sans droit administratif implicite.
+
 ## Règles métier et invariants
 
 La présentation utilise le système commun xAI de [UI](../../packages/ui/README.md), conformément à ADR-0007. Le layout de compte partagé reçoit uniquement des textes et icônes ; les décisions d’identité restent dans cette app. Compte, appareils, déconnexion et états sont des sections ouvertes sans card.

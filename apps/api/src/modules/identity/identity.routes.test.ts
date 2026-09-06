@@ -56,6 +56,12 @@ beforeEach(async () => {
   mfaChecks = 0;
   remoteClockOffset = 0;
   const provider: IdentityProvider = {
+    // Existing route cases do not exercise credential enrollment.
+    factors: () => Promise.reject(new Error("Enrollment is outside these existing cases")),
+    enroll: () => Promise.reject(new Error("Enrollment is outside these existing cases")),
+    challengeEnrollment: () =>
+      Promise.reject(new Error("Enrollment is outside these existing cases")),
+    cancelEnrollment: () => Promise.reject(new Error("Enrollment is outside these existing cases")),
     authorization: () => {
       const state = randomSecret();
       return Promise.resolve({
@@ -78,6 +84,7 @@ beforeEach(async () => {
         workosUserId: code,
         workosSessionId: remote.id,
         email: `${code}@example.test`,
+        authenticatedAt: null,
       });
     },
     sessions: (id) => {

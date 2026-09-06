@@ -15,6 +15,20 @@
       "when": 1788645193165,
       "tag": "0001_crazy_gravity",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788716580205,
+      "tag": "0002_normal_reptil",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1788716813073,
+      "tag": "0003_tense_frightful_four",
+      "breakpoints": true
     }
   ]
 }

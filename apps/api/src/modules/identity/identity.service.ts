@@ -11,6 +11,7 @@ import {
   type IdentityDiagnostic,
 } from "./identity.security.js";
 import type { IdentityProvider, RemoteIdentity } from "./identity.workos.js";
+import { createEnrollmentService } from "./identity.enrollment.js";
 
 type Repository = ReturnType<typeof createIdentityRepository>;
 type Surface = "wallet" | "admin" | "www";
@@ -126,11 +127,12 @@ export function createIdentityService(
   }
 
   return {
+    ...createEnrollmentService(repository, provider, authenticate),
     authenticate,
     logoutSession: (token: string | undefined) => localSession(token, true),
     csrf: (token: string) => csrfToken(secret, token),
-    async login(surface: Surface) {
-      const authorization = await provider.authorization();
+    async login(surface: Surface, reauthenticate = false) {
+      const authorization = await provider.authorization(reauthenticate);
       const browserNonce = randomSecret();
       const now = new Date();
       await repository.createLogin({
@@ -262,6 +264,9 @@ export function createIdentityService(
     },
     async challenge(session: IdentitySession) {
       requireAdministration(session, false);
+      const enrollment = await repository.getEnrollment(session.userId);
+      if (enrollment && !["confirmed", "cancelled"].includes(enrollment.status))
+        throw new IdentityError("IDENTITY_MFA_NOT_ENROLLED", 403);
       const challenge = await provider.challenge(session.workosUserId);
       const saved = await repository.saveChallenge(
         session.id,
@@ -274,6 +279,9 @@ export function createIdentityService(
     },
     async verify(token: string, session: IdentitySession, code: string, requestId: string) {
       requireAdministration(session, false);
+      const enrollment = await repository.getEnrollment(session.userId);
+      if (enrollment && !["confirmed", "cancelled"].includes(enrollment.status))
+        throw new IdentityError("IDENTITY_MFA_NOT_ENROLLED", 403);
       const challenge = await repository.consumeChallenge(session.id);
       if (!challenge || challenge.expiresAt.getTime() <= Date.now())
         throw new IdentityError("IDENTITY_MFA_INVALID", 400);

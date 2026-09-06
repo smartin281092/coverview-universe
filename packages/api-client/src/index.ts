@@ -12,6 +12,8 @@ import {
   identityLogoutInputSchema,
   identityMfaChallengeSchema,
   identityMfaVerifyInputSchema,
+  identityMfaEnrollmentSchema,
+  identityMfaEnrollmentStartSchema,
   type ApiErrorCode,
 } from "@coverview/contracts";
 import type { z } from "zod";
@@ -154,6 +156,43 @@ export function createApiClient({
         { body: {}, credentials: options },
         true,
       ),
+    mfaEnrollment: (options?: RequestOptions) =>
+      request("/identity/mfa/enrollment", identityMfaEnrollmentSchema, options, undefined, true),
+    startMfaEnrollment: (options: MutationOptions) =>
+      request(
+        "/identity/mfa/enrollment/start",
+        identityMfaEnrollmentStartSchema,
+        options,
+        { body: {}, credentials: options, timeoutMs: 20000 },
+        true,
+      ),
+    challengeMfaEnrollment: (options: MutationOptions) =>
+      request(
+        "/identity/mfa/enrollment/challenge",
+        identityMfaChallengeSchema,
+        options,
+        { body: {}, credentials: options, timeoutMs: 20000 },
+        true,
+      ),
+    confirmMfaEnrollment: (
+      input: z.infer<typeof identityMfaVerifyInputSchema>,
+      options: MutationOptions,
+    ) =>
+      request(
+        "/identity/mfa/enrollment/confirm",
+        identitySuccessSchema,
+        options,
+        { body: identityMfaVerifyInputSchema.parse(input), credentials: options, timeoutMs: 20000 },
+        true,
+      ),
+    cancelMfaEnrollment: (options: MutationOptions) =>
+      request(
+        "/identity/mfa/enrollment/cancel",
+        identitySuccessSchema,
+        options,
+        { body: {}, credentials: options, timeoutMs: 20000 },
+        true,
+      ),
     verifyMfa: (input: z.infer<typeof identityMfaVerifyInputSchema>, options: MutationOptions) =>
       request(
         "/identity/mfa/verify",
@@ -162,9 +201,15 @@ export function createApiClient({
         { body: identityMfaVerifyInputSchema.parse(input), credentials: options },
         true,
       ),
-    loginUrl: (surface: "wallet" | "admin" | "www") =>
-      new URL(`/auth/login?${new URLSearchParams({ surface })}`, base).href,
+    loginUrl: (surface: "wallet" | "admin" | "www", options: { reauthenticate?: boolean } = {}) =>
+      new URL(
+        `/auth/login?${new URLSearchParams({ surface, ...(options.reauthenticate ? { reauthenticate: "true" } : {}) })}`,
+        base,
+      ).href,
   };
 }
 
 export type IdentityMe = Awaited<ReturnType<ReturnType<typeof createApiClient>["me"]>>;
+export type IdentityMfaEnrollment = Awaited<
+  ReturnType<ReturnType<typeof createApiClient>["mfaEnrollment"]>
+>;

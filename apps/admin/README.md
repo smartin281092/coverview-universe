@@ -10,7 +10,9 @@ Surface indépendante destinée aux équipes CoverView. Le compte est l’entré
 
 `/preview`, `/states` et `/diagnostics` restent accessibles uniquement par leur adresse directe en développement : profils fictifs locaux, démonstration explicite des états UI et santé de l’API. Les profils viennent de l’API ; leur sélection est un état React local qui ne crée aucune session. Navigation et détails sur des pages séparées, conformément à FRONT-14.
 
-`/account` demande l’identité puis l’autorisation administrative au serveur. Un refus reste un refus, même si le navigateur déclare un rôle. L’exigence MFA ouvre `/mfa` : démarrage d’un challenge, code à six chiffres de l’application d’authentification existante, puis relecture de la session et de l’accès après rotation serveur. Aucun enrôlement ou secret TOTP frontend ; un facteur absent affiche une instruction d’assistance. Un code refusé exige un nouveau challenge.
+`/account` demande l’identité puis l’autorisation administrative au serveur. Un refus reste un refus, même si le navigateur déclare un rôle. L’exigence MFA ouvre `/mfa` : démarrage d’un challenge, code à six chiffres de l’application d’authentification, puis relecture de la session et de l’accès après rotation serveur. Un facteur absent mène à `/authenticator`, également accessible depuis le compte sans permission administrative. Un code refusé exige un nouveau challenge.
+
+`/authenticator` permet au titulaire de démarrer personnellement l’inscription WorkOS, scanner le QR et confirmer son code. La page ne crée aucun facteur à son ouverture. QR et code restent dans l’état local du composant, sans cache TanStack ni stockage navigateur, puis sont effacés à expiration ou sortie. La confirmation de l’inscription ne constitue ni une attribution administrative ni la preuve MFA de `/mfa`. La reprise du même facteur et l’annulation explicite d’une inscription inachevée sont pilotées par l’état serveur ; l’annulation ouvre `/authenticator/cancel`. Les résultats distants incertains restent indiqués sans faux succès.
 
 ## Règles métier et invariants
 

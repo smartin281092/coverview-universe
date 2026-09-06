@@ -34,6 +34,7 @@ export const identitySessions = pgTable(
     tokenHash: text("token_hash").notNull().unique(),
     device: text("device").notNull(),
     createdAt: instant("created_at").notNull().defaultNow(),
+    authenticatedAt: instant("authenticated_at"),
     lastSeenAt: instant("last_seen_at").notNull().defaultNow(),
     expiresAt: instant("expires_at").notNull(),
     revokedAt: instant("revoked_at"),
@@ -99,6 +100,54 @@ export const identityMfaChallenges = pgTable("identity_mfa_challenges", {
   expiresAt: instant("expires_at").notNull(),
 });
 
+// A single owned enrollment prevents duplicate credentials. Only provider IDs are retained.
+export const identityMfaEnrollments = pgTable(
+  "identity_mfa_enrollments",
+  {
+    userId: text("user_id")
+      .primaryKey()
+      .references(() => identityUsers.id),
+    sessionId: text("session_id")
+      .notNull()
+      .references(() => identitySessions.id),
+    operationId: text("operation_id").notNull().unique(),
+    status: text("status", {
+      enum: [
+        "creating",
+        "pending",
+        "challenging",
+        "verifying",
+        "cancelling",
+        "confirmed",
+        "cancelled",
+        "recovery",
+      ],
+    }).notNull(),
+    factorId: text("factor_id"),
+    challengeId: text("challenge_id"),
+    challengeExpiresAt: instant("challenge_expires_at"),
+    claimId: text("claim_id").notNull(),
+    // An uncertain verification must never authorize deletion of a potentially confirmed factor.
+    verificationUncertain: boolean("verification_uncertain").notNull().default(false),
+    createdAt: instant("created_at").notNull(),
+    updatedAt: instant("updated_at").notNull(),
+  },
+  (table) => [
+    check(
+      "identity_mfa_enrollment_status",
+      sql`${table.status} in ('creating', 'pending', 'challenging', 'verifying', 'cancelling', 'confirmed', 'cancelled', 'recovery')`,
+    ),
+    check(
+      "identity_mfa_enrollment_factor",
+      sql`${table.status} in ('creating', 'recovery', 'cancelled') or ${table.factorId} is not null`,
+    ),
+    check(
+      "identity_mfa_enrollment_challenge",
+      sql`(${table.challengeId} is null) = (${table.challengeExpiresAt} is null)`,
+    ),
+  ],
+);
+
 export const identityAuditEvents = pgTable(
   "identity_audit_events",
   {
@@ -108,7 +157,18 @@ export const identityAuditEvents = pgTable(
       .references(() => identityUsers.id),
     sessionId: text("session_id").references(() => identitySessions.id),
     action: text("action", {
-      enum: ["login", "session.revoke", "sessions.revoke_all", "mfa.verify"],
+      enum: [
+        "login",
+        "session.revoke",
+        "sessions.revoke_all",
+        "mfa.verify",
+        "mfa.enrollment.start",
+        "mfa.enrollment.challenge",
+        "mfa.enrollment.verify",
+        "mfa.enrollment.cancel_request",
+        "mfa.enrollment.confirm",
+        "mfa.enrollment.cancel",
+      ],
     }).notNull(),
     requestId: text("request_id").notNull(),
     deduplicationKey: text("deduplication_key").notNull().unique(),

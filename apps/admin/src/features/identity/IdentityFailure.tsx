@@ -41,6 +41,21 @@ export function IdentityFailure({ error, onRetry }: { error: unknown; onRetry: (
       />
     );
   }
+  if (code === "IDENTITY_REAUTHENTICATION_REQUIRED") {
+    return (
+      <SessionExpiredState
+        title={t("authenticator.reauthenticateTitle")}
+        description={t("authenticator.reauthenticateDescription")}
+        action={
+          <Button asChild>
+            <a href={api.loginUrl("admin", { reauthenticate: true })}>
+              {t("authenticator.reauthenticate")}
+            </a>
+          </Button>
+        }
+      />
+    );
+  }
   if (code === "IDENTITY_NOT_FOUND") {
     return (
       <NotFoundState

@@ -30,6 +30,11 @@ describe("official WorkOS SDK protocol with local HTTP responses only", () => {
     expect(url.searchParams.get("state")).toBe(result.state);
     expect(result.url).not.toContain(config.WORKOS_API_KEY);
     expect(result.url).not.toContain(result.codeVerifier);
+    expect(
+      new URL((await createWorkosProvider(config).authorization(true)).url).searchParams.get(
+        "max_age",
+      ),
+    ).toBe("0");
   });
   it("validates provider session ownership and refuses a truncated list", async () => {
     let after: string | null = null;
@@ -75,6 +80,7 @@ describe("official WorkOS SDK protocol with local HTTP responses only", () => {
     const { privateKey, publicKey } = generateKeyPairSync("rsa", { modulusLength: 2048 });
     let issuer = "https://api.workos.com/";
     let subject = "user_fixture";
+    const authenticatedAt = Math.floor(Date.now() / 1000) - 60;
     vi.stubGlobal(
       "fetch",
       vi.fn((url: string | URL | Request, options?: RequestInit) => {
@@ -109,6 +115,7 @@ describe("official WorkOS SDK protocol with local HTTP responses only", () => {
             sid: "session_fixture",
             iss: issuer,
             iat: Math.floor(Date.now() / 1000),
+            auth_time: authenticatedAt,
             exp: Math.floor(Date.now() / 1000) + 300,
           }),
         ).toString("base64url");
@@ -139,6 +146,7 @@ describe("official WorkOS SDK protocol with local HTTP responses only", () => {
       workosUserId: "user_fixture",
       email: "user@example.test",
       workosSessionId: "session_fixture",
+      authenticatedAt: new Date(authenticatedAt * 1000),
     });
     issuer = "https://foreign.example.test/";
     await expect(provider.exchange("fixture_code", "fixture_verifier")).rejects.toMatchObject({

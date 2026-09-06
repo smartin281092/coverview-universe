@@ -75,7 +75,7 @@ function Verification({ identity }: { identity: IdentityMe }) {
         description={t("identity.mfaNotEnrolled")}
         action={
           <Button asChild variant="outline">
-            <Link to="/account">{t("identity.backAccount")}</Link>
+            <Link to="/authenticator">{t("authenticator.accountAction")}</Link>
           </Button>
         }
       />

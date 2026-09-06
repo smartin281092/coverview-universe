@@ -12,11 +12,13 @@ import {
   type SQL,
 } from "drizzle-orm";
 import type { createDatabase } from "../../platform/db/database.js";
+import { createEnrollmentRepository } from "./identity.enrollment.repository.js";
 import {
   identityAdminPermissions,
   identityAuditEvents,
   identityLogins,
   identityMfaChallenges,
+  identityMfaEnrollments,
   identityProfiles,
   identitySessions,
   identityUsers,
@@ -42,6 +44,7 @@ export type CreateIdentitySession = {
   expiresAt: Date;
   loginStartedAt: Date;
   requestId: string;
+  authenticatedAt?: Date | null;
 };
 
 const hasAdminPermission = sql<boolean>`exists (
@@ -49,6 +52,11 @@ const hasAdminPermission = sql<boolean>`exists (
   where ${identityAdminPermissions.userId} = ${identitySessions.userId}
     and ${identityAdminPermissions.permission} = 'administration.access'
     and ${identityAdminPermissions.revokedAt} is null
+)`;
+const noPendingEnrollment = sql<boolean>`not exists (
+  select 1 from ${identityMfaEnrollments}
+  where ${identityMfaEnrollments.userId} = ${identitySessions.userId}
+    and ${identityMfaEnrollments.status} not in ('confirmed', 'cancelled')
 )`;
 
 async function readSession(executor: Pick<Database, "select">, condition: SQL | undefined) {
@@ -73,6 +81,7 @@ const activeSession = (now: Date) =>
 
 export function createIdentityRepository(db: Database) {
   return {
+    ...createEnrollmentRepository(db),
     async createLogin(input: typeof identityLogins.$inferInsert) {
       // Expiry is a technical lifetime, not an invented retention period for personal records.
       await db
@@ -171,6 +180,7 @@ export function createIdentityRepository(db: Database) {
           workosSessionId: input.workosSessionId,
           tokenHash: input.tokenHash,
           device: input.device,
+          authenticatedAt: input.authenticatedAt ?? null,
           expiresAt: input.expiresAt,
         });
         await tx.insert(identityAuditEvents).values({
@@ -379,7 +389,14 @@ export function createIdentityRepository(db: Database) {
         const [session] = await tx
           .select({ id: identitySessions.id })
           .from(identitySessions)
-          .where(and(eq(identitySessions.id, sessionId), activeSession(now), hasAdminPermission))
+          .where(
+            and(
+              eq(identitySessions.id, sessionId),
+              activeSession(now),
+              hasAdminPermission,
+              noPendingEnrollment,
+            ),
+          )
           .limit(1)
           .for("update");
         if (!session) return false;
@@ -412,7 +429,14 @@ export function createIdentityRepository(db: Database) {
         const [session] = await tx
           .update(identitySessions)
           .set({ mfaVerifiedAt: now, tokenHash: newTokenHash })
-          .where(and(eq(identitySessions.id, sessionId), activeSession(now), hasAdminPermission))
+          .where(
+            and(
+              eq(identitySessions.id, sessionId),
+              activeSession(now),
+              hasAdminPermission,
+              noPendingEnrollment,
+            ),
+          )
           .returning({ userId: identitySessions.userId });
         if (!session) return undefined;
         await tx.insert(identityAuditEvents).values({

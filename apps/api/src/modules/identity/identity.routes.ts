@@ -15,6 +15,8 @@ import {
   identityRevokeInputSchema,
   identityMfaChallengeSchema,
   identityMfaVerifyInputSchema,
+  identityMfaEnrollmentSchema,
+  identityMfaEnrollmentStartSchema,
 } from "@coverview/contracts";
 import type { Environment } from "../../platform/config.js";
 import { createDatabase } from "../../platform/db/database.js";
@@ -98,11 +100,21 @@ export async function registerIdentity(
     "/auth/login",
     {
       config: limited,
-      schema: { querystring: z.object({ surface: z.enum(["wallet", "admin", "www"]) }).strict() },
+      schema: {
+        querystring: z
+          .object({
+            surface: z.enum(["wallet", "admin", "www"]),
+            reauthenticate: z.literal("true").optional(),
+          })
+          .strict(),
+      },
     },
     async (request, reply) => {
       checkHost(request);
-      const result = await requiredService().login(request.query.surface);
+      const result = await requiredService().login(
+        request.query.surface,
+        request.query.reauthenticate === "true",
+      );
       reply.header("referrer-policy", "no-referrer");
       reply.setCookie(loginName, result.browserNonce, { ...cookieOptions, maxAge: 600 });
       return reply.redirect(result.url, 303);
@@ -248,6 +260,91 @@ export async function registerIdentity(
       );
       if (result === "complete") reply.clearCookie(sessionName, cookieOptions);
       return { success: true as const, remoteRevocation: result };
+    },
+  );
+  app.get(
+    "/identity/mfa/enrollment",
+    { config: limited, schema: { response: { 200: identityMfaEnrollmentSchema } } },
+    async (request) => {
+      checkHost(request);
+      const auth = requiredService();
+      const current = token(request);
+      return auth.enrollment(current ?? "", await auth.authenticate(current));
+    },
+  );
+  app.post(
+    "/identity/mfa/enrollment/start",
+    {
+      config: sensitive,
+      onRequest: checkMutation,
+      schema: {
+        body: identityRevokeInputSchema,
+        response: { 200: identityMfaEnrollmentStartSchema },
+      },
+    },
+    async (request) => {
+      const auth = requiredService();
+      const current = token(request);
+      return auth.startEnrollment(
+        current ?? "",
+        await auth.authenticate(current),
+        String(request.headers["idempotency-key"]),
+      );
+    },
+  );
+  app.post(
+    "/identity/mfa/enrollment/challenge",
+    {
+      config: sensitive,
+      onRequest: checkMutation,
+      schema: { body: identityRevokeInputSchema, response: { 200: identityMfaChallengeSchema } },
+    },
+    async (request) => {
+      const auth = requiredService();
+      const current = token(request);
+      return auth.challengeEnrollment(
+        current ?? "",
+        await auth.authenticate(current),
+        String(request.headers["idempotency-key"]),
+      );
+    },
+  );
+  app.post(
+    "/identity/mfa/enrollment/confirm",
+    {
+      config: sensitive,
+      onRequest: checkMutation,
+      schema: { body: identityMfaVerifyInputSchema, response: { 200: identitySuccessSchema } },
+    },
+    async (request, reply) => {
+      const auth = requiredService();
+      const current = token(request);
+      const result = await auth.confirmEnrollment(
+        current ?? "",
+        await auth.authenticate(current),
+        request.body.code,
+        String(request.headers["idempotency-key"]),
+      );
+      setSession(reply, result.token, result.session.expiresAt);
+      return { success: true as const };
+    },
+  );
+  app.post(
+    "/identity/mfa/enrollment/cancel",
+    {
+      config: sensitive,
+      onRequest: checkMutation,
+      schema: { body: identityRevokeInputSchema, response: { 200: identitySuccessSchema } },
+    },
+    async (request) => {
+      const auth = requiredService();
+      const current = token(request);
+      await auth.cancelEnrollment(
+        current ?? "",
+        await auth.authenticate(current),
+        String(request.headers["idempotency-key"]),
+      );
+      return { success: true as const };
     },
   );
   app.post(

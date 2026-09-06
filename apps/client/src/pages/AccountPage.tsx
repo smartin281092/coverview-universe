@@ -4,6 +4,7 @@ import { Button } from "@coverview/ui";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { AccountLayout } from "../features/identity/AccountLayout";
 import { LogoutActions } from "../features/identity/LogoutActions";
+import { api } from "../api";
 
 export function AccountPage() {
   const { t } = useTranslation();
@@ -11,6 +12,9 @@ export function AccountPage() {
   const websiteUrl =
     import.meta.env.VITE_WEBSITE_URL ??
     (import.meta.env.DEV ? "http://127.0.0.1:4103" : "https://coverview.ch");
+  const authenticatorUrl = import.meta.env.DEV
+    ? "http://127.0.0.1:4102/authenticator"
+    : api.loginUrl("admin");
   return (
     <AccountLayout>
       {params.get("authError") === "callback" && (
@@ -35,6 +39,9 @@ export function AccountPage() {
                 </Button>
                 <Button asChild variant="outline">
                   <Link to="/devices">{t("identity.devices")}</Link>
+                </Button>
+                <Button asChild variant="outline">
+                  <a href={authenticatorUrl}>{t("identity.authenticator")}</a>
                 </Button>
                 <Button asChild variant="outline">
                   <a href={new URL("/account", websiteUrl).href}>{t("identity.websiteAccount")}</a>

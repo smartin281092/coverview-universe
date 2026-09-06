@@ -7,7 +7,12 @@ import { LogoutFeedback } from "./features/identity/LogoutFeedback";
 export function AppShell() {
   const { t } = useTranslation();
   const { pathname } = useLocation();
-  const accountPage = pathname === "/" || pathname === "/account" || pathname === "/mfa";
+  const accountPage =
+    pathname === "/" ||
+    pathname === "/account" ||
+    pathname === "/mfa" ||
+    pathname === "/authenticator" ||
+    pathname === "/authenticator/cancel";
   const websiteUrl =
     import.meta.env.VITE_WEBSITE_URL ??
     (import.meta.env.DEV ? "http://127.0.0.1:4103" : "https://coverview.ch");

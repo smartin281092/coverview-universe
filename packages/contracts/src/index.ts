@@ -21,6 +21,8 @@ export const identityErrorCodeSchema = z.enum([
   "IDENTITY_RATE_LIMITED",
   "IDENTITY_MFA_NOT_ENROLLED",
   "IDENTITY_MFA_INVALID",
+  "IDENTITY_MFA_ENROLLMENT_CONFLICT",
+  "IDENTITY_REAUTHENTICATION_REQUIRED",
 ]);
 export const apiErrorCodeSchema = z.union([platformErrorCodeSchema, identityErrorCodeSchema]);
 export const apiErrorSchema = z.object({
@@ -63,11 +65,27 @@ export const identityLogoutSchema = identitySuccessSchema.extend({
   remoteRevocation: z.enum(["complete", "pending"]),
 });
 export const identityMfaChallengeSchema = z.object({ expiresAt: z.iso.datetime() });
+// The QR is delivered once to the enrolling user; it must never enter persistent application state.
+export const identityMfaEnrollmentStartSchema = identityMfaChallengeSchema.extend({
+  qrCode: z
+    .string()
+    .max(262144)
+    .regex(/^data:image\/png;base64,[A-Za-z0-9+/]+={0,2}$/),
+});
+export const identityMfaEnrollmentSchema = z.object({
+  state: z.enum(["available", "pending", "confirmed", "recovery"]),
+  expiresAt: z.iso.datetime().nullable(),
+  canConfirm: z.boolean(),
+  canRestart: z.boolean(),
+  canCancel: z.boolean(),
+  reason: z.enum(["operation_pending", "operation_uncertain", "existing_factor"]).nullable(),
+});
 export const identityMfaVerifyInputSchema = z
   .object({ code: z.string().regex(/^\d{6}$/) })
   .strict();
 
 export type IdentityMe = z.infer<typeof identityMeSchema>;
+export type IdentityMfaEnrollment = z.infer<typeof identityMfaEnrollmentSchema>;
 export type IdentityErrorCode = z.infer<typeof identityErrorCodeSchema>;
 export type ApiErrorCode = z.infer<typeof apiErrorCodeSchema>;
 

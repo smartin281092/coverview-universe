@@ -1,0 +1,1 @@
+ALTER TABLE "identity_sessions" ADD COLUMN "authenticated_at" timestamp (3) with time zone;

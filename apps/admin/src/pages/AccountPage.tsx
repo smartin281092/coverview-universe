@@ -62,7 +62,16 @@ export function AccountPage() {
           {t("identity.callbackError")}
         </p>
       )}
-      <IdentityBoundary>{(identity) => <TeamAccess identity={identity} />}</IdentityBoundary>
+      <IdentityBoundary>
+        {(identity) => (
+          <>
+            <Button asChild variant="outline">
+              <Link to="/authenticator">{t("authenticator.accountAction")}</Link>
+            </Button>
+            <TeamAccess identity={identity} />
+          </>
+        )}
+      </IdentityBoundary>
     </AccountLayout>
   );
 }

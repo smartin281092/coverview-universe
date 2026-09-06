@@ -1,5 +1,6 @@
 import { AuthenticateWithSessionCookieFailureReason, WorkOS } from "@workos-inc/node";
 import { z } from "zod";
+import { identityMfaEnrollmentStartSchema } from "@coverview/contracts";
 import type { Environment } from "../../platform/config.js";
 import {
   IdentityError,
@@ -16,16 +17,33 @@ const remoteSessionSchema = z.object({
   authMethod: z.string(),
 });
 export type RemoteSession = z.infer<typeof remoteSessionSchema>;
-export type RemoteIdentity = { workosUserId: string; email: string; workosSessionId: string };
+export type RemoteIdentity = {
+  workosUserId: string;
+  email: string;
+  workosSessionId: string;
+  authenticatedAt: Date | null;
+};
+const remoteFactorSchema = z.object({
+  id: z.string().min(1).max(200),
+  userId: z.string(),
+  type: z.string(),
+});
+type RemoteChallenge = { challengeId: string; factorId: string; expiresAt: Date };
 
 // This adapter is the only external identity boundary. Test doubles never enter runtime config.
 export interface IdentityProvider {
-  authorization(): Promise<{ url: string; state: string; codeVerifier: string }>;
+  authorization(
+    reauthenticate?: boolean,
+  ): Promise<{ url: string; state: string; codeVerifier: string }>;
   exchange(code: string, verifier: string): Promise<RemoteIdentity>;
   sessions(userId: string, signal?: AbortSignal): Promise<RemoteSession[]>;
   revoke(sessionId: string, signal?: AbortSignal): Promise<void>;
   challenge(userId: string): Promise<{ challengeId: string; factorId: string; expiresAt: Date }>;
   verify(challengeId: string, factorId: string, code: string): Promise<boolean>;
+  factors(userId: string): Promise<z.infer<typeof remoteFactorSchema>[]>;
+  enroll(userId: string, email: string): Promise<RemoteChallenge & { qrCode: string }>;
+  challengeEnrollment(userId: string, factorId: string): Promise<RemoteChallenge>;
+  cancelEnrollment(userId: string, factorId: string): Promise<void>;
 }
 
 export function createWorkosProvider(config: Environment): IdentityProvider {
@@ -94,14 +112,93 @@ export function createWorkosProvider(config: Environment): IdentityProvider {
       ? "custom"
       : "other";
   }
+  async function factors(userId: string) {
+    const page = await workos.multiFactorAuth.listUserAuthFactors({ userId, limit: 10 });
+    if (page.listMetadata.after) throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
+    const result = z.array(remoteFactorSchema).max(10).parse(page.data);
+    if (result.some((factor) => factor.userId !== userId))
+      throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
+    return result;
+  }
+  function challengeResult(raw: unknown, factorId: string): RemoteChallenge {
+    const challenge = z
+      .object({
+        id: z.string().min(1).max(200),
+        authenticationFactorId: z.string(),
+        expiresAt: z.iso.datetime().optional(),
+      })
+      .parse(raw);
+    if (challenge.authenticationFactorId !== factorId)
+      throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
+    const expiresAt = new Date(
+      Math.min(
+        Date.now() + 5 * 60_000,
+        challenge.expiresAt ? Date.parse(challenge.expiresAt) : Number.POSITIVE_INFINITY,
+      ),
+    );
+    if (expiresAt.getTime() <= Date.now()) throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
+    return { challengeId: challenge.id, factorId, expiresAt };
+  }
   return {
-    authorization: () =>
+    factors: (userId) => external(() => factors(userId), "mfa_enrollment"),
+    enroll: (userId, email) =>
+      external(async () => {
+        const raw = await workos.multiFactorAuth.createUserAuthFactor({
+          userId,
+          type: "totp",
+          totpIssuer: "CoverView",
+          totpUser: email,
+        });
+        const factor = remoteFactorSchema
+          .extend({
+            type: z.literal("totp"),
+            totp: z.object({ qrCode: identityMfaEnrollmentStartSchema.shape.qrCode }),
+          })
+          .parse(raw.authenticationFactor);
+        if (factor.userId !== userId) throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
+        return {
+          ...challengeResult(raw.authenticationChallenge, factor.id),
+          qrCode: factor.totp.qrCode,
+        };
+      }, "mfa_enrollment"),
+    challengeEnrollment: (userId, factorId) =>
+      external(async () => {
+        const owned = (await factors(userId)).some(
+          (factor) => factor.id === factorId && factor.type === "totp",
+        );
+        if (!owned) throw new IdentityError("IDENTITY_MFA_ENROLLMENT_CONFLICT", 409);
+        return challengeResult(
+          await workos.multiFactorAuth.challengeFactor({ authenticationFactorId: factorId }),
+          factorId,
+        );
+      }, "mfa_enrollment"),
+    cancelEnrollment: (userId, factorId) =>
+      external(async () => {
+        const owned = (await factors(userId)).some(
+          (factor) => factor.id === factorId && factor.type === "totp",
+        );
+        if (!owned) return; // This exact locally recorded enrollment was already removed.
+        try {
+          await workos.multiFactorAuth.deleteFactor(factorId);
+        } catch (cause) {
+          if (
+            typeof cause === "object" &&
+            cause !== null &&
+            "status" in cause &&
+            cause.status === 404
+          )
+            return;
+          throw cause;
+        }
+      }, "mfa_enrollment"),
+    authorization: (reauthenticate = false) =>
       external(
         () =>
           workos.userManagement.getAuthorizationUrlWithPKCE({
             provider: "authkit",
             redirectUri: `${config.AUTH_API_ORIGIN}/auth/callback`,
             screenHint: "sign-in",
+            ...(reauthenticate ? { maxAge: 0 } : {}),
           }),
         "authorization",
       ),
@@ -161,6 +258,7 @@ export function createWorkosProvider(config: Environment): IdentityProvider {
                 iss: z.url(),
                 exp: z.number(),
                 iat: z.number(),
+                auth_time: z.number().int().positive().optional(),
                 aud: z.union([z.string(), z.array(z.string())]).optional(),
               })
               .safeParse(
@@ -182,6 +280,12 @@ export function createWorkosProvider(config: Environment): IdentityProvider {
           });
         if (claims.data.exp <= Date.now() / 1000) throw invalid("token_claims", "token_expired");
         if (claims.data.iat > Date.now() / 1000 + 30) throw invalid("token_claims", "token_future");
+        if (
+          claims.data.auth_time &&
+          (claims.data.auth_time > claims.data.iat ||
+            claims.data.auth_time > Date.now() / 1000 + 30)
+        )
+          throw invalid("token_claims", "token_future");
         if (claims.data.aud && ![claims.data.aud].flat().includes(clientId))
           throw invalid("token_claims", "audience_mismatch");
         const identity = z
@@ -189,11 +293,13 @@ export function createWorkosProvider(config: Environment): IdentityProvider {
             workosUserId: z.string().min(1),
             email: z.email(),
             workosSessionId: z.string().min(1),
+            authenticatedAt: z.date().nullable(),
           })
           .safeParse({
             workosUserId: verified.user.id,
             email: verified.user.email,
             workosSessionId: verified.sessionId,
+            authenticatedAt: claims.data.auth_time ? new Date(claims.data.auth_time * 1000) : null,
           });
         if (!identity.success) throw invalid("token_claims", "identity_invalid");
         return identity.data;
@@ -239,38 +345,12 @@ export function createWorkosProvider(config: Environment): IdentityProvider {
       }, "remote_revocation"),
     challenge: (userId) =>
       external(async () => {
-        const page = await workos.multiFactorAuth.listUserAuthFactors({ userId, limit: 10 });
-        if (page.listMetadata.after) throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
-        const factors = z
-          .array(z.object({ id: z.string().min(1), userId: z.string(), type: z.string() }))
-          .max(10)
-          .parse(page.data);
-        if (factors.some((factor) => factor.userId !== userId))
-          throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
-        const factor = factors.find((item) => item.type === "totp");
+        const factor = (await factors(userId)).find((item) => item.type === "totp");
         if (!factor) throw new IdentityError("IDENTITY_MFA_NOT_ENROLLED", 403);
         const result = await workos.multiFactorAuth.challengeFactor({
           authenticationFactorId: factor.id,
         });
-        const challenge = z
-          .object({
-            id: z.string().min(1),
-            authenticationFactorId: z.string(),
-            expiresAt: z.iso.datetime().optional(),
-          })
-          .parse(result);
-        if (challenge.authenticationFactorId !== factor.id)
-          throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
-        return {
-          challengeId: challenge.id,
-          factorId: factor.id,
-          expiresAt: new Date(
-            Math.min(
-              Date.now() + 5 * 60_000,
-              challenge.expiresAt ? Date.parse(challenge.expiresAt) : Number.POSITIVE_INFINITY,
-            ),
-          ),
-        };
+        return challengeResult(result, factor.id);
       }, "mfa_challenge"),
     verify: (challengeId, factorId, code) =>
       external(async () => {
