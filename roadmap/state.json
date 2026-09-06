@@ -288,12 +288,18 @@
           "oracle": "V3 partiel ; C05 non clos",
           "observed": "Après intégration da362e0, connexion WorkOS BMP réelle forcée et callback réussis. Compte équipe sans permission refusé ; lien suivi vers Authenticator, instructions et Générer mon QR code inspectés avant création. SQL confirme une session active avec auth_time récent et aucune inscription/habilitation. Page laissée au titulaire.",
           "decision": "Le titulaire doit personnellement lancer, scanner et confirmer le credential ; bénéficiaire admin explicitement désigné encore requis. Conserver S-000b running et S-013 fermé. Reprise documentée dans handoff MFA actualisé."
+        },
+        {
+          "target": "Inscription personnelle et revue produit avant clôture",
+          "oracle": "V3 inscription ; C05 administratif restant",
+          "observed": "Confirmation WorkOS enregistrée et page de succès réelle relue. Revue : aide code email insuffisante, lien de configuration avant action principale et titre invitant à configurer même après succès.",
+          "decision": "Clarifier la méthode email et les titres, placer état/action équipe avant lien Authenticator. Seconde revue après intégration ; ne pas clôturer C05 sans désignation puis grant et preuve MFA réelle. Mandat de double revue persisté pour chaque slice."
         }
       ],
       "ledger": {
         "assumed": [],
         "done_unverified": [
-          "C05 : parcours Authenticator implémenté et contrôlé localement ; inscription personnelle dans la page préparée, désignation/habilitation admin tracée et MFA WorkOS administrative réelle encore nécessaires. Aucun credential ni droit fabriqué.",
+          "C05 : Authenticator personnel confirmé. Bénéficiaire admin à désigner explicitement, grant local tracé et challenge MFA administratif réel encore nécessaires ; aucune permission fabriquée.",
           "CI distante, environnement déployé, cookies entre sous-domaines réels et reset destructif non exécutés."
         ],
         "verified": [
@@ -308,7 +314,8 @@
           "V3 isolation et continuité : deux identités SQL distinctes, espaces propriétaires accessibles, refus croisés, identité partagée www/Wallet ; compte ordinaire refusé sur admin.",
           "V3 révocations : logout courant Hook, deux appareils BMP même identité, retrait ciblé puis logout global depuis deux sessions actives ; refus suivant, zéro session active et zéro révocation distante en attente.",
           "Authenticator V0/V1/V2 ciblé : types/lint/build API+UI+contrats, revue indépendante close, frontières corrigées/knip passés ; 3 cas SDK existants et 1 cas HTTP/PostgreSQL MFA existant passent. Deux migrations additives appliquées et rejouées sans perte, users2/admin0 avant déploiement. Détails et limites au ledger.",
-          "Commit applicatif da362e0 intégré par fast-forward sur main enregistré, API 9b02 et UI 4133 ; HEAD/contenu identiques, checkouts propres. Reconnexion BMP forcée maxAge:0 réussie, auth_time récent persisté, refus équipe sans grant, page Authenticator réelle préparée dans Chrome. SQL users2/active1/enrollment0/admin0 ; API ready/enabled. Aucun QR créé ni secret collecté."
+          "Commit applicatif da362e0 intégré par fast-forward sur main enregistré, API 9b02 et UI 4133 ; HEAD/contenu identiques, checkouts propres. Reconnexion BMP forcée maxAge:0 réussie, auth_time récent persisté, refus équipe sans grant, page Authenticator réelle préparée dans Chrome. SQL users2/active1/enrollment0/admin0 ; API ready/enabled. Aucun QR créé ni secret collecté.",
+          "Inscription personnelle BMP confirmée le 2026-09-06 à 18:15:09.313 UTC : SQL status confirmed, verification_uncertain false et écran Votre application est associée relu dans le navigateur intégré. Aucun QR/seed/code collecté. Deux sessions actives, aucun grant admin avant désignation."
         ]
       },
       "notes": [
@@ -489,8 +496,8 @@
     "active": true,
     "mode": "sequential-fresh-tasks",
     "authorized_at": "2026-09-05",
-    "authorization": "Lancer S-000a puis enchaîner les slices dans une nouvelle tâche à contexte propre ; choisir les réponses par défaut les mieux adaptées au projet.",
-    "evidence": "Message utilisateur 01a0734f-fd18-76a0-a2e5-d0cf7ddd7c78 dans la tâche 01a072f8-6263-7ed0-8b49-0b384c54bf9d ; roadmap/execution-policy.md",
+    "authorization": "Autonomie complète réaffirmée le 2026-09-06 : enchaîner la roadmap, une nouvelle tâche gpt-6-astra / ultra par slice, avec revue critique produit, améliorations et seconde revue avant validation selon roadmap/execution-policy.md.",
+    "evidence": "Message utilisateur 01a0734f-fd18-76a0-a2e5-d0cf7ddd7c78 dans la tâche 01a072f8-6263-7ed0-8b49-0b384c54bf9d ; roadmap/execution-policy.md ; message utilisateur de la tâche 01a077bc-b0f8-7630-a4fe-861eec6e71f4 après inscription Authenticator, 2026-09-06.",
     "policy": "roadmap/execution-policy.md"
   }
 }

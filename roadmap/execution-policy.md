@@ -22,6 +22,14 @@ Une seule slice est `running`. Réaliser ses critères et contrôles, enregistre
 
 Les exigences de portée restent celles de PROJECT : la bible entière, le preset et la charte, WorkOS coverview, les données fictives initiales et la protection de toutes les instances Infomaniak existantes avec leurs dépendances. Aucun réglage de modèle alternatif, élargissement de droits ou changement de ces choix n'est déduit de l'autonomie. Préparer les actions externes concrètement avant leur exécution ; les actes qui exigent une autorisation spécifique non comprise dans le mandat restent limités à leur préparation.
 
+## Revue produit avant validation de chaque slice
+
+Mandat réaffirmé le 2026-09-06 dans la tâche S-000b : autonomie complète pour poursuivre la roadmap, une nouvelle tâche Astra Ultra par slice, avec une revue critique de chaque page ou fonctionnalité avant validation et passage à la suivante.
+
+Sur le parcours réel implémenté, challenger le rendu, les animations, le contenu et l’expérience : attractivité et agrément visuels, modernité, efficacité, priorité des actions, sens de lecture et cohérence avec le système de design acquis. Choisir intelligemment les pages, modals/popups, panneaux et onglets selon l’intention, au lieu d’empiler tous les contenus. Pour les formulaires longs, examiner la progression et les étapes, y compris une approche ludique lorsqu’elle facilite réellement la tâche. Ne pas imposer artificiellement ces motifs à une action simple ou sensible.
+
+Effectuer les améliorations justifiées, puis une dernière revue du résultat avant de valider la slice. Observer aussi le clavier, le mobile, les états d’erreur/attente/succès et le mouvement réduit lorsque le parcours est concerné. Consigner les défauts trouvés, les corrections et les limites de cette seconde revue dans le ledger existant ; une déclaration de qualité esthétique ne remplace pas l’observation. Cette boucle s’ajoute aux oracles fonctionnels, sans nouvelle batterie de tests de surface ni validation humaine simulée.
+
 ## Nouvelle tâche, nouveau contexte
 
 À chaque fin de slice, créer **une nouvelle tâche `gpt-6-astra` / `ultra`**, sans fork de l'historique. Ce passage systématique n'attend pas une mesure de 70 %. En cours de slice, CDX-03 conserve le relais préventif et sa limite de télémétrie.

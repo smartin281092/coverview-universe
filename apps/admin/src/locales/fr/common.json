@@ -15,7 +15,7 @@
     "unavailableTitle": "Connexion indisponible pour le moment",
     "unavailableDescription": "La connexion à votre compte n’est pas encore disponible dans cette préversion. Vous pouvez continuer à découvrir CoverView.",
     "signedOutTitle": "Connectez-vous pour continuer",
-    "signedOutDescription": "Votre connexion a expiré ou aucun compte n’est connecté sur cet appareil. Connectez-vous pour retrouver votre espace.",
+    "signedOutDescription": "Connectez-vous pour retrouver votre espace. Sur l’écran suivant, vous pouvez choisir « Code de connexion par e-mail » sans saisir de mot de passe.",
     "login": "Se connecter",
     "deniedTitle": "Accès réservé",
     "deniedDescription": "Ce compte n’a pas accès à cet espace.",
@@ -51,8 +51,8 @@
     "mfaStart": "Commencer la vérification"
   },
   "authenticator": {
-    "title": "Configurer Authenticator",
-    "accountAction": "Configurer Authenticator",
+    "title": "Votre application Authenticator",
+    "accountAction": "Mon application Authenticator",
     "loading": "Vérification de votre application d’authentification",
     "account": "Compte concerné : {{email}}",
     "instructions": "Préparez votre application Authenticator. Générez le QR code, scannez-le vous-même, puis saisissez le code à six chiffres pour confirmer l’association.",
@@ -80,7 +80,7 @@
     "cancelUnavailableDescription": "Son état a changé ou une vérification est nécessaire. Revenez à Authenticator pour consulter les actions disponibles.",
     "back": "Revenir à Authenticator",
     "reauthenticateTitle": "Confirmez à nouveau votre connexion",
-    "reauthenticateDescription": "Une connexion récente est nécessaire pour modifier votre application d’authentification. Reconnectez-vous, puis revenez à Authenticator depuis votre compte.",
+    "reauthenticateDescription": "Confirmez votre connexion avant de modifier Authenticator. Vous pouvez choisir « Code de connexion par e-mail » sur l’écran suivant, puis revenir ici depuis votre compte.",
     "reauthenticate": "Se reconnecter"
   },
   "accountIntro": {

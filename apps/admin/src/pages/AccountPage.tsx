@@ -47,6 +47,9 @@ function TeamAccess({ identity }: { identity: IdentityMe }) {
           <EmptyState title={t("identity.teamReady")} description={t("identity.teamEmpty")} />
         </section>
       )}
+      <Button asChild variant="outline">
+        <Link to="/authenticator">{t("authenticator.accountAction")}</Link>
+      </Button>
       <LogoutActions identity={identity} />
     </div>
   );
@@ -62,16 +65,7 @@ export function AccountPage() {
           {t("identity.callbackError")}
         </p>
       )}
-      <IdentityBoundary>
-        {(identity) => (
-          <>
-            <Button asChild variant="outline">
-              <Link to="/authenticator">{t("authenticator.accountAction")}</Link>
-            </Button>
-            <TeamAccess identity={identity} />
-          </>
-        )}
-      </IdentityBoundary>
+      <IdentityBoundary>{(identity) => <TeamAccess identity={identity} />}</IdentityBoundary>
     </AccountLayout>
   );
 }
