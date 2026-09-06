@@ -1,6 +1,7 @@
 import { createRootRoute, createRoute, createRouter } from "@tanstack/react-router";
 import { AppShell } from "./AppShell";
 import { HomePage } from "./pages/HomePage";
+import { DiagnosticsPage } from "./pages/DiagnosticsPage";
 import { PreviewPage } from "./pages/PreviewPage";
 import { MissingPage, StatesPage } from "./pages/StatesPage";
 import { AccountPage } from "./pages/AccountPage";
@@ -34,9 +35,15 @@ const statesRoute = createRoute({
   path: "/states",
   component: StatesPage,
 });
+const diagnosticsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/diagnostics",
+  component: DiagnosticsPage,
+});
 export const router = createRouter({
   routeTree: rootRoute.addChildren([
     homeRoute,
+    diagnosticsRoute,
     previewRoute,
     statesRoute,
     accountRoute,

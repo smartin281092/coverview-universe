@@ -9,7 +9,7 @@
     "logoutRetry": "Terminer la déconnexion",
     "logoutRetryFailed": "La fermeture n’a pas abouti. Votre accès à CoverView reste fermé ; vous pouvez réessayer.",
     "accountTitle": "Mon compte",
-    "accountDescription": "Retrouvez votre identité et les accès à votre espace CoverView.",
+    "accountDescription": "Votre compte CoverView et vos connexions, réunis dans un espace personnel.",
     "loading": "Vérification de votre connexion",
     "unavailableTitle": "Connexion indisponible pour le moment",
     "unavailableDescription": "La connexion à votre compte n’est pas encore disponible dans cette préversion. Vous pouvez continuer à découvrir CoverView.",
@@ -57,6 +57,22 @@
     "next": "Suivant",
     "page": "Page {{page}}"
   },
+  "accountIntro": {
+    "eyebrow": "Votre espace personnel",
+    "discover": "Découvrir CoverView",
+    "account": {
+      "title": "Un seul compte CoverView",
+      "description": "Retrouvez la même connexion depuis le site public et Wallet."
+    },
+    "access": {
+      "title": "Votre espace reste privé",
+      "description": "Vous seul accédez à votre espace personnel après connexion."
+    },
+    "devices": {
+      "title": "Gardez la main sur vos connexions",
+      "description": "Consultez vos appareils et fermez les accès que vous ne souhaitez plus utiliser."
+    }
+  },
   "app": "Wallet",
   "title": "Votre Wallet commence ici.",
   "subtitle": "Un point de départ pour retrouver, comprendre et suivre votre protection.",
@@ -67,7 +83,7 @@
   "home": "Vue d’ensemble",
   "preview": "Profils fictifs",
   "states": "États d’interface",
-  "website": "Découvrir CoverView",
+  "website": "Site public",
   "local": "Préversion locale · Données fictives",
   "production": "Socle en préparation",
   "footer": "CoverView · Votre protection, plus claire.",

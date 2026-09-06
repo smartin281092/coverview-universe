@@ -24,6 +24,15 @@ const ROOT = resolve(dirname(SCRIPT), "..");
 const delay = (ms) => new Promise((done) => setTimeout(done, ms));
 const urlOf = (app) => `http://127.0.0.1:${app.port}`;
 
+/** Les credentials d'identité ne traversent que les processus de l'API. */
+export function childEnvironment(key, environment = process.env) {
+  return Object.fromEntries(
+    Object.entries(environment).filter(
+      ([name]) => key === "api" || !/^(WORKOS_API_KEY|AUTH_SESSION_SECRET)$/i.test(name),
+    ),
+  );
+}
+
 export function requireLocal(environment) {
   if (!["local", "development"].includes(environment.APP_ENV)) {
     throw new Error(
@@ -162,13 +171,14 @@ function saveRecords(root, records) {
   writeFileSync(join(root, ".preview", "pids.json"), JSON.stringify(records, null, 2) + "\n");
 }
 
-function run(command, args, root) {
+function run(command, args, root, environment = childEnvironment("infrastructure")) {
   return new Promise((done, reject) => {
     const child = spawn(command, args, {
       cwd: root,
       stdio: "inherit",
       windowsHide: true,
       timeout: 120_000,
+      env: environment,
     });
     child.once("error", reject);
     child.once("exit", (code, signal) =>
@@ -209,6 +219,50 @@ async function configuration(root) {
   return config;
 }
 
+function toolBinary(root, app) {
+  const require = createRequire(join(root, app.dir, "package.json"));
+  const packagePath = require.resolve(`${app.tool}/package.json`);
+  const packageJson = JSON.parse(readFileSync(packagePath, "utf8"));
+  const binary =
+    typeof packageJson.bin === "string" ? packageJson.bin : packageJson.bin?.[app.tool];
+  if (!binary) throw new Error(`Exécutable ${app.tool} absent; vérifier pnpm install.`);
+  return resolve(dirname(packagePath), binary);
+}
+
+async function checkAuthConfiguration(root, config) {
+  if (process.env.AUTH_ENABLED !== "true")
+    throw new Error("REFUSÉ — AUTH_ENABLED=true est requis pour ce lancement.");
+  const api = config.apps.find((app) => app.key === "api");
+  if (!api) throw new Error("REFUSÉ — API absente de la configuration preview.");
+  for (const app of config.apps) toolBinary(root, app);
+  await run(
+    process.execPath,
+    [toolBinary(root, api), join(root, api.dir, "src/platform/config.check.ts"), "--runtime"],
+    root,
+    childEnvironment("api"),
+  );
+  console.log("Configuration locale valide. Ceci ne vérifie ni la clé WorkOS ni une connexion.");
+}
+
+async function authenticationStatus(config, records, root) {
+  const api = config.apps.find((app) => app.key === "api");
+  if (!api || !(await control(root, records.api))) return null;
+  try {
+    const response = await fetch(`${urlOf(api)}/identity/config`, {
+      signal: AbortSignal.timeout(2500),
+      redirect: "error",
+    });
+    if (!response.ok) {
+      await response.body?.cancel();
+      return null;
+    }
+    const result = await response.json();
+    return typeof result.enabled === "boolean" ? result.enabled : null;
+  } catch {
+    return null;
+  }
+}
+
 function stopOwnTree() {
   if (process.platform === "win32") {
     // Le PID est celui du processus en train d'exécuter cette instruction : il
@@ -217,6 +271,7 @@ function stopOwnTree() {
       windowsHide: true,
       stdio: "ignore",
       timeout: 10_000,
+      env: childEnvironment("control"),
     });
     if (result.error || result.status !== 0) {
       console.error(
@@ -235,19 +290,14 @@ async function worker(key, token, root) {
   const app = config.apps.find((entry) => entry.key === key);
   if (!app) throw new Error("Application preview inconnue.");
   const cwd = resolve(root, app.dir);
-  const require = createRequire(join(cwd, "package.json"));
-  const packagePath = require.resolve(`${app.tool}/package.json`);
-  const packageJson = JSON.parse(readFileSync(packagePath, "utf8"));
-  const binary =
-    typeof packageJson.bin === "string" ? packageJson.bin : packageJson.bin?.[app.tool];
-  if (!binary) throw new Error(`Exécutable ${app.tool} absent; vérifier pnpm install.`);
+  const binary = toolBinary(root, app);
   prepareEndpoint(root, token);
-  const child = spawn(process.execPath, [resolve(dirname(packagePath), binary), ...app.args], {
+  const child = spawn(process.execPath, [binary, ...app.args], {
     cwd,
     stdio: "inherit",
     windowsHide: true,
     env: {
-      ...process.env,
+      ...childEnvironment(app.key),
       // Astro détecte les agents et daemonise son CLI. Ce marqueur interne
       // conserve le serveur au premier plan, sous notre arbre de processus.
       ...(app.tool === "astro" ? { ASTRO_DEV_BACKGROUND: "1" } : {}),
@@ -308,27 +358,18 @@ async function stopRecord(root, key, record) {
   throw new Error(`${key} : arrêt non confirmé après 10 secondes.`);
 }
 
-function panel(config) {
+async function panel(config, records, root) {
   console.log("\n## Applications\n\n| App | URL |\n|---|---|");
   for (const app of config.apps)
-    console.log(`| ${app.label} | ${urlOf(app)}${app.health ?? "/"} |`);
-  for (const service of config.services ?? []) console.log(`| ${service.label} | ${service.url} |`);
-  console.log("\n## Fixtures locales\n");
+    console.log(`| ${app.label} | ${urlOf(app)}${app.entry ?? app.health ?? "/"} |`);
+  const configured = await authenticationStatus(config, records, root);
   console.log(
-    "Données fictives. Persistance : `pnpm db:seed`. Le sélecteur /preview des coquilles ne crée ni session ni droit. Connexion WorkOS : S-000b.\n",
+    configured === true
+      ? "\nCompte : connexion activée dans l'API. Une connexion WorkOS réelle doit encore être vérifiée dans le navigateur."
+      : configured === false
+        ? "\nCompte : connexion indisponible, WorkOS est désactivé dans l'API."
+        : "\nCompte : état de configuration non disponible (API arrêtée ou réponse invalide).",
   );
-  console.log(
-    "| E-mail | Accès local déclaré | Espace | Rôle fixture | État | Périmètre |\n|---|---|---|---|---|---|",
-  );
-  for (const persona of config.personas ?? []) {
-    const tests = Array.isArray(persona.tests) ? persona.tests.join(" ; ") : persona.tests;
-    console.log(
-      `| ${persona.email} | ${persona.access} | ${persona.org ?? "—"} | ${persona.role} | ${persona.state} | ${tests ?? ""} |`,
-    );
-  }
-  console.log("\n## Parcours de fumée du socle\n");
-  for (const [index, check] of (config.smokeChecks ?? []).entries())
-    console.log(`${index + 1}. ${check}`);
   console.log(
     "\nÉtat réel : `node scripts/preview.mjs status`. Arrêter : `node scripts/preview.mjs stop` (`--all` inclut l'infrastructure Docker).\n",
   );
@@ -337,16 +378,23 @@ function panel(config) {
 export async function main(args = process.argv.slice(2), root = ROOT) {
   const [command = "start"] = args;
   if (
-    !["start", "stop", "status", "info"].includes(command) ||
-    args.slice(1).some((arg) => arg !== "--all") ||
-    (args.includes("--all") && command !== "stop")
+    !["start", "stop", "status", "info", "check-auth"].includes(command) ||
+    args.slice(1).some((arg) => !["--all", "--require-auth"].includes(arg)) ||
+    (args.includes("--all") && command !== "stop") ||
+    (args.includes("--require-auth") && command !== "start")
   ) {
-    throw new Error("Usage : node scripts/preview.mjs start|stop [--all]|status|info");
+    throw new Error(
+      "Usage : node scripts/preview.mjs start [--require-auth]|stop [--all]|status|info|check-auth",
+    );
   }
   const config = await configuration(root);
   const records = readRecords(root);
+  if (command === "check-auth") {
+    await checkAuthConfiguration(root, config);
+    return;
+  }
   if (command === "info") {
-    panel(config);
+    await panel(config, records, root);
     return;
   }
   if (command === "stop") {
@@ -379,6 +427,16 @@ export async function main(args = process.argv.slice(2), root = ROOT) {
     }
     if (failed) throw new Error("La preview ne répond pas intégralement.");
     return;
+  }
+  if (args.includes("--require-auth")) {
+    await checkAuthConfiguration(root, config);
+    if (
+      (await control(root, records.api)) &&
+      (await authenticationStatus(config, records, root)) !== true
+    )
+      throw new Error(
+        "REFUSÉ — l'API déjà en marche n'a pas activé l'authentification. Utiliser scripts/start-auth-preview.ps1 pour la relancer avec les credentials en mémoire.",
+      );
   }
   const existing = new Set();
   for (const app of config.apps) {
@@ -413,7 +471,7 @@ export async function main(args = process.argv.slice(2), root = ROOT) {
         detached: true,
         windowsHide: true,
         stdio: ["ignore", log, log],
-        env: process.env,
+        env: childEnvironment(app.key),
       });
       closeSync(log);
       await new Promise((done, reject) => {
@@ -450,6 +508,13 @@ export async function main(args = process.argv.slice(2), root = ROOT) {
       throw new Error(
         `Probe en échec : ${[...pending].join(", ")}. Voir les logs .preview/ concernés; aucune migration exécutée.`,
       );
+    if (
+      args.includes("--require-auth") &&
+      (await authenticationStatus(config, records, root)) !== true
+    )
+      throw new Error(
+        "REFUSÉ — l'API démarrée n'a pas activé la connexion. Aucun parcours WorkOS déclaré fonctionnel.",
+      );
   } catch (error) {
     for (const key of started) {
       if (await control(root, records[key])) {
@@ -472,7 +537,7 @@ export async function main(args = process.argv.slice(2), root = ROOT) {
     saveRecords(root, records);
     throw error;
   }
-  panel(config);
+  await panel(config, records, root);
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === SCRIPT) {

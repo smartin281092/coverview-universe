@@ -7,7 +7,7 @@ export const journeys = [
     title: "J’ai déjà un 3e pilier.",
     question:
       "Où est investi mon argent ? Combien cela coûte ? Quelles protections et quel potentiel ?",
-    action: "Analyser mon contrat",
+    action: "Découvrir les points à vérifier",
     heading: "Comprendre mon contrat de 3e pilier",
     description:
       "L’analyse de contrat n’est pas encore disponible. Découvrez les questions qu’elle devra éclairer avant de transmettre un document.",
@@ -22,7 +22,7 @@ export const journeys = [
     label: "Calculer ma retraite",
     title: "Je veux préparer ma retraite.",
     question: "Combien me faudra-t-il ? Pour quel niveau de vie ? Quel effet de l’inflation ?",
-    action: "Calculer mon objectif",
+    action: "Comprendre l’objectif retraite",
     heading: "Définir mon objectif retraite",
     description:
       "Le calculateur retraite n’est pas encore disponible. Commencez par distinguer votre objectif de niveau de vie et la trajectoire à évaluer.",
@@ -38,7 +38,7 @@ export const journeys = [
     title: "Je veux comparer.",
     question:
       "Quelles stratégies correspondent à mon objectif ? Avec quelles hypothèses, quels risques et quelle probabilité ?",
-    action: "Comparer les stratégies",
+    action: "Lire les critères de comparaison",
     heading: "Comparer des stratégies pour un même objectif",
     description:
       "Le comparateur de stratégies n’est pas encore disponible. Découvrez pourquoi une comparaison commence par un objectif et des hypothèses communs.",
@@ -239,6 +239,7 @@ export const acquisition = {
   availabilityTitle: "{{label}} : disponibilité — CoverView",
   overview: "Comment ça marche",
   explore: "Explorer CoverView",
+  exploreShort: "Explorer",
   method: "La méthode",
   founder: "Sébastien Martin",
   coming: "En préparation",
@@ -253,17 +254,24 @@ export const acquisition = {
     "Vous pouvez conserver cette adresse pour revenir à ce parcours. Aucun résultat personnel n’est enregistré.",
   home: {
     eyebrow: "Prévoyance · Assurance · Retraite",
-    heading: "Votre 3e pilier vous rapproche-t-il de la retraite que vous souhaitez ?",
-    analyse: "Analyser mon 3e pilier",
-    calculate: "Calculer mon objectif retraite",
-    note: "Découvrez les parcours. L’analyse, le calculateur et le comparateur sont en préparation.",
+    heading: "Votre 3e pilier prépare-t-il vraiment votre retraite ?",
+    discover: "Comprendre la méthode",
+    account: "Accéder à mon compte",
+    note: "Analyses et simulations en préparation. Les premiers repères sont à lire librement.",
+    readingLabel: "Les premiers repères",
+    readingTitle: "Les repères pour avancer.",
+    readings: [
+      { href: "/articles", label: "Les questions qui comptent", description: "Articles et réponses pour vous orienter." },
+      { href: "/glossaire", label: "Les mots de la prévoyance", description: "Des définitions pour mieux comprendre." },
+      { href: "/modeles", label: "Les modèles d’accompagnement", description: "Comparer les approches et leurs rôles." },
+    ],
     methodTeaser: "Choisir. Mesurer. Suivre. Adapter.",
     methodText:
       "Partir de ce que vous avez, le relier à votre objectif et garder une vue dans le temps.",
     methodAction: "Comprendre la méthode",
   },
   demo: {
-    label: "Exemple fictif · aucune estimation personnelle",
+    label: "Exemple fictif",
     title: "Un objectif. Une trajectoire. Un écart.",
     target: "Objectif retraite",
     trajectory: "Trajectoire de l’exemple",
@@ -271,8 +279,8 @@ export const acquisition = {
     targetValue: "65 ans",
     trajectoryValue: "71 ans",
     gapValue: "+6 ans",
-    question: "Et si votre stratégie pouvait faire mieux ?",
-    note: "Ces chiffres illustrent une question, pas votre situation ni un résultat calculé.",
+    question: "L’écart est un point de départ.",
+    note: "Aucune estimation personnelle. Ces chiffres illustrent une question à explorer.",
     action: "Comprendre cet exemple",
   },
   overviewPage: {
@@ -292,14 +300,42 @@ export const acquisition = {
     title: "Explorer les parcours et espaces CoverView",
     description:
       "Retrouvez les pages de présentation, les futurs outils et les espaces CoverView. Leur état est indiqué avant toute démarche ou connexion.",
-    heading: "Tous vos points de repère.",
+    heading: "Que souhaitez-vous explorer ?",
     introduction:
-      "Les pages et exemples de préversion sont à lire librement. Les outils et services en préparation indiquent ce qui reste indisponible.",
+      "Un repère à comprendre, une démarche à découvrir ou un espace à rejoindre.",
+    categories: "Les trois entrées de l’explorateur",
     navigation: "Toutes les destinations CoverView",
     understand: "Comprendre CoverView",
     tools: "Outils & démarches",
     spaces: "Vos espaces",
     accountStatus: "Disponibilité de la connexion",
     wallet: "Wallet et mon compte",
+    open: "Explorer",
+    sections: {
+      understand: {
+        slug: "comprendre",
+        title: "Comprendre la prévoyance et CoverView — Guide",
+        heading: "Comprendre, avant de décider.",
+        description: "La méthode, les articles et les exemples pour mieux lire votre prévoyance et vos choix. Retrouvez ici les contenus disponibles de CoverView.",
+        summary: "Méthode, articles et exemples pour éclairer vos choix.",
+        status: "Lectures disponibles",
+      },
+      tools: {
+        slug: "outils",
+        title: "Outils et démarches : ce qui se prépare — CoverView",
+        heading: "Les démarches, étape par étape.",
+        description: "Analyse de contrat, objectif retraite, comparaison et documents : découvrez le rôle de chaque futur outil et sa disponibilité actuelle.",
+        summary: "Analyse, retraite et comparaison : comprendre chaque démarche.",
+        status: "Outils en préparation",
+      },
+      spaces: {
+        slug: "espaces",
+        title: "Votre compte et les espaces CoverView",
+        heading: "À chaque besoin, son espace.",
+        description: "Rejoignez votre compte Wallet et découvrez les espaces prévus pour la retraite, les partenaires et les professionnels, avec leur disponibilité actuelle.",
+        summary: "Votre compte Wallet et les espaces du projet CoverView.",
+        status: "Compte et espaces à découvrir",
+      },
+    },
   },
 };

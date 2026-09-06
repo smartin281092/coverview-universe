@@ -2654,7 +2654,7 @@ Bloque : Modification WorkOS des méthodes ou callbacks, seulement si un écart 
 
 Autorisation : Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md. Réponse : enregistrée ci-dessous.
 
-- `project.auth-methods` · Si les méthodes constatées diffèrent du parcours email/OTP, quel changement appliquer ? → **Option a : si un écart est réellement constaté, préparer et présenter le diff exact des méthodes et callbacks pour configurer email/OTP et MFA admin dans l’environnement de développement identifié. Conserver les configurations sans rapport avec ce parcours.** · preuve : Écart constaté : Magic Auth et MFA désactivés, callbacks absents. Diff concret préparé dans roadmap/evidence/S-000b.md ; aucun changement distant effectué. C01/C03/C05 restent non vérifiés.
+- `project.auth-methods` · Si les méthodes constatées diffèrent du parcours email/OTP, quel changement appliquer ? → **Option a : si un écart est réellement constaté, préparer et présenter le diff exact des méthodes et callbacks pour configurer email/OTP et MFA admin dans l’environnement de développement identifié. Conserver les configurations sans rapport avec ce parcours.** · preuve : Le 2026-09-06, utilisateur confirme explicitement callback local exact et Magic Auth. Les deux réglages sont enregistrés et relus dans WorkOS coverview / LocalHost. MFA reste désactivée ; C01/C03/C05 non clos sans parcours réel.
 
 ## project.git-push
 

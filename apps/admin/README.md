@@ -2,11 +2,13 @@
 
 ## Résumé
 
-Surface indépendante destinée aux équipes CoverView. Navigation, état vide et disponibilité du socle sont complétés par une connexion avec autorisation administrative et MFA côté serveur ; aucun CRM ni dossier opérationnel.
+Surface indépendante destinée aux équipes CoverView. Le compte est l’entrée principale, avec autorisation administrative et MFA côté serveur ; aucun CRM ni dossier opérationnel n’est présenté comme disponible.
 
 ## Périmètre
 
-`/` affiche le socle. `/preview` et `/states` sont des pages de développement : profils fictifs locaux et démonstration explicite des états UI. Les profils viennent de l’API ; leur sélection est un état React local qui ne crée aucune session. Navigation et détails sur des pages séparées, conformément à FRONT-14.
+`/` et `/account` ouvrent le même parcours d’accès équipe. L’action de connexion et les erreurs arrivent avant les explications secondaires sur mobile. La navigation produit se limite à cet accès, sans diagnostics ni données de démonstration.
+
+`/preview`, `/states` et `/diagnostics` restent accessibles uniquement par leur adresse directe en développement : profils fictifs locaux, démonstration explicite des états UI et santé de l’API. Les profils viennent de l’API ; leur sélection est un état React local qui ne crée aucune session. Navigation et détails sur des pages séparées, conformément à FRONT-14.
 
 `/account` demande l’identité puis l’autorisation administrative au serveur. Un refus reste un refus, même si le navigateur déclare un rôle. L’exigence MFA ouvre `/mfa` : démarrage d’un challenge, code à six chiffres de l’application d’authentification existante, puis relecture de la session et de l’accès après rotation serveur. Aucun enrôlement ou secret TOTP frontend ; un facteur absent affiche une instruction d’assistance. Un code refusé exige un nouveau challenge.
 

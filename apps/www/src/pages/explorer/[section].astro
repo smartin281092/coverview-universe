@@ -1,0 +1,22 @@
+---
+import type { InferGetStaticPropsType } from 'astro';
+import Layout from '../../layouts/Layout.astro';
+import { acquisition as copy } from '../../content/fr/acquisition';
+import { explorerGroups } from '../../content/explorer';
+export function getStaticPaths() {
+  return explorerGroups.map((group) => ({ params: { section: group.slug }, props: { group } }));
+}
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { group } = Astro.props;
+---
+<Layout title={group.title} description={group.description}>
+  <section class="content-page explorer-page">
+    <a href="/explorer" class="text-link">← {copy.returnExplore}</a>
+    <div class="page-intro"><p class="eyebrow">{group.label}</p><h1>{group.heading}</h1><p>{group.description}</p></div>
+    <nav class="explorer-destinations" aria-label={copy.explorer.navigation}>
+      <ul>{group.links.map((link) => <li><a href={link.href}>
+        <span>{link.label}<small>{link.status}</small></span><span aria-hidden="true">→</span>
+      </a></li>)}</ul>
+    </nav>
+  </section>
+</Layout>

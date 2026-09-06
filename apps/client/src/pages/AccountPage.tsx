@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Button } from "@coverview/ui";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
+import { AccountLayout } from "../features/identity/AccountLayout";
 import { LogoutActions } from "../features/identity/LogoutActions";
 
 export function AccountPage() {
@@ -11,11 +12,7 @@ export function AccountPage() {
     import.meta.env.VITE_WEBSITE_URL ??
     (import.meta.env.DEV ? "http://127.0.0.1:4103" : "https://coverview.ch");
   return (
-    <>
-      <div className="space-y-3">
-        <h1 className="text-3xl font-semibold tracking-tight">{t("identity.accountTitle")}</h1>
-        <p className="max-w-xl text-muted-foreground">{t("identity.accountDescription")}</p>
-      </div>
+    <AccountLayout>
       {params.get("authError") === "callback" && (
         <p role="alert" className="text-destructive">
           {t("identity.callbackError")}
@@ -51,6 +48,6 @@ export function AccountPage() {
           </>
         )}
       </IdentityBoundary>
-    </>
+    </AccountLayout>
   );
 }

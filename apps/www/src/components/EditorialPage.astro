@@ -15,13 +15,13 @@ const index = listing ? `/${listing.slug}#${editorialAnchor(data.slug)}` : '/exp
 <Layout title={data.title} description={data.description} markdown={`/${data.slug}.md`} structuredData={structuredEditorial(entry, canonical)}>
   <article class:list={['reading-page', 'editorial-page', { 'comparison-page': data.slug === 'modeles' }]}>
     <a href={index} class="text-link">← {index === '/explorer' ? acquisition.returnExplore : copy.returnIndex}</a>
+    {data.fictional && <p class="fiction-notice">{copy.fictional}</p>}
+    <div class="prose-content editorial-body" data-editorial-body><Content components={{ table: EditorialTable }} /></div>
     <div class="editorial-meta">
-      <p class="eyebrow">{copy.author} · {copy.authorNote}</p>
+      <p>{copy.author} · {copy.authorNote}</p>
       <p>{copy.created} <time datetime={data.date}>{formatDate(data.date)}</time> · {copy.updated} <time datetime={data.updatedAt}>{formatDate(data.updatedAt)}</time> · {copy.version} {data.version}</p>
       <p>{copy.preview}</p>
     </div>
-    {data.fictional && <p class="fiction-notice">{copy.fictional}</p>}
-    <div class="prose-content editorial-body" data-editorial-body><Content components={{ table: EditorialTable }} /></div>
     <aside class="editorial-sources" aria-label={copy.sources}>
       <p class="source-title">{copy.sources}</p>
       <ul>{data.sources.map((source) => <li><a href="/sources#bible-v15">{source.label}</a></li>)}</ul>

@@ -16,12 +16,40 @@ import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { control, endpoint, portAvailable, probe, requireLocal } from "./preview.mjs";
+import {
+  childEnvironment,
+  control,
+  endpoint,
+  portAvailable,
+  probe,
+  requireLocal,
+} from "./preview.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const TRANSIENT = mkdtempSync(join(tmpdir(), "coverview-preview-tests-"));
 after(() => {
   rmdirSync(TRANSIENT);
+});
+
+test("seule l'API hérite des secrets d'identité, sans mutation de l'environnement parent", () => {
+  const environment = {
+    PATH: "runtime",
+    AUTH_ENABLED: "true",
+    WORKOS_CLIENT_ID: "client_example",
+    WORKOS_API_KEY: "FAKE_FOR_ENV_SELECTION",
+    AUTH_SESSION_SECRET: "FAKE_FOR_ENV_SELECTION",
+    workos_api_key: "FAKE_CASE_VARIANT",
+  };
+  const original = { ...environment };
+  assert.deepEqual(childEnvironment("api", environment), original);
+  for (const key of ["client", "admin", "www", "infrastructure", "control"]) {
+    assert.deepEqual(childEnvironment(key, environment), {
+      PATH: "runtime",
+      AUTH_ENABLED: "true",
+      WORKOS_CLIENT_ID: "client_example",
+    });
+  }
+  assert.deepEqual(environment, original);
 });
 
 async function listener(handler = (_request, response) => response.end("ok")) {

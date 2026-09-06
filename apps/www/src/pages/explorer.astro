@@ -1,34 +1,18 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { acquisition as copy, journeys, plannedPages } from '../content/fr/acquisition';
-import { content } from '../content/fr/interface';
-import { readableEditorialPaths } from '../content/editorial';
+import { acquisition as copy } from '../content/fr/acquisition';
+import { explorerGroups } from '../content/explorer';
 const page = copy.explorer;
-const status = (slug: string) => readableEditorialPaths.has(slug) && !['contact', 'retire', 'miles'].includes(slug) ? copy.readable : copy.coming;
-const groups = [
-  { label: page.understand, links: [
-    { href: '/', label: content.home, status: copy.readable },
-    { href: '/overview', label: copy.overview, status: copy.readable },
-    { href: '/methode', label: copy.method, status: copy.readable },
-    { href: '/sebastien-martin', label: copy.founder, status: copy.readable },
-    ...plannedPages.filter((p) => p.group === 'understand').map((p) => ({ href: `/${p.slug}`, label: p.label, status: status(p.slug) })),
-    ...copy.editorialLinks.map((link) => ({ ...link, status: copy.readable })),
-  ] },
-  { label: page.tools, links: [
-    ...journeys.map((p) => ({ href: `/${p.slug}`, label: p.label, status: copy.coming })),
-    ...plannedPages.filter((p) => p.group === 'tools').map((p) => ({ href: `/${p.slug}`, label: p.label, status: copy.coming })),
-  ] },
-  { label: page.spaces, links: [
-    { href: '/account', label: page.wallet, status: page.accountStatus },
-    ...plannedPages.filter((p) => p.group === 'spaces').map((p) => ({ href: `/${p.slug}`, label: p.label, status: copy.coming })),
-  ] },
-];
 ---
 <Layout title={page.title} description={page.description}>
-  <section class="content-page">
-    <div class="page-intro"><h1>{page.heading}</h1><p>{page.introduction}</p></div>
-    <nav class="explorer-grid" aria-label={page.navigation}>
-      {groups.map((group) => <section><h2>{group.label}</h2><ul>{group.links.map((link) => <li><a href={link.href}><span>{link.label}</span><small>{link.status}</small></a></li>)}</ul></section>)}
+  <section class="content-page explorer-page">
+    <div class="page-intro"><p class="eyebrow">{copy.explore}</p><h1>{page.heading}</h1><p>{page.introduction}</p></div>
+    <nav class="explorer-categories" aria-label={page.categories}>
+      {explorerGroups.map((group, index) => <a href={`/explorer/${group.slug}`} class="explorer-category">
+        <span class="category-number" aria-hidden="true">{new Intl.NumberFormat('fr-CH', { minimumIntegerDigits: 2 }).format(index + 1)}</span>
+        <div><h2>{group.label}</h2><p>{group.summary}</p><span class="category-status">{group.status}</span></div>
+        <span class="category-arrow" aria-hidden="true">↗</span>
+      </a>)}
     </nav>
   </section>
 </Layout>

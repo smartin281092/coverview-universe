@@ -50,6 +50,22 @@
     "mfaRestart": "Recommencer la vérification",
     "mfaStart": "Commencer la vérification"
   },
+  "accountIntro": {
+    "eyebrow": "L’espace des équipes CoverView",
+    "discover": "Découvrir CoverView",
+    "account": {
+      "title": "Votre compte de travail",
+      "description": "Utilisez le compte associé à votre habilitation CoverView."
+    },
+    "access": {
+      "title": "Un accès contrôlé",
+      "description": "L’accès à cet espace est réservé aux membres explicitement habilités."
+    },
+    "devices": {
+      "title": "Une vérification supplémentaire",
+      "description": "Confirmez votre identité avec votre application d’authentification avant d’accéder à l’espace équipe."
+    }
+  },
   "app": "Espace équipe",
   "title": "Une vue claire sur vos opérations.",
   "subtitle": "Le point de départ de l’espace de travail des équipes CoverView.",
@@ -60,7 +76,7 @@
   "home": "Vue d’ensemble",
   "preview": "Profils fictifs",
   "states": "États d’interface",
-  "website": "Découvrir CoverView",
+  "website": "Site public",
   "local": "Préversion locale · Données fictives",
   "production": "Socle en préparation",
   "footer": "CoverView · Votre protection, plus claire.",

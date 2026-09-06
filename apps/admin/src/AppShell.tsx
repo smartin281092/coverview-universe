@@ -1,17 +1,18 @@
 import { Link, Outlet, useLocation } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { ArrowUpRight, House, PanelsTopLeft, Users, UserRound } from "lucide-react";
+import { ArrowUpRight, UserRound } from "lucide-react";
 import logo from "../../../assets/logo-coverview.svg";
 import { LogoutFeedback } from "./features/identity/LogoutFeedback";
 
 export function AppShell() {
   const { t } = useTranslation();
   const { pathname } = useLocation();
-  const identityPage =
-    ["/account", "/devices", "/mfa"].includes(pathname) || pathname.startsWith("/workspace/");
-  const websiteUrl = import.meta.env.DEV ? "http://127.0.0.1:4103" : "https://coverview.ch";
+  const accountPage = pathname === "/" || pathname === "/account" || pathname === "/mfa";
+  const websiteUrl =
+    import.meta.env.VITE_WEBSITE_URL ??
+    (import.meta.env.DEV ? "http://127.0.0.1:4103" : "https://coverview.ch");
   return (
-    <div className="min-h-screen">
+    <div className="flex min-h-screen flex-col">
       <a
         href="#main"
         className="sr-only z-50 rounded-md bg-primary p-3 text-primary-foreground focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
@@ -19,78 +20,52 @@ export function AppShell() {
         {t("skip")}
       </a>
       <header className="border-b border-border bg-card">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-5 py-5 sm:px-8">
-          <Link to="/" className="flex items-center gap-4">
-            <img src={logo} alt={t("brand")} className="h-6 w-auto" width="444" height="73" />
-            <span className="border-l border-border pl-4 text-sm font-medium text-muted-foreground">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-5 gap-y-4 px-5 py-5 sm:px-8">
+          <Link to="/" className="flex items-center gap-3 sm:gap-5">
+            <img
+              src={logo}
+              alt={t("brand")}
+              className="h-5 w-auto sm:h-6"
+              width="444"
+              height="73"
+            />
+            <span className="border-l border-border pl-3 text-xs font-medium text-muted-foreground sm:pl-5 sm:text-sm">
               {t("app")}
             </span>
           </Link>
           <a
             href={websiteUrl}
-            className="inline-flex items-center gap-1 text-sm font-medium text-primary"
+            className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-primary"
           >
             {t("website")}
             <ArrowUpRight className="size-4" aria-hidden="true" />
           </a>
         </div>
       </header>
-      <div className="mx-auto grid max-w-7xl md:grid-cols-[14rem_1fr]">
-        <aside className="border-b border-border px-5 py-5 md:min-h-[calc(100vh-5rem)] md:border-r md:border-b-0 sm:px-8">
-          <nav aria-label={t("navigation")} className="flex flex-wrap gap-2 md:flex-col">
-            <Link
-              to="/"
-              activeOptions={{ exact: true }}
-              className="inline-flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted"
-              activeProps={{ className: "bg-accent text-primary", "aria-current": "page" }}
-            >
-              <House className="size-4" aria-hidden="true" />
-              {t("home")}
-            </Link>
-            <Link
-              to="/account"
-              className="inline-flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted"
-              activeProps={{ className: "bg-accent text-primary", "aria-current": "page" }}
-            >
-              <UserRound className="size-4" aria-hidden="true" />
-              {t("identity.accountTitle")}
-            </Link>
-            {import.meta.env.DEV && (
-              <>
-                <Link
-                  to="/preview"
-                  className="inline-flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted"
-                  activeProps={{ className: "bg-accent text-primary", "aria-current": "page" }}
-                >
-                  <Users className="size-4" aria-hidden="true" />
-                  {t("preview")}
-                </Link>
-                <Link
-                  to="/states"
-                  className="inline-flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-muted"
-                  activeProps={{ className: "bg-accent text-primary", "aria-current": "page" }}
-                >
-                  <PanelsTopLeft className="size-4" aria-hidden="true" />
-                  {t("states")}
-                </Link>
-              </>
-            )}
-          </nav>
-        </aside>
-        <div className="min-w-0">
-          <main id="main" tabIndex={-1} className="space-y-8 px-5 py-8 sm:px-10 sm:py-10">
-            <p className="inline-flex rounded-full border border-border bg-card px-3 py-1 text-xs font-medium text-muted-foreground">
-              {t(import.meta.env.DEV ? (identityPage ? "identity.local" : "local") : "production")}
-            </p>
-            <LogoutFeedback>
-              <Outlet />
-            </LogoutFeedback>
-          </main>
-          <footer className="px-5 pb-8 text-xs text-muted-foreground sm:px-10">
-            {t("footer")}
-          </footer>
-        </div>
+      <div className="mx-auto w-full max-w-6xl flex-1 px-5 sm:px-8">
+        <nav
+          aria-label={t("navigation")}
+          className="flex flex-wrap gap-2 border-b border-border py-4 sm:py-5"
+        >
+          <Link
+            to="/account"
+            aria-current={accountPage ? "page" : undefined}
+            className={`inline-flex min-h-11 items-center gap-2 rounded-lg px-4 text-sm font-medium ${accountPage ? "bg-accent text-primary" : "text-muted-foreground hover:bg-muted"}`}
+          >
+            <UserRound className="size-4" aria-hidden="true" />
+            {t("identity.accountTitle")}
+          </Link>
+        </nav>
+        <main id="main" tabIndex={-1} className="app-content space-y-8 py-8 sm:py-12 lg:py-16">
+          <LogoutFeedback>
+            <Outlet />
+          </LogoutFeedback>
+        </main>
       </div>
+      <footer className="mx-auto flex w-full max-w-6xl flex-wrap justify-between gap-2 border-t border-border px-5 py-6 text-xs text-muted-foreground sm:px-8">
+        <p>{t("footer")}</p>
+        {import.meta.env.DEV && <p>{t("identity.local")}</p>}
+      </footer>
     </div>
   );
 }

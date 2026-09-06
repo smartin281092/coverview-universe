@@ -13,6 +13,7 @@ const missing = Object.keys(environmentSchema.shape).filter((key) => !documented
 if (missing.length)
   throw new Error(`Environment example is missing API keys: ${missing.join(", ")}`);
 parseEnvironment(example);
+if (process.argv.includes("--runtime")) parseEnvironment(process.env);
 process.stdout.write(
   "Environment example documents every API schema key; active defaults pass validation\n",
 );

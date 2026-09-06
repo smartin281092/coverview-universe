@@ -146,7 +146,7 @@
       }
     },
     "S-000b": {
-      "status": "review",
+      "status": "running",
       "approval": "Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md",
       "decisions": [
         {
@@ -159,7 +159,7 @@
           "ref": "project.auth-methods",
           "question": "Si les méthodes constatées diffèrent du parcours email/OTP, quel changement appliquer ?",
           "answer": "Option a : si un écart est réellement constaté, préparer et présenter le diff exact des méthodes et callbacks pour configurer email/OTP et MFA admin dans l’environnement de développement identifié. Conserver les configurations sans rapport avec ce parcours.",
-          "evidence": "Écart constaté : Magic Auth et MFA désactivés, callbacks absents. Diff concret préparé dans roadmap/evidence/S-000b.md ; aucun changement distant effectué. C01/C03/C05 restent non vérifiés."
+          "evidence": "Le 2026-09-06, utilisateur confirme explicitement callback local exact et Magic Auth. Les deux réglages sont enregistrés et relus dans WorkOS coverview / LocalHost. MFA reste désactivée ; C01/C03/C05 non clos sans parcours réel."
         }
       ],
       "verification_attempts": [
@@ -210,27 +210,36 @@
           "decision": "Aucune valeur secrète ajoutée à .env ; préserver tables additives au rollback et suivre reset double confirmation documenté.",
           "oracle": "V0",
           "observed": "check:env initialement refuse les clés process-only commentées ; reconnaissance des déclarations documentées puis validation indépendante des valeurs actives corrigées, lint/typecheck/check:env passent. Installation frozen confirme lockfile ; roadmap/planning/checkpoint/lint docs et marque passent."
+        },
+        {
+          "target": "Reprise après rejet utilisateur",
+          "oracle": "V1 et observation réelle partielle",
+          "observed": "Configuration callback et Magic Auth réellement enregistrée après confirmation ; interface compte et lectures corrigée, rendus inspectés, compilation réussie. Injection de clé serveur en attente dans saisie masquée ; aucun login WorkOS exécuté.",
+          "decision": "Ne plus ajouter fixtures/smoke tests/tests de surface. Retrait explicite de dix scénarios obsolètes de coquilles et démonstration. Continuer le parcours réel après injection ; ne pas libérer les dépendances identity."
         }
       ],
       "ledger": {
         "assumed": [],
         "done_unverified": [
-          "C01/C03/C05 : intégration présente mais aucun parcours WorkOS réel ; identités test et admin autorisé, secrets process et configuration distante encore requis.",
+          "C01/C03/C05 : callback et Magic Auth configurés ; saisie masquée de clé serveur en attente, puis login/OTP, continuité, révocation et MFA réels à effectuer avec les identités autorisées.",
           "CI distante, environnement déployé, cookies entre sous-domaines réels et reset destructif non exécutés."
         ],
         "verified": [
           "C02 : utilisateur/profil canonique, cookies opaques, DTO minimal, cache et stockage contrôlés V2.",
           "C04 : logout appareil/global et refus suivant, panne/reprise distante et rejeu sûr contrôlés HTTP/PostgreSQL avec fournisseur doublé V2.",
-          "Migration additive appliquée/rejouée ;78tests applicatifs,48outillage,15navigateur passent, limites des transports documentées.",
-          "Lint/typecheck/build/frontières/knip/scan bundles et audit npm passent ; revue de sécurité locale close."
+          "Historique avant reprise (ne prouve pas la connexion réelle) : Migration additive appliquée/rejouée ;78tests applicatifs,48outillage,15navigateur passent, limites des transports documentées.",
+          "Lint/typecheck/build/frontières/knip/scan bundles et audit npm passent ; revue de sécurité locale close.",
+          "Reprise : configuration distante callback/Magic Auth relue, rendu mobile/desktop corrigé et build complet réussi. Lanceur mémoire seule préparé, saisie masquée atteinte ; aucun secret écrit."
         ]
       },
       "notes": [
         "Propriétaire unique : tâche 01a07385-bfec-7021-b1d0-1df3708cd86b, worktree 4133, branche codex/s-000b-workos. SHA requis vérifié ancêtre de HEAD ; checkout initial propre.",
         "Implémentation détaillée et observation WorkOS : roadmap/evidence/S-000b.md. Aucun oracle WorkOS de connexion exécuté.",
-        "Ledger définitif, sources et diff externe non exécuté : roadmap/evidence/S-000b.md. README identity contient manifeste données et activation opérateur.",
-        "Relais indépendant S-010 ready ; checkpoint roadmap/handoffs/S-010.md. S-013 et toutes les dépendantes S-000b restent fermées.",
-        "Avertissements bundles Vite >500kB ; RLS non activée (DEVRAIT DATA-09), reprises distantes à la commande/prochaine connexion, bornes fournisseur documentées."
+        "Journal courant de reprise et historique : roadmap/evidence/S-000b.md. Activation mémoire seule et limites dans le README identity.",
+        "S-010 done et S-011 review intégrées localement au début de la reprise. S-013 et les dépendantes identity attendent toujours le parcours réel.",
+        "Avertissements bundles Vite >500kB ; RLS non activée (DEVRAIT DATA-09), reprises distantes à la commande/prochaine connexion, bornes fournisseur documentées.",
+        "Reprise explicite du 2026-09-06 après rejet utilisateur de la preview obsolète et non fonctionnelle. Plan borné roadmap/handoffs/S-000b-recovery.md ; compte prioritaire, correction UI et activation WorkOS réelle à reprendre.",
+        "Correction utilisateur fixtures/smoke/surface enregistrée dans execution-policy.md. Fenêtre interactive dédiée prête pour injection ; copie dans le presse-papiers du navigateur ne prouve pas le presse-papiers système. Ne pas solliciter la clé dans le chat ni dans une invite shell normale."
       ],
       "session": "Tâche créée gpt-6-astra / ultra ; modèle hôte GPT-6, effort non observable indépendamment du paramètre transmis."
     },

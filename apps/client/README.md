@@ -2,11 +2,13 @@
 
 ## Résumé
 
-Wallet conserve la coquille et ajoute le compte, l’espace privé et les appareils connectés. Français dès le départ, textes externalisés dans `src/locales/fr/common.json`.
+Wallet ouvre directement le compte, puis l’espace privé et les appareils connectés. Français dès le départ, textes externalisés dans `src/locales/fr/common.json`.
 
 ## Périmètre
 
-`/` affiche une coquille sans contrat, analyse ni document. `/preview` présente les personas fictives renvoyées par le backend local ; une sélection radio ne change que l’affichage de cette page. `/states` montre les primitives d’états. Les deux dernières routes sont réservées à `import.meta.env.DEV`. Les liens ouvrent une autre page et aucun contenu hors FAQ ne se déplie (FRONT-14).
+`/` et `/account` ouvrent le même parcours de compte et vérifient la véritable disponibilité de l’identité. La navigation propose le compte et les appareils ; aucun contrat, analyse ni document fictif n’est présenté comme un parcours utilisable. L’action de connexion et les erreurs arrivent avant les explications secondaires sur mobile.
+
+Les outils de développement restent accessibles par leur adresse directe, hors navigation produit : `/preview` présente les personas fictives renvoyées par le backend local, `/states` montre les primitives d’états et `/diagnostics` vérifie la santé de l’API. Ces trois routes sont réservées à `import.meta.env.DEV`. Les liens ouvrent une autre page et aucun contenu hors FAQ ne se déplie (FRONT-14).
 
 `/account` vérifie la disponibilité de la connexion puis la session serveur ; il affiche le profil, ouvre `/workspace/:userId`, `/devices` et le compte du site public. Le serveur contrôle la propriété de l’espace. La liste des appareils remplace ses pages de 20 entrées maximum, permet de fermer un appareil et propose les déconnexions locale/globale. Les données métier demeurent absentes.
 

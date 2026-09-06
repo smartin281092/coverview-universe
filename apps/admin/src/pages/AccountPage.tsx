@@ -5,6 +5,7 @@ import { ApiError, type IdentityMe } from "@coverview/api-client";
 import { AccessDeniedState, Button, EmptyState, LoadingState } from "@coverview/ui";
 import { api } from "../api";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
+import { AccountLayout } from "../features/identity/AccountLayout";
 import { IdentityFailure } from "../features/identity/IdentityFailure";
 import { LogoutActions } from "../features/identity/LogoutActions";
 
@@ -55,17 +56,13 @@ export function AccountPage() {
   const { t } = useTranslation();
   const params = new URLSearchParams(window.location.search);
   return (
-    <>
-      <div className="space-y-3">
-        <h1 className="text-3xl font-semibold tracking-tight">{t("identity.accountTitle")}</h1>
-        <p className="max-w-xl text-muted-foreground">{t("identity.accountDescription")}</p>
-      </div>
+    <AccountLayout>
       {params.get("authError") === "callback" && (
         <p role="alert" className="text-destructive">
           {t("identity.callbackError")}
         </p>
       )}
       <IdentityBoundary>{(identity) => <TeamAccess identity={identity} />}</IdentityBoundary>
-    </>
+    </AccountLayout>
   );
 }

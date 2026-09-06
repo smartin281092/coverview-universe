@@ -13,6 +13,7 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
   --color-ring: var(--ring);
 }
 @layer base {
@@ -37,16 +38,19 @@
     @apply sr-only z-50 rounded-md bg-primary p-3 text-primary-foreground focus:not-sr-only focus:fixed focus:left-4 focus:top-4;
   }
   .site-header {
-    @apply mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 border-b border-border px-6 py-5 sm:px-10;
+    @apply mx-auto flex max-w-7xl items-center justify-between gap-3 border-b border-border px-4 py-4 sm:px-10 sm:py-5;
   }
   .logo {
-    @apply h-7 w-auto;
+    @apply h-5 w-auto sm:h-6;
   }
   .site-header nav {
-    @apply flex flex-wrap items-center gap-x-5 gap-y-1;
+    @apply flex shrink-0 items-center gap-3 sm:gap-7;
   }
   .site-header nav a {
     @apply min-h-11;
+  }
+  .header-account {
+    @apply inline-flex items-center justify-center rounded-lg bg-foreground px-3 text-[13px] font-medium text-white hover:bg-primary sm:px-5 sm:text-sm;
   }
   [aria-current="page"] {
     @apply underline underline-offset-4;
@@ -58,13 +62,13 @@
     @apply inline-flex items-center gap-2 text-sm font-medium text-primary;
   }
   .hero {
-    @apply mx-auto grid max-w-7xl items-center gap-6 px-6 py-8 sm:px-10 sm:py-14 lg:grid-cols-2 lg:gap-x-12 lg:gap-y-5;
+    @apply mx-auto grid max-w-7xl items-center gap-10 px-5 py-9 sm:px-10 sm:py-14 lg:min-h-160 lg:grid-cols-2 lg:gap-14 lg:py-20;
   }
-  .hero-heading {
-    @apply space-y-4 lg:col-start-1 lg:row-start-1 lg:self-end;
+  .hero-content {
+    @apply space-y-5 sm:space-y-6;
   }
-  .hero-copy {
-    @apply space-y-5 lg:col-start-1 lg:row-start-2 lg:self-start;
+  .hero-content h1 {
+    @apply text-[2.35rem] leading-[1.1] sm:text-5xl xl:text-[3.65rem];
   }
   .eyebrow {
     @apply text-sm font-medium text-primary;
@@ -76,49 +80,43 @@
     @apply max-w-xl space-y-4 text-base leading-relaxed text-muted-foreground;
   }
   .primary-link {
-    @apply inline-flex min-h-11 items-center justify-center gap-5 rounded-lg bg-primary px-5 py-3 text-sm font-medium text-primary-foreground hover:bg-primary-hover;
+    @apply inline-flex min-h-12 items-center justify-center gap-5 rounded-lg bg-foreground px-5 py-3 text-sm font-medium text-white hover:bg-primary;
   }
   .secondary-link {
-    @apply inline-flex min-h-11 items-center justify-center rounded-lg border border-primary px-5 py-3 text-sm font-medium text-primary hover:bg-accent;
+    @apply inline-flex min-h-12 items-center justify-center rounded-lg border border-border-strong px-5 py-3 text-sm font-medium text-foreground hover:bg-accent;
   }
   .hero-actions {
-    @apply flex flex-wrap gap-3;
+    @apply flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center;
   }
   .preview-note {
     @apply max-w-lg text-sm leading-relaxed text-muted-foreground;
   }
-  .demo-frame {
-    @apply relative isolate rounded-2xl p-3 sm:p-6 lg:col-start-2 lg:row-span-2 lg:row-start-1;
+  .reading-frame {
+    @apply relative isolate rounded-2xl p-4 sm:p-7;
   }
-  .demo-background {
+  .reading-background {
     @apply absolute inset-0 -z-10 h-full w-full rounded-2xl object-cover;
   }
-  .demo-card {
-    @apply space-y-5 rounded-xl border border-border bg-card p-5 sm:p-7;
+  .reading-preview {
+    @apply rounded-xl bg-card p-5 shadow-sm sm:p-7;
   }
-  .demo-card h2 {
-    @apply max-w-xs text-2xl font-semibold tracking-tight;
+  .reading-preview h2 {
+    @apply my-4 max-w-sm text-2xl leading-tight font-semibold tracking-tight sm:text-3xl;
   }
-  .demo-label {
-    @apply text-sm font-medium text-primary;
+  .reading-shortcuts {
+    @apply mt-6 list-none p-0;
   }
-  .demo-metrics {
-    @apply m-0 grid grid-cols-2 gap-4;
+  .reading-shortcuts li {
+    @apply border-t border-border;
   }
-  .demo-metrics dt {
-    @apply text-sm text-muted-foreground;
+  .reading-shortcuts a {
+    @apply flex items-center justify-between gap-4 rounded-sm py-4 hover:text-primary;
   }
-  .demo-metrics dd {
-    @apply m-0 mt-1 text-3xl font-semibold tracking-tight;
+  .reading-shortcuts strong {
+    @apply block text-sm font-semibold;
   }
-  .demo-metrics .demo-gap {
-    @apply col-span-2 flex items-center justify-between rounded-lg bg-accent px-4 py-3;
-  }
-  .demo-gap dd {
-    @apply m-0 text-2xl text-primary;
-  }
-  .demo-question {
-    @apply text-base font-semibold;
+  .reading-shortcuts small {
+    @apply mt-1 block text-sm leading-relaxed text-muted-foreground;
   }
   .method-strip {
     @apply mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-5 border-t border-border px-6 py-7 sm:px-10;
@@ -158,23 +156,41 @@
   .convergence h2 {
     @apply text-xl font-semibold;
   }
-  .explorer-grid {
-    @apply grid gap-8 md:grid-cols-3;
+  .explorer-page {
+    @apply max-w-6xl;
   }
-  .explorer-grid h2 {
-    @apply mb-4 text-lg font-semibold;
+  .explorer-categories {
+    @apply grid gap-4 md:grid-cols-3;
   }
-  .explorer-grid ul {
-    @apply m-0 list-none p-0;
+  .explorer-category {
+    @apply relative flex gap-4 rounded-xl border border-border bg-card p-5 hover:border-primary hover:bg-accent md:min-h-68 md:flex-col md:p-7;
   }
-  .explorer-grid li {
+  .category-number {
+    @apply text-sm font-medium text-primary md:mb-3;
+  }
+  .explorer-category h2 {
+    @apply mb-2 pr-5 text-xl font-semibold tracking-tight;
+  }
+  .explorer-category p {
+    @apply text-sm leading-relaxed text-muted-foreground;
+  }
+  .category-status {
+    @apply mt-5 block text-xs font-medium text-primary;
+  }
+  .category-arrow {
+    @apply absolute top-5 right-5 text-lg text-primary md:top-7 md:right-7;
+  }
+  .explorer-destinations ul {
+    @apply grid list-none gap-x-10 p-0 md:grid-cols-2;
+  }
+  .explorer-destinations li {
     @apply border-t border-border;
   }
-  .explorer-grid a {
-    @apply flex min-h-14 flex-col gap-1 rounded-sm px-2 py-3 text-base font-medium hover:bg-accent;
+  .explorer-destinations a {
+    @apply flex min-h-20 items-center justify-between gap-4 rounded-sm px-2 py-4 text-base font-medium hover:bg-accent hover:text-primary;
   }
-  .explorer-grid small {
-    @apply text-sm font-normal text-muted-foreground;
+  .explorer-destinations small {
+    @apply mt-1 block text-xs font-normal text-muted-foreground;
   }
   .reading-page {
     @apply mx-auto max-w-3xl space-y-6 px-6 py-10 sm:px-10 sm:py-14;
@@ -227,6 +243,9 @@
   .editorial-sources {
     @apply border-t border-border pt-5;
   }
+  .editorial-meta {
+    @apply mt-10 border-t border-border pt-6;
+  }
   .editorial-sources ul {
     @apply list-disc space-y-1 pl-5;
   }
@@ -277,13 +296,44 @@
     @apply leading-relaxed text-muted-foreground;
   }
   .account-page {
-    @apply mx-auto max-w-4xl space-y-8 px-6 py-16 sm:px-10;
+    @apply mx-auto grid max-w-6xl items-center gap-9 px-5 py-10 sm:px-10 sm:py-16 md:min-h-150 md:grid-cols-2 md:gap-16;
   }
   .account-page h1 {
-    @apply mb-6 text-3xl sm:text-4xl;
+    @apply text-4xl leading-tight sm:text-5xl;
+  }
+  .account-welcome {
+    @apply space-y-5;
+  }
+  .account-welcome > a {
+    @apply mt-3 min-h-11;
+  }
+  .account-frame {
+    @apply relative isolate rounded-2xl p-4 sm:p-6;
   }
   .account-card {
-    @apply space-y-5 rounded-xl border border-border bg-card p-6;
+    @apply space-y-5 rounded-xl bg-card p-5 shadow-sm sm:p-7;
+  }
+  .account-symbol {
+    @apply h-10 w-auto;
+  }
+  .account-card h2 {
+    @apply text-xl font-semibold tracking-tight;
+  }
+  #account-message,
+  #account-error {
+    @apply text-sm leading-relaxed text-muted-foreground;
+  }
+  #account-error {
+    color: var(--destructive);
+  }
+  .account-entry-actions {
+    @apply flex flex-col items-stretch gap-4;
+  }
+  .account-entry-actions > .text-link {
+    @apply min-h-11 justify-center;
+  }
+  .account-privacy {
+    @apply border-t border-border pt-4 text-xs leading-relaxed text-muted-foreground;
   }
   .account-actions {
     @apply flex flex-wrap items-center gap-5;

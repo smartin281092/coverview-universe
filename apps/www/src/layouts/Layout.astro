@@ -41,16 +41,16 @@ const walletUrl = import.meta.env.PUBLIC_WALLET_URL ?? (import.meta.env.DEV ? 'h
     <header class="site-header">
       <a href="/" aria-label={content.home}><img src={logo} alt={content.brand} width="444" height="73" class="logo" /></a>
       <nav aria-label={content.navigation}>
-        <a href="/overview" class="text-link" aria-current={Astro.url.pathname === '/overview' ? 'page' : undefined}>{acquisition.overview}</a>
-        <a href="/explorer" class="text-link" aria-current={Astro.url.pathname === '/explorer' ? 'page' : undefined}>{acquisition.explore}</a>
-        <a href="/account" class="text-link">{content.accountLink}</a>
+        <a href="/explorer" class="text-link" aria-current={Astro.url.pathname.startsWith('/explorer') ? 'page' : undefined}>{acquisition.exploreShort}</a>
+        <a href="/account" class="header-account" aria-current={Astro.url.pathname === '/account' ? 'page' : undefined}>{content.accountLink}</a>
       </nav>
     </header>
     <main id="main" tabindex="-1"><slot /></main>
     <footer class="site-footer">
       <div><p>{content.footer}</p><p>{import.meta.env.DEV ? content.account.local : content.construction}</p></div>
       <div class="account-actions">
-        {walletUrl && <a href={walletUrl} class="text-link">{content.wallet}<span aria-hidden="true">↗</span></a>}
+        <a href="/methode" class="text-link">{acquisition.method}</a>
+        {walletUrl && <a href={new URL('/account', walletUrl).href} class="text-link">{content.wallet}<span aria-hidden="true">↗</span></a>}
         {import.meta.env.DEV && <a href="http://127.0.0.1:4102" class="text-link">{content.team}<span aria-hidden="true">↗</span></a>}
         <a href="/explorer" class="text-link">{acquisition.explore}</a>
       </div>

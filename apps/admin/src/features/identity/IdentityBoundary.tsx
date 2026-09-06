@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { Button, EmptyState, LoadingState, SessionExpiredState } from "@coverview/ui";
+import { AccessDeniedState, Button, LoadingState, SessionExpiredState } from "@coverview/ui";
 import type { IdentityMe } from "@coverview/api-client";
 import { api } from "../../api";
 import { identityOptions } from "./session-state";
@@ -36,10 +36,18 @@ export function IdentityBoundary({ children }: { children: (identity: IdentityMe
     );
   }
   if (!config.data?.enabled) {
+    const websiteUrl =
+      import.meta.env.VITE_WEBSITE_URL ??
+      (import.meta.env.DEV ? "http://127.0.0.1:4103" : "https://coverview.ch");
     return (
-      <EmptyState
+      <AccessDeniedState
         title={t("identity.unavailableTitle")}
         description={t("identity.unavailableDescription")}
+        action={
+          <Button asChild variant="outline">
+            <a href={websiteUrl}>{t("accountIntro.discover")}</a>
+          </Button>
+        }
       />
     );
   }

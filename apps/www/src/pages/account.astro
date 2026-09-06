@@ -1,24 +1,35 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { content } from "../content/fr/interface";
+import { Image } from "astro:assets";
+import dawn from "../../../../assets/dawn-bg.png";
+import icon from "../../../../assets/icon-coverview.svg?url";
 
 const walletUrl = import.meta.env.PUBLIC_WALLET_URL ?? (import.meta.env.DEV ? "http://127.0.0.1:4101" : undefined);
 ---
 <Layout title={content.account.title} description={content.account.description}>
   <section class="account-page">
-    <div class="intro">
+    <div class="account-welcome">
+      <p class="eyebrow">{content.account.eyebrow}</p>
       <h1>{content.account.heading}</h1>
-      <p>{content.account.introduction}</p>
+      <p class="intro">{content.account.introduction}</p>
+      <a href="/explorer" class="text-link">{content.account.publicLink}<span aria-hidden="true">→</span></a>
     </div>
-    <div id="account-status" class="account-card" aria-busy="true">
+    <div class="account-frame">
+      <Image src={dawn} alt="" width={620} format="webp" loading="eager" class="reading-background" />
+      <div id="account-status" class="account-card" aria-busy="true">
+      <img src={icon} alt="" width="80" height="73" class="account-symbol" />
+      <h2>{content.account.panelTitle}</h2>
       <p id="account-message" role="status" aria-live="polite">{content.account.loading}</p>
       <p id="account-error" role="alert" hidden></p>
-      <div class="account-actions">
+      <div class="account-entry-actions">
         <a id="account-login" class="primary-link" hidden>{content.account.login}</a>
         <button id="account-retry" type="button" class="primary-link" hidden>{content.account.retry}</button>
         {walletUrl && <a href={new URL("/account", walletUrl).href} class="text-link">{content.account.wallet}<span aria-hidden="true">→</span></a>}
       </div>
+      <p class="account-privacy">{content.account.privacy}</p>
       <noscript><p>{content.account.noScript}</p></noscript>
+      </div>
     </div>
   </section>
 </Layout>

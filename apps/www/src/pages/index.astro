@@ -17,36 +17,29 @@ const schema = {
 <Layout title={frontmatter.title} description={frontmatter.description}>
   <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
   <section class="hero">
-    <div class="hero-heading">
+    <div class="hero-content">
       <p class="eyebrow">{copy.home.eyebrow}</p>
       <h1>{copy.home.heading}</h1>
-    </div>
-    <div class="demo-frame">
-      <Image src={dawn} alt="" width={700} format="webp" loading="eager" class="demo-background" />
-      <section class="demo-card" aria-labelledby="demo-title">
-        <p class="demo-label">{copy.demo.label}</p>
-        <h2 id="demo-title">{copy.demo.title}</h2>
-        <dl class="demo-metrics">
-          <div><dt>{copy.demo.target}</dt><dd>{copy.demo.targetValue}</dd></div>
-          <div><dt>{copy.demo.trajectory}</dt><dd>{copy.demo.trajectoryValue}</dd></div>
-          <div class="demo-gap"><dt>{copy.demo.gap}</dt><dd>{copy.demo.gapValue}</dd></div>
-        </dl>
-        <p class="demo-question">{copy.demo.question}</p>
-        <p class="preview-note">{copy.demo.note}</p>
-        <a href="/demonstration" class="text-link" id="demo-details">{copy.demo.action}<span aria-hidden="true">↗</span></a>
-      </section>
-    </div>
-    <div class="hero-copy">
       <div class="intro"><HomeContent /></div>
       <div class="hero-actions">
-        <a href="/analyser-3p" class="primary-link">{copy.home.analyse}<span aria-hidden="true">→</span></a>
-        <a href="/calculer-retraite" class="secondary-link">{copy.home.calculate}</a>
+        <a href="/methode" class="primary-link">{copy.home.discover}<span aria-hidden="true">→</span></a>
+        <a href="/account" class="secondary-link">{copy.home.account}</a>
       </div>
       <p class="preview-note">{copy.home.note}</p>
+    </div>
+    <div class="reading-frame">
+      <Image src={dawn} alt="" width={700} format="webp" loading="eager" class="reading-background" />
+      <section class="reading-preview" aria-labelledby="reading-title">
+        <p class="eyebrow">{copy.home.readingLabel}</p>
+        <h2 id="reading-title">{copy.home.readingTitle}</h2>
+        <ul class="reading-shortcuts">
+          {copy.home.readings.map((reading) => <li><a href={reading.href}><span><strong>{reading.label}</strong><small>{reading.description}</small></span><span aria-hidden="true">↗</span></a></li>)}
+        </ul>
+      </section>
     </div>
   </section>
   <section class="method-strip" aria-labelledby="method-title">
     <div><h2 id="method-title">{copy.home.methodTeaser}</h2><p>{copy.home.methodText}</p></div>
-    <div class="account-actions"><a href="/methode" class="text-link">{copy.home.methodAction}<span aria-hidden="true">→</span></a><a href="/overview" class="text-link">{copy.choose}<span aria-hidden="true">→</span></a></div>
+    <a href="/overview" class="text-link">{copy.choose}<span aria-hidden="true">→</span></a>
   </section>
 </Layout>
