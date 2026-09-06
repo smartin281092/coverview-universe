@@ -1,5 +1,7 @@
 # Reprise de travail — S-000b, confirmation personnelle Authenticator et preuve MFA
 
+**Checkpoint clos le 2026-09-06** : BMP explicitement désigné, grant audité puis challenge MFA réel réussi ; Hook reste refusé. S-000b done, détails et limites dans le ledger. La suite active est [S-013](S-013.md). Les sections ci-dessous décrivent les étapes historiques et ne doivent pas relancer une inscription ni une attribution.
+
 ## État courant après implémentation — 2026-09-06
 
 **Actualisation personnelle** : Authenticator BMP confirmé par le titulaire le 2026-09-06 à 18:15:09.313 UTC ; état SQL confirmed sans incertitude, écran de succès relu dans le navigateur intégré. L’état zéro inscription ci-dessous décrit la préparation antérieure. Deux sessions actives, zéro grant admin. Une question de désignation BMP/Hook est en attente dans la tâche courante. Restent uniquement désignation, grant tracé et preuve MFA administrative distincte. Le mandat utilisateur ajoute désormais la double revue produit de chaque slice dans execution-policy.md ; le suivre aussi dans chaque nouvelle tâche Astra Ultra.

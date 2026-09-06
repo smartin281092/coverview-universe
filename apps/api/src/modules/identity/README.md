@@ -24,7 +24,7 @@ L’espace personnel utilise l’identité et la propriété, sans accès implic
 
 ## État réel
 
-Les connexions WorkOS de deux identités, leur persistance, l’isolation personnelle, la continuité www/Wallet et les révocations d’appareils sont vérifiées en local. L’inscription Authenticator a été personnellement confirmée ; le parcours administratif avec MFA reste à terminer. Les preuves et limites sont centralisées dans [le ledger S-000b](../../../../../roadmap/evidence/S-000b.md). `AUTH_ENABLED=false` conserve un état d’indisponibilité explicite.
+Les connexions WorkOS de deux identités, leur persistance, l’isolation personnelle, la continuité www/Wallet et les révocations d’appareils sont vérifiées en local. Inscription Authenticator personnelle, attribution nominative et accès administratif avec MFA distincte ont été exécutés avec WorkOS réel ; le compte ordinaire reste refusé. Les preuves et limites sont centralisées dans [le ledger S-000b](../../../../../roadmap/evidence/S-000b.md), l’attribution locale dans [sa trace opérateur](../../../../../roadmap/evidence/S-000b-admin-grant.md). `AUTH_ENABLED=false` conserve un état d’indisponibilité explicite.
 
 ## Activer et vérifier localement
 

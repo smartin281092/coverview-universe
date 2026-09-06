@@ -4,7 +4,7 @@
 
 Le programme contient **120 slices** et **682 critères d’acceptation**. Traçabilité : **2115/2115 unités source** affectées, dont 1742 liées aux critères et 373 qualifiées comme contexte ; **0 non affectées**. Ce sont des preuves de planification, aucune fonctionnalité n’est déclarée implémentée par ce décompte.
 
-État enregistré : 2 done, 1 review, 1 running, 116 specified. Les intégrations réelles et décisions métier ont des slices explicites ; aucun mock critique ne satisfait l’acceptation complète.
+État enregistré : 3 done, 1 review, 116 specified. Les intégrations réelles et décisions métier ont des slices explicites ; aucun mock critique ne satisfait l’acceptation complète.
 
 - [Index topologique et jalons](roadmap/index.md)
 - [Prompts détaillés](roadmap/prompts/README.md)

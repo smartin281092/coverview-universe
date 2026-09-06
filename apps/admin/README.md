@@ -30,7 +30,7 @@ Le nom `admin` n’accorde aucun droit. Seul le serveur confirme une habilitatio
 
 ## État réel
 
-Coquille et parcours d’identité/MFA implémentés ; les données et états d’exemple portent leur caractère fictif. Les preuves de slice distinguent contrôles locaux et accès WorkOS réellement exécuté ; ce README ne prouve aucune habilitation externe.
+Parcours d’identité, d’inscription Authenticator et d’accès équipe avec MFA vérifiés avec WorkOS réel en local ; attribution nominative et refus du compte ordinaire consignés dans le [ledger S-000b](../../roadmap/evidence/S-000b.md). Aucun dossier métier n’est encore disponible. Les écrans d’exemple isolés conservent leur caractère fictif et ne constituent pas les preuves de cette recette.
 
 ## Développement et dépendances
 
