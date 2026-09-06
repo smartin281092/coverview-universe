@@ -4,6 +4,8 @@
 
 **Actualisation personnelle** : Authenticator BMP confirmé par le titulaire le 2026-09-06 à 18:15:09.313 UTC ; état SQL confirmed sans incertitude, écran de succès relu dans le navigateur intégré. L’état zéro inscription ci-dessous décrit la préparation antérieure. Deux sessions actives, zéro grant admin. Une question de désignation BMP/Hook est en attente dans la tâche courante. Restent uniquement désignation, grant tracé et preuve MFA administrative distincte. Le mandat utilisateur ajoute désormais la double revue produit de chaque slice dans execution-policy.md ; le suivre aussi dans chaque nouvelle tâche Astra Ultra.
 
+**Revue produit terminée pour les ajustements courants** : `74d20ac` intégré dans main/API/UI, aide code email, titre Authenticator neutre et ordre état/action équipe avant réglage secondaire. Deuxième inspection réelle après intégration : succès puis retour compte, lisibilité dans le panneau étroit et focus clavier visible. Contrôles ciblés et build passent, aucune nouvelle batterie de tests. L’onglet intégré courant est sur `/account`, accès refusé tant que le grant n’est pas désigné ; les futurs IDs de navigateur restent à découvrir.
+
 Cette section actualise le checkpoint historique conservé ci-dessous. Le parcours d’inscription manquant est maintenant implémenté, revu, migré et intégré. La page réelle est prête pour le titulaire. S-000b demeure **running** : aucune preuve C05 complète ni nouvelle tâche S-013 avant confirmation personnelle, désignation admin et MFA administrative réelle. Le mandat d’enchaînement et l’absence de nouveau GO restent acquis.
 
 ### Dépôt et services vivants
