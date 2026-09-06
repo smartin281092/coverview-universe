@@ -11,6 +11,7 @@ Chaque prompt cible une session principale et indique son redécoupage. Reprise 
 - [S-000a — Démarrer un socle local reproductible et une preview fictive](S-000a.prompt.md) · [plan](../plans/S-000a.plan.md) · done · foundation.
 - [S-000b — Se connecter avec WorkOS et retrouver son espace protégé](S-000b.prompt.md) · [plan](../plans/S-000b.plan.md) · done · integration.
 - [S-013a — Préparer son profil privé et le reprendre dans Wallet](S-013a.prompt.md) · [plan](../plans/S-013a.plan.md) · running · integration.
+- [S-042a — Conserver ses documents originaux et confirmer les informations extraites dans son profil](S-042a.prompt.md) · [plan](../plans/S-042a.plan.md) · specified · integration.
 - [S-010 — Ouvrir les trois parcours CoverView depuis un site public compact](S-010.prompt.md) · [plan](../plans/S-010.plan.md) · done · local-fixtures.
 - [S-081 — Délivrer un dossier avec tâches, prochaine action et Kanban](S-081.prompt.md) · [plan](../plans/S-081.plan.md) · specified · local-fixtures.
 - [S-017 — Générer et archiver les documents de démarches à partir du profil](S-017.prompt.md) · [plan](../plans/S-017.plan.md) · specified · local-fixtures.

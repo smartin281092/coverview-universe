@@ -2,9 +2,9 @@
 
 > Vue générée depuis les spécifications et `roadmap/state.json`. Modifier les sources canoniques puis régénérer. La planification ne prouve aucune implémentation.
 
-Le programme contient **121 slices** et **687 critères d’acceptation**. Traçabilité : **2115/2115 unités source** affectées, dont 1742 liées aux critères et 373 qualifiées comme contexte ; **0 non affectées**. Ce sont des preuves de planification, aucune fonctionnalité n’est déclarée implémentée par ce décompte.
+Le programme contient **122 slices** et **694 critères d’acceptation**. Traçabilité : **2115/2115 unités source** affectées, dont 1742 liées aux critères et 373 qualifiées comme contexte ; **0 non affectées**. Ce sont des preuves de planification, aucune fonctionnalité n’est déclarée implémentée par ce décompte.
 
-État enregistré : 3 done, 1 review, 1 running, 116 specified. Les intégrations réelles et décisions métier ont des slices explicites ; aucun mock critique ne satisfait l’acceptation complète.
+État enregistré : 3 done, 1 review, 1 running, 117 specified. Les intégrations réelles et décisions métier ont des slices explicites ; aucun mock critique ne satisfait l’acceptation complète.
 
 - [Index topologique et jalons](roadmap/index.md)
 - [Prompts détaillés](roadmap/prompts/README.md)
@@ -30,7 +30,7 @@ La v1 n’est complète qu’après la recette [S-139](roadmap/plans/S-139.plan.
 - **M5 — Opérations** : 13 slices ; dépendances et livrables dans l’index.
 - **M6 — Assistance et fidélité** : 10 slices ; dépendances et livrables dans l’index.
 - **M7 — Professionnels et Exchange** : 7 slices ; dépendances et livrables dans l’index.
-- **M8 — Intégrations réelles** : 32 slices ; dépendances et livrables dans l’index.
+- **M8 — Intégrations réelles** : 33 slices ; dépendances et livrables dans l’index.
 - **M9 — Préparation au lancement** : 11 slices ; dépendances et livrables dans l’index.
 
 ## Maintenance

@@ -79,6 +79,19 @@ Aucune réponse à cette question exacte.
 
 ## bible.question.005
 
+### S-042a — question 4
+
+[S-042a](plans/S-042a.plan.md) · Le scan constitue-t-il une vérification réglementaire ?
+
+- (a) Non, extraction et préremplissage seulement — défaut proposé
+- (b) Capacité KYC distincte qualifiée
+
+Bloque : Libellés produit
+
+Autorisation : Demande explicite utilisateur du 6 septembre 2026 : mobile Wallet puis conservation de tous les documents déposés, y compris identité, classification et extraction profil ; choix locaux délégués PROG-23, aucune validation juridique déduite.. Réponse : enregistrée ci-dessous.
+
+- `bible.question.005` · Le scan constitue-t-il une vérification réglementaire ? → **Non, extraction et préremplissage seulement** · preuve : Demande explicite utilisateur du 6 septembre 2026 : mobile Wallet puis conservation de tous les documents déposés, y compris identité, classification et extraction profil ; choix locaux délégués PROG-23, aucune validation juridique déduite.
+
 ### S-017 — question 1
 
 [S-017](plans/S-017.plan.md) · Utiliser d’abord des templates marqués démonstration puis exiger validation de chaque périmètre/texte avant document réel ?
@@ -171,6 +184,19 @@ Bloque : Conservation et ingestion de vraies pièces uniquement
 Autorisation : Mandat PROG-23 réaffirmé dans la création de cette tâche ; roadmap/execution-policy.md.. Réponse : enregistrée ci-dessous.
 
 - `bible.question.006` · Séparer dès le modèle la durée de conservation des images d’identité de celle des champs extraits, avec durées à valider avant pièces réelles ? → **Oui, aucune durée légale déduite** · preuve : Décision déléguée PROG-23, 2026-09-06 : roadmap/execution-policy.md ; confidentialité ADR-0002, ingestion de pièces désactivée sans matrice approuvée.
+
+### S-042a — question 2
+
+[S-042a](plans/S-042a.plan.md) · Quelle conservation opérationnelle des documents ?
+
+- (a) Conserver volontairement les originaux jusqu’à suppression propriétaire, séparer dérivés et champs, sans délai juridique déduit — défaut proposé
+- (b) Politique catégorielle déjà fournie
+
+Bloque : Cycle de vie local
+
+Autorisation : Demande explicite utilisateur du 6 septembre 2026 : mobile Wallet puis conservation de tous les documents déposés, y compris identité, classification et extraction profil ; choix locaux délégués PROG-23, aucune validation juridique déduite.. Réponse : enregistrée ci-dessous.
+
+- `bible.question.006` · Quelle conservation opérationnelle des documents ? → **Conserver volontairement les originaux jusqu’à suppression propriétaire, séparer dérivés et champs, sans délai juridique déduit** · preuve : Demande explicite utilisateur du 6 septembre 2026 : mobile Wallet puis conservation de tous les documents déposés, y compris identité, classification et extraction profil ; choix locaux délégués PROG-23, aucune validation juridique déduite.
 
 ### S-023 — question 2
 
@@ -303,6 +329,19 @@ Autorisation : aucune enregistrée. Réponse : **non enregistrée**.
 Aucune réponse à cette question exacte.
 
 ## bible.question.007
+
+### S-042a — question 3
+
+[S-042a](plans/S-042a.plan.md) · Une extraction peut-elle remplacer automatiquement un champ confirmé ?
+
+- (a) Non, confirmation propriétaire des propositions — défaut proposé
+- (b) Uniquement avec matrice évaluée et validée
+
+Bloque : Matérialisation profil
+
+Autorisation : Demande explicite utilisateur du 6 septembre 2026 : mobile Wallet puis conservation de tous les documents déposés, y compris identité, classification et extraction profil ; choix locaux délégués PROG-23, aucune validation juridique déduite.. Réponse : enregistrée ci-dessous.
+
+- `bible.question.007` · Une extraction peut-elle remplacer automatiquement un champ confirmé ? → **Non, confirmation propriétaire des propositions** · preuve : Demande explicite utilisateur du 6 septembre 2026 : mobile Wallet puis conservation de tous les documents déposés, y compris identité, classification et extraction profil ; choix locaux délégués PROG-23, aucune validation juridique déduite.
 
 ### S-016 — question 1
 
@@ -2681,6 +2720,21 @@ Bloque : Modification WorkOS des méthodes ou callbacks, seulement si un écart 
 Autorisation : Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md. Réponse : enregistrée ci-dessous.
 
 - `project.auth-methods` · Si les méthodes constatées diffèrent du parcours email/OTP, quel changement appliquer ? → **Option a : si un écart est réellement constaté, préparer et présenter le diff exact des méthodes et callbacks pour configurer email/OTP et MFA admin dans l’environnement de développement identifié. Conserver les configurations sans rapport avec ce parcours.** · preuve : Callback exact, Magic Auth, homepage www et MFA Optional enregistrés et relus après confirmations utilisateur. Le callback réel confirme que l’issuer de l’access token est distinct de la découverte OIDC ; normalisation locale bornée corrigée. Aucun facteur Authenticator ni droit admin attribué. Détails : roadmap/evidence/S-000b.md.
+
+## project.documents.local-processing
+
+### S-042a — question 1
+
+[S-042a](plans/S-042a.plan.md) · Quel traitement pour la première ingestion réelle ?
+
+- (a) Moteurs OCR/classification/extraction et antivirus locaux durables ; aucun transfert tiers — défaut proposé
+- (b) Fournisseur externe après vérification de ses conditions
+
+Bloque : Choix effectif des moteurs
+
+Autorisation : Demande explicite utilisateur du 6 septembre 2026 : mobile Wallet puis conservation de tous les documents déposés, y compris identité, classification et extraction profil ; choix locaux délégués PROG-23, aucune validation juridique déduite.. Réponse : enregistrée ci-dessous.
+
+- `project.documents.local-processing` · Quel traitement pour la première ingestion réelle ? → **Moteurs OCR/classification/extraction et antivirus locaux durables ; aucun transfert tiers** · preuve : Demande explicite utilisateur du 6 septembre 2026 : mobile Wallet puis conservation de tous les documents déposés, y compris identité, classification et extraction profil ; choix locaux délégués PROG-23, aucune validation juridique déduite.
 
 ## project.git-push
 

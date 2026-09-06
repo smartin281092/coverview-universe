@@ -12,6 +12,11 @@
       "target": "shared primitives",
       "command": "pnpm dlx shadcn@latest add button skeleton card input label --yes --cwd .planning-local/preset-shadcn",
       "exitCode": 0
+    },
+    {
+      "target": "Wallet mobile Sheet",
+      "command": "pnpm dlx shadcn@latest add sheet --yes --cwd .planning-local/preset-shadcn",
+      "exitCode": 0
     }
   ],
   "resolved": {
@@ -24,7 +29,7 @@
     "theme": "mist",
     "chartColor": "indigo"
   },
-  "adaptation": "Light preset tokens retained in src/preset.css; white background, card uses muted flat fill and no border/ring/shadow. Geist body/headings, supplied MONTECH V.02 in former mono roles. ButtonLink shares generated Button variants; Bento composes generated Card with article. Large public CTA and OTP retain 44px targets.",
+  "adaptation": "Light preset tokens retained in src/preset.css; white background, card uses muted flat fill and no border/ring/shadow. Geist body/headings, supplied MONTECH V.02 in former mono roles. ButtonLink shares generated Button variants; Bento composes generated Card with article. Large public CTA and OTP retain 44px targets. Sheet from the same generator: shared Button import, token overlay, translated close label supplied by consumer, focus management retained.",
   "executionContext": "Applied in an isolated initialized Vite generation project under ignored .planning-local/preset-shadcn; generated token, component and radius outputs integrated in packages/ui. Manifests and lockfile updated using pnpm, not copied from the generation project.",
   "previousInitialization": {
     "date": "2026-09-05",
@@ -53,6 +58,7 @@
     "skeleton": "4c2af7fa9c645358a0fb188779deab6f0b981733b62befc25e18aaebea1350dc",
     "card": "5e7040289fff160d6ef96afcb52a7ef9d4bd01e44a144adf80b0c1957fb5fa47",
     "input": "9755070826f002a98bce851abadeab05568a3e771383866e0677358cbb4e04bb",
-    "label": "d998d18a30e592449cb5eeaa17ab6e6d19450afeaf4d9ad6721e018e5350c761"
+    "label": "d998d18a30e592449cb5eeaa17ab6e6d19450afeaf4d9ad6721e018e5350c761",
+    "sheet": "423f59542bedc112593f1b85427444bc5d9ed759c31bc3e65f11fc77f02ded73"
   }
 }

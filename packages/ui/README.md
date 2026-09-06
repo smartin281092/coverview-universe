@@ -10,7 +10,7 @@ Les trois frontends importent `@coverview/ui/styles.css`, qui branche Tailwind e
 
 `src/theme.css` charge Geist Variable via Fontsource pour les titres et le corps, ainsi que les OTF locaux MONTECH V.02 Regular et Medium pour les usages auparavant attribués à Geist Mono. L’alias `--cv-font-mono` reste compatible avec les consommateurs ; Montech n’est toutefois pas une fonte à chasse fixe. Les fichiers, graisses 400/500, métadonnées et provenance sont décrits dans le [README Montech](src/fonts/montech/README.md).
 
-Les composants de présentation ne contiennent aucun hook, accès réseau ou référence au navigateur. Astro peut les rendre côté serveur sans directive `client:*`. L’intégration de rendu React appartient à l’application Astro ; une page statique n’exige aucune hydratation.
+Les composants de présentation statique ne contiennent aucun accès réseau ni état métier. Astro peut les rendre côté serveur sans directive `client:*`. Le composant interactif `Sheet`, ajouté pour le menu Wallet, utilise Radix Dialog dans l’application React ; sa gestion du focus ne doit pas être assimilée à une présentation Astro sans hydratation.
 
 | Composant        | Contrat principal                                                                                                     |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------- |
@@ -24,6 +24,7 @@ Les composants de présentation ne contiennent aucun hook, accès réseau ou ré
 | `Card`           | Primitive générée avec ses slots de contenu ; composition `asChild`, aplat clair sans bordure ni ombre                  |
 | `Skeleton`       | Primitive générée de chargement, utilisée par les états partagés                                                       |
 | `Input`, `Label` | Primitives générées ; valeurs, association accessible et validation restent à la charge du formulaire                  |
+| `Sheet` et slots | Panneau modal généré depuis le même preset ; titre et description accessibles, focus Radix, fermeture traduite fournie par le consommateur |
 | `Bento`          | Compose `Card` autour d’un `article` ; titre et texte courts, `level={2\|3}`, illustration ou valeur justifiée         |
 | `AccountLayout`  | Titres, explications et liste de repères injectés par l’app ; aucun état d’identité                                   |
 | États            | Chargement, vide, erreur avec reprise, refus, introuvable et session expirée ; libellés et actions injectés           |

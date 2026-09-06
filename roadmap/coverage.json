@@ -4,8 +4,8 @@
   "source_sha256": "6264300267b345c1a6e7347139afe2653aeeac332ce3f21f5d21c37119f5454f",
   "meaning": "Couverture de planification seulement ; aucune preuve d’implémentation.",
   "summary": {
-    "slices": 121,
-    "criteria": 687,
+    "slices": 122,
+    "criteria": 694,
     "implementation_units": 1742,
     "context_units": 373,
     "assigned_units": 2115,
@@ -584,7 +584,7 @@
     {
       "id": "S-013a-C05",
       "disposition": "implementation",
-      "criterion": "La page dédiée propose étapes courtes, correction, récapitulatif, états vide/erreur/expiration et reprise des données effectivement enregistrées ; clavier, mobile et mouvement réduit sont relus après amélioration.",
+      "criterion": "La page dédiée propose étapes courtes, correction, récapitulatif, états vide/erreur/expiration et reprise des données effectivement enregistrées ; clavier, mobile et mouvement réduit sont relus après amélioration. Sur smartphone, le shell propose menu burger accessible et navigation basse avec icônes et libellés, zones tactiles et safe areas ; le clavier ne masque pas les actions.",
       "oracle": "V3",
       "test": "Parcours réel sur ordinateur et mobile, focus et retour, double revue produit consignée sans batterie de tests de surface.",
       "source_ids": [
@@ -3933,6 +3933,147 @@
       ],
       "slices": [
         "S-041"
+      ]
+    },
+    {
+      "id": "S-042a-C01",
+      "disposition": "implementation",
+      "criterion": "Un propriétaire peut déposer, retrouver et télécharger l’original privé inchangé, y compris une pièce d’identité ; MIME, taille, magic bytes et checksum sont vérifiés, les dérivés séparés et tout accès tiers refusé.",
+      "oracle": "V3",
+      "test": "Upload autorisé réel, rechargement et téléchargement ; checksum identique et refus hors propriétaire.",
+      "source_ids": [
+        "bible.v15.t026r007",
+        "bible.v15.p0855",
+        "bible.v15.p0883"
+      ],
+      "slices": [
+        "S-042a"
+      ]
+    },
+    {
+      "id": "S-042a-C02",
+      "disposition": "implementation",
+      "criterion": "OCR et antivirus sont des services durables du produit ; le contrôle antivirus précède le parsing. Une indisponibilité ou un format refusé ne produit aucun faux succès et préserve l’original.",
+      "oracle": "V3",
+      "test": "Traitement réel et reprise après redémarrage ; antivirus indisponible bloque le parsing sans perdre l’original.",
+      "source_ids": [
+        "bible.v15.p0855",
+        "bible.v15.p0856",
+        "bible.v15.p0857",
+        "bible.v15.p0858",
+        "bible.v15.p0859",
+        "bible.v15.p0860",
+        "bible.v15.p2495"
+      ],
+      "slices": [
+        "S-042a"
+      ]
+    },
+    {
+      "id": "S-042a-C03",
+      "disposition": "implementation",
+      "criterion": "La classification lit le contenu des familles supportées ; un type indéterminé reste inconnu. Une correction est historisée sans modifier l’original.",
+      "oracle": "V3",
+      "test": "Pièce d’identité et autre document autorisé ; confronter type et contenu puis corriger et recharger.",
+      "source_ids": [
+        "bible.v15.p0747",
+        "bible.v15.p0748",
+        "bible.v15.p0749",
+        "bible.v15.p0750",
+        "bible.v15.p0835",
+        "bible.v15.p0836",
+        "bible.v15.p0837",
+        "bible.v15.p0858",
+        "bible.v15.p0859",
+        "bible.v15.p0860"
+      ],
+      "slices": [
+        "S-042a"
+      ]
+    },
+    {
+      "id": "S-042a-C04",
+      "disposition": "implementation",
+      "criterion": "Les informations d’identité réellement lisibles sont extraites avec preuve localisée, méthode/version et confiance disponible ; les champs absents restent inconnus.",
+      "oracle": "V3",
+      "test": "Confronter nom, prénom, naissance, nationalité et métadonnées de pièce à la source réelle ; aucune adresse/date/confiance inventée.",
+      "source_ids": [
+        "bible.v15.p0414",
+        "bible.v15.t025r001",
+        "bible.v15.p0747",
+        "bible.v15.p0748",
+        "bible.v15.p0749",
+        "bible.v15.p0750",
+        "bible.v15.p0751",
+        "bible.v15.p0752",
+        "bible.v15.p0753",
+        "bible.v15.p0858"
+      ],
+      "slices": [
+        "S-042a"
+      ]
+    },
+    {
+      "id": "S-042a-C05",
+      "disposition": "implementation",
+      "criterion": "La confirmation propriétaire enrichit le même profil canonique sans écraser les confirmations antérieures ; divergence explicite, provenance conservée et contrats N-1 compatibles.",
+      "oracle": "V3",
+      "test": "Confirmer puis réextraire une divergence ; profil inchangé avant décision, confirmation idempotente et ancien client compatible.",
+      "source_ids": [
+        "bible.v15.p0418",
+        "bible.v15.p0419",
+        "bible.v15.p0420",
+        "bible.v15.p0421",
+        "bible.v15.p0422",
+        "bible.v15.p0747",
+        "bible.v15.p0751",
+        "bible.v15.p0752",
+        "bible.v15.p0753",
+        "bible.v15.p0754",
+        "bible.v15.t037r001",
+        "bible.v15.p0860"
+      ],
+      "slices": [
+        "S-042a"
+      ]
+    },
+    {
+      "id": "S-042a-C06",
+      "disposition": "implementation",
+      "criterion": "Wallet propose liste bornée et revue documentaire au clavier et sur smartphone ; attente, erreur et reprise reflètent les jobs réels et la saisie manuelle reste possible.",
+      "oracle": "V3",
+      "test": "Parcours réel ordinateur/mobile, interruption et reprise ; critique produit puis corrections et seconde revue.",
+      "source_ids": [
+        "bible.v15.p0751",
+        "bible.v15.p0752",
+        "bible.v15.p0753",
+        "bible.v15.p0875",
+        "bible.v15.p0876",
+        "bible.v15.p0877",
+        "bible.v15.p0878",
+        "bible.v15.p0879",
+        "bible.v15.p0880",
+        "bible.v15.p0881",
+        "bible.v15.p0883"
+      ],
+      "slices": [
+        "S-042a"
+      ]
+    },
+    {
+      "id": "S-042a-C07",
+      "disposition": "implementation",
+      "criterion": "La fin de l’OCR conserve l’original. La suppression propriétaire expose ses conséquences, retire les objets actifs et empêche les jobs de les recréer ; durées légales non inventées.",
+      "oracle": "V3",
+      "test": "Original disponible après extraction ; suppression demandée puis refus de lecture et absence de résurrection après reprise worker.",
+      "source_ids": [
+        "bible.v15.p0754",
+        "bible.v15.p0855",
+        "bible.v15.p2516",
+        "bible.v15.p2898"
+      ],
+      "slices": [
+        "S-042a"
       ]
     },
     {
