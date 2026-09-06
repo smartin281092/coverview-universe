@@ -531,7 +531,7 @@
       ]
     },
     "S-013a": {
-      "status": "running",
+      "status": "done",
       "approval": "Mandat PROG-23 réaffirmé dans la création de cette tâche ; roadmap/execution-policy.md.",
       "decisions": [
         {
@@ -554,11 +554,39 @@
           "oracle": "V0 et audit indépendant",
           "observed": "HEAD initial aef0e7aac46fd5b4a61a64c04e8e48616a162ca0 ; checkout propre, S-000b done. Audits sécurité/produit concordants sur absence des producteurs exigés par C04/C05.",
           "decision": "Livrer S-013a ; garder S-013 specified et critères originaux complets. Installation frozen réussie après refus réseau sandbox et relance technique autorisée."
+        },
+        {
+          "target": "Implémentation, migrations et invariants",
+          "oracle": "V0/V1/V2 ciblé",
+          "observed": "Types/lint/build/frontières/knip passent ; migrations additives 0004/0005 appliquées et rejouées. Repository réel sur vrais objets PostgreSQL sous rollback : rejeu/révision/propriété/expiration/claim/confirmation/renouvellement et verrou concurrent passent.",
+          "decision": "Conserver les invariants et limites de concurrence décrites dans roadmap/evidence/S-013a.md ; aucun jeu de fixtures ajouté."
+        },
+        {
+          "target": "Profil, brouillon et choix personnel",
+          "oracle": "V3",
+          "observed": "Brouillon réel repris à Adresse, WorkOS puis rattachement explicite. Confirmation nom/prénom, choix activé puis retiré et historique relu. Second brouillon divergent : canonique intact, arbitrage requis, garder la valeur puis confirmer et recharger sans proposition. Profil BMP distinct vide.",
+          "decision": "C01–C04 acquis pour le périmètre S-013a ; interruption du premier retour Chrome reste documentée, sans fausse correction."
+        },
+        {
+          "target": "Mobile et double revue produit",
+          "oracle": "V3 navigateur et V0 mouvement réduit",
+          "observed": "390 puis320 px dans navigateur intégré ; boutons44 px, absence de débordement après correction, barre icônes/libellés, focus de saisie, destination active, Sheet/Shift+Tab/Échap/retour du focus relus. Corrections de lien public visible, dimensions, focus étape, titre dupliqué et min-width.",
+          "decision": "C05 acquis dans ces formats navigateur ; clavier virtuel/appareil physique et production hors preuves. Revue déléguée PROG-23 close."
         }
       ],
       "ledger": {
-        "verified": [],
-        "done_unverified": [],
+        "verified": [
+          "C01 V3 : profil canonique persisté et relu, informations volontairement fournies et confirmations serveur ; champs absents inconnus.",
+          "C02 V3 + PostgreSQL : brouillon persistant/reprise exacte, claim explicite, ancien brouillon privé après logout ; garde propriété/expiration/rejeu/renouvellement vérifiée sous rollback.",
+          "C03 V3 : vraie divergence de casse, valeur confirmée intacte, décision explicite et rechargement après résolution.",
+          "C04 V3 : préremplissage activé puis retiré, historique finalité/version/date et isolation entre comptes réels.",
+          "C05 V3 : shell smartphone et parcours clavier aux formats320/390, critique/améliorations/seconde lecture ; détails au ledger.",
+          "Types/lint/build/frontières/knip et migrations additives/rejeu ; aucun secret ni fixture nouvelle. Dépendances de formulaires déjà employées réutilisées et Sheet généré selon preset."
+        ],
+        "done_unverified": [
+          "CI distante, production, appareil physique et clavier virtuel natif non exécutés. Premier callback Chrome après OTP parfois ERR_BLOCKED_BY_CLIENT, seconde entrée officielle réussie ; interruption non déclarée corrigée.",
+          "Documents/OCR/antivirus/stockage applicatif restent à implémenter réellement dans S-042a ; les parents gardent leurs critères."
+        ],
         "assumed": []
       },
       "notes": [
@@ -566,7 +594,8 @@
         "Plan technique : brouillon sous cookie HttpOnly, hash serveur, expiration24h, CSRF/origine/Host ; mises à jour versionnées/idempotentes, priorité des confirmations et claim atomique. Pas de métadonnées OCR acceptées du frontend. Continuation autorisée stockée dans la transaction login, jamais returnUrl libre.",
         "Surface : www ouvre une page de préparation Wallet anonyme ; 3étapes facultatives, consentement limité au préremplissage propriétaire version1, aucun texte juridique global fabriqué. Enregistrement serveur à chaque étape ; saisie non envoyée conservée seulement en mémoire, jamais localStorage.",
         "Manifeste export/rétention documenté dans README identity : images non ingérées, champs profil rectifiables, choix historisés ; durées juridiques et effacement/export attendent S-130/S-131.",
-        "Demande smartphone explicite : menu Sheet shadcn issu du preset, bottom nav icônes/libellés, safe areas et retrait pendant la saisie. Ensuite S-042a prioritaire selon execution-policy.md."
+        "Demande smartphone explicite : menu Sheet shadcn issu du preset, bottom nav icônes/libellés, safe areas et retrait pendant la saisie. Ensuite S-042a prioritaire selon execution-policy.md.",
+        "Clôture déléguée sur preuves du 6 septembre : roadmap/evidence/S-013a.md. Prochaine tranche S-042a prioritaire dans une nouvelle tâche gpt-6-astra / ultra, aucune nouvelle demande de GO."
       ]
     },
     "S-042a": {

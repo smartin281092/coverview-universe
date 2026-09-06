@@ -12,7 +12,7 @@ L’ordre est topologique ; les identifiants restent stables. Vérifier dépenda
 |---|---|---|---|---|---|---|
 | 1 | [S-000a — Démarrer un socle local reproductible et une preview fictive](plans/S-000a.plan.md) | M0 | foundation | done | — | [prompt](prompts/S-000a.prompt.md) |
 | 2 | [S-000b — Se connecter avec WorkOS et retrouver son espace protégé](plans/S-000b.plan.md) | M0 | integration | done | [S-000a](plans/S-000a.plan.md) | [prompt](prompts/S-000b.prompt.md) |
-| 3 | [S-013a — Préparer son profil privé et le reprendre dans Wallet](plans/S-013a.plan.md) | M1 | integration | running | [S-000b](plans/S-000b.plan.md) | [prompt](prompts/S-013a.prompt.md) |
+| 3 | [S-013a — Préparer son profil privé et le reprendre dans Wallet](plans/S-013a.plan.md) | M1 | integration | done | [S-000b](plans/S-000b.plan.md) | [prompt](prompts/S-013a.prompt.md) |
 | 4 | [S-042a — Conserver ses documents originaux et confirmer les informations extraites dans son profil](plans/S-042a.plan.md) | M8 | integration | specified | [S-013a](plans/S-013a.plan.md) | [prompt](prompts/S-042a.prompt.md) |
 | 5 | [S-010 — Ouvrir les trois parcours CoverView depuis un site public compact](plans/S-010.plan.md) | M1 | local-fixtures | done | [S-000a](plans/S-000a.plan.md) | [prompt](prompts/S-010.prompt.md) |
 | 6 | [S-081 — Délivrer un dossier avec tâches, prochaine action et Kanban](plans/S-081.plan.md) | M5 | local-fixtures | specified | [S-000b](plans/S-000b.plan.md) | [prompt](prompts/S-081.prompt.md) |
