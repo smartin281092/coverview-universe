@@ -31,7 +31,7 @@ Cause réelle : validation SDK réussie puis rejet `token_claims / issuer_mismat
 
 Recette V3 réelle : BMP et Hook connectés par WorkOS et persistés ; espaces personnels propriétaires accessibles, refus croisés ; continuité www/Wallet ; compte ordinaire refusé dans l’équipe. Logout Hook, deuxième appareil BMP avec le même ID canonique, révocation ciblée, reconnexion puis logout global depuis deux sessions actives. État final : 2 utilisateurs, 4 sessions historiques, 0 active, 0 révocation distante en attente. Les sessions sont volontairement déconnectées. Aucun oracle fournisseur remplacé par une fixture.
 
-Contrôles de la réparation : régression configuration d’abord rouge puis verte ; 30 tests configuration/diagnostic/fournisseur passent, types et lint ciblés, build API, frontières/knip, référentiel et vues roadmap valides. La revue finale et les tests de base réels sont consignés au ledger ; ne pas répéter les mêmes contrôles sans changement ou doute concret. Pas de migration ni dépendance ajoutée.
+Contrôles de la réparation : régression configuration d’abord rouge puis verte ; 30 tests configuration/diagnostic/fournisseur passent, types et lint ciblés, build API, frontières/knip, référentiel et vues roadmap valides. Revue indépendante sans défaut concret. Les 29 tests routes/repository supplémentaires n’ont pas pu s’exécuter faute d’accès Docker dans le sandbox ; la relance avec validation a été interrompue. Ne pas les annoncer passés ni répéter les mêmes contrôles sans changement ou doute concret. Pas de migration ni dépendance ajoutée.
 
 ## Prochaine action bornée
 

@@ -252,6 +252,12 @@
           "oracle": "V3 + V0/V1/V2 ciblés",
           "observed": "Échec réel token_claims/issuer_mismatch : issuer configuré app OIDC, token signé generic AuthKit. Correction bornée locale rechargée par watcher existant sans lire secrets. BMP puis Hook connectés et persistés, deux espaces propriétaires et refus croisés, www partagé, refus admin ordinaire. Session supplémentaire même identité, révocation ciblée puis déconnexion globale avec deux sessions actives : refus après rechargement, zéro session active et zéro révocation distante en attente.",
           "decision": "Cause corrigée et parcours personnels/révocations prouvés ; ne pas clore C05 sans bénéficiaire admin désigné et inscription Authenticator puis MFA réelle. Anciennes UI de 9b02 non réintroduites ; fusion des preuves avec Geist/Montech de main."
+        },
+        {
+          "target": "Revue finale du correctif callback",
+          "oracle": "V0/V1/V2 ciblés + revue indépendante",
+          "observed": "30 tests configuration/diagnostic/fournisseur passent ; types, lint/format ciblés, build API, frontières/knip et vérifications roadmap valides. Aucun défaut concret identifié en revue. Les 29 tests routes/repository supplémentaires ne se sont pas exécutés faute de runtime Docker accessible au sandbox ; relance avec validation interrompue, aucun succès revendiqué.",
+          "decision": "Conserver les oracles acquis et les parcours WorkOS réels persistés. Aucun nouveau test à relancer sans changement ou doute concret. C05 reste ouvert pour implémentation de l’inscription Authenticator puis preuve MFA administrative réelle."
         }
       ],
       "ledger": {
