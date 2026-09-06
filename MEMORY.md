@@ -26,3 +26,5 @@ Aucune entrée activée. L'identité du projet vit dans PROJECT.md ; les décisi
 - MEM-113 · piège · Un retour de détail vers l’index racine perd la position d’une liste paginée ; le retour vers la page calculée et une ancre focalisable est vérifié en S-011. La restauration native du focus par retour navigateur reste distincte de cet oracle explicite. (S-011, 2026-09-06 · confiance haute · revoir avant 2026-12-05 · candidat)
 
 Ces candidats attendent une revue ; ils ne constituent pas des règles concurrentes des références citées.
+
+- MEM-114 · décision · L’utilisateur autorise deux identités réelles pour la recette WorkOS et les identités fictives LocalHost ; inventaire et limites d’habilitation dans le ledger S-000b. L’OTP fournisseur accepté ne prouve pas une session CoverView : premier callback en échec. (S-000b reprise, 2026-09-06 · confiance haute · revoir avant 2026-12-05 · candidat)

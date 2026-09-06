@@ -160,6 +160,12 @@
           "question": "Si les méthodes constatées diffèrent du parcours email/OTP, quel changement appliquer ?",
           "answer": "Option a : si un écart est réellement constaté, préparer et présenter le diff exact des méthodes et callbacks pour configurer email/OTP et MFA admin dans l’environnement de développement identifié. Conserver les configurations sans rapport avec ce parcours.",
           "evidence": "Écart constaté : Magic Auth et MFA désactivés, callbacks absents. Diff concret préparé dans roadmap/evidence/S-000b.md ; aucun changement distant effectué. C01/C03/C05 restent non vérifiés."
+        },
+        {
+          "ref": "S-000b-authorized-test-identities",
+          "question": "Quelles identités sont autorisées pour les tests réels et fictifs ?",
+          "answer": "Les deux emails réels et les comptes fictifs explicitement autorisés par l’utilisateur sont inventoriés au ledger S-000b ; aucune habilitation administrative réelle déduite.",
+          "evidence": "Message utilisateur du 2026-09-06 ; créations et premier OTP réellement observés, détails dans roadmap/evidence/S-000b.md."
         }
       ],
       "verification_attempts": [
@@ -222,6 +228,12 @@
           "oracle": "V3 partiel",
           "observed": "API ready, identity/config enabled:true et accès anonyme refusé 401. Lien Wallet exécuté dans Chrome : formulaire réel WorkOS ouvert pour le client et le callback attendus. Aucun email soumis ni callback authentifié achevé.",
           "decision": "Blocage de lancement levé ; maintenir review en attendant identités test autorisées, login complet et recette fournisseur. Détails dans roadmap/evidence/S-000b.md."
+        },
+        {
+          "target": "Comptes autorisés et premier OTP réel — 2026-09-06",
+          "oracle": "V3 partiel / callback en échec",
+          "observed": "Quatre identités WorkOS créées, MFA Optional confirmée. OTP incorrect refusé puis code reçu accepté pour BMP, profil fournisseur actif. Retour CoverView authError=callback ; zéro utilisateur/session SQL local. Seconde session navigateur intégré : invitation non valide. Aucun password ou facteur saisi.",
+          "decision": "Maintenir review. Diagnostiquer le code serveur demandé ; bénéficiaire admin réel non désigné, enrôlement Authenticator utilisateur et autres oracles encore requis."
         }
       ],
       "ledger": {
