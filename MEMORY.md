@@ -34,3 +34,5 @@ Aucune entrée activée. L'identité du projet vit dans PROJECT.md ; les décisi
 - MEM-117 · correction utilisateur · Preset shadcn et Geist réaffirmés ; MONTECH V.02 fourni remplace les rôles Geist Mono, fond blanc/cards en aplat sans bordure ni ombre. ADR-0008 gouverne les composants et la typographie, résultat dans roadmap/evidence/shadcn-typography.md. (Typographie, 2026-09-06 · confiance haute · revoir avant 2026-12-05 · candidat)
 
 Ces candidats attendent une revue ; ils ne constituent pas des règles concurrentes des références citées.
+
+- MEM-118 · décision · L’utilisateur autorise deux identités réelles pour la recette WorkOS et les identités fictives LocalHost ; inventaire et limites d’habilitation dans le ledger S-000b. L’OTP fournisseur accepté ne prouve pas une session CoverView : premier callback en échec. (S-000b reprise, 2026-09-06 · confiance haute · revoir avant 2026-12-05 · candidat)
