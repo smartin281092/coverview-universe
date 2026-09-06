@@ -210,6 +210,12 @@
           "decision": "Aucune valeur secrète ajoutée à .env ; préserver tables additives au rollback et suivre reset double confirmation documenté.",
           "oracle": "V0",
           "observed": "check:env initialement refuse les clés process-only commentées ; reconnaissance des déclarations documentées puis validation indépendante des valeurs actives corrigées, lint/typecheck/check:env passent. Installation frozen confirme lockfile ; roadmap/planning/checkpoint/lint docs et marque passent."
+        },
+        {
+          "target": "Reprise opérateur WorkOS après injection annoncée — 2026-09-06",
+          "oracle": "V3 configuration / V1 migration",
+          "observed": "Callback exact et Magic Auth activés constatés. Homepage corrigée vers www 4103 et MFA Optional enregistrée puis relue. Issuer vérifié via découverte OIDC publique. Ancienne API preview 4133 AUTH_ENABLED=false arrêtée via superviseur identifié ; port4100 libéré. Migration locale rejouée avec succès. Détails : roadmap/evidence/S-000b.md.",
+          "decision": "Maintenir review. Attendre relance API dans terminal opérateur et deux identités autorisées avec bénéficiaire admin ; aucune clé serveur ni connexion fournisseur encore vérifiée."
         }
       ],
       "ledger": {
