@@ -35,10 +35,7 @@ export function DiagnosticsPage() {
           }}
         />
       ) : (
-        <div
-          role="status"
-          className="flex items-center gap-4 rounded-xl border border-border bg-card p-6"
-        >
+        <div role="status" className="flex items-center gap-4 py-6">
           <CheckCircle2 className="size-5 text-success-foreground" aria-hidden="true" />
           <div>
             <p className="font-medium">{t("health.ready")}</p>

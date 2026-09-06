@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { ArrowUpRight, MonitorSmartphone, UserRound } from "lucide-react";
+import { Container, TextLink } from "@coverview/ui";
 import logo from "../../../assets/logo-coverview.svg";
 import { LogoutFeedback } from "./features/identity/LogoutFeedback";
 
@@ -19,9 +19,9 @@ export function AppShell() {
       >
         {t("skip")}
       </a>
-      <header className="border-b border-border bg-card">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-5 gap-y-4 px-5 py-5 sm:px-8">
-          <Link to="/" className="flex items-center gap-3 sm:gap-5">
+      <header className="border-b border-border">
+        <Container className="flex flex-wrap items-center justify-between gap-x-5 gap-y-2 py-4">
+          <Link to="/" className="flex items-center gap-4">
             <img
               src={logo}
               alt={t("brand")}
@@ -29,50 +29,51 @@ export function AppShell() {
               width="444"
               height="73"
             />
-            <span className="border-l border-border pl-3 text-xs font-medium text-muted-foreground sm:pl-5 sm:text-sm">
-              {t("app")}
-            </span>
+            <span className="text-xs text-muted-foreground sm:text-sm">{t("app")}</span>
           </Link>
-          <a
-            href={websiteUrl}
-            className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-primary"
-          >
+          <TextLink href={websiteUrl} arrow="up" className="text-sm">
             {t("website")}
-            <ArrowUpRight className="size-4" aria-hidden="true" />
-          </a>
-        </div>
+          </TextLink>
+        </Container>
       </header>
-      <div className="mx-auto w-full max-w-6xl flex-1 px-5 sm:px-8">
+      <Container className="flex-1">
         <nav
           aria-label={t("navigation")}
-          className="flex flex-wrap gap-2 border-b border-border py-4 sm:py-5"
+          className="flex flex-wrap gap-x-7 border-b border-border py-3"
         >
           <Link
             to="/account"
             aria-current={accountPage ? "page" : undefined}
-            className={`inline-flex min-h-11 items-center gap-2 rounded-lg px-4 text-sm font-medium ${accountPage ? "bg-accent text-primary" : "text-muted-foreground hover:bg-muted"}`}
+            className={`inline-flex min-h-11 items-center text-sm ${accountPage ? "text-foreground underline underline-offset-8" : "text-muted-foreground hover:text-foreground"}`}
           >
-            <UserRound className="size-4" aria-hidden="true" />
             {t("identity.accountTitle")}
           </Link>
           <Link
             to="/devices"
-            className="inline-flex min-h-11 items-center gap-2 rounded-lg px-4 text-sm font-medium text-muted-foreground hover:bg-muted"
-            activeProps={{ className: "bg-accent text-primary", "aria-current": "page" }}
+            className="inline-flex min-h-11 items-center text-sm text-muted-foreground hover:text-foreground"
+            activeProps={{
+              className: "text-foreground underline underline-offset-8",
+              "aria-current": "page",
+            }}
           >
-            <MonitorSmartphone className="size-4" aria-hidden="true" />
             {t("identity.devices")}
           </Link>
         </nav>
-        <main id="main" tabIndex={-1} className="app-content space-y-8 py-8 sm:py-12 lg:py-16">
+        <main
+          id="main"
+          tabIndex={-1}
+          className="app-content cv-section cv-section--compact space-y-10"
+        >
           <LogoutFeedback>
             <Outlet />
           </LogoutFeedback>
         </main>
-      </div>
-      <footer className="mx-auto flex w-full max-w-6xl flex-wrap justify-between gap-2 border-t border-border px-5 py-6 text-xs text-muted-foreground sm:px-8">
-        <p>{t("footer")}</p>
-        {import.meta.env.DEV && <p>{t("identity.local")}</p>}
+      </Container>
+      <footer className="border-t border-border">
+        <Container className="flex flex-wrap justify-between gap-2 py-6 text-xs text-muted-foreground">
+          <p>{t("footer")}</p>
+          {import.meta.env.DEV && <p>{t("identity.local")}</p>}
+        </Container>
       </footer>
     </div>
   );

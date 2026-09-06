@@ -1,0 +1,23 @@
+---
+interface Props { kind: number; }
+const { kind } = Astro.props;
+---
+<svg class:list={['benefit-art', `benefit-art-${kind}`]} viewBox="0 0 320 180" fill="none" aria-hidden="true">
+  <defs><linearGradient id={`metal-${kind}`} x1="60" y1="10" x2="240" y2="175" gradientUnits="userSpaceOnUse"><stop stop-color="#fff"/><stop offset="1" stop-color="#cdd4dc"/></linearGradient></defs>
+  {kind === 0 && <>
+    <rect x="84" y="25" width="139" height="134" rx="9" transform="rotate(-10 84 25)" fill="#dce1e7" />
+    <rect x="101" y="17" width="133" height="146" rx="9" fill={`url(#metal-${kind})`} stroke="#c0c9d2"/>
+    <path d="M123 51h50M123 64h86M123 82h63M123 98h86M123 114h51" stroke="#9ca8b5" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="219" cy="128" r="27" fill="#0071e3"/><path d="m207 127 9 9 16-18" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </>}
+  {kind === 1 && <>
+    <circle cx="160" cy="90" r="74" stroke="#d0d6de"/><circle cx="160" cy="90" r="52" stroke="#b8c4d2"/><circle cx="160" cy="90" r="29" stroke="#95b0cc"/>
+    <circle cx="160" cy="90" r="8" fill="#0071e3"/><path d="m161 88 70-64" stroke="#0071e3" stroke-width="3" stroke-linecap="round"/><path d="m210 26 21-2-3 20" stroke="#0071e3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </>}
+  {kind === 2 && <>
+    <path d="M160 30v114M113 145h94" stroke="#8b9aab" stroke-width="4" stroke-linecap="round"/><path d="m84 59 151-16" stroke="#0071e3" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="160" cy="51" r="8" fill="#0071e3"/>
+    <path d="m95 59-29 59h58L95 59ZM222 47l-29 59h58l-29-59Z" stroke="#a7b7c9" stroke-width="2"/>
+    <path d="M65 118h60c-3 34-56 34-60 0ZM192 106h60c-3 34-56 34-60 0Z" fill={`url(#metal-${kind})`} stroke="#a7b7c9"/>
+  </>}
+</svg>

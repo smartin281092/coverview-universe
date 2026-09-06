@@ -1,15 +1,15 @@
 ---
 import '../styles/global.css';
+import { Container, ButtonLink } from '@coverview/ui';
 import logo from '../../../../assets/logo-coverview.svg?url';
-import favicon from '../../../../assets/favicon.png?url';
+import icon from '../../../../assets/icon-coverview.svg?url';
 import { content } from '../content/fr/interface';
-import { acquisition } from '../content/fr/acquisition';
-
+import { marketing as copy } from '../content/fr/marketing';
 interface Props { title: string; description: string; markdown?: string; structuredData?: Record<string, unknown>; }
 const { title, description, markdown, structuredData } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const image = new URL('/og-preview.svg', Astro.site);
-const walletUrl = import.meta.env.PUBLIC_WALLET_URL ?? (import.meta.env.DEV ? 'http://127.0.0.1:4101' : undefined);
+const image = new URL('/og.png', Astro.site);
+const nav = [copy.nav.services, copy.nav.method, copy.nav.resources];
 ---
 <!doctype html>
 <html lang="fr-CH">
@@ -22,8 +22,9 @@ const walletUrl = import.meta.env.PUBLIC_WALLET_URL ?? (import.meta.env.DEV ? 'h
     <link rel="canonical" href={canonical} />
     {markdown && <link rel="alternate" type="text/markdown" href={markdown} />}
     {structuredData && <script type="application/ld+json" is:inline set:html={JSON.stringify(structuredData).replaceAll('<', '\\u003c')} />}
-    <link rel="icon" type="image/png" href={favicon} />
+    <link rel="icon" type="image/svg+xml" href={icon} />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="CoverView" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
@@ -39,21 +40,25 @@ const walletUrl = import.meta.env.PUBLIC_WALLET_URL ?? (import.meta.env.DEV ? 'h
   <body>
     <a href="#main" class="skip-link">{content.skip}</a>
     <header class="site-header">
-      <a href="/" aria-label={content.home}><img src={logo} alt={content.brand} width="444" height="73" class="logo" /></a>
-      <nav aria-label={content.navigation}>
-        <a href="/explorer" class="text-link" aria-current={Astro.url.pathname.startsWith('/explorer') ? 'page' : undefined}>{acquisition.exploreShort}</a>
-        <a href="/account" class="header-account" aria-current={Astro.url.pathname === '/account' ? 'page' : undefined}>{content.accountLink}</a>
-      </nav>
+      <Container className="header-inner">
+        <a href="/" aria-label={content.home} class="logo-link"><img src={logo} alt={content.brand} width="444" height="73" class="logo" /></a>
+        <nav aria-label={content.navigation}>
+          {nav.map(item => <a href={item.href} aria-current={Astro.url.pathname === item.href ? 'page' : undefined}>{item.label}</a>)}
+        </nav>
+        <ButtonLink href={copy.nav.account.href} className="header-account">{copy.nav.account.label}</ButtonLink>
+      </Container>
     </header>
     <main id="main" tabindex="-1"><slot /></main>
     <footer class="site-footer">
-      <div><p>{content.footer}</p><p>{import.meta.env.DEV ? content.account.local : content.construction}</p></div>
-      <div class="account-actions">
-        <a href="/methode" class="text-link">{acquisition.method}</a>
-        {walletUrl && <a href={new URL('/account', walletUrl).href} class="text-link">{content.wallet}<span aria-hidden="true">↗</span></a>}
-        {import.meta.env.DEV && <a href="http://127.0.0.1:4102" class="text-link">{content.team}<span aria-hidden="true">↗</span></a>}
-        <a href="/explorer" class="text-link">{acquisition.explore}</a>
-      </div>
+      <Container>
+        <div class="footer-main">
+          <div class="footer-brand"><a href="/" aria-label={content.home}><img src={logo} alt={content.brand} width="444" height="73" class="logo" /></a><p>{copy.footer.statement}</p><small>{copy.footer.description}</small></div>
+          <div><h2>{copy.footer.resources}</h2><ul><li><a href="/services">{copy.nav.services.label}</a></li><li><a href="/methode">{copy.nav.method.label}</a></li><li><a href="/articles">{copy.nav.resources.label}</a></li><li><a href={copy.footer.links.glossary.href}>{copy.footer.links.glossary.label}</a></li></ul></div>
+          <div><h2>{copy.footer.company}</h2><ul><li><a href={copy.footer.links.vision.href}>{copy.footer.links.vision.label}</a></li><li><a href={copy.footer.links.questions.href}>{copy.footer.links.questions.label}</a></li><li><a href={copy.footer.links.sources.href}>{copy.footer.links.sources.label}</a></li><li><a href={copy.nav.all.href}>{copy.nav.all.label}</a></li></ul></div>
+          <div><h2>{copy.footer.account}</h2><ul><li><a href="/account">{copy.nav.account.label}</a></li><li><a href={copy.footer.links.overview.href}>{copy.footer.links.overview.label}</a></li><li><a href={copy.footer.links.contact.href}>{copy.footer.links.contact.label}</a></li></ul></div>
+        </div>
+        <div class="footer-bottom"><p>© {new Date().getFullYear()} {copy.footer.copyright}</p><p>{copy.footer.availability}</p></div>
+      </Container>
     </footer>
   </body>
 </html>

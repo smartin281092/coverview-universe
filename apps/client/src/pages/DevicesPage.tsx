@@ -78,7 +78,7 @@ function Devices({ identity }: { identity: IdentityMe }) {
           {sessions.data.sessions.map((session) => (
             <li
               key={session.id}
-              className="flex flex-wrap items-center justify-between gap-5 rounded-xl border border-border bg-card p-5"
+              className="flex flex-wrap items-center justify-between gap-5 border-b border-border py-7"
             >
               <div className="min-w-0 space-y-2">
                 <h2 className="break-words font-medium">{session.device}</h2>

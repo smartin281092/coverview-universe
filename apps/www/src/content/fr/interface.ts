@@ -18,7 +18,7 @@ export const content = {
     loading: "Vérification de votre connexion…",
     connected: "Vous êtes connecté à CoverView.",
     disconnected: "Connectez-vous pour retrouver votre espace personnel.",
-    unavailable: "La connexion n’est pas encore disponible dans cette préversion.",
+    unavailable: "La connexion n’est pas encore ouverte.",
     failed: "La connexion n’a pas abouti. Réessayez dans quelques instants.",
     callbackError: "La connexion a échoué ou a expiré. Recommencez depuis cette page.",
     login: "Se connecter",

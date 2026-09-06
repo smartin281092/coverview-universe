@@ -1,31 +1,44 @@
-# UI partagée
+# Système de présentation CoverView
 
 ## Résumé
 
-Primitives de présentation consommées par Wallet et l’espace équipe. Le site `www` utilise seulement les assets et tokens de marque, sans dépendance à ce package.
+Source commune des tokens et primitives de présentation de Wallet, de l’espace équipe et du site Astro. La direction actuelle suit [ADR-0006](../../adr/0006-marketing-design-system.md) : blanc, neutres sobres, typographie ample, actions bleues discrètes et sections ouvertes. Les surfaces fermées sont réservées aux bentos courts avec illustration ou chiffre justifié.
 
-## Périmètre
+## Consommation
 
-Bouton, skeleton et états chargement, vide, erreur avec retry, accès refusé, introuvable et session expirée. Les libellés sont injectés par les catalogues i18next de chaque application. Aucun accès réseau, store ou page applicative dans ce package.
+Les applications React importent `@coverview/ui/styles.css`, qui branche Tailwind et le thème commun. Astro importe `@coverview/ui/theme.css` : CSS ordinaire, police Geist auto-hébergée, tokens et classes de présentation autonomes. Ce chemin ne nécessite pas Tailwind pour dessiner les composants. Les assets et tokens historiques de `assets/brand` sont conservés mais ne sont plus importés dans les apps par ce package.
 
-## Règles métier et invariants
+Les composants de présentation ne contiennent aucun hook, accès réseau ou référence au navigateur. Astro peut les rendre côté serveur sans directive `client:*`. L’intégration de rendu React appartient à l’application Astro ; une page statique n’exige aucune hydratation.
 
-Aucune règle métier. Les composants `Button` et `Skeleton` proviennent de `pnpm dlx shadcn@latest add button skeleton --yes`. Les deux projets Vite de préparation ont exécuté avec succès `pnpm dlx shadcn@latest apply --preset b38oXC5rf --yes` le 2026-09-05. Le suffixe `--yes` répond à la confirmation du mandat ; le preset reste celui de DSN-01.
+| Composant | Contrat principal |
+|---|---|
+| `Container` | `size="wide"` ou `"reading"`, props div et enfants |
+| `Section` | `tone="white"`, `"soft"` ou `"dark"` ; `spacing="normal"` ou `"compact"` ; props section |
+| `Stack` | `gap="sm"`, `"md"` ou `"lg"` ; direction verticale/horizontale ; alignement start/center |
+| `SectionHeading` | `title`, `eyebrow?`, `description?`, `level={1\|2\|3}`, taille display/large/medium, alignement start/center, `id?` |
+| `TextLink` | Props anchor, enfants, flèche right/up/false |
+| `ButtonLink` | Props anchor et variantes du bouton ; destiné notamment au rendu Astro statique |
+| `Button` | Bouton React accessible ; composition `asChild` existante conservée pour les liens TanStack |
+| `Bento` | Titre et texte courts ; `illustration` ou `value` doit porter l’objet visuel ; label facultatif |
+| `AccountLayout` | Titres, explications et liste de repères injectés par l’app ; aucun état d’identité |
+| États | Chargement, vide, erreur avec reprise, refus, introuvable et session expirée ; libellés et actions injectés |
 
-Configuration obtenue : Radix Mira, Geist, Lucide, rayon par défaut, menus inverted-translucent/subtle. Les couleurs Mist et le thème sombre générés sont retirés au profit de l’import canonique `assets/brand/tokens.css` (BRD-03). Police, rayons et structure Mira sont conservés. Adaptations accessibles du bouton : focus opaque avec décalage, survol primaire via le token de marque et bordure de contrôle renforcée (BRD-02).
+Les mêmes classes `cv-container`, `cv-section`, `cv-heading`, `cv-text-link`, `cv-button` et `cv-bento` sont utilisables dans du HTML Astro lorsque son emplacement de contenu le nécessite. `SectionHeading` reçoit l’ID sur le titre pour la relation `aria-labelledby` de la section.
 
-Les composants générés sont renommés en PascalCase selon CONV-01. Le fichier de réexport `utils.ts` généré par la CLI est inutile et n’est pas livré (ARCH-09) ; la CLI utilise directement le package officiel `cn`. Les dossiers de préparation `.preset-work/` sont ignorés et ne participent à aucun build.
+## Règles de présentation
 
-## Permissions
+`src/theme.css` est la source des couleurs, de la typographie et des primitives CSS. Les états sont ouverts, sans fond, bordure ou ombre de card. Un bento n’est jamais l’emballage d’une longue section, d’un formulaire ou d’un état vide. Les boutons conservent une hauteur minimale de 44 px ; le focus visible et la réduction des animations respectent les préférences du navigateur. Les consommateurs conservent leur hiérarchie sémantique, leurs catalogues et leurs responsabilités d’accessibilité.
 
-Aucune autorisation décidée par l’UI. Un état « accès refusé » affiche une décision du consommateur ; il ne l’applique jamais à la place du serveur.
+## Permissions et données
+
+Aucune règle métier, autorisation, identité, donnée privée, cache ou appel réseau. Les libellés viennent des catalogues i18next des apps ou du contenu public. Un état de refus présente une décision du serveur sans la remplacer.
+
+## Provenance et évolution
+
+Le bouton et le skeleton partent des primitives shadcn déjà installées ; Radix et la composition `asChild` sont conservés. Le preset historique exécuté figure dans `preset-provenance.json` et dans le ledger S-000a. ADR-0006 remplace sa direction chromatique et ses conteneurs visuels, sans ajouter une autre bibliothèque.
+
+`shadcn`, `radix-ui`, `class-variance-authority`, `cn`, `lucide-react` et `tw-animate-css` sont les dépendances déjà issues de cette initialisation. Geist via Fontsource conserve sa licence OFL-1.1. Aucun package ajouté pour la refonte ; versions et licences exécutables restent attachées au manifeste et au lockfile.
 
 ## État réel
 
-Preset exécuté sur les deux coquilles et composants générés. Build, types et rendu vérifiés par les oracles consignés dans [le ledger S-000a](../../roadmap/evidence/S-000a.md).
-
-## Dépendances et provenance
-
-Les packages `shadcn` (CSS Mira), `radix-ui` (composition accessible), `class-variance-authority`, `cn`, `lucide-react` et `tw-animate-css` sont ceux ajoutés par la CLI officielle. `cn` provient de `shadcn-ui/cn`, pas d’un homonyme. Licences MIT/Apache-2.0/ISC ; l’audit d’installation est géré à la racine. Geist est auto-hébergée via Fontsource et conserve sa licence de police **OFL-1.1**, signalée car hors allowlist de licences de code DEP-01 ; elle est explicitement requise par le preset.
-
-Sources officielles consultées le 2026-09-05 : [shadcn apply](https://ui.shadcn.com/docs/cli#apply), [preset](https://ui.shadcn.com/docs/cli#preset), métadonnées `latest` du registre npm. Les versions exécutables sont celles du manifeste et du lockfile, sans seconde liste documentaire.
+La refonte est locale. Les vérifications et l’inspection des écrans réels sont consignées par la tâche propriétaire dans le journal de reprise. Un typecheck ou le rendu d’un état ne prouve ni une connexion WorkOS, ni une habilitation externe.

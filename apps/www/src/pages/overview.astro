@@ -1,18 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { acquisition as copy, journeys } from '../content/fr/acquisition';
-const page = copy.overviewPage;
+import { Container, Section, SectionHeading, ButtonLink } from '@coverview/ui';
+import { marketing } from '../content/fr/marketing';
+import BenefitArt from '../components/BenefitArt.astro';
+const copy = marketing.overview;
 ---
-<Layout title={page.title} description={page.description}>
-  <section class="content-page">
-    <div class="page-intro"><p class="eyebrow">{copy.overview}</p><h1>{page.heading}</h1><p>{page.introduction}</p></div>
-    <div class="journey-grid">
-      {journeys.map((journey) => <article class="journey-card">
-        <span class="stage-label">{copy.coming}</span>
-        <h2>{journey.title}</h2><p>{journey.question}</p>
-        <a href={`/${journey.slug}`} class="text-link">{journey.action}<span aria-hidden="true">→</span></a>
-      </article>)}
-    </div>
-    <section class="convergence" aria-labelledby="convergence-title"><h2 id="convergence-title">{page.convergenceTitle}</h2><p>{page.convergence}</p><p>{page.status}</p><a href="/methode" class="text-link">{copy.home.methodAction}<span aria-hidden="true">→</span></a></section>
-  </section>
+<Layout title={copy.seo.title} description={copy.seo.description}>
+  <Section className="interior-hero"><Container><SectionHeading level={1} size="display" eyebrow={copy.eyebrow} title={copy.title} description={copy.description} align="center" /></Container></Section>
+  <Container><div class="orientation-list">{copy.journeys.map((journey, index) => <section class="orientation-item">
+    <div class="orientation-art"><BenefitArt kind={index} /></div>
+    <div><SectionHeading level={2} size="medium" eyebrow={journey.eyebrow} title={journey.title} description={journey.description} /><ul>{journey.questions.map(question => <li>{question}</li>)}</ul><ButtonLink href={journey.action.href}>{journey.action.label}</ButtonLink></div>
+  </section>)}</div></Container>
+  <Section tone="soft"><Container><SectionHeading title={copy.convergenceTitle} description={copy.convergenceDescription} align="center" /><div class="closing-actions"><ButtonLink href={copy.action.href}>{copy.action.label}</ButtonLink></div><p class="availability-note">{copy.availability}</p></Container></Section>
 </Layout>

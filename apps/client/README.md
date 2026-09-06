@@ -14,6 +14,8 @@ Les outils de développement restent accessibles par leur adresse directe, hors 
 
 ## Règles métier et invariants
 
+La présentation utilise le système blanc commun de [UI](../../packages/ui/README.md), conformément à ADR-0006. Le layout de compte partagé reçoit uniquement des textes et icônes ; les décisions d’identité restent dans cette app. Compte, appareils, déconnexion et états sont des sections ouvertes sans card.
+
 Aucune règle métier ni secret de session durable frontend. Le réseau passe par `@coverview/api-client` ; les réponses sont validées par ses schémas. Source du socle : [API platform](../api/src/platform/README.md). TanStack Query conserve santé/personas fraîches 15 secondes et libère leur cache inutilisé après une minute.
 
 L’identité est relue à chaque montage/focus, sans retry automatique. Pendant cette vérification, les données privées ne sont pas affichées. Le cache privé inclut identité et session, est périmé immédiatement et supprimé dès qu’il n’a plus d’observateur. Tout changement d’identité/session, refus d’authentification ou déconnexion annule les requêtes privées et les retire. Un résultat tardif d’une requête annulée ne modifie pas le cache de l’identité suivante. Les mutations ont un CSRF en mémoire et une clé d’idempotence conservée lors d’un retry ; aucune persistance navigateur.

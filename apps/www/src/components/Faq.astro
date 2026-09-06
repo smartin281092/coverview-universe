@@ -1,0 +1,9 @@
+---
+import { Container, Section, SectionHeading, TextLink } from '@coverview/ui';
+import { marketing } from '../content/fr/marketing';
+const copy = marketing.faq;
+---
+<Section><Container><div class="faq-layout">
+  <SectionHeading eyebrow={copy.eyebrow} title={copy.title} />
+  <div class="faq-list">{copy.items.map(item => <details><summary>{item.question}<span aria-hidden="true"></span></summary><div class="faq-answer"><p>{item.answer}</p><TextLink href={item.href}>{item.linkLabel}</TextLink></div></details>)}</div>
+</div></Container></Section>

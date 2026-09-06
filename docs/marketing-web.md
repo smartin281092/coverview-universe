@@ -1,5 +1,7 @@
 # Site marketing, blog et contenu public
 
+> **Direction et partage actuels** : [ADR-0006](../adr/0006-marketing-design-system.md) gouverne la refonte et autorise les composants statiques du système [UI](../packages/ui/README.md) dans Astro. Cette décision prévaut sur la restriction de package UI de MKT-02, sans modifier les frontières métier ni la règle de non-hydratation des composants statiques.
+
 > **Résumé** : Surfaces publiques à priorités propres : SSG par défaut, SPA client-only interdit, îlots opt-in, contenu Markdown/CMS, budgets Core Web Vitals en CI, formulaires via l'API leads, consentement RGPD.
 
 Ce fichier gouverne les surfaces publiques de contenu (`apps/www` : site marketing, blog, landing pages, éventuellement documentation publique). Les règles de l'application (multi-tenant, idempotence, temps réel) ne s'y appliquent PAS — sauf à la frontière des formulaires (MKT-08). Réciproquement, les règles de ce fichier ne s'appliquent pas à l'app.
@@ -13,6 +15,8 @@ Pour les interactions d'ouverture de contenu CoverView, charger FRONT-14 dans `d
 En cas d'arbitrage avec l'esthétique ou l'outillage : le contenu servi, crawlable et rapide gagne.
 
 ## MKT-02 — Séparation architecturale
+
+> **Exception de présentation** : le partage de `packages/ui` par rendu statique Astro suit [ADR-0006](../adr/0006-marketing-design-system.md). L’interdiction de package UI global ci-dessous est remplacée pour ce seul usage ; l’indépendance du backend et l’interdiction d’accès à sa base restent applicables.
 
 - `apps/www` est une application indépendante : build et déploiement propres, AUCUNE dépendance au backend applicatif pour afficher le contenu — le site reste en ligne si l'app est down, et inversement.
 - NE JAMAIS accéder à la base de l'app. Le contenu vit en Markdown/MDX dans le repo ou dans un CMS headless (MKT-05).

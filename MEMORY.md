@@ -27,4 +27,6 @@ Aucune entrée activée. L'identité du projet vit dans PROJECT.md ; les décisi
 
 - MEM-114 · correction utilisateur · Après rejet de la preview, l’utilisateur a réaffirmé l’interdiction des fixtures, smoke tests et tests de surface. La priorité au parcours réel est persistée dans execution-policy.md ; configuration WorkOS réellement appliquée et intervention serveur restante dans le ledger S-000b. Ne pas reprendre les décomptes de tests historiques comme preuve de fonctionnement. (Reprise S-000b, 2026-09-06 · confiance haute · revoir avant 2026-12-05 · candidat)
 
+- MEM-115 · correction utilisateur · Refonte blanche, sections ouvertes, bentos courts uniquement et bibliothèque commune demandées explicitement ; ADR-0006 remplace la palette initiale et la restriction de partage statique Astro. Le ledger marketing-redesign décrit le rendu actuel, sans clore l’identité ou la collecte commerciale. (Refonte, 2026-09-06 · confiance haute · revoir avant 2026-12-05 · candidat)
+
 Ces candidats attendent une revue ; ils ne constituent pas des règles concurrentes des références citées.

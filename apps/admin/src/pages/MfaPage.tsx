@@ -83,7 +83,7 @@ function Verification({ identity }: { identity: IdentityMe }) {
   }
   const pending = challenge.isPending || verification.isPending;
   return (
-    <section className="max-w-xl space-y-6 rounded-xl border border-border bg-card p-6">
+    <section className="max-w-xl space-y-8 py-4">
       <p className="text-muted-foreground">{t("identity.mfaInstructions")}</p>
       {code === "IDENTITY_MFA_INVALID" && !challenge.data && (
         <p role="alert" className="text-destructive">

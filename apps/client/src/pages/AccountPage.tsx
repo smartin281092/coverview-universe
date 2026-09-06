@@ -21,10 +21,7 @@ export function AccountPage() {
       <IdentityBoundary>
         {(identity) => (
           <>
-            <section
-              className="space-y-5 rounded-xl border border-border bg-card p-6"
-              aria-label={t("identity.profile")}
-            >
+            <section className="max-w-2xl space-y-7" aria-label={t("identity.profile")}>
               <h2 className="text-xl font-semibold">{t("identity.connectedTitle")}</h2>
               <dl className="space-y-2">
                 <dt className="text-sm text-muted-foreground">{t("identity.email")}</dt>

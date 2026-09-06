@@ -14,7 +14,6 @@ const url = (n: number) => n === 1 ? `/${root}` : `/${root}/page/${n}`;
     <a href="/explorer" class="text-link">← {acquisition.returnExplore}</a>
     <h1>{index.heading}</h1>
     <p class="intro">{index.description}</p>
-    <p class="preview-note">{copy.preview}</p>
     <div class="editorial-list">{entries.map(({ data }) => <article class="reading-card">
       <h2><a id={editorialAnchor(data.slug)} href={`/${data.slug}`} class="text-link">{data.title}</a></h2>
       <p>{data.description}</p>

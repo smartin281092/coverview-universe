@@ -1,12 +1,14 @@
-# Site public CoverView — parcours d’entrée
+# Site public CoverView — assurance, prévoyance et retraite
 
 ## Résumé
 
-Accueil, trois parcours et contenus éditoriaux du projet, en français. HTML Astro/MDX intégralement statique, lisible sans JavaScript et sans dépendance à l’API. [S-010](../../roadmap/evidence/S-010.md) reste livré ; [S-011](../../roadmap/evidence/S-011.md) documente la mécanique éditoriale locale et les preuves externes encore absentes.
+Site marketing en français pour la Suisse, construit autour de la compréhension des contrats, de la prévoyance et de l’objectif retraite. La refonte du 6 septembre 2026 suit [ADR-0006](../../adr/0006-marketing-design-system.md) : narration de conversion, sections ouvertes, fond blanc et système de présentation commun. Le contenu public reste statique, lisible sans JavaScript et sans dépendance à l’API pour sa lecture. Les ledgers [S-010](../../roadmap/evidence/S-010.md) et [S-011](../../roadmap/evidence/S-011.md) conservent l’historique et les limites des versions antérieures ; ils ne valent pas validation de cette refonte.
 
 ## Périmètre
 
-`/` présente la question retraite et mène aux lectures disponibles : méthode, articles, glossaire, modèles de service, ainsi qu’au compte. Les actions précèdent les lectures secondaires sur mobile. Aucun dossier ni résultat fictif n’est présenté dans l’accueil. `/overview` explique les trois futurs parcours, avec des actions de lecture et leur disponibilité explicite. `/explorer` propose trois catégories ; `/explorer/comprendre`, `/explorer/outils` et `/explorer/espaces` donnent accès aux destinations des §22/66 sans allonger la page d’entrée (FRONT-14). Les approfondissements s’ouvrent sur leur page. La démonstration historique reste à `/demonstration` ; la vraie 404, `/account` et les liens locaux Wallet/équipe sont conservés.
+`src/content/fr/marketing.ts` porte le contenu de composition de l’accueil : proposition de valeur, problème concret, bénéfices de la compréhension, besoins, méthode, éléments de transparence, FAQ et appels à l’action. Il expose aussi les libellés de navigation, la narration de l’orientation et les introductions des services et du compte. Les CTA ouvrent une orientation, une lecture existante ou la page de connexion ; aucun bouton ne promet une analyse ou un calcul actuellement indisponible. Aucun dossier fictif, rendement ou témoignage n’alimente le hero.
+
+`/overview` oriente selon un contrat à comprendre, une retraite à préparer ou des options à comparer. `/services` relie 3e pilier, LPP, assurances, retraite et documents ; les ancrages stables sont notamment `#3e-pilier`, `#lpp` et `#assurances`. `/methode` développe l’objectif initial puis les six étapes canoniques. Les approfondissements gardent leurs URLs propres. L’explorateur conserve l’accès aux destinations des §22/66, dont les outils futurs restent qualifiés. La démonstration historique reste à `/demonstration` ; la vraie 404 et `/account` sont conservés.
 
 L’inventaire `src/content/fr/acquisition.ts` conserve les propriétaires de parcours et le contenu de repli des destinations futures ; ces IDs restent hors UI. Les contenus éditoriaux disponibles prennent la place de ce repli à la même URL, sans ouvrir leurs outils. Contact, Retire et Miles gardent leur disponibilité opérationnelle en préparation. Une lecture ne déclenche aucune collecte, session anonyme ou événement d’entrée d’outil.
 
@@ -14,11 +16,33 @@ Les 18 contenus éditoriaux se trouvent dans `src/content/fr/editorial/`, plus l
 
 Le frontmatter porte slug, auteur, création/mise à jour, version, état, type, sources et indicateur fictif. `editorial-schema.ts` bloque un auteur non autorisé, les dates incohérentes, un état de publication externe, une structure cas/rapport incomplète et les formats financiers usuels sans preuve approuvée. Le registre de preuves est vide : renseigner des métadonnées dans un MDX ne suffit pas à valider un chiffre. Ce garde mécanique ne remplace pas la revue du sens, des faits ou des formulations en toutes lettres.
 
-Assets de marque importés depuis leur source sans altération des originaux ; Astro produit le dérivé WebP du fond au build. Le site ne dépend pas de `packages/ui` (MKT-02).
+Le système de présentation partagé vit dans `packages/ui`. `@astrojs/react` permet le rendu serveur statique des composants de présentation React, sans hydratation ajoutée pour le contenu public. ADR-0006 remplace le précédent défaut d’isolation de la présentation et l’ancienne palette. Les assets historiques restent conservés ; ils ne définissent plus le rendu de la refonte.
+
+## Narration, SEO et sources
+
+La structure marketing reprend d’[IM8](https://im8health.com/) le principe d’une proposition claire, suivie d’explications, de raisons de confiance, d’objections et d’un prochain pas. Aucun texte, chiffre, témoignage ou argument relatif à ses produits n’est repris. La direction visuelle Apple relève de la composition et des composants communs ; elle ne fournit aucun fait concernant CoverView.
+
+| Page | Intention de lecture et de recherche |
+| --- | --- |
+| `/` | Assurance, prévoyance et retraite en Suisse ; comprendre la proposition CoverView |
+| `/overview` | Choisir comment commencer selon son contrat, son projet ou ses options |
+| `/services` | Identifier les questions liées au 3e pilier, à la LPP, aux assurances et aux documents |
+| `/methode` | Comprendre le raisonnement de l’objectif à la réévaluation |
+| `/benchmark` | Connaître les critères d’une comparaison de prévoyance |
+| `/articles/lire-un-benchmark` | Savoir lire le cadre, les chiffres et les limites d’un classement |
+| `/articles/pourquoi-conserver` | Comprendre pourquoi analyser ne suppose pas remplacer un contrat |
+| `/retire` | Préparer les questions de niveau de vie, de ressources et de rente ou capital |
+| `/articles/questions-frequentes` | Répondre aux objections et aux questions avant de commencer |
+
+Titres et descriptions sont propres à l’intention de chaque page. Les textes structurent les questions en titres et paragraphes autonomes, avec des liens entre besoin, méthode et approfondissement. Les FAQ utilisent les mêmes questions et réponses pour la lecture et les données structurées. Ce travail prépare le contenu SEO ; il ne lève pas le `noindex` de l’environnement local.
+
+La [bible v1.5](../../docs/product/bible.extracted.md) est la source métier fournie. La narration s’appuie sur §2–4 (`p0093` à `p0159` : vue d’ensemble, objectif avant produit, benchmark, méthode), §5.2 et §6 (`p0171` à `p0207` : preuves et valeur avant vente), §21–28 (`p0525` à `p0727` : pages, parcours et questions), §66 (`p1763` à `p1790` : besoins publics et continuité compte), R1–R2 (`p1384` à `p1413` : niveau de vie, décisions et Wallet). Les articles sur le maintien conservent également §26.1 (`p0682`, `p0684`). Les ancrages précis des pages MDX vivent dans leur frontmatter.
+
+La source décrit une vision et un produit à construire. Elle ne fournit pas de résultats clients vérifiés, de qualification professionnelle à certifier, de conditions fiscales actuelles ou d’autorisation de promettre un rendement. Aucun prix, avis, nombre de clients, certification ni service personnalisé opérationnel n’a donc été ajouté. Les textes sur la retraite et les contrats restent des questions de méthode, sans recommandation financière individuelle. Les disponibilités sont présentées dans les FAQ et au point d’entrée des actions concernées, sans transformer le reste du site en inventaire technique.
 
 ## Règles métier et invariants
 
-Les capacités décrites sont des intentions du projet et le texte indique qu’elles ne sont pas encore disponibles. Aucun tarif, performance commerciale ou conseil financier inventé. Metadata, canonical et Open Graph/Twitter sont rendus au build. JSON-LD : Organization/WebSite pour l’accueil ; Organization, WebPage ou Article pour les contenus, Person minimal sur la personne, FAQPage dérivée des questions/réponses visibles. Aucun statut FinancialService, Service commercial, SoftwareApplication, Offer, avis ou identité sociale absent n’est matérialisé.
+Les principes de méthode sont distincts de l’état des outils. Les fonctionnalités futures ne sont pas présentées comme actives. Aucun tarif, performance commerciale ou conseil financier inventé. Metadata, canonical et Open Graph/Twitter sont rendus au build. JSON-LD : Organization/WebSite pour l’accueil ; Organization, WebPage ou Article pour les contenus, Person minimal sur la personne, FAQPage dérivée des questions/réponses visibles. Aucun statut FinancialService, Service commercial, SoftwareApplication, Offer, avis ou identité sociale absent n’est matérialisé.
 
 L’auteur « CoverView » désigne la rédaction du projet, explicitement assistée par IA ; aucune signature personnelle d’expert n’est attribuée. Les dates décrivent la création locale (`dateCreated`) et la mise à jour, pas une publication externe ni un résultat financier. Auteur, dates et provenance suivent le contenu ; les avertissements sur les exemples fictifs restent avant leur lecture. La provenance visible renvoie à `/sources#bible-v15` ; les ancrages précis du document fourni restent dans les métadonnées sources. La biographie reprend seulement les sept axes de la source avec leur limite de validation. Les deux cas et le rapport sont entièrement fictifs, sans PII ni calcul. Aucun article dérivé d’Instagram n’est revendiqué faute de référence fournie.
 
@@ -40,9 +64,9 @@ Chaque contenu lisible possède `/<slug>.md`, annoncé par un lien alternatif, a
 
 ## Développement et dépendances
 
-`pnpm --filter www dev` : `127.0.0.1:4103`, port strict. `build` : HTML/CSS/assets sous `dist`. `typecheck` : Astro Check. Astro, MDX, Tailwind et le plugin Vite sont imposés (MIT). Geist auto-hébergée suit le preset des apps, licence OFL-1.1 signalée dans [UI](../../packages/ui/README.md#dépendances-et-provenance). Aucune nouvelle bibliothèque de composants, CMS ou dépendance backend.
+`pnpm --filter www dev` : `127.0.0.1:4103`, port strict. `build` : HTML/CSS/assets sous `dist`. `typecheck` : Astro Check. Astro, MDX, Tailwind et le plugin Vite sont imposés (MIT). La typographie et les composants partagés sont documentés dans [UI](../../packages/ui/README.md). La refonte ajoute `@astrojs/react` pour le rendu statique de `@coverview/ui` ; aucun CMS ni accès direct à une base applicative n’est ajouté.
 
-Documentation officielle consultée : [Astro MDX](https://docs.astro.build/en/guides/integrations-guide/mdx/), [Tailwind dans Astro](https://docs.astro.build/en/guides/styling/), puis [imports Markdown](https://docs.astro.build/en/guides/markdown-content/) et [Zod exposé par Astro](https://docs.astro.build/en/reference/modules/astro-zod/) pour S-011 le 2026-09-06. Aucun paquet ajouté en S-011 ; lockfile et stack conservés.
+Documentation officielle consultée lors des étapes précédentes : [Astro MDX](https://docs.astro.build/en/guides/integrations-guide/mdx/), [Tailwind dans Astro](https://docs.astro.build/en/guides/styling/), puis [imports Markdown](https://docs.astro.build/en/guides/markdown-content/) et [Zod exposé par Astro](https://docs.astro.build/en/reference/modules/astro-zod/) pour S-011 le 2026-09-06. S-011 n’ajoutait aucun paquet ; l’intégration React appartient à la refonte ADR-0006.
 
 `PUBLIC_API_URL` définit l’origine publique de l’API (défaut local `http://127.0.0.1:4100`, origine du site en build). `PUBLIC_WALLET_URL` définit l’origine de Wallet ; défaut local `http://127.0.0.1:4101`, aucun domaine de déploiement inventé en build. Sans cette valeur en build, le lien Wallet est omis. Ces URLs doivent correspondre aux origines approuvées côté serveur ; elles ne prouvent ni continuité déployée ni droit externe.
 
@@ -50,6 +74,8 @@ Sharp est déclaré directement pour le service d’images Astro, uniquement au 
 
 ## Vérifier les parcours
 
+Le [ledger de refonte](../../roadmap/evidence/marketing-redesign.md) décrit les vérifications effectivement réalisées le 6 septembre et leurs limites. L’aperçu social `/og.png` et la variante `/og-preview.svg` sont générés depuis `src/content/social.ts` et le texte de l’accueil. La provenance du visuel original est dans `src/assets/README.md`.
+
 Après `pnpm build` et installation du Chromium Playwright : `pnpm check:www` sert le build seul sur loopback éphémère puis s’arrête. Il contrôle HTML, metadata, graphe JSON-LD, miroirs comparés à la source et au HTML, liens/ancres/orphelins, sorties d’indexation vides, absence de JS exécutable hors compte, budget JS gzip et LCP/CLS sur onze gabarits. Ces mesures synthétiques ne sont ni du RUM ni une preuve du futur hébergement. Le contrôle est branché en CI après l’installation de Chromium.
 
-La reprise du 6 septembre 2026 privilégie le parcours réel et le rendu, conformément au refus utilisateur des fixtures et tests de surface. Aucun nouveau test public ajouté. Les cinq anciens scénarios d’acquisition ont été retirés explicitement : ils validaient une démonstration chiffrée désormais retirée de l’accueil, des pages de disponibilité et des métadonnées, sans parcours d’acquisition ni calcul persistant. Les scénarios éditoriaux de pagination et retour sont conservés. Les vérifications de compilation et l’inspection visuelle ne prouvent pas la connexion WorkOS.
+La reprise du 6 septembre 2026 privilégie le parcours réel et le rendu, conformément au refus utilisateur des fixtures et tests de surface. Aucun nouveau test public ajouté. Les cinq anciens scénarios d’acquisition puis quatre scénarios éditoriaux de surface ont été retirés explicitement : ils validaient démonstration chiffrée, pages d’indisponibilité, métadonnées et textes recopiés, sans acquisition persistante. Seul le scénario éditorial de pagination et retour/focus reste. Les vérifications de compilation et l’inspection visuelle ne prouvent pas la connexion WorkOS.

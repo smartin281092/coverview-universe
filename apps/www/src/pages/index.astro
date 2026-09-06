@@ -1,45 +1,64 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
-import dawn from '../../../../assets/dawn-bg.png';
-import { acquisition as copy } from '../content/fr/acquisition';
-import HomeContent, { frontmatter } from '../content/fr/home.mdx';
-import { content } from '../content/fr/interface';
+import { Container, Section, SectionHeading, ButtonLink, TextLink, Bento } from '@coverview/ui';
+import clarity from '../assets/clarity.png';
+import BenefitArt from '../components/BenefitArt.astro';
+import Closing from '../components/Closing.astro';
+import Faq from '../components/Faq.astro';
+import { marketing as copy } from '../content/fr/marketing';
 
 const schema = {
   '@context': 'https://schema.org',
   '@graph': [
-    { '@type': 'Organization', name: content.brand, url: Astro.site?.href },
-    { '@type': 'WebSite', name: content.brand, url: Astro.site?.href, inLanguage: 'fr-CH', description: frontmatter.description },
+    { '@type': 'Organization', '@id': 'https://coverview.ch/#organization', name: 'CoverView', url: Astro.site?.href },
+    { '@type': 'WebSite', name: 'CoverView', url: Astro.site?.href, inLanguage: 'fr-CH', description: copy.seo.description, publisher: { '@id': 'https://coverview.ch/#organization' } },
+    { '@type': 'FAQPage', mainEntity: copy.faq.items.map(item => ({ '@type': 'Question', name: item.question, acceptedAnswer: { '@type': 'Answer', text: item.answer } })) },
   ],
 };
 ---
-<Layout title={frontmatter.title} description={frontmatter.description}>
-  <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
-  <section class="hero">
-    <div class="hero-content">
-      <p class="eyebrow">{copy.home.eyebrow}</p>
-      <h1>{copy.home.heading}</h1>
-      <div class="intro"><HomeContent /></div>
-      <div class="hero-actions">
-        <a href="/methode" class="primary-link">{copy.home.discover}<span aria-hidden="true">→</span></a>
-        <a href="/account" class="secondary-link">{copy.home.account}</a>
+<Layout title={copy.seo.title} description={copy.seo.description} structuredData={schema}>
+  <section class="marketing-hero" aria-labelledby="hero-title">
+    <Container className="hero-layout">
+      <div class="hero-copy">
+        <SectionHeading id="hero-title" level={1} size="display" eyebrow={copy.hero.eyebrow} title={copy.hero.title} description={copy.hero.description} />
+        <div class="hero-actions">
+          <ButtonLink href={copy.hero.primary.href} size="lg">{copy.hero.primary.label}</ButtonLink>
+          <TextLink href={copy.hero.secondary.href}>{copy.hero.secondary.label}</TextLink>
+        </div>
+        <p class="hero-note">{copy.hero.note}</p>
       </div>
-      <p class="preview-note">{copy.home.note}</p>
-    </div>
-    <div class="reading-frame">
-      <Image src={dawn} alt="" width={700} format="webp" loading="eager" class="reading-background" />
-      <section class="reading-preview" aria-labelledby="reading-title">
-        <p class="eyebrow">{copy.home.readingLabel}</p>
-        <h2 id="reading-title">{copy.home.readingTitle}</h2>
-        <ul class="reading-shortcuts">
-          {copy.home.readings.map((reading) => <li><a href={reading.href}><span><strong>{reading.label}</strong><small>{reading.description}</small></span><span aria-hidden="true">↗</span></a></li>)}
-        </ul>
-      </section>
-    </div>
+      <Image src={clarity} alt={copy.hero.imageAlt} widths={[640, 960, 1280, 1536]} sizes="(max-width: 700px) 140vw, 900px" width={1536} height={1024} format="webp" quality={85} loading="eager" fetchpriority="high" class="hero-art" />
+    </Container>
   </section>
-  <section class="method-strip" aria-labelledby="method-title">
-    <div><h2 id="method-title">{copy.home.methodTeaser}</h2><p>{copy.home.methodText}</p></div>
-    <a href="/overview" class="text-link">{copy.choose}<span aria-hidden="true">→</span></a>
-  </section>
+  <div class="trust-strip"><Container><ul>{copy.trust.map(item => <li><span aria-hidden="true">✓</span>{item}</li>)}</ul></Container></div>
+  <Section><Container>
+    <div class="problem-layout">
+      <SectionHeading eyebrow={copy.problem.eyebrow} title={copy.problem.title} />
+      <div class="problem-copy"><p class="body-large">{copy.problem.description}</p><ul class="question-list">{copy.problem.questions.map(question => <li><span aria-hidden="true">↗</span>{question}</li>)}</ul><p>{copy.problem.conclusion}</p></div>
+    </div>
+  </Container></Section>
+  <Section spacing="compact" className="benefit-section"><Container>
+    <SectionHeading eyebrow={copy.benefits.eyebrow} title={copy.benefits.title} />
+    <div class="benefit-grid">{copy.benefits.items.map((item, index) => <Bento title={item.title} description={item.description}>
+      <BenefitArt kind={index} slot="illustration" />
+      <TextLink href={item.href}>{item.linkLabel}</TextLink>
+    </Bento>)}</div>
+  </Container></Section>
+  <Section tone="soft"><Container>
+    <div class="method-layout">
+      <div class="method-intro"><SectionHeading eyebrow={copy.steps.eyebrow} title={copy.steps.title} description={copy.steps.description} /><TextLink href={copy.steps.action.href}>{copy.steps.action.label}</TextLink><div class="method-orbit" aria-hidden="true"><span></span><span></span><span></span><i></i></div></div>
+      <ol class="method-steps">{copy.steps.items.map(item => <li><span class="step-number">{item.number}</span><div><h3>{item.title}</h3><p>{item.description}</p></div></li>)}</ol>
+    </div>
+  </Container></Section>
+  <Section><Container>
+    <SectionHeading eyebrow={copy.pillars.eyebrow} title={copy.pillars.title} />
+    <div class="pillar-list">{copy.pillars.items.map(item => <article><p class="eyebrow">{item.eyebrow}</p><h3>{item.title}</h3><div><p>{item.description}</p><TextLink href={item.href}>{item.linkLabel}</TextLink></div></article>)}</div>
+  </Container></Section>
+  <Section tone="soft"><Container>
+    <SectionHeading eyebrow={copy.proof.eyebrow} title={copy.proof.title} align="center" />
+    <div class="proof-grid">{copy.proof.items.map((item, index) => <article><div class="proof-symbol" aria-hidden="true">{['≡', '↔', '◎'][index]}</div><h3>{item.title}</h3><p>{item.description}</p><TextLink href={item.href}>{item.linkLabel}</TextLink></article>)}</div>
+  </Container></Section>
+  <Faq />
+  <Closing />
 </Layout>

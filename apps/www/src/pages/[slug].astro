@@ -24,7 +24,6 @@ const { page, entry, listing } = Astro.props;
     <h1>{'heading' in page ? page.heading : page.label}</h1>
     <p class="intro">{page.unavailable}</p>
     <section class="reading-card"><h2>{copy.preparation}</h2><p>{'preparation' in page ? page.preparation : page.description}</p><a href="/methode" class="text-link">{copy.home.methodAction}<span aria-hidden="true">→</span></a></section>
-    <div class="resume-entry"><h2>{copy.resume}</h2><p>{copy.resumeNote}</p><a href={`/${page.slug}`} class="text-link">{`/${page.slug}`}</a></div>
     <a href="/explorer" class="text-link">{copy.returnExplore}<span aria-hidden="true">→</span></a>
   </section>
 </Layout>}

@@ -14,6 +14,8 @@ Surface indépendante destinée aux équipes CoverView. Le compte est l’entré
 
 ## Règles métier et invariants
 
+La présentation utilise le système blanc commun de [UI](../../packages/ui/README.md), conformément à ADR-0006. Le layout de compte partagé reçoit uniquement des textes et icônes ; les décisions d’identité restent dans cette app. Compte, formulaire MFA, déconnexion et états sont des sections ouvertes sans card.
+
 Texte français externalisé dans `src/locales/fr/common.json`. Aucun credential PostgreSQL, aucune lecture DB, room ou job. Réseau via `@coverview/api-client` uniquement. Santé et personas utilisent un cache TanStack Query frais 15 secondes, collecté après une minute. L’identité se vérifie à chaque montage/focus ; les données privées sont masquées pendant cette vérification. Le cache privé, borné à identité/session, est périmé immédiatement et supprimé sans observateur, au changement de session, au refus d’authentification et à la déconnexion. Les requêtes sont annulées avant retrait, y compris l’identité lors du logout ; aucun retry automatique de mutation.
 
 Les commandes CSRF et idempotence restent en mémoire. Dès la demande de logout, le profil disparaît et la commande est conservée hors du parcours privé. Une réponse perdue laisse le résultat à confirmer ; une réponse pending confirme la fermeture locale et permet la reprise distante. Recharger/fermer la page abandonne ce contexte de reprise sans prouver l’état distant. Pendant une simple revalidation de la même session, le formulaire MFA reste monté mais masqué/inactif ; le challenge et le code restent utilisables au retour d’un authentificateur. Source du socle : [API platform](../api/src/platform/README.md).

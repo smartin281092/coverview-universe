@@ -1,7 +1,7 @@
 export const editorialCopy = {
   author: "CoverView",
-  authorNote: "Rédaction assistée par IA · préversion éditoriale",
-  preview: "Contenu de préversion · validation éditoriale à compléter",
+  authorNote: "Rédaction assistée par IA",
+  preview: "Édition en cours de validation avant publication",
   fictional: "Exemple entièrement fictif · aucun dossier client ni conseil personnalisé",
   created: "Créé le",
   updated: "Mis à jour le",
@@ -22,10 +22,10 @@ export const editorialCopy = {
     "Sur petit écran, faites défiler le tableau horizontalement pour lire toutes les colonnes.",
   indexes: {
     articles: {
-      title: "Articles et FAQ : repères de prévoyance — CoverView",
-      heading: "Articles & FAQ",
+      title: "Guides et réponses sur la prévoyance en Suisse | CoverView",
+      heading: "Les repères pour mieux comprendre.",
       description:
-        "Des repères pour comprendre la méthode, lire un benchmark et distinguer une décision documentée d’une promesse. Contenus de préversion sourcés.",
+        "Contrat de 3e pilier, comparaison, choix à préparer : des articles et des réponses pour avancer dans votre réflexion, à votre rythme.",
       kinds: ["article", "faq"],
     },
     "etudes-de-cas": {

@@ -1,12 +1,6 @@
 @import "@coverview/ui/styles.css";
 @source "../../../packages/ui/src";
 
-@layer utilities {
-  .app-content [data-slot="button"] {
-    @apply min-h-11 max-w-full whitespace-normal px-4 py-2 text-sm;
-  }
-}
-
 @layer base {
   a,
   button,

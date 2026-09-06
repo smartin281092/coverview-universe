@@ -216,6 +216,12 @@
           "oracle": "V1 et observation réelle partielle",
           "observed": "Configuration callback et Magic Auth réellement enregistrée après confirmation ; interface compte et lectures corrigée, rendus inspectés, compilation réussie. Injection de clé serveur en attente dans saisie masquée ; aucun login WorkOS exécuté.",
           "decision": "Ne plus ajouter fixtures/smoke tests/tests de surface. Retrait explicite de dix scénarios obsolètes de coquilles et démonstration. Continuer le parcours réel après injection ; ne pas libérer les dépendances identity."
+        },
+        {
+          "target": "Refonte marketing et système commun",
+          "oracle": "V1 et parcours de lecture réel",
+          "observed": "Lint, types, frontières et build passent. Accueil et pages recomposés, captures mobile/ordinateur lues, FAQ ouverte et orientation vers services effectivement suivie. Composants partagés appliqués aux trois apps. Aucun nouveau test ni fixture.",
+          "decision": "Conserver la preview disponible. Retrait explicite de quatre anciens tests éditoriaux de surface, pagination/focus conservés. Aucun critère WorkOS, acquisition persistante ou publication déclaré clos par le redesign."
         }
       ],
       "ledger": {
@@ -239,7 +245,8 @@
         "S-010 done et S-011 review intégrées localement au début de la reprise. S-013 et les dépendantes identity attendent toujours le parcours réel.",
         "Avertissements bundles Vite >500kB ; RLS non activée (DEVRAIT DATA-09), reprises distantes à la commande/prochaine connexion, bornes fournisseur documentées.",
         "Reprise explicite du 2026-09-06 après rejet utilisateur de la preview obsolète et non fonctionnelle. Plan borné roadmap/handoffs/S-000b-recovery.md ; compte prioritaire, correction UI et activation WorkOS réelle à reprendre.",
-        "Correction utilisateur fixtures/smoke/surface enregistrée dans execution-policy.md. Fenêtre interactive dédiée prête pour injection ; copie dans le presse-papiers du navigateur ne prouve pas le presse-papiers système. Ne pas solliciter la clé dans le chat ni dans une invite shell normale."
+        "Correction utilisateur fixtures/smoke/surface enregistrée dans execution-policy.md. Fenêtre interactive dédiée prête pour injection ; copie dans le presse-papiers du navigateur ne prouve pas le presse-papiers système. Ne pas solliciter la clé dans le chat ni dans une invite shell normale.",
+        "Refonte supplémentaire explicitement demandée : fond blanc, sections ouvertes, bentos illustrés et bibliothèque commune. ADR-0006 et roadmap/evidence/marketing-redesign.md décrivent le résultat réel. L’identité reste en cours, clé serveur et login réel encore attendus."
       ],
       "session": "Tâche créée gpt-6-astra / ultra ; modèle hôte GPT-6, effort non observable indépendamment du paramètre transmis."
     },
@@ -389,7 +396,8 @@
         "Propriétaire unique S-011 : worktree9b02, branche codex/s-011-editorial ; préconditions propres et ascendance requise vérifiées avant mutation.",
         "Ledger complet/captures : roadmap/evidence/S-011.md ; JSON de build S-011-build-check.json. Aucun nouveau package, schéma, permission ou secret.",
         "S-011 review conserve C01/C04/C06 non vérifiés ; S-000b review inchangé. Aucune nouvelle slice éligible, preuve S-011-next-eligibility.json ; exception obstacle réel du mandat, pas de relais factice.",
-        "Chevauchement contact à réconcilier : S-080 possède l’entrée publique CRM ; après S-013/S-080 done, reprendre C06 S-011 avant S-012 qui enrichit le contact existant. Exiger S-012 avant S-011 créerait une boucle sémantique ; voir checkpoint/README www."
+        "Chevauchement contact à réconcilier : S-080 possède l’entrée publique CRM ; après S-013/S-080 done, reprendre C06 S-011 avant S-012 qui enrichit le contact existant. Exiger S-012 avant S-011 créerait une boucle sémantique ; voir checkpoint/README www.",
+        "Les gabarits et contenus ont été repris à la demande de l’utilisateur : voir roadmap/evidence/marketing-redesign.md et ADR-0006. Statut review conservé, collecte commerciale et preuves externes toujours absentes."
       ],
       "cost": "Non disponible ; une session principale et trois sous-tâches bornées."
     }

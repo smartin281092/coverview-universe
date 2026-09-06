@@ -1,8 +1,12 @@
 # Design système des apps (UI)
 
+> **Décision actuelle** : appliquer [ADR-0006](../adr/0006-marketing-design-system.md) et le système commun documenté dans [UI](../packages/ui/README.md). Cette décision prévaut sur l’ancienne direction du preset et sur la restriction de partage statique avec `www` ci-dessous.
+
 > **Résumé** : une seule bibliothèque de composants — shadcn/ui initialisée avec le preset imposé — des tokens pour toute valeur visuelle, des primitives d'états partagées, une seule stack de formulaires. La cohérence prime sur la nouveauté : l'agent réutilise l'existant avant de créer.
 
 ## DSN-01 — Initialisation imposée
+
+> **Portée historique** : la procédure ci-dessous documente l’initialisation d’ADR-0004. [ADR-0006](../adr/0006-marketing-design-system.md) la remplace pour la direction visuelle actuelle : réutiliser le système commun, sans réappliquer l’ancien thème ni écraser ses adaptations par une nouvelle application du preset.
 
 Dans chaque app React (`client`, `admin`, apps additionnelles), l'UI s'initialise avec le preset du harness :
 
@@ -35,6 +39,8 @@ Navigation, header et layout construits une fois ; les pages composent le shell,
 lucide-react uniquement (livré avec shadcn) ; tailles et graisses cohérentes.
 
 ## DSN-07 — `www` à part
+
+> **Exception actuelle** : [ADR-0006](../adr/0006-marketing-design-system.md) autorise explicitement le partage des composants de présentation de `packages/ui` avec Astro par rendu statique, sans hydratation. Le défaut restrictif ci-dessous ne s’applique plus à cette composition.
 
 Le site marketing partage les tokens de marque (couleurs, typo) mais PAS la bibliothèque de composants React par défaut — îlots uniquement (MKT-04). Sa direction visuelle relève de `marketing-web.md`.
 

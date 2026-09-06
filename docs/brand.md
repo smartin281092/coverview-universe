@@ -1,5 +1,7 @@
 # Marque CoverView
 
+> **Direction actuelle** : [ADR-0006](../adr/0006-marketing-design-system.md) remplace la palette et les décisions visuelles initiales ci-dessous. Appliquer la source commune décrite dans [UI](../packages/ui/README.md). Ce document conserve l’historique des sources et leurs empreintes ; il ne faut pas réappliquer son ancien thème.
+
 État au 5 septembre 2026 : références initialisées ; aucune interface applicative encore réalisée. Les cinq aplats fournis sont la source de marque. Les compléments sémantiques sont une proposition dérivée, explicitement distinguée de cette source. Leur vérification numérique ne vaut pas validation du rendu d'un écran.
 
 ## Sources et routage
@@ -11,6 +13,8 @@
 - [Interactions et accessibilité](frontend.md), notamment FRONT-14 : consulter ce référentiel pour le comportement des pages, actions et FAQ. [Site public](marketing-web.md) : direction et contraintes propres au marketing.
 
 ## BRD-01 — Aplats fournis
+
+> **Historique** : ces aplats restent des sources conservées. Leur usage imposé dans les interfaces est remplacé par [ADR-0006](../adr/0006-marketing-design-system.md).
 
 Échantillonnage des pixels opaques au centre des rectangles, hors texte et anticrénelage ; coordonnées depuis le coin supérieur gauche de l'image originale 1281 × 619.
 
@@ -41,6 +45,8 @@ La proposition assombrit ce rôle en `#66687E`, enregistré comme couleur dériv
 La bordure source ne doit pas constituer seule l'indice nécessaire à l'identification d'un contrôle. `--input` et `--border-strong` proposent la bordure renforcée. Un anneau de focus violet autour d'un bouton violet a besoin d'un espacement sur surface claire : la paire chiffrée ne couvre que cette surface adjacente. Le critère de [contraste non textuel du W3C](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html) précise le seuil de 3:1 pour les informations visuelles nécessaires à l'identification des contrôles et de leurs états.
 
 ## BRD-03 — Palette sémantique claire proposée
+
+> **Proposition remplacée** : [ADR-0006](../adr/0006-marketing-design-system.md) gouverne le rendu actuel. Ne pas importer cette palette historique à la place du thème commun référencé dans [UI](../packages/ui/README.md).
 
 Les alias shadcn complets vivent dans le JSON et le CSS liés ci-dessus : fonds, foregrounds, cartes, popovers, boutons, surfaces secondaires, accents, bordures, champs, focus, cinq couleurs de graphiques et sidebar. La correspondance est une proposition d'application des aplats ; elle n'a pas encore été exécutée dans une app.
 

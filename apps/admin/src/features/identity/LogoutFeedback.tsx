@@ -52,10 +52,7 @@ export function LogoutFeedback({ children }: { children: ReactNode }) {
   const value = command.data;
   const confirmed = value.status === "pending" || value.status === "complete";
   return (
-    <section
-      className="space-y-5 rounded-xl border border-border bg-card p-6"
-      aria-labelledby="logout-feedback-title"
-    >
+    <section className="max-w-2xl space-y-7" aria-labelledby="logout-feedback-title">
       <h1 id="logout-feedback-title" className="text-2xl font-semibold">
         {t(confirmed ? "identity.logoutClosedTitle" : "identity.logoutCheckingTitle")}
       </h1>
