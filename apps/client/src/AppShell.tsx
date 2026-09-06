@@ -36,6 +36,13 @@ export function AppShell() {
             className="order-3 flex basis-full flex-wrap gap-x-7 sm:order-none sm:basis-auto"
           >
             <Link
+              to="/profile"
+              className="cv-app-nav-link"
+              activeProps={{ "aria-current": "page" }}
+            >
+              {t("nav", { ns: "profile" })}
+            </Link>
+            <Link
               to="/account"
               aria-current={accountPage ? "page" : undefined}
               className="cv-app-nav-link"

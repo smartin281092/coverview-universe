@@ -7,6 +7,7 @@ import { MissingPage, StatesPage } from "./pages/StatesPage";
 import { AccountPage } from "./pages/AccountPage";
 import { WorkspacePage } from "./pages/WorkspacePage";
 import { DevicesPage } from "./pages/DevicesPage";
+import { ProfilePage } from "./pages/ProfilePage";
 
 const rootRoute = createRootRoute({ component: AppShell, notFoundComponent: MissingPage });
 const homeRoute = createRoute({ getParentRoute: () => rootRoute, path: "/", component: HomePage });
@@ -24,6 +25,18 @@ const devicesRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/devices",
   component: DevicesPage,
+});
+const profileRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/profile",
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): { view?: "choices"; continue?: "1"; authError?: "callback" } => ({
+    ...(search.view === "choices" ? { view: "choices" as const } : {}),
+    ...(search.continue === "1" ? { continue: "1" as const } : {}),
+    ...(search.authError === "callback" ? { authError: "callback" as const } : {}),
+  }),
+  component: ProfilePage,
 });
 const previewRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -49,6 +62,7 @@ export const router = createRouter({
     accountRoute,
     workspaceRoute,
     devicesRoute,
+    profileRoute,
   ]),
   defaultPreload: "intent",
   scrollRestoration: true,

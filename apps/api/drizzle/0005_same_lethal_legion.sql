@@ -1,0 +1,1 @@
+ALTER TABLE "profile_drafts" ADD COLUMN "renewed_at" timestamp (3) with time zone;

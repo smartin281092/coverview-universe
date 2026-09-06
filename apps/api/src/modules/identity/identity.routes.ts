@@ -28,6 +28,8 @@ import {
   type IdentityService,
 } from "./identity.service.js";
 import { createWorkosProvider } from "./identity.workos.js";
+import { createProfileRepository } from "./identity.profile.repository.js";
+import { registerProfileRoutes } from "./identity.profile.routes.js";
 
 export async function registerIdentity(
   server: FastifyInstance,
@@ -38,12 +40,14 @@ export async function registerIdentity(
   await app.register(cookie);
   await app.register(rateLimit, { global: false, max: 30, timeWindow: "1 minute" });
   let service = injectedService;
+  let profileRepository: ReturnType<typeof createProfileRepository> | undefined;
   if (config.AUTH_ENABLED && !service) {
     const database = createDatabase(config);
     database.pool.on("error", () =>
       app.log.error({ dependency: "identity_database" }, "Identity dependency unavailable"),
     );
     app.addHook("onClose", () => database.pool.end());
+    profileRepository = createProfileRepository(database.db);
     service = createIdentityService(
       config,
       createIdentityRepository(database.db),
@@ -105,6 +109,7 @@ export async function registerIdentity(
           .object({
             surface: z.enum(["wallet", "admin", "www"]),
             reauthenticate: z.literal("true").optional(),
+            continuation: z.literal("profile").optional(),
           })
           .strict(),
       },
@@ -114,6 +119,7 @@ export async function registerIdentity(
       const result = await requiredService().login(
         request.query.surface,
         request.query.reauthenticate === "true",
+        request.query.continuation,
       );
       reply.header("referrer-policy", "no-referrer");
       reply.setCookie(loginName, result.browserNonce, { ...cookieOptions, maxAge: 600 });
@@ -379,4 +385,15 @@ export async function registerIdentity(
       return { success: true as const };
     },
   );
+  registerProfileRoutes(app, config, {
+    repository: () => {
+      requiredService();
+      if (!profileRepository) throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
+      return profileRepository;
+    },
+    authenticate: (request) => requiredService().authenticate(token(request)),
+    csrf: (value) => requiredService().csrf(value),
+    checkHost,
+    checkMutation,
+  });
 }

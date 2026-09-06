@@ -24,6 +24,8 @@ export const content = {
     login: "Se connecter",
     retry: "Réessayer",
     wallet: "Retrouver mon compte dans Wallet",
+    profile: "Préparer mon profil",
+    profileHint: "Vous pouvez commencer sans compte, puis conserver vos informations dans Wallet.",
     noScript:
       "Activez JavaScript pour vérifier votre connexion. Le contenu public de CoverView reste accessible.",
   },

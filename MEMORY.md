@@ -6,6 +6,8 @@ Aucune entrée activée. L'identité du projet vit dans PROJECT.md ; les décisi
 
 ## Candidats
 
+- MEM-123 · correction utilisateur · Autonomie maximale et absence de confirmations d’autorisation réaffirmées pour toutes les sessions CoverView pendant S-013. La consigne persistante et sa portée sont dans roadmap/execution-policy.md ; ne pas ajouter de GO conversationnel aux relais. (S-013, 2026-09-06 · confiance haute · revoir avant 2026-12-05 · candidat)
+
 - MEM-101 · piège · La CLI locale et l'application Codex exposent des efforts différents ; consulter CDX-02 avant de lancer une slice avec la préférence PROG-12. (Initialisation, 2026-09-05 · confiance haute · revoir avant 2026-12-04 · candidat)
 - MEM-102 · fait · La reprise à contexte propre possède un checkpoint validable, mais aucun compteur de contexte consommable par l'agent n'a été identifié ; voir CDX-03 pour la limite précise. (Initialisation, 2026-09-05 · confiance haute · revoir avant 2026-12-04 · candidat)
 

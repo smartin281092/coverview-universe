@@ -21,8 +21,10 @@ const walletUrl = import.meta.env.PUBLIC_WALLET_URL ?? (import.meta.env.DEV ? "h
         <ButtonLink id="account-login" hidden>{content.account.login}</ButtonLink>
         <Button id="account-retry" type="button" hidden>{content.account.retry}</Button>
         {walletUrl && <TextLink href={new URL("/account", walletUrl).href}>{content.account.wallet}</TextLink>}
+        {walletUrl && <TextLink href={new URL("/profile", walletUrl).href}>{content.account.profile}</TextLink>}
       </div>
       <p class="account-privacy">{content.account.privacy}</p>
+      {walletUrl && <p class="account-privacy">{content.account.profileHint}</p>}
       <noscript><p>{content.account.noScript}</p></noscript>
     </div>
   </section>

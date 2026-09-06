@@ -9,7 +9,7 @@
     "objective": "Un visiteur renseigne son projet retraite, obtient gratuitement un revenu estimé et un gap, puis retrouve le même dossier dans l'entrée Retraite de Wallet après connexion WorkOS.",
     "depends_on": [
       "S-000b",
-      "S-013",
+      "S-013a",
       "S-028"
     ],
     "apps": [

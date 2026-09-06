@@ -4,16 +4,9 @@
     "title": "Ouvrir les trois parcours CoverView depuis un site public compact",
     "milestone": "M1",
     "objective": "Un visiteur comprend la valeur de CoverView, choisit analyser, préparer ou comparer, et commence un parcours sans être poussé à créer un compte ou prendre rendez-vous.",
-    "depends_on": [
-      "S-000a"
-    ],
-    "apps": [
-      "www",
-      "api"
-    ],
-    "modules": [
-      "content-acquisition"
-    ],
+    "depends_on": ["S-000a"],
+    "apps": ["www", "api"],
+    "modules": ["content-acquisition"],
     "mode": "local-fixtures",
     "priority": 30,
     "session_budget": 1,
@@ -36,40 +29,18 @@
       "Visiteur mobile et clavier ; utilisateur connecté revenant de Wallet ; démonstration 65/71/+6 clairement étiquetée exemple."
     ],
     "integrations": {
-      "simulated": [
-        "Démonstration financière statique explicitement signalée"
-      ],
-      "real": [
-        "Astro SSR/SSG local",
-        "Navigation et API locales"
-      ],
-      "activation_slices": [
-        "S-028",
-        "S-029",
-        "S-038",
-        "S-139"
-      ]
+      "simulated": ["Démonstration financière statique explicitement signalée"],
+      "real": ["Astro SSR/SSG local", "Navigation et API locales"],
+      "activation_slices": ["S-028", "S-029", "S-038", "S-139"]
     },
     "criteria": [
       {
         "criterion": "Home présente question retraite, CTA analyse et calculateur, exemple objectif/trajectoire/écart et relance ; aucun chiffre exemple ne devient une estimation personnelle.",
         "source_ranges": [
-          [
-            588,
-            605
-          ],
-          [
-            891,
-            891
-          ],
-          [
-            526,
-            526
-          ],
-          [
-            909,
-            910
-          ]
+          [588, 605],
+          [891, 891],
+          [526, 526],
+          [909, 910]
         ],
         "oracle": "V3",
         "test": "Lire HTML sans JavaScript puis parcourir Home mobile : démonstration identifiable comme fictive et CTA distincts."
@@ -77,18 +48,9 @@
       {
         "criterion": "Overview expose les trois entrées déjà 3P, préparer retraite et comparer, en explicitant les questions traitées et leur convergence vers profil et moteurs communs.",
         "source_ranges": [
-          [
-            607,
-            621
-          ],
-          [
-            109,
-            109
-          ],
-          [
-            911,
-            912
-          ]
+          [607, 621],
+          [109, 109],
+          [911, 912]
         ],
         "oracle": "V3",
         "test": "Suivre les trois CTA et vérifier destination fonctionnelle ou disponibilité précise, sans lien cassé ni second profil."
@@ -96,14 +58,8 @@
       {
         "criterion": "Navigation publique réserve toutes les entrées de §66, services, outils, compte et Wallet ; les fonctionnalités futures gardent leur propriétaire de slice et ne se présentent pas comme disponibles.",
         "source_ranges": [
-          [
-            1763,
-            1788
-          ],
-          [
-            539,
-            586
-          ]
+          [1763, 1788],
+          [539, 586]
         ],
         "oracle": "V2",
         "test": "Comparer inventaire des routes à la navigation desktop/mobile ; aucune destination factice présentée comme prestation."
@@ -111,26 +67,11 @@
       {
         "criterion": "Le visiteur obtient de la valeur avant identification ; les CTA commerciaux sont rares, contextuels et absents avant résultat ; comprendre, voir détails et explorer ouvrent les surfaces prescrites.",
         "source_ranges": [
-          [
-            179,
-            207
-          ],
-          [
-            527,
-            537
-          ],
-          [
-            937,
-            937
-          ],
-          [
-            1374,
-            1374
-          ],
-          [
-            890,
-            890
-          ]
+          [179, 207],
+          [527, 537],
+          [937, 937],
+          [1374, 1374],
+          [890, 890]
         ],
         "oracle": "V3",
         "test": "Visiteur sans session : terminer une première lecture utile avant tout CTA commercial ; ouvrir puis fermer les détails sans modification de la hauteur du contenu principal. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -138,18 +79,9 @@
       {
         "criterion": "La présentation distingue objectif, analyse, benchmark, stratégie, mise en œuvre, suivi et réévaluation ; CoverView et son fondateur sont des identités distinctes et liées.",
         "source_ranges": [
-          [
-            94,
-            118
-          ],
-          [
-            129,
-            159
-          ],
-          [
-            161,
-            162
-          ]
+          [94, 118],
+          [129, 159],
+          [161, 162]
         ],
         "oracle": "V3",
         "test": "Vérifier le parcours éditorial et ses liens vers méthode, personne et services sans promesse de rendement ni remplacement systématique."
@@ -165,13 +97,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "backend.md",
-      "data.md",
-      "jobs.md",
-      "design.md",
-      "billing.md"
-    ],
+    "exclusions": ["backend.md", "data.md", "jobs.md", "design.md", "billing.md"],
     "risks": [
       "Des CTA vers des outils non livrés pourraient simuler un produit terminé : garder leur disponibilité exacte jusqu’à la slice propriétaire."
     ],
@@ -185,15 +111,9 @@
     "title": "Publier les pages de méthode, preuves et contenus de référence",
     "milestone": "M1",
     "objective": "Un visiteur ou moteur de recherche trouve une réponse éditoriale sourcée sur CoverView, sa méthode et ses services, puis consulte des cas et rapports cohérents avec le contenu visible.",
-    "depends_on": [
-      "S-010"
-    ],
-    "apps": [
-      "www"
-    ],
-    "modules": [
-      "content-acquisition"
-    ],
+    "depends_on": ["S-010"],
+    "apps": ["www"],
+    "modules": ["content-acquisition"],
     "mode": "local-fixtures",
     "priority": 111,
     "session_budget": 1,
@@ -215,96 +135,53 @@
       "Étude de cas anonymisée concluant au maintien ; cas comparatif fictif ; track record sans chiffre validé ; article issu d’un exemple Instagram fourni."
     ],
     "integrations": {
-      "simulated": [
-        "Cas, rapports et track record exemples balisés"
-      ],
-      "real": [
-        "Rendu Astro et contrôles sémantiques locaux"
-      ],
-      "activation_slices": [
-        "S-137",
-        "S-139"
-      ]
+      "simulated": ["Cas, rapports et track record exemples balisés"],
+      "real": ["Rendu Astro et contrôles sémantiques locaux"],
+      "activation_slices": ["S-137", "S-139"]
     },
     "criteria": [
       {
         "criterion": "La page Sébastien Martin relate les sept aspects de parcours et thèmes de la source, séparément de l’organisation ; presse, statut, avis et track record n’exposent que des preuves validées.",
-        "source_ranges": [
-          [
-            163,
-            178
-          ]
-        ],
+        "source_ranges": [[163, 178]],
         "oracle": "V2",
         "test": "Vérifier biographies, liens et champs source/date/devise/frais/période ; un chiffre sans preuve ne passe pas le garde de publication."
       },
       {
         "criterion": "Les pages vision, méthode, services, comparaison des modèles, benchmark, outils, contact et index Retire/Miles existent avec contenu adapté et liens vers leurs parcours propriétaires.",
         "source_ranges": [
-          [
-            539,
-            586
-          ],
-          [
-            111,
-            159
-          ]
+          [539, 586],
+          [111, 159]
         ],
         "oracle": "V3",
         "test": "Parcourir toutes les pages prioritaires ; vérifier chaque destination et les six étapes de méthode."
       },
       {
         "criterion": "La comparaison agent/courtier/CoverView couvre toutes les dimensions de §25 et explique les qualifications rare/variable comme tendances, sans accusation absolue ni promesse universelle.",
-        "source_ranges": [
-          [
-            622,
-            676
-          ]
-        ],
+        "source_ranges": [[622, 676]],
         "oracle": "V3",
         "test": "Revue du tableau complet à petite largeur et de sa note méthodologique ; valeurs non amputées."
       },
       {
         "criterion": "Cas et rapports respectent les cinq étapes du cas et les dix sections du rapport ; une décision de maintien est représentée ; réutilisation Instagram conserve identité et liens réciproques.",
         "source_ranges": [
-          [
-            677,
-            697
-          ],
-          [
-            359,
-            360
-          ]
+          [677, 697],
+          [359, 360]
         ],
         "oracle": "V2",
         "test": "Comparer deux contenus rendus à leur schéma ; valider anonymisation, sources et absence de preuve inventée."
       },
       {
         "criterion": "HTML, metadata auteur/dates, sitemap, flux, liens, glossaire, Person/Organization/FinancialService/Service/Article/FAQPage/SoftwareApplication et miroirs éventuels portent exactement les contenus publics correspondants.",
-        "source_ranges": [
-          [
-            716,
-            729
-          ]
-        ],
+        "source_ranges": [[716, 729]],
         "oracle": "V2",
         "test": "Comparer contenu visible et miroir ; valider JSON-LD applicable à chaque type et aucune donnée interne indexée."
       },
       {
         "criterion": "Chaque approfondissement ouvre une page, modal ou panneau ; les index sont paginés ; contact/expert collecte seulement les informations du parcours autorisé et renvoie à son implémentation CRM.",
         "source_ranges": [
-          [
-            578,
-            580
-          ],
-          [
-            919,
-            924
-          ],
-          [
-            1368,
-            1369
-          ]
+          [578, 580],
+          [919, 924],
+          [1368, 1369]
         ],
         "oracle": "V3",
         "test": "Paginer un index rempli, ouvrir contact/expert et contrôler les champs collectés et le raccord CRM prévu ; vérifier reprise de saisie après retour. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -322,21 +199,8 @@
         "blocks": "Liste des traductions publiables, sans bloquer la structure FR"
       }
     ],
-    "satellites": [
-      "marketing-web.md",
-      "seo.md",
-      "geo.md",
-      "brand.md",
-      "i18n.md",
-      "testing.md"
-    ],
-    "exclusions": [
-      "backend.md",
-      "data.md",
-      "jobs.md",
-      "design.md",
-      "billing.md"
-    ],
+    "satellites": ["marketing-web.md", "seo.md", "geo.md", "brand.md", "i18n.md", "testing.md"],
+    "exclusions": ["backend.md", "data.md", "jobs.md", "design.md", "billing.md"],
     "risks": [
       "Informations de confiance/avis/statut non fournis : garder champs non publiés et ticket de preuve ; ne pas rédiger de faux témoignages."
     ],
@@ -350,18 +214,9 @@
     "title": "Répondre aux FAQ et conserver la provenance déclarée des prospects",
     "milestone": "M1",
     "objective": "Un visiteur explore les questions de prévoyance, couverture et Retire, puis déclare comment il a trouvé CoverView lors d’une demande ; les équipes retrouvent cette provenance sans dépendre des seuls UTM.",
-    "depends_on": [
-      "S-011",
-      "S-080"
-    ],
-    "apps": [
-      "www",
-      "api",
-      "admin"
-    ],
-    "modules": [
-      "content-acquisition"
-    ],
+    "depends_on": ["S-011", "S-080"],
+    "apps": ["www", "api", "admin"],
+    "modules": ["content-acquisition"],
     "mode": "local-fixtures",
     "priority": 112,
     "session_budget": 1,
@@ -383,41 +238,22 @@
       "ChatGPT sans UTM ; autre IA ; référence absente ; question hors corpus ; double envoi contact."
     ],
     "integrations": {
-      "simulated": [
-        "Conversation déterministe sur corpus fictif, sans fournisseur LLM"
-      ],
-      "real": [
-        "FAQ, formulaire, CRM et stockage locaux"
-      ],
-      "activation_slices": [
-        "S-039",
-        "S-133",
-        "S-137"
-      ]
+      "simulated": ["Conversation déterministe sur corpus fictif, sans fournisseur LLM"],
+      "real": ["FAQ, formulaire, CRM et stockage locaux"],
+      "activation_slices": ["S-039", "S-133", "S-137"]
     },
     "criteria": [
       {
         "criterion": "Les seize intentions FAQ §27 sont consultables, cherchables et liées au bon outil ; réponses couverture personnelle exigent connexion et domaine Coverage, sans fuite de contrat.",
-        "source_ranges": [
-          [
-            699,
-            715
-          ]
-        ],
+        "source_ranges": [[699, 715]],
         "oracle": "V3",
         "test": "Jouer une question de chaque famille ; vérifier refus de diagnostic personnel et navigation vers le bon parcours."
       },
       {
         "criterion": "Conversation publique cite une FAQ publiée ; question sans source reçoit une limite et une prochaine action ; aucune réponse de modèle n’invente une règle LPP ou un rendement.",
         "source_ranges": [
-          [
-            698,
-            715
-          ],
-          [
-            737,
-            737
-          ]
+          [698, 715],
+          [737, 737]
         ],
         "oracle": "V2",
         "test": "Injecter hors corpus et instruction malveillante ; vérifier source obligatoire et absence d’action métier issue du texte."
@@ -425,14 +261,8 @@
       {
         "criterion": "Le contact peut déclarer ChatGPT/autre IA indépendamment des UTM ; source, page d’entrée et referrer disponible restent distincts et récupérables dans le CRM.",
         "source_ranges": [
-          [
-            731,
-            736
-          ],
-          [
-            578,
-            580
-          ]
+          [731, 736],
+          [578, 580]
         ],
         "oracle": "V3",
         "test": "Soumettre un contact sans UTM puis le retrouver en Admin ; rejouer la soumission sans doublon."
@@ -440,14 +270,8 @@
       {
         "criterion": "Questions qualitatives alimentent une file éditoriale privée avec provenance et validation avant nouvelle FAQ/cas ; aucun verbatim personnel n’est publié automatiquement.",
         "source_ranges": [
-          [
-            736,
-            737
-          ],
-          [
-            697,
-            697
-          ]
+          [736, 737],
+          [697, 697]
         ],
         "oracle": "V2",
         "test": "Proposer une FAQ depuis deux formulations et vérifier anonymisation et statut brouillon avant publication."
@@ -455,14 +279,8 @@
       {
         "criterion": "Les FAQ seules peuvent se déplier ; recherche, contact et citations ouvrent des surfaces bornées accessibles ; chargement, vide, erreur et consentement manquant sont explicites.",
         "source_ranges": [
-          [
-            698,
-            715
-          ],
-          [
-            1369,
-            1369
-          ]
+          [698, 715],
+          [1369, 1369]
         ],
         "oracle": "V3",
         "test": "Tester FAQ connue/inconnue, recherche vide, erreur, refus de consentement et citation ; seuls les blocs FAQ augmentent la page. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -491,10 +309,7 @@
       "permissions.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "realtime.md"
-    ],
+    "exclusions": ["billing.md", "realtime.md"],
     "risks": [
       "FAQ financière peut dériver en conseil individualisé : router vers analyse/coverage autorisée et garder sources publiées."
     ],
@@ -504,23 +319,144 @@
     "split_trigger": "Après une session principale sans passage en revue, découper au prochain résultat utilisateur autonome ; conserver les preuves et le reste à faire selon PROG-14."
   },
   {
+    "id": "S-013a",
+    "title": "Préparer son profil privé et le reprendre dans Wallet",
+    "milestone": "M1",
+    "objective": "Une personne prépare volontairement son profil sans compte, conserve chaque étape puis le rattache à son profil canonique après WorkOS, sans resaisie ni partage implicite.",
+    "depends_on": ["S-000b"],
+    "apps": ["www", "api", "client"],
+    "modules": ["identity"],
+    "mode": "integration",
+    "priority": 19,
+    "session_budget": 1,
+    "journey": [
+      "Ouvrir depuis www la préparation du profil Wallet, sans connexion obligatoire.",
+      "Enregistrer informations et adresse par étapes, relire leur origine et choisir le préremplissage personnel versionné.",
+      "Se connecter puis rattacher explicitement le brouillon dans une transaction et reprendre son étape exacte ; résoudre les divergences sans écraser les confirmations."
+    ],
+    "data": [
+      "Enrichissement de identity_profiles existant : valeurs, origine, confirmation, propositions concurrentes, version et étape.",
+      "Brouillon de profil temporaire sous cookie HttpOnly hashé ; TTL technique de 24 heures, sans durée juridique déduite.",
+      "Choix profile.prefill version 1 append-only : préremplissage des seules démarches personnelles autorisées, désactivable ; ni marketing ni partage foyer."
+    ],
+    "permissions": [
+      "Le client ne lit et ne modifie que ses objets ou ceux explicitement partagés ; un identifiant deviné ne vaut jamais un droit.",
+      "Les interventions Admin exigent rôle, finalité et accès au dossier autorisés côté serveur ; données internes exclues de la projection publique."
+    ],
+    "events_jobs": [
+      "Audit transactionnel profile.updated/profile.confirmed/profile.attached/profile.prefill_changed, sans valeurs personnelles ; invalidation TanStack après commande. Aucun consommateur asynchrone ni job inventé."
+    ],
+    "fixtures": [
+      "Aucune nouvelle fixture : parcours réels et contrôles ciblés des invariants, selon execution-policy.md."
+    ],
+    "integrations": {
+      "real": ["WorkOS actif S-000b", "API et PostgreSQL locaux persistants"],
+      "simulated": [],
+      "activation_slices": ["S-013", "S-042", "S-130", "S-131"]
+    },
+    "criteria": [
+      {
+        "criterion": "Le profil canonique unique réutilise identity_users et identity_profiles ; une personne peut enregistrer et relire nom, prénom, naissance, nationalité et adresse depuis Wallet et y accéder depuis www.",
+        "source_ranges": [
+          [230, 236],
+          [747, 748],
+          [750, 753]
+        ],
+        "oracle": "V3",
+        "test": "Enregistrer le profil par la vraie API puis recharger ; identité et profil constants entre les entrées www/Wallet."
+      },
+      {
+        "criterion": "Le brouillon anonyme est borné dans le temps, persistant par étape et rattaché atomiquement à son propriétaire WorkOS ; retry sans doublon, autre compte refusé, aucune lecture anonyme après rattachement.",
+        "source_ranges": [
+          [743, 744],
+          [1337, 1342]
+        ],
+        "oracle": "V3",
+        "test": "Préparer puis connecter via WorkOS, rattacher et recharger à l’étape enregistrée ; contrôler propriété, expiration, rejeu et concurrence en PostgreSQL."
+      },
+      {
+        "criterion": "Toute correction et confirmation vient du propriétaire ; une valeur confirmée n’est jamais remplacée par un brouillon divergent, qui devient une proposition à résoudre explicitement.",
+        "source_ranges": [
+          [422, 422],
+          [751, 753],
+          [755, 756]
+        ],
+        "oracle": "V3",
+        "test": "Confirmer une valeur puis rattacher un brouillon divergent réel ; valeur intacte jusqu’à correction propriétaire explicite."
+      },
+      {
+        "criterion": "Le choix facultatif de préremplissage personnel conserve finalité, version, décision, acteur et instant ; aucun droit familial, administratif ou commercial n’est attribué.",
+        "source_ranges": [
+          [269, 269],
+          [341, 344],
+          [937, 937]
+        ],
+        "oracle": "V3",
+        "test": "Accepter puis retirer le préremplissage et relire l’historique ; un compte tiers ne reçoit aucun champ."
+      },
+      {
+        "criterion": "La page dédiée propose étapes courtes, correction, récapitulatif, états vide/erreur/expiration et reprise des données effectivement enregistrées ; clavier, mobile et mouvement réduit sont relus après amélioration.",
+        "source_ranges": [
+          [752, 753],
+          [937, 937],
+          [1337, 1342]
+        ],
+        "oracle": "V3",
+        "test": "Parcours réel sur ordinateur et mobile, focus et retour, double revue produit consignée sans batterie de tests de surface."
+      }
+    ],
+    "questions": [
+      {
+        "ref": "bible.question.006",
+        "question": "Séparer dès le modèle la durée de conservation des images d’identité de celle des champs extraits, avec durées à valider avant pièces réelles ?",
+        "options": [
+          "Oui, aucune durée légale déduite",
+          "Fournir maintenant la matrice de conservation approuvée"
+        ],
+        "recommended": 0,
+        "blocks": "Conservation et ingestion de vraies pièces uniquement"
+      },
+      {
+        "ref": "bible.question.008",
+        "question": "Le profil individuel reste privé tant qu’aucun consentement explicite par ressource n’accorde un accès au foyer ?",
+        "options": [
+          "Oui, aucun partage familial implicite",
+          "Fournir une matrice de droits alternative explicite"
+        ],
+        "recommended": 0,
+        "blocks": "Accès multi-membres et délégations non définis"
+      }
+    ],
+    "satellites": [
+      "architecture.md",
+      "contracts.md",
+      "api.md",
+      "data.md",
+      "permissions.md",
+      "frontend.md",
+      "design.md",
+      "brand.md",
+      "i18n.md",
+      "testing.md"
+    ],
+    "exclusions": ["billing.md", "realtime.md", "llm.md"],
+    "risks": [
+      "Vol d’objets lors du rattachement : possession de session prouvée, transaction, expiration et refus inter-comptes."
+    ],
+    "out_of_scope": [
+      "Pièces d’identité et OCR, documents/analyses/simulations/comparaisons/favoris, partage foyer et opérations Admin : critères du parent S-013 conservés et producteurs dédiés."
+    ],
+    "split_trigger": "Après une session principale sans passage en revue, découper au prochain résultat utilisateur autonome ; conserver les preuves et le reste à faire selon PROG-14."
+  },
+  {
     "id": "S-013",
     "title": "Reprendre un parcours anonyme dans Wallet avec un profil central",
     "milestone": "M1",
     "objective": "Une personne commence sans compte, confirme ses données de profil puis retrouve dans Wallet ses documents, analyses, comparaisons et simulations sans nouvelle saisie.",
-    "depends_on": [
-      "S-000b"
-    ],
-    "apps": [
-      "www",
-      "api",
-      "client"
-    ],
-    "modules": [
-      "identity-profile",
-      "saved-results"
-    ],
-    "mode": "local-fixtures",
+    "depends_on": ["S-013a", "S-015", "S-019", "S-025", "S-028", "S-030", "S-042", "S-050"],
+    "apps": ["www", "api", "client"],
+    "modules": ["identity-profile", "saved-results"],
+    "mode": "integration",
     "priority": 20,
     "session_budget": 1,
     "journey": [
@@ -540,109 +476,60 @@
       "Rattachement transactionnel et idempotent ; événement de profil confirmé/rattachement pour invalidation des vues, sans copie des données entre apps."
     ],
     "fixtures": [
-      "Deux sessions anonymes ; compte existant ; doublon favori ; OCR divergent d’une valeur confirmée ; expiration pendant connexion."
+      "Aucune nouvelle fixture : objets des producteurs métier réels requis, selon execution-policy.md."
     ],
     "integrations": {
-      "simulated": [
-        "Champs extraits du scan identité fournis par fixture"
-      ],
-      "real": [
-        "Sessions WorkOS du socle S-000b",
-        "Profil et rattachement persistants locaux"
-      ],
-      "activation_slices": [
-        "S-042",
-        "S-130",
-        "S-131"
-      ]
+      "simulated": [],
+      "real": ["Sessions WorkOS du socle S-000b", "Profil et rattachement persistants locaux"],
+      "activation_slices": ["S-042", "S-130", "S-131"]
     },
     "criteria": [
       {
         "criterion": "Le compte unique et son profil central sont réutilisés par www/Wallet, avec rôles multiples, consentements versionnés et session anonyme rattachable ; aucune identité métier concurrente de WorkOS.",
         "source_ranges": [
-          [
-            230,
-            236
-          ],
-          [
-            341,
-            344
-          ],
-          [
-            743,
-            744
-          ],
-          [
-            269,
-            269
-          ]
+          [230, 236],
+          [341, 344],
+          [743, 744],
+          [269, 269]
         ],
         "oracle": "V3",
         "test": "AuthKit puis retour Wallet : userId/profil identiques ; changement profil visible par API commune."
       },
       {
         "criterion": "Profil conserve identité, date de naissance, nationalité, numéro/type/échéance document et adresse fiable, avec source, confiance et confirmation par champ ; image et données extraites ont rétention distincte.",
-        "source_ranges": [
-          [
-            747,
-            754
-          ]
-        ],
+        "source_ranges": [[747, 754]],
         "oracle": "V2",
         "test": "Corriger une adresse OCR et recharger le profil ; champs sensibles absents des réponses publiques et sans droit."
       },
       {
         "criterion": "Une donnée confirmée par la personne prime sur vérification CoverView puis extraction non vérifiée ; nouvelle extraction ne remplace jamais silencieusement une confirmation.",
         "source_ranges": [
-          [
-            422,
-            422
-          ],
-          [
-            755,
-            756
-          ]
+          [422, 422],
+          [755, 756]
         ],
         "oracle": "V2",
-        "test": "Réimporter une fixture contradictoire après confirmation : proposition de conflit et valeur confirmée inchangée."
+        "test": "Importer une extraction réelle contradictoire après confirmation lorsque S-042 est disponible : proposition de conflit et valeur confirmée inchangée."
       },
       {
         "criterion": "Rattachement du document, contrat/analyse, simulation et comparaison conserve leurs identifiants, snapshots et étape de reprise ; un retry ne duplique ni ne vole des objets.",
         "source_ranges": [
-          [
-            743,
-            744
-          ],
-          [
-            1337,
-            1342
-          ]
+          [743, 744],
+          [1337, 1342]
         ],
         "oracle": "V2",
-        "test": "Deux sessions/deux comptes et double callback : invariants de propriété et reprise exacte sans upload."
+        "test": "Deux sessions/deux comptes et retry de rattachement : invariants de propriété et reprise exacte des objets réels sans upload. Le callback OAuth reste consommable une seule fois."
       },
       {
         "criterion": "Favoris référencent le productId canonique ; sauvegardes gardent inputs, résultats, hypothèses, moteur/date ; recalcul crée une nouvelle version et favoris restent uniques.",
-        "source_ranges": [
-          [
-            785,
-            793
-          ]
-        ],
+        "source_ranges": [[785, 793]],
         "oracle": "V2",
         "test": "Sauvegarder, rouvrir, recalculer puis comparer anciens snapshots ; tentative sur produit privé refusée."
       },
       {
         "criterion": "L’utilisateur peut corriger et confirmer dans une page/panneau, voir vide/erreur/expiration et reprendre après connexion sans formulaire répété ; données de foyer ne sont jamais partagées implicitement.",
         "source_ranges": [
-          [
-            937,
-            937
-          ],
-          [
-            1337,
-            1342
-          ]
+          [937, 937],
+          [1337, 1342]
         ],
         "oracle": "V3",
         "test": "Corriger un profil, expirer la session puis se reconnecter : saisie reprise, champs confirmés conservés ; second membre du foyer ne reçoit aucun champ sans partage. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -682,11 +569,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "realtime.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "realtime.md", "llm.md"],
     "risks": [
       "Vol d’objets lors du rattachement : possession de session prouvée, transaction, expiration et refus inter-comptes."
     ],
@@ -700,17 +583,9 @@
     "title": "Créer et documenter un produit de catalogue canonique dans Admin",
     "milestone": "M2",
     "objective": "Un gestionnaire habilité crée un produit même incomplet, ajoute ses conditions et sources, puis le soumet à revue sans exposer une donnée privée aux clients.",
-    "depends_on": [
-      "S-000b",
-      "S-017"
-    ],
-    "apps": [
-      "api",
-      "admin"
-    ],
-    "modules": [
-      "catalog"
-    ],
+    "depends_on": ["S-000b", "S-017"],
+    "apps": ["api", "admin"],
+    "modules": ["catalog"],
     "mode": "local-fixtures",
     "priority": 114,
     "session_budget": 1,
@@ -734,53 +609,31 @@
     ],
     "integrations": {
       "simulated": [],
-      "real": [
-        "API et persistance PostgreSQL locales"
-      ],
+      "real": ["API et persistance PostgreSQL locales"],
       "activation_slices": []
     },
     "criteria": [
       {
         "criterion": "Produit central appartient à Core et garde le même identifiant dans toutes les projections ; Product, Contract, ProductVersion et ContractSnapshot ne se confondent pas.",
         "source_ranges": [
-          [
-            310,
-            335
-          ],
-          [
-            345,
-            350
-          ],
-          [
-            270,
-            270
-          ]
+          [310, 335],
+          [345, 350],
+          [270, 270]
         ],
         "oracle": "V2",
         "test": "Créer un produit puis deux contrats distincts en fixture ; aucune donnée de police dans la fiche publique produit."
       },
       {
         "criterion": "Création Admin couvre compagnie/marque/entité, catégorie/statut, dates/versions, frais/rachats/pénalités, garanties, fonds/univers, allocations et pièces ; données absentes restent inconnues.",
-        "source_ranges": [
-          [
-            448,
-            458
-          ]
-        ],
+        "source_ranges": [[448, 458]],
         "oracle": "V3",
         "test": "Renseigner et recharger tous les groupes sur produit incomplet ; contrainte montant/date invalide rejetée côté serveur."
       },
       {
         "criterion": "Chaque valeur importante expose source documentaire/URL, auteur, vérificateur/date, confiance, méthode, validité, visibilité et complétude ; notes internes restent privées.",
         "source_ranges": [
-          [
-            414,
-            415
-          ],
-          [
-            458,
-            458
-          ]
+          [414, 415],
+          [458, 458]
         ],
         "oracle": "V2",
         "test": "Changer une valeur et comparer provenance ancienne/nouvelle ; projection publique ne contient jamais la note."
@@ -788,14 +641,8 @@
       {
         "criterion": "Un produit peut être soumis IN_REVIEW sans publication automatique ; source manquante et ambiguïté ont un état visible et un responsable de revue.",
         "source_ranges": [
-          [
-            392,
-            398
-          ],
-          [
-            448,
-            448
-          ]
+          [392, 398],
+          [448, 448]
         ],
         "oracle": "V2",
         "test": "Créer, demander revue, recharger ; un visiteur et client ne peuvent lire le brouillon par ID."
@@ -803,14 +650,8 @@
       {
         "criterion": "Le gestionnaire accomplit tout le parcours sans intervention SQL : recherche bornée, panneaux de saisie et pièces, erreurs de conflit/permission documentées.",
         "source_ranges": [
-          [
-            448,
-            458
-          ],
-          [
-            2389,
-            2389
-          ]
+          [448, 458],
+          [2389, 2389]
         ],
         "oracle": "V3",
         "test": "Créer/rechercher un produit et joindre une pièce via UI ; provoquer conflit de version et rôle insuffisant, vérifier retour exploitable et état persistant exact. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -840,11 +681,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "realtime.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "realtime.md", "llm.md"],
     "risks": [
       "Modèle trop horizontal : implémenter uniquement les champs nécessaires au parcours de création, sans microservice par table."
     ],
@@ -858,19 +695,9 @@
     "title": "Valider et publier le catalogue sans modifier les analyses passées",
     "milestone": "M2",
     "objective": "Un responsable contrôle un produit, le publie dans les surfaces autorisées puis peut corriger ou archiver une version sans altérer les analyses déjà délivrées.",
-    "depends_on": [
-      "S-014"
-    ],
-    "apps": [
-      "api",
-      "admin",
-      "www",
-      "client",
-      "intelligence"
-    ],
-    "modules": [
-      "catalog"
-    ],
+    "depends_on": ["S-014"],
+    "apps": ["api", "admin", "www", "client", "intelligence"],
+    "modules": ["catalog"],
     "mode": "local-fixtures",
     "priority": 115,
     "session_budget": 1,
@@ -895,45 +722,27 @@
     ],
     "integrations": {
       "simulated": [],
-      "real": [
-        "API et persistance PostgreSQL locales"
-      ],
+      "real": ["API et persistance PostgreSQL locales"],
       "activation_slices": []
     },
     "criteria": [
       {
         "criterion": "Cycle de publication respecte DRAFT→IN_REVIEW→VERIFIED→PUBLISHED→ARCHIVED ; brouillons restent internes, données vérifiées ont usage interne explicite, archive est exclue des nouvelles sélections.",
-        "source_ranges": [
-          [
-            390,
-            398
-          ]
-        ],
+        "source_ranges": [[390, 398]],
         "oracle": "V2",
         "test": "Tester transitions interdites, double publication et chaque projection consommateur."
       },
       {
         "criterion": "Les frais et conditions historiques conservent validité, source et vérification ; une analyse fige inputs, hypothèses, moteur/modèle, référence catalogue, résultats/messages/date/auteur/statut et validation éventuelle.",
-        "source_ranges": [
-          [
-            400,
-            411
-          ]
-        ],
+        "source_ranges": [[400, 411]],
         "oracle": "V2",
         "test": "Publier frais 2026 après rapport 2024 : même hash du snapshot et résultat passé, nouveau calcul utilisant version applicable."
       },
       {
         "criterion": "Les six visibilités sont projetées avant envoi au frontend ; accès sensible est audité ; aucun champ interne n’est envoyé à www pour masquage navigateur.",
         "source_ranges": [
-          [
-            424,
-            445
-          ],
-          [
-            2389,
-            2389
-          ]
+          [424, 445],
+          [2389, 2389]
         ],
         "oracle": "V2",
         "test": "Tests contractuels des DTO pour six personas et documents sensibles, y compris ID deviné."
@@ -941,18 +750,9 @@
       {
         "criterion": "Admin peut comparer sources et données, corriger, motiver, valider et publier sans technique ; les consommateurs voient le même produit avec profondeur adaptée.",
         "source_ranges": [
-          [
-            310,
-            311
-          ],
-          [
-            448,
-            458
-          ],
-          [
-            2639,
-            2647
-          ]
+          [310, 311],
+          [448, 458],
+          [2639, 2647]
         ],
         "oracle": "V3",
         "test": "Exécuter le workflow D depuis brouillon à www/Wallet/Intelligence ; vérifier différence de champs, identité identique."
@@ -960,14 +760,8 @@
       {
         "criterion": "Publication produit un événement durable et idempotent ; cache/index se rafraîchissent, les nouvelles analyses utilisent le nouveau catalogue et un échec de consommateur reste repris.",
         "source_ranges": [
-          [
-            2426,
-            2427
-          ],
-          [
-            2495,
-            2495
-          ]
+          [2426, 2427],
+          [2495, 2495]
         ],
         "oracle": "V2",
         "test": "Arrêter le worker avant publication puis reprendre : une diffusion logique, aucun ancien snapshot changé."
@@ -998,10 +792,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "llm.md"],
     "risks": [
       "Écrasement de versions et fuite champ : snapshot immuable et tests de projections à chaque nouveau champ."
     ],
@@ -1015,16 +806,9 @@
     "title": "Versionner et modifier les hypothèses de calcul depuis Admin",
     "milestone": "M2",
     "objective": "Un responsable habilité retrouve les paramètres source, prépare une nouvelle version et la rend disponible aux futurs calculs avec des unités, une provenance et un statut de validation explicites.",
-    "depends_on": [
-      "S-015"
-    ],
-    "apps": [
-      "api",
-      "admin"
-    ],
-    "modules": [
-      "calculation-settings"
-    ],
+    "depends_on": ["S-015"],
+    "apps": ["api", "admin"],
+    "modules": ["calculation-settings"],
     "mode": "local-fixtures",
     "priority": 116,
     "session_budget": 1,
@@ -1047,45 +831,27 @@
     ],
     "integrations": {
       "simulated": [],
-      "real": [
-        "API et persistance PostgreSQL locales"
-      ],
+      "real": ["API et persistance PostgreSQL locales"],
       "activation_slices": []
     },
     "criteria": [
       {
         "criterion": "Paramètres généraux reprennent les valeurs initiales source avec inflation 4%, remplacement 80%, AVS+LPP 60% explicitement simplifiées, horizon rapide 25 ans, N général 10000 et confiance médiane 50%.",
-        "source_ranges": [
-          [
-            463,
-            480
-          ]
-        ],
+        "source_ranges": [[463, 480]],
         "oracle": "V2",
         "test": "Lire JSON puis UI des valeurs/unités ; aucune estimation rapide affichée comme rente individuelle certifiée."
       },
       {
         "criterion": "Retire garde son profil cible 100000 et seuils 80/90/95/99 distincts ; EMS par défaut, allocation, drawdown, réserve, bonus et N restent reliés aux arbitrages R16 avant activation exécutable.",
-        "source_ranges": [
-          [
-            481,
-            490
-          ]
-        ],
+        "source_ranges": [[481, 490]],
         "oracle": "V2",
         "test": "Vérifier version Retire déclarative, champs bloqués tant que conventions absentes, cible distincte de N exécuté."
       },
       {
         "criterion": "Toute modification crée une version datée avec auteur/motif/source ; un run conserve sa version originale ; réinitialiser une hypothèse personnelle vise une version explicite CoverView.",
         "source_ranges": [
-          [
-            403,
-            411
-          ],
-          [
-            1115,
-            1128
-          ]
+          [403, 411],
+          [1115, 1128]
         ],
         "oracle": "V2",
         "test": "Modifier inflation globale après sauvegarde : ancienne hypothèse intacte, nouvelle appliquée seulement au nouveau run."
@@ -1093,14 +859,8 @@
       {
         "criterion": "Admin voit les changements avant activation, validations d’unités et valeurs impossibles côté serveur ; aucun calcul frontend ne redéfinit un défaut.",
         "source_ranges": [
-          [
-            459,
-            490
-          ],
-          [
-            2335,
-            2343
-          ]
+          [459, 490],
+          [2335, 2343]
         ],
         "oracle": "V2",
         "test": "Refuser durée négative, N nul, seuil hors domaine ; tentative d’écriture sans rôle refusée."
@@ -1108,14 +868,8 @@
       {
         "criterion": "Les versions et limites sont consultables depuis un résultat via panneau ou page de méthode ; droits manquants, conflit de version et publication échouée sont explicités.",
         "source_ranges": [
-          [
-            414,
-            415
-          ],
-          [
-            1012,
-            1012
-          ]
+          [414, 415],
+          [1012, 1012]
         ],
         "oracle": "V3",
         "test": "Depuis un résultat ancien ouvrir ses hypothèses puis publier une autre version ; la lecture conserve sa version. Provoquer conflit, refus et échec de publication. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -1155,11 +909,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "realtime.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "realtime.md", "llm.md"],
     "risks": [
       "Tableau stratégique pris pour calibration : distinguer statut référence/source, validé et actif."
     ],
@@ -1173,18 +923,9 @@
     "title": "Générer et archiver les documents de démarches à partir du profil",
     "milestone": "M2",
     "objective": "Une personne préremplit une procuration ou un mandat, vérifie son périmètre et obtient le document exact à lire avant signature, conservé avec ses sources et sa version.",
-    "depends_on": [
-      "S-013"
-    ],
-    "apps": [
-      "api",
-      "www",
-      "client",
-      "admin"
-    ],
-    "modules": [
-      "documents-signing"
-    ],
+    "depends_on": ["S-013a"],
+    "apps": ["api", "www", "client", "admin"],
+    "modules": ["documents-signing"],
     "mode": "local-fixtures",
     "priority": 40,
     "session_budget": 1,
@@ -1207,67 +948,34 @@
       "Procuration renseignement ; mandat ; consentement ; demande rachat ; résiliation/modification ; LPP ; KYC ; variable manquante et annexe invalide."
     ],
     "integrations": {
-      "simulated": [
-        "Textes et templates juridiques explicitement fictifs"
-      ],
-      "real": [
-        "Génération PDF et stockage MinIO locaux"
-      ],
-      "activation_slices": [
-        "S-035",
-        "S-137"
-      ]
+      "simulated": ["Textes et templates juridiques explicitement fictifs"],
+      "real": ["Génération PDF et stockage MinIO locaux"],
+      "activation_slices": ["S-035", "S-137"]
     },
     "criteria": [
       {
         "criterion": "Le même moteur gère template, variables, version, annexes, conditions d’affichage, signataires, génération, vérification et archivage ; aucune implémentation parallèle par famille documentaire.",
         "source_ranges": [
-          [
-            759,
-            768
-          ],
-          [
-            272,
-            272
-          ],
-          [
-            275,
-            275
-          ],
-          [
-            349,
-            350
-          ]
+          [759, 768],
+          [272, 272],
+          [275, 275],
+          [349, 350]
         ],
         "oracle": "V2",
         "test": "Générer au moins un cas de chacune des sept familles et comparer schémas/versions sans branchement métier dupliqué."
       },
       {
         "criterion": "Pages procuration/mandat réutilisent session et profil, proposent scan facultatif, sélection du périmètre et compagnies, puis génération et lecture du rendu.",
-        "source_ranges": [
-          [
-            775,
-            779
-          ]
-        ],
+        "source_ranges": [[775, 779]],
         "oracle": "V3",
         "test": "Parcourir les deux démarches avec profil incomplet ; corriger puis générer sans nouvelle saisie des champs confirmés."
       },
       {
         "criterion": "Le rendu conserve hash, template/version, variables retenues et annexes ; modifier le profil ensuite ne modifie pas le document prêt à signer.",
         "source_ranges": [
-          [
-            761,
-            761
-          ],
-          [
-            770,
-            770
-          ],
-          [
-            781,
-            783
-          ]
+          [761, 761],
+          [770, 770],
+          [781, 783]
         ],
         "oracle": "V2",
         "test": "Générer, changer adresse profil, relire l’original : hash stable et nouvelle génération explicitement versionnée."
@@ -1275,26 +983,15 @@
       {
         "criterion": "Variables ou signataires obligatoires manquants empêchent la génération finale ; fichier invalide et accès croisé sont refusés ; preview et téléchargement passent par stockage autorisé.",
         "source_ranges": [
-          [
-            761,
-            768
-          ],
-          [
-            424,
-            445
-          ]
+          [761, 768],
+          [424, 445]
         ],
         "oracle": "V2",
         "test": "Fixtures variable absente, annexe corrompue et URL d’un autre client : rejet précis sans URL publique permanente."
       },
       {
         "criterion": "Document généré est visible dans Wallet et Admin autorisés ; lecture, correction et annexe ouvrent page/panneau/modal accessibles et conservent l’étape en cas d’erreur.",
-        "source_ranges": [
-          [
-            777,
-            783
-          ]
-        ],
+        "source_ranges": [[777, 783]],
         "oracle": "V3",
         "test": "Générer puis lire le même document depuis Wallet et Admin habilité ; erreur de chargement/reprise conserve l’étape et une autre identité reçoit un refus. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
       }
@@ -1323,11 +1020,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "llm.md",
-      "marketing-web.md"
-    ],
+    "exclusions": ["billing.md", "llm.md", "marketing-web.md"],
     "risks": [
       "Texte fictif confondu avec mandat valide : watermark et métadonnée de mode bloquent transmission réelle."
     ],
@@ -1341,18 +1034,9 @@
     "title": "Signer un document de test et suivre son dossier de preuve",
     "milestone": "M2",
     "objective": "Une personne lit et consent au document exact, signe dans le parcours local explicitement simulé et retrouve sa preuve ainsi que l’état de sa démarche sans événement doublonné.",
-    "depends_on": [
-      "S-017"
-    ],
-    "apps": [
-      "www",
-      "client",
-      "admin",
-      "api"
-    ],
-    "modules": [
-      "documents-signing"
-    ],
+    "depends_on": ["S-017"],
+    "apps": ["www", "client", "admin", "api"],
+    "modules": ["documents-signing"],
     "mode": "local-fixtures",
     "priority": 45,
     "session_budget": 1,
@@ -1375,39 +1059,22 @@
       "Signé ; refusé ; expiré ; annulé ; callback doublé/désordonné ; hash incorrect ; mauvais signataire."
     ],
     "integrations": {
-      "simulated": [
-        "Prestataire de signature explicite, preuve non juridique"
-      ],
-      "real": [
-        "États, hash, preuve et dispatch workflow locaux"
-      ],
-      "activation_slices": [
-        "S-035"
-      ]
+      "simulated": ["Prestataire de signature explicite, preuve non juridique"],
+      "real": ["États, hash, preuve et dispatch workflow locaux"],
+      "activation_slices": ["S-035"]
     },
     "criteria": [
       {
         "criterion": "Les transitions DRAFT/READY_TO_SIGN/AWAITING_SIGNATURE/SIGNED/VALIDATED et sorties DECLINED/EXPIRED/CANCELLED sont persistantes et interdites hors transitions documentées.",
-        "source_ranges": [
-          [
-            771,
-            772
-          ]
-        ],
+        "source_ranges": [[771, 772]],
         "oracle": "V2",
         "test": "Table de transitions couvrant expiration, refus, annulation et callback tardif ; aucune réactivation silencieuse."
       },
       {
         "criterion": "La preuve contient document exact, version/hash, signataire, date/heure, méthode d’authentification, consentement, adresse technique utile et événements ; accès à la preuve reste protégé.",
         "source_ranges": [
-          [
-            770,
-            770
-          ],
-          [
-            274,
-            274
-          ]
+          [770, 770],
+          [274, 274]
         ],
         "oracle": "V2",
         "test": "Signer une fixture puis vérifier hash, contenu et permissions des artefacts archivés."
@@ -1415,14 +1082,8 @@
       {
         "criterion": "Après lecture/consentement, une modification de document impose une nouvelle session ; un signataire différent et un callback invalide sont refusés sans valider le dossier.",
         "source_ranges": [
-          [
-            770,
-            774
-          ],
-          [
-            780,
-            781
-          ]
+          [770, 774],
+          [780, 781]
         ],
         "oracle": "V2",
         "test": "Essayer substitution document et callback forgé ; hash et signature finale restent liés à la version consentie."
@@ -1430,26 +1091,15 @@
       {
         "criterion": "Signature finalisée met à jour le workflow et rend document/preuve immédiatement accessibles dans Wallet/Admin ; retry et événements hors ordre ne créent qu’une transition métier logique.",
         "source_ranges": [
-          [
-            782,
-            783
-          ],
-          [
-            2420,
-            2421
-          ]
+          [782, 783],
+          [2420, 2421]
         ],
         "oracle": "V2",
         "test": "Redélivrer trois callbacks puis recharger Wallet et Admin : une preuve, une activité, même statut."
       },
       {
         "criterion": "Le parcours affiche explicitement signature de test, état en attente, refus/expiration et nouvelle tentative autorisée ; le niveau juridique reste non déclaré avant S-035.",
-        "source_ranges": [
-          [
-            774,
-            774
-          ]
-        ],
+        "source_ranges": [[774, 774]],
         "oracle": "V3",
         "test": "Observer signature de test pending, refusée, expirée puis nouvelle tentative autorisée ; aucun état ne revendique une validité juridique réelle. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
       }
@@ -1458,10 +1108,7 @@
       {
         "ref": "bible.question.005",
         "question": "Définir la matrice type de document→niveau de signature avant toute activation réelle, sans qualifier juridiquement la preuve de test ?",
-        "options": [
-          "Oui, gate de S-035",
-          "Fournir maintenant la matrice et son validateur"
-        ],
+        "options": ["Oui, gate de S-035", "Fournir maintenant la matrice et son validateur"],
         "recommended": 0,
         "blocks": "Activation de signatures réelles seulement"
       }
@@ -1479,16 +1126,11 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "llm.md"],
     "risks": [
       "Double callback ou substitution : clé idempotence, signature du callback et hash immuable."
     ],
-    "out_of_scope": [
-      "Prestataire réel et validité S-035 ; aucun email ou mandat réel envoyé."
-    ],
+    "out_of_scope": ["Prestataire réel et validité S-035 ; aucun email ou mandat réel envoyé."],
     "split_trigger": "Après une session principale sans passage en revue, découper au prochain résultat utilisateur autonome ; conserver les preuves et le reste à faire selon PROG-14."
   },
   {
@@ -1496,19 +1138,9 @@
     "title": "Centraliser les contrats et leurs documents dans Wallet",
     "milestone": "M2",
     "objective": "Un client ou conseiller autorisé crée un contrat détenu, le relie au bon produit et consulte titulaires, prestations, pièces et historique sans confondre connaissance publique et conditions particulières.",
-    "depends_on": [
-      "S-013",
-      "S-015",
-      "S-017"
-    ],
-    "apps": [
-      "api",
-      "client",
-      "admin"
-    ],
-    "modules": [
-      "contracts"
-    ],
+    "depends_on": ["S-013a", "S-015", "S-017"],
+    "apps": ["api", "client", "admin"],
+    "modules": ["contracts"],
     "mode": "local-fixtures",
     "priority": 119,
     "session_budget": 1,
@@ -1533,83 +1165,47 @@
     ],
     "integrations": {
       "simulated": [],
-      "real": [
-        "API et persistance PostgreSQL locales"
-      ],
+      "real": ["API et persistance PostgreSQL locales"],
       "activation_slices": []
     },
     "criteria": [
       {
         "criterion": "Contract est une instance personnelle liée au Product central et à ses versions applicables ; paramètres spécifiques et ContractSnapshot appartiennent au contrat et ne modifient pas le catalogue.",
         "source_ranges": [
-          [
-            318,
-            337
-          ],
-          [
-            347,
-            348
-          ],
-          [
-            271,
-            271
-          ]
+          [318, 337],
+          [347, 348],
+          [271, 271]
         ],
         "oracle": "V2",
         "test": "Deux contrats sur même produit avec garanties différentes : ni contamination du catalogue ni accès croisé."
       },
       {
         "criterion": "Fiche expose compagnie/produit/police, titulaire/assuré/bénéficiaires, dates, prime/périodicité/valeurs/prestations, fonds/allocation/frais/garanties/décès/libération et pièces applicables.",
-        "source_ranges": [
-          [
-            839,
-            844
-          ]
-        ],
+        "source_ranges": [[839, 844]],
         "oracle": "V3",
         "test": "Saisir puis rouvrir chaque groupe ; données inconnues distinctes de zéro et CGA liées à la période."
       },
       {
         "criterion": "Chaque correction a provenance et avant/après ; un snapshot utilisé dans une analyse demeure immuable et conserve conditions particulières séparées des connaissances génériques.",
         "source_ranges": [
-          [
-            333,
-            337
-          ],
-          [
-            400,
-            411
-          ],
-          [
-            883,
-            883
-          ]
+          [333, 337],
+          [400, 411],
+          [883, 883]
         ],
         "oracle": "V2",
         "test": "Changer la police courante après snapshot : valeurs actuelles changées, ancien snapshot intact."
       },
       {
         "criterion": "Documents et clauses sont servis seulement au propriétaire/partage autorisé ; les vues publiques ou partenaires ne reçoivent jamais données contractuelles ou bénéficiaires.",
-        "source_ranges": [
-          [
-            424,
-            445
-          ]
-        ],
+        "source_ranges": [[424, 445]],
         "oracle": "V2",
         "test": "Requêtes par identifiant deviné, attachment URL et projection partenaire refusées."
       },
       {
         "criterion": "Contrats arrivent dans la liste et timeline Wallet, avec état incomplet et prochaine action enrichir/importer ; listes bornées et fiches/pieces ouvrent surfaces dédiées.",
         "source_ranges": [
-          [
-            824,
-            825
-          ],
-          [
-            871,
-            872
-          ]
+          [824, 825],
+          [871, 872]
         ],
         "oracle": "V3",
         "test": "Importer un contrat incomplet : une seule ligne et un événement lié apparaissent ; ouvrir prochaine action et pièce, paginer sans perte de sélection. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -1628,11 +1224,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "realtime.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "realtime.md", "llm.md"],
     "risks": [
       "Confusion contrat/produit et mauvais rattachement : correspondance inconnue possible, revue obligatoire sur conflit."
     ],
@@ -1646,21 +1238,9 @@
     "title": "Demander et suivre la récupération de contrats par compagnie",
     "milestone": "M2",
     "objective": "Un client indique les compagnies dont il se souvient, signe la procuration et suit une demande persistante par compagnie avec références, pièces et prochaine action.",
-    "depends_on": [
-      "S-018",
-      "S-019",
-      "S-081",
-      "S-082"
-    ],
-    "apps": [
-      "www",
-      "client",
-      "admin",
-      "api"
-    ],
-    "modules": [
-      "contract-retrieval"
-    ],
+    "depends_on": ["S-018", "S-019", "S-081", "S-082"],
+    "apps": ["www", "client", "admin", "api"],
+    "modules": ["contract-retrieval"],
     "mode": "local-fixtures",
     "priority": 120,
     "session_budget": 1,
@@ -1684,40 +1264,22 @@
       "Trois compagnies dont une répond et une demande complément ; procuration périmètre insuffisant ; compagnie inconnue ; retry envoi ; réponse ambiguë."
     ],
     "integrations": {
-      "simulated": [
-        "Envoi et réponses de compagnies via adapter de test"
-      ],
-      "real": [
-        "Dossiers, demandes et suivi locaux"
-      ],
-      "activation_slices": [
-        "S-036",
-        "S-041"
-      ]
+      "simulated": ["Envoi et réponses de compagnies via adapter de test"],
+      "real": ["Dossiers, demandes et suivi locaux"],
+      "activation_slices": ["S-036", "S-041"]
     },
     "criteria": [
       {
         "criterion": "Client démarre avec peu d’informations, choisit compagnies proposées et signe la procuration ; absence de numéro de police ne bloque pas artificiellement la recherche.",
-        "source_ranges": [
-          [
-            814,
-            819
-          ]
-        ],
+        "source_ranges": [[814, 819]],
         "oracle": "V3",
         "test": "Créer demande avec seulement compagnies connues et profil ; périmètre insuffisant bloque l’envoi et indique correction."
       },
       {
         "criterion": "Une requête par compagnie possède référence unique, procuration, courriels/threads/relances, réponses/pièces, contrats, extractions/anomalies/validations et statut propre.",
         "source_ranges": [
-          [
-            818,
-            825
-          ],
-          [
-            277,
-            277
-          ]
+          [818, 825],
+          [277, 277]
         ],
         "oracle": "V2",
         "test": "Deux compagnies et retry : références distinctes, une requête logique chacune, aucun écrasement du statut voisin."
@@ -1725,14 +1287,8 @@
       {
         "criterion": "Statut global et détail compagnie, pièces manquantes, responsable, dernière activité, prochaine action/date/blocage sont consultables et persistants sur dossier S-081.",
         "source_ranges": [
-          [
-            502,
-            509
-          ],
-          [
-            825,
-            825
-          ]
+          [502, 509],
+          [825, 825]
         ],
         "oracle": "V3",
         "test": "Fermer puis rouvrir Wallet/Admin ; dossier partiellement traité reste actif avec prochaine action visible."
@@ -1740,18 +1296,9 @@
       {
         "criterion": "Réponse reconnue déclenche ingestion et fait apparaître progressivement les contrats ; ambiguïté ou échec crée tâche de revue et n’associe jamais document au mauvais client.",
         "source_ranges": [
-          [
-            827,
-            833
-          ],
-          [
-            875,
-            881
-          ],
-          [
-            2616,
-            2628
-          ]
+          [827, 833],
+          [875, 881],
+          [2616, 2628]
         ],
         "oracle": "V2",
         "test": "Fixture réponse A puis réponse ambiguë B : un contrat visible, une exception attribuée, aucune fuite."
@@ -1759,14 +1306,8 @@
       {
         "criterion": "Signature/envoi/réponse et relances utilisent outbox/timers idempotents ; le mode test ne présente jamais SUBMITTED comme un envoi réellement effectué.",
         "source_ranges": [
-          [
-            2420,
-            2425
-          ],
-          [
-            2495,
-            2495
-          ]
+          [2420, 2425],
+          [2495, 2495]
         ],
         "oracle": "V2",
         "test": "Redémarrer worker après émission puis rejouer : un envoi test logique, preuve de mode visible et reprise."
@@ -1796,10 +1337,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "llm.md"],
     "risks": [
       "Relance hors mandat ou double envoi : contrôle périmètre/signature au worker et idempotence par demande."
     ],
@@ -1813,20 +1351,9 @@
     "title": "Initier et signer une recherche d’avoirs LPP perdus",
     "milestone": "M2",
     "objective": "Depuis le site ou Wallet, une personne comprend la recherche LPP, rassemble ses informations et pièces, signe les autorisations puis retrouve une demande prête à transmettre et un dossier suivi.",
-    "depends_on": [
-      "S-018",
-      "S-081",
-      "S-082"
-    ],
-    "apps": [
-      "www",
-      "client",
-      "admin",
-      "api"
-    ],
-    "modules": [
-      "lpp-search"
-    ],
+    "depends_on": ["S-018", "S-081", "S-082"],
+    "apps": ["www", "client", "admin", "api"],
+    "modules": ["lpp-search"],
     "mode": "local-fixtures",
     "priority": 55,
     "session_budget": 1,
@@ -1849,41 +1376,22 @@
       "Salarié ayant plusieurs employeurs ; ancienne adresse ; document requis manquant ; refus/expiration signature ; compte créé après brouillon."
     ],
     "integrations": {
-      "simulated": [
-        "Modèle de formulaire organismes et signature de test"
-      ],
-      "real": [
-        "Demande LPP et dossier persistants locaux"
-      ],
-      "activation_slices": [
-        "S-035",
-        "S-036",
-        "S-041"
-      ]
+      "simulated": ["Modèle de formulaire organismes et signature de test"],
+      "real": ["Demande LPP et dossier persistants locaux"],
+      "activation_slices": ["S-035", "S-036", "S-041"]
     },
     "criteria": [
       {
         "criterion": "Page publique explique utilité, cas pertinents, informations/documents, étapes et délais indicatifs et propose Retrouver mes avoirs de deuxième pilier ; entrée identique disponible Wallet.",
-        "source_ranges": [
-          [
-            795,
-            801
-          ]
-        ],
+        "source_ranges": [[795, 801]],
         "oracle": "V3",
         "test": "Parcourir mobile depuis www puis Wallet ; données de démarche conservées et aucune promesse de délai inventée."
       },
       {
         "criterion": "Demande évolue DRAFT/INFORMATION_REQUIRED/READY_TO_SIGN/SIGNED selon pièces et autorisations, conserve statut et dossier ; un formulaire envoyé sans objet persistant ne satisfait pas le parcours.",
         "source_ranges": [
-          [
-            795,
-            803
-          ],
-          [
-            276,
-            276
-          ]
+          [795, 803],
+          [276, 276]
         ],
         "oracle": "V2",
         "test": "Reprendre après rafraîchissement à chaque état ; champs manquants empêchent uniquement étape concernée."
@@ -1891,18 +1399,9 @@
       {
         "criterion": "Profil préremplit la demande ; génération/lecture/consentement/signature portent le périmètre LPP et la version exacte ; attachement anonyme au compte ne recommence ni saisie ni upload.",
         "source_ranges": [
-          [
-            743,
-            756
-          ],
-          [
-            767,
-            783
-          ],
-          [
-            2629,
-            2634
-          ]
+          [743, 756],
+          [767, 783],
+          [2629, 2634]
         ],
         "oracle": "V3",
         "test": "Créer anonyme, compléter, connecter et signer test : même demande, mêmes pièces et preuve."
@@ -1910,18 +1409,9 @@
       {
         "criterion": "Wallet/Admin affichent pièces disponibles/manquantes, statut, responsable, prochaine action et date ; signature reçue crée l’action transmettre sans prétendre qu’elle est déjà accomplie.",
         "source_ranges": [
-          [
-            502,
-            508
-          ],
-          [
-            806,
-            811
-          ],
-          [
-            2420,
-            2421
-          ]
+          [502, 508],
+          [806, 811],
+          [2420, 2421]
         ],
         "oracle": "V2",
         "test": "Après callback de test rejoué, vérifier une seule transition et une seule action à traiter."
@@ -1929,18 +1419,9 @@
       {
         "criterion": "Consultation ou édition inter-client, pièce non autorisée, mandat insuffisant et signature expirée sont refusés par API/worker ; les ouvertures restent accessibles et bornées.",
         "source_ranges": [
-          [
-            424,
-            445
-          ],
-          [
-            770,
-            774
-          ],
-          [
-            803,
-            803
-          ]
+          [424, 445],
+          [770, 774],
+          [803, 803]
         ],
         "oracle": "V3",
         "test": "Tester API et worker avec client tiers, pièce non autorisée, mandat insuffisant et signature expirée : refus sans écriture ni transmission ; ensuite observer les ouvertures au clavier. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -1983,10 +1464,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "llm.md"],
     "risks": [
       "Recherche considérée comme simple lead : dossier métier et reprise obligatoires ; aucun rapprochement financier sans preuve."
     ],
@@ -2000,18 +1478,9 @@
     "title": "Suivre la recherche LPP jusqu’aux avoirs identifiés et prochaines démarches",
     "milestone": "M2",
     "objective": "Un client voit où en est sa recherche LPP, répond aux compléments et consulte les institutions/avoirs identifiés ; un opérateur autorisé traite les réponses et clôture avec une suite explicite.",
-    "depends_on": [
-      "S-021",
-      "S-082"
-    ],
-    "apps": [
-      "api",
-      "client",
-      "admin"
-    ],
-    "modules": [
-      "lpp-search"
-    ],
+    "depends_on": ["S-021", "S-082"],
+    "apps": ["api", "client", "admin"],
+    "modules": ["lpp-search"],
     "mode": "local-fixtures",
     "priority": 56,
     "session_budget": 1,
@@ -2034,41 +1503,22 @@
       "Avoir identifié ; plusieurs institutions ; aucun avoir trouvé ; réponse insuffisante ; complément client ; réponse dupliquée ; réouverture autorisée à définir."
     ],
     "integrations": {
-      "simulated": [
-        "Réponses et institutions/avoirs fictifs",
-        "Notifications Mailpit locales"
-      ],
-      "real": [
-        "Transitions, messages, preuves et suivi locaux"
-      ],
-      "activation_slices": [
-        "S-036",
-        "S-041"
-      ]
+      "simulated": ["Réponses et institutions/avoirs fictifs", "Notifications Mailpit locales"],
+      "real": ["Transitions, messages, preuves et suivi locaux"],
+      "activation_slices": ["S-036", "S-041"]
     },
     "criteria": [
       {
         "criterion": "Le suivi porte SUBMITTED/IN_PROGRESS/RESPONSE_RECEIVED/ASSET_IDENTIFIED/ACTION_REQUIRED/COMPLETED et conserve historique des transitions ; une réponse sans avoir ne fabrique pas ASSET_IDENTIFIED.",
-        "source_ranges": [
-          [
-            803,
-            803
-          ]
-        ],
+        "source_ranges": [[803, 803]],
         "oracle": "V2",
         "test": "Table transitions avec avoir trouvé, aucun résultat et demande de complément ; finalisation sans preuve refusée."
       },
       {
         "criterion": "Wallet expose timeline, pièces présentes/manquantes, statut, institutions, messages/compléments, résultat et prochaines étapes ; notification renvoie à l’objet autorisé.",
         "source_ranges": [
-          [
-            805,
-            811
-          ],
-          [
-            881,
-            881
-          ]
+          [805, 811],
+          [881, 881]
         ],
         "oracle": "V3",
         "test": "Client reçoit complément, joint pièce, recharge puis lit résultat de deux institutions sans duplication."
@@ -2076,18 +1526,9 @@
       {
         "criterion": "Opérateur rattache réponse et institutions sur preuves ; source/date/auteur et statut de validation accompagnent les avoirs ; montant absent reste inconnu et réponse ambiguë crée revue.",
         "source_ranges": [
-          [
-            414,
-            422
-          ],
-          [
-            875,
-            883
-          ],
-          [
-            2629,
-            2638
-          ]
+          [414, 422],
+          [875, 883],
+          [2629, 2638]
         ],
         "oracle": "V2",
         "test": "Réponse ambiguë et valeur non chiffrée : aucune attribution automatique fausse, tâche avec propriétaire/date."
@@ -2095,14 +1536,8 @@
       {
         "criterion": "La clôture conserve résultat, options de suite et décision ; ouvrir transfert/analyse crée une démarche distincte avec autorisations requises, sans exécution financière silencieuse.",
         "source_ranges": [
-          [
-            811,
-            811
-          ],
-          [
-            2635,
-            2638
-          ]
+          [811, 811],
+          [2635, 2638]
         ],
         "oracle": "V2",
         "test": "Clôturer puis ouvrir prochaine étape ; recherche reste immuable, aucune instruction de transfert envoyée."
@@ -2110,18 +1545,9 @@
       {
         "criterion": "Messages et documents restent isolés au client/dossier ; un retry de réponse ne produit ni second avoir ni notification doublée ; UI borne listes et utilise panneau/page.",
         "source_ranges": [
-          [
-            424,
-            445
-          ],
-          [
-            806,
-            811
-          ],
-          [
-            2495,
-            2495
-          ]
+          [424, 445],
+          [806, 811],
+          [2495, 2495]
         ],
         "oracle": "V3",
         "test": "Deux clients/dossiers distincts : refuser messages et pièces croisés ; rejouer une même réponse deux fois puis compter un seul avoir et une notification ; vérifier pagination. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -2162,10 +1588,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "llm.md"],
     "risks": [
       "Avoir fictif ou incertain pris pour montant acquis : source, statut de validation et mode obligatoires."
     ],
@@ -2179,19 +1602,9 @@
     "title": "Transformer une pièce en données contractuelles avec revue des conflits",
     "milestone": "M2",
     "objective": "Une personne dépose un document et l’équipe autorisée valide les extractions proposées ; le contrat est enrichi avec provenance sans écraser les données confirmées.",
-    "depends_on": [
-      "S-019",
-      "S-081",
-      "S-082"
-    ],
-    "apps": [
-      "api",
-      "client",
-      "admin"
-    ],
-    "modules": [
-      "document-intelligence"
-    ],
+    "depends_on": ["S-019", "S-081", "S-082"],
+    "apps": ["api", "client", "admin"],
+    "modules": ["document-intelligence"],
     "mode": "local-fixtures",
     "priority": 123,
     "session_budget": 1,
@@ -2215,86 +1628,42 @@
       "Police PDF ; photo floue ; relevé/factsheet/correspondance ; faux virus test ; deux clients homonymes ; produit inconnu ; valeur confirmée contradictoire ; doublon email/upload."
     ],
     "integrations": {
-      "simulated": [
-        "OCR/classification/matching automatiques par fixtures déterministes"
-      ],
-      "real": [
-        "Stockage original, jobs, revue et mise à jour locaux"
-      ],
-      "activation_slices": [
-        "S-037",
-        "S-042"
-      ]
+      "simulated": ["OCR/classification/matching automatiques par fixtures déterministes"],
+      "real": ["Stockage original, jobs, revue et mise à jour locaux"],
+      "activation_slices": ["S-037", "S-042"]
     },
     "criteria": [
       {
         "criterion": "Pipeline unique conserve l’original et contexte upload/email/chat puis applique antivirus, classification, OCR, extraction et rapprochement ; le chat est un signal sans autorité sur les droits.",
         "source_ranges": [
-          [
-            834,
-            860
-          ],
-          [
-            2350,
-            2351
-          ],
-          [
-            2410,
-            2415
-          ],
-          [
-            273,
-            273
-          ]
+          [834, 860],
+          [2350, 2351],
+          [2410, 2415],
+          [273, 273]
         ],
         "oracle": "V2",
         "test": "Même pièce reçue par deux canaux : original/logique dédupliqué selon règle, sources de réception préservées, pas de contournement du contrôle."
       },
       {
         "criterion": "Classification couvre police/proposition/avenant/CGA, relevé/certificat/rachat, factsheet/rapport/facture/correspondance ; extraction couvre tous champs de §38.2.",
-        "source_ranges": [
-          [
-            834,
-            844
-          ]
-        ],
+        "source_ranges": [[834, 844]],
         "oracle": "V2",
         "test": "Corpus d’une pièce par famille ; assertions champ/source/confiance, inconnu explicite plutôt que zéro inventé."
       },
       {
         "criterion": "Matching combine expéditeur/domaine, thread/message précédent, requestId, nom/police, texte et métadonnées ; ambiguïté va en revue et non au premier client ressemblant.",
-        "source_ranges": [
-          [
-            827,
-            833
-          ]
-        ],
+        "source_ranges": [[827, 833]],
         "oracle": "V2",
         "test": "Homonymes, mauvaise référence et pièce ancienne : blocage de l’association incertaine et aucune fuite d’URL."
       },
       {
         "criterion": "Les états IMPORTED/EXTRACTED/NEEDS_REVIEW/VERIFIED et hiérarchie des confirmations sont visibles ; correction humaine conserve avant/après/source/motif et ne réécrit pas un champ confirmé.",
         "source_ranges": [
-          [
-            417,
-            422
-          ],
-          [
-            755,
-            756
-          ],
-          [
-            858,
-            860
-          ],
-          [
-            875,
-            883
-          ],
-          [
-            361,
-            362
-          ]
+          [417, 422],
+          [755, 756],
+          [858, 860],
+          [875, 883],
+          [361, 362]
         ],
         "oracle": "V3",
         "test": "Comparer original/proposition, corriger et valider ; rejouer OCR contradictoire et vérifier conservation."
@@ -2302,14 +1671,8 @@
       {
         "criterion": "Schéma connu enrichit les métadonnées autorisées ; inconnu crée objet incomplet et tâche explicite responsable/priorité/date ; contrat, produit, tâche, client, dossier, sinistre, note et échéance restent des propositions typées.",
         "source_ranges": [
-          [
-            857,
-            859
-          ],
-          [
-            875,
-            880
-          ]
+          [857, 859],
+          [875, 880]
         ],
         "oracle": "V2",
         "test": "Pièce inconnue : tâche et proposition auditables ; aucune création produit publié ou sinistre final par simple texte."
@@ -2317,14 +1680,8 @@
       {
         "criterion": "Client voit progression et changements utiles ; malware, fichier corrompu, timeout, permission retirée et échec de worker ont retour/reprise explicites sans faux succès.",
         "source_ranges": [
-          [
-            881,
-            883
-          ],
-          [
-            2495,
-            2495
-          ]
+          [881, 883],
+          [2495, 2495]
         ],
         "oracle": "V3",
         "test": "Injecter fichier test antivirus inoffensif, fichier corrompu, timeout, droit révoqué et crash worker : état d’échec exact, aucune progression mensongère et reprise possible. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -2365,10 +1722,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "marketing-web.md"
-    ],
+    "exclusions": ["billing.md", "marketing-web.md"],
     "risks": [
       "Injections dans pièce et mauvais rapprochement : source non fiable, proposition typée et contrôle propriétaire au worker."
     ],
@@ -2382,19 +1736,9 @@
     "title": "Déclencher un audit de contrat complet et rendre les exceptions traitables",
     "milestone": "M3",
     "objective": "Une fois son contrat suffisamment documenté, le client reçoit un audit persistant dont les éléments incomplets sont explicitement limités et dont les exceptions sont attribuées dans Admin.",
-    "depends_on": [
-      "S-023",
-      "S-026",
-      "S-081"
-    ],
-    "apps": [
-      "api",
-      "client",
-      "admin"
-    ],
-    "modules": [
-      "contract-analysis"
-    ],
+    "depends_on": ["S-023", "S-026", "S-081"],
+    "apps": ["api", "client", "admin"],
+    "modules": ["contract-analysis"],
     "mode": "local-fixtures",
     "priority": 124,
     "session_budget": 1,
@@ -2417,34 +1761,17 @@
       "Contrat complet ; frais absents ; fonds inconnu ; deux documents contradictoires ; audit doublé après retry ; produit nouvellement versionné."
     ],
     "integrations": {
-      "simulated": [
-        "Références et règles de calcul de démonstration explicitement marquées"
-      ],
-      "real": [
-        "Orchestration audit et stockage des résultats locaux"
-      ],
-      "activation_slices": [
-        "S-038",
-        "S-040",
-        "S-136"
-      ]
+      "simulated": ["Références et règles de calcul de démonstration explicitement marquées"],
+      "real": ["Orchestration audit et stockage des résultats locaux"],
+      "activation_slices": ["S-038", "S-040", "S-136"]
     },
     "criteria": [
       {
         "criterion": "Complétude suffisante déclenche analyse via événement, matching canonique et données autorisées ; composants calculables sont produits même si d’autres restent inconnus.",
         "source_ranges": [
-          [
-            862,
-            870
-          ],
-          [
-            2338,
-            2339
-          ],
-          [
-            2414,
-            2419
-          ]
+          [862, 870],
+          [2338, 2339],
+          [2414, 2419]
         ],
         "oracle": "V2",
         "test": "Dossier incomplet puis complété : lancement unique, indicateurs disponibles distincts de non calculables."
@@ -2452,14 +1779,8 @@
       {
         "criterion": "Audit expose score/sous-scores, frais, performance/benchmark, risque/diversification/concentration, univers/flexibilité, protections, Freshness et alertes avec sources/version.",
         "source_ranges": [
-          [
-            863,
-            870
-          ],
-          [
-            351,
-            352
-          ]
+          [863, 870],
+          [351, 352]
         ],
         "oracle": "V2",
         "test": "Comparer sortie à neuf groupes source ; aucune métrique sans inputs/méthode ou indication de démonstration."
@@ -2467,40 +1788,23 @@
       {
         "criterion": "Snapshot d’audit fige contrat, catalogue, hypothèses, moteur/modèle et résultats ; nouveau calcul versionne sans modifier historique.",
         "source_ranges": [
-          [
-            403,
-            411
-          ],
-          [
-            883,
-            883
-          ]
+          [403, 411],
+          [883, 883]
         ],
         "oracle": "V2",
         "test": "Mettre catalogue à jour après audit : ancien résultat intact, nouveau audit explicitement lié au précédent."
       },
       {
         "criterion": "Une anomalie ouvre revue avec responsable, priorité/échéance, comparaison source/proposition, correction/validation et avant-après ; une notification client signale état ou action requise.",
-        "source_ranges": [
-          [
-            875,
-            883
-          ]
-        ],
+        "source_ranges": [[875, 883]],
         "oracle": "V3",
         "test": "Traiter faible confiance dans Admin puis voir même état et activité dans Wallet."
       },
       {
         "criterion": "Pipeline découverte→récupération→digitalisation→structuration→audit→benchmark→recommandation→suivi reste traçable ; autorisations sont revalidées au job et les erreurs ne disparaissent pas.",
         "source_ranges": [
-          [
-            871,
-            872
-          ],
-          [
-            2495,
-            2495
-          ]
+          [871, 872],
+          [2495, 2495]
         ],
         "oracle": "V2",
         "test": "Retirer accès pendant job puis reprendre worker ; pas de résultat divulgué, exception explicite et pas de double notification."
@@ -2530,10 +1834,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "llm.md"],
     "risks": [
       "Audit partiel présenté comme conclusion globale : statut par indicateur et blocage d’une recommandation non étayée."
     ],
@@ -2547,18 +1848,9 @@
     "title": "Analyser un 3P sans compte depuis un document ou une saisie minimale",
     "milestone": "M3",
     "objective": "Un visiteur apporte PDF/scan/photo ou renseigne compagnie, produit, année et prime, suit un traitement réel et joue au Prediction Game avant de découvrir ses résultats.",
-    "depends_on": [
-      "S-013",
-      "S-023"
-    ],
-    "apps": [
-      "www",
-      "api",
-      "client"
-    ],
-    "modules": [
-      "contract-analysis"
-    ],
+    "depends_on": ["S-013a", "S-023"],
+    "apps": ["www", "api", "client"],
+    "modules": ["contract-analysis"],
     "mode": "local-fixtures",
     "priority": 125,
     "session_budget": 1,
@@ -2580,29 +1872,16 @@
       "PDF/scan/photo ; manuel compagnie/produit/année/prime ; erreur lecture ; changement onglet ; score prévu 78, année 2019 clairement saisis."
     ],
     "integrations": {
-      "simulated": [
-        "Extraction et indicateurs démonstration via adapters S-023/026"
-      ],
-      "real": [
-        "Upload, validation, étapes jobs et prédictions persistants locaux"
-      ],
-      "activation_slices": [
-        "S-037",
-        "S-038"
-      ]
+      "simulated": ["Extraction et indicateurs démonstration via adapters S-023/026"],
+      "real": ["Upload, validation, étapes jobs et prédictions persistants locaux"],
+      "activation_slices": ["S-037", "S-038"]
     },
     "criteria": [
       {
         "criterion": "PDF, scan et photo alimentent le pipeline commun et proposent compagnie/produit/dates/prime/périodicité/allocation/fonds/frais/garanties/rachat/décès/libération/conditions à vérifier.",
         "source_ranges": [
-          [
-            929,
-            933
-          ],
-          [
-            913,
-            914
-          ]
+          [929, 933],
+          [913, 914]
         ],
         "oracle": "V3",
         "test": "Parcourir trois formats puis contrôler inputs et source ; document invalide affiche erreur récupérable."
@@ -2610,55 +1889,30 @@
       {
         "criterion": "Sans document, quatre champs compagnie→produit→année→prime suffisent à démarrer ; complétude affichée ne copie pas le 62% illustratif et propose upload pour l’améliorer.",
         "source_ranges": [
-          [
-            934,
-            937
-          ],
-          [
-            1208,
-            1222
-          ]
+          [934, 937],
+          [1208, 1222]
         ],
         "oracle": "V3",
         "test": "Compléter manuel, recharger et joindre document : même analyse, complétude basée sur champs réels, aucun téléphone obligatoire."
       },
       {
         "criterion": "Lecture contrat, fonds, frais, allocation, protections et projection sont cochés uniquement après confirmation serveur de l’étape ; timeout/échec n’est pas une fausse progression narrative.",
-        "source_ranges": [
-          [
-            938,
-            940
-          ]
-        ],
+        "source_ranges": [[938, 940]],
         "oracle": "V2",
         "test": "Retarder puis échouer extraction : progression correspond aux jobs et résultat absent reste absent."
       },
       {
         "criterion": "Prediction Game propose score 0–100 et époque 1990–année actuelle, conserve choix et permet de passer ; c’est une prédiction utilisateur indépendante du calcul.",
-        "source_ranges": [
-          [
-            942,
-            945
-          ]
-        ],
+        "source_ranges": [[942, 945]],
         "oracle": "V2",
         "test": "Saisir bornes, changer page/recharger, vérifier choix ; valeur hors borne rejetée API."
       },
       {
         "criterion": "L’analyse se poursuit vers Reveal/détail et conserve ses IDs à la sauvegarde ; navigation et écrans de vide/erreur restent accessibles sans expansion du contenu.",
         "source_ranges": [
-          [
-            891,
-            895
-          ],
-          [
-            937,
-            937
-          ],
-          [
-            1337,
-            1342
-          ]
+          [891, 895],
+          [937, 937],
+          [1337, 1342]
         ],
         "oracle": "V3",
         "test": "Parcourir saisie → Reveal → détail → sauvegarde → rechargement ; comparer les IDs avant/après et tester erreur d’analyse sans perdre la saisie. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -2688,17 +1942,11 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "realtime.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "realtime.md", "llm.md"],
     "risks": [
       "Progression scénarisée confondue avec traitement : écouter état persistant uniquement."
     ],
-    "out_of_scope": [
-      "Scores S-026 ; Reveal S-027 ; extraction réelle S-037."
-    ],
+    "out_of_scope": ["Scores S-026 ; Reveal S-027 ; extraction réelle S-037."],
     "split_trigger": "Après une session principale sans passage en revue, découper au prochain résultat utilisateur autonome ; conserver les preuves et le reste à faire selon PROG-14."
   },
   {
@@ -2706,20 +1954,9 @@
     "title": "Expliquer le score 3P, son allocation et son benchmark",
     "milestone": "M3",
     "objective": "Une personne comprend ce que contient son allocation, les forces/faiblesses du contrat, sa cohorte comparable et les limites du score à partir de données et règles versionnées.",
-    "depends_on": [
-      "S-025",
-      "S-016"
-    ],
-    "apps": [
-      "www",
-      "client",
-      "admin",
-      "api"
-    ],
-    "modules": [
-      "contract-analysis",
-      "scoring-benchmark"
-    ],
+    "depends_on": ["S-025", "S-016"],
+    "apps": ["www", "client", "admin", "api"],
+    "modules": ["contract-analysis", "scoring-benchmark"],
     "mode": "local-fixtures",
     "priority": 126,
     "session_budget": 1,
@@ -2742,44 +1979,23 @@
       "Allocation diversifiée/concentrée ; cohorte insuffisante ; dernière revue inconnue ; absence de frais ; prédiction différente du score calculé fixture."
     ],
     "integrations": {
-      "simulated": [
-        "Méthodes/cohortes de démonstration non calibrées et marchés fictifs"
-      ],
-      "real": [
-        "Calculs déterministes sur fixtures et snapshots locaux"
-      ],
-      "activation_slices": [
-        "S-038",
-        "S-040"
-      ]
+      "simulated": ["Méthodes/cohortes de démonstration non calibrées et marchés fictifs"],
+      "real": ["Calculs déterministes sur fixtures et snapshots locaux"],
+      "activation_slices": ["S-038", "S-040"]
     },
     "criteria": [
       {
         "criterion": "DNA montre expositions réelles du snapshot et archétype selon règles versionnées explicables ; il décrit allocation sans prétendre déterminer seul le résultat retraite.",
-        "source_ranges": [
-          [
-            970,
-            984
-          ]
-        ],
+        "source_ranges": [[970, 984]],
         "oracle": "V2",
         "test": "Deux allocations aux expositions différentes : contributions totalisées selon taxonomie déclarée et archétype explicable ; valeurs exemples non copiées."
       },
       {
         "criterion": "Score expose sept sous-scores performance/frais/diversification/allocation/protection/flexibilité/adaptabilité, poids, version, explications et actions ; donnée manquante ne devient pas zéro arbitraire.",
         "source_ranges": [
-          [
-            995,
-            1012
-          ],
-          [
-            2346,
-            2347
-          ],
-          [
-            278,
-            278
-          ]
+          [995, 1012],
+          [2346, 2347],
+          [278, 278]
         ],
         "oracle": "V2",
         "test": "Contrat incomplet puis complet : statut par sous-score et somme pondérée recalculable selon règle de test explicitement fictive."
@@ -2787,18 +2003,9 @@
       {
         "criterion": "Benchmark vérifie comparabilité catégorie/période/profil/contraintes et expose taille/filtres/date ; aucun rang TOP n’apparaît sans cohorte suffisante documentée.",
         "source_ranges": [
-          [
-            118,
-            127
-          ],
-          [
-            1014,
-            1014
-          ],
-          [
-            2348,
-            2349
-          ]
+          [118, 127],
+          [1014, 1014],
+          [2348, 2349]
         ],
         "oracle": "V2",
         "test": "Cohorte non comparable et trop petite : rang refusé avec raison ; cohorte test valide : rang recomputable."
@@ -2806,14 +2013,8 @@
       {
         "criterion": "Investment Age reste une similarité/cohorte métaphorique, expose méthode et différence avec prédiction ; dernière revue est demandée séparément et inconnue reste inconnue.",
         "source_ranges": [
-          [
-            986,
-            992
-          ],
-          [
-            1034,
-            1039
-          ]
+          [986, 992],
+          [1034, 1039]
         ],
         "oracle": "V3",
         "test": "Résultat 2006 et revue inconnue : aucun texte affirmant absence de revue depuis 2006."
@@ -2821,14 +2022,8 @@
       {
         "criterion": "Freshness combine époque, dernière revue connue, univers, adaptabilité et suivi ; métriques demeurent distinguées de Target Age, Goal Probability, World et inflation ; détails ouvrent surfaces bornées.",
         "source_ranges": [
-          [
-            1015,
-            1051
-          ],
-          [
-            1377,
-            1377
-          ]
+          [1015, 1051],
+          [1377, 1377]
         ],
         "oracle": "V3",
         "test": "Sur fixtures méthodologiques distinctes faire varier époque, revue inconnue et adaptabilité ; contrôler composants Freshness et absence de substitution à Target Age/Goal Probability/World/inflation. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -2858,11 +2053,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "realtime.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "realtime.md", "llm.md"],
     "risks": [
       "Score convaincant mais non étayé : mode démo et méthode visibles, activation interdite sans validation."
     ],
@@ -2876,19 +2067,9 @@
     "title": "Découvrir puis rejouer son Reveal et son Retirement World explicables",
     "milestone": "M3",
     "objective": "Le client découvre une information par écran, accède à l’analyse détaillée et compare visuellement sa trajectoire actuelle à une alternative sans que la scène masque les métriques.",
-    "depends_on": [
-      "S-026",
-      "S-029",
-      "S-030"
-    ],
-    "apps": [
-      "www",
-      "client",
-      "api"
-    ],
-    "modules": [
-      "analysis-storytelling"
-    ],
+    "depends_on": ["S-026", "S-029", "S-030"],
+    "apps": ["www", "client", "api"],
+    "modules": ["analysis-storytelling"],
     "mode": "local-fixtures",
     "priority": 127,
     "session_budget": 1,
@@ -2911,28 +2092,16 @@
       "Dix slides complètes ; données partielles ; six paliers visuels ; alternative absente ; mouvement réduit ; prédiction incorrecte."
     ],
     "integrations": {
-      "simulated": [
-        "Pondérations World et trajectoires financières fixtures"
-      ],
-      "real": [
-        "Narration, routes et liaison snapshots locales"
-      ],
-      "activation_slices": [
-        "S-038"
-      ]
+      "simulated": ["Pondérations World et trajectoires financières fixtures"],
+      "real": ["Narration, routes et liaison snapshots locales"],
+      "activation_slices": ["S-038"]
     },
     "criteria": [
       {
         "criterion": "Reveal présente profil, Investment Age, score, force, faiblesse, World, Target Age, Goal Probability, potentiel et alternative avec une information forte par slide ; absent/non calculable est explicite.",
         "source_ranges": [
-          [
-            950,
-            968
-          ],
-          [
-            894,
-            904
-          ]
+          [950, 968],
+          [894, 904]
         ],
         "oracle": "V3",
         "test": "Parcourir complet et partiel ; aucun placeholder substitué à un résultat manquant."
@@ -2940,14 +2109,8 @@
       {
         "criterion": "Voir analyse complète et Rejouer mon Reveal sont bidirectionnels ; Wallet réutilise exactement narration et snapshots après notification de nouvelle analyse.",
         "source_ranges": [
-          [
-            957,
-            957
-          ],
-          [
-            1343,
-            1344
-          ]
+          [957, 957],
+          [1343, 1344]
         ],
         "oracle": "V3",
         "test": "Ouvrir notification, Reveal, détail, rejeu, rafraîchissement et retour arrière ; IDs identiques."
@@ -2955,14 +2118,8 @@
       {
         "criterion": "World utilise score de trajectoire combinant probabilité, âge, capital, risque/volatilité/drawdown/frais/diversification/horizon et paramètres versionnés ; les six paliers source sont représentés sans jugement moral.",
         "source_ranges": [
-          [
-            1054,
-            1078
-          ],
-          [
-            1046,
-            1048
-          ]
+          [1054, 1078],
+          [1046, 1048]
         ],
         "oracle": "V2",
         "test": "Tester chaque palier et frontières selon règle validée ; ouvrir contributions et mode fictif visible."
@@ -2970,14 +2127,8 @@
       {
         "criterion": "Sliders et bascule ACTUEL/OPTIMISÉ modifient scène et métriques depuis le même résultat serveur ; montants exemplaires 250/350/450/500 ne sont pas codés comme seuils universels.",
         "source_ranges": [
-          [
-            1080,
-            1095
-          ],
-          [
-            1113,
-            1113
-          ]
+          [1080, 1095],
+          [1113, 1113]
         ],
         "oracle": "V3",
         "test": "Modifier cotisation puis attendre run ; scène et probabilité/âge changent atomiquement, ancien run identifiable."
@@ -2985,14 +2136,8 @@
       {
         "criterion": "Narration reste secondaire à compréhension : pas d’humiliation ni garantie, mouvement réduit, commandes clavier, tableau alternatif et détails en surfaces dédiées selon FRONT-14.",
         "source_ranges": [
-          [
-            1078,
-            1078
-          ],
-          [
-            1368,
-            1377
-          ]
+          [1078, 1078],
+          [1368, 1377]
         ],
         "oracle": "V3",
         "test": "Rejouer les slides avec mouvement réduit et clavier, consulter le tableau alternatif ; résultat insuffisant présenté sans humiliation ni garantie et métriques lisibles sans scène. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -3022,11 +2167,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "realtime.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "realtime.md", "llm.md"],
     "risks": [
       "Scène persuasive sur résultat non validé : explicabilité, affichage du mode et aucune recommandation morale."
     ],
@@ -3040,19 +2181,9 @@
     "title": "Calculer son besoin retraite en CHF actuels et futurs",
     "milestone": "M3",
     "objective": "Un visiteur ajuste âge, revenu et effort d’épargne, comprend sa lacune AVS/LPP et le capital nécessaire, puis affine les données sans recommencer le parcours.",
-    "depends_on": [
-      "S-013",
-      "S-016",
-      "S-019"
-    ],
-    "apps": [
-      "www",
-      "client",
-      "api"
-    ],
-    "modules": [
-      "retirement-accumulation"
-    ],
+    "depends_on": ["S-013a", "S-016", "S-019"],
+    "apps": ["www", "client", "api"],
+    "modules": ["retirement-accumulation"],
     "mode": "local-fixtures",
     "priority": 128,
     "session_budget": 1,
@@ -3077,78 +2208,45 @@
       "simulated": [
         "Données pensions/marchés et équation cible de démonstration tant que méthode non validée"
       ],
-      "real": [
-        "Calculs déterministes locaux selon hypothèses explicites"
-      ],
-      "activation_slices": [
-        "S-038",
-        "S-040"
-      ]
+      "real": ["Calculs déterministes locaux selon hypothèses explicites"],
+      "activation_slices": ["S-038", "S-040"]
     },
     "criteria": [
       {
         "criterion": "Les neuf inputs §52.1 et sliders salaire 3000–15000, revenu souhaité 60–100%, cotisation dès 100 au plafond applicable, âge et confiance sont validés côté API ; plafond inconnu ne devient pas un montant inventé.",
         "source_ranges": [
-          [
-            1097,
-            1113
-          ],
-          [
-            915,
-            916
-          ]
+          [1097, 1113],
+          [915, 916]
         ],
         "oracle": "V2",
         "test": "Modifier chaque champ, tester bornes et réutiliser mêmes inputs dans Wallet ; refus du plafond non configuré pour résultat réel."
       },
       {
         "criterion": "Inflation source 4% administrable est visible et modifiable en panneau avancé 0–8%, incluse/exclue/réinitialisée ; valeurs portent CHF, date de référence et nature réelle ou nominale.",
-        "source_ranges": [
-          [
-            1115,
-            1126
-          ]
-        ],
+        "source_ranges": [[1115, 1126]],
         "oracle": "V2",
         "test": "Basculer mode à inflation zéro puis positive ; égalité à zéro et cohérence de conversion vérifiées par exemples de référence."
       },
       {
         "criterion": "Cotisation fixe et maintien de l’effort réel indexé produisent des flux distincts explicitables ; l’interface privilégie CHF d’aujourd’hui sans mélanger capital futur et revenu actuel.",
         "source_ranges": [
-          [
-            1126,
-            1128
-          ],
-          [
-            1371,
-            1372
-          ]
+          [1126, 1128],
+          [1371, 1372]
         ],
         "oracle": "V2",
         "test": "Comparer deux suites de cotisations sur mêmes inputs et vérifier libellés/date/unité de chaque métrique."
       },
       {
         "criterion": "Parcours rapide utilise estimation AVS+LPP 60% clairement nommée ; niveaux intermédiaire et précis accueillent famille/LPP/capital/autres 3P/revenus puis certificat et AVS détaillée avec provenance.",
-        "source_ranges": [
-          [
-            1131,
-            1140
-          ]
-        ],
+        "source_ranges": [[1131, 1140]],
         "oracle": "V3",
         "test": "Retrouver exemple de gap 1400 ; remplacer estimation par donnée vérifiée et conserver ancien snapshot."
       },
       {
         "criterion": "Capital nécessaire prend revenu/rentes/gap/inflation/durée/rendement de décaissement/retraits/indexation/marge selon équation validée ou démonstration explicite ; résultats réel et nominal conservent hypothèses.",
         "source_ranges": [
-          [
-            1143,
-            1143
-          ],
-          [
-            2340,
-            2341
-          ]
+          [1143, 1143],
+          [2340, 2341]
         ],
         "oracle": "V2",
         "test": "Corpus analytique à inflation/rendement zéro, revenus égaux à objectif et horizon nul ; toute règle non définie reste bloquée en réel."
@@ -3156,14 +2254,8 @@
       {
         "criterion": "Affinement indique complétude utile avec sources et prochaine donnée à fournir, jamais gains illustratifs présentés comme précision scientifique ; reprises et détails respectent UX.",
         "source_ranges": [
-          [
-            1208,
-            1222
-          ],
-          [
-            1382,
-            1383
-          ]
+          [1208, 1222],
+          [1382, 1383]
         ],
         "oracle": "V3",
         "test": "Ajouter un champ documenté puis un champ absent : la complétude et la prochaine donnée utile reflètent leur provenance ; aucune précision chiffrée illustrative présentée comme mesurée. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -3203,11 +2295,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "realtime.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "realtime.md", "llm.md"],
     "risks": [
       "Formule financière inventée : questions bloquent la méthode réelle, simulations de démonstration ne sont pas conseils."
     ],
@@ -3221,18 +2309,9 @@
     "title": "Explorer des probabilités et un âge cible reproductibles",
     "milestone": "M3",
     "objective": "L’utilisateur voit distribution, fan chart, Goal Probability et premier âge cible issus d’un même run vérifiable, avec méthode et nombre de trajectoires effectivement exécutées.",
-    "depends_on": [
-      "S-028"
-    ],
-    "apps": [
-      "www",
-      "client",
-      "api"
-    ],
-    "modules": [
-      "simulation-engine",
-      "retirement-accumulation"
-    ],
+    "depends_on": ["S-028"],
+    "apps": ["www", "client", "api"],
+    "modules": ["simulation-engine", "retirement-accumulation"],
     "mode": "local-fixtures",
     "priority": 129,
     "session_budget": 1,
@@ -3255,71 +2334,38 @@
       "Trajectoires analytiques connues ; N réduit test vs profil 10000 exécuté ; aucune trajectoire atteinte ; objectif atteint plusieurs âges ; changement version/seed ; timeout."
     ],
     "integrations": {
-      "simulated": [
-        "Marchés et paramètres probabilistes de démonstration"
-      ],
-      "real": [
-        "Exécution réelle de trajectoires synthétiques, métriques, jobs et cache locaux"
-      ],
-      "activation_slices": [
-        "S-038",
-        "S-040",
-        "S-136"
-      ]
+      "simulated": ["Marchés et paramètres probabilistes de démonstration"],
+      "real": ["Exécution réelle de trajectoires synthétiques, métriques, jobs et cache locaux"],
+      "activation_slices": ["S-038", "S-040", "S-136"]
     },
     "criteria": [
       {
         "criterion": "Le moteur commun produit distribution plutôt qu’avenir certain, conserve méthode visible/versionnée et calcule réellement N ; une mention unique proche des probabilités affiche N exécuté, cible Retire séparée.",
         "source_ranges": [
-          [
-            1145,
-            1147
-          ],
-          [
-            2335,
-            2343
-          ],
-          [
-            279,
-            279
-          ]
+          [1145, 1147],
+          [2335, 2343],
+          [279, 279]
         ],
         "oracle": "V2",
         "test": "Lancer deux profils N différents puis vérifier compteur d’échantillons/résultat/mention, sans nombre cible pris pour exécution."
       },
       {
         "criterion": "Fan chart expose P10/P25/P50/P75/P90 ; distribution en tranches totalise les trajectoires, tableau/quantiles accessibles accompagnent histogramme/heatmap sans recopier exemples.",
-        "source_ranges": [
-          [
-            1148,
-            1180
-          ]
-        ],
+        "source_ranges": [[1148, 1180]],
         "oracle": "V2",
         "test": "Corpus déterministe : quantiles ordonnés, tranches exhaustives sans doublon et alternative tabulaire lisible."
       },
       {
         "criterion": "Goal Probability(age) est la part des capitaux atteignant cible à cet âge ; Target Age est le premier âge franchissant confiance ; cas jamais atteint explicite, zéro trajectoire sans fausse certitude 0%.",
-        "source_ranges": [
-          [
-            1183,
-            1206
-          ]
-        ],
+        "source_ranges": [[1183, 1206]],
         "oracle": "V2",
         "test": "Vérifier trajectoires fabriquées à seuils précis, franchissements non monotones et cas aucun âge ; borne/capital égal inclus selon définition source."
       },
       {
         "criterion": "Clé déterministe inclut inputs normalisés, hypothèses, dataVersion, engineVersion et seed policy ; même clé autorisée réutilise résultat, nouvelle version/inputs force nouveau calcul et archive demeure indépendante.",
         "source_ranges": [
-          [
-            2497,
-            2505
-          ],
-          [
-            353,
-            354
-          ]
+          [2497, 2505],
+          [353, 354]
         ],
         "oracle": "V2",
         "test": "Rejouer même demande et changer chacun des cinq composants ; vérifier hit/miss et anciens snapshots inchangés."
@@ -3327,14 +2373,8 @@
       {
         "criterion": "Quantiles, histogramme et métriques sont conservés, trajectoires brutes seulement selon besoin déclaré ; job crash/retry ne publie pas run partiel comme complet et autorisations sont respectées.",
         "source_ranges": [
-          [
-            2500,
-            2505
-          ],
-          [
-            2495,
-            2495
-          ]
+          [2500, 2505],
+          [2495, 2495]
         ],
         "oracle": "V2",
         "test": "Tuer worker à mi-calcul puis reprendre : statut/compteur correct, résultat final unique et aucun accès autre client."
@@ -3342,18 +2382,9 @@
       {
         "criterion": "Slider confiance/âge affiche métriques et hypothèses cohérentes du même run, avec états ancien/en cours/nouveau ; tables et explications ouvrent surfaces accessibles.",
         "source_ranges": [
-          [
-            1112,
-            1113
-          ],
-          [
-            1180,
-            1180
-          ],
-          [
-            1206,
-            1206
-          ]
+          [1112, 1113],
+          [1180, 1180],
+          [1206, 1206]
         ],
         "oracle": "V3",
         "test": "Déplacer confiance/âge pendant un recalcul puis recharger : les métriques d’un même affichage portent le même run et les états ancien/en cours/nouveau sont identifiables. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -3405,10 +2436,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "llm.md"],
     "risks": [
       "Cache faux ou inter-client : versionner tous inputs et recontrôler droits ; stress non calibré ne reçoit pas probabilité inventée."
     ],
@@ -3422,19 +2450,9 @@
     "title": "Comparer des stratégies compatibles avec son objectif",
     "milestone": "M3",
     "objective": "Une personne compare sa stratégie à des alternatives compatibles, comprend les compromis et l’effet d’une cotisation différente avant de demander une validation humaine.",
-    "depends_on": [
-      "S-026",
-      "S-029",
-      "S-015"
-    ],
-    "apps": [
-      "www",
-      "client",
-      "api"
-    ],
-    "modules": [
-      "strategy-engine"
-    ],
+    "depends_on": ["S-026", "S-029", "S-015"],
+    "apps": ["www", "client", "api"],
+    "modules": ["strategy-engine"],
     "mode": "local-fixtures",
     "priority": 130,
     "session_budget": 1,
@@ -3456,59 +2474,32 @@
       "Zéro stratégie compatible ; 2 compatibles ; contrainte de rachat bloquante ; plus de cotisation nécessaire ; résultat non calculable ; stratégie conserver le contrat."
     ],
     "integrations": {
-      "simulated": [
-        "Stratégies, marchés et règles compatibilité de démonstration"
-      ],
-      "real": [
-        "Comparaison et persistance locales"
-      ],
-      "activation_slices": [
-        "S-038",
-        "S-040"
-      ]
+      "simulated": ["Stratégies, marchés et règles compatibilité de démonstration"],
+      "real": ["Comparaison et persistance locales"],
+      "activation_slices": ["S-038", "S-040"]
     },
     "criteria": [
       {
         "criterion": "Recherche suit objectif→horizon→situation→contraintes→environnement→stratégie→enveloppe→produit ; stratégies ne se réduisent pas à un catalogue de produits ni à performance passée.",
         "source_ranges": [
-          [
-            113,
-            116
-          ],
-          [
-            1235,
-            1237
-          ],
-          [
-            1373,
-            1375
-          ]
+          [113, 116],
+          [1235, 1237],
+          [1373, 1375]
         ],
         "oracle": "V2",
         "test": "Comparer scénario conserver/modifier/compléter et vérifier raisons de compatibilité au-delà rendement."
       },
       {
         "criterion": "Décompte compatible dépend cotisation/inflation/âge/revenu/confiance/risque/contrat ; absence d’option est expliquée, effort complémentaire n’est proposé que s’il satisfait toutes contraintes selon méthode validée.",
-        "source_ranges": [
-          [
-            1224,
-            1235
-          ]
-        ],
+        "source_ranges": [[1224, 1235]],
         "oracle": "V2",
         "test": "Corpus zéro/deux options puis modification d’une contrainte : décompte recomputable, minimum supplémentaire non inventé."
       },
       {
         "criterion": "Comparaison simple montre actuel/alternatives avec Target Age et Goal Probability ; détail inclut capital médian/P10/P90, historique/volatilité/drawdown/stress, frais/diversification/flexibilité/fonds/protections/décès/libération/suivi.",
         "source_ranges": [
-          [
-            1238,
-            1260
-          ],
-          [
-            917,
-            918
-          ]
+          [1238, 1260],
+          [917, 918]
         ],
         "oracle": "V3",
         "test": "Vérifier dimensions alignées sur mêmes hypothèses/périodes ; métriques absentes signalées et non remplacées par zéro."
@@ -3516,14 +2507,8 @@
       {
         "criterion": "Duel est une vue facultative des mêmes valeurs de performance/frais/diversification/probabilité/âge ; scores n’altèrent pas métriques ni recommendation ; comparaison sauvegarde snapshot immuable.",
         "source_ranges": [
-          [
-            1261,
-            1279
-          ],
-          [
-            786,
-            789
-          ]
+          [1261, 1279],
+          [786, 789]
         ],
         "oracle": "V2",
         "test": "Ouvrir détail puis duel puis sauvegarde/rechargement : mêmes IDs, valeurs et hypothèses."
@@ -3531,14 +2516,8 @@
       {
         "criterion": "CTA faire valider apparaît après comparaison ; utilisateur ajuste/revient sans perte, alternatives paginées et explications en panneau/page ; aucun ordre de souscription/transfert implicite.",
         "source_ranges": [
-          [
-            200,
-            207
-          ],
-          [
-            1289,
-            1289
-          ]
+          [200, 207],
+          [1289, 1289]
         ],
         "oracle": "V3",
         "test": "Comparer, ajuster, revenir puis demander validation : paramètres conservés et CTA seulement après comparaison ; contrôler qu’aucun ordre ou transfert financier n’est émis. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -3568,11 +2547,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "realtime.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "realtime.md", "llm.md"],
     "risks": [
       "Comparaison biaisée : cohorte/période/hypothèses alignées et explication des exclusions ; risque de recommandation à partir fixture explicitement bloqué."
     ],
@@ -3586,21 +2561,9 @@
     "title": "Sauvegarder un Full Audit et demander une validation experte",
     "milestone": "M3",
     "objective": "Le client réunit contrat, risques, projection et alternatives dans un audit lisible et sourcé, le retrouve dans Wallet et demande une vérification avec son contexte déjà attaché.",
-    "depends_on": [
-      "S-024",
-      "S-030",
-      "S-081",
-      "S-080"
-    ],
-    "apps": [
-      "www",
-      "client",
-      "admin",
-      "api"
-    ],
-    "modules": [
-      "contract-analysis"
-    ],
+    "depends_on": ["S-024", "S-030", "S-081", "S-080"],
+    "apps": ["www", "client", "admin", "api"],
+    "modules": ["contract-analysis"],
     "mode": "local-fixtures",
     "priority": 131,
     "session_budget": 1,
@@ -3623,32 +2586,16 @@
       "Audit complet ; incomplet ; recommandation maintien ; donnée incertaine bloquant conclusion ; double demande expert."
     ],
     "integrations": {
-      "simulated": [
-        "Résultats financiers de démonstration",
-        "Email réception audit via Mailpit"
-      ],
-      "real": [
-        "Composition rapport, sauvegarde et dossier locaux"
-      ],
-      "activation_slices": [
-        "S-038",
-        "S-040",
-        "S-089",
-        "S-136"
-      ]
+      "simulated": ["Résultats financiers de démonstration", "Email réception audit via Mailpit"],
+      "real": ["Composition rapport, sauvegarde et dossier locaux"],
+      "activation_slices": ["S-038", "S-040", "S-089", "S-136"]
     },
     "criteria": [
       {
         "criterion": "Full Audit couvre contrat/allocation/fonds ; performance/benchmark/frais/risque/diversification ; protections/flexibilité/Freshness ; inflation/hypothèses/cible ; fan chart/distribution/probabilité/âge ; stress/alternatives ; sources/limites/validation.",
         "source_ranges": [
-          [
-            1282,
-            1289
-          ],
-          [
-            686,
-            695
-          ]
+          [1282, 1289],
+          [686, 695]
         ],
         "oracle": "V2",
         "test": "Comparer rendu aux sept groupes et dix sections source ; chaque métrique pointe snapshot/méthode, aucune absence dissimulée."
@@ -3656,14 +2603,8 @@
       {
         "criterion": "Rendu et consultation conservent mêmes snapshots, versions et données applicables ; une régénération crée nouvelle version et indique modifications, sans réécrire un rapport délivré.",
         "source_ranges": [
-          [
-            403,
-            411
-          ],
-          [
-            1289,
-            1289
-          ]
+          [403, 411],
+          [1289, 1289]
         ],
         "oracle": "V2",
         "test": "Générer, modifier contrat puis régénérer : deux rapports sources/IDs/dates distincts et ancien lisible."
@@ -3671,14 +2612,8 @@
       {
         "criterion": "Identification au moment de recevoir/sauvegarder ou être recontacté préserve document, contrat, paramètres, résultats et étape exacte dans Wallet.",
         "source_ranges": [
-          [
-            937,
-            937
-          ],
-          [
-            1337,
-            1342
-          ]
+          [937, 937],
+          [1337, 1342]
         ],
         "oracle": "V3",
         "test": "Depuis anonyme demander audit puis AuthKit ; vérifier aucune ressaisie/upload, même rapport et prochaine étape."
@@ -3686,18 +2621,9 @@
       {
         "criterion": "Validation experte suit résultat/comparaison, garde contexte/attribution et crée dossier avec responsable/état/prochaine action/date ; proposition commerciale ne transforme pas toute demande en opportunité artificielle.",
         "source_ranges": [
-          [
-            180,
-            207
-          ],
-          [
-            502,
-            509
-          ],
-          [
-            904,
-            905
-          ]
+          [180, 207],
+          [502, 509],
+          [904, 905]
         ],
         "oracle": "V2",
         "test": "Soumettre validation deux fois : une demande/dossier logique, audit attaché, prochaine action visible Admin/Wallet."
@@ -3705,14 +2631,8 @@
       {
         "criterion": "Rapport comprend forces/limites et possibilité de conserver la solution ; détails restent pages/panneaux, téléchargement protégé et mode démo explicite dans fichier comme dans UI.",
         "source_ranges": [
-          [
-            679,
-            695
-          ],
-          [
-            1369,
-            1377
-          ]
+          [679, 695],
+          [1369, 1377]
         ],
         "oracle": "V3",
         "test": "Télécharger un rapport démonstration avec solution à conserver : forces, limites, décision de maintien et mention fictive figurent dans le fichier ; téléchargement tiers refusé. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -3742,11 +2662,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "realtime.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "realtime.md", "llm.md"],
     "risks": [
       "PDF transmis avec faux résultats ou PII : mêmes contrôles/mode/provenance que UI et stockage privé."
     ],
@@ -3760,18 +2676,9 @@
     "title": "Partager un Wrapped révocable et comparer des métriques consenties",
     "milestone": "M3",
     "objective": "Un client choisit explicitement les métriques publiques d’un résultat, partage un lien révocable puis invite à un challenge sans exposer ses données financières privées.",
-    "depends_on": [
-      "S-027",
-      "S-013"
-    ],
-    "apps": [
-      "www",
-      "client",
-      "api"
-    ],
-    "modules": [
-      "engagement-sharing"
-    ],
+    "depends_on": ["S-027", "S-013a"],
+    "apps": ["www", "client", "api"],
+    "modules": ["engagement-sharing"],
     "mode": "local-fixtures",
     "priority": 132,
     "session_budget": 1,
@@ -3794,64 +2701,37 @@
     ],
     "integrations": {
       "simulated": [],
-      "real": [
-        "API et persistance PostgreSQL locales"
-      ],
+      "real": ["API et persistance PostgreSQL locales"],
       "activation_slices": []
     },
     "criteria": [
       {
         "criterion": "Wrapped partage seulement profil/Investment Age/score/Target Age explicitement choisis ; salaire/capital/cotisation/patrimoine/police/PII sensibles sont exclus par défaut côté serveur.",
-        "source_ranges": [
-          [
-            1292,
-            1303
-          ]
-        ],
+        "source_ranges": [[1292, 1303]],
         "oracle": "V2",
         "test": "Inspecter HTML/JSON/images de partage et tenter une clé hors whitelist : données absentes, pas seulement masquées."
       },
       {
         "criterion": "La page possède token révocable et date de génération, pointe snapshot figé et permet nouveau parcours anonyme sans accès aux sources privées du propriétaire.",
         "source_ranges": [
-          [
-            1303,
-            1303
-          ],
-          [
-            2661,
-            2668
-          ]
+          [1303, 1303],
+          [2661, 2668]
         ],
         "oracle": "V3",
         "test": "Ouvrir en session privée, lancer analyse distincte puis révoquer : URL et cache cessent d’exposer projection."
       },
       {
         "criterion": "3P Challenge compare uniquement métriques autorisées de deux participants ; Group Wrapped couvre meilleur score/époque/potentiel après gate explicite usage individuel et confidentialité.",
-        "source_ranges": [
-          [
-            1304,
-            1307
-          ]
-        ],
+        "source_ranges": [[1304, 1307]],
         "oracle": "V2",
         "test": "Un participant ne consent pas au score : comparaison exclut ce champ ; retrait ferme sa projection et recalcul ne le réintroduit pas."
       },
       {
         "criterion": "Roast est secondaire, humoristique sans humiliation et suivi d’une analyse sérieuse ; son texte ne révèle pas d’autres champs ni fausse date de revue.",
         "source_ranges": [
-          [
-            1308,
-            1309
-          ],
-          [
-            991,
-            991
-          ],
-          [
-            1376,
-            1376
-          ]
+          [1308, 1309],
+          [991, 991],
+          [1376, 1376]
         ],
         "oracle": "V3",
         "test": "Comparer réponses de corpus humoristique et refus des données sensibles ; parcours sérieux reste accessible."
@@ -3859,14 +2739,8 @@
       {
         "criterion": "Prévisualiser/partager/révoquer et vue de groupe sont accessibles et persistants ; aucune quête ou partage forcé ne bloque analyse principale.",
         "source_ranges": [
-          [
-            1305,
-            1311
-          ],
-          [
-            1368,
-            1369
-          ]
+          [1305, 1311],
+          [1368, 1369]
         ],
         "oracle": "V3",
         "test": "Prévisualiser, partager puis révoquer, recharger et ouvrir comme destinataire ; l’accès suit la révocation, le groupe respecte ses droits et l’analyse reste utilisable sans partage. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -3906,11 +2780,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "realtime.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "realtime.md", "llm.md"],
     "risks": [
       "Fuite par HTML/cache/image : whitelist avant rendu et invalidation de révocation testée."
     ],
@@ -3924,20 +2794,9 @@
     "title": "Suivre une stratégie par Health Check, Wrapped annuel et timeline",
     "milestone": "M3",
     "objective": "Le client retrouve sa stratégie dans le temps, voit ce qui a changé depuis la dernière revue et conserve une décision documentée avec prochaine action.",
-    "depends_on": [
-      "S-031",
-      "S-027",
-      "S-081",
-      "S-082"
-    ],
-    "apps": [
-      "client",
-      "admin",
-      "api"
-    ],
-    "modules": [
-      "engagement-monitoring"
-    ],
+    "depends_on": ["S-031", "S-027", "S-081", "S-082"],
+    "apps": ["client", "admin", "api"],
+    "modules": ["engagement-monitoring"],
     "mode": "local-fixtures",
     "priority": 133,
     "session_budget": 1,
@@ -3960,68 +2819,35 @@
       "Revue annuelle due ; hypothèse inflation changée ; allocation inchangée ; opportunité identifiée ; client inaccessible ; job livré deux fois."
     ],
     "integrations": {
-      "simulated": [
-        "Évolution marchés et analyses de démonstration",
-        "Notifications Mailpit"
-      ],
-      "real": [
-        "Revue/version/timeline et scheduling locaux"
-      ],
-      "activation_slices": [
-        "S-038",
-        "S-040",
-        "S-089"
-      ]
+      "simulated": ["Évolution marchés et analyses de démonstration", "Notifications Mailpit"],
+      "real": ["Revue/version/timeline et scheduling locaux"],
+      "activation_slices": ["S-038", "S-040", "S-089"]
     },
     "criteria": [
       {
         "criterion": "Wrapped annuel compare score, Goal Probability, Target Age, modifications d’allocation et opportunités entre versions comparables ; dates et hypothèses changées sont explicites.",
-        "source_ranges": [
-          [
-            1346,
-            1358
-          ]
-        ],
+        "source_ranges": [[1346, 1358]],
         "oracle": "V2",
         "test": "Deux snapshots : deltas recomputables, métrique non comparable signalée plutôt que variation trompeuse."
       },
       {
         "criterion": "Health Check montre allocation/risque/frais, probabilité/âge, inflation, opportunité et recommandation ; source incertaine mène revue et non recommandation automatique définitive.",
-        "source_ranges": [
-          [
-            1362,
-            1363
-          ]
-        ],
+        "source_ranges": [[1362, 1363]],
         "oracle": "V3",
         "test": "Revoir inflation et contrat incomplet : alerte et action requise, résultat antérieur conservé."
       },
       {
         "criterion": "Timeline matérialise création, revues, adaptations et réduction de risque décidée ; scène persistante évolue depuis capital/cotisations/stratégie/projections/probabilité/objectif sans progression artificielle.",
-        "source_ranges": [
-          [
-            1360,
-            1366
-          ]
-        ],
+        "source_ranges": [[1360, 1366]],
         "oracle": "V2",
         "test": "Changer paramètres puis consulter années : événements et scène correspondent aux snapshots, absence d’évolution possible."
       },
       {
         "criterion": "Revue due crée nouvelle analyse/version, différences, décision et tâches/notification ; répétition du job ne produit qu’une revue logique avec responsable/prochaine action.",
         "source_ranges": [
-          [
-            2430,
-            2431
-          ],
-          [
-            2669,
-            2678
-          ],
-          [
-            502,
-            508
-          ]
+          [2430, 2431],
+          [2669, 2678],
+          [502, 508]
         ],
         "oracle": "V2",
         "test": "Déclencher et rejouer une échéance puis suivre Admin→Wallet : une revue, ancien snapshot intact."
@@ -4029,14 +2855,8 @@
       {
         "criterion": "Le suivi ne confond pas abonnement Care Retire et suivi général ; interfaces de revue/action/historique ouvrent surfaces dédiées, erreurs et arrêt de suivi visibles.",
         "source_ranges": [
-          [
-            154,
-            159
-          ],
-          [
-            1365,
-            1377
-          ]
+          [154, 159],
+          [1365, 1377]
         ],
         "oracle": "V3",
         "test": "Comparer un suivi général et un droit Care expiré : aucun droit indu ; arrêter le suivi général, recharger et contrôler historique conservé et absence de nouveau job non autorisé. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -4076,11 +2896,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "realtime.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "realtime.md", "llm.md"],
     "risks": [
       "Comparaison invalide après méthode modifiée : étiqueter rupture de méthode et proposer recalcul distinct."
     ],
@@ -4094,18 +2910,9 @@
     "title": "Explorer un royaume retraite persistant en mode bonus",
     "milestone": "M3",
     "objective": "Un client peut visualiser ses résultats sous forme de royaume et de builds comparés, puis revenir à l’explication financière sans que le jeu devienne le parcours obligatoire.",
-    "depends_on": [
-      "S-027",
-      "S-033"
-    ],
-    "apps": [
-      "client",
-      "www",
-      "api"
-    ],
-    "modules": [
-      "analysis-storytelling"
-    ],
+    "depends_on": ["S-027", "S-033"],
+    "apps": ["client", "www", "api"],
+    "modules": ["analysis-storytelling"],
     "mode": "local-fixtures",
     "priority": 134,
     "session_budget": 1,
@@ -4129,23 +2936,15 @@
     ],
     "integrations": {
       "simulated": [],
-      "real": [
-        "API et persistance PostgreSQL locales"
-      ],
+      "real": ["API et persistance PostgreSQL locales"],
       "activation_slices": []
     },
     "criteria": [
       {
         "criterion": "RPG reste bonus via accès nommé et sortie immédiate vers analyse sérieuse ; aucun badge/streak/quête sans utilité ne bloque le produit principal.",
         "source_ranges": [
-          [
-            1310,
-            1311
-          ],
-          [
-            1368,
-            1368
-          ]
+          [1310, 1311],
+          [1368, 1368]
         ],
         "oracle": "V3",
         "test": "Faire parcours complet sans jeu puis entrer/sortir sans perte de résultat."
@@ -4153,14 +2952,8 @@
       {
         "criterion": "Château/capital, coffre/3P, remparts/protections, personnage/situation, météo/sécurité et inflation/défi ont légende explicite et données de snapshot, pas verdict moral.",
         "source_ranges": [
-          [
-            1313,
-            1326
-          ],
-          [
-            1078,
-            1078
-          ]
+          [1313, 1326],
+          [1078, 1078]
         ],
         "oracle": "V3",
         "test": "Inspecter chaque élément et sa source ; protection inconnue n’est pas figurée comme acquise."
@@ -4168,40 +2961,23 @@
       {
         "criterion": "Boss capital nécessaire/capital projeté/écart provient du même mode réel ou nominal et scénario ; cible atteinte/écart négatif sont traités sans prédiction certaine.",
         "source_ranges": [
-          [
-            1329,
-            1329
-          ],
-          [
-            1370,
-            1372
-          ]
+          [1329, 1329],
+          [1370, 1372]
         ],
         "oracle": "V2",
         "test": "Comparer valeurs source avec rendu pour écart positif/nul et vérifier unité/date."
       },
       {
         "criterion": "Cinq classes, équipements de continuité/décès/allocation/garanties et niveaux de builds restent explicables selon règles versionnées ; décompte de configurations reprend compatibilité de S-030.",
-        "source_ranges": [
-          [
-            1332,
-            1335
-          ]
-        ],
+        "source_ranges": [[1332, 1335]],
         "oracle": "V2",
         "test": "Afficher builds actuel/alternatives et confronter au comparateur ; aucune capacité financière inventée par équipement."
       },
       {
         "criterion": "Royaume persiste par version et évolue selon données/projections réelles ; clavier, mode réduit, table de lecture et ouvertures bornées permettent usage accessible.",
         "source_ranges": [
-          [
-            1360,
-            1361
-          ],
-          [
-            1369,
-            1377
-          ]
+          [1360, 1361],
+          [1369, 1377]
         ],
         "oracle": "V3",
         "test": "Sauvegarder un royaume puis changer de version de résultat : visuel, métriques et historique correspondent ; recharger et comparer en mode réduit/tableau accessible. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -4231,11 +3007,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "realtime.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "realtime.md", "llm.md"],
     "risks": [
       "Gamification culpabilisante : langage neutre et retour permanent aux unités/hypothèses."
     ],
@@ -4249,18 +3021,9 @@
     "title": "Activer la signature réelle des documents et ses preuves",
     "milestone": "M8",
     "objective": "Un signataire utilise un prestataire approuvé pour le document exact ; CoverView conserve la preuve vérifiable et reprend refus, expiration ou interruption de manière fiable.",
-    "depends_on": [
-      "S-018"
-    ],
-    "apps": [
-      "www",
-      "client",
-      "admin",
-      "api"
-    ],
-    "modules": [
-      "documents-signing"
-    ],
+    "depends_on": ["S-018"],
+    "apps": ["www", "client", "admin", "api"],
+    "modules": ["documents-signing"],
     "mode": "integration",
     "priority": 735,
     "session_budget": 1,
@@ -4287,53 +3050,30 @@
       "real": [
         "Prestataire de signature retenu en sandbox réelle puis configuration de production autorisée"
       ],
-      "activation_slices": [
-        "S-137",
-        "S-139"
-      ]
+      "activation_slices": ["S-137", "S-139"]
     },
     "criteria": [
       {
         "criterion": "Chaque document procuration/mandat/consentement/rachat/résiliation/LPP/KYC activé possède template/périmètre/niveau approuvés et fournisseur connecté ; famille non validée demeure indisponible en réel.",
         "source_ranges": [
-          [
-            762,
-            774
-          ],
-          [
-            2897,
-            2897
-          ],
-          [
-            2906,
-            2906
-          ]
+          [762, 774],
+          [2897, 2897],
+          [2906, 2906]
         ],
         "oracle": "V5",
         "test": "Matrice signée par responsable et essai réel d’au moins chaque niveau activé ; mode de preuve fournisseur consigné."
       },
       {
         "criterion": "Le cycle fournisseur conserve exactement les états métier existants, document/hash/signataire/consentement/authentification/date et dossier de preuve téléchargeable contrôlé.",
-        "source_ranges": [
-          [
-            770,
-            783
-          ]
-        ],
+        "source_ranges": [[770, 783]],
         "oracle": "V3",
         "test": "Signer via compte test réel, récupérer preuve, comparer hash et statut Wallet/Admin après retour."
       },
       {
         "criterion": "Callback forgé, rejoué, tardif ou désordonné ne modifie pas abusivement état ; retries et timeouts n’envoient pas un second document au signataire.",
         "source_ranges": [
-          [
-            772,
-            774
-          ],
-          [
-            2420,
-            2421
-          ]
+          [772, 774],
+          [2420, 2421]
         ],
         "oracle": "V2",
         "test": "Tests signatures webhook puis redélivraison réelle contrôlée : une transition signature.completed."
@@ -4341,26 +3081,15 @@
       {
         "criterion": "Tokens/PII et preuve restent privés, permission est revalidée au téléchargement/worker ; logs n’exposent pas secrets ou contenu du document.",
         "source_ranges": [
-          [
-            424,
-            445
-          ],
-          [
-            883,
-            883
-          ]
+          [424, 445],
+          [883, 883]
         ],
         "oracle": "V2",
         "test": "Inspection réponses/logs et tests client étranger ; preuve accessible uniquement selon policy."
       },
       {
         "criterion": "Retrait/refus/expiration et panne prestataire donnent des suites compréhensibles ; transmission d’une démarche ne démarre que sur signature validée réelle du bon périmètre.",
-        "source_ranges": [
-          [
-            774,
-            783
-          ]
-        ],
+        "source_ranges": [[774, 783]],
         "oracle": "V3",
         "test": "Interrompre et reprendre parcours réel puis vérifier workflow bloqué jusqu’au signal valide."
       }
@@ -4401,10 +3130,7 @@
       "testing.md",
       "dependencies.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "llm.md"],
     "risks": [
       "Fournisseur pas choisi : aucun identifiant/API inventé ; l’implémentation réelle attend décision exacte."
     ],
@@ -4418,20 +3144,9 @@
     "title": "Transmettre réellement les demandes LPP et de récupération de contrats",
     "milestone": "M8",
     "objective": "Un opérateur autorisé transmet une demande réellement signée par le canal approuvé de l’organisme et le client voit une preuve d’envoi, une référence et la prochaine action.",
-    "depends_on": [
-      "S-020",
-      "S-022",
-      "S-035",
-      "S-089"
-    ],
-    "apps": [
-      "api",
-      "admin",
-      "client"
-    ],
-    "modules": [
-      "institution-requests"
-    ],
+    "depends_on": ["S-020", "S-022", "S-035", "S-089"],
+    "apps": ["api", "admin", "client"],
+    "modules": ["institution-requests"],
     "mode": "integration",
     "priority": 736,
     "session_budget": 1,
@@ -4457,54 +3172,30 @@
       "real": [
         "Canal organisme approuvé : messagerie réelle ou transmission humaine assistée avec preuve réelle"
       ],
-      "activation_slices": [
-        "S-041",
-        "S-137",
-        "S-139"
-      ]
+      "activation_slices": ["S-041", "S-137", "S-139"]
     },
     "criteria": [
       {
         "criterion": "Canal et destinataire sont approuvés par organisme ; aucune API LPP inventée ; portail/courrier sans API est traité comme tâche opérateur et exige preuve réelle avant statut envoyé.",
         "source_ranges": [
-          [
-            795,
-            803
-          ],
-          [
-            818,
-            821
-          ],
-          [
-            2629,
-            2638
-          ]
+          [795, 803],
+          [818, 821],
+          [2629, 2638]
         ],
         "oracle": "V3",
         "test": "Exécuter au moins un canal réellement autorisé sur dossier de test et joindre preuve ; tâche assistée ne se clôture pas par simple simulation."
       },
       {
         "criterion": "Les demandes par compagnie possèdent référence robuste, documents signés/périmètre valide et corrélation des échanges ; pièces et destinataire sont vérifiables avant transmission.",
-        "source_ranges": [
-          [
-            819,
-            833
-          ]
-        ],
+        "source_ranges": [[819, 833]],
         "oracle": "V3",
         "test": "Envoyer dossier test autorisé puis confronter message/accusé/référence à demande et preuve signée."
       },
       {
         "criterion": "LppSearchRequest passe SUBMITTED uniquement après transmission réelle prouvée ; erreur conserve SIGNED/action requise, avec responsable/date/motif visible Wallet/Admin.",
         "source_ranges": [
-          [
-            803,
-            811
-          ],
-          [
-            502,
-            508
-          ]
+          [803, 811],
+          [502, 508]
         ],
         "oracle": "V2",
         "test": "Faire échouer transport et reprendre : aucun SUBMITTED prématuré, client voit prochaine action exacte."
@@ -4512,18 +3203,9 @@
       {
         "criterion": "Idempotence et corrélation empêchent double envoi ; relance obéit au template/délai approuvé, s’arrête sur réponse/mandat invalide et reste auditable.",
         "source_ranges": [
-          [
-            821,
-            825
-          ],
-          [
-            2422,
-            2425
-          ],
-          [
-            2495,
-            2495
-          ]
+          [821, 825],
+          [2422, 2425],
+          [2495, 2495]
         ],
         "oracle": "V2",
         "test": "Retry après timeout ambigu : vérifier état fournisseur avant relancer ; aucune seconde demande injustifiée."
@@ -4531,14 +3213,8 @@
       {
         "criterion": "Logs de transmission conservent acteur/date/objet/raison/source sans secrets ; pièces/périmètres sont autorisés côté worker et preuve présentée en surface accessible.",
         "source_ranges": [
-          [
-            883,
-            883
-          ],
-          [
-            875,
-            881
-          ]
+          [883, 883],
+          [875, 881]
         ],
         "oracle": "V3",
         "test": "Retirer accès ou expirer mandat avant job puis vérifier refus ; inspecter preuve réelle dans Wallet autorisé."
@@ -4579,10 +3255,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "llm.md"],
     "risks": [
       "Timeout ambigu ou canal inventé : preuve et réconciliation avant retry ; aucun envoi aveugle."
     ],
@@ -4596,17 +3269,9 @@
     "title": "Classer et extraire réellement des documents avec un adapter approuvé",
     "milestone": "M8",
     "objective": "Un utilisateur dépose une pièce de test puis autorisée et reçoit des champs sourcés réellement extraits, avec revue humaine des erreurs et reprise des pannes.",
-    "depends_on": [
-      "S-023"
-    ],
-    "apps": [
-      "api",
-      "client",
-      "admin"
-    ],
-    "modules": [
-      "document-intelligence"
-    ],
+    "depends_on": ["S-023"],
+    "apps": ["api", "client", "admin"],
+    "modules": ["document-intelligence"],
     "mode": "integration",
     "priority": 737,
     "session_budget": 1,
@@ -4633,24 +3298,14 @@
       "real": [
         "OCR/classification approuvés et antivirus effectif sur corpus non personnel puis périmètre réel autorisé"
       ],
-      "activation_slices": [
-        "S-131",
-        "S-135",
-        "S-139"
-      ]
+      "activation_slices": ["S-131", "S-135", "S-139"]
     },
     "criteria": [
       {
         "criterion": "OCR/classification réelle couvre familles de §38.1 et champs de §38.2 avec référence page/span/source ; extraction impossible demeure inconnue et proposition non validée.",
         "source_ranges": [
-          [
-            834,
-            844
-          ],
-          [
-            2350,
-            2351
-          ]
+          [834, 844],
+          [2350, 2351]
         ],
         "oracle": "V3",
         "test": "Exécuter corpus avec oracle annoté, inspecter sorties et corrections puis publier rapport de rappel/précision par champ."
@@ -4658,14 +3313,8 @@
       {
         "criterion": "Original traverse antivirus effectif avant parsing, stockage privé et extraction ; fichier malveillant/corrompu ne déclenche ni appel tiers non autorisé ni mise à jour métier.",
         "source_ranges": [
-          [
-            855,
-            860
-          ],
-          [
-            2410,
-            2415
-          ]
+          [855, 860],
+          [2410, 2415]
         ],
         "oracle": "V2",
         "test": "Fichier de test antivirus et PDF invalide : quarantaine/refus observés, aucun contrat créé."
@@ -4673,18 +3322,9 @@
       {
         "criterion": "Champs/confidence/conflits sont proposés à revue selon seuils validés ; données confirmées restent prioritaires, produit inconnu crée brouillon/revue sans publication.",
         "source_ranges": [
-          [
-            417,
-            422
-          ],
-          [
-            855,
-            860
-          ],
-          [
-            875,
-            880
-          ]
+          [417, 422],
+          [855, 860],
+          [875, 880]
         ],
         "oracle": "V3",
         "test": "Deux extractions contradictoires et valeur confirmée : historique et tâche visibles, aucune écriture silencieuse."
@@ -4692,14 +3332,8 @@
       {
         "criterion": "Timeout, limite fournisseur, coût excessif, callback doublé et worker interrompu ont reprise bornée et exception attribuée ; aucune sortie partielle n’est présentée comme VERIFIED.",
         "source_ranges": [
-          [
-            875,
-            883
-          ],
-          [
-            2495,
-            2495
-          ]
+          [875, 883],
+          [2495, 2495]
         ],
         "oracle": "V2",
         "test": "Couper fournisseur puis reprendre job ; une extraction logique finale et erreur traçable."
@@ -4707,14 +3341,8 @@
       {
         "criterion": "Résidence/rétention/réutilisation et contrat sous-traitant sont approuvés ; données de PDF/chat ne changent ni droits ni instructions d’actions du pipeline.",
         "source_ranges": [
-          [
-            2515,
-            2518
-          ],
-          [
-            2919,
-            2921
-          ]
+          [2515, 2518],
+          [2919, 2921]
         ],
         "oracle": "V5",
         "test": "Validation humaine des paramètres fournisseur, tests corpus injection et inspection logs sans contenu sensible."
@@ -4755,10 +3383,7 @@
       "testing.md",
       "dependencies.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "marketing-web.md"
-    ],
+    "exclusions": ["billing.md", "marketing-web.md"],
     "risks": [
       "Qualité OCR confondue confiance fournisseur : corpus annoté et contrôle par champ ; aucune conclusion financière depuis texte seul."
     ],
@@ -4772,17 +3397,8 @@
     "title": "Composer et activer les méthodes accumulation, score et compatibilité validées",
     "milestone": "M8",
     "objective": "Un validateur relie les preuves S-043/S-044/S-045 aux versions composées, autorise leur activation et vérifie qu’un résultat utilisateur conserve les méthodes, sources et limites approuvées.",
-    "depends_on": [
-      "S-043",
-      "S-044",
-      "S-045"
-    ],
-    "apps": [
-      "api",
-      "www",
-      "client",
-      "admin"
-    ],
+    "depends_on": ["S-043", "S-044", "S-045"],
+    "apps": ["api", "www", "client", "admin"],
     "modules": [
       "scoring-benchmark",
       "simulation-engine",
@@ -4814,35 +3430,17 @@
       "real": [
         "Composition des versions approuvées S-043/S-044/S-045 sur les sources S-040 ; activation exacte et auditable."
       ],
-      "activation_slices": [
-        "S-136",
-        "S-139"
-      ]
+      "activation_slices": ["S-136", "S-139"]
     },
     "criteria": [
       {
         "criterion": "Le manifeste relie chaque famille activée aux définitions, paramètres et preuves approuvés en S-043/S-044/S-045 ; une preuve absente ou d’une autre version bloque cette famille.",
         "source_ranges": [
-          [
-            2899,
-            2902
-          ],
-          [
-            2908,
-            2908
-          ],
-          [
-            1012,
-            1014
-          ],
-          [
-            1054,
-            1054
-          ],
-          [
-            1143,
-            1145
-          ]
+          [2899, 2902],
+          [2908, 2908],
+          [1012, 1014],
+          [1054, 1054],
+          [1143, 1145]
         ],
         "oracle": "V5",
         "test": "Relire rapports et manifeste sans refaire les campagnes ; contrôler propriétaire, version et domaine de validité."
@@ -4850,14 +3448,8 @@
       {
         "criterion": "Le run composé emploie le profil accumulation validé S-043, conserve N/méthode/seed/horizon/corrélations et distingue Goal Probability/Target Age de la soutenabilité Retire.",
         "source_ranges": [
-          [
-            1145,
-            1206
-          ],
-          [
-            1733,
-            1736
-          ]
+          [1145, 1206],
+          [1733, 1736]
         ],
         "oracle": "V2",
         "test": "Rejouer un cas de composition et comparer version/run au rapport S-043 validé."
@@ -4865,14 +3457,8 @@
       {
         "criterion": "Scores, cohortes, rangs et Investment Age affichés proviennent des versions validées S-044 avec leurs abstentions et explications.",
         "source_ranges": [
-          [
-            118,
-            127
-          ],
-          [
-            995,
-            1029
-          ]
+          [118, 127],
+          [995, 1029]
         ],
         "oracle": "V2",
         "test": "Comparer version, contributions et rang aux preuves S-044 ; refuser une cohorte non validée."
@@ -4880,14 +3466,8 @@
       {
         "criterion": "Calculateur et compatibilité composent S-043/S-045 en conservant sources datées, réel/nominal, effort, AVS/LPP, plafonds et contraintes.",
         "source_ranges": [
-          [
-            1099,
-            1143
-          ],
-          [
-            1224,
-            1235
-          ]
+          [1099, 1143],
+          [1224, 1235]
         ],
         "oracle": "V2",
         "test": "Un parcours profil → résultat → stratégie retrouve les versions/contraintes des rapports ; aucune recalibration globale."
@@ -4895,18 +3475,9 @@
       {
         "criterion": "Complétude n’est pas précision statistique ; paramètres/versions modifiés créent nouveaux runs, tests de sensibilité et messages distinguent historique/simulation/projection sans garantie ni recommandation au seul passé.",
         "source_ranges": [
-          [
-            1208,
-            1222
-          ],
-          [
-            1370,
-            1377
-          ],
-          [
-            2524,
-            2531
-          ]
+          [1208, 1222],
+          [1370, 1377],
+          [2524, 2531]
         ],
         "oracle": "V3",
         "test": "Observer un cas de composition ambigu et une version historique ; comparer provenance/limites aux preuves sans reprendre les campagnes familiales."
@@ -4956,10 +3527,7 @@
       "frontend.md",
       "i18n.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "llm.md"],
     "risks": [
       "Portée calibration multi-familles peut dépasser une session : scinder au premier groupe activable (capital/probabilités puis score/cohortes puis compatibilité) en conservant un oracle distinct par groupe."
     ],
@@ -4973,17 +3541,9 @@
     "title": "Répondre réellement aux FAQ à partir du corpus public cité",
     "milestone": "M8",
     "objective": "Le visiteur pose une question libre et reçoit une réponse générée depuis le corpus public validé, avec citation vérifiable ou abstention, sans accès aux données personnelles.",
-    "depends_on": [
-      "S-012"
-    ],
-    "apps": [
-      "www",
-      "api",
-      "admin"
-    ],
-    "modules": [
-      "content-acquisition"
-    ],
+    "depends_on": ["S-012"],
+    "apps": ["www", "api", "admin"],
+    "modules": ["content-acquisition"],
     "mode": "integration",
     "priority": 739,
     "session_budget": 1,
@@ -5006,49 +3566,27 @@
     ],
     "integrations": {
       "simulated": [],
-      "real": [
-        "LLM approuvé connecté au seul corpus public"
-      ],
-      "activation_slices": [
-        "S-131",
-        "S-135",
-        "S-139"
-      ]
+      "real": ["LLM approuvé connecté au seul corpus public"],
+      "activation_slices": ["S-131", "S-135", "S-139"]
     },
     "criteria": [
       {
         "criterion": "Les seize intentions de §27 obtiennent réponse rattachée à FAQ publiée ou abstention ; citation pointe passage existant et version, aucun conseil individualisé ne provient du chat public.",
-        "source_ranges": [
-          [
-            699,
-            715
-          ]
-        ],
+        "source_ranges": [[699, 715]],
         "oracle": "V3",
         "test": "Exécuter corpus réel fournisseur et vérifier existence/support de chaque citation ; questions personnelles dirigées vers parcours autorisé."
       },
       {
         "criterion": "Corpus et miroir sont équivalents au contenu public ; brouillon, donnée interne et contenu retiré ne sont pas récupérables même si connus par un ancien index.",
-        "source_ranges": [
-          [
-            717,
-            727
-          ]
-        ],
+        "source_ranges": [[717, 727]],
         "oracle": "V2",
         "test": "Retirer FAQ et réinterroger : contrôle de publication au retrieval, aucun extrait périmé divulgué."
       },
       {
         "criterion": "Question ou document hostile ne peut modifier règles de retrieval, lancer outil/action métier ni récupérer profil/contrat ; limites de tokens/temps/coût appliquées.",
         "source_ranges": [
-          [
-            2919,
-            2921
-          ],
-          [
-            2517,
-            2518
-          ]
+          [2919, 2921],
+          [2517, 2518]
         ],
         "oracle": "V2",
         "test": "Corpus injection/off-topic et timeout ; aucune action ni fuite, fallback FAQ fonctionnel."
@@ -5056,14 +3594,8 @@
       {
         "criterion": "Fournisseur/résidence/rétention/réutilisation et suppression des questions sont explicitement validés ; provenance déclarée et tracking respectent consentement.",
         "source_ranges": [
-          [
-            731,
-            737
-          ],
-          [
-            2919,
-            2921
-          ]
+          [731, 737],
+          [2919, 2921]
         ],
         "oracle": "V5",
         "test": "Revue des paramètres et politique, inspection des requêtes fournisseur pour absence de contexte privé."
@@ -5071,14 +3603,8 @@
       {
         "criterion": "Réponse, citation, erreur et suggestion éditoriale sont accessibles ; suggestions restent privées à valider, seule FAQ peut s’étendre inline.",
         "source_ranges": [
-          [
-            736,
-            737
-          ],
-          [
-            698,
-            715
-          ]
+          [736, 737],
+          [698, 715]
         ],
         "oracle": "V3",
         "test": "Demander réponse, citation et suggestion éditoriale, provoquer erreur provider puis lire publiquement : suggestion privée absente et FAQ publiée seulement dépliable. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -5088,10 +3614,7 @@
       {
         "ref": "bible.question.012",
         "question": "Le fournisseur et ses conditions de données pour FAQ publique sont-ils approuvés, avec aucune source privée ?",
-        "options": [
-          "Oui, décision exacte au GO",
-          "Non, conserver recherche FAQ sans génération"
-        ],
+        "options": ["Oui, décision exacte au GO", "Non, conserver recherche FAQ sans génération"],
         "recommended": 0,
         "blocks": "Appels LLM réels"
       },
@@ -5119,10 +3642,7 @@
       "testing.md",
       "observability.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "realtime.md"
-    ],
+    "exclusions": ["billing.md", "realtime.md"],
     "risks": [
       "Hallucination sur matière financière : source publiée et abstention, corpus d’évaluation fournisseur réel."
     ],
@@ -5136,19 +3656,9 @@
     "title": "Alimenter le catalogue et les marchés par des sources réelles validées",
     "milestone": "M8",
     "objective": "Un gestionnaire importe ou saisit une source marché/produit réellement autorisée, contrôle ses versions et la publie pour les moteurs avec qualité, licence et date explicites.",
-    "depends_on": [
-      "S-015",
-      "S-023"
-    ],
-    "apps": [
-      "api",
-      "admin",
-      "intelligence"
-    ],
-    "modules": [
-      "catalog",
-      "market-data"
-    ],
+    "depends_on": ["S-015", "S-023"],
+    "apps": ["api", "admin", "intelligence"],
+    "modules": ["catalog", "market-data"],
     "mode": "integration",
     "priority": 740,
     "session_budget": 1,
@@ -5174,25 +3684,14 @@
       "real": [
         "Sources produits/marchés licenciées ou documents publics autorisés réellement ingérés"
       ],
-      "activation_slices": [
-        "S-038",
-        "S-068",
-        "S-136",
-        "S-139"
-      ]
+      "activation_slices": ["S-038", "S-068", "S-136", "S-139"]
     },
     "criteria": [
       {
         "criterion": "Produits/frais/fonds/allocations/garanties et historiques ont preuve/date/validité/source ; entrée manuelle et adapter réel suivent même modèle et revue avant publication.",
         "source_ranges": [
-          [
-            400,
-            415
-          ],
-          [
-            450,
-            458
-          ]
+          [400, 415],
+          [450, 458]
         ],
         "oracle": "V3",
         "test": "Importer corpus réel autorisé et vérifier provenance de chaque champ critique ; comparer à documents source."
@@ -5200,18 +3699,9 @@
       {
         "criterion": "Performance/cohortes utilisent périodes/devise/frais/univers explicités et comparables ; taux de couverture et données manquantes empêchent benchmark non étayé.",
         "source_ranges": [
-          [
-            118,
-            127
-          ],
-          [
-            172,
-            172
-          ],
-          [
-            1014,
-            1014
-          ]
+          [118, 127],
+          [172, 172],
+          [1014, 1014]
         ],
         "oracle": "V2",
         "test": "Jeux aux périodes/devises incompatibles : exclusion documentée ; benchmark valide recalculable depuis série publiée."
@@ -5219,14 +3709,8 @@
       {
         "criterion": "Validité et corrections créent nouvelles versions, vieux snapshots restent intacts ; dataVersion modifiée invalide seulement les futurs caches de calcul.",
         "source_ranges": [
-          [
-            400,
-            411
-          ],
-          [
-            2497,
-            2505
-          ]
+          [400, 411],
+          [2497, 2505]
         ],
         "oracle": "V2",
         "test": "Importer correction puis rejouer demande nouvelle/ancienne : références et résultats historiques protégés."
@@ -5234,14 +3718,8 @@
       {
         "criterion": "Licences, droits d’usage/rediffusion, fournisseurs et qualité/cadence sont approuvés ; champ professionnel non publiable n’est jamais envoyé à www.",
         "source_ranges": [
-          [
-            424,
-            445
-          ],
-          [
-            310,
-            311
-          ]
+          [424, 445],
+          [310, 311]
         ],
         "oracle": "V5",
         "test": "Revue humaine des sources/licences et tests DTO public/professionnel sur même produit."
@@ -5249,14 +3727,8 @@
       {
         "criterion": "Import doublé, timeout, série manquante et changement de schéma créent revue attribuée ; Admin contrôle source/diff/motif et affiche fraîcheur sans fausse performance temps réel.",
         "source_ranges": [
-          [
-            417,
-            422
-          ],
-          [
-            875,
-            883
-          ]
+          [417, 422],
+          [875, 883]
         ],
         "oracle": "V3",
         "test": "Exécuter panne et anomalie puis correction Admin ; journal et prochaine action visibles, aucune donnée supposée publiée."
@@ -5297,10 +3769,7 @@
       "testing.md",
       "dependencies.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "llm.md"],
     "risks": [
       "Biais survivance ou normalisation inventée : rendre conventions inconnues bloquantes et versionner les sources."
     ],
@@ -5314,23 +3783,9 @@
     "title": "Rapprocher les réponses réelles des organismes et clôturer les demandes",
     "milestone": "M8",
     "objective": "Une réponse réelle d’organisme rejoint le bon dossier, ses documents deviennent contrats ou preuves d’avoirs après contrôle et le client retrouve résultat et prochaine démarche.",
-    "depends_on": [
-      "S-036",
-      "S-037",
-      "S-089",
-      "S-022",
-      "S-024"
-    ],
-    "apps": [
-      "api",
-      "admin",
-      "client"
-    ],
-    "modules": [
-      "institution-requests",
-      "lpp-search",
-      "contract-retrieval"
-    ],
+    "depends_on": ["S-036", "S-037", "S-089", "S-022", "S-024"],
+    "apps": ["api", "admin", "client"],
+    "modules": ["institution-requests", "lpp-search", "contract-retrieval"],
     "mode": "integration",
     "priority": 741,
     "session_budget": 1,
@@ -5359,35 +3814,20 @@
         "Pipeline documentaire réel",
         "Suivi de demandes réellement transmis"
       ],
-      "activation_slices": [
-        "S-136",
-        "S-137",
-        "S-139"
-      ]
+      "activation_slices": ["S-136", "S-137", "S-139"]
     },
     "criteria": [
       {
         "criterion": "Rapprochement réel combine expéditeur/domaine, thread/message, requestId, nom/police et contenu/pièces ; un seul signal ambigu ne lie pas un document au mauvais client.",
-        "source_ranges": [
-          [
-            827,
-            833
-          ]
-        ],
+        "source_ranges": [[827, 833]],
         "oracle": "V3",
         "test": "Corpus réel autorisé et faux homonyme : bonne référence liée, ambiguïté en file et aucune fuite inter-client."
       },
       {
         "criterion": "Réponse compagnie fait apparaître progressivement contrats digitalisés/audités, conserve statut par compagnie et global, preuve/anomalies/validation et prochaines actions.",
         "source_ranges": [
-          [
-            818,
-            825
-          ],
-          [
-            2616,
-            2628
-          ]
+          [818, 825],
+          [2616, 2628]
         ],
         "oracle": "V3",
         "test": "Jouer demande→réponse réelle→contrat→audit sur compte de test autorisé ; source initiale retrouvable."
@@ -5395,14 +3835,8 @@
       {
         "criterion": "Réponse LPP traverse RESPONSE_RECEIVED puis résultat validé, institutions/avoirs ou absence ; Wallet présente preuves/pièces/messages/timeline et suite explicite sans transfert automatique.",
         "source_ranges": [
-          [
-            803,
-            811
-          ],
-          [
-            2629,
-            2638
-          ]
+          [803, 811],
+          [2629, 2638]
         ],
         "oracle": "V3",
         "test": "Jouer workflow C avec réponse réelle autorisée puis clôture validée ; aucun montant non prouvé ni statut fictif."
@@ -5410,14 +3844,8 @@
       {
         "criterion": "Réponse attendue peut clôturer tâche documentaire et créer étape suivante, mais rattachement incertain ou pièce insuffisante conserve attente/exception avec responsable/date.",
         "source_ranges": [
-          [
-            846,
-            852
-          ],
-          [
-            875,
-            881
-          ]
+          [846, 852],
+          [875, 881]
         ],
         "oracle": "V2",
         "test": "Réponse partielle puis complément : tâches se mettent à jour une fois et prochaine action jamais perdue."
@@ -5425,18 +3853,9 @@
       {
         "criterion": "Scope email est strict, doublons/retards/corrections idempotents et audités ; consentement/accès révoqué bloque worker ; client est notifié seulement d’un changement validé.",
         "source_ranges": [
-          [
-            851,
-            852
-          ],
-          [
-            883,
-            883
-          ],
-          [
-            2424,
-            2425
-          ]
+          [851, 852],
+          [883, 883],
+          [2424, 2425]
         ],
         "oracle": "V2",
         "test": "Rejouer réponse, retirer accès, puis tenter fichier et job : refus et une notification logique par changement autorisé."
@@ -5477,10 +3896,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "llm.md"],
     "risks": [
       "Fusion erronée d’identités et preuve manquante : revue avant résultat final, canal source conservé et correction auditée."
     ],
@@ -5494,21 +3910,9 @@
     "title": "Scanner une pièce d’identité pour enrichir le profil confirmé",
     "milestone": "M8",
     "objective": "Une personne choisit de scanner une pièce, corrige les champs réellement extraits et réutilise ce profil dans ses démarches selon une conservation et un accès explicitement autorisés.",
-    "depends_on": [
-      "S-013",
-      "S-037",
-      "S-131"
-    ],
-    "apps": [
-      "www",
-      "client",
-      "api",
-      "admin"
-    ],
-    "modules": [
-      "identity-profile",
-      "document-intelligence"
-    ],
+    "depends_on": ["S-013a", "S-037", "S-131"],
+    "apps": ["www", "client", "api", "admin"],
+    "modules": ["identity-profile", "document-intelligence"],
     "mode": "integration",
     "priority": 742,
     "session_budget": 1,
@@ -5531,54 +3935,30 @@
     ],
     "integrations": {
       "simulated": [],
-      "real": [
-        "Extraction d’identité approuvée",
-        "Rétention et purge effectives des images"
-      ],
-      "activation_slices": [
-        "S-135",
-        "S-137",
-        "S-139"
-      ]
+      "real": ["Extraction d’identité approuvée", "Rétention et purge effectives des images"],
+      "activation_slices": ["S-135", "S-137", "S-139"]
     },
     "criteria": [
       {
         "criterion": "Scan facultatif enrichit profil central, jamais seulement un formulaire ; nom/prénom/naissance/nationalité/document/type/échéance/adresse fiable ont source et confiance explicites.",
         "source_ranges": [
-          [
-            747,
-            753
-          ],
-          [
-            777,
-            777
-          ]
+          [747, 753],
+          [777, 777]
         ],
         "oracle": "V3",
         "test": "Scanner via deux démarches et vérifier un seul profil partagé, image non dupliquée et champs absents inconnus."
       },
       {
         "criterion": "Écran de correction/confirmation applique utilisateur confirmé > CoverView vérifié > OCR ; nouvelle extraction ne remplace pas une donnée confirmée et conflit reste visible.",
-        "source_ranges": [
-          [
-            751,
-            756
-          ]
-        ],
+        "source_ranges": [[751, 756]],
         "oracle": "V2",
         "test": "Confirmer nom puis réextraire variation : proposition de conflit, profil inchangé jusqu’à décision."
       },
       {
         "criterion": "Image et champs ont durées/finalités distinctes validées ; purge image conserve seulement les données autorisées et preuve minimale de confirmation selon règles approuvées.",
         "source_ranges": [
-          [
-            754,
-            756
-          ],
-          [
-            2898,
-            2898
-          ]
+          [754, 756],
+          [2898, 2898]
         ],
         "oracle": "V2",
         "test": "Exécuter horloge de rétention sur fixture puis vérifier stockage/DB/export et impossibilité d’ouvrir image purgée."
@@ -5586,18 +3966,9 @@
       {
         "criterion": "Accès à pièce est strictement autorisé et audité ; extraction ne constitue pas une vérification d’identité/KYC ni un niveau de signature sans service et qualification correspondants.",
         "source_ranges": [
-          [
-            443,
-            445
-          ],
-          [
-            770,
-            774
-          ],
-          [
-            883,
-            883
-          ]
+          [443, 445],
+          [770, 774],
+          [883, 883]
         ],
         "oracle": "V2",
         "test": "Tests membres foyer/partenaire/admin non habilité et revue des libellés pour absence de fausse certification."
@@ -5605,14 +3976,8 @@
       {
         "criterion": "Panne/fichier illisible/permission retirée conservent possibilité de saisie manuelle ; champs peuvent être corrigés au clavier dans une surface bornée avant consentement.",
         "source_ranges": [
-          [
-            747,
-            756
-          ],
-          [
-            775,
-            780
-          ]
+          [747, 756],
+          [775, 780]
         ],
         "oracle": "V3",
         "test": "Fournisseur en panne, scan illisible et droit révoqué : continuer en saisie manuelle, corriger chaque champ puis consentir ; aucun résultat perdu ni document inaccessible exposé. Vérifier focus, retour, libellés et ouvertures conformes à FRONT-14."
@@ -5622,10 +3987,7 @@
       {
         "ref": "bible.question.006",
         "question": "Les règles exactes image/champs/confirmation et droits d’accès sensibles sont-elles validées avant scan personnel ?",
-        "options": [
-          "Oui, matrice de S-131 jointe au GO",
-          "Non, corpus synthétique seulement"
-        ],
+        "options": ["Oui, matrice de S-131 jointe au GO", "Non, corpus synthétique seulement"],
         "recommended": 0,
         "blocks": "Pièces personnelles réelles"
       },
@@ -5652,10 +4014,7 @@
       "i18n.md",
       "testing.md"
     ],
-    "exclusions": [
-      "billing.md",
-      "llm.md"
-    ],
+    "exclusions": ["billing.md", "llm.md"],
     "risks": [
       "Pièce sensible répliquée ou scan présenté comme KYC : centralisation, rétention séparée et libellés contrôlés."
     ],

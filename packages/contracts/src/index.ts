@@ -1,4 +1,5 @@
 import { z } from "zod";
+export * from "./profile.js";
 
 export const livenessSchema = z.object({ status: z.literal("alive") });
 export const readinessSchema = z.object({ status: z.enum(["ready", "not_ready"]) });
@@ -23,6 +24,12 @@ export const identityErrorCodeSchema = z.enum([
   "IDENTITY_MFA_INVALID",
   "IDENTITY_MFA_ENROLLMENT_CONFLICT",
   "IDENTITY_REAUTHENTICATION_REQUIRED",
+  "PROFILE_CONFLICT",
+  "PROFILE_DRAFT_EXPIRED",
+  "PROFILE_DRAFT_ATTACHED",
+  "PROFILE_IDEMPOTENCY_REUSED",
+  "PROFILE_CONFIRMATION_REQUIRED",
+  "PROFILE_INVALID_BIRTH_DATE",
 ]);
 export const apiErrorCodeSchema = z.union([platformErrorCodeSchema, identityErrorCodeSchema]);
 export const apiErrorSchema = z.object({

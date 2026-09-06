@@ -1,5 +1,16 @@
 import { sql } from "drizzle-orm";
-import { boolean, check, index, pgTable, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  check,
+  index,
+  integer,
+  jsonb,
+  pgTable,
+  text,
+  timestamp,
+  uniqueIndex,
+} from "drizzle-orm/pg-core";
+import type { Profile } from "@coverview/contracts";
 
 const instant = (name: string) => timestamp(name, { withTimezone: true, precision: 3 });
 
@@ -14,14 +25,29 @@ export const identityUsers = pgTable("identity_users", {
 });
 
 // A profile is personal. No household, organization, or email-based ownership is inferred.
-export const identityProfiles = pgTable("identity_profiles", {
-  id: text("id").primaryKey(),
-  userId: text("user_id")
-    .notNull()
-    .unique()
-    .references(() => identityUsers.id),
-  createdAt: instant("created_at").notNull().defaultNow(),
-});
+export const identityProfiles = pgTable(
+  "identity_profiles",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .unique()
+      .references(() => identityUsers.id),
+    createdAt: instant("created_at").notNull().defaultNow(),
+    fields: jsonb("fields").$type<Profile["fields"]>().notNull().default({}),
+    revision: integer("revision").notNull().default(0),
+    step: text("step", { enum: ["information", "address", "review"] })
+      .notNull()
+      .default("information"),
+    prefill: boolean("prefill").notNull().default(false),
+    prefillDecidedAt: instant("prefill_decided_at"),
+  },
+  (table) => [
+    check("identity_profiles_revision", sql`${table.revision} >= 0`),
+    check("identity_profiles_step", sql`${table.step} in ('information', 'address', 'review')`),
+    check("identity_profiles_fields_object", sql`jsonb_typeof(${table.fields}) = 'object'`),
+  ],
+);
 
 export const identitySessions = pgTable(
   "identity_sessions",
@@ -57,6 +83,7 @@ export const identityLogins = pgTable(
     browserHash: text("browser_hash").notNull(),
     encryptedVerifier: text("encrypted_verifier").notNull(),
     surface: text("surface", { enum: ["client", "admin", "www"] }).notNull(),
+    continuation: text("continuation", { enum: ["profile"] }),
     createdAt: instant("created_at").notNull(),
     expiresAt: instant("expires_at").notNull(),
   },

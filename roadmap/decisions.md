@@ -159,18 +159,18 @@ Aucune réponse à cette question exacte.
 
 ## bible.question.006
 
-### S-013 — question 1
+### S-013a — question 1
 
-[S-013](plans/S-013.plan.md) · Séparer dès le modèle la durée de conservation des images d’identité de celle des champs extraits, avec durées à valider avant pièces réelles ?
+[S-013a](plans/S-013a.plan.md) · Séparer dès le modèle la durée de conservation des images d’identité de celle des champs extraits, avec durées à valider avant pièces réelles ?
 
 - (a) Oui, aucune durée légale déduite — défaut proposé
 - (b) Fournir maintenant la matrice de conservation approuvée
 
 Bloque : Conservation et ingestion de vraies pièces uniquement
 
-Autorisation : aucune enregistrée. Réponse : **non enregistrée**.
+Autorisation : Mandat PROG-23 réaffirmé dans la création de cette tâche ; roadmap/execution-policy.md.. Réponse : enregistrée ci-dessous.
 
-Aucune réponse à cette question exacte.
+- `bible.question.006` · Séparer dès le modèle la durée de conservation des images d’identité de celle des champs extraits, avec durées à valider avant pièces réelles ? → **Oui, aucune durée légale déduite** · preuve : Décision déléguée PROG-23, 2026-09-06 : roadmap/execution-policy.md ; confidentialité ADR-0002, ingestion de pièces désactivée sans matrice approuvée.
 
 ### S-023 — question 2
 
@@ -275,6 +275,19 @@ Bloque : Pièces personnelles réelles
 Autorisation : aucune enregistrée. Réponse : **non enregistrée**.
 
 Aucune réponse à cette question exacte.
+
+### S-013 — question 1
+
+[S-013](plans/S-013.plan.md) · Séparer dès le modèle la durée de conservation des images d’identité de celle des champs extraits, avec durées à valider avant pièces réelles ?
+
+- (a) Oui, aucune durée légale déduite — défaut proposé
+- (b) Fournir maintenant la matrice de conservation approuvée
+
+Bloque : Conservation et ingestion de vraies pièces uniquement
+
+Autorisation : PROG-23 : roadmap/execution-policy.md ; découpage explicite après inspection des producteurs absents.. Réponse : enregistrée ci-dessous.
+
+- `bible.question.006` · Séparer dès le modèle la durée de conservation des images d’identité de celle des champs extraits, avec durées à valider avant pièces réelles ? → **Oui, aucune durée légale déduite** · preuve : Décision déléguée PROG-23, 2026-09-06 : roadmap/execution-policy.md ; confidentialité ADR-0002, ingestion de pièces désactivée sans matrice approuvée.
 
 ### S-089 — question 2
 
@@ -554,18 +567,18 @@ Aucune réponse à cette question exacte.
 
 ## bible.question.008
 
-### S-013 — question 2
+### S-013a — question 2
 
-[S-013](plans/S-013.plan.md) · Le profil individuel reste privé tant qu’aucun consentement explicite par ressource n’accorde un accès au foyer ?
+[S-013a](plans/S-013a.plan.md) · Le profil individuel reste privé tant qu’aucun consentement explicite par ressource n’accorde un accès au foyer ?
 
 - (a) Oui, aucun partage familial implicite — défaut proposé
 - (b) Fournir une matrice de droits alternative explicite
 
 Bloque : Accès multi-membres et délégations non définis
 
-Autorisation : aucune enregistrée. Réponse : **non enregistrée**.
+Autorisation : Mandat PROG-23 réaffirmé dans la création de cette tâche ; roadmap/execution-policy.md.. Réponse : enregistrée ci-dessous.
 
-Aucune réponse à cette question exacte.
+- `bible.question.008` · Le profil individuel reste privé tant qu’aucun consentement explicite par ressource n’accorde un accès au foyer ? → **Oui, aucun partage familial implicite** · preuve : Décision déléguée PROG-23, 2026-09-06 : roadmap/execution-policy.md ; confidentialité ADR-0002, ingestion de pièces désactivée sans matrice approuvée.
 
 ### S-081 — question 1
 
@@ -826,6 +839,19 @@ Bloque : Édition/publication réelles des données professionnelles.
 Autorisation : aucune enregistrée. Réponse : **non enregistrée**.
 
 Aucune réponse à cette question exacte.
+
+### S-013 — question 2
+
+[S-013](plans/S-013.plan.md) · Le profil individuel reste privé tant qu’aucun consentement explicite par ressource n’accorde un accès au foyer ?
+
+- (a) Oui, aucun partage familial implicite — défaut proposé
+- (b) Fournir une matrice de droits alternative explicite
+
+Bloque : Accès multi-membres et délégations non définis
+
+Autorisation : PROG-23 : roadmap/execution-policy.md ; découpage explicite après inspection des producteurs absents.. Réponse : enregistrée ci-dessous.
+
+- `bible.question.008` · Le profil individuel reste privé tant qu’aucun consentement explicite par ressource n’accorde un accès au foyer ? → **Oui, aucun partage familial implicite** · preuve : Décision déléguée PROG-23, 2026-09-06 : roadmap/execution-policy.md ; confidentialité ADR-0002, ingestion de pièces désactivée sans matrice approuvée.
 
 ### S-113 — question 1
 

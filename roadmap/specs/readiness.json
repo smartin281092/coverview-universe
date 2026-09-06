@@ -5,7 +5,7 @@
     "milestone": "M9",
     "objective": "Un client demande un export de ses données ou leur rectification, suit le dossier et reçoit uniquement les objets auxquels il a droit.",
     "depends_on": [
-      "S-013",
+      "S-013a",
       "S-081",
       "S-082"
     ],

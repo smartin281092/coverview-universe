@@ -10,7 +10,7 @@ Chaque prompt cible une session principale et indique son redécoupage. Reprise 
 
 - [S-000a — Démarrer un socle local reproductible et une preview fictive](S-000a.prompt.md) · [plan](../plans/S-000a.plan.md) · done · foundation.
 - [S-000b — Se connecter avec WorkOS et retrouver son espace protégé](S-000b.prompt.md) · [plan](../plans/S-000b.plan.md) · done · integration.
-- [S-013 — Reprendre un parcours anonyme dans Wallet avec un profil central](S-013.prompt.md) · [plan](../plans/S-013.plan.md) · specified · local-fixtures.
+- [S-013a — Préparer son profil privé et le reprendre dans Wallet](S-013a.prompt.md) · [plan](../plans/S-013a.plan.md) · running · integration.
 - [S-010 — Ouvrir les trois parcours CoverView depuis un site public compact](S-010.prompt.md) · [plan](../plans/S-010.plan.md) · done · local-fixtures.
 - [S-081 — Délivrer un dossier avec tâches, prochaine action et Kanban](S-081.prompt.md) · [plan](../plans/S-081.plan.md) · specified · local-fixtures.
 - [S-017 — Générer et archiver les documents de démarches à partir du profil](S-017.prompt.md) · [plan](../plans/S-017.plan.md) · specified · local-fixtures.
@@ -90,6 +90,7 @@ Chaque prompt cible une session principale et indique son redécoupage. Reprise 
 - [S-040 — Alimenter le catalogue et les marchés par des sources réelles validées](S-040.prompt.md) · [plan](../plans/S-040.plan.md) · specified · integration.
 - [S-112 — Analyser le catalogue et publier une proposition professionnelle sourcée](S-112.prompt.md) · [plan](../plans/S-112.plan.md) · specified · local-fixtures.
 - [S-042 — Scanner une pièce d’identité pour enrichir le profil confirmé](S-042.prompt.md) · [plan](../plans/S-042.plan.md) · specified · integration.
+- [S-013 — Reprendre un parcours anonyme dans Wallet avec un profil central](S-013.prompt.md) · [plan](../plans/S-013.plan.md) · specified · integration.
 - [S-043 — Valider l'accumulation et ses probabilités sur un corpus indépendant](S-043.prompt.md) · [plan](../plans/S-043.plan.md) · specified · integration.
 - [S-044 — Valider Score, Investment Age, Freshness et cohortes comparables](S-044.prompt.md) · [plan](../plans/S-044.plan.md) · specified · integration.
 - [S-045 — Valider compatibilité stratégique et traduction Retirement World](S-045.prompt.md) · [plan](../plans/S-045.plan.md) · specified · integration.

@@ -10,6 +10,8 @@ Le module porte l’identité canonique CoverView et la session serveur commune 
 
 **Non géré ici** : organisations et partage foyer (slices propriétaires), rattachement anonyme (S-013), règles d’effacement/export et conservation définitives (S-130/S-131). Les personas `platform` restent des fixtures techniques sans habilitation.
 
+Extension S-013a : [profil personnel et reprise](docs/profile.md), avec saisie/confirmation propriétaire, préremplissage versionné et rattachement du brouillon anonyme. Les objets métier restent S-013 ; les règles d’export/rétention définitives restent S-130/S-131.
+
 ## Règles métier et invariants
 
 - **`identity.canonical.1`** — Une identité WorkOS correspond à un utilisateur applicatif et un profil uniques. Une même adresse email ne fusionne jamais deux identités ; [ADR-0002](../../../../../adr/0002-tenancy.md) fixe leur séparation des espaces métier.

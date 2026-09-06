@@ -1,0 +1,105 @@
+{
+  "nav": "Mon profil",
+  "title": "Un profil, moins de resaisie.",
+  "eyebrow": { "owner": "Votre espace personnel", "draft": "Commencez à votre rythme" },
+  "intro": {
+    "owner": "Gardez vos informations à jour pour vos prochaines démarches.",
+    "draft": "Préparez vos informations, puis connectez-vous pour les conserver dans Wallet."
+  },
+  "privacy": "Votre profil reste privé. Vous choisissez ce que vous renseignez et pouvez le corriger à tout moment.",
+  "loading": "Chargement de votre profil…",
+  "progress": "Étapes du profil",
+  "steps": { "information": "Informations", "address": "Adresse", "review": "Récapitulatif" },
+  "optional": "Tous les champs sont facultatifs.",
+  "fields": {
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "birthDate": "Date de naissance",
+    "nationality": "Nationalité",
+    "street": "Rue et numéro",
+    "postalCode": "Code postal",
+    "city": "Localité",
+    "country": "Pays"
+  },
+  "source": { "user_entered": "Saisi par vous", "user_confirmed": "Confirmé par vous" },
+  "invalidField": "Vérifiez ce champ et sa longueur.",
+  "invalidDate": "Saisissez une date valide.",
+  "next": "Enregistrer et continuer",
+  "previous": "Retour",
+  "save": "Enregistrer",
+  "confirm": "Confirmer mes informations",
+  "pending": "Enregistrement…",
+  "login": "Se connecter et conserver",
+  "loginEarly": "Se connecter dès maintenant",
+  "retry": "Réessayer",
+  "refresh": "Recharger en gardant mes corrections",
+  "saved": "Vos dernières modifications sont enregistrées.",
+  "notSaved": "Les informations seront enregistrées à la prochaine étape.",
+  "unsaved": "Vos dernières modifications ne sont pas encore enregistrées.",
+  "notice": {
+    "saved": "Étape enregistrée.",
+    "restarted": "Votre saisie est conservée sur cette page. Enregistrez-la pour créer le nouveau brouillon.",
+    "confirmed": "Vos informations et votre choix sont enregistrés.",
+    "attached": "Votre brouillon a été rattaché. Vous pouvez reprendre ici.",
+    "refreshed": "La dernière version est chargée. Vos corrections en cours sont conservées ; relisez-les avant d’enregistrer."
+  },
+  "errors": {
+    "save": "L’opération n’a pas pu être confirmée. Vos saisies restent sur cette page ; réessayez.",
+    "conflict": "Une autre modification a été enregistrée. Rechargez la dernière version avant de continuer.",
+    "expired": "Ce brouillon n’est plus disponible. Rechargez son état pour commencer un nouveau profil.",
+    "session": "Votre connexion doit être vérifiée. Reconnectez-vous pour reprendre vos corrections.",
+    "denied": "Cette opération n’est pas autorisée pour ce compte.",
+    "birthDate": "La date de naissance doit être aujourd’hui ou dans le passé.",
+    "proposals": "Choisissez les valeurs à conserver avant de confirmer."
+  },
+  "draft": {
+    "expires": "Brouillon disponible jusqu’au {{date}} sur ce navigateur.",
+    "expiredTitle": "Ce brouillon a expiré.",
+    "expiredDescription": "Les informations enregistrées ne sont plus accessibles. Votre saisie encore présente sur cette page sera conservée dans le nouveau formulaire, puis enregistrée à votre demande.",
+    "attachedTitle": "Ce brouillon est déjà conservé.",
+    "attachedDescription": "Il a été rattaché à un compte et n’est plus accessible sans connexion. Un nouveau brouillon sera distinct.",
+    "restart": "Commencer un nouveau brouillon"
+  },
+  "attach": {
+    "title": "Reprendre votre brouillon",
+    "description": "Vous avez enregistré un brouillon à l’étape « {{step}} ». Rattachez-le à ce compte pour continuer. Les informations existantes sont préservées en cas de différence.",
+    "action": "Rattacher à mon profil",
+    "saveFirst": "Enregistrez vos corrections en cours avant le rattachement."
+  },
+  "proposal": {
+    "value": "Valeur du brouillon : {{value}}",
+    "keep": "Garder la valeur actuelle",
+    "use": "Utiliser le brouillon",
+    "resolved": "Choix prêt à être enregistré.",
+    "review": "Votre brouillon contient des différences. Choisissez explicitement les valeurs à conserver."
+  },
+  "review": {
+    "intro": "Relisez vos informations. Vous pouvez revenir en arrière pour les corriger.",
+    "empty": "Non renseigné",
+    "login": "Connectez-vous pour rattacher ce brouillon à votre profil et confirmer vos informations."
+  },
+  "prefill": {
+    "label": "Préremplir mes prochaines démarches",
+    "description": "Facultatif. Utiliser ces informations dans mes démarches personnelles autorisées. Je peux retirer ce choix ici. Aucun partage familial ou usage commercial n’est accordé."
+  },
+  "history": {
+    "action": "Voir l’historique de mon choix",
+    "title": "Votre choix de préremplissage",
+    "description": "Chaque décision conserve sa date et la version du choix de préremplissage personnel.",
+    "back": "Retour au profil",
+    "empty": "Vous n’avez pas encore enregistré de choix.",
+    "enabled": "Préremplissage activé",
+    "disabled": "Préremplissage désactivé",
+    "version": "Préremplissage personnel · version {{version}}",
+    "next": "Décisions précédentes"
+  },
+  "session": {
+    "title": "Reprenez votre connexion.",
+    "description": "Vos corrections restent en mémoire sur cette page. Connectez-vous dans le nouvel onglet, puis revenez ici. Elles seront effacées de cette page si vous utilisez un autre compte.",
+    "login": "Se reconnecter dans un nouvel onglet",
+    "resume": "Reprendre mes corrections"
+  },
+  "callbackError": "La connexion n’a pas abouti. Votre brouillon enregistré reste disponible ; vous pouvez réessayer.",
+  "unavailable": "La préparation du profil est momentanément indisponible.",
+  "account": "Mon compte"
+}

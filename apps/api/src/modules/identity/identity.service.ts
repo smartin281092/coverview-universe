@@ -131,7 +131,9 @@ export function createIdentityService(
     authenticate,
     logoutSession: (token: string | undefined) => localSession(token, true),
     csrf: (token: string) => csrfToken(secret, token),
-    async login(surface: Surface, reauthenticate = false) {
+    async login(surface: Surface, reauthenticate = false, continuation?: "profile") {
+      if (continuation && surface !== "wallet")
+        throw new IdentityError("IDENTITY_ACCESS_DENIED", 400);
       const authorization = await provider.authorization(reauthenticate);
       const browserNonce = randomSecret();
       const now = new Date();
@@ -140,6 +142,7 @@ export function createIdentityService(
         browserHash: secretHash(browserNonce),
         encryptedVerifier: encryptVerifier(authorization.codeVerifier, secret),
         surface: surface === "wallet" ? "client" : surface,
+        continuation: continuation ?? null,
         createdAt: now,
         expiresAt: new Date(now.getTime() + 10 * 60_000),
       });
@@ -161,7 +164,10 @@ export function createIdentityService(
       );
       if (!transaction) throw new IdentityError("IDENTITY_INVALID_CALLBACK", 400);
       const surface = transaction.surface === "client" ? "wallet" : transaction.surface;
-      const destination = `${destinations[surface]}/account`;
+      const destination =
+        transaction.continuation === "profile" && surface === "wallet"
+          ? `${destinations.wallet}/profile?continue=1`
+          : `${destinations[surface]}/account`;
       let stage: IdentityDiagnostic["stage"] = "callback_code";
       try {
         if (!code)
@@ -208,7 +214,7 @@ export function createIdentityService(
         // Only a consumed, browser-bound transaction may select a fixed recovery surface.
         return {
           success: false as const,
-          destination: `${destination}?authError=callback`,
+          destination: `${destination}${destination.includes("?") ? "&" : "?"}authError=callback`,
           code: cause instanceof IdentityError ? cause.code : "IDENTITY_UNAVAILABLE",
           diagnostic: identityFailureDiagnostic(cause, stage),
         };

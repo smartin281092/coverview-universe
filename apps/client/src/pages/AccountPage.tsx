@@ -33,6 +33,9 @@ export function AccountPage() {
               </dl>
               <div className="flex flex-wrap gap-3">
                 <Button asChild>
+                  <Link to="/profile">{t("nav", { ns: "profile" })}</Link>
+                </Button>
+                <Button asChild variant="outline">
                   <Link to="/workspace/$userId" params={{ userId: identity.user.id }}>
                     {t("identity.openWorkspace")}
                   </Link>

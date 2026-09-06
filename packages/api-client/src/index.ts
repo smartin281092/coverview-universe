@@ -14,6 +14,13 @@ import {
   identityMfaVerifyInputSchema,
   identityMfaEnrollmentSchema,
   identityMfaEnrollmentStartSchema,
+  profileSchema,
+  profileSaveInputSchema,
+  profileConfirmInputSchema,
+  profileDraftEntrySchema,
+  profileAttachInputSchema,
+  profileAttachSchema,
+  profileChoicesSchema,
   type ApiErrorCode,
 } from "@coverview/contracts";
 import type { z } from "zod";
@@ -103,6 +110,61 @@ export function createApiClient({
   }
 
   return {
+    profile: (options?: RequestOptions) =>
+      request("/identity/profile", profileSchema, options, undefined, true),
+    saveProfile: (input: z.infer<typeof profileSaveInputSchema>, options: MutationOptions) =>
+      request(
+        "/identity/profile",
+        profileSchema,
+        options,
+        { body: profileSaveInputSchema.parse(input), credentials: options },
+        true,
+      ),
+    confirmProfile: (input: z.infer<typeof profileConfirmInputSchema>, options: MutationOptions) =>
+      request(
+        "/identity/profile/confirm",
+        profileSchema,
+        options,
+        { body: profileConfirmInputSchema.parse(input), credentials: options },
+        true,
+      ),
+    profileDraft: (options?: RequestOptions) =>
+      request("/identity/profile/draft", profileDraftEntrySchema, options, undefined, true),
+    newProfileDraft: (options: MutationOptions) =>
+      request(
+        "/identity/profile/draft/new",
+        profileDraftEntrySchema,
+        options,
+        { body: {}, credentials: options },
+        true,
+      ),
+    saveProfileDraft: (input: z.infer<typeof profileSaveInputSchema>, options: MutationOptions) =>
+      request(
+        "/identity/profile/draft",
+        profileDraftEntrySchema,
+        options,
+        { body: profileSaveInputSchema.parse(input), credentials: options },
+        true,
+      ),
+    attachProfileDraft: (
+      input: z.infer<typeof profileAttachInputSchema>,
+      options: MutationOptions,
+    ) =>
+      request(
+        "/identity/profile/attach",
+        profileAttachSchema,
+        options,
+        { body: profileAttachInputSchema.parse(input), credentials: options },
+        true,
+      ),
+    profileChoices: (cursor?: string, options?: RequestOptions) =>
+      request(
+        `/identity/profile/choices${cursor ? `?${new URLSearchParams({ cursor })}` : ""}`,
+        profileChoicesSchema,
+        options,
+        undefined,
+        true,
+      ),
     health: (options?: RequestOptions) => request("/health/ready", readinessSchema, options),
     personas: (options?: RequestOptions) =>
       request("/local/personas", localPersonasSchema, options),
@@ -201,9 +263,12 @@ export function createApiClient({
         { body: identityMfaVerifyInputSchema.parse(input), credentials: options },
         true,
       ),
-    loginUrl: (surface: "wallet" | "admin" | "www", options: { reauthenticate?: boolean } = {}) =>
+    loginUrl: (
+      surface: "wallet" | "admin" | "www",
+      options: { reauthenticate?: boolean; continuation?: "profile" } = {},
+    ) =>
       new URL(
-        `/auth/login?${new URLSearchParams({ surface, ...(options.reauthenticate ? { reauthenticate: "true" } : {}) })}`,
+        `/auth/login?${new URLSearchParams({ surface, ...(options.reauthenticate ? { reauthenticate: "true" } : {}), ...(options.continuation ? { continuation: options.continuation } : {}) })}`,
         base,
       ).href,
   };

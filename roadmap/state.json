@@ -510,6 +510,65 @@
         "Correction utilisateur suivante : preset shadcn b38oXC5rf effectivement réappliqué, Geist titres/corps et MONTECH V.02 fourni pour les métadonnées ; composants partagés réutilisés, fond blanc/cards en aplat sans cadre. ADR-0008 et roadmap/evidence/shadcn-typography.md. Statut et limites fonctionnelles conservés."
       ],
       "cost": "Non disponible ; une session principale et trois sous-tâches bornées."
+    },
+    "S-013": {
+      "status": "specified",
+      "approval": "PROG-23 : roadmap/execution-policy.md ; découpage explicite après inspection des producteurs absents.",
+      "decisions": [
+        {
+          "ref": "bible.question.006",
+          "question": "Séparer dès le modèle la durée de conservation des images d’identité de celle des champs extraits, avec durées à valider avant pièces réelles ?",
+          "answer": "Oui, aucune durée légale déduite",
+          "evidence": "Décision déléguée PROG-23, 2026-09-06 : roadmap/execution-policy.md ; confidentialité ADR-0002, ingestion de pièces désactivée sans matrice approuvée."
+        },
+        {
+          "ref": "bible.question.008",
+          "question": "Le profil individuel reste privé tant qu’aucun consentement explicite par ressource n’accorde un accès au foyer ?",
+          "answer": "Oui, aucun partage familial implicite",
+          "evidence": "Décision déléguée PROG-23, 2026-09-06 : roadmap/execution-policy.md ; confidentialité ADR-0002, ingestion de pièces désactivée sans matrice approuvée."
+        }
+      ],
+      "notes": [
+        "Revue d’entrée 2026-09-06 : le seul module métier présent est identity. S-013a livre le parcours autonome du profil et du brouillon ; S-013 conserve ses six critères et toutes ses sources, avec dépendances vers producteurs réels. Les consommateurs du seul profil dépendent de S-013a ; S-117 garde S-013. Aucune exigence supprimée ni slice incomplète done. Voir roadmap/evidence/S-013a.md."
+      ]
+    },
+    "S-013a": {
+      "status": "running",
+      "approval": "Mandat PROG-23 réaffirmé dans la création de cette tâche ; roadmap/execution-policy.md.",
+      "decisions": [
+        {
+          "ref": "bible.question.006",
+          "question": "Séparer dès le modèle la durée de conservation des images d’identité de celle des champs extraits, avec durées à valider avant pièces réelles ?",
+          "answer": "Oui, aucune durée légale déduite",
+          "evidence": "Décision déléguée PROG-23, 2026-09-06 : roadmap/execution-policy.md ; confidentialité ADR-0002, ingestion de pièces désactivée sans matrice approuvée."
+        },
+        {
+          "ref": "bible.question.008",
+          "question": "Le profil individuel reste privé tant qu’aucun consentement explicite par ressource n’accorde un accès au foyer ?",
+          "answer": "Oui, aucun partage familial implicite",
+          "evidence": "Décision déléguée PROG-23, 2026-09-06 : roadmap/execution-policy.md ; confidentialité ADR-0002, ingestion de pièces désactivée sans matrice approuvée."
+        }
+      ],
+      "session": "Création demandée gpt-6-astra / ultra ; effort non observable indépendamment du paramètre de création.",
+      "verification_attempts": [
+        {
+          "target": "Entrée, découpage et dépendances",
+          "oracle": "V0 et audit indépendant",
+          "observed": "HEAD initial aef0e7aac46fd5b4a61a64c04e8e48616a162ca0 ; checkout propre, S-000b done. Audits sécurité/produit concordants sur absence des producteurs exigés par C04/C05.",
+          "decision": "Livrer S-013a ; garder S-013 specified et critères originaux complets. Installation frozen réussie après refus réseau sandbox et relance technique autorisée."
+        }
+      ],
+      "ledger": {
+        "verified": [],
+        "done_unverified": [],
+        "assumed": []
+      },
+      "notes": [
+        "Propriétaire 0101, codex/s-013-profile. Préserver superviseur API 9b02 et UI 4133, sessions, Docker et volumes.",
+        "Plan technique : brouillon sous cookie HttpOnly, hash serveur, expiration24h, CSRF/origine/Host ; mises à jour versionnées/idempotentes, priorité des confirmations et claim atomique. Pas de métadonnées OCR acceptées du frontend. Continuation autorisée stockée dans la transaction login, jamais returnUrl libre.",
+        "Surface : www ouvre une page de préparation Wallet anonyme ; 3étapes facultatives, consentement limité au préremplissage propriétaire version1, aucun texte juridique global fabriqué. Enregistrement serveur à chaque étape ; saisie non envoyée conservée seulement en mémoire, jamais localStorage.",
+        "Manifeste export/rétention documenté dans README identity : images non ingérées, champs profil rectifiables, choix historisés ; durées juridiques et effacement/export attendent S-130/S-131."
+      ]
     }
   },
   "execution": {

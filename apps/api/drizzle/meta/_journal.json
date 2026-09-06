@@ -29,6 +29,20 @@
       "when": 1788716813073,
       "tag": "0003_tense_frightful_four",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1788724302236,
+      "tag": "0004_panoramic_black_tarantula",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1788724744633,
+      "tag": "0005_same_lethal_legion",
+      "breakpoints": true
     }
   ]
 }

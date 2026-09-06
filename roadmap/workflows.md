@@ -8,7 +8,7 @@ Chaque étape source est reliée à ses critères de planification. Leur affecta
 
 ## Workflow A — Analyse 3P anonyme vers Wallet
 
-[Source maître](../docs/product/bible.extracted.md#p2603). Slices dans l’ordre topologique : [S-013](plans/S-013.plan.md), [S-010](plans/S-010.plan.md), [S-023](plans/S-023.plan.md), [S-025](plans/S-025.plan.md), [S-026](plans/S-026.plan.md), [S-028](plans/S-028.plan.md), [S-029](plans/S-029.plan.md), [S-030](plans/S-030.plan.md), [S-027](plans/S-027.plan.md), [S-031](plans/S-031.plan.md), [S-033](plans/S-033.plan.md).
+[Source maître](../docs/product/bible.extracted.md#p2603). Slices dans l’ordre topologique : [S-010](plans/S-010.plan.md), [S-023](plans/S-023.plan.md), [S-025](plans/S-025.plan.md), [S-026](plans/S-026.plan.md), [S-028](plans/S-028.plan.md), [S-029](plans/S-029.plan.md), [S-030](plans/S-030.plan.md), [S-027](plans/S-027.plan.md), [S-031](plans/S-031.plan.md), [S-033](plans/S-033.plan.md), [S-013](plans/S-013.plan.md).
 
 | Étape source | Critères | Slices | Qualification |
 |---|---|---|---|

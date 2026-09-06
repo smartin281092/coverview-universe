@@ -6,7 +6,7 @@
     "objective": "Le conseiller transforme un entrant identifié en opportunités suivies sans dupliquer la personne ni confondre client et étape commerciale.",
     "depends_on": [
       "S-000b",
-      "S-013"
+      "S-013a"
     ],
     "apps": [
       "api",
@@ -360,7 +360,7 @@
     "milestone": "M5",
     "objective": "Le conseiller comprend la situation d’un client et sa prochaine action en ouvrant des données canoniques, sans copie des domaines spécialisés.",
     "depends_on": [
-      "S-013",
+      "S-013a",
       "S-019",
       "S-080",
       "S-081"

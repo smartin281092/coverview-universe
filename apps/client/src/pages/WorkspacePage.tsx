@@ -37,7 +37,7 @@ function Workspace({ identity, userId }: { identity: IdentityMe; userId: string 
         description={t("identity.workspaceEmptyDescription")}
         action={
           <Button asChild variant="outline">
-            <Link to="/account">{t("identity.backAccount")}</Link>
+            <Link to="/profile">{t("nav", { ns: "profile" })}</Link>
           </Button>
         }
       />

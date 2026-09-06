@@ -4,8 +4,8 @@
   "source_sha256": "6264300267b345c1a6e7347139afe2653aeeac332ce3f21f5d21c37119f5454f",
   "meaning": "Couverture de planification seulement ; aucune preuve d’implémentation.",
   "summary": {
-    "slices": 120,
-    "criteria": 682,
+    "slices": 121,
+    "criteria": 687,
     "implementation_units": 1742,
     "context_units": 373,
     "assigned_units": 2115,
@@ -504,6 +504,105 @@
       ]
     },
     {
+      "id": "S-013a-C01",
+      "disposition": "implementation",
+      "criterion": "Le profil canonique unique réutilise identity_users et identity_profiles ; une personne peut enregistrer et relire nom, prénom, naissance, nationalité et adresse depuis Wallet et y accéder depuis www.",
+      "oracle": "V3",
+      "test": "Enregistrer le profil par la vraie API puis recharger ; identité et profil constants entre les entrées www/Wallet.",
+      "source_ids": [
+        "bible.v15.p0230",
+        "bible.v15.p0231",
+        "bible.v15.p0232",
+        "bible.v15.p0233",
+        "bible.v15.p0234",
+        "bible.v15.p0235",
+        "bible.v15.p0236",
+        "bible.v15.p0747",
+        "bible.v15.p0748",
+        "bible.v15.p0750",
+        "bible.v15.p0751",
+        "bible.v15.p0752",
+        "bible.v15.p0753"
+      ],
+      "slices": [
+        "S-013a"
+      ]
+    },
+    {
+      "id": "S-013a-C02",
+      "disposition": "implementation",
+      "criterion": "Le brouillon anonyme est borné dans le temps, persistant par étape et rattaché atomiquement à son propriétaire WorkOS ; retry sans doublon, autre compte refusé, aucune lecture anonyme après rattachement.",
+      "oracle": "V3",
+      "test": "Préparer puis connecter via WorkOS, rattacher et recharger à l’étape enregistrée ; contrôler propriété, expiration, rejeu et concurrence en PostgreSQL.",
+      "source_ids": [
+        "bible.v15.p0743",
+        "bible.v15.t036r001",
+        "bible.v15.p1337",
+        "bible.v15.p1338",
+        "bible.v15.p1339",
+        "bible.v15.p1340",
+        "bible.v15.p1341",
+        "bible.v15.p1342"
+      ],
+      "slices": [
+        "S-013a"
+      ]
+    },
+    {
+      "id": "S-013a-C03",
+      "disposition": "implementation",
+      "criterion": "Toute correction et confirmation vient du propriétaire ; une valeur confirmée n’est jamais remplacée par un brouillon divergent, qui devient une proposition à résoudre explicitement.",
+      "oracle": "V3",
+      "test": "Confirmer une valeur puis rattacher un brouillon divergent réel ; valeur intacte jusqu’à correction propriétaire explicite.",
+      "source_ids": [
+        "bible.v15.p0422",
+        "bible.v15.p0751",
+        "bible.v15.p0752",
+        "bible.v15.p0753",
+        "bible.v15.t037r001"
+      ],
+      "slices": [
+        "S-013a"
+      ]
+    },
+    {
+      "id": "S-013a-C04",
+      "disposition": "implementation",
+      "criterion": "Le choix facultatif de préremplissage personnel conserve finalité, version, décision, acteur et instant ; aucun droit familial, administratif ou commercial n’est attribué.",
+      "oracle": "V3",
+      "test": "Accepter puis retirer le préremplissage et relire l’historique ; un compte tiers ne reçoit aucun champ.",
+      "source_ids": [
+        "bible.v15.p0269",
+        "bible.v15.t021r002",
+        "bible.v15.t021r003",
+        "bible.v15.p0937"
+      ],
+      "slices": [
+        "S-013a"
+      ]
+    },
+    {
+      "id": "S-013a-C05",
+      "disposition": "implementation",
+      "criterion": "La page dédiée propose étapes courtes, correction, récapitulatif, états vide/erreur/expiration et reprise des données effectivement enregistrées ; clavier, mobile et mouvement réduit sont relus après amélioration.",
+      "oracle": "V3",
+      "test": "Parcours réel sur ordinateur et mobile, focus et retour, double revue produit consignée sans batterie de tests de surface.",
+      "source_ids": [
+        "bible.v15.p0752",
+        "bible.v15.p0753",
+        "bible.v15.p0937",
+        "bible.v15.p1337",
+        "bible.v15.p1338",
+        "bible.v15.p1339",
+        "bible.v15.p1340",
+        "bible.v15.p1341",
+        "bible.v15.p1342"
+      ],
+      "slices": [
+        "S-013a"
+      ]
+    },
+    {
       "id": "S-013-C01",
       "disposition": "implementation",
       "criterion": "Le compte unique et son profil central sont réutilisés par www/Wallet, avec rôles multiples, consentements versionnés et session anonyme rattachable ; aucune identité métier concurrente de WorkOS.",
@@ -553,7 +652,7 @@
       "disposition": "implementation",
       "criterion": "Une donnée confirmée par la personne prime sur vérification CoverView puis extraction non vérifiée ; nouvelle extraction ne remplace jamais silencieusement une confirmation.",
       "oracle": "V2",
-      "test": "Réimporter une fixture contradictoire après confirmation : proposition de conflit et valeur confirmée inchangée.",
+      "test": "Importer une extraction réelle contradictoire après confirmation lorsque S-042 est disponible : proposition de conflit et valeur confirmée inchangée.",
       "source_ids": [
         "bible.v15.p0422",
         "bible.v15.t037r001"
@@ -567,7 +666,7 @@
       "disposition": "implementation",
       "criterion": "Rattachement du document, contrat/analyse, simulation et comparaison conserve leurs identifiants, snapshots et étape de reprise ; un retry ne duplique ni ne vole des objets.",
       "oracle": "V2",
-      "test": "Deux sessions/deux comptes et double callback : invariants de propriété et reprise exacte sans upload.",
+      "test": "Deux sessions/deux comptes et retry de rattachement : invariants de propriété et reprise exacte des objets réels sans upload. Le callback OAuth reste consommable une seule fois.",
       "source_ids": [
         "bible.v15.p0743",
         "bible.v15.t036r001",
