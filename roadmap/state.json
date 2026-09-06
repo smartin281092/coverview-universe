@@ -216,6 +216,12 @@
           "oracle": "V3 configuration / V1 migration",
           "observed": "Callback exact et Magic Auth activés constatés. Homepage corrigée vers www 4103 et MFA Optional enregistrée puis relue. Issuer vérifié via découverte OIDC publique. Ancienne API preview 4133 AUTH_ENABLED=false arrêtée via superviseur identifié ; port4100 libéré. Migration locale rejouée avec succès. Détails : roadmap/evidence/S-000b.md.",
           "decision": "Maintenir review. Attendre relance API dans terminal opérateur et deux identités autorisées avec bénéficiaire admin ; aucune clé serveur ni connexion fournisseur encore vérifiée."
+        },
+        {
+          "target": "Contrôle après relance opérateur — 2026-09-06",
+          "oracle": "V3 partiel",
+          "observed": "API ready, identity/config enabled:true et accès anonyme refusé 401. Lien Wallet exécuté dans Chrome : formulaire réel WorkOS ouvert pour le client et le callback attendus. Aucun email soumis ni callback authentifié achevé.",
+          "decision": "Blocage de lancement levé ; maintenir review en attendant identités test autorisées, login complet et recette fournisseur. Détails dans roadmap/evidence/S-000b.md."
         }
       ],
       "ledger": {
