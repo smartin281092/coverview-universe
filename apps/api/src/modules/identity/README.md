@@ -8,7 +8,7 @@ Le module porte l’identité canonique CoverView et la session serveur commune 
 
 **Géré ici** : transactions de connexion, association de l’identité WorkOS à un utilisateur et profil uniques, appareils et révocations, preuve MFA de session et audit de sécurité. Le module est propriétaire de cette capacité transverse pour les applications consommatrices.
 
-**Non géré ici** : organisations et partage foyer (slices propriétaires), rattachement anonyme (S-013), règles d’effacement/export et conservation définitives (S-130/S-131). Les personas `platform` restent des fixtures techniques sans habilitation.
+**Non géré ici** : organisations et partage foyer (slices propriétaires), rattachement des objets métier anonymes (S-013), règles d’effacement/export et conservation définitives (S-130/S-131). Le brouillon de profil est géré par S-013a. Les personas `platform` restent des fixtures techniques sans habilitation.
 
 Extension S-013a : [profil personnel et reprise](docs/profile.md), avec saisie/confirmation propriétaire, préremplissage versionné et rattachement du brouillon anonyme. Les objets métier restent S-013 ; les règles d’export/rétention définitives restent S-130/S-131.
 

@@ -2,11 +2,13 @@
 
 ## Résumé
 
-Wallet ouvre directement le compte, puis l’espace privé et les appareils connectés. Français dès le départ, textes externalisés dans `src/locales/fr/common.json`.
+Wallet propose le profil personnel, le compte et les appareils connectés. Français dès le départ, textes externalisés dans `src/locales/fr/common.json` et `profile.json`.
 
 ## Périmètre
 
-`/` et `/account` ouvrent le même parcours de compte et vérifient la véritable disponibilité de l’identité. La navigation propose le compte et les appareils ; aucun contrat, analyse ni document fictif n’est présenté comme un parcours utilisable. L’action de connexion et les erreurs arrivent avant les explications secondaires sur mobile.
+`/` et `/account` ouvrent le même parcours de compte et vérifient la véritable disponibilité de l’identité. `/profile` prépare un profil en trois étapes facultatives, avant ou après connexion. Chaque étape s’enregistre sur le serveur ; après WorkOS, le rattachement explicite reprend l’étape du brouillon et propose les divergences sans écraser le profil. `/profile?view=choices` remplace le formulaire par l’historique du choix personnel tout en conservant la saisie en mémoire. Aucun contrat, analyse ni document fictif n’est présenté comme un parcours utilisable.
+
+Sur smartphone, le shell unique expose Profil, Compte et Appareils dans une barre basse à icônes et libellés. Le menu Sheet shadcn ouvre les repères publics, gère le focus et Échap ; les safe areas sont réservées. La barre s’efface pendant la saisie et tous les boutons Wallet conservent une cible d’au moins 44 px. Les futurs documents de S-042a devront ajouter une destination réelle et adapter la grille de navigation à quatre éléments.
 
 Les outils de développement restent accessibles par leur adresse directe, hors navigation produit : `/preview` présente les personas fictives renvoyées par le backend local, `/states` montre les primitives d’états et `/diagnostics` vérifie la santé de l’API. Ces trois routes sont réservées à `import.meta.env.DEV`. Les liens ouvrent une autre page et aucun contenu hors FAQ ne se déplie (FRONT-14).
 
@@ -16,7 +18,7 @@ L’action Authenticator ouvre la page dédiée de l’espace équipe en dévelo
 
 ## Règles métier et invariants
 
-La présentation utilise le système commun xAI de [UI](../../packages/ui/README.md), conformément à ADR-0007. Le layout de compte partagé reçoit uniquement des textes et icônes ; les décisions d’identité restent dans cette app. Compte, appareils, déconnexion et états sont des sections ouvertes sans card.
+La présentation utilise le preset shadcn Geist/Montech de [UI](../../packages/ui/README.md), conformément à ADR-0008, avec la composition ouverte conservée d’ADR-0007. Le layout de compte partagé reçoit uniquement des textes et icônes ; les décisions d’identité restent dans cette app. Compte, profil, appareils, déconnexion et états sont des sections ouvertes sans card.
 
 Aucune règle métier ni secret de session durable frontend. Le réseau passe par `@coverview/api-client` ; les réponses sont validées par ses schémas. Source du socle : [API platform](../api/src/platform/README.md). TanStack Query conserve santé/personas fraîches 15 secondes et libère leur cache inutilisé après une minute.
 
@@ -38,6 +40,6 @@ Coquille S-000a et parcours d’identité S-000b implémentés. Les oracles et l
 
 `VITE_WEBSITE_URL` peut définir l’origine du site ; défaut local `http://127.0.0.1:4103`, cible de projet `https://coverview.ch` en build. Ces URLs publiques doivent correspondre aux origines réellement approuvées côté identité ; elles n’accordent aucun droit.
 
-Stack imposée : React/Vite, TanStack Router (routes par code), TanStack Query (server state), i18next/react-i18next (catalogues), Tailwind et [UI shadcn partagée](../../packages/ui/README.md). Les packages directs ont des licences MIT, sauf Lucide ISC. Aucun store global ni bibliothèque de formulaires ajouté sans formulaire réel.
+Stack imposée : React/Vite, TanStack Router (routes par code), TanStack Query (server state), i18next/react-i18next (catalogues), Tailwind et [UI shadcn partagée](../../packages/ui/README.md). Le formulaire profil utilise React Hook Form et le resolver Zod sur les contrats partagés, comme l’espace équipe. Les packages directs ont des licences MIT, sauf Lucide ISC. Aucune donnée du profil en localStorage ; cache privé borné à l’identité/session et saisie temporaire en mémoire.
 
 Sources officielles consultées : [TanStack Router](https://tanstack.com/router/latest/docs/framework/react), [Query defaults](https://tanstack.com/query/latest/docs/framework/react/guides/important-defaults), [shadcn CLI](https://ui.shadcn.com/docs/cli). Versions stables résolues via le registre npm le 2026-09-05, fixées dans le lockfile par l’installation racine.
