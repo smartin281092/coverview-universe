@@ -2,11 +2,13 @@
 
 ## Résumé
 
-Site marketing en français pour la Suisse, construit autour de la compréhension des contrats, de la prévoyance et de l’objectif retraite. La refonte du 6 septembre 2026 suit [ADR-0006](../../adr/0006-marketing-design-system.md) : narration de conversion, sections ouvertes, fond blanc et système de présentation commun. Le contenu public reste statique, lisible sans JavaScript et sans dépendance à l’API pour sa lecture. Les ledgers [S-010](../../roadmap/evidence/S-010.md) et [S-011](../../roadmap/evidence/S-011.md) conservent l’historique et les limites des versions antérieures ; ils ne valent pas validation de cette refonte.
+Site marketing en français pour la Suisse, construit autour de la compréhension des contrats, de la prévoyance et de l’objectif retraite. La direction actuelle suit [ADR-0007](../../adr/0007-xai-design-reference.md) et la [référence xAI fournie](../../references/xai-style-reference.md). [ADR-0006](../../adr/0006-marketing-design-system.md) conserve la décision de partager les composants de présentation avec les apps. Le contenu public reste statique, lisible sans JavaScript et sans dépendance à l’API pour sa lecture. Les ledgers [S-010](../../roadmap/evidence/S-010.md) et [S-011](../../roadmap/evidence/S-011.md) conservent l’historique et les limites des versions antérieures ; ils ne valent pas validation de cette refonte.
 
 ## Périmètre
 
-`src/content/fr/marketing.ts` porte le contenu de composition de l’accueil : proposition de valeur, problème concret, bénéfices de la compréhension, besoins, méthode, éléments de transparence, FAQ et appels à l’action. Il expose aussi les libellés de navigation, la narration de l’orientation et les introductions des services et du compte. Les CTA ouvrent une orientation, une lecture existante ou la page de connexion ; aucun bouton ne promet une analyse ou un calcul actuellement indisponible. Aucun dossier fictif, rendement ou témoignage n’alimente le hero.
+`src/content/fr/marketing.ts` porte les six sections de l’accueil : hero centré avec texte court, deux bentos de guides, méthode, ressources, FAQ et appel à l’action final. Le bento contrat ouvre `/services#3e-pilier` ; le bento retraite ouvre `/retire`. Leurs aperçus sont des repères issus des lectures disponibles, explicitement étiquetés « Guide de lecture ». Ils ne représentent ni des captures de Wallet, ni des résultats personnels.
+
+Le contenu expose aussi les libellés de navigation, la narration de l’orientation et les introductions des services et du compte. Les CTA ouvrent une orientation, une lecture existante ou la page de connexion ; aucun bouton ne promet une analyse ou un calcul actuellement indisponible. Le rendu exclut les images 3D et illustrations bleues de la tentative précédente. Aucun dossier fictif, rendement ou témoignage n’alimente le hero. Les règles visuelles restent dans la référence xAI et le système commun, sans copie locale de leur palette.
 
 `/overview` oriente selon un contrat à comprendre, une retraite à préparer ou des options à comparer. `/services` relie 3e pilier, LPP, assurances, retraite et documents ; les ancrages stables sont notamment `#3e-pilier`, `#lpp` et `#assurances`. `/methode` développe l’objectif initial puis les six étapes canoniques. Les approfondissements gardent leurs URLs propres. L’explorateur conserve l’accès aux destinations des §22/66, dont les outils futurs restent qualifiés. La démonstration historique reste à `/demonstration` ; la vraie 404 et `/account` sont conservés.
 
@@ -16,11 +18,11 @@ Les 18 contenus éditoriaux se trouvent dans `src/content/fr/editorial/`, plus l
 
 Le frontmatter porte slug, auteur, création/mise à jour, version, état, type, sources et indicateur fictif. `editorial-schema.ts` bloque un auteur non autorisé, les dates incohérentes, un état de publication externe, une structure cas/rapport incomplète et les formats financiers usuels sans preuve approuvée. Le registre de preuves est vide : renseigner des métadonnées dans un MDX ne suffit pas à valider un chiffre. Ce garde mécanique ne remplace pas la revue du sens, des faits ou des formulations en toutes lettres.
 
-Le système de présentation partagé vit dans `packages/ui`. `@astrojs/react` permet le rendu serveur statique des composants de présentation React, sans hydratation ajoutée pour le contenu public. ADR-0006 remplace le précédent défaut d’isolation de la présentation et l’ancienne palette. Les assets historiques restent conservés ; ils ne définissent plus le rendu de la refonte.
+Le système de présentation partagé vit dans `packages/ui`. `@astrojs/react` permet le rendu serveur statique des composants de présentation React, sans hydratation ajoutée pour le contenu public. ADR-0006 a remplacé le précédent défaut d’isolation de la présentation ; ADR-0007 fixe désormais la direction visuelle. Les assets historiques restent conservés et n’imposent pas le rendu actuel.
 
 ## Narration, SEO et sources
 
-La structure marketing reprend d’[IM8](https://im8health.com/) le principe d’une proposition claire, suivie d’explications, de raisons de confiance, d’objections et d’un prochain pas. Aucun texte, chiffre, témoignage ou argument relatif à ses produits n’est repris. La direction visuelle Apple relève de la composition et des composants communs ; elle ne fournit aucun fait concernant CoverView.
+La référence xAI gouverne la composition actuelle : priorité au texte, hiérarchie sobre et deux guides en bento suivis de contenus ouverts. La tentative IM8/Apple appartient à l’historique d’ADR-0006. Le contenu métier et ses sources restent propres à CoverView ; aucune preuve commerciale, capacité produit ou affirmation financière n’est déduite d’une référence de style.
 
 | Page | Intention de lecture et de recherche |
 | --- | --- |
@@ -74,7 +76,7 @@ Sharp est déclaré directement pour le service d’images Astro, uniquement au 
 
 ## Vérifier les parcours
 
-Le [ledger de refonte](../../roadmap/evidence/marketing-redesign.md) décrit les vérifications effectivement réalisées le 6 septembre et leurs limites. L’aperçu social `/og.png` et la variante `/og-preview.svg` sont générés depuis `src/content/social.ts` et le texte de l’accueil. La provenance du visuel original est dans `src/assets/README.md`.
+Le [ledger de refonte](../../roadmap/evidence/xai-redesign.md) décrit les vérifications effectivement réalisées le 6 septembre et leurs limites. L’aperçu social `/og.png` et la variante `/og-preview.svg` sont générés depuis `src/content/social.ts` et le texte de l’accueil. La provenance du visuel de la tentative précédente reste conservée dans `src/assets/README.md` ; elle ne prouve pas son utilisation dans le rendu xAI.
 
 Après `pnpm build` et installation du Chromium Playwright : `pnpm check:www` sert le build seul sur loopback éphémère puis s’arrête. Il contrôle HTML, metadata, graphe JSON-LD, miroirs comparés à la source et au HTML, liens/ancres/orphelins, sorties d’indexation vides, absence de JS exécutable hors compte, budget JS gzip et LCP/CLS sur onze gabarits. Ces mesures synthétiques ne sont ni du RUM ni une preuve du futur hébergement. Le contrôle est branché en CI après l’installation de Chromium.
 

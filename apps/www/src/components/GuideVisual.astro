@@ -1,0 +1,11 @@
+---
+interface Props { preview: { label: string; title: string; lines: readonly string[] }; variant: number; }
+const { preview, variant } = Astro.props;
+---
+<div class:list={['guide-visual', variant === 1 && 'guide-visual--retire']}>
+  <div class="guide-sheet">
+    <div class="guide-sheet-top"><span>{preview.label}</span><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 2.5h7l3 3v12H5zM12 2.5v4h3M8 10h4M8 13h4" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg></div>
+    <p class="guide-sheet-title">{preview.title}</p>
+    <ul>{preview.lines.map((line,index) => <li><span class="guide-line-mark" aria-hidden="true">{variant === 0 ? String(index+1).padStart(2,'0') : '—'}</span><span>{line}</span></li>)}</ul>
+  </div>
+</div>

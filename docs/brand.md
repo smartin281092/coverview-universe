@@ -1,6 +1,6 @@
 # Marque CoverView
 
-> **Direction actuelle** : [ADR-0006](../adr/0006-marketing-design-system.md) remplace la palette et les décisions visuelles initiales ci-dessous. Appliquer la source commune décrite dans [UI](../packages/ui/README.md). Ce document conserve l’historique des sources et leurs empreintes ; il ne faut pas réappliquer son ancien thème.
+> **Direction actuelle** : appliquer [ADR-0007](../adr/0007-xai-design-reference.md) et la [référence xAI fournie](../references/xai-style-reference.md), avec le système commun décrit dans [UI](../packages/ui/README.md). La direction visuelle d’ADR-0006 est remplacée ; son autorisation de partager la présentation statique reste acquise. Le reste de ce document conserve l’historique des sources et leurs empreintes, sans imposer leur ancien thème.
 
 État au 5 septembre 2026 : références initialisées ; aucune interface applicative encore réalisée. Les cinq aplats fournis sont la source de marque. Les compléments sémantiques sont une proposition dérivée, explicitement distinguée de cette source. Leur vérification numérique ne vaut pas validation du rendu d'un écran.
 

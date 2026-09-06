@@ -22,7 +22,7 @@ export function AccountPage() {
         {(identity) => (
           <>
             <section className="max-w-2xl space-y-7" aria-label={t("identity.profile")}>
-              <h2 className="text-xl font-semibold">{t("identity.connectedTitle")}</h2>
+              <h2 className="cv-app-subheading">{t("identity.connectedTitle")}</h2>
               <dl className="space-y-2">
                 <dt className="text-sm text-muted-foreground">{t("identity.email")}</dt>
                 <dd className="break-words font-medium">{identity.user.email}</dd>

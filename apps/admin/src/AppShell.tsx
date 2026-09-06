@@ -19,8 +19,8 @@ export function AppShell() {
       >
         {t("skip")}
       </a>
-      <header className="border-b border-border">
-        <Container className="flex flex-wrap items-center justify-between gap-x-5 gap-y-2 py-4">
+      <header className="sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur-xl">
+        <Container className="flex flex-wrap items-center justify-between gap-x-5 gap-y-2 py-2.5">
           <Link to="/" className="flex items-center gap-4">
             <img
               src={logo}
@@ -31,24 +31,24 @@ export function AppShell() {
             />
             <span className="text-xs text-muted-foreground sm:text-sm">{t("app")}</span>
           </Link>
+          <nav
+            aria-label={t("navigation")}
+            className="order-3 flex basis-full flex-wrap gap-x-7 sm:order-none sm:basis-auto"
+          >
+            <Link
+              to="/account"
+              aria-current={accountPage ? "page" : undefined}
+              className="cv-app-nav-link"
+            >
+              {t("identity.accountTitle")}
+            </Link>
+          </nav>
           <TextLink href={websiteUrl} arrow="up" className="text-sm">
             {t("website")}
           </TextLink>
         </Container>
       </header>
       <Container className="flex-1">
-        <nav
-          aria-label={t("navigation")}
-          className="flex flex-wrap gap-x-7 border-b border-border py-3"
-        >
-          <Link
-            to="/account"
-            aria-current={accountPage ? "page" : undefined}
-            className={`inline-flex min-h-11 items-center text-sm ${accountPage ? "text-foreground underline underline-offset-8" : "text-muted-foreground hover:text-foreground"}`}
-          >
-            {t("identity.accountTitle")}
-          </Link>
-        </nav>
         <main
           id="main"
           tabIndex={-1}
@@ -62,7 +62,7 @@ export function AppShell() {
       <footer className="border-t border-border">
         <Container className="flex flex-wrap justify-between gap-2 py-6 text-xs text-muted-foreground">
           <p>{t("footer")}</p>
-          {import.meta.env.DEV && <p>{t("identity.local")}</p>}
+          {import.meta.env.DEV && <p className="cv-meta">{t("identity.local")}</p>}
         </Container>
       </footer>
     </div>

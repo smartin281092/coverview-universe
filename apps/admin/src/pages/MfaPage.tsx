@@ -165,7 +165,7 @@ export function MfaPage() {
   return (
     <>
       <div className="space-y-3">
-        <h1 className="text-3xl font-semibold tracking-tight">{t("identity.mfaTitle")}</h1>
+        <h1 className="cv-app-heading">{t("identity.mfaTitle")}</h1>
         <Link to="/account" className="text-sm font-medium text-primary">
           {t("identity.backAccount")}
         </Link>

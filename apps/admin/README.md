@@ -14,7 +14,7 @@ Surface indépendante destinée aux équipes CoverView. Le compte est l’entré
 
 ## Règles métier et invariants
 
-La présentation utilise le système blanc commun de [UI](../../packages/ui/README.md), conformément à ADR-0006. Le layout de compte partagé reçoit uniquement des textes et icônes ; les décisions d’identité restent dans cette app. Compte, formulaire MFA, déconnexion et états sont des sections ouvertes sans card.
+La présentation utilise le système commun xAI de [UI](../../packages/ui/README.md), conformément à ADR-0007. Le layout de compte partagé reçoit uniquement des textes et icônes ; les décisions d’identité restent dans cette app. Compte, formulaire MFA, déconnexion et états sont des sections ouvertes sans card.
 
 Texte français externalisé dans `src/locales/fr/common.json`. Aucun credential PostgreSQL, aucune lecture DB, room ou job. Réseau via `@coverview/api-client` uniquement. Santé et personas utilisent un cache TanStack Query frais 15 secondes, collecté après une minute. L’identité se vérifie à chaque montage/focus ; les données privées sont masquées pendant cette vérification. Le cache privé, borné à identité/session, est périmé immédiatement et supprimé sans observateur, au changement de session, au refus d’authentification et à la déconnexion. Les requêtes sont annulées avant retrait, y compris l’identité lors du logout ; aucun retry automatique de mutation.
 

@@ -23,7 +23,7 @@ export function PreviewPage() {
   return (
     <>
       <div className="space-y-3">
-        <h1 className="text-3xl font-semibold tracking-tight">{t("personas.title")}</h1>
+        <h1 className="cv-app-heading">{t("personas.title")}</h1>
         <p className="max-w-xl leading-relaxed text-muted-foreground">
           {t("personas.description")}
         </p>
@@ -45,7 +45,7 @@ export function PreviewPage() {
         <EmptyState title={t("personas.empty")} description={t("personas.emptyDescription")} />
       ) : (
         <fieldset className="space-y-3">
-          <legend className="mb-4 text-sm font-semibold">{t("personas.legend")}</legend>
+          <legend className="mb-4 text-sm font-medium">{t("personas.legend")}</legend>
           {personas.data.personas.map((persona) => (
             <label
               key={persona.id}
@@ -62,7 +62,7 @@ export function PreviewPage() {
                 className="size-4 accent-primary"
               />
               <span className="min-w-0">
-                <span className="block break-all text-sm font-semibold">{persona.email}</span>
+                <span className="block break-all text-sm font-medium">{persona.email}</span>
                 <span className="mt-1 block text-sm text-muted-foreground">{persona.org}</span>
                 <span className="mt-2 block text-xs text-primary">{t("personas.badge")}</span>
               </span>

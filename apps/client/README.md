@@ -14,7 +14,7 @@ Les outils de développement restent accessibles par leur adresse directe, hors 
 
 ## Règles métier et invariants
 
-La présentation utilise le système blanc commun de [UI](../../packages/ui/README.md), conformément à ADR-0006. Le layout de compte partagé reçoit uniquement des textes et icônes ; les décisions d’identité restent dans cette app. Compte, appareils, déconnexion et états sont des sections ouvertes sans card.
+La présentation utilise le système commun xAI de [UI](../../packages/ui/README.md), conformément à ADR-0007. Le layout de compte partagé reçoit uniquement des textes et icônes ; les décisions d’identité restent dans cette app. Compte, appareils, déconnexion et états sont des sections ouvertes sans card.
 
 Aucune règle métier ni secret de session durable frontend. Le réseau passe par `@coverview/api-client` ; les réponses sont validées par ses schémas. Source du socle : [API platform](../api/src/platform/README.md). TanStack Query conserve santé/personas fraîches 15 secondes et libère leur cache inutilisé après une minute.
 

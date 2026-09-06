@@ -25,7 +25,7 @@ export function StatesPage() {
   return (
     <>
       <div className="space-y-3">
-        <h1 className="text-3xl font-semibold tracking-tight">{t("stateExamples.title")}</h1>
+        <h1 className="cv-app-heading">{t("stateExamples.title")}</h1>
         <p className="text-muted-foreground">{t("stateExamples.description")}</p>
       </div>
       <LoadingState label={t("stateExamples.loading")} />

@@ -1,13 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { Image } from 'astro:assets';
 import { Container, Section, SectionHeading, ButtonLink, TextLink, Bento } from '@coverview/ui';
-import clarity from '../assets/clarity.png';
-import BenefitArt from '../components/BenefitArt.astro';
+import GuideVisual from '../components/GuideVisual.astro';
+import ResourceVisual from '../components/ResourceVisual.astro';
 import Closing from '../components/Closing.astro';
 import Faq from '../components/Faq.astro';
 import { marketing as copy } from '../content/fr/marketing';
-
 const schema = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -19,45 +17,39 @@ const schema = {
 ---
 <Layout title={copy.seo.title} description={copy.seo.description} structuredData={schema}>
   <section class="marketing-hero" aria-labelledby="hero-title">
-    <Container className="hero-layout">
-      <div class="hero-copy">
-        <SectionHeading id="hero-title" level={1} size="display" eyebrow={copy.hero.eyebrow} title={copy.hero.title} description={copy.hero.description} />
-        <div class="hero-actions">
-          <ButtonLink href={copy.hero.primary.href} size="lg">{copy.hero.primary.label}</ButtonLink>
-          <TextLink href={copy.hero.secondary.href}>{copy.hero.secondary.label}</TextLink>
-        </div>
-        <p class="hero-note">{copy.hero.note}</p>
+    <Container>
+      <SectionHeading id="hero-title" level={1} size="display" align="center" eyebrow={copy.hero.eyebrow} title={copy.hero.title} description={copy.hero.description} />
+      <div class="hero-actions">
+        <ButtonLink href={copy.hero.primary.href}>{copy.hero.primary.label}</ButtonLink>
+        <ButtonLink href={copy.hero.secondary.href} variant="ghost">{copy.hero.secondary.label}<span aria-hidden="true">↗</span></ButtonLink>
       </div>
-      <Image src={clarity} alt={copy.hero.imageAlt} widths={[640, 960, 1280, 1536]} sizes="(max-width: 700px) 140vw, 900px" width={1536} height={1024} format="webp" quality={85} loading="eager" fetchpriority="high" class="hero-art" />
+      <p class="hero-note">{copy.hero.note}</p>
     </Container>
   </section>
-  <div class="trust-strip"><Container><ul>{copy.trust.map(item => <li><span aria-hidden="true">✓</span>{item}</li>)}</ul></Container></div>
-  <Section><Container>
-    <div class="problem-layout">
-      <SectionHeading eyebrow={copy.problem.eyebrow} title={copy.problem.title} />
-      <div class="problem-copy"><p class="body-large">{copy.problem.description}</p><ul class="question-list">{copy.problem.questions.map(question => <li><span aria-hidden="true">↗</span>{question}</li>)}</ul><p>{copy.problem.conclusion}</p></div>
-    </div>
-  </Container></Section>
-  <Section spacing="compact" className="benefit-section"><Container>
-    <SectionHeading eyebrow={copy.benefits.eyebrow} title={copy.benefits.title} />
-    <div class="benefit-grid">{copy.benefits.items.map((item, index) => <Bento title={item.title} description={item.description}>
-      <BenefitArt kind={index} slot="illustration" />
+  <Container>
+    <div class="showcase-grid">{copy.showcases.items.map((item, index) => <Bento level={2} className="showcase" title={item.title} description={item.description}>
+      <GuideVisual slot="illustration" preview={item.preview} variant={index} />
       <TextLink href={item.href}>{item.linkLabel}</TextLink>
     </Bento>)}</div>
-  </Container></Section>
-  <Section tone="soft"><Container>
+  </Container>
+  <Section><Container>
     <div class="method-layout">
-      <div class="method-intro"><SectionHeading eyebrow={copy.steps.eyebrow} title={copy.steps.title} description={copy.steps.description} /><TextLink href={copy.steps.action.href}>{copy.steps.action.label}</TextLink><div class="method-orbit" aria-hidden="true"><span></span><span></span><span></span><i></i></div></div>
-      <ol class="method-steps">{copy.steps.items.map(item => <li><span class="step-number">{item.number}</span><div><h3>{item.title}</h3><p>{item.description}</p></div></li>)}</ol>
+      <div class="method-intro">
+        <SectionHeading eyebrow={copy.steps.eyebrow} title={copy.steps.title} description={copy.steps.description} />
+        <ButtonLink href={copy.steps.action.href} variant="outline">{copy.steps.action.label}<span aria-hidden="true">↗</span></ButtonLink>
+      </div>
+      <ol class="method-steps">{copy.steps.items.map(item => <li>
+        <span class="step-number">{item.number}</span>
+        <div><h3>{item.title}</h3><p>{item.description}</p></div>
+      </li>)}</ol>
     </div>
   </Container></Section>
-  <Section><Container>
-    <SectionHeading eyebrow={copy.pillars.eyebrow} title={copy.pillars.title} />
-    <div class="pillar-list">{copy.pillars.items.map(item => <article><p class="eyebrow">{item.eyebrow}</p><h3>{item.title}</h3><div><p>{item.description}</p><TextLink href={item.href}>{item.linkLabel}</TextLink></div></article>)}</div>
-  </Container></Section>
-  <Section tone="soft"><Container>
-    <SectionHeading eyebrow={copy.proof.eyebrow} title={copy.proof.title} align="center" />
-    <div class="proof-grid">{copy.proof.items.map((item, index) => <article><div class="proof-symbol" aria-hidden="true">{['≡', '↔', '◎'][index]}</div><h3>{item.title}</h3><p>{item.description}</p><TextLink href={item.href}>{item.linkLabel}</TextLink></article>)}</div>
+  <Section className="resources-section"><Container>
+    <div class="section-top"><SectionHeading title={copy.resources.heading} size="medium" description={copy.resources.description} /><TextLink href={copy.nav.resources.href}>{copy.nav.resources.label}</TextLink></div>
+    <div class="resource-grid">{copy.resources.items.map((item,index) => <a class="resource-item" href={item.href}>
+      <ResourceVisual kind={index} />
+      <p class="resource-label">{item.label}</p><h3>{item.title}<span aria-hidden="true">↗</span></h3><p>{item.description}</p>
+    </a>)}</div>
   </Container></Section>
   <Faq />
   <Closing />

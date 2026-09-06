@@ -20,7 +20,7 @@ export function DiagnosticsPage() {
     );
   return (
     <section className="space-y-6">
-      <h1 className="text-3xl font-semibold tracking-tight">{t("health.title")}</h1>
+      <h1 className="cv-app-heading">{t("health.title")}</h1>
       {health.isPending ? (
         <LoadingState label={t("health.loading")} />
       ) : health.isError ? (

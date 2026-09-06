@@ -50,7 +50,7 @@ export function WorkspacePage() {
   const { userId } = useParams({ from: "/workspace/$userId" });
   return (
     <>
-      <h1 className="text-3xl font-semibold tracking-tight">{t("identity.workspaceTitle")}</h1>
+      <h1 className="cv-app-heading">{t("identity.workspaceTitle")}</h1>
       <IdentityBoundary>
         {(identity) => <Workspace identity={identity} userId={userId} />}
       </IdentityBoundary>

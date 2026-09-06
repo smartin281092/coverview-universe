@@ -45,7 +45,7 @@ const nav = [copy.nav.services, copy.nav.method, copy.nav.resources];
         <nav aria-label={content.navigation}>
           {nav.map(item => <a href={item.href} aria-current={Astro.url.pathname === item.href ? 'page' : undefined}>{item.label}</a>)}
         </nav>
-        <ButtonLink href={copy.nav.account.href} className="header-account">{copy.nav.account.label}</ButtonLink>
+        <div class="header-actions"><ButtonLink href={copy.nav.account.href} variant="outline" className="header-account">{copy.nav.account.label}</ButtonLink><ButtonLink href={copy.hero.primary.href} className="header-primary">{copy.hero.primary.label}</ButtonLink><a class="mobile-explore" href={copy.nav.all.href} aria-label={copy.nav.all.label}><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.5"/></svg></a></div>
       </Container>
     </header>
     <main id="main" tabindex="-1"><slot /></main>

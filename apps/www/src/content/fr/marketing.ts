@@ -16,14 +16,82 @@ export const marketing = {
   },
   hero: {
     eyebrow: "Assurance. Prévoyance. Retraite.",
-    title: "Votre prévoyance.\nEnfin plus claire.",
+    title: "Votre prévoyance,\nen clair.",
     description:
-      "Votre 3e pilier, vos assurances, votre retraite : comprenez ce que vous avez, ce que vous souhaitez et les questions à poser avant de décider.",
-    primary: { label: "Trouver mon point de départ", href: "/overview" },
-    secondary: { label: "Découvrir notre méthode", href: "/methode" },
-    note: "Commencez par comprendre. Sans compte, à votre rythme.",
-    imageAlt:
-      "Porte-documents blanc et argent, feuilles réunies sous une protection transparente courbe",
+      "Comprenez vos contrats, comparez les approches et préparez votre retraite. Des repères clairs pour relier votre protection à vos projets.",
+    primary: { label: "Explorer les parcours", href: "/overview" },
+    secondary: { label: "Notre méthode", href: "/methode" },
+    note: "Guides en accès libre.",
+  },
+  showcases: {
+    items: [
+      {
+        eyebrow: "Votre contrat",
+        title: "Le 3e pilier, ligne par ligne.",
+        description:
+          "Distinguez l’épargne, les frais et les protections. Un guide pour comprendre ce que vous détenez avant d’envisager un changement.",
+        href: "/services#3e-pilier",
+        linkLabel: "Lire le guide du 3e pilier",
+        preview: {
+          label: "Guide de lecture · 3e pilier",
+          title: "Les éléments à examiner",
+          lines: [
+            "L’épargne et les placements",
+            "Les frais et les protections",
+            "Les possibilités d’adaptation",
+            "Les conditions de sortie",
+          ],
+        },
+      },
+      {
+        eyebrow: "Votre retraite",
+        title: "Un projet avant un chiffre.",
+        description:
+          "Précisez le niveau de vie souhaité, les ressources connues et les décisions à préparer. Le point de départ d’une réflexion sur votre retraite.",
+        href: "/retire",
+        linkLabel: "Lire le guide retraite",
+        preview: {
+          label: "Guide de lecture · Retraite",
+          title: "Les premiers repères",
+          lines: [
+            "Le niveau de vie souhaité",
+            "Les ressources connues",
+            "Le choix entre rente et capital",
+            "La durée et les changements de vie",
+          ],
+        },
+      },
+    ],
+  },
+  resources: {
+    heading: "Pour approfondir.",
+    description: "Des lectures courtes pour avancer à votre rythme.",
+    items: [
+      {
+        label: "Comparaison",
+        title: "Lire un benchmark",
+        description: "Le cadre, les critères et les limites à regarder avant le classement.",
+        href: "/articles/lire-un-benchmark",
+      },
+      {
+        label: "Contrats",
+        title: "Conserver reste une option",
+        description: "Pourquoi comprendre un contrat ne signifie pas devoir le remplacer.",
+        href: "/articles/pourquoi-conserver",
+      },
+      {
+        label: "Glossaire",
+        title: "Les mots de la prévoyance",
+        description: "Les termes essentiels pour suivre les explications sans perdre le fil.",
+        href: "/glossaire",
+      },
+      {
+        label: "Transparence",
+        title: "Nos sources et leur portée",
+        description: "L’origine des contenus et la distinction entre méthode et résultats.",
+        href: "/sources",
+      },
+    ],
   },
   trust: ["Pensé pour la Suisse", "L’objectif avant le produit", "Une méthode à examiner"],
   problem: {
@@ -105,33 +173,32 @@ export const marketing = {
   },
   steps: {
     eyebrow: "La méthode CoverView",
-    title: "Votre objectif d’abord.\nLe produit ensuite.",
+    title: "L’objectif avant le produit.",
     description:
-      "L’horizon, la situation et les contraintes donnent le cadre. La méthode relie ensuite l’analyse à la décision, puis au suivi dans le temps.",
+      "Partir de votre situation. Comparer dans un cadre commun. Garder les raisons de chaque décision.",
     items: [
       {
         number: "01",
         title: "Comprendre",
-        description: "Partir des documents, identifier ce que vous avez et ce qui manque.",
+        description: "Identifier ce que vos documents décrivent et ce qui reste à confirmer.",
       },
       {
         number: "02",
         title: "Comparer",
-        description:
-          "Mettre les solutions en perspective avec des critères et des hypothèses communs.",
+        description: "Rapprocher les coûts, les protections et les contraintes.",
       },
       {
         number: "03",
         title: "Décider",
-        description: "Examiner les compromis, y compris l’intérêt de conserver l’existant.",
+        description: "Examiner les compromis, y compris le maintien du contrat.",
       },
       {
         number: "04",
         title: "Réévaluer",
-        description: "Revenir sur la décision lorsque vos projets ou ses hypothèses évoluent.",
+        description: "Revoir le choix lorsque votre situation ou ses hypothèses évoluent.",
       },
     ],
-    action: { label: "Voir la méthode complète", href: "/methode" },
+    action: { label: "Lire la méthode complète", href: "/methode" },
   },
   proof: {
     eyebrow: "La confiance se construit",
@@ -169,42 +236,42 @@ export const marketing = {
       {
         question: "Dois-je déjà savoir ce que je cherche ?",
         answer:
-          "Non. Vous pouvez partir d’un contrat que vous comprenez mal, d’une question sur votre retraite ou de plusieurs options à comparer. La page « Comment ça marche » vous aide à choisir les premières questions à examiner.",
+          "Non. Commencez par un contrat à comprendre, un projet de retraite ou des options à comparer. La page des parcours vous aide à vous orienter.",
         href: "/overview",
         linkLabel: "Choisir mon point de départ",
       },
       {
         question: "Analyser mon contrat signifie-t-il devoir en changer ?",
         answer:
-          "Non. Comprendre l’existant vient avant toute proposition de changement. Il faut examiner ce que le contrat apporte, ses limites et ses conditions, puis les relier à votre objectif. Conserver le contrat peut faire partie des options à étudier.",
+          "Non. L’analyse vient avant la décision. Les raisons de conserver un contrat doivent pouvoir être examinées autant que celles de l’adapter.",
         href: "/articles/pourquoi-conserver",
-        linkLabel: "Lire pourquoi conserver reste une option",
+        linkLabel: "Comprendre la place du maintien",
       },
       {
         question: "Comment savoir si deux 3es piliers sont comparables ?",
         answer:
-          "Commencez par leur objectif, leur catégorie et les contraintes qu’ils doivent respecter. Regardez ensuite les coûts, les protections, les risques, la flexibilité et la période observée. Une comparaison utile explique son cadre ; elle ne se limite pas à un chiffre de rendement.",
+          "Regardez leur objectif, leur catégorie et leurs contraintes, puis les coûts, les protections et les risques. Le cadre de comparaison compte autant que le résultat affiché.",
         href: "/benchmark",
         linkLabel: "Découvrir le cadre de comparaison",
       },
       {
         question: "Faut-il un compte pour découvrir CoverView ?",
         answer:
-          "Les guides, la méthode et les articles sont accessibles sans compte. La page de connexion donne accès à votre compte CoverView lorsque la connexion est disponible. La lecture des contenus publics ne demande aucun document personnel.",
+          "Non. Les guides et les articles sont accessibles sans compte ni document personnel. L’accès au compte est un parcours distinct.",
         href: "/account",
         linkLabel: "Accéder à la page de connexion",
       },
       {
         question: "Puis-je déjà envoyer un contrat ou obtenir une simulation ?",
         answer:
-          "Pas encore. Le dépôt de contrats, les analyses personnalisées et les simulateurs ne sont pas ouverts. Vous pouvez dès maintenant explorer la méthode, les critères de comparaison et les questions à préparer pour votre situation.",
+          "Pas encore. Le dépôt de contrats, les analyses personnalisées et les simulateurs ne sont pas ouverts. Les guides et la méthode sont déjà accessibles.",
         href: "/outils",
         linkLabel: "Voir les parcours et leur disponibilité",
       },
       {
         question: "CoverView s’adresse-t-il uniquement à la retraite ?",
         answer:
-          "La retraite est un point d’entrée. L’approche couvre aussi la compréhension des assurances, du 3e pilier, de la prévoyance professionnelle et des documents contractuels. L’objectif est de relier ces sujets à vos besoins, plutôt que de les examiner séparément.",
+          "L’approche relie les assurances, le 3e pilier, la prévoyance professionnelle et la retraite. Chaque sujet peut être un point de départ.",
         href: "/services",
         linkLabel: "Explorer mes besoins",
       },
@@ -212,11 +279,10 @@ export const marketing = {
   },
   closing: {
     eyebrow: "Le prochain pas",
-    title: "Commencez par une question.\nAvancez avec une vue plus claire.",
-    description:
-      "Vous n’avez pas besoin de tout comprendre aujourd’hui. Choisissez ce qui vous préoccupe et découvrez les premiers repères.",
-    primary: { label: "Trouver mon point de départ", href: "/overview" },
-    secondary: { label: "Accéder à mon compte", href: "/account" },
+    title: "Choisissez votre point de départ.",
+    description: "Un contrat à comprendre. Une retraite à préparer. Des options à comparer.",
+    primary: { label: "Explorer les parcours", href: "/overview" },
+    secondary: { label: "Mon compte", href: "/account" },
   },
   overview: {
     seo: {

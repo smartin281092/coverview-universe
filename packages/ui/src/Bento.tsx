@@ -3,6 +3,7 @@ import { cn } from "cn";
 
 export type BentoProps = Omit<ComponentProps<"article">, "title"> & {
   title: ReactNode;
+  level?: 2 | 3;
   description?: ReactNode;
   illustration?: ReactNode;
   value?: ReactNode;
@@ -11,6 +12,7 @@ export type BentoProps = Omit<ComponentProps<"article">, "title"> & {
 
 export function Bento({
   title,
+  level = 3,
   description,
   illustration,
   value,
@@ -19,10 +21,11 @@ export function Bento({
   children,
   ...props
 }: BentoProps) {
+  const Heading = level === 2 ? "h2" : "h3";
   return (
     <article className={cn("cv-bento", className)} {...props}>
       <div>
-        <h3 className="cv-bento__title">{title}</h3>
+        <Heading className="cv-bento__title">{title}</Heading>
         {description && <p className="cv-bento__description">{description}</p>}
       </div>
       {value != null && (

@@ -1,12 +1,12 @@
 # Design système des apps (UI)
 
-> **Décision actuelle** : appliquer [ADR-0006](../adr/0006-marketing-design-system.md) et le système commun documenté dans [UI](../packages/ui/README.md). Cette décision prévaut sur l’ancienne direction du preset et sur la restriction de partage statique avec `www` ci-dessous.
+> **Direction actuelle** : appliquer [ADR-0007](../adr/0007-xai-design-reference.md), la [référence xAI fournie](../references/xai-style-reference.md) et le système commun documenté dans [UI](../packages/ui/README.md). [ADR-0006](../adr/0006-marketing-design-system.md) conserve l’autorisation de partage statique avec `www` ; sa direction visuelle est remplacée. Ces décisions prévalent sur l’ancien thème du preset et la restriction de partage ci-dessous.
 
 > **Résumé** : une seule bibliothèque de composants — shadcn/ui initialisée avec le preset imposé — des tokens pour toute valeur visuelle, des primitives d'états partagées, une seule stack de formulaires. La cohérence prime sur la nouveauté : l'agent réutilise l'existant avant de créer.
 
 ## DSN-01 — Initialisation imposée
 
-> **Portée historique** : la procédure ci-dessous documente l’initialisation d’ADR-0004. [ADR-0006](../adr/0006-marketing-design-system.md) la remplace pour la direction visuelle actuelle : réutiliser le système commun, sans réappliquer l’ancien thème ni écraser ses adaptations par une nouvelle application du preset.
+> **Portée historique** : la procédure ci-dessous documente l’initialisation d’ADR-0004. La direction actuelle relève d’[ADR-0007](../adr/0007-xai-design-reference.md) : réutiliser le système commun, sans réappliquer l’ancien thème ni écraser ses adaptations par une nouvelle application du preset.
 
 Dans chaque app React (`client`, `admin`, apps additionnelles), l'UI s'initialise avec le preset du harness :
 

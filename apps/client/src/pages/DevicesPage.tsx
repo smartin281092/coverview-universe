@@ -149,7 +149,7 @@ export function DevicesPage() {
   return (
     <>
       <div className="space-y-3">
-        <h1 className="text-3xl font-semibold tracking-tight">{t("identity.devices")}</h1>
+        <h1 className="cv-app-heading">{t("identity.devices")}</h1>
         <p className="max-w-xl text-muted-foreground">{t("identity.devicesDescription")}</p>
         <Link to="/account" className="inline-flex text-sm font-medium text-primary">
           {t("identity.backAccount")}
