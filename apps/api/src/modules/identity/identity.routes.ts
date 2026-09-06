@@ -139,7 +139,11 @@ export async function registerIdentity(
       );
       reply.clearCookie(loginName, cookieOptions);
       if (result.success) setSession(reply, result.token, result.session.expiresAt);
-      else request.log.warn({ code: result.code }, "Identity callback failed");
+      else
+        request.log.warn(
+          { code: result.code, diagnostic: result.diagnostic },
+          "Identity callback failed",
+        );
       return reply.redirect(result.destination, 303);
     },
   );

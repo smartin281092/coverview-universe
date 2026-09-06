@@ -184,7 +184,18 @@ export function parseEnvironment(input: Record<string, string | undefined>): Env
     const fields = [...new Set(result.error.issues.map((issue) => issue.path.join(".")))];
     throw new Error(`Invalid environment configuration: ${fields.join(", ")}`);
   }
-  return result.data;
+  const config = result.data;
+  // Repair the earlier local runbook's OIDC discovery/session-token issuer mix-up.
+  // This known alias is configuration-only; never infer an accepted issuer from a token.
+  if (
+    ["local", "development"].includes(config.APP_ENV) &&
+    config.NODE_ENV !== "production" &&
+    config.WORKOS_CLIENT_ID &&
+    config.WORKOS_ISSUER === `https://api.workos.com/user_management/${config.WORKOS_CLIENT_ID}`
+  ) {
+    return { ...config, WORKOS_ISSUER: "https://api.workos.com/" };
+  }
+  return config;
 }
 
 export function loadEnvironment(): Environment {

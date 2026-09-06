@@ -36,3 +36,4 @@ Aucune entrée activée. L'identité du projet vit dans PROJECT.md ; les décisi
 Ces candidats attendent une revue ; ils ne constituent pas des règles concurrentes des références citées.
 
 - MEM-118 · décision · L’utilisateur autorise deux identités réelles pour la recette WorkOS et les identités fictives LocalHost ; inventaire et limites d’habilitation dans le ledger S-000b. L’OTP fournisseur accepté ne prouve pas une session CoverView : premier callback en échec. (S-000b reprise, 2026-09-06 · confiance haute · revoir avant 2026-12-05 · candidat)
+- MEM-119 · piège · Ne pas configurer l’émetteur des access tokens AuthKit à partir de la découverte OIDC du client ; le callback réel a prouvé la confusion d’émetteurs. Correction locale, preuve, normalisation bornée et contrôles conservés dans le README identity et le ledger S-000b. (Réparation callback, 2026-09-06 · confiance haute · revoir avant 2026-12-05 · candidat)

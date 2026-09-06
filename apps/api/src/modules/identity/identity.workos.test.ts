@@ -143,11 +143,19 @@ describe("official WorkOS SDK protocol with local HTTP responses only", () => {
     issuer = "https://foreign.example.test/";
     await expect(provider.exchange("fixture_code", "fixture_verifier")).rejects.toMatchObject({
       code: "IDENTITY_INVALID_CALLBACK",
+      diagnostic: {
+        stage: "token_claims",
+        reason: "issuer_mismatch",
+        configuredIssuer: "generic",
+        tokenIssuer: "custom",
+        issuerMatches: false,
+      },
     });
     issuer = "https://api.workos.com/";
     subject = "other_user";
     await expect(provider.exchange("fixture_code", "fixture_verifier")).rejects.toMatchObject({
       code: "IDENTITY_INVALID_CALLBACK",
+      diagnostic: { stage: "token_claims", reason: "subject_mismatch" },
     });
   });
   it("does not turn a valid challenge for another factor into a session MFA proof", async () => {

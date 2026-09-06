@@ -7,15 +7,85 @@ import {
   timingSafeEqual,
 } from "node:crypto";
 import type { IdentityErrorCode } from "@coverview/contracts";
+import { z } from "zod";
+
+const identityDiagnosticSchema = z.object({
+  stage: z.enum([
+    "authorization",
+    "callback_code",
+    "verifier_decryption",
+    "code_exchange",
+    "sealed_session",
+    "session_authentication",
+    "token_claims",
+    "remote_sessions",
+    "reconciliation",
+    "persistence",
+    "remote_revocation",
+    "mfa_challenge",
+    "mfa_verification",
+  ]),
+  reason: z.enum([
+    "operation_failed",
+    "code_missing",
+    "session_missing",
+    "invalid_jwt",
+    "invalid_session",
+    "impersonation",
+    "email_unverified",
+    "claims_invalid",
+    "subject_mismatch",
+    "session_mismatch",
+    "issuer_mismatch",
+    "token_expired",
+    "token_future",
+    "audience_mismatch",
+    "identity_invalid",
+    "sessions_truncated",
+    "sessions_invalid",
+    "session_owner_mismatch",
+    "session_not_active",
+    "session_creation_refused",
+  ]),
+  providerStatus: z.number().int().min(100).max(599).optional(),
+  configuredIssuer: z.enum(["generic", "app", "custom", "other"]).optional(),
+  tokenIssuer: z.enum(["generic", "app", "custom", "other"]).optional(),
+  issuerMatches: z.boolean().optional(),
+});
+export type IdentityDiagnostic = z.infer<typeof identityDiagnosticSchema>;
+
+// Rebuild from a closed schema at the logging boundary: no error messages, claims or arbitrary keys.
+export function identityFailureDiagnostic(
+  cause: unknown,
+  stage: IdentityDiagnostic["stage"],
+  reason: IdentityDiagnostic["reason"] = "operation_failed",
+): IdentityDiagnostic {
+  const supplied =
+    cause instanceof IdentityError
+      ? identityDiagnosticSchema.safeParse(cause.diagnostic)
+      : undefined;
+  if (supplied?.success) return supplied.data;
+  const status =
+    typeof cause === "object" && cause !== null && "status" in cause ? cause.status : undefined;
+  return {
+    stage,
+    reason,
+    ...(typeof status === "number" && Number.isInteger(status) && status >= 100 && status <= 599
+      ? { providerStatus: status }
+      : {}),
+  };
+}
 
 export class IdentityError extends Error {
+  readonly diagnostic: IdentityDiagnostic | undefined;
   constructor(
     readonly code: IdentityErrorCode,
     readonly statusCode: number,
-    options?: ErrorOptions,
+    options?: ErrorOptions & { diagnostic?: IdentityDiagnostic },
   ) {
     super(code, options);
     this.name = "IdentityError";
+    this.diagnostic = options?.diagnostic;
   }
 }
 

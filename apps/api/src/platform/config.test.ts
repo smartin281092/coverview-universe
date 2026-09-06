@@ -79,6 +79,30 @@ describe("environment safety boundary", () => {
       "AUTH_SESSION_SECRET",
     );
   });
+  it("repairs the documented local OIDC/session issuer mix-up without adopting arbitrary issuers", () => {
+    const oidcIssuer = `https://api.workos.com/user_management/${auth.WORKOS_CLIENT_ID}`;
+    expect(parseEnvironment({ ...auth, WORKOS_ISSUER: oidcIssuer }).WORKOS_ISSUER).toBe(
+      "https://api.workos.com/",
+    );
+    for (const WORKOS_ISSUER of [
+      "https://auth.example.test/",
+      "https://api.workos.com/user_management/client_other",
+      `${oidcIssuer}/unexpected`,
+    ]) {
+      expect(parseEnvironment({ ...auth, WORKOS_ISSUER }).WORKOS_ISSUER).toBe(WORKOS_ISSUER);
+    }
+    expect(
+      parseEnvironment({
+        ...auth,
+        AUTH_ENABLED: "false",
+        APP_ENV: "production",
+        NODE_ENV: "production",
+        FIXTURE_MODE: "false",
+        EXTERNAL_ADAPTER_MODE: "disabled",
+        WORKOS_ISSUER: oidcIssuer,
+      }).WORKOS_ISSUER,
+    ).toBe(oidcIssuer);
+  });
   it.each([
     "AUTH_API_ORIGIN",
     "AUTH_WALLET_ORIGIN",

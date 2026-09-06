@@ -5,8 +5,10 @@ import {
   decryptVerifier,
   encryptVerifier,
   IdentityError,
+  identityFailureDiagnostic,
   randomSecret,
   secretHash,
+  type IdentityDiagnostic,
 } from "./identity.security.js";
 import type { IdentityProvider, RemoteIdentity } from "./identity.workos.js";
 
@@ -158,18 +160,28 @@ export function createIdentityService(
       if (!transaction) throw new IdentityError("IDENTITY_INVALID_CALLBACK", 400);
       const surface = transaction.surface === "client" ? "wallet" : transaction.surface;
       const destination = `${destinations[surface]}/account`;
+      let stage: IdentityDiagnostic["stage"] = "callback_code";
       try {
-        if (!code) throw new IdentityError("IDENTITY_INVALID_CALLBACK", 400);
-        const identity = await provider.exchange(
-          code,
-          decryptVerifier(transaction.encryptedVerifier, secret),
-        );
+        if (!code)
+          throw new IdentityError("IDENTITY_INVALID_CALLBACK", 400, {
+            diagnostic: { stage, reason: "code_missing" },
+          });
+        stage = "verifier_decryption";
+        const verifier = decryptVerifier(transaction.encryptedVerifier, secret);
+        stage = "code_exchange";
+        const identity = await provider.exchange(code, verifier);
+        stage = "reconciliation";
         await reconcilePending(identity);
+        stage = "remote_sessions";
         const remote = (await provider.sessions(identity.workosUserId)).find(
           (item) => item.id === identity.workosSessionId,
         );
-        if (!remote) throw new IdentityError("IDENTITY_INVALID_CALLBACK", 400);
+        if (!remote)
+          throw new IdentityError("IDENTITY_INVALID_CALLBACK", 400, {
+            diagnostic: { stage, reason: "session_not_active" },
+          });
         const token = randomSecret();
+        stage = "persistence";
         const session = await repository.createSession({
           ...identity,
           tokenHash: secretHash(token),
@@ -185,7 +197,9 @@ export function createIdentityService(
         });
         if (!session) {
           await provider.revoke(identity.workosSessionId);
-          throw new IdentityError("IDENTITY_INVALID_CALLBACK", 400);
+          throw new IdentityError("IDENTITY_INVALID_CALLBACK", 400, {
+            diagnostic: { stage, reason: "session_creation_refused" },
+          });
         }
         return { success: true as const, token, session, destination };
       } catch (cause) {
@@ -194,6 +208,7 @@ export function createIdentityService(
           success: false as const,
           destination: `${destination}?authError=callback`,
           code: cause instanceof IdentityError ? cause.code : "IDENTITY_UNAVAILABLE",
+          diagnostic: identityFailureDiagnostic(cause, stage),
         };
       }
     },

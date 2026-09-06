@@ -1,7 +1,11 @@
-import { WorkOS } from "@workos-inc/node";
+import { AuthenticateWithSessionCookieFailureReason, WorkOS } from "@workos-inc/node";
 import { z } from "zod";
 import type { Environment } from "../../platform/config.js";
-import { IdentityError } from "./identity.security.js";
+import {
+  IdentityError,
+  identityFailureDiagnostic,
+  type IdentityDiagnostic,
+} from "./identity.security.js";
 
 const remoteSessionSchema = z.object({
   id: z.string().min(1),
@@ -49,22 +53,57 @@ export function createWorkosProvider(config: Environment): IdentityProvider {
   const cookiePassword = config.AUTH_SESSION_SECRET;
   if (!cookiePassword) throw new Error("Missing authentication server key");
 
-  async function external<T>(operation: () => Promise<T>): Promise<T> {
+  async function external<T>(
+    operation: () => Promise<T> | T,
+    stage: IdentityDiagnostic["stage"],
+  ): Promise<T> {
     try {
       return await operation();
     } catch (cause) {
-      if (cause instanceof IdentityError) throw cause;
-      throw new IdentityError("IDENTITY_UNAVAILABLE", 503, { cause });
+      if (cause instanceof IdentityError && cause.diagnostic) throw cause;
+      throw new IdentityError(
+        cause instanceof IdentityError ? cause.code : "IDENTITY_UNAVAILABLE",
+        cause instanceof IdentityError ? cause.statusCode : 503,
+        { cause, diagnostic: identityFailureDiagnostic(cause, stage) },
+      );
     }
+  }
+  function invalid(
+    stage: IdentityDiagnostic["stage"],
+    reason: IdentityDiagnostic["reason"],
+    details: Partial<
+      Pick<IdentityDiagnostic, "configuredIssuer" | "tokenIssuer" | "issuerMatches">
+    > = {},
+  ) {
+    return new IdentityError("IDENTITY_INVALID_CALLBACK", 400, {
+      diagnostic: { stage, reason, ...details },
+    });
+  }
+  function issuerKind(value: string): NonNullable<IdentityDiagnostic["configuredIssuer"]> {
+    if (!URL.canParse(value)) return "other";
+    const url = new URL(value);
+    if (url.href === "https://api.workos.com/") return "generic";
+    if (url.href === `https://api.workos.com/user_management/${clientId}`) return "app";
+    return url.protocol === "https:" &&
+      url.hostname !== "api.workos.com" &&
+      url.pathname === "/" &&
+      !url.username &&
+      !url.password &&
+      !url.search &&
+      !url.hash
+      ? "custom"
+      : "other";
   }
   return {
     authorization: () =>
-      external(() =>
-        workos.userManagement.getAuthorizationUrlWithPKCE({
-          provider: "authkit",
-          redirectUri: `${config.AUTH_API_ORIGIN}/auth/callback`,
-          screenHint: "sign-in",
-        }),
+      external(
+        () =>
+          workos.userManagement.getAuthorizationUrlWithPKCE({
+            provider: "authkit",
+            redirectUri: `${config.AUTH_API_ORIGIN}/auth/callback`,
+            screenHint: "sign-in",
+          }),
+        "authorization",
       ),
     exchange: (code, codeVerifier) =>
       external(async () => {
@@ -82,71 +121,106 @@ export function createWorkosProvider(config: Environment): IdentityProvider {
             "status" in cause &&
             cause.status === 400
           ) {
-            throw new IdentityError("IDENTITY_INVALID_CALLBACK", 400, { cause });
+            throw new IdentityError("IDENTITY_INVALID_CALLBACK", 400, {
+              cause,
+              diagnostic: identityFailureDiagnostic(cause, "code_exchange"),
+            });
           }
           throw cause;
         }
-        if (!result.sealedSession) throw new IdentityError("IDENTITY_INVALID_CALLBACK", 400);
+        const sealedSession = result.sealedSession;
+        if (!sealedSession) throw invalid("sealed_session", "session_missing");
         // Verify the provider JWT using its official helper; keep all returned tokens in memory only.
-        const verified = await workos.userManagement
-          .loadSealedSession({
-            sessionData: result.sealedSession,
-            cookiePassword,
-          })
-          .authenticate();
-        if (!verified.authenticated || verified.impersonator || !verified.user.emailVerified) {
-          throw new IdentityError("IDENTITY_INVALID_CALLBACK", 400);
-        }
-        // The SDK checks signature/time; also bind the verified JWT claims to this issuer and identity.
-        const claims = z
-          .object({
-            sub: z.string(),
-            sid: z.string(),
-            iss: z.url(),
-            exp: z.number(),
-            iat: z.number(),
-            aud: z.union([z.string(), z.array(z.string())]).optional(),
-          })
-          .safeParse(
-            JSON.parse(
-              Buffer.from(result.accessToken.split(".")[1] ?? "", "base64url").toString("utf8"),
-            ),
+        const verified = await external(
+          () =>
+            workos.userManagement
+              .loadSealedSession({
+                sessionData: sealedSession,
+                cookiePassword,
+              })
+              .authenticate(),
+          "session_authentication",
+        );
+        if (!verified.authenticated)
+          throw invalid(
+            "session_authentication",
+            verified.reason === AuthenticateWithSessionCookieFailureReason.INVALID_JWT
+              ? "invalid_jwt"
+              : "invalid_session",
           );
-        if (
-          !claims.success ||
-          claims.data.sub !== verified.user.id ||
-          claims.data.sid !== verified.sessionId ||
-          new URL(claims.data.iss).href !== new URL(config.WORKOS_ISSUER).href ||
-          claims.data.exp <= Date.now() / 1000 ||
-          claims.data.iat > Date.now() / 1000 + 30 ||
-          (claims.data.aud && ![claims.data.aud].flat().includes(clientId))
-        ) {
-          throw new IdentityError("IDENTITY_INVALID_CALLBACK", 400);
-        }
-        return z
+        if (verified.impersonator) throw invalid("session_authentication", "impersonation");
+        if (!verified.user.emailVerified)
+          throw invalid("session_authentication", "email_unverified");
+        // The SDK checks signature/time; also bind the verified JWT claims to this issuer and identity.
+        const claims = await external(
+          () =>
+            z
+              .object({
+                sub: z.string(),
+                sid: z.string(),
+                iss: z.url(),
+                exp: z.number(),
+                iat: z.number(),
+                aud: z.union([z.string(), z.array(z.string())]).optional(),
+              })
+              .safeParse(
+                JSON.parse(
+                  Buffer.from(result.accessToken.split(".")[1] ?? "", "base64url").toString("utf8"),
+                ),
+              ),
+          "token_claims",
+        );
+        if (!claims.success) throw invalid("token_claims", "claims_invalid");
+        if (claims.data.sub !== verified.user.id) throw invalid("token_claims", "subject_mismatch");
+        if (claims.data.sid !== verified.sessionId)
+          throw invalid("token_claims", "session_mismatch");
+        if (new URL(claims.data.iss).href !== new URL(config.WORKOS_ISSUER).href)
+          throw invalid("token_claims", "issuer_mismatch", {
+            configuredIssuer: issuerKind(config.WORKOS_ISSUER),
+            tokenIssuer: issuerKind(claims.data.iss),
+            issuerMatches: false,
+          });
+        if (claims.data.exp <= Date.now() / 1000) throw invalid("token_claims", "token_expired");
+        if (claims.data.iat > Date.now() / 1000 + 30) throw invalid("token_claims", "token_future");
+        if (claims.data.aud && ![claims.data.aud].flat().includes(clientId))
+          throw invalid("token_claims", "audience_mismatch");
+        const identity = z
           .object({
             workosUserId: z.string().min(1),
             email: z.email(),
             workosSessionId: z.string().min(1),
           })
-          .parse({
+          .safeParse({
             workosUserId: verified.user.id,
             email: verified.user.email,
             workosSessionId: verified.sessionId,
           });
-      }),
+        if (!identity.success) throw invalid("token_claims", "identity_invalid");
+        return identity.data;
+      }, "code_exchange"),
     sessions: (userId, signal) =>
       external(async () => {
         const page = await withSignal(signal).userManagement.listSessions(userId, { limit: 100 });
         // A truncated list cannot establish global revocation or reliably validate the current session.
-        if (page.listMetadata.after) throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
-        const sessions = z.array(remoteSessionSchema).max(100).parse(page.data);
+        if (page.listMetadata.after)
+          throw new IdentityError("IDENTITY_UNAVAILABLE", 503, {
+            diagnostic: { stage: "remote_sessions", reason: "sessions_truncated" },
+          });
+        const parsed = z.array(remoteSessionSchema).max(100).safeParse(page.data);
+        if (!parsed.success)
+          throw new IdentityError("IDENTITY_UNAVAILABLE", 503, {
+            cause: parsed.error,
+            diagnostic: { stage: "remote_sessions", reason: "sessions_invalid" },
+          });
+        const sessions = parsed.data;
         if (sessions.some((session) => session.userId !== userId))
-          throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
+          throw new IdentityError("IDENTITY_UNAVAILABLE", 503, {
+            diagnostic: { stage: "remote_sessions", reason: "session_owner_mismatch" },
+          });
         return sessions.filter(
           (session) => session.status === "active" && Date.parse(session.expiresAt) > Date.now(),
         );
-      }),
+      }, "remote_sessions"),
     revoke: (sessionId, signal) =>
       external(async () => {
         try {
@@ -162,7 +236,7 @@ export function createWorkosProvider(config: Environment): IdentityProvider {
             return;
           throw cause;
         }
-      }),
+      }, "remote_revocation"),
     challenge: (userId) =>
       external(async () => {
         const page = await workos.multiFactorAuth.listUserAuthFactors({ userId, limit: 10 });
@@ -197,7 +271,7 @@ export function createWorkosProvider(config: Environment): IdentityProvider {
             ),
           ),
         };
-      }),
+      }, "mfa_challenge"),
     verify: (challengeId, factorId, code) =>
       external(async () => {
         let raw;
@@ -227,6 +301,6 @@ export function createWorkosProvider(config: Environment): IdentityProvider {
           result.challenge.id === challengeId &&
           result.challenge.authenticationFactorId === factorId
         );
-      }),
+      }, "mfa_verification"),
   };
 }

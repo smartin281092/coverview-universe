@@ -8,6 +8,8 @@ Le 2026-09-05, dans la tâche `01a072f8-6263-7ed0-8b49-0b384c54bf9d`, message ut
 
 Ce mandat autorise l'implémentation de la roadmap, à commencer par S-000a, le choix des réponses par défaut pertinentes et la création de nouvelles tâches pour poursuivre. Il remplace les anciens arrêts « attendre GO » et « ne pas lancer la suivante » pour cette séquence. Ne pas demander à nouveau l'autorisation déjà donnée. La politique est active tant que l'utilisateur ne l'interrompt pas ou ne la modifie pas ; son état machine est `execution` dans state.json.
 
+Réaffirmation du 2026-09-06 dans la reprise callback : « Ne me demande pas d’autorisation, continue jusqu’à ce que les tâches soient terminées ». Continuer les travaux et relais déjà autorisés ; une information externe manquante ou une action personnelle indispensable n’est pas une nouvelle demande de GO.
+
 ## Décider et exécuter
 
 **Correction explicite du 2026-09-06, tâche S-000b** : l’utilisateur rappelle l’interdiction des fixtures, smoke tests et autres tests de surface comme travail de livraison. Cette instruction prime les recommandations antérieures de socle qui ont conduit à multiplier ces artefacts. Ne plus en ajouter ni remplacer le parcours demandé par une démonstration ou une batterie de contrôles superficiels. Terminer et observer le parcours réel, avec le service externe et les données persistées concernés ; garder seulement les vérifications proportionnées aux risques concrets. Les tests simulés historiques ne prouvent aucune intégration ni fonctionnalité utilisable. Si une intervention utilisateur est indispensable, préparer complètement cette étape et expliquer le blocage précis, sans arrêt silencieux.
