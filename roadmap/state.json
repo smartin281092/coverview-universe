@@ -282,6 +282,12 @@
           "oracle": "V0/V1/V2 ciblé, V3 personnel restant",
           "observed": "UI/API implémentées ; types/lint/build passent. Revue corrige séparation stepup/pending, vraie fraîcheur auth_time et ordre des verrous. Cycle type seul corrigé avant frontières vertes. Quatre cas existants sélectionnés passent, dont HTTP MFA PostgreSQL jetable après refus sandbox et relance technique autorisée. Migrations0002/0003 appliquées/rejouées sur base s000b, deux utilisateurs et aucune habilitation.",
           "decision": "Déployer localement les sources vérifiées sans arrêter superviseur secret, puis préparer page utilisateur. Aucune nouvelle batterie tests/fixtures, aucun C05 déclaré passé avant intervention personnelle et preuve réelle."
+        },
+        {
+          "target": "Préparation personnelle Authenticator sur runtime vivant",
+          "oracle": "V3 partiel ; C05 non clos",
+          "observed": "Après intégration da362e0, connexion WorkOS BMP réelle forcée et callback réussis. Compte équipe sans permission refusé ; lien suivi vers Authenticator, instructions et Générer mon QR code inspectés avant création. SQL confirme une session active avec auth_time récent et aucune inscription/habilitation. Page laissée au titulaire.",
+          "decision": "Le titulaire doit personnellement lancer, scanner et confirmer le credential ; bénéficiaire admin explicitement désigné encore requis. Conserver S-000b running et S-013 fermé. Reprise documentée dans handoff MFA actualisé."
         }
       ],
       "ledger": {
@@ -301,7 +307,8 @@
           "V3 callback : cause issuer OIDC/session AuthKit prouvée et corrigée ; échange du code, session SDK, identité locale et accès personnel réussis sur deux emails autorisés.",
           "V3 isolation et continuité : deux identités SQL distinctes, espaces propriétaires accessibles, refus croisés, identité partagée www/Wallet ; compte ordinaire refusé sur admin.",
           "V3 révocations : logout courant Hook, deux appareils BMP même identité, retrait ciblé puis logout global depuis deux sessions actives ; refus suivant, zéro session active et zéro révocation distante en attente.",
-          "Authenticator V0/V1/V2 ciblé : types/lint/build API+UI+contrats, revue indépendante close, frontières corrigées/knip passés ; 3 cas SDK existants et 1 cas HTTP/PostgreSQL MFA existant passent. Deux migrations additives appliquées et rejouées sans perte, users2/admin0 avant déploiement. Détails et limites au ledger."
+          "Authenticator V0/V1/V2 ciblé : types/lint/build API+UI+contrats, revue indépendante close, frontières corrigées/knip passés ; 3 cas SDK existants et 1 cas HTTP/PostgreSQL MFA existant passent. Deux migrations additives appliquées et rejouées sans perte, users2/admin0 avant déploiement. Détails et limites au ledger.",
+          "Commit applicatif da362e0 intégré par fast-forward sur main enregistré, API 9b02 et UI 4133 ; HEAD/contenu identiques, checkouts propres. Reconnexion BMP forcée maxAge:0 réussie, auth_time récent persisté, refus équipe sans grant, page Authenticator réelle préparée dans Chrome. SQL users2/active1/enrollment0/admin0 ; API ready/enabled. Aucun QR créé ni secret collecté."
         ]
       },
       "notes": [
@@ -319,7 +326,8 @@
         "API 9b02 rechargée par son watcher existant après contrôle du contenu des fichiers. Configuration normalisée sans extraction, écriture ou transfert des secrets ; instrumentation temporaire retirée après recette, /health ready et identity/config enabled:true relus. Préserver le superviseur et ses variables.",
         "Relais de clôture S-000b : roadmap/handoffs/S-000b-mfa-completion.md. Le parcours d’inscription TOTP manque dans le code ; le préparer avant l’intervention personnelle indispensable. Nouvelle tâche gpt-6-astra / ultra, même slice et périmètre, puis S-013 seulement après preuves C05.",
         "Plan borné Authenticator, propriétaire ffdf : API/contrats et migration additive de suivi technique ; page dédiée réutilisant Geist/Montech, Input/Label/Button et formulaires Zod existants, liens compte/MFA. G-02/03/04, AUTH-11, identity.admin.1, SEC-04, DATA-01/02/03/07, FRONT-10/12/14. Aucun changement callback, UI commune, méthodes WorkOS, infrastructure ou attribution. Pas nouvelle batterie fixtures/smoke. Oracles : types/lint/build concernés, revue indépendante sécurité, migration additive sur s000b puis parcours réel utilisateur et C05 avant done/S-013. Risques : doublons de création, rejeu, réponses perdues, révocation en vol et exposition QR ; réservations/claims SQL, contrôles après réseau, reprise explicite et nettoyage mémoire. Catégorie nouvelle : suivi inscription MFA propriétaire technique sensible, IDs/status/dates sans secret ; export/rétention S-130/S-131, rollback applicatif conserve la table.",
-        "Propriétaire courant ffdf, codex/s-000b-authenticator. Inscription entièrement implémentée ; SDK/réauthentification réelle requise contrôlés, nouvelles routes propres. État/reprise/documents dans ledger S-000b et handoff MFA. C05 attend seulement sa recette personnelle et attribution désignée après déploiement ; pas de relais S-013 anticipé."
+        "Propriétaire courant ffdf, codex/s-000b-authenticator. Inscription entièrement implémentée ; SDK/réauthentification réelle requise contrôlés, nouvelles routes propres. État/reprise/documents dans ledger S-000b et handoff MFA. C05 attend seulement sa recette personnelle et attribution désignée après déploiement ; pas de relais S-013 anticipé.",
+        "Préparation utilisateur achevée dans Chrome le 2026-09-06 : page Authenticator du compte BMP prête, création non lancée. Code da362e0 intégré et runtime fonctionnel ; seule la recette personnelle C05 et la désignation/grant tracé restent. Une expiration de fraîcheur demande la reconnexion explicite disponible dans le parcours."
       ],
       "session": "Tâche créée gpt-6-astra / ultra ; modèle hôte GPT-6, effort non observable indépendamment du paramètre transmis."
     },

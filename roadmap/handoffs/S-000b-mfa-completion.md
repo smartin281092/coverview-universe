@@ -1,4 +1,41 @@
-# Reprise de travail — S-000b, inscription Authenticator et preuve MFA
+# Reprise de travail — S-000b, confirmation personnelle Authenticator et preuve MFA
+
+## État courant après implémentation — 2026-09-06
+
+Cette section actualise le checkpoint historique conservé ci-dessous. Le parcours d’inscription manquant est maintenant implémenté, revu, migré et intégré. La page réelle est prête pour le titulaire. S-000b demeure **running** : aucune preuve C05 complète ni nouvelle tâche S-013 avant confirmation personnelle, désignation admin et MFA administrative réelle. Le mandat d’enchaînement et l’absence de nouveau GO restent acquis.
+
+### Dépôt et services vivants
+
+Propriétaire courant : `C:/Users/sebm1/.codex/worktrees/ffdf/coverview-astra`, branche `codex/s-000b-authenticator`. Commit applicatif vérifié : `da362e04efd89698fd19724c55b0fbb85d2e6df8`, descendant de c57f145 ; réparation du callback et UI Geist/Montech conservées. Le commit documentaire peut être postérieur : vérifier HEAD, branche, ascendance et propreté avant écriture.
+
+Le commit applicatif a été intégré par fast-forward dans main enregistré (`D:/Projects/coverview-astra`), API 9b02 (`codex/s-011-editorial`) et UI 4133 (`codex/s-000b-workos`) après contrôle de propreté. HEAD et contenu comparés identiques ; aucun push. Le superviseur API secret et les frontends sont préservés. Les migrations additives 0002/0003 ont été appliquées puis rejouées sans suppression ; aucun reset ni autre compose lancé. Dernière lecture : API ready, identité enabled:true.
+
+### Page personnelle prête
+
+Chrome a été reconnecté au compte `sebastien@bmpartners.ch` par WorkOS avec `maxAge:0` et OTP email autorisé. Retour compte équipe refusé sans habilitation, puis lien « Configurer Authenticator » suivi jusqu’à `http://127.0.0.1:4102/authenticator`. Identité, instructions et bouton « Générer mon QR code » relus et inspectés visuellement avant création. Onglet laissé au titulaire ; les identifiants CUA ne sont pas portables entre tâches. Ouvrir le même lien dans le navigateur intégré ne transfère pas la session Chrome.
+
+Dernier SQL : deux utilisateurs, une session active avec `authenticated_at` récent, zéro inscription et zéro habilitation. Cet état remplace l’ancien zéro session active. La fraîcheur requise expire après dix minutes ; le parcours propose alors une reconnexion explicite. Aucune date de fraîcheur ne doit être fabriquée.
+
+La politique de l’outil navigateur réserve la création et la confirmation d’un nouveau credential à l’utilisateur : il doit lancer le QR, le scanner et confirmer son code dans la page. Aucun bouton de création actionné par l’agent, aucun seed/QR/URI collecté, aucune capture après QR. Ne pas demander le secret ou le code dans la conversation. Après confirmation personnelle, relire uniquement le résultat non sensible.
+
+La désignation du bénéficiaire admin reste sans réponse. Ne pas déduire une permission du compte BMP préparé. Les deux emails autorisés et les identités canoniques sont au ledger ; le grant local et la preuve MFA liée à la session sont deux préconditions séparées.
+
+### Livraison et limites
+
+Parcours propriétaire `/authenticator` et `/authenticator/cancel` : état, lancement explicite, reprise du challenge, confirmation et annulation bornée au facteur de l’inscription. SDK WorkOS 10.13.0 existant, réservation durable unique, claims, audit et traitement fermé des résultats distants ambigus. QR rendu une seule fois en état React, jamais stocké serveur/cache/fichier. Confirmation avec rotation de handle, sans grant ni preuve administrative. Le step-up exclut le facteur pending. Fraîcheur fondée sur `auth_time` signé, session nullable et reconnexion explicite `maxAge:0`.
+
+Types/lint/build API, admin, Wallet et contrats passent ; frontières/knip passent. Trois cas SDK existants et un cas HTTP/PostgreSQL MFA existant sélectionnés passent ; aucun nouveau test ni batterie de fixtures. Les 29 cas historiques non exécutés ne sont pas revendiqués. Revue indépendante close après corrections de séparation enrollment/step-up, fraîcheur et verrous SQL. Avertissement bundle admin 535,55 kB > 500 kB maintenu. Aucune dépendance ajoutée. Détails dans le ledger actuel.
+
+### Prochaine action bornée
+
+1. Attendre le résultat de l’inscription personnelle et la désignation admin. Le code et la page nécessaires sont prêts ; leur implémentation n’est plus un obstacle.
+2. Après désignation, relire la paire canonique/WorkOS et préparer la transaction SQL paramétrée d’attribution `administration.access` conformément au README identity. Consigner opérateur, environnement, bénéficiaire, motif et référence d’autorisation ; vérifier unicité et résultat. Aucune route de grant applicative n’existe volontairement.
+3. Relire l’inscription confirmée sans secret ; recharger compte équipe et constater MFA requise. Faire terminer le challenge distinct via `/mfa`, puis constater accès administratif réel, preuve liée à la session et audit. Depuis l’autre identité sans permission, constater refus de `/identity/admin` et de la variante falsifiée `?role=admin&app=admin`. Ne pas rejouer les parcours personnels/révocations déjà acquis sans nouveau doute.
+4. Seulement après C05 complet : S-000b done, intégration locale conservatrice, nouvelle tâche Astra Ultra S-013, puis ordre de programme acquis. Ne pas modifier les dépendances pour contourner cette preuve.
+
+## Checkpoint historique antérieur à l’implémentation
+
+Les sections ci-dessous décrivent le point de départ et ses contraintes acquises ; leurs étapes d’implémentation et états Git sont remplacés par l’état courant ci-dessus.
 
 Créé : 2026-09-06
 Contexte observé : non disponible ; relais préventif autorisé, aucune mesure de seuil inventée.
