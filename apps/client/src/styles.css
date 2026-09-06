@@ -36,6 +36,17 @@
   min-height: var(--wallet-bottom-nav-height);
 }
 @media (max-width: 47.999rem) {
+  .wallet-mobile-menu[data-side="right"] {
+    max-width: none;
+  }
+  .wallet-shell .app-content {
+    padding-top: var(--spacing-24);
+  }
+  .wallet-shell [data-slot="button"] {
+    min-height: calc(var(--spacing) * 11);
+    font-size: var(--text-body-sm);
+    white-space: normal;
+  }
   .wallet-shell {
     padding-bottom: calc(var(--wallet-bottom-nav-height) + env(safe-area-inset-bottom, 0px));
   }

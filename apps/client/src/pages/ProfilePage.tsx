@@ -47,8 +47,6 @@ function ProfileChoices({ identity, onBack }: { identity: IdentityMe; onBack: ()
       <Button variant="ghost" onClick={onBack}>
         {t("history.back")}
       </Button>
-      <h2 className="cv-app-subheading">{t("history.title")}</h2>
-      <p className="text-sm text-muted-foreground">{t("history.description")}</p>
       {query.isPending ? (
         <LoadingState label={t("loading")} />
       ) : query.isError ? (
@@ -197,6 +195,8 @@ function ProfileEditor({
     void navigate({ to: "/profile", search: value ? { view: "choices" } : {} });
   };
   const heading = useRef<HTMLHeadingElement>(null);
+  const stepHeading = useRef<HTMLHeadingElement>(null);
+  const previousStep = useRef(journey.step);
   const stepIndex = steps.indexOf(journey.step);
   const unavailableDraft =
     !ownerId &&
@@ -207,7 +207,11 @@ function ProfileEditor({
   const proposals = allFields.filter((field) => journey.profile?.fields[field]?.proposal);
   const unresolved = proposals.filter((field) => !journey.resolved.has(field));
   useEffect(() => {
-    if (journey.initialized && !blocked) heading.current?.focus();
+    if (journey.initialized && !blocked) {
+      const target = previousStep.current !== journey.step && !history ? stepHeading : heading;
+      target.current?.focus();
+      previousStep.current = journey.step;
+    }
   }, [journey.step, journey.initialized, blocked, history]);
   if (!journey.initialized)
     return journey.loadError ? (
@@ -230,7 +234,7 @@ function ProfileEditor({
           {t(history ? "history.title" : "title")}
         </h1>
         <p className="max-w-xl text-muted-foreground">
-          {t(ownerId ? "intro.owner" : "intro.draft")}
+          {t(history ? "history.description" : ownerId ? "intro.owner" : "intro.draft")}
         </p>
       </div>
       {history && identity && (
@@ -320,7 +324,13 @@ function ProfileEditor({
                 aria-busy={journey.pending}
               >
                 <div className="space-y-1">
-                  <h2 className="cv-app-subheading">{t(`steps.${journey.step}`)}</h2>
+                  <h2
+                    ref={stepHeading}
+                    tabIndex={-1}
+                    className="cv-app-subheading scroll-mt-24 outline-none"
+                  >
+                    {t(`steps.${journey.step}`)}
+                  </h2>
                   <p className="text-sm text-muted-foreground">
                     {t(journey.step === "review" ? "review.intro" : "optional")}
                   </p>

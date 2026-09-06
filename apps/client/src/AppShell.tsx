@@ -120,9 +120,11 @@ export function AppShell() {
               </Link>
             ))}
           </nav>
-          <TextLink href={websiteUrl} arrow="up" className="hidden text-sm md:inline-flex">
-            {t("website")}
-          </TextLink>
+          <div className="hidden md:block">
+            <TextLink href={websiteUrl} arrow="up" className="text-sm">
+              {t("website")}
+            </TextLink>
+          </div>
           <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
             <SheetTrigger asChild>
               <Button
