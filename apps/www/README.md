@@ -78,6 +78,8 @@ Sharp est déclaré directement pour le service d’images Astro, uniquement au 
 
 ## Vérifier les parcours
 
+GSAP est installé à la demande de l’utilisateur pour les prochaines animations, sans chargement dans les pages actuelles. [Périmètre préparatoire, licence et exception Knip](../../roadmap/evidence/gsap-setup.md). Sa future intégration devra préserver le contenu sans JavaScript et respecter la réduction des animations.
+
 Le [ledger shadcn et typographie](../../roadmap/evidence/shadcn-typography.md) porte les vérifications courantes et leurs limites. Le [ledger xAI](../../roadmap/evidence/xai-redesign.md) conserve l’étape précédente. L’aperçu social `/og.png` et la variante `/og-preview.svg` sont générés depuis `src/content/social.ts` et le texte de l’accueil. La provenance du visuel de la tentative précédente reste conservée dans `src/assets/README.md` ; elle ne prouve pas son utilisation dans le rendu actuel.
 
 Après `pnpm build` et installation du Chromium Playwright : `pnpm check:www` sert le build seul sur loopback éphémère puis s’arrête. Il contrôle HTML, metadata, graphe JSON-LD, miroirs comparés à la source et au HTML, liens/ancres/orphelins, sorties d’indexation vides, absence de JS exécutable hors compte, budget JS gzip et LCP/CLS sur onze gabarits. Ces mesures synthétiques ne sont ni du RUM ni une preuve du futur hébergement. Le contrôle est branché en CI après l’installation de Chromium.
