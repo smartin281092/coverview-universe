@@ -143,7 +143,7 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
       <div ref={setPortalContainer} className="contents" />
       <Link
         to="/documents"
-        className="inline-flex min-h-11 items-center gap-2 text-sm text-muted-foreground"
+        className="inline-flex min-h-11 items-center gap-2 text-sm text-primary"
       >
         <ArrowLeft className="size-4" aria-hidden="true" />
         {t("back")}
