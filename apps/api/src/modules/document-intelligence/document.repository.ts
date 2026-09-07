@@ -60,21 +60,17 @@ import {
 import { documentProfileComparisons, sameProfileValue } from "./document.reconciliation.js";
 import { referencedCompanyIds } from "./document.companies.js";
 import { companyOverview } from "./document.insurance.js";
+import { DocumentError } from "./document.errors.js";
+import {
+  createIdentityAttachmentRepository,
+  cleanupIdentityAttachmentCommands,
+} from "./document.identity-attachment.js";
+export { DocumentError } from "./document.errors.js";
 
 type Database = ReturnType<typeof createDatabase>["db"];
 type Tx = Parameters<Parameters<Database["transaction"]>[0]>[0];
 type Row = typeof documents.$inferSelect;
 type Actor = { userId: string; id: string };
-export class DocumentError extends Error {
-  constructor(
-    public code: string,
-    public statusCode: number,
-    options?: ErrorOptions,
-  ) {
-    super(code, options);
-    this.name = "DocumentError";
-  }
-}
 const condition = (userId: string, id: string) =>
   and(eq(documents.userId, userId), eq(documents.id, id));
 function summary(row: Row) {
@@ -250,6 +246,7 @@ export function createDocumentRepository(db: Database) {
     });
   }
   return {
+    ...createIdentityAttachmentRepository(db, summary),
     async profileDifferences(userId: string) {
       const profile = await readDocumentProfile(db, userId);
       const rows = await db
@@ -517,6 +514,7 @@ export function createDocumentRepository(db: Database) {
           .insert(documents)
           .values({
             ...input,
+            category: input.purpose === "identity_card" ? "identity" : "unknown",
             id,
             userId: actor.userId,
             declaredMime: input.mime,
@@ -1058,6 +1056,7 @@ export function createDocumentRepository(db: Database) {
       });
     },
     async cleanup() {
+      await cleanupIdentityAttachmentCommands(db);
       // Technical upload handles expire; accepted originals never expire automatically.
       const stale = await db
         .select()

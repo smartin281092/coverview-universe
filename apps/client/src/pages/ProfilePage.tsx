@@ -15,6 +15,12 @@ import {
 } from "../features/profile/profile-fields";
 import { useProfileJourney, type ProfileJourney } from "../features/profile/use-profile-journey";
 import { ProfileDocumentDifferences } from "../features/profile/ProfileDocumentDifferences";
+import { ProfileWorkspace } from "../features/profile/ProfileWorkspace";
+import {
+  ProfileSteps,
+  type ProfileEditorBridge,
+  type ProfileViewStep,
+} from "../features/profile/ProfileSteps";
 
 const steps = ["information", "address", "review"] as const;
 const autocomplete: Record<ProfileFieldName, string> = {
@@ -198,10 +204,18 @@ function ProfileEditor({
   identity,
   ownerId,
   blocked,
+  embedded = false,
+  requestedStep,
+  onStepChange,
+  onBridge,
 }: {
   identity: IdentityMe | null;
   ownerId: string | null;
   blocked: boolean;
+  embedded?: boolean;
+  requestedStep?: ProfileViewStep | undefined;
+  onStepChange?: (step: ProfileViewStep) => void;
+  onBridge?: (bridge: ProfileEditorBridge | null) => void;
 }) {
   const { t, i18n } = useTranslation("profile");
   const location = useLocation();
@@ -216,6 +230,7 @@ function ProfileEditor({
   const heading = useRef<HTMLHeadingElement>(null);
   const stepHeading = useRef<HTMLHeadingElement>(null);
   const previousStep = useRef(journey.step);
+  const lastRequested = useRef<ProfileViewStep | null | undefined>(null);
   const stepIndex = steps.indexOf(journey.step);
   const unavailableDraft =
     !ownerId &&
@@ -225,6 +240,28 @@ function ProfileEditor({
   const draftUnavailableState = journey.draftEntry?.state === "attached" ? "attached" : "expired";
   const proposals = allFields.filter((field) => journey.profile?.fields[field]?.proposal);
   const unresolved = proposals.filter((field) => !journey.resolved.has(field));
+  const changeStep = async (next: (typeof steps)[number]) => {
+    if (await journey.move(next)) onStepChange?.(next === "address" ? "details" : next);
+  };
+  useEffect(() => {
+    if (!journey.initialized || lastRequested.current === requestedStep) return;
+    lastRequested.current = requestedStep;
+    const next = requestedStep === "details" ? "address" : requestedStep;
+    if (next && next !== journey.step) void journey.move(next);
+  }, [journey, requestedStep]);
+  useEffect(() => {
+    onBridge?.({
+      dirty:
+        journey.isDirty ||
+        journey.prefillDirty ||
+        journey.resolved.size > 0 ||
+        Object.keys(journey.dirtyFields).length > 0,
+      pending: journey.pending,
+      save: () => (journey.prefillDirty ? journey.confirm() : journey.move(journey.step)),
+      discard: journey.discard,
+    });
+  });
+  useEffect(() => () => onBridge?.(null), [onBridge]);
   useEffect(() => {
     if (journey.initialized && !blocked) {
       const target = previousStep.current !== journey.step && !history ? stepHeading : heading;
@@ -245,17 +282,20 @@ function ProfileEditor({
     );
   return (
     <>
-      <div className="space-y-3">
-        <p className="wallet-page-eyebrow cv-meta text-muted-foreground">
-          {t(ownerId ? "eyebrow.owner" : "eyebrow.draft")}
-        </p>
-        <h1 ref={heading} tabIndex={-1} className="cv-app-heading outline-none">
-          {t(history ? "history.title" : "title")}
-        </h1>
-        <p className="max-w-xl text-muted-foreground">
-          {t(history ? "history.description" : ownerId ? "intro.owner" : "intro.draft")}
-        </p>
-      </div>
+      {!embedded && (
+        <div className="space-y-3">
+          <p className="wallet-page-eyebrow cv-meta text-muted-foreground">
+            {t(ownerId ? "eyebrow.owner" : "eyebrow.draft")}
+          </p>
+          <h1 ref={heading} tabIndex={-1} className="cv-app-heading outline-none">
+            {t(history ? "history.title" : "title")}
+          </h1>
+          <p className="max-w-xl text-muted-foreground">
+            {t(history ? "history.description" : ownerId ? "intro.owner" : "intro.draft")}
+          </p>
+        </div>
+      )}
+      {embedded && history && <h2 className="cv-app-subheading">{t("history.title")}</h2>}
       {history && identity && (
         <ProfileChoices identity={identity} onBack={() => setHistory(false)} />
       )}
@@ -310,25 +350,16 @@ function ProfileEditor({
             )}
             <div className="grid gap-8 lg:grid-cols-[220px_minmax(0,640px)] lg:gap-16">
               <aside className="space-y-6">
-                <ol
-                  aria-label={t("progress")}
-                  className="grid grid-cols-3 gap-3 lg:grid-cols-1 lg:gap-4"
-                >
-                  {steps.map((step, index) => (
-                    <li
-                      key={step}
-                      aria-current={journey.step === step ? "step" : undefined}
-                      className={`flex flex-col gap-1 text-sm lg:flex-row lg:items-center lg:gap-3 ${journey.step === step ? "font-medium text-foreground" : "text-muted-foreground"}`}
-                    >
-                      <span
-                        className={`flex size-7 shrink-0 items-center justify-center rounded-full border text-xs ${journey.step === step ? "border-primary bg-primary text-primary-foreground" : "border-border"}`}
-                      >
-                        {index + 1}
-                      </span>
-                      <span>{t(`steps.${step}`)}</span>
-                    </li>
-                  ))}
-                </ol>
+                <ProfileSteps
+                  step={journey.step === "address" ? "details" : journey.step}
+                  labels={{
+                    information: t("steps.information"),
+                    details: t("steps.address"),
+                    review: t("steps.review"),
+                  }}
+                  disabled={journey.pending || blocked}
+                  onChange={(next) => void changeStep(next === "details" ? "address" : next)}
+                />
                 <p className="hidden max-w-48 text-sm leading-relaxed text-muted-foreground lg:block">
                   {t("privacy")}
                 </p>
@@ -338,7 +369,7 @@ function ProfileEditor({
                   event.preventDefault();
                   if (journey.step === "review")
                     void (identity ? journey.confirm() : journey.continueLogin());
-                  else void journey.move(steps[stepIndex + 1] ?? "review");
+                  else void changeStep(steps[stepIndex + 1] ?? "review");
                 }}
                 className="min-w-0 space-y-6"
                 aria-busy={journey.pending}
@@ -455,7 +486,7 @@ function ProfileEditor({
                       <Button
                         type="button"
                         variant="outline"
-                        onClick={() => void journey.move(steps[stepIndex - 1] ?? "information")}
+                        onClick={() => void changeStep(steps[stepIndex - 1] ?? "information")}
                       >
                         {t("previous")}
                       </Button>
@@ -537,6 +568,8 @@ export function ProfilePage() {
     retry: false,
   });
   const identity = useQuery({ ...identityOptions(client), enabled: config.data?.enabled === true });
+  const lastIdentity = useRef<IdentityMe | null>(null);
+  if (identity.data) lastIdentity.current = identity.data;
   const [ownerId, setOwnerId] = useState<string | null | undefined>(undefined);
   useEffect(() => {
     if (identity.isSuccess && !identity.isFetching) {
@@ -608,7 +641,23 @@ export function ProfilePage() {
         )}
       {ownerId !== undefined && (
         <div key={ownerId ?? "anonymous"} hidden={blocked} inert={blocked} className="space-y-8">
-          <ProfileEditor identity={identity.data ?? null} ownerId={ownerId} blocked={blocked} />
+          {ownerId && lastIdentity.current?.user.id === ownerId ? (
+            <ProfileWorkspace
+              identity={identity.data ?? lastIdentity.current}
+              blocked={blocked}
+              renderSelf={(props) => (
+                <ProfileEditor
+                  {...props}
+                  embedded
+                  identity={identity.data ?? null}
+                  ownerId={ownerId}
+                  blocked={blocked}
+                />
+              )}
+            />
+          ) : (
+            <ProfileEditor identity={identity.data ?? null} ownerId={ownerId} blocked={blocked} />
+          )}
         </div>
       )}
     </>

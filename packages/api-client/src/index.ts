@@ -35,6 +35,15 @@ import {
   documentCompaniesSchema,
   insuranceCompanyDetailsSchema,
   insuranceCompanyIdSchema,
+  managedProfilesSchema,
+  managedProfileSchema,
+  managedProfileCreateInputSchema,
+  profileSectionSchema,
+  profileSectionSaveInputSchema,
+  managedProfileIdSchema,
+  profileSectionNameSchema,
+  documentIdentityAttachmentSchema,
+  documentIdentityAttachmentInputSchema,
   type ApiErrorCode,
 } from "@coverview/contracts";
 import type { z } from "zod";
@@ -262,6 +271,71 @@ export function createApiClient({
     },
     profile: (options?: RequestOptions) =>
       request("/identity/profile", profileSchema, options, undefined, true),
+    identityAttachment: (options?: RequestOptions) =>
+      request(
+        "/documents/identity-attachment",
+        documentIdentityAttachmentSchema,
+        options,
+        undefined,
+        true,
+      ),
+    saveIdentityAttachment: (
+      input: z.infer<typeof documentIdentityAttachmentInputSchema>,
+      options: MutationOptions,
+    ) =>
+      request(
+        "/documents/identity-attachment",
+        documentIdentityAttachmentSchema,
+        options,
+        { body: documentIdentityAttachmentInputSchema.parse(input), credentials: options },
+        true,
+      ),
+    profiles: (options?: RequestOptions) =>
+      request("/profiles", managedProfilesSchema, options, undefined, true),
+    managedProfile: (id: z.infer<typeof managedProfileIdSchema>, options?: RequestOptions) =>
+      request(
+        `/profiles/${encodeURIComponent(managedProfileIdSchema.parse(id))}`,
+        managedProfileSchema,
+        options,
+        undefined,
+        true,
+      ),
+    createManagedProfile: (
+      input: z.infer<typeof managedProfileCreateInputSchema>,
+      options: MutationOptions,
+    ) =>
+      request(
+        "/profiles",
+        managedProfileSchema,
+        options,
+        { body: managedProfileCreateInputSchema.parse(input), credentials: options },
+        true,
+      ),
+    profileSection: (
+      id: z.infer<typeof managedProfileIdSchema>,
+      section: z.infer<typeof profileSectionNameSchema>,
+      options?: RequestOptions,
+    ) =>
+      request(
+        `/profiles/${encodeURIComponent(managedProfileIdSchema.parse(id))}/sections/${profileSectionNameSchema.parse(section)}`,
+        profileSectionSchema,
+        options,
+        undefined,
+        true,
+      ),
+    saveProfileSection: (
+      id: z.infer<typeof managedProfileIdSchema>,
+      section: z.infer<typeof profileSectionNameSchema>,
+      input: z.infer<typeof profileSectionSaveInputSchema>,
+      options: MutationOptions,
+    ) =>
+      request(
+        `/profiles/${encodeURIComponent(managedProfileIdSchema.parse(id))}/sections/${profileSectionNameSchema.parse(section)}`,
+        profileSectionSchema,
+        options,
+        { body: profileSectionSaveInputSchema.parse(input), credentials: options },
+        true,
+      ),
     insuranceCompany: (id: z.infer<typeof insuranceCompanyIdSchema>, options?: RequestOptions) =>
       request(
         `/documents/companies/${encodeURIComponent(insuranceCompanyIdSchema.parse(id))}`,

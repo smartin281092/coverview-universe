@@ -1,5 +1,7 @@
 import { z } from "zod";
 import { documentErrorCodes } from "./documents.js";
+import { managedProfileErrorCodes } from "./managed-profiles.js";
+export * from "./managed-profiles.js";
 export * from "./profile.js";
 export * from "./companies.js";
 export * from "./documents.js";
@@ -38,6 +40,7 @@ export const apiErrorCodeSchema = z.union([
   platformErrorCodeSchema,
   identityErrorCodeSchema,
   z.enum(documentErrorCodes),
+  z.enum(managedProfileErrorCodes),
 ]);
 export const apiErrorSchema = z.object({
   error: z.object({

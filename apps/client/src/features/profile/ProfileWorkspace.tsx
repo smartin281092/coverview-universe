@@ -1,0 +1,448 @@
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { useBlocker, useLocation, useNavigate } from "@tanstack/react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslation } from "react-i18next";
+import { Building2, HeartPulse, Plus, UserRound, Wallet } from "lucide-react";
+import { ApiError, type IdentityMe } from "@coverview/api-client";
+import {
+  managedProfileCreateInputSchema,
+  managedProfileIdSchema,
+  profileSectionNameSchema,
+  profileSectionStepSchema,
+  type ManagedProfileCreateInput,
+  type ProfileSectionName,
+} from "@coverview/contracts";
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  Input,
+  Label,
+  LoadingState,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@coverview/ui";
+import { api } from "../../api";
+import { forgetIdentity } from "../identity/session-state";
+import { ProfileSectionEditor } from "./ProfileSectionEditor";
+import { type ProfileEditorBridge, type ProfileViewStep } from "./ProfileSteps";
+
+type SelfProps = {
+  requestedStep?: ProfileViewStep | undefined;
+  onStepChange: (step: ProfileViewStep) => void;
+  onBridge: (bridge: ProfileEditorBridge | null) => void;
+};
+export function ProfileWorkspace({
+  identity,
+  blocked,
+  renderSelf,
+}: {
+  identity: IdentityMe;
+  blocked: boolean;
+  renderSelf: (props: SelfProps) => ReactNode;
+}) {
+  const { t, i18n } = useTranslation("profile");
+  const client = useQueryClient();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const params = new URLSearchParams(location.searchStr);
+  const person = managedProfileIdSchema.safeParse(params.get("person")).data ?? "self";
+  const tab = profileSectionNameSchema.safeParse(params.get("tab")).data ?? "general";
+  const requestedStep = profileSectionStepSchema.safeParse(params.get("step")).data;
+  const queryKey = ["private", identity.user.id, identity.session.id, "managed-profiles"];
+  const profiles = useQuery({
+    queryKey,
+    queryFn: ({ signal }) => api.profiles({ signal }),
+    enabled: !blocked,
+    staleTime: 0,
+    gcTime: 0,
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
+  const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);
+  const bridge = useRef<ProfileEditorBridge | null>(null);
+  const [editing, setEditing] = useState({ dirty: false, pending: false });
+  const onBridge = useCallback((value: ProfileEditorBridge | null) => {
+    bridge.current = value;
+    const next = { dirty: value?.dirty ?? false, pending: value?.pending ?? false };
+    setEditing((previous) =>
+      previous.dirty === next.dirty && previous.pending === next.pending ? previous : next,
+    );
+  }, []);
+  const [guardSaving, setGuardSaving] = useState(false);
+  const [guardFailure, setGuardFailure] = useState(false);
+  const blocker = useBlocker({
+    shouldBlockFn: () => Boolean(bridge.current?.dirty || bridge.current?.pending),
+    enableBeforeUnload: () => Boolean(bridge.current?.dirty || bridge.current?.pending),
+    withResolver: true,
+    disabled: blocked,
+  });
+  const [adding, setAdding] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [createError, setCreateError] = useState(false);
+  const controller = useRef<AbortController | null>(null);
+  const creation = useRef<{ signature: string; key: string } | null>(null);
+  const busy = useRef(false);
+  const mounted = useRef(true);
+  const addForm = useForm<ManagedProfileCreateInput>({
+    resolver: zodResolver(managedProfileCreateInputSchema),
+    defaultValues: { kind: "person", displayName: "" },
+  });
+  const addKind = addForm.watch("kind");
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      controller.current?.abort();
+    };
+  }, []);
+  useEffect(() => {
+    if (profiles.error instanceof ApiError && profiles.error.code === "IDENTITY_UNAUTHENTICATED")
+      void forgetIdentity(client);
+  }, [profiles.error, client]);
+  const change = (
+    nextPerson: typeof person,
+    nextTab: ProfileSectionName = "general",
+    step?: ProfileViewStep,
+    ignoreBlocker = false,
+  ) => {
+    void navigate({
+      to: "/profile",
+      search: { person: nextPerson, tab: nextTab, ...(step ? { step } : {}) },
+      ignoreBlocker,
+    });
+  };
+  const onStepChange = (step: ProfileViewStep) => change(person, tab, step, true);
+  const saveBeforeLeaving = async () => {
+    if (!bridge.current || guardSaving) return;
+    setGuardSaving(true);
+    setGuardFailure(false);
+    try {
+      if (await bridge.current.save()) blocker.proceed?.();
+      else setGuardFailure(true);
+    } finally {
+      if (mounted.current) setGuardSaving(false);
+    }
+  };
+  const create = addForm.handleSubmit(async (input) => {
+    if (busy.current || blocked) return;
+    busy.current = true;
+    setCreating(true);
+    setCreateError(false);
+    const signature = JSON.stringify(input);
+    if (creation.current?.signature !== signature)
+      creation.current = { signature, key: crypto.randomUUID() };
+    controller.current = new AbortController();
+    try {
+      const result = await api.createManagedProfile(input, {
+        csrfToken: identity.csrfToken,
+        idempotencyKey: creation.current.key,
+        signal: controller.current.signal,
+      });
+      if (!mounted.current) return;
+      client.setQueryData(
+        queryKey,
+        (current: Awaited<ReturnType<typeof api.profiles>> | undefined) => ({
+          profiles: [
+            ...(current?.profiles.filter((entry) => entry.id !== result.id) ?? []),
+            result,
+          ],
+        }),
+      );
+      setAdding(false);
+      addForm.reset({ kind: "person", displayName: "" });
+      creation.current = null;
+      change(result.id);
+    } catch (error) {
+      if (!mounted.current) return;
+      setCreateError(true);
+      if (error instanceof ApiError && error.code === "IDENTITY_UNAUTHENTICATED")
+        await forgetIdentity(client);
+    } finally {
+      busy.current = false;
+      if (mounted.current) setCreating(false);
+    }
+  });
+  if (!profiles.data)
+    return profiles.isError ? (
+      <div role="alert" className="space-y-3">
+        <p>{t("errors.save")}</p>
+        <Button variant="outline" onClick={() => void profiles.refetch()}>
+          {t("retry")}
+        </Button>
+      </div>
+    ) : (
+      <LoadingState label={t("loading")} />
+    );
+  const selected = profiles.data.profiles.find((profile) => profile.id === person);
+  const percent = (value: number | null) =>
+    value === null
+      ? t("workspace.notApplicable")
+      : new Intl.NumberFormat(i18n.language, { style: "percent", maximumFractionDigits: 0 }).format(
+          value / 100,
+        );
+  const tabs = [
+    { id: "general", icon: UserRound },
+    { id: "finances", icon: Wallet },
+    { id: "health", icon: HeartPulse },
+  ] as const;
+  return (
+    <div className="space-y-6">
+      <div ref={setPortalContainer} className="contents" />
+      <div
+        className="flex flex-wrap items-center gap-2"
+        role="group"
+        aria-label={t("workspace.chooseProfile")}
+      >
+        {profiles.data.profiles.map((profile) => {
+          const Icon = profile.kind === "legal_entity" ? Building2 : UserRound;
+          return (
+            <Button
+              key={profile.id}
+              type="button"
+              variant={person === profile.id ? "default" : "outline"}
+              className="min-h-11 max-w-full rounded-full px-4"
+              aria-pressed={person === profile.id}
+              disabled={guardSaving || creating}
+              onClick={() => change(profile.id)}
+            >
+              <Icon className="size-4 shrink-0" aria-hidden="true" />
+              <span className="truncate">
+                {profile.isSelf ? t("workspace.self") : profile.displayName}
+              </span>
+            </Button>
+          );
+        })}
+        <Button
+          type="button"
+          variant="ghost"
+          className="min-h-11 rounded-full"
+          disabled={creating || profiles.data.profiles.length >= 50}
+          onClick={() => {
+            setAdding(true);
+            setCreateError(false);
+          }}
+        >
+          <Plus className="size-4" aria-hidden="true" />
+          {t("workspace.add")}
+        </Button>
+      </div>
+      <div className="cv-tabbed-page">
+        <header className="space-y-3">
+          <p className="wallet-page-eyebrow cv-meta text-muted-foreground">{t("eyebrow.owner")}</p>
+          <h1 className="cv-app-heading">
+            {selected?.isSelf
+              ? t("workspace.title")
+              : (selected?.displayName ?? t("workspace.title"))}
+          </h1>
+          <p className="max-w-2xl text-muted-foreground">{t("intro.owner")}</p>
+        </header>
+        {!selected ? (
+          <div role="alert" className="space-y-3">
+            <p>{t("workspace.notFound")}</p>
+            <Button variant="outline" onClick={() => change("self")}>
+              {t("workspace.returnSelf")}
+            </Button>
+          </div>
+        ) : (
+          <Tabs
+            value={tab}
+            onValueChange={(value) => {
+              const next = profileSectionNameSchema.safeParse(value);
+              if (next.success) change(person, next.data);
+            }}
+            className="gap-7"
+          >
+            <TabsList
+              aria-label={t("workspace.sections")}
+              className="h-auto min-h-16 w-full sm:w-auto"
+            >
+              {tabs.map(({ id, icon: Icon }) => (
+                <TabsTrigger
+                  key={id}
+                  value={id}
+                  className="min-h-16 min-w-0 flex-1 px-2 sm:min-w-36 sm:px-5"
+                  disabled={guardSaving || creating}
+                >
+                  <span className="flex min-w-0 flex-col items-center gap-1">
+                    <span className="flex items-center gap-1.5 text-sm">
+                      <Icon className="hidden size-4 sm:block" aria-hidden="true" />
+                      {t(`workspace.tabs.${id}`)}
+                    </span>
+                    <span className="text-xs font-normal opacity-75">
+                      {percent(selected.completion[id])}
+                    </span>
+                  </span>
+                </TabsTrigger>
+              ))}
+            </TabsList>
+            <TabsContent value={tab} className="min-w-0">
+              {profiles.isError && (
+                <p role="alert" className="mb-4 text-sm text-destructive">
+                  {t("errors.save")}
+                </p>
+              )}
+              {tab === "health" && selected.kind === "legal_entity" ? (
+                <p className="text-sm text-muted-foreground">{t("workspace.entityHealth")}</p>
+              ) : selected.isSelf && tab === "general" ? (
+                renderSelf({ requestedStep, onStepChange, onBridge })
+              ) : (
+                <ProfileSectionEditor
+                  key={`${selected.id}:${tab}`}
+                  identity={identity}
+                  profile={selected}
+                  section={tab}
+                  requestedStep={requestedStep}
+                  onStepChange={onStepChange}
+                  onBridge={onBridge}
+                  portalContainer={portalContainer}
+                  blocked={blocked}
+                />
+              )}
+            </TabsContent>
+          </Tabs>
+        )}
+      </div>
+      <Dialog
+        open={adding}
+        onOpenChange={(value) => {
+          if (!creating) setAdding(value);
+        }}
+      >
+        <DialogContent
+          portalContainer={portalContainer}
+          className="max-h-[calc(100dvh-2rem)] overflow-y-auto p-6 sm:max-w-lg"
+        >
+          <DialogHeader>
+            <DialogTitle className="text-lg">{t("workspace.addTitle")}</DialogTitle>
+            <DialogDescription className="text-sm">
+              {t("workspace.addDescription")}
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={(event) => void create(event)} className="space-y-5">
+            <div className="space-y-2">
+              <Label htmlFor="profile-kind">{t("workspace.kind")}</Label>
+              <Select
+                value={addKind}
+                onValueChange={(value) => {
+                  if (value === "person" || value === "legal_entity")
+                    addForm.setValue("kind", value);
+                }}
+                disabled={creating}
+              >
+                <SelectTrigger id="profile-kind" className="min-h-11 w-full text-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent portalContainer={portalContainer} position="popper">
+                  <SelectItem value="person">{t("workspace.person")}</SelectItem>
+                  <SelectItem value="legal_entity">{t("workspace.entity")}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="profile-display-name">
+                {t(addKind === "person" ? "workspace.personName" : "workspace.entityName")}
+              </Label>
+              <Input
+                id="profile-display-name"
+                maxLength={160}
+                className="min-h-11 text-base"
+                aria-invalid={Boolean(addForm.formState.errors.displayName)}
+                disabled={creating}
+                {...addForm.register("displayName")}
+              />
+              {addForm.formState.errors.displayName && (
+                <p role="alert" className="text-sm text-destructive">
+                  {t("invalidField")}
+                </p>
+              )}
+            </div>
+            {createError && (
+              <p role="alert" className="text-sm text-destructive">
+                {t("errors.save")}
+              </p>
+            )}
+            <DialogFooter className="gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                disabled={creating}
+                onClick={() => setAdding(false)}
+              >
+                {t("workspace.cancel")}
+              </Button>
+              <Button type="submit" disabled={creating}>
+                {t(creating ? "pending" : "workspace.create")}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={blocker.status === "blocked"}
+        onOpenChange={(value) => {
+          if (!value && !guardSaving && !editing.pending) {
+            blocker.reset?.();
+            setGuardFailure(false);
+          }
+        }}
+      >
+        <DialogContent portalContainer={portalContainer} className="p-6 sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-lg">{t("workspace.unsavedTitle")}</DialogTitle>
+            <DialogDescription className="text-sm">
+              {t("workspace.unsavedDescription")}
+            </DialogDescription>
+          </DialogHeader>
+          {guardFailure && (
+            <p role="alert" className="text-sm text-destructive">
+              {t("workspace.unsavedSaveFailed")}
+            </p>
+          )}
+          <DialogFooter className="flex-wrap gap-3">
+            <Button
+              variant="ghost"
+              disabled={guardSaving || editing.pending}
+              onClick={() => {
+                blocker.reset?.();
+                setGuardFailure(false);
+              }}
+            >
+              {t("workspace.stay")}
+            </Button>
+            <Button
+              variant="outline"
+              disabled={guardSaving || editing.pending}
+              onClick={() => {
+                bridge.current?.discard();
+                blocker.proceed?.();
+                setGuardFailure(false);
+              }}
+            >
+              {t("workspace.discard")}
+            </Button>
+            <Button
+              disabled={guardSaving || editing.pending}
+              onClick={() => void saveBeforeLeaving()}
+            >
+              {t(guardSaving ? "pending" : "workspace.saveLeave")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}

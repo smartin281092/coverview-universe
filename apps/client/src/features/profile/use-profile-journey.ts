@@ -132,7 +132,7 @@ export function useProfileJourney({
     else setFailure("save");
   };
   const run = async (operation: (signal: AbortSignal) => Promise<void>) => {
-    if (busy.current || blocked) return;
+    if (busy.current || blocked) return false;
     busy.current = true;
     controller.current = new AbortController();
     setPending(true);
@@ -140,8 +140,10 @@ export function useProfileJourney({
     setNotice(null);
     try {
       await operation(controller.current.signal);
+      return true;
     } catch (error) {
       await report(error);
+      return false;
     } finally {
       busy.current = false;
       if (mounted.current) setPending(false);
@@ -154,6 +156,10 @@ export function useProfileJourney({
     explicit.current.clear();
     setResolved(new Set());
     if ("prefill" in record) client.setQueryData(queryKey, record);
+    if (identity)
+      void client.invalidateQueries({
+        queryKey: ["private", identity.user.id, identity.session.id, "managed-profiles"],
+      });
   };
   const persist = async (values: ProfileFormValues, next: ProfileStep, signal: AbortSignal) => {
     const input = {
@@ -183,16 +189,19 @@ export function useProfileJourney({
     adopt(entry.draft);
     return entry.draft;
   };
-  const move = (next: ProfileStep) =>
-    form.handleSubmit((values) =>
-      run(async (signal) => {
+  const move = async (next: ProfileStep) => {
+    let succeeded = false;
+    await form.handleSubmit(async (values) => {
+      succeeded = await run(async (signal) => {
         await persist(values, next, signal);
         if (mounted.current) {
           setStep(next);
           setNotice("saved");
         }
-      }),
-    )();
+      });
+    })();
+    return succeeded;
+  };
   const continueLogin = () =>
     form.handleSubmit((values) =>
       run(async (signal) => {
@@ -218,9 +227,10 @@ export function useProfileJourney({
         setNotice("attached");
       }
     });
-  const confirm = () =>
-    form.handleSubmit((values) =>
-      run(async (signal) => {
+  const confirm = async () => {
+    let succeeded = false;
+    await form.handleSubmit(async (values) => {
+      succeeded = await run(async (signal) => {
         if (!identity) return;
         const record = await persist(values, "review", signal);
         const input = { revision: record.revision, prefill, version: "1" as const };
@@ -235,8 +245,10 @@ export function useProfileJourney({
           setNotice("confirmed");
           setPrefillDirty(false);
         }
-      }),
-    )();
+      });
+    })();
+    return succeeded;
+  };
   const refreshKeepingEdits = () =>
     run(async (signal) => {
       const record = identity ? await api.profile({ signal }) : null;
@@ -311,6 +323,15 @@ export function useProfileJourney({
     refreshKeepingEdits,
     restart,
     resolveProposal,
+    discard: () => {
+      form.reset(profileValues(saved));
+      explicit.current.clear();
+      setResolved(new Set());
+      if (saved && "prefill" in saved) setPrefill(saved.prefill.enabled);
+      setPrefillDirty(false);
+      setFailure(null);
+      setNotice(null);
+    },
     retryLoad: async () => {
       await Promise.all([draftQuery.refetch(), ...(identity ? [profileQuery.refetch()] : [])]);
     },

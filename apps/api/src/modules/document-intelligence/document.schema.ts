@@ -97,6 +97,58 @@ export const documentChangeRequests = pgTable(
     index("document_change_requests_owner_list").on(table.userId, table.createdAt, table.id),
   ],
 );
+export const documentIdentityAttachments = pgTable(
+  "document_identity_attachments",
+  {
+    userId: text("user_id")
+      .primaryKey()
+      .references(() => identityUsers.id),
+    revision: integer("revision").notNull().default(0),
+    combinedId: text("combined_id"),
+    frontId: text("front_id"),
+    backId: text("back_id"),
+    updatedAt: instant("updated_at").notNull().defaultNow(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.userId, table.combinedId],
+      foreignColumns: [documents.userId, documents.id],
+    }),
+    foreignKey({
+      columns: [table.userId, table.frontId],
+      foreignColumns: [documents.userId, documents.id],
+    }),
+    foreignKey({
+      columns: [table.userId, table.backId],
+      foreignColumns: [documents.userId, documents.id],
+    }),
+    check("document_identity_attachment_revision", sql`${table.revision} >= 0`),
+    check(
+      "document_identity_attachment_mode",
+      sql`${table.combinedId} is null or (${table.frontId} is null and ${table.backId} is null)`,
+    ),
+    check(
+      "document_identity_attachment_faces",
+      sql`${table.frontId} is null or ${table.backId} is null or ${table.frontId} <> ${table.backId}`,
+    ),
+  ],
+);
+export const documentIdentityAttachmentCommands = pgTable(
+  "document_identity_attachment_commands",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => identityUsers.id),
+    key: text("key").notNull(),
+    hash: text("hash").notNull(),
+    expiresAt: instant("expires_at").notNull(),
+  },
+  (table) => [
+    uniqueIndex("document_identity_attachment_commands_key").on(table.userId, table.key),
+    index("document_identity_attachment_commands_expiry").on(table.expiresAt, table.id),
+  ],
+);
 export const documentDecisions = pgTable(
   "document_decisions",
   {

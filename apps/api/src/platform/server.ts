@@ -16,6 +16,7 @@ import {
 import { isLoopback, type Environment } from "./config.js";
 import { createPlatformDependencies, type PlatformDependencies } from "./dependencies.js";
 import { registerDocuments, DocumentError } from "../modules/document-intelligence/index.js";
+import { registerManagedProfiles, ManagedProfileError } from "../modules/profiles/index.js";
 import {
   IdentityError,
   registerIdentity,
@@ -95,7 +96,9 @@ export async function buildServer(
       errorStatus >= 400 &&
       errorStatus < 500;
     const status =
-      error instanceof IdentityError || error instanceof DocumentError
+      error instanceof IdentityError ||
+      error instanceof DocumentError ||
+      error instanceof ManagedProfileError
         ? error.statusCode
         : isClientError
           ? errorStatus
@@ -103,7 +106,9 @@ export async function buildServer(
             ? 400
             : 500;
     const code =
-      error instanceof IdentityError || error instanceof DocumentError
+      error instanceof IdentityError ||
+      error instanceof DocumentError ||
+      error instanceof ManagedProfileError
         ? error.code
         : status === 429
           ? "IDENTITY_RATE_LIMITED"
@@ -162,6 +167,7 @@ export async function buildServer(
   }
 
   const identity = await registerIdentity(app, config, identityService);
+  registerManagedProfiles(app, config, identity);
   await registerDocuments(app, config, identity);
   return app;
 }

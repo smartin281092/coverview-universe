@@ -16,6 +16,7 @@ import {
   type AuthorizationFieldGroup,
 } from "../features/authorizations/AuthorizationProfileEditor";
 import { CompanyPicker } from "../features/authorizations/CompanyPicker";
+import { IdentityAttachment } from "../features/authorizations/IdentityAttachment";
 
 function Authorization({
   identity,
@@ -106,6 +107,9 @@ function Authorization({
           <p className="text-sm text-muted-foreground">{t("legalAddress")}</p>
           <p className="text-sm text-muted-foreground">{t("advisor")}</p>
         </div>
+        {kind === "procuration" && (
+          <IdentityAttachment identity={identity} onChanged={() => setAccepted(false)} />
+        )}
         <section className="space-y-4">
           <h2 className="text-lg font-medium">{t("client")}</h2>
           <dl className="grid gap-4 text-sm sm:grid-cols-2">
@@ -119,7 +123,7 @@ function Authorization({
                   <dd className="mt-1">
                     <button
                       type="button"
-                      className="group flex min-h-11 w-full items-start gap-2 rounded-lg py-2 text-left text-sm font-medium hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                      className="group flex min-h-11 w-full items-start gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none"
                       aria-label={t("editField", { field: t(row.label) })}
                       onClick={() => {
                         setSaved(false);
@@ -239,12 +243,6 @@ function Authorization({
           <p className="text-sm text-muted-foreground">
             {t(kind === "mandate" ? "countersignature" : "clientSignature")}
           </p>
-          {kind === "procuration" && (
-            <label className="flex min-h-11 items-center gap-3 text-sm">
-              <input type="checkbox" className="size-4 accent-primary" />
-              {t("identityAttachment")}
-            </label>
-          )}
         </section>
         <section
           className="space-y-6 border-t border-border pt-6"

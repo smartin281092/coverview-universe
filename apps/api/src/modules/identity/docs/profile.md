@@ -2,7 +2,7 @@
 
 ## Périmètre
 
-`identity_profiles` reste le seul profil par utilisateur WorkOS canonique. La page Wallet `/profile`, accessible depuis le compte public, prépare les informations et l’adresse sans imposer la connexion. Chaque passage d’étape enregistre le brouillon côté serveur. Après connexion WorkOS, la personne choisit explicitement de rattacher ce brouillon ; le serveur renvoie l’étape conservée. Une saisie non envoyée ne devient pas une sauvegarde.
+`identity_profiles` reste le seul profil canonique par utilisateur WorkOS. Les dossiers privés supplémentaires et les sections Finances/Santé appartiennent au [module profiles](../../profiles/README.md), sans deuxième copie des informations générales du titulaire. La page Wallet `/profile`, accessible depuis le compte public, prépare les informations et l’adresse sans imposer la connexion. Chaque passage d’étape enregistre le brouillon côté serveur. Après connexion WorkOS, la personne choisit explicitement de rattacher ce brouillon ; le serveur renvoie l’étape conservée. Une saisie non envoyée ne devient pas une sauvegarde.
 
 Contrats : `packages/contracts/src/profile.ts`. Commandes : `identity.profile.repository.ts`. Frontières HTTP : `identity.profile.routes.ts`. Preuves : [ledger S-013a](../../../../../../roadmap/evidence/S-013a.md). S-013 conserve les raccordements aux producteurs de documents, analyses, simulations, comparaisons et favoris, ainsi que l’OCR et la recette foyer.
 
@@ -22,13 +22,13 @@ Lectures privées propriétaires, choix paginés par20. Aucun champ privé dans 
 
 ## Manifeste S-130/S-131
 
-| Catégorie | Propriétaire / classification | Export, rectification, conservation |
-|---|---|---|
-| Profil/propositions | Utilisateur ; nom/prénom, naissance, nationalité, adresse et confirmation identifiants | Rectification disponible ; export/effacement/rétention juridique S-130/S-131. Aucune copie/numéro de pièce collecté. |
-| Brouillon | Navigateur puis utilisateur réclamant ; champs identifiants | Accès technique24h, refus après expiration/claim. Purge définitive/export des objets rattachés S-131, aucun délai juridique déduit. |
-| Choix | Utilisateur ; préférence et preuve technique | Historique append-only, correction par nouveau choix ; export/effacement/rétention S-130/S-131. |
-| Réponses idempotentes | Propriétaire de commande ; snapshot privé et hash requête | TTL technique24h et purge bornée ; réponse protégée comme la commande. Aucun cookie brut, aucun hash à exporter. |
-| Audit | Acteur/ressource ; action/date/corrélation | Sans valeurs. Export/anonymisation/rétention S-130/S-131. |
-| Images d’identité | Non ingérées | Catégorie distincte des champs ; matrice approuvée avant ingestion avec S-042/S-131. Aucune durée inventée. |
+| Catégorie             | Propriétaire / classification                                                          | Export, rectification, conservation                                                                                                                                                                  |
+| --------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Profil/propositions   | Utilisateur ; nom/prénom, naissance, nationalité, adresse et confirmation identifiants | Rectification disponible ; export/effacement/rétention juridique S-130/S-131. Aucune copie/numéro de pièce collecté.                                                                                 |
+| Brouillon             | Navigateur puis utilisateur réclamant ; champs identifiants                            | Accès technique24h, refus après expiration/claim. Purge définitive/export des objets rattachés S-131, aucun délai juridique déduit.                                                                  |
+| Choix                 | Utilisateur ; préférence et preuve technique                                           | Historique append-only, correction par nouveau choix ; export/effacement/rétention S-130/S-131.                                                                                                      |
+| Réponses idempotentes | Propriétaire de commande ; snapshot privé et hash requête                              | TTL technique24h et purge bornée ; réponse protégée comme la commande. Aucun cookie brut, aucun hash à exporter.                                                                                     |
+| Audit                 | Acteur/ressource ; action/date/corrélation                                             | Sans valeurs. Export/anonymisation/rétention S-130/S-131.                                                                                                                                            |
+| Images d’identité     | Originaux privés dans document-intelligence, séparés des champs                        | Dépôt et association recto/verso autorisés par la demande S-042a ; voir le [module documentaire](../../document-intelligence/README.md). Aucun droit familial implicite ni durée juridique inventée. |
 
 Migration additive compatible N-1, rollback applicatif conservant tables/colonnes. Aucun reset/effacement comme rollback. RLS non activée comme dans l’existant : limite DATA-09 DEVRAIT, contrôles propriétaires et concurrence à vérifier sur le parcours réel.

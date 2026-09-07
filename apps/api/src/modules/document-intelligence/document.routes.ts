@@ -17,6 +17,8 @@ import {
   documentCompaniesSchema,
   insuranceCompanyDetailsSchema,
   insuranceCompanyIdSchema,
+  documentIdentityAttachmentSchema,
+  documentIdentityAttachmentInputSchema,
 } from "@coverview/contracts";
 import type { createDocumentRepository } from "./document.repository.js";
 import type { createDocumentService } from "./document.service.js";
@@ -49,6 +51,28 @@ export function registerDocumentRoutes(
     actors.set(request, await identity.authenticate(request));
   };
   const limited = { rateLimit: { max: 60, timeWindow: "1 minute" } };
+  app.get(
+    "/documents/identity-attachment",
+    {
+      onRequest: read,
+      config: limited,
+      schema: { response: { 200: documentIdentityAttachmentSchema } },
+    },
+    async (request) => repository.identityAttachment(actor(request).userId),
+  );
+  app.post(
+    "/documents/identity-attachment",
+    {
+      onRequest: write,
+      config: limited,
+      schema: {
+        body: documentIdentityAttachmentInputSchema,
+        response: { 200: documentIdentityAttachmentSchema },
+      },
+    },
+    async (request) =>
+      repository.saveIdentityAttachment(actor(request), request.body, key(request)),
+  );
   app.get(
     "/documents/companies",
     {

@@ -277,8 +277,27 @@ export const documentCreateInputSchema = z
       .max(20 * 1024 * 1024),
     checksum: z.string().regex(/^[0-9a-f]{64}$/),
     analysisRequested: z.boolean(),
+    // The depositor declares the document's purpose; this never verifies identity.
+    purpose: z.literal("identity_card").optional(),
   })
   .strict();
+export const documentIdentityAttachmentSchema = z.object({
+  revision: z.number().int().nonnegative(),
+  combined: documentSummarySchema.nullable(),
+  front: documentSummarySchema.nullable(),
+  back: documentSummarySchema.nullable(),
+  status: z.enum(["missing", "incomplete", "processing", "ready", "needs_attention"]),
+});
+export const documentIdentityAttachmentInputSchema = z
+  .object({
+    revision: z.number().int().nonnegative(),
+    combinedId: documentIdSchema.nullable().optional(),
+    frontId: documentIdSchema.nullable().optional(),
+    backId: documentIdSchema.nullable().optional(),
+  })
+  .strict();
+export type DocumentIdentityAttachment = z.infer<typeof documentIdentityAttachmentSchema>;
+export type DocumentIdentityAttachmentInput = z.infer<typeof documentIdentityAttachmentInputSchema>;
 export const documentRevisionSchema = z
   .object({ revision: z.number().int().nonnegative() })
   .strict();
@@ -334,5 +353,6 @@ export const documentErrorCodes = [
   "DOCUMENT_STORAGE_UNAVAILABLE",
   "DOCUMENT_DOWNLOAD_BLOCKED",
   "DOCUMENT_REVIEW_INVALID",
+  "DOCUMENT_ATTACHMENT_INVALID",
   "DOCUMENT_LIMIT_REACHED",
 ] as const;

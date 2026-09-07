@@ -81,10 +81,27 @@ const profileRoute = createRoute({
   path: "/profile",
   validateSearch: (
     search: Record<string, unknown>,
-  ): { view?: "choices"; continue?: "1"; authError?: "callback" } => ({
+  ): {
+    view?: "choices";
+    continue?: "1";
+    authError?: "callback";
+    person?: string;
+    tab?: "general" | "finances" | "health";
+    step?: "information" | "details" | "review";
+  } => ({
     ...(search.view === "choices" ? { view: "choices" as const } : {}),
     ...(search.continue === "1" ? { continue: "1" as const } : {}),
     ...(search.authError === "callback" ? { authError: "callback" as const } : {}),
+    ...(typeof search.person === "string" &&
+    (search.person === "self" || /^prf_[0-9a-f-]{36}$/.test(search.person))
+      ? { person: search.person }
+      : {}),
+    ...(search.tab === "general" || search.tab === "finances" || search.tab === "health"
+      ? { tab: search.tab }
+      : {}),
+    ...(search.step === "information" || search.step === "details" || search.step === "review"
+      ? { step: search.step }
+      : {}),
   }),
   component: ProfilePage,
 });

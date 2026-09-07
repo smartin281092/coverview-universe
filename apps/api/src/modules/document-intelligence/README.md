@@ -40,6 +40,12 @@ Les divergences sont calculées côté serveur à partir du profil et des docume
 
 [Plan et limites](../../../../../roadmap/plans/S-042a-library-authorizations.plan.md) · [Preuves](../../../../../roadmap/evidence/document-library-authorizations.md).
 
+## Pièce d’identité du titulaire
+
+`GET/POST /documents/identity-attachment` lit et modifie l’association privée de la pièce du titulaire : un original contenant les deux faces, ou un recto et un verso distincts. Les faces partielles persistent pour reprendre un dépôt interrompu. Les fichiers restent dans le circuit chiffré de Documents, avec antivirus et lecture facultative ; la déclaration `purpose=identity_card` initialise seulement leur catégorie, sans KYC. Un document d’assurance contenant un nom ou numéro de pièce n’est pas proposé comme carte d’identité.
+
+Session/Host/CSRF, révision, idempotence et FK composites propriétaire/document protègent la commande. Un champ absent conserve sa face, `null` la retire ; mode combiné et deux faces s’excluent, les mêmes ID ou checksums pour recto/verso sont refusés. Le statut est recalculé depuis les originaux : suppression, quarantaine ou catégorie modifiée retirent la disponibilité, y compris sur rejeu. Les originaux ne sont pas supprimés en retirant leur association. Migration additive0009 et [oracles](../../../../../roadmap/evidence/profile-sections-identity-attachment.md).
+
 ## Compagnies et contrats documentaires
 
 `GET /documents/companies/:companyId` reprend l’authentification, le contrôle Host et la limitation de débit documentaires. La réponse contient uniquement les documents non supprimés du propriétaire, leurs contrats identifiés et les indicateurs calculés côté serveur, dans la borne de 200 originaux. Le répertoire de compagnies est validé par le contrat partagé ; cette projection ne crée ni relation assurantielle canonique ni autorisation.
