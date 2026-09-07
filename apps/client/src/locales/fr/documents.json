@@ -19,27 +19,27 @@
   "loading": "Chargement des documents…",
   "loadingMessages": {
     "preparing": {
-      "initial": "Nous préparons votre fichier avant son envoi. Gardez cette page ouverte.",
-      "long": "La préparation se poursuit. Cette étape peut prendre un peu de temps selon le fichier."
+      "initial": "On prépare votre fichier… encore un petit instant.",
+      "long": "La préparation continue… ça prend un peu de temps, pas d’inquiétude 😉"
     },
     "uploading": {
-      "initial": "Votre original est en cours d’enregistrement. Gardez cette page ouverte pendant le transfert.",
-      "long": "Le transfert est toujours en cours. Sa durée dépend du fichier et de votre connexion."
+      "initial": "Votre document est en route… gardez juste cette page ouverte.",
+      "long": "Le transfert est toujours en cours… encore un peu de patience, on s’en occupe 😉"
     },
     "queued": {
-      "initial": "Votre document est enregistré et attend son tour pour être traité.",
-      "long": "Votre document est toujours dans la file d’attente. Le traitement démarrera automatiquement."
+      "initial": "Votre document est bien enregistré. Encore un petit instant avant de commencer…",
+      "long": "Votre document attend encore son tour… merci pour votre patience 😉"
     },
     "scanning": {
-      "initial": "Nous vérifions la sécurité de votre document avant sa lecture.",
-      "long": "Le contrôle antivirus est toujours en cours. Certains documents demandent un peu plus de temps."
+      "initial": "Un petit contrôle de sécurité avant de lire votre document…",
+      "long": "On vérifie encore votre document… ça peut prendre un peu de temps, pas d’inquiétude 😉"
     },
     "reading": {
-      "initial": "Nous recherchons les informations utiles dans votre document.",
-      "long": "La lecture se poursuit. Les documents longs ou détaillés peuvent demander un peu plus de temps."
+      "initial": "On parcourt votre document pour en extraire les informations utiles…",
+      "long": "Extraction toujours en cours… Ça prend un peu de temps, pas d’inquiétude 😉"
     },
-    "noRefresh": "Inutile d’actualiser : cette page affichera automatiquement la suite. Vous pouvez la laisser ouverte.",
-    "awaitingStatus": "Nous attendons une mise à jour du traitement. Vérifiez votre connexion ; le suivi reprendra automatiquement."
+    "noRefresh": "Vous pouvez souffler, on s’occupe de la suite 😉 Pas besoin d’actualiser la page.",
+    "awaitingStatus": "Le suivi prend un peu de retard… On attend la prochaine mise à jour pour vous donner des nouvelles."
   },
   "empty": "Votre espace est prêt",
   "emptyHelp": "Ajoutez une pièce d’identité, un contrat ou un autre document. Vous gardez la main sur les informations extraites.",
