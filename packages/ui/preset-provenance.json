@@ -5,6 +5,13 @@
   "executions": [
     {
       "date": "2026-09-07",
+      "target": "Select official source verification and Badge",
+      "command": "pnpm exec shadcn add select --yes --overwrite; pnpm exec shadcn add badge --yes; pnpm exec shadcn preset decode b38oXC5rf (cwd .planning-local/preset-shadcn)",
+      "exitCode": 0,
+      "result": "Select registry output unchanged (same SHA256); Badge generated. Preset decode confirms Mira, Mist, default radius, subtle accent and inverted-translucent menu. Required Mist dark color tokens copied from generated CSS, scoped only to SelectContent."
+    },
+    {
+      "date": "2026-09-07",
       "target": "Wallet custom select controls",
       "command": "pnpm exec shadcn add select --yes (cwd .planning-local/preset-shadcn)",
       "exitCode": 0
@@ -71,6 +78,8 @@
     "executionContext": "Two isolated initialized Vite projects inside ignored packages/ui/.preset-work. Generated artifacts copied into owned app/UI files. No preset installation touched the root manifest or lockfile."
   },
   "generatedSources": {
+    "badge": "9cf4675414acf20c53b2a3ecfb631746da435fa3d7a4a72450d1169213255baf",
+    "themeWithDarkTokens": "4507a979210e553252b13a3802a94abde76f047eac24bbade44d7694b37c9870",
     "select": "c3f501aaa460599d5a9287993eccdfa0c9b5f3e385f9c4318d1ef5603a95e99d",
     "tabs": "013cde60c69bdac4b2472303b8aa679ba04fc0d7cf7904b5f2210e9bbc208ead",
     "button": "40dcea12cc5c9a357df10b6d56dfde7907cd84d076887fa4b56ac0a39f9e55b7",

@@ -1,5 +1,6 @@
 export { Button } from "./Button";
 export { ButtonLink } from "./Button";
+export { Badge, badgeVariants } from "./Badge";
 export {
   Card,
   CardHeader,

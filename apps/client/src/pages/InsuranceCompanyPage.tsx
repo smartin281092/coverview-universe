@@ -16,6 +16,7 @@ import {
 } from "@coverview/ui";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { DocumentFailure } from "../features/documents/DocumentFailure";
+import { DocumentLabels } from "../features/documents/DocumentLabels";
 import { CompanyLogo } from "../features/insurance/CompanyLogo";
 import { InsuranceContractCard } from "../features/insurance/InsuranceContractCard";
 import { api } from "../api";
@@ -221,6 +222,7 @@ function Company({ identity, companyId }: { identity: IdentityMe; companyId: Ins
                             {document.title ??
                               td(`classification.${document.classification ?? document.category}`)}
                           </h3>
+                          <DocumentLabels document={document} />
                           <p className="break-words text-xs text-muted-foreground">
                             {t("documentMeta", {
                               name: document.name,

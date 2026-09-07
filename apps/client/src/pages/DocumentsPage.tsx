@@ -29,6 +29,7 @@ import { DocumentUpload } from "../features/documents/DocumentUpload";
 import { DocumentFailure } from "../features/documents/DocumentFailure";
 import { DocumentProcessingIndicator } from "../features/documents/DocumentProcessingIndicator";
 import { AuthorizationNotice } from "../features/documents/AuthorizationNotice";
+import { DocumentLabels } from "../features/documents/DocumentLabels";
 
 function Documents({ identity }: { identity: IdentityMe }) {
   const { t, i18n } = useTranslation("documents");
@@ -176,7 +177,7 @@ function Documents({ identity }: { identity: IdentityMe }) {
               <SelectTrigger id="document-group" className="min-h-11 w-full text-sm">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent portalContainer={portalContainer} position="popper">
+              <SelectContent portalContainer={portalContainer}>
                 <SelectItem value="date">{t("library.byDate")}</SelectItem>
                 <SelectItem value="type">{t("library.byType")}</SelectItem>
               </SelectContent>
@@ -198,7 +199,7 @@ function Documents({ identity }: { identity: IdentityMe }) {
               <SelectTrigger id="document-sort" className="min-h-11 w-full text-sm">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent portalContainer={portalContainer} position="popper">
+              <SelectContent portalContainer={portalContainer}>
                 <SelectItem value="newest">{t("library.newest")}</SelectItem>
                 <SelectItem value="oldest">{t("library.oldest")}</SelectItem>
                 <SelectItem value="title">{t("library.alphabetical")}</SelectItem>
@@ -222,7 +223,7 @@ function Documents({ identity }: { identity: IdentityMe }) {
               <SelectTrigger id="document-classification" className="min-h-11 w-full text-sm">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent portalContainer={portalContainer} position="popper">
+              <SelectContent portalContainer={portalContainer}>
                 <SelectItem value="all">{t("library.allTypes")}</SelectItem>
                 {documentClassificationSchema.options.map((value) => (
                   <SelectItem key={value} value={value}>
@@ -296,6 +297,7 @@ function Documents({ identity }: { identity: IdentityMe }) {
                               {document.title ??
                                 t(`classification.${document.classification ?? document.category}`)}
                             </h3>
+                            <DocumentLabels document={document} />
                             <p className="text-sm text-muted-foreground">
                               {t("listMeta", {
                                 date: format.format(new Date(document.createdAt)),

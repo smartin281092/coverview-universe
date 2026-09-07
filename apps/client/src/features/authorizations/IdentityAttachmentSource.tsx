@@ -163,7 +163,7 @@ export function IdentityAttachmentSource({
               )}
             />
           </SelectTrigger>
-          <SelectContent portalContainer={portalContainer} position="popper">
+          <SelectContent portalContainer={portalContainer}>
             {options.map((item) => (
               <SelectItem key={item.id} value={item.id} className="whitespace-normal break-words">
                 {item.title && item.title !== item.name

@@ -30,6 +30,7 @@ import { DocumentProgress } from "../features/documents/DocumentProgress";
 import { DocumentLoadingMessage } from "../features/documents/DocumentLoadingMessage";
 import { AlertTriangle, Clock3 } from "lucide-react";
 import { InsuranceCompanyLink } from "../features/insurance/InsuranceCompanyLink";
+import { DocumentLabels } from "../features/documents/DocumentLabels";
 
 type Panel =
   "category" | "delete" | "history" | "source" | "resume" | "analysis" | { fieldId: string } | null;
@@ -163,6 +164,7 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
         <h1 className="break-words text-2xl font-medium tracking-tight sm:text-4xl">
           {item.title ?? t(`classification.${item.classification ?? item.category}`)}
         </h1>
+        <DocumentLabels document={item} />
       </header>
       {item.companyId && <InsuranceCompanyLink companyId={item.companyId} />}
       {item.analysis && (
@@ -459,7 +461,7 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
                 <SelectTrigger id="document-category" className="min-h-11 w-full text-sm">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent position="popper" portalContainer={portalContainer}>
+                <SelectContent portalContainer={portalContainer}>
                   {documentCategorySchema.options.map((category) => (
                     <SelectItem key={category} value={category}>
                       {t(`category.${category}`)}

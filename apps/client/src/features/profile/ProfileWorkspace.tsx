@@ -396,7 +396,7 @@ export function ProfileWorkspace({
                   <SelectTrigger id="profile-kind" className="min-h-11 w-full text-sm">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent portalContainer={portalContainer} position="popper">
+                  <SelectContent portalContainer={portalContainer}>
                     <SelectItem value="person">{t("workspace.person")}</SelectItem>
                     <SelectItem value="legal_entity">{t("workspace.entity")}</SelectItem>
                   </SelectContent>

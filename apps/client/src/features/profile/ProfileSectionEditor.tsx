@@ -450,7 +450,7 @@ export function ProfileSectionEditor({
                       >
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent portalContainer={portalContainer} position="popper">
+                      <SelectContent portalContainer={portalContainer}>
                         {field !== "currency" && (
                           <SelectItem value="empty">{t("review.empty")}</SelectItem>
                         )}

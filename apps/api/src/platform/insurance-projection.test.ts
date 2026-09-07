@@ -73,7 +73,11 @@ it("uses content consistently, avoids address numbers as domains and leaves ambi
       ],
     },
   });
-  expect(full.title).toBe("Prévoyance 3A · Liechtenstein Life · Offre");
+  expect(full).toMatchObject({
+    title: "Modèle d’offre",
+    companyId: "liechtenstein-life",
+    insuranceDomain: "pension_3a",
+  });
   expect(full).toEqual(
     documentPresentation({ category: "insurance", categoryCorrected: false, analysis: content }),
   );
@@ -286,9 +290,19 @@ it("projects only the current owner's undeleted documents with the same detail/l
   expect(overview.documents.map((item) => item.id)).toEqual([doc.id]);
   const detail = await repository.get(actor.userId, doc.id);
   const list = await repository.list(actor.userId);
-  expect(detail.title).toBe("Voiture · AXA · Contrat");
+  expect(detail.title).toBe("Police d’assurance automobile");
   expect(list.documents[0]?.title).toBe(detail.title);
   expect(overview.documents[0]?.title).toBe(detail.title);
+  // Company and domain remain searchable even though neither label prefixes the title.
+  expect(
+    (await repository.list(actor.userId, undefined, { q: "AXA" })).documents.map((item) => item.id),
+  ).toEqual([doc.id]);
+  expect(
+    (await repository.list(actor.userId, undefined, { q: "voiture" })).documents.map(
+      (item) => item.id,
+    ),
+  ).toEqual([doc.id]);
+  expect((await repository.list(stranger.userId, undefined, { q: "AXA" })).documents).toEqual([]);
   expect((await repository.insuranceCompany(stranger.userId, "axa")).documents).toEqual([]);
   expect((await repository.insuranceCompany(stranger.userId, "axa")).contracts).toEqual([]);
   expect((await repository.insuranceCompany(actor.userId, "allianz")).documents).toEqual([]);

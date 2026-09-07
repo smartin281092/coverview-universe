@@ -58,8 +58,8 @@ import {
   normalizeDocumentSearch,
 } from "./document.presentation.js";
 import { documentProfileComparisons, sameProfileValue } from "./document.reconciliation.js";
-import { referencedCompanyIds } from "./document.companies.js";
-import { companyOverview } from "./document.insurance.js";
+import { referencedCompanyIds, companyLabels } from "./document.companies.js";
+import { companyOverview, insuranceDomainLabels } from "./document.insurance.js";
 import { DocumentError } from "./document.errors.js";
 import {
   createIdentityAttachmentRepository,
@@ -429,7 +429,7 @@ export function createDocumentRepository(db: Database) {
         return (
           (!query.classification || classification === query.classification) &&
           normalizeDocumentSearch(
-            `${item.title ?? ""} ${item.name} ${classificationLabels[classification]}`,
+            `${item.title ?? ""} ${item.name} ${classificationLabels[classification]} ${item.companyId ? companyLabels[item.companyId] : ""} ${item.insuranceDomain ? insuranceDomainLabels[item.insuranceDomain] : ""}`,
           ).includes(needle)
         );
       });
