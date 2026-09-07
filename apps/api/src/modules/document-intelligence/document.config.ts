@@ -20,7 +20,7 @@ const schema = z.object({
     .string()
     .regex(/^[a-zA-Z0-9.-]{1,100}$/)
     .default("gpt-5.4-mini"),
-  OPENAI_DOCUMENT_DAILY_CALLS: z.coerce.number().int().min(1).max(20).default(3),
+  OPENAI_DOCUMENT_DAILY_CALLS: z.coerce.number().int().min(1).max(20).optional(),
   OPENAI_DOCUMENT_INPUT_USD_PER_MILLION: z.coerce.number().min(0).max(1000).default(0.75),
   OPENAI_DOCUMENT_OUTPUT_USD_PER_MILLION: z.coerce.number().min(0).max(1000).default(4.5),
   OPENAI_DOCUMENT_MAX_OUTPUT_TOKENS: z.coerce.number().int().min(1000).max(12000).default(6000),
@@ -56,6 +56,7 @@ export async function documentConfig(config: Environment) {
   const encryptionKey = key ? Buffer.from(key, "base64") : Buffer.alloc(32);
   return {
     ...values,
+    OPENAI_DOCUMENT_DAILY_CALLS: values.OPENAI_DOCUMENT_DAILY_CALLS ?? (local ? 20 : 3),
     enabled,
     local,
     encryptionKey,
