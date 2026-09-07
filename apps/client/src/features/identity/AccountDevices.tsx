@@ -1,16 +1,13 @@
 import { useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Button, EmptyState, LoadingState } from "@coverview/ui";
 import type { IdentityMe } from "@coverview/api-client";
-import { api } from "../api";
-import { IdentityBoundary } from "../features/identity/IdentityBoundary";
-import { IdentityFailure } from "../features/identity/IdentityFailure";
-import { LogoutActions } from "../features/identity/LogoutActions";
-import { forgetIdentity } from "../features/identity/session-state";
+import { api } from "../../api";
+import { IdentityFailure } from "./IdentityFailure";
+import { forgetIdentity } from "./session-state";
 
-function Devices({ identity }: { identity: IdentityMe }) {
+export function AccountDevices({ identity }: { identity: IdentityMe }) {
   const { t, i18n } = useTranslation();
   const client = useQueryClient();
   const [cursors, setCursors] = useState<string[]>([]);
@@ -111,53 +108,36 @@ function Devices({ identity }: { identity: IdentityMe }) {
           ))}
         </ul>
       )}
-      <nav aria-label={t("identity.pagination")} className="flex flex-wrap items-center gap-4">
-        <Button
-          variant="outline"
-          disabled={cursors.length === 0 || revoke.isPending || sessions.isFetching}
-          onClick={() => {
-            setCursors((value) => value.slice(0, -1));
-            setNotice(false);
-          }}
-        >
-          {t("identity.previous")}
-        </Button>
-        <p className="text-sm text-muted-foreground">
-          {t("identity.page", {
-            page: new Intl.NumberFormat(i18n.language).format(cursors.length + 1),
-          })}
-        </p>
-        <Button
-          variant="outline"
-          disabled={!sessions.data.nextCursor || revoke.isPending || sessions.isFetching}
-          onClick={() => {
-            if (sessions.data.nextCursor)
-              setCursors((value) => [...value, sessions.data.nextCursor as string]);
-            setNotice(false);
-          }}
-        >
-          {t("identity.next")}
-        </Button>
-      </nav>
-      <LogoutActions identity={identity} />
+      {(cursors.length > 0 || sessions.data.nextCursor) && (
+        <nav aria-label={t("identity.pagination")} className="flex flex-wrap items-center gap-4">
+          <Button
+            variant="outline"
+            disabled={cursors.length === 0 || revoke.isPending || sessions.isFetching}
+            onClick={() => {
+              setCursors((value) => value.slice(0, -1));
+              setNotice(false);
+            }}
+          >
+            {t("identity.previous")}
+          </Button>
+          <p className="text-sm text-muted-foreground">
+            {t("identity.page", {
+              page: new Intl.NumberFormat(i18n.language).format(cursors.length + 1),
+            })}
+          </p>
+          <Button
+            variant="outline"
+            disabled={!sessions.data.nextCursor || revoke.isPending || sessions.isFetching}
+            onClick={() => {
+              if (sessions.data.nextCursor)
+                setCursors((value) => [...value, sessions.data.nextCursor as string]);
+              setNotice(false);
+            }}
+          >
+            {t("identity.next")}
+          </Button>
+        </nav>
+      )}
     </div>
-  );
-}
-
-export function DevicesPage() {
-  const { t } = useTranslation();
-  return (
-    <>
-      <div className="space-y-3">
-        <h1 className="cv-app-heading">{t("identity.devices")}</h1>
-        <p className="max-w-xl text-muted-foreground">{t("identity.devicesDescription")}</p>
-        <Link to="/account" className="wallet-back-link inline-flex text-sm font-medium text-primary">
-          {t("identity.backAccount")}
-        </Link>
-      </div>
-      <IdentityBoundary>
-        {(identity) => <Devices key={identity.session.id} identity={identity} />}
-      </IdentityBoundary>
-    </>
   );
 }

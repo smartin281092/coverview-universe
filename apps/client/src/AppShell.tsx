@@ -1,15 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, Outlet, useLocation } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import {
-  ArrowUpRight,
-  FileText,
-  Menu,
-  MonitorSmartphone,
-  Settings2,
-  UserRound,
-  X,
-} from "lucide-react";
+import { ArrowUpRight, FileText, Menu, Settings2, UserRound, X } from "lucide-react";
 import {
   Button,
   Container,
@@ -29,7 +21,6 @@ const destinations = [
   { to: "/profile", key: "profile", icon: UserRound },
   { to: "/documents", key: "documents", icon: FileText },
   { to: "/account", key: "account", icon: Settings2 },
-  { to: "/devices", key: "devices", icon: MonitorSmartphone },
 ] as const;
 
 function isEditingControl(target: EventTarget | null) {
@@ -232,7 +223,7 @@ export function AppShell() {
           aria-label={t("navigation")}
           className="wallet-bottom-nav fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur-xl md:hidden"
         >
-          <ul className="grid grid-cols-4">
+          <ul className="grid grid-cols-3">
             {destinations.map(({ to, key, icon: Icon }) => {
               const current = isCurrent(to);
               return (

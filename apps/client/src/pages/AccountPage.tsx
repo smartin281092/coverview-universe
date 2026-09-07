@@ -1,17 +1,18 @@
-import { Link } from "@tanstack/react-router";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { Button } from "@coverview/ui";
+import { Button, Tabs, TabsList, TabsTrigger, TabsContent } from "@coverview/ui";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { AccountLayout } from "../features/identity/AccountLayout";
+import { AccountDevices } from "../features/identity/AccountDevices";
 import { LogoutActions } from "../features/identity/LogoutActions";
 import { api } from "../api";
 
 export function AccountPage() {
   const { t } = useTranslation();
-  const params = new URLSearchParams(window.location.search);
-  const websiteUrl =
-    import.meta.env.VITE_WEBSITE_URL ??
-    (import.meta.env.DEV ? "http://127.0.0.1:4103" : "https://coverview.ch");
+  const { searchStr } = useLocation();
+  const navigate = useNavigate();
+  const params = new URLSearchParams(searchStr);
+  const tab = params.get("tab") === "devices" ? "devices" : "preferences";
   const authenticatorUrl = import.meta.env.DEV
     ? "http://127.0.0.1:4102/authenticator"
     : api.loginUrl("admin");
@@ -24,35 +25,43 @@ export function AccountPage() {
       )}
       <IdentityBoundary>
         {(identity) => (
-          <>
-            <section className="max-w-2xl space-y-7" aria-label={t("identity.profile")}>
-              <h2 className="cv-app-subheading">{t("identity.connectedTitle")}</h2>
-              <dl className="space-y-2">
-                <dt className="text-sm text-muted-foreground">{t("identity.email")}</dt>
-                <dd className="break-words font-medium">{identity.user.email}</dd>
-              </dl>
-              <div className="flex flex-wrap gap-3">
-                <Button asChild>
-                  <Link to="/profile">{t("nav", { ns: "profile" })}</Link>
-                </Button>
-                <Button asChild variant="outline">
-                  <Link to="/workspace/$userId" params={{ userId: identity.user.id }}>
-                    {t("identity.openWorkspace")}
-                  </Link>
-                </Button>
-                <Button asChild variant="outline">
-                  <Link to="/devices">{t("identity.devices")}</Link>
-                </Button>
+          <Tabs
+            value={tab}
+            onValueChange={(value) => {
+              void navigate({
+                to: "/account",
+                search: value === "devices" ? { tab: "devices" } : {},
+                resetScroll: false,
+              });
+            }}
+            className="gap-6"
+          >
+            <TabsList aria-label={t("accountTabs.label")} className="min-h-12">
+              <TabsTrigger value="preferences" className="min-h-11 px-4 text-sm">
+                {t("accountTabs.preferences")}
+              </TabsTrigger>
+              <TabsTrigger value="devices" className="min-h-11 px-4 text-sm">
+                {t("accountTabs.devices")}
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="preferences" className="space-y-7 text-base">
+              <section className="max-w-2xl space-y-7" aria-label={t("identity.profile")}>
+                <dl className="space-y-2">
+                  <dt className="text-sm text-muted-foreground">{t("identity.email")}</dt>
+                  <dd className="break-words font-medium">{identity.user.email}</dd>
+                </dl>
                 <Button asChild variant="outline">
                   <a href={authenticatorUrl}>{t("identity.authenticator")}</a>
                 </Button>
-                <Button asChild variant="outline">
-                  <a href={new URL("/account", websiteUrl).href}>{t("identity.websiteAccount")}</a>
-                </Button>
-              </div>
-            </section>
-            <LogoutActions identity={identity} />
-          </>
+              </section>
+              <LogoutActions identity={identity} scope="current" />
+            </TabsContent>
+            <TabsContent value="devices" className="space-y-4 text-base">
+              <p className="max-w-xl text-muted-foreground">{t("identity.devicesDescription")}</p>
+              <AccountDevices key={identity.session.id} identity={identity} />
+              <LogoutActions identity={identity} scope="all" />
+            </TabsContent>
+          </Tabs>
         )}
       </IdentityBoundary>
     </AccountLayout>

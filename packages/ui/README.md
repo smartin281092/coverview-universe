@@ -26,6 +26,7 @@ Les composants de présentation statique ne contiennent aucun accès réseau ni 
 | `Input`, `Label` | Primitives générées ; valeurs, association accessible et validation restent à la charge du formulaire                  |
 | `Sheet` et slots | Panneau modal généré depuis le même preset ; titre et description accessibles, focus Radix, fermeture traduite fournie par le consommateur |
 | `Bento`          | Compose `Card` autour d’un `article` ; titre et texte courts, `level={2\|3}`, illustration ou valeur justifiée         |
+| `Tabs` et slots | Onglets shadcn/Radix générés avec le même preset ; sélection contrôlée, navigation clavier, contenus associés et libellés fournis par l’application |
 | `AccountLayout`  | Titres, explications et liste de repères injectés par l’app ; aucun état d’identité                                   |
 | États            | Chargement, vide, erreur avec reprise, refus, introuvable et session expirée ; libellés et actions injectés           |
 

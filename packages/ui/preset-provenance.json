@@ -4,6 +4,12 @@
   "source": "https://ui.shadcn.com/create?preset=b38oXC5rf",
   "executions": [
     {
+      "date": "2026-09-07",
+      "target": "Wallet account Tabs",
+      "command": "pnpm exec shadcn add tabs --yes (cwd .planning-local/preset-shadcn)",
+      "exitCode": 0
+    },
+    {
       "target": "shared design system source",
       "command": "pnpm dlx shadcn@latest apply --preset b38oXC5rf --yes --cwd .planning-local/preset-shadcn",
       "exitCode": 0
@@ -54,6 +60,7 @@
     "executionContext": "Two isolated initialized Vite projects inside ignored packages/ui/.preset-work. Generated artifacts copied into owned app/UI files. No preset installation touched the root manifest or lockfile."
   },
   "generatedSources": {
+    "tabs": "013cde60c69bdac4b2472303b8aa679ba04fc0d7cf7904b5f2210e9bbc208ead",
     "button": "40dcea12cc5c9a357df10b6d56dfde7907cd84d076887fa4b56ac0a39f9e55b7",
     "skeleton": "4c2af7fa9c645358a0fb188779deab6f0b981733b62befc25e18aaebea1350dc",
     "card": "5e7040289fff160d6ef96afcb52a7ef9d4bd01e44a144adf80b0c1957fb5fa47",

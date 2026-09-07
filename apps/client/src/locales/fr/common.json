@@ -1,5 +1,10 @@
 {
   "brand": "CoverView",
+  "accountTabs": {
+    "label": "Rubriques du compte",
+    "preferences": "Préférences",
+    "devices": "Appareils"
+  },
   "identity": {
     "logoutCheckingTitle": "Votre déconnexion",
     "logoutUncertain": "Le résultat de la déconnexion n’a pas pu être confirmé. Réessayez pour la terminer.",
@@ -32,12 +37,9 @@
     "logoutAll": "Se déconnecter de tous les appareils",
     "backAccount": "Revenir à mon compte",
     "profile": "Profil du compte",
-    "connectedTitle": "Vous êtes connecté",
     "email": "Adresse email",
-    "openWorkspace": "Ouvrir mon espace privé",
     "devices": "Appareils connectés",
     "authenticator": "Configurer Authenticator",
-    "websiteAccount": "Mon compte sur le site",
     "workspaceTitle": "Mon espace privé",
     "workspaceLoading": "Chargement de votre espace privé",
     "workspaceOwner": "Espace de {{email}}",
@@ -78,7 +80,6 @@
   "mobileNav": {
     "profile": "Profil",
     "account": "Compte",
-    "devices": "Appareils",
     "openMenu": "Ouvrir le menu",
     "closeMenu": "Fermer le menu",
     "menuTitle": "Explorer CoverView",

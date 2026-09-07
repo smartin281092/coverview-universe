@@ -4,7 +4,13 @@ import { Button } from "@coverview/ui";
 import type { IdentityMe } from "@coverview/api-client";
 import { logoutCommandKey, type LogoutCommand } from "./LogoutFeedback";
 
-export function LogoutActions({ identity }: { identity: IdentityMe }) {
+export function LogoutActions({
+  identity,
+  scope,
+}: {
+  identity: IdentityMe;
+  scope: "current" | "all";
+}) {
   const { t } = useTranslation();
   const client = useQueryClient();
   const start = (scope: "current" | "all") => {
@@ -21,18 +27,10 @@ export function LogoutActions({ identity }: { identity: IdentityMe }) {
       <Button
         variant="outline"
         onClick={() => {
-          start("current");
+          start(scope);
         }}
       >
-        {t("identity.logoutCurrent")}
-      </Button>
-      <Button
-        variant="outline"
-        onClick={() => {
-          start("all");
-        }}
-      >
-        {t("identity.logoutAll")}
+        {t(scope === "current" ? "identity.logoutCurrent" : "identity.logoutAll")}
       </Button>
     </section>
   );

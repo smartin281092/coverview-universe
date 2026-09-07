@@ -1,4 +1,4 @@
-import { createRootRoute, createRoute, createRouter } from "@tanstack/react-router";
+import { createRootRoute, createRoute, createRouter, redirect } from "@tanstack/react-router";
 import { AppShell } from "./AppShell";
 import { HomePage } from "./pages/HomePage";
 import { DiagnosticsPage } from "./pages/DiagnosticsPage";
@@ -6,7 +6,6 @@ import { PreviewPage } from "./pages/PreviewPage";
 import { MissingPage, StatesPage } from "./pages/StatesPage";
 import { AccountPage } from "./pages/AccountPage";
 import { WorkspacePage } from "./pages/WorkspacePage";
-import { DevicesPage } from "./pages/DevicesPage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { DocumentsPage } from "./pages/DocumentsPage";
 import { DocumentDetailsPage } from "./pages/DocumentDetailsPage";
@@ -26,6 +25,12 @@ const homeRoute = createRoute({ getParentRoute: () => rootRoute, path: "/", comp
 const accountRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/account",
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): { tab?: "devices"; authError?: "callback" } => ({
+    ...(search.tab === "devices" ? { tab: "devices" as const } : {}),
+    ...(search.authError === "callback" ? { authError: "callback" as const } : {}),
+  }),
   component: AccountPage,
 });
 const workspaceRoute = createRoute({
@@ -36,7 +41,9 @@ const workspaceRoute = createRoute({
 const devicesRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/devices",
-  component: DevicesPage,
+  beforeLoad: () => {
+    return redirect({ to: "/account", search: { tab: "devices" }, replace: true });
+  },
 });
 const profileRoute = createRoute({
   getParentRoute: () => rootRoute,
