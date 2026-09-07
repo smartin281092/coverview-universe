@@ -151,7 +151,7 @@ export function DevicesPage() {
       <div className="space-y-3">
         <h1 className="cv-app-heading">{t("identity.devices")}</h1>
         <p className="max-w-xl text-muted-foreground">{t("identity.devicesDescription")}</p>
-        <Link to="/account" className="inline-flex text-sm font-medium text-primary">
+        <Link to="/account" className="wallet-back-link inline-flex text-sm font-medium text-primary">
           {t("identity.backAccount")}
         </Link>
       </div>

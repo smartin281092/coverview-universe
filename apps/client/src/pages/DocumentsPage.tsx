@@ -49,7 +49,7 @@ function Documents({ identity }: { identity: IdentityMe }) {
   const format = new Intl.DateTimeFormat(i18n.language, { dateStyle: "medium" });
   return (
     <div className="space-y-8">
-      <div ref={setPortalContainer} />
+      <div ref={setPortalContainer} className="contents" />
       <div className="flex flex-wrap items-start justify-between gap-5">
         <div className="space-y-3">
           <h1 className="cv-app-heading">{t("title")}</h1>

@@ -18,8 +18,14 @@
 .wallet-header {
   padding-top: env(safe-area-inset-top, 0px);
 }
-.wallet-shell .app-content:has(.document-details) {
+.wallet-shell .app-content {
   padding-top: var(--spacing-24);
+}
+.wallet-shell .wallet-back-link {
+  margin-block-end: var(--spacing-16);
+}
+.wallet-shell :is(.wallet-page-eyebrow, .cv-heading__eyebrow) {
+  margin-block-end: var(--spacing-4);
 }
 .wallet-mobile-menu[data-side="right"] {
   width: 100%;
@@ -41,9 +47,6 @@
 @media (max-width: 47.999rem) {
   .wallet-mobile-menu[data-side="right"] {
     max-width: none;
-  }
-  .wallet-shell .app-content {
-    padding-top: var(--spacing-24);
   }
   .wallet-shell [data-slot="button"] {
     min-height: calc(var(--spacing) * 11);

@@ -44,7 +44,7 @@ function ProfileChoices({ identity, onBack }: { identity: IdentityMe; onBack: ()
   }, [query.error, client]);
   return (
     <section className="max-w-2xl space-y-6">
-      <Button variant="ghost" onClick={onBack}>
+      <Button variant="ghost" className="wallet-back-link" onClick={onBack}>
         {t("history.back")}
       </Button>
       {query.isPending ? (
@@ -227,7 +227,7 @@ function ProfileEditor({
   return (
     <>
       <div className="space-y-3">
-        <p className="cv-meta text-muted-foreground">
+        <p className="wallet-page-eyebrow cv-meta text-muted-foreground">
           {t(ownerId ? "eyebrow.owner" : "eyebrow.draft")}
         </p>
         <h1 ref={heading} tabIndex={-1} className="cv-app-heading outline-none">

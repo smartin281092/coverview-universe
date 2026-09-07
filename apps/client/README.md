@@ -52,4 +52,6 @@ Sources officielles consultées : [TanStack Router](https://tanstack.com/router/
 
 La fiche place les informations extraites juste sous le titre. `DocumentProgress` montre une activité indéterminée pendant transfert et traitement, avec l’étape serveur réelle et réduction des animations ; aucun pourcentage n’est mesuré par le contrat actuel. [Demande utilisateur, actions et vérifications](../../roadmap/evidence/document-reading-ux.md).
 
+Les espacements de page Wallet sont communs dans `src/styles.css` : 24 px sous le menu, 16 px sous les retours (`wallet-back-link`) et 4 px sous les sur-titres (`wallet-page-eyebrow` et le composant `SectionHeading`). Les conteneurs de portail documentaire utilisent `display: contents` pour ne pas ajouter d’espace dans la page.
+
 `DocumentLoadingMessage` accompagne les traitements longs avec des textes adaptés à chaque étape. Cadence, gestion des interruptions et vérifications dans le [ledger des messages d’attente](../../roadmap/evidence/document-loading-messages.md).

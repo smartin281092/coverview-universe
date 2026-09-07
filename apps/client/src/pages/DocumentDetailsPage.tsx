@@ -139,17 +139,19 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
     ? t(`field.${field.field}`)
     : t(`panel.${typeof panel === "string" ? panel : "source"}`);
   return (
-    <div className="document-details space-y-8">
+    <div className="space-y-8">
       <div ref={setPortalContainer} className="contents" />
       <Link
         to="/documents"
-        className="mb-4! inline-flex min-h-11 items-center gap-2 text-sm font-medium text-indigo-600"
+        className="wallet-back-link inline-flex min-h-11 items-center gap-2 text-sm font-medium text-indigo-600"
       >
         <ArrowLeft className="size-4" aria-hidden="true" />
         {t("back")}
       </Link>
       <header className="space-y-1">
-        <p className="cv-meta text-muted-foreground">{t(`category.${item.category}`)}</p>
+        <p className="wallet-page-eyebrow cv-meta text-muted-foreground">
+          {t(`category.${item.category}`)}
+        </p>
         <h1 className="break-words text-2xl font-medium tracking-tight sm:text-4xl">{item.name}</h1>
       </header>
       {item.analysis && (
