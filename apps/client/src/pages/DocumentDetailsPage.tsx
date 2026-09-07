@@ -179,9 +179,11 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
                         {item.reviewedValues.find((value) => value.field === extraction.field)
                           ?.value ?? extraction.value}
                       </p>
-                      <p className="text-xs text-muted-foreground">
-                        {decision ? t(`decision.${decision.choice}`) : t("awaitingReview")}
-                      </p>
+                      {decision && (
+                        <p className="text-xs text-muted-foreground">
+                          {t(`decision.${decision.choice}`)}
+                        </p>
+                      )}
                     </div>
                     <Button
                       variant="outline"
