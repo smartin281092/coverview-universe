@@ -29,6 +29,28 @@ export function startDocumentJobs(
   storage: FileStorage,
   logger: FastifyBaseLogger,
 ) {
+  let closed = false;
+  const outages = new Map<string, { since: number; reportedAt: number }>();
+  function reportUnavailable(dependency: string, error: unknown) {
+    if (closed) return;
+    const now = Date.now();
+    const outage = outages.get(dependency);
+    if (outage && now - outage.reportedAt < 60000) return;
+    outages.set(dependency, { since: outage?.since ?? now, reportedAt: now });
+    logger.warn(
+      { dependency, code: dependencyErrorCode(error), unavailableMs: now - (outage?.since ?? now) },
+      "Document dependency unavailable; reconnecting automatically",
+    );
+  }
+  function reportRecovered(dependency: string) {
+    const outage = outages.get(dependency);
+    if (!outage || closed) return;
+    outages.delete(dependency);
+    logger.info(
+      { dependency, unavailableMs: Date.now() - outage.since },
+      "Document dependency restored",
+    );
+  }
   // BullMQ's plain connection options load its optional ioredis peer. Reuse our installed driver explicitly.
   function redisClient(socketTimeout: number) {
     return createClient({
@@ -41,6 +63,8 @@ export function startDocumentJobs(
       disableOfflineQueue: true,
       commandsQueueMaxLength: 100,
       commandOptions: { timeout: socketTimeout },
+      // socketTimeout measures inactivity, including an idle healthy queue. Keep it alive without removing its stall bound.
+      pingInterval: 5000,
     });
   }
   const producerRedis = redisClient(10000);
@@ -157,30 +181,30 @@ export function startDocumentJobs(
       lockDuration: 180000,
     },
   );
-  worker.on("error", () =>
-    logger.warn({ dependency: "document_worker" }, "Document worker unavailable"),
-  );
+  worker.on("error", (error) => reportUnavailable("document_worker", error));
+  worker.on("ready", () => reportRecovered("document_worker"));
+  workerRedis.on("ready", () => reportRecovered("document_worker"));
   worker.on("failed", (job, error) =>
     logger.warn(
       { jobId: job?.id, code: error.message.slice(0, 100) },
       "Document job awaits retry or owner action",
     ),
   );
-  queue.on("error", () =>
-    logger.warn({ dependency: "document_queue" }, "Document queue unavailable"),
-  );
-  let closed = false;
+  queue.on("error", (error) => reportUnavailable("document_queue", error));
+  producerRedis.on("ready", () => reportRecovered("document_queue"));
   // Do not enter BullMQ's processing loop after an initialization/configuration failure.
   void worker
     .waitUntilReady()
     .then(async () => {
       if (!closed) await worker.run();
     })
-    .catch(() => logger.warn({ dependency: "document_worker" }, "Document worker stopped"));
+    .catch((error: unknown) => reportUnavailable("document_worker", error));
   let relayRunning: Promise<void> | undefined;
   let maintenanceAt = 0;
+  let relayFailures = 0;
+  let relayNextAt = 0;
   async function relay() {
-    if (closed || relayRunning) return;
+    if (closed || relayRunning || Date.now() < relayNextAt) return;
     relayRunning = (async () => {
       try {
         if (Date.now() - maintenanceAt >= 60000) {
@@ -207,8 +231,13 @@ export function startDocumentJobs(
           });
           await repository.published(row.id);
         }
-      } catch {
-        logger.warn({ dependency: "document_outbox" }, "Document dispatch will retry");
+        relayFailures = 0;
+        relayNextAt = 0;
+        reportRecovered("document_outbox");
+      } catch (error) {
+        relayFailures = Math.min(relayFailures + 1, 5);
+        relayNextAt = Date.now() + Math.min(3000 * 2 ** relayFailures, 60000);
+        reportUnavailable("document_outbox", error);
       }
     })();
     try {
@@ -232,4 +261,28 @@ export function startDocumentJobs(
     workerConnection.disconnect();
     await closing;
   };
+}
+
+function dependencyErrorCode(error: unknown, depth = 0): string {
+  if (depth > 2 || typeof error !== "object" || !error) return "DEPENDENCY_UNAVAILABLE";
+  if (
+    "code" in error &&
+    typeof error.code === "string" &&
+    [
+      "ECONNREFUSED",
+      "ECONNRESET",
+      "ETIMEDOUT",
+      "EPIPE",
+      "ENOTFOUND",
+      "EHOSTUNREACH",
+      "57P01",
+      "28P01",
+      "53300",
+    ].includes(error.code)
+  )
+    return error.code;
+  if (error instanceof Error && error.name === "SocketTimeoutError") return "REDIS_SOCKET_TIMEOUT";
+  if ("cause" in error) return dependencyErrorCode(error.cause, depth + 1);
+  if (error instanceof AggregateError) return dependencyErrorCode(error.errors[0], depth + 1);
+  return "DEPENDENCY_UNAVAILABLE";
 }
