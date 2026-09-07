@@ -647,6 +647,12 @@
           "oracle": "V1/V2 et services réels partiels",
           "observed": "ClamAV sain, clé DPAPI stable, original palette chiffré/relu identique, second PUT idempotent, GET anonyme 403. SQL documentaire non exécuté après garde session active ; OpenAI non configuré ; recette navigateur indisponible.",
           "decision": "Conserver S-042a running ; préparer activation puis reprendre les preuves réelles après clé/session."
+        },
+        {
+          "target": "Démarrage API avec BullMQ et intégration locale",
+          "oracle": "V0/V1 et disponibilité HTTP réelle",
+          "observed": "Échec après 606eb6c diagnostiqué : peer ioredis absent et boucle initiale. Adapter Redis explicite et arrêt corrigés dans af24238 ; diagnostic passe avec/sans Redis. FF des trois checkouts propres, API prête200, identité activée200, documents anonymes401 et Wallet Documents200.",
+          "decision": "Superviseur WorkOS préservé ; conserver running. Clé OpenAI, session propriétaire et recette réelle restent nécessaires."
         }
       ],
       "ledger": {

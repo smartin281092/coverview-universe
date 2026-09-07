@@ -62,7 +62,7 @@ export function createOpenAiProvider(config: {
       const data = `data:${input.mime};base64,${input.bytes.toString("base64")}`;
       const file =
         input.mime === "application/pdf"
-          ? { type: "input_file", filename: "document.pdf", file_data: data }
+          ? { type: "input_file", filename: "document.pdf", file_data: data, detail: "high" }
           : { type: "input_image", image_url: data, detail: "high" };
       let response: Response;
       try {
