@@ -6,4 +6,6 @@ L’utilisateur confirme une analyse réelle réussie après ajout de crédits. 
 
 **Actions conservées** : « Corriger le type » modifie uniquement la catégorie documentaire. « Vérifier » ouvre source/proposition/valeur courante, puis permet conserver, utiliser ou corriger ; aucune écriture au simple clic. La confirmation finale applique un champ au profil si compatible, sinon conserve sa valeur sur le document. Aucun changement métier, API, migration, dépendance ou nouvelle extraction.
 
-**Vérifié V0/V1** : lint ciblé, typage et build Wallet passent. Recherche des fournisseurs dans les sources des interfaces : aucune occurrence OpenAI restante. Pas de test de surface ajouté. Vérification navigateur après intégration à consigner ; la barre en activité nécessite un nouveau traitement réel et n’est pas validée par le seul build.
+**Vérifié V0/V1** : lint ciblé, typage et build Wallet passent. Recherche des fournisseurs dans les sources des interfaces : aucune occurrence OpenAI restante. Pas de test de surface ajouté.
+
+**Vérifié navigateur** : après intégration, capture de la fiche réelle authentifiée : titre puis informations extraites et boutons Vérifier, sans fournisseur visible. API prête200, identité activée et route Wallet accessible. Aucun champ confirmé ou modifié pendant cette revue. La barre en activité nécessite un nouveau traitement réel ; aucune nouvelle analyse payante lancée uniquement pour la vérifier.
