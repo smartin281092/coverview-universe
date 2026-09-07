@@ -21,6 +21,7 @@ import { DocumentFailure } from "../features/documents/DocumentFailure";
 import { DocumentUpload } from "../features/documents/DocumentUpload";
 import { DocumentReview } from "../features/documents/DocumentReview";
 import { DocumentProcessingIndicator } from "../features/documents/DocumentProcessingIndicator";
+import { DocumentProgress } from "../features/documents/DocumentProgress";
 
 type Panel =
   "category" | "delete" | "history" | "source" | "resume" | "analysis" | { fieldId: string } | null;
@@ -149,110 +150,7 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
       <header className="space-y-4">
         <p className="cv-meta text-muted-foreground">{t(`category.${item.category}`)}</p>
         <h1 className="break-words text-2xl font-medium tracking-tight sm:text-4xl">{item.name}</h1>
-        <p className="text-sm text-muted-foreground">
-          {t("fileMeta", {
-            size: new Intl.NumberFormat(i18n.language, { maximumFractionDigits: 1 }).format(
-              item.size / 1024,
-            ),
-            date: date.format(new Date(item.createdAt)),
-          })}
-        </p>
       </header>
-      <section
-        className="flex flex-wrap items-start justify-between gap-5 border-y border-border py-6"
-        aria-label={t("processing")}
-      >
-        <div className="flex min-w-0 gap-3">
-          {["queued", "scanning", "reading"].includes(item.state) ? (
-            <DocumentProcessingIndicator />
-          ) : (
-            <ShieldCheck className="mt-1 size-5 shrink-0" aria-hidden="true" />
-          )}
-          <div className="space-y-2">
-            <p className="font-medium" role="status">
-              {t(`state.${item.state}`)}
-            </p>
-            <p className="max-w-xl text-sm text-muted-foreground">
-              {item.failure
-                ? t(`failure.${item.failure}`, {
-                    defaultValue: t("failure.processing_unavailable"),
-                  })
-                : t(item.state === "pending" ? "pendingHelp" : "originalSafe")}
-            </p>
-          </div>
-        </div>
-        {item.state === "pending" && (
-          <Button onClick={() => setPanel("resume")}>{t("resumeUpload")}</Button>
-        )}
-        {item.canRetry && (
-          <Button
-            variant="outline"
-            disabled={busy}
-            onClick={() =>
-              mutation.mutate({
-                action: "retry",
-                revision: item.revision,
-                analysisRequested: item.analysisRequested,
-              })
-            }
-          >
-            <RotateCw className="size-4" aria-hidden="true" />
-            {t(item.analysisRequested ? "retryAnalysis" : "retryScan")}
-          </Button>
-        )}
-        {stable && (item.state === "ready" || !item.analysisRequested) && (
-          <Button variant="outline" disabled={busy} onClick={() => setPanel("analysis")}>
-            {t(item.analysisRequested ? "reanalyze" : "startAnalysis")}
-          </Button>
-        )}
-      </section>
-      {notice && (
-        <p role="status" className="text-sm">
-          {t("saved")}
-        </p>
-      )}
-      {mutation.isError && (
-        <DocumentFailure
-          error={mutation.error}
-          onRetry={() => {
-            if (mutation.variables) mutation.mutate(mutation.variables);
-          }}
-        />
-      )}
-      {download.isError && (
-        <DocumentFailure error={download.error} onRetry={() => download.mutate()} />
-      )}
-      <div className="flex flex-wrap gap-3">
-        <Button
-          variant="outline"
-          disabled={!item.canDownload || download.isPending}
-          onClick={() => download.mutate()}
-        >
-          <Download className="size-4" aria-hidden="true" />
-          {t("download")}
-        </Button>
-        {stable && (
-          <Button
-            variant="ghost"
-            onClick={() => {
-              setCategory(item.category);
-              setPanel("category");
-            }}
-          >
-            {t("correctCategory")}
-          </Button>
-        )}
-        {!!item.analysis?.pages.length && (
-          <Button variant="ghost" onClick={() => setPanel("source")}>
-            {t("readSource")}
-          </Button>
-        )}
-        {item.decisions.length > 0 && (
-          <Button variant="ghost" onClick={() => setPanel("history")}>
-            {t("history")}
-          </Button>
-        )}
-      </div>
       {item.analysis && (
         <section className="space-y-4">
           <div className="space-y-2">
@@ -307,6 +205,114 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
           </Link>
         </section>
       )}
+      <section
+        className="flex flex-wrap items-start justify-between gap-5 border-y border-border py-6"
+        aria-label={t("processing")}
+      >
+        <div className="flex min-w-0 gap-3">
+          {["queued", "scanning", "reading"].includes(item.state) ? (
+            <DocumentProcessingIndicator />
+          ) : (
+            <ShieldCheck className="mt-1 size-5 shrink-0" aria-hidden="true" />
+          )}
+          <div className="space-y-2">
+            <p className="font-medium" role="status">
+              {t(`state.${item.state}`)}
+            </p>
+            <p className="max-w-xl text-sm text-muted-foreground">
+              {item.failure
+                ? t(`failure.${item.failure}`, {
+                    defaultValue: t("failure.processing_unavailable"),
+                  })
+                : t(item.state === "pending" ? "pendingHelp" : "originalSafe")}
+            </p>
+          </div>
+        </div>
+        {item.state === "pending" && (
+          <Button onClick={() => setPanel("resume")}>{t("resumeUpload")}</Button>
+        )}
+        {item.canRetry && (
+          <Button
+            variant="outline"
+            disabled={busy}
+            onClick={() =>
+              mutation.mutate({
+                action: "retry",
+                revision: item.revision,
+                analysisRequested: item.analysisRequested,
+              })
+            }
+          >
+            <RotateCw className="size-4" aria-hidden="true" />
+            {t(item.analysisRequested ? "retryAnalysis" : "retryScan")}
+          </Button>
+        )}
+        {stable && (item.state === "ready" || !item.analysisRequested) && (
+          <Button variant="outline" disabled={busy} onClick={() => setPanel("analysis")}>
+            {t(item.analysisRequested ? "reanalyze" : "startAnalysis")}
+          </Button>
+        )}
+        {["queued", "scanning", "reading"].includes(item.state) && (
+          <div className="basis-full">
+            <DocumentProgress label={t(`state.${item.state}`)} />
+          </div>
+        )}
+      </section>
+      {notice && (
+        <p role="status" className="text-sm">
+          {t("saved")}
+        </p>
+      )}
+      {mutation.isError && (
+        <DocumentFailure
+          error={mutation.error}
+          onRetry={() => {
+            if (mutation.variables) mutation.mutate(mutation.variables);
+          }}
+        />
+      )}
+      {download.isError && (
+        <DocumentFailure error={download.error} onRetry={() => download.mutate()} />
+      )}
+      <p className="text-sm text-muted-foreground">
+        {t("fileMeta", {
+          size: new Intl.NumberFormat(i18n.language, { maximumFractionDigits: 1 }).format(
+            item.size / 1024,
+          ),
+          date: date.format(new Date(item.createdAt)),
+        })}
+      </p>
+      <div className="flex flex-wrap gap-3">
+        <Button
+          variant="outline"
+          disabled={!item.canDownload || download.isPending}
+          onClick={() => download.mutate()}
+        >
+          <Download className="size-4" aria-hidden="true" />
+          {t("download")}
+        </Button>
+        {stable && (
+          <Button
+            variant="ghost"
+            onClick={() => {
+              setCategory(item.category);
+              setPanel("category");
+            }}
+          >
+            {t("correctCategory")}
+          </Button>
+        )}
+        {!!item.analysis?.pages.length && (
+          <Button variant="ghost" onClick={() => setPanel("source")}>
+            {t("readSource")}
+          </Button>
+        )}
+        {item.decisions.length > 0 && (
+          <Button variant="ghost" onClick={() => setPanel("history")}>
+            {t("history")}
+          </Button>
+        )}
+      </div>
       <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6">
         <p className="max-w-xl text-xs text-muted-foreground">{t("retention")}</p>
         <Button variant="ghost" disabled={busy} onClick={() => setPanel("delete")}>

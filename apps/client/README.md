@@ -49,3 +49,5 @@ Sources officielles consultées : [TanStack Router](https://tanstack.com/router/
 ## Documents S-042a
 
 `/documents` et `/documents/$documentId` portent le dépôt, les originaux, la lecture facultative OpenAI et la confirmation par champ. Le serveur reste propriétaire des règles ; [README documentaire](../api/src/modules/document-intelligence/README.md) et [preuves](../../roadmap/evidence/S-042a.md). Les panneaux privés sont rendus sous IdentityBoundary pour rester masqués pendant la revalidation sans perdre le fichier sélectionné. Les mutations documentaires sont isolées par identité/session, libérées au démontage et purgées à la perte d’identité. Le parcours réel reste à valider selon le ledger.
+
+La fiche place les informations extraites juste sous le titre. `DocumentProgress` montre une activité indéterminée pendant transfert et traitement, avec l’étape serveur réelle et réduction des animations ; aucun pourcentage n’est mesuré par le contrat actuel. [Demande utilisateur, actions et vérifications](../../roadmap/evidence/document-reading-ux.md).

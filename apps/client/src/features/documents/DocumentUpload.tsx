@@ -7,6 +7,7 @@ import type { IdentityMe } from "@coverview/api-client";
 import type { DocumentRecord } from "@coverview/contracts";
 import { api } from "../../api";
 import { DocumentFailure } from "./DocumentFailure";
+import { DocumentProgress } from "./DocumentProgress";
 
 export function DocumentUpload({
   identity,
@@ -119,6 +120,7 @@ export function DocumentUpload({
       >
         {mutation.isPending ? t(step) : t(pending ? "resumeUpload" : "saveDocument")}
       </Button>
+      {mutation.isPending && <DocumentProgress label={t(step)} />}
       <p className="text-xs leading-relaxed text-muted-foreground">{t("retention")}</p>
     </form>
   );
