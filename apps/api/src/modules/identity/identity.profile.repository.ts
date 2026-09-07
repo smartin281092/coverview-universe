@@ -83,6 +83,7 @@ export function toProfile(row: ProfileRow): Profile {
     revision: row.revision,
     step: row.step,
     fields: row.fields,
+    insuranceCompanies: row.insuranceCompanies,
     prefill: {
       enabled: row.prefill,
       version: "1",
@@ -407,7 +408,14 @@ export function createProfileRepository(db: Database) {
         const revision = nextRevision(profile.revision);
         const [updated] = await tx
           .update(identityProfiles)
-          .set({ fields: values, step: input.step, revision })
+          .set({
+            fields: values,
+            step: input.step,
+            revision,
+            ...(input.insuranceCompanies !== undefined
+              ? { insuranceCompanies: input.insuranceCompanies }
+              : {}),
+          })
           .where(
             and(
               eq(identityProfiles.id, profile.id),

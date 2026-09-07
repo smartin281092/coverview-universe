@@ -32,6 +32,7 @@ import {
   documentChangeRequestsSchema,
   documentChangeRequestSchema,
   documentProfileDifferencesSchema,
+  documentCompaniesSchema,
   type ApiErrorCode,
 } from "@coverview/contracts";
 import type { z } from "zod";
@@ -128,6 +129,8 @@ export function createApiClient({
   }
 
   return {
+    documentCompanies: (options?: RequestOptions) =>
+      request("/documents/companies", documentCompaniesSchema, options, undefined, true),
     documentProfileDifferences: (options?: RequestOptions) =>
       request(
         "/documents/profile-differences",

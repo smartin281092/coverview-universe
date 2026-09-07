@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { insuranceCompanyIdsSchema } from "./companies.js";
 
 export const profileStepSchema = z.enum(["information", "address", "review"]);
 export const profileFieldSchema = z.enum([
@@ -10,8 +11,18 @@ export const profileFieldSchema = z.enum([
   "postalCode",
   "city",
   "country",
+  "phone",
+  "contactEmail",
 ]);
 const shortText = z.string().trim().min(1).max(160);
+const phone = z
+  .string()
+  .trim()
+  .min(6)
+  .max(40)
+  .regex(/^\+?[\d\s()./-]+$/)
+  .refine((value) => (value.match(/\d/g)?.length ?? 0) >= 6);
+const contactEmail = z.email().max(240);
 export const profileValuesSchema = z
   .object({
     firstName: shortText.optional(),
@@ -22,6 +33,8 @@ export const profileValuesSchema = z
     postalCode: z.string().trim().min(1).max(24).optional(),
     city: shortText.optional(),
     country: shortText.optional(),
+    phone: phone.optional(),
+    contactEmail: contactEmail.optional(),
   })
   .strict();
 export const profileFieldValueSchema = z.object({
@@ -40,6 +53,7 @@ export const profileSchema = z.object({
   revision: z.number().int().nonnegative(),
   step: profileStepSchema,
   fields: z.partialRecord(profileFieldSchema, profileFieldValueSchema),
+  insuranceCompanies: insuranceCompanyIdsSchema.nullable().optional(),
   prefill: z.object({
     enabled: z.boolean(),
     version: z.literal("1"),
@@ -50,6 +64,7 @@ export const profileSaveInputSchema = z
   .object({
     revision: z.number().int().nonnegative(),
     step: profileStepSchema,
+    insuranceCompanies: insuranceCompanyIdsSchema.optional(),
     // Only supplied fields change. Null is an explicit owner correction/removal.
     fields: z
       .object({
@@ -61,6 +76,8 @@ export const profileSaveInputSchema = z
         postalCode: z.string().trim().min(1).max(24).nullable().optional(),
         city: shortText.nullable().optional(),
         country: shortText.nullable().optional(),
+        phone: phone.nullable().optional(),
+        contactEmail: contactEmail.nullable().optional(),
       })
       .strict(),
   })

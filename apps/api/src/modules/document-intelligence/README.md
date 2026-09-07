@@ -68,6 +68,8 @@ Choisir OpenAI ne prouve pas une clé disponible, un DPA, une résidence ou une 
 
 ## Dépendances et sources
 
+`GET /documents/companies` authentifié propose des identifiants de compagnies à partir des noms et des premiers en-têtes disponibles des documents du propriétaire (200 originaux, 12 000 caractères par en-tête) et des compagnies déjà renseignées dans ses demandes (200 noms distincts). Aucun original supprimé, document d’autrui, appel IA ou fournisseur externe n’est lu. Reconnaissance par alias entiers ; ces références ne prouvent ni contrat ni autorisation et ne modifient jamais le profil. La sélection explicite est portée par identity et ne déclenche aucun job ni envoi.
+
 `@aws-sdk/client-s3` (Apache-2.0) fournit le protocole S3 ; `bullmq` (MIT), la queue imposée ; `file-type` (MIT), la détection bornée de signature. Versions résolues et intégrité dans le lockfile. `msgpackr-extract` optionnel n’exécute pas de build natif ; repli JavaScript. ClamAV (GPLv2) reste un service séparé, image fixée par digest ; aucun moteur installé dans le runtime agent n’est requis.
 
 Sources officielles consultées : [Responses et fichiers](https://developers.openai.com/api/docs/guides/file-inputs), [sorties structurées](https://developers.openai.com/api/docs/guides/structured-outputs), [données fournisseur](https://developers.openai.com/api/docs/guides/your-data), [modèle et tarifs](https://developers.openai.com/api/docs/models/gpt-5.4-mini), [ClamAV Docker](https://docs.clamav.net/manual/Installing/Docker.html), [compatibilité ACL MinIO](https://github.com/minio/minio/blob/master/cmd/acl-handlers.go).

@@ -2,7 +2,7 @@
   "intro": "Retrouvez ici les procurations et mandats enregistrés dans CoverView. Déposer un document ne donne pas, à lui seul, une autorisation d’agir en votre nom.",
   "procuration": {
     "title": "Procuration",
-    "description": "Procuration de renseignements limitée, sans transfert de gestion. Valable six mois dès la signature, auprès de la compagnie désignée."
+    "description": "Procuration de renseignements limitée, sans transfert de gestion. Valable six mois dès la signature, auprès des compagnies désignées."
   },
   "mandate": {
     "title": "Mandat de gestion",
@@ -10,7 +10,7 @@
   },
   "notRecorded": "Aucune autorisation enregistrée",
   "view": "Consulter",
-  "back": "Mes autorisations",
+  "back": "Autorisations",
   "unavailableTitle": "Le document à signer n’est pas encore disponible",
   "unavailableDescription": "La signature électronique n’est pas encore disponible. Aucune autorisation n’est accordée à ce stade.",
   "signUnavailable": "Signature indisponible",
@@ -28,12 +28,10 @@
   "birthDate": "Date de naissance",
   "address": "Adresse",
   "locality": "NPA / Localité / Pays",
-  "email": "E-mail",
+  "email": "E-mail de contact",
   "phone": "Téléphone",
-  "insurer": "Compagnie destinataire",
-  "missing": "À compléter dans votre profil",
-  "prefillHelp": "Ces informations sont reprises de votre profil. Vérifiez-les avant de signer. Cet aperçu et les champs complémentaires ne sont pas encore enregistrés comme document signé.",
-  "editProfile": "Modifier mes informations",
+  "missing": "À compléter",
+  "prefillHelp": "Cliquez sur une information pour la compléter ou la modifier. Vos corrections sont aussi enregistrées dans votre profil.",
   "signature": "Signatures",
   "place": "Lieu",
   "date": "Date",
@@ -47,5 +45,41 @@
   "legalContact": "CoverView, marque de Bassa Martin Partners Sàrl · ℅ Arnaud Parreaux, Avocat · Boulevard James-Fazy 3, 1201 Genève · contact@bmpartners.ch · www.bmpartners.ch",
   "signatureActions": "Actions de signature",
   "accept": "J’ai lu les documents et j’accepte leur contenu",
-  "sign": "Accepter et signer"
+  "sign": "Accepter et signer",
+  "complete": "Renseigné",
+  "editField": "Modifier : {{field}}",
+  "editHelp": "Vos modifications seront enregistrées dans votre profil et reprises dans ce document.",
+  "cancel": "Annuler",
+  "saving": "Enregistrement…",
+  "saved": "Vos modifications sont enregistrées.",
+  "companies": {
+    "title": "Choisir vos compagnies",
+    "help": "Sélectionnez les compagnies auprès desquelles vous souhaitez demander vos documents.",
+    "search": "Rechercher une compagnie",
+    "referenced": "Repérée dans vos documents",
+    "suggestedHelp": "Ces compagnies ont été repérées dans vos documents. Vous pouvez ajuster cette liste.",
+    "referencesUnavailable": "Les compagnies de vos documents n’ont pas pu être recherchées. Vous pouvez les choisir dans la liste.",
+    "loading": "Recherche de vos compagnies…",
+    "recipients": "Compagnies destinataires",
+    "add": "Ajouter des compagnies",
+    "edit": "Modifier les compagnies",
+    "confirm": "Confirmer la sélection",
+    "emptySearch": "Aucune compagnie ne correspond à cette recherche.",
+    "selected_zero": "Aucune compagnie sélectionnée",
+    "selected_one": "{{count}} compagnie sélectionnée",
+    "selected_other": "{{count}} compagnies sélectionnées",
+    "names": {
+      "allianz": "Allianz",
+      "assura": "Assura",
+      "automate": "Automate",
+      "axa": "AXA",
+      "baloise": "Baloise",
+      "css": "CSS",
+      "generali": "Generali",
+      "groupe-mutuel": "Groupe Mutuel",
+      "helsana": "Helsana",
+      "liechtenstein-life": "Liechtenstein Life",
+      "tsm": "TSM Assurance"
+    }
+  }
 }

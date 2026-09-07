@@ -17,6 +17,8 @@ Extension explicitement demandée : l'extraction complète automatiquement les c
 
 ## Oracles
 
+Extension autorisée le 7 septembre : onglet « Autorisations », sélection multiple de compagnies en dialogue shadcn (logos locaux issus des sites officiels), liste enregistrée avec le profil et reproduite dans la procuration. Les compagnies repérées dans les documents privés sont proposées si aucune sélection n'a été enregistrée ; une liste explicitement vidée reste vide. La sélection ne confère aucun droit. Les coordonnées sont éditables depuis le document, avec les commandes profil existantes (session, CSRF, révision, idempotence). Téléphone et e-mail de contact deviennent des champs facultatifs du profil ; l'e-mail de connexion reste inchangé. Triangle rouge pour les données manquantes, cercle vert pour les données renseignées. Adaptation explicite du destinataire de la procuration aux compagnies sélectionnées, sans élargissement de ses pouvoirs. Migration additive des compagnies du profil ; tests PostgreSQL de persistance/reprise/concurrence/isolation et recette du dialogue sur mobile et ordinateur.
+
 Lint/typage/build ciblés ; recherche/tri/pagination et isolation du propriétaire vérifiés sur PostgreSQL réel sans modifier les pièces de l’utilisateur ; navigation et rendu réel Wallet sur ordinateur et smartphone. Un traitement documentaire ne prouve ni un droit de récupération ni une capacité de gestion d’assurance.
 
 Règles : G-02/G-06/G-12/G-13/G-14, DATA-06/07, FRONT-14, LLM-04/08. Aucun secret, droits nouveaux, fichier utilisateur effacé ou transmission à un prestataire de signature non défini. Modules concernés : document-intelligence, contrats/client API, Wallet ; périmètre signatures à compléter après réponse.

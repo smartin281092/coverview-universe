@@ -57,6 +57,7 @@ import {
   normalizeDocumentSearch,
 } from "./document.presentation.js";
 import { documentProfileComparisons, sameProfileValue } from "./document.reconciliation.js";
+import { referencedCompanyIds } from "./document.companies.js";
 
 type Database = ReturnType<typeof createDatabase>["db"];
 type Tx = Parameters<Parameters<Database["transaction"]>[0]>[0];
@@ -347,6 +348,35 @@ export function createDocumentRepository(db: Database) {
           return { row, response: changeRequest(request) };
         },
       );
+    },
+    async referencedCompanies(userId: string) {
+      const rows = await db
+        .select({
+          name: documents.name,
+          text: sql<string>`coalesce(left(${documents.analysis}->'pages'->0->>'text', 12000), '')`,
+        })
+        .from(documents)
+        .where(
+          and(
+            eq(documents.userId, userId),
+            isNull(documents.deletedAt),
+            ne(documents.state, "deleted"),
+          ),
+        )
+        .orderBy(desc(documents.createdAt), desc(documents.id))
+        .limit(201);
+      if (rows.length > 200) throw new DocumentError("DOCUMENT_LIMIT_REACHED", 422);
+      const requests = await db
+        .selectDistinct({ insurer: documentChangeRequests.insurer })
+        .from(documentChangeRequests)
+        .where(eq(documentChangeRequests.userId, userId))
+        .limit(200);
+      return {
+        companyIds: referencedCompanyIds([
+          ...rows.flatMap((row) => [row.name, row.text]),
+          ...requests.map((row) => row.insurer),
+        ]),
+      };
     },
     async list(
       userId: string,

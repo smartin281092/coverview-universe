@@ -8,7 +8,8 @@ import { createIdentityRepository } from "../modules/identity/identity.repositor
 import { createProfileRepository } from "../modules/identity/identity.profile.repository.js";
 import { createDocumentRepository } from "../modules/document-intelligence/document.repository.js";
 import { documents } from "../modules/document-intelligence/document.schema.js";
-import type { DocumentAnalysis } from "@coverview/contracts";
+import { profileSaveInputSchema, type DocumentAnalysis } from "@coverview/contracts";
+import { eq } from "drizzle-orm";
 
 let container: StartedPostgreSqlContainer;
 let database: ReturnType<typeof createDatabase>;
@@ -52,6 +53,115 @@ beforeAll(async () => {
 afterAll(async () => {
   if (database) await database.pool.end();
   if (container) await container.stop();
+});
+
+it("persists contact and company choices with owner sessions, revision conflicts and retry safety", async () => {
+  const actor = await owner();
+  const stranger = await owner();
+  const profiles = createProfileRepository(database.db);
+  const original = await profiles.get(actor.userId);
+  expect(original.insuranceCompanies).toBeNull();
+  const input = profileSaveInputSchema.parse({
+    revision: original.revision,
+    step: original.step,
+    fields: { phone: "+41 79 123 45 67", contactEmail: "contact@workflow.test", city: "Lausanne" },
+    insuranceCompanies: ["axa", "liechtenstein-life"],
+  });
+  const key = randomUUID();
+  const [saved, replay] = await Promise.all([
+    profiles.save(actor.userId, actor.id, input, key),
+    profiles.save(actor.userId, actor.id, input, key),
+  ]);
+  expect(replay).toEqual(saved);
+  expect(await profiles.get(actor.userId)).toEqual(saved);
+  expect(saved.insuranceCompanies).toEqual(["axa", "liechtenstein-life"]);
+  expect(saved.fields.phone?.value).toBe(input.fields.phone);
+  expect(saved.fields.contactEmail?.source).toBe("user_entered");
+  expect(saved.revision).toBe(original.revision + 1);
+  expect((await profiles.get(stranger.userId)).insuranceCompanies).toBeNull();
+  await expect(
+    profiles.save(actor.userId, stranger.id, { ...input, revision: saved.revision }, randomUUID()),
+  ).rejects.toMatchObject({ statusCode: 401 });
+  await expect(profiles.save(actor.userId, actor.id, input, randomUUID())).rejects.toMatchObject({
+    statusCode: 409,
+  });
+  await expect(
+    profiles.save(actor.userId, actor.id, { ...input, insuranceCompanies: [] }, key),
+  ).rejects.toMatchObject({ code: "PROFILE_IDEMPOTENCY_REUSED", statusCode: 422 });
+  const corrected = await profiles.save(
+    actor.userId,
+    actor.id,
+    { revision: saved.revision, step: saved.step, fields: { city: "Genève" } },
+    randomUUID(),
+  );
+  expect(corrected.insuranceCompanies).toEqual(saved.insuranceCompanies);
+  const cleared = await profiles.save(
+    actor.userId,
+    actor.id,
+    {
+      revision: corrected.revision,
+      step: corrected.step,
+      fields: { phone: null },
+      insuranceCompanies: [],
+    },
+    randomUUID(),
+  );
+  expect(cleared.fields.phone).toBeUndefined();
+  expect((await profiles.get(actor.userId)).insuranceCompanies).toEqual([]);
+  expect(
+    profileSaveInputSchema.safeParse({ ...input, insuranceCompanies: ["unknown"] }).success,
+  ).toBe(false);
+  expect(
+    profileSaveInputSchema.safeParse({ ...input, insuranceCompanies: ["axa", "axa"] }).success,
+  ).toBe(false);
+  expect(
+    profileSaveInputSchema.safeParse({ ...input, fields: { phone: "not a phone" } }).success,
+  ).toBe(false);
+  expect(
+    profileSaveInputSchema.safeParse({ ...input, fields: { contactEmail: "not an email" } })
+      .success,
+  ).toBe(false);
+
+  const document = await repository.create(
+    actor,
+    {
+      name: "AXA contrat.pdf",
+      mime: "application/pdf",
+      size: 100,
+      checksum: digest("company reference"),
+      analysisRequested: true,
+    },
+    randomUUID(),
+  );
+  await database.db
+    .update(documents)
+    .set({
+      analysis: {
+        category: "insurance",
+        evidence: source,
+        fields: [],
+        pages: [
+          {
+            page: 1,
+            text: "Liechtenstein Life Assurance AG. Taxation",
+            method: "isolated-test",
+            version: "1",
+          },
+        ],
+      },
+    })
+    .where(eq(documents.id, document.id));
+  expect(await repository.referencedCompanies(actor.userId)).toEqual({
+    companyIds: ["axa", "liechtenstein-life"],
+  });
+  expect(await repository.referencedCompanies(stranger.userId)).toEqual({ companyIds: [] });
+  // Finding document references must neither mutate the profile nor repopulate an explicit empty choice.
+  expect((await profiles.get(actor.userId)).insuranceCompanies).toEqual([]);
+  await database.db
+    .update(documents)
+    .set({ deletedAt: new Date(), state: "deleted" })
+    .where(eq(documents.id, document.id));
+  expect(await repository.referencedCompanies(actor.userId)).toEqual({ companyIds: [] });
 });
 
 it("enriches only empty fields once; scopes differences and correction requests; keeps delivery truthful", async () => {

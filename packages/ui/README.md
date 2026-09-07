@@ -50,4 +50,6 @@ La génération du 6 septembre utilise réellement `apply --preset b38oXC5rf --y
 
 ## État réel
 
+`Dialog` et ses slots sont générés par `shadcn add dialog --yes` dans le même projet de preset le 7 septembre. L'import du bouton commun, l'overlay via token et les libellés de fermeture injectés sont les seules adaptations ; source et empreinte dans le fichier de provenance. Le Wallet compose ce dialogue pour les compagnies et corrections du profil, avec boutons accessibles et défilement intérieur sur smartphone. Aucune dépendance ajoutée.
+
 La refonte est locale. Les vérifications et l’inspection des écrans réels sont consignées par la tâche propriétaire dans le [ledger shadcn et typographie](../../roadmap/evidence/shadcn-typography.md). Un typecheck ou le rendu d’un état ne prouve ni une connexion WorkOS, ni une habilitation externe.

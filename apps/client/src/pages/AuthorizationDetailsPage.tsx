@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, FileSignature } from "lucide-react";
+import { ArrowLeft, FileSignature, CircleCheck, TriangleAlert, Pencil, Plus } from "lucide-react";
 import type { IdentityMe } from "@coverview/api-client";
 import { Button, Input, Label, LoadingState } from "@coverview/ui";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
@@ -10,6 +10,12 @@ import { DocumentFailure } from "../features/documents/DocumentFailure";
 import { MissingPage } from "./StatesPage";
 import { api } from "../api";
 import texts from "../locales/fr/authorization-texts.json";
+import {
+  AuthorizationProfileEditor,
+  authorizationFieldGroups,
+  type AuthorizationFieldGroup,
+} from "../features/authorizations/AuthorizationProfileEditor";
+import { CompanyPicker } from "../features/authorizations/CompanyPicker";
 
 function Authorization({
   identity,
@@ -20,9 +26,20 @@ function Authorization({
 }) {
   const { t, i18n } = useTranslation("authorizations");
   const [accepted, setAccepted] = useState(false);
+  const [editing, setEditing] = useState<AuthorizationFieldGroup | null>(null);
+  const [companiesOpen, setCompaniesOpen] = useState(false);
+  const [saved, setSaved] = useState(false);
   const profile = useQuery({
     queryKey: ["private", identity.user.id, identity.session.id, "profile"],
     queryFn: ({ signal }) => api.profile({ signal }),
+    gcTime: 0,
+    staleTime: 0,
+    retry: false,
+  });
+  const references = useQuery({
+    queryKey: ["private", identity.user.id, identity.session.id, "document-companies"],
+    queryFn: ({ signal }) => api.documentCompanies({ signal }),
+    enabled: kind === "procuration",
     gcTime: 0,
     staleTime: 0,
     retry: false,
@@ -31,7 +48,19 @@ function Authorization({
   if (profile.isError)
     return <DocumentFailure error={profile.error} onRetry={() => void profile.refetch()} />;
   const fields = profile.data.fields;
-  const rows = [
+  const refreshProfile = async () => {
+    const latest = await profile.refetch({ throwOnError: true });
+    if (!latest.data) throw new Error("Profile unavailable");
+    return latest.data;
+  };
+  const selectedCompanies = profile.data.insuranceCompanies ?? references.data?.companyIds ?? [];
+  const onSaved = () => {
+    setEditing(null);
+    setCompaniesOpen(false);
+    setAccepted(false);
+    setSaved(true);
+  };
+  const rows: { label: AuthorizationFieldGroup; value: string | undefined }[] = [
     {
       label: "clientName",
       value: [fields.firstName?.value, fields.lastName?.value].filter(Boolean).join(" "),
@@ -51,7 +80,8 @@ function Authorization({
         .filter(Boolean)
         .join(" "),
     },
-    { label: "email", value: identity.user.email },
+    { label: "email", value: fields.contactEmail?.value ?? identity.user.email },
+    { label: "phone", value: fields.phone?.value },
   ];
   return (
     <div className="authorization-page space-y-8">
@@ -79,38 +109,109 @@ function Authorization({
         <section className="space-y-4">
           <h2 className="text-lg font-medium">{t("client")}</h2>
           <dl className="grid gap-4 text-sm sm:grid-cols-2">
-            {rows.map((row) => (
-              <div key={row.label}>
-                <dt className="text-muted-foreground">{t(row.label)}</dt>
-                <dd className="mt-1 break-words font-medium">{row.value || t("missing")}</dd>
-              </div>
-            ))}
+            {rows.map((row) => {
+              const complete = authorizationFieldGroups[row.label].every((field) =>
+                Boolean(fields[field]?.value || (field === "contactEmail" && identity.user.email)),
+              );
+              return (
+                <div key={row.label}>
+                  <dt className="text-muted-foreground">{t(row.label)}</dt>
+                  <dd className="mt-1">
+                    <button
+                      type="button"
+                      className="group flex min-h-11 w-full items-start gap-2 rounded-lg py-2 text-left text-sm font-medium hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                      aria-label={t("editField", { field: t(row.label) })}
+                      onClick={() => {
+                        setSaved(false);
+                        setEditing(row.label);
+                      }}
+                    >
+                      {complete ? (
+                        <CircleCheck
+                          className="mt-0.5 size-4 shrink-0 text-green-700"
+                          aria-hidden="true"
+                        />
+                      ) : (
+                        <TriangleAlert
+                          className="mt-0.5 size-4 shrink-0 text-red-600"
+                          aria-hidden="true"
+                        />
+                      )}
+                      <span className="min-w-0 flex-1 break-words">
+                        {row.value && <span className="block">{row.value}</span>}
+                        {!complete ? (
+                          <span className="block text-red-600">{t("missing")}</span>
+                        ) : (
+                          <span className="sr-only">{t("complete")}</span>
+                        )}
+                      </span>
+                      <Pencil
+                        className="mt-0.5 size-3.5 shrink-0 text-muted-foreground"
+                        aria-hidden="true"
+                      />
+                    </button>
+                  </dd>
+                </div>
+              );
+            })}
           </dl>
           <p className="text-sm text-muted-foreground">{t("prefillHelp")}</p>
-          <Button asChild variant="outline">
-            <Link to="/profile" search={{}}>
-              {t("editProfile")}
-            </Link>
-          </Button>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="authorization-phone">{t("phone")}</Label>
-              <Input
-                id="authorization-phone"
-                type="tel"
-                autoComplete="tel"
-                maxLength={40}
-                className="min-h-11"
-              />
-            </div>
-            {kind === "procuration" && (
-              <div className="space-y-2">
-                <Label htmlFor="authorization-insurer">{t("insurer")}</Label>
-                <Input id="authorization-insurer" maxLength={160} className="min-h-11" />
-              </div>
-            )}
-          </div>
+          {saved && (
+            <p role="status" className="text-sm text-green-700">
+              {t("saved")}
+            </p>
+          )}
         </section>
+        {kind === "procuration" && (
+          <section className="space-y-3" aria-labelledby="authorization-companies">
+            <h2 id="authorization-companies" className="font-medium">
+              {t("companies.recipients")}
+            </h2>
+            {selectedCompanies.length > 0 ? (
+              <ul className="space-y-2 text-sm">
+                {selectedCompanies.map((id) => (
+                  <li key={id} className="flex items-center gap-2">
+                    <CircleCheck aria-hidden="true" className="size-4 shrink-0 text-green-700" />
+                    {t(`companies.names.${id}`)}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="flex items-center gap-2 text-sm text-red-600">
+                <TriangleAlert aria-hidden="true" className="size-4" />
+                {t("missing")}
+              </p>
+            )}
+            {profile.data.insuranceCompanies == null && references.isPending && (
+              <p role="status" className="text-sm text-muted-foreground">
+                {t("companies.loading")}
+              </p>
+            )}
+            {profile.data.insuranceCompanies == null && selectedCompanies.length > 0 && (
+              <p className="text-sm text-muted-foreground">{t("companies.suggestedHelp")}</p>
+            )}
+            {references.isError && (
+              <p className="text-sm text-muted-foreground">
+                {t("companies.referencesUnavailable")}
+              </p>
+            )}
+            <Button
+              variant="outline"
+              className="min-h-11"
+              onClick={() => {
+                setSaved(false);
+                setCompaniesOpen(true);
+              }}
+            >
+              {selectedCompanies.length ? (
+                <Pencil aria-hidden="true" className="size-4" />
+              ) : (
+                <Plus aria-hidden="true" className="size-4" />
+              )}
+              {t(selectedCompanies.length ? "companies.edit" : "companies.add")}
+            </Button>
+          </section>
+        )}
         {texts[kind].map((section) => (
           <section key={section.title} className="space-y-3">
             <h2 className="font-medium">{section.title}</h2>
@@ -169,6 +270,27 @@ function Authorization({
           {t("legalContact")}
         </p>
       </article>
+      {editing && (
+        <AuthorizationProfileEditor
+          identity={identity}
+          profile={profile.data}
+          group={editing}
+          onClose={() => setEditing(null)}
+          onSaved={onSaved}
+          onRefresh={refreshProfile}
+        />
+      )}
+      {companiesOpen && (
+        <CompanyPicker
+          identity={identity}
+          profile={profile.data}
+          selected={selectedCompanies}
+          referenced={references.data?.companyIds ?? []}
+          onClose={() => setCompaniesOpen(false)}
+          onSaved={onSaved}
+          onRefresh={refreshProfile}
+        />
+      )}
       <div
         className="authorization-actions fixed inset-x-0 z-20 border-t border-border bg-background/95 px-4 py-3 backdrop-blur-xl"
         role="region"

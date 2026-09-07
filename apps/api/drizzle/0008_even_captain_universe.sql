@@ -1,0 +1,2 @@
+ALTER TABLE "identity_profiles" ADD COLUMN "insurance_companies" jsonb;--> statement-breakpoint
+ALTER TABLE "identity_profiles" ADD CONSTRAINT "identity_profiles_companies_array" CHECK ("identity_profiles"."insurance_companies" is null or (jsonb_typeof("identity_profiles"."insurance_companies") = 'array' and jsonb_array_length("identity_profiles"."insurance_companies") <= 50));

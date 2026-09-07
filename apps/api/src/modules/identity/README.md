@@ -94,4 +94,6 @@ Le retour à l’application N-1 conserve les tables additives ; les supprimer f
 
 ## Producteur documentaire S-042a
 
+Les corrections depuis une autorisation réutilisent `/identity/profile` et ses protections de session, CSRF, révision et idempotence. Téléphone et e-mail de contact sont facultatifs et distincts de l’e-mail WorkOS ; aucun changement du compte de connexion. Migration additive `0008` : `identity_profiles.insurance_companies`, liste nullable d’identifiants validés ; null signifie absence de choix, vide signifie effacement explicite. La commande de sauvegarde conserve la liste si elle n’est pas fournie et produit l’audit `profile.saved.v1` existant, sans contenu personnel dans les logs. Rollback : garder la colonne et des lecteurs compatibles avec les nouveaux champs ; pas de suppression des données.
+
 Le module document-intelligence utilise les fonctions publiques de lecture, verrouillage, enrichissement et confirmation du profil. La demande du 7 septembre autorise le remplissage des champs vides après extraction, avec provenance distincte et audit `profile.document_enriched.v1`. Aucun écrasement automatique ni confirmation utilisateur fabriquée. Verrous : propriétaire, session si commande interactive, profil, document. Parcours et compatibilité de déploiement des lecteurs dans le [module documentaire](../document-intelligence/README.md).

@@ -10,6 +10,16 @@ Mandat et décisions canoniques : [plan](../plans/S-042a-library-authorizations.
 
 ## Recette locale authentifiée
 
+## Extension : édition sur place et compagnies
+
+Demande utilisateur du 7 septembre, dans la même slice. Coordonnées modifiables dans le document, téléphone/e-mail de contact persistants, onglet Autorisations, répertoire de onze compagnies issues de la LSA45 avec logos locaux et sélection persistante. Le texte de procuration passe en version `.2` pour désigner chaque compagnie sélectionnée ; les pouvoirs et la durée restent ceux du modèle.
+
+- **Vérifié V2** : trois tests PostgreSQL réel passent, migrations de zéro et rejeu inclus. Nouvelles preuves : sauvegarde/relecture téléphone, contact et compagnies ; deux appels simultanés avec même clé ne produisent qu’une révision ; changement de contenu avec clé réutilisée refusé (422 contractuel), révision ancienne refusée, session d’autrui refusée. Sauvegarde partielle conserve les compagnies, effacement explicite demeure vide. Références documentaires privées, documents supprimés exclus et aucune écriture automatique de la liste.
+- **Vérifié** : migration additive `0008_even_captain_universe` appliquée sur la base locale existante sans reset. `Dialog` réellement généré avec le preset imposé ; aucune dépendance, variable, autorisation ou transmission nouvelle. Provenance des logos dans `apps/client/public/companies` ; Baloise 2022 repris de Commons, attribution Baloise AG, les sites nationaux redirigeant vers Helvetia. Catalogue limité aux modèles fournis, pas annuaire exhaustif.
+- **Fait, recette visuelle en cours** : dialogues multisélection/recherche, état sans résultat, édition sans quitter la page, icônes outline rouge/vert, révision figée à l’ouverture avec recharge explicite en cas de conflit. Signature et droits restent indisponibles comme avant.
+
+### Recette de la livraison précédente
+
 - **Vérifié** : migration appliquée à la base locale existante, sans reset ; intégration FF dans les checkouts Wallet/API/principal, PDF sources non suivis du principal laissés intacts. Le superviseur WorkOS existant a rechargé son enfant ; readiness200, identité activée, documents anonymes401 après rétablissement.
 - **Vérifié — deux documents réels** : anciennes analyses désormais titrées « Profil d’investisseur » et « Modèle d’offre » depuis leurs propres en-têtes. Le choix initial avait repris une phrase de validité et ignoré un titre ; sélecteur corrigé après observation du texte déjà disponible, sans relecture payante. Recherche « offre » avec regroupement type renvoie la seule offre ; date seule et nom original sur des lignes distinctes.
 - **Vérifié — 375 px** : absence de débordement horizontal ; 4 px entre titre/date et date/fichier. Mes autorisations conserve trois onglets de 44 px. Barre de signature fixe (161 px de haut), au-dessus de la navigation inférieure. À 1280 px, barre fixe de 89 px en bas de la fenêtre, aucun débordement. Dimensions de contrôle réinitialisées après recette.

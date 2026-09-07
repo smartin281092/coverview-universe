@@ -23,6 +23,16 @@ export {
 } from "./Sheet";
 export { Container, Section, Stack, SectionHeading, type SectionHeadingProps } from "./Layout";
 export { TextLink } from "./TextLink";
+export {
+  Dialog,
+  DialogTrigger,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "./Dialog";
 export { Bento, type BentoProps } from "./Bento";
 export { AccountLayout, type AccountLayoutProps } from "./AccountLayout";
 export {

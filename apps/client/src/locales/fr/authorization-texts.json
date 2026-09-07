@@ -1,5 +1,5 @@
 {
-  "version": "coverview-2026-09-07.1",
+  "version": "coverview-2026-09-07.2",
   "sources": {
     "Procuration_Bassa_Martin_Partners_finale.pdf": "50bdd9d2a434a669572ba4cf784a5e17fdf4ceeb3dd096856db6325f7bc65af9",
     "mandat-gestion-bmp-v2026.pdf": "ff89ff89e08627a03b5588ae989395dd7f45395b9415e76c892ebb9ee5d6b4d8",
@@ -8,7 +8,7 @@
   "procuration": [
     {
       "title": "Contrats concernés",
-      "text": "Je soussigné(e) autorise CoverView à demander et recevoir, en mon nom, les renseignements et documents relatifs à mes contrats d’assurance auprès de la compagnie destinataire. La présente procuration couvre tous les contrats individuels, actuels ou échus, pour lesquels je suis ou ai été preneur d’assurance ou titulaire auprès de cette compagnie, même si je ne connais pas leur numéro de police. La compagnie peut identifier les contrats concernés au moyen de mes données personnelles."
+      "text": "Je soussigné(e) autorise CoverView à demander et recevoir, en mon nom, les renseignements et documents relatifs à mes contrats d’assurance auprès de chacune des compagnies désignées ci-dessus. La présente procuration couvre tous les contrats individuels, actuels ou échus, pour lesquels je suis ou ai été preneur d’assurance ou titulaire auprès de ces compagnies, même si je ne connais pas leur numéro de police. Chaque compagnie peut identifier les contrats concernés au moyen de mes données personnelles."
     },
     {
       "title": "Documents et renseignements demandés",

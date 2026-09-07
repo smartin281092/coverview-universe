@@ -14,6 +14,7 @@ import {
   documentChangeRequestsSchema,
   documentChangeRequestSchema,
   documentProfileDifferencesSchema,
+  documentCompaniesSchema,
 } from "@coverview/contracts";
 import type { createDocumentRepository } from "./document.repository.js";
 import type { createDocumentService } from "./document.service.js";
@@ -46,6 +47,15 @@ export function registerDocumentRoutes(
     actors.set(request, await identity.authenticate(request));
   };
   const limited = { rateLimit: { max: 60, timeWindow: "1 minute" } };
+  app.get(
+    "/documents/companies",
+    {
+      onRequest: read,
+      config: limited,
+      schema: { response: { 200: documentCompaniesSchema } },
+    },
+    async (request) => repository.referencedCompanies(actor(request).userId),
+  );
   app.get(
     "/documents/profile-differences",
     {

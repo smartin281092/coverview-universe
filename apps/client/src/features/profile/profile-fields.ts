@@ -8,7 +8,14 @@ import {
 } from "@coverview/contracts";
 
 export type ProfileFieldName = (typeof profileFieldSchema.options)[number];
-export const informationFields = ["firstName", "lastName", "birthDate", "nationality"] as const;
+export const informationFields = [
+  "firstName",
+  "lastName",
+  "birthDate",
+  "nationality",
+  "phone",
+  "contactEmail",
+] as const;
 export const addressFields = ["street", "postalCode", "city", "country"] as const;
 export const allFields = profileFieldSchema.options;
 // Empty controls are presentation state; the public schema remains the validation authority.
@@ -22,6 +29,8 @@ export const profileFormSchema = z
     postalCode: z.string(),
     city: z.string(),
     country: z.string(),
+    phone: z.string(),
+    contactEmail: z.string(),
   })
   .superRefine((values, context) => {
     const result = profileValuesSchema.safeParse(

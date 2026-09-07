@@ -1,0 +1,5 @@
+# Compagnies des modèles fournis
+
+Les onze entrées correspondent aux noms du document LSA45 fourni par le propriétaire de CoverView. Ce répertoire ne prouve aucun partenariat nouveau, contrat client ou pouvoir de représentation. Les identifiants sont validés dans `packages/contracts/src/companies.ts` ; les noms d'affichage sont dans le catalogue français des autorisations.
+
+Logos servis localement : aucune requête tierce du navigateur. Sources et empreintes dans `provenance.json`. CSS et le symbole Liechtenstein Life sont extraits des SVG de leurs en-têtes officiels, sans redessiner leurs tracés. Generali fournit un logo blanc, présenté sur fond rouge. Le nom Baloise reste celui du modèle et des anciens contrats ; son logo 2022, attribué à Baloise AG, vient de [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Baloise_Logo_2022.svg) car les sites suisse et allemand redirigent désormais vers Helvetia. La sélection ne réalise aucune correspondance juridique vers une nouvelle entité destinataire.

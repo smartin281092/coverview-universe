@@ -26,6 +26,8 @@ const autocomplete: Record<ProfileFieldName, string> = {
   postalCode: "postal-code",
   city: "address-level2",
   country: "country-name",
+  phone: "tel",
+  contactEmail: "email",
 };
 
 function ProfileChoices({ identity, onBack }: { identity: IdentityMe; onBack: () => void }) {
@@ -121,9 +123,25 @@ function ProfileField({ field, journey }: { field: ProfileFieldName; journey: Pr
       <Label htmlFor={`profile-${field}`}>{t(`fields.${field}`)}</Label>
       <Input
         id={`profile-${field}`}
-        type={field === "birthDate" ? "date" : "text"}
+        type={
+          field === "birthDate"
+            ? "date"
+            : field === "phone"
+              ? "tel"
+              : field === "contactEmail"
+                ? "email"
+                : "text"
+        }
         autoComplete={autocomplete[field]}
-        maxLength={field === "street" ? 240 : field === "postalCode" ? 24 : 160}
+        maxLength={
+          field === "street" || field === "contactEmail"
+            ? 240
+            : field === "phone"
+              ? 40
+              : field === "postalCode"
+                ? 24
+                : 160
+        }
         className="h-11 text-base md:text-base"
         aria-invalid={Boolean(error)}
         aria-describedby={

@@ -57,6 +57,13 @@
       "when": 1788802942470,
       "tag": "0007_clever_nighthawk",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1788806163538,
+      "tag": "0008_even_captain_universe",
+      "breakpoints": true
     }
   ]
 }

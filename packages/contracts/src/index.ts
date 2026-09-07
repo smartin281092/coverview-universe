@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { documentErrorCodes } from "./documents.js";
 export * from "./profile.js";
+export * from "./companies.js";
 export * from "./documents.js";
 
 export const livenessSchema = z.object({ status: z.literal("alive") });

@@ -23,6 +23,11 @@
       "target": "Wallet mobile Sheet",
       "command": "pnpm dlx shadcn@latest add sheet --yes --cwd .planning-local/preset-shadcn",
       "exitCode": 0
+    },
+    {
+      "target": "Wallet company selection and profile correction",
+      "command": "pnpm exec shadcn add dialog --yes",
+      "exitCode": 0
     }
   ],
   "resolved": {
@@ -66,6 +71,7 @@
     "card": "5e7040289fff160d6ef96afcb52a7ef9d4bd01e44a144adf80b0c1957fb5fa47",
     "input": "9755070826f002a98bce851abadeab05568a3e771383866e0677358cbb4e04bb",
     "label": "d998d18a30e592449cb5eeaa17ab6e6d19450afeaf4d9ad6721e018e5350c761",
-    "sheet": "423f59542bedc112593f1b85427444bc5d9ed759c31bc3e65f11fc77f02ded73"
+    "sheet": "423f59542bedc112593f1b85427444bc5d9ed759c31bc3e65f11fc77f02ded73",
+    "dialog": "f9955f7e9fa305d94b4dec940ff0375bd40225c78a60a9f94028dbf811e760e0"
   }
 }
