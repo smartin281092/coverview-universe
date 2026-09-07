@@ -21,6 +21,13 @@ import {
   profileAttachInputSchema,
   profileAttachSchema,
   profileChoicesSchema,
+  documentSchema,
+  documentListSchema,
+  documentCreateInputSchema,
+  documentReviewInputSchema,
+  documentReviewResultSchema,
+  documentCategoryInputSchema,
+  documentRetryInputSchema,
   type ApiErrorCode,
 } from "@coverview/contracts";
 import type { z } from "zod";
@@ -56,7 +63,12 @@ export function createApiClient({
     path: string,
     schema: z.ZodType<T>,
     options: RequestOptions = {},
-    mutation?: { body: unknown; credentials: MutationOptions; timeoutMs?: number },
+    mutation?: {
+      body: unknown;
+      credentials: MutationOptions;
+      timeoutMs?: number;
+      binary?: boolean;
+    },
     authenticated = false,
   ): Promise<T> {
     const timeout = AbortSignal.timeout(mutation?.timeoutMs ?? timeoutMs);
@@ -71,7 +83,7 @@ export function createApiClient({
           "X-Request-Id": crypto.randomUUID(),
           ...(mutation
             ? {
-                "Content-Type": "application/json",
+                "Content-Type": mutation.binary ? "application/octet-stream" : "application/json",
                 "X-CSRF-Token": mutation.credentials.csrfToken,
                 "Idempotency-Key": mutation.credentials.idempotencyKey,
               }
@@ -79,7 +91,9 @@ export function createApiClient({
         },
         credentials: authenticated ? "include" : "omit",
         cache: authenticated ? "no-store" : "default",
-        ...(mutation ? { body: JSON.stringify(mutation.body) } : {}),
+        ...(mutation
+          ? { body: mutation.binary ? (mutation.body as Blob) : JSON.stringify(mutation.body) }
+          : {}),
       });
     } catch (cause) {
       throw new ApiError("PLATFORM_REQUEST_FAILED", 0, undefined, { cause });
@@ -110,6 +124,101 @@ export function createApiClient({
   }
 
   return {
+    documents: (cursor?: string, options?: RequestOptions) =>
+      request(
+        `/documents${cursor ? `?${new URLSearchParams({ cursor })}` : ""}`,
+        documentListSchema,
+        options,
+        undefined,
+        true,
+      ),
+    document: (id: string, options?: RequestOptions) =>
+      request(`/documents/${encodeURIComponent(id)}`, documentSchema, options, undefined, true),
+    createDocument: (input: z.infer<typeof documentCreateInputSchema>, options: MutationOptions) =>
+      request(
+        "/documents",
+        documentSchema,
+        options,
+        { body: documentCreateInputSchema.parse(input), credentials: options },
+        true,
+      ),
+    uploadDocument: (id: string, file: File, options: MutationOptions) =>
+      request(
+        `/documents/${encodeURIComponent(id)}/content`,
+        documentSchema,
+        options,
+        { body: file, credentials: options, binary: true, timeoutMs: 60000 },
+        true,
+      ),
+    retryDocument: (
+      id: string,
+      input: z.infer<typeof documentRetryInputSchema>,
+      options: MutationOptions,
+    ) =>
+      request(
+        `/documents/${encodeURIComponent(id)}/retry`,
+        documentSchema,
+        options,
+        { body: documentRetryInputSchema.parse(input), credentials: options },
+        true,
+      ),
+    categorizeDocument: (
+      id: string,
+      input: z.infer<typeof documentCategoryInputSchema>,
+      options: MutationOptions,
+    ) =>
+      request(
+        `/documents/${encodeURIComponent(id)}/category`,
+        documentSchema,
+        options,
+        { body: documentCategoryInputSchema.parse(input), credentials: options },
+        true,
+      ),
+    reviewDocument: (
+      id: string,
+      input: z.infer<typeof documentReviewInputSchema>,
+      options: MutationOptions,
+    ) =>
+      request(
+        `/documents/${encodeURIComponent(id)}/review`,
+        documentReviewResultSchema,
+        options,
+        { body: documentReviewInputSchema.parse(input), credentials: options },
+        true,
+      ),
+    deleteDocument: (id: string, options: MutationOptions) =>
+      request(
+        `/documents/${encodeURIComponent(id)}/delete`,
+        identitySuccessSchema,
+        options,
+        { body: {}, credentials: options },
+        true,
+      ),
+    async downloadDocument(id: string, options: RequestOptions = {}) {
+      const signal = AbortSignal.any([
+        AbortSignal.timeout(30000),
+        ...(options.signal ? [options.signal] : []),
+      ]);
+      let response: Response;
+      try {
+        response = await fetch(new URL(`/documents/${encodeURIComponent(id)}/download`, base), {
+          credentials: "include",
+          cache: "no-store",
+          signal,
+          headers: { "X-Request-Id": crypto.randomUUID() },
+        });
+      } catch (cause) {
+        throw new ApiError("PLATFORM_REQUEST_FAILED", 0, undefined, { cause });
+      }
+      if (!response.ok) {
+        const parsed = apiErrorSchema.safeParse(await response.json());
+        throw new ApiError(
+          parsed.success ? parsed.data.error.code : "PLATFORM_REQUEST_FAILED",
+          response.status,
+        );
+      }
+      return response.blob();
+    },
     profile: (options?: RequestOptions) =>
       request("/identity/profile", profileSchema, options, undefined, true),
     saveProfile: (input: z.infer<typeof profileSaveInputSchema>, options: MutationOptions) =>

@@ -8,8 +8,20 @@ import { AccountPage } from "./pages/AccountPage";
 import { WorkspacePage } from "./pages/WorkspacePage";
 import { DevicesPage } from "./pages/DevicesPage";
 import { ProfilePage } from "./pages/ProfilePage";
+import { DocumentsPage } from "./pages/DocumentsPage";
+import { DocumentDetailsPage } from "./pages/DocumentDetailsPage";
 
 const rootRoute = createRootRoute({ component: AppShell, notFoundComponent: MissingPage });
+const documentsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/documents",
+  component: DocumentsPage,
+});
+const documentRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/documents/$documentId",
+  component: DocumentDetailsPage,
+});
 const homeRoute = createRoute({ getParentRoute: () => rootRoute, path: "/", component: HomePage });
 const accountRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -63,6 +75,8 @@ export const router = createRouter({
     workspaceRoute,
     devicesRoute,
     profileRoute,
+    documentsRoute,
+    documentRoute,
   ]),
   defaultPreload: "intent",
   scrollRestoration: true,

@@ -36,7 +36,7 @@ function Invoke-PreviewCommand {
     $taskStart.ArgumentList.Add($taskPreview)
     foreach ($taskArgument in $PreviewArguments) { $taskStart.ArgumentList.Add($taskArgument) }
     # Retirer aussi d'éventuelles valeurs héritées avant de sélectionner le contexte.
-    foreach ($taskName in @('WORKOS_API_KEY', 'AUTH_SESSION_SECRET')) {
+    foreach ($taskName in @('WORKOS_API_KEY', 'AUTH_SESSION_SECRET', 'OPENAI_API_KEY', 'DOCUMENT_STORAGE_KEY', 'DOCUMENT_S3_ACCESS_KEY', 'DOCUMENT_S3_SECRET_KEY')) {
         [void] $taskStart.Environment.Remove($taskName)
     }
     if ($WithAuthentication) {

@@ -15,6 +15,7 @@ import {
 } from "fastify-type-provider-zod";
 import { isLoopback, type Environment } from "./config.js";
 import { createPlatformDependencies, type PlatformDependencies } from "./dependencies.js";
+import { registerDocuments, DocumentError } from "../modules/document-intelligence/index.js";
 import {
   IdentityError,
   registerIdentity,
@@ -94,7 +95,7 @@ export async function buildServer(
       errorStatus >= 400 &&
       errorStatus < 500;
     const status =
-      error instanceof IdentityError
+      error instanceof IdentityError || error instanceof DocumentError
         ? error.statusCode
         : isClientError
           ? errorStatus
@@ -102,7 +103,7 @@ export async function buildServer(
             ? 400
             : 500;
     const code =
-      error instanceof IdentityError
+      error instanceof IdentityError || error instanceof DocumentError
         ? error.code
         : status === 429
           ? "IDENTITY_RATE_LIMITED"
@@ -160,6 +161,7 @@ export async function buildServer(
     );
   }
 
-  await registerIdentity(app, config, identityService);
+  const identity = await registerIdentity(app, config, identityService);
+  await registerDocuments(app, config, identity);
   return app;
 }

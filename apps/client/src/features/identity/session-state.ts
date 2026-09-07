@@ -7,6 +7,10 @@ export const identityKey = ["identity", "me"] as const;
 async function clearPrivateState(client: QueryClient) {
   await client.cancelQueries({ queryKey: ["private"] });
   client.removeQueries({ queryKey: ["private"] });
+  const mutations = client.getMutationCache();
+  for (const mutation of mutations.getAll()) {
+    if (mutation.options.mutationKey?.[0] === "private") mutations.remove(mutation);
+  }
 }
 
 export async function forgetIdentity(client: QueryClient) {

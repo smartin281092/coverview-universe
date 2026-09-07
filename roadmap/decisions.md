@@ -2727,14 +2727,14 @@ Autorisation : Mandat utilisateur du 2026-09-05 : enchaînement et choix des mei
 
 [S-042a](plans/S-042a.plan.md) · Quel traitement pour la première ingestion réelle ?
 
-- (a) Moteurs OCR/classification/extraction et antivirus locaux durables ; aucun transfert tiers — défaut proposé
-- (b) Fournisseur externe après vérification de ses conditions
+- (a) API OpenAI pour OCR/classification/extraction et futures capacités IA ; antivirus et stockage privés locaux — défaut proposé
+- (b) Moteurs de lecture exclusivement locaux
 
 Bloque : Choix effectif des moteurs
 
 Autorisation : Demande explicite utilisateur du 6 septembre 2026 : mobile Wallet puis conservation de tous les documents déposés, y compris identité, classification et extraction profil ; choix locaux délégués PROG-23, aucune validation juridique déduite.. Réponse : enregistrée ci-dessous.
 
-- `project.documents.local-processing` · Quel traitement pour la première ingestion réelle ? → **Moteurs OCR/classification/extraction et antivirus locaux durables ; aucun transfert tiers** · preuve : Demande explicite utilisateur du 6 septembre 2026 : mobile Wallet puis conservation de tous les documents déposés, y compris identité, classification et extraction profil ; choix locaux délégués PROG-23, aucune validation juridique déduite.
+- `project.documents.local-processing` · Quel traitement pour la première ingestion réelle ? → **API OpenAI pour OCR/classification/extraction et futures capacités IA ; antivirus et stockage privés locaux** · preuve : Instruction utilisateur pendant S-042a : Pour la lecture OCR et toutes les fonctionnalités dont nous aurons besoin de l’IA d’ailleurs on peut utiliser l’API de chatgpt. Remplace le choix exclusivement local antérieur ; documentation officielle Responses/file inputs/structured outputs/your-data consultée le 6 septembre 2026.
 
 ## project.git-push
 

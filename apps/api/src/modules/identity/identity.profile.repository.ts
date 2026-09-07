@@ -75,7 +75,7 @@ function nextRevision(revision: number) {
   if (revision >= 2_147_483_647) throw new IdentityError("PROFILE_CONFLICT", 409);
   return revision + 1;
 }
-function toProfile(row: ProfileRow): Profile {
+export function toProfile(row: ProfileRow): Profile {
   return profileSchema.parse({
     id: row.id,
     userId: row.userId,
@@ -177,7 +177,7 @@ async function complete<T extends CommandRow["response"]>(
       .values({ ...audit, id: `paudit_${randomUUID()}`, commandId: id, createdAt: now });
   return response;
 }
-async function lockOwner(tx: Transaction, userId: string, sessionId: string) {
+export async function lockProfileOwner(tx: Transaction, userId: string, sessionId: string) {
   // Match global logout ordering: user, session, profile, optional draft. No network under lock.
   const [user] = await tx
     .select({ id: identityUsers.id, pending: identityUsers.globalRevocationPending })
@@ -208,6 +208,40 @@ async function lockOwner(tx: Transaction, userId: string, sessionId: string) {
     .for("update");
   if (!profile) throw new IdentityError("IDENTITY_NOT_FOUND", 404);
   return { profile, session };
+}
+const lockOwner = lockProfileOwner;
+
+// Document confirmation is composed inside its own short transaction and audit.
+export async function confirmDocumentProfileFields(
+  tx: Transaction,
+  profile: ProfileRow,
+  values: ProfileValues,
+) {
+  const parsed = profileValuesSchema.parse(values);
+  const now = new Date();
+  requireBirthDate(parsed.birthDate, now);
+  const next = { ...profile.fields };
+  for (const field of fields) {
+    const value = parsed[field];
+    if (value === undefined) continue;
+    // A separate anonymous proposal must first be resolved in the profile journey.
+    if (next[field]?.proposal) throw new IdentityError("PROFILE_CONFIRMATION_REQUIRED", 409);
+    next[field] = {
+      value,
+      source: "user_confirmed",
+      confidence: null,
+      confirmedAt: now.toISOString(),
+      proposal: null,
+    };
+  }
+  if (Object.keys(parsed).length === 0) return toProfile(profile);
+  const [updated] = await tx
+    .update(identityProfiles)
+    .set({ fields: next, revision: nextRevision(profile.revision) })
+    .where(and(eq(identityProfiles.id, profile.id), eq(identityProfiles.userId, profile.userId)))
+    .returning();
+  if (!updated) throw new IdentityError("IDENTITY_NOT_FOUND", 404);
+  return toProfile(updated);
 }
 function requireActiveSession(expiresAt: Date, now: Date) {
   if (expiresAt <= now) throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);

@@ -4,6 +4,7 @@ packages:
 allowBuilds:
   cpu-features: false # Accélérateur SSH optionnel, sans besoin pour Docker local.
   esbuild: true # Installe et vérifie le binaire de compilation officiel.
+  msgpackr-extract: false # Accélérateur natif optionnel BullMQ ; implémentation JS suffisante.
   protobufjs: false # Postinstall émet seulement un conseil de version.
   ssh2: false # Binding crypto SSH optionnel ; aucun transport SSH utilisé.
 minimumReleaseAgeExclude:

@@ -1,0 +1,793 @@
+import { createHash, randomUUID } from "node:crypto";
+import { and, asc, desc, eq, gte, inArray, isNull, lt, lte, ne, or, sql } from "drizzle-orm";
+import { z } from "zod";
+import {
+  documentSchema,
+  documentSummarySchema,
+  documentListSchema,
+  documentReviewResultSchema,
+  documentProfileValuesSchema,
+  profileFieldSchema,
+  type DocumentCreateInput,
+  type DocumentReviewInput,
+  type DocumentRecord,
+  type DocumentAnalysis,
+} from "@coverview/contracts";
+import {
+  lockProfileOwner,
+  toProfile,
+  confirmDocumentProfileFields,
+  identityUsers,
+  IdentityError,
+} from "../identity/index.js";
+import type { createDatabase } from "../../platform/db/database.js";
+import {
+  documents,
+  documentAudit,
+  documentCommands,
+  documentDecisions,
+  documentOutbox,
+  documentAiCalls,
+} from "./document.schema.js";
+
+type Database = ReturnType<typeof createDatabase>["db"];
+type Tx = Parameters<Parameters<Database["transaction"]>[0]>[0];
+type Row = typeof documents.$inferSelect;
+type Actor = { userId: string; id: string };
+export class DocumentError extends Error {
+  constructor(
+    public code: string,
+    public statusCode: number,
+    options?: ErrorOptions,
+  ) {
+    super(code, options);
+    this.name = "DocumentError";
+  }
+}
+const condition = (userId: string, id: string) =>
+  and(eq(documents.userId, userId), eq(documents.id, id));
+function summary(row: Row) {
+  return documentSummarySchema.parse({
+    ...row,
+    createdAt: row.createdAt.toISOString(),
+    updatedAt: row.updatedAt.toISOString(),
+    canRetry: row.state === "failed",
+    canDownload:
+      !!row.scanVersion && !["pending", "quarantined", "deleting", "deleted"].includes(row.state),
+  });
+}
+async function detail(tx: Tx | Database, row: Row): Promise<DocumentRecord> {
+  // Accepted values remain available even beyond the bounded history page.
+  const accepted = await tx.execute<{ field: string; value: string }>(sql`
+    select distinct on (field->>'field') field->>'field' as field, field->>'value' as value
+    from ${documentDecisions}, lateral jsonb_array_elements(${documentDecisions.decision}->'fields') as field
+    where ${documentDecisions.userId} = ${row.userId} and ${documentDecisions.documentId} = ${row.id}
+      and field->>'value' is not null and field->>'choice' in ('use', 'correct')
+    order by field->>'field', ${documentDecisions.createdAt} desc, ${documentDecisions.id} desc limit 11
+  `);
+  const decisions = await tx
+    .select({ decision: documentDecisions.decision })
+    .from(documentDecisions)
+    .where(and(eq(documentDecisions.userId, row.userId), eq(documentDecisions.documentId, row.id)))
+    .orderBy(desc(documentDecisions.createdAt), desc(documentDecisions.id))
+    .limit(20);
+  return documentSchema.parse({
+    ...summary(row),
+    analysis: row.analysis,
+    decisions: decisions.map((item) => item.decision),
+    reviewedValues: accepted.rows,
+  });
+}
+function canonical(value: unknown): string {
+  if (Array.isArray(value)) return `[${value.map(canonical).join(",")}]`;
+  if (value && typeof value === "object")
+    return `{${Object.entries(value)
+      .filter(([, v]) => v !== undefined)
+      .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+      .map(([k, v]) => `${JSON.stringify(k)}:${canonical(v)}`)
+      .join(",")}}`;
+  return JSON.stringify(value);
+}
+const hash = (value: unknown) => createHash("sha256").update(canonical(value)).digest("hex");
+async function audit(tx: Tx, row: Row, actor: string, action: string) {
+  await tx.insert(documentAudit).values({
+    id: randomUUID(),
+    documentId: row.id,
+    userId: row.userId,
+    actor,
+    action,
+    revision: row.revision,
+  });
+}
+async function event(tx: Tx, row: Row, type: typeof documentOutbox.$inferInsert.type) {
+  await tx.insert(documentOutbox).values({
+    id: randomUUID(),
+    documentId: row.id,
+    userId: row.userId,
+    generation: row.generation,
+    type,
+  });
+}
+function live(row: Row | undefined): Row {
+  if (!row || row.deletedAt || ["deleting", "deleted"].includes(row.state))
+    throw new DocumentError("DOCUMENT_NOT_FOUND", 404);
+  return row;
+}
+function revision(row: Row, expected: number) {
+  if (row.revision !== expected || row.revision >= 2147483646)
+    throw new DocumentError("DOCUMENT_CONFLICT", 409);
+}
+export function createDocumentRepository(db: Database) {
+  async function command<T>(
+    actor: Actor,
+    id: string | null,
+    operation: string,
+    key: string,
+    payload: unknown,
+    schema: z.ZodType<T>,
+    execute: (
+      tx: Tx,
+      profile: Awaited<ReturnType<typeof lockProfileOwner>>["profile"],
+      row: Row | undefined,
+    ) => Promise<{ row: Row; response: T }>,
+  ): Promise<T> {
+    const normalizedKey = z.uuid().parse(key).toLowerCase();
+    return db.transaction(async (tx) => {
+      const { profile, session } = await lockProfileOwner(tx, actor.userId, actor.id);
+      const row = id
+        ? live(
+            (
+              await tx
+                .select()
+                .from(documents)
+                .where(condition(actor.userId, id))
+                .limit(1)
+                .for("update")
+            )[0],
+          )
+        : undefined;
+      const now = new Date();
+      if (session.expiresAt <= now) throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);
+      const [previous] = await tx
+        .select()
+        .from(documentCommands)
+        .where(
+          and(
+            eq(documentCommands.userId, actor.userId),
+            eq(documentCommands.operation, operation),
+            eq(documentCommands.key, normalizedKey),
+          ),
+        )
+        .limit(1);
+      if (previous) {
+        live(
+          (
+            await tx
+              .select()
+              .from(documents)
+              .where(condition(actor.userId, previous.documentId))
+              .limit(1)
+          )[0],
+        );
+        if (previous.expiresAt > now) {
+          if (previous.hash !== hash(payload))
+            throw new DocumentError("DOCUMENT_IDEMPOTENCY_REUSED", 422);
+          return schema.parse(previous.response);
+        }
+        await tx
+          .delete(documentCommands)
+          .where(
+            and(eq(documentCommands.id, previous.id), eq(documentCommands.userId, actor.userId)),
+          );
+      }
+      const result = await execute(tx, profile, row);
+      await tx.insert(documentCommands).values({
+        id: randomUUID(),
+        userId: actor.userId,
+        documentId: result.row.id,
+        operation,
+        key: normalizedKey,
+        hash: hash(payload),
+        response: result.response,
+        expiresAt: new Date(now.getTime() + 86400000),
+      });
+      await audit(tx, result.row, actor.id, `document.${operation}.v1`);
+      return schema.parse(result.response);
+    });
+  }
+  return {
+    async list(userId: string, cursor?: string) {
+      let position: { at: string; id: string } | undefined;
+      if (cursor) {
+        try {
+          position = z
+            .object({ at: z.iso.datetime(), id: z.string().regex(/^doc_[0-9a-f-]{36}$/) })
+            .strict()
+            .parse(JSON.parse(Buffer.from(cursor, "base64url").toString("utf8")));
+        } catch (cause) {
+          throw new DocumentError("DOCUMENT_NOT_FOUND", 400, { cause });
+        }
+      }
+      const rows = await db
+        .select()
+        .from(documents)
+        .where(
+          and(
+            eq(documents.userId, userId),
+            isNull(documents.deletedAt),
+            ne(documents.state, "deleted"),
+            position
+              ? or(
+                  lt(documents.createdAt, new Date(position.at)),
+                  and(
+                    eq(documents.createdAt, new Date(position.at)),
+                    lt(documents.id, position.id),
+                  ),
+                )
+              : undefined,
+          ),
+        )
+        .orderBy(desc(documents.createdAt), desc(documents.id))
+        .limit(21);
+      const page = rows.slice(0, 20);
+      const last = page.at(-1);
+      return documentListSchema.parse({
+        documents: page.map(summary),
+        nextCursor:
+          rows.length > 20 && last
+            ? Buffer.from(
+                JSON.stringify({ at: last.createdAt.toISOString(), id: last.id }),
+              ).toString("base64url")
+            : null,
+      });
+    },
+    async get(userId: string, id: string) {
+      return detail(
+        db,
+        live((await db.select().from(documents).where(condition(userId, id)).limit(1))[0]),
+      );
+    },
+    async original(userId: string, id: string) {
+      return live((await db.select().from(documents).where(condition(userId, id)).limit(1))[0]);
+    },
+    create(actor: Actor, input: DocumentCreateInput, key: string) {
+      return command(actor, null, "created", key, input, documentSchema, async (tx) => {
+        const count = await tx
+          .select({ id: documents.id })
+          .from(documents)
+          .where(and(eq(documents.userId, actor.userId), isNull(documents.deletedAt)))
+          .limit(201);
+        if (count.length >= 200) throw new DocumentError("DOCUMENT_LIMIT_REACHED", 422);
+        const id = `doc_${randomUUID()}`;
+        const [row] = await tx
+          .insert(documents)
+          .values({
+            ...input,
+            id,
+            userId: actor.userId,
+            declaredMime: input.mime,
+            mime: "application/octet-stream",
+            objectKey: `documents/${id}/original`,
+          })
+          .returning();
+        if (!row) throw new Error("Document insert failed");
+        return { row, response: await detail(tx, row) };
+      });
+    },
+    async uploaded(actor: Actor, id: string, mime: string) {
+      return db.transaction(async (tx) => {
+        const { session } = await lockProfileOwner(tx, actor.userId, actor.id);
+        const row = live(
+          (
+            await tx
+              .select()
+              .from(documents)
+              .where(condition(actor.userId, id))
+              .limit(1)
+              .for("update")
+          )[0],
+        );
+        if (session.expiresAt <= new Date())
+          throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);
+        if (row.state !== "pending") return detail(tx, row);
+        const [updated] = await tx
+          .update(documents)
+          .set({
+            mime,
+            state: "queued",
+            revision: row.revision + 1,
+            generation: row.generation + 1,
+            updatedAt: new Date(),
+          })
+          .where(condition(actor.userId, id))
+          .returning();
+        if (!updated) throw new Error("Document update failed");
+        await event(tx, updated, "document.uploaded.v1");
+        await audit(tx, updated, actor.id, "document.uploaded.v1");
+        return detail(tx, updated);
+      });
+    },
+    retry(actor: Actor, id: string, expected: number, analysisRequested: boolean, key: string) {
+      return command(
+        actor,
+        id,
+        "retry_requested",
+        key,
+        { id, expected, analysisRequested },
+        documentSchema,
+        async (tx, _, current) => {
+          const row = live(current);
+          revision(row, expected);
+          if (row.state !== "failed" && !(row.state === "ready" && analysisRequested))
+            throw new DocumentError("DOCUMENT_CONFLICT", 409);
+          const [updated] = await tx
+            .update(documents)
+            .set({
+              state: "queued",
+              failure: null,
+              analysisRequested,
+              revision: row.revision + 1,
+              generation: row.generation + 1,
+              updatedAt: new Date(),
+            })
+            .where(condition(actor.userId, id))
+            .returning();
+          if (!updated) throw new Error("Document update failed");
+          await event(tx, updated, "document.retry_requested.v1");
+          return { row: updated, response: await detail(tx, updated) };
+        },
+      );
+    },
+    categorize(
+      actor: Actor,
+      id: string,
+      input: { revision: number; category: Row["category"] },
+      key: string,
+    ) {
+      return command(
+        actor,
+        id,
+        "categorized",
+        key,
+        { id, ...input },
+        documentSchema,
+        async (tx, _, current) => {
+          const row = live(current);
+          revision(row, input.revision);
+          if (!["ready", "failed"].includes(row.state))
+            throw new DocumentError("DOCUMENT_CONFLICT", 409);
+          const now = new Date();
+          const [updated] = await tx
+            .update(documents)
+            .set({
+              category: input.category,
+              categoryCorrected: true,
+              revision: row.revision + 1,
+              updatedAt: now,
+            })
+            .where(condition(actor.userId, id))
+            .returning();
+          if (!updated) throw new Error("Document update failed");
+          const decision = {
+            id: randomUUID(),
+            action: "category" as const,
+            at: now.toISOString(),
+            category: input.category,
+            fields: [],
+          };
+          await tx.insert(documentDecisions).values({
+            id: decision.id,
+            documentId: id,
+            userId: actor.userId,
+            sessionId: actor.id,
+            revision: updated.revision,
+            decision,
+            createdAt: now,
+          });
+          return { row: updated, response: await detail(tx, updated) };
+        },
+      );
+    },
+    review(actor: Actor, id: string, input: DocumentReviewInput, key: string) {
+      return command(
+        actor,
+        id,
+        "reviewed",
+        key,
+        { id, ...input },
+        documentReviewResultSchema,
+        async (tx, profile, current) => {
+          const row = live(current);
+          revision(row, input.revision);
+          if (
+            row.state !== "ready" ||
+            profile.revision !== input.profileRevision ||
+            new Set(input.decisions.map((item) => item.extractionId)).size !==
+              input.decisions.length
+          )
+            throw new DocumentError("DOCUMENT_CONFLICT", 409);
+          const values: Record<string, string> = {};
+          const seen = new Set<string>();
+          const fields = input.decisions.map((item) => {
+            const extraction = row.analysis?.fields.find((field) => field.id === item.extractionId);
+            if (!extraction || seen.has(extraction.field))
+              throw new DocumentError("DOCUMENT_REVIEW_INVALID", 422);
+            seen.add(extraction.field);
+            if (item.choice !== "keep" && !input.concernsMe)
+              throw new DocumentError("DOCUMENT_REVIEW_INVALID", 422);
+            const value =
+              item.choice === "keep"
+                ? null
+                : item.choice === "correct"
+                  ? item.value
+                  : extraction.value;
+            if (item.choice !== "keep" && !value)
+              throw new DocumentError("DOCUMENT_REVIEW_INVALID", 422);
+            if (
+              value &&
+              ["expiresOn", "birthDate"].includes(extraction.field) &&
+              !z.iso.date().safeParse(value).success
+            )
+              throw new DocumentError("DOCUMENT_REVIEW_INVALID", 422);
+            if (value && profileFieldSchema.safeParse(extraction.field).success)
+              values[extraction.field] = value;
+            return {
+              field: extraction.field,
+              choice: item.choice,
+              value: value ?? null,
+              source: extraction.source,
+            };
+          });
+          const validValues = documentProfileValuesSchema.safeParse(values);
+          if (!validValues.success) throw new DocumentError("DOCUMENT_REVIEW_INVALID", 422);
+          const updatedProfile = Object.keys(values).length
+            ? await confirmDocumentProfileFields(tx, profile, validValues.data)
+            : toProfile(profile);
+          const now = new Date();
+          const [updated] = await tx
+            .update(documents)
+            .set({ revision: row.revision + 1, updatedAt: now })
+            .where(condition(actor.userId, id))
+            .returning();
+          if (!updated) throw new Error("Document update failed");
+          const decision = {
+            id: randomUUID(),
+            action: "review" as const,
+            at: now.toISOString(),
+            category: null,
+            fields,
+          };
+          await tx.insert(documentDecisions).values({
+            id: decision.id,
+            documentId: id,
+            userId: actor.userId,
+            sessionId: actor.id,
+            revision: updated.revision,
+            decision,
+            createdAt: now,
+          });
+          return {
+            row: updated,
+            response: { document: await detail(tx, updated), profile: updatedProfile },
+          };
+        },
+      );
+    },
+    async remove(actor: Actor, id: string) {
+      await db.transaction(async (tx) => {
+        const { session } = await lockProfileOwner(tx, actor.userId, actor.id);
+        const [row] = await tx
+          .select()
+          .from(documents)
+          .where(condition(actor.userId, id))
+          .limit(1)
+          .for("update");
+        if (session.expiresAt <= new Date())
+          throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);
+        if (!row) throw new DocumentError("DOCUMENT_NOT_FOUND", 404);
+        if (row.deletedAt) return;
+        const [updated] = await tx
+          .update(documents)
+          .set({
+            state: "deleting",
+            deletedAt: new Date(),
+            analysis: null,
+            revision: row.revision + 1,
+            generation: row.generation + 1,
+            updatedAt: new Date(),
+          })
+          .where(condition(actor.userId, id))
+          .returning();
+        if (!updated) throw new Error("Document update failed");
+        // Keep only field names and owner decisions as provenance of surviving profile fields.
+        await tx
+          .update(documentDecisions)
+          .set({
+            decision: sql`jsonb_set(${documentDecisions.decision}, '{fields}', coalesce((
+            select jsonb_agg(field || '{"value":null,"source":null}'::jsonb)
+            from jsonb_array_elements(${documentDecisions.decision}->'fields') as field
+          ), '[]'::jsonb))`,
+          })
+          .where(
+            and(eq(documentDecisions.userId, actor.userId), eq(documentDecisions.documentId, id)),
+          );
+        // Empty tombstones preserve creation idempotency without keeping private snapshots.
+        await tx
+          .update(documentCommands)
+          .set({ response: {} })
+          .where(
+            and(eq(documentCommands.userId, actor.userId), eq(documentCommands.documentId, id)),
+          );
+        await audit(tx, updated, actor.id, "document.deletion_requested.v1");
+        await event(tx, updated, "document.deletion_requested.v1");
+      });
+    },
+    async access(actor: Actor, id: string) {
+      await db.transaction(async (tx) => {
+        const { session } = await lockProfileOwner(tx, actor.userId, actor.id);
+        const row = live(
+          (await tx.select().from(documents).where(condition(actor.userId, id)).limit(1))[0],
+        );
+        if (session.expiresAt <= new Date())
+          throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);
+        if (!summary(row).canDownload) throw new DocumentError("DOCUMENT_DOWNLOAD_BLOCKED", 422);
+        await audit(tx, row, actor.id, "document.downloaded.v1");
+      });
+    },
+    async pendingEvents() {
+      return db
+        .select()
+        .from(documentOutbox)
+        .where(isNull(documentOutbox.publishedAt))
+        .orderBy(asc(documentOutbox.createdAt), asc(documentOutbox.id))
+        .limit(50);
+    },
+    async published(id: string) {
+      await db
+        .update(documentOutbox)
+        .set({ publishedAt: new Date() })
+        .where(eq(documentOutbox.id, id));
+    },
+    async jobRow(userId: string, id: string, generation: number) {
+      const [row] = await db
+        .select()
+        .from(documents)
+        .where(and(condition(userId, id), eq(documents.generation, generation)))
+        .limit(1);
+      return row;
+    },
+    async transition(
+      userId: string,
+      id: string,
+      generation: number,
+      patch: Partial<Pick<Row, "state" | "analysis" | "failure" | "scanVersion" | "category">>,
+    ) {
+      return db.transaction(async (tx) => {
+        const [row] = await tx
+          .select()
+          .from(documents)
+          .where(
+            and(
+              condition(userId, id),
+              eq(documents.generation, generation),
+              isNull(documents.deletedAt),
+            ),
+          )
+          .limit(1)
+          .for("update");
+        if (!row || ["ready", "quarantined"].includes(row.state)) return false;
+        const [updated] = await tx
+          .update(documents)
+          .set({
+            ...patch,
+            ...(row.categoryCorrected ? { category: row.category } : {}),
+            revision: row.revision + 1,
+            updatedAt: new Date(),
+          })
+          .where(condition(userId, id))
+          .returning();
+        if (updated)
+          await audit(
+            tx,
+            updated,
+            "system:document-worker",
+            `document.${patch.state ?? "processed"}.v1`,
+          );
+        return !!updated;
+      });
+    },
+    async finishDelete(userId: string, id: string, generation: number) {
+      await db.transaction(async (tx) => {
+        const [row] = await tx
+          .update(documents)
+          .set({
+            state: "deleted",
+            name: "",
+            mime: "application/octet-stream",
+            declaredMime: "",
+            size: 0,
+            checksum: "0".repeat(64),
+            category: "unknown",
+            analysis: null,
+            failure: null,
+            scanVersion: null,
+            updatedAt: new Date(),
+          })
+          .where(
+            and(
+              condition(userId, id),
+              eq(documents.generation, generation),
+              eq(documents.state, "deleting"),
+            ),
+          )
+          .returning();
+        if (row) await audit(tx, row, "system:document-worker", "document.deleted.v1");
+      });
+    },
+    async reserveAi(userId: string, id: string, generation: number, model: string, limit: number) {
+      return db.transaction(async (tx) => {
+        const [owner] = await tx
+          .select({ id: identityUsers.id })
+          .from(identityUsers)
+          .where(eq(identityUsers.id, userId))
+          .for("no key update")
+          .limit(1);
+        if (!owner) throw new DocumentError("DOCUMENT_NOT_FOUND", 404);
+        const row = live(
+          (
+            await tx
+              .select()
+              .from(documents)
+              .where(and(condition(userId, id), eq(documents.generation, generation)))
+              .limit(1)
+              .for("update")
+          )[0],
+        );
+        if (row.state !== "reading") throw new DocumentError("DOCUMENT_CONFLICT", 409);
+        const callId = `call_${hash({ userId, id, generation })}`;
+        const [existing] = await tx
+          .select({ id: documentAiCalls.id })
+          .from(documentAiCalls)
+          .where(and(eq(documentAiCalls.id, callId), eq(documentAiCalls.userId, userId)))
+          .limit(1);
+        if (existing) return { id: callId, existing: true };
+        const calls = await tx
+          .select({ id: documentAiCalls.id })
+          .from(documentAiCalls)
+          .where(
+            and(
+              eq(documentAiCalls.userId, userId),
+              gte(documentAiCalls.createdAt, new Date(Date.now() - 86400000)),
+            ),
+          )
+          .limit(limit);
+        if (calls.length >= limit) return null;
+        await tx.insert(documentAiCalls).values({ id: callId, userId, documentId: id, model });
+        return { id: callId, existing: false };
+      });
+    },
+    async completeAnalysis(
+      userId: string,
+      id: string,
+      generation: number,
+      callId: string,
+      analysis: DocumentAnalysis,
+      usage: { inputTokens: number; outputTokens: number; model: string },
+    ) {
+      await db.transaction(async (tx) => {
+        const [row] = await tx
+          .select()
+          .from(documents)
+          .where(and(condition(userId, id), eq(documents.generation, generation)))
+          .limit(1)
+          .for("update");
+        await tx
+          .update(documentAiCalls)
+          .set({
+            inputTokens: usage.inputTokens,
+            outputTokens: usage.outputTokens,
+            model: usage.model,
+          })
+          .where(
+            and(
+              eq(documentAiCalls.id, callId),
+              eq(documentAiCalls.userId, userId),
+              eq(documentAiCalls.documentId, id),
+            ),
+          );
+        if (!row || row.deletedAt || row.state !== "reading") return;
+        const [updated] = await tx
+          .update(documents)
+          .set({
+            analysis,
+            state: "ready",
+            failure: null,
+            category: row.categoryCorrected ? row.category : analysis.category,
+            revision: row.revision + 1,
+            updatedAt: new Date(),
+          })
+          .where(condition(userId, id))
+          .returning();
+        if (updated) await audit(tx, updated, "system:document-worker", "document.ready.v1");
+      });
+    },
+    async recover() {
+      // Redis is transport only. Re-enqueue stale work from PostgreSQL after queue loss.
+      // Keep the logical generation so an uncertain provider call cannot be billed again automatically.
+      await db.transaction(async (tx) => {
+        const rows = await tx
+          .select()
+          .from(documents)
+          .where(
+            and(
+              inArray(documents.state, ["queued", "scanning", "reading", "deleting"]),
+              lt(documents.updatedAt, new Date(Date.now() - 600000)),
+            ),
+          )
+          .orderBy(asc(documents.updatedAt), asc(documents.id))
+          .limit(20)
+          .for("update", { skipLocked: true });
+        for (const row of rows) {
+          const [updated] = await tx
+            .update(documents)
+            .set({
+              state: row.deletedAt ? "deleting" : "queued",
+              revision: row.revision + 1,
+              updatedAt: new Date(),
+            })
+            .where(condition(row.userId, row.id))
+            .returning();
+          if (updated) {
+            await event(
+              tx,
+              updated,
+              row.deletedAt ? "document.deletion_requested.v1" : "document.retry_requested.v1",
+            );
+            await audit(tx, updated, "system:document-recovery", "document.recovered.v1");
+          }
+        }
+      });
+    },
+    async cleanup() {
+      // Technical upload handles expire; accepted originals never expire automatically.
+      const stale = await db
+        .select()
+        .from(documents)
+        .where(
+          and(
+            eq(documents.state, "pending"),
+            lt(documents.updatedAt, new Date(Date.now() - 86400000)),
+          ),
+        )
+        .orderBy(asc(documents.updatedAt), asc(documents.id))
+        .limit(20);
+      for (const item of stale)
+        await db.transaction(async (tx) => {
+          const [row] = await tx
+            .update(documents)
+            .set({
+              state: "deleting",
+              deletedAt: new Date(),
+              generation: item.generation + 1,
+              updatedAt: new Date(),
+            })
+            .where(and(condition(item.userId, item.id), eq(documents.state, "pending")))
+            .returning();
+          if (row) await event(tx, row, "document.deletion_requested.v1");
+        });
+      await db
+        .delete(documentCommands)
+        .where(
+          inArray(
+            documentCommands.id,
+            db
+              .select({ id: documentCommands.id })
+              .from(documentCommands)
+              .where(lte(documentCommands.expiresAt, new Date()))
+              .orderBy(asc(documentCommands.expiresAt), asc(documentCommands.id))
+              .limit(100),
+          ),
+        );
+    },
+  };
+}

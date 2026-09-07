@@ -28,7 +28,11 @@ const urlOf = (app) => `http://127.0.0.1:${app.port}`;
 export function childEnvironment(key, environment = process.env) {
   return Object.fromEntries(
     Object.entries(environment).filter(
-      ([name]) => key === "api" || !/^(WORKOS_API_KEY|AUTH_SESSION_SECRET)$/i.test(name),
+      ([name]) =>
+        key === "api" ||
+        !/^(WORKOS_API_KEY|AUTH_SESSION_SECRET|OPENAI_API_KEY|DOCUMENT_STORAGE_KEY|DOCUMENT_S3_ACCESS_KEY|DOCUMENT_S3_SECRET_KEY)$/i.test(
+          name,
+        ),
     ),
   );
 }

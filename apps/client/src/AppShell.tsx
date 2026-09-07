@@ -1,7 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, Outlet, useLocation } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { ArrowUpRight, Menu, MonitorSmartphone, Settings2, UserRound, X } from "lucide-react";
+import {
+  ArrowUpRight,
+  FileText,
+  Menu,
+  MonitorSmartphone,
+  Settings2,
+  UserRound,
+  X,
+} from "lucide-react";
 import {
   Button,
   Container,
@@ -19,6 +27,7 @@ import { LogoutFeedback } from "./features/identity/LogoutFeedback";
 
 const destinations = [
   { to: "/profile", key: "profile", icon: UserRound },
+  { to: "/documents", key: "documents", icon: FileText },
   { to: "/account", key: "account", icon: Settings2 },
   { to: "/devices", key: "devices", icon: MonitorSmartphone },
 ] as const;
@@ -114,9 +123,7 @@ export function AppShell() {
                 aria-current={isCurrent(destination.to) ? "page" : undefined}
                 className="cv-app-nav-link"
               >
-                {destination.key === "profile"
-                  ? t("nav", { ns: "profile" })
-                  : t(destination.key === "account" ? "identity.accountTitle" : "identity.devices")}
+                {t("mobileNav." + destination.key)}
               </Link>
             ))}
           </nav>
@@ -225,7 +232,7 @@ export function AppShell() {
           aria-label={t("navigation")}
           className="wallet-bottom-nav fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur-xl md:hidden"
         >
-          <ul className="grid grid-cols-3">
+          <ul className="grid grid-cols-4">
             {destinations.map(({ to, key, icon: Icon }) => {
               const current = isCurrent(to);
               return (

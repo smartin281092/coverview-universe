@@ -3909,10 +3909,18 @@
     "id": "S-042a",
     "title": "Conserver ses documents originaux et confirmer les informations extraites dans son profil",
     "milestone": "M8",
-    "objective": "Depuis Wallet, conserver un document original privé, consulter sa classification réelle et confirmer ses informations extraites localement dans le profil canonique.",
-    "depends_on": ["S-013a"],
-    "apps": ["api", "client"],
-    "modules": ["identity", "document-intelligence"],
+    "objective": "Depuis Wallet, conserver un original privé, consulter sa classification issue de l’API OpenAI et confirmer ses informations extraites dans le profil canonique.",
+    "depends_on": [
+      "S-013a"
+    ],
+    "apps": [
+      "api",
+      "client"
+    ],
+    "modules": [
+      "identity",
+      "document-intelligence"
+    ],
     "mode": "integration",
     "priority": 21,
     "session_budget": 1,
@@ -3938,7 +3946,7 @@
     ],
     "events_jobs": [
       "Confirmation upload et outbox Postgres atomiques ; BullMQ persistant, jobs idempotents et ressources bornées.",
-      "Antivirus réel avant parsing, classification/OCR/extraction locaux intégrés durablement au produit avec états, retry sélectif et erreurs lisibles.",
+      "Antivirus local réel avant parsing ou envoi ; lecture/classification/extraction par API OpenAI intégrée au produit, store:false, schéma strict, aucun outil, coûts bornés et reprise explicite.",
       "Confirmation de champs et audit atomiques, révision optimiste et idempotence ; aucune valeur personnelle dans les événements.",
       "Suppression idempotente des objets et dérivés, jobs rendus inapplicables pour empêcher la résurrection."
     ],
@@ -3950,17 +3958,35 @@
       "real": [
         "WorkOS et profil canonique S-000b/S-013a",
         "PostgreSQL, MinIO privé et BullMQ persistants",
-        "OCR, classification, extraction et antivirus locaux installés et démarrés depuis le dépôt, indépendants du runtime agent"
+        "ClamAV local durable et API OpenAI Responses réelle, indépendants du runtime agent ; clé serveur uniquement."
       ],
-      "activation_slices": ["S-013", "S-023", "S-037", "S-042", "S-130", "S-131", "S-135", "S-139"]
+      "activation_slices": [
+        "S-013",
+        "S-023",
+        "S-037",
+        "S-042",
+        "S-130",
+        "S-131",
+        "S-135",
+        "S-139"
+      ]
     },
     "criteria": [
       {
         "criterion": "Un propriétaire peut déposer, retrouver et télécharger l’original privé inchangé, y compris une pièce d’identité ; MIME, taille, magic bytes et checksum sont vérifiés, les dérivés séparés et tout accès tiers refusé.",
         "source_ranges": [
-          [443, 445],
-          [855, 855],
-          [883, 883]
+          [
+            443,
+            445
+          ],
+          [
+            855,
+            855
+          ],
+          [
+            883,
+            883
+          ]
         ],
         "oracle": "V3",
         "test": "Upload autorisé réel, rechargement et téléchargement ; checksum identique et refus hors propriétaire."
@@ -3968,8 +3994,14 @@
       {
         "criterion": "OCR et antivirus sont des services durables du produit ; le contrôle antivirus précède le parsing. Une indisponibilité ou un format refusé ne produit aucun faux succès et préserve l’original.",
         "source_ranges": [
-          [855, 860],
-          [2495, 2495]
+          [
+            855,
+            860
+          ],
+          [
+            2495,
+            2495
+          ]
         ],
         "oracle": "V3",
         "test": "Traitement réel et reprise après redémarrage ; antivirus indisponible bloque le parsing sans perdre l’original."
@@ -3977,9 +4009,18 @@
       {
         "criterion": "La classification lit le contenu des familles supportées ; un type indéterminé reste inconnu. Une correction est historisée sans modifier l’original.",
         "source_ranges": [
-          [747, 750],
-          [835, 837],
-          [858, 860]
+          [
+            747,
+            750
+          ],
+          [
+            835,
+            837
+          ],
+          [
+            858,
+            860
+          ]
         ],
         "oracle": "V3",
         "test": "Pièce d’identité et autre document autorisé ; confronter type et contenu puis corriger et recharger."
@@ -3987,9 +4028,18 @@
       {
         "criterion": "Les informations d’identité réellement lisibles sont extraites avec preuve localisée, méthode/version et confiance disponible ; les champs absents restent inconnus.",
         "source_ranges": [
-          [414, 415],
-          [747, 753],
-          [858, 858]
+          [
+            414,
+            415
+          ],
+          [
+            747,
+            753
+          ],
+          [
+            858,
+            858
+          ]
         ],
         "oracle": "V3",
         "test": "Confronter nom, prénom, naissance, nationalité et métadonnées de pièce à la source réelle ; aucune adresse/date/confiance inventée."
@@ -3997,10 +4047,22 @@
       {
         "criterion": "La confirmation propriétaire enrichit le même profil canonique sans écraser les confirmations antérieures ; divergence explicite, provenance conservée et contrats N-1 compatibles.",
         "source_ranges": [
-          [418, 422],
-          [747, 747],
-          [751, 756],
-          [860, 860]
+          [
+            418,
+            422
+          ],
+          [
+            747,
+            747
+          ],
+          [
+            751,
+            756
+          ],
+          [
+            860,
+            860
+          ]
         ],
         "oracle": "V3",
         "test": "Confirmer puis réextraire une divergence ; profil inchangé avant décision, confirmation idempotente et ancien client compatible."
@@ -4008,8 +4070,14 @@
       {
         "criterion": "Wallet propose liste bornée et revue documentaire au clavier et sur smartphone ; attente, erreur et reprise reflètent les jobs réels et la saisie manuelle reste possible.",
         "source_ranges": [
-          [751, 753],
-          [875, 883]
+          [
+            751,
+            753
+          ],
+          [
+            875,
+            883
+          ]
         ],
         "oracle": "V3",
         "test": "Parcours réel ordinateur/mobile, interruption et reprise ; critique produit puis corrections et seconde revue."
@@ -4017,10 +4085,22 @@
       {
         "criterion": "La fin de l’OCR conserve l’original. La suppression propriétaire expose ses conséquences, retire les objets actifs et empêche les jobs de les recréer ; durées légales non inventées.",
         "source_ranges": [
-          [754, 754],
-          [855, 855],
-          [2516, 2516],
-          [2898, 2898]
+          [
+            754,
+            754
+          ],
+          [
+            855,
+            855
+          ],
+          [
+            2516,
+            2516
+          ],
+          [
+            2898,
+            2898
+          ]
         ],
         "oracle": "V3",
         "test": "Original disponible après extraction ; suppression demandée puis refus de lecture et absence de résurrection après reprise worker."
@@ -4031,8 +4111,8 @@
         "ref": "project.documents.local-processing",
         "question": "Quel traitement pour la première ingestion réelle ?",
         "options": [
-          "Moteurs OCR/classification/extraction et antivirus locaux durables ; aucun transfert tiers",
-          "Fournisseur externe après vérification de ses conditions"
+          "API OpenAI pour OCR/classification/extraction et futures capacités IA ; antivirus et stockage privés locaux",
+          "Moteurs de lecture exclusivement locaux"
         ],
         "recommended": 0,
         "blocks": "Choix effectif des moteurs"
@@ -4087,21 +4167,26 @@
       "observability.md",
       "testing.md",
       "dependencies.md",
-      "environment.md"
+      "environment.md",
+      "llm.md"
     ],
-    "exclusions": ["billing.md", "marketing-web.md"],
+    "exclusions": [
+      "billing.md",
+      "marketing-web.md"
+    ],
     "risks": [
       "Extraction inexacte : source visible et confirmation.",
       "Original sensible : bucket privé et autorisation à chaque frontière.",
       "Concurrence suppression/job : état terminal recontrôlé.",
       "Disponibilité moteur à prouver par service produit reproductible.",
-      "Conservation volontaire locale distincte d’une conformité juridique globale."
+      "Conservation volontaire locale distincte d’une conformité juridique globale.",
+      "Transfert OpenAI facultatif explicite ; store:false ne garantit pas aucune conservation fournisseur. Une autorisation d’usage ne prouve ni clé, ni DPA, ni conformité de production."
     ],
     "out_of_scope": [
       "Rattachement de documents anonymes et autres objets : S-013.",
       "Extraction contractuelle complète, catalogue et canaux email/chat : S-023/S-037.",
       "Démarches supplémentaires et rétention générale : S-042/S-130/S-131.",
-      "KYC, fournisseur externe, publication et conformité de production."
+      "KYC, publication et conformité de production ; capacités IA futures sans parcours actuel."
     ],
     "split_trigger": "Après une session principale sans passage en revue, découper au prochain résultat utilisateur autonome ; conserver les preuves et le reste à faire selon PROG-14."
   },

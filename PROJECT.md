@@ -34,6 +34,7 @@ Données fictives au démarrage : ENV-09. Les exemples financiers ne deviennent 
 |---|---|
 | Stack technique | CLAUDE.md §0, ADR-0001 |
 | Identité / connexion WorkOS, projet `coverview` | AUTH-11, ADR-0003 |
+| API OpenAI pour OCR et fonctions IA | Décision utilisateur S-042a ; roadmap/execution-policy.md et README document-intelligence |
 | Tenancy personnelle, foyers et espaces professionnels | ADR-0002 ; droits non décidés à inventer interdits |
 | Preset shadcn et commande exacte fournie | DSN-01, ADR-0004 |
 | Palette jointe, logo et fonds du dossier assets | docs/brand.md, ADR-0004 |

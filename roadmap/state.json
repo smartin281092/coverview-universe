@@ -137,7 +137,9 @@
           "S-000a-C01..C06 : recette complète depuis checkout vierge 4f04808f2201af5603a54d27fdbbf8a175ba800c passée ; proof roadmap/evidence/S-000a-clean-check.json.",
           "Neuf tests de preview passent aussi dans Linux non-root avec source read-only et réseau désactivé."
         ],
-        "done_unverified": ["CI distante, reset destructif, WorkOS et déploiement non exécutés."],
+        "done_unverified": [
+          "CI distante, reset destructif, WorkOS et déploiement non exécutés."
+        ],
         "assumed": [
           "Français initial et ports réversibles : impact catalogues i18n et configuration locale."
         ]
@@ -599,14 +601,14 @@
       ]
     },
     "S-042a": {
-      "status": "specified",
+      "status": "running",
       "approval": "Demande explicite utilisateur du 6 septembre 2026 : mobile Wallet puis conservation de tous les documents déposés, y compris identité, classification et extraction profil ; choix locaux délégués PROG-23, aucune validation juridique déduite.",
       "decisions": [
         {
           "ref": "project.documents.local-processing",
           "question": "Quel traitement pour la première ingestion réelle ?",
-          "answer": "Moteurs OCR/classification/extraction et antivirus locaux durables ; aucun transfert tiers",
-          "evidence": "Demande explicite utilisateur du 6 septembre 2026 : mobile Wallet puis conservation de tous les documents déposés, y compris identité, classification et extraction profil ; choix locaux délégués PROG-23, aucune validation juridique déduite."
+          "answer": "API OpenAI pour OCR/classification/extraction et futures capacités IA ; antivirus et stockage privés locaux",
+          "evidence": "Instruction utilisateur pendant S-042a : Pour la lecture OCR et toutes les fonctionnalités dont nous aurons besoin de l’IA d’ailleurs on peut utiliser l’API de chatgpt. Remplace le choix exclusivement local antérieur ; documentation officielle Responses/file inputs/structured outputs/your-data consultée le 6 septembre 2026."
         },
         {
           "ref": "bible.question.006",
@@ -627,7 +629,26 @@
           "evidence": "Demande explicite utilisateur du 6 septembre 2026 : mobile Wallet puis conservation de tous les documents déposés, y compris identité, classification et extraction profil ; choix locaux délégués PROG-23, aucune validation juridique déduite."
         }
       ],
-      "verification_attempts": [],
+      "verification_attempts": [
+        {
+          "target": "Reprise 7440",
+          "oracle": "V0",
+          "observed": "SHA 54913e45a083f559793844fa91f4da5b6c9c21fb présent ; worktree propre avant mutation ; branche codex/s-042a-documents.",
+          "decision": "S-042a seule running ; autres runtimes préservés."
+        },
+        {
+          "target": "Contrats/API/Wallet",
+          "oracle": "V0",
+          "observed": "Types API et Wallet passent ; lint initial signale 8 corrections locales traitées. Migration additive 0006 générée.",
+          "decision": "Poursuivre mise en service et contrôles intégrité ; ne pas clore sur compilation."
+        },
+        {
+          "target": "Stockage et contrôles locaux S-042a",
+          "oracle": "V1/V2 et services réels partiels",
+          "observed": "ClamAV sain, clé DPAPI stable, original palette chiffré/relu identique, second PUT idempotent, GET anonyme 403. SQL documentaire non exécuté après garde session active ; OpenAI non configuré ; recette navigateur indisponible.",
+          "decision": "Conserver S-042a running ; préparer activation puis reprendre les preuves réelles après clé/session."
+        }
+      ],
       "ledger": {
         "verified": [],
         "done_unverified": [],
@@ -636,7 +657,8 @@
       "notes": [
         "Prochaine tranche prioritaire après S-013a mobile réellement close ; WIP=1.",
         "Les parents et consommateurs gardent tous leurs critères/sources et restent incomplets.",
-        "Moteurs et antivirus à installer réellement comme services du produit. Aucun outil du runtime agent ne constitue cette intégration."
+        "Fournisseur OpenAI choisi explicitement pendant cette tâche ; services et parcours codés, recette réelle encore requise. Clé API absente de l’environnement de cette tâche, aucune autre mémoire de processus inspectée.",
+        "Checkpoint 2026-09-07 : adapter OpenAI et parcours codés. Services réels ClamAV/MinIO/DPAPI vérifiés ; typecheck, lint, frontières, knip et 21 tests HTTP existants passent. OpenAI absent et sessions de recette expirées ; CUA échoue à initialiser son noyau. Aucun critère V3 clôturé, voir roadmap/evidence/S-042a.md."
       ]
     }
   },

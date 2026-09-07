@@ -1,5 +1,7 @@
 import { z } from "zod";
+import { documentErrorCodes } from "./documents.js";
 export * from "./profile.js";
+export * from "./documents.js";
 
 export const livenessSchema = z.object({ status: z.literal("alive") });
 export const readinessSchema = z.object({ status: z.enum(["ready", "not_ready"]) });
@@ -31,7 +33,11 @@ export const identityErrorCodeSchema = z.enum([
   "PROFILE_CONFIRMATION_REQUIRED",
   "PROFILE_INVALID_BIRTH_DATE",
 ]);
-export const apiErrorCodeSchema = z.union([platformErrorCodeSchema, identityErrorCodeSchema]);
+export const apiErrorCodeSchema = z.union([
+  platformErrorCodeSchema,
+  identityErrorCodeSchema,
+  z.enum(documentErrorCodes),
+]);
 export const apiErrorSchema = z.object({
   error: z.object({
     code: apiErrorCodeSchema,

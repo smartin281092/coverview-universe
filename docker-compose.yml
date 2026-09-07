@@ -48,7 +48,23 @@ services:
       interval: 3s
       timeout: 3s
       retries: 20
+  clamav:
+    image: clamav/clamav@sha256:f0954d679017eb6d48221e2b2be3ac5457bf278a844f39b672376f55a085f591
+    restart: unless-stopped
+    ports: ["127.0.0.1:53310:3310"]
+    volumes: ["clamavdata:/var/lib/clamav"]
+    mem_limit: 2g
+    cpus: 1.0
+    pids_limit: 100
+    security_opt: ["no-new-privileges:true"]
+    healthcheck:
+      test: ["CMD", "clamdscan", "--ping", "3"]
+      interval: 20s
+      timeout: 10s
+      start_period: 120s
+      retries: 15
 volumes:
   pgdata:
   redisdata:
   miniodata:
+  clamavdata:

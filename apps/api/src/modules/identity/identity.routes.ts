@@ -396,4 +396,9 @@ export async function registerIdentity(
     checkHost,
     checkMutation,
   });
+  return {
+    authenticate: (request: FastifyRequest) => requiredService().authenticate(token(request)),
+    checkHost,
+    checkMutation,
+  };
 }

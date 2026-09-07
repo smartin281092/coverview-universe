@@ -58,6 +58,10 @@ export const environmentSchema = z
       .enum(["true", "false"])
       .default("false")
       .transform((value) => value === "true"),
+    DOCUMENTS_ENABLED: z
+      .enum(["true", "false"])
+      .default("true")
+      .transform((value) => value === "true"),
     WORKOS_API_KEY: z.string().min(1).optional(),
     WORKOS_CLIENT_ID: z.string().startsWith("client_").optional(),
     WORKOS_ISSUER: httpUrl.default("https://api.workos.com/"),
