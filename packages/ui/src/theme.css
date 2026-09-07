@@ -327,6 +327,18 @@ body {
   align-items: start;
   gap: var(--spacing-48);
 }
+.cv-tabbed-page,
+.cv-account-layout.cv-tabbed-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-24);
+}
+.cv-tabbed-page > .cv-account-layout__content {
+  padding-top: 0;
+}
+.cv-tabbed-page > .cv-account-layout__details {
+  margin-top: var(--spacing-24);
+}
 .cv-account-layout__details {
   display: grid;
   gap: var(--spacing-24);

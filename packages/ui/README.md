@@ -32,6 +32,8 @@ Les composants de présentation statique ne contiennent aucun accès réseau ni 
 
 Les classes de composition `cv-container`, `cv-section`, `cv-heading` et `cv-text-link` restent utilisables dans du HTML Astro lorsque son emplacement de contenu le nécessite. Les actions composent `Button` ou `ButtonLink` pour conserver les variantes communes. `SectionHeading` reçoit l’ID sur le titre pour la relation `aria-labelledby` de la section.
 
+Pour toute nouvelle page à onglets, utiliser la composition `cv-tabbed-page` avec l’en-tête puis le contenu à onglets comme enfants directs : elle conserve 24 px entre la description de page et les onglets, sur toutes les largeurs. `AccountLayout layout="tabs"` applique cette composition et garde les onglets sous le titre sur grand écran. Les groupes d’actions utilisent `flex flex-wrap items-center gap-3` : 12 px entre boutons, avec retour à la ligne selon la largeur disponible.
+
 ## Règles de présentation et invariants
 
 `src/preset.css` conserve les tokens clairs Mist générés ; `src/theme.css` porte les fontes et adaptations communes, et `src/styles.css` leur raccord Tailwind, notamment les rayons du preset. Ces fichiers exécutables font autorité sur les valeurs. Les règles visuelles courantes sont celles d’ADR-0008 ; les sections et états restent ouverts, les cards rares. Un bento n’emballe pas une longue section, un formulaire ou un état vide. Les consommateurs gardent leur hiérarchie sémantique, leurs catalogues, le focus visible et leurs responsabilités d’accessibilité.

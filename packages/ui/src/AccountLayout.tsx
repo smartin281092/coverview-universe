@@ -5,6 +5,7 @@ export type AccountLayoutProps = {
   title: string;
   eyebrow: string;
   description: string;
+  layout?: "split" | "tabs";
   details: ReadonlyArray<{ title: string; description: string; icon?: ReactNode }>;
   children: ReactNode;
 };
@@ -13,11 +14,12 @@ export function AccountLayout({
   title,
   eyebrow,
   description,
+  layout = "split",
   details,
   children,
 }: AccountLayoutProps) {
   return (
-    <div className="cv-account-layout">
+    <div className={layout === "tabs" ? "cv-account-layout cv-tabbed-page" : "cv-account-layout"}>
       <SectionHeading
         className="cv-account-layout__heading"
         title={title}

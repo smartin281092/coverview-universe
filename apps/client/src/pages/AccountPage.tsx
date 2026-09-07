@@ -50,11 +50,13 @@ export function AccountPage() {
                   <dt className="text-sm text-muted-foreground">{t("identity.email")}</dt>
                   <dd className="break-words font-medium">{identity.user.email}</dd>
                 </dl>
+              </section>
+              <div className="flex flex-wrap items-center gap-3">
                 <Button asChild variant="outline">
                   <a href={authenticatorUrl}>{t("identity.authenticator")}</a>
                 </Button>
-              </section>
-              <LogoutActions identity={identity} scope="current" />
+                <LogoutActions identity={identity} scope="current" />
+              </div>
             </TabsContent>
             <TabsContent value="devices" className="space-y-4 text-base">
               <p className="max-w-xl text-muted-foreground">{t("identity.devicesDescription")}</p>

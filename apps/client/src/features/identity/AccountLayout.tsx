@@ -12,6 +12,7 @@ export function AccountLayout({ children }: { children: ReactNode }) {
   ];
   return (
     <SharedAccountLayout
+      layout="tabs"
       title={t("identity.accountTitle")}
       eyebrow={t("accountIntro.eyebrow")}
       description={t("identity.accountDescription")}
