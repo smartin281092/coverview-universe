@@ -155,6 +155,7 @@ it("keeps canonical identity distinct from managed people/entities and enforces 
 
 it("persists independent sections, counts zero amounts, rejects stale/cross-profile replays and never turns empty review into complete data", async () => {
   const actor = await owner();
+  const stranger = await owner();
   const person = await repository.create(
     actor,
     { kind: "person", displayName: "Dossier A" },
@@ -194,11 +195,25 @@ it("persists independent sections, counts zero amounts, rejects stale/cross-prof
   const healthInput = profileSectionSaveInputSchema.parse({
     revision: 0,
     step: "review",
-    fields: { allergies: "Aucune connue", accidentCoverage: "unknown" },
+    fields: {
+      allergies: "Aucune connue",
+      accidentCoverage: "unknown",
+      primaryDoctorName: "  Dre Exemple  ",
+    },
     confirm: true,
   });
   const health = await repository.saveSection(actor, person.id, "health", healthInput, healthKey);
-  expect(health.completion).toBe(22);
+  expect(health.completion).toBe(30);
+  expect(health.values.primaryDoctorName).toBe("Dre Exemple");
+  expect(
+    (await repository.section(actor.userId, person.id, "health")).values.primaryDoctorName,
+  ).toBe("Dre Exemple");
+  expect(
+    (await repository.section(actor.userId, other.id, "health")).values.primaryDoctorName,
+  ).toBeUndefined();
+  await expect(repository.section(stranger.userId, person.id, "health")).rejects.toMatchObject({
+    statusCode: 404,
+  });
   expect(health.confirmedAt).not.toBeNull();
   const [record] = await database.db
     .select({ response: managedProfileCommands.response })
@@ -226,14 +241,22 @@ it("persists independent sections, counts zero amounts, rejects stale/cross-prof
     actor,
     person.id,
     "health",
-    { revision: health.revision, step: "information", fields: { allergies: null } },
+    {
+      revision: health.revision,
+      step: "information",
+      fields: { allergies: null, primaryDoctorName: null },
+    },
     randomUUID(),
   );
-  expect(edited.completion).toBe(11);
+  expect(edited.completion).toBe(10);
   expect(edited.confirmedAt).toBeNull();
   const oldRetry = await repository.saveSection(actor, person.id, "health", healthInput, healthKey);
   expect(oldRetry).toEqual(edited);
   expect(oldRetry.values.allergies).toBeUndefined();
+  expect(oldRetry.values.primaryDoctorName).toBeUndefined();
+  expect(
+    (await repository.section(actor.userId, person.id, "health")).values.primaryDoctorName,
+  ).toBeUndefined();
   expect(
     (await repository.section(actor.userId, person.id, "health")).values.allergies,
   ).toBeUndefined();
@@ -242,6 +265,7 @@ it("persists independent sections, counts zero amounts, rejects stale/cross-prof
     .from(managedProfileCommands)
     .where(eq(managedProfileCommands.userId, actor.userId));
   expect(JSON.stringify(retained)).not.toContain("Aucune connue");
+  expect(JSON.stringify(retained)).not.toContain("Dre Exemple");
   const emptyReview = await repository.saveSection(
     actor,
     "self",
@@ -251,7 +275,7 @@ it("persists independent sections, counts zero amounts, rejects stale/cross-prof
   );
   expect(emptyReview.completion).toBe(0);
   const profile = await repository.get(actor.userId, person.id);
-  expect(profile.completion).toEqual({ general: 0, finances: 25, health: 11 });
+  expect(profile.completion).toEqual({ general: 0, finances: 25, health: 10 });
   await expect(
     repository.saveSection(
       actor,

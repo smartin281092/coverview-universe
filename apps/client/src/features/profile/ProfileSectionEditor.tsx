@@ -57,6 +57,7 @@ function fieldsFor(profile: ManagedProfile, section: ProfileSectionName): [Field
     return [
       ["insurer", "deductibleMinor", "accidentCoverage"],
       [
+        "primaryDoctorName",
         "heightCm",
         "weightKg",
         "smokingStatus",
@@ -429,7 +430,7 @@ export function ProfileSectionEditor({
               {(step === "information" ? information : details).map((field) => (
                 <div
                   key={field}
-                  className={`space-y-2 ${field === "street" || noteFields.has(field) ? "sm:col-span-2" : ""}`}
+                  className={`space-y-2 ${field === "street" || field === "primaryDoctorName" || noteFields.has(field) ? "sm:col-span-2" : ""}`}
                 >
                   <Label htmlFor={`section-${field}`}>{fieldLabel(field)}</Label>
                   {choices[field] ? (
@@ -487,9 +488,20 @@ export function ProfileSectionEditor({
                       }
                       maxLength={field === "street" || field === "contactEmail" ? 240 : 160}
                       className="min-h-11 text-base"
+                      aria-describedby={
+                        field === "primaryDoctorName" ? "section-primaryDoctorName-help" : undefined
+                      }
                       aria-invalid={Boolean(form.formState.errors[field])}
                       {...form.register(field)}
                     />
+                  )}
+                  {field === "primaryDoctorName" && (
+                    <p
+                      id="section-primaryDoctorName-help"
+                      className="text-sm text-muted-foreground"
+                    >
+                      {t("workspace.primaryDoctorHelp")}
+                    </p>
                   )}
                   {form.formState.errors[field] && (
                     <p role="alert" className="text-sm text-destructive">

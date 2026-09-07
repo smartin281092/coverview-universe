@@ -36,6 +36,7 @@ export const financialProfileValuesSchema = z
 export const healthProfileValuesSchema = z
   .object({
     insurer: z.string().trim().min(1).max(160).optional(),
+    primaryDoctorName: z.string().trim().min(1).max(160).optional(),
     deductibleMinor: money.optional(),
     accidentCoverage: z.enum(["yes", "no", "unknown"]).optional(),
     heightCm: z.number().positive().max(300).optional(),

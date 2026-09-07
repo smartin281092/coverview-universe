@@ -12,7 +12,7 @@ export function InsuranceCompanyLink({ companyId }: { companyId: InsuranceCompan
   return (
     <Card
       asChild
-      className="flex-row items-center gap-4 rounded-xl border border-border bg-transparent px-5 py-4 transition-colors duration-200 hover:border-primary/40 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transition-none"
+      className="w-48 max-w-full gap-2 rounded-xl border border-border bg-transparent p-3 transition-colors duration-200 hover:border-primary/40 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary motion-reduce:transition-none"
     >
       <Link
         to="/insurance-companies/$companyId"
@@ -20,11 +20,11 @@ export function InsuranceCompanyLink({ companyId }: { companyId: InsuranceCompan
         search={{}}
         aria-label={t("companyOpen", { company: name })}
       >
-        <span className="flex h-12 w-28 shrink-0 items-center justify-center">
-          <CompanyLogo companyId={companyId} />
+        <span className="flex w-full items-center justify-between gap-3">
+          <CompanyLogo companyId={companyId} className="h-6 w-14 object-left" />
+          <ArrowUpRight className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
         </span>
-        <span className="min-w-0 flex-1 break-words text-base font-medium">{name}</span>
-        <ArrowUpRight className="size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
+        <span className="min-w-0 break-words text-sm font-medium">{name}</span>
       </Link>
     </Card>
   );

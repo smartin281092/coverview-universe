@@ -114,7 +114,7 @@ function Company({ identity, companyId }: { identity: IdentityMe; companyId: Ins
               update(value);
           }}
         >
-          <TabsList className="h-12 w-full sm:w-auto" aria-label={t("eyebrow")}>
+          <TabsList className="min-h-[50px] w-full sm:w-fit" aria-label={t("eyebrow")}>
             <TabsTrigger value="contracts" className="min-h-11 px-3 text-sm">
               {t("tabs.contracts")}
             </TabsTrigger>
