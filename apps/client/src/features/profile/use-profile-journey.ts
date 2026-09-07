@@ -43,6 +43,11 @@ export function useProfileJourney({
   const busy = useRef(false);
   const controller = useRef<AbortController | null>(null);
   const mounted = useRef(true);
+  const sessionScope = `${ownerId ?? "anonymous"}:${identity?.session.id ?? "unavailable"}`;
+  const currentScope = useRef(sessionScope);
+  currentScope.current = sessionScope;
+  const blockedNow = useRef(blocked);
+  blockedNow.current = blocked;
   const keys = useRef(new Map<string, { signature: string; key: string }>());
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
@@ -78,6 +83,12 @@ export function useProfileJourney({
       keys.current.clear();
     };
   }, []);
+  useEffect(() => {
+    controller.current?.abort();
+    controller.current = null;
+    busy.current = false;
+    setPending(false);
+  }, [sessionScope]);
   useEffect(() => {
     if (draftQuery.data) setDraftEntry(draftQuery.data);
   }, [draftQuery.data]);
@@ -115,8 +126,8 @@ export function useProfileJourney({
     keys.current.set(operation, { signature, key });
     return key;
   };
-  const report = async (error: unknown) => {
-    if (!mounted.current) return;
+  const report = async (error: unknown, isCurrent: () => boolean) => {
+    if (!isCurrent()) return;
     const code = error instanceof ApiError ? String(error.code) : "";
     if (code === "IDENTITY_UNAUTHENTICATED" || code === "IDENTITY_CSRF_INVALID") {
       setFailure("session");
@@ -124,29 +135,40 @@ export function useProfileJourney({
     } else if (code === "PROFILE_DRAFT_EXPIRED" || code === "PROFILE_DRAFT_ATTACHED") {
       setFailure("expired");
       const entry = await draftQuery.refetch();
-      if (mounted.current && entry.data) setDraftEntry(entry.data);
+      if (isCurrent() && entry.data) setDraftEntry(entry.data);
     } else if (code === "PROFILE_INVALID_BIRTH_DATE") setFailure("birthDate");
     else if (code === "PROFILE_CONFIRMATION_REQUIRED") setFailure("proposals");
     else if (error instanceof ApiError && error.status === 409) setFailure("conflict");
     else if (error instanceof ApiError && error.status === 403) setFailure("denied");
     else setFailure("save");
   };
-  const run = async (operation: (signal: AbortSignal) => Promise<void>) => {
-    if (busy.current || blocked) return false;
+  const run = async (
+    operation: (signal: AbortSignal, isCurrent: () => boolean) => Promise<void>,
+  ) => {
+    if (busy.current || blockedNow.current || currentScope.current !== sessionScope) return false;
     busy.current = true;
-    controller.current = new AbortController();
+    const scope = sessionScope;
+    const active = new AbortController();
+    controller.current = active;
+    const isCurrent = () =>
+      mounted.current &&
+      currentScope.current === scope &&
+      controller.current === active &&
+      !active.signal.aborted;
     setPending(true);
     setFailure(null);
     setNotice(null);
     try {
-      await operation(controller.current.signal);
-      return true;
+      await operation(active.signal, isCurrent);
+      return isCurrent();
     } catch (error) {
-      await report(error);
+      await report(error, isCurrent);
       return false;
     } finally {
-      busy.current = false;
-      if (mounted.current) setPending(false);
+      if (controller.current === active) {
+        busy.current = false;
+        if (mounted.current && currentScope.current === scope) setPending(false);
+      }
     }
   };
   const adopt = (record: Profile | ProfileDraft) => {
@@ -161,7 +183,12 @@ export function useProfileJourney({
         queryKey: ["private", identity.user.id, identity.session.id, "managed-profiles"],
       });
   };
-  const persist = async (values: ProfileFormValues, next: ProfileStep, signal: AbortSignal) => {
+  const persist = async (
+    values: ProfileFormValues,
+    next: ProfileStep,
+    signal: AbortSignal,
+    isCurrent: () => boolean,
+  ) => {
     const input = {
       revision: saved?.revision ?? 0,
       step: next,
@@ -175,7 +202,7 @@ export function useProfileJourney({
         idempotencyKey: keyFor("save", input),
         signal,
       });
-      adopt(record);
+      if (isCurrent()) adopt(record);
       return record;
     }
     if (ownerId || !draftEntry) throw new Error("PROFILE_DRAFT_UNAVAILABLE");
@@ -185,16 +212,18 @@ export function useProfileJourney({
       signal,
     });
     if (!entry.draft) throw new Error("PROFILE_DRAFT_UNAVAILABLE");
-    if (mounted.current) setDraftEntry(entry);
-    adopt(entry.draft);
+    if (isCurrent()) {
+      setDraftEntry(entry);
+      adopt(entry.draft);
+    }
     return entry.draft;
   };
   const move = async (next: ProfileStep) => {
     let succeeded = false;
     await form.handleSubmit(async (values) => {
-      succeeded = await run(async (signal) => {
-        await persist(values, next, signal);
-        if (mounted.current) {
+      succeeded = await run(async (signal, isCurrent) => {
+        await persist(values, next, signal, isCurrent);
+        if (isCurrent()) {
           setStep(next);
           setNotice("saved");
         }
@@ -204,14 +233,14 @@ export function useProfileJourney({
   };
   const continueLogin = () =>
     form.handleSubmit((values) =>
-      run(async (signal) => {
-        await persist(values, step, signal);
-        if (mounted.current)
+      run(async (signal, isCurrent) => {
+        await persist(values, step, signal, isCurrent);
+        if (isCurrent())
           window.location.assign(api.loginUrl("wallet", { continuation: "profile" }));
       }),
     )();
   const attach = () =>
-    run(async (signal) => {
+    run(async (signal, isCurrent) => {
       if (!identity || !draftEntry?.draft || isDirty || prefillDirty || resolved.size > 0) return;
       const input = { draftRevision: draftEntry.draft.revision };
       const result = await api.attachProfileDraft(input, {
@@ -219,8 +248,8 @@ export function useProfileJourney({
         idempotencyKey: keyFor("attach", input),
         signal,
       });
-      adopt(result.profile);
-      if (mounted.current) {
+      if (isCurrent()) {
+        adopt(result.profile);
         setPrefill(result.profile.prefill.enabled);
         setDraftEntry({ ...draftEntry, draft: null, state: "attached" });
         setStep(result.resumeStep);
@@ -230,17 +259,18 @@ export function useProfileJourney({
   const confirm = async () => {
     let succeeded = false;
     await form.handleSubmit(async (values) => {
-      succeeded = await run(async (signal) => {
+      succeeded = await run(async (signal, isCurrent) => {
         if (!identity) return;
-        const record = await persist(values, "review", signal);
+        const record = await persist(values, "review", signal, isCurrent);
+        if (!isCurrent()) return;
         const input = { revision: record.revision, prefill, version: "1" as const };
         const result = await api.confirmProfile(input, {
           csrfToken: identity.csrfToken,
           idempotencyKey: keyFor("confirm", input),
           signal,
         });
-        adopt(result);
-        if (mounted.current) {
+        if (isCurrent()) {
+          adopt(result);
           setStep("review");
           setNotice("confirmed");
           setPrefillDirty(false);
@@ -250,10 +280,10 @@ export function useProfileJourney({
     return succeeded;
   };
   const refreshKeepingEdits = () =>
-    run(async (signal) => {
+    run(async (signal, isCurrent) => {
       const record = identity ? await api.profile({ signal }) : null;
       const entry = await api.profileDraft({ signal });
-      if (!mounted.current) return;
+      if (!isCurrent()) return;
       const latest = record ?? entry?.draft ?? null;
       if (entry) setDraftEntry(entry);
       if (record && saved && "prefill" in saved) {
@@ -270,7 +300,7 @@ export function useProfileJourney({
       setNotice("refreshed");
     });
   const restart = () =>
-    run(async (signal) => {
+    run(async (signal, isCurrent) => {
       if (ownerId || !draftEntry) return;
       // No active draft is discarded. The server rejects active handles.
       const entry = await api.newProfileDraft({
@@ -278,7 +308,7 @@ export function useProfileJourney({
         idempotencyKey: keyFor("new", draftEntry.csrfToken),
         signal,
       });
-      if (!mounted.current) return;
+      if (!isCurrent()) return;
       setDraftEntry(entry);
       setSaved(entry.draft);
       const currentValues = form.getValues();

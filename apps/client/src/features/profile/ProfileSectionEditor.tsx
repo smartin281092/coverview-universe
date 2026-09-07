@@ -162,6 +162,11 @@ export function ProfileSectionEditor({
   const busy = useRef(false);
   const controller = useRef<AbortController | null>(null);
   const mounted = useRef(true);
+  const sessionScope = `${identity.user.id}:${identity.session.id}`;
+  const currentScope = useRef(sessionScope);
+  currentScope.current = sessionScope;
+  const blockedNow = useRef(blocked);
+  blockedNow.current = blocked;
   const lastRequested = useRef(requestedStep);
   const command = useRef<{ signature: string; key: string } | null>(null);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -192,6 +197,12 @@ export function ProfileSectionEditor({
     };
   }, [onBridge]);
   useEffect(() => {
+    controller.current?.abort();
+    controller.current = null;
+    busy.current = false;
+    setPending(false);
+  }, [sessionScope]);
+  useEffect(() => {
     if (!query.data) return;
     if (!saved) {
       setSaved(query.data);
@@ -211,13 +222,21 @@ export function ProfileSectionEditor({
   }, [requestedStep]);
   const save = async (next = step, confirm = false) => {
     if (!saved || busy.current || blocked) return false;
+    const scope = sessionScope;
     let successful = false;
     await form.handleSubmit(async (current) => {
+      if (currentScope.current !== scope || blockedNow.current || busy.current) return;
       busy.current = true;
       setPending(true);
       setFailure(null);
       setNotice(false);
-      controller.current = new AbortController();
+      const active = new AbortController();
+      controller.current = active;
+      const isCurrent = () =>
+        mounted.current &&
+        currentScope.current === scope &&
+        controller.current === active &&
+        !active.signal.aborted;
       const parsed = authority.parse(normalized(current, fields, section));
       const patch = Object.fromEntries(
         fields.flatMap((field) => {
@@ -238,9 +257,9 @@ export function ProfileSectionEditor({
         const result = await api.saveProfileSection(profile.id, section, input, {
           csrfToken: identity.csrfToken,
           idempotencyKey: command.current.key,
-          signal: controller.current.signal,
+          signal: active.signal,
         });
-        if (!mounted.current) return;
+        if (!isCurrent()) return;
         setSaved(result);
         setStep(next);
         form.reset(formValues(fields, result));
@@ -251,7 +270,7 @@ export function ProfileSectionEditor({
         setNotice(true);
         successful = true;
       } catch (error) {
-        if (!mounted.current) return;
+        if (!isCurrent()) return;
         if (
           error instanceof ApiError &&
           (error.code === "IDENTITY_UNAUTHENTICATED" || error.code === "IDENTITY_CSRF_INVALID")
@@ -267,8 +286,10 @@ export function ProfileSectionEditor({
                 : "save",
           );
       } finally {
-        busy.current = false;
-        if (mounted.current) setPending(false);
+        if (controller.current === active) {
+          busy.current = false;
+          if (mounted.current && currentScope.current === scope) setPending(false);
+        }
       }
     })();
     return successful;
@@ -285,7 +306,7 @@ export function ProfileSectionEditor({
     });
   });
   const move = async (next: ProfileViewStep) => {
-    if (await save(next)) {
+    if ((await save(next)) && currentScope.current === sessionScope) {
       onStepChange(next);
       heading.current?.focus();
     }
@@ -294,17 +315,20 @@ export function ProfileSectionEditor({
     if (busy.current || blocked) return;
     busy.current = true;
     setPending(true);
+    const scope = sessionScope;
     try {
       const result = await query.refetch();
-      if (!mounted.current) return;
+      if (!mounted.current || currentScope.current !== scope) return;
       if (result.data) {
         setSaved(result.data);
         form.reset(formValues(fields, result.data), { keepDirtyValues: true });
         setFailure(null);
       } else setFailure("save");
     } finally {
-      busy.current = false;
-      if (mounted.current) setPending(false);
+      if (currentScope.current === scope) {
+        busy.current = false;
+        if (mounted.current) setPending(false);
+      }
     }
   };
   if (!saved)

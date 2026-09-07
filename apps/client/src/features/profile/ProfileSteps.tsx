@@ -36,7 +36,7 @@ export function ProfileSteps({
             disabled={disabled}
             aria-current={value === step ? "step" : undefined}
             onClick={() => onChange(value)}
-            className={`relative flex min-h-11 w-full flex-col items-center gap-2 rounded-lg px-1 text-center text-xs outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50 lg:flex-row lg:gap-3 lg:text-left lg:text-sm ${value === step ? "font-medium text-foreground" : "text-muted-foreground"}`}
+            className={`relative flex min-h-11 w-full flex-col items-center gap-2 rounded-lg px-1 text-center text-xs outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50 lg:flex-row lg:gap-3 lg:px-0 lg:text-left lg:text-sm ${value === step ? "font-medium text-foreground" : "text-muted-foreground"}`}
           >
             <span
               className={`flex size-10 shrink-0 items-center justify-center rounded-full border bg-background text-sm ${value === step ? "border-primary bg-primary text-primary-foreground" : "border-border"}`}
