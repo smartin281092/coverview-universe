@@ -9,6 +9,7 @@ import {
   check,
   index,
   uniqueIndex,
+  foreignKey,
 } from "drizzle-orm/pg-core";
 import type { DocumentAnalysis, DocumentRecord, DocumentSummary } from "@coverview/contracts";
 import { identityUsers } from "../identity/index.js";
@@ -55,7 +56,45 @@ export const documents = pgTable(
     ),
     check("files_checksum", sql`${table.checksum} ~ '^[0-9a-f]{64}$'`),
     index("files_owner_list").on(table.userId, table.createdAt, table.id),
+    uniqueIndex("files_owner_id").on(table.userId, table.id),
     index("files_pending").on(table.state, table.updatedAt, table.id),
+  ],
+);
+export const documentChangeRequests = pgTable(
+  "document_change_requests",
+  {
+    id: text("id").primaryKey(),
+    documentId: text("document_id").notNull(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => identityUsers.id),
+    extractionId: text("extraction_id").notNull(),
+    field: text("field").notNull(),
+    previousValue: text("previous_value").notNull(),
+    requestedValue: text("requested_value").notNull(),
+    insurer: text("insurer").notNull(),
+    state: text("state").$type<"prepared" | "cancelled">().notNull().default("prepared"),
+    createdAt: instant("created_at").notNull().defaultNow(),
+    updatedAt: instant("updated_at").notNull().defaultNow(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.userId, table.documentId],
+      foreignColumns: [documents.userId, documents.id],
+    }),
+    check("document_change_requests_state", sql`${table.state} in ('prepared','cancelled')`),
+    check(
+      "document_change_requests_field",
+      sql`${table.field} in ('firstName','lastName','birthDate','nationality','street','postalCode','city','country')`,
+    ),
+    check(
+      "document_change_requests_bounds",
+      sql`length(${table.previousValue}) between 1 and 240 and length(${table.requestedValue}) between 1 and 240 and length(${table.insurer}) between 1 and 160`,
+    ),
+    uniqueIndex("document_change_requests_pending")
+      .on(table.userId, table.documentId, table.extractionId)
+      .where(sql`${table.state} = 'prepared'`),
+    index("document_change_requests_owner_list").on(table.userId, table.createdAt, table.id),
   ],
 );
 export const documentDecisions = pgTable(

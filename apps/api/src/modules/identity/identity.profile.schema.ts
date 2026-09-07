@@ -127,6 +127,7 @@ export const profileAuditEvents = pgTable(
         "profile.confirmed.v1",
         "profile.draft_saved.v1",
         "profile.draft_attached.v1",
+        "profile.document_enriched.v1",
       ],
     }).notNull(),
     revision: integer("revision").notNull(),
@@ -137,7 +138,7 @@ export const profileAuditEvents = pgTable(
     check("profile_audit_session", sql`${table.sessionId} is null or ${table.userId} is not null`),
     check(
       "profile_audit_action",
-      sql`${table.action} in ('profile.saved.v1', 'profile.confirmed.v1', 'profile.draft_saved.v1', 'profile.draft_attached.v1')`,
+      sql`${table.action} in ('profile.saved.v1', 'profile.confirmed.v1', 'profile.draft_saved.v1', 'profile.draft_attached.v1', 'profile.document_enriched.v1')`,
     ),
     check("profile_audit_revision", sql`${table.revision} >= 0`),
     index("profile_audit_owner_list").on(table.userId, table.createdAt, table.id),

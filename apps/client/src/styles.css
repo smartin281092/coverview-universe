@@ -44,6 +44,20 @@
 .wallet-bottom-nav__link {
   min-height: var(--wallet-bottom-nav-height);
 }
+.authorization-page {
+  padding-bottom: 190px;
+}
+.authorization-actions {
+  bottom: 0;
+}
+@media (max-width: 47.999rem) {
+  .authorization-page {
+    padding-bottom: 250px;
+  }
+  .authorization-actions {
+    bottom: calc(var(--wallet-bottom-nav-height) + env(safe-area-inset-bottom, 0px));
+  }
+}
 @media (max-width: 47.999rem) {
   .wallet-mobile-menu[data-side="right"] {
     max-width: none;

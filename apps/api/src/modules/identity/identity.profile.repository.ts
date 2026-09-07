@@ -14,6 +14,7 @@ import {
   type ProfileDraft,
   type ProfileSaveInput,
   type ProfileValues,
+  type DocumentExtraction,
 } from "@coverview/contracts";
 import { and, asc, desc, eq, gt, inArray, isNull, lt, lte, or, sql } from "drizzle-orm";
 import { z } from "zod";
@@ -210,6 +211,80 @@ export async function lockProfileOwner(tx: Transaction, userId: string, sessionI
   return { profile, session };
 }
 const lockOwner = lockProfileOwner;
+
+export async function readDocumentProfile(tx: Transaction | Database, userId: string) {
+  const [profile] = await tx
+    .select()
+    .from(identityProfiles)
+    .where(eq(identityProfiles.userId, userId))
+    .limit(1);
+  if (!profile) throw new IdentityError("IDENTITY_NOT_FOUND", 404);
+  return toProfile(profile);
+}
+
+export async function lockDocumentProfile(tx: Transaction, userId: string) {
+  // Same lock order as interactive profile/document commands: owner, then profile, then document.
+  const [user] = await tx
+    .select({ id: identityUsers.id, pending: identityUsers.globalRevocationPending })
+    .from(identityUsers)
+    .where(eq(identityUsers.id, userId))
+    .limit(1)
+    .for("no key update");
+  if (!user || user.pending) return null;
+  const [profile] = await tx
+    .select()
+    .from(identityProfiles)
+    .where(eq(identityProfiles.userId, userId))
+    .limit(1)
+    .for("update");
+  return profile ?? null;
+}
+
+export async function enrichDocumentProfile(
+  tx: Transaction,
+  profile: ProfileRow,
+  documentId: string,
+  extracted: DocumentExtraction[],
+) {
+  const next = { ...profile.fields };
+  let changed = false;
+  for (const field of fields) {
+    if (next[field]) continue;
+    const candidates = extracted.filter((item) => item.field === field);
+    const candidate = candidates[0];
+    // Ambiguous primary subjects or invalid values do not populate a canonical profile.
+    if (!candidate || new Set(candidates.map((item) => item.value)).size !== 1) continue;
+    const parsed = profileValuesSchema.safeParse({ [field]: candidate.value });
+    if (
+      !parsed.success ||
+      (field === "birthDate" && candidate.value > new Date().toISOString().slice(0, 10))
+    )
+      continue;
+    next[field] = {
+      value: parsed.data[field] ?? candidate.value,
+      source: "document_extracted",
+      confidence: null,
+      confirmedAt: null,
+      proposal: null,
+      documentSource: { documentId, extractionId: candidate.id },
+    };
+    changed = true;
+  }
+  if (!changed) return;
+  await tx
+    .update(identityProfiles)
+    .set({ fields: next, revision: nextRevision(profile.revision) })
+    .where(and(eq(identityProfiles.id, profile.id), eq(identityProfiles.userId, profile.userId)));
+  await tx.insert(profileAuditEvents).values({
+    id: `paudit_${randomUUID()}`,
+    commandId: `document:${documentId}:${profile.revision + 1}`,
+    userId: profile.userId,
+    profileId: profile.id,
+    action: "profile.document_enriched.v1",
+    revision: profile.revision + 1,
+    createdAt: new Date(),
+  });
+}
 
 // Document confirmation is composed inside its own short transaction and audit.
 export async function confirmDocumentProfileFields(

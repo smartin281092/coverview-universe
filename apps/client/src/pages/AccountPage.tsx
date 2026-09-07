@@ -4,6 +4,7 @@ import { Button, Tabs, TabsList, TabsTrigger, TabsContent } from "@coverview/ui"
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { AccountLayout } from "../features/identity/AccountLayout";
 import { AccountDevices } from "../features/identity/AccountDevices";
+import { AccountAuthorizations } from "../features/identity/AccountAuthorizations";
 import { LogoutActions } from "../features/identity/LogoutActions";
 import { api } from "../api";
 
@@ -12,7 +13,9 @@ export function AccountPage() {
   const { searchStr } = useLocation();
   const navigate = useNavigate();
   const params = new URLSearchParams(searchStr);
-  const tab = params.get("tab") === "devices" ? "devices" : "preferences";
+  const requestedTab = params.get("tab");
+  const tab =
+    requestedTab === "devices" || requestedTab === "authorizations" ? requestedTab : "preferences";
   const authenticatorUrl = import.meta.env.DEV
     ? "http://127.0.0.1:4102/authenticator"
     : api.loginUrl("admin");
@@ -30,18 +33,24 @@ export function AccountPage() {
             onValueChange={(value) => {
               void navigate({
                 to: "/account",
-                search: value === "devices" ? { tab: "devices" } : {},
+                search: value === "devices" || value === "authorizations" ? { tab: value } : {},
                 resetScroll: false,
               });
             }}
             className="gap-6"
           >
-            <TabsList aria-label={t("accountTabs.label")} className="min-h-12">
-              <TabsTrigger value="preferences" className="min-h-11 px-4 text-sm">
+            <TabsList aria-label={t("accountTabs.label")} className="min-h-12 max-w-full">
+              <TabsTrigger value="preferences" className="min-h-11 px-2 text-xs sm:px-4 sm:text-sm">
                 {t("accountTabs.preferences")}
               </TabsTrigger>
-              <TabsTrigger value="devices" className="min-h-11 px-4 text-sm">
+              <TabsTrigger value="devices" className="min-h-11 px-2 text-xs sm:px-4 sm:text-sm">
                 {t("accountTabs.devices")}
+              </TabsTrigger>
+              <TabsTrigger
+                value="authorizations"
+                className="min-h-11 whitespace-normal px-2 text-xs sm:px-3 sm:text-sm"
+              >
+                {t("accountTabs.authorizations")}
               </TabsTrigger>
             </TabsList>
             <TabsContent value="preferences" className="space-y-7 text-base">
@@ -62,6 +71,9 @@ export function AccountPage() {
               <p className="max-w-xl text-muted-foreground">{t("identity.devicesDescription")}</p>
               <AccountDevices key={identity.session.id} identity={identity} />
               <LogoutActions identity={identity} scope="all" />
+            </TabsContent>
+            <TabsContent value="authorizations" className="text-base">
+              <AccountAuthorizations />
             </TabsContent>
           </Tabs>
         )}

@@ -23,6 +23,7 @@ import { DocumentReview } from "../features/documents/DocumentReview";
 import { DocumentProcessingIndicator } from "../features/documents/DocumentProcessingIndicator";
 import { DocumentProgress } from "../features/documents/DocumentProgress";
 import { DocumentLoadingMessage } from "../features/documents/DocumentLoadingMessage";
+import { AlertTriangle, Clock3 } from "lucide-react";
 
 type Panel =
   "category" | "delete" | "history" | "source" | "resume" | "analysis" | { fieldId: string } | null;
@@ -165,6 +166,12 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
           ) : (
             <ul className="divide-y divide-border">
               {item.analysis.fields.map((extraction) => {
+                const mismatch = item.profileComparisons?.find(
+                  (entry) => entry.extractionId === extraction.id,
+                )?.different;
+                const changeRequest = item.changeRequests?.find(
+                  (entry) => entry.extractionId === extraction.id,
+                );
                 const decision = item.decisions
                   .flatMap((item) => item.fields)
                   .find((field) => field.field === extraction.field);
@@ -185,6 +192,22 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
                         <p className="text-xs text-muted-foreground">
                           {t(`decision.${decision.choice}`)}
                         </p>
+                      )}
+                      {changeRequest ? (
+                        <Link
+                          to="/requests"
+                          className="inline-flex min-h-11 items-center gap-2 text-xs text-indigo-600"
+                        >
+                          <Clock3 className="size-4" aria-hidden="true" />
+                          {t("requests.pending")}
+                        </Link>
+                      ) : (
+                        mismatch && (
+                          <p className="inline-flex items-center gap-2 rounded-md bg-amber-50 px-2 py-1 text-xs text-amber-950">
+                            <AlertTriangle className="size-4 shrink-0" aria-hidden="true" />
+                            {t("requests.difference")}
+                          </p>
+                        )
                       )}
                     </div>
                     <Button

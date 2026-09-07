@@ -5,11 +5,15 @@ import {
   documentIdSchema,
   documentSchema,
   documentListSchema,
+  documentListQuerySchema,
   documentCreateInputSchema,
   documentRetryInputSchema,
   documentCategoryInputSchema,
   documentReviewInputSchema,
   documentReviewResultSchema,
+  documentChangeRequestsSchema,
+  documentChangeRequestSchema,
+  documentProfileDifferencesSchema,
 } from "@coverview/contracts";
 import type { createDocumentRepository } from "./document.repository.js";
 import type { createDocumentService } from "./document.service.js";
@@ -42,6 +46,46 @@ export function registerDocumentRoutes(
     actors.set(request, await identity.authenticate(request));
   };
   const limited = { rateLimit: { max: 60, timeWindow: "1 minute" } };
+  app.get(
+    "/documents/profile-differences",
+    {
+      onRequest: read,
+      config: limited,
+      schema: { response: { 200: documentProfileDifferencesSchema } },
+    },
+    async (request) => repository.profileDifferences(actor(request).userId),
+  );
+  app.get(
+    "/document-change-requests",
+    {
+      onRequest: read,
+      config: limited,
+      schema: {
+        querystring: z.object({ cursor: z.string().max(200).optional() }).strict(),
+        response: { 200: documentChangeRequestsSchema },
+      },
+    },
+    async (request) => repository.changeRequests(actor(request).userId, request.query.cursor),
+  );
+  app.post(
+    "/documents/:id/change-requests/:requestId/cancel",
+    {
+      onRequest: write,
+      config: limited,
+      schema: {
+        params: z.object({ id: documentIdSchema, requestId: z.uuid() }).strict(),
+        body: z.object({}).strict(),
+        response: { 200: documentChangeRequestSchema },
+      },
+    },
+    async (request) =>
+      repository.cancelChangeRequest(
+        actor(request),
+        request.params.id,
+        request.params.requestId,
+        key(request),
+      ),
+  );
   app.addContentTypeParser(
     "application/octet-stream",
     { parseAs: "buffer", bodyLimit: 20 * 1024 * 1024 },
@@ -53,11 +97,14 @@ export function registerDocumentRoutes(
       onRequest: read,
       config: limited,
       schema: {
-        querystring: z.object({ cursor: z.string().max(200).optional() }).strict(),
+        querystring: documentListQuerySchema,
         response: { 200: documentListSchema },
       },
     },
-    async (request) => repository.list(actor(request).userId, request.query.cursor),
+    async (request) => {
+      const { cursor, ...filters } = request.query;
+      return repository.list(actor(request).userId, cursor, filters);
+    },
   );
   app.post(
     "/documents",

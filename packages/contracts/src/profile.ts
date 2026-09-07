@@ -26,7 +26,8 @@ export const profileValuesSchema = z
   .strict();
 export const profileFieldValueSchema = z.object({
   value: z.string().max(240),
-  source: z.enum(["user_entered", "user_confirmed"]),
+  source: z.enum(["user_entered", "user_confirmed", "document_extracted"]),
+  documentSource: z.object({ documentId: z.string().max(200), extractionId: z.uuid() }).optional(),
   confidence: z.null(),
   confirmedAt: z.iso.datetime().nullable(),
   proposal: z

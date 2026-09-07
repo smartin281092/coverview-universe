@@ -3,7 +3,8 @@
   "accountTabs": {
     "label": "Rubriques du compte",
     "preferences": "Préférences",
-    "devices": "Appareils"
+    "devices": "Appareils",
+    "authorizations": "Mes autorisations"
   },
   "identity": {
     "logoutCheckingTitle": "Votre déconnexion",
@@ -89,7 +90,8 @@
     "method": "Notre méthode",
     "questions": "Questions fréquentes",
     "backToWallet": "Revenir à Wallet",
-    "documents": "Documents"
+    "documents": "Documents",
+    "requests": "Demandes"
   },
   "title": "Votre Wallet commence ici.",
   "subtitle": "Un point de départ pour retrouver, comprendre et suivre votre protection.",

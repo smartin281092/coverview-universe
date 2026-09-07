@@ -13,6 +13,8 @@ import {
   type DocumentReviewInput,
 } from "@coverview/contracts";
 import { Button, Input, Label } from "@coverview/ui";
+import { AlertTriangle, Clock3 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { api } from "../../api";
 import { DocumentFailure } from "./DocumentFailure";
 
@@ -21,8 +23,11 @@ const formSchema = z
     choice: z.enum(["keep", "use", "correct"]),
     value: z.string().trim().min(1).max(240),
     concernsMe: z.boolean(),
+    notifyInsurer: z.boolean(),
+    insurer: z.string().trim().max(160),
   })
-  .refine((value) => value.choice === "keep" || value.concernsMe);
+  .refine((value) => (value.choice === "keep" && !value.notifyInsurer) || value.concernsMe)
+  .refine((value) => !value.notifyInsurer || value.insurer.length > 0);
 export function DocumentReview({
   identity,
   document,
@@ -49,9 +54,17 @@ export function DocumentReview({
   }, []);
   const profileKey = profileFieldSchema.safeParse(field.field);
   const current = profileKey.success ? profile.fields[profileKey.data] : undefined;
+  const comparison = document.profileComparisons?.find((item) => item.extractionId === field.id);
+  const request = document.changeRequests?.find((item) => item.extractionId === field.id);
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { choice: "keep" as const, value: field.value, concernsMe: false },
+    defaultValues: {
+      choice: "keep" as const,
+      value: field.value,
+      concernsMe: false,
+      notifyInsurer: false,
+      insurer: "",
+    },
   });
   const mutation = useMutation({
     mutationKey: ["private", identity.user.id, identity.session.id, "document-review"],
@@ -75,6 +88,10 @@ export function DocumentReview({
     },
     retry: false,
   });
+  const selectedChoice = form.watch("choice");
+  useEffect(() => {
+    if (selectedChoice === "use") form.setValue("notifyInsurer", false);
+  }, [selectedChoice, form]);
   useEffect(() => {
     onPendingChange(mutation.isPending);
     return () => onPendingChange(false);
@@ -88,6 +105,7 @@ export function DocumentReview({
             revision: document.revision,
             profileRevision: profile.revision,
             concernsMe: values.concernsMe,
+            ...(values.notifyInsurer ? { notification: { insurer: values.insurer } } : {}),
             decisions: [
               {
                 extractionId: field.id,
@@ -113,8 +131,17 @@ export function DocumentReview({
           <dd className="mt-1 break-words font-medium">{field.value}</dd>
         </div>
       </dl>
-      {current?.confirmedAt && current.value !== field.value && (
-        <p className="rounded-lg bg-muted p-4 text-sm">{t("divergence")}</p>
+      {comparison?.different && (
+        <p className="flex items-start gap-2 rounded-lg bg-amber-50 p-4 text-sm text-amber-950">
+          <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
+          {t("divergence")}
+        </p>
+      )}
+      {request && (
+        <Link to="/requests" className="flex min-h-11 items-center gap-2 text-sm text-indigo-600">
+          <Clock3 className="size-4" aria-hidden="true" />
+          {t("requests.pending")}
+        </Link>
       )}
       <div className="space-y-2 text-sm">
         <p className="font-medium">{t("sourcePage", { page: field.source.page })}</p>
@@ -150,6 +177,34 @@ export function DocumentReview({
           />
         </div>
       )}
+      {profileKey.success &&
+        !request &&
+        form.watch("choice") !== "use" &&
+        (comparison?.different || form.watch("choice") === "correct") && (
+          <div className="space-y-3 rounded-xl border border-border p-4">
+            <label className="flex min-h-11 items-center gap-3 text-sm font-medium">
+              <input
+                type="checkbox"
+                className="size-4 accent-primary"
+                disabled={mutation.isPending}
+                {...form.register("notifyInsurer")}
+              />
+              {t("requests.notify")}
+            </label>
+            {form.watch("notifyInsurer") && (
+              <>
+                <Label htmlFor="notification-insurer">{t("requests.insurer")}</Label>
+                <Input
+                  id="notification-insurer"
+                  className="min-h-11"
+                  {...form.register("insurer")}
+                  disabled={mutation.isPending}
+                />
+                <p className="text-sm text-muted-foreground">{t("requests.prepareHelp")}</p>
+              </>
+            )}
+          </div>
+        )}
       <label className="flex items-start gap-3 text-sm">
         <input
           className="mt-1 size-4 shrink-0 accent-primary"

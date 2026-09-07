@@ -1,7 +1,10 @@
 {
   "nav": "Mon profil",
   "title": "Un profil, moins de resaisie.",
-  "eyebrow": { "owner": "Votre espace personnel", "draft": "Commencez à votre rythme" },
+  "eyebrow": {
+    "owner": "Votre espace personnel",
+    "draft": "Commencez à votre rythme"
+  },
   "intro": {
     "owner": "Gardez vos informations à jour pour vos prochaines démarches.",
     "draft": "Préparez vos informations, puis connectez-vous pour les conserver dans Wallet."
@@ -9,7 +12,11 @@
   "privacy": "Votre profil reste privé. Vous choisissez ce que vous renseignez et pouvez le corriger à tout moment.",
   "loading": "Chargement de votre profil…",
   "progress": "Étapes du profil",
-  "steps": { "information": "Informations", "address": "Adresse", "review": "Récapitulatif" },
+  "steps": {
+    "information": "Informations",
+    "address": "Adresse",
+    "review": "Récapitulatif"
+  },
   "optional": "Tous les champs sont facultatifs.",
   "fields": {
     "firstName": "Prénom",
@@ -21,7 +28,11 @@
     "city": "Localité",
     "country": "Pays"
   },
-  "source": { "user_entered": "Saisi par vous", "user_confirmed": "Confirmé par vous" },
+  "source": {
+    "user_entered": "Saisi par vous",
+    "user_confirmed": "Confirmé par vous",
+    "document_extracted": "Repris d’un document"
+  },
   "invalidField": "Vérifiez ce champ et sa longueur.",
   "invalidDate": "Saisissez une date valide.",
   "next": "Enregistrer et continuer",

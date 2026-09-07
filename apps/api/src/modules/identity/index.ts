@@ -6,4 +6,7 @@ export {
   lockProfileOwner,
   toProfile,
   confirmDocumentProfileFields,
+  lockDocumentProfile,
+  readDocumentProfile,
+  enrichDocumentProfile,
 } from "./identity.profile.repository.js";

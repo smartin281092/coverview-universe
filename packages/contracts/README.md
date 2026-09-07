@@ -8,7 +8,7 @@ Schémas Zod exécutables consommés par Fastify et le client HTTP commun.
 
 Santé, projection des personas fictives locales et DTO d’identité : configuration, profil/session sans token durable, espace du propriétaire, accès admin, liste bornée d’appareils, déconnexion, challenge/vérification MFA. Aucun modèle ORM, accès réseau ou secret.
 
-`profile.ts` définit les huit champs facultatifs du profil, leur origine saisie/confirmation, les propositions du brouillon, les trois étapes, les mutations versionnées et l’historique borné du choix personnel version 1. Les entrées n’acceptent ni propriétaire choisi par le client, ni source OCR, ni confiance fabriquée. S-042a doit ajouter ses DTO documentaires par expansion compatible N-1.
+`profile.ts` définit les huit champs facultatifs, leur origine saisie/confirmation/extraction, propositions du brouillon, étapes et mutations versionnées. Les entrées n’acceptent ni propriétaire choisi par le client, ni source OCR, ni confiance fabriquée ; seul le serveur attribue `document_extracted` et sa provenance. `documents.ts` porte originaux, analyses, classement, recherche, comparaisons et demandes de changement. Déployer les lecteurs de la nouvelle origine avant activation des écritures ; protocole dans le README documentaire.
 
 ## Règles métier et invariants
 

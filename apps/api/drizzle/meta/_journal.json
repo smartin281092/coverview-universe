@@ -50,6 +50,13 @@
       "when": 1788730637959,
       "tag": "0006_wonderful_madame_web",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1788802942470,
+      "tag": "0007_clever_nighthawk",
+      "breakpoints": true
     }
   ]
 }

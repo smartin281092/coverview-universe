@@ -23,11 +23,15 @@ import {
   profileChoicesSchema,
   documentSchema,
   documentListSchema,
+  documentListQuerySchema,
   documentCreateInputSchema,
   documentReviewInputSchema,
   documentReviewResultSchema,
   documentCategoryInputSchema,
   documentRetryInputSchema,
+  documentChangeRequestsSchema,
+  documentChangeRequestSchema,
+  documentProfileDifferencesSchema,
   type ApiErrorCode,
 } from "@coverview/contracts";
 import type { z } from "zod";
@@ -124,9 +128,41 @@ export function createApiClient({
   }
 
   return {
-    documents: (cursor?: string, options?: RequestOptions) =>
+    documentProfileDifferences: (options?: RequestOptions) =>
       request(
-        `/documents${cursor ? `?${new URLSearchParams({ cursor })}` : ""}`,
+        "/documents/profile-differences",
+        documentProfileDifferencesSchema,
+        options,
+        undefined,
+        true,
+      ),
+    documentChangeRequests: (cursor?: string, options?: RequestOptions) =>
+      request(
+        `/document-change-requests${cursor ? `?cursor=${encodeURIComponent(cursor)}` : ""}`,
+        documentChangeRequestsSchema,
+        options,
+        undefined,
+        true,
+      ),
+    cancelDocumentChangeRequest: (
+      documentId: string,
+      requestId: string,
+      options: MutationOptions,
+    ) =>
+      request(
+        `/documents/${encodeURIComponent(documentId)}/change-requests/${encodeURIComponent(requestId)}/cancel`,
+        documentChangeRequestSchema,
+        options,
+        { body: {}, credentials: options },
+        true,
+      ),
+    documents: (
+      cursor?: string,
+      options?: RequestOptions,
+      filters?: Omit<z.infer<typeof documentListQuerySchema>, "cursor">,
+    ) =>
+      request(
+        `/documents?${new URLSearchParams(Object.entries(documentListQuerySchema.parse({ ...filters, cursor })).filter((entry): entry is [string, string] => typeof entry[1] === "string"))}`,
         documentListSchema,
         options,
         undefined,

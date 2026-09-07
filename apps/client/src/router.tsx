@@ -9,12 +9,19 @@ import { WorkspacePage } from "./pages/WorkspacePage";
 import { ProfilePage } from "./pages/ProfilePage";
 import { DocumentsPage } from "./pages/DocumentsPage";
 import { DocumentDetailsPage } from "./pages/DocumentDetailsPage";
+import { AuthorizationDetailsPage } from "./pages/AuthorizationDetailsPage";
+import { RequestsPage } from "./pages/RequestsPage";
 
 const rootRoute = createRootRoute({ component: AppShell, notFoundComponent: MissingPage });
 const documentsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/documents",
   component: DocumentsPage,
+});
+const requestsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/requests",
+  component: RequestsPage,
 });
 const documentRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -27,8 +34,8 @@ const accountRoute = createRoute({
   path: "/account",
   validateSearch: (
     search: Record<string, unknown>,
-  ): { tab?: "devices"; authError?: "callback" } => ({
-    ...(search.tab === "devices" ? { tab: "devices" as const } : {}),
+  ): { tab?: "devices" | "authorizations"; authError?: "callback" } => ({
+    ...(search.tab === "devices" || search.tab === "authorizations" ? { tab: search.tab } : {}),
     ...(search.authError === "callback" ? { authError: "callback" as const } : {}),
   }),
   component: AccountPage,
@@ -37,6 +44,11 @@ const workspaceRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/workspace/$userId",
   component: WorkspacePage,
+});
+const authorizationRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/authorizations/$kind",
+  component: AuthorizationDetailsPage,
 });
 const devicesRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -79,10 +91,12 @@ export const router = createRouter({
     previewRoute,
     statesRoute,
     accountRoute,
+    authorizationRoute,
     workspaceRoute,
     devicesRoute,
     profileRoute,
     documentsRoute,
+    requestsRoute,
     documentRoute,
   ]),
   defaultPreload: "intent",

@@ -14,6 +14,7 @@ import {
   type ProfileFieldName,
 } from "../features/profile/profile-fields";
 import { useProfileJourney, type ProfileJourney } from "../features/profile/use-profile-journey";
+import { ProfileDocumentDifferences } from "../features/profile/ProfileDocumentDifferences";
 
 const steps = ["information", "address", "review"] as const;
 const autocomplete: Record<ProfileFieldName, string> = {
@@ -241,6 +242,7 @@ function ProfileEditor({
         <ProfileChoices identity={identity} onBack={() => setHistory(false)} />
       )}
       <div hidden={history} inert={history} className="space-y-7">
+        {identity && <ProfileDocumentDifferences identity={identity} />}
         {new URLSearchParams(location.searchStr).get("authError") && (
           <p role="alert" className="text-destructive">
             {t("callbackError")}

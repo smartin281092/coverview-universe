@@ -1,13 +1,31 @@
 import { createHash, randomUUID } from "node:crypto";
-import { and, asc, desc, eq, gte, inArray, isNull, lt, lte, ne, or, sql } from "drizzle-orm";
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  getTableColumns,
+  gte,
+  inArray,
+  isNull,
+  lt,
+  lte,
+  ne,
+  or,
+  sql,
+} from "drizzle-orm";
 import { z } from "zod";
 import {
   documentSchema,
   documentSummarySchema,
   documentListSchema,
+  documentListQuerySchema,
   documentReviewResultSchema,
   documentProfileValuesSchema,
   profileFieldSchema,
+  documentChangeRequestSchema,
+  documentChangeRequestsSchema,
+  documentProfileDifferencesSchema,
   type DocumentCreateInput,
   type DocumentReviewInput,
   type DocumentRecord,
@@ -19,6 +37,9 @@ import {
   confirmDocumentProfileFields,
   identityUsers,
   IdentityError,
+  readDocumentProfile,
+  lockDocumentProfile,
+  enrichDocumentProfile,
 } from "../identity/index.js";
 import type { createDatabase } from "../../platform/db/database.js";
 import {
@@ -28,7 +49,14 @@ import {
   documentDecisions,
   documentOutbox,
   documentAiCalls,
+  documentChangeRequests,
 } from "./document.schema.js";
+import {
+  classificationLabels,
+  documentPresentation,
+  normalizeDocumentSearch,
+} from "./document.presentation.js";
+import { documentProfileComparisons, sameProfileValue } from "./document.reconciliation.js";
 
 type Database = ReturnType<typeof createDatabase>["db"];
 type Tx = Parameters<Parameters<Database["transaction"]>[0]>[0];
@@ -49,6 +77,7 @@ const condition = (userId: string, id: string) =>
 function summary(row: Row) {
   return documentSummarySchema.parse({
     ...row,
+    ...documentPresentation(row),
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
     canRetry: row.state === "failed",
@@ -57,6 +86,19 @@ function summary(row: Row) {
   });
 }
 async function detail(tx: Tx | Database, row: Row): Promise<DocumentRecord> {
+  const profile = await readDocumentProfile(tx, row.userId);
+  const requests = await tx
+    .select()
+    .from(documentChangeRequests)
+    .where(
+      and(
+        eq(documentChangeRequests.userId, row.userId),
+        eq(documentChangeRequests.documentId, row.id),
+        eq(documentChangeRequests.state, "prepared"),
+      ),
+    )
+    .orderBy(desc(documentChangeRequests.createdAt), desc(documentChangeRequests.id))
+    .limit(40);
   // Accepted values remain available even beyond the bounded history page.
   const accepted = await tx.execute<{ field: string; value: string }>(sql`
     select distinct on (field->>'field') field->>'field' as field, field->>'value' as value
@@ -76,6 +118,15 @@ async function detail(tx: Tx | Database, row: Row): Promise<DocumentRecord> {
     analysis: row.analysis,
     decisions: decisions.map((item) => item.decision),
     reviewedValues: accepted.rows,
+    profileComparisons: documentProfileComparisons(row.analysis, profile),
+    changeRequests: requests.map(changeRequest),
+  });
+}
+function changeRequest(row: typeof documentChangeRequests.$inferSelect) {
+  return documentChangeRequestSchema.parse({
+    ...row,
+    createdAt: row.createdAt.toISOString(),
+    updatedAt: row.updatedAt.toISOString(),
   });
 }
 function canonical(value: unknown): string {
@@ -196,12 +247,129 @@ export function createDocumentRepository(db: Database) {
     });
   }
   return {
-    async list(userId: string, cursor?: string) {
-      let position: { at: string; id: string } | undefined;
+    async profileDifferences(userId: string) {
+      const profile = await readDocumentProfile(db, userId);
+      const rows = await db
+        .select({
+          id: documents.id,
+          analysis: sql<DocumentAnalysis | null>`case when ${documents.analysis} is null then null else jsonb_build_object('fields', ${documents.analysis}->'fields') end`,
+        })
+        .from(documents)
+        .where(
+          and(
+            eq(documents.userId, userId),
+            isNull(documents.deletedAt),
+            eq(documents.state, "ready"),
+          ),
+        )
+        .orderBy(desc(documents.createdAt), desc(documents.id))
+        .limit(200);
+      const byField = new Map<string, { field: string; count: number; documentId: string }>();
+      for (const row of rows) {
+        for (const comparison of documentProfileComparisons(row.analysis, profile).filter(
+          (item) => item.different,
+        )) {
+          const field = row.analysis?.fields.find(
+            (item) => item.id === comparison.extractionId,
+          )?.field;
+          if (!field) continue;
+          const current = byField.get(field);
+          if (current) current.count += 1;
+          else byField.set(field, { field, count: 1, documentId: row.id });
+        }
+      }
+      return documentProfileDifferencesSchema.parse({ fields: [...byField.values()] });
+    },
+    async changeRequests(userId: string, cursor?: string) {
+      let after: { at: string; id: string } | undefined;
+      if (cursor) {
+        try {
+          after = z
+            .object({ at: z.iso.datetime(), id: z.uuid() })
+            .strict()
+            .parse(JSON.parse(Buffer.from(cursor, "base64url").toString("utf8")));
+        } catch {
+          throw new DocumentError("DOCUMENT_REVIEW_INVALID", 400);
+        }
+      }
+      const rows = await db
+        .select()
+        .from(documentChangeRequests)
+        .where(
+          and(
+            eq(documentChangeRequests.userId, userId),
+            after
+              ? or(
+                  lt(documentChangeRequests.createdAt, new Date(after.at)),
+                  and(
+                    eq(documentChangeRequests.createdAt, new Date(after.at)),
+                    lt(documentChangeRequests.id, after.id),
+                  ),
+                )
+              : undefined,
+          ),
+        )
+        .orderBy(desc(documentChangeRequests.createdAt), desc(documentChangeRequests.id))
+        .limit(21);
+      const last = rows[19];
+      return documentChangeRequestsSchema.parse({
+        requests: rows.slice(0, 20).map(changeRequest),
+        nextCursor:
+          rows.length > 20 && last
+            ? Buffer.from(
+                JSON.stringify({ at: last.createdAt.toISOString(), id: last.id }),
+              ).toString("base64url")
+            : null,
+      });
+    },
+    cancelChangeRequest(actor: Actor, id: string, requestId: string, key: string) {
+      return command(
+        actor,
+        id,
+        "change_request_cancelled",
+        key,
+        { id, requestId },
+        documentChangeRequestSchema,
+        async (tx, _profile, current) => {
+          const row = live(current);
+          const [request] = await tx
+            .update(documentChangeRequests)
+            .set({ state: "cancelled", updatedAt: new Date() })
+            .where(
+              and(
+                eq(documentChangeRequests.id, requestId),
+                eq(documentChangeRequests.userId, actor.userId),
+                eq(documentChangeRequests.documentId, id),
+              ),
+            )
+            .returning();
+          if (!request) throw new DocumentError("DOCUMENT_NOT_FOUND", 404);
+          return { row, response: changeRequest(request) };
+        },
+      );
+    },
+    async list(
+      userId: string,
+      cursor?: string,
+      filters: Omit<z.infer<typeof documentListQuerySchema>, "cursor"> = {},
+    ) {
+      const query = documentListQuerySchema.parse(filters);
+      const fingerprint = hash({
+        q: query.q ?? "",
+        classification: query.classification,
+        group: query.group ?? "date",
+        sort: query.sort ?? "newest",
+      });
+      let position:
+        { at?: string | undefined; id: string; fingerprint?: string | undefined } | undefined;
       if (cursor) {
         try {
           position = z
-            .object({ at: z.iso.datetime(), id: z.string().regex(/^doc_[0-9a-f-]{36}$/) })
+            .object({
+              at: z.iso.datetime().optional(),
+              id: z.string().regex(/^doc_[0-9a-f-]{36}$/),
+              fingerprint: z.string().optional(),
+            })
             .strict()
             .parse(JSON.parse(Buffer.from(cursor, "base64url").toString("utf8")));
         } catch (cause) {
@@ -209,35 +377,65 @@ export function createDocumentRepository(db: Database) {
         }
       }
       const rows = await db
-        .select()
+        .select({
+          ...getTableColumns(documents),
+          analysis: sql<Row["analysis"]>`case when ${documents.analysis} is null then null else
+            (${documents.analysis} - 'fields' - 'pages') || jsonb_build_object('fields', '[]'::jsonb, 'pages',
+              jsonb_build_array((${documents.analysis}->'pages'->0) || jsonb_build_object('text', left(${documents.analysis}->'pages'->0->>'text', 12000)))) end`,
+        })
         .from(documents)
         .where(
           and(
             eq(documents.userId, userId),
             isNull(documents.deletedAt),
             ne(documents.state, "deleted"),
-            position
-              ? or(
-                  lt(documents.createdAt, new Date(position.at)),
-                  and(
-                    eq(documents.createdAt, new Date(position.at)),
-                    lt(documents.id, position.id),
-                  ),
-                )
-              : undefined,
           ),
         )
         .orderBy(desc(documents.createdAt), desc(documents.id))
-        .limit(21);
-      const page = rows.slice(0, 20);
+        .limit(201);
+      if (rows.length > 200) throw new DocumentError("DOCUMENT_LIMIT_REACHED", 422);
+      const needle = normalizeDocumentSearch(query.q ?? "");
+      const entries = rows.map(summary).filter((item) => {
+        const classification = item.classification ?? item.category;
+        return (
+          (!query.classification || classification === query.classification) &&
+          normalizeDocumentSearch(
+            `${item.title ?? ""} ${item.name} ${classificationLabels[classification]}`,
+          ).includes(needle)
+        );
+      });
+      const collator = new Intl.Collator("fr", { numeric: true, sensitivity: "base" });
+      entries.sort((a, b) => {
+        const groupOrder =
+          query.group === "type"
+            ? collator.compare(
+                classificationLabels[a.classification ?? a.category],
+                classificationLabels[b.classification ?? b.category],
+              )
+            : (query.sort === "oldest" ? 1 : -1) *
+              a.createdAt.slice(0, 7).localeCompare(b.createdAt.slice(0, 7));
+        if (groupOrder) return groupOrder;
+        const order =
+          query.sort === "title"
+            ? collator.compare(
+                a.title ?? classificationLabels[a.classification ?? a.category],
+                b.title ?? classificationLabels[b.classification ?? b.category],
+              )
+            : (query.sort === "oldest" ? 1 : -1) * a.createdAt.localeCompare(b.createdAt);
+        return order || b.id.localeCompare(a.id);
+      });
+      if (position?.fingerprint && position.fingerprint !== fingerprint)
+        throw new DocumentError("DOCUMENT_NOT_FOUND", 400);
+      const index = position ? entries.findIndex((item) => item.id === position.id) : -1;
+      if (position && index < 0) throw new DocumentError("DOCUMENT_NOT_FOUND", 400);
+      const page = entries.slice(index + 1, index + 21);
       const last = page.at(-1);
       return documentListSchema.parse({
-        documents: page.map(summary),
+        documents: page,
+        total: entries.length,
         nextCursor:
-          rows.length > 20 && last
-            ? Buffer.from(
-                JSON.stringify({ at: last.createdAt.toISOString(), id: last.id }),
-              ).toString("base64url")
+          entries.length > index + 21 && last
+            ? Buffer.from(JSON.stringify({ id: last.id, fingerprint })).toString("base64url")
             : null,
       });
     },
@@ -443,6 +641,51 @@ export function createDocumentRepository(db: Database) {
           const updatedProfile = Object.keys(values).length
             ? await confirmDocumentProfileFields(tx, profile, validValues.data)
             : toProfile(profile);
+          if (input.notification) {
+            if (!input.concernsMe || input.decisions.length !== 1)
+              throw new DocumentError("DOCUMENT_REVIEW_INVALID", 422);
+            const extraction = row.analysis?.fields.find(
+              (item) => item.id === input.decisions[0]?.extractionId,
+            );
+            const field = profileFieldSchema.safeParse(extraction?.field);
+            const requested = field.success ? updatedProfile.fields[field.data]?.value : undefined;
+            if (
+              !extraction ||
+              !field.success ||
+              !requested ||
+              sameProfileValue(requested, extraction.value)
+            )
+              throw new DocumentError("DOCUMENT_REVIEW_INVALID", 422);
+            const [existing] = await tx
+              .select()
+              .from(documentChangeRequests)
+              .where(
+                and(
+                  eq(documentChangeRequests.userId, actor.userId),
+                  eq(documentChangeRequests.documentId, id),
+                  eq(documentChangeRequests.extractionId, extraction.id),
+                  eq(documentChangeRequests.state, "prepared"),
+                ),
+              )
+              .limit(1);
+            if (
+              existing &&
+              (existing.requestedValue !== requested ||
+                existing.insurer !== input.notification.insurer)
+            )
+              throw new DocumentError("DOCUMENT_CONFLICT", 409);
+            if (!existing)
+              await tx.insert(documentChangeRequests).values({
+                id: randomUUID(),
+                userId: actor.userId,
+                documentId: id,
+                extractionId: extraction.id,
+                field: field.data,
+                previousValue: extraction.value,
+                requestedValue: requested,
+                insurer: input.notification.insurer,
+              });
+          }
           const now = new Date();
           const [updated] = await tx
             .update(documents)
@@ -500,6 +743,14 @@ export function createDocumentRepository(db: Database) {
           .returning();
         if (!updated) throw new Error("Document update failed");
         // Keep only field names and owner decisions as provenance of surviving profile fields.
+        await tx
+          .delete(documentChangeRequests)
+          .where(
+            and(
+              eq(documentChangeRequests.userId, actor.userId),
+              eq(documentChangeRequests.documentId, id),
+            ),
+          );
         await tx
           .update(documentDecisions)
           .set({
@@ -675,6 +926,7 @@ export function createDocumentRepository(db: Database) {
       usage: { inputTokens: number; outputTokens: number; model: string },
     ) {
       await db.transaction(async (tx) => {
+        const profile = await lockDocumentProfile(tx, userId);
         const [row] = await tx
           .select()
           .from(documents)
@@ -696,6 +948,7 @@ export function createDocumentRepository(db: Database) {
             ),
           );
         if (!row || row.deletedAt || row.state !== "reading") return;
+        if (profile) await enrichDocumentProfile(tx, profile, id, analysis.fields);
         const [updated] = await tx
           .update(documents)
           .set({

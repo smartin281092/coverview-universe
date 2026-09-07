@@ -28,21 +28,29 @@ Le choix `analysisRequested` est enregistré au dépôt. Reprendre un contrôle 
 
 ## Revue et profil compatible
 
-La classification, les informations extraites, l’original et les décisions sont séparés. La correction de catégorie survit à une nouvelle analyse. Chaque champ est accepté, corrigé ou laissé tel quel ; accepter/corriger exige l’attestation qu’il concerne le propriétaire. Les huit champs existants passent par la fonction publique d’identity dans la même transaction que la décision/audit. Les autres métadonnées restent documentaires. Aucun enrichissement automatique ni KYC.
+La demande du 7 septembre autorise le remplissage automatique des champs de profil vides à la fin d’une lecture, via identity et dans la même transaction. Valeurs invalides, dates futures et extractions contradictoires d’un même champ sont ignorées pour ce remplissage. Une valeur existante ou une proposition anonyme n’est jamais remplacée automatiquement. Une extraction ne constitue pas un KYC. La revue explicite conserve ses révisions, l’attestation personnelle et son audit ; la correction de catégorie survit aux relectures.
 
-Le contrat profil N-1 garde ses champs, sources et valeurs de confiance existants. La provenance documentaire est portée par le DTO dédié et les décisions. Une proposition anonyme encore à arbitrer n’est pas écrasée. Les dernières valeurs documentaires acceptées restent disponibles au-delà des vingt décisions affichées.
+Le DTO ajoute l’origine `document_extracted` et les identifiants de source ; `confirmedAt` reste nul. Déployer les lecteurs compatibles avant d’activer ce producteur dans un environnement ayant des clients N-1 ; garder ces lecteurs en cas de rollback. Ne pas maquiller l’extraction en confirmation utilisateur. Les dernières valeurs documentaires acceptées restent disponibles au-delà des vingt décisions affichées.
+
+## Bibliothèque et demandes de changement
+
+Titre et classification détaillée sont des métadonnées additives d’analyse. Le nouveau titre exige une citation dans la transcription. Les anciennes analyses reprennent un en-tête lisible, sinon le libellé du type, sans appel payant. Recherche accent-insensible sur titre/fichier/type, regroupement par mois ou type, tri et pagination après filtrage sur la bibliothèque bornée à 200 originaux. La projection de liste charge seulement 12 000 caractères de première page pour les anciens titres, jamais toutes les transcriptions.
+
+Les divergences sont calculées côté serveur à partir du profil et des documents du propriétaire, après normalisation de casse/espaces. La notification prépare dans `document_change_requests` la valeur documentaire, la valeur du profil après décision et la compagnie saisie. Même transaction/révisions/idempotence que la revue ; clé étrangère propriétaire/document et unicité de préparation active par extraction. Statut `prepared` = **à transmettre**, sans envoi externe. Annulation propriétaire persistante, liste paginée de 20, 40 demandes actives maximum par document. Supprimer l’original efface les instantanés des demandes. La transmission et la réponse de l’assureur nécessitent encore une intégration réelle.
+
+[Plan et limites](../../../../../roadmap/plans/S-042a-library-authorizations.plan.md) · [Preuves](../../../../../roadmap/evidence/document-library-authorizations.md).
 
 ## Données et manifeste S-130 / S-131
 
-| Donnée | Propriétaire et export | Conservation / suppression |
-|---|---|---|
-| `files`, objet S3 original | Propriétaire individuel ; original et métadonnées | Jusqu’à suppression volontaire ; un dépôt non confirmé expire techniquement après 24 h |
-| Analyse, transcription, preuves | Même propriétaire ; dérivés distincts | Effacés à la demande de suppression |
-| `document_decisions` | Décisions/provenance du propriétaire | Valeurs et citations effacées à la suppression ; noms des champs, choix et dates conservés pour la provenance du profil survivant |
-| `document_commands` | Rejeu privé des commandes | 24 h ; snapshots immédiatement vidés à la suppression |
-| `document_outbox`, `document_audit_events` | Identifiants techniques du propriétaire, sans valeurs extraites | Rétention finale à définir dans S-130/S-131 ; aucune durée légale inventée |
-| `document_ai_calls` | Réservations, modèle, tokens du propriétaire | Rétention finale à définir dans S-130/S-131 ; aucune transcription |
-| Champs confirmés du profil | Profil canonique existant | Survivent à la suppression de l’original, conformément au choix annoncé |
+| Donnée                                     | Propriétaire et export                                          | Conservation / suppression                                                                                                        |
+| ------------------------------------------ | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `files`, objet S3 original                 | Propriétaire individuel ; original et métadonnées               | Jusqu’à suppression volontaire ; un dépôt non confirmé expire techniquement après 24 h                                            |
+| Analyse, transcription, preuves            | Même propriétaire ; dérivés distincts                           | Effacés à la demande de suppression                                                                                               |
+| `document_decisions`                       | Décisions/provenance du propriétaire                            | Valeurs et citations effacées à la suppression ; noms des champs, choix et dates conservés pour la provenance du profil survivant |
+| `document_commands`                        | Rejeu privé des commandes                                       | 24 h ; snapshots immédiatement vidés à la suppression                                                                             |
+| `document_outbox`, `document_audit_events` | Identifiants techniques du propriétaire, sans valeurs extraites | Rétention finale à définir dans S-130/S-131 ; aucune durée légale inventée                                                        |
+| `document_ai_calls`                        | Réservations, modèle, tokens du propriétaire                    | Rétention finale à définir dans S-130/S-131 ; aucune transcription                                                                |
+| Champs confirmés du profil                 | Profil canonique existant                                       | Survivent à la suppression de l’original, conformément au choix annoncé                                                           |
 
 La suppression rend les lectures immédiatement impossibles, invalide les jobs, vide dérivés/snapshots et programme la suppression physique. Un second effacement après une fenêtre de deux minutes couvre un PUT commencé avant suppression, même après crash API ; les métadonnées restantes sont alors neutralisées. Le bucket doit rester sans versioning : ce module ne prétend pas purger les versions ou sauvegardes externes. L’export/effacement de compte global n’est pas encore livré.
 

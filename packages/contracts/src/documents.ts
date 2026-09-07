@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { profileSchema, profileValuesSchema } from "./profile.js";
+import { profileSchema, profileValuesSchema, profileFieldSchema } from "./profile.js";
 
 export const documentIdSchema = z.string().regex(/^doc_[0-9a-f-]{36}$/);
 export const documentCategorySchema = z.enum([
@@ -34,6 +34,27 @@ export const documentFieldSchema = z.enum([
   "documentType",
   "expiresOn",
 ]);
+export const documentClassificationSchema = z.enum([
+  "identity",
+  "insurance",
+  "insurance_offer",
+  "insurance_policy",
+  "pension",
+  "invoice",
+  "correspondence",
+  "power_of_attorney",
+  "management_mandate",
+  "unknown",
+]);
+export const documentListQuerySchema = z
+  .object({
+    cursor: z.string().max(200).optional(),
+    q: z.string().trim().max(120).optional(),
+    classification: documentClassificationSchema.optional(),
+    group: z.enum(["date", "type"]).optional(),
+    sort: z.enum(["newest", "oldest", "title"]).optional(),
+  })
+  .strict();
 export const documentSourceSchema = z.object({
   page: z.number().int().min(1).max(20),
   text: z.string().max(1000),
@@ -57,6 +78,9 @@ export const documentExtractionSchema = z.object({
 });
 export const documentAnalysisSchema = z.object({
   category: documentCategorySchema,
+  title: z.string().trim().min(1).max(140).nullable().optional(),
+  titleSource: documentSourceSchema.nullable().optional(),
+  classification: documentClassificationSchema.optional(),
   evidence: documentSourceSchema.nullable(),
   fields: z.array(documentExtractionSchema).max(40),
   pages: z
@@ -73,6 +97,8 @@ export const documentAnalysisSchema = z.object({
 export const documentSummarySchema = z.object({
   id: documentIdSchema,
   name: z.string().max(240),
+  title: z.string().max(140).nullable().optional(),
+  classification: documentClassificationSchema.optional(),
   mime: z.string().max(160),
   size: z.number().int().nonnegative(),
   checksum: z.string().regex(/^[0-9a-f]{64}$/),
@@ -102,7 +128,45 @@ export const documentDecisionSchema = z.object({
     )
     .max(40),
 });
+export const documentChangeRequestSchema = z.object({
+  id: z.uuid(),
+  documentId: documentIdSchema,
+  extractionId: z.uuid(),
+  field: profileFieldSchema,
+  previousValue: z.string().max(240),
+  requestedValue: z.string().max(240),
+  insurer: z.string().trim().min(1).max(160),
+  state: z.enum(["prepared", "cancelled"]),
+  createdAt: z.iso.datetime(),
+  updatedAt: z.iso.datetime(),
+});
+export const documentChangeRequestsSchema = z.object({
+  requests: z.array(documentChangeRequestSchema).max(20),
+  nextCursor: z.string().max(200).nullable(),
+});
+export const documentProfileDifferencesSchema = z.object({
+  fields: z
+    .array(
+      z.object({
+        field: profileFieldSchema,
+        count: z.number().int().positive(),
+        documentId: documentIdSchema,
+      }),
+    )
+    .max(8),
+});
 export const documentSchema = documentSummarySchema.extend({
+  profileComparisons: z
+    .array(
+      z.object({
+        extractionId: z.uuid(),
+        currentValue: z.string().max(240),
+        different: z.boolean(),
+      }),
+    )
+    .max(40)
+    .optional(),
+  changeRequests: z.array(documentChangeRequestSchema).max(40).optional(),
   analysis: documentAnalysisSchema.nullable(),
   decisions: z.array(documentDecisionSchema).max(20),
   reviewedValues: z
@@ -112,6 +176,7 @@ export const documentSchema = documentSummarySchema.extend({
 export const documentListSchema = z.object({
   documents: z.array(documentSummarySchema).max(20),
   nextCursor: z.string().max(200).nullable(),
+  total: z.number().int().nonnegative().optional(),
 });
 export const documentCreateInputSchema = z
   .object({
@@ -148,6 +213,10 @@ export const documentReviewInputSchema = documentRevisionSchema
   .extend({
     profileRevision: z.number().int().nonnegative(),
     concernsMe: z.boolean(),
+    notification: z
+      .object({ insurer: z.string().trim().min(1).max(160) })
+      .strict()
+      .optional(),
     decisions: z
       .array(
         z
