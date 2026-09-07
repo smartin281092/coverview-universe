@@ -2,6 +2,8 @@
 
 Demande explicite : ajouter GSAP au marketing et à Wallet pour leurs prochaines animations. Ajout préparatoire uniquement ; aucune nouvelle animation visible ni clôture de S-042a.
 
+Évolution ultérieure : [indicateur documentaire GSAP dans Wallet](document-quota-animation.md), exception Knip Wallet retirée au premier usage. Les mesures ci-dessous décrivent l’installation initiale.
+
 ## Dépendance (DEP-01)
 
 Paquet officiel `gsap`, dépendance directe de `apps/www` et `apps/client`, lockfile produit par pnpm. Choix explicite de l’utilisateur pour les timelines et animations à venir ; aucune bibliothèque équivalente déjà présente. Types intégrés, aucune dépendance transitive ajoutée ; paquet décompressé d’environ 6,3 Mo, sans import dans les bundles actuels. Installation réussie avec validation des politiques de chaîne d’approvisionnement pnpm.

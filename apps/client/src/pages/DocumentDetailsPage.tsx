@@ -20,6 +20,7 @@ import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { DocumentFailure } from "../features/documents/DocumentFailure";
 import { DocumentUpload } from "../features/documents/DocumentUpload";
 import { DocumentReview } from "../features/documents/DocumentReview";
+import { DocumentProcessingIndicator } from "../features/documents/DocumentProcessingIndicator";
 
 type Panel =
   "category" | "delete" | "history" | "source" | "resume" | "analysis" | { fieldId: string } | null;
@@ -162,7 +163,11 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
         aria-label={t("processing")}
       >
         <div className="flex min-w-0 gap-3">
-          <ShieldCheck className="mt-1 size-5 shrink-0" aria-hidden="true" />
+          {["queued", "scanning", "reading"].includes(item.state) ? (
+            <DocumentProcessingIndicator />
+          ) : (
+            <ShieldCheck className="mt-1 size-5 shrink-0" aria-hidden="true" />
+          )}
           <div className="space-y-2">
             <p className="font-medium" role="status">
               {t(`state.${item.state}`)}

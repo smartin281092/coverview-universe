@@ -21,7 +21,6 @@
       "project": ["src/**/*.ts", "*.ts", "*.mjs"]
     },
     "apps/client": {
-      "ignoreDependencies": ["gsap"],
       "project": ["src/**/*.{ts,tsx,css}"]
     },
     "apps/admin": {

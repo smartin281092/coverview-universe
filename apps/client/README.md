@@ -42,7 +42,7 @@ Coquille S-000a et parcours d’identité S-000b implémentés. Les oracles et l
 
 Stack imposée : React/Vite, TanStack Router (routes par code), TanStack Query (server state), i18next/react-i18next (catalogues), Tailwind et [UI shadcn partagée](../../packages/ui/README.md). Le formulaire profil utilise React Hook Form et le resolver Zod sur les contrats partagés, comme l’espace équipe. Les packages directs ont des licences MIT, sauf Lucide ISC et GSAP sous sa licence standard propre. Aucune donnée du profil en localStorage ; cache privé borné à l’identité/session et saisie temporaire en mémoire.
 
-GSAP est installé à la demande de l’utilisateur pour les prochaines animations. Son usage reste à intégrer ; [périmètre préparatoire et exception Knip](../../roadmap/evidence/gsap-setup.md). Lors de cette intégration, respecter la réduction des animations et libérer les animations au démontage React.
+GSAP anime l’indicateur de traitement documentaire dans la liste et la fiche : attente, antivirus et lecture. `DocumentProcessingIndicator` respecte `prefers-reduced-motion` et libère son contexte au démontage React. L’exception Knip préparatoire a été retirée pour Wallet ; [installation](../../roadmap/evidence/gsap-setup.md) et [correctif quota/animation](../../roadmap/evidence/document-quota-animation.md).
 
 Sources officielles consultées : [TanStack Router](https://tanstack.com/router/latest/docs/framework/react), [Query defaults](https://tanstack.com/query/latest/docs/framework/react/guides/important-defaults), [shadcn CLI](https://ui.shadcn.com/docs/cli). Versions stables résolues via le registre npm le 2026-09-05, fixées dans le lockfile par l’installation racine.
 

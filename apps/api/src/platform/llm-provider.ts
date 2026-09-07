@@ -41,6 +41,48 @@ const responseSchema = z.object({
     output_tokens: z.number().int().nonnegative(),
   }),
 });
+
+async function quotaExhausted(response: Response): Promise<boolean> {
+  const reader = response.body?.getReader();
+  if (!reader) return false;
+  const chunks: Uint8Array[] = [];
+  let size = 0;
+  try {
+    while (true) {
+      const chunk = await reader.read();
+      if (chunk.done) break;
+      const value: unknown = chunk.value;
+      if (!(value instanceof Uint8Array)) return false;
+      size += value.byteLength;
+      if (size > 16384) return false;
+      chunks.push(value);
+    }
+    const result = z
+      .object({
+        error: z.object({
+          code: z.string().max(100).nullable().optional(),
+          type: z.string().max(100).nullable().optional(),
+        }),
+      })
+      .safeParse(JSON.parse(Buffer.concat(chunks).toString("utf8")));
+    if (!result.success) return false;
+    const { code, type } = result.data.error;
+    return (
+      type === "insufficient_quota" ||
+      [
+        "insufficient_quota",
+        "credit_balance_exhausted",
+        "billing_hard_limit_reached",
+        "organization_usage_limit_exceeded",
+      ].includes(code ?? "")
+    );
+  } catch {
+    return false;
+  } finally {
+    await reader.cancel().catch(() => {});
+    reader.releaseLock();
+  }
+}
 export function createOpenAiProvider(config: {
   OPENAI_API_KEY?: string | undefined;
   OPENAI_DOCUMENT_MODEL: string;
@@ -106,6 +148,9 @@ export function createOpenAiProvider(config: {
         throw new LlmError("ai_unavailable", true, { cause });
       }
       if (!response.ok) {
+        // 429 also covers billing refusals. Keep provider messages and bodies private.
+        if (response.status === 429 && (await quotaExhausted(response)))
+          throw new LlmError("ai_quota_exhausted", false);
         await response.body?.cancel();
         throw new LlmError(
           response.status === 401 || response.status === 403

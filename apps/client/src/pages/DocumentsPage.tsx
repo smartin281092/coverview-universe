@@ -19,6 +19,7 @@ import { api } from "../api";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { DocumentUpload } from "../features/documents/DocumentUpload";
 import { DocumentFailure } from "../features/documents/DocumentFailure";
+import { DocumentProcessingIndicator } from "../features/documents/DocumentProcessingIndicator";
 
 function Documents({ identity }: { identity: IdentityMe }) {
   const { t, i18n } = useTranslation("documents");
@@ -108,11 +109,15 @@ function Documents({ identity }: { identity: IdentityMe }) {
                     params={{ documentId: document.id }}
                     className="group flex min-w-0 items-start gap-4 py-6"
                   >
-                    <FileText
-                      className="mt-1 size-5 shrink-0 text-muted-foreground"
-                      strokeWidth={1.5}
-                      aria-hidden="true"
-                    />
+                    {["queued", "scanning", "reading"].includes(document.state) ? (
+                      <DocumentProcessingIndicator />
+                    ) : (
+                      <FileText
+                        className="mt-1 size-5 shrink-0 text-muted-foreground"
+                        strokeWidth={1.5}
+                        aria-hidden="true"
+                      />
+                    )}
                     <div className="min-w-0 flex-1 space-y-2">
                       <h2 className="break-words font-medium group-hover:underline">
                         {document.name}
