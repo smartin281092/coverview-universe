@@ -8,6 +8,7 @@ import type { DocumentRecord } from "@coverview/contracts";
 import { api } from "../../api";
 import { DocumentFailure } from "./DocumentFailure";
 import { DocumentProgress } from "./DocumentProgress";
+import { DocumentLoadingMessage } from "./DocumentLoadingMessage";
 
 export function DocumentUpload({
   identity,
@@ -120,7 +121,12 @@ export function DocumentUpload({
       >
         {mutation.isPending ? t(step) : t(pending ? "resumeUpload" : "saveDocument")}
       </Button>
-      {mutation.isPending && <DocumentProgress label={t(step)} />}
+      {mutation.isPending && (
+        <div className="space-y-3">
+          <DocumentProgress label={t(step)} />
+          <DocumentLoadingMessage key={step} phase={step} connectionPaused={mutation.isPaused} />
+        </div>
+      )}
       <p className="text-xs leading-relaxed text-muted-foreground">{t("retention")}</p>
     </form>
   );

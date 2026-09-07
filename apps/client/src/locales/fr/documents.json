@@ -17,6 +17,30 @@
   "preparing": "Vérification du fichier…",
   "uploading": "Enregistrement de l’original…",
   "loading": "Chargement des documents…",
+  "loadingMessages": {
+    "preparing": {
+      "initial": "Nous préparons votre fichier avant son envoi. Gardez cette page ouverte.",
+      "long": "La préparation se poursuit. Cette étape peut prendre un peu de temps selon le fichier."
+    },
+    "uploading": {
+      "initial": "Votre original est en cours d’enregistrement. Gardez cette page ouverte pendant le transfert.",
+      "long": "Le transfert est toujours en cours. Sa durée dépend du fichier et de votre connexion."
+    },
+    "queued": {
+      "initial": "Votre document est enregistré et attend son tour pour être traité.",
+      "long": "Votre document est toujours dans la file d’attente. Le traitement démarrera automatiquement."
+    },
+    "scanning": {
+      "initial": "Nous vérifions la sécurité de votre document avant sa lecture.",
+      "long": "Le contrôle antivirus est toujours en cours. Certains documents demandent un peu plus de temps."
+    },
+    "reading": {
+      "initial": "Nous recherchons les informations utiles dans votre document.",
+      "long": "La lecture se poursuit. Les documents longs ou détaillés peuvent demander un peu plus de temps."
+    },
+    "noRefresh": "Inutile d’actualiser : cette page affichera automatiquement la suite. Vous pouvez la laisser ouverte.",
+    "awaitingStatus": "Nous attendons une mise à jour du traitement. Vérifiez votre connexion ; le suivi reprendra automatiquement."
+  },
   "empty": "Votre espace est prêt",
   "emptyHelp": "Ajoutez une pièce d’identité, un contrat ou un autre document. Vous gardez la main sur les informations extraites.",
   "manualHelp": "Vous pouvez aussi compléter vos informations directement.",

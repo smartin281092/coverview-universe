@@ -22,6 +22,7 @@ import { DocumentUpload } from "../features/documents/DocumentUpload";
 import { DocumentReview } from "../features/documents/DocumentReview";
 import { DocumentProcessingIndicator } from "../features/documents/DocumentProcessingIndicator";
 import { DocumentProgress } from "../features/documents/DocumentProgress";
+import { DocumentLoadingMessage } from "../features/documents/DocumentLoadingMessage";
 
 type Panel =
   "category" | "delete" | "history" | "source" | "resume" | "analysis" | { fieldId: string } | null;
@@ -219,13 +220,22 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
             <p className="font-medium" role="status">
               {t(`state.${item.state}`)}
             </p>
-            <p className="max-w-xl text-sm text-muted-foreground">
-              {item.failure
-                ? t(`failure.${item.failure}`, {
-                    defaultValue: t("failure.processing_unavailable"),
-                  })
-                : t(item.state === "pending" ? "pendingHelp" : "originalSafe")}
-            </p>
+            {item.state === "queued" || item.state === "scanning" || item.state === "reading" ? (
+              <DocumentLoadingMessage
+                key={`${item.id}:${item.state}`}
+                phase={item.state}
+                confirmedAt={query.dataUpdatedAt}
+                connectionPaused={query.fetchStatus === "paused"}
+              />
+            ) : (
+              <p className="max-w-xl text-sm text-muted-foreground">
+                {item.failure
+                  ? t(`failure.${item.failure}`, {
+                      defaultValue: t("failure.processing_unavailable"),
+                    })
+                  : t(item.state === "pending" ? "pendingHelp" : "originalSafe")}
+              </p>
+            )}
           </div>
         </div>
         {item.state === "pending" && (
