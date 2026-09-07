@@ -9,3 +9,11 @@ Demande utilisateur du 7 septembre 2026 : retirer Appareils du menu, regrouper P
 - **Périmètre** : les requêtes, autorisations, clés de cache privé et actions de révocation existantes sont conservées. Aucun réglage simulé ajouté. Déconnexion courante dans Préférences, déconnexion globale dans Appareils ; aucune déconnexion réelle déclenchée pour vérifier la présentation.
 
 Session : Codex GPT-6 ; effort exact non exposé dans ce contexte. Cette correction ne clôt pas la recette documentaire S-042a.
+
+## Espacements communs et actions adaptatives
+
+Demande suivante : rapprocher les onglets de la description, conserver cette règle pour les futures pages et placer les actions Préférences côte à côte si possible.
+
+- **Vérifié — implementation** : composition partagée `cv-tabbed-page`, utilisée par `AccountLayout layout="tabs"` et documentée dans UI ; lint ciblé, typage UI/Wallet et build réussis.
+- **Vérifié — navigateur authentifié à 375 et 1280 px** : distance description/onglets mesurée à 24 px dans les deux cas. Boutons sur deux lignes à 375 px et côte à côte à 1280 px, avec 12 px d’écart mesuré dans les deux dispositions. Aucun débordement horizontal. Dimensions de contrôle réinitialisées ensuite.
+- **Vérifié — actualisation locale** : Vite avait conservé le CSS importé du package UI ; une notification de modification du fichier CSS d’entrée Wallet a déclenché sa recompilation, sans changer le contenu du fichier ni relancer l’API. Le CSS chargé et les dimensions finales ont été contrôlés après rechargement.
