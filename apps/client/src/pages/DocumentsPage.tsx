@@ -29,6 +29,7 @@ function Documents({ identity }: { identity: IdentityMe }) {
   const { t, i18n } = useTranslation("documents");
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [noticeDismissed, setNoticeDismissed] = useState(false);
   const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);
   const [cursors, setCursors] = useState<string[]>([]);
   const [searchText, setSearchText] = useState("");
@@ -116,7 +117,7 @@ function Documents({ identity }: { identity: IdentityMe }) {
           </SheetContent>
         </Sheet>
       </div>
-      <AuthorizationNotice />
+      {!noticeDismissed && <AuthorizationNotice onDismiss={() => setNoticeDismissed(true)} />}
       <form
         className="flex flex-wrap items-end gap-3"
         onSubmit={(event) => {

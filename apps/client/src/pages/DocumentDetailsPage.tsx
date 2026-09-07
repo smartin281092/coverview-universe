@@ -57,8 +57,9 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
         : false,
   });
   const profile = useQuery({
-    queryKey: [...rootKey, "profile"],
+    queryKey: [...rootKey, "profile", query.data?.revision],
     queryFn: ({ signal }) => api.profile({ signal }),
+    enabled: query.data?.state === "ready",
     gcTime: 0,
     staleTime: 0,
     retry: false,

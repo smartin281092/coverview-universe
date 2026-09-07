@@ -15,7 +15,7 @@
   "unavailableDescription": "La signature électronique n’est pas encore disponible. Aucune autorisation n’est accordée à ce stade.",
   "signUnavailable": "Signature indisponible",
   "noticeTitle": "Votre autorisation est nécessaire",
-  "notice": "Pour demander vos documents ou intervenir sur vos assurances, CoverView a besoin de votre autorisation. Une procuration précise ce que vous autorisez ; un mandat peut être nécessaire pour la gestion.",
+  "notice": "Pour récupérer vos documents, CoverView a besoin d’une procuration. La gestion de vos assurances nécessite un mandat.",
   "signProcuration": "Signer une procuration",
   "dismiss": "Fermer cette information",
   "loading": "Préparation du document…",
