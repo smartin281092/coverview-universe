@@ -63,6 +63,7 @@ export function AppShell() {
     { path: "/articles/questions-frequentes", key: "questions" },
   ] as const;
   const isCurrent = (destination: (typeof destinations)[number]["to"]) => {
+    if (destination === "/documents" && pathname.startsWith("/insurance-companies/")) return true;
     if (destination === "/account")
       return (
         pathname === "/" ||

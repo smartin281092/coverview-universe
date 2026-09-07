@@ -33,6 +33,8 @@ import {
   documentChangeRequestSchema,
   documentProfileDifferencesSchema,
   documentCompaniesSchema,
+  insuranceCompanyDetailsSchema,
+  insuranceCompanyIdSchema,
   type ApiErrorCode,
 } from "@coverview/contracts";
 import type { z } from "zod";
@@ -260,6 +262,14 @@ export function createApiClient({
     },
     profile: (options?: RequestOptions) =>
       request("/identity/profile", profileSchema, options, undefined, true),
+    insuranceCompany: (id: z.infer<typeof insuranceCompanyIdSchema>, options?: RequestOptions) =>
+      request(
+        `/documents/companies/${encodeURIComponent(insuranceCompanyIdSchema.parse(id))}`,
+        insuranceCompanyDetailsSchema,
+        options,
+        undefined,
+        true,
+      ),
     saveProfile: (input: z.infer<typeof profileSaveInputSchema>, options: MutationOptions) =>
       request(
         "/identity/profile",

@@ -7,25 +7,26 @@ export function AuthorizationNotice({ onDismiss }: { onDismiss: () => void }) {
   const { t } = useTranslation("authorizations");
   return (
     <aside
-      className="relative flex items-start gap-3 rounded-xl bg-indigo-50 p-4 pr-14 text-indigo-950"
+      className="relative space-y-2 rounded-xl bg-indigo-50 p-4 pr-14 text-indigo-950"
       aria-label={t("noticeTitle")}
     >
-      <Info className="mt-0.5 size-5 shrink-0" aria-hidden="true" />
-      <div className="space-y-2">
-        <p className="max-w-2xl text-sm leading-relaxed">{t("notice")}</p>
-        <Link
-          to="/authorizations/$kind"
-          params={{ kind: "procuration" }}
-          className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-indigo-700"
-        >
-          {t("signProcuration")}
-          <ArrowUpRight className="size-4" aria-hidden="true" />
-        </Link>
+      <div className="flex items-center gap-2">
+        <Info className="size-5 shrink-0" strokeWidth={1.5} aria-hidden="true" />
+        <h2 className="text-base font-semibold">{t("noticeTitle")}</h2>
       </div>
+      <p className="max-w-2xl text-sm leading-relaxed">{t("notice")}</p>
+      <Link
+        to="/authorizations/$kind"
+        params={{ kind: "procuration" }}
+        className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-indigo-700"
+      >
+        {t("signProcuration")}
+        <ArrowUpRight className="size-4" aria-hidden="true" />
+      </Link>
       <Button
         variant="ghost"
         size="icon"
-        className="absolute right-2 top-2 size-11"
+        className="absolute right-2 top-2 size-11 motion-reduce:transition-none"
         aria-label={t("dismiss")}
         onClick={onDismiss}
       >

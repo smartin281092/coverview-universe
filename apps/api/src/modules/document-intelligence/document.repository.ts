@@ -30,6 +30,7 @@ import {
   type DocumentReviewInput,
   type DocumentRecord,
   type DocumentAnalysis,
+  type InsuranceCompanyId,
 } from "@coverview/contracts";
 import {
   lockProfileOwner,
@@ -58,6 +59,7 @@ import {
 } from "./document.presentation.js";
 import { documentProfileComparisons, sameProfileValue } from "./document.reconciliation.js";
 import { referencedCompanyIds } from "./document.companies.js";
+import { companyOverview } from "./document.insurance.js";
 
 type Database = ReturnType<typeof createDatabase>["db"];
 type Tx = Parameters<Parameters<Database["transaction"]>[0]>[0];
@@ -468,6 +470,30 @@ export function createDocumentRepository(db: Database) {
             ? Buffer.from(JSON.stringify({ id: last.id, fingerprint })).toString("base64url")
             : null,
       });
+    },
+    async insuranceCompany(userId: string, companyId: InsuranceCompanyId) {
+      const rows = await db
+        .select({
+          ...getTableColumns(documents),
+          analysis: sql<Row["analysis"]>`case when ${documents.analysis} is null then null else
+          (${documents.analysis} - 'fields' - 'pages') || jsonb_build_object('fields', '[]'::jsonb, 'pages',
+            jsonb_build_array((${documents.analysis}->'pages'->0) || jsonb_build_object('text', left(${documents.analysis}->'pages'->0->>'text', 12000)))) end`,
+        })
+        .from(documents)
+        .where(
+          and(
+            eq(documents.userId, userId),
+            isNull(documents.deletedAt),
+            ne(documents.state, "deleted"),
+          ),
+        )
+        .orderBy(desc(documents.createdAt), desc(documents.id))
+        .limit(201);
+      if (rows.length > 200) throw new DocumentError("DOCUMENT_LIMIT_REACHED", 422);
+      return companyOverview(
+        companyId,
+        rows.map((row) => ({ document: summary(row), analysis: row.analysis })),
+      );
     },
     async get(userId: string, id: string) {
       return detail(

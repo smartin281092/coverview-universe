@@ -4,6 +4,8 @@
   "retryScan": "Reprendre le contrôle",
   "analysisDisclosure": "Après le contrôle antivirus, cet original sera transmis à un service d’analyse externe. Les informations extraites complètent les champs vides de votre profil ; toute différence avec une valeur existante est signalée pour vérification.",
   "listMeta": "{{date}}",
+  "filenameMeta": "{{name}} · {{size}} Ko · Ajouté le {{date}}",
+  "companyOpen": "Voir mes assurances chez {{company}}",
   "library": {
     "search": "Rechercher",
     "searchPlaceholder": "Titre, nom de fichier ou type…",

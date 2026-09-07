@@ -11,6 +11,7 @@ export {
 } from "./Card";
 export { Input } from "./Input";
 export { Label } from "./Label";
+export { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "./Select";
 export { Tabs, TabsList, TabsTrigger, TabsContent } from "./Tabs";
 export {
   Sheet,

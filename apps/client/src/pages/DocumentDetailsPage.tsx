@@ -12,6 +12,11 @@ import {
   SheetHeader,
   SheetTitle,
   SheetDescription,
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
 } from "@coverview/ui";
 import type { IdentityMe } from "@coverview/api-client";
 import { documentCategorySchema, type DocumentRecord } from "@coverview/contracts";
@@ -24,6 +29,7 @@ import { DocumentProcessingIndicator } from "../features/documents/DocumentProce
 import { DocumentProgress } from "../features/documents/DocumentProgress";
 import { DocumentLoadingMessage } from "../features/documents/DocumentLoadingMessage";
 import { AlertTriangle, Clock3 } from "lucide-react";
+import { InsuranceCompanyLink } from "../features/insurance/InsuranceCompanyLink";
 
 type Panel =
   "category" | "delete" | "history" | "source" | "resume" | "analysis" | { fieldId: string } | null;
@@ -141,7 +147,7 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
     ? t(`field.${field.field}`)
     : t(`panel.${typeof panel === "string" ? panel : "source"}`);
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div ref={setPortalContainer} className="contents" />
       <Link
         to="/documents"
@@ -154,8 +160,11 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
         <p className="wallet-page-eyebrow cv-meta text-muted-foreground">
           {t(`category.${item.category}`)}
         </p>
-        <h1 className="break-words text-2xl font-medium tracking-tight sm:text-4xl">{item.name}</h1>
+        <h1 className="break-words text-2xl font-medium tracking-tight sm:text-4xl">
+          {item.title ?? t(`classification.${item.classification ?? item.category}`)}
+        </h1>
       </header>
+      {item.companyId && <InsuranceCompanyLink companyId={item.companyId} />}
       {item.analysis && (
         <section className="space-y-4">
           <div className="space-y-2">
@@ -165,7 +174,7 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
           {item.analysis.fields.length === 0 ? (
             <p className="rounded-lg bg-muted p-5 text-sm">{t("noFields")}</p>
           ) : (
-            <ul className="divide-y divide-border">
+            <ul className="grid gap-x-8 sm:grid-cols-2">
               {item.analysis.fields.map((extraction) => {
                 const mismatch = item.profileComparisons?.find(
                   (entry) => entry.extractionId === extraction.id,
@@ -179,7 +188,7 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
                 return (
                   <li
                     key={extraction.id}
-                    className="flex flex-wrap items-center justify-between gap-4 py-5"
+                    className="flex flex-wrap items-center justify-between gap-3 border-b border-border py-3"
                   >
                     <div className="min-w-0 flex-1 space-y-1">
                       <p className="text-sm text-muted-foreground">
@@ -235,7 +244,7 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
         </section>
       )}
       <section
-        className="flex flex-wrap items-start justify-between gap-5 border-y border-border py-6"
+        className="flex flex-wrap items-start justify-between gap-4 border-y border-border py-4"
         aria-label={t("processing")}
       >
         <div className="flex min-w-0 gap-3">
@@ -312,14 +321,6 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
       {download.isError && (
         <DocumentFailure error={download.error} onRetry={() => download.mutate()} />
       )}
-      <p className="text-sm text-muted-foreground">
-        {t("fileMeta", {
-          size: new Intl.NumberFormat(i18n.language, { maximumFractionDigits: 1 }).format(
-            item.size / 1024,
-          ),
-          date: date.format(new Date(item.createdAt)),
-        })}
-      </p>
       <div className="flex flex-wrap gap-3">
         <Button
           variant="outline"
@@ -351,8 +352,19 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
           </Button>
         )}
       </div>
-      <div className="flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6">
-        <p className="max-w-xl text-xs text-muted-foreground">{t("retention")}</p>
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
+        <div className="min-w-0 flex-1 space-y-2">
+          <p className="break-words text-xs text-muted-foreground">
+            {t("filenameMeta", {
+              name: item.name,
+              size: new Intl.NumberFormat(i18n.language, { maximumFractionDigits: 1 }).format(
+                item.size / 1024,
+              ),
+              date: date.format(new Date(item.createdAt)),
+            })}
+          </p>
+          <p className="max-w-xl text-xs text-muted-foreground">{t("retention")}</p>
+        </div>
         <Button variant="ghost" disabled={busy} onClick={() => setPanel("delete")}>
           <Trash2 className="size-4" aria-hidden="true" />
           {t("delete")}
@@ -439,18 +451,22 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
               }}
             >
               <Label htmlFor="document-category">{t("categoryLabel")}</Label>
-              <select
-                id="document-category"
-                className="min-h-11 w-full rounded-md bg-muted px-3 text-sm"
+              <Select
                 value={category}
-                onChange={(event) => setCategory(documentCategorySchema.parse(event.target.value))}
+                disabled={busy}
+                onValueChange={(value) => setCategory(documentCategorySchema.parse(value))}
               >
-                {documentCategorySchema.options.map((category) => (
-                  <option key={category} value={category}>
-                    {t(`category.${category}`)}
-                  </option>
-                ))}
-              </select>
+                <SelectTrigger id="document-category" className="min-h-11 w-full text-sm">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent position="popper" portalContainer={portalContainer}>
+                  {documentCategorySchema.options.map((category) => (
+                    <SelectItem key={category} value={category}>
+                      {t(`category.${category}`)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               {item.analysis?.evidence && (
                 <blockquote className="break-words border-l-2 border-border pl-4 text-sm text-muted-foreground">
                   {item.analysis.evidence.text}

@@ -2,6 +2,15 @@
 
 Mandat et décisions canoniques : [plan](../plans/S-042a-library-authorizations.plan.md). Session Codex GPT-6 ; effort exact non exposé. Extension de S-042a, sans clôture de la signature ni du transport assureur.
 
+## Extension : bibliothèque et page compagnie
+
+Demande utilisateur du 7 septembre : menus custom, hiérarchie et compacité des documents, navigation vers les assurances d’une compagnie. La recette navigateur de cette extension reste à consigner après intégration locale.
+
+- **Vérifié V0/V1** : typage/build API et Wallet, ESLint ciblé, dependency-cruiser/Knip et contrôle des 52 fichiers frontend passent. Avertissement de bundle de plus de 500 ko déjà présent, conservé sans contournement. `Select` généré avec le preset shadcn imposé, provenance enregistrée, aucune dépendance ajoutée.
+- **Vérifié V2** : neuf tests passent, dont six cas de projection d’assurance et les trois parcours PostgreSQL documentaires existants. Isolation de propriétaire, refus anonyme, doublons, dates ambiguës, primes annualisées en centimes et devises séparées ; les offres et demandes ne deviennent pas des contrats. Revue indépendante terminée sans blocage restant.
+- **Fait** : titre liste/détail commun avec domaine et compagnie sourcés, carte compagnie sans fond, données sur deux colonnes à largeur suffisante, fichier et poids en pied. Page privée de compagnie avec onglets contrats/échus/documents, cartes et totaux, pagination de douze. Recherche sur ligne dédiée, labels avec icônes, notice avant titre, lignes arrondies et survol progressif, menus custom dans la bibliothèque et la correction du type.
+- **Limites explicites** : actif selon les dates du document, sans confirmation par l’assureur. Échéance proche = repère UX de trente jours. Optimisation et lacunes non évaluées : « Analyse à réaliser ». Totaux limités aux contrats actifs dont la prime est annualisable et la police identifiable ; incertitudes exclues et total partiel indiqué. Projection additive des analyses existantes sans relecture payante ; faits facultatifs des prochaines extractions sourcés et non normalisables laissés vides. Aucun droit, événement, job, transmission, variable ni migration nouvelle.
+
 ## État initial, avant l’extension ci-dessous
 
 - **Vérifié — code** : lint ciblé, typage/build API et Wallet, dependency-cruiser/Knip passent. Deux parcours critiques sur PostgreSQL18 isolé passent : migration depuis zéro/rejeu ; complétion des seuls champs vides, source non confirmée, refus de dates futures/ambiguïtés, rejeu worker sans duplication, divergences, idempotence concurrente des demandes, isolation de propriétaires, annulation et effacement des instantanés à la suppression. Second parcours : recherche dans 25 pièces, pagination sans doublons, classement/tri et refus d’un curseur avec filtres différents. Fixtures exclusivement dans le PostgreSQL de test, aucun utilisateur ou document de démonstration ajouté au Wallet.

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { profileSchema, profileValuesSchema, profileFieldSchema } from "./profile.js";
+import { insuranceCompanyIdSchema } from "./companies.js";
 
 export const documentIdSchema = z.string().regex(/^doc_[0-9a-f-]{36}$/);
 export const documentCategorySchema = z.enum([
@@ -76,11 +77,48 @@ export const documentExtractionSchema = z.object({
   value: z.string().min(1).max(240),
   source: documentSourceSchema,
 });
+export const insuranceDomainSchema = z.enum([
+  "motor",
+  "household",
+  "personal_liability",
+  "building",
+  "legal_protection",
+  "health",
+  "accident",
+  "life",
+  "pension_3a",
+  "pension_3b",
+  "pension",
+  "travel",
+  "pet",
+  "other",
+]);
+export const insurancePremiumSchema = z.object({
+  amountMinor: z.number().int().nonnegative().max(100000000000),
+  currency: z.enum(["CHF", "EUR", "USD"]),
+  period: z.enum(["month", "quarter", "half_year", "year", "once", "unknown"]),
+});
+const sourcedTextSchema = z.object({
+  value: z.string().min(1).max(240),
+  source: documentSourceSchema,
+});
+export const documentInsuranceSchema = z.object({
+  companyId: insuranceCompanyIdSchema.nullable(),
+  companySource: documentSourceSchema.nullable(),
+  domain: insuranceDomainSchema.nullable(),
+  domainSource: documentSourceSchema.nullable(),
+  policyNumber: sourcedTextSchema.nullable(),
+  insuredSubject: sourcedTextSchema.nullable(),
+  startsOn: z.object({ value: z.iso.date(), source: documentSourceSchema }).nullable(),
+  endsOn: z.object({ value: z.iso.date(), source: documentSourceSchema }).nullable(),
+  premium: insurancePremiumSchema.extend({ source: documentSourceSchema }).nullable(),
+});
 export const documentAnalysisSchema = z.object({
   category: documentCategorySchema,
   title: z.string().trim().min(1).max(140).nullable().optional(),
   titleSource: documentSourceSchema.nullable().optional(),
   classification: documentClassificationSchema.optional(),
+  insurance: documentInsuranceSchema.nullable().optional(),
   evidence: documentSourceSchema.nullable(),
   fields: z.array(documentExtractionSchema).max(40),
   pages: z
@@ -99,6 +137,8 @@ export const documentSummarySchema = z.object({
   name: z.string().max(240),
   title: z.string().max(140).nullable().optional(),
   classification: documentClassificationSchema.optional(),
+  companyId: insuranceCompanyIdSchema.nullable().optional(),
+  insuranceDomain: insuranceDomainSchema.nullable().optional(),
   mime: z.string().max(160),
   size: z.number().int().nonnegative(),
   checksum: z.string().regex(/^[0-9a-f]{64}$/),
@@ -178,6 +218,45 @@ export const documentListSchema = z.object({
   nextCursor: z.string().max(200).nullable(),
   total: z.number().int().nonnegative().optional(),
 });
+export const insuranceContractSchema = z.object({
+  id: documentIdSchema,
+  documentIds: z.array(documentIdSchema).min(1).max(200),
+  title: z.string().max(140),
+  domain: insuranceDomainSchema.nullable(),
+  insuredSubject: z.string().max(240).nullable(),
+  policyNumber: z.string().max(240).nullable(),
+  startsOn: z.iso.date().nullable(),
+  endsOn: z.iso.date().nullable(),
+  state: z.enum(["active", "expired", "upcoming", "unknown"]),
+  expiresSoon: z.boolean(),
+  optimization: z.literal("unknown"),
+  premium: insurancePremiumSchema.nullable(),
+});
+export const insuranceCompanyDetailsSchema = z.object({
+  companyId: insuranceCompanyIdSchema,
+  documents: z.array(documentSummarySchema).max(200),
+  contracts: z.array(insuranceContractSchema).max(200),
+  stats: z.object({
+    documentCount: z.number().int().nonnegative(),
+    contractCount: z.number().int().nonnegative(),
+    activeContractCount: z.number().int().nonnegative(),
+    expiredContractCount: z.number().int().nonnegative(),
+    unknownContractCount: z.number().int().nonnegative(),
+    annualPremiumTotals: z
+      .array(
+        z.object({
+          currency: insurancePremiumSchema.shape.currency,
+          amountMinor: z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER),
+        }),
+      )
+      .max(3),
+    premiumCoverage: z.object({
+      included: z.number().int().nonnegative(),
+      total: z.number().int().nonnegative(),
+    }),
+    incomplete: z.boolean(),
+  }),
+});
 export const documentCreateInputSchema = z
   .object({
     name: z
@@ -241,6 +320,10 @@ export type DocumentRecord = z.infer<typeof documentSchema>;
 export type DocumentAnalysis = z.infer<typeof documentAnalysisSchema>;
 export type DocumentSource = z.infer<typeof documentSourceSchema>;
 export type DocumentExtraction = z.infer<typeof documentExtractionSchema>;
+export type DocumentInsurance = z.infer<typeof documentInsuranceSchema>;
+export type InsuranceDomain = z.infer<typeof insuranceDomainSchema>;
+export type InsuranceContract = z.infer<typeof insuranceContractSchema>;
+export type InsuranceCompanyDetails = z.infer<typeof insuranceCompanyDetailsSchema>;
 export type DocumentReviewInput = z.infer<typeof documentReviewInputSchema>;
 export type DocumentCreateInput = z.infer<typeof documentCreateInputSchema>;
 export const documentErrorCodes = [

@@ -1,5 +1,19 @@
 import type { InsuranceCompanyId } from "@coverview/contracts";
-import { normalizeDocumentSearch } from "./document.presentation.js";
+import { normalizeDocumentSearch } from "./document.search.js";
+
+export const companyLabels: Record<InsuranceCompanyId, string> = {
+  allianz: "Allianz",
+  assura: "Assura",
+  automate: "Automate",
+  axa: "AXA",
+  baloise: "Bâloise",
+  css: "CSS",
+  generali: "Generali",
+  "groupe-mutuel": "Groupe Mutuel",
+  helsana: "Helsana",
+  "liechtenstein-life": "Liechtenstein Life",
+  tsm: "TSM",
+};
 
 // Names on a document are references, never proof of affiliation or permission.
 const names: Record<InsuranceCompanyId, readonly string[]> = {

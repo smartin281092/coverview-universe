@@ -1,4 +1,8 @@
 import type { DocumentAnalysis, DocumentSummary } from "@coverview/contracts";
+import { companyLabels } from "./document.companies.js";
+import { insuranceDomainLabels, insuranceFacts } from "./document.insurance.js";
+import { normalizeDocumentSearch } from "./document.search.js";
+export { normalizeDocumentSearch } from "./document.search.js";
 
 export const classificationLabels = {
   identity: "Pièce d’identité",
@@ -13,16 +17,13 @@ export const classificationLabels = {
   unknown: "Document à classer",
 } as const;
 
-export function normalizeDocumentSearch(value: string) {
-  return value.normalize("NFD").replace(/\p{M}/gu, "").toLocaleLowerCase("fr");
-}
-
 export function documentPresentation(row: {
   category: DocumentSummary["category"];
   categoryCorrected: boolean;
-  analysis: Pick<DocumentAnalysis, "title" | "classification" | "pages"> | null;
+  analysis: Pick<DocumentAnalysis, "title" | "classification" | "pages" | "insurance"> | null;
 }) {
   const heading = row.analysis?.pages[0]?.text
+    .slice(0, 12000)
     .split(/\r?\n/u)
     .slice(0, 80)
     .map((line) => line.replace(/^[#*\s]+|[*\s]+$/gu, "").trim())
@@ -35,7 +36,7 @@ export function documentPresentation(row: {
           line,
         ),
     );
-  const title = row.analysis?.title ?? heading ?? null;
+  let title = row.analysis?.title ?? heading ?? null;
   let classification: NonNullable<DocumentSummary["classification"]> =
     row.analysis?.classification ?? row.category;
   if (!row.analysis?.classification && title) {
@@ -49,5 +50,25 @@ export function documentPresentation(row: {
       classification = "insurance_policy";
   }
   if (row.categoryCorrected) classification = row.category;
-  return { title, classification };
+  const facts = insuranceFacts(row.analysis);
+  if (
+    facts.companyId &&
+    ["insurance", "pension", "invoice", "correspondence"].includes(row.category)
+  ) {
+    const purpose =
+      classification === "insurance_offer"
+        ? "Offre"
+        : classification === "insurance_policy"
+          ? "Contrat"
+          : (title ?? classificationLabels[classification]);
+    title = [
+      facts.domain ? insuranceDomainLabels[facts.domain] : null,
+      companyLabels[facts.companyId],
+      purpose,
+    ]
+      .filter(Boolean)
+      .join(" · ")
+      .slice(0, 140);
+  }
+  return { title, classification, companyId: facts.companyId, insuranceDomain: facts.domain };
 }

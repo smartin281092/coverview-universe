@@ -15,6 +15,8 @@ import {
   documentChangeRequestSchema,
   documentProfileDifferencesSchema,
   documentCompaniesSchema,
+  insuranceCompanyDetailsSchema,
+  insuranceCompanyIdSchema,
 } from "@coverview/contracts";
 import type { createDocumentRepository } from "./document.repository.js";
 import type { createDocumentService } from "./document.service.js";
@@ -55,6 +57,18 @@ export function registerDocumentRoutes(
       schema: { response: { 200: documentCompaniesSchema } },
     },
     async (request) => repository.referencedCompanies(actor(request).userId),
+  );
+  app.get(
+    "/documents/companies/:companyId",
+    {
+      onRequest: read,
+      config: limited,
+      schema: {
+        params: z.object({ companyId: insuranceCompanyIdSchema }).strict(),
+        response: { 200: insuranceCompanyDetailsSchema },
+      },
+    },
+    async (request) => repository.insuranceCompany(actor(request).userId, request.params.companyId),
   );
   app.get(
     "/documents/profile-differences",

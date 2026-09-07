@@ -11,6 +11,7 @@ import { DocumentsPage } from "./pages/DocumentsPage";
 import { DocumentDetailsPage } from "./pages/DocumentDetailsPage";
 import { AuthorizationDetailsPage } from "./pages/AuthorizationDetailsPage";
 import { RequestsPage } from "./pages/RequestsPage";
+import { InsuranceCompanyPage } from "./pages/InsuranceCompanyPage";
 
 const rootRoute = createRootRoute({ component: AppShell, notFoundComponent: MissingPage });
 const documentsRoute = createRoute({
@@ -27,6 +28,24 @@ const documentRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/documents/$documentId",
   component: DocumentDetailsPage,
+});
+const insuranceCompanyRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/insurance-companies/$companyId",
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): { tab?: "contracts" | "expired" | "documents"; page?: number } => ({
+    ...(search.tab === "contracts" || search.tab === "expired" || search.tab === "documents"
+      ? { tab: search.tab }
+      : {}),
+    ...(typeof search.page === "number" &&
+    Number.isInteger(search.page) &&
+    search.page >= 1 &&
+    search.page <= 20
+      ? { page: search.page }
+      : {}),
+  }),
+  component: InsuranceCompanyPage,
 });
 const homeRoute = createRoute({ getParentRoute: () => rootRoute, path: "/", component: HomePage });
 const accountRoute = createRoute({
@@ -98,6 +117,7 @@ export const router = createRouter({
     documentsRoute,
     requestsRoute,
     documentRoute,
+    insuranceCompanyRoute,
   ]),
   defaultPreload: "intent",
   scrollRestoration: true,

@@ -2,11 +2,16 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { ArrowUpRight, FileText, Plus, Search } from "lucide-react";
+import { ArrowUpDown, ArrowUpRight, FileText, Layers3, Plus, Search, Tags } from "lucide-react";
 import {
   Button,
   Input,
   Label,
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
   EmptyState,
   LoadingState,
   Sheet,
@@ -80,6 +85,7 @@ function Documents({ identity }: { identity: IdentityMe }) {
   return (
     <div className="space-y-8">
       <div ref={setPortalContainer} className="contents" />
+      {!noticeDismissed && <AuthorizationNotice onDismiss={() => setNoticeDismissed(true)} />}
       <div className="flex flex-wrap items-start justify-between gap-5">
         <div className="space-y-3">
           <h1 className="cv-app-heading">{t("title")}</h1>
@@ -117,9 +123,8 @@ function Documents({ identity }: { identity: IdentityMe }) {
           </SheetContent>
         </Sheet>
       </div>
-      {!noticeDismissed && <AuthorizationNotice onDismiss={() => setNoticeDismissed(true)} />}
       <form
-        className="flex flex-wrap items-end gap-3"
+        className="space-y-4"
         onSubmit={(event) => {
           event.preventDefault();
           updateFilters({ q: searchText.trim() });
@@ -127,83 +132,106 @@ function Documents({ identity }: { identity: IdentityMe }) {
         role="search"
         aria-label={t("library.search")}
       >
-        <div className="min-w-0 flex-1 basis-60 space-y-2">
-          <Label htmlFor="document-search">{t("library.search")}</Label>
-          <Input
-            className="min-h-11"
-            id="document-search"
-            type="search"
-            maxLength={120}
-            value={searchText}
-            placeholder={t("library.searchPlaceholder")}
-            onChange={(event) => {
-              setSearchText(event.target.value);
-              if (!event.target.value) updateFilters({ q: "" });
-            }}
-          />
-        </div>
-        <Button type="submit" variant="outline" className="min-h-11">
-          <Search className="size-4" aria-hidden="true" />
-          {t("library.searchAction")}
-        </Button>
         <div className="space-y-2">
-          <Label htmlFor="document-group">{t("library.group")}</Label>
-          <select
-            id="document-group"
-            className="min-h-11 rounded-md bg-muted px-3 text-sm"
-            value={filters.group}
-            onChange={(event) =>
-              updateFilters({ group: event.target.value === "type" ? "type" : "date" })
-            }
-          >
-            <option value="date">{t("library.byDate")}</option>
-            <option value="type">{t("library.byType")}</option>
-          </select>
+          <Label htmlFor="document-search">
+            <Search className="size-4" strokeWidth={1.5} aria-hidden="true" />
+            {t("library.search")}
+          </Label>
+          <div className="flex items-center gap-3">
+            <Input
+              className="min-h-11 min-w-0 flex-1"
+              id="document-search"
+              type="search"
+              maxLength={120}
+              value={searchText}
+              placeholder={t("library.searchPlaceholder")}
+              onChange={(event) => {
+                setSearchText(event.target.value);
+                if (!event.target.value) updateFilters({ q: "" });
+              }}
+            />
+            <Button
+              type="submit"
+              variant="outline"
+              className="min-h-11 shrink-0"
+              aria-label={t("library.searchAction")}
+            >
+              <Search className="size-4" aria-hidden="true" />
+              <span className="hidden sm:inline">{t("library.searchAction")}</span>
+            </Button>
+          </div>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="document-sort">{t("library.sort")}</Label>
-          <select
-            id="document-sort"
-            className="min-h-11 rounded-md bg-muted px-3 text-sm"
-            value={filters.sort}
-            onChange={(event) =>
-              updateFilters({
-                sort:
-                  event.target.value === "oldest"
-                    ? "oldest"
-                    : event.target.value === "title"
-                      ? "title"
-                      : "newest",
-              })
-            }
-          >
-            <option value="newest">{t("library.newest")}</option>
-            <option value="oldest">{t("library.oldest")}</option>
-            <option value="title">{t("library.alphabetical")}</option>
-          </select>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="document-classification">{t("library.type")}</Label>
-          <select
-            id="document-classification"
-            className="min-h-11 max-w-full rounded-md bg-muted px-3 text-sm"
-            value={filters.classification ?? "all"}
-            onChange={(event) =>
-              updateFilters({
-                classification:
-                  event.target.value === "all"
-                    ? undefined
-                    : documentClassificationSchema.parse(event.target.value),
-              })
-            }
-          >
-            <option value="all">{t("library.allTypes")}</option>
-            {documentClassificationSchema.options.map((value) => (
-              <option key={value} value={value}>
-                {t(`classification.${value}`)}
-              </option>
-            ))}
-          </select>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="min-w-0 space-y-2">
+            <Label htmlFor="document-group">
+              <Layers3 className="size-4" strokeWidth={1.5} aria-hidden="true" />
+              {t("library.group")}
+            </Label>
+            <Select
+              value={filters.group}
+              onValueChange={(value) =>
+                updateFilters({ group: value === "type" ? "type" : "date" })
+              }
+            >
+              <SelectTrigger id="document-group" className="min-h-11 w-full text-sm">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent portalContainer={portalContainer} position="popper">
+                <SelectItem value="date">{t("library.byDate")}</SelectItem>
+                <SelectItem value="type">{t("library.byType")}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="min-w-0 space-y-2">
+            <Label htmlFor="document-sort">
+              <ArrowUpDown className="size-4" strokeWidth={1.5} aria-hidden="true" />
+              {t("library.sort")}
+            </Label>
+            <Select
+              value={filters.sort}
+              onValueChange={(value) =>
+                updateFilters({
+                  sort: value === "oldest" ? "oldest" : value === "title" ? "title" : "newest",
+                })
+              }
+            >
+              <SelectTrigger id="document-sort" className="min-h-11 w-full text-sm">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent portalContainer={portalContainer} position="popper">
+                <SelectItem value="newest">{t("library.newest")}</SelectItem>
+                <SelectItem value="oldest">{t("library.oldest")}</SelectItem>
+                <SelectItem value="title">{t("library.alphabetical")}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="min-w-0 space-y-2">
+            <Label htmlFor="document-classification">
+              <Tags className="size-4" strokeWidth={1.5} aria-hidden="true" />
+              {t("library.type")}
+            </Label>
+            <Select
+              value={filters.classification ?? "all"}
+              onValueChange={(value) =>
+                updateFilters({
+                  classification:
+                    value === "all" ? undefined : documentClassificationSchema.parse(value),
+                })
+              }
+            >
+              <SelectTrigger id="document-classification" className="min-h-11 w-full text-sm">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent portalContainer={portalContainer} position="popper">
+                <SelectItem value="all">{t("library.allTypes")}</SelectItem>
+                {documentClassificationSchema.options.map((value) => (
+                  <SelectItem key={value} value={value}>
+                    {t(`classification.${value}`)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </form>
       {query.isPending ? (
@@ -252,7 +280,7 @@ function Documents({ identity }: { identity: IdentityMe }) {
                         <Link
                           to="/documents/$documentId"
                           params={{ documentId: document.id }}
-                          className="group flex min-w-0 items-start gap-4 py-4"
+                          className="group flex min-w-0 items-start gap-4 rounded-xl p-4 transition-colors duration-200 ease-in-out hover:bg-muted/60 focus-visible:bg-muted/60 motion-reduce:transition-none"
                         >
                           {["queued", "scanning", "reading"].includes(document.state) ? (
                             <DocumentProcessingIndicator />
@@ -264,7 +292,7 @@ function Documents({ identity }: { identity: IdentityMe }) {
                             />
                           )}
                           <div className="min-w-0 flex-1 space-y-1">
-                            <h3 className="break-words font-medium group-hover:underline">
+                            <h3 className="break-words font-medium">
                               {document.title ??
                                 t(`classification.${document.classification ?? document.category}`)}
                             </h3>
