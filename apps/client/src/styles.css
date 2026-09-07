@@ -18,6 +18,9 @@
 .wallet-header {
   padding-top: env(safe-area-inset-top, 0px);
 }
+.wallet-shell .app-content:has(.document-details) {
+  padding-top: var(--spacing-24);
+}
 .wallet-mobile-menu[data-side="right"] {
   width: 100%;
   max-width: var(--container-sm);

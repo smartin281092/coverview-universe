@@ -139,8 +139,8 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
     ? t(`field.${field.field}`)
     : t(`panel.${typeof panel === "string" ? panel : "source"}`);
   return (
-    <div className="space-y-8">
-      <div ref={setPortalContainer} />
+    <div className="document-details space-y-8">
+      <div ref={setPortalContainer} className="contents" />
       <Link
         to="/documents"
         className="inline-flex min-h-11 items-center gap-2 text-sm text-muted-foreground"
