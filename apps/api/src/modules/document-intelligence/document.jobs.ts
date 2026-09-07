@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
-import { Queue, Worker, UnrecoverableError } from "bullmq";
+import { Queue, Worker, UnrecoverableError, createNodeRedisClient } from "bullmq";
+import { createClient } from "redis";
 import { z } from "zod";
 import type { FastifyBaseLogger } from "fastify";
 import type { FileStorage } from "../../platform/file-storage.js";
@@ -28,23 +29,27 @@ export function startDocumentJobs(
   storage: FileStorage,
   logger: FastifyBaseLogger,
 ) {
-  const redis = new URL(config.redisUrl);
-  const connection = {
-    host: redis.hostname,
-    port: Number(redis.port || 6379),
-    ...(redis.password ? { password: decodeURIComponent(redis.password) } : {}),
-    ...(redis.username ? { username: decodeURIComponent(redis.username) } : {}),
-    ...(redis.protocol === "rediss:" ? { tls: {} } : {}),
-    db: Number(redis.pathname.slice(1) || 0),
-    connectTimeout: 5000,
-  };
+  // BullMQ's plain connection options load its optional ioredis peer. Reuse our installed driver explicitly.
+  function redisClient(socketTimeout: number) {
+    return createClient({
+      url: config.redisUrl,
+      socket: {
+        connectTimeout: 5000,
+        socketTimeout,
+        reconnectStrategy: (retries) => Math.min(500 * (retries + 1), 5000),
+      },
+      disableOfflineQueue: true,
+      commandsQueueMaxLength: 100,
+      commandOptions: { timeout: socketTimeout },
+    });
+  }
+  const producerRedis = redisClient(10000);
+  // The worker's blocking duplicate can legitimately wait up to ten seconds for a job.
+  const workerRedis = redisClient(30000);
+  const producerConnection = createNodeRedisClient(producerRedis);
+  const workerConnection = createNodeRedisClient(workerRedis);
   const queue = new Queue("coverview-documents-v1", {
-    connection: {
-      ...connection,
-      maxRetriesPerRequest: 1,
-      commandTimeout: 10000,
-      enableOfflineQueue: false,
-    },
+    connection: producerConnection,
   });
   const provider = createOpenAiProvider(config);
   const abort = new AbortController();
@@ -146,7 +151,8 @@ export function startDocumentJobs(
       }
     },
     {
-      connection: { ...connection, maxRetriesPerRequest: null },
+      connection: workerConnection,
+      autorun: false,
       concurrency: 1,
       lockDuration: 180000,
     },
@@ -164,6 +170,13 @@ export function startDocumentJobs(
     logger.warn({ dependency: "document_queue" }, "Document queue unavailable"),
   );
   let closed = false;
+  // Do not enter BullMQ's processing loop after an initialization/configuration failure.
+  void worker
+    .waitUntilReady()
+    .then(async () => {
+      if (!closed) await worker.run();
+    })
+    .catch(() => logger.warn({ dependency: "document_worker" }, "Document worker stopped"));
   let relayRunning: Promise<void> | undefined;
   let maintenanceAt = 0;
   async function relay() {
@@ -176,6 +189,8 @@ export function startDocumentJobs(
           await repository.cleanup();
         }
         for (const row of await repository.pendingEvents()) {
+          // Before initial connection BullMQ waits outside the command timeout. Leave the event durable for the next tick.
+          if (closed || !producerRedis.isReady) break;
           const data = jobSchema.parse({
             id: row.id,
             documentId: row.documentId,
@@ -211,8 +226,10 @@ export function startDocumentJobs(
     closed = true;
     clearInterval(timer);
     abort.abort();
-    await relayRunning;
-    await worker.close();
-    await queue.close();
+    const closing = Promise.all([worker.close(), queue.close(), relayRunning]);
+    // External adapters are shared: release them explicitly, including a pending initial connection.
+    producerConnection.disconnect();
+    workerConnection.disconnect();
+    await closing;
   };
 }
