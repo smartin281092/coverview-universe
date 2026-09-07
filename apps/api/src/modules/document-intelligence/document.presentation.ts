@@ -30,7 +30,8 @@ export function documentPresentation(row: {
       (line) =>
         line.length >= 5 &&
         line.length <= 140 &&
-        /^(?:offre|proposition|police|contrat|certificat|attestation|procuration|mandat|facture|formulaire|demande|décompte|relevé|bulletin|carte d.identité|passeport)\b/iu.test(
+        !/^(?:offre valable|(?:police|contrat|demande)\s*(?:n[°ºo]|numéro|:))/iu.test(line) &&
+        /^(?:modèle d.offre|profil d.investisseur|questionnaire|offre|proposition|police|contrat|certificat|attestation|procuration|mandat|facture|formulaire|demande|décompte|relevé|bulletin|carte d.identité|passeport)\b/iu.test(
           line,
         ),
     );
@@ -42,7 +43,7 @@ export function documentPresentation(row: {
     if (/^procuration\b/u.test(text)) classification = "power_of_attorney";
     else if (/^mandat (?:de gestion|de courtage)\b/u.test(text))
       classification = "management_mandate";
-    else if (row.category === "insurance" && /^(?:offre|proposition)\b/u.test(text))
+    else if (row.category === "insurance" && /^(?:modele d.offre|offre|proposition)\b/u.test(text))
       classification = "insurance_offer";
     else if (row.category === "insurance" && /^(?:contrat|police)\b/u.test(text))
       classification = "insurance_policy";
