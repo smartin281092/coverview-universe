@@ -318,7 +318,7 @@ export function ProfileWorkspace({
             >
               <TabsList
                 aria-label={t("workspace.sections")}
-                className="h-auto min-h-16 w-full sm:w-auto"
+                className="min-h-[70px] w-full sm:w-auto"
               >
                 {tabs.map(({ id, icon: Icon }) => (
                   <TabsTrigger
