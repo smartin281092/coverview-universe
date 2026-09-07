@@ -299,7 +299,7 @@ export function createIdentityService(
       requireAdministration(fresh, false);
       const newToken = randomSecret();
       const elevated = await repository.markMfaVerified(
-        session.id,
+        fresh,
         new Date(),
         secretHash(newToken),
         requestId,

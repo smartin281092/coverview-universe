@@ -55,6 +55,8 @@ Ouvrir `/account` dans Wallet, se connecter par email/OTP avec une identité aut
 
 La session locale expire au plus tard avec la session distante, et au plus après `AUTH_SESSION_TTL_SECONDS` (huit heures par défaut). Aucun refresh token n’est conservé. WorkOS est interrogé à chaque authentification ; une indisponibilité ou une liste distante tronquée entraîne un refus. La preuve MFA vaut quinze minutes, son challenge au plus cinq minutes ; un nouvel essai nécessite un nouveau challenge.
 
+Un nouveau callback validé peut renvoyer une session WorkOS déjà connue, notamment après expiration locale. Pour le même propriétaire et sans révocation, CoverView conserve son ID/historique, remplace le cookie et recalcule l’expiration ; l’ancien cookie, sa preuve et son challenge MFA administratif deviennent inutilisables. La publication MFA compare aussi le cookie authentifié pour refuser un résultat arrivé après rotation. Une session révoquée ou une identité différente ne peut être réactivée par ce chemin. Cause, contrôle concurrent et limites de recette : [réparation de reconnexion](../../../../../roadmap/evidence/identity-session-reconnect.md).
+
 ## Procédure opérateur d’habilitation administrative
 
 Cette procédure prépare une attribution explicite ; elle n’en exécute aucune. L’opérateur doit déjà être habilité à modifier les permissions dans l’environnement concerné. Une adresse email, un rôle de fixture, l’accès à l’interface équipe ou une organisation WorkOS ne fournit pas cette autorisation (`identity.admin.1`).

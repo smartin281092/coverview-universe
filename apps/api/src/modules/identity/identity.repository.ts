@@ -164,6 +164,17 @@ export function createIdentityRepository(db: Database) {
         )
           return undefined;
 
+        // A successful AuthKit callback may reuse its still-active remote session after our local expiry.
+        const [existing] = await tx
+          .select()
+          .from(identitySessions)
+          .where(eq(identitySessions.workosSessionId, input.workosSessionId))
+          .limit(1)
+          .for("update");
+        if (existing && existing.userId !== user.id)
+          throw new Error("Provider session belongs to another canonical identity");
+        if (existing && (existing.revokedAt || existing.remoteRevocationPending)) return undefined;
+
         await tx
           .update(identityUsers)
           .set({ email: input.email })
@@ -173,23 +184,38 @@ export function createIdentityRepository(db: Database) {
           .insert(identityProfiles)
           .values({ id: `prof_${randomUUID()}`, userId: user.id })
           .onConflictDoNothing({ target: identityProfiles.userId });
-        const sessionId = `sess_${randomUUID()}`;
-        await tx.insert(identitySessions).values({
-          id: sessionId,
-          userId: user.id,
-          workosSessionId: input.workosSessionId,
+        const loginId = `sess_${randomUUID()}`;
+        const sessionId = existing?.id ?? loginId;
+        const credentials = {
           tokenHash: input.tokenHash,
           device: input.device,
           authenticatedAt: input.authenticatedAt ?? null,
           expiresAt: input.expiresAt,
-        });
+        };
+        if (existing) {
+          // Rotate the browser credential; never inherit the old session's step-up proof or challenge.
+          await tx
+            .update(identitySessions)
+            .set({ ...credentials, lastSeenAt: new Date(), mfaVerifiedAt: null })
+            .where(and(eq(identitySessions.id, sessionId), eq(identitySessions.userId, user.id)));
+          await tx
+            .delete(identityMfaChallenges)
+            .where(eq(identityMfaChallenges.sessionId, sessionId));
+        } else {
+          await tx.insert(identitySessions).values({
+            id: sessionId,
+            userId: user.id,
+            workosSessionId: input.workosSessionId,
+            ...credentials,
+          });
+        }
         await tx.insert(identityAuditEvents).values({
           id: `audit_${randomUUID()}`,
           userId: user.id,
           sessionId,
           action: "login",
           requestId: input.requestId,
-          deduplicationKey: `login:${sessionId}`,
+          deduplicationKey: `login:${loginId}`,
         });
         return readSession(tx, eq(identitySessions.id, sessionId));
       });
@@ -420,11 +446,12 @@ export function createIdentityRepository(db: Database) {
     },
 
     async markMfaVerified(
-      sessionId: string,
+      authenticatedSession: Pick<Session, "id" | "tokenHash">,
       now: Date,
       newTokenHash: string,
       requestId: string = randomUUID(),
     ) {
+      const sessionId = authenticatedSession.id;
       return db.transaction(async (tx) => {
         const [session] = await tx
           .update(identitySessions)
@@ -432,6 +459,7 @@ export function createIdentityRepository(db: Database) {
           .where(
             and(
               eq(identitySessions.id, sessionId),
+              eq(identitySessions.tokenHash, authenticatedSession.tokenHash),
               activeSession(now),
               hasAdminPermission,
               noPendingEnrollment,

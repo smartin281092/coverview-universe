@@ -91,7 +91,7 @@ it("consumes a browser-bound callback exactly once under concurrency and refuses
   const results = await Promise.all(
     Array.from({ length: 8 }, () => repository.consumeLogin(stateHash, browserHash, now)),
   );
-  expect(results.filter(Boolean)).toEqual([login]);
+  expect(results.filter(Boolean)).toEqual([{ ...login, continuation: null }]);
   expect(await repository.consumeLogin(stateHash, browserHash, now)).toBeUndefined();
 
   const expiredHash = hash();
@@ -127,6 +127,45 @@ it("keeps one canonical user and profile across concurrent logins without mergin
   ).toHaveLength(1);
   const other = await session({ email: sessions[0]!.email });
   expect(other.userId).not.toBe(userId);
+
+  // Reuse the existing identity/session: AuthKit can return the same sid after local expiry.
+  const first = sessions[0]!;
+  const createdAt = new Date(Date.now() - 7_200_000);
+  await database.db
+    .update(identitySessions)
+    .set({
+      createdAt,
+      expiresAt: new Date(Date.now() - 3_600_000),
+      mfaVerifiedAt: new Date(),
+    })
+    .where(eq(identitySessions.id, first.id));
+  const resumed = await Promise.all(
+    Array.from({ length: 3 }, () =>
+      session({
+        workosUserId: first.workosUserId,
+        workosSessionId: first.workosSessionId,
+        email: first.email,
+      }),
+    ),
+  );
+  expect(resumed.every((value) => value.id === first.id && value.userId === first.userId)).toBe(
+    true,
+  );
+  expect(
+    resumed.every((value) => value.mfaVerifiedAt === null && +value.createdAt === +createdAt),
+  ).toBe(true);
+  expect(await repository.getSession(first.tokenHash, new Date())).toBeUndefined();
+  const active = await Promise.all(
+    resumed.map((value) => repository.getSession(value.tokenHash, new Date())),
+  );
+  expect(active.filter(Boolean)).toHaveLength(1);
+  const [logins] = await database.db
+    .select({ count: count() })
+    .from(identityAuditEvents)
+    .where(
+      and(eq(identityAuditEvents.sessionId, first.id), eq(identityAuditEvents.action, "login")),
+    );
+  expect(logins?.count).toBe(4);
 });
 
 it("rolls back the whole identity creation when a provider session is replayed", async () => {
@@ -212,6 +251,14 @@ it("tracks pending remote revocation by owner without reactivating or duplicatin
   ]);
   await repository.markRemoteRevoked(first.workosSessionId, first.userId);
   expect(await repository.listPendingRevocations(first.userId)).toEqual([]);
+  expect(
+    await repository.createSession(
+      input({
+        workosUserId: first.workosUserId,
+        workosSessionId: first.workosSessionId,
+      }),
+    ),
+  ).toBeUndefined();
   expect(
     (await repository.revokeSession(first.userId, first.id, randomUUID()))?.remoteRevocationPending,
   ).toBe(false);
@@ -299,7 +346,7 @@ it("keeps global logout idempotent and prevents an older remote completion from 
 it("requires an explicit unrevoked permission and immediately observes its withdrawal", async () => {
   const first = await session();
   expect(first.hasAdminPermission).toBe(false);
-  expect(await repository.markMfaVerified(first.id, new Date(), hash())).toBeUndefined();
+  expect(await repository.markMfaVerified(first, new Date(), hash())).toBeUndefined();
   expect(
     await repository.saveChallenge(
       first.id,
@@ -317,7 +364,7 @@ it("requires an explicit unrevoked permission and immediately observes its withd
   expect((await repository.getSession(first.tokenHash, new Date()))?.hasAdminPermission).toBe(
     false,
   );
-  expect(await repository.markMfaVerified(first.id, new Date(), hash())).toBeUndefined();
+  expect(await repository.markMfaVerified(first, new Date(), hash())).toBeUndefined();
   await expect(
     database.db.insert(identityAdminPermissions).values({
       id: randomUUID(),
@@ -389,11 +436,26 @@ it("binds one-use MFA challenges to one session and rotates the handle only afte
   );
   expect(consumed.filter(Boolean)).toHaveLength(1);
   const tokenHash = hash();
-  const verified = await repository.markMfaVerified(first.id, new Date(), tokenHash, randomUUID());
+  const verified = await repository.markMfaVerified(first, new Date(), tokenHash, randomUUID());
   expect(verified?.mfaVerifiedAt).toBeInstanceOf(Date);
   expect(await repository.getSession(first.tokenHash, new Date())).toBeUndefined();
   expect((await repository.getSession(tokenHash, new Date()))?.id).toBe(first.id);
   expect((await repository.getSession(second.tokenHash, new Date()))?.mfaVerifiedAt).toBeNull();
+  await repository.saveChallenge(
+    second.id,
+    "challenge_fixture",
+    "factor_fixture",
+    new Date(Date.now() + 60000),
+  );
+  const resumed = await session({
+    workosUserId: second.workosUserId,
+    workosSessionId: second.workosSessionId,
+  });
+  expect(resumed.id).toBe(second.id);
+  expect(await repository.getSession(second.tokenHash, new Date())).toBeUndefined();
+  expect(await repository.consumeChallenge(resumed.id)).toBeUndefined();
+  expect(await repository.markMfaVerified(second, new Date(), hash())).toBeUndefined();
+  expect((await repository.getSession(tokenHash, new Date()))?.mfaVerifiedAt).toBeInstanceOf(Date);
 });
 
 it("a revocation during the external MFA call prevents elevation and drops pending challenges", async () => {
@@ -407,7 +469,7 @@ it("a revocation during the external MFA call prevents elevation and drops pendi
   );
   expect(await repository.consumeChallenge(first.id)).toBeDefined();
   await repository.revokeSession(first.userId, first.id, randomUUID());
-  expect(await repository.markMfaVerified(first.id, new Date(), hash())).toBeUndefined();
+  expect(await repository.markMfaVerified(first, new Date(), hash())).toBeUndefined();
   expect(
     await repository.saveChallenge(
       first.id,
@@ -425,17 +487,21 @@ it("a revocation during the external MFA call prevents elevation and drops pendi
   );
   await repository.revokeAll(first.userId, randomUUID());
   expect(await repository.consumeChallenge(second.id)).toBeUndefined();
-  expect(await repository.markMfaVerified(second.id, new Date(), hash())).toBeUndefined();
+  expect(await repository.markMfaVerified(second, new Date(), hash())).toBeUndefined();
 });
 
 it("permits a later MFA proof on the same session without colliding with its previous audit", async () => {
   const first = await session();
   await grant(first.userId);
   const initialHash = hash();
-  expect(await repository.markMfaVerified(first.id, new Date(), initialHash)).toBeDefined();
+  expect(await repository.markMfaVerified(first, new Date(), initialHash)).toBeDefined();
   const laterHash = hash();
   expect(
-    await repository.markMfaVerified(first.id, new Date(Date.now() + 960000), laterHash),
+    await repository.markMfaVerified(
+      { ...first, tokenHash: initialHash },
+      new Date(Date.now() + 960000),
+      laterHash,
+    ),
   ).toBeDefined();
   expect(await repository.getSession(initialHash, new Date())).toBeUndefined();
   expect((await repository.getSession(laterHash, new Date()))?.id).toBe(first.id);
@@ -514,5 +580,8 @@ it("purges expired temporary secrets on activity in bounded batches without dele
   expect(remaining).toHaveLength(1);
   expect(await repository.consumeChallenge(first.id)).toBeUndefined();
   expect((await repository.consumeChallenge(second.id))?.challengeId).toBe("live_challenge");
-  expect(await repository.consumeLogin(fresh.stateHash, fresh.browserHash, now)).toEqual(fresh);
+  expect(await repository.consumeLogin(fresh.stateHash, fresh.browserHash, now)).toEqual({
+    ...fresh,
+    continuation: null,
+  });
 });
