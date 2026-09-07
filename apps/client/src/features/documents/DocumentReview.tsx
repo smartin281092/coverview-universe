@@ -124,7 +124,6 @@ export function DocumentReview({
         <p className="break-words text-xs text-muted-foreground">
           {t("sourceMethod", { version: field.source.version })}
         </p>
-        <p className="text-xs text-muted-foreground">{t("confidenceUnknown")}</p>
       </div>
       <fieldset className="space-y-3" disabled={mutation.isPending}>
         <legend className="mb-3 text-sm font-medium">{t("yourDecision")}</legend>

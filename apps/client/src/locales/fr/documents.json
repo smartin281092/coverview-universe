@@ -114,7 +114,6 @@
   "divergence": "Votre profil contient déjà une valeur confirmée différente. Elle reste inchangée jusqu’à votre décision.",
   "sourcePage": "Page {{page}}",
   "sourceMethod": "Lecture automatique",
-  "confidenceUnknown": "Confiance non évaluée : aucun score calibré n’est fourni.",
   "yourDecision": "Votre décision",
   "choice": {
     "keep": "Conserver mon profil tel quel",
