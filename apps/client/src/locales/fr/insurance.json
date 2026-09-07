@@ -8,6 +8,7 @@
   "noPremiums": "Non renseignées",
   "partialPremiums_one": "Total partiel · {{included}} contrat sur {{total}}",
   "partialPremiums_other": "Total partiel · {{included}} contrats sur {{total}}",
+  "uncertainPremiums": "Total partiel · certains contrats restent à préciser",
   "contractsCount": "Contrats identifiés",
   "activeCount_zero": "Aucun actif identifié",
   "activeCount_one": "{{count}} actif selon le document",

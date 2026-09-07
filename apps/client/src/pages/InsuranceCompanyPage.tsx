@@ -124,8 +124,8 @@ function Company({ identity, companyId }: { identity: IdentityMe; companyId: Ins
               {t("tabs.documents")}
             </TabsTrigger>
           </TabsList>
-          <div className="grid gap-3 sm:grid-cols-3">
-            <Card className="gap-2 p-5">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            <Card className="col-span-2 gap-2 p-5 sm:col-span-1">
               <p className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Wallet className="size-4" aria-hidden="true" />
                 {t("premiums")}
@@ -140,13 +140,15 @@ function Company({ identity, companyId }: { identity: IdentityMe; companyId: Ins
                 )}
               </div>
               <p className="text-xs text-muted-foreground">{t("premiumsHelp")}</p>
-              {stats.premiumCoverage.included < stats.premiumCoverage.total && (
+              {stats.incomplete && (
                 <p className="text-xs text-amber-700">
-                  {t("partialPremiums", {
-                    count: stats.premiumCoverage.total,
-                    included: stats.premiumCoverage.included,
-                    total: stats.premiumCoverage.total,
-                  })}
+                  {stats.premiumCoverage.included < stats.premiumCoverage.total
+                    ? t("partialPremiums", {
+                        count: stats.premiumCoverage.included,
+                        included: stats.premiumCoverage.included,
+                        total: stats.premiumCoverage.total,
+                      })
+                    : t("uncertainPremiums")}
                 </p>
               )}
             </Card>
