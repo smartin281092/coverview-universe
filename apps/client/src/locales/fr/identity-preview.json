@@ -1,5 +1,9 @@
 {
   "title": "Pièce d’identité",
+  "title_company": "Extrait du registre du commerce",
+  "description_company": "Consultez l’extrait et téléchargez le fichier original.",
+  "loading_company": "Chargement de l’extrait du registre du commerce…",
+  "canvas_company": "Images de l’extrait du registre du commerce",
   "description": "Consultez les faces et téléchargez les fichiers originaux.",
   "close": "Fermer la prévisualisation",
   "loading": "Chargement de la pièce d’identité…",

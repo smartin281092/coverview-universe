@@ -36,6 +36,8 @@ Les données générales des personnes incluent les champs facultatifs AVS et pr
 
 Un clic sur une face disponible ouvre les originaux ensemble dans une visionneuse privée : disposition selon l’écran et les proportions, zoom molette/pincement/clavier, déplacement, téléchargement et fermeture avec restauration du focus. Les blobs et requêtes sont libérés à la fermeture ou au changement de portée. L’aperçu PDF utilise le lecteur natif sandboxé et conserve le téléchargement de secours lorsque celui-ci n’est pas disponible. Le sélecteur de fichiers reste monté sous la frontière privée lors d’une simple revalidation de session, afin de conserver la sélection de retour de la caméra.
 
+Pour une société, cet encart devient Extrait du registre du commerce. Son dialogue accepte un fichier contenant l’extrait complet, depuis les documents de la société, un dépôt ou une photo, sans choix de type de pièce ni recto-verso. Le fichier est associé au profil de la société sans être classé artificiellement comme pièce d’identité ; sa présence ne vérifie pas son contenu juridique. Les personnes, la procuration et le mandat conservent la pièce d’identité du titulaire.
+
 WorkOS s’ouvre via la route serveur de connexion, avec retour fixé côté API. Les cookies sensibles restent HttpOnly et les droits viennent du serveur. Aucun ID, email ou permission ne peut être défini par une persona locale. Lorsque l’API annonce la connexion désactivée, le compte affiche son indisponibilité et n’invente aucun login.
 
 ## État réel

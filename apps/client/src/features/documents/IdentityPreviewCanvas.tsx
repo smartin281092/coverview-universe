@@ -63,7 +63,13 @@ function gesture(points: Point[]) {
     : { center: first, distance: 0 };
 }
 
-export function IdentityPreviewCanvas({ images }: { images: readonly ImageAsset[] }) {
+export function IdentityPreviewCanvas({
+  images,
+  company = false,
+}: {
+  images: readonly ImageAsset[];
+  company?: boolean;
+}) {
   const { t, i18n } = useTranslation("identityPreview");
   const instructionsId = useId();
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -218,7 +224,7 @@ export function IdentityPreviewCanvas({ images }: { images: readonly ImageAsset[
         ref={viewportRef}
         role="region"
         tabIndex={0}
-        aria-label={t("canvas")}
+        aria-label={t("canvas", company ? { context: "company" } : {})}
         aria-describedby={instructionsId}
         className="relative min-h-48 flex-1 touch-none overflow-hidden rounded-lg bg-muted gap-4 outline-none select-none focus-visible:ring-2 focus-visible:ring-ring"
         style={{ cursor: view.scale > 1 ? "grab" : "default" }}

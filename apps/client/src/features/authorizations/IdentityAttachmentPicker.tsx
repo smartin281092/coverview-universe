@@ -43,6 +43,7 @@ type Upload = { key: string; analysisRequested: boolean; id?: string; document?:
 export function IdentityAttachmentPicker({
   identity,
   attachment,
+  company = false,
   portalContainer,
   onClose,
   onSaved,
@@ -50,25 +51,28 @@ export function IdentityAttachmentPicker({
 }: {
   identity: IdentityMe;
   attachment: Attachment;
+  company?: boolean;
   portalContainer: HTMLDivElement | null;
   onClose: () => void;
   onSaved: (value: Attachment) => void;
   onRefresh: () => Promise<Attachment>;
 }) {
   const { t } = useTranslation("authorizations");
+  const piece = (key: string) =>
+    t(`identityPiece.${key}`, company ? { context: "company" } : {});
   const { t: td } = useTranslation("documents");
   const client = useQueryClient();
   const [base, setBase] = useState(attachment);
   const currentBase = useRef(attachment);
   const profileId = attachment.profileId;
   const [documentType, setDocumentType] = useState<DocumentIdentityDocumentType>(
-    attachment.documentTypeSource === "declared" ? attachment.documentType : "unknown",
+    !company && attachment.documentTypeSource === "declared" ? attachment.documentType : "unknown",
   );
   const passport =
     documentType === "passport" ||
     (documentType === "unknown" && base.documentTypeSource === "detected" && !base.backRequired);
   const [mode, setMode] = useState<"combined" | "separate">(
-    attachment.combined ? "combined" : "separate",
+    company || attachment.combined ? "combined" : "separate",
   );
   const [selections, setSelections] = useState<Selections>(() => ({
     combined: attachment.combined ? { document: attachment.combined } : null,
@@ -104,7 +108,7 @@ export function IdentityAttachmentPicker({
       api.documents(
         cursors.at(-1),
         { signal },
-        { profileId, classification: "identity", sort: "newest" },
+        { profileId, ...(!company ? { classification: "identity" as const } : {}), sort: "newest" },
       ),
     gcTime: 0,
     staleTime: 0,
@@ -205,7 +209,7 @@ export function IdentityAttachmentPicker({
                 mime: entry.file.type,
                 checksum,
                 analysisRequested: upload.analysisRequested,
-                purpose: "identity_card",
+                ...(!company ? { purpose: "identity_card" as const } : {}),
               },
               options,
             );
@@ -247,7 +251,7 @@ export function IdentityAttachmentPicker({
   });
   const available = (candidates.data?.documents ?? []).filter(
     (document) =>
-      document.category === "identity" &&
+      (company ? document.category !== "identity" : document.category === "identity") &&
       !["pending", "quarantined", "deleting", "deleted"].includes(document.state),
   );
   const progressLabel = phase === "associating" ? t("saving") : td(phase);
@@ -262,8 +266,8 @@ export function IdentityAttachmentPicker({
         className="flex max-h-[calc(100dvh-2rem)] flex-col overflow-hidden p-5 text-sm sm:max-w-3xl sm:p-6"
       >
         <DialogHeader>
-          <DialogTitle className="text-xl">{t("identityPiece.dialogTitle")}</DialogTitle>
-          <DialogDescription className="text-sm">{t("identityPiece.help")}</DialogDescription>
+          <DialogTitle className="text-xl">{piece("dialogTitle")}</DialogTitle>
+          <DialogDescription className="text-sm">{piece("help")}</DialogDescription>
         </DialogHeader>
         <form
           className="flex min-h-0 flex-col gap-5"
@@ -275,36 +279,38 @@ export function IdentityAttachmentPicker({
           }}
         >
           <div className="min-h-0 space-y-5 overflow-y-auto px-1 pb-1">
-            <div className="space-y-2">
-              <Label htmlFor="identity-document-type">{t("identityPiece.typeLabel")}</Label>
-              <Select
-                value={documentType}
-                disabled={pending}
-                onValueChange={(value) => {
-                  const parsed = documentIdentityDocumentTypeSchema.safeParse(value);
-                  if (parsed.success) {
-                    setDocumentType(parsed.data);
-                    mutation.reset();
-                  }
-                }}
-              >
-                <SelectTrigger id="identity-document-type" className="min-h-11 w-full">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent portalContainer={portalContainer}>
-                  {documentIdentityDocumentTypeSchema.options.map((type) => (
-                    <SelectItem key={type} value={type}>
-                      {t(
-                        type === "unknown"
-                          ? "identityPiece.automaticType"
-                          : `identityPiece.types.${type}`,
-                      )}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-muted-foreground">{t("identityPiece.typeHelp")}</p>
-            </div>
+            {!company && (
+              <div className="space-y-2">
+                <Label htmlFor="identity-document-type">{t("identityPiece.typeLabel")}</Label>
+                <Select
+                  value={documentType}
+                  disabled={pending}
+                  onValueChange={(value) => {
+                    const parsed = documentIdentityDocumentTypeSchema.safeParse(value);
+                    if (parsed.success) {
+                      setDocumentType(parsed.data);
+                      mutation.reset();
+                    }
+                  }}
+                >
+                  <SelectTrigger id="identity-document-type" className="min-h-11 w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent portalContainer={portalContainer}>
+                    {documentIdentityDocumentTypeSchema.options.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {t(
+                          type === "unknown"
+                            ? "identityPiece.automaticType"
+                            : `identityPiece.types.${type}`,
+                        )}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground">{t("identityPiece.typeHelp")}</p>
+              </div>
+            )}
             <Tabs
               value={mode}
               onValueChange={(value) => {
@@ -313,7 +319,7 @@ export function IdentityAttachmentPicker({
                 mutation.reset();
               }}
             >
-              {!passport && (
+              {!company && !passport && (
                 <TabsList className="grid min-h-[50px] w-full grid-cols-2">
                   <TabsTrigger value="combined" disabled={pending} className="min-h-11">
                     {t("identityPiece.oneFile")}
@@ -325,23 +331,28 @@ export function IdentityAttachmentPicker({
               )}
               <TabsContent value={mode} className="space-y-4">
                 <p className="text-sm text-muted-foreground">
-                  {t(
-                    passport
-                      ? "identityPiece.passportHelp"
-                      : mode === "combined"
-                        ? "identityPiece.combinedHelp"
-                        : "identityPiece.separateHelp",
-                  )}
+                  {company
+                    ? piece("combinedHelp")
+                    : t(
+                        passport
+                          ? "identityPiece.passportHelp"
+                          : mode === "combined"
+                            ? "identityPiece.combinedHelp"
+                            : "identityPiece.separateHelp",
+                      )}
                 </p>
                 <div className={sides.length === 1 ? "" : "grid gap-4 sm:grid-cols-2"}>
                   {sides.map((side) => (
                     <IdentityAttachmentSource
                       key={side}
                       side={side}
+                      company={company}
                       label={
-                        passport && side !== "back"
-                          ? t("identityPiece.passportPage")
-                          : t(`identityPiece.side.${side}`)
+                        company
+                          ? piece("document")
+                          : passport && side !== "back"
+                            ? t("identityPiece.passportPage")
+                            : t(`identityPiece.side.${side}`)
                       }
                       file={selections[side]?.file}
                       document={selections[side]?.document}
@@ -400,10 +411,10 @@ export function IdentityAttachmentPicker({
               <DocumentFailure error={candidates.error} onRetry={() => void candidates.refetch()} />
             )}
             {!candidates.isPending && !candidates.isError && available.length === 0 && (
-              <p className="text-xs text-muted-foreground">{t("identityPiece.noExisting")}</p>
+              <p className="text-xs text-muted-foreground">{piece("noExisting")}</p>
             )}
             {(cursors.length > 0 || candidates.data?.nextCursor) && (
-              <nav className="flex flex-wrap gap-3" aria-label={t("identityPiece.pagination")}>
+              <nav className="flex flex-wrap gap-3" aria-label={piece("pagination")}>
                 <Button
                   type="button"
                   variant="outline"
@@ -495,7 +506,7 @@ export function IdentityAttachmentPicker({
                 </div>
               ) : invalidAttachment ? (
                 <p role="alert" className="text-sm text-red-700">
-                  {t("identityPiece.invalidAttachment")}
+                  {piece("invalidAttachment")}
                 </p>
               ) : (
                 <DocumentFailure
@@ -505,7 +516,7 @@ export function IdentityAttachmentPicker({
               ))}
             {base.revision !== attachment.revision && (
               <p role="status" className="text-xs text-muted-foreground">
-                {t("identityPiece.partialSaved")}
+                {piece("partialSaved")}
               </p>
             )}
           </div>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { CircleCheck, IdCard, Pencil, Plus, TriangleAlert } from "lucide-react";
+import { CircleCheck, FileText, IdCard, Pencil, Plus, TriangleAlert } from "lucide-react";
 import type { IdentityMe } from "@coverview/api-client";
 import type { DocumentSummary } from "@coverview/contracts";
 import { Button } from "@coverview/ui";
@@ -15,15 +15,20 @@ import { IdentityDocumentPreview } from "../documents/IdentityDocumentPreview";
 export function IdentityAttachment({
   identity,
   profileId = "self",
+  company = false,
   blocked = false,
   onChanged,
 }: {
   identity: IdentityMe;
   profileId?: string;
+  company?: boolean;
   blocked?: boolean;
   onChanged?: () => void;
 }) {
   const { t } = useTranslation("authorizations");
+  const piece = (key: string) =>
+    t(`identityPiece.${key}`, company ? { context: "company" } : {});
+  const AttachmentIcon = company ? FileText : IdCard;
   const { t: td } = useTranslation("documents");
   const client = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -96,8 +101,12 @@ export function IdentityAttachment({
       <div ref={setPortalContainer} className="contents" />
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="flex items-center gap-2 text-lg font-medium">
-          <IdCard className="size-5 text-muted-foreground" strokeWidth={1.5} aria-hidden="true" />
-          {t("identityPiece.title")}
+          <AttachmentIcon
+            className="size-5 text-muted-foreground"
+            strokeWidth={1.5}
+            aria-hidden="true"
+          />
+          {piece("title")}
         </h2>
         <Button
           type="button"
@@ -111,13 +120,13 @@ export function IdentityAttachment({
           ) : (
             <Plus className="size-4" aria-hidden="true" />
           )}
-          {t(entries.length ? "identityPiece.edit" : "identityPiece.add")}
+          {piece(entries.length ? "edit" : "add")}
         </Button>
       </div>
       {query.isPending ? (
         <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground">
           <DocumentProcessingIndicator />
-          {t("identityPiece.loading")}
+          {piece("loading")}
         </p>
       ) : query.isError ? (
         <DocumentFailure error={query.error} onRetry={() => void query.refetch()} />
@@ -142,9 +151,9 @@ export function IdentityAttachment({
             ) : (
               <TriangleAlert className="size-4 shrink-0" aria-hidden="true" />
             )}
-            {t(`identityPiece.status.${query.data.status}`)}
+            {piece(`status.${query.data.status}`)}
           </p>
-          {entries.length > 0 && (
+          {entries.length > 0 && !company && (
             <p className="text-sm text-muted-foreground">
               {t(`identityPiece.types.${query.data.documentType}`)}
             </p>
@@ -155,11 +164,13 @@ export function IdentityAttachment({
                 document ? (
                   <li key={side} className="min-w-0 space-y-1 text-sm">
                     <p className="text-xs font-medium text-muted-foreground">
-                      {t(
-                        query.data.documentType === "passport" && side !== "back"
-                          ? "identityPiece.passportPage"
-                          : `identityPiece.side.${side}`,
-                      )}
+                      {company
+                        ? piece("document")
+                        : t(
+                            query.data.documentType === "passport" && side !== "back"
+                              ? "identityPiece.passportPage"
+                              : `identityPiece.side.${side}`,
+                          )}
                     </p>
                     <button
                       type="button"
@@ -176,7 +187,7 @@ export function IdentityAttachment({
             </ul>
           )}
           {query.data.status === "processing" && (
-            <DocumentProgress label={t("identityPiece.status.processing")} />
+            <DocumentProgress label={piece("status.processing")} />
           )}
         </>
       )}
@@ -184,6 +195,7 @@ export function IdentityAttachment({
         <IdentityDocumentPreview
           identity={identity}
           documents={documents}
+          company={company}
           scopeKey={profileId}
           portalContainer={portalContainer}
           onClose={() => setPreviewOpen(false)}
@@ -193,6 +205,7 @@ export function IdentityAttachment({
         <IdentityAttachmentPicker
           identity={identity}
           attachment={value}
+          company={company}
           portalContainer={portalContainer}
           onClose={() => setOpen(false)}
           onSaved={(result) => {

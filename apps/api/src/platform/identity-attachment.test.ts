@@ -397,3 +397,202 @@ it("requires a cited identity type to detect a one-page passport and keeps manua
     documentType: "unknown",
   });
 });
+
+it("associates one company registry file without OCR and preserves scope, scan and replay protections", async () => {
+  const actor = await owner();
+  const stranger = await owner();
+  const profiles = createManagedProfileRepository(database.db);
+  const repository = createDocumentRepository(database.db);
+  const company = await profiles.create(
+    actor,
+    { kind: "legal_entity", displayName: "Registry subject" },
+    randomUUID(),
+  );
+  const person = await profiles.create(
+    actor,
+    { kind: "person", displayName: "Personal subject" },
+    randomUUID(),
+  );
+  const create = (profileId: string, uploader = actor, identity = false) =>
+    repository.create(
+      uploader,
+      {
+        profileId,
+        name: "original.pdf",
+        mime: "application/pdf",
+        size: 80,
+        checksum: digest(randomUUID()),
+        analysisRequested: false,
+        ...(identity ? { purpose: "identity_card" as const } : {}),
+      },
+      randomUUID(),
+    );
+  const registry = await create(company.id);
+  const personalFile = await create(person.id);
+  const ownerFile = await create("self");
+  const strangerFile = await create("self", stranger);
+  const wrongIdentity = await create(company.id, actor, true);
+  const input = {
+    profileId: company.id,
+    revision: 0,
+    combinedId: registry.id,
+    documentType: "unknown" as const,
+  };
+  expect(await repository.identityAttachment(actor.userId, company.id)).toMatchObject({
+    status: "missing",
+    backRequired: false,
+    documentType: "unknown",
+  });
+  const key = randomUUID();
+  const [saved, replay] = await Promise.all([
+    repository.saveIdentityAttachment(actor, input, key),
+    repository.saveIdentityAttachment(actor, input, key),
+  ]);
+  expect(saved).toEqual(replay);
+  expect(saved).toMatchObject({
+    revision: 1,
+    status: "processing",
+    combined: { id: registry.id, canDownload: false, category: "unknown" },
+    front: null,
+    back: null,
+    documentType: "unknown",
+    documentTypeSource: "unknown",
+    backRequired: false,
+  });
+  for (const id of [personalFile.id, ownerFile.id, strangerFile.id]) {
+    await expect(
+      repository.saveIdentityAttachment(
+        actor,
+        { ...input, revision: 1, combinedId: id },
+        randomUUID(),
+      ),
+    ).rejects.toMatchObject({ code: "DOCUMENT_NOT_FOUND" });
+  }
+  await expect(repository.identityAttachment(stranger.userId, company.id)).rejects.toMatchObject({
+    statusCode: 404,
+  });
+  await expect(
+    repository.saveIdentityAttachment(stranger, input, randomUUID()),
+  ).rejects.toMatchObject({ statusCode: 404 });
+  for (const [profileId, id] of [
+    [person.id, personalFile.id],
+    ["self", ownerFile.id],
+  ]) {
+    await expect(
+      repository.saveIdentityAttachment(
+        actor,
+        { profileId, revision: 0, combinedId: id },
+        randomUUID(),
+      ),
+    ).rejects.toMatchObject({ code: "DOCUMENT_ATTACHMENT_INVALID" });
+  }
+  for (const invalid of [
+    { combinedId: wrongIdentity.id },
+    { combinedId: null, frontId: registry.id },
+    { combinedId: null, backId: registry.id },
+    { documentType: "passport" as const },
+  ]) {
+    await expect(
+      repository.saveIdentityAttachment(actor, { ...input, revision: 1, ...invalid }, randomUUID()),
+    ).rejects.toMatchObject({ code: "DOCUMENT_ATTACHMENT_INVALID" });
+  }
+  await expect(
+    repository.saveIdentityAttachment(actor, { ...input, combinedId: null }, key),
+  ).rejects.toMatchObject({ code: "DOCUMENT_IDEMPOTENCY_REUSED" });
+  await expect(
+    repository.saveIdentityAttachment(actor, { ...input, combinedId: null }, randomUUID()),
+  ).rejects.toMatchObject({ code: "DOCUMENT_CONFLICT" });
+  await repository.uploaded(actor, registry.id, "application/pdf");
+  await database.db.update(documents).set({ state: "ready" }).where(eq(documents.id, registry.id));
+  expect((await repository.identityAttachment(actor.userId, company.id)).status).toBe("incomplete");
+  await database.db
+    .update(documents)
+    .set({ scanVersion: "isolated-antivirus" })
+    .where(eq(documents.id, registry.id));
+  expect(
+    await createDocumentRepository(database.db).identityAttachment(actor.userId, company.id),
+  ).toMatchObject({ status: "ready", combined: { id: registry.id, canDownload: true } });
+  const [original] = await database.db
+    .select()
+    .from(documents)
+    .where(eq(documents.id, registry.id));
+  expect(original).toMatchObject({ category: "unknown", analysis: null, analysisRequested: false });
+  await database.db
+    .update(documents)
+    .set({ state: "quarantined" })
+    .where(eq(documents.id, registry.id));
+  expect(await repository.saveIdentityAttachment(actor, input, key)).toMatchObject({
+    revision: 1,
+    status: "needs_attention",
+    combined: { canDownload: false },
+  });
+  await expect(
+    repository.saveIdentityAttachment(actor, { ...input, revision: 1 }, randomUUID()),
+  ).rejects.toMatchObject({ code: "DOCUMENT_ATTACHMENT_INVALID" });
+  await repository.remove(actor, registry.id);
+  expect(await repository.saveIdentityAttachment(actor, input, key)).toMatchObject({
+    revision: 1,
+    status: "needs_attention",
+    combined: null,
+  });
+  expect(
+    await repository.saveIdentityAttachment(
+      actor,
+      { ...input, revision: 1, combinedId: null },
+      randomUUID(),
+    ),
+  ).toMatchObject({ revision: 2, status: "missing" });
+});
+
+it("keeps a company's historical identity association visible for replacement without treating it as a registry extract", async () => {
+  const actor = await owner();
+  const company = await createManagedProfileRepository(database.db).create(
+    actor,
+    { kind: "legal_entity", displayName: "Legacy company" },
+    randomUUID(),
+  );
+  const repository = createDocumentRepository(database.db);
+  const file = await repository.create(
+    actor,
+    {
+      profileId: company.id,
+      name: "original.jpg",
+      mime: "image/jpeg",
+      size: 80,
+      checksum: digest(randomUUID()),
+      analysisRequested: false,
+      purpose: "identity_card",
+    },
+    randomUUID(),
+  );
+  await database.db
+    .update(documents)
+    .set({ state: "ready", scanVersion: "isolated-antivirus" })
+    .where(eq(documents.id, file.id));
+  await database.db.insert(managedDocumentIdentityAttachments).values({
+    userId: actor.userId,
+    managedProfileId: company.id,
+    revision: 3,
+    documentType: "passport",
+    frontId: file.id,
+  });
+  expect(await repository.identityAttachment(actor.userId, company.id)).toMatchObject({
+    revision: 3,
+    status: "needs_attention",
+    documentType: "unknown",
+    documentTypeSource: "unknown",
+    backRequired: false,
+    front: { id: file.id, canDownload: true },
+  });
+  const cleared = await repository.saveIdentityAttachment(
+    actor,
+    { profileId: company.id, revision: 3, frontId: null },
+    randomUUID(),
+  );
+  expect(cleared).toMatchObject({ revision: 4, status: "missing" });
+  expect(await repository.get(actor.userId, file.id)).toMatchObject({
+    id: file.id,
+    canDownload: true,
+    category: "identity",
+  });
+});

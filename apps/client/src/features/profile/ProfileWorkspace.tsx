@@ -401,6 +401,7 @@ export function ProfileWorkspace({
             key={`${identity.user.id}:${identity.session.id}:${selected.id}`}
             identity={identity}
             profileId={selected.id}
+            company={selected.kind === "legal_entity"}
             blocked={editorBlocked}
           />
         )}

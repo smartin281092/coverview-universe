@@ -17,6 +17,7 @@ export type IdentityAttachmentSide = "combined" | "front" | "back";
 export function IdentityAttachmentSource({
   side,
   label,
+  company = false,
   file,
   document,
   available,
@@ -30,6 +31,7 @@ export function IdentityAttachmentSource({
 }: {
   side: IdentityAttachmentSide;
   label: string;
+  company?: boolean;
   file?: File | undefined;
   document?: DocumentSummary | undefined;
   available: DocumentSummary[];
@@ -162,6 +164,7 @@ export function IdentityAttachmentSource({
             <SelectValue
               placeholder={t(
                 loading ? "identityPiece.loadingExisting" : "identityPiece.chooseExisting",
+                company ? { context: "company" } : {},
               )}
             />
           </SelectTrigger>

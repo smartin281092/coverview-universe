@@ -25,6 +25,7 @@ type PreviewProps = {
   portalContainer: HTMLDivElement | null;
   onClose: () => void;
   scopeKey?: string;
+  company?: boolean;
 };
 type PreviewAsset = { document: DocumentSummary; url: string; mime: string };
 
@@ -46,6 +47,7 @@ function IdentityPreviewContent({
   portalContainer,
   onClose,
   sourceKey,
+  company = false,
 }: PreviewProps & { sourceKey: string }) {
   const { t } = useTranslation("identityPreview");
   const returnFocus = useRef(document.activeElement);
@@ -103,8 +105,12 @@ function IdentityPreviewContent({
       >
         <div className="flex shrink-0 items-start justify-between gap-3">
           <DialogHeader>
-            <DialogTitle className="text-lg">{t("title")}</DialogTitle>
-            <DialogDescription>{t("description")}</DialogDescription>
+            <DialogTitle className="text-lg">
+              {t("title", company ? { context: "company" } : {})}
+            </DialogTitle>
+            <DialogDescription>
+              {t("description", company ? { context: "company" } : {})}
+            </DialogDescription>
           </DialogHeader>
           <DialogClose asChild>
             <Button
@@ -124,10 +130,10 @@ function IdentityPreviewContent({
           ) : originals.isError ? (
             <DocumentFailure error={originals.error} onRetry={() => void originals.refetch()} />
           ) : originals.isPending || assets.length === 0 ? (
-            <LoadingState label={t("loading")} />
+            <LoadingState label={t("loading", company ? { context: "company" } : {})} />
           ) : (
             <>
-              {images.length > 0 && <IdentityPreviewCanvas images={images} />}
+              {images.length > 0 && <IdentityPreviewCanvas images={images} company={company} />}
               {others.map((asset) => (
                 <section key={asset.document.id} className="flex min-h-0 flex-1 flex-col gap-2">
                   {asset.mime === "application/pdf" && (

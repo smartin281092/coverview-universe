@@ -93,6 +93,7 @@ export function createIdentityAttachmentRepository(
     tx: Database | Tx,
     userId: string,
     profileId: string,
+    company: boolean,
     attachment?: Attachment,
   ) {
     const row =
@@ -127,15 +128,20 @@ export function createIdentityAttachmentRepository(
       return record ? summary(record) : null;
     };
     const summaries = visible.map(summary);
-    const documentType = row.documentType !== "unknown" ? row.documentType : detectedType(visible);
-    const backRequired = documentType !== "passport";
-    const full = !!row.combinedId || !!(row.frontId && (row.backId || !backRequired));
+    const documentType = company
+      ? "unknown"
+      : row.documentType !== "unknown"
+        ? row.documentType
+        : detectedType(visible);
+    const backRequired = !company && documentType !== "passport";
+    const full = !!row.combinedId || (!company && !!(row.frontId && (row.backId || !backRequired)));
     const invalid =
       visible.length !== ids.length ||
+      (company && !!(row.frontId || row.backId)) ||
       summaries.some(
         (document) =>
           document.state === "quarantined" ||
-          document.category !== "identity" ||
+          (company ? document.category === "identity" : document.category !== "identity") ||
           (document.state === "failed" && !document.canDownload),
       );
     const processing = summaries.some((document) =>
@@ -146,7 +152,7 @@ export function createIdentityAttachmentRepository(
       profileId,
       documentType,
       documentTypeSource:
-        row.documentType !== "unknown"
+        !company && row.documentType !== "unknown"
           ? "declared"
           : documentType !== "unknown"
             ? "detected"
@@ -170,8 +176,8 @@ export function createIdentityAttachmentRepository(
   }
   return {
     async identityAttachment(userId: string, profileId = "self") {
-      await assertDocumentProfileTarget(db, userId, profileId);
-      return read(db, userId, profileId);
+      const subject = await assertDocumentProfileTarget(db, userId, profileId);
+      return read(db, userId, profileId, subject?.kind === "legal_entity");
     },
     async saveIdentityAttachment(
       actor: ProfileActor,
@@ -187,7 +193,8 @@ export function createIdentityAttachmentRepository(
       return db.transaction(async (tx) => {
         const { session } = await lockProfileActor(tx, actor);
         if (actor.administratorUserId) throw new DocumentError("DOCUMENT_ATTACHMENT_INVALID", 422);
-        await assertDocumentProfileTarget(tx, actor.userId, profileId);
+        const subject = await assertDocumentProfileTarget(tx, actor.userId, profileId);
+        const company = subject?.kind === "legal_entity";
         const now = new Date();
         if (session.expiresAt <= now) throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);
         const current =
@@ -215,10 +222,12 @@ export function createIdentityAttachmentRepository(
           if (previous.hash !== signature)
             throw new DocumentError("DOCUMENT_IDEMPOTENCY_REUSED", 422);
           // No old filename/status survives a subsequent removal or quarantine through replay.
-          return read(tx, actor.userId, profileId, current);
+          return read(tx, actor.userId, profileId, company, current);
         }
         if (current.revision !== payload.revision || current.revision >= 2147483646)
           throw new DocumentError("DOCUMENT_CONFLICT", 409);
+        if (company && payload.documentType !== undefined && payload.documentType !== "unknown")
+          throw new DocumentError("DOCUMENT_ATTACHMENT_INVALID", 422);
         const next: Attachment = {
           ...current,
           revision: current.revision + 1,
@@ -227,9 +236,14 @@ export function createIdentityAttachmentRepository(
           ...(payload.combinedId !== undefined ? { combinedId: payload.combinedId } : {}),
           ...(payload.frontId !== undefined ? { frontId: payload.frontId } : {}),
           ...(payload.backId !== undefined ? { backId: payload.backId } : {}),
+          ...(company ? { documentType: "unknown" } : {}),
         };
         const ids = idsOf(next);
-        if ((next.combinedId && (next.frontId || next.backId)) || new Set(ids).size !== ids.length)
+        if (
+          (next.combinedId && (next.frontId || next.backId)) ||
+          (company && (next.frontId || next.backId)) ||
+          new Set(ids).size !== ids.length
+        )
           throw new DocumentError("DOCUMENT_ATTACHMENT_INVALID", 422);
         const rows = ids.length
           ? await tx
@@ -252,7 +266,11 @@ export function createIdentityAttachmentRepository(
         )
           throw new DocumentError("DOCUMENT_NOT_FOUND", 404);
         if (
-          rows.some((row) => row.category !== "identity" || row.state === "quarantined") ||
+          rows.some(
+            (row) =>
+              (company ? row.category === "identity" : row.category !== "identity") ||
+              row.state === "quarantined",
+          ) ||
           new Set(rows.map((row) => row.checksum)).size !== rows.length
         )
           throw new DocumentError("DOCUMENT_ATTACHMENT_INVALID", 422);
@@ -301,7 +319,7 @@ export function createIdentityAttachmentRepository(
               revision: next.revision,
             })),
           );
-        return read(tx, actor.userId, profileId, next);
+        return read(tx, actor.userId, profileId, company, next);
       });
     },
   };
