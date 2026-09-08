@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
@@ -46,8 +46,7 @@ function User({
   const navigate = useNavigate();
   const params = new URLSearchParams(location.searchStr);
   const profileId = managedProfileIdSchema.safeParse(params.get("profile")).data ?? "self";
-  const requestedTab = params.get("tab");
-  const tab: Tab = tabs.find((item) => item === requestedTab) ?? "general";
+  const requestedTab = tabs.find((item) => item === params.get("tab")) ?? "general";
   const [adding, setAdding] = useState(false);
   const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);
   const key = ["private", identity.user.id, identity.session.id, "admin-user", userId];
@@ -69,6 +68,19 @@ function User({
     retry: false,
     refetchOnWindowFocus: false,
   });
+  const selected = profiles.data?.profiles.find((profile) => profile.id === profileId);
+  const tab =
+    selected?.kind === "legal_entity" && requestedTab === "health" ? "general" : requestedTab;
+  const visibleTabs = tabs.filter((item) => item !== "health" || selected?.kind !== "legal_entity");
+  useEffect(() => {
+    if (!blocked && selected?.kind === "legal_entity" && requestedTab === "health")
+      void navigate({
+        to: "/users/$userId",
+        params: { userId },
+        search: { profile: profileId, tab: "general" },
+        replace: true,
+      });
+  }, [blocked, selected?.kind, requestedTab, userId, profileId, navigate]);
   const navigateProfile = (id: string, nextTab: Tab = "general") =>
     void navigate({
       to: "/users/$userId",
@@ -86,7 +98,6 @@ function User({
       />
     );
   if (!user.data || !profiles.data) return <LoadingState label={t("profile.loading")} />;
-  const selected = profiles.data.profiles.find((profile) => profile.id === profileId);
   const percent = new Intl.NumberFormat(i18n.language, {
     style: "percent",
     maximumFractionDigits: 0,
@@ -147,7 +158,7 @@ function User({
           <Tabs
             value={tab}
             onValueChange={(value) => {
-              const next = tabs.find((item) => item === value);
+              const next = visibleTabs.find((item) => item === value);
               if (next) navigateProfile(profileId, next);
             }}
             className="min-w-0 gap-6"
@@ -156,7 +167,7 @@ function User({
               className="h-auto min-h-14 w-full sm:w-auto"
               aria-label={t("profile.sections")}
             >
-              {tabs.map((item) => (
+              {visibleTabs.map((item) => (
                 <TabsTrigger
                   key={item}
                   value={item}
@@ -194,8 +205,6 @@ function User({
                   blocked={blocked}
                   portalContainer={portalContainer}
                 />
-              ) : tab === "health" && selected.kind === "legal_entity" ? (
-                <p className="text-sm text-muted-foreground">{t("profile.entityHealth")}</p>
               ) : (
                 <AdminProfileEditor
                   key={`${userId}:${profileId}:${tab}`}

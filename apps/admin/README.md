@@ -22,6 +22,8 @@ L’état et l’action d’accès équipe précèdent le lien secondaire vers l
 
 ## Règles métier et invariants
 
+L’onglet Santé est masqué pour les sociétés ; un ancien lien vers cette rubrique revient à Générales pour le même profil.
+
 La présentation utilise le système commun xAI de [UI](../../packages/ui/README.md), conformément à ADR-0007. Le layout de compte partagé reçoit uniquement des textes et icônes ; les décisions d’identité restent dans cette app. Compte, formulaire MFA, déconnexion et états sont des sections ouvertes sans card.
 
 Texte français externalisé dans `src/locales/fr/common.json` et `users.json`. Aucun credential PostgreSQL, aucune lecture DB, room ou job. Réseau via `@coverview/api-client` uniquement. Santé et personas utilisent un cache TanStack Query frais 15 secondes, collecté après une minute. L’identité se vérifie à chaque montage/focus ; les données privées sont masquées pendant cette vérification. Le cache privé, borné à identité/session puis utilisateur/profil pour la gestion, est périmé immédiatement et supprimé sans observateur, au changement de session, au refus d’authentification et à la déconnexion. Les requêtes sont annulées avant retrait, y compris l’identité lors du logout ; aucun retry automatique de mutation.

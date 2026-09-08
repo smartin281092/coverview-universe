@@ -8,6 +8,9 @@ import {
   managedProfileCreateInputSchema,
   managedProfileSchema,
   managedProfilesSchema,
+  isProfileConfirmed,
+  profileCompletionAverage,
+  profileStepCompletion,
   profileSectionSaveInputSchema,
   profileSectionSchema,
   profileValuesSchema,
@@ -57,34 +60,25 @@ function sectionValuesSchema(section: ProfileSectionName, kind: ManagedProfile["
         ? entityProfileValuesSchema
         : profileValuesSchema;
 }
-function completion(
-  values: ProfileSectionValues,
-  section: ProfileSectionName,
-  kind: ManagedProfile["kind"],
-) {
-  const keys = Object.keys(sectionValuesSchema(section, kind).shape).filter(
-    (key) => !["currency", "registrationNumber", "avsNumber", "occupation"].includes(key),
-  ) as (keyof ProfileSectionValues)[];
-  return Math.round(
-    (100 *
-      keys.filter((key) => values[key] !== undefined && values[key] !== null && values[key] !== "")
-        .length) /
-      keys.length,
-  );
-}
 function selfGeneral(profile: Profile): ProfileSection {
   const values = Object.fromEntries(
     Object.entries(profile.fields).map(([key, value]) => [key, value?.value]),
   );
-  const confirmed = Object.values(profile.fields).map((field) => field?.confirmedAt);
+  const confirmed = isProfileConfirmed(profile);
+  const confirmedFields = Object.values(profile.fields).map((field) => field?.confirmedAt);
   return profileSectionSchema.parse({
     profileId: "self",
     section: "general",
     revision: profile.revision,
     step: profile.step === "address" ? "details" : profile.step,
     values,
-    confirmedAt: confirmed.length && confirmed.every(Boolean) ? confirmed.sort().at(-1) : null,
-    completion: completion(values, "general", "person"),
+    confirmedAt:
+      confirmedFields.length && confirmedFields.every(Boolean)
+        ? confirmedFields.sort().at(-1)
+        : null,
+    completion: profileCompletionAverage(
+      profileStepCompletion("person", "general", values, confirmed),
+    ),
   });
 }
 function sectionDto(
@@ -101,7 +95,9 @@ function sectionDto(
     values: row?.values ?? {},
     confirmedAt: row?.confirmedAt?.toISOString() ?? null,
     documentSources: row?.documentSources ?? {},
-    completion: completion(row?.values ?? {}, section, kind),
+    completion: profileCompletionAverage(
+      profileStepCompletion(kind, section, row?.values ?? {}, Boolean(row?.confirmedAt)),
+    ),
   });
 }
 function profileDto(

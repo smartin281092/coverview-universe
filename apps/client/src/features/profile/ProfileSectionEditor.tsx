@@ -10,6 +10,9 @@ import {
   financialProfileValuesSchema,
   healthProfileValuesSchema,
   profileValuesSchema,
+  profileCompletionAverage,
+  profileStepCompletion,
+  profileStepFields,
   type ManagedProfile,
   type ProfileSection,
   type ProfileSectionName,
@@ -29,7 +32,6 @@ import {
 } from "@coverview/ui";
 import { api } from "../../api";
 import { forgetIdentity } from "../identity/session-state";
-import { filledFieldsPercent } from "./profile-step-completion";
 import {
   ProfileSteps,
   profileViewSteps,
@@ -49,39 +51,8 @@ const moneyFields = new Set<Field>([
 const numberFields = new Set<Field>(["heightCm", "weightKg"]);
 const noteFields = new Set<Field>(["allergies", "chronicConditions", "ongoingTreatments"]);
 function fieldsFor(profile: ManagedProfile, section: ProfileSectionName): [Field[], Field[]] {
-  if (section === "finances")
-    return [
-      ["annualIncomeMinor", "monthlyExpensesMinor", "currency"],
-      ["savingsMinor", "debtsMinor"],
-    ];
-  if (section === "health")
-    return [
-      ["insurer", "deductibleMinor", "accidentCoverage"],
-      [
-        "primaryDoctorName",
-        "heightCm",
-        "weightKg",
-        "smokingStatus",
-        "allergies",
-        "chronicConditions",
-        "ongoingTreatments",
-      ],
-    ];
-  return [
-    profile.kind === "legal_entity"
-      ? ["companyName", "registrationNumber", "phone", "contactEmail"]
-      : [
-          "firstName",
-          "lastName",
-          "birthDate",
-          "nationality",
-          "avsNumber",
-          "occupation",
-          "phone",
-          "contactEmail",
-        ],
-    ["street", "postalCode", "city", "country"],
-  ];
+  const { information, details } = profileStepFields(profile.kind, section);
+  return [[...information], [...details]];
 }
 function formValues(fields: Field[], record: ProfileSection | null): Values {
   return Object.fromEntries(
@@ -166,6 +137,12 @@ export function ProfileSectionEditor({
   const values = useWatch({ control: form.control });
   const { isDirty, dirtyFields } = form.formState;
   const [saved, setSaved] = useState<ProfileSection | null>(null);
+  const completion = profileStepCompletion(
+    profile.kind,
+    section,
+    values,
+    Boolean(saved?.confirmedAt) && !isDirty,
+  );
   const [step, setStep] = useState<ProfileViewStep>(requestedStep ?? "information");
   const [pending, setPending] = useState(false);
   const [failure, setFailure] = useState<"save" | "conflict" | "session" | "denied" | null>(null);
@@ -309,6 +286,8 @@ export function ProfileSectionEditor({
     onBridge({
       dirty: isDirty || Object.keys(dirtyFields).length > 0,
       pending,
+      completion: saved ? profileCompletionAverage(completion) : null,
+      scopeKey: `${identity.user.id}:${identity.session.id}:${profile.id}:${section}`,
       save: () => save(),
       discard: () => {
         form.reset(formValues(fields, saved));
@@ -369,11 +348,7 @@ export function ProfileSectionEditor({
       <aside>
         <ProfileSteps
           step={step}
-          completion={{
-            information: filledFieldsPercent(information, values),
-            details: filledFieldsPercent(details, values),
-            review: saved.confirmedAt && !isDirty ? 100 : 0,
-          }}
+          completion={completion}
           labels={labels}
           disabled={pending || blocked}
           onChange={(next) => void move(next)}

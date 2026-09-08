@@ -2,23 +2,16 @@ import { z } from "zod";
 import {
   profileFieldSchema,
   profileValuesSchema,
+  profileStepFields,
   type Profile,
   type ProfileDraft,
   type ProfileSaveInput,
 } from "@coverview/contracts";
 
 export type ProfileFieldName = (typeof profileFieldSchema.options)[number];
-export const informationFields = [
-  "firstName",
-  "lastName",
-  "birthDate",
-  "nationality",
-  "avsNumber",
-  "occupation",
-  "phone",
-  "contactEmail",
-] as const;
-export const addressFields = ["street", "postalCode", "city", "country"] as const;
+const generalSteps = profileStepFields("person", "general");
+export const informationFields = generalSteps.information as readonly ProfileFieldName[];
+export const addressFields = generalSteps.details as readonly ProfileFieldName[];
 export const allFields = profileFieldSchema.options;
 // Empty controls are presentation state; the public schema remains the validation authority.
 export const profileFormSchema = z

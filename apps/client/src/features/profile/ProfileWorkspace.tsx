@@ -61,8 +61,7 @@ export function ProfileWorkspace({
   const navigate = useNavigate();
   const params = new URLSearchParams(location.searchStr);
   const person = managedProfileIdSchema.safeParse(params.get("person")).data ?? "self";
-  const tab = profileSectionNameSchema.safeParse(params.get("tab")).data ?? "general";
-  const requestedStep = profileSectionStepSchema.safeParse(params.get("step")).data;
+  const requestedTab = profileSectionNameSchema.safeParse(params.get("tab")).data ?? "general";
   const queryKey = ["private", identity.user.id, identity.session.id, "managed-profiles"];
   const profiles = useQuery({
     queryKey,
@@ -83,16 +82,41 @@ export function ProfileWorkspace({
   }, [identity.user.id, profiles.data]);
   const index =
     profiles.data ?? (previousIndex?.ownerId === identity.user.id ? previousIndex.data : undefined);
+  const selected = index?.profiles.find((profile) => profile.id === person);
+  const tab =
+    selected?.kind === "legal_entity" && requestedTab === "health" ? "general" : requestedTab;
+  const requestedStep =
+    tab === requestedTab ? profileSectionStepSchema.safeParse(params.get("step")).data : undefined;
+  const editorScope = `${identity.user.id}:${identity.session.id}:${person}:${tab}`;
+  useEffect(() => {
+    if (!blocked && profiles.data && selected?.kind === "legal_entity" && requestedTab === "health")
+      void navigate({ to: "/profile", search: { person, tab: "general" }, replace: true });
+  }, [blocked, profiles.data, selected?.kind, requestedTab, person, navigate]);
   const awaitingIndex = !profiles.data;
   const editorBlocked = blocked || awaitingIndex;
   const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);
   const bridge = useRef<ProfileEditorBridge | null>(null);
-  const [editing, setEditing] = useState({ dirty: false, pending: false });
+  const [editing, setEditing] = useState<{
+    dirty: boolean;
+    pending: boolean;
+    completion: number | null;
+    scopeKey: string | null;
+  }>({ dirty: false, pending: false, completion: null, scopeKey: null });
   const onBridge = useCallback((value: ProfileEditorBridge | null) => {
     bridge.current = value;
-    const next = { dirty: value?.dirty ?? false, pending: value?.pending ?? false };
+    const next = {
+      dirty: value?.dirty ?? false,
+      pending: value?.pending ?? false,
+      completion: value?.completion ?? null,
+      scopeKey: value?.scopeKey ?? null,
+    };
     setEditing((previous) =>
-      previous.dirty === next.dirty && previous.pending === next.pending ? previous : next,
+      previous.dirty === next.dirty &&
+      previous.pending === next.pending &&
+      previous.completion === next.completion &&
+      previous.scopeKey === next.scopeKey
+        ? previous
+        : next,
     );
   }, []);
   const [guardSaving, setGuardSaving] = useState(false);
@@ -224,18 +248,19 @@ export function ProfileWorkspace({
     ) : (
       <LoadingState label={t("loading")} />
     );
-  const selected = index.profiles.find((profile) => profile.id === person);
   const percent = (value: number | null) =>
     value === null
       ? t("workspace.notApplicable")
       : new Intl.NumberFormat(i18n.language, { style: "percent", maximumFractionDigits: 0 }).format(
           value / 100,
         );
-  const tabs = [
-    { id: "general", icon: UserRound },
-    { id: "finances", icon: Wallet },
-    { id: "health", icon: HeartPulse },
-  ] as const;
+  const tabs = (
+    [
+      { id: "general", icon: UserRound },
+      { id: "finances", icon: Wallet },
+      { id: "health", icon: HeartPulse },
+    ] as const
+  ).filter(({ id }) => id !== "health" || selected?.kind !== "legal_entity");
   return (
     <>
       {awaitingIndex &&
@@ -334,7 +359,13 @@ export function ProfileWorkspace({
                         {t(`workspace.tabs.${id}`)}
                       </span>
                       <span className="text-xs font-normal opacity-75">
-                        {percent(selected.completion[id])}
+                        {percent(
+                          id === tab &&
+                            editing.scopeKey === editorScope &&
+                            editing.completion !== null
+                            ? editing.completion
+                            : selected.completion[id],
+                        )}
                       </span>
                     </span>
                   </TabsTrigger>
@@ -346,9 +377,7 @@ export function ProfileWorkspace({
                     {t("errors.save")}
                   </p>
                 )}
-                {tab === "health" && selected.kind === "legal_entity" ? (
-                  <p className="text-sm text-muted-foreground">{t("workspace.entityHealth")}</p>
-                ) : selected.isSelf && tab === "general" ? (
+                {selected.isSelf && tab === "general" ? (
                   renderSelf({ requestedStep, onStepChange, onBridge })
                 ) : (
                   <ProfileSectionEditor

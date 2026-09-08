@@ -5,6 +5,8 @@ export const profileViewSteps: ProfileViewStep[] = ["information", "details", "r
 export type ProfileEditorBridge = {
   dirty: boolean;
   pending: boolean;
+  completion: number | null;
+  scopeKey: string;
   save: () => Promise<boolean>;
   discard: () => void;
 };

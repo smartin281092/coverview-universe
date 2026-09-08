@@ -4,6 +4,7 @@ import { documentErrorCodes } from "./documents.js";
 import { managedProfileErrorCodes } from "./managed-profiles.js";
 export * from "./managed-profiles.js";
 export * from "./profile.js";
+export * from "./profile-completion.js";
 export * from "./companies.js";
 export * from "./documents.js";
 export * from "./admin-users.js";
