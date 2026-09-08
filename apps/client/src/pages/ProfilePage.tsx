@@ -259,8 +259,8 @@ function ProfileEditor({
     if (!journey.initialized || lastRequested.current === requestedStep) return;
     lastRequested.current = requestedStep;
     const next = requestedStep === "details" ? "address" : requestedStep;
-    if (next && next !== journey.step) void journey.move(next);
-  }, [journey, requestedStep]);
+    if (next && next !== step) void journey.move(next);
+  }, [journey, requestedStep, step]);
   useEffect(() => {
     onBridge?.({
       dirty:
