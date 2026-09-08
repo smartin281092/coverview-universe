@@ -669,9 +669,12 @@
           "Profils et pièce d’identité : onglets Générales/Finances/Santé, champs médicaux facultatifs, étapes et garde de sortie, dialogue recto-verso vérifiés dans Wallet mobile/desktop. Trois nouveaux tests PostgreSQL de persistance/isolation/reprise, dont effacement médical sans résurrection sur ancien retry ; migration0009 locale sans reset, contrôles ciblés. Voir roadmap/evidence/profile-sections-identity-attachment.md.",
           "Correction titre/pastilles et Select du preset vérifiée sur Wallet mobile/desktop : palette sombre locale restaurée, source officielle conservée, recherche compagnie/domaine et tri par contenu ; 9 tests projection/workflows, build/types/lint/frontières. Voir roadmap/evidence/document-titles-preset-select.md.",
           "Carte compagnie compacte et onglets corrigés dans la fiche compagnie et le profil ; médecin traitant facultatif avant taille/poids. Rendu mobile/desktop, navigation, 2 tests PostgreSQL de persistance/effacement/isolation, types/build/lint/frontières vérifiés. Voir roadmap/evidence/insurer-card-tabs-doctor.md.",
-          "Onglets de pièce d’identité, espacement Montech et alignement HTML/CSS de Mon compte sur Mon profil : recette authentifiée mobile/desktop, compilation et limites dans roadmap/evidence/identity-tabs-heading-spacing.md. Ces preuves de présentation ne clôturent ni dépôt ni signature."
+          "Onglets de pièce d’identité, espacement Montech et alignement HTML/CSS de Mon compte sur Mon profil : recette authentifiée mobile/desktop, compilation et limites dans roadmap/evidence/identity-tabs-heading-spacing.md. Ces preuves de présentation ne clôturent ni dépôt ni signature.",
+          "Admin utilisateurs/profils/documents ciblés : types, lint, builds, frontières et tests PostgreSQL/HTTP passent ; migration0010 locale et code dans les checkouts de preview. Preuves et limites roadmap/evidence/admin-users.md."
         ],
-        "done_unverified": [],
+        "done_unverified": [
+          "Extension Admin : recette des données et mutations en navigateur en attente de MFA personnelle ; connexion active constatée mais accès exige toujours vérification. Aucun OCR réel déclaré. Voir roadmap/evidence/admin-users.md."
+        ],
         "assumed": []
       },
       "notes": [

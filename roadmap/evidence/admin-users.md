@@ -25,6 +25,10 @@ Demande utilisateur du 8 septembre 2026 ; extension autorisée de S-042a. [Plan]
 
 ## Recette et limites
 
-Recette navigateur en cours. Connexion utilisateur disponible dans le navigateur intégré ; preuve MFA supplémentaire demandée via l'écran existant. Aucun succès de mutation, dépôt ou extraction réel déclaré avant observation.
+**Vérifié dans les services locaux** : migration0010 appliquée, code intégré par fast-forward dans les deux checkouts propres servant réellement l'API (9b02) et l'Admin (4133). Le superviseur WorkOS et sa clé de session ont été conservés. `/admin/users` anonyme refuse l'accès (401) ; la navigation Utilisateurs est rendue dans le navigateur intégré. La session connectée sans MFA valide voit « Vérifier votre identité » et aucune donnée privée.
+
+**Fait non vérifié en navigateur authentifié** : lecture de l'annuaire, sauvegarde dans un compte réel, création de dossiers, dépôt/téléchargement et autocomplétion OpenAI. L'utilisateur a confirmé la connexion, mais l'écran et le serveur demandent toujours la preuve MFA supplémentaire. Cette étape personnelle a été demandée dans la conversation ; aucune protection contournée, aucune donnée fictive ajoutée au compte réel. Les commandes et leur isolation sont vérifiées sur PostgreSQL jetable selon les oracles ci-dessus.
+
+Pour reprendre : ouvrir `/users` après validation `/mfa`, choisir un utilisateur, contrôler ses sections et documents, ouvrir la création personne/société et le dépôt. Les profils et consentements existants ne servent pas de données de démonstration. Aucune preuve OCR réelle revendiquée par les tests SQL.
 
 Aucune dépendance ni variable d'environnement ajoutée. Aucun nouvel événement/worker : outbox documentaire et BullMQ existants ; aucune room, aucun message externe envoyé. Aucun changement à l'infrastructure distante. Avertissement Vite Admin corrigé par chargement différé des nouvelles routes ; avertissement Wallet préexistant conservé, aucune limite désactivée. Les modifications et références utilisateur préexistantes sont conservées.

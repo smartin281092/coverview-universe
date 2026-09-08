@@ -36,3 +36,6 @@ Accès transversal sensible : politique centrale et revalidation transactionnell
 | Cible | Oracle | Observé | Décision |
 |---|---|---|---|
 | Inspection | Lecture | Admin ne gère que compte/MFA ; profils liés et pipeline documentaire déjà persistants dans Wallet | Réutiliser ces modules avec frontières administratives explicites |
+| API et persistance | V0/V1/V2 | Types, lint, builds, frontières et tests PostgreSQL/HTTP ciblés passent ; migration0010 locale appliquée | Code intégré dans les checkouts de preview sans reset ni remplacement du superviseur |
+| Revue UI | Lecture | Deux défauts de reprise détectés : MFA et dépôt pending invisible | Corrections appliquées ; types/lint/build repassés |
+| Navigateur connecté | V3 partiel | Navigation Utilisateurs visible ; écran MFA bloque la session connectée sans preuve valide | Vérification personnelle demandée, aucun accès contourné ; annuaire et mutations réelles restent à observer |
