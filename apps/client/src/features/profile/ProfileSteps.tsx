@@ -64,15 +64,17 @@ export function ProfileSteps({
                   style={{ strokeWidth: "var(--spacing-4)" }}
                 >
                   <circle cx="24" cy="24" r="22" className="stroke-border" />
-                  <circle
-                    cx="24"
-                    cy="24"
-                    r="22"
-                    pathLength="100"
-                    strokeDasharray="100"
-                    strokeDashoffset={100 - percentage}
-                    className="stroke-chart-3"
-                  />
+                  {percentage > 0 && (
+                    <circle
+                      cx="24"
+                      cy="24"
+                      r="22"
+                      pathLength="100"
+                      strokeDasharray="100"
+                      strokeDashoffset={100 - percentage}
+                      className="stroke-chart-3"
+                    />
+                  )}
                 </svg>
                 <span className="relative">{formattedPercentage}</span>
               </span>
