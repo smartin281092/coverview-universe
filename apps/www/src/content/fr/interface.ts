@@ -30,7 +30,7 @@ export const content = {
       "Activez JavaScript pour vérifier votre connexion. Le contenu public de CoverView reste accessible.",
   },
   wallet: "Ouvrir Wallet",
-  team: "Espace équipe",
+  team: "Admin",
   local: "Préversion locale · Données fictives",
   construction: "Projet en construction",
   eyebrow: "Votre protection, plus claire",

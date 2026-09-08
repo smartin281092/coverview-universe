@@ -9,7 +9,7 @@
     "remoteComplete": "La déconnexion est terminée.",
     "logoutRetry": "Terminer la déconnexion",
     "logoutRetryFailed": "La fermeture n’a pas abouti. Votre accès à CoverView reste fermé ; vous pouvez réessayer.",
-    "accountTitle": "Mon accès équipe",
+    "accountTitle": "Mon accès Admin",
     "accountDescription": "Cet espace est réservé aux membres habilités de l’équipe CoverView.",
     "loading": "Vérification de votre connexion",
     "unavailableTitle": "Connexion indisponible pour le moment",
@@ -32,12 +32,12 @@
     "logoutCurrent": "Se déconnecter de cet appareil",
     "logoutAll": "Se déconnecter de tous les appareils",
     "backAccount": "Revenir à mon compte",
-    "accessLoading": "Vérification de votre accès à l’équipe",
+    "accessLoading": "Vérification de votre accès à Admin",
     "teamConnected": "Connecté avec {{email}}",
-    "teamReady": "Votre accès équipe est confirmé",
+    "teamReady": "Votre accès à Admin est confirmé",
     "teamEmpty": "Retrouvez les utilisateurs, leurs profils et leurs documents depuis l’espace de gestion.",
     "mfaTitle": "Vérifier votre identité",
-    "mfaDescription": "Une vérification supplémentaire est nécessaire pour ouvrir l’espace équipe.",
+    "mfaDescription": "Une vérification supplémentaire est nécessaire pour ouvrir Admin.",
     "mfaAction": "Vérifier mon identité",
     "mfaUnavailableTitle": "Vérification indisponible",
     "mfaNotEnrolled": "Aucune application d’authentification n’est associée à ce compte. Configurez Authenticator pour vérifier votre identité.",
@@ -84,7 +84,7 @@
     "reauthenticate": "Se reconnecter"
   },
   "accountIntro": {
-    "eyebrow": "L’espace des équipes CoverView",
+    "eyebrow": "Admin CoverView",
     "discover": "Découvrir CoverView",
     "account": {
       "title": "Votre compte de travail",
@@ -96,10 +96,10 @@
     },
     "devices": {
       "title": "Une vérification supplémentaire",
-      "description": "Confirmez votre identité avec votre application d’authentification avant d’accéder à l’espace équipe."
+      "description": "Confirmez votre identité avec votre application d’authentification avant d’accéder à Admin."
     }
   },
-  "app": "Espace équipe",
+  "app": "Admin",
   "title": "Une vue claire sur vos opérations.",
   "subtitle": "Le point de départ de l’espace de travail des équipes CoverView.",
   "emptyTitle": "Aucun dossier dans cette préversion",

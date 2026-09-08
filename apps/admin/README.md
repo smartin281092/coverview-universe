@@ -1,12 +1,12 @@
-# Espace équipe — accès protégé
+# Admin — accès protégé
 
 ## Résumé
 
-Surface indépendante destinée aux équipes CoverView. Le compte donne accès à la gestion des utilisateurs, de leurs profils et de leurs documents, avec autorisation administrative et MFA côté serveur.
+Application Admin destinée aux équipes CoverView, avec `admin.coverview.ch` comme sous-domaine cible. Le compte donne accès à la gestion des utilisateurs, de leurs profils et de leurs documents, avec autorisation administrative et MFA côté serveur.
 
 ## Périmètre
 
-`/` et `/account` ouvrent le même parcours d’accès équipe. L’action de connexion et les erreurs arrivent avant les explications secondaires sur mobile. La navigation produit expose Utilisateurs et Mon accès équipe, sans diagnostics ni données de démonstration.
+`/` et `/account` ouvrent le même parcours d’accès à Admin. L’action de connexion et les erreurs arrivent avant les explications secondaires sur mobile. La navigation produit expose Utilisateurs et Mon accès Admin, sans diagnostics ni données de démonstration.
 
 `/users` recherche les comptes applicatifs par nom ou e-mail et remplace les pages de vingt résultats. `/users/$userId` ouvre leur dossier : `profile` et `tab` dans l’URL sélectionnent explicitement le titulaire, une personne ou une société, puis Générales, Finances, Santé ou Documents. L’ajout d’un profil ouvre un dialogue ; aucun compte de connexion, droit familial ou pouvoir de signature n’est créé implicitement. Les champs des sections sont facultatifs et validés par les contrats partagés. Générales du titulaire conserve son stockage canonique dans identity, sans confirmation ni choix de consentement à sa place. Une saisie non enregistrée bloque la navigation avec enregistrer/abandonner/rester ; un conflit conserve les corrections jusqu’au rechargement explicite de la dernière révision.
 

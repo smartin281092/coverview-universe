@@ -27,7 +27,7 @@ export const apps = [
   },
   {
     key: "admin",
-    label: "Espace équipe — accès au compte",
+    label: "Admin — accès au compte",
     dir: "apps/admin",
     port: 4102,
     entry: "/account",
