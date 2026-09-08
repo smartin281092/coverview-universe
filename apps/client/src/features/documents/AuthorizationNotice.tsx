@@ -7,7 +7,7 @@ export function AuthorizationNotice({ onDismiss }: { onDismiss: () => void }) {
   const { t } = useTranslation("authorizations");
   return (
     <aside
-      className="relative space-y-2 rounded-xl bg-indigo-50 p-4 pr-14 text-indigo-950"
+      className="relative flex flex-col gap-2 rounded-xl bg-indigo-50 p-4 pr-14 text-indigo-950"
       aria-label={t("noticeTitle")}
     >
       <div className="flex items-center gap-2">
@@ -18,7 +18,7 @@ export function AuthorizationNotice({ onDismiss }: { onDismiss: () => void }) {
       <Link
         to="/authorizations/$kind"
         params={{ kind: "procuration" }}
-        className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-indigo-700"
+        className="inline-flex min-h-11 self-start items-center gap-2 text-sm font-medium text-indigo-700"
       >
         {t("signProcuration")}
         <ArrowUpRight className="size-4" aria-hidden="true" />
