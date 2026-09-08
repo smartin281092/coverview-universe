@@ -2,11 +2,15 @@
 
 ## Résumé
 
-Surface indépendante destinée aux équipes CoverView. Le compte est l’entrée principale, avec autorisation administrative et MFA côté serveur ; aucun CRM ni dossier opérationnel n’est présenté comme disponible.
+Surface indépendante destinée aux équipes CoverView. Le compte donne accès à la gestion des utilisateurs, de leurs profils et de leurs documents, avec autorisation administrative et MFA côté serveur.
 
 ## Périmètre
 
-`/` et `/account` ouvrent le même parcours d’accès équipe. L’action de connexion et les erreurs arrivent avant les explications secondaires sur mobile. La navigation produit se limite à cet accès, sans diagnostics ni données de démonstration.
+`/` et `/account` ouvrent le même parcours d’accès équipe. L’action de connexion et les erreurs arrivent avant les explications secondaires sur mobile. La navigation produit expose Utilisateurs et Mon accès équipe, sans diagnostics ni données de démonstration.
+
+`/users` recherche les comptes applicatifs par nom ou e-mail et remplace les pages de vingt résultats. `/users/$userId` ouvre leur dossier : `profile` et `tab` dans l’URL sélectionnent explicitement le titulaire, une personne ou une société, puis Générales, Finances, Santé ou Documents. L’ajout d’un profil ouvre un dialogue ; aucun compte de connexion, droit familial ou pouvoir de signature n’est créé implicitement. Les champs des sections sont facultatifs et validés par les contrats partagés. Générales du titulaire conserve son stockage canonique dans identity, sans confirmation ni choix de consentement à sa place. Une saisie non enregistrée bloque la navigation avec enregistrer/abandonner/rester ; un conflit conserve les corrections jusqu’au rechargement explicite de la dernière révision.
+
+Documents conserve chaque original sur le profil sélectionné. Un panneau permet le dépôt et la lecture facultative, avec information sur le traitement externe et l’autocomplétion des seuls champs vides. Une création acceptée actualise immédiatement la bibliothèque pour permettre de reprendre un transfert interrompu. Le détail ouvre un autre panneau : traitement réel, téléchargement autorisé par le serveur, sources des champs extraits et reprise explicite d’une lecture. Les traitements en cours sont relus toutes les cinq secondes ; une erreur suspend cette relève automatique. Les corrections restent accessibles dans Générales. Les fichiers, états de traitement et règles d’autocomplétion appartiennent au [module documentaire](../api/src/modules/document-intelligence/README.md).
 
 `/preview`, `/states` et `/diagnostics` restent accessibles uniquement par leur adresse directe en développement : profils fictifs locaux, démonstration explicite des états UI et santé de l’API. Les profils viennent de l’API ; leur sélection est un état React local qui ne crée aucune session. Navigation et détails sur des pages séparées, conformément à FRONT-14.
 
@@ -20,7 +24,9 @@ L’état et l’action d’accès équipe précèdent le lien secondaire vers l
 
 La présentation utilise le système commun xAI de [UI](../../packages/ui/README.md), conformément à ADR-0007. Le layout de compte partagé reçoit uniquement des textes et icônes ; les décisions d’identité restent dans cette app. Compte, formulaire MFA, déconnexion et états sont des sections ouvertes sans card.
 
-Texte français externalisé dans `src/locales/fr/common.json`. Aucun credential PostgreSQL, aucune lecture DB, room ou job. Réseau via `@coverview/api-client` uniquement. Santé et personas utilisent un cache TanStack Query frais 15 secondes, collecté après une minute. L’identité se vérifie à chaque montage/focus ; les données privées sont masquées pendant cette vérification. Le cache privé, borné à identité/session, est périmé immédiatement et supprimé sans observateur, au changement de session, au refus d’authentification et à la déconnexion. Les requêtes sont annulées avant retrait, y compris l’identité lors du logout ; aucun retry automatique de mutation.
+Texte français externalisé dans `src/locales/fr/common.json` et `users.json`. Aucun credential PostgreSQL, aucune lecture DB, room ou job. Réseau via `@coverview/api-client` uniquement. Santé et personas utilisent un cache TanStack Query frais 15 secondes, collecté après une minute. L’identité se vérifie à chaque montage/focus ; les données privées sont masquées pendant cette vérification. Le cache privé, borné à identité/session puis utilisateur/profil pour la gestion, est périmé immédiatement et supprimé sans observateur, au changement de session, au refus d’authentification et à la déconnexion. Les requêtes sont annulées avant retrait, y compris l’identité lors du logout ; aucun retry automatique de mutation.
+
+La frontière Admin relit `/identity/admin` et masque les panneaux avec le reste du dossier pendant la revalidation. Les portails de dialogues, menus et panneaux restent dans cette frontière privée. Les composants sont remontés lors du changement d’utilisateur/profil, ce qui évite de transférer un fichier ou une saisie au dossier suivant. Les commandes conservent leur clé d’idempotence tant que la demande reste identique ; elles sont annulées au démontage. Un refus d’habilitation/MFA déclenche une nouvelle vérification de l’accès ; la protection de saisie n’empêche pas la reconnexion.
 
 Les commandes CSRF et idempotence restent en mémoire. Dès la demande de logout, le profil disparaît et la commande est conservée hors du parcours privé. Une réponse perdue laisse le résultat à confirmer ; une réponse pending confirme la fermeture locale et permet la reprise distante. Recharger/fermer la page abandonne ce contexte de reprise sans prouver l’état distant. Pendant une simple revalidation de la même session, le formulaire MFA reste monté mais masqué/inactif ; le challenge et le code restent utilisables au retour d’un authentificateur. Source du socle : [API platform](../api/src/platform/README.md).
 
@@ -30,7 +36,7 @@ Le nom `admin` n’accorde aucun droit. Seul le serveur confirme une habilitatio
 
 ## État réel
 
-Parcours d’identité, d’inscription Authenticator et d’accès équipe avec MFA vérifiés avec WorkOS réel en local ; attribution nominative et refus du compte ordinaire consignés dans le [ledger S-000b](../../roadmap/evidence/S-000b.md). Aucun dossier métier n’est encore disponible. Les écrans d’exemple isolés conservent leur caractère fictif et ne constituent pas les preuves de cette recette.
+Parcours d’identité, d’inscription Authenticator et d’accès équipe avec MFA vérifiés avec WorkOS réel en local ; attribution nominative et refus du compte ordinaire consignés dans le [ledger S-000b](../../roadmap/evidence/S-000b.md). Gestion des utilisateurs implémentée dans [l’extension S-042a](../../roadmap/plans/S-042a-admin-users.plan.md) : types, lint et build Admin vérifiés ; les preuves de parcours réel restent à consigner par la recette de cette extension. Les écrans d’exemple isolés conservent leur caractère fictif et ne constituent pas les preuves de cette recette.
 
 ## Développement et dépendances
 
@@ -38,4 +44,4 @@ Parcours d’identité, d’inscription Authenticator et d’accès équipe avec
 
 Stack et provenance partagées avec [Wallet](../client/README.md#développement-et-dépendances) ; composants et preset dans [UI](../../packages/ui/README.md). Les pages, routes, catalogues et état local restent propres à cette application (ARCH-13).
 
-Le formulaire MFA utilise la stack imposée react-hook-form, resolver Zod et schéma partagé dans `@coverview/contracts`. Le champ natif utilise les tokens existants, un label, l’autocomplétion OTP, un focus initial et des erreurs accessibles. Aucun composant visuel externe ajouté.
+Les formulaires utilisent la stack imposée react-hook-form, resolver Zod et schémas partagés dans `@coverview/contracts`. Le champ MFA natif utilise les tokens existants, un label, l’autocomplétion OTP, un focus initial et des erreurs accessibles. Les pages Utilisateurs et Dossier se chargent à la navigation. Aucun composant visuel externe ni dépendance ajouté.

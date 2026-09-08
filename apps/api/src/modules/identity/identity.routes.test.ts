@@ -6,6 +6,12 @@ import { setTimeout as delay } from "node:timers/promises";
 import { PostgreSqlContainer, type StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { eq } from "drizzle-orm";
+import {
+  adminUsersSchema,
+  managedProfileSchema,
+  profileSchema,
+  profileSectionSchema,
+} from "@coverview/contracts";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { parseEnvironment } from "../../platform/config.js";
 import { createDatabase } from "../../platform/db/database.js";
@@ -169,7 +175,7 @@ type Login = Awaited<ReturnType<typeof login>>;
 function mutation(
   url: string,
   session: Login,
-  payload: Record<string, string> = {},
+  payload: Record<string, unknown> = {},
   headers: Record<string, string> = {},
 ) {
   return app.inject({
@@ -188,6 +194,112 @@ function mutation(
 }
 
 describe("identity HTTP with real PostgreSQL and an explicit WorkOS double", () => {
+  it("enforces administrative authority at HTTP boundaries and persists changes only in the selected user's profiles", async () => {
+    const admin = await login();
+    const owner = await login();
+    const stranger = await login();
+    const base = `/admin/users/${owner.body.user.id}`;
+    expect((await request("/admin/users")).statusCode).toBe(401);
+    expect((await request(base, owner.cookie)).statusCode).toBe(403);
+    expect((await request(`${base}/profile`, admin.cookie)).statusCode).toBe(403);
+    expect(
+      (await mutation(`${base}/profiles`, admin, { kind: "person", displayName: "Family" }))
+        .statusCode,
+    ).toBe(403);
+    await database.db.insert(identityAdminPermissions).values({
+      id: randomUUID(),
+      userId: admin.body.user.id,
+      permission: "administration.access",
+      evidence: "Isolated HTTP authorization test",
+    });
+    expect((await request("/admin/users", admin.cookie)).json()).toMatchObject({
+      error: { code: "IDENTITY_MFA_REQUIRED" },
+    });
+    await database.db
+      .update(identitySessions)
+      .set({ mfaVerifiedAt: new Date() })
+      .where(eq(identitySessions.id, admin.body.session.id));
+    const listing = await request(
+      `/admin/users?q=${encodeURIComponent(owner.body.user.email)}&limit=1`,
+      admin.cookie,
+    );
+    expect(listing.statusCode, listing.body).toBe(200);
+    expect(adminUsersSchema.parse(listing.json()).users).toMatchObject([
+      { id: owner.body.user.id },
+    ]);
+    expect((await request("/admin/users?limit=51", admin.cookie)).statusCode).toBe(400);
+    const profile = profileSchema.parse((await request(`${base}/profile`, admin.cookie)).json());
+    const input = {
+      revision: profile.revision,
+      step: "information",
+      fields: { firstName: "Edited by administrator" },
+    };
+    expect(
+      (await mutation(`${base}/profile`, admin, input, { "x-csrf-token": "invalid" })).statusCode,
+    ).toBe(403);
+    expect(
+      (await mutation(`${base}/profile`, admin, input, { origin: "https://foreign.invalid" }))
+        .statusCode,
+    ).toBe(403);
+    const saved = await mutation(`${base}/profile`, admin, input);
+    expect(saved.statusCode, saved.body).toBe(200);
+    expect(profileSchema.parse(saved.json()).fields.firstName).toMatchObject({
+      value: "Edited by administrator",
+      confirmedAt: null,
+    });
+    expect(
+      profileSchema.parse((await request("/identity/profile", owner.cookie)).json()).fields
+        .firstName?.value,
+    ).toBe("Edited by administrator");
+    expect(
+      profileSchema.parse((await request("/identity/profile", admin.cookie)).json()).fields
+        .firstName,
+    ).toBeUndefined();
+    const created = await mutation(`${base}/profiles`, admin, {
+      kind: "legal_entity",
+      displayName: "Managed business",
+    });
+    expect(created.statusCode, created.body).toBe(200);
+    const subject = managedProfileSchema.parse(created.json());
+    const section = `${base}/profiles/${subject.id}/sections/general`;
+    const values = {
+      revision: 0,
+      step: "information",
+      fields: { companyName: "Managed business", city: "Lausanne" },
+    };
+    const key = randomUUID();
+    const sectionSaved = await mutation(section, admin, values, { "idempotency-key": key });
+    expect(sectionSaved.statusCode, sectionSaved.body).toBe(200);
+    expect((await mutation(section, admin, values, { "idempotency-key": key })).json()).toEqual(
+      sectionSaved.json(),
+    );
+    expect(
+      profileSectionSchema.parse(
+        (await request(`/profiles/${subject.id}/sections/general`, owner.cookie)).json(),
+      ).values.city,
+    ).toBe("Lausanne");
+    expect(
+      (await request(`/admin/users/${stranger.body.user.id}/profiles/${subject.id}`, admin.cookie))
+        .statusCode,
+    ).toBe(404);
+    expect(
+      (await request(`${base}/profiles/${subject.id}/sections/health`, admin.cookie)).statusCode,
+    ).toBe(422);
+    expect((await mutation(section, owner, values)).statusCode).toBe(403);
+    await database.db
+      .update(identityAdminPermissions)
+      .set({ revokedAt: new Date() })
+      .where(eq(identityAdminPermissions.userId, admin.body.user.id));
+    expect((await request(base, admin.cookie)).statusCode).toBe(403);
+    expect((await mutation(section, admin, values, { "idempotency-key": key })).statusCode).toBe(
+      403,
+    );
+    expect(
+      profileSectionSchema.parse(
+        (await request(`/profiles/${subject.id}/sections/general`, owner.cookie)).json(),
+      ).values.city,
+    ).toBe("Lausanne");
+  });
   it("binds callback state to a browser, consumes it once, and refuses arbitrary destinations", async () => {
     const pending = await startLogin();
     expect((await request(`/auth/callback?code=fixture&state=${pending.state}`)).statusCode).toBe(

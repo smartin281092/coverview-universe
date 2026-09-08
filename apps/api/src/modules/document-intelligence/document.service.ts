@@ -1,15 +1,17 @@
 import { createHash } from "node:crypto";
 import { fileTypeFromBuffer } from "file-type";
 import type { FileStorage } from "../../platform/file-storage.js";
+import type { ProfileActor } from "../identity/index.js";
 import { createDocumentRepository, DocumentError } from "./document.repository.js";
 
-type Actor = { userId: string; id: string };
+type Actor = ProfileActor;
 export function createDocumentService(
   repository: ReturnType<typeof createDocumentRepository>,
   storage: FileStorage,
 ) {
   return {
     async upload(actor: Actor, id: string, bytes: Buffer) {
+      await repository.authorizeUpload(actor, id);
       const row = await repository.original(actor.userId, id);
       if (
         bytes.length !== row.size ||

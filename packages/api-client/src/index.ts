@@ -44,6 +44,10 @@ import {
   profileSectionNameSchema,
   documentIdentityAttachmentSchema,
   documentIdentityAttachmentInputSchema,
+  adminUserIdSchema,
+  adminUserSchema,
+  adminUsersSchema,
+  adminUsersQuerySchema,
   type ApiErrorCode,
 } from "@coverview/contracts";
 import type { z } from "zod";
@@ -140,6 +144,196 @@ export function createApiClient({
   }
 
   return {
+    adminUsers: (query: z.input<typeof adminUsersQuerySchema> = {}, options?: RequestOptions) =>
+      request(
+        `/admin/users?${new URLSearchParams(
+          Object.entries(adminUsersQuerySchema.parse(query))
+            .filter(([, value]) => value !== undefined)
+            .map(([key, value]) => [key, String(value)]),
+        )}`,
+        adminUsersSchema,
+        options,
+        undefined,
+        true,
+      ),
+    adminUser: (userId: string, options?: RequestOptions) =>
+      request(
+        `/admin/users/${encodeURIComponent(adminUserIdSchema.parse(userId))}`,
+        adminUserSchema,
+        options,
+        undefined,
+        true,
+      ),
+    adminProfile: (userId: string, options?: RequestOptions) =>
+      request(
+        `/admin/users/${encodeURIComponent(adminUserIdSchema.parse(userId))}/profile`,
+        profileSchema,
+        options,
+        undefined,
+        true,
+      ),
+    saveAdminProfile: (
+      userId: string,
+      input: z.infer<typeof profileSaveInputSchema>,
+      options: MutationOptions,
+    ) =>
+      request(
+        `/admin/users/${encodeURIComponent(adminUserIdSchema.parse(userId))}/profile`,
+        profileSchema,
+        options,
+        { body: profileSaveInputSchema.parse(input), credentials: options },
+        true,
+      ),
+    adminProfiles: (userId: string, options?: RequestOptions) =>
+      request(
+        `/admin/users/${encodeURIComponent(adminUserIdSchema.parse(userId))}/profiles`,
+        managedProfilesSchema,
+        options,
+        undefined,
+        true,
+      ),
+    createAdminProfile: (
+      userId: string,
+      input: z.infer<typeof managedProfileCreateInputSchema>,
+      options: MutationOptions,
+    ) =>
+      request(
+        `/admin/users/${encodeURIComponent(adminUserIdSchema.parse(userId))}/profiles`,
+        managedProfileSchema,
+        options,
+        { body: managedProfileCreateInputSchema.parse(input), credentials: options },
+        true,
+      ),
+    adminManagedProfile: (userId: string, profileId: string, options?: RequestOptions) =>
+      request(
+        `/admin/users/${encodeURIComponent(adminUserIdSchema.parse(userId))}/profiles/${encodeURIComponent(managedProfileIdSchema.parse(profileId))}`,
+        managedProfileSchema,
+        options,
+        undefined,
+        true,
+      ),
+    adminProfileSection: (
+      userId: string,
+      profileId: string,
+      section: z.infer<typeof profileSectionNameSchema>,
+      options?: RequestOptions,
+    ) =>
+      request(
+        `/admin/users/${encodeURIComponent(adminUserIdSchema.parse(userId))}/profiles/${encodeURIComponent(managedProfileIdSchema.parse(profileId))}/sections/${profileSectionNameSchema.parse(section)}`,
+        profileSectionSchema,
+        options,
+        undefined,
+        true,
+      ),
+    saveAdminProfileSection: (
+      userId: string,
+      profileId: string,
+      section: z.infer<typeof profileSectionNameSchema>,
+      input: z.infer<typeof profileSectionSaveInputSchema>,
+      options: MutationOptions,
+    ) =>
+      request(
+        `/admin/users/${encodeURIComponent(adminUserIdSchema.parse(userId))}/profiles/${encodeURIComponent(managedProfileIdSchema.parse(profileId))}/sections/${profileSectionNameSchema.parse(section)}`,
+        profileSectionSchema,
+        options,
+        { body: profileSectionSaveInputSchema.parse(input), credentials: options },
+        true,
+      ),
+    adminDocuments: (
+      userId: string,
+      profileId: string,
+      query: z.infer<typeof documentListQuerySchema> = {},
+      options?: RequestOptions,
+    ) =>
+      request(
+        `/admin/users/${encodeURIComponent(adminUserIdSchema.parse(userId))}/profiles/${encodeURIComponent(managedProfileIdSchema.parse(profileId))}/documents?${new URLSearchParams(Object.entries(documentListQuerySchema.parse(query)).filter((entry): entry is [string, string] => typeof entry[1] === "string"))}`,
+        documentListSchema,
+        options,
+        undefined,
+        true,
+      ),
+    adminDocument: (userId: string, profileId: string, id: string, options?: RequestOptions) =>
+      request(
+        `/admin/users/${encodeURIComponent(adminUserIdSchema.parse(userId))}/profiles/${encodeURIComponent(managedProfileIdSchema.parse(profileId))}/documents/${encodeURIComponent(id)}`,
+        documentSchema,
+        options,
+        undefined,
+        true,
+      ),
+    createAdminDocument: (
+      userId: string,
+      profileId: string,
+      input: z.infer<typeof documentCreateInputSchema>,
+      options: MutationOptions,
+    ) =>
+      request(
+        `/admin/users/${encodeURIComponent(adminUserIdSchema.parse(userId))}/profiles/${encodeURIComponent(managedProfileIdSchema.parse(profileId))}/documents`,
+        documentSchema,
+        options,
+        { body: documentCreateInputSchema.parse(input), credentials: options },
+        true,
+      ),
+    uploadAdminDocument: (
+      userId: string,
+      profileId: string,
+      id: string,
+      file: File,
+      options: MutationOptions,
+    ) =>
+      request(
+        `/admin/users/${encodeURIComponent(adminUserIdSchema.parse(userId))}/profiles/${encodeURIComponent(managedProfileIdSchema.parse(profileId))}/documents/${encodeURIComponent(id)}/content`,
+        documentSchema,
+        options,
+        { body: file, credentials: options, binary: true, timeoutMs: 60000 },
+        true,
+      ),
+    retryAdminDocument: (
+      userId: string,
+      profileId: string,
+      id: string,
+      input: z.infer<typeof documentRetryInputSchema>,
+      options: MutationOptions,
+    ) =>
+      request(
+        `/admin/users/${encodeURIComponent(adminUserIdSchema.parse(userId))}/profiles/${encodeURIComponent(managedProfileIdSchema.parse(profileId))}/documents/${encodeURIComponent(id)}/retry`,
+        documentSchema,
+        options,
+        { body: documentRetryInputSchema.parse(input), credentials: options },
+        true,
+      ),
+    async downloadAdminDocument(
+      userId: string,
+      profileId: string,
+      id: string,
+      options: RequestOptions = {},
+    ) {
+      const timeout = AbortSignal.timeout(60000);
+      let response: Response;
+      try {
+        response = await fetch(
+          new URL(
+            `/admin/users/${encodeURIComponent(adminUserIdSchema.parse(userId))}/profiles/${encodeURIComponent(managedProfileIdSchema.parse(profileId))}/documents/${encodeURIComponent(id)}/download`,
+            base,
+          ),
+          {
+            credentials: "include",
+            cache: "no-store",
+            signal: options.signal ? AbortSignal.any([options.signal, timeout]) : timeout,
+            headers: { "X-Request-Id": crypto.randomUUID() },
+          },
+        );
+      } catch (cause) {
+        throw new ApiError("PLATFORM_REQUEST_FAILED", 0, undefined, { cause });
+      }
+      if (!response.ok) {
+        const parsed = apiErrorSchema.safeParse(await response.json());
+        throw new ApiError(
+          parsed.success ? parsed.data.error.code : "PLATFORM_REQUEST_FAILED",
+          response.status,
+        );
+      }
+      return response.blob();
+    },
     documentCompanies: (options?: RequestOptions) =>
       request("/documents/companies", documentCompaniesSchema, options, undefined, true),
     documentProfileDifferences: (options?: RequestOptions) =>

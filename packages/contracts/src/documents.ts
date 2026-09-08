@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { profileSchema, profileValuesSchema, profileFieldSchema } from "./profile.js";
 import { insuranceCompanyIdSchema } from "./companies.js";
+import { managedProfileIdSchema } from "./managed-profiles.js";
 
 export const documentIdSchema = z.string().regex(/^doc_[0-9a-f-]{36}$/);
 export const documentCategorySchema = z.enum([
@@ -34,6 +35,10 @@ export const documentFieldSchema = z.enum([
   "documentNumber",
   "documentType",
   "expiresOn",
+  "phone",
+  "contactEmail",
+  "companyName",
+  "registrationNumber",
 ]);
 export const documentClassificationSchema = z.enum([
   "identity",
@@ -50,6 +55,7 @@ export const documentClassificationSchema = z.enum([
 export const documentListQuerySchema = z
   .object({
     cursor: z.string().max(200).optional(),
+    profileId: managedProfileIdSchema.optional(),
     q: z.string().trim().max(120).optional(),
     classification: documentClassificationSchema.optional(),
     group: z.enum(["date", "type"]).optional(),
@@ -133,6 +139,7 @@ export const documentAnalysisSchema = z.object({
     .max(20),
 });
 export const documentSummarySchema = z.object({
+  profileId: managedProfileIdSchema.optional(),
   id: documentIdSchema,
   name: z.string().max(240),
   title: z.string().max(140).nullable().optional(),
@@ -193,7 +200,7 @@ export const documentProfileDifferencesSchema = z.object({
         documentId: documentIdSchema,
       }),
     )
-    .max(8),
+    .max(10),
 });
 export const documentSchema = documentSummarySchema.extend({
   profileComparisons: z
@@ -211,7 +218,7 @@ export const documentSchema = documentSummarySchema.extend({
   decisions: z.array(documentDecisionSchema).max(20),
   reviewedValues: z
     .array(z.object({ field: documentFieldSchema, value: z.string().max(240) }))
-    .max(11),
+    .max(15),
 });
 export const documentListSchema = z.object({
   documents: z.array(documentSummarySchema).max(20),
@@ -259,6 +266,7 @@ export const insuranceCompanyDetailsSchema = z.object({
 });
 export const documentCreateInputSchema = z
   .object({
+    profileId: managedProfileIdSchema.optional(),
     name: z
       .string()
       .trim()

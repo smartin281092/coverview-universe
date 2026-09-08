@@ -1,5 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
-import { and, asc, eq, getTableColumns, inArray, lte, sql } from "drizzle-orm";
+import { and, asc, eq, getTableColumns, inArray, isNull, lte, sql } from "drizzle-orm";
 import { z } from "zod";
 import {
   documentIdentityAttachmentSchema,
@@ -8,7 +8,7 @@ import {
   type DocumentSummary,
 } from "@coverview/contracts";
 import type { createDatabase } from "../../platform/db/database.js";
-import { lockProfileOwner, IdentityError } from "../identity/index.js";
+import { lockProfileActor, IdentityError, type ProfileActor } from "../identity/index.js";
 import {
   documents,
   documentIdentityAttachments,
@@ -57,7 +57,13 @@ export function createIdentityAttachmentRepository(
         jsonb_build_array((${documents.analysis}->'pages'->0) || jsonb_build_object('text', left(${documents.analysis}->'pages'->0->>'text', 12000)))) end`,
           })
           .from(documents)
-          .where(and(eq(documents.userId, userId), inArray(documents.id, ids)))
+          .where(
+            and(
+              eq(documents.userId, userId),
+              isNull(documents.managedProfileId),
+              inArray(documents.id, ids),
+            ),
+          )
           .limit(3)
       : [];
     const visible = records.filter(
@@ -101,7 +107,7 @@ export function createIdentityAttachmentRepository(
   return {
     identityAttachment: (userId: string) => read(db, userId),
     async saveIdentityAttachment(
-      actor: { userId: string; id: string },
+      actor: ProfileActor,
       input: DocumentIdentityAttachmentInput,
       key: string,
     ) {
@@ -111,7 +117,8 @@ export function createIdentityAttachmentRepository(
         .update(JSON.stringify(Object.entries(payload).sort(([a], [b]) => a.localeCompare(b))))
         .digest("hex");
       return db.transaction(async (tx) => {
-        const { session } = await lockProfileOwner(tx, actor.userId, actor.id);
+        const { session } = await lockProfileActor(tx, actor);
+        if (actor.administratorUserId) throw new DocumentError("DOCUMENT_ATTACHMENT_INVALID", 422);
         const now = new Date();
         if (session.expiresAt <= now) throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);
         const current =
@@ -158,7 +165,13 @@ export function createIdentityAttachmentRepository(
           ? await tx
               .select()
               .from(documents)
-              .where(and(eq(documents.userId, actor.userId), inArray(documents.id, ids)))
+              .where(
+                and(
+                  eq(documents.userId, actor.userId),
+                  isNull(documents.managedProfileId),
+                  inArray(documents.id, ids),
+                ),
+              )
               .orderBy(asc(documents.id))
               .limit(3)
               .for("update")
@@ -186,30 +199,26 @@ export function createIdentityAttachmentRepository(
                 eq(documentIdentityAttachmentCommands.userId, actor.userId),
               ),
             );
-        await tx
-          .insert(documentIdentityAttachmentCommands)
-          .values({
-            id: randomUUID(),
-            userId: actor.userId,
-            key: normalizedKey,
-            hash: signature,
-            expiresAt: new Date(now.getTime() + 86400000),
-          });
+        await tx.insert(documentIdentityAttachmentCommands).values({
+          id: randomUUID(),
+          userId: actor.userId,
+          key: normalizedKey,
+          hash: signature,
+          expiresAt: new Date(now.getTime() + 86400000),
+        });
         // Audit references originals, never their contents or the client's identity fields.
         const auditIds = [...new Set([...idsOf(current), ...ids])];
         if (auditIds.length)
-          await tx
-            .insert(documentAudit)
-            .values(
-              auditIds.map((id) => ({
-                id: randomUUID(),
-                documentId: id,
-                userId: actor.userId,
-                actor: actor.id,
-                action: "document.identity_attachment_changed.v1",
-                revision: next.revision,
-              })),
-            );
+          await tx.insert(documentAudit).values(
+            auditIds.map((id) => ({
+              id: randomUUID(),
+              documentId: id,
+              userId: actor.userId,
+              actor: actor.id,
+              action: "document.identity_attachment_changed.v1",
+              revision: next.revision,
+            })),
+          );
         return read(tx, actor.userId, next);
       });
     },

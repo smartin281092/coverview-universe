@@ -22,9 +22,10 @@ import {
 import type { createDatabase } from "../../platform/db/database.js";
 import {
   IdentityError,
-  lockProfileOwner,
+  lockProfileActor,
   readDocumentProfile,
   toProfile,
+  type ProfileActor,
 } from "../identity/index.js";
 import {
   managedProfiles,
@@ -35,7 +36,7 @@ import {
 
 type Database = ReturnType<typeof createDatabase>["db"];
 type Tx = Parameters<Parameters<Database["transaction"]>[0]>[0];
-type Actor = { userId: string; id: string };
+type Actor = ProfileActor;
 type SectionRow = typeof managedProfileSections.$inferSelect;
 type SubjectRow = typeof managedProfiles.$inferSelect;
 export class ManagedProfileError extends Error {
@@ -99,6 +100,7 @@ function sectionDto(
     step: row?.step ?? "information",
     values: row?.values ?? {},
     confirmedAt: row?.confirmedAt?.toISOString() ?? null,
+    documentSources: row?.documentSources ?? {},
     completion: completion(row?.values ?? {}, section, kind),
   });
 }
@@ -372,9 +374,13 @@ export function createManagedProfileRepository(db: Database) {
     async create(actor: Actor, supplied: ManagedProfileCreateInput, suppliedKey: string) {
       const input = managedProfileCreateInputSchema.parse(supplied);
       const key = z.uuid().parse(suppliedKey).toLowerCase();
-      const hash = fingerprint(input);
+      const hash = fingerprint(
+        actor.administratorUserId
+          ? { input, administratorUserId: actor.administratorUserId }
+          : input,
+      );
       return db.transaction(async (tx) => {
-        const { profile, session } = await lockProfileOwner(tx, actor.userId, actor.id);
+        const { profile, session } = await lockProfileActor(tx, actor);
         if (session.expiresAt <= new Date())
           throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);
         const previous = await replay(tx, actor, "create", key, hash);
@@ -421,10 +427,17 @@ export function createManagedProfileRepository(db: Database) {
       suppliedKey: string,
     ) {
       const input = profileSectionSaveInputSchema.parse(supplied);
+      if (actor.administratorUserId && input.confirm)
+        throw new ManagedProfileError("MANAGED_PROFILE_INVALID_FIELDS", 422);
       const key = z.uuid().parse(suppliedKey).toLowerCase();
-      const hash = fingerprint({ profileId: id, section, input });
+      const hash = fingerprint({
+        profileId: id,
+        section,
+        input,
+        administratorUserId: actor.administratorUserId,
+      });
       return db.transaction(async (tx) => {
-        const { session } = await lockProfileOwner(tx, actor.userId, actor.id);
+        const { session } = await lockProfileActor(tx, actor);
         if (session.expiresAt <= new Date())
           throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);
         const owner = await subject(tx, actor.userId, id);
@@ -478,8 +491,14 @@ export function createManagedProfileRepository(db: Database) {
         )
           throw new ManagedProfileError("MANAGED_PROFILE_INVALID_FIELDS", 422);
         const unchanged = canonical(normalized) === canonical(saved?.values ?? {});
+        const documentSources = { ...saved?.documentSources };
+        for (const [field, value] of Object.entries(input.fields)) {
+          if (value !== undefined && value !== saved?.values[field as keyof ProfileSectionValues])
+            delete documentSources[field];
+        }
         const data = {
           values: normalized,
+          documentSources,
           step: input.step,
           revision: nextRevision(input.revision),
           confirmedAt: input.confirm ? new Date() : unchanged ? (saved?.confirmedAt ?? null) : null,

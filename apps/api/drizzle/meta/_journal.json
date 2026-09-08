@@ -71,6 +71,13 @@
       "when": 1788809671409,
       "tag": "0009_broad_angel",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1788862091282,
+      "tag": "0010_bored_jocasta",
+      "breakpoints": true
     }
   ]
 }

@@ -7,7 +7,11 @@ import { api } from "../../api";
 import { identityOptions } from "./session-state";
 import { IdentityFailure } from "./IdentityFailure";
 
-export function IdentityBoundary({ children }: { children: (identity: IdentityMe) => ReactNode }) {
+export function IdentityBoundary({
+  children,
+}: {
+  children: (identity: IdentityMe, validating: boolean) => ReactNode;
+}) {
   const { t } = useTranslation();
   const client = useQueryClient();
   const config = useQuery({
@@ -73,7 +77,7 @@ export function IdentityBoundary({ children }: { children: (identity: IdentityMe
         inert={validating}
         className="space-y-6"
       >
-        {children(identity.data)}
+        {children(identity.data, validating)}
       </div>
     </>
   );

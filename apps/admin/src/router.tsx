@@ -1,4 +1,9 @@
-import { createRootRoute, createRoute, createRouter } from "@tanstack/react-router";
+import {
+  createRootRoute,
+  createRoute,
+  createRouter,
+  lazyRouteComponent,
+} from "@tanstack/react-router";
 import { AppShell } from "./AppShell";
 import { HomePage } from "./pages/HomePage";
 import { DiagnosticsPage } from "./pages/DiagnosticsPage";
@@ -11,6 +16,30 @@ import { CancelAuthenticatorPage } from "./pages/CancelAuthenticatorPage";
 
 const rootRoute = createRootRoute({ component: AppShell, notFoundComponent: MissingPage });
 const homeRoute = createRoute({ getParentRoute: () => rootRoute, path: "/", component: HomePage });
+const usersRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/users",
+  component: lazyRouteComponent(() => import("./pages/UsersPage"), "UsersPage"),
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): { q?: string | undefined; cursor?: string | undefined } => ({
+    ...(typeof search.q === "string" && search.q.length <= 120 ? { q: search.q } : {}),
+    ...(typeof search.cursor === "string" && search.cursor.length <= 500
+      ? { cursor: search.cursor }
+      : {}),
+  }),
+});
+const userRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/users/$userId",
+  component: lazyRouteComponent(() => import("./pages/UserPage"), "UserPage"),
+  validateSearch: (search: Record<string, unknown>): { profile?: string; tab?: string } => ({
+    ...(typeof search.profile === "string" && search.profile.length <= 100
+      ? { profile: search.profile }
+      : {}),
+    ...(typeof search.tab === "string" && search.tab.length <= 20 ? { tab: search.tab } : {}),
+  }),
+});
 const accountRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/account",
@@ -45,6 +74,8 @@ const diagnosticsRoute = createRoute({
 export const router = createRouter({
   routeTree: rootRoute.addChildren([
     homeRoute,
+    usersRoute,
+    userRoute,
     diagnosticsRoute,
     previewRoute,
     statesRoute,

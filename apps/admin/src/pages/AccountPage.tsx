@@ -45,6 +45,9 @@ function TeamAccess({ identity }: { identity: IdentityMe }) {
             {t("identity.teamConnected", { email: identity.user.email })}
           </p>
           <EmptyState title={t("identity.teamReady")} description={t("identity.teamEmpty")} />
+          <Button asChild>
+            <Link to="/users">{t("users:open")}</Link>
+          </Button>
         </section>
       )}
       <Button asChild variant="outline">

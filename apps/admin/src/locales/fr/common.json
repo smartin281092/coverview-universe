@@ -35,7 +35,7 @@
     "accessLoading": "Vérification de votre accès à l’équipe",
     "teamConnected": "Connecté avec {{email}}",
     "teamReady": "Votre accès équipe est confirmé",
-    "teamEmpty": "Aucun dossier ni outil d’accompagnement n’est encore disponible.",
+    "teamEmpty": "Retrouvez les utilisateurs, leurs profils et leurs documents depuis l’espace de gestion.",
     "mfaTitle": "Vérifier votre identité",
     "mfaDescription": "Une vérification supplémentaire est nécessaire pour ouvrir l’espace équipe.",
     "mfaAction": "Vérifier mon identité",

@@ -110,7 +110,11 @@
     "country": "Pays",
     "documentNumber": "Numéro de la pièce",
     "documentType": "Type de pièce",
-    "expiresOn": "Échéance de la pièce"
+    "expiresOn": "Échéance de la pièce",
+    "phone": "Téléphone",
+    "contactEmail": "Email de contact",
+    "companyName": "Raison sociale",
+    "registrationNumber": "Numéro d’identification de l’entreprise"
   },
   "failure": {
     "antivirus_unavailable": "Le contrôle antivirus est indisponible. Le document reste isolé et ne peut pas encore être téléchargé.",

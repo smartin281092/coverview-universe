@@ -201,6 +201,7 @@ export const identityAuditEvents = pgTable(
         "mfa.enrollment.cancel_request",
         "mfa.enrollment.confirm",
         "mfa.enrollment.cancel",
+        "administration.access",
       ],
     }).notNull(),
     requestId: text("request_id").notNull(),

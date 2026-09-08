@@ -25,11 +25,18 @@ import {
   profileCommands,
   profileDrafts,
 } from "./identity.profile.schema.js";
-import { identityProfiles, identitySessions, identityUsers } from "./identity.schema.js";
+import {
+  identityAdminPermissions,
+  identityProfiles,
+  identitySessions,
+  identityUsers,
+} from "./identity.schema.js";
 import { IdentityError } from "./identity.security.js";
+import { requireAdministration } from "./identity.service.js";
 
 type Database = ReturnType<typeof createDatabase>["db"];
 type Transaction = Parameters<Parameters<Database["transaction"]>[0]>[0];
+export type ProfileActor = { userId: string; id: string; administratorUserId?: string };
 type ProfileRow = typeof identityProfiles.$inferSelect;
 type DraftRow = typeof profileDrafts.$inferSelect;
 type CommandRow = typeof profileCommands.$inferSelect;
@@ -213,6 +220,61 @@ export async function lockProfileOwner(tx: Transaction, userId: string, sessionI
 }
 const lockOwner = lockProfileOwner;
 
+export async function lockProfileActor(tx: Transaction, actor: ProfileActor) {
+  if (!actor.administratorUserId) return lockProfileOwner(tx, actor.userId, actor.id);
+  // Ordered user locks avoid A administering B / B administering A deadlocks.
+  const users = await tx
+    .select({ id: identityUsers.id, pending: identityUsers.globalRevocationPending })
+    .from(identityUsers)
+    .where(inArray(identityUsers.id, [...new Set([actor.userId, actor.administratorUserId])]))
+    .orderBy(asc(identityUsers.id))
+    .for("no key update");
+  if (!users.some((user) => user.id === actor.administratorUserId && !user.pending))
+    throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);
+  if (!users.some((user) => user.id === actor.userId))
+    throw new IdentityError("IDENTITY_NOT_FOUND", 404);
+  if (users.some((user) => user.pending)) throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);
+  const [session] = await tx
+    .select({
+      id: identitySessions.id,
+      expiresAt: identitySessions.expiresAt,
+      mfaVerifiedAt: identitySessions.mfaVerifiedAt,
+    })
+    .from(identitySessions)
+    .where(
+      and(
+        eq(identitySessions.id, actor.id),
+        eq(identitySessions.userId, actor.administratorUserId),
+        isNull(identitySessions.revokedAt),
+        gt(identitySessions.expiresAt, sql`clock_timestamp()`),
+      ),
+    )
+    .limit(1)
+    .for("update");
+  if (!session) throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);
+  const [permission] = await tx
+    .select({ id: identityAdminPermissions.id })
+    .from(identityAdminPermissions)
+    .where(
+      and(
+        eq(identityAdminPermissions.userId, actor.administratorUserId),
+        eq(identityAdminPermissions.permission, "administration.access"),
+        isNull(identityAdminPermissions.revokedAt),
+      ),
+    )
+    .limit(1)
+    .for("share");
+  requireAdministration({ hasAdminPermission: !!permission, mfaVerifiedAt: session.mfaVerifiedAt });
+  const [profile] = await tx
+    .select()
+    .from(identityProfiles)
+    .where(eq(identityProfiles.userId, actor.userId))
+    .limit(1)
+    .for("update");
+  if (!profile) throw new IdentityError("IDENTITY_NOT_FOUND", 404);
+  return { profile, session };
+}
+
 export async function readDocumentProfile(tx: Transaction | Database, userId: string) {
   const [profile] = await tx
     .select()
@@ -379,13 +441,18 @@ export function createProfileRepository(db: Database) {
       sessionId: string,
       suppliedInput: ProfileSaveInput,
       suppliedKey: string,
+      administratorUserId?: string,
     ): Promise<Profile> {
       const input = profileSaveInputSchema.parse(suppliedInput);
       const key = commandKey(suppliedKey);
-      const hash = requestHash(input);
+      const hash = requestHash(administratorUserId ? { input, administratorUserId } : input);
       const scope: Scope = { kind: "user", id: userId };
       return db.transaction(async (tx) => {
-        const { profile, session } = await lockOwner(tx, userId, sessionId);
+        const { profile, session } = await lockProfileActor(tx, {
+          userId,
+          id: sessionId,
+          ...(administratorUserId ? { administratorUserId } : {}),
+        });
         const now = new Date();
         requireActiveSession(session.expiresAt, now);
         requireBirthDate(input.fields.birthDate, now);

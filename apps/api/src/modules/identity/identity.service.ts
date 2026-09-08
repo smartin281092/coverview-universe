@@ -17,11 +17,16 @@ type Repository = ReturnType<typeof createIdentityRepository>;
 type Surface = "wallet" | "admin" | "www";
 export type IdentityService = ReturnType<typeof createIdentityService>;
 
-export function requireAdministration(session: IdentitySession, requireMfa = true) {
+export function requireAdministration(
+  session: Pick<IdentitySession, "hasAdminPermission" | "mfaVerifiedAt">,
+  requireMfa = true,
+) {
   if (!session.hasAdminPermission) throw new IdentityError("IDENTITY_ACCESS_DENIED", 403);
   if (
     requireMfa &&
-    (!session.mfaVerifiedAt || Date.now() - session.mfaVerifiedAt.getTime() >= 15 * 60_000)
+    (!session.mfaVerifiedAt ||
+      session.mfaVerifiedAt.getTime() > Date.now() ||
+      Date.now() - session.mfaVerifiedAt.getTime() >= 15 * 60_000)
   ) {
     throw new IdentityError("IDENTITY_MFA_REQUIRED", 403);
   }

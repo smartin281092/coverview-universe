@@ -6,13 +6,17 @@ import { documentConfig } from "./document.config.js";
 import { createDocumentRepository } from "./document.repository.js";
 import { createDocumentService } from "./document.service.js";
 import { registerDocumentRoutes } from "./document.routes.js";
+import {
+  registerAdminDocumentRoutes,
+  type AdminDocumentIdentity,
+} from "./document.admin.routes.js";
 import { startDocumentJobs } from "./document.jobs.js";
 export { DocumentError } from "./document.repository.js";
 
 export async function registerDocuments(
   app: FastifyInstance,
   environment: Environment,
-  identity: Parameters<typeof registerDocumentRoutes>[3],
+  identity: Parameters<typeof registerDocumentRoutes>[3] & AdminDocumentIdentity,
 ) {
   const config = await documentConfig(environment);
   if (!config.enabled) return;
@@ -22,7 +26,9 @@ export async function registerDocuments(
   );
   const storage = createS3Storage(config);
   const repository = createDocumentRepository(database.db);
-  registerDocumentRoutes(app, repository, createDocumentService(repository, storage), identity);
+  const service = createDocumentService(repository, storage);
+  registerDocumentRoutes(app, repository, service, identity);
+  registerAdminDocumentRoutes(app, repository, service, identity);
   const stop = startDocumentJobs(config, repository, storage, app.log);
   app.addHook("onClose", async () => {
     await stop();

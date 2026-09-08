@@ -50,6 +50,10 @@ export const managedProfileSections = pgTable(
     revision: integer("revision").notNull().default(0),
     step: text("step").$type<ProfileSection["step"]>().notNull().default("information"),
     values: jsonb("values").$type<ProfileSectionValues>().notNull().default({}),
+    documentSources: jsonb("document_sources")
+      .$type<NonNullable<ProfileSection["documentSources"]>>()
+      .notNull()
+      .default({}),
     confirmedAt: instant("confirmed_at"),
     updatedAt: instant("updated_at").notNull().defaultNow(),
   },

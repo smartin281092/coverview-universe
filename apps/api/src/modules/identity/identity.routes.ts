@@ -20,7 +20,7 @@ import {
 } from "@coverview/contracts";
 import type { Environment } from "../../platform/config.js";
 import { createDatabase } from "../../platform/db/database.js";
-import { createIdentityRepository } from "./identity.repository.js";
+import { createIdentityRepository, type IdentitySession } from "./identity.repository.js";
 import { IdentityError, matchesSecret } from "./identity.security.js";
 import {
   createIdentityService,
@@ -30,6 +30,8 @@ import {
 import { createWorkosProvider } from "./identity.workos.js";
 import { createProfileRepository } from "./identity.profile.repository.js";
 import { registerProfileRoutes } from "./identity.profile.routes.js";
+import { createAdminUserRepository } from "./identity.admin.repository.js";
+import { registerAdminUserRoutes } from "./identity.admin.routes.js";
 
 export async function registerIdentity(
   server: FastifyInstance,
@@ -41,14 +43,16 @@ export async function registerIdentity(
   await app.register(rateLimit, { global: false, max: 30, timeWindow: "1 minute" });
   let service = injectedService;
   let profileRepository: ReturnType<typeof createProfileRepository> | undefined;
-  if (config.AUTH_ENABLED && !service) {
+  let adminRepository: ReturnType<typeof createAdminUserRepository> | undefined;
+  if (config.AUTH_ENABLED) {
     const database = createDatabase(config);
     database.pool.on("error", () =>
       app.log.error({ dependency: "identity_database" }, "Identity dependency unavailable"),
     );
     app.addHook("onClose", () => database.pool.end());
     profileRepository = createProfileRepository(database.db);
-    service = createIdentityService(
+    adminRepository = createAdminUserRepository(database.db);
+    service ??= createIdentityService(
       config,
       createIdentityRepository(database.db),
       createWorkosProvider(config),
@@ -396,9 +400,44 @@ export async function registerIdentity(
     checkHost,
     checkMutation,
   });
-  return {
+  const administrators = new WeakMap<FastifyRequest, IdentitySession>();
+  const identity = {
     authenticate: (request: FastifyRequest) => requiredService().authenticate(token(request)),
+    authenticateAdministrator: async (request: FastifyRequest) => {
+      checkHost(request);
+      const session = await requiredService().authenticate(token(request));
+      requireAdministration(session);
+      administrators.set(request, session);
+      return session;
+    },
+    auditAdministratorAccess: async (
+      request: FastifyRequest,
+      targetUserId: string | null,
+      resource: string,
+      action: string,
+    ) => {
+      const session = administrators.get(request);
+      if (!session) throw new IdentityError("IDENTITY_ACCESS_DENIED", 403);
+      requireAdministration(session);
+      if (!adminRepository) throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
+      await adminRepository.audit(session, request.id, targetUserId, resource, action);
+    },
     checkHost,
     checkMutation,
   };
+  registerAdminUserRoutes(
+    app,
+    {
+      users: () => {
+        if (!adminRepository) throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
+        return adminRepository;
+      },
+      profiles: () => {
+        if (!profileRepository) throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
+        return profileRepository;
+      },
+    },
+    identity,
+  );
+  return identity;
 }

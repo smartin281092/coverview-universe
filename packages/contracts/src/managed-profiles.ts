@@ -96,6 +96,16 @@ export const profileSectionSchema = z.object({
   revision: z.number().int().nonnegative(),
   step: profileSectionStepSchema,
   values: profileSectionValuesSchema,
+  documentSources: z
+    .record(
+      z.string().max(100),
+      z.object({
+        documentId: z.string().regex(/^doc_[0-9a-f-]{36}$/),
+        extractionId: z.uuid(),
+        extractedAt: z.iso.datetime(),
+      }),
+    )
+    .optional(),
   confirmedAt: z.iso.datetime().nullable(),
   completion: z.number().int().min(0).max(100),
 });

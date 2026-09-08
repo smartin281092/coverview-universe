@@ -33,7 +33,7 @@ import {
   type InsuranceCompanyId,
 } from "@coverview/contracts";
 import {
-  lockProfileOwner,
+  lockProfileActor,
   toProfile,
   confirmDocumentProfileFields,
   identityUsers,
@@ -41,7 +41,13 @@ import {
   readDocumentProfile,
   lockDocumentProfile,
   enrichDocumentProfile,
+  type ProfileActor,
 } from "../identity/index.js";
+import {
+  assertDocumentProfileTarget,
+  readManagedDocumentValues,
+  enrichManagedDocumentProfile,
+} from "../profiles/index.js";
 import type { createDatabase } from "../../platform/db/database.js";
 import {
   documents,
@@ -70,12 +76,19 @@ export { DocumentError } from "./document.errors.js";
 type Database = ReturnType<typeof createDatabase>["db"];
 type Tx = Parameters<Parameters<Database["transaction"]>[0]>[0];
 type Row = typeof documents.$inferSelect;
-type Actor = { userId: string; id: string };
+type Actor = ProfileActor;
+const auditActor = (actor: Actor) =>
+  actor.administratorUserId ? `admin:${actor.administratorUserId}:session:${actor.id}` : actor.id;
+const targetCondition = (profileId: string) =>
+  profileId === "self"
+    ? isNull(documents.managedProfileId)
+    : eq(documents.managedProfileId, profileId);
 const condition = (userId: string, id: string) =>
   and(eq(documents.userId, userId), eq(documents.id, id));
 function summary(row: Row) {
   return documentSummarySchema.parse({
     ...row,
+    profileId: row.managedProfileId ?? "self",
     ...documentPresentation(row),
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
@@ -85,7 +98,23 @@ function summary(row: Row) {
   });
 }
 async function detail(tx: Tx | Database, row: Row): Promise<DocumentRecord> {
-  const profile = await readDocumentProfile(tx, row.userId);
+  const managedValues = row.managedProfileId
+    ? await readManagedDocumentValues(tx, row.userId, row.managedProfileId)
+    : null;
+  const profileComparisons = managedValues
+    ? (row.analysis?.fields ?? []).flatMap((extraction) => {
+        const current = managedValues[extraction.field as keyof typeof managedValues];
+        return typeof current === "string"
+          ? [
+              {
+                extractionId: extraction.id,
+                currentValue: current,
+                different: !sameProfileValue(current, extraction.value),
+              },
+            ]
+          : [];
+      })
+    : documentProfileComparisons(row.analysis, await readDocumentProfile(tx, row.userId));
   const requests = await tx
     .select()
     .from(documentChangeRequests)
@@ -104,7 +133,7 @@ async function detail(tx: Tx | Database, row: Row): Promise<DocumentRecord> {
     from ${documentDecisions}, lateral jsonb_array_elements(${documentDecisions.decision}->'fields') as field
     where ${documentDecisions.userId} = ${row.userId} and ${documentDecisions.documentId} = ${row.id}
       and field->>'value' is not null and field->>'choice' in ('use', 'correct')
-    order by field->>'field', ${documentDecisions.createdAt} desc, ${documentDecisions.id} desc limit 11
+    order by field->>'field', ${documentDecisions.createdAt} desc, ${documentDecisions.id} desc limit 15
   `);
   const decisions = await tx
     .select({ decision: documentDecisions.decision })
@@ -117,7 +146,7 @@ async function detail(tx: Tx | Database, row: Row): Promise<DocumentRecord> {
     analysis: row.analysis,
     decisions: decisions.map((item) => item.decision),
     reviewedValues: accepted.rows,
-    profileComparisons: documentProfileComparisons(row.analysis, profile),
+    profileComparisons,
     changeRequests: requests.map(changeRequest),
   });
 }
@@ -177,13 +206,18 @@ export function createDocumentRepository(db: Database) {
     schema: z.ZodType<T>,
     execute: (
       tx: Tx,
-      profile: Awaited<ReturnType<typeof lockProfileOwner>>["profile"],
+      profile: Awaited<ReturnType<typeof lockProfileActor>>["profile"],
       row: Row | undefined,
     ) => Promise<{ row: Row; response: T }>,
   ): Promise<T> {
     const normalizedKey = z.uuid().parse(key).toLowerCase();
     return db.transaction(async (tx) => {
-      const { profile, session } = await lockProfileOwner(tx, actor.userId, actor.id);
+      const { profile, session } = await lockProfileActor(tx, actor);
+      const payloadHash = hash({
+        actor: actor.administratorUserId ?? actor.userId,
+        administrator: !!actor.administratorUserId,
+        payload,
+      });
       const row = id
         ? live(
             (
@@ -220,7 +254,12 @@ export function createDocumentRepository(db: Database) {
           )[0],
         );
         if (previous.expiresAt > now) {
-          if (previous.hash !== hash(payload))
+          // Existing owner receipts remain valid during the additive rollout.
+          // Administrative commands never replay a receipt made by the owner.
+          if (
+            previous.hash !== payloadHash &&
+            (actor.administratorUserId || previous.hash !== hash(payload))
+          )
             throw new DocumentError("DOCUMENT_IDEMPOTENCY_REUSED", 422);
           return schema.parse(previous.response);
         }
@@ -237,16 +276,29 @@ export function createDocumentRepository(db: Database) {
         documentId: result.row.id,
         operation,
         key: normalizedKey,
-        hash: hash(payload),
+        hash: payloadHash,
         response: result.response,
         expiresAt: new Date(now.getTime() + 86400000),
       });
-      await audit(tx, result.row, actor.id, `document.${operation}.v1`);
+      await audit(tx, result.row, auditActor(actor), `document.${operation}.v1`);
       return schema.parse(result.response);
     });
   }
   return {
     ...createIdentityAttachmentRepository(db, summary),
+    async assertTarget(userId: string, profileId: string, id?: string) {
+      await assertDocumentProfileTarget(db, userId, profileId);
+      if (id)
+        live(
+          (
+            await db
+              .select()
+              .from(documents)
+              .where(and(condition(userId, id), targetCondition(profileId)))
+              .limit(1)
+          )[0],
+        );
+    },
     async profileDifferences(userId: string) {
       const profile = await readDocumentProfile(db, userId);
       const rows = await db
@@ -258,6 +310,7 @@ export function createDocumentRepository(db: Database) {
         .where(
           and(
             eq(documents.userId, userId),
+            isNull(documents.managedProfileId),
             isNull(documents.deletedAt),
             eq(documents.state, "ready"),
           ),
@@ -358,6 +411,7 @@ export function createDocumentRepository(db: Database) {
         .where(
           and(
             eq(documents.userId, userId),
+            isNull(documents.managedProfileId),
             isNull(documents.deletedAt),
             ne(documents.state, "deleted"),
           ),
@@ -383,7 +437,10 @@ export function createDocumentRepository(db: Database) {
       filters: Omit<z.infer<typeof documentListQuerySchema>, "cursor"> = {},
     ) {
       const query = documentListQuerySchema.parse(filters);
+      const profileId = query.profileId ?? "self";
+      await assertDocumentProfileTarget(db, userId, profileId);
       const fingerprint = hash({
+        profileId,
         q: query.q ?? "",
         classification: query.classification,
         group: query.group ?? "date",
@@ -416,6 +473,7 @@ export function createDocumentRepository(db: Database) {
         .where(
           and(
             eq(documents.userId, userId),
+            targetCondition(profileId),
             isNull(documents.deletedAt),
             ne(documents.state, "deleted"),
           ),
@@ -480,6 +538,7 @@ export function createDocumentRepository(db: Database) {
         .where(
           and(
             eq(documents.userId, userId),
+            isNull(documents.managedProfileId),
             isNull(documents.deletedAt),
             ne(documents.state, "deleted"),
           ),
@@ -501,8 +560,16 @@ export function createDocumentRepository(db: Database) {
     async original(userId: string, id: string) {
       return live((await db.select().from(documents).where(condition(userId, id)).limit(1))[0]);
     },
+    async authorizeUpload(actor: Actor, id: string) {
+      await db.transaction(async (tx) => {
+        await lockProfileActor(tx, actor);
+        live((await tx.select().from(documents).where(condition(actor.userId, id)).limit(1))[0]);
+      });
+    },
     create(actor: Actor, input: DocumentCreateInput, key: string) {
       return command(actor, null, "created", key, input, documentSchema, async (tx) => {
+        const profileId = input.profileId ?? "self";
+        await assertDocumentProfileTarget(tx, actor.userId, profileId);
         const count = await tx
           .select({ id: documents.id })
           .from(documents)
@@ -517,6 +584,7 @@ export function createDocumentRepository(db: Database) {
             category: input.purpose === "identity_card" ? "identity" : "unknown",
             id,
             userId: actor.userId,
+            managedProfileId: profileId === "self" ? null : profileId,
             declaredMime: input.mime,
             mime: "application/octet-stream",
             objectKey: `documents/${id}/original`,
@@ -528,7 +596,7 @@ export function createDocumentRepository(db: Database) {
     },
     async uploaded(actor: Actor, id: string, mime: string) {
       return db.transaction(async (tx) => {
-        const { session } = await lockProfileOwner(tx, actor.userId, actor.id);
+        const { session } = await lockProfileActor(tx, actor);
         const row = live(
           (
             await tx
@@ -555,7 +623,7 @@ export function createDocumentRepository(db: Database) {
           .returning();
         if (!updated) throw new Error("Document update failed");
         await event(tx, updated, "document.uploaded.v1");
-        await audit(tx, updated, actor.id, "document.uploaded.v1");
+        await audit(tx, updated, auditActor(actor), "document.uploaded.v1");
         return detail(tx, updated);
       });
     },
@@ -650,6 +718,8 @@ export function createDocumentRepository(db: Database) {
         documentReviewResultSchema,
         async (tx, profile, current) => {
           const row = live(current);
+          if (row.managedProfileId || actor.administratorUserId)
+            throw new DocumentError("DOCUMENT_REVIEW_INVALID", 422);
           revision(row, input.revision);
           if (
             row.state !== "ready" ||
@@ -772,7 +842,7 @@ export function createDocumentRepository(db: Database) {
     },
     async remove(actor: Actor, id: string) {
       await db.transaction(async (tx) => {
-        const { session } = await lockProfileOwner(tx, actor.userId, actor.id);
+        const { session } = await lockProfileActor(tx, actor);
         const [row] = await tx
           .select()
           .from(documents)
@@ -823,20 +893,20 @@ export function createDocumentRepository(db: Database) {
           .where(
             and(eq(documentCommands.userId, actor.userId), eq(documentCommands.documentId, id)),
           );
-        await audit(tx, updated, actor.id, "document.deletion_requested.v1");
+        await audit(tx, updated, auditActor(actor), "document.deletion_requested.v1");
         await event(tx, updated, "document.deletion_requested.v1");
       });
     },
     async access(actor: Actor, id: string) {
       await db.transaction(async (tx) => {
-        const { session } = await lockProfileOwner(tx, actor.userId, actor.id);
+        const { session } = await lockProfileActor(tx, actor);
         const row = live(
           (await tx.select().from(documents).where(condition(actor.userId, id)).limit(1))[0],
         );
         if (session.expiresAt <= new Date())
           throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);
         if (!summary(row).canDownload) throw new DocumentError("DOCUMENT_DOWNLOAD_BLOCKED", 422);
-        await audit(tx, row, actor.id, "document.downloaded.v1");
+        await audit(tx, row, auditActor(actor), "document.downloaded.v1");
       });
     },
     async pendingEvents() {
@@ -1002,7 +1072,10 @@ export function createDocumentRepository(db: Database) {
             ),
           );
         if (!row || row.deletedAt || row.state !== "reading") return;
-        if (profile) await enrichDocumentProfile(tx, profile, id, analysis.fields);
+        if (row.managedProfileId && profile)
+          await enrichManagedDocumentProfile(tx, userId, row.managedProfileId, id, analysis.fields);
+        else if (!row.managedProfileId && profile)
+          await enrichDocumentProfile(tx, profile, id, analysis.fields);
         const [updated] = await tx
           .update(documents)
           .set({

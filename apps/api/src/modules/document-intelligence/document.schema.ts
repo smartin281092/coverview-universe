@@ -13,6 +13,7 @@ import {
 } from "drizzle-orm/pg-core";
 import type { DocumentAnalysis, DocumentRecord, DocumentSummary } from "@coverview/contracts";
 import { identityUsers } from "../identity/index.js";
+import { managedProfiles } from "../profiles/index.js";
 
 const instant = (name: string) => timestamp(name, { withTimezone: true, precision: 3 });
 export const documents = pgTable(
@@ -22,6 +23,7 @@ export const documents = pgTable(
     userId: text("user_id")
       .notNull()
       .references(() => identityUsers.id),
+    managedProfileId: text("managed_profile_id"),
     name: text("name").notNull(),
     mime: text("mime").notNull(),
     declaredMime: text("declared_mime").notNull(),
@@ -42,6 +44,10 @@ export const documents = pgTable(
     deletedAt: instant("deleted_at"),
   },
   (table) => [
+    foreignKey({
+      columns: [table.userId, table.managedProfileId],
+      foreignColumns: [managedProfiles.userId, managedProfiles.id],
+    }),
     check(
       "files_state",
       sql`${table.state} in ('pending','queued','scanning','reading','ready','failed','quarantined','deleting','deleted')`,
@@ -56,6 +62,7 @@ export const documents = pgTable(
     ),
     check("files_checksum", sql`${table.checksum} ~ '^[0-9a-f]{64}$'`),
     index("files_owner_list").on(table.userId, table.createdAt, table.id),
+    index("files_profile_list").on(table.userId, table.managedProfileId, table.createdAt, table.id),
     uniqueIndex("files_owner_id").on(table.userId, table.id),
     index("files_pending").on(table.state, table.updatedAt, table.id),
   ],
@@ -85,7 +92,7 @@ export const documentChangeRequests = pgTable(
     check("document_change_requests_state", sql`${table.state} in ('prepared','cancelled')`),
     check(
       "document_change_requests_field",
-      sql`${table.field} in ('firstName','lastName','birthDate','nationality','street','postalCode','city','country')`,
+      sql`${table.field} in ('firstName','lastName','birthDate','nationality','street','postalCode','city','country','phone','contactEmail')`,
     ),
     check(
       "document_change_requests_bounds",
