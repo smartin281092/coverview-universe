@@ -1,5 +1,5 @@
 {
-  "version": "coverview-2026-09-08.3",
+  "version": "coverview-2026-09-08.4",
   "sources": {
     "procuration": "50bdd9d2a434a669572ba4cf784a5e17fdf4ceeb3dd096856db6325f7bc65af9",
     "mandate": "ff89ff89e08627a03b5588ae989395dd7f45395b9415e76c892ebb9ee5d6b4d8",
@@ -7,16 +7,12 @@
   },
   "procuration": [
     {
-      "title": "Votre autorisation",
-      "text": "J’autorise CoverView à demander, consulter et recevoir en mon nom les informations et documents relatifs à mes assurances, à ma prévoyance et à mes avoirs, actuels ou passés, ainsi qu’à effectuer les recherches nécessaires pour retrouver mes avoirs. J’autorise leur transmission directe à CoverView et, à cette seule fin et dans les limites de la loi, je délie leurs détenteurs de leur obligation de garder le secret."
+      "title": "Autorisations",
+      "text": "Je soussigné(e) autorise CoverView à demander et recevoir, en mon nom, les renseignements et documents relatifs à mes contrats d’assurance, actuels ou échus, et à mes avoirs auprès de votre institution. L’institution peut identifier les contrats concernés au moyen de mes données personnelles."
     },
     {
-      "title": "Les limites de cette autorisation",
-      "text": "Cette autorisation permet uniquement de recueillir des informations et des documents. Elle ne permet ni de conclure, modifier ou résilier un contrat, ni de changer un bénéficiaire, ni d’effectuer un rachat, un transfert d’avoirs ou une autre opération financière. Elle ne transfère aucune gestion, aucun portefeuille ni courtage à CoverView et ne modifie ni l’intermédiaire, ni le code de gestion, ni l’adresse administrative ou l’acheminement de la correspondance. Les données médicales, dossiers de sinistres et autres données sensibles non nécessaires sont exclus."
-    },
-    {
-      "title": "Durée",
-      "text": "La présente procuration est valable pendant six mois dès sa signature et peut être révoquée en tout temps par écrit."
+      "title": "Limites de la procuration",
+      "text": "Cette procuration est strictement limitée à l’obtention et à la réception de renseignements et documents. Elle n’autorise aucune résiliation, aucun rachat, aucune modification contractuelle, aucun transfert, aucune opération financière, aucun changement de bénéficiaire et aucune conclusion de nouveau contrat. Elle ne constitue pas une nomination de CoverView comme intermédiaire gestionnaire et ne doit donner lieu à aucun transfert ou reprise de portefeuille, aucun changement d’intermédiaire ou de code de gestion, aucune attribution de courtage, aucune modification d’adresse administrative et aucune redirection de la correspondance future."
     }
   ],
   "mandate": [
