@@ -11,3 +11,11 @@ Demande utilisateur du 8 septembre 2026 : réparer les onglets de la popup d’i
 - **Limites** : le rendu de chaque page publique/équipe n’a pas été inspecté individuellement ; leurs builds passent. Aucune validation du parcours de dépôt ou de signature déduite de ces vérifications. Aucun changement de données, permission, contrat, événement, job, migration, variable d’environnement, dépendance ou test.
 
 Session : Codex GPT-6 ; effort effectif non exposé indépendamment dans ce contexte. Documentation propriétaire mise à jour dans UI et Wallet ; aucune nouvelle slice ni candidat mémoire requis par PROG-19.
+
+## Alignement de Mon compte sur les pages Wallet
+
+Correction utilisateur du 8 septembre : les seules marges ne suffisent pas ; Mon compte doit reprendre exactement le HTML et le CSS des en-têtes applicatifs.
+
+- **Vérifié — code et activation** : commit `8bdea33`, intégré par fast-forward dans la preview Wallet 4133. Le slot `heading` du layout partagé permet à Wallet de fournir le même `header.space-y-3` que Mon profil, avec les mêmes classes sur les trois enfants. Aucun nouveau CSS ; l’espace équipe conserve son en-tête par défaut.
+- **Vérifié — navigateur** : comparaison entre Mon compte et Mon profil de la balise et des classes du parent et des enfants, puis de la police, taille, graisse, interlettrage, hauteur de ligne, marges et largeur maximale calculées. Résultats identiques en largeur mobile courante puis à 1280 px. Dimensions de contrôle réinitialisées ; Mon compte reste ouvert dans la preview.
+- **Vérifié — contrôles** : lint ciblé, typage UI/Wallet/équipe, build Wallet, Prettier des composants et diff sans erreur. Avertissement préexistant de bundle Wallet supérieur à 500 ko conservé. Aucun changement métier ni nouvelle dépendance.
