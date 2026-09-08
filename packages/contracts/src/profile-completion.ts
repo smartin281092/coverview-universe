@@ -37,12 +37,12 @@ export function profileStepFields(
         : [
             "firstName",
             "lastName",
+            "phone",
+            "contactEmail",
             "birthDate",
             "nationality",
             "avsNumber",
             "occupation",
-            "phone",
-            "contactEmail",
           ],
     details: ["street", "postalCode", "city", "country"],
   };
