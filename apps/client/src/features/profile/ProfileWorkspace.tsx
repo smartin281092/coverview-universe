@@ -38,6 +38,7 @@ import {
 import { api } from "../../api";
 import { forgetIdentity } from "../identity/session-state";
 import { ProfileSectionEditor } from "./ProfileSectionEditor";
+import { IdentityAttachment } from "../authorizations/IdentityAttachment";
 import { type ProfileEditorBridge, type ProfileViewStep } from "./ProfileSteps";
 
 type SelfProps = {
@@ -366,6 +367,14 @@ export function ProfileWorkspace({
             </Tabs>
           )}
         </div>
+        {selected && tab === "general" && (
+          <IdentityAttachment
+            key={`${identity.user.id}:${identity.session.id}:${selected.id}`}
+            identity={identity}
+            profileId={selected.id}
+            blocked={editorBlocked}
+          />
+        )}
         <Dialog
           open={adding && !editorBlocked}
           onOpenChange={(value) => {

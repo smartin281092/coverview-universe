@@ -1,17 +1,20 @@
 import { createHash, randomUUID } from "node:crypto";
-import { and, asc, eq, getTableColumns, inArray, isNull, lte, sql } from "drizzle-orm";
+import { and, asc, eq, inArray, isNull, lte } from "drizzle-orm";
 import { z } from "zod";
 import {
   documentIdentityAttachmentSchema,
   documentIdentityAttachmentInputSchema,
   type DocumentIdentityAttachmentInput,
+  type DocumentIdentityDocumentType,
   type DocumentSummary,
 } from "@coverview/contracts";
 import type { createDatabase } from "../../platform/db/database.js";
 import { lockProfileActor, IdentityError, type ProfileActor } from "../identity/index.js";
+import { assertDocumentProfileTarget } from "../profiles/index.js";
 import {
   documents,
   documentIdentityAttachments,
+  managedDocumentIdentityAttachments,
   documentIdentityAttachmentCommands,
   documentAudit,
 } from "./document.schema.js";
@@ -24,6 +27,7 @@ type Row = typeof documents.$inferSelect;
 const empty = (userId: string): Attachment => ({
   userId,
   revision: 0,
+  documentType: "unknown",
   combinedId: null,
   frontId: null,
   backId: null,
@@ -31,36 +35,85 @@ const empty = (userId: string): Attachment => ({
 });
 const idsOf = (row: Attachment) =>
   [row.combinedId, row.frontId, row.backId].filter((id): id is string => !!id);
+const targetCondition = (profileId: string) =>
+  profileId === "self"
+    ? isNull(documents.managedProfileId)
+    : eq(documents.managedProfileId, profileId);
+const attachmentTable = (profileId: string) =>
+  profileId === "self" ? documentIdentityAttachments : managedDocumentIdentityAttachments;
+const attachmentCondition = (userId: string, profileId: string) =>
+  profileId === "self"
+    ? eq(documentIdentityAttachments.userId, userId)
+    : and(
+        eq(managedDocumentIdentityAttachments.userId, userId),
+        eq(managedDocumentIdentityAttachments.managedProfileId, profileId),
+      );
+
+function typeFromText(text: string): DocumentIdentityDocumentType {
+  const normalized = text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
+  const matches: DocumentIdentityDocumentType[] = [];
+  if (/\b(passport|passeport|reisepass|passaporto)\b/u.test(normalized)) matches.push("passport");
+  if (
+    /\b(carte d['’ ]identite|identity card|identitatskarte|personalausweis|carta d['’ ]identita)\b/u.test(
+      normalized,
+    )
+  )
+    matches.push("identity_card");
+  if (
+    /\b(permis de sejour|titre de sejour|residence permit|aufenthaltstitel|aufenthaltsbewilligung|auslanderausweis|permesso di soggiorno)\b/u.test(
+      normalized,
+    )
+  )
+    matches.push("residence_permit");
+  return matches.length === 1 ? matches[0]! : "unknown";
+}
+
+// Only a cited documentType extraction can relax the requirement for a second face.
+// A file name or incidental mention in another document is never identity evidence.
+function detectedType(records: Row[]): DocumentIdentityDocumentType {
+  const detected = new Set<DocumentIdentityDocumentType>();
+  for (const record of records) {
+    if (record.category !== "identity" || record.state === "quarantined") continue;
+    for (const field of record.analysis?.fields ?? []) {
+      if (field.field !== "documentType" || !field.source.text.trim()) continue;
+      const page = record.analysis?.pages.find((item) => item.page === field.source.page);
+      if (!page?.text.includes(field.source.text)) continue;
+      const type = typeFromText(field.source.text);
+      if (type !== "unknown" && typeFromText(field.value) === type) detected.add(type);
+    }
+  }
+  return detected.size === 1 ? [...detected][0]! : "unknown";
+}
 
 export function createIdentityAttachmentRepository(
   db: Database,
   summary: (row: Row) => DocumentSummary,
 ) {
-  async function read(tx: Database | Tx, userId: string, attachment?: Attachment) {
+  async function read(
+    tx: Database | Tx,
+    userId: string,
+    profileId: string,
+    attachment?: Attachment,
+  ) {
     const row =
       attachment ??
       (
         await tx
           .select()
-          .from(documentIdentityAttachments)
-          .where(eq(documentIdentityAttachments.userId, userId))
+          .from(attachmentTable(profileId))
+          .where(attachmentCondition(userId, profileId))
           .limit(1)
       )[0] ??
       empty(userId);
     const ids = idsOf(row);
     const records = ids.length
       ? await tx
-          .select({
-            ...getTableColumns(documents),
-            analysis: sql<Row["analysis"]>`case when ${documents.analysis} is null then null else
-        (${documents.analysis} - 'fields' - 'pages') || jsonb_build_object('fields', '[]'::jsonb, 'pages',
-        jsonb_build_array((${documents.analysis}->'pages'->0) || jsonb_build_object('text', left(${documents.analysis}->'pages'->0->>'text', 12000)))) end`,
-          })
+          .select()
           .from(documents)
           .where(
             and(
               eq(documents.userId, userId),
-              isNull(documents.managedProfileId),
+              targetCondition(profileId),
               inArray(documents.id, ids),
             ),
           )
@@ -74,7 +127,9 @@ export function createIdentityAttachmentRepository(
       return record ? summary(record) : null;
     };
     const summaries = visible.map(summary);
-    const full = !!row.combinedId || !!(row.frontId && row.backId);
+    const documentType = row.documentType !== "unknown" ? row.documentType : detectedType(visible);
+    const backRequired = documentType !== "passport";
+    const full = !!row.combinedId || !!(row.frontId && (row.backId || !backRequired));
     const invalid =
       visible.length !== ids.length ||
       summaries.some(
@@ -88,6 +143,15 @@ export function createIdentityAttachmentRepository(
     );
     const ready = full && summaries.every((document) => document.canDownload);
     return documentIdentityAttachmentSchema.parse({
+      profileId,
+      documentType,
+      documentTypeSource:
+        row.documentType !== "unknown"
+          ? "declared"
+          : documentType !== "unknown"
+            ? "detected"
+            : "unknown",
+      backRequired,
       revision: row.revision,
       combined: get(row.combinedId),
       front: get(row.frontId),
@@ -105,13 +169,17 @@ export function createIdentityAttachmentRepository(
     });
   }
   return {
-    identityAttachment: (userId: string) => read(db, userId),
+    async identityAttachment(userId: string, profileId = "self") {
+      await assertDocumentProfileTarget(db, userId, profileId);
+      return read(db, userId, profileId);
+    },
     async saveIdentityAttachment(
       actor: ProfileActor,
       input: DocumentIdentityAttachmentInput,
       key: string,
     ) {
       const payload = documentIdentityAttachmentInputSchema.parse(input);
+      const profileId = payload.profileId ?? "self";
       const normalizedKey = z.uuid().parse(key).toLowerCase();
       const signature = createHash("sha256")
         .update(JSON.stringify(Object.entries(payload).sort(([a], [b]) => a.localeCompare(b))))
@@ -119,14 +187,15 @@ export function createIdentityAttachmentRepository(
       return db.transaction(async (tx) => {
         const { session } = await lockProfileActor(tx, actor);
         if (actor.administratorUserId) throw new DocumentError("DOCUMENT_ATTACHMENT_INVALID", 422);
+        await assertDocumentProfileTarget(tx, actor.userId, profileId);
         const now = new Date();
         if (session.expiresAt <= now) throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);
         const current =
           (
             await tx
               .select()
-              .from(documentIdentityAttachments)
-              .where(eq(documentIdentityAttachments.userId, actor.userId))
+              .from(attachmentTable(profileId))
+              .where(attachmentCondition(actor.userId, profileId))
               .limit(1)
               .for("update")
           )[0] ?? empty(actor.userId);
@@ -146,7 +215,7 @@ export function createIdentityAttachmentRepository(
           if (previous.hash !== signature)
             throw new DocumentError("DOCUMENT_IDEMPOTENCY_REUSED", 422);
           // No old filename/status survives a subsequent removal or quarantine through replay.
-          return read(tx, actor.userId, current);
+          return read(tx, actor.userId, profileId, current);
         }
         if (current.revision !== payload.revision || current.revision >= 2147483646)
           throw new DocumentError("DOCUMENT_CONFLICT", 409);
@@ -154,6 +223,7 @@ export function createIdentityAttachmentRepository(
           ...current,
           revision: current.revision + 1,
           updatedAt: now,
+          ...(payload.documentType !== undefined ? { documentType: payload.documentType } : {}),
           ...(payload.combinedId !== undefined ? { combinedId: payload.combinedId } : {}),
           ...(payload.frontId !== undefined ? { frontId: payload.frontId } : {}),
           ...(payload.backId !== undefined ? { backId: payload.backId } : {}),
@@ -168,7 +238,7 @@ export function createIdentityAttachmentRepository(
               .where(
                 and(
                   eq(documents.userId, actor.userId),
-                  isNull(documents.managedProfileId),
+                  targetCondition(profileId),
                   inArray(documents.id, ids),
                 ),
               )
@@ -186,10 +256,22 @@ export function createIdentityAttachmentRepository(
           new Set(rows.map((row) => row.checksum)).size !== rows.length
         )
           throw new DocumentError("DOCUMENT_ATTACHMENT_INVALID", 422);
-        await tx
-          .insert(documentIdentityAttachments)
-          .values(next)
-          .onConflictDoUpdate({ target: documentIdentityAttachments.userId, set: next });
+        if (profileId === "self")
+          await tx
+            .insert(documentIdentityAttachments)
+            .values(next)
+            .onConflictDoUpdate({ target: documentIdentityAttachments.userId, set: next });
+        else
+          await tx
+            .insert(managedDocumentIdentityAttachments)
+            .values({ ...next, managedProfileId: profileId })
+            .onConflictDoUpdate({
+              target: [
+                managedDocumentIdentityAttachments.userId,
+                managedDocumentIdentityAttachments.managedProfileId,
+              ],
+              set: next,
+            });
         if (previous)
           await tx
             .delete(documentIdentityAttachmentCommands)
@@ -219,7 +301,7 @@ export function createIdentityAttachmentRepository(
               revision: next.revision,
             })),
           );
-        return read(tx, actor.userId, next);
+        return read(tx, actor.userId, profileId, next);
       });
     },
   };

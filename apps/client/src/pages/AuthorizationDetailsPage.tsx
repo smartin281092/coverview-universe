@@ -112,9 +112,7 @@ function Authorization({
           <p className="text-sm text-muted-foreground">{t("legalAddress")}</p>
           <p className="text-sm text-muted-foreground">{t("advisor")}</p>
         </div>
-        {kind === "procuration" && (
-          <IdentityAttachment identity={identity} onChanged={() => setAccepted(false)} />
-        )}
+        <IdentityAttachment identity={identity} onChanged={() => setAccepted(false)} />
         <section className="space-y-4">
           <h2 className="text-lg font-medium">{t("client")}</h2>
           <dl className="grid gap-4 text-sm sm:grid-cols-2">

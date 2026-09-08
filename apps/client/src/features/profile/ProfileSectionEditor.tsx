@@ -69,7 +69,16 @@ function fieldsFor(profile: ManagedProfile, section: ProfileSectionName): [Field
   return [
     profile.kind === "legal_entity"
       ? ["companyName", "registrationNumber", "phone", "contactEmail"]
-      : ["firstName", "lastName", "birthDate", "nationality", "phone", "contactEmail"],
+      : [
+          "firstName",
+          "lastName",
+          "birthDate",
+          "nationality",
+          "avsNumber",
+          "occupation",
+          "phone",
+          "contactEmail",
+        ],
     ["street", "postalCode", "city", "country"],
   ];
 }
@@ -130,7 +139,7 @@ export function ProfileSectionEditor({
   portalContainer: HTMLElement | null;
   blocked: boolean;
 }) {
-  const { t, i18n } = useTranslation("profile");
+  const { t } = useTranslation("profile");
   const client = useQueryClient();
   const [information, details] = fieldsFor(profile, section);
   const fields = [...information, ...details];
@@ -354,20 +363,6 @@ export function ProfileSectionEditor({
     smokingStatus: ["never", "former", "current"],
   };
   const fieldLabel = (field: Field) => t(`fields.${field}`);
-  const displayed = (field: Field) => {
-    const value = values[field];
-    if (!value) return t("review.empty");
-    if (choices[field] && field !== "currency") return t(`workspace.options.${value}`);
-    if (moneyFields.has(field))
-      return t("workspace.amount", {
-        amount: new Intl.NumberFormat(i18n.language, {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        }).format(Number(value)),
-        currency: section === "health" ? "CHF" : values.currency || "CHF",
-      });
-    return value;
-  };
   return (
     <div className="grid gap-8 lg:grid-cols-[220px_minmax(0,640px)] lg:gap-16">
       <aside>
@@ -416,16 +411,7 @@ export function ProfileSectionEditor({
           </p>
         )}
         <fieldset disabled={pending || blocked} className="space-y-6">
-          {step === "review" ? (
-            <dl className="divide-y divide-border">
-              {fields.map((field) => (
-                <div key={field} className="grid grid-cols-2 gap-4 py-3 text-sm">
-                  <dt className="text-muted-foreground">{fieldLabel(field)}</dt>
-                  <dd className="whitespace-pre-wrap break-words">{displayed(field)}</dd>
-                </div>
-              ))}
-            </dl>
-          ) : (
+          {step !== "review" && (
             <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2">
               {(step === "information" ? information : details).map((field) => (
                 <div
@@ -484,9 +470,19 @@ export function ProfileSectionEditor({
                               : "text"
                       }
                       inputMode={
-                        moneyFields.has(field) || numberFields.has(field) ? "decimal" : undefined
+                        field === "avsNumber"
+                          ? "numeric"
+                          : moneyFields.has(field) || numberFields.has(field)
+                            ? "decimal"
+                            : undefined
                       }
-                      maxLength={field === "street" || field === "contactEmail" ? 240 : 160}
+                      maxLength={
+                        field === "avsNumber"
+                          ? 40
+                          : field === "street" || field === "contactEmail"
+                            ? 240
+                            : 160
+                      }
                       className="min-h-11 text-base"
                       aria-describedby={
                         field === "primaryDoctorName" ? "section-primaryDoctorName-help" : undefined
@@ -505,7 +501,7 @@ export function ProfileSectionEditor({
                   )}
                   {form.formState.errors[field] && (
                     <p role="alert" className="text-sm text-destructive">
-                      {t("invalidField")}
+                      {t(field === "avsNumber" ? "invalidAvsNumber" : "invalidField")}
                     </p>
                   )}
                 </div>

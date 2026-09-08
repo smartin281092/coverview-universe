@@ -15,7 +15,7 @@
   "steps": {
     "information": "Informations",
     "address": "Adresse",
-    "review": "Récapitulatif"
+    "review": "Validation"
   },
   "optional": "Tous les champs sont facultatifs.",
   "fields": {
@@ -23,6 +23,8 @@
     "lastName": "Nom",
     "birthDate": "Date de naissance",
     "nationality": "Nationalité",
+    "avsNumber": "Numéro AVS",
+    "occupation": "Profession",
     "street": "Rue et numéro",
     "postalCode": "Code postal",
     "city": "Localité",
@@ -53,6 +55,7 @@
     "document_extracted": "Repris d’un document"
   },
   "invalidField": "Vérifiez ce champ et sa longueur.",
+  "invalidAvsNumber": "Saisissez un numéro AVS valide de 13 chiffres commençant par 756.",
   "invalidDate": "Saisissez une date valide.",
   "next": "Enregistrer et continuer",
   "previous": "Retour",
@@ -104,7 +107,7 @@
     "review": "Votre brouillon contient des différences. Choisissez explicitement les valeurs à conserver."
   },
   "review": {
-    "intro": "Relisez vos informations. Vous pouvez revenir en arrière pour les corriger.",
+    "intro": "Confirmez les informations enregistrées dans cette rubrique. Vous pouvez revenir aux étapes précédentes pour les modifier.",
     "empty": "Non renseigné",
     "login": "Connectez-vous pour rattacher ce brouillon à votre profil et confirmer vos informations."
   },

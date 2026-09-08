@@ -30,6 +30,10 @@ La demande de déconnexion place immédiatement la commande exacte en mémoire h
 
 ## Permissions
 
+Les données générales des personnes incluent les champs facultatifs AVS et profession. Générales, Finances et Santé conservent leurs étapes distinctes ; la dernière étape Validation confirme les informations et les choix associés sans répéter toutes les valeurs. En bas de Générales, chaque profil possède sa propre association de pièce d’identité. Le titulaire retrouve la même pièce dans la procuration et le mandat de gestion. Le type est corrigeable : une page suffit pour un passeport, avec conservation d’un éventuel verso existant ; la détection automatique exige une preuve issue du contenu lu.
+
+Un clic sur une face disponible ouvre les originaux ensemble dans une visionneuse privée : disposition selon l’écran et les proportions, zoom molette/pincement/clavier, déplacement, téléchargement et fermeture avec restauration du focus. Les blobs et requêtes sont libérés à la fermeture ou au changement de portée. L’aperçu PDF utilise le lecteur natif sandboxé et conserve le téléchargement de secours lorsque celui-ci n’est pas disponible. Le sélecteur de fichiers reste monté sous la frontière privée lors d’une simple revalidation de session, afin de conserver la sélection de retour de la caméra.
+
 WorkOS s’ouvre via la route serveur de connexion, avec retour fixé côté API. Les cookies sensibles restent HttpOnly et les droits viennent du serveur. Aucun ID, email ou permission ne peut être défini par une persona locale. Lorsque l’API annonce la connexion désactivée, le compte affiche son indisponibilité et n’invente aucun login.
 
 ## État réel

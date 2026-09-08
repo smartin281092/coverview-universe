@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { useWatch } from "react-hook-form";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { ApiError, type IdentityMe } from "@coverview/api-client";
@@ -28,6 +27,8 @@ const autocomplete: Record<ProfileFieldName, string> = {
   lastName: "family-name",
   birthDate: "bday",
   nationality: "off",
+  avsNumber: "off",
+  occupation: "organization-title",
   street: "street-address",
   postalCode: "postal-code",
   city: "address-level2",
@@ -139,6 +140,7 @@ function ProfileField({ field, journey }: { field: ProfileFieldName; journey: Pr
                 : "text"
         }
         autoComplete={autocomplete[field]}
+        inputMode={field === "avsNumber" ? "numeric" : undefined}
         maxLength={
           field === "street" || field === "contactEmail"
             ? 240
@@ -161,7 +163,13 @@ function ProfileField({ field, journey }: { field: ProfileFieldName; journey: Pr
       />
       {error && (
         <p role="alert" id={`profile-${field}-error`} className="text-sm text-destructive">
-          {t(field === "birthDate" ? "invalidDate" : "invalidField")}
+          {t(
+            field === "birthDate"
+              ? "invalidDate"
+              : field === "avsNumber"
+                ? "invalidAvsNumber"
+                : "invalidField",
+          )}
         </p>
       )}
       {source && (
@@ -221,7 +229,6 @@ function ProfileEditor({
   const location = useLocation();
   const navigate = useNavigate();
   const journey = useProfileJourney({ identity, ownerId, blocked });
-  const values = useWatch({ control: journey.form.control });
   const history =
     new URLSearchParams(location.searchStr).get("view") === "choices" && Boolean(identity);
   const setHistory = (value: boolean) => {
@@ -421,24 +428,6 @@ function ProfileEditor({
                     </div>
                   ) : (
                     <>
-                      <dl className="divide-y divide-border">
-                        {allFields.map((field) => (
-                          <div
-                            key={field}
-                            className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] gap-4 py-3 text-sm"
-                          >
-                            <dt className="text-muted-foreground">{t(`fields.${field}`)}</dt>
-                            <dd className="min-w-0 space-y-1 break-words">
-                              <p>{values[field] || t("review.empty")}</p>
-                              {journey.profile?.fields[field] && (
-                                <p className="text-xs text-muted-foreground">
-                                  {t(`source.${journey.profile.fields[field].source}`)}
-                                </p>
-                              )}
-                            </dd>
-                          </div>
-                        ))}
-                      </dl>
                       {proposals.length > 0 && (
                         <div className="space-y-3">
                           <p className="text-sm">{t("proposal.review")}</p>

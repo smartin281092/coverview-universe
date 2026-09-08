@@ -11,7 +11,12 @@ import {
   uniqueIndex,
   foreignKey,
 } from "drizzle-orm/pg-core";
-import type { DocumentAnalysis, DocumentRecord, DocumentSummary } from "@coverview/contracts";
+import type {
+  DocumentAnalysis,
+  DocumentIdentityDocumentType,
+  DocumentRecord,
+  DocumentSummary,
+} from "@coverview/contracts";
 import { identityUsers } from "../identity/index.js";
 import { managedProfiles } from "../profiles/index.js";
 
@@ -64,6 +69,7 @@ export const documents = pgTable(
     index("files_owner_list").on(table.userId, table.createdAt, table.id),
     index("files_profile_list").on(table.userId, table.managedProfileId, table.createdAt, table.id),
     uniqueIndex("files_owner_id").on(table.userId, table.id),
+    uniqueIndex("files_profile_id").on(table.userId, table.managedProfileId, table.id),
     index("files_pending").on(table.state, table.updatedAt, table.id),
   ],
 );
@@ -111,6 +117,10 @@ export const documentIdentityAttachments = pgTable(
       .primaryKey()
       .references(() => identityUsers.id),
     revision: integer("revision").notNull().default(0),
+    documentType: text("document_type")
+      .$type<DocumentIdentityDocumentType>()
+      .notNull()
+      .default("unknown"),
     combinedId: text("combined_id"),
     frontId: text("front_id"),
     backId: text("back_id"),
@@ -131,11 +141,73 @@ export const documentIdentityAttachments = pgTable(
     }),
     check("document_identity_attachment_revision", sql`${table.revision} >= 0`),
     check(
+      "document_identity_attachment_type",
+      sql`${table.documentType} in ('identity_card','passport','residence_permit','unknown')`,
+    ),
+    check(
       "document_identity_attachment_mode",
       sql`${table.combinedId} is null or (${table.frontId} is null and ${table.backId} is null)`,
     ),
     check(
       "document_identity_attachment_faces",
+      sql`${table.frontId} is null or ${table.backId} is null or ${table.frontId} <> ${table.backId}`,
+    ),
+  ],
+);
+// Keep the holder table intact for N-1 readers and command replays.
+export const managedDocumentIdentityAttachments = pgTable(
+  "managed_document_identity_attachments",
+  {
+    userId: text("user_id")
+      .notNull()
+      .references(() => identityUsers.id),
+    managedProfileId: text("managed_profile_id").notNull(),
+    revision: integer("revision").notNull().default(0),
+    documentType: text("document_type")
+      .$type<DocumentIdentityDocumentType>()
+      .notNull()
+      .default("unknown"),
+    combinedId: text("combined_id"),
+    frontId: text("front_id"),
+    backId: text("back_id"),
+    updatedAt: instant("updated_at").notNull().defaultNow(),
+  },
+  (table) => [
+    uniqueIndex("managed_document_identity_attachment_owner").on(
+      table.userId,
+      table.managedProfileId,
+    ),
+    foreignKey({
+      name: "managed_identity_attachment_profile_fk",
+      columns: [table.userId, table.managedProfileId],
+      foreignColumns: [managedProfiles.userId, managedProfiles.id],
+    }),
+    foreignKey({
+      name: "managed_identity_attachment_combined_fk",
+      columns: [table.userId, table.managedProfileId, table.combinedId],
+      foreignColumns: [documents.userId, documents.managedProfileId, documents.id],
+    }),
+    foreignKey({
+      name: "managed_identity_attachment_front_fk",
+      columns: [table.userId, table.managedProfileId, table.frontId],
+      foreignColumns: [documents.userId, documents.managedProfileId, documents.id],
+    }),
+    foreignKey({
+      name: "managed_identity_attachment_back_fk",
+      columns: [table.userId, table.managedProfileId, table.backId],
+      foreignColumns: [documents.userId, documents.managedProfileId, documents.id],
+    }),
+    check("managed_document_identity_attachment_revision", sql`${table.revision} >= 0`),
+    check(
+      "managed_document_identity_attachment_type",
+      sql`${table.documentType} in ('identity_card','passport','residence_permit','unknown')`,
+    ),
+    check(
+      "managed_document_identity_attachment_mode",
+      sql`${table.combinedId} is null or (${table.frontId} is null and ${table.backId} is null)`,
+    ),
+    check(
+      "managed_document_identity_attachment_faces",
       sql`${table.frontId} is null or ${table.backId} is null or ${table.frontId} <> ${table.backId}`,
     ),
   ],

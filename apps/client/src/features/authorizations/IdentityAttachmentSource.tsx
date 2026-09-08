@@ -16,6 +16,7 @@ export type IdentityAttachmentSide = "combined" | "front" | "back";
 
 export function IdentityAttachmentSource({
   side,
+  label,
   file,
   document,
   available,
@@ -28,6 +29,7 @@ export function IdentityAttachmentSource({
   onClear,
 }: {
   side: IdentityAttachmentSide;
+  label: string;
   file?: File | undefined;
   document?: DocumentSummary | undefined;
   available: DocumentSummary[];
@@ -67,7 +69,7 @@ export function IdentityAttachmentSource({
       <div className="flex items-center justify-between gap-3">
         <h3 className="flex items-center gap-2 font-medium">
           <FileText className="size-4 text-muted-foreground" aria-hidden="true" />
-          {t(`identityPiece.side.${side}`)}
+          {label}
         </h3>
         {(file || document) && (
           <Button
@@ -77,7 +79,7 @@ export function IdentityAttachmentSource({
             className="min-h-11 min-w-11"
             disabled={disabled}
             onClick={onClear}
-            aria-label={t("identityPiece.clear", { side: t(`identityPiece.side.${side}`) })}
+            aria-label={t("identityPiece.clear", { side: label })}
           >
             <X className="size-4" aria-hidden="true" />
           </Button>
@@ -86,7 +88,7 @@ export function IdentityAttachmentSource({
       {preview && (
         <img
           src={preview}
-          alt={t("identityPiece.preview", { side: t(`identityPiece.side.${side}`) })}
+          alt={t("identityPiece.preview", { side: label })}
           className="max-h-40 w-full rounded-lg object-contain"
         />
       )}
@@ -109,7 +111,7 @@ export function IdentityAttachmentSource({
           <Upload className="size-4" aria-hidden="true" />
           {t("identityPiece.chooseFile")}
         </Button>
-        {side !== "combined" && (
+        {
           <Button
             type="button"
             variant="outline"
@@ -120,7 +122,7 @@ export function IdentityAttachmentSource({
             <Camera className="size-4" aria-hidden="true" />
             {t("identityPiece.takePhoto")}
           </Button>
-        )}
+        }
       </div>
       <input
         ref={fileInput}
@@ -128,10 +130,10 @@ export function IdentityAttachmentSource({
         accept="application/pdf,image/jpeg,image/png,image/webp"
         className="hidden"
         disabled={disabled}
-        aria-label={t("identityPiece.chooseFor", { side: t(`identityPiece.side.${side}`) })}
+        aria-label={t("identityPiece.chooseFor", { side: label })}
         onChange={(event) => receive(event.currentTarget)}
       />
-      {side !== "combined" && (
+      {
         <input
           ref={cameraInput}
           type="file"
@@ -139,10 +141,10 @@ export function IdentityAttachmentSource({
           capture="environment"
           className="hidden"
           disabled={disabled}
-          aria-label={t("identityPiece.photoFor", { side: t(`identityPiece.side.${side}`) })}
+          aria-label={t("identityPiece.photoFor", { side: label })}
           onChange={(event) => receive(event.currentTarget)}
         />
-      )}
+      }
       <div className="space-y-2">
         <Label htmlFor={`identity-existing-${side}`}>
           <FolderOpen className="size-4" aria-hidden="true" />

@@ -13,6 +13,8 @@ export const informationFields = [
   "lastName",
   "birthDate",
   "nationality",
+  "avsNumber",
+  "occupation",
   "phone",
   "contactEmail",
 ] as const;
@@ -25,6 +27,8 @@ export const profileFormSchema = z
     lastName: z.string(),
     birthDate: z.string(),
     nationality: z.string(),
+    avsNumber: z.string(),
+    occupation: z.string(),
     street: z.string(),
     postalCode: z.string(),
     city: z.string(),

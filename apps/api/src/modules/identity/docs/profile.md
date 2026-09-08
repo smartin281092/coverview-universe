@@ -20,6 +20,8 @@ Commandes avec révision optimiste et `Idempotency-Key` : même clé/payload rej
 
 Lectures privées propriétaires, choix paginés par20. Aucun champ privé dans les contenus publics. Cache Wallet par identité/session, sans stockage personnel persistant navigateur. Mutations invalidant les vues ; audit transactionnel sans valeurs. Aucun consommateur asynchrone justifiant bus/outbox dans ce parcours.
 
+Extension demandée le 8 septembre 2026 : numéro AVS (`avsNumber`) et profession (`occupation`) facultatifs, saisis et effaçables par leur propriétaire. Le numéro AVS reste une chaîne ; points et espaces de saisie sont acceptés, puis le contrat partagé normalise `756.xxxx.xxxx.xx`. Préfixe 756, treize chiffres et clé EAN-13 suivent la [structure publiée par la Centrale de compensation](https://www.zas.admin.ch/fr/numero-avs-identificateur). Ce contrôle détecte les erreurs de saisie ; il ne vérifie ni l’attribution ni la validité administrative auprès d’UPI. La profession est un texte de 160 caractères maximum. Ces champs identifiants restent privés dans le JSON canonique et les brouillons existants, sans migration SQL ni transmission à l’extracteur. Les lecteurs compatibles doivent rester déployés après une première saisie.
+
 ## Manifeste S-130/S-131
 
 | Catégorie             | Propriétaire / classification                                                          | Export, rectification, conservation                                                                                                                                                                  |

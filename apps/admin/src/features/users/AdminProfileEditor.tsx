@@ -383,14 +383,21 @@ export function AdminProfileEditor({
                           ? "tel"
                           : "text"
                   }
-                  inputMode={money.has(field) || numeric.has(field) ? "decimal" : undefined}
+                  inputMode={
+                    field === "avsNumber"
+                      ? "numeric"
+                      : money.has(field) || numeric.has(field)
+                        ? "decimal"
+                        : undefined
+                  }
+                  maxLength={field === "avsNumber" ? 40 : undefined}
                   aria-invalid={Boolean(form.formState.errors[field])}
                   {...form.register(field)}
                 />
               )}
               {form.formState.errors[field] && (
                 <p role="alert" className="text-sm text-destructive">
-                  {t("profile.invalid")}
+                  {t(field === "avsNumber" ? "profile.invalidAvsNumber" : "profile.invalid")}
                 </p>
               )}
             </div>

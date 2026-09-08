@@ -1,0 +1,20 @@
+{
+  "title": "Pièce d’identité",
+  "description": "Consultez les faces et téléchargez les fichiers originaux.",
+  "close": "Fermer la prévisualisation",
+  "loading": "Chargement de la pièce d’identité…",
+  "download": "Télécharger {{name}}",
+  "pdfTitle": "Aperçu du PDF {{name}}",
+  "pdfFallback": "L’aperçu PDF dépend de votre navigateur. S’il ne s’affiche pas, téléchargez le fichier original ci-dessous.",
+  "unsupported": "Ce format ne peut pas être affiché ici. Vous pouvez télécharger le fichier original ci-dessous.",
+  "unavailableTitle": "Aperçu indisponible pour le moment",
+  "unavailableDescription": "Les fichiers pourront être consultés une fois leur contrôle terminé.",
+  "pendingFiles": "Certains fichiers ne sont pas encore disponibles à la consultation.",
+  "zoomIn": "Agrandir",
+  "zoomOut": "Réduire",
+  "reset": "Ajuster à l’écran",
+  "zoom": "Zoom : {{value}}",
+  "canvas": "Images de la pièce d’identité",
+  "gestures": "Pincez ou utilisez la molette pour zoomer, puis faites glisser pour déplacer l’image. Au clavier : +, −, flèches et 0 pour réinitialiser.",
+  "imageError": "Cette image ne peut pas être affichée. Son original reste téléchargeable."
+}

@@ -7,6 +7,8 @@ export const profileFieldSchema = z.enum([
   "lastName",
   "birthDate",
   "nationality",
+  "avsNumber",
+  "occupation",
   "street",
   "postalCode",
   "city",
@@ -15,6 +17,26 @@ export const profileFieldSchema = z.enum([
   "contactEmail",
 ]);
 const shortText = z.string().trim().min(1).max(160);
+// CdC: 13 digits, prefix 756, EAN-13 check digit. This checks syntax, not attribution.
+// https://www.zas.admin.ch/fr/numero-avs-identificateur
+const avsNumber = z
+  .string()
+  .trim()
+  .min(1)
+  .max(40)
+  .regex(/^[\d.\s]+$/u)
+  .transform((value) => value.replace(/[.\s]/gu, ""))
+  .refine((value) => /^756\d{10}$/u.test(value), "invalid_avs_number")
+  .refine(
+    (value) =>
+      [...value].reduce((sum, digit, index) => sum + Number(digit) * (index % 2 ? 3 : 1), 0) %
+        10 ===
+      0,
+    "invalid_avs_number",
+  )
+  .transform(
+    (value) => `${value.slice(0, 3)}.${value.slice(3, 7)}.${value.slice(7, 11)}.${value.slice(11)}`,
+  );
 const phone = z
   .string()
   .trim()
@@ -29,6 +51,8 @@ export const profileValuesSchema = z
     lastName: shortText.optional(),
     birthDate: z.iso.date().optional(),
     nationality: shortText.optional(),
+    avsNumber: avsNumber.optional(),
+    occupation: shortText.optional(),
     street: z.string().trim().min(1).max(240).optional(),
     postalCode: z.string().trim().min(1).max(24).optional(),
     city: shortText.optional(),
@@ -72,6 +96,8 @@ export const profileSaveInputSchema = z
         lastName: shortText.nullable().optional(),
         birthDate: z.iso.date().nullable().optional(),
         nationality: shortText.nullable().optional(),
+        avsNumber: avsNumber.nullable().optional(),
+        occupation: shortText.nullable().optional(),
         street: z.string().trim().min(1).max(240).nullable().optional(),
         postalCode: z.string().trim().min(1).max(24).nullable().optional(),
         city: shortText.nullable().optional(),

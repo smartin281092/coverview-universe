@@ -3,7 +3,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { ApiError, type IdentityMe } from "@coverview/api-client";
-import type { DocumentSummary } from "@coverview/contracts";
+import {
+  documentIdentityDocumentTypeSchema,
+  type DocumentSummary,
+  type DocumentIdentityDocumentType,
+} from "@coverview/contracts";
 import {
   Button,
   Dialog,
@@ -16,6 +20,12 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
+  Label,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@coverview/ui";
 import { api } from "../../api";
 import { DocumentFailure } from "../documents/DocumentFailure";
@@ -50,6 +60,13 @@ export function IdentityAttachmentPicker({
   const client = useQueryClient();
   const [base, setBase] = useState(attachment);
   const currentBase = useRef(attachment);
+  const profileId = attachment.profileId;
+  const [documentType, setDocumentType] = useState<DocumentIdentityDocumentType>(
+    attachment.documentTypeSource === "declared" ? attachment.documentType : "unknown",
+  );
+  const passport =
+    documentType === "passport" ||
+    (documentType === "unknown" && base.documentTypeSource === "detected" && !base.backRequired);
   const [mode, setMode] = useState<"combined" | "separate">(
     attachment.combined ? "combined" : "separate",
   );
@@ -80,17 +97,33 @@ export function IdentityAttachmentPicker({
       identity.user.id,
       identity.session.id,
       "identity-document-candidates",
+      profileId,
       cursors.at(-1) ?? null,
     ],
     queryFn: ({ signal }) =>
-      api.documents(cursors.at(-1), { signal }, { classification: "identity", sort: "newest" }),
+      api.documents(
+        cursors.at(-1),
+        { signal },
+        { profileId, classification: "identity", sort: "newest" },
+      ),
     gcTime: 0,
     staleTime: 0,
     retry: false,
   });
-  const sides: IdentityAttachmentSide[] = mode === "combined" ? ["combined"] : ["front", "back"];
+  const sides: IdentityAttachmentSide[] =
+    mode === "combined"
+      ? ["combined"]
+      : passport && !selections.back
+        ? ["front"]
+        : ["front", "back"];
   const mutation = useMutation({
-    mutationKey: ["private", identity.user.id, identity.session.id, "identity-attachment-save"],
+    mutationKey: [
+      "private",
+      identity.user.id,
+      identity.session.id,
+      "identity-attachment-save",
+      profileId,
+    ],
     gcTime: 0,
     mutationFn: async (analysisRequested: boolean) => {
       const chosen = selections;
@@ -109,13 +142,22 @@ export function IdentityAttachmentPicker({
         };
         if (
           currentBase.current.status !== "needs_attention" &&
+          documentType ===
+            (currentBase.current.documentTypeSource === "declared"
+              ? currentBase.current.documentType
+              : "unknown") &&
           ids.combinedId === (currentBase.current.combined?.id ?? null) &&
           ids.frontId === (currentBase.current.front?.id ?? null) &&
           ids.backId === (currentBase.current.back?.id ?? null)
         )
           return currentBase.current;
         setPhase("associating");
-        const input: AttachmentInput = { revision: currentBase.current.revision, ...ids };
+        const input: AttachmentInput = {
+          profileId,
+          documentType,
+          revision: currentBase.current.revision,
+          ...ids,
+        };
         const payload = JSON.stringify(input);
         if (association.current?.payload !== payload)
           association.current = { payload, key: crypto.randomUUID() };
@@ -129,7 +171,7 @@ export function IdentityAttachmentPicker({
         setBase(result);
         association.current = null;
         client.setQueryData(
-          ["private", identity.user.id, identity.session.id, "identity-attachment"],
+          ["private", identity.user.id, identity.session.id, "identity-attachment", profileId],
           result,
         );
         return result;
@@ -157,6 +199,7 @@ export function IdentityAttachmentPicker({
             ).join("");
             const created = await api.createDocument(
               {
+                profileId,
                 name: entry.file.name,
                 size: entry.file.size,
                 mime: entry.file.type,
@@ -232,6 +275,36 @@ export function IdentityAttachmentPicker({
           }}
         >
           <div className="min-h-0 space-y-5 overflow-y-auto px-1 pb-1">
+            <div className="space-y-2">
+              <Label htmlFor="identity-document-type">{t("identityPiece.typeLabel")}</Label>
+              <Select
+                value={documentType}
+                disabled={pending}
+                onValueChange={(value) => {
+                  const parsed = documentIdentityDocumentTypeSchema.safeParse(value);
+                  if (parsed.success) {
+                    setDocumentType(parsed.data);
+                    mutation.reset();
+                  }
+                }}
+              >
+                <SelectTrigger id="identity-document-type" className="min-h-11 w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent portalContainer={portalContainer}>
+                  {documentIdentityDocumentTypeSchema.options.map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {t(
+                        type === "unknown"
+                          ? "identityPiece.automaticType"
+                          : `identityPiece.types.${type}`,
+                      )}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">{t("identityPiece.typeHelp")}</p>
+            </div>
             <Tabs
               value={mode}
               onValueChange={(value) => {
@@ -240,27 +313,36 @@ export function IdentityAttachmentPicker({
                 mutation.reset();
               }}
             >
-              <TabsList className="grid min-h-[50px] w-full grid-cols-2">
-                <TabsTrigger value="combined" disabled={pending} className="min-h-11">
-                  {t("identityPiece.oneFile")}
-                </TabsTrigger>
-                <TabsTrigger value="separate" disabled={pending} className="min-h-11">
-                  {t("identityPiece.twoFaces")}
-                </TabsTrigger>
-              </TabsList>
+              {!passport && (
+                <TabsList className="grid min-h-[50px] w-full grid-cols-2">
+                  <TabsTrigger value="combined" disabled={pending} className="min-h-11">
+                    {t("identityPiece.oneFile")}
+                  </TabsTrigger>
+                  <TabsTrigger value="separate" disabled={pending} className="min-h-11">
+                    {t("identityPiece.twoFaces")}
+                  </TabsTrigger>
+                </TabsList>
+              )}
               <TabsContent value={mode} className="space-y-4">
                 <p className="text-sm text-muted-foreground">
                   {t(
-                    mode === "combined"
-                      ? "identityPiece.combinedHelp"
-                      : "identityPiece.separateHelp",
+                    passport
+                      ? "identityPiece.passportHelp"
+                      : mode === "combined"
+                        ? "identityPiece.combinedHelp"
+                        : "identityPiece.separateHelp",
                   )}
                 </p>
-                <div className={mode === "combined" ? "" : "grid gap-4 sm:grid-cols-2"}>
+                <div className={sides.length === 1 ? "" : "grid gap-4 sm:grid-cols-2"}>
                   {sides.map((side) => (
                     <IdentityAttachmentSource
                       key={side}
                       side={side}
+                      label={
+                        passport && side !== "back"
+                          ? t("identityPiece.passportPage")
+                          : t(`identityPiece.side.${side}`)
+                      }
                       file={selections[side]?.file}
                       document={selections[side]?.document}
                       available={available.filter(

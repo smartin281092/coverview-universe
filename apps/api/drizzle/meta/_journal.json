@@ -85,6 +85,13 @@
       "when": 1788875727294,
       "tag": "0011_unknown_bill_hollister",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1788895449959,
+      "tag": "0012_stiff_leader",
+      "breakpoints": true
     }
   ]
 }

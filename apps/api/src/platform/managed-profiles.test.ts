@@ -12,7 +12,11 @@ import {
   managedProfileCommands,
   managedProfileSections,
 } from "../modules/profiles/profiles.schema.js";
-import { profileSectionSaveInputSchema } from "@coverview/contracts";
+import {
+  profileSaveInputSchema,
+  profileSectionSaveInputSchema,
+  profileValuesSchema,
+} from "@coverview/contracts";
 
 let container: StartedPostgreSqlContainer;
 let database: ReturnType<typeof createDatabase>;
@@ -322,4 +326,123 @@ it("persists independent sections, counts zero amounts, rejects stale/cross-prof
         .where(eq(managedProfileCommands.userId, actor.userId))
     ).length,
   ).toBeGreaterThan(0);
+});
+
+it("validates and normalizes optional Swiss AVS numbers without assigning one to empty profiles", () => {
+  // Synthetic checksum vector, used only in the disposable test database.
+  expect(
+    profileValuesSchema.parse({ avsNumber: " 756 0000.0000 02 ", occupation: " Architecte " }),
+  ).toEqual({
+    avsNumber: "756.0000.0000.02",
+    occupation: "Architecte",
+  });
+  expect(profileValuesSchema.parse({})).toEqual({});
+  for (const avsNumber of [
+    "7560000000003",
+    "756000000002",
+    "75600000000002",
+    "7570000000002",
+    "756abc0000002",
+    "756-0000-0000-02",
+  ])
+    expect(profileValuesSchema.safeParse({ avsNumber }).success).toBe(false);
+  expect(profileValuesSchema.safeParse({ occupation: "x".repeat(161) }).success).toBe(false);
+  expect(
+    profileSaveInputSchema.parse({
+      revision: 0,
+      step: "information",
+      fields: { avsNumber: null, occupation: null },
+    }).fields,
+  ).toEqual({ avsNumber: null, occupation: null });
+});
+
+it("persists, isolates and removes AVS and occupation for canonical and managed people without changing completion", async () => {
+  const actor = await owner();
+  const stranger = await owner();
+  const canonical = createProfileRepository(database.db);
+  const original = await canonical.get(actor.userId);
+  const person = await repository.create(
+    actor,
+    { kind: "person", displayName: "Personne privée" },
+    randomUUID(),
+  );
+  const entity = await repository.create(
+    actor,
+    { kind: "legal_entity", displayName: "Société privée" },
+    randomUUID(),
+  );
+  const self = await canonical.save(
+    actor.userId,
+    actor.id,
+    {
+      revision: original.revision,
+      step: "information",
+      fields: { avsNumber: "7560000000002", occupation: " Architecte " },
+    },
+    randomUUID(),
+  );
+  expect(self.fields.avsNumber?.value).toBe("756.0000.0000.02");
+  expect(self.fields.occupation?.value).toBe("Architecte");
+  expect((await canonical.get(actor.userId)).fields).toEqual(self.fields);
+  expect((await repository.section(actor.userId, "self", "general")).values).toMatchObject({
+    avsNumber: "756.0000.0000.02",
+    occupation: "Architecte",
+  });
+  expect((await canonical.get(stranger.userId)).fields.avsNumber).toBeUndefined();
+  await expect(
+    canonical.save(
+      actor.userId,
+      stranger.id,
+      {
+        revision: self.revision,
+        step: "information",
+        fields: { avsNumber: null },
+      },
+      randomUUID(),
+    ),
+  ).rejects.toMatchObject({ statusCode: 401 });
+  const input = profileSectionSaveInputSchema.parse({
+    revision: 0,
+    step: "information",
+    fields: { avsNumber: "756 0000 0000 19", occupation: " Enseignante " },
+  });
+  const key = randomUUID();
+  const managed = await repository.saveSection(actor, person.id, "general", input, key);
+  expect(managed.values).toEqual({ avsNumber: "756.0000.0000.19", occupation: "Enseignante" });
+  expect(managed.completion).toBe(0);
+  expect((await repository.section(actor.userId, person.id, "general")).values).toEqual(
+    managed.values,
+  );
+  expect((await canonical.get(actor.userId)).fields.avsNumber?.value).toBe("756.0000.0000.02");
+  await expect(repository.section(stranger.userId, person.id, "general")).rejects.toMatchObject({
+    statusCode: 404,
+  });
+  await expect(
+    repository.saveSection(actor, entity.id, "general", input, randomUUID()),
+  ).rejects.toMatchObject({ code: "MANAGED_PROFILE_INVALID_FIELDS" });
+  const erased = await repository.saveSection(
+    actor,
+    person.id,
+    "general",
+    {
+      revision: managed.revision,
+      step: "information",
+      fields: { avsNumber: null, occupation: null },
+    },
+    randomUUID(),
+  );
+  expect(erased.values).toEqual({});
+  expect(await repository.saveSection(actor, person.id, "general", input, key)).toEqual(erased);
+  expect((await repository.section(actor.userId, person.id, "general")).values).toEqual({});
+  await canonical.save(
+    actor.userId,
+    actor.id,
+    {
+      revision: self.revision,
+      step: "information",
+      fields: { avsNumber: null, occupation: null },
+    },
+    randomUUID(),
+  );
+  expect((await canonical.get(actor.userId)).fields).toEqual({});
 });

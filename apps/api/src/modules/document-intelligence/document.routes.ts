@@ -19,6 +19,7 @@ import {
   insuranceCompanyIdSchema,
   documentIdentityAttachmentSchema,
   documentIdentityAttachmentInputSchema,
+  documentIdentityAttachmentQuerySchema,
 } from "@coverview/contracts";
 import type { createDocumentRepository } from "./document.repository.js";
 import type { createDocumentService } from "./document.service.js";
@@ -56,9 +57,13 @@ export function registerDocumentRoutes(
     {
       onRequest: read,
       config: limited,
-      schema: { response: { 200: documentIdentityAttachmentSchema } },
+      schema: {
+        querystring: documentIdentityAttachmentQuerySchema,
+        response: { 200: documentIdentityAttachmentSchema },
+      },
     },
-    async (request) => repository.identityAttachment(actor(request).userId),
+    async (request) =>
+      repository.identityAttachment(actor(request).userId, request.query.profileId),
   );
   app.post(
     "/documents/identity-attachment",

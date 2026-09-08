@@ -6,6 +6,45 @@ afterEach(() => {
 });
 
 describe("API client contract boundary", () => {
+  it("scopes identity attachment reads and mutations to the chosen profile", async () => {
+    const profileId = `prf_${crypto.randomUUID()}`;
+    const response = {
+      profileId,
+      documentType: "passport",
+      documentTypeSource: "declared",
+      backRequired: false,
+      revision: 2,
+      combined: null,
+      front: null,
+      back: null,
+      status: "missing",
+    };
+    const fetch = vi.fn<(url: URL, options: RequestInit) => Promise<Response>>(() =>
+      Promise.resolve(Response.json(response)),
+    );
+    vi.stubGlobal("fetch", fetch);
+    const api = createApiClient({ baseUrl: "https://api.example.test" });
+    expect(await api.identityAttachment(undefined, { profileId })).toEqual(response);
+    expect(fetch.mock.calls[0]?.[0].searchParams.get("profileId")).toBe(profileId);
+    const options = { csrfToken: "csrf-memory-only", idempotencyKey: crypto.randomUUID() };
+    const input = { profileId, revision: 1, documentType: "passport" as const };
+    await api.saveIdentityAttachment(input, options);
+    await api.saveIdentityAttachment(input, options);
+    for (const [, request] of fetch.mock.calls.slice(1)) {
+      expect(JSON.parse(request.body as string)).toEqual(input);
+      expect(request).toMatchObject({
+        method: "POST",
+        credentials: "include",
+        cache: "no-store",
+        headers: { "X-CSRF-Token": options.csrfToken, "Idempotency-Key": options.idempotencyKey },
+      });
+    }
+    expect(() =>
+      api.identityAttachment(undefined, { profileId: "self&profileId=foreign" }),
+    ).toThrow();
+    expect(fetch).toHaveBeenCalledTimes(3);
+  });
+
   it("uses only cookies for authenticated reads and omits credentials for fixtures", async () => {
     const fetch = vi.fn((_url: URL, options: RequestInit) =>
       Promise.resolve(

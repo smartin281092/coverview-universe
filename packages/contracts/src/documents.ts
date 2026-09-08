@@ -289,7 +289,21 @@ export const documentCreateInputSchema = z
     purpose: z.literal("identity_card").optional(),
   })
   .strict();
+export const documentIdentityDocumentTypeSchema = z.enum([
+  "identity_card",
+  "passport",
+  "residence_permit",
+  "unknown",
+]);
+export type DocumentIdentityDocumentType = z.infer<typeof documentIdentityDocumentTypeSchema>;
+export const documentIdentityAttachmentQuerySchema = z
+  .object({ profileId: managedProfileIdSchema.optional() })
+  .strict();
 export const documentIdentityAttachmentSchema = z.object({
+  profileId: managedProfileIdSchema.default("self"),
+  documentType: documentIdentityDocumentTypeSchema.default("unknown"),
+  documentTypeSource: z.enum(["declared", "detected", "unknown"]).default("unknown"),
+  backRequired: z.boolean().default(true),
   revision: z.number().int().nonnegative(),
   combined: documentSummarySchema.nullable(),
   front: documentSummarySchema.nullable(),
@@ -298,6 +312,8 @@ export const documentIdentityAttachmentSchema = z.object({
 });
 export const documentIdentityAttachmentInputSchema = z
   .object({
+    profileId: managedProfileIdSchema.optional(),
+    documentType: documentIdentityDocumentTypeSchema.optional(),
     revision: z.number().int().nonnegative(),
     combinedId: documentIdSchema.nullable().optional(),
     frontId: documentIdSchema.nullable().optional(),

@@ -63,7 +63,7 @@ function completion(
   kind: ManagedProfile["kind"],
 ) {
   const keys = Object.keys(sectionValuesSchema(section, kind).shape).filter(
-    (key) => key !== "currency" && key !== "registrationNumber",
+    (key) => !["currency", "registrationNumber", "avsNumber", "occupation"].includes(key),
   ) as (keyof ProfileSectionValues)[];
   return Math.round(
     (100 *

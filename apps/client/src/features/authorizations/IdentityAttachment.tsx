@@ -1,35 +1,50 @@
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { CircleCheck, IdCard, Pencil, Plus, TriangleAlert } from "lucide-react";
 import type { IdentityMe } from "@coverview/api-client";
+import type { DocumentSummary } from "@coverview/contracts";
 import { Button } from "@coverview/ui";
 import { api } from "../../api";
 import { DocumentFailure } from "../documents/DocumentFailure";
 import { DocumentProcessingIndicator } from "../documents/DocumentProcessingIndicator";
 import { DocumentProgress } from "../documents/DocumentProgress";
 import { IdentityAttachmentPicker } from "./IdentityAttachmentPicker";
+import { IdentityDocumentPreview } from "../documents/IdentityDocumentPreview";
 
 export function IdentityAttachment({
   identity,
+  profileId = "self",
+  blocked = false,
   onChanged,
 }: {
   identity: IdentityMe;
-  onChanged: () => void;
+  profileId?: string;
+  blocked?: boolean;
+  onChanged?: () => void;
 }) {
   const { t } = useTranslation("authorizations");
   const { t: td } = useTranslation("documents");
   const client = useQueryClient();
   const [open, setOpen] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
   const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);
+  const queryKey = [
+    "private",
+    identity.user.id,
+    identity.session.id,
+    "identity-attachment",
+    profileId,
+  ];
   const query = useQuery({
-    queryKey: ["private", identity.user.id, identity.session.id, "identity-attachment"],
-    queryFn: ({ signal }) => api.identityAttachment({ signal }),
+    queryKey,
+    queryFn: ({ signal }) => api.identityAttachment({ signal }, { profileId }),
+    enabled: !blocked,
     gcTime: 0,
     staleTime: 0,
     retry: false,
     refetchInterval: (query) => {
+      if (query.state.status === "error") return false;
       const value = query.state.data;
       return [value?.combined, value?.front, value?.back].some(
         (document) => document && ["queued", "scanning", "reading"].includes(document.state),
@@ -38,6 +53,11 @@ export function IdentityAttachment({
         : false;
     },
   });
+  useEffect(() => {
+    if (blocked) {
+      setPreviewOpen(false);
+    }
+  }, [blocked]);
   const value = query.data;
   const readyVersion =
     value?.status === "ready"
@@ -49,16 +69,28 @@ export function IdentityAttachment({
         ].join("/")
       : null;
   useEffect(() => {
-    if (readyVersion)
+    if (readyVersion) {
       void client.invalidateQueries({
-        queryKey: ["private", identity.user.id, identity.session.id, "profile"],
+        queryKey: [
+          "private",
+          identity.user.id,
+          identity.session.id,
+          ...(profileId === "self" ? ["profile"] : ["profile-section", profileId]),
+        ],
       });
-  }, [readyVersion, client, identity.user.id, identity.session.id]);
+      void client.invalidateQueries({
+        queryKey: ["private", identity.user.id, identity.session.id, "managed-profiles"],
+      });
+    }
+  }, [readyVersion, client, identity.user.id, identity.session.id, profileId]);
   const entries = [
     { side: "combined", document: value?.combined },
     { side: "front", document: value?.front },
     { side: "back", document: value?.back },
   ].filter((entry) => entry.document);
+  const documents = entries
+    .map((entry) => entry.document)
+    .filter((document): document is DocumentSummary => Boolean(document));
   return (
     <section className="space-y-4 rounded-xl border border-border p-4 sm:p-5">
       <div ref={setPortalContainer} className="contents" />
@@ -71,7 +103,7 @@ export function IdentityAttachment({
           type="button"
           variant="outline"
           className="min-h-11"
-          disabled={!value || query.isError || !portalContainer}
+          disabled={blocked || !value || query.isError || !portalContainer}
           onClick={() => setOpen(true)}
         >
           {entries.length ? (
@@ -113,20 +145,30 @@ export function IdentityAttachment({
             {t(`identityPiece.status.${query.data.status}`)}
           </p>
           {entries.length > 0 && (
+            <p className="text-sm text-muted-foreground">
+              {t(`identityPiece.types.${query.data.documentType}`)}
+            </p>
+          )}
+          {entries.length > 0 && (
             <ul className="grid gap-3 sm:grid-cols-2">
               {entries.map(({ side, document }) =>
                 document ? (
                   <li key={side} className="min-w-0 space-y-1 text-sm">
                     <p className="text-xs font-medium text-muted-foreground">
-                      {t(`identityPiece.side.${side}`)}
+                      {t(
+                        query.data.documentType === "passport" && side !== "back"
+                          ? "identityPiece.passportPage"
+                          : `identityPiece.side.${side}`,
+                      )}
                     </p>
-                    <Link
-                      to="/documents/$documentId"
-                      params={{ documentId: document.id }}
-                      className="inline-flex min-h-11 items-center break-words rounded-lg text-sm font-medium text-indigo-600 underline-offset-4 hover:underline"
+                    <button
+                      type="button"
+                      disabled={blocked || !document.canDownload || !portalContainer}
+                      onClick={() => setPreviewOpen(true)}
+                      className="inline-flex min-h-11 items-center break-words rounded-lg text-left text-sm font-medium text-indigo-600 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {document.name}
-                    </Link>
+                    </button>
                     <p className="text-xs text-muted-foreground">{td(`state.${document.state}`)}</p>
                   </li>
                 ) : null,
@@ -138,18 +180,24 @@ export function IdentityAttachment({
           )}
         </>
       )}
-      {open && value && (
+      {previewOpen && !blocked && !query.isError && (
+        <IdentityDocumentPreview
+          identity={identity}
+          documents={documents}
+          scopeKey={profileId}
+          portalContainer={portalContainer}
+          onClose={() => setPreviewOpen(false)}
+        />
+      )}
+      {open && value && !query.isError && (
         <IdentityAttachmentPicker
           identity={identity}
           attachment={value}
           portalContainer={portalContainer}
           onClose={() => setOpen(false)}
           onSaved={(result) => {
-            client.setQueryData(
-              ["private", identity.user.id, identity.session.id, "identity-attachment"],
-              result,
-            );
-            onChanged();
+            client.setQueryData(queryKey, result);
+            onChanged?.();
             setOpen(false);
           }}
           onRefresh={async () => {

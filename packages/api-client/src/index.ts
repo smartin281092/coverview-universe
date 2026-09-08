@@ -47,6 +47,7 @@ import {
   profileSectionNameSchema,
   documentIdentityAttachmentSchema,
   documentIdentityAttachmentInputSchema,
+  documentIdentityAttachmentQuerySchema,
   adminUserIdSchema,
   adminUserSchema,
   adminUsersSchema,
@@ -481,9 +482,12 @@ export function createApiClient({
     },
     profile: (options?: RequestOptions) =>
       request("/identity/profile", profileSchema, options, undefined, true),
-    identityAttachment: (options?: RequestOptions) =>
+    identityAttachment: (
+      options?: RequestOptions,
+      query: z.infer<typeof documentIdentityAttachmentQuerySchema> = {},
+    ) =>
       request(
-        "/documents/identity-attachment",
+        `/documents/identity-attachment${query.profileId ? `?profileId=${encodeURIComponent(documentIdentityAttachmentQuerySchema.parse(query).profileId!)}` : ""}`,
         documentIdentityAttachmentSchema,
         options,
         undefined,
