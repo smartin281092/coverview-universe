@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { useWatch } from "react-hook-form";
 import { ApiError, type IdentityMe } from "@coverview/api-client";
 import { Button, Input, Label, LoadingState } from "@coverview/ui";
 import { api } from "../api";
@@ -15,6 +16,7 @@ import {
 import { useProfileJourney, type ProfileJourney } from "../features/profile/use-profile-journey";
 import { ProfileDocumentDifferences } from "../features/profile/ProfileDocumentDifferences";
 import { ProfileWorkspace } from "../features/profile/ProfileWorkspace";
+import { filledFieldsPercent } from "../features/profile/profile-step-completion";
 import {
   ProfileSteps,
   type ProfileEditorBridge,
@@ -229,6 +231,12 @@ function ProfileEditor({
   const location = useLocation();
   const navigate = useNavigate();
   const journey = useProfileJourney({ identity, ownerId, blocked });
+  const values = useWatch({ control: journey.form.control });
+  const confirmed =
+    Boolean(journey.profile?.prefill.decidedAt) &&
+    Object.values(journey.profile?.fields ?? {}).every((field) => Boolean(field?.confirmedAt)) &&
+    !journey.isDirty &&
+    journey.resolved.size === 0;
   const history =
     new URLSearchParams(location.searchStr).get("view") === "choices" && Boolean(identity);
   const setHistory = (value: boolean) => {
@@ -359,6 +367,11 @@ function ProfileEditor({
               <aside className="space-y-6">
                 <ProfileSteps
                   step={journey.step === "address" ? "details" : journey.step}
+                  completion={{
+                    information: filledFieldsPercent(informationFields, values),
+                    details: filledFieldsPercent(addressFields, values),
+                    review: confirmed ? 100 : 0,
+                  }}
                   labels={{
                     information: t("steps.information"),
                     details: t("steps.address"),

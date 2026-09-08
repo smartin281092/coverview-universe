@@ -29,6 +29,7 @@ import {
 } from "@coverview/ui";
 import { api } from "../../api";
 import { forgetIdentity } from "../identity/session-state";
+import { filledFieldsPercent } from "./profile-step-completion";
 import {
   ProfileSteps,
   profileViewSteps,
@@ -368,6 +369,11 @@ export function ProfileSectionEditor({
       <aside>
         <ProfileSteps
           step={step}
+          completion={{
+            information: filledFieldsPercent(information, values),
+            details: filledFieldsPercent(details, values),
+            review: saved.confirmedAt && !isDirty ? 100 : 0,
+          }}
           labels={labels}
           disabled={pending || blocked}
           onChange={(next) => void move(next)}

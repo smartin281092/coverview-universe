@@ -12,6 +12,7 @@
   "privacy": "Votre profil reste privé. Vous choisissez ce que vous renseignez et pouvez le corriger à tout moment.",
   "loading": "Chargement de votre profil…",
   "progress": "Étapes du profil",
+  "stepCompletion": "{{step}} : {{completion}} de complétion",
   "steps": {
     "information": "Informations",
     "address": "Adresse",
