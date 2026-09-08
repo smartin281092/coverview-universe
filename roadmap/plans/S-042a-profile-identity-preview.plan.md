@@ -26,4 +26,6 @@ Règles chargées : frontend, design, i18n, contrats, données, API, stockage, s
 
 ## Journal et ledger
 
-Implémentation en cours. Aucun oracle déclaré passé à ce stade. Répartition : données des champs, backend des associations, visionneuse, intégration Wallet/navigation et recette.
+Implémentation intégrée au commit `14c6aa4`, migration additive 0012 appliquée en local sans reset, API et preview synchronisées. Le [ledger de cette extension](../evidence/profile-identity-preview.md) conserve les oracles et leurs limites : types/lint/build/frontières, 9 tests PostgreSQL, 9 tests client HTTP et 300 cas de géométrie passés ; profils titulaire/personne gérée, Validation, passeport mobile et présence de la pièce dans les deux autorisations observés en navigateur réel.
+
+Les images privées réelles, gestes tactiles physiques, lecteur PDF natif et nouvelle reconnaissance OCR restent non vérifiés en parcours réel. Aucun document de recette fictif ni consentement n’a été ajouté au compte. S-042a reste la seule slice en cours ; ses autres critères ne sont pas clos par cette extension.

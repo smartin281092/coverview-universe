@@ -660,6 +660,12 @@
           "oracle": "V0/V1 et panne/reprise Redis réelle ciblée",
           "observed": "Docker Desktop arrêté, Redis/PG injoignables ; services existants rétablis sans reset. Défaut socketTimeout au repos reproduit : trois warnings en35s, puis zéro avec PING. Deux coupures via proxy local vers Redis réel : avertissement borné, rétablissement, puis35s sans warning ; arrêt propre.",
           "decision": "Limiter les avertissements et espacer les échecs outbox ; conserver S-042a running, aucun OCR/V3 revendiqué."
+        },
+        {
+          "target": "Profil AVS/profession et pièces d’identité par profil",
+          "oracle": "V0/V1/V2 et V3 partiel",
+          "observed": "Commit14c6aa4 intégré, migration0012 locale sans reset, types/lint/build/frontières passent. 9 tests PostgreSQL, 9 tests client HTTP et 300 cas de géométrie passent. Navigateur réel : champs et pièce titulaire/personne gérée, Validation sans répétition, passeport mobile une page, pièce dans procuration et mandat. Preuves dans roadmap/evidence/profile-identity-preview.md.",
+          "decision": "Conserver S-042a running. Images réelles, pincement physique, PDF natif et nouvelle reconnaissance OCR non exercés ; aucun V3 déduit de la géométrie ou des tests isolés."
         }
       ],
       "ledger": {
@@ -671,10 +677,12 @@
           "Carte compagnie compacte et onglets corrigés dans la fiche compagnie et le profil ; médecin traitant facultatif avant taille/poids. Rendu mobile/desktop, navigation, 2 tests PostgreSQL de persistance/effacement/isolation, types/build/lint/frontières vérifiés. Voir roadmap/evidence/insurer-card-tabs-doctor.md.",
           "Onglets de pièce d’identité, espacement Montech et alignement HTML/CSS de Mon compte sur Mon profil : recette authentifiée mobile/desktop, compilation et limites dans roadmap/evidence/identity-tabs-heading-spacing.md. Ces preuves de présentation ne clôturent ni dépôt ni signature.",
           "Admin utilisateurs/profils/documents ciblés : types, lint, builds, frontières et tests PostgreSQL/HTTP passent ; migration0010 locale et code dans les checkouts de preview. Preuves et limites roadmap/evidence/admin-users.md.",
-          "Notice LSA45 autonome : première ouverture persistée par propriétaire/version, coche verte dans Autorisations après rechargement, notice retirée des documents de signature. Migration0011 locale sans reset, 17 tests HTTP/PostgreSQL identity, types/build/lint/frontières et recette réelle mobile/desktop ; preuves et limites dans roadmap/evidence/lsa45-notice.md."
+          "Notice LSA45 autonome : première ouverture persistée par propriétaire/version, coche verte dans Autorisations après rechargement, notice retirée des documents de signature. Migration0011 locale sans reset, 17 tests HTTP/PostgreSQL identity, types/build/lint/frontières et recette réelle mobile/desktop ; preuves et limites dans roadmap/evidence/lsa45-notice.md.",
+          "AVS/profession et pièces d’identité par profil : persistance/isolation, migration0012 locale, types/lint/build/frontières et tests ciblés passent. Formulaires segmentés, Validation, passeport une page et pièce commune aux autorisations observés en preview ; preuves et limites dans roadmap/evidence/profile-identity-preview.md."
         ],
         "done_unverified": [
-          "Extension Admin : recette des données et mutations en navigateur en attente de MFA personnelle ; connexion active constatée mais accès exige toujours vérification. Aucun OCR réel déclaré. Voir roadmap/evidence/admin-users.md."
+          "Extension Admin : recette des données et mutations en navigateur en attente de MFA personnelle ; connexion active constatée mais accès exige toujours vérification. Aucun OCR réel déclaré. Voir roadmap/evidence/admin-users.md.",
+          "Visionneuse privée implémentée et géométrie contrôlée ; ouverture d’images réelles, gestes tactiles physiques, PDF natif et nouvelle détection OCR restent à exercer. Aucun original fictif ajouté en preview. Voir roadmap/evidence/profile-identity-preview.md."
         ],
         "assumed": []
       },
