@@ -27,7 +27,7 @@ Les composants de présentation statique ne contiennent aucun accès réseau ni 
 | `Sheet` et slots | Panneau modal généré depuis le même preset ; titre et description accessibles, focus Radix, fermeture traduite fournie par le consommateur |
 | `Bento`          | Compose `Card` autour d’un `article` ; titre et texte courts, `level={2\|3}`, illustration ou valeur justifiée         |
 | `Tabs` et slots | Onglets shadcn/Radix générés avec le même preset ; sélection contrôlée, navigation clavier, contenus associés et libellés fournis par l’application |
-| `AccountLayout`  | Titres, explications et liste de repères injectés par l’app ; aucun état d’identité                                   |
+| `AccountLayout`  | Titres, explications et liste de repères injectés par l’app ; slot `heading` facultatif pour l’en-tête applicatif ; aucun état d’identité |
 | États            | Chargement, vide, erreur avec reprise, refus, introuvable et session expirée ; libellés et actions injectés           |
 
 Les classes de composition `cv-container`, `cv-section`, `cv-heading` et `cv-text-link` restent utilisables dans du HTML Astro lorsque son emplacement de contenu le nécessite. Les actions composent `Button` ou `ButtonLink` pour conserver les variantes communes. `SectionHeading` reçoit l’ID sur le titre pour la relation `aria-labelledby` de la section.

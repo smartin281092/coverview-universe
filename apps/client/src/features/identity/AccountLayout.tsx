@@ -16,6 +16,15 @@ export function AccountLayout({ children }: { children: ReactNode }) {
       title={t("identity.accountTitle")}
       eyebrow={t("accountIntro.eyebrow")}
       description={t("identity.accountDescription")}
+      heading={
+        <header className="space-y-3">
+          <p className="wallet-page-eyebrow cv-meta text-muted-foreground">
+            {t("accountIntro.eyebrow")}
+          </p>
+          <h1 className="cv-app-heading">{t("identity.accountTitle")}</h1>
+          <p className="max-w-2xl text-muted-foreground">{t("identity.accountDescription")}</p>
+        </header>
+      }
       details={items.map(({ key, icon: Icon }) => ({
         title: t(`accountIntro.${key}.title`),
         description: t(`accountIntro.${key}.description`),

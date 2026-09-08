@@ -60,7 +60,7 @@ Les espacements de page Wallet sont communs dans `src/styles.css` : 24 px sous l
 
 La carte de compagnie reste compacte, avec logo et flèche sur la première ligne puis nom dessous. La hauteur minimale des listes d’onglets inclut les 6 px de padding du preset autour des boutons ; [recette de la fiche compagnie et du profil médical](../../roadmap/evidence/insurer-card-tabs-doctor.md). La même composition s’applique aux onglets Un fichier / Recto et verso du dialogue de pièce d’identité : 50 px minimum pour contenir les boutons de 44 px et le padding. [Correction et vérifications](../../roadmap/evidence/identity-tabs-heading-spacing.md).
 
-Les pages à onglets suivent la composition `cv-tabbed-page` du [design system](../../packages/ui/README.md) : 24 px après la description. Mon compte utilise `AccountLayout layout="tabs"` ; ses actions Préférences sont regroupées sur une ligne avec un espacement de 12 px et reviennent à la ligne selon la place disponible.
+Les pages à onglets suivent la composition `cv-tabbed-page` du [design system](../../packages/ui/README.md) : 24 px après la description. Mon compte utilise `AccountLayout layout="tabs"` avec un en-tête fourni par Wallet, identique à Mon profil : `header.space-y-3`, sur-titre `wallet-page-eyebrow cv-meta text-muted-foreground`, H1 `cv-app-heading` et description `max-w-2xl text-muted-foreground`. Ses actions Préférences sont regroupées sur une ligne avec un espacement de 12 px et reviennent à la ligne selon la place disponible.
 
 `DocumentLoadingMessage` accompagne les traitements longs avec des textes adaptés à chaque étape. Cadence, gestion des interruptions et vérifications dans le [ledger des messages d’attente](../../roadmap/evidence/document-loading-messages.md).
 
