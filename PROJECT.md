@@ -66,6 +66,8 @@ Les besoins de paiement, signature, email, Gmail/Calendar, document intelligence
 
 **Identité commerciale — instruction utilisateur du 8 septembre 2026** : CoverView est le seul nom à afficher dans les interfaces, documents et contenus produits. Supprimer toute mention de l’ancienne identité, toute formule « marque de » et ses coordonnées commerciales obsolètes. Cette instruction remplace celle du 7 septembre qui demandait de conserver l’ancienne dénomination. Elle ne modifie pas les identités de connexion, les documents originaux ni les preuves historiques, et ne constitue pas une vérification indépendante des registres ou de la couverture RC. Le [plan des autorisations](roadmap/plans/S-042a-library-authorizations.plan.md) conserve la portée du changement ; les règles de remplissage du profil restent dans [le module documentaire](apps/api/src/modules/document-intelligence/README.md#revue-et-profil-compatible).
 
+Adresse CoverView fournie par l’utilisateur le 8 septembre 2026 : **Avenue Louis-Casaï 71, 1216 Cointrin**. Elle remplace l’adresse précédente dans les coordonnées et documents produits. La notice LSA45 dispose d’une nouvelle version ; les dates d’ouverture des versions antérieures restent conservées.
+
 ## Git et livraison
 
 Dépôt donné par l'utilisateur : [smartin281092/coverview-universe](https://github.com/smartin281092/coverview-universe). Remote `origin` configuré, branche locale `main`. Lecture distante initiale : aucune référence publiée retournée par `git ls-remote` le 2026-09-05. Le harness fourni et ses sources ont un commit initial conservé ; aucun historique distant remplacé.
