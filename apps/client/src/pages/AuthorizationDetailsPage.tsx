@@ -127,7 +127,7 @@ function Authorization({
                   <dd className="mt-1">
                     <button
                       type="button"
-                      className="group flex min-h-11 w-full items-start gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none"
+                      className="group flex min-h-11 w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary motion-reduce:transition-none"
                       aria-label={t("editField", { field: t(row.label) })}
                       onClick={() => {
                         setSaved(false);
@@ -136,12 +136,12 @@ function Authorization({
                     >
                       {complete ? (
                         <CircleCheck
-                          className="mt-0.5 size-4 shrink-0 text-green-700"
+                          className="size-4 shrink-0 text-green-700"
                           aria-hidden="true"
                         />
                       ) : (
                         <TriangleAlert
-                          className="mt-0.5 size-4 shrink-0 text-red-600"
+                          className="size-4 shrink-0 text-red-600"
                           aria-hidden="true"
                         />
                       )}
@@ -154,7 +154,7 @@ function Authorization({
                         )}
                       </span>
                       <Pencil
-                        className="mt-0.5 size-3.5 shrink-0 text-muted-foreground"
+                        className="size-3.5 shrink-0 text-muted-foreground"
                         aria-hidden="true"
                       />
                     </button>
