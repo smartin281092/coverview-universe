@@ -64,7 +64,7 @@ Les besoins de paiement, signature, email, Gmail/Calendar, document intelligence
 
 ## Règles transverses
 
-**Identité commerciale fournie par l’utilisateur le 7 septembre 2026** : CoverView est la nouvelle marque de Bassa Martin Partners Sàrl, sans changement de personne morale, coordonnées, inscriptions FINMA ni assurance RC. Les documents utilisent CoverView comme nom d’usage et conservent la mention de la personne morale. Cette décision et ses trois documents de référence sont consignés dans [le plan des autorisations](roadmap/plans/S-042a-library-authorizations.plan.md) ; elle ne constitue pas une vérification indépendante des registres ou de la couverture RC. Les règles de remplissage du profil restent dans [le module documentaire](apps/api/src/modules/document-intelligence/README.md#revue-et-profil-compatible).
+**Identité commerciale — instruction utilisateur du 8 septembre 2026** : CoverView est le seul nom à afficher dans les interfaces, documents et contenus produits. Supprimer toute mention de l’ancienne identité, toute formule « marque de » et ses coordonnées commerciales obsolètes. Cette instruction remplace celle du 7 septembre qui demandait de conserver l’ancienne dénomination. Elle ne modifie pas les identités de connexion, les documents originaux ni les preuves historiques, et ne constitue pas une vérification indépendante des registres ou de la couverture RC. Le [plan des autorisations](roadmap/plans/S-042a-library-authorizations.plan.md) conserve la portée du changement ; les règles de remplissage du profil restent dans [le module documentaire](apps/api/src/modules/document-intelligence/README.md#revue-et-profil-compatible).
 
 ## Git et livraison
 
