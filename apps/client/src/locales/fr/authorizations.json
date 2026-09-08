@@ -1,8 +1,8 @@
 {
   "intro": "Retrouvez ici les procurations et mandats enregistrés dans CoverView. Déposer un document ne donne pas, à lui seul, une autorisation d’agir en votre nom.",
   "procuration": {
-    "title": "Procuration universelle",
-    "description": "Demander et recevoir vos documents auprès de toutes les institutions et assurances concernées, y compris le 2e pilier et le libre passage. Valable six mois dès la signature, sans transfert de gestion."
+    "title": "Procuration",
+    "description": "Autorisez CoverView à recueillir les informations et documents utiles à votre accompagnement."
   },
   "mandate": {
     "title": "Mandat de gestion",

@@ -15,3 +15,7 @@ Le [formulaire de l’Institution supplétive LPP](https://aeis.ch/application/f
 Le [formulaire officiel du Fonds de garantie LPP](https://sfbvg.ch/fr/missions/recherche-davoirs-de-la-prevoyance-professionnelle/formulaire-online) demande une copie de procuration pour une recherche faite par un tiers. Cela justifie de nommer expressément la recherche d’avoirs ; aucun formulaire n’a été soumis.
 
 Session : Codex GPT-6 ; effort effectif non observable indépendamment. Aucune recette d’envoi ou de signature déduite des contrôles de présentation.
+
+## Simplification demandée ensuite
+
+L’utilisateur juge les mentions de portée universelle et l’énumération des institutions trop verbeuses et inquiétantes. Version `coverview-2026-09-08.2` : titre « Procuration », description courte et trois sections — autorisation, limites, durée. La collecte, la recherche d’avoirs et la transmission directe sont exprimées sans liste de destinataires ; la levée du secret reste bornée. Les exclusions sont reformulées sans ajout de pouvoir de gestion ou d’opération. La durée, le mandat de gestion, la notice LSA45 et la désactivation du sélecteur sont conservés.
