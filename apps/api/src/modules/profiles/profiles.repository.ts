@@ -8,7 +8,6 @@ import {
   managedProfileCreateInputSchema,
   managedProfileSchema,
   managedProfilesSchema,
-  isProfileConfirmed,
   profileCompletionAverage,
   profileStepCompletion,
   profileSectionSaveInputSchema,
@@ -64,7 +63,6 @@ function selfGeneral(profile: Profile): ProfileSection {
   const values = Object.fromEntries(
     Object.entries(profile.fields).map(([key, value]) => [key, value?.value]),
   );
-  const confirmed = isProfileConfirmed(profile);
   const confirmedFields = Object.values(profile.fields).map((field) => field?.confirmedAt);
   return profileSectionSchema.parse({
     profileId: "self",
@@ -77,7 +75,7 @@ function selfGeneral(profile: Profile): ProfileSection {
         ? confirmedFields.sort().at(-1)
         : null,
     completion: profileCompletionAverage(
-      profileStepCompletion("person", "general", values, confirmed),
+      profileStepCompletion("person", "general", values),
     ),
   });
 }
@@ -96,7 +94,7 @@ function sectionDto(
     confirmedAt: row?.confirmedAt?.toISOString() ?? null,
     documentSources: row?.documentSources ?? {},
     completion: profileCompletionAverage(
-      profileStepCompletion(kind, section, row?.values ?? {}, Boolean(row?.confirmedAt)),
+      profileStepCompletion(kind, section, row?.values ?? {}),
     ),
   });
 }

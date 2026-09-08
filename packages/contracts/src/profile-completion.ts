@@ -3,10 +3,9 @@ import type {
   ProfileSectionName,
   ProfileSectionValues,
 } from "./managed-profiles.js";
-import type { Profile } from "./profile.js";
 
 type Field = keyof ProfileSectionValues;
-type StepCompletion = Readonly<{ information: number; details: number; review: number }>;
+type StepCompletion = Readonly<{ information: number; details: number }>;
 
 // Shared presentation groups keep the section score aligned with its visible step indicators.
 export function profileStepFields(
@@ -53,7 +52,6 @@ export function profileStepCompletion(
   kind: ManagedProfile["kind"],
   section: ProfileSectionName,
   values: Readonly<Partial<Record<Field, unknown>>>,
-  confirmed: boolean,
 ): StepCompletion {
   const fields = profileStepFields(kind, section);
   const percent = (keys: readonly Field[]) => {
@@ -68,17 +66,9 @@ export function profileStepCompletion(
   return {
     information: percent(fields.information),
     details: percent(fields.details),
-    review: confirmed ? 100 : 0,
   };
 }
 
 export function profileCompletionAverage(steps: StepCompletion): number {
-  return Math.round((steps.information + steps.details + steps.review) / 3);
-}
-
-export function isProfileConfirmed(profile: Profile): boolean {
-  return (
-    Boolean(profile.prefill.decidedAt) &&
-    Object.values(profile.fields).every((field) => Boolean(field?.confirmedAt))
-  );
+  return Math.round((steps.information + steps.details) / 2);
 }

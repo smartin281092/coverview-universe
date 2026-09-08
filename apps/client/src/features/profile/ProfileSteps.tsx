@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 
-export type ProfileViewStep = "information" | "details" | "review";
-export const profileViewSteps: ProfileViewStep[] = ["information", "details", "review"];
+export type ProfileViewStep = "information" | "details";
+export const profileViewSteps: ProfileViewStep[] = ["information", "details"];
 export type ProfileEditorBridge = {
   dirty: boolean;
   pending: boolean;
@@ -30,7 +30,7 @@ export function ProfileSteps({
     maximumFractionDigits: 0,
   });
   return (
-    <ol aria-label={t("progress")} className="grid grid-cols-3 lg:grid-cols-1">
+    <ol aria-label={t("progress")} className="grid grid-cols-2 lg:grid-cols-1">
       {profileViewSteps.map((value, index) => {
         const percentage = Number.isFinite(completion[value])
           ? Math.round(Math.min(100, Math.max(0, completion[value])))

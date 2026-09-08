@@ -88,7 +88,7 @@ it("keeps canonical identity distinct from managed people/entities and enforces 
     { revision: 0, step: "details", fields: { firstName: "Autre", lastName: "Personne" } },
     randomUUID(),
   );
-  expect(saved.completion).toBe(8); // Information 25 %, details 0 %, review 0 %.
+  expect(saved.completion).toBe(13); // (25 + 0) / 2, rounded.
   expect(saved.step).toBe("details");
   expect(await canonical.get(actor.userId)).toEqual(original);
   await expect(repository.get(stranger.userId, person.id)).rejects.toMatchObject({
@@ -149,7 +149,7 @@ it("keeps canonical identity distinct from managed people/entities and enforces 
   );
   expect(await repository.section(actor.userId, "self", "general")).toMatchObject({
     values: { firstName: "Titulaire" },
-    completion: 4,
+    completion: 7,
     step: "details",
   });
   expect((await repository.section(actor.userId, person.id, "general")).values.firstName).toBe(
@@ -183,7 +183,7 @@ it("persists independent sections, counts zero amounts, rejects stale/cross-prof
   expect(replay).toEqual(saved);
   expect(saved).toMatchObject({
     revision: 1,
-    completion: 22,
+    completion: 34,
     step: "details",
     values: { annualIncomeMinor: 0, currency: "CHF" },
   });
@@ -207,7 +207,7 @@ it("persists independent sections, counts zero amounts, rejects stale/cross-prof
     confirm: true,
   });
   const health = await repository.saveSection(actor, person.id, "health", healthInput, healthKey);
-  expect(health.completion).toBe(54); // (33 + 29 + 100) / 3, rounded.
+  expect(health.completion).toBe(31); // (33 + 29) / 2; confirmation adds no progress.
   expect(health.values.primaryDoctorName).toBe("Dre Exemple");
   expect(
     (await repository.section(actor.userId, person.id, "health")).values.primaryDoctorName,
@@ -252,7 +252,7 @@ it("persists independent sections, counts zero amounts, rejects stale/cross-prof
     },
     randomUUID(),
   );
-  expect(edited.completion).toBe(11);
+  expect(edited.completion).toBe(17);
   expect(edited.confirmedAt).toBeNull();
   const oldRetry = await repository.saveSection(actor, person.id, "health", healthInput, healthKey);
   expect(oldRetry).toEqual(edited);
@@ -277,9 +277,10 @@ it("persists independent sections, counts zero amounts, rejects stale/cross-prof
     { revision: 0, step: "review", fields: {}, confirm: true },
     randomUUID(),
   );
-  expect(emptyReview.completion).toBe(33);
+  expect(emptyReview.completion).toBe(0);
+  expect(emptyReview.confirmedAt).not.toBeNull();
   const profile = await repository.get(actor.userId, person.id);
-  expect(profile.completion).toEqual({ general: 0, finances: 22, health: 11 });
+  expect(profile.completion).toEqual({ general: 0, finances: 34, health: 17 });
   await expect(
     repository.saveSection(
       actor,
@@ -328,7 +329,7 @@ it("persists independent sections, counts zero amounts, rejects stale/cross-prof
   ).toBeGreaterThan(0);
 });
 
-it("keeps persisted section and index means aligned after self confirmation and company edits", async () => {
+it("keeps section and index means aligned independently from historical confirmations", async () => {
   const actor = await owner();
   const canonical = createProfileRepository(database.db);
   const original = await canonical.get(actor.userId);
@@ -339,11 +340,12 @@ it("keeps persisted section and index means aligned after self confirmation and 
     randomUUID(),
   );
   expect(confirmed.prefill.enabled).toBe(false);
+  expect(confirmed.prefill.decidedAt).not.toBeNull();
   expect(await repository.section(actor.userId, "self", "general")).toMatchObject({
-    completion: 33,
+    completion: 0,
     confirmedAt: null,
   });
-  expect((await repository.get(actor.userId, "self")).completion.general).toBe(33);
+  expect((await repository.get(actor.userId, "self")).completion.general).toBe(0);
   await canonical.save(
     actor.userId,
     actor.id,
@@ -351,7 +353,7 @@ it("keeps persisted section and index means aligned after self confirmation and 
     randomUUID(),
   );
   expect(await repository.section(actor.userId, "self", "general")).toMatchObject({
-    completion: 4,
+    completion: 7,
     confirmedAt: null,
   });
   const entity = await repository.create(
@@ -366,15 +368,16 @@ it("keeps persisted section and index means aligned after self confirmation and 
     { revision: 0, step: "review", fields: { registrationNumber: "CHE-1" }, confirm: true },
     randomUUID(),
   );
-  expect(saved.completion).toBe(42); // (25 + 0 + 100) / 3, rounded.
+  expect(saved.completion).toBe(13); // (25 + 0) / 2, rounded.
+  expect(saved.confirmedAt).not.toBeNull();
   expect((await repository.get(actor.userId, entity.id)).completion).toEqual({
-    general: 42,
+    general: 13,
     finances: 0,
     health: null,
   });
   const profiles = (await repository.list(actor.userId)).profiles;
-  expect(profiles.find((profile) => profile.id === "self")?.completion.general).toBe(4);
-  expect(profiles.find((profile) => profile.id === entity.id)?.completion.general).toBe(42);
+  expect(profiles.find((profile) => profile.id === "self")?.completion.general).toBe(7);
+  expect(profiles.find((profile) => profile.id === entity.id)?.completion.general).toBe(13);
 });
 
 it("validates and normalizes optional Swiss AVS numbers without assigning one to empty profiles", () => {
@@ -458,7 +461,7 @@ it("persists, isolates and removes AVS and occupation while including them in th
   const key = randomUUID();
   const managed = await repository.saveSection(actor, person.id, "general", input, key);
   expect(managed.values).toEqual({ avsNumber: "756.0000.0000.19", occupation: "Enseignante" });
-  expect(managed.completion).toBe(8);
+  expect(managed.completion).toBe(13);
   expect((await repository.section(actor.userId, person.id, "general")).values).toEqual(
     managed.values,
   );

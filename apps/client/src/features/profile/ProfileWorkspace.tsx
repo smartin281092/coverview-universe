@@ -85,13 +85,16 @@ export function ProfileWorkspace({
   const selected = index?.profiles.find((profile) => profile.id === person);
   const tab =
     selected?.kind === "legal_entity" && requestedTab === "health" ? "general" : requestedTab;
-  const requestedStep =
+  const parsedStep =
     tab === requestedTab ? profileSectionStepSchema.safeParse(params.get("step")).data : undefined;
+  const requestedStep = parsedStep === "review" ? "details" : parsedStep;
   const editorScope = `${identity.user.id}:${identity.session.id}:${person}:${tab}`;
   useEffect(() => {
     if (!blocked && profiles.data && selected?.kind === "legal_entity" && requestedTab === "health")
       void navigate({ to: "/profile", search: { person, tab: "general" }, replace: true });
-  }, [blocked, profiles.data, selected?.kind, requestedTab, person, navigate]);
+    else if (!blocked && profiles.data && selected && parsedStep === "review")
+      void navigate({ to: "/profile", search: { person, tab, step: "details" }, replace: true });
+  }, [blocked, profiles.data, selected, requestedTab, parsedStep, person, tab, navigate]);
   const awaitingIndex = !profiles.data;
   const editorBlocked = blocked || awaitingIndex;
   const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);

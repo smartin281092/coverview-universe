@@ -33,3 +33,7 @@ Les images privées réelles, gestes tactiles physiques, lecteur PDF natif et no
 ## Extension société — demande utilisateur suivante
 
 Pour une société, remplacer la pièce d’identité par l’extrait du registre du commerce, y compris le dépôt et la prévisualisation. Un fichier du profil société contient l’extrait complet ; aucun choix de passeport ou de recto-verso. Le serveur détermine le type de profil et conserve les exigences d’identité des personnes, l’isolation, les originaux, les contrôles de téléchargement et les états de quarantaine/suppression. L’association est une déclaration du propriétaire, sans preuve juridique ni classification artificielle. Aucune migration ou nouvelle forme de contrat public ; [preuves et limites](../evidence/profile-identity-preview.md#extrait-du-registre-du-commerce-pour-les-sociétés).
+
+## Retrait de Validation — dernière précision utilisateur
+
+La demande explicite suivante remplace la décision initiale de conserver une étape Validation : la retirer de toutes les rubriques des profils. Conserver les deux étapes contenant les champs, terminer par Enregistrer et calculer chaque rubrique sur leur moyenne. Les anciens liens et états `review` ouvrent la deuxième étape ; conserver les contrats et preuves historiques, sans migration destructive. Le choix facultatif de préremplissage du titulaire et son historique restent à la fin d’Adresse, sans activation implicite. Vérifier les calculs persistés, l’isolation, les types/builds et la navigation réelle ; [journal de vérification](../evidence/profile-step-donuts.md).

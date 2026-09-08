@@ -137,12 +137,7 @@ export function ProfileSectionEditor({
   const values = useWatch({ control: form.control });
   const { isDirty, dirtyFields } = form.formState;
   const [saved, setSaved] = useState<ProfileSection | null>(null);
-  const completion = profileStepCompletion(
-    profile.kind,
-    section,
-    values,
-    Boolean(saved?.confirmedAt) && !isDirty,
-  );
+  const completion = profileStepCompletion(profile.kind, section, values);
   const [step, setStep] = useState<ProfileViewStep>(requestedStep ?? "information");
   const [pending, setPending] = useState(false);
   const [failure, setFailure] = useState<"save" | "conflict" | "session" | "denied" | null>(null);
@@ -195,7 +190,7 @@ export function ProfileSectionEditor({
     if (!saved) {
       setSaved(query.data);
       form.reset(formValues(fieldsFor(profile, section).flat(), query.data));
-      setStep(requestedStep ?? query.data.step);
+      setStep(requestedStep ?? (query.data.step === "review" ? "details" : query.data.step));
     } else if (query.data.revision > saved.revision) setFailure("conflict");
   }, [query.data, saved, form, profile, section, requestedStep]);
   useEffect(() => {
@@ -208,7 +203,7 @@ export function ProfileSectionEditor({
       if (requestedStep) setStep(requestedStep);
     }
   }, [requestedStep]);
-  const save = async (next = step, confirm = false) => {
+  const save = async (next = step) => {
     if (!saved || busy.current || blocked) return false;
     const scope = sessionScope;
     let successful = false;
@@ -236,7 +231,6 @@ export function ProfileSectionEditor({
         revision: saved.revision,
         step: next,
         fields: patch,
-        ...(confirm ? { confirm: true } : {}),
       };
       const signature = JSON.stringify(input);
       if (command.current?.signature !== signature)
@@ -335,7 +329,6 @@ export function ProfileSectionEditor({
   const labels = {
     information: t(`workspace.steps.${section}.information`),
     details: t(`workspace.steps.${section}.details`),
-    review: t("steps.review"),
   };
   const choices: Partial<Record<Field, string[]>> = {
     currency: ["CHF", "EUR", "USD"],
@@ -357,8 +350,8 @@ export function ProfileSectionEditor({
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          if (step === "review") void save(step, true);
-          else void move(profileViewSteps[profileViewSteps.indexOf(step) + 1] ?? "review");
+          if (step === "details") void save();
+          else void move("details");
         }}
         className="min-w-0 space-y-6"
         aria-busy={pending}
@@ -367,9 +360,7 @@ export function ProfileSectionEditor({
           <h2 ref={heading} tabIndex={-1} className="cv-app-subheading outline-none">
             {labels[step]}
           </h2>
-          <p className="text-sm text-muted-foreground">
-            {t(step === "review" ? "review.intro" : "optional")}
-          </p>
+          <p className="text-sm text-muted-foreground">{t("optional")}</p>
         </div>
         {failure && (
           <div role="alert" className="space-y-3 border-l-2 border-destructive pl-4 text-sm">
@@ -392,103 +383,98 @@ export function ProfileSectionEditor({
           </p>
         )}
         <fieldset disabled={pending || blocked} className="space-y-6">
-          {step !== "review" && (
-            <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2">
-              {(step === "information" ? information : details).map((field) => (
-                <div
-                  key={field}
-                  className={`space-y-2 ${field === "street" || field === "primaryDoctorName" || noteFields.has(field) ? "sm:col-span-2" : ""}`}
-                >
-                  <Label htmlFor={`section-${field}`}>{fieldLabel(field)}</Label>
-                  {choices[field] ? (
-                    <Select
-                      value={values[field] || (field === "currency" ? "CHF" : "empty")}
-                      onValueChange={(value) =>
-                        form.setValue(field, value === "empty" ? "" : value, {
-                          shouldDirty: true,
-                          shouldTouch: true,
-                          shouldValidate: true,
-                        })
-                      }
-                    >
-                      <SelectTrigger
-                        id={`section-${field}`}
-                        className="min-h-11 w-full text-base"
-                        aria-invalid={Boolean(form.formState.errors[field])}
-                      >
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent portalContainer={portalContainer}>
-                        {field !== "currency" && (
-                          <SelectItem value="empty">{t("review.empty")}</SelectItem>
-                        )}
-                        {choices[field].map((value) => (
-                          <SelectItem value={value} key={value}>
-                            {field === "currency" ? value : t(`workspace.options.${value}`)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  ) : noteFields.has(field) ? (
-                    <textarea
+          <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2">
+            {(step === "information" ? information : details).map((field) => (
+              <div
+                key={field}
+                className={`space-y-2 ${field === "street" || field === "primaryDoctorName" || noteFields.has(field) ? "sm:col-span-2" : ""}`}
+              >
+                <Label htmlFor={`section-${field}`}>{fieldLabel(field)}</Label>
+                {choices[field] ? (
+                  <Select
+                    value={values[field] || (field === "currency" ? "CHF" : "empty")}
+                    onValueChange={(value) =>
+                      form.setValue(field, value === "empty" ? "" : value, {
+                        shouldDirty: true,
+                        shouldTouch: true,
+                        shouldValidate: true,
+                      })
+                    }
+                  >
+                    <SelectTrigger
                       id={`section-${field}`}
-                      rows={3}
-                      maxLength={1000}
-                      className="w-full rounded-lg border border-input bg-transparent px-3 py-2 text-base outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      className="min-h-11 w-full text-base"
                       aria-invalid={Boolean(form.formState.errors[field])}
-                      {...form.register(field)}
-                    />
-                  ) : (
-                    <Input
-                      id={`section-${field}`}
-                      type={
-                        field === "birthDate"
-                          ? "date"
-                          : field === "contactEmail"
-                            ? "email"
-                            : field === "phone"
-                              ? "tel"
-                              : "text"
-                      }
-                      inputMode={
-                        field === "avsNumber"
-                          ? "numeric"
-                          : moneyFields.has(field) || numberFields.has(field)
-                            ? "decimal"
-                            : undefined
-                      }
-                      maxLength={
-                        field === "avsNumber"
-                          ? 40
-                          : field === "street" || field === "contactEmail"
-                            ? 240
-                            : 160
-                      }
-                      className="min-h-11 text-base"
-                      aria-describedby={
-                        field === "primaryDoctorName" ? "section-primaryDoctorName-help" : undefined
-                      }
-                      aria-invalid={Boolean(form.formState.errors[field])}
-                      {...form.register(field)}
-                    />
-                  )}
-                  {field === "primaryDoctorName" && (
-                    <p
-                      id="section-primaryDoctorName-help"
-                      className="text-sm text-muted-foreground"
                     >
-                      {t("workspace.primaryDoctorHelp")}
-                    </p>
-                  )}
-                  {form.formState.errors[field] && (
-                    <p role="alert" className="text-sm text-destructive">
-                      {t(field === "avsNumber" ? "invalidAvsNumber" : "invalidField")}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent portalContainer={portalContainer}>
+                      {field !== "currency" && (
+                        <SelectItem value="empty">{t("review.empty")}</SelectItem>
+                      )}
+                      {choices[field].map((value) => (
+                        <SelectItem value={value} key={value}>
+                          {field === "currency" ? value : t(`workspace.options.${value}`)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                ) : noteFields.has(field) ? (
+                  <textarea
+                    id={`section-${field}`}
+                    rows={3}
+                    maxLength={1000}
+                    className="w-full rounded-lg border border-input bg-transparent px-3 py-2 text-base outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    aria-invalid={Boolean(form.formState.errors[field])}
+                    {...form.register(field)}
+                  />
+                ) : (
+                  <Input
+                    id={`section-${field}`}
+                    type={
+                      field === "birthDate"
+                        ? "date"
+                        : field === "contactEmail"
+                          ? "email"
+                          : field === "phone"
+                            ? "tel"
+                            : "text"
+                    }
+                    inputMode={
+                      field === "avsNumber"
+                        ? "numeric"
+                        : moneyFields.has(field) || numberFields.has(field)
+                          ? "decimal"
+                          : undefined
+                    }
+                    maxLength={
+                      field === "avsNumber"
+                        ? 40
+                        : field === "street" || field === "contactEmail"
+                          ? 240
+                          : 160
+                    }
+                    className="min-h-11 text-base"
+                    aria-describedby={
+                      field === "primaryDoctorName" ? "section-primaryDoctorName-help" : undefined
+                    }
+                    aria-invalid={Boolean(form.formState.errors[field])}
+                    {...form.register(field)}
+                  />
+                )}
+                {field === "primaryDoctorName" && (
+                  <p id="section-primaryDoctorName-help" className="text-sm text-muted-foreground">
+                    {t("workspace.primaryDoctorHelp")}
+                  </p>
+                )}
+                {form.formState.errors[field] && (
+                  <p role="alert" className="text-sm text-destructive">
+                    {t(field === "avsNumber" ? "invalidAvsNumber" : "invalidField")}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
           {section === "health" && (
             <p className="text-xs text-muted-foreground">{t("workspace.healthPrivacy")}</p>
           )}
@@ -505,9 +491,9 @@ export function ProfileSectionEditor({
               </Button>
             )}
             <Button type="submit">
-              {t(pending ? "pending" : step === "review" ? "workspace.confirmSection" : "next")}
+              {t(pending ? "pending" : step === "details" ? "save" : "next")}
             </Button>
-            {step !== "review" && (
+            {step === "information" && (
               <Button type="button" variant="ghost" onClick={() => void save()}>
                 {t("save")}
               </Button>

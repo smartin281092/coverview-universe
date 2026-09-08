@@ -4,11 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useWatch } from "react-hook-form";
 import { ApiError, type IdentityMe } from "@coverview/api-client";
-import {
-  isProfileConfirmed,
-  profileCompletionAverage,
-  profileStepCompletion,
-} from "@coverview/contracts";
+import { profileCompletionAverage, profileStepCompletion } from "@coverview/contracts";
 import { Button, Input, Label, LoadingState } from "@coverview/ui";
 import { api } from "../api";
 import { forgetIdentity, identityOptions } from "../features/identity/session-state";
@@ -27,7 +23,7 @@ import {
   type ProfileViewStep,
 } from "../features/profile/ProfileSteps";
 
-const steps = ["information", "address", "review"] as const;
+const steps = ["information", "address"] as const;
 const autocomplete: Record<ProfileFieldName, string> = {
   firstName: "given-name",
   lastName: "family-name",
@@ -236,11 +232,8 @@ function ProfileEditor({
   const navigate = useNavigate();
   const journey = useProfileJourney({ identity, ownerId, blocked });
   const values = useWatch({ control: journey.form.control });
-  const confirmed =
-    Boolean(journey.profile && isProfileConfirmed(journey.profile)) &&
-    !journey.isDirty &&
-    journey.resolved.size === 0;
-  const completion = profileStepCompletion("person", "general", values, confirmed);
+  const step = journey.step === "review" ? "address" : journey.step;
+  const completion = profileStepCompletion("person", "general", values);
   const history =
     new URLSearchParams(location.searchStr).get("view") === "choices" && Boolean(identity);
   const setHistory = (value: boolean) => {
@@ -250,7 +243,7 @@ function ProfileEditor({
   const stepHeading = useRef<HTMLHeadingElement>(null);
   const previousStep = useRef(journey.step);
   const lastRequested = useRef<ProfileViewStep | null | undefined>(null);
-  const stepIndex = steps.indexOf(journey.step);
+  const stepIndex = steps.indexOf(step);
   const unavailableDraft =
     !ownerId &&
     (journey.failure === "expired" ||
@@ -278,7 +271,7 @@ function ProfileEditor({
       pending: journey.pending,
       completion: journey.initialized ? profileCompletionAverage(completion) : null,
       scopeKey: `${identity?.user.id}:${identity?.session.id}:self:general`,
-      save: () => (journey.prefillDirty ? journey.confirm() : journey.move(journey.step)),
+      save: () => (journey.prefillDirty ? journey.confirm() : journey.move(step)),
       discard: journey.discard,
     });
   });
@@ -351,7 +344,11 @@ function ProfileEditor({
               >
                 <h2 className="font-medium">{t("attach.title")}</h2>
                 <p className="text-sm text-muted-foreground">
-                  {t("attach.description", { step: t(`steps.${journey.draftEntry.draft.step}`) })}
+                  {t("attach.description", {
+                    step: t(
+                      `steps.${journey.draftEntry.draft.step === "review" ? "address" : journey.draftEntry.draft.step}`,
+                    ),
+                  })}
                 </p>
                 <Button
                   disabled={
@@ -372,12 +369,11 @@ function ProfileEditor({
             <div className="grid gap-8 lg:grid-cols-[220px_minmax(0,640px)] lg:gap-16">
               <aside className="space-y-6">
                 <ProfileSteps
-                  step={journey.step === "address" ? "details" : journey.step}
+                  step={step === "address" ? "details" : step}
                   completion={completion}
                   labels={{
                     information: t("steps.information"),
                     details: t("steps.address"),
-                    review: t("steps.review"),
                   }}
                   disabled={journey.pending || blocked}
                   onChange={(next) => void changeStep(next === "details" ? "address" : next)}
@@ -389,9 +385,9 @@ function ProfileEditor({
               <form
                 onSubmit={(event) => {
                   event.preventDefault();
-                  if (journey.step === "review")
-                    void (identity ? journey.confirm() : journey.continueLogin());
-                  else void changeStep(steps[stepIndex + 1] ?? "review");
+                  if (step === "information") void changeStep("address");
+                  else if (!identity) void journey.continueLogin();
+                  else void (journey.prefillDirty ? journey.confirm() : journey.move("address"));
                 }}
                 className="min-w-0 space-y-6"
                 aria-busy={journey.pending}
@@ -402,11 +398,9 @@ function ProfileEditor({
                     tabIndex={-1}
                     className="cv-app-subheading scroll-mt-24 outline-none"
                   >
-                    {t(`steps.${journey.step}`)}
+                    {t(`steps.${step}`)}
                   </h2>
-                  <p className="text-sm text-muted-foreground">
-                    {t(journey.step === "review" ? "review.intro" : "optional")}
-                  </p>
+                  <p className="text-sm text-muted-foreground">{t("optional")}</p>
                 </div>
                 {journey.failure && (
                   <div
@@ -433,57 +427,37 @@ function ProfileEditor({
                   </p>
                 )}
                 <fieldset disabled={journey.pending} className="space-y-6">
-                  {journey.step !== "review" ? (
-                    <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2">
-                      {(journey.step === "information" ? informationFields : addressFields).map(
-                        (field) => (
-                          <ProfileField key={field} field={field} journey={journey} />
-                        ),
-                      )}
+                  {unresolved.length > 0 && <p className="text-sm">{t("proposal.review")}</p>}
+                  <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2">
+                    {(step === "information" ? informationFields : addressFields).map((field) => (
+                      <ProfileField key={field} field={field} journey={journey} />
+                    ))}
+                  </div>
+                  {step === "address" && identity && (
+                    <div className="space-y-4 border-t border-border pt-5">
+                      <label className="flex cursor-pointer items-start gap-3">
+                        <input
+                          type="checkbox"
+                          className="mt-1 size-4 shrink-0 accent-primary"
+                          checked={journey.prefill}
+                          onChange={(event) => journey.setPrefill(event.target.checked)}
+                        />
+                        <span className="space-y-1">
+                          <span className="block text-sm font-medium">{t("prefill.label")}</span>
+                          <span className="block text-sm text-muted-foreground">
+                            {t("prefill.description")}
+                          </span>
+                        </span>
+                      </label>
+                      <Button
+                        type="button"
+                        variant="link"
+                        className="h-auto p-0 text-sm"
+                        onClick={() => setHistory(true)}
+                      >
+                        {t("history.action")}
+                      </Button>
                     </div>
-                  ) : (
-                    <>
-                      {proposals.length > 0 && (
-                        <div className="space-y-3">
-                          <p className="text-sm">{t("proposal.review")}</p>
-                          <div className="grid gap-5 sm:grid-cols-2">
-                            {proposals.map((field) => (
-                              <ProfileField key={field} field={field} journey={journey} />
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      {identity ? (
-                        <div className="space-y-4 border-t border-border pt-5">
-                          <label className="flex cursor-pointer items-start gap-3">
-                            <input
-                              type="checkbox"
-                              className="mt-1 size-4 shrink-0 accent-primary"
-                              checked={journey.prefill}
-                              onChange={(event) => journey.setPrefill(event.target.checked)}
-                            />
-                            <span className="space-y-1">
-                              <span className="block text-sm font-medium">
-                                {t("prefill.label")}
-                              </span>
-                              <span className="block text-sm text-muted-foreground">
-                                {t("prefill.description")}
-                              </span>
-                            </span>
-                          </label>
-                          <Button
-                            type="button"
-                            variant="link"
-                            className="h-auto p-0 text-sm"
-                            onClick={() => setHistory(true)}
-                          >
-                            {t("history.action")}
-                          </Button>
-                        </div>
-                      ) : (
-                        <p className="text-sm text-muted-foreground">{t("review.login")}</p>
-                      )}
-                    </>
                   )}
                   <div className="flex flex-wrap items-center gap-3 pt-2">
                     {stepIndex > 0 && (
@@ -495,28 +469,19 @@ function ProfileEditor({
                         {t("previous")}
                       </Button>
                     )}
-                    <Button
-                      type="submit"
-                      disabled={
-                        journey.step === "review" && Boolean(identity) && unresolved.length > 0
-                      }
-                    >
+                    <Button type="submit">
                       {t(
                         journey.pending
                           ? "pending"
-                          : journey.step !== "review"
+                          : step === "information"
                             ? "next"
                             : identity
-                              ? "confirm"
+                              ? "save"
                               : "login",
                       )}
                     </Button>
-                    {journey.step !== "review" && (
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        onClick={() => void journey.move(journey.step)}
-                      >
+                    {step === "information" && (
+                      <Button type="button" variant="ghost" onClick={() => void journey.move(step)}>
                         {t("save")}
                       </Button>
                     )}
@@ -542,7 +507,7 @@ function ProfileEditor({
                     })}
                   </p>
                 )}
-                {!ownerId && journey.step !== "review" && (
+                {!ownerId && step === "information" && (
                   <Button
                     type="button"
                     variant="link"
