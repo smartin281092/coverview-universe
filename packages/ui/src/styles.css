@@ -5,6 +5,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@utility font-mono {
+  font-family: var(--cv-font-mono);
+  letter-spacing: var(--cv-mono-letter-spacing);
+}
+
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: var(--cv-font-sans);

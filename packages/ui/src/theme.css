@@ -20,6 +20,7 @@
   color-scheme: light;
   --cv-font-sans: "Geist Variable", Geist, system-ui, sans-serif;
   --cv-font-mono: "MONTECH V.02", ui-monospace, monospace;
+  --cv-mono-letter-spacing: 1px;
   --background: #ffffff;
   --card: var(--muted);
   --primary-hover: color-mix(in oklch, var(--primary), transparent 20%);
@@ -45,6 +46,7 @@
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --spacing-4: 4px;
+  --spacing-6: 6px;
   --spacing-8: 8px;
   --spacing-12: 12px;
   --spacing-16: 16px;
@@ -135,6 +137,8 @@ body {
 .cv-heading__eyebrow {
   margin: 0 0 var(--spacing-24);
   color: var(--muted-foreground);
+  font-family: var(--cv-font-mono);
+  letter-spacing: var(--cv-mono-letter-spacing);
   font-size: var(--text-body-sm);
   font-weight: 500;
   line-height: var(--leading-body-sm);
@@ -162,12 +166,17 @@ body {
 }
 .cv-heading__description {
   max-width: 640px;
-  margin: var(--spacing-24) 0 0;
+  margin: 0;
   color: var(--muted-foreground);
   font-size: var(--text-body-lg);
   font-weight: 400;
   line-height: 1.5;
   text-wrap: pretty;
+}
+h1,
+h1.cv-heading__title,
+h1.cv-app-heading {
+  margin-bottom: var(--spacing-6);
 }
 .cv-heading--center .cv-heading__description {
   margin-inline: auto;
@@ -239,6 +248,7 @@ body {
   margin: var(--spacing-12) 0 0;
   color: var(--muted-foreground);
   font-family: var(--cv-font-mono);
+  letter-spacing: var(--cv-mono-letter-spacing);
   font-size: var(--text-caption);
   line-height: 1.5;
 }
@@ -397,7 +407,7 @@ body {
   font-size: var(--text-caption);
   font-weight: 400;
   line-height: 1.5;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--cv-mono-letter-spacing);
 }
 @media (min-width: 768px) {
   :root {

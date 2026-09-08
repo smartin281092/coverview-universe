@@ -240,7 +240,7 @@ export function IdentityAttachmentPicker({
                 mutation.reset();
               }}
             >
-              <TabsList className="grid h-auto w-full grid-cols-2">
+              <TabsList className="grid min-h-[50px] w-full grid-cols-2">
                 <TabsTrigger value="combined" disabled={pending} className="min-h-11">
                   {t("identityPiece.oneFile")}
                 </TabsTrigger>
