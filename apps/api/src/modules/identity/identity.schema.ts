@@ -38,7 +38,7 @@ export const identityProfiles = pgTable(
     insuranceCompanies:
       jsonb("insurance_companies").$type<NonNullable<Profile["insuranceCompanies"]>>(),
     revision: integer("revision").notNull().default(0),
-    step: text("step", { enum: ["information", "address", "review"] })
+    step: text("step", { enum: ["information", "contact", "address", "review"] })
       .notNull()
       .default("information"),
     prefill: boolean("prefill").notNull().default(false),
@@ -46,7 +46,10 @@ export const identityProfiles = pgTable(
   },
   (table) => [
     check("identity_profiles_revision", sql`${table.revision} >= 0`),
-    check("identity_profiles_step", sql`${table.step} in ('information', 'address', 'review')`),
+    check(
+      "identity_profiles_step",
+      sql`${table.step} in ('information', 'contact', 'address', 'review')`,
+    ),
     check("identity_profiles_fields_object", sql`jsonb_typeof(${table.fields}) = 'object'`),
     check(
       "identity_profiles_companies_array",

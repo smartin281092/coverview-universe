@@ -437,6 +437,8 @@ export function createManagedProfileRepository(db: Database) {
         const owner = await subject(tx, actor.userId, id);
         const kind = owner?.kind ?? "person";
         checkSection(id, kind, section, true);
+        if (input.step === "contact" && section !== "general")
+          throw new ManagedProfileError("MANAGED_PROFILE_INVALID_FIELDS", 422);
         const previous = await replay(tx, actor, "save_section", key, hash);
         const [saved] = await tx
           .select()

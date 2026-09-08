@@ -22,7 +22,7 @@ export const profileDrafts = pgTable(
     tokenHash: text("token_hash").notNull().unique(),
     fields: jsonb("fields").$type<ProfileValues>().notNull().default({}),
     revision: integer("revision").notNull().default(0),
-    step: text("step", { enum: ["information", "address", "review"] })
+    step: text("step", { enum: ["information", "contact", "address", "review"] })
       .notNull()
       .default("information"),
     createdAt: instant("created_at").notNull(),
@@ -35,7 +35,10 @@ export const profileDrafts = pgTable(
     check("profile_drafts_hash", sql`${table.tokenHash} ~ '^[0-9a-f]{64}$'`),
     check("profile_drafts_fields", sql`jsonb_typeof(${table.fields}) = 'object'`),
     check("profile_drafts_revision", sql`${table.revision} >= 0`),
-    check("profile_drafts_step", sql`${table.step} in ('information', 'address', 'review')`),
+    check(
+      "profile_drafts_step",
+      sql`${table.step} in ('information', 'contact', 'address', 'review')`,
+    ),
     check("profile_drafts_expiration", sql`${table.expiresAt} > ${table.createdAt}`),
     check("profile_drafts_claim", sql`(${table.claimedBy} is null) = (${table.claimedAt} is null)`),
     index("profile_drafts_expiry").on(table.expiresAt, table.id),

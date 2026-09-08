@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 
-export type ProfileViewStep = "information" | "details";
-export const profileViewSteps: ProfileViewStep[] = ["information", "details"];
+export type ProfileViewStep = "information" | "contact" | "details";
+export const profileViewSteps: ProfileViewStep[] = ["information", "contact", "details"];
 export type ProfileEditorBridge = {
   dirty: boolean;
   pending: boolean;
@@ -19,26 +19,34 @@ export function ProfileSteps({
   onChange,
 }: {
   step: ProfileViewStep;
-  labels: Record<ProfileViewStep, string>;
-  completion: Record<ProfileViewStep, number>;
+  labels: Record<"information" | "details", string> & Partial<Record<"contact", string>>;
+  completion: Record<"information" | "details", number> & Partial<Record<"contact", number>>;
   disabled: boolean;
   onChange: (step: ProfileViewStep) => void;
 }) {
   const { t, i18n } = useTranslation("profile");
+  const steps = profileViewSteps.filter(
+    (value) => value !== "contact" || completion.contact !== undefined,
+  );
   const percent = new Intl.NumberFormat(i18n.language, {
     style: "percent",
     maximumFractionDigits: 0,
   });
   return (
-    <ol aria-label={t("progress")} className="grid grid-cols-2 lg:grid-cols-1">
-      {profileViewSteps.map((value, index) => {
-        const percentage = Number.isFinite(completion[value])
-          ? Math.round(Math.min(100, Math.max(0, completion[value])))
+    <ol
+      aria-label={t("progress")}
+      className={`grid ${steps.length === 3 ? "grid-cols-3" : "grid-cols-2"} lg:grid-cols-1`}
+    >
+      {steps.map((value, index) => {
+        const progress = completion[value] ?? 0;
+        const percentage = Number.isFinite(progress)
+          ? Math.round(Math.min(100, Math.max(0, progress)))
           : 0;
         const formattedPercentage = percent.format(percentage / 100);
+        const label = labels[value] ?? t("steps.contact");
         return (
           <li key={value} className="relative min-w-0 lg:pb-6">
-            {index < profileViewSteps.length - 1 && (
+            {index < steps.length - 1 && (
               <span
                 aria-hidden="true"
                 className="absolute left-1/2 right-0 top-6 h-px w-full bg-border lg:left-6 lg:top-6 lg:h-full lg:w-px"
@@ -49,7 +57,7 @@ export function ProfileSteps({
               disabled={disabled}
               aria-current={value === step ? "step" : undefined}
               aria-label={t("stepCompletion", {
-                step: labels[value],
+                step: label,
                 completion: formattedPercentage,
               })}
               onClick={() => onChange(value)}
@@ -80,7 +88,7 @@ export function ProfileSteps({
                 </svg>
                 <span className="relative">{formattedPercentage}</span>
               </span>
-              <span className="relative bg-background px-1 lg:px-0">{labels[value]}</span>
+              <span className="relative bg-background px-1 lg:px-0">{label}</span>
             </button>
           </li>
         );

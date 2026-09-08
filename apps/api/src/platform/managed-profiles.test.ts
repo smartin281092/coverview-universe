@@ -85,11 +85,12 @@ it("keeps canonical identity distinct from managed people/entities and enforces 
     actor,
     person.id,
     "general",
-    { revision: 0, step: "details", fields: { firstName: "Autre", lastName: "Personne" } },
+    { revision: 0, step: "contact", fields: { firstName: "Autre", lastName: "Personne" } },
     randomUUID(),
   );
-  expect(saved.completion).toBe(13); // (25 + 0) / 2, rounded.
-  expect(saved.step).toBe("details");
+  expect(saved.completion).toBe(11); // (33 + 0 + 0) / 3.
+  expect(saved.step).toBe("contact");
+  expect((await repository.section(actor.userId, person.id, "general")).step).toBe("contact");
   expect(await canonical.get(actor.userId)).toEqual(original);
   await expect(repository.get(stranger.userId, person.id)).rejects.toMatchObject({
     statusCode: 404,
@@ -149,7 +150,7 @@ it("keeps canonical identity distinct from managed people/entities and enforces 
   );
   expect(await repository.section(actor.userId, "self", "general")).toMatchObject({
     values: { firstName: "Titulaire" },
-    completion: 7,
+    completion: 6,
     step: "details",
   });
   expect((await repository.section(actor.userId, person.id, "general")).values.firstName).toBe(
@@ -194,6 +195,24 @@ it("persists independent sections, counts zero amounts, rejects stale/cross-prof
     repository.saveSection(actor, person.id, "finances", input, randomUUID()),
   ).rejects.toMatchObject({ statusCode: 409 });
   expect((await repository.section(actor.userId, other.id, "finances")).completion).toBe(0);
+  await expect(
+    repository.saveSection(
+      actor,
+      other.id,
+      "finances",
+      { revision: 0, step: "contact", fields: {} },
+      randomUUID(),
+    ),
+  ).rejects.toMatchObject({ code: "MANAGED_PROFILE_INVALID_FIELDS" });
+  await expect(
+    database.db.insert(managedProfileSections).values({
+      id: `psec_${randomUUID()}`,
+      userId: actor.userId,
+      managedProfileId: other.id,
+      section: "health",
+      step: "contact",
+    }),
+  ).rejects.toThrow();
   expect((await repository.section(actor.userId, person.id, "general")).step).toBe("information");
   const healthKey = randomUUID();
   const healthInput = profileSectionSaveInputSchema.parse({
@@ -329,7 +348,7 @@ it("persists independent sections, counts zero amounts, rejects stale/cross-prof
   ).toBeGreaterThan(0);
 });
 
-it("keeps section and index means aligned independently from historical confirmations", async () => {
+it("resumes contact for canonical, draft and company profiles while keeping completion independent of confirmations", async () => {
   const actor = await owner();
   const canonical = createProfileRepository(database.db);
   const original = await canonical.get(actor.userId);
@@ -349,12 +368,35 @@ it("keeps section and index means aligned independently from historical confirma
   await canonical.save(
     actor.userId,
     actor.id,
-    { revision: confirmed.revision, step: "information", fields: { firstName: "Titulaire" } },
+    { revision: confirmed.revision, step: "contact", fields: { firstName: "Titulaire" } },
     randomUUID(),
   );
   expect(await repository.section(actor.userId, "self", "general")).toMatchObject({
-    completion: 7,
+    step: "contact",
+    completion: 6,
     confirmedAt: null,
+  });
+  expect((await canonical.get(actor.userId)).step).toBe("contact");
+  const draftTokenHash = digest(randomUUID());
+  const draft = await canonical.saveDraft(
+    draftTokenHash,
+    { revision: 0, step: "contact", fields: { phone: "+41 22 000 00 00" } },
+    randomUUID(),
+  );
+  expect((await canonical.getDraft(draftTokenHash)).draft?.step).toBe("contact");
+  const attached = await canonical.attach(
+    actor.userId,
+    actor.id,
+    draftTokenHash,
+    { draftRevision: draft.revision },
+    randomUUID(),
+  );
+  expect(attached.resumeStep).toBe("contact");
+  expect(attached.profile.step).toBe("contact");
+  expect((await canonical.get(actor.userId)).fields.phone?.value).toBe("+41 22 000 00 00");
+  expect(await repository.section(actor.userId, "self", "general")).toMatchObject({
+    step: "contact",
+    completion: 22,
   });
   const entity = await repository.create(
     actor,
@@ -368,16 +410,33 @@ it("keeps section and index means aligned independently from historical confirma
     { revision: 0, step: "review", fields: { registrationNumber: "CHE-1" }, confirm: true },
     randomUUID(),
   );
-  expect(saved.completion).toBe(13); // (25 + 0) / 2, rounded.
+  expect(saved.completion).toBe(17); // (50 + 0 + 0) / 3, rounded.
   expect(saved.confirmedAt).not.toBeNull();
   expect((await repository.get(actor.userId, entity.id)).completion).toEqual({
-    general: 13,
+    general: 17,
     finances: 0,
     health: null,
   });
+  const contact = await repository.saveSection(
+    actor,
+    entity.id,
+    "general",
+    {
+      revision: saved.revision,
+      step: "contact",
+      fields: { phone: "+41 22 000 00 00", contactEmail: "company@isolated.test" },
+    },
+    randomUUID(),
+  );
+  expect(contact.completion).toBe(50); // (50 + 100 + 0) / 3.
+  expect(await repository.section(actor.userId, entity.id, "general")).toMatchObject({
+    step: "contact",
+    values: { phone: "+41 22 000 00 00", contactEmail: "company@isolated.test" },
+    completion: 50,
+  });
   const profiles = (await repository.list(actor.userId)).profiles;
-  expect(profiles.find((profile) => profile.id === "self")?.completion.general).toBe(7);
-  expect(profiles.find((profile) => profile.id === entity.id)?.completion.general).toBe(13);
+  expect(profiles.find((profile) => profile.id === "self")?.completion.general).toBe(22);
+  expect(profiles.find((profile) => profile.id === entity.id)?.completion.general).toBe(50);
 });
 
 it("validates and normalizes optional Swiss AVS numbers without assigning one to empty profiles", () => {
@@ -461,7 +520,7 @@ it("persists, isolates and removes AVS and occupation while including them in th
   const key = randomUUID();
   const managed = await repository.saveSection(actor, person.id, "general", input, key);
   expect(managed.values).toEqual({ avsNumber: "756.0000.0000.19", occupation: "Enseignante" });
-  expect(managed.completion).toBe(13);
+  expect(managed.completion).toBe(11);
   expect((await repository.section(actor.userId, person.id, "general")).values).toEqual(
     managed.values,
   );

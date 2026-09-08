@@ -5,13 +5,13 @@ import type {
 } from "./managed-profiles.js";
 
 type Field = keyof ProfileSectionValues;
-type StepCompletion = Readonly<{ information: number; details: number }>;
+type StepCompletion = Readonly<{ information: number; contact?: number; details: number }>;
 
 // Shared presentation groups keep the section score aligned with its visible step indicators.
 export function profileStepFields(
   kind: ManagedProfile["kind"],
   section: ProfileSectionName,
-): { information: readonly Field[]; details: readonly Field[] } {
+): { information: readonly Field[]; contact?: readonly Field[]; details: readonly Field[] } {
   if (section === "finances")
     return {
       information: ["annualIncomeMinor", "monthlyExpensesMinor", "currency"],
@@ -33,17 +33,16 @@ export function profileStepFields(
   return {
     information:
       kind === "legal_entity"
-        ? ["companyName", "registrationNumber", "phone", "contactEmail"]
+        ? ["companyName", "registrationNumber"]
         : [
             "firstName",
             "lastName",
-            "phone",
-            "contactEmail",
             "birthDate",
             "nationality",
             "avsNumber",
             "occupation",
           ],
+    contact: ["phone", "contactEmail"],
     details: ["street", "postalCode", "city", "country"],
   };
 }
@@ -65,10 +64,13 @@ export function profileStepCompletion(
   };
   return {
     information: percent(fields.information),
+    ...(fields.contact ? { contact: percent(fields.contact) } : {}),
     details: percent(fields.details),
   };
 }
 
 export function profileCompletionAverage(steps: StepCompletion): number {
-  return Math.round((steps.information + steps.details) / 2);
+  const percentages = [steps.information, steps.details];
+  if (steps.contact !== undefined) percentages.push(steps.contact);
+  return Math.round(percentages.reduce((sum, percent) => sum + percent, 0) / percentages.length);
 }

@@ -7,7 +7,7 @@ export const managedProfileIdSchema = z.union([
 ]);
 export const managedProfileKindSchema = z.enum(["person", "legal_entity"]);
 export const profileSectionNameSchema = z.enum(["general", "finances", "health"]);
-export const profileSectionStepSchema = z.enum(["information", "details", "review"]);
+export const profileSectionStepSchema = z.enum(["information", "contact", "details", "review"]);
 const money = z.number().int().nonnegative().max(1000000000000);
 const note = z.string().trim().min(1).max(1000);
 export const entityProfileValuesSchema = z

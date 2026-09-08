@@ -2,7 +2,7 @@
 
 ## Périmètre
 
-`identity_profiles` reste le seul profil canonique par utilisateur WorkOS. Les dossiers privés supplémentaires et les sections Finances/Santé appartiennent au [module profiles](../../profiles/README.md), sans deuxième copie des informations générales du titulaire. La page Wallet `/profile`, accessible depuis le compte public, prépare les informations et l’adresse sans imposer la connexion. Chaque passage d’étape enregistre le brouillon côté serveur. Après connexion WorkOS, la personne choisit explicitement de rattacher ce brouillon ; le serveur renvoie l’étape conservée. Une saisie non envoyée ne devient pas une sauvegarde.
+`identity_profiles` reste le seul profil canonique par utilisateur WorkOS. Les dossiers privés supplémentaires et les sections Finances/Santé appartiennent au [module profiles](../../profiles/README.md), sans deuxième copie des informations générales du titulaire. La page Wallet `/profile` prépare les informations, le contact (Téléphone/E-mail) et l’adresse sans imposer la connexion. Chaque passage d’étape enregistre le brouillon côté serveur, y compris `contact` ; les valeurs restent dans les champs canoniques existants. Après connexion WorkOS, la personne choisit explicitement de rattacher ce brouillon ; le serveur renvoie l’étape conservée. Une saisie non envoyée ne devient pas une sauvegarde.
 
 Contrats : `packages/contracts/src/profile.ts`. Commandes : `identity.profile.repository.ts`. Frontières HTTP : `identity.profile.routes.ts`. Preuves : [ledger S-013a](../../../../../../roadmap/evidence/S-013a.md). S-013 conserve les raccordements aux producteurs de documents, analyses, simulations, comparaisons et favoris, ainsi que l’OCR et la recette foyer.
 

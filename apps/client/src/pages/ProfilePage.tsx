@@ -10,6 +10,7 @@ import { api } from "../api";
 import { forgetIdentity, identityOptions } from "../features/identity/session-state";
 import {
   informationFields,
+  contactFields,
   addressFields,
   allFields,
   type ProfileFieldName,
@@ -23,7 +24,7 @@ import {
   type ProfileViewStep,
 } from "../features/profile/ProfileSteps";
 
-const steps = ["information", "address"] as const;
+const steps = ["information", "contact", "address"] as const;
 const autocomplete: Record<ProfileFieldName, string> = {
   firstName: "given-name",
   lastName: "family-name",
@@ -373,6 +374,7 @@ function ProfileEditor({
                   completion={completion}
                   labels={{
                     information: t("steps.information"),
+                    contact: t("steps.contact"),
                     details: t("steps.address"),
                   }}
                   disabled={journey.pending || blocked}
@@ -385,7 +387,7 @@ function ProfileEditor({
               <form
                 onSubmit={(event) => {
                   event.preventDefault();
-                  if (step === "information") void changeStep("address");
+                  if (step !== "address") void changeStep(steps[stepIndex + 1] ?? "address");
                   else if (!identity) void journey.continueLogin();
                   else void (journey.prefillDirty ? journey.confirm() : journey.move("address"));
                 }}
@@ -429,7 +431,12 @@ function ProfileEditor({
                 <fieldset disabled={journey.pending} className="space-y-6">
                   {unresolved.length > 0 && <p className="text-sm">{t("proposal.review")}</p>}
                   <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2">
-                    {(step === "information" ? informationFields : addressFields).map((field) => (
+                    {(step === "information"
+                      ? informationFields
+                      : step === "contact"
+                        ? contactFields
+                        : addressFields
+                    ).map((field) => (
                       <ProfileField key={field} field={field} journey={journey} />
                     ))}
                   </div>
@@ -473,14 +480,14 @@ function ProfileEditor({
                       {t(
                         journey.pending
                           ? "pending"
-                          : step === "information"
+                          : step !== "address"
                             ? "next"
                             : identity
                               ? "save"
                               : "login",
                       )}
                     </Button>
-                    {step === "information" && (
+                    {step !== "address" && (
                       <Button type="button" variant="ghost" onClick={() => void journey.move(step)}>
                         {t("save")}
                       </Button>

@@ -50,9 +50,16 @@ const moneyFields = new Set<Field>([
 ]);
 const numberFields = new Set<Field>(["heightCm", "weightKg"]);
 const noteFields = new Set<Field>(["allergies", "chronicConditions", "ongoingTreatments"]);
-function fieldsFor(profile: ManagedProfile, section: ProfileSectionName): [Field[], Field[]] {
-  const { information, details } = profileStepFields(profile.kind, section);
-  return [[...information], [...details]];
+function fieldsFor(
+  profile: ManagedProfile,
+  section: ProfileSectionName,
+): Record<ProfileViewStep, Field[]> {
+  const { information, contact, details } = profileStepFields(profile.kind, section);
+  return { information: [...information], contact: [...(contact ?? [])], details: [...details] };
+}
+function visibleStep(step: ProfileSection["step"], section: ProfileSectionName): ProfileViewStep {
+  if (step === "review") return "details";
+  return step === "contact" && section !== "general" ? "information" : step;
 }
 function formValues(fields: Field[], record: ProfileSection | null): Values {
   return Object.fromEntries(
@@ -113,8 +120,9 @@ export function ProfileSectionEditor({
 }) {
   const { t } = useTranslation("profile");
   const client = useQueryClient();
-  const [information, details] = fieldsFor(profile, section);
-  const fields = [...information, ...details];
+  const groups = fieldsFor(profile, section);
+  const fields = Object.values(groups).flat();
+  const steps = profileViewSteps.filter((value) => value !== "contact" || section === "general");
   const authority =
     section === "finances"
       ? financialProfileValuesSchema
@@ -138,7 +146,9 @@ export function ProfileSectionEditor({
   const { isDirty, dirtyFields } = form.formState;
   const [saved, setSaved] = useState<ProfileSection | null>(null);
   const completion = profileStepCompletion(profile.kind, section, values);
-  const [step, setStep] = useState<ProfileViewStep>(requestedStep ?? "information");
+  const [step, setStep] = useState<ProfileViewStep>(() =>
+    visibleStep(requestedStep ?? "information", section),
+  );
   const [pending, setPending] = useState(false);
   const [failure, setFailure] = useState<"save" | "conflict" | "session" | "denied" | null>(null);
   const [notice, setNotice] = useState(false);
@@ -189,8 +199,8 @@ export function ProfileSectionEditor({
     if (!query.data) return;
     if (!saved) {
       setSaved(query.data);
-      form.reset(formValues(fieldsFor(profile, section).flat(), query.data));
-      setStep(requestedStep ?? (query.data.step === "review" ? "details" : query.data.step));
+      form.reset(formValues(Object.values(fieldsFor(profile, section)).flat(), query.data));
+      setStep(visibleStep(requestedStep ?? query.data.step, section));
     } else if (query.data.revision > saved.revision) setFailure("conflict");
   }, [query.data, saved, form, profile, section, requestedStep]);
   useEffect(() => {
@@ -200,9 +210,9 @@ export function ProfileSectionEditor({
   useEffect(() => {
     if (requestedStep !== lastRequested.current) {
       lastRequested.current = requestedStep;
-      if (requestedStep) setStep(requestedStep);
+      if (requestedStep) setStep(visibleStep(requestedStep, section));
     }
-  }, [requestedStep]);
+  }, [requestedStep, section]);
   const save = async (next = step) => {
     if (!saved || busy.current || blocked) return false;
     const scope = sessionScope;
@@ -328,6 +338,7 @@ export function ProfileSectionEditor({
     );
   const labels = {
     information: t(`workspace.steps.${section}.information`),
+    contact: t("steps.contact"),
     details: t(`workspace.steps.${section}.details`),
   };
   const choices: Partial<Record<Field, string[]>> = {
@@ -351,7 +362,7 @@ export function ProfileSectionEditor({
         onSubmit={(event) => {
           event.preventDefault();
           if (step === "details") void save();
-          else void move("details");
+          else void move(steps[steps.indexOf(step) + 1] ?? "details");
         }}
         className="min-w-0 space-y-6"
         aria-busy={pending}
@@ -384,7 +395,7 @@ export function ProfileSectionEditor({
         )}
         <fieldset disabled={pending || blocked} className="space-y-6">
           <div className="grid gap-x-6 gap-y-5 sm:grid-cols-2">
-            {(step === "information" ? information : details).map((field) => (
+            {groups[step].map((field) => (
               <div
                 key={field}
                 className={`space-y-2 ${field === "street" || field === "primaryDoctorName" || noteFields.has(field) ? "sm:col-span-2" : ""}`}
@@ -483,9 +494,7 @@ export function ProfileSectionEditor({
               <Button
                 type="button"
                 variant="outline"
-                onClick={() =>
-                  void move(profileViewSteps[profileViewSteps.indexOf(step) - 1] ?? "information")
-                }
+                onClick={() => void move(steps[steps.indexOf(step) - 1] ?? "information")}
               >
                 {t("previous")}
               </Button>
@@ -493,7 +502,7 @@ export function ProfileSectionEditor({
             <Button type="submit">
               {t(pending ? "pending" : step === "details" ? "save" : "next")}
             </Button>
-            {step === "information" && (
+            {step !== "details" && (
               <Button type="button" variant="ghost" onClick={() => void save()}>
                 {t("save")}
               </Button>

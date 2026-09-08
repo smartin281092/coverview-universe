@@ -14,6 +14,12 @@ it("weights the displayed steps equally rather than weighting each field equally
   expect(profileCompletionAverage(steps)).toBe(31);
   expect(profileCompletionAverage({ information: 100, details: 0 })).toBe(50);
   expect(profileCompletionAverage({ information: 100, details: 100 })).toBe(100);
+  const contact = profileStepCompletion("person", "general", {
+    phone: "+41 22 000 00 00",
+    contactEmail: "contact@isolated.test",
+  });
+  expect(contact).toEqual({ information: 0, contact: 100, details: 0 });
+  expect(profileCompletionAverage(contact)).toBe(33);
 });
 
 it("counts the visible optional fields and zero amounts while ignoring empty controls", () => {
@@ -29,10 +35,10 @@ it("counts the visible optional fields and zero amounts while ignoring empty con
         occupation: "Profession",
       },
     ),
-  ).toEqual({ information: 25, details: 0 });
+  ).toEqual({ information: 33, contact: 0, details: 0 });
   expect(
     profileStepCompletion("legal_entity", "general", { registrationNumber: "CHE-1" }),
-  ).toEqual({ information: 25, details: 0 });
+  ).toEqual({ information: 50, contact: 0, details: 0 });
   expect(
     profileStepCompletion(
       "person",

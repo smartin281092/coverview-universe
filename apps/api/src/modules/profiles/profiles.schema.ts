@@ -72,7 +72,7 @@ export const managedProfileSections = pgTable(
     ),
     check(
       "managed_profile_sections_step",
-      sql`${table.step} in ('information','details','review')`,
+      sql`${table.step} in ('information','contact','details','review') and (${table.step} <> 'contact' or ${table.section} = 'general')`,
     ),
     uniqueIndex("managed_profile_sections_managed")
       .on(table.userId, table.managedProfileId, table.section)

@@ -15,6 +15,7 @@
   "stepCompletion": "{{step}} : {{completion}} de complétion",
   "steps": {
     "information": "Informations",
+    "contact": "Contact",
     "address": "Adresse",
     "review": "Validation"
   },

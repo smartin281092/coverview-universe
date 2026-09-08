@@ -11,6 +11,7 @@ import {
 export type ProfileFieldName = (typeof profileFieldSchema.options)[number];
 const generalSteps = profileStepFields("person", "general");
 export const informationFields = generalSteps.information as readonly ProfileFieldName[];
+export const contactFields = generalSteps.contact as readonly ProfileFieldName[];
 export const addressFields = generalSteps.details as readonly ProfileFieldName[];
 export const allFields = profileFieldSchema.options;
 // Empty controls are presentation state; the public schema remains the validation authority.

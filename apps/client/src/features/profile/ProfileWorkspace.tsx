@@ -87,14 +87,33 @@ export function ProfileWorkspace({
     selected?.kind === "legal_entity" && requestedTab === "health" ? "general" : requestedTab;
   const parsedStep =
     tab === requestedTab ? profileSectionStepSchema.safeParse(params.get("step")).data : undefined;
-  const requestedStep = parsedStep === "review" ? "details" : parsedStep;
+  const requestedStep =
+    parsedStep === "review"
+      ? "details"
+      : parsedStep === "contact" && tab !== "general"
+        ? "information"
+        : parsedStep;
   const editorScope = `${identity.user.id}:${identity.session.id}:${person}:${tab}`;
   useEffect(() => {
     if (!blocked && profiles.data && selected?.kind === "legal_entity" && requestedTab === "health")
       void navigate({ to: "/profile", search: { person, tab: "general" }, replace: true });
-    else if (!blocked && profiles.data && selected && parsedStep === "review")
-      void navigate({ to: "/profile", search: { person, tab, step: "details" }, replace: true });
-  }, [blocked, profiles.data, selected, requestedTab, parsedStep, person, tab, navigate]);
+    else if (!blocked && profiles.data && selected && requestedStep && parsedStep !== requestedStep)
+      void navigate({
+        to: "/profile",
+        search: { person, tab, step: requestedStep },
+        replace: true,
+      });
+  }, [
+    blocked,
+    profiles.data,
+    selected,
+    requestedTab,
+    parsedStep,
+    requestedStep,
+    person,
+    tab,
+    navigate,
+  ]);
   const awaitingIndex = !profiles.data;
   const editorBlocked = blocked || awaitingIndex;
   const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);

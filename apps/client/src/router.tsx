@@ -87,7 +87,7 @@ const profileRoute = createRoute({
     authError?: "callback";
     person?: string;
     tab?: "general" | "finances" | "health";
-    step?: "information" | "details" | "review";
+    step?: "information" | "contact" | "details" | "review";
   } => ({
     ...(search.view === "choices" ? { view: "choices" as const } : {}),
     ...(search.continue === "1" ? { continue: "1" as const } : {}),
@@ -99,7 +99,10 @@ const profileRoute = createRoute({
     ...(search.tab === "general" || search.tab === "finances" || search.tab === "health"
       ? { tab: search.tab }
       : {}),
-    ...(search.step === "information" || search.step === "details" || search.step === "review"
+    ...(search.step === "information" ||
+    search.step === "contact" ||
+    search.step === "details" ||
+    search.step === "review"
       ? { step: search.step }
       : {}),
   }),

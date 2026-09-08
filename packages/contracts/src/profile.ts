@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { insuranceCompanyIdsSchema } from "./companies.js";
 
-export const profileStepSchema = z.enum(["information", "address", "review"]);
+export const profileStepSchema = z.enum(["information", "contact", "address", "review"]);
 export const profileFieldSchema = z.enum([
   "firstName",
   "lastName",
