@@ -18,6 +18,10 @@ import {
 import { CompanyPicker } from "../features/authorizations/CompanyPicker";
 import { IdentityAttachment } from "../features/authorizations/IdentityAttachment";
 
+// Procuration universelle depuis le 08.09.2026 : sélection conservée pour réactivation.
+// Réviser aussi le texte de portée avant de rétablir une liste limitative de destinataires.
+const recipientSelectionEnabled = false;
+
 function Authorization({
   identity,
   kind,
@@ -40,7 +44,7 @@ function Authorization({
   const references = useQuery({
     queryKey: ["private", identity.user.id, identity.session.id, "document-companies"],
     queryFn: ({ signal }) => api.documentCompanies({ signal }),
-    enabled: kind === "procuration",
+    enabled: recipientSelectionEnabled && kind === "procuration",
     gcTime: 0,
     staleTime: 0,
     retry: false,
@@ -166,7 +170,7 @@ function Authorization({
             </p>
           )}
         </section>
-        {kind === "procuration" && (
+        {recipientSelectionEnabled && kind === "procuration" && (
           <section className="space-y-3" aria-labelledby="authorization-companies">
             <h2 id="authorization-companies" className="font-medium">
               {t("companies.recipients")}
@@ -278,7 +282,7 @@ function Authorization({
           onRefresh={refreshProfile}
         />
       )}
-      {companiesOpen && (
+      {recipientSelectionEnabled && kind === "procuration" && companiesOpen && (
         <CompanyPicker
           identity={identity}
           profile={profile.data}

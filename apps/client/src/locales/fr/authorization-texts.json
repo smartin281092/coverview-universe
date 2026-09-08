@@ -1,5 +1,5 @@
 {
-  "version": "coverview-2026-09-07.2",
+  "version": "coverview-2026-09-08.1",
   "sources": {
     "Procuration_Bassa_Martin_Partners_finale.pdf": "50bdd9d2a434a669572ba4cf784a5e17fdf4ceeb3dd096856db6325f7bc65af9",
     "mandat-gestion-bmp-v2026.pdf": "ff89ff89e08627a03b5588ae989395dd7f45395b9415e76c892ebb9ee5d6b4d8",
@@ -7,12 +7,16 @@
   },
   "procuration": [
     {
-      "title": "Contrats concernés",
-      "text": "Je soussigné(e) autorise CoverView à demander et recevoir, en mon nom, les renseignements et documents relatifs à mes contrats d’assurance auprès de chacune des compagnies désignées ci-dessus. La présente procuration couvre tous les contrats individuels, actuels ou échus, pour lesquels je suis ou ai été preneur d’assurance ou titulaire auprès de ces compagnies, même si je ne connais pas leur numéro de police. Chaque compagnie peut identifier les contrats concernés au moyen de mes données personnelles."
+      "title": "Objet et portée universelle",
+      "text": "Je soussigné(e) donne procuration à Bassa Martin Partners Sàrl, agissant sous la marque CoverView et représentée par Sébastien Martin, pour demander, consulter et recevoir en mon nom les renseignements et documents me concernant auprès de toute institution, entreprise, assurance ou organisme public ou privé qui les détient, dans le cadre de mes assurances, de ma prévoyance et de mes avoirs. Cette autorisation s’applique sans sélection ni désignation préalable de destinataires, y compris lorsque l’institution, le contrat, le compte ou le numéro de police ne m’est pas connu."
+    },
+    {
+      "title": "Institutions et recherche d’avoirs",
+      "text": "Sont notamment concernés les compagnies d’assurance et caisses-maladie ; les caisses de pension et institutions de prévoyance professionnelle du 2e pilier, obligatoire et surobligatoire ; les fondations et institutions de libre passage ; la Fondation institution supplétive LPP ; la Centrale du 2e pilier du Fonds de garantie LPP ; les institutions de prévoyance individuelle du 3e pilier, banques et établissements financiers ; ainsi que les caisses de compensation, organismes d’assurances sociales, employeurs actuels ou anciens et administrations détenant les renseignements concernés. CoverView peut déposer et suivre des demandes de recherche afin d’identifier les institutions et de localiser mes avoirs, y compris oubliés ou non réclamés, puis demander les documents correspondants."
     },
     {
       "title": "Documents et renseignements demandés",
-      "text": "Copies des polices et avenants, situation actuelle du ou des contrats, valeur de rachat actuelle, valeur de réduction ou de libération, capital ou valeur d’épargne constituée, primes, échéances et prestations, allocation de placement ou supports détenus, frais, retenues et déductions applicables."
+      "text": "L’autorisation couvre mes relations actuelles ou passées : contrats individuels ou couverture collective me concernant, affiliations, comptes, polices, prestations et avoirs. Elle permet notamment d’obtenir les polices et avenants, certificats et règlements de prévoyance, attestations d’affiliation, relevés et extraits de compte, décomptes d’entrée et de sortie, prestations de libre passage, historiques de transferts, résultats de recherches d’avoirs, cotisations, primes, échéances et prestations, valeurs de rachat, de réduction ou de libération, capitaux et valeurs d’épargne, allocations de placement, frais et retenues. J’autorise les organismes concernés à transmettre directement à CoverView ces renseignements et copies de documents, sur la base de mes données d’identification et dans les limites ci-dessous."
     },
     {
       "title": "Limites de la procuration",
