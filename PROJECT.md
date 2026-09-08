@@ -62,6 +62,10 @@ Les besoins de paiement, signature, email, Gmail/Calendar, document intelligence
 - Noms de dossiers `client` pour Wallet, `www`, `admin`, `partners`, `intelligence`, `exchange` : mapping de travail, sans infrastructure correspondante.
 - Modèle de droits du foyer, équipes et partenaires, méthodes WorkOS activées, régions/ressources cloud, règles de calcul/commerciales : **questions ouvertes**, pas hypothèses à matérialiser en base. Elles bloquent les slices concernées seulement.
 
+## Règles transverses
+
+**Identité commerciale fournie par l’utilisateur le 7 septembre 2026** : CoverView est la nouvelle marque de Bassa Martin Partners Sàrl, sans changement de personne morale, coordonnées, inscriptions FINMA ni assurance RC. Les documents utilisent CoverView comme nom d’usage et conservent la mention de la personne morale. Cette décision et ses trois documents de référence sont consignés dans [le plan des autorisations](roadmap/plans/S-042a-library-authorizations.plan.md) ; elle ne constitue pas une vérification indépendante des registres ou de la couverture RC. Les règles de remplissage du profil restent dans [le module documentaire](apps/api/src/modules/document-intelligence/README.md#revue-et-profil-compatible).
+
 ## Git et livraison
 
 Dépôt donné par l'utilisateur : [smartin281092/coverview-universe](https://github.com/smartin281092/coverview-universe). Remote `origin` configuré, branche locale `main`. Lecture distante initiale : aucune référence publiée retournée par `git ls-remote` le 2026-09-05. Le harness fourni et ses sources ont un commit initial conservé ; aucun historique distant remplacé.

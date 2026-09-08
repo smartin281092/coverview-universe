@@ -66,6 +66,10 @@ Chaque contenu lisible possède `/<slug>.md`, annoncé par un lien alternatif, a
 
 ## Développement et dépendances
 
+Le lancement `dev` passe par `dev.mjs` pour conserver la supervision du processus parent et éviter une seconde mise en arrière-plan par Astro dans un contexte agent. La preview applique le même marqueur à son enfant Astro. Conserver ce cycle de vie unique ; [diagnostic S-000a](../../roadmap/evidence/S-000a.md).
+
+Si l’import de Sharp échoue après une installation pnpm, inspecter la résolution du paquet et la cible de sa jonction avant de modifier les versions. En S-010, une cible sans suffixe de peer expliquait l’échec ; la résolution outillée de la même version a rétabli import, build et installation frozen, sans édition manuelle du lockfile. [Diagnostic conservé](../../roadmap/evidence/S-010.md).
+
 `pnpm --filter www dev` : `127.0.0.1:4103`, port strict. `build` : HTML/CSS/assets sous `dist`. `typecheck` : Astro Check. Astro, MDX, Tailwind et le plugin Vite sont imposés (MIT). `@astrojs/react` assure le rendu statique de `@coverview/ui` ; aucun CMS ni accès direct à une base applicative n’est ajouté.
 
 `src/styles/global.css` importe `@coverview/ui/styles.css` et déclare `@source "../../../../packages/ui/src"` pour compiler les utilitaires des composants partagés. Tailwind est porté par UI ; le plugin Vite reste déclaré dans `www`, sans dépendance Tailwind directe redondante. Le thème charge Geist Variable via Fontsource pour les titres et le corps, puis les OTF locaux Montech aux graisses 400/500 pour les usages précédents de Geist Mono. Montech n’est pas à chasse fixe. Le [README UI](../../packages/ui/README.md) porte la provenance du preset réellement généré, les primitives `button`, `skeleton`, `card`, `input`, `label` et les sources des fontes. Les paquets Inter et Geist Mono sont remplacés par Geist via pnpm ; aucune autre bibliothèque UI n’est introduite.
@@ -77,6 +81,8 @@ Documentation officielle consultée lors des étapes précédentes : [Astro MDX]
 Sharp est déclaré directement pour le service d’images Astro, uniquement au build/développement. Déjà présent transitivement dans le lockfile, il ne crée aucun traitement de fichiers soumis par un visiteur. Nom/provenance et licence Apache-2.0 contrôlés ; justification et diagnostic d’installation dans le ledger S-010.
 
 ## Vérifier les parcours
+
+Le retour explicite d’un détail éditorial rejoint la page d’index qui contient réellement sa carte, avec son ancre ; un retour systématique à la racine perd la position dans une liste paginée. Distinguer la preuve de ce retour explicite de la restauration native du focus par le navigateur. [Correction et oracles S-011](../../roadmap/evidence/S-011.md).
 
 GSAP est installé à la demande de l’utilisateur pour les prochaines animations, sans chargement dans les pages actuelles. [Périmètre préparatoire, licence et exception Knip](../../roadmap/evidence/gsap-setup.md). Sa future intégration devra préserver le contenu sans JavaScript et respecter la réduction des animations.
 

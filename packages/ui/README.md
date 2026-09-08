@@ -38,6 +38,8 @@ Les usages de `--cv-font-mono`, y compris l’utilitaire `font-mono` et les sur-
 
 ## Règles de présentation et invariants
 
+Une primitive dont le `display` est déclaré hors couche CSS peut primer sur l’utilitaire Tailwind `hidden`. Pour masquer son lien au breakpoint voulu, masquer son conteneur, comme dans le shell Wallet, puis contrôler le rendu. À 320 px, tenir compte de la largeur consommée par une scrollbar classique : un `min-width: 320px` peut provoquer un débordement. [Défauts reproduits et corrections S-013a](../../roadmap/evidence/S-013a.md).
+
 `src/preset.css` conserve les tokens clairs Mist générés ; `src/theme.css` porte les fontes et adaptations communes, et `src/styles.css` leur raccord Tailwind, notamment les rayons du preset. Ces fichiers exécutables font autorité sur les valeurs. Les règles visuelles courantes sont celles d’ADR-0008 ; les sections et états restent ouverts, les cards rares. Un bento n’emballe pas une longue section, un formulaire ou un état vide. Les consommateurs gardent leur hiérarchie sémantique, leurs catalogues, le focus visible et leurs responsabilités d’accessibilité.
 
 ## Permissions et données
