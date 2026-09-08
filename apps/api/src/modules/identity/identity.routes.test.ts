@@ -8,6 +8,8 @@ import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { eq } from "drizzle-orm";
 import {
   adminUsersSchema,
+  authorizationNoticeSchema,
+  lsa45NoticeVersion,
   managedProfileSchema,
   profileSchema,
   profileSectionSchema,
@@ -21,6 +23,8 @@ import { identityAdminPermissions, identityLogins, identitySessions } from "./id
 import { createIdentityService } from "./identity.service.js";
 import { IdentityError, randomSecret, secretHash } from "./identity.security.js";
 import type { IdentityProvider, RemoteSession } from "./identity.workos.js";
+import { identityNoticeOpenings } from "./identity.notice.schema.js";
+import { createNoticeRepository } from "./identity.notice.repository.js";
 
 // Explicit provider double: these tests prove local HTTP/SQL guarantees, never a real WorkOS login.
 const example = parseEnv(
@@ -572,4 +576,75 @@ describe("identity HTTP with real PostgreSQL and an explicit WorkOS double", () 
       expect((await request("/auth/login?surface=wallet")).statusCode).toBe(303);
     expect((await request("/auth/login?surface=wallet")).statusCode).toBe(429);
   });
+});
+
+it("records the first LSA45 opening once, preserves it across retries and sessions, and isolates readers", async () => {
+  const owner = await login();
+  const stranger = await login();
+  const url = "/identity/notices/lsa45";
+  const empty = await request(url, owner.cookie);
+  expect(empty.statusCode).toBe(200);
+  expect(authorizationNoticeSchema.parse(empty.json()).firstOpenedAt).toBeNull();
+  expect(
+    await database.db
+      .select()
+      .from(identityNoticeOpenings)
+      .where(eq(identityNoticeOpenings.userId, owner.body.user.id)),
+  ).toHaveLength(0);
+  const input = { version: lsa45NoticeVersion };
+  const [first, concurrent] = await Promise.all([
+    mutation(url + "/opened", owner, input),
+    mutation(url + "/opened", owner, input),
+  ]);
+  expect(first.statusCode, first.body).toBe(200);
+  expect(concurrent.statusCode, concurrent.body).toBe(200);
+  const receipt = authorizationNoticeSchema.parse(first.json());
+  expect(receipt.firstOpenedAt).not.toBeNull();
+  expect(concurrent.json()).toEqual(receipt);
+  expect((await mutation(url + "/opened", owner, input)).json()).toEqual(receipt);
+  const freshSession = await login(owner.identity);
+  expect((await request(url, freshSession.cookie)).json()).toEqual(receipt);
+  expect((await mutation(url + "/opened", freshSession, input)).json()).toEqual(receipt);
+  expect(
+    authorizationNoticeSchema.parse((await request(url, stranger.cookie)).json()).firstOpenedAt,
+  ).toBeNull();
+  const rows = await database.db
+    .select()
+    .from(identityNoticeOpenings)
+    .where(eq(identityNoticeOpenings.userId, owner.body.user.id));
+  expect(rows).toHaveLength(1);
+  expect(rows[0]?.sessionId).toBe(owner.body.session.id);
+});
+
+it("refuses LSA45 opening without owner authority, valid CSRF or the exact notice version", async () => {
+  const owner = await login();
+  const stranger = await login();
+  const url = "/identity/notices/lsa45";
+  const input = { version: lsa45NoticeVersion };
+  expect((await request(url)).statusCode).toBe(401);
+  expect(
+    (await mutation(url + "/opened", owner, input, { "x-csrf-token": "invalid" })).statusCode,
+  ).toBe(403);
+  expect(
+    (await mutation(url + "/opened", owner, input, { origin: "https://untrusted.example" }))
+      .statusCode,
+  ).toBe(403);
+  expect(
+    (await mutation(url + "/opened", owner, { ...input, userId: stranger.body.user.id }))
+      .statusCode,
+  ).toBe(400);
+  expect((await mutation(url + "/opened", owner, { version: "unknown" })).statusCode).toBe(400);
+  const notices = createNoticeRepository(database.db);
+  await expect(notices.opened(owner.body.user.id, stranger.body.session.id)).rejects.toMatchObject({
+    code: "IDENTITY_UNAUTHENTICATED",
+  });
+  await database.db
+    .update(identitySessions)
+    .set({ revokedAt: new Date() })
+    .where(eq(identitySessions.id, owner.body.session.id));
+  await expect(notices.opened(owner.body.user.id, owner.body.session.id)).rejects.toMatchObject({
+    code: "IDENTITY_UNAUTHENTICATED",
+  });
+  expect((await notices.get(owner.body.user.id)).firstOpenedAt).toBeNull();
+  expect((await notices.get(stranger.body.user.id)).firstOpenedAt).toBeNull();
 });

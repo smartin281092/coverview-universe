@@ -1,4 +1,5 @@
 import { z } from "zod";
+export * from "./authorization-notice.js";
 import { documentErrorCodes } from "./documents.js";
 import { managedProfileErrorCodes } from "./managed-profiles.js";
 export * from "./managed-profiles.js";

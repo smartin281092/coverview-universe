@@ -78,6 +78,13 @@
       "when": 1788862091282,
       "tag": "0010_bored_jocasta",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1788875727294,
+      "tag": "0011_unknown_bill_hollister",
+      "breakpoints": true
     }
   ]
 }

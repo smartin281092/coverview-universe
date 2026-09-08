@@ -1,5 +1,8 @@
 import {
   apiErrorSchema,
+  authorizationNoticeSchema,
+  authorizationNoticeOpenedInputSchema,
+  lsa45NoticeVersion,
   localPersonasSchema,
   readinessSchema,
   identityConfigSchema,
@@ -144,6 +147,19 @@ export function createApiClient({
   }
 
   return {
+    authorizationNotice: (options?: RequestOptions) =>
+      request("/identity/notices/lsa45", authorizationNoticeSchema, options, undefined, true),
+    openAuthorizationNotice: (options: MutationOptions) =>
+      request(
+        "/identity/notices/lsa45/opened",
+        authorizationNoticeSchema,
+        options,
+        {
+          body: authorizationNoticeOpenedInputSchema.parse({ version: lsa45NoticeVersion }),
+          credentials: options,
+        },
+        true,
+      ),
     adminUsers: (query: z.input<typeof adminUsersQuerySchema> = {}, options?: RequestOptions) =>
       request(
         `/admin/users?${new URLSearchParams(

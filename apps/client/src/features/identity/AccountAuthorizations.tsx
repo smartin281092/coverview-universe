@@ -2,13 +2,16 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { CircleDashed, ArrowUpRight } from "lucide-react";
 import { Button } from "@coverview/ui";
+import type { IdentityMe } from "@coverview/api-client";
+import { NoticeSummary } from "../authorizations/NoticeSummary";
 
-export function AccountAuthorizations() {
+export function AccountAuthorizations({ identity }: { identity: IdentityMe }) {
   const { t } = useTranslation("authorizations");
   return (
     <div className="space-y-5">
       <p className="max-w-2xl text-sm text-muted-foreground">{t("intro")}</p>
       <ul className="divide-y divide-border">
+        <NoticeSummary identity={identity} />
         {(["procuration", "mandate"] as const).map((kind) => (
           <li key={kind} className="flex flex-wrap items-center justify-between gap-4 py-5">
             <div className="min-w-0 flex-1 space-y-1">

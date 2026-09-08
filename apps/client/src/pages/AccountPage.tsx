@@ -73,7 +73,7 @@ export function AccountPage() {
               <LogoutActions identity={identity} scope="all" />
             </TabsContent>
             <TabsContent value="authorizations" className="text-base">
-              <AccountAuthorizations />
+              <AccountAuthorizations key={identity.session.id} identity={identity} />
             </TabsContent>
           </Tabs>
         )}

@@ -32,6 +32,8 @@ import { createProfileRepository } from "./identity.profile.repository.js";
 import { registerProfileRoutes } from "./identity.profile.routes.js";
 import { createAdminUserRepository } from "./identity.admin.repository.js";
 import { registerAdminUserRoutes } from "./identity.admin.routes.js";
+import { createNoticeRepository } from "./identity.notice.repository.js";
+import { registerNoticeRoutes } from "./identity.notice.routes.js";
 
 export async function registerIdentity(
   server: FastifyInstance,
@@ -44,6 +46,7 @@ export async function registerIdentity(
   let service = injectedService;
   let profileRepository: ReturnType<typeof createProfileRepository> | undefined;
   let adminRepository: ReturnType<typeof createAdminUserRepository> | undefined;
+  let noticeRepository: ReturnType<typeof createNoticeRepository> | undefined;
   if (config.AUTH_ENABLED) {
     const database = createDatabase(config);
     database.pool.on("error", () =>
@@ -52,6 +55,7 @@ export async function registerIdentity(
     app.addHook("onClose", () => database.pool.end());
     profileRepository = createProfileRepository(database.db);
     adminRepository = createAdminUserRepository(database.db);
+    noticeRepository = createNoticeRepository(database.db);
     service ??= createIdentityService(
       config,
       createIdentityRepository(database.db),
@@ -397,6 +401,16 @@ export async function registerIdentity(
     },
     authenticate: (request) => requiredService().authenticate(token(request)),
     csrf: (value) => requiredService().csrf(value),
+    checkHost,
+    checkMutation,
+  });
+  registerNoticeRoutes(app, {
+    repository: () => {
+      requiredService();
+      if (!noticeRepository) throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
+      return noticeRepository;
+    },
+    authenticate: (request) => requiredService().authenticate(token(request)),
     checkHost,
     checkMutation,
   });

@@ -8,6 +8,7 @@ import { Button, Input, Label, LoadingState } from "@coverview/ui";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { DocumentFailure } from "../features/documents/DocumentFailure";
 import { MissingPage } from "./StatesPage";
+import { AuthorizationNoticePage } from "./AuthorizationNoticePage";
 import { api } from "../api";
 import texts from "../locales/fr/authorization-texts.json";
 import {
@@ -248,26 +249,6 @@ function Authorization({
             {t(kind === "mandate" ? "countersignature" : "clientSignature")}
           </p>
         </section>
-        <section
-          className="space-y-6 border-t border-border pt-6"
-          aria-labelledby="legal-information"
-        >
-          <div className="space-y-2">
-            <h2 id="legal-information" className="text-lg font-medium">
-              {t("informationTitle")}
-            </h2>
-            <p className="text-xs text-muted-foreground">{t("informationEdition")}</p>
-          </div>
-          {texts.information.map((section) => (
-            <section key={section.title} className="space-y-2">
-              <h3 className="text-sm font-medium">{section.title}</h3>
-              <p className="text-sm leading-7">{section.text}</p>
-            </section>
-          ))}
-          <p className="text-sm text-muted-foreground">
-            {t("informationSignature", { name: rows[0]?.value || t("missing") })}
-          </p>
-        </section>
         <p className="border-t border-border pt-5 text-xs leading-6 text-muted-foreground">
           {t("legalContact")}
         </p>
@@ -329,6 +310,12 @@ function Authorization({
 
 export function AuthorizationDetailsPage() {
   const { kind } = useParams({ from: "/authorizations/$kind" });
+  if (kind === "lsa45")
+    return (
+      <IdentityBoundary>
+        {(identity) => <AuthorizationNoticePage key={identity.session.id} identity={identity} />}
+      </IdentityBoundary>
+    );
   if (kind !== "mandate" && kind !== "procuration") return <MissingPage />;
   return (
     <IdentityBoundary>

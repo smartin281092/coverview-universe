@@ -31,7 +31,7 @@ async function main() {
       }
       // Explicit opt-in, loopback-only, fixed CoverView tables; no cascade into unrelated schemas.
       await database.pool.query(
-        "DROP TABLE IF EXISTS profile_audit_events, profile_commands, profile_choices, profile_drafts, identity_mfa_enrollments, identity_mfa_challenges, identity_audit_events, identity_admin_permissions, identity_sessions, identity_profiles, identity_logins, identity_users",
+        "DROP TABLE IF EXISTS identity_notice_openings, profile_audit_events, profile_commands, profile_choices, profile_drafts, identity_mfa_enrollments, identity_mfa_challenges, identity_audit_events, identity_admin_permissions, identity_sessions, identity_profiles, identity_logins, identity_users",
       );
       await database.pool.query("DROP TABLE IF EXISTS local_preview_personas");
       await database.pool.query("DROP SCHEMA IF EXISTS drizzle CASCADE");

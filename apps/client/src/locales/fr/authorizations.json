@@ -1,5 +1,5 @@
 {
-  "intro": "Retrouvez ici les procurations et mandats enregistrés dans CoverView. Déposer un document ne donne pas, à lui seul, une autorisation d’agir en votre nom.",
+  "intro": "Retrouvez ici vos documents d’information, procurations et mandats. Ouvrir un document ne donne pas d’autorisation d’agir en votre nom.",
   "procuration": {
     "title": "Procuration",
     "description": "Autorisez CoverView à recueillir les informations et documents utiles à votre accompagnement."
@@ -86,11 +86,10 @@
     "save": "Enregistrer la pièce jointe"
   },
   "informationTitle": "Devoir d’information légal · art. 45 LSA",
-  "informationEdition": "Édition 02.2026 · Information à lire avec votre autorisation",
-  "informationSignature": "Client : {{name}} · La signature attestera également la prise de connaissance de cette notice.",
+  "informationEdition": "Édition 02.2026",
   "legalContact": "CoverView · ℅ Arnaud Parreaux, Avocat · Boulevard James-Fazy 3, 1201 Genève · coverview.ch",
   "signatureActions": "Actions de signature",
-  "accept": "J’ai lu les documents et j’accepte leur contenu",
+  "accept": "J’ai lu ce document et j’accepte son contenu",
   "sign": "Accepter et signer",
   "complete": "Renseigné",
   "editField": "Modifier : {{field}}",
@@ -127,5 +126,16 @@
       "liechtenstein-life": "Liechtenstein Life",
       "tsm": "TSM Assurance"
     }
+  },
+  "information": {
+    "title": "Notice d’information · LSA45",
+    "description": "Les informations sur votre intermédiaire et son activité.",
+    "read": "Lu",
+    "unread": "À lire",
+    "loading": "Vérification de la lecture…",
+    "unavailable": "Statut de lecture indisponible",
+    "retry": "Réessayer",
+    "recording": "Enregistrement de l’ouverture…",
+    "saveFailed": "La lecture n’a pas pu être enregistrée. Réessayez."
   }
 }
