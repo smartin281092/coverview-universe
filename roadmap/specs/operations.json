@@ -16,7 +16,7 @@
       "crm"
     ],
     "mode": "local-fixtures",
-    "priority": 70,
+    "priority": 31,
     "session_budget": 1,
     "journey": [
       "Saisir un lead ou recevoir un événement public/Wallet/partenaire/import/email avec attribution.",

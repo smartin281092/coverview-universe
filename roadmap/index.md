@@ -15,12 +15,12 @@ L’ordre est topologique ; les identifiants restent stables. Vérifier dépenda
 | 3 | [S-013a — Préparer son profil privé et le reprendre dans Wallet](plans/S-013a.plan.md) | M1 | integration | done | [S-000b](plans/S-000b.plan.md) | [prompt](prompts/S-013a.prompt.md) |
 | 4 | [S-042a — Conserver ses documents originaux et confirmer les informations extraites dans son profil](plans/S-042a.plan.md) | M8 | integration | running | [S-013a](plans/S-013a.plan.md) | [prompt](prompts/S-042a.prompt.md) |
 | 5 | [S-010 — Ouvrir les trois parcours CoverView depuis un site public compact](plans/S-010.plan.md) | M1 | local-fixtures | done | [S-000a](plans/S-000a.plan.md) | [prompt](prompts/S-010.prompt.md) |
-| 6 | [S-081 — Délivrer un dossier avec tâches, prochaine action et Kanban](plans/S-081.plan.md) | M5 | local-fixtures | specified | [S-000b](plans/S-000b.plan.md) | [prompt](prompts/S-081.prompt.md) |
-| 7 | [S-017 — Générer et archiver les documents de démarches à partir du profil](plans/S-017.plan.md) | M2 | local-fixtures | specified | [S-013a](plans/S-013a.plan.md) | [prompt](prompts/S-017.prompt.md) |
-| 8 | [S-018 — Signer un document de test et suivre son dossier de preuve](plans/S-018.plan.md) | M2 | local-fixtures | specified | [S-017](plans/S-017.plan.md) | [prompt](prompts/S-018.prompt.md) |
-| 9 | [S-080 — Qualifier un entrant et suivre plusieurs opportunités distinctes](plans/S-080.plan.md) | M5 | local-fixtures | specified | [S-000b](plans/S-000b.plan.md), [S-013a](plans/S-013a.plan.md) | [prompt](prompts/S-080.prompt.md) |
-| 10 | [S-011 — Publier les pages de méthode, preuves et contenus de référence](plans/S-011.plan.md) | M1 | local-fixtures | review | [S-010](plans/S-010.plan.md) | [prompt](prompts/S-011.prompt.md) |
-| 11 | [S-012 — Répondre aux FAQ et conserver la provenance déclarée des prospects](plans/S-012.plan.md) | M1 | local-fixtures | specified | [S-011](plans/S-011.plan.md), [S-080](plans/S-080.plan.md) | [prompt](prompts/S-012.prompt.md) |
+| 6 | [S-080 — Qualifier un entrant et suivre plusieurs opportunités distinctes](plans/S-080.plan.md) | M5 | local-fixtures | specified | [S-000b](plans/S-000b.plan.md), [S-013a](plans/S-013a.plan.md) | [prompt](prompts/S-080.prompt.md) |
+| 7 | [S-011 — Publier les pages de méthode, preuves et contenus de référence](plans/S-011.plan.md) | M1 | local-fixtures | review | [S-010](plans/S-010.plan.md) | [prompt](prompts/S-011.prompt.md) |
+| 8 | [S-012 — Répondre aux FAQ et conserver la provenance déclarée des prospects](plans/S-012.plan.md) | M1 | local-fixtures | specified | [S-011](plans/S-011.plan.md), [S-080](plans/S-080.plan.md) | [prompt](prompts/S-012.prompt.md) |
+| 9 | [S-081 — Délivrer un dossier avec tâches, prochaine action et Kanban](plans/S-081.plan.md) | M5 | local-fixtures | specified | [S-000b](plans/S-000b.plan.md) | [prompt](prompts/S-081.prompt.md) |
+| 10 | [S-017 — Générer et archiver les documents de démarches à partir du profil](plans/S-017.plan.md) | M2 | local-fixtures | specified | [S-013a](plans/S-013a.plan.md) | [prompt](prompts/S-017.prompt.md) |
+| 11 | [S-018 — Signer un document de test et suivre son dossier de preuve](plans/S-018.plan.md) | M2 | local-fixtures | specified | [S-017](plans/S-017.plan.md) | [prompt](prompts/S-018.prompt.md) |
 | 12 | [S-014 — Créer et documenter un produit de catalogue canonique dans Admin](plans/S-014.plan.md) | M2 | local-fixtures | specified | [S-000b](plans/S-000b.plan.md), [S-017](plans/S-017.plan.md) | [prompt](prompts/S-014.prompt.md) |
 | 13 | [S-015 — Valider et publier le catalogue sans modifier les analyses passées](plans/S-015.plan.md) | M2 | local-fixtures | specified | [S-014](plans/S-014.plan.md) | [prompt](prompts/S-015.prompt.md) |
 | 14 | [S-016 — Versionner et modifier les hypothèses de calcul depuis Admin](plans/S-016.plan.md) | M2 | local-fixtures | specified | [S-015](plans/S-015.plan.md) | [prompt](prompts/S-016.prompt.md) |
@@ -200,8 +200,8 @@ L’ordre est topologique ; les identifiants restent stables. Vérifier dépenda
 
 ### M5 — Opérations
 
-- [S-081](plans/S-081.plan.md) — Délivrer un dossier avec tâches, prochaine action et Kanban · 6 critères · local-fixtures.
 - [S-080](plans/S-080.plan.md) — Qualifier un entrant et suivre plusieurs opportunités distinctes · 6 critères · local-fixtures.
+- [S-081](plans/S-081.plan.md) — Délivrer un dossier avec tâches, prochaine action et Kanban · 6 critères · local-fixtures.
 - [S-082](plans/S-082.plan.md) — Lire la vue client 360 et une timeline commune · 6 critères · local-fixtures.
 - [S-083](plans/S-083.plan.md) — Traiter une boîte de réception orientée dossiers avec emails fictifs · 6 critères · local-fixtures.
 - [S-084](plans/S-084.plan.md) — Planifier un rendez-vous et assurer sa suite dans Admin · 6 critères · local-fixtures.

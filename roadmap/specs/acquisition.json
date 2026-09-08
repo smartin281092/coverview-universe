@@ -115,7 +115,7 @@
     "apps": ["www"],
     "modules": ["content-acquisition"],
     "mode": "local-fixtures",
-    "priority": 111,
+    "priority": 32,
     "session_budget": 1,
     "journey": [
       "Créer modèles de pages, article, cas, rapport et auteur avec métadonnées de provenance.",
@@ -218,7 +218,7 @@
     "apps": ["www", "api", "admin"],
     "modules": ["content-acquisition"],
     "mode": "local-fixtures",
-    "priority": 112,
+    "priority": 33,
     "session_budget": 1,
     "journey": [
       "Rédiger corpus FAQ des seize questions source et réponses validables.",

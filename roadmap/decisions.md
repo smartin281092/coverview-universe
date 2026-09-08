@@ -619,9 +619,9 @@ Autorisation : Mandat PROG-23 réaffirmé dans la création de cette tâche ; ro
 
 - `bible.question.008` · Le profil individuel reste privé tant qu’aucun consentement explicite par ressource n’accorde un accès au foyer ? → **Oui, aucun partage familial implicite** · preuve : Décision déléguée PROG-23, 2026-09-06 : roadmap/execution-policy.md ; confidentialité ADR-0002, ingestion de pièces désactivée sans matrice approuvée.
 
-### S-081 — question 1
+### S-080 — question 1
 
-[S-081](plans/S-081.plan.md) · Quel périmètre initial autoriser pour les équipes internes ?
+[S-080](plans/S-080.plan.md) · Quel périmètre initial autoriser pour les équipes internes ?
 
 - (a) Accès aux objets explicitement affectés à la personne ou à son équipe, avec droits financiers distincts — défaut proposé
 - (b) Accès transversal des conseillers selon une matrice métier fournie avant implémentation
@@ -632,9 +632,9 @@ Autorisation : aucune enregistrée. Réponse : **non enregistrée**.
 
 Aucune réponse à cette question exacte.
 
-### S-080 — question 1
+### S-081 — question 1
 
-[S-080](plans/S-080.plan.md) · Quel périmètre initial autoriser pour les équipes internes ?
+[S-081](plans/S-081.plan.md) · Quel périmètre initial autoriser pour les équipes internes ?
 
 - (a) Accès aux objets explicitement affectés à la personne ou à son équipe, avec droits financiers distincts — défaut proposé
 - (b) Accès transversal des conseillers selon une matrice métier fournie avant implémentation

@@ -55,4 +55,4 @@ La revue sémantique recherche les omissions, faux liens de couverture et dépen
 
 ## Reprise
 
-[Le checkpoint roadmap](handoffs/roadmap.md) donne l'état et la prochaine action. CDX-03 gouverne les reprises futures : nouvelle tâche propre au seuil de 70 % si une mesure fiable existe, sinon checkpoint préventif sans annoncer de seuil mesuré. Le journal d'initialisation est historique ; il ne remplace pas ce nouvel état.
+[La revue du 8 septembre 2026](evidence/roadmap-review-2026-09-08.md) explique l’ordre et les preuves restant à consolider ; `state.json` et l’index généré portent l’état courant. [Le checkpoint de rédaction](handoffs/roadmap.md) est historique. CDX-03 gouverne les reprises futures : nouvelle tâche propre au seuil de 70 % si une mesure fiable existe, sinon checkpoint préventif sans annoncer de seuil mesuré.

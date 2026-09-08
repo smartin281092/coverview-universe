@@ -63,7 +63,7 @@
   session: ""
   cost: ""
   decisions: [{"ref":"project.documents.local-processing","question":"Quel traitement pour la première ingestion réelle ?","answer":"API OpenAI pour OCR/classification/extraction et futures capacités IA ; antivirus et stockage privés locaux","evidence":"Instruction utilisateur pendant S-042a : Pour la lecture OCR et toutes les fonctionnalités dont nous aurons besoin de l’IA d’ailleurs on peut utiliser l’API de chatgpt. Remplace le choix exclusivement local antérieur ; documentation officielle Responses/file inputs/structured outputs/your-data consultée le 6 septembre 2026."},{"ref":"bible.question.006","question":"Quelle conservation opérationnelle des documents ?","answer":"Conserver volontairement les originaux jusqu’à suppression propriétaire, séparer dérivés et champs, sans délai juridique déduit","evidence":"Demande explicite utilisateur du 6 septembre 2026 : mobile Wallet puis conservation de tous les documents déposés, y compris identité, classification et extraction profil ; choix locaux délégués PROG-23, aucune validation juridique déduite."},{"ref":"bible.question.007","question":"Une extraction peut-elle remplacer automatiquement un champ confirmé ?","answer":"Non, confirmation propriétaire des propositions","evidence":"Demande explicite utilisateur du 6 septembre 2026 : mobile Wallet puis conservation de tous les documents déposés, y compris identité, classification et extraction profil ; choix locaux délégués PROG-23, aucune validation juridique déduite."},{"ref":"bible.question.005","question":"Le scan constitue-t-il une vérification réglementaire ?","answer":"Non, extraction et préremplissage seulement","evidence":"Demande explicite utilisateur du 6 septembre 2026 : mobile Wallet puis conservation de tous les documents déposés, y compris identité, classification et extraction profil ; choix locaux délégués PROG-23, aucune validation juridique déduite."}]
-  notes: ["Prochaine tranche prioritaire après S-013a mobile réellement close ; WIP=1.","Les parents et consommateurs gardent tous leurs critères/sources et restent incomplets.","Fournisseur OpenAI choisi explicitement pendant cette tâche ; services et parcours codés, recette réelle encore requise. Clé API absente de l’environnement de cette tâche, aucune autre mémoire de processus inspectée.","Checkpoint 2026-09-07 : adapter OpenAI et parcours codés. Services réels ClamAV/MinIO/DPAPI vérifiés ; typecheck, lint, frontières, knip et 21 tests HTTP existants passent. OpenAI absent et sessions de recette expirées ; CUA échoue à initialiser son noyau. Aucun critère V3 clôturé, voir roadmap/evidence/S-042a.md.","Extension utilisateur : bibliothèque, profil et autorisations ; sources et recette canonique dans roadmap/evidence/document-library-authorizations.md. Édition sur place et compagnies persistantes livrées le 7 septembre ; signature et envoi restent non raccordés.","Extension personnes/entités et sections médicales livrée sans compte tiers implicite ni sélection globale ; procuration/OCR restent ceux du titulaire. Capture physique de carte non exercée, aucune donnée fictive dans le compte réel. Session GPT-6, effort effectif non exposé ; preuves dans roadmap/evidence/profile-sections-identity-attachment.md."]
+  notes: ["Prochaine tranche prioritaire après S-013a mobile réellement close ; WIP=1.","Les parents et consommateurs gardent tous leurs critères/sources et restent incomplets.","Fournisseur OpenAI choisi explicitement pendant cette tâche ; services et parcours codés, recette réelle encore requise. Clé API absente de l’environnement de cette tâche, aucune autre mémoire de processus inspectée.","Checkpoint 2026-09-07 : adapter OpenAI et parcours codés. Services réels ClamAV/MinIO/DPAPI vérifiés ; typecheck, lint, frontières, knip et 21 tests HTTP existants passent. OpenAI absent et sessions de recette expirées ; CUA échoue à initialiser son noyau. Aucun critère V3 clôturé, voir roadmap/evidence/S-042a.md.","Extension utilisateur : bibliothèque, profil et autorisations ; sources et recette canonique dans roadmap/evidence/document-library-authorizations.md. Édition sur place et compagnies persistantes livrées le 7 septembre ; signature et envoi restent non raccordés.","Extension personnes/entités et sections médicales livrée sans compte tiers implicite ni sélection globale ; procuration/OCR restent ceux du titulaire. Capture physique de carte non exercée, aucune donnée fictive dans le compte réel. Session GPT-6, effort effectif non exposé ; preuves dans roadmap/evidence/profile-sections-identity-attachment.md.","Revue 2026-09-08 : les mentions antérieures de clé absente, sessions expirées et panne CUA sont des checkpoints historiques. Analyse réelle confirmée par l’utilisateur et fiche authentifiée observée dans roadmap/evidence/document-reading-ux.md ; la clôture complète C01–C07 reste à consolider. Voir roadmap/evidence/roadmap-review-2026-09-08.md.","Extension Admin/utilisateurs et ciblage des documents en cours dans le checkout partagé le 2026-09-08 : aucune livraison déduite des fichiers modifiés. Préserver son propriétaire et ses travaux ; borner cette extension avant tout nouveau périmètre selon PROG-14."]
 - id: S-010
   title: "Ouvrir les trois parcours CoverView depuis un site public compact"
   status: done
@@ -80,6 +80,54 @@
   cost: "Non disponible ; une session principale et sous-tâches bornées de lecture/revue/tests."
   decisions: [{"ref":"S-010.public-entry","question":"Comment ouvrir honnêtement les parcours dont les outils ne sont pas livrés ?","answer":"Pages SSG de disponibilité avec URL stable, question traitée et liens utiles ; aucun formulaire, prospect, session anonyme ni événement d’entrée d’outil avant un outil réellement disponible. Navigation complète sur /explorer, détails sur pages dédiées. Préversion locale noindex conservée.","evidence":"Mandat PROG-23 ; S-010-C02/C03 autorisent la disponibilité précise ; MKT-02/03/09 et FRONT-14 ; dépendances S-025/S-028/S-030 non done constatées le 2026-09-06."}]
   notes: ["Propriétaire unique : worktree 8b6a, branche codex/s-010-public ; préconditions propres et ascendance 94f6939b35f0b5e009d7a615776bba8e8b99a2fe vérifiées avant mutation.","Ledger et captures : roadmap/evidence/S-010.md ; preuve synthétique build : roadmap/evidence/S-010-build-check.json.","Revue indépendante close après correction des propriétaires S-013/S-032 et du titre FR ; aucune validation WorkOS déduite. S-000b reste review."]
+- id: S-080
+  title: "Qualifier un entrant et suivre plusieurs opportunités distinctes"
+  status: specified
+  milestone: M5
+  depends_on: ["S-000b","S-013a"]
+  plan: roadmap/plans/S-080.plan.md
+  prompt: roadmap/prompts/S-080.prompt.md
+  mode: local-fixtures
+  recommended_model: gpt-6-astra
+  recommended_effort: ultra
+  session_budget: 1
+  approval: ""
+  session: ""
+  cost: ""
+  decisions: []
+  notes: []
+- id: S-011
+  title: "Publier les pages de méthode, preuves et contenus de référence"
+  status: review
+  milestone: M1
+  depends_on: ["S-010"]
+  plan: roadmap/plans/S-011.plan.md
+  prompt: roadmap/prompts/S-011.prompt.md
+  mode: local-fixtures
+  recommended_model: gpt-6-astra
+  recommended_effort: ultra
+  session_budget: 1
+  approval: "Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md"
+  session: "Tâche S-011 créée selon relais gpt-6-astra / ultra ; modèle hôte GPT-6, effort non observable indépendamment des paramètres transmis."
+  cost: "Non disponible ; une session principale et trois sous-tâches bornées."
+  decisions: [{"ref":"bible.question.004","question":"Publier initialement tous ces contenus en français avec clés et architecture i18n extensibles ?","answer":"(a) Oui, français initial comme PROJECT. Réutiliser les contenus FR et conserver une architecture extensible ; aucune locale supplémentaire fournie.","evidence":"PROJECT.md, Langues et données ; décision déléguée de préparation du 2026-09-06 selon roadmap/execution-policy.md / PROG-23."},{"ref":"S-011.editorial-preview","question":"Comment livrer les contenus locaux sans fabriquer les preuves éditoriales et intégrations absentes ?","answer":"Conserver la préversion FR non indexable, sources/auteur/dates explicites, cas et rapport entièrement fictifs ; aucun état published activable. Réaliser les pages et gardes sans retirer C01/C04/C06 : bio externe, Instagram fourni et collecte CRM demeurent non vérifiés.","evidence":"PROJECT, ENV-09, SEO-04/06/08, G-06 et mandat PROG-23 ; audit source S-011 du 2026-09-06, roadmap/evidence/S-011.md."}]
+  notes: ["Propriétaire unique S-011 : worktree9b02, branche codex/s-011-editorial ; préconditions propres et ascendance requise vérifiées avant mutation.","Ledger complet/captures : roadmap/evidence/S-011.md ; JSON de build S-011-build-check.json. Aucun nouveau package, schéma, permission ou secret.","S-011 review conserve C01/C04/C06 non vérifiés ; S-000b review inchangé. Aucune nouvelle slice éligible, preuve S-011-next-eligibility.json ; exception obstacle réel du mandat, pas de relais factice.","Chevauchement contact à réconcilier : S-080 possède l’entrée publique CRM ; après S-013/S-080 done, reprendre C06 S-011 avant S-012 qui enrichit le contact existant. Exiger S-012 avant S-011 créerait une boucle sémantique ; voir checkpoint/README www.","Les gabarits et contenus ont été repris à la demande de l’utilisateur : voir roadmap/evidence/marketing-redesign.md et ADR-0006. Statut review conservé, collecte commerciale et preuves externes toujours absentes.","Refonte xAI demandée après rejet de la version f8e1e07 : nouveau rendu et limites dans roadmap/evidence/xai-redesign.md. Statut review et dépendance à la collecte persistante conservés.","Correction utilisateur suivante : preset shadcn b38oXC5rf effectivement réappliqué, Geist titres/corps et MONTECH V.02 fourni pour les métadonnées ; composants partagés réutilisés, fond blanc/cards en aplat sans cadre. ADR-0008 et roadmap/evidence/shadcn-typography.md. Statut et limites fonctionnelles conservés.","Revue 2026-09-08 : S-000b et S-013a sont done ; l’absence ancienne de WorkOS réel et de prochaine slice éligible n’est plus actuelle. Ordre aligné sur execution-policy.md : après S-042a, S-080 puis reste S-011 puis S-012. Statut review conservé ; détails dans roadmap/evidence/roadmap-review-2026-09-08.md."]
+- id: S-012
+  title: "Répondre aux FAQ et conserver la provenance déclarée des prospects"
+  status: specified
+  milestone: M1
+  depends_on: ["S-011","S-080"]
+  plan: roadmap/plans/S-012.plan.md
+  prompt: roadmap/prompts/S-012.prompt.md
+  mode: local-fixtures
+  recommended_model: gpt-6-astra
+  recommended_effort: ultra
+  session_budget: 1
+  approval: ""
+  session: ""
+  cost: ""
+  decisions: []
+  notes: []
 - id: S-081
   title: "Délivrer un dossier avec tâches, prochaine action et Kanban"
   status: specified
@@ -119,54 +167,6 @@
   depends_on: ["S-017"]
   plan: roadmap/plans/S-018.plan.md
   prompt: roadmap/prompts/S-018.prompt.md
-  mode: local-fixtures
-  recommended_model: gpt-6-astra
-  recommended_effort: ultra
-  session_budget: 1
-  approval: ""
-  session: ""
-  cost: ""
-  decisions: []
-  notes: []
-- id: S-080
-  title: "Qualifier un entrant et suivre plusieurs opportunités distinctes"
-  status: specified
-  milestone: M5
-  depends_on: ["S-000b","S-013a"]
-  plan: roadmap/plans/S-080.plan.md
-  prompt: roadmap/prompts/S-080.prompt.md
-  mode: local-fixtures
-  recommended_model: gpt-6-astra
-  recommended_effort: ultra
-  session_budget: 1
-  approval: ""
-  session: ""
-  cost: ""
-  decisions: []
-  notes: []
-- id: S-011
-  title: "Publier les pages de méthode, preuves et contenus de référence"
-  status: review
-  milestone: M1
-  depends_on: ["S-010"]
-  plan: roadmap/plans/S-011.plan.md
-  prompt: roadmap/prompts/S-011.prompt.md
-  mode: local-fixtures
-  recommended_model: gpt-6-astra
-  recommended_effort: ultra
-  session_budget: 1
-  approval: "Mandat utilisateur du 2026-09-05 : enchaînement et choix des meilleurs défauts autorisés — roadmap/execution-policy.md"
-  session: "Tâche S-011 créée selon relais gpt-6-astra / ultra ; modèle hôte GPT-6, effort non observable indépendamment des paramètres transmis."
-  cost: "Non disponible ; une session principale et trois sous-tâches bornées."
-  decisions: [{"ref":"bible.question.004","question":"Publier initialement tous ces contenus en français avec clés et architecture i18n extensibles ?","answer":"(a) Oui, français initial comme PROJECT. Réutiliser les contenus FR et conserver une architecture extensible ; aucune locale supplémentaire fournie.","evidence":"PROJECT.md, Langues et données ; décision déléguée de préparation du 2026-09-06 selon roadmap/execution-policy.md / PROG-23."},{"ref":"S-011.editorial-preview","question":"Comment livrer les contenus locaux sans fabriquer les preuves éditoriales et intégrations absentes ?","answer":"Conserver la préversion FR non indexable, sources/auteur/dates explicites, cas et rapport entièrement fictifs ; aucun état published activable. Réaliser les pages et gardes sans retirer C01/C04/C06 : bio externe, Instagram fourni et collecte CRM demeurent non vérifiés.","evidence":"PROJECT, ENV-09, SEO-04/06/08, G-06 et mandat PROG-23 ; audit source S-011 du 2026-09-06, roadmap/evidence/S-011.md."}]
-  notes: ["Propriétaire unique S-011 : worktree9b02, branche codex/s-011-editorial ; préconditions propres et ascendance requise vérifiées avant mutation.","Ledger complet/captures : roadmap/evidence/S-011.md ; JSON de build S-011-build-check.json. Aucun nouveau package, schéma, permission ou secret.","S-011 review conserve C01/C04/C06 non vérifiés ; S-000b review inchangé. Aucune nouvelle slice éligible, preuve S-011-next-eligibility.json ; exception obstacle réel du mandat, pas de relais factice.","Chevauchement contact à réconcilier : S-080 possède l’entrée publique CRM ; après S-013/S-080 done, reprendre C06 S-011 avant S-012 qui enrichit le contact existant. Exiger S-012 avant S-011 créerait une boucle sémantique ; voir checkpoint/README www.","Les gabarits et contenus ont été repris à la demande de l’utilisateur : voir roadmap/evidence/marketing-redesign.md et ADR-0006. Statut review conservé, collecte commerciale et preuves externes toujours absentes.","Refonte xAI demandée après rejet de la version f8e1e07 : nouveau rendu et limites dans roadmap/evidence/xai-redesign.md. Statut review et dépendance à la collecte persistante conservés.","Correction utilisateur suivante : preset shadcn b38oXC5rf effectivement réappliqué, Geist titres/corps et MONTECH V.02 fourni pour les métadonnées ; composants partagés réutilisés, fond blanc/cards en aplat sans cadre. ADR-0008 et roadmap/evidence/shadcn-typography.md. Statut et limites fonctionnelles conservés."]
-- id: S-012
-  title: "Répondre aux FAQ et conserver la provenance déclarée des prospects"
-  status: specified
-  milestone: M1
-  depends_on: ["S-011","S-080"]
-  plan: roadmap/plans/S-012.plan.md
-  prompt: roadmap/prompts/S-012.prompt.md
   mode: local-fixtures
   recommended_model: gpt-6-astra
   recommended_effort: ultra

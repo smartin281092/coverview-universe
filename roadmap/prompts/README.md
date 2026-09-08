@@ -13,12 +13,12 @@ Chaque prompt cible une session principale et indique son redécoupage. Reprise 
 - [S-013a — Préparer son profil privé et le reprendre dans Wallet](S-013a.prompt.md) · [plan](../plans/S-013a.plan.md) · done · integration.
 - [S-042a — Conserver ses documents originaux et confirmer les informations extraites dans son profil](S-042a.prompt.md) · [plan](../plans/S-042a.plan.md) · running · integration.
 - [S-010 — Ouvrir les trois parcours CoverView depuis un site public compact](S-010.prompt.md) · [plan](../plans/S-010.plan.md) · done · local-fixtures.
-- [S-081 — Délivrer un dossier avec tâches, prochaine action et Kanban](S-081.prompt.md) · [plan](../plans/S-081.plan.md) · specified · local-fixtures.
-- [S-017 — Générer et archiver les documents de démarches à partir du profil](S-017.prompt.md) · [plan](../plans/S-017.plan.md) · specified · local-fixtures.
-- [S-018 — Signer un document de test et suivre son dossier de preuve](S-018.prompt.md) · [plan](../plans/S-018.plan.md) · specified · local-fixtures.
 - [S-080 — Qualifier un entrant et suivre plusieurs opportunités distinctes](S-080.prompt.md) · [plan](../plans/S-080.plan.md) · specified · local-fixtures.
 - [S-011 — Publier les pages de méthode, preuves et contenus de référence](S-011.prompt.md) · [plan](../plans/S-011.plan.md) · review · local-fixtures.
 - [S-012 — Répondre aux FAQ et conserver la provenance déclarée des prospects](S-012.prompt.md) · [plan](../plans/S-012.plan.md) · specified · local-fixtures.
+- [S-081 — Délivrer un dossier avec tâches, prochaine action et Kanban](S-081.prompt.md) · [plan](../plans/S-081.plan.md) · specified · local-fixtures.
+- [S-017 — Générer et archiver les documents de démarches à partir du profil](S-017.prompt.md) · [plan](../plans/S-017.plan.md) · specified · local-fixtures.
+- [S-018 — Signer un document de test et suivre son dossier de preuve](S-018.prompt.md) · [plan](../plans/S-018.plan.md) · specified · local-fixtures.
 - [S-014 — Créer et documenter un produit de catalogue canonique dans Admin](S-014.prompt.md) · [plan](../plans/S-014.plan.md) · specified · local-fixtures.
 - [S-015 — Valider et publier le catalogue sans modifier les analyses passées](S-015.prompt.md) · [plan](../plans/S-015.plan.md) · specified · local-fixtures.
 - [S-016 — Versionner et modifier les hypothèses de calcul depuis Admin](S-016.prompt.md) · [plan](../plans/S-016.plan.md) · specified · local-fixtures.

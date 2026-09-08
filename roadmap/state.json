@@ -137,7 +137,9 @@
           "S-000a-C01..C06 : recette complète depuis checkout vierge 4f04808f2201af5603a54d27fdbbf8a175ba800c passée ; proof roadmap/evidence/S-000a-clean-check.json.",
           "Neuf tests de preview passent aussi dans Linux non-root avec source read-only et réseau désactivé."
         ],
-        "done_unverified": ["CI distante, reset destructif, WorkOS et déploiement non exécutés."],
+        "done_unverified": [
+          "CI distante, reset destructif, WorkOS et déploiement non exécutés."
+        ],
         "assumed": [
           "Français initial et ports réversibles : impact catalogues i18n et configuration locale."
         ]
@@ -490,8 +492,8 @@
         ],
         "done_unverified": [
           "C01 validation biographique externe absente ; C04 source Instagram et liens réciproques absents ; C06 collecte/reprise/raccord CRM non livrés. Slice review, non done.",
-          "Aucun WorkOS réel, push, déploiement Infomaniak, DNS, CI distante, Search Console, RUM ou INP terrain. Neuf transports identité simulés conservés.",
-          "Aucune prochaine slice indépendante aux dépendances done ; checkpoint roadmap/handoffs/S-011-review.md avant reprise sur préconditions réelles."
+          "Checkpoint historique de S-011, dépassé pour WorkOS par S-000b done : Aucun WorkOS réel, push, déploiement Infomaniak, DNS, CI distante, Search Console, RUM ou INP terrain. Neuf transports identité simulés conservés.",
+          "Constat historique dépassé au 2026-09-08 : les dépendances de S-080 sont done, mais S-042a occupe le WIP. Ancien constat conservé pour traçabilité : Aucune prochaine slice indépendante aux dépendances done ; checkpoint roadmap/handoffs/S-011-review.md avant reprise sur préconditions réelles."
         ],
         "assumed": [
           "Pagination de deux entrées et nouveaux slugs éditoriaux locaux ; impact si changement : retours d’index à recalculer, redirections301 après exposition ; aucun droit ni calcul."
@@ -505,7 +507,8 @@
         "Chevauchement contact à réconcilier : S-080 possède l’entrée publique CRM ; après S-013/S-080 done, reprendre C06 S-011 avant S-012 qui enrichit le contact existant. Exiger S-012 avant S-011 créerait une boucle sémantique ; voir checkpoint/README www.",
         "Les gabarits et contenus ont été repris à la demande de l’utilisateur : voir roadmap/evidence/marketing-redesign.md et ADR-0006. Statut review conservé, collecte commerciale et preuves externes toujours absentes.",
         "Refonte xAI demandée après rejet de la version f8e1e07 : nouveau rendu et limites dans roadmap/evidence/xai-redesign.md. Statut review et dépendance à la collecte persistante conservés.",
-        "Correction utilisateur suivante : preset shadcn b38oXC5rf effectivement réappliqué, Geist titres/corps et MONTECH V.02 fourni pour les métadonnées ; composants partagés réutilisés, fond blanc/cards en aplat sans cadre. ADR-0008 et roadmap/evidence/shadcn-typography.md. Statut et limites fonctionnelles conservés."
+        "Correction utilisateur suivante : preset shadcn b38oXC5rf effectivement réappliqué, Geist titres/corps et MONTECH V.02 fourni pour les métadonnées ; composants partagés réutilisés, fond blanc/cards en aplat sans cadre. ADR-0008 et roadmap/evidence/shadcn-typography.md. Statut et limites fonctionnelles conservés.",
+        "Revue 2026-09-08 : S-000b et S-013a sont done ; l’absence ancienne de WorkOS réel et de prochaine slice éligible n’est plus actuelle. Ordre aligné sur execution-policy.md : après S-042a, S-080 puis reste S-011 puis S-012. Statut review conservé ; détails dans roadmap/evidence/roadmap-review-2026-09-08.md."
       ],
       "cost": "Non disponible ; une session principale et trois sous-tâches bornées."
     },
@@ -665,7 +668,8 @@
           "Bibliothèque et fiche compagnie : menus custom, titres domaine/assureur communs, données compactes et navigation réelle vérifiées sur mobile/desktop. Six tests de projection supplémentaires, primes/doublons/isolation, sans contrat ni montant inventé. Limites et preuves dans roadmap/evidence/document-library-authorizations.md.",
           "Profils et pièce d’identité : onglets Générales/Finances/Santé, champs médicaux facultatifs, étapes et garde de sortie, dialogue recto-verso vérifiés dans Wallet mobile/desktop. Trois nouveaux tests PostgreSQL de persistance/isolation/reprise, dont effacement médical sans résurrection sur ancien retry ; migration0009 locale sans reset, contrôles ciblés. Voir roadmap/evidence/profile-sections-identity-attachment.md.",
           "Correction titre/pastilles et Select du preset vérifiée sur Wallet mobile/desktop : palette sombre locale restaurée, source officielle conservée, recherche compagnie/domaine et tri par contenu ; 9 tests projection/workflows, build/types/lint/frontières. Voir roadmap/evidence/document-titles-preset-select.md.",
-          "Carte compagnie compacte et onglets corrigés dans la fiche compagnie et le profil ; médecin traitant facultatif avant taille/poids. Rendu mobile/desktop, navigation, 2 tests PostgreSQL de persistance/effacement/isolation, types/build/lint/frontières vérifiés. Voir roadmap/evidence/insurer-card-tabs-doctor.md."
+          "Carte compagnie compacte et onglets corrigés dans la fiche compagnie et le profil ; médecin traitant facultatif avant taille/poids. Rendu mobile/desktop, navigation, 2 tests PostgreSQL de persistance/effacement/isolation, types/build/lint/frontières vérifiés. Voir roadmap/evidence/insurer-card-tabs-doctor.md.",
+          "Onglets de pièce d’identité, espacement Montech et alignement HTML/CSS de Mon compte sur Mon profil : recette authentifiée mobile/desktop, compilation et limites dans roadmap/evidence/identity-tabs-heading-spacing.md. Ces preuves de présentation ne clôturent ni dépôt ni signature."
         ],
         "done_unverified": [],
         "assumed": []
@@ -676,7 +680,9 @@
         "Fournisseur OpenAI choisi explicitement pendant cette tâche ; services et parcours codés, recette réelle encore requise. Clé API absente de l’environnement de cette tâche, aucune autre mémoire de processus inspectée.",
         "Checkpoint 2026-09-07 : adapter OpenAI et parcours codés. Services réels ClamAV/MinIO/DPAPI vérifiés ; typecheck, lint, frontières, knip et 21 tests HTTP existants passent. OpenAI absent et sessions de recette expirées ; CUA échoue à initialiser son noyau. Aucun critère V3 clôturé, voir roadmap/evidence/S-042a.md.",
         "Extension utilisateur : bibliothèque, profil et autorisations ; sources et recette canonique dans roadmap/evidence/document-library-authorizations.md. Édition sur place et compagnies persistantes livrées le 7 septembre ; signature et envoi restent non raccordés.",
-        "Extension personnes/entités et sections médicales livrée sans compte tiers implicite ni sélection globale ; procuration/OCR restent ceux du titulaire. Capture physique de carte non exercée, aucune donnée fictive dans le compte réel. Session GPT-6, effort effectif non exposé ; preuves dans roadmap/evidence/profile-sections-identity-attachment.md."
+        "Extension personnes/entités et sections médicales livrée sans compte tiers implicite ni sélection globale ; procuration/OCR restent ceux du titulaire. Capture physique de carte non exercée, aucune donnée fictive dans le compte réel. Session GPT-6, effort effectif non exposé ; preuves dans roadmap/evidence/profile-sections-identity-attachment.md.",
+        "Revue 2026-09-08 : les mentions antérieures de clé absente, sessions expirées et panne CUA sont des checkpoints historiques. Analyse réelle confirmée par l’utilisateur et fiche authentifiée observée dans roadmap/evidence/document-reading-ux.md ; la clôture complète C01–C07 reste à consolider. Voir roadmap/evidence/roadmap-review-2026-09-08.md.",
+        "Extension Admin/utilisateurs et ciblage des documents en cours dans le checkout partagé le 2026-09-08 : aucune livraison déduite des fichiers modifiés. Préserver son propriétaire et ses travaux ; borner cette extension avant tout nouveau périmètre selon PROG-14."
       ]
     }
   },
