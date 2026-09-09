@@ -235,6 +235,14 @@
     "openDocument": "Voir le document concerné",
     "empty": "Vous n’avez pas encore de demande de changement."
   },
+  "thumbnails": {
+    "title": "Aperçus du document",
+    "loading": "Chargement des aperçus…",
+    "open": "Agrandir {{name}}, page {{page}}",
+    "unavailable": "Miniature indisponible. Ouvrez l’original pour consulter cette page.",
+    "pagination": "Pages du document",
+    "range": "{{start}}–{{end}} sur {{count}}"
+  },
   "capture": {
     "camera": "Appareil photo",
     "cameraTitle": "Photographier le document",

@@ -32,6 +32,7 @@ import { DocumentLoadingMessage } from "../features/documents/DocumentLoadingMes
 import { AlertTriangle, Clock3 } from "lucide-react";
 import { InsuranceCompanyLink } from "../features/insurance/InsuranceCompanyLink";
 import { DocumentLabels } from "../features/documents/DocumentLabels";
+import { DocumentThumbnails } from "../features/documents/DocumentThumbnails";
 
 type Panel =
   "category" | "delete" | "history" | "source" | "resume" | "analysis" | { fieldId: string } | null;
@@ -46,6 +47,7 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
   const [notice, setNotice] = useState(false);
   const [reviewPending, setReviewPending] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewPage, setPreviewPage] = useState(1);
   const operation = useRef<{ payload: string; key: string } | null>(null);
   const controller = useRef(new AbortController());
   useEffect(() => {
@@ -169,6 +171,14 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
         <DocumentLabels document={item} />
       </header>
       {item.companyId && <InsuranceCompanyLink companyId={item.companyId} />}
+      <DocumentThumbnails
+        identity={identity}
+        document={item}
+        onOpen={(page) => {
+          setPreviewPage(page);
+          setPreviewOpen(true);
+        }}
+      />
       {item.analysis && (
         <section className="space-y-4">
           <div className="space-y-2">
@@ -384,6 +394,7 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
           portalContainer={portalContainer}
           onClose={() => setPreviewOpen(false)}
           generic
+          initialPage={previewPage}
         />
       )}
       <Sheet

@@ -27,6 +27,7 @@ type PreviewProps = {
   scopeKey?: string;
   company?: boolean;
   generic?: boolean;
+  initialPage?: number;
 };
 type PreviewAsset = { document: DocumentSummary; url: string; mime: string };
 
@@ -50,6 +51,7 @@ function IdentityPreviewContent({
   sourceKey,
   company = false,
   generic = false,
+  initialPage = 1,
 }: PreviewProps & { sourceKey: string }) {
   const { t } = useTranslation("identityPreview");
   const returnFocus = useRef(document.activeElement);
@@ -154,7 +156,7 @@ function IdentityPreviewContent({
                 <section key={asset.document.id} className="flex min-h-0 flex-1 flex-col gap-2">
                   {asset.mime === "application/pdf" && (
                     <iframe
-                      src={asset.url}
+                      src={`${asset.url}#page=${initialPage}`}
                       title={t("pdfTitle", { name: asset.document.name })}
                       sandbox=""
                       referrerPolicy="no-referrer"
