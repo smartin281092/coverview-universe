@@ -6,9 +6,12 @@ import documents from "./locales/fr/documents.json";
 import authorizations from "./locales/fr/authorizations.json";
 import insurance from "./locales/fr/insurance.json";
 import identityPreview from "./locales/fr/identity-preview.json";
+import actions from "./locales/fr/actions.json";
 
 void i18next.use(initReactI18next).init({
-  resources: { fr: { common, profile, documents, authorizations, insurance, identityPreview } },
+  resources: {
+    fr: { common, profile, documents, authorizations, insurance, identityPreview, actions },
+  },
   lng: "fr",
   fallbackLng: "fr",
   defaultNS: "common",

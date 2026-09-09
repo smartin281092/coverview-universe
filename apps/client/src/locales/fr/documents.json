@@ -100,6 +100,7 @@
     "unknown": "Type indéterminé"
   },
   "field": {
+    "address": "Adresse",
     "firstName": "Prénom",
     "lastName": "Nom",
     "birthDate": "Date de naissance",
@@ -180,7 +181,7 @@
   },
   "correction": "Valeur corrigée",
   "concernsMe": "J’ai vérifié la source : cette information me concerne personnellement.",
-  "reviewInvalid": "Vérifiez la valeur et cochez la confirmation personnelle avant de l’utiliser.",
+  "reviewInvalid": "Vérifiez le format des valeurs saisies avant de les enregistrer.",
   "confirmDecision": "Enregistrer ma décision",
   "saving": "Enregistrement…",
   "profileImpact": "Seul ce champ sera confirmé dans votre profil. Les autres informations et votre choix de préremplissage restent inchangés.",
@@ -198,7 +199,21 @@
     "resume": "Reprendre le dépôt",
     "analysis": "Analyser le document"
   },
-  "reviewDescription": "Confrontez cette proposition à la source avant de décider.",
+  "reviewDescription": "Corrigez la valeur lue ou utilisez-la dans votre profil.",
+  "reviewEdit": {
+    "save": "Enregistrer la correction",
+    "useProfile": "Utiliser dans mon profil",
+    "different": "Cette information diffère de votre profil.",
+    "unknownCompany": "Cette information diffère de votre profil. La compagnie à notifier n’est pas identifiée dans ce document.",
+    "actionCenter": "Voir dans le centre d’action",
+    "notified": "La compagnie a été notifiée de vos coordonnées actuelles.",
+    "confirmed": "La compagnie dispose de vos coordonnées à jour.",
+    "current": "Les informations de la compagnie correspondent à votre profil.",
+    "pending": "La mise à jour est prise en charge par le service client.",
+    "needsReview": "Les documents de cette compagnie contiennent des informations différentes. Vérifiez lesquelles sont actuelles.",
+    "unknown": "Les informations disponibles ne permettent pas encore de savoir si la compagnie est à jour.",
+    "date": "Le {{date}}"
+  },
   "detailDescription": "Vos documents restent privés et vos décisions sont enregistrées.",
   "deleteDescription": "Cette action retire définitivement l’original de votre espace.",
   "deleteConsequences": "L’original, le texte lu et les copies d’extraction seront effacés du stockage actif. Les champs déjà confirmés dans votre profil seront conservés, avec une trace minimale de votre décision. La suppression dans CoverView ne modifie pas les règles de conservation du service d’analyse externe pour un document déjà envoyé.",

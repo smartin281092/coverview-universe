@@ -8,6 +8,7 @@ export * from "./profile-completion.js";
 export * from "./companies.js";
 export * from "./documents.js";
 export * from "./admin-users.js";
+export * from "./company-actions.js";
 
 export const livenessSchema = z.object({ status: z.literal("alive") });
 export const readinessSchema = z.object({ status: z.enum(["ready", "not_ready"]) });

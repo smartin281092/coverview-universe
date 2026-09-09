@@ -15,6 +15,11 @@ import { AuthenticatorPage } from "./pages/AuthenticatorPage";
 import { CancelAuthenticatorPage } from "./pages/CancelAuthenticatorPage";
 
 const rootRoute = createRootRoute({ component: AppShell, notFoundComponent: MissingPage });
+const serviceRequestsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/service-requests",
+  component: lazyRouteComponent(() => import("./pages/ServiceRequestsPage"), "ServiceRequestsPage"),
+});
 const homeRoute = createRoute({ getParentRoute: () => rootRoute, path: "/", component: HomePage });
 const usersRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -75,6 +80,7 @@ export const router = createRouter({
   routeTree: rootRoute.addChildren([
     homeRoute,
     usersRoute,
+    serviceRequestsRoute,
     userRoute,
     diagnosticsRoute,
     previewRoute,

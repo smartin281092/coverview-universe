@@ -11,6 +11,7 @@ import {
   documentCategoryInputSchema,
   documentReviewInputSchema,
   documentReviewResultSchema,
+  documentFieldReviewInputSchema,
   documentChangeRequestsSchema,
   documentChangeRequestSchema,
   documentProfileDifferencesSchema,
@@ -225,6 +226,16 @@ export function registerDocumentRoutes(
     },
     async (request) =>
       repository.categorize(actor(request), request.params.id, request.body, key(request)),
+  );
+  app.post(
+    "/documents/:id/fields",
+    {
+      onRequest: write,
+      config: limited,
+      schema: { params, body: documentFieldReviewInputSchema, response: { 200: documentSchema } },
+    },
+    async (request) =>
+      repository.fields(actor(request), request.params.id, request.body, key(request)),
   );
   app.post(
     "/documents/:id/review",

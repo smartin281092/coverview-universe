@@ -29,7 +29,6 @@ import { DocumentReview } from "../features/documents/DocumentReview";
 import { DocumentProcessingIndicator } from "../features/documents/DocumentProcessingIndicator";
 import { DocumentProgress } from "../features/documents/DocumentProgress";
 import { DocumentLoadingMessage } from "../features/documents/DocumentLoadingMessage";
-import { AlertTriangle, Clock3 } from "lucide-react";
 import { InsuranceCompanyLink } from "../features/insurance/InsuranceCompanyLink";
 import { DocumentLabels } from "../features/documents/DocumentLabels";
 import { DocumentThumbnails } from "../features/documents/DocumentThumbnails";
@@ -66,14 +65,6 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
       query.state.data && ["queued", "scanning", "reading"].includes(query.state.data.state)
         ? 5000
         : false,
-  });
-  const profile = useQuery({
-    queryKey: [...rootKey, "profile", query.data?.revision],
-    queryFn: ({ signal }) => api.profile({ signal }),
-    enabled: query.data?.state === "ready",
-    gcTime: 0,
-    staleTime: 0,
-    retry: false,
   });
   const mutation = useMutation({
     mutationKey: [...rootKey, "document-command"],
@@ -144,12 +135,12 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
   const busy = mutation.isPending || reviewPending;
   const field =
     panel && typeof panel === "object"
-      ? item.analysis?.fields.find((field) => field.id === panel.fieldId)
+      ? item.reviewGroups?.find((group) => group.id === panel.fieldId)
       : undefined;
   const date = new Intl.DateTimeFormat(i18n.language, { dateStyle: "medium", timeStyle: "short" });
   const stable = ["ready", "failed"].includes(item.state);
   const panelTitle = field
-    ? t(`field.${field.field}`)
+    ? t(`field.${field.labelKey}`)
     : t(`panel.${typeof panel === "string" ? panel : "source"}`);
   return (
     <div className="space-y-6">
@@ -189,62 +180,27 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
             <p className="rounded-lg bg-muted p-5 text-sm">{t("noFields")}</p>
           ) : (
             <ul className="grid gap-x-8 sm:grid-cols-2">
-              {item.analysis.fields.map((extraction) => {
-                const mismatch = item.profileComparisons?.find(
-                  (entry) => entry.extractionId === extraction.id,
-                )?.different;
-                const changeRequest = item.changeRequests?.find(
-                  (entry) => entry.extractionId === extraction.id,
-                );
-                const decision = item.decisions
-                  .flatMap((item) => item.fields)
-                  .find((field) => field.field === extraction.field);
-                return (
-                  <li
-                    key={extraction.id}
-                    className="flex flex-wrap items-center justify-between gap-3 border-b border-border py-3"
+              {(item.reviewGroups ?? []).map((group) => (
+                <li
+                  key={group.id}
+                  className="flex flex-wrap items-center justify-between gap-3 border-b border-border py-3"
+                >
+                  <div className="min-w-0 flex-1 space-y-1">
+                    <p className="text-sm text-muted-foreground">{t(`field.${group.labelKey}`)}</p>
+                    <p className="whitespace-pre-line break-words font-medium">
+                      {group.fields.map((field) => field.value).join("\n")}
+                    </p>
+                  </div>
+                  <Button
+                    variant="outline"
+                    disabled={busy || item.state !== "ready"}
+                    onClick={() => setPanel({ fieldId: group.id })}
                   >
-                    <div className="min-w-0 flex-1 space-y-1">
-                      <p className="text-sm text-muted-foreground">
-                        {t(`field.${extraction.field}`)}
-                      </p>
-                      <p className="break-words font-medium">
-                        {item.reviewedValues.find((value) => value.field === extraction.field)
-                          ?.value ?? extraction.value}
-                      </p>
-                      {decision && (
-                        <p className="text-xs text-muted-foreground">
-                          {t(`decision.${decision.choice}`)}
-                        </p>
-                      )}
-                      {changeRequest ? (
-                        <Link
-                          to="/requests"
-                          className="inline-flex min-h-11 items-center gap-2 text-xs text-indigo-600"
-                        >
-                          <Clock3 className="size-4" aria-hidden="true" />
-                          {t("requests.pending")}
-                        </Link>
-                      ) : (
-                        mismatch && (
-                          <p className="inline-flex items-center gap-2 rounded-md bg-amber-50 px-2 py-1 text-xs text-amber-950">
-                            <AlertTriangle className="size-4 shrink-0" aria-hidden="true" />
-                            {t("requests.difference")}
-                          </p>
-                        )
-                      )}
-                    </div>
-                    <Button
-                      variant="outline"
-                      disabled={busy || item.state !== "ready"}
-                      onClick={() => setPanel({ fieldId: extraction.id })}
-                    >
-                      {t("review")}
-                      <ArrowUpRight className="size-4" aria-hidden="true" />
-                    </Button>
-                  </li>
-                );
-              })}
+                    {t("review")}
+                    <ArrowUpRight className="size-4" aria-hidden="true" />
+                  </Button>
+                </li>
+              ))}
             </ul>
           )}
           <Link
@@ -555,30 +511,19 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
               ))}
             </ul>
           )}
-          {field &&
-            (profile.isPending ? (
-              <LoadingState label={t("loading")} />
-            ) : profile.isError ? (
-              <DocumentFailure
-                error={profile.error}
-                onRetry={() => {
-                  void profile.refetch();
-                }}
-              />
-            ) : (
-              <DocumentReview
-                key={field.id}
-                identity={identity}
-                document={item}
-                field={field}
-                profile={profile.data}
-                onPendingChange={setReviewPending}
-                onDone={() => {
-                  setPanel(null);
-                  setNotice(true);
-                }}
-              />
-            ))}
+          {field && (
+            <DocumentReview
+              key={field.id}
+              identity={identity}
+              document={item}
+              group={field}
+              onPendingChange={setReviewPending}
+              onDone={() => {
+                setPanel(null);
+                setNotice(true);
+              }}
+            />
+          )}
         </SheetContent>
       </Sheet>
     </div>

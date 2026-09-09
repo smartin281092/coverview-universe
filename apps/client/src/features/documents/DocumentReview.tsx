@@ -1,45 +1,34 @@
 import { useEffect, useRef } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import type { IdentityMe } from "@coverview/api-client";
 import {
-  profileFieldSchema,
+  documentFieldReviewInputSchema,
   type DocumentRecord,
-  type DocumentExtraction,
-  type Profile,
-  type DocumentReviewInput,
+  type DocumentReviewGroup,
 } from "@coverview/contracts";
 import { Button, Input, Label } from "@coverview/ui";
-import { AlertTriangle, Clock3 } from "lucide-react";
-import { Link } from "@tanstack/react-router";
 import { api } from "../../api";
 import { DocumentFailure } from "./DocumentFailure";
+import { DocumentCompanyStatus } from "./DocumentCompanyStatus";
 
-const formSchema = z
-  .object({
-    choice: z.enum(["keep", "use", "correct"]),
-    value: z.string().trim().min(1).max(240),
-    concernsMe: z.boolean(),
-    notifyInsurer: z.boolean(),
-    insurer: z.string().trim().max(160),
-  })
-  .refine((value) => (value.choice === "keep" && !value.notifyInsurer) || value.concernsMe)
-  .refine((value) => !value.notifyInsurer || value.insurer.length > 0);
+const formSchema = z.object({ values: documentFieldReviewInputSchema.shape.values });
+const comparable = (value: string) =>
+  value.normalize("NFKC").trim().replace(/\s+/gu, " ").toLocaleLowerCase("fr");
+
 export function DocumentReview({
   identity,
   document,
-  field,
-  profile,
+  group,
   onDone,
   onPendingChange,
 }: {
   identity: IdentityMe;
   document: DocumentRecord;
-  field: DocumentExtraction;
-  profile: Profile;
+  group: DocumentReviewGroup;
   onDone: () => void;
   onPendingChange: (pending: boolean) => void;
 }) {
@@ -52,28 +41,37 @@ export function DocumentReview({
     controller.current = active;
     return () => active.abort();
   }, []);
-  const profileKey = profileFieldSchema.safeParse(field.field);
-  const current = profileKey.success ? profile.fields[profileKey.data] : undefined;
-  const comparison = document.profileComparisons?.find((item) => item.extractionId === field.id);
-  const request = document.changeRequests?.find((item) => item.extractionId === field.id);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      choice: "keep" as const,
-      value: field.value,
-      concernsMe: false,
-      notifyInsurer: false,
-      insurer: "",
+      values: group.fields.map((field) => ({
+        extractionId: field.extractionId,
+        value: field.value,
+      })),
     },
   });
-  const mutation = useMutation({
-    mutationKey: ["private", identity.user.id, identity.session.id, "document-review"],
+  const company = useQuery({
+    queryKey: [
+      "private",
+      identity.user.id,
+      identity.session.id,
+      "company-actions",
+      document.id,
+      document.revision,
+    ],
+    queryFn: ({ signal }) => api.companyActions({ documentId: document.id }, { signal }),
     gcTime: 0,
-    mutationFn: async (input: DocumentReviewInput) => {
+    staleTime: 0,
+    retry: false,
+  });
+  const mutation = useMutation({
+    mutationKey: ["private", identity.user.id, identity.session.id, "document-fields"],
+    gcTime: 0,
+    mutationFn: (input: z.infer<typeof documentFieldReviewInputSchema>) => {
       const payload = JSON.stringify(input);
       if (command.current?.payload !== payload)
         command.current = { payload, key: crypto.randomUUID() };
-      return api.reviewDocument(document.id, input, {
+      return api.updateDocumentFields(document.id, input, {
         csrfToken: identity.csrfToken,
         idempotencyKey: command.current.key,
         signal: controller.current.signal,
@@ -88,132 +86,72 @@ export function DocumentReview({
     },
     retry: false,
   });
-  const selectedChoice = form.watch("choice");
-  useEffect(() => {
-    if (selectedChoice === "use") form.setValue("notifyInsurer", false);
-  }, [selectedChoice, form]);
   useEffect(() => {
     onPendingChange(mutation.isPending);
     return () => onPendingChange(false);
   }, [mutation.isPending, onPendingChange]);
+  const values = form.watch("values");
+  const differs = group.fields.some(
+    (field, index) =>
+      comparable(values[index]?.value ?? "") !== comparable(field.currentValue ?? ""),
+  );
+  const save = (intent: "save" | "sync") =>
+    form.handleSubmit((input) =>
+      mutation.mutate({
+        revision: document.revision,
+        profileRevision: group.profileRevision,
+        intent,
+        values: input.values,
+      }),
+    );
   return (
-    <form
-      className="space-y-6"
-      onSubmit={(event) => {
-        void form.handleSubmit((values) =>
-          mutation.mutate({
-            revision: document.revision,
-            profileRevision: profile.revision,
-            concernsMe: values.concernsMe,
-            ...(values.notifyInsurer ? { notification: { insurer: values.insurer } } : {}),
-            decisions: [
-              {
-                extractionId: field.id,
-                choice: values.choice,
-                ...(values.choice === "correct" ? { value: values.value } : {}),
-              },
-            ],
-          }),
-        )(event);
-      }}
-    >
-      <dl className="space-y-4 text-sm">
-        <div>
-          <dt className="text-muted-foreground">{t("current")}</dt>
-          <dd className="mt-1 break-words font-medium">
-            {current?.value ??
-              document.reviewedValues.find((value) => value.field === field.field)?.value ??
-              t("unknown")}
-          </dd>
-        </div>
-        <div>
-          <dt className="text-muted-foreground">{t("proposed")}</dt>
-          <dd className="mt-1 break-words font-medium">{field.value}</dd>
-        </div>
-      </dl>
-      {comparison?.different && (
-        <p className="flex items-start gap-2 rounded-lg bg-amber-50 p-4 text-sm text-amber-950">
-          <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
-          {t("divergence")}
-        </p>
-      )}
-      {request && (
-        <Link to="/requests" className="flex min-h-11 items-center gap-2 text-sm text-indigo-600">
-          <Clock3 className="size-4" aria-hidden="true" />
-          {t("requests.pending")}
-        </Link>
-      )}
-      <div className="space-y-2 text-sm">
-        <p className="font-medium">{t("sourcePage", { page: field.source.page })}</p>
-        <blockquote className="break-words border-l-2 border-border pl-4 text-muted-foreground">
-          {field.source.text}
-        </blockquote>
-        <p className="break-words text-xs text-muted-foreground">
-          {t("sourceMethod", { version: field.source.version })}
-        </p>
-      </div>
-      <fieldset className="space-y-3" disabled={mutation.isPending}>
-        <legend className="mb-3 text-sm font-medium">{t("yourDecision")}</legend>
-        {(["keep", "use", "correct"] as const).map((choice) => (
-          <label key={choice} className="flex min-h-11 items-center gap-3 text-sm">
-            <input
-              type="radio"
-              value={choice}
-              className="size-4 accent-primary"
-              {...form.register("choice")}
+    <form className="space-y-6" onSubmit={(event) => void save("save")(event)}>
+      <fieldset disabled={mutation.isPending} className="space-y-4">
+        <legend className="mb-3 text-sm font-medium">{t("proposed")}</legend>
+        {group.fields.map((field, index) => (
+          <div key={field.extractionId} className="space-y-2">
+            <Label htmlFor={`document-value-${field.extractionId}`}>
+              {t(`field.${field.field}`)}
+            </Label>
+            <Input
+              id={`document-value-${field.extractionId}`}
+              type={
+                ["birthDate", "expiresOn"].includes(field.field)
+                  ? "date"
+                  : field.field === "contactEmail"
+                    ? "email"
+                    : field.field === "phone"
+                      ? "tel"
+                      : "text"
+              }
+              autoComplete="off"
+              {...form.register(`values.${index}.value`)}
+              className="min-h-11"
             />
-            {t(`choice.${choice}`)}
-          </label>
+          </div>
         ))}
       </fieldset>
-      {form.watch("choice") === "correct" && (
-        <div className="space-y-2">
-          <Label htmlFor="document-correction">{t("correction")}</Label>
-          <Input
-            id="document-correction"
-            type={["birthDate", "expiresOn"].includes(field.field) ? "date" : "text"}
-            {...form.register("value")}
-            disabled={mutation.isPending}
-          />
+      {group.fields.some((field) => field.currentValue !== null) && (
+        <div className="space-y-2 rounded-lg bg-muted p-4 text-sm">
+          <p className="text-muted-foreground">{t("current")}</p>
+          <p className="whitespace-pre-line break-words font-medium">
+            {group.fields
+              .map((field) => field.currentValue)
+              .filter(Boolean)
+              .join("\n")}
+          </p>
         </div>
       )}
-      {profileKey.success &&
-        !request &&
-        form.watch("choice") !== "use" &&
-        (comparison?.different || form.watch("choice") === "correct") && (
-          <div className="space-y-3 rounded-xl border border-border p-4">
-            <label className="flex min-h-11 items-center gap-3 text-sm font-medium">
-              <input
-                type="checkbox"
-                className="size-4 accent-primary"
-                disabled={mutation.isPending}
-                {...form.register("notifyInsurer")}
-              />
-              {t("requests.notify")}
-            </label>
-            {form.watch("notifyInsurer") && (
-              <>
-                <Label htmlFor="notification-insurer">{t("requests.insurer")}</Label>
-                <Input
-                  id="notification-insurer"
-                  className="min-h-11"
-                  {...form.register("insurer")}
-                  disabled={mutation.isPending}
-                />
-                <p className="text-sm text-muted-foreground">{t("requests.prepareHelp")}</p>
-              </>
-            )}
-          </div>
-        )}
-      <label className="flex items-start gap-3 text-sm">
-        <input
-          className="mt-1 size-4 shrink-0 accent-primary"
-          type="checkbox"
-          {...form.register("concernsMe")}
-          disabled={mutation.isPending}
-        />
-        <span>{t("concernsMe")}</span>
-      </label>
+      {company.isError ? (
+        <DocumentFailure error={company.error} onRetry={() => void company.refetch()} />
+      ) : (
+        !company.isPending && (
+          <DocumentCompanyStatus
+            action={company.data?.actions.find((action) => action.groupId === group.id)}
+            different={group.canSync && group.different}
+          />
+        )
+      )}
       {Object.keys(form.formState.errors).length > 0 && (
         <p role="alert" className="text-sm text-destructive">
           {t("reviewInvalid")}
@@ -227,12 +165,20 @@ export function DocumentReview({
           }}
         />
       )}
-      <Button type="submit" className="min-h-11 w-full" disabled={mutation.isPending}>
-        {t(mutation.isPending ? "saving" : "confirmDecision")}
-      </Button>
-      <p className="text-xs text-muted-foreground">
-        {t(profileKey.success ? "profileImpact" : "documentImpact")}
-      </p>
+      <div className="flex flex-col gap-3">
+        <Button
+          type="submit"
+          variant={group.canSync && differs ? "outline" : "default"}
+          disabled={mutation.isPending || !form.formState.isDirty}
+        >
+          {t(mutation.isPending ? "saving" : "reviewEdit.save")}
+        </Button>
+        {group.canSync && differs && (
+          <Button type="button" disabled={mutation.isPending} onClick={() => void save("sync")()}>
+            {t("reviewEdit.useProfile")}
+          </Button>
+        )}
+      </div>
     </form>
   );
 }

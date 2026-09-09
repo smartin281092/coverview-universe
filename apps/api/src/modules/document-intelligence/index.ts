@@ -11,6 +11,8 @@ import {
   type AdminDocumentIdentity,
 } from "./document.admin.routes.js";
 import { startDocumentJobs } from "./document.jobs.js";
+import { createCompanyActionRepository } from "./document.company-actions.repository.js";
+import { registerCompanyActionRoutes } from "./document.company-actions.routes.js";
 export { DocumentError } from "./document.repository.js";
 
 export async function registerDocuments(
@@ -29,8 +31,29 @@ export async function registerDocuments(
   const service = createDocumentService(repository, storage);
   registerDocumentRoutes(app, repository, service, identity);
   registerAdminDocumentRoutes(app, repository, service, identity);
+  const actions = createCompanyActionRepository(database.db);
+  registerCompanyActionRoutes(app, actions, identity);
+  let actionMaintenance: Promise<void> | null = null;
+  const maintainActions = () => {
+    if (actionMaintenance) return;
+    actionMaintenance = actions
+      .purgeExpiredCommands()
+      .catch(() =>
+        app.log.warn(
+          { dependency: "company_action_cleanup" },
+          "Expired company action receipts will be retried",
+        ),
+      )
+      .finally(() => {
+        actionMaintenance = null;
+      });
+  };
+  const actionTimer = setInterval(maintainActions, 60000);
+  actionTimer.unref();
   const stop = startDocumentJobs(config, repository, storage, app.log);
   app.addHook("onClose", async () => {
+    clearInterval(actionTimer);
+    await actionMaintenance;
     await stop();
     storage.close();
     await database.pool.end();

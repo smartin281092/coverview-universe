@@ -202,7 +202,26 @@ export const documentProfileDifferencesSchema = z.object({
     )
     .max(10),
 });
+export const documentReviewGroupSchema = z.object({
+  id: z.string().min(1).max(100),
+  labelKey: z.union([z.literal("address"), documentFieldSchema]),
+  fields: z
+    .array(
+      z.object({
+        extractionId: z.uuid(),
+        field: documentFieldSchema,
+        value: z.string().min(1).max(240),
+        currentValue: z.string().max(240).nullable(),
+      }),
+    )
+    .min(1)
+    .max(15),
+  different: z.boolean(),
+  canSync: z.boolean(),
+  profileRevision: z.number().int().nonnegative(),
+});
 export const documentSchema = documentSummarySchema.extend({
+  reviewGroups: z.array(documentReviewGroupSchema).max(15).optional(),
   profileComparisons: z
     .array(
       z.object({
@@ -357,6 +376,25 @@ export const documentReviewResultSchema = z.object({
   document: documentSchema,
   profile: profileSchema,
 });
+export const documentFieldReviewInputSchema = documentRevisionSchema
+  .extend({
+    profileRevision: z.number().int().nonnegative(),
+    intent: z.enum(["save", "sync"]),
+    values: z
+      .array(
+        z
+          .object({
+            extractionId: z.uuid(),
+            value: z.string().trim().min(1).max(240),
+          })
+          .strict(),
+      )
+      .min(1)
+      .max(15),
+  })
+  .strict();
+export type DocumentReviewGroup = z.infer<typeof documentReviewGroupSchema>;
+export type DocumentFieldReviewInput = z.infer<typeof documentFieldReviewInputSchema>;
 export const documentProfileValuesSchema = profileValuesSchema;
 export type DocumentSummary = z.infer<typeof documentSummarySchema>;
 export type DocumentRecord = z.infer<typeof documentSchema>;

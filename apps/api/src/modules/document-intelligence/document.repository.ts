@@ -26,6 +26,8 @@ import {
   documentChangeRequestSchema,
   documentChangeRequestsSchema,
   documentProfileDifferencesSchema,
+  documentFieldReviewInputSchema,
+  type DocumentFieldReviewInput,
   type DocumentCreateInput,
   type DocumentReviewInput,
   type DocumentRecord,
@@ -47,6 +49,7 @@ import {
   assertDocumentProfileTarget,
   readManagedDocumentValues,
   enrichManagedDocumentProfile,
+  syncManagedDocumentProfile,
 } from "../profiles/index.js";
 import type { createDatabase } from "../../platform/db/database.js";
 import {
@@ -67,6 +70,12 @@ import { documentProfileComparisons, sameProfileValue } from "./document.reconci
 import { referencedCompanyIds, companyLabels } from "./document.companies.js";
 import { companyOverview, insuranceDomainLabels } from "./document.insurance.js";
 import { DocumentError } from "./document.errors.js";
+import {
+  getDocumentGroups,
+  readDocumentFieldCorrections,
+  effectiveDocumentFields,
+} from "./document.field-review.js";
+import { documentFieldCorrections } from "./document.field-review.schema.js";
 import {
   createIdentityAttachmentRepository,
   cleanupIdentityAttachmentCommands,
@@ -98,11 +107,24 @@ function summary(row: Row) {
   });
 }
 async function detail(tx: Tx | Database, row: Row): Promise<DocumentRecord> {
+  const reviewGroups = await getDocumentGroups(tx, row);
+  const effectiveAnalysis = row.analysis
+    ? {
+        ...row.analysis,
+        fields: row.analysis.fields.map((field) => ({
+          ...field,
+          value:
+            reviewGroups
+              .flatMap((group) => group.fields)
+              .find((item) => item.extractionId === field.id)?.value ?? field.value,
+        })),
+      }
+    : null;
   const managedValues = row.managedProfileId
     ? await readManagedDocumentValues(tx, row.userId, row.managedProfileId)
     : null;
   const profileComparisons = managedValues
-    ? (row.analysis?.fields ?? []).flatMap((extraction) => {
+    ? (effectiveAnalysis?.fields ?? []).flatMap((extraction) => {
         const current = managedValues[extraction.field as keyof typeof managedValues];
         return typeof current === "string"
           ? [
@@ -114,7 +136,7 @@ async function detail(tx: Tx | Database, row: Row): Promise<DocumentRecord> {
             ]
           : [];
       })
-    : documentProfileComparisons(row.analysis, await readDocumentProfile(tx, row.userId));
+    : documentProfileComparisons(effectiveAnalysis, await readDocumentProfile(tx, row.userId));
   const requests = await tx
     .select()
     .from(documentChangeRequests)
@@ -146,6 +168,7 @@ async function detail(tx: Tx | Database, row: Row): Promise<DocumentRecord> {
     analysis: row.analysis,
     decisions: decisions.map((item) => item.decision),
     reviewedValues: accepted.rows,
+    reviewGroups,
     profileComparisons,
     changeRequests: requests.map(changeRequest),
   });
@@ -304,6 +327,7 @@ export function createDocumentRepository(db: Database) {
       const rows = await db
         .select({
           id: documents.id,
+          generation: documents.generation,
           analysis: sql<DocumentAnalysis | null>`case when ${documents.analysis} is null then null else jsonb_build_object('fields', ${documents.analysis}->'fields') end`,
         })
         .from(documents)
@@ -317,9 +341,17 @@ export function createDocumentRepository(db: Database) {
         )
         .orderBy(desc(documents.createdAt), desc(documents.id))
         .limit(200);
+      const corrections = await readDocumentFieldCorrections(
+        db,
+        userId,
+        rows.map((row) => row.id),
+      );
       const byField = new Map<string, { field: string; count: number; documentId: string }>();
       for (const row of rows) {
-        for (const comparison of documentProfileComparisons(row.analysis, profile).filter(
+        const analysis = row.analysis
+          ? { ...row.analysis, fields: effectiveDocumentFields(row, corrections) }
+          : null;
+        for (const comparison of documentProfileComparisons(analysis, profile).filter(
           (item) => item.different,
         )) {
           const field = row.analysis?.fields.find(
@@ -708,6 +740,96 @@ export function createDocumentRepository(db: Database) {
         },
       );
     },
+    fields(actor: Actor, id: string, supplied: DocumentFieldReviewInput, key: string) {
+      const input = documentFieldReviewInputSchema.parse(supplied);
+      return command(
+        actor,
+        id,
+        "fields_reviewed",
+        key,
+        { id, ...input },
+        documentSchema,
+        async (tx, profile, current) => {
+          const row = live(current);
+          if (actor.administratorUserId) throw new DocumentError("DOCUMENT_REVIEW_INVALID", 422);
+          revision(row, input.revision);
+          if (row.state !== "ready") throw new DocumentError("DOCUMENT_CONFLICT", 409);
+          const groups = await getDocumentGroups(tx, row);
+          const ids = new Set(input.values.map((item) => item.extractionId));
+          if (ids.size !== input.values.length)
+            throw new DocumentError("DOCUMENT_REVIEW_INVALID", 422);
+          const selected = groups.filter((group) =>
+            group.fields.some((field) => ids.has(field.extractionId)),
+          );
+          const selectedFields = selected.flatMap((group) => group.fields);
+          // Addresses are one operation. Missing components in the original stay absent.
+          if (
+            selectedFields.length !== ids.size ||
+            selectedFields.some((field) => !ids.has(field.extractionId))
+          )
+            throw new DocumentError("DOCUMENT_REVIEW_INVALID", 422);
+          const values: Record<string, string> = {};
+          for (const item of input.values) {
+            const field = selectedFields.find(
+              (candidate) => candidate.extractionId === item.extractionId,
+            );
+            if (!field || Object.hasOwn(values, field.field))
+              throw new DocumentError("DOCUMENT_REVIEW_INVALID", 422);
+            if (
+              ["birthDate", "expiresOn"].includes(field.field) &&
+              !z.iso.date().safeParse(item.value).success
+            )
+              throw new DocumentError("DOCUMENT_REVIEW_INVALID", 422);
+            values[field.field] = item.value;
+          }
+          if (input.intent === "sync") {
+            if (selected.some((group) => !group.canSync))
+              throw new DocumentError("DOCUMENT_REVIEW_INVALID", 422);
+            if (selected.some((group) => group.profileRevision !== input.profileRevision))
+              throw new DocumentError("DOCUMENT_CONFLICT", 409);
+            if (row.managedProfileId)
+              await syncManagedDocumentProfile(
+                tx,
+                actor,
+                row.managedProfileId,
+                input.profileRevision,
+                values,
+              );
+            else {
+              const parsed = documentProfileValuesSchema.safeParse(values);
+              if (!parsed.success) throw new DocumentError("DOCUMENT_REVIEW_INVALID", 422);
+              await confirmDocumentProfileFields(tx, profile, parsed.data);
+            }
+          }
+          const corrections = selectedFields.flatMap((field) => {
+            const value = values[field.field]!;
+            return value === field.value
+              ? []
+              : [
+                  {
+                    id: randomUUID(),
+                    userId: actor.userId,
+                    documentId: id,
+                    generation: row.generation,
+                    extractionId: field.extractionId,
+                    field: field.field,
+                    value,
+                    documentRevision: row.revision + 1,
+                    actor: auditActor(actor),
+                  },
+                ];
+          });
+          if (corrections.length) await tx.insert(documentFieldCorrections).values(corrections);
+          const [updated] = await tx
+            .update(documents)
+            .set({ revision: row.revision + 1, updatedAt: new Date() })
+            .where(condition(actor.userId, id))
+            .returning();
+          if (!updated) throw new DocumentError("DOCUMENT_CONFLICT", 409);
+          return { row: updated, response: await detail(tx, updated) };
+        },
+      );
+    },
     review(actor: Actor, id: string, input: DocumentReviewInput, key: string) {
       return command(
         actor,
@@ -833,6 +955,28 @@ export function createDocumentRepository(db: Database) {
             decision,
             createdAt: now,
           });
+          // N-1 review clients retain their existing profile mutation semantics while
+          // the accepted document value also keeps its exact extraction identity.
+          const acceptedCorrections = input.decisions.flatMap((item) => {
+            const extraction = row.analysis?.fields.find((field) => field.id === item.extractionId);
+            if (!extraction || item.choice === "keep") return [];
+            return [
+              {
+                id: randomUUID(),
+                userId: actor.userId,
+                documentId: id,
+                generation: row.generation,
+                extractionId: extraction.id,
+                field: extraction.field,
+                value: item.choice === "correct" ? item.value! : extraction.value,
+                documentRevision: updated.revision,
+                actor: auditActor(actor),
+                createdAt: now,
+              },
+            ];
+          });
+          if (acceptedCorrections.length)
+            await tx.insert(documentFieldCorrections).values(acceptedCorrections);
           return {
             row: updated,
             response: { document: await detail(tx, updated), profile: updatedProfile },
@@ -867,6 +1011,14 @@ export function createDocumentRepository(db: Database) {
           .returning();
         if (!updated) throw new Error("Document update failed");
         // Keep only field names and owner decisions as provenance of surviving profile fields.
+        await tx
+          .delete(documentFieldCorrections)
+          .where(
+            and(
+              eq(documentFieldCorrections.userId, actor.userId),
+              eq(documentFieldCorrections.documentId, id),
+            ),
+          );
         await tx
           .delete(documentChangeRequests)
           .where(

@@ -1,4 +1,10 @@
-import { createRootRoute, createRoute, createRouter, redirect } from "@tanstack/react-router";
+import {
+  createRootRoute,
+  createRoute,
+  createRouter,
+  lazyRouteComponent,
+  redirect,
+} from "@tanstack/react-router";
 import { AppShell } from "./AppShell";
 import { HomePage } from "./pages/HomePage";
 import { DiagnosticsPage } from "./pages/DiagnosticsPage";
@@ -23,6 +29,16 @@ const requestsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/requests",
   component: RequestsPage,
+});
+const actionsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/actions",
+  component: lazyRouteComponent(() => import("./pages/ActionCenterPage"), "ActionCenterPage"),
+  validateSearch: (search: Record<string, unknown>): { cursor?: string } => ({
+    ...(typeof search.cursor === "string" && search.cursor.length <= 300
+      ? { cursor: search.cursor }
+      : {}),
+  }),
 });
 const documentRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -136,6 +152,7 @@ export const router = createRouter({
     profileRoute,
     documentsRoute,
     requestsRoute,
+    actionsRoute,
     documentRoute,
     insuranceCompanyRoute,
   ]),

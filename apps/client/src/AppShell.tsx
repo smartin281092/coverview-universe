@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, Outlet, useLocation } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { ArrowUpRight, FileText, Menu, Settings2, UserRound, X, Clock3 } from "lucide-react";
+import { ArrowUpRight, FileText, Menu, Settings2, UserRound, X, ListChecks } from "lucide-react";
 import {
   Button,
   Container,
@@ -20,7 +20,7 @@ import { LogoutFeedback } from "./features/identity/LogoutFeedback";
 const destinations = [
   { to: "/profile", key: "profile", icon: UserRound },
   { to: "/documents", key: "documents", icon: FileText },
-  { to: "/requests", key: "requests", icon: Clock3 },
+  { to: "/actions", key: "actions", icon: ListChecks },
   { to: "/account", key: "account", icon: Settings2 },
 ] as const;
 
@@ -63,6 +63,7 @@ export function AppShell() {
     { path: "/articles/questions-frequentes", key: "questions" },
   ] as const;
   const isCurrent = (destination: (typeof destinations)[number]["to"]) => {
+    if (destination === "/actions" && pathname === "/requests") return true;
     if (destination === "/documents" && pathname.startsWith("/insurance-companies/")) return true;
     if (destination === "/account")
       return (

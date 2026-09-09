@@ -48,6 +48,13 @@ export function AppShell() {
               {t("users:nav")}
             </Link>
             <Link
+              to="/service-requests"
+              aria-current={pathname === "/service-requests" ? "page" : undefined}
+              className="cv-app-nav-link"
+            >
+              {t("serviceRequests:nav")}
+            </Link>
+            <Link
               to="/account"
               aria-current={accountPage ? "page" : undefined}
               className="cv-app-nav-link"

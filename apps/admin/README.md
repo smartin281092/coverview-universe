@@ -34,6 +34,8 @@ Les commandes CSRF et idempotence restent en mémoire. Dès la demande de logout
 
 ## Permissions
 
+`/service-requests` est le kanban des mises à jour demandées dans le Centre d’action Wallet. Il utilise la même frontière Admin+MFA, les portails privés, l’audit des lectures et commandes, révisions et idempotence. Les cartes figent compte, profil, compagnie et coordonnées demandées. Une transmission ou confirmation exige date effective et référence de preuve ; une tâche créée ne prouve pas l’envoi. Les demandes devenues obsolètes après modification du profil sont identifiées. Aucun email n’est envoyé automatiquement depuis cet écran. [Contrats et conservation](../api/src/modules/document-intelligence/README.md#revue-simplifiée-et-centre-daction--demande-du-9-septembre).
+
 Le nom `admin` n’accorde aucun droit. Seul le serveur confirme une habilitation explicite et une preuve MFA valide ; aucune permission du DTO `/me` ne remplace `/identity/admin`. L’API décide aussi de l’exposition locale des fixtures. Les routes d’exemples sont désactivées hors build de développement. Une configuration d’identité désactivée présente une connexion indisponible.
 
 ## État réel

@@ -8,6 +8,8 @@ export { managedProfiles } from "./profiles.schema.js";
 export {
   assertDocumentProfileTarget,
   readManagedDocumentValues,
+  readManagedDocumentProfile,
+  syncManagedDocumentProfile,
   enrichManagedDocumentProfile,
 } from "./profiles.document.repository.js";
 

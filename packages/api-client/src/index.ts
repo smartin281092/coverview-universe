@@ -29,6 +29,7 @@ import {
   documentListQuerySchema,
   documentCreateInputSchema,
   documentReviewInputSchema,
+  documentFieldReviewInputSchema,
   documentReviewResultSchema,
   documentCategoryInputSchema,
   documentRetryInputSchema,
@@ -55,6 +56,15 @@ import {
   type ApiErrorCode,
 } from "@coverview/contracts";
 import type { z } from "zod";
+import {
+  companyActionsQuerySchema,
+  companyActionsSchema,
+  companyActionRequestInputSchema,
+  serviceRequestSchema,
+  serviceRequestsQuerySchema,
+  serviceRequestsSchema,
+  serviceRequestTransitionInputSchema,
+} from "@coverview/contracts";
 
 export class ApiError extends Error {
   constructor(
@@ -447,6 +457,18 @@ export function createApiClient({
         { body: documentReviewInputSchema.parse(input), credentials: options },
         true,
       ),
+    updateDocumentFields: (
+      id: string,
+      input: z.infer<typeof documentFieldReviewInputSchema>,
+      options: MutationOptions,
+    ) =>
+      request(
+        `/documents/${encodeURIComponent(id)}/fields`,
+        documentSchema,
+        options,
+        { body: documentFieldReviewInputSchema.parse(input), credentials: options },
+        true,
+      ),
     deleteDocument: (id: string, options: MutationOptions) =>
       request(
         `/documents/${encodeURIComponent(id)}/delete`,
@@ -556,6 +578,56 @@ export function createApiClient({
         insuranceCompanyDetailsSchema,
         options,
         undefined,
+        true,
+      ),
+    companyActions: (
+      query: z.infer<typeof companyActionsQuerySchema> = {},
+      options?: RequestOptions,
+    ) => {
+      const params = new URLSearchParams(
+        Object.entries(companyActionsQuerySchema.parse(query)).filter(
+          (entry): entry is [string, string] => typeof entry[1] === "string",
+        ),
+      );
+      return request(`/actions?${params}`, companyActionsSchema, options, undefined, true);
+    },
+    requestCompanyAction: (
+      input: z.infer<typeof companyActionRequestInputSchema>,
+      options: MutationOptions,
+    ) =>
+      request(
+        "/actions/request",
+        serviceRequestSchema,
+        options,
+        { body: companyActionRequestInputSchema.parse(input), credentials: options },
+        true,
+      ),
+    serviceRequests: (
+      query: z.infer<typeof serviceRequestsQuerySchema> = {},
+      options?: RequestOptions,
+    ) => {
+      const params = new URLSearchParams(
+        Object.entries(serviceRequestsQuerySchema.parse(query)).filter(
+          (entry): entry is [string, string] => typeof entry[1] === "string",
+        ),
+      );
+      return request(
+        `/admin/service-requests?${params}`,
+        serviceRequestsSchema,
+        options,
+        undefined,
+        true,
+      );
+    },
+    transitionServiceRequest: (
+      input: z.infer<typeof serviceRequestTransitionInputSchema>,
+      options: MutationOptions,
+    ) =>
+      request(
+        "/admin/service-requests/transition",
+        serviceRequestSchema,
+        options,
+        { body: serviceRequestTransitionInputSchema.parse(input), credentials: options },
         true,
       ),
     saveProfile: (input: z.infer<typeof profileSaveInputSchema>, options: MutationOptions) =>
