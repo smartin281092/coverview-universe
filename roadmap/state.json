@@ -602,7 +602,7 @@
       ]
     },
     "S-042a": {
-      "status": "running",
+      "status": "review",
       "approval": "Demande explicite utilisateur du 6 septembre 2026 : mobile Wallet puis conservation de tous les documents déposés, y compris identité, classification et extraction profil ; choix locaux délégués PROG-23, aucune validation juridique déduite.",
       "decisions": [
         {
@@ -666,6 +666,12 @@
           "oracle": "V0/V1/V2 et V3 partiel",
           "observed": "Commit14c6aa4 intégré, migration0012 locale sans reset, types/lint/build/frontières passent. 9 tests PostgreSQL, 9 tests client HTTP et 300 cas de géométrie passent. Navigateur réel : champs et pièce titulaire/personne gérée, Validation sans répétition, passeport mobile une page, pièce dans procuration et mandat. Preuves dans roadmap/evidence/profile-identity-preview.md.",
           "decision": "Conserver S-042a running. Images réelles, pincement physique, PDF natif et nouvelle reconnaissance OCR non exercés ; aucun V3 déduit de la géométrie ou des tests isolés."
+        },
+        {
+          "target": "Livraison S-042a — demande /ship du 9 septembre 2026",
+          "oracle": "V0/V1/V2 et V3 partiel",
+          "observed": "35 tests existants sur 6 fichiers passent ; 11 tâches de types/build, lint ciblé, frontières et contrôle des bundles passent. Deux analyses réelles persistées. Téléchargement propriétaire HTTP200 et intégrité de l’original vérifiés ; suppression déjà demandée terminée, objet absent et dérivés/métadonnées effacés. Admin exige toujours une MFA personnelle. Détails et limites C01–C07 : roadmap/evidence/S-042a-ship-2026-09-09.md.",
+          "decision": "Passer en review conformément à /ship ; ne pas déclarer done. Compléter pièce d’identité réelle, confirmation/réextraction, refus deuxième session et interruption/reprise avant clôture. Aucune mutation de profil ou suppression supplémentaire pour fabriquer les preuves."
         }
       ],
       "ledger": {
@@ -678,11 +684,13 @@
           "Onglets de pièce d’identité, espacement Montech et alignement HTML/CSS de Mon compte sur Mon profil : recette authentifiée mobile/desktop, compilation et limites dans roadmap/evidence/identity-tabs-heading-spacing.md. Ces preuves de présentation ne clôturent ni dépôt ni signature.",
           "Admin utilisateurs/profils/documents ciblés : types, lint, builds, frontières et tests PostgreSQL/HTTP passent ; migration0010 locale et code dans les checkouts de preview. Preuves et limites roadmap/evidence/admin-users.md.",
           "Notice LSA45 autonome : première ouverture persistée par propriétaire/version, coche verte dans Autorisations après rechargement, notice retirée des documents de signature. Migration0011 locale sans reset, 17 tests HTTP/PostgreSQL identity, types/build/lint/frontières et recette réelle mobile/desktop ; preuves et limites dans roadmap/evidence/lsa45-notice.md.",
-          "AVS/profession et pièces d’identité par profil : persistance/isolation, migration0012 locale, types/lint/build/frontières et tests ciblés passent. Formulaires segmentés, Validation, passeport une page et pièce commune aux autorisations observés en preview ; preuves et limites dans roadmap/evidence/profile-identity-preview.md."
+          "AVS/profession et pièces d’identité par profil : persistance/isolation, migration0012 locale, types/lint/build/frontières et tests ciblés passent. Formulaires segmentés, Validation, passeport une page et pièce commune aux autorisations observés en preview ; preuves et limites dans roadmap/evidence/profile-identity-preview.md.",
+          "Revue de livraison du 9 septembre : contrôles ciblés réussis, téléchargement réel, taille/SHA256 identiques, analyses persistées et suppression physique observée. Bilan consolidé et propositions DOC-13 dans roadmap/evidence/S-042a-ship-2026-09-09.md."
         ],
         "done_unverified": [
           "Extension Admin : recette des données et mutations en navigateur en attente de MFA personnelle ; connexion active constatée mais accès exige toujours vérification. Aucun OCR réel déclaré. Voir roadmap/evidence/admin-users.md.",
-          "Visionneuse privée implémentée et géométrie contrôlée ; ouverture d’images réelles, gestes tactiles physiques, PDF natif et nouvelle détection OCR restent à exercer. Aucun original fictif ajouté en preview. Voir roadmap/evidence/profile-identity-preview.md."
+          "Visionneuse privée implémentée et géométrie contrôlée ; ouverture d’images réelles, gestes tactiles physiques, PDF natif et nouvelle détection OCR restent à exercer. Aucun original fictif ajouté en preview. Voir roadmap/evidence/profile-identity-preview.md.",
+          "Critères C01–C07 partiellement prouvés : pièce d’identité réelle et citations, confirmation puis divergence sans écrasement, refus dans une deuxième session WorkOS, interruption/reprise avec antivirus indisponible et non-résurrection après redémarrage restent à exercer. L’absence d’original d’identité et la MFA Admin personnelle sont explicites ; aucune preuve V3 déduite des doubles/tests SQL. Voir bilan de livraison du 9 septembre."
         ],
         "assumed": []
       },
@@ -695,8 +703,12 @@
         "Extension personnes/entités et sections médicales livrée sans compte tiers implicite ni sélection globale ; procuration/OCR restent ceux du titulaire. Capture physique de carte non exercée, aucune donnée fictive dans le compte réel. Session GPT-6, effort effectif non exposé ; preuves dans roadmap/evidence/profile-sections-identity-attachment.md.",
         "Revue 2026-09-08 : les mentions antérieures de clé absente, sessions expirées et panne CUA sont des checkpoints historiques. Analyse réelle confirmée par l’utilisateur et fiche authentifiée observée dans roadmap/evidence/document-reading-ux.md ; la clôture complète C01–C07 reste à consolider. Voir roadmap/evidence/roadmap-review-2026-09-08.md.",
         "Extension Admin/utilisateurs et ciblage des documents en cours dans le checkout partagé le 2026-09-08 : aucune livraison déduite des fichiers modifiés. Préserver son propriétaire et ses travaux ; borner cette extension avant tout nouveau périmètre selon PROG-14.",
-        "Extension Admin demandée le 8 septembre 2026 : annuaire utilisateurs, gestion des profils liés et documents explicitement ciblés ; plan roadmap/plans/S-042a-admin-users.plan.md, preuves roadmap/evidence/admin-users.md. Ne clôture pas les critères globaux S-042a encore incomplets."
-      ]
+        "Extension Admin demandée le 8 septembre 2026 : annuaire utilisateurs, gestion des profils liés et documents explicitement ciblés ; plan roadmap/plans/S-042a-admin-users.plan.md, preuves roadmap/evidence/admin-users.md. Ne clôture pas les critères globaux S-042a encore incomplets.",
+        "Demande explicite /ship du 9 septembre 2026 : compte rendu partiel livré, statut review ; aucune clôture done ou dépendance libérée. Artefact canonique roadmap/evidence/S-042a-ship-2026-09-09.md. Les obstacles historiques de clé absente sont dépassés ; les limites actuelles sont détaillées par critère.",
+        "Suite préparée dans le bilan de livraison : brouillon S-080, plan existant et session recommandée gpt-6-astra/ultra ; aucun relais démarré ni travail concurrent pendant cette revue incomplète."
+      ],
+      "session": "GPT-6 ; effort effectif non exposé — revue de livraison du 9 septembre 2026",
+      "cost": "Coût de session non disponible ; aucun nouvel appel OpenAI pendant la revue de livraison"
     }
   },
   "execution": {

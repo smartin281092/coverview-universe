@@ -4,7 +4,7 @@
 
 Le programme contient **122 slices** et **694 critères d’acceptation**. Traçabilité : **2115/2115 unités source** affectées, dont 1742 liées aux critères et 373 qualifiées comme contexte ; **0 non affectées**. Ce sont des preuves de planification, aucune fonctionnalité n’est déclarée implémentée par ce décompte.
 
-État enregistré : 4 done, 1 review, 1 running, 116 specified. Les intégrations réelles et décisions métier ont des slices explicites ; aucun mock critique ne satisfait l’acceptation complète.
+État enregistré : 4 done, 2 review, 116 specified. Les intégrations réelles et décisions métier ont des slices explicites ; aucun mock critique ne satisfait l’acceptation complète.
 
 - [Index topologique et jalons](roadmap/index.md)
 - [Prompts détaillés](roadmap/prompts/README.md)
@@ -12,7 +12,7 @@ Le programme contient **122 slices** et **694 critères d’acceptation**. Traç
 - [Décisions avec options et périmètre](roadmap/decisions.md)
 - [Backlog](roadmap/backlog.yaml) · [Couverture](roadmap/coverage.json) · [État canonique](roadmap/state.json)
 
-En cours : [S-042a](roadmap/plans/S-042a.plan.md). En revue : [S-011](roadmap/plans/S-011.plan.md). L’ordre suit les dépendances, pas les seuls numéros. Exécution séquentielle et choix des meilleurs défauts autorisés : [mandat et relais entre tâches](roadmap/execution-policy.md). Les décisions sont consignées à l’entrée de chaque slice ; aucun GO répété.
+En cours : aucune slice. En revue : [S-042a](roadmap/plans/S-042a.plan.md), [S-011](roadmap/plans/S-011.plan.md). L’ordre suit les dépendances, pas les seuls numéros. Exécution séquentielle et choix des meilleurs défauts autorisés : [mandat et relais entre tâches](roadmap/execution-policy.md). Les décisions sont consignées à l’entrée de chaque slice ; aucun GO répété.
 
 La recherche LPP apparaît tôt : [S-021 demande/signature](roadmap/plans/S-021.plan.md), [S-022 suivi/résultats](roadmap/plans/S-022.plan.md), puis [S-036 transmission réelle](roadmap/plans/S-036.plan.md) et [S-041 réponses réelles](roadmap/plans/S-041.plan.md). Pièces, institutions, avoirs et prochaines démarches font partie du parcours ; un formulaire seul ne suffit pas.
 

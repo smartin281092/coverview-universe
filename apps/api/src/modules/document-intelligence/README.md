@@ -2,6 +2,8 @@
 
 S-042a ajoute le dépôt, la conservation et la revue des documents dans Wallet. La décision de fournisseur et les preuves effectives restent dans [le plan](../../../../../roadmap/plans/S-042a.plan.md) et [le ledger](../../../../../roadmap/evidence/S-042a.md). Une compilation réussie ne prouve pas une extraction OpenAI.
 
+État de livraison : **review, partielle**. La [revue du 9 septembre 2026](../../../../../roadmap/evidence/S-042a-ship-2026-09-09.md) consolide analyse réelle, intégrité de l’original, suppression physique et contrôles d’isolation ; la recette complète d’identité et de reprise reste à effectuer.
+
 ## Parcours et frontières
 
 Le propriétaire WorkOS crée un dépôt, transmet les octets puis retrouve l’original dans `/documents`. Le serveur vérifie taille, SHA256 et signature sur un préfixe borné ; les autres formats restent inconnus et conservés. Aucun parsing documentaire ni transfert OpenAI avant ClamAV. PDF, PNG, JPEG et WebP sont les formats de lecture proposés. La limite d’upload est 20 Mio ; une sortie dépassement/incomplète reste en échec, sans extraction partielle présentée comme fiable.
