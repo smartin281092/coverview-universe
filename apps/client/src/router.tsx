@@ -34,11 +34,17 @@ const actionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/actions",
   component: lazyRouteComponent(() => import("./pages/ActionCenterPage"), "ActionCenterPage"),
-  validateSearch: (search: Record<string, unknown>): { cursor?: string } => ({
-    ...(typeof search.cursor === "string" && search.cursor.length <= 300
+  validateSearch: (search: Record<string, unknown>): { cursor?: string; tab?: "activity" } => ({
+    ...(search.tab === "activity" ? { tab: "activity" as const } : {}),
+    ...(typeof search.cursor === "string" && search.cursor.length <= 500
       ? { cursor: search.cursor }
       : {}),
   }),
+});
+const actionRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/actions/$actionId",
+  component: lazyRouteComponent(() => import("./pages/ActionDetailsPage"), "ActionDetailsPage"),
 });
 const documentRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -83,6 +89,16 @@ const workspaceRoute = createRoute({
 const authorizationRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/authorizations/$kind",
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): { person?: string; returnAction?: string } => ({
+    ...(typeof search.person === "string" && /^(self|prf_[0-9a-f-]{36})$/.test(search.person)
+      ? { person: search.person }
+      : {}),
+    ...(typeof search.returnAction === "string" && /^act_[0-9a-f]{32}$/.test(search.returnAction)
+      ? { returnAction: search.returnAction }
+      : {}),
+  }),
   component: AuthorizationDetailsPage,
 });
 const devicesRoute = createRoute({
@@ -153,6 +169,7 @@ export const router = createRouter({
     documentsRoute,
     requestsRoute,
     actionsRoute,
+    actionRoute,
     documentRoute,
     insuranceCompanyRoute,
   ]),

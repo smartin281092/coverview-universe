@@ -371,7 +371,9 @@ export function ProfileSectionEditor({
           <h2 ref={heading} tabIndex={-1} className="cv-app-subheading outline-none">
             {labels[step]}
           </h2>
-          <p className="text-sm text-muted-foreground">{t("optional")}</p>
+          <p className="text-sm text-muted-foreground">
+            {t(section === "general" ? "generalRequired" : "optional")}
+          </p>
         </div>
         {failure && (
           <div role="alert" className="space-y-3 border-l-2 border-destructive pl-4 text-sm">

@@ -57,6 +57,26 @@ import {
 } from "@coverview/contracts";
 import type { z } from "zod";
 import {
+  authorizationDocumentSchema,
+  authorizationReceiptSchema,
+  authorizationSignInputSchema,
+  authorizationStatusSchema,
+  authorizationKindSchema,
+} from "@coverview/contracts";
+import {
+  actionCenterIdSchema,
+  actionCenterQuerySchema,
+  actionCenterListSchema,
+  actionCenterSummarySchema,
+  actionCenterHistorySchema,
+  actionCenterDetailsSchema,
+  actionCenterResolveInputSchema,
+  actionCenterResolveResultSchema,
+  actionCenterManualReviewsSchema,
+  actionCenterManualTransitionInputSchema,
+  actionCenterManualReviewSchema,
+} from "@coverview/contracts";
+import {
   companyActionsQuerySchema,
   companyActionsSchema,
   companyActionRequestInputSchema,
@@ -502,6 +522,46 @@ export function createApiClient({
       }
       return response.blob();
     },
+    authorization: (
+      kind: "procuration" | "mandate",
+      profileId = "self",
+      options?: RequestOptions,
+    ) =>
+      request(
+        `/authorizations/${authorizationKindSchema.parse(kind)}?${new URLSearchParams({ profileId: managedProfileIdSchema.parse(profileId) })}`,
+        authorizationDocumentSchema,
+        options,
+        undefined,
+        true,
+      ),
+    authorizationStatus: (profileId = "self", options?: RequestOptions) =>
+      request(
+        `/authorizations/status?${new URLSearchParams({ profileId: managedProfileIdSchema.parse(profileId) })}`,
+        authorizationStatusSchema,
+        options,
+        undefined,
+        true,
+      ),
+    signedAuthorization: (id: string, options?: RequestOptions) =>
+      request(
+        `/authorizations/receipts/${encodeURIComponent(id)}`,
+        authorizationReceiptSchema,
+        options,
+        undefined,
+        true,
+      ),
+    signAuthorization: (
+      kind: "procuration" | "mandate",
+      input: z.infer<typeof authorizationSignInputSchema>,
+      options: MutationOptions,
+    ) =>
+      request(
+        `/authorizations/${authorizationKindSchema.parse(kind)}/sign`,
+        authorizationReceiptSchema,
+        options,
+        { body: authorizationSignInputSchema.parse(input), credentials: options },
+        true,
+      ),
     profile: (options?: RequestOptions) =>
       request("/identity/profile", profileSchema, options, undefined, true),
     identityAttachment: (
@@ -591,6 +651,84 @@ export function createApiClient({
       );
       return request(`/actions?${params}`, companyActionsSchema, options, undefined, true);
     },
+    actionCenter: (
+      query: z.infer<typeof actionCenterQuerySchema> = {},
+      options?: RequestOptions,
+    ) => {
+      const params = new URLSearchParams(
+        Object.entries(actionCenterQuerySchema.parse(query)).filter(
+          (entry): entry is [string, string] => typeof entry[1] === "string",
+        ),
+      );
+      return request(`/action-center?${params}`, actionCenterListSchema, options, undefined, true);
+    },
+    actionCenterSummary: (options?: RequestOptions) =>
+      request("/action-center/summary", actionCenterSummarySchema, options, undefined, true),
+    actionCenterHistory: (
+      query: z.infer<typeof actionCenterQuerySchema> = {},
+      options?: RequestOptions,
+    ) => {
+      const params = new URLSearchParams(
+        Object.entries(actionCenterQuerySchema.parse(query)).filter(
+          (entry): entry is [string, string] => typeof entry[1] === "string",
+        ),
+      );
+      return request(
+        `/action-center/history?${params}`,
+        actionCenterHistorySchema,
+        options,
+        undefined,
+        true,
+      );
+    },
+    actionCenterAction: (id: string, options?: RequestOptions) =>
+      request(
+        `/action-center/${encodeURIComponent(actionCenterIdSchema.parse(id))}`,
+        actionCenterDetailsSchema,
+        options,
+        undefined,
+        true,
+      ),
+    resolveActionCenter: (
+      id: string,
+      input: z.infer<typeof actionCenterResolveInputSchema>,
+      options: MutationOptions,
+    ) =>
+      request(
+        `/action-center/${encodeURIComponent(actionCenterIdSchema.parse(id))}/resolve`,
+        actionCenterResolveResultSchema,
+        options,
+        { body: actionCenterResolveInputSchema.parse(input), credentials: options },
+        true,
+      ),
+    actionManualReviews: (
+      query: Pick<z.infer<typeof actionCenterQuerySchema>, "cursor"> = {},
+      options?: RequestOptions,
+    ) => {
+      const params = new URLSearchParams(
+        Object.entries(actionCenterQuerySchema.pick({ cursor: true }).parse(query)).filter(
+          (entry): entry is [string, string] => typeof entry[1] === "string",
+        ),
+      );
+      return request(
+        `/admin/action-reviews?${params}`,
+        actionCenterManualReviewsSchema,
+        options,
+        undefined,
+        true,
+      );
+    },
+    transitionActionManualReview: (
+      input: z.infer<typeof actionCenterManualTransitionInputSchema>,
+      options: MutationOptions,
+    ) =>
+      request(
+        "/admin/action-reviews/transition",
+        actionCenterManualReviewSchema,
+        options,
+        { body: actionCenterManualTransitionInputSchema.parse(input), credentials: options },
+        true,
+      ),
     requestCompanyAction: (
       input: z.infer<typeof companyActionRequestInputSchema>,
       options: MutationOptions,

@@ -11,3 +11,7 @@ export {
   enrichDocumentProfile,
 } from "./identity.profile.repository.js";
 export type { ProfileActor } from "./identity.profile.repository.js";
+export {
+  readAuthorizationNotice,
+  readAuthorizationNoticeActivity,
+} from "./identity.notice.repository.js";

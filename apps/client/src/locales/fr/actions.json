@@ -1,5 +1,105 @@
 {
   "eyebrow": "Votre suivi",
+  "tabs": { "todo": "À faire", "activity": "Activité" },
+  "viewSource": "Voir la source",
+  "verify": "Vérifier",
+  "saving": "Enregistrement…",
+  "backToActions": "Centre d’action",
+  "actionNavigation": "Navigation entre les actions",
+  "previousAction": "Action précédente",
+  "nextAction": "Action suivante",
+  "missingTitle": "Action indisponible",
+  "mandateRequired": "Un mandat de gestion signé est nécessaire pour faire transmettre ces informations. Actualisez cette action pour ouvrir le mandat concerné.",
+  "missingDescription": "Cette action n’est plus disponible dans votre espace.",
+  "badge_one": "{{count}} action à faire",
+  "badge_other": "{{count}} actions à faire",
+  "progress": {
+    "inProgress_one": "{{count}} action prise en charge",
+    "inProgress_other": "{{count}} actions prises en charge",
+    "label": "Progression des actions",
+    "remaining_one": "{{count}} action à faire",
+    "remaining_other": "{{count}} actions à faire",
+    "completed_one": "{{count}} action terminée sur {{total}}",
+    "completed_other": "{{count}} actions terminées sur {{total}}",
+    "optimization": "Optimisation",
+    "optimizationValue": "Optimisation des actions identifiées : {{percent}}"
+  },
+  "kinds": {
+    "profile_review": "Information à vérifier",
+    "company_notification": "Coordonnées à transmettre",
+    "authorization": "Autorisation",
+    "profile_completion": "Information du profil à compléter"
+  },
+  "states": {
+    "pending": "À faire",
+    "in_progress": "Prise en charge par le service client",
+    "complete": "Cette action est terminée."
+  },
+  "choices": {
+    "keep": "Conserver la valeur de mon profil ; l’information du document est obsolète",
+    "variant": "Utiliser cette information dans mon profil",
+    "correct": "Renseigner la bonne information",
+    "notify": "Faire transmettre mes coordonnées actuelles aux compagnies concernées",
+    "custom": "Rédiger ma propre réponse"
+  },
+  "question": {
+    "label": "Question",
+    "choose": "Choisir une réponse",
+    "profile_review": "Quelle information souhaitez-vous conserver pour « {{field}} » dans le profil de {{name}} ?",
+    "company_notification": "Comment souhaitez-vous mettre à jour « {{field}} » auprès des compagnies concernées ?",
+    "profile_completion": "Complétez « {{field}} » pour le profil de {{name}}.",
+    "authorization": "Complétez l’autorisation ci-dessus ou précisez votre demande au service client.",
+    "custom": "Ou rédigez votre propre réponse",
+    "customHelp": "Votre réponse sera transmise au service client pour traitement. Elle ne modifie pas automatiquement votre profil.",
+    "send": "Envoyer",
+    "invalid": "Vérifiez les informations saisies avant d’envoyer votre réponse."
+  },
+  "requirements": {
+    "title": "Éléments nécessaires",
+    "lsa45": "Lire la notice LSA45",
+    "procuration": "Signer la procuration",
+    "management_mandate": "Signer le mandat de gestion",
+    "profile_information": "Compléter les informations générales",
+    "missing": "Cet élément est nécessaire pour poursuivre la démarche concernée.",
+    "unavailable": "Cet élément reste à compléter dans votre dossier.",
+    "completed": "Complété le {{date}}",
+    "completeProfile": "Ouvrir mon profil",
+    "read": "Lire le document",
+    "openSign": "Ouvrir et signer"
+  },
+  "context": {
+    "title": "Documents et compagnies concernés",
+    "contract": "Contrat : {{reference}}",
+    "profile": "Cette action concerne les informations ou autorisations du profil."
+  },
+  "guard": {
+    "title": "Quitter cette réponse ?",
+    "description": "Votre réponse n’a pas été envoyée. Elle sera abandonnée si vous quittez cette page.",
+    "stay": "Continuer ma réponse",
+    "leave": "Quitter sans envoyer"
+  },
+  "activity": {
+    "authorizationVersion": "Version du document : {{version}}",
+    "authorizationRevoked": "Autorisation révoquée le {{date}}",
+    "incomplete": "Cette vue ne couvre pas encore toute l’activité enregistrée.",
+    "emptyTitle": "Aucune activité enregistrée",
+    "emptyDescription": "Vos réponses et les actions effectuées apparaîtront ici avec leur date.",
+    "recorded": "{{actor}} · {{date}}",
+    "actors": { "owner": "Vous", "administrator": "Service client" },
+    "before": "Avant",
+    "after": "Après",
+    "openAction": "Ouvrir l’action",
+    "choices": {
+      "keep": "Valeur du profil conservée",
+      "variant": "Profil synchronisé depuis un document",
+      "correct": "Information corrigée",
+      "notify": "Demande de mise à jour transmise au service client",
+      "custom": "Réponse confiée au service client",
+      "manual_completed": "Réponse traitée par le service client",
+      "opened": "Document ouvert",
+      "signed": "Autorisation signée"
+    }
+  },
   "title": "Centre d’action",
   "description": "Mettez votre profil à jour à partir de vos documents et suivez les coordonnées connues de vos compagnies.",
   "loading": "Chargement de vos actions",
@@ -61,11 +161,13 @@
     "needs_review": "Les documents contiennent des informations différentes ou incomplètes. Vérifiez les valeurs avant de demander une mise à jour.",
     "needs_notification": "Ces informations diffèrent de votre profil. Aucune notification correspondant aux coordonnées actuelles n’est enregistrée.",
     "requested": "Le service client a reçu votre demande. La compagnie n’a pas encore été notifiée.",
-    "in_progress": "Le service client traite votre demande.",
+    "in_progress": "Le service client traite votre demande. La compagnie n’a pas encore été notifiée.",
     "notified": "La notification de vos coordonnées actuelles est enregistrée. La confirmation de la compagnie reste attendue.",
     "confirmed": "La compagnie a confirmé vos coordonnées actuelles. Un ancien document peut encore afficher une autre valeur."
   },
   "groups": {
+    "avsNumber": "Numéro AVS",
+    "occupation": "Profession",
     "address": "Adresse",
     "phone": "Téléphone",
     "contactEmail": "E-mail",

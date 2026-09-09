@@ -402,7 +402,7 @@ function ProfileEditor({
                   >
                     {t(`steps.${step}`)}
                   </h2>
-                  <p className="text-sm text-muted-foreground">{t("optional")}</p>
+                  <p className="text-sm text-muted-foreground">{t("generalRequired")}</p>
                 </div>
                 {journey.failure && (
                   <div

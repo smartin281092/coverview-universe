@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { CheckCircle2, RefreshCw } from "lucide-react";
@@ -14,11 +15,16 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
 } from "@coverview/ui";
 import { api } from "../api";
 import { AdminBoundary } from "../features/users/AdminBoundary";
 import { ServiceRequestFailure } from "../features/service-requests/ServiceRequestFailure";
 import { ServiceRequestDetails } from "../features/service-requests/ServiceRequestDetails";
+import { ActionManualReviews } from "../features/service-requests/ActionManualReviews";
 
 const states = ["requested", "in_progress", "notified", "confirmed"] as const;
 
@@ -124,6 +130,9 @@ function ServiceRequests({ identity, blocked }: { identity: IdentityMe; blocked:
   const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);
   const [pending, setPending] = useState(false);
   const [notice, setNotice] = useState(false);
+  const search = useSearch({ from: "/service-requests" });
+  const navigate = useNavigate();
+  const tab = search.tab ?? "coordinates";
   return (
     <div ref={setPortalContainer} className="space-y-8">
       <header className="space-y-3">
@@ -131,88 +140,115 @@ function ServiceRequests({ identity, blocked }: { identity: IdentityMe; blocked:
         <h1 className="cv-app-heading">{t("title")}</h1>
         <p className="max-w-2xl text-muted-foreground">{t("description")}</p>
       </header>
-      <Button
-        variant="outline"
-        className="min-h-11"
-        disabled={blocked || pending}
-        onClick={() =>
-          void client.invalidateQueries({
-            queryKey: ["private", identity.user.id, identity.session.id, "service-requests"],
-          })
-        }
-      >
-        <RefreshCw className="size-4" aria-hidden="true" />
-        {t("refresh")}
-      </Button>
-      {notice && (
-        <p role="status" className="text-sm text-muted-foreground">
-          {t("saved")}
-        </p>
-      )}
-      <div className="grid items-start gap-6 sm:grid-cols-2 xl:grid-cols-4">
-        {states.map((state) => (
-          <RequestColumn
-            key={state}
-            state={state}
-            identity={identity}
-            blocked={blocked || pending}
-            onOpen={(request) => {
-              setSelected(request);
-              setNotice(false);
-            }}
-          />
-        ))}
-      </div>
-      <Sheet
-        open={!!selected}
-        onOpenChange={(open) => {
-          if (!open && !pending) setSelected(null);
+      <Tabs
+        value={tab}
+        onValueChange={(value) => {
+          if (!pending)
+            void navigate({
+              to: "/service-requests",
+              search: value === "reviews" ? { tab: "reviews" } : {},
+            });
         }}
       >
-        <SheetContent
-          portalContainer={portalContainer}
-          showCloseButton
-          closeLabel={t("close")}
-          className="gap-6 overflow-y-auto p-6 data-[side=right]:w-full data-[side=right]:sm:max-w-xl"
-        >
-          {selected && (
-            <>
-              <SheetHeader className="p-0 pr-8">
-                <SheetTitle>{t(`companies.${selected.companyId}`)}</SheetTitle>
-                <SheetDescription>
-                  {t("detailDescription", {
-                    name: selected.profileName,
-                    group: t(`groups.${selected.group}`),
-                  })}
-                </SheetDescription>
-              </SheetHeader>
-              <ServiceRequestDetails
-                key={`${selected.id}:${selected.revision}`}
-                request={selected}
-                identity={identity}
-                blocked={blocked}
-                onPending={setPending}
-                onRefresh={() => {
-                  setSelected(null);
-                  void client.invalidateQueries({
-                    queryKey: [
-                      "private",
-                      identity.user.id,
-                      identity.session.id,
-                      "service-requests",
-                    ],
-                  });
-                }}
-                onSaved={() => {
-                  setPending(false);
-                  setNotice(true);
-                  setSelected(null);
-                }}
-              />
-            </>
+        <TabsList>
+          <TabsTrigger value="coordinates" disabled={pending}>
+            {t("tabs.coordinates")}
+          </TabsTrigger>
+          <TabsTrigger value="reviews" disabled={pending}>
+            {t("tabs.reviews")}
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="reviews">
+          {tab === "reviews" && (
+            <ActionManualReviews identity={identity} blocked={blocked} onPending={setPending} />
           )}
-        </SheetContent>
-      </Sheet>
+        </TabsContent>
+        <TabsContent value="coordinates" className="space-y-6">
+          <Button
+            variant="outline"
+            className="min-h-11"
+            disabled={blocked || pending}
+            onClick={() =>
+              void client.invalidateQueries({
+                queryKey: ["private", identity.user.id, identity.session.id, "service-requests"],
+              })
+            }
+          >
+            <RefreshCw className="size-4" aria-hidden="true" />
+            {t("refresh")}
+          </Button>
+          {notice && (
+            <p role="status" className="text-sm text-muted-foreground">
+              {t("saved")}
+            </p>
+          )}
+          <div className="grid items-start gap-6 sm:grid-cols-2 xl:grid-cols-4">
+            {tab === "coordinates" &&
+              states.map((state) => (
+                <RequestColumn
+                  key={state}
+                  state={state}
+                  identity={identity}
+                  blocked={blocked || pending}
+                  onOpen={(request) => {
+                    setSelected(request);
+                    setNotice(false);
+                  }}
+                />
+              ))}
+          </div>
+          <Sheet
+            open={!!selected}
+            onOpenChange={(open) => {
+              if (!open && !pending) setSelected(null);
+            }}
+          >
+            <SheetContent
+              portalContainer={portalContainer}
+              showCloseButton
+              closeLabel={t("close")}
+              className="gap-6 overflow-y-auto p-6 data-[side=right]:w-full data-[side=right]:sm:max-w-xl"
+            >
+              {selected && (
+                <>
+                  <SheetHeader className="p-0 pr-8">
+                    <SheetTitle>{t(`companies.${selected.companyId}`)}</SheetTitle>
+                    <SheetDescription>
+                      {t("detailDescription", {
+                        name: selected.profileName,
+                        group: t(`groups.${selected.group}`),
+                      })}
+                    </SheetDescription>
+                  </SheetHeader>
+                  <ServiceRequestDetails
+                    key={`${selected.id}:${selected.revision}`}
+                    request={selected}
+                    identity={identity}
+                    blocked={blocked}
+                    onPending={setPending}
+                    onRefresh={() => {
+                      setSelected(null);
+                      void client.invalidateQueries({
+                        queryKey: [
+                          "private",
+                          identity.user.id,
+                          identity.session.id,
+                          "service-requests",
+                        ],
+                      });
+                    }}
+                    onSaved={() => {
+                      setPending(false);
+                      setNotice(true);
+                      setSelected(null);
+                    }}
+                  />
+                </>
+              )}
+            </SheetContent>
+          </Sheet>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

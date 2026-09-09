@@ -18,6 +18,8 @@ import {
   companyActionEvidence,
 } from "../modules/document-intelligence/document.company-actions.schema.js";
 import { companyActionProjection } from "../modules/document-intelligence/document.company-actions.projection.js";
+import { createAuthorizationRepository } from "../modules/authorizations/index.js";
+import { authorizationSignatures } from "../modules/authorizations/authorizations.schema.js";
 
 let container: StartedPostgreSqlContainer;
 let database: ReturnType<typeof createDatabase>;
@@ -37,6 +39,31 @@ async function owner() {
   return session;
 }
 type Actor = Awaited<ReturnType<typeof owner>>;
+async function signMandate(actor: Actor, profileId = "self") {
+  const repository = createAuthorizationRepository(database.db);
+  const draft = await repository.draft(actor.userId, "mandate", profileId);
+  return repository.sign(
+    actor,
+    "mandate",
+    {
+      profileId,
+      profileRevision: draft.profileRevision,
+      contentHash: draft.contentHash,
+      signerName: profileId === "self" ? draft.profileName : "Représentant de test",
+      place: "Genève",
+      accepted: true,
+      representative: profileId !== "self",
+      drawing: [
+        [
+          [0.1, 0.1],
+          [0.6, 0.8],
+          [0.8, 0.2],
+        ],
+      ],
+    },
+    randomUUID(),
+  );
+}
 async function original(
   actor: Actor,
   values: Partial<Record<DocumentExtraction["field"], string>>,
@@ -133,7 +160,13 @@ it("isolates owner and managed profiles, groups addresses, uses corrected values
     {
       revision: 0,
       step: "information",
-      fields: { street: "Rue nouvelle 10", city: "Genève", postalCode: "1200" },
+      fields: {
+        firstName: "Isolated",
+        lastName: "Person",
+        street: "Rue nouvelle 10",
+        city: "Genève",
+        postalCode: "1200",
+      },
     },
     randomUUID(),
   );
@@ -191,6 +224,7 @@ it("isolates owner and managed profiles, groups addresses, uses corrected values
       ?.values.city,
   ).toBe("Nyon");
   const own = (await actions.list(actor.userId)).actions.find((item) => item.profileId === "self")!;
+  await signMandate(actor);
   await expect(actions.request(other, requestInput(own), randomUUID())).rejects.toMatchObject({
     statusCode: 409,
   });
@@ -221,11 +255,16 @@ it("requires admin permission, MFA and dated evidence; retains old proof without
   const profile = await profiles.save(
     actor.userId,
     actor.id,
-    { revision: 0, step: "information", fields: { city: "Genève" } },
+    {
+      revision: 0,
+      step: "information",
+      fields: { firstName: "Isolated", lastName: "Person", city: "Genève" },
+    },
     randomUUID(),
   );
   await original(actor, { city: "Lausanne" });
   const action = (await actions.list(actor.userId)).actions[0]!;
+  await signMandate(actor);
   const requestKey = randomUUID();
   const requested = await actions.request(actor, requestInput(action), requestKey);
   expect((await actions.list(actor.userId)).actions[0]).toMatchObject({
@@ -402,6 +441,101 @@ it("keeps complementary address observations separate from contradictions and co
       observations: [{ ...source, values: { city: "Autre ville" }, documentDate: "2026-01-03" }],
     }).status,
   ).toBe("needs_notification");
+});
+
+it("requires the exact profile's active mandate before request or evidence, including receipt replay", async () => {
+  const actor = await owner();
+  const administrator = await owner();
+  const profiles = createProfileRepository(database.db);
+  const managed = createManagedProfileRepository(database.db);
+  const actions = createCompanyActionRepository(database.db);
+  await profiles.save(
+    actor.userId,
+    actor.id,
+    { revision: 0, step: "information", fields: { firstName: "Isolated", lastName: "Person" } },
+    randomUUID(),
+  );
+  await signMandate(actor);
+  const subject = await managed.create(
+    actor,
+    { kind: "person", displayName: "Managed person" },
+    randomUUID(),
+  );
+  await managed.saveSection(
+    actor,
+    subject.id,
+    "general",
+    {
+      revision: 0,
+      step: "information",
+      fields: { firstName: "Managed", lastName: "Person", city: "Genève" },
+    },
+    randomUUID(),
+  );
+  await original(actor, { city: "Lausanne" }, subject.id);
+  const action = (await actions.list(actor.userId, { profileId: subject.id })).actions[0]!;
+  const data = requestInput(action);
+  const key = randomUUID();
+  await expect(actions.request(actor, data, key)).rejects.toMatchObject({
+    code: "DOCUMENT_MANDATE_REQUIRED",
+  });
+  const signed = await signMandate(actor, subject.id);
+  const requested = await actions.request(actor, data, key);
+  await database.db.insert(identityAdminPermissions).values({
+    id: randomUUID(),
+    userId: administrator.userId,
+    permission: "administration.access",
+    evidence: "Isolated test",
+  });
+  await database.db
+    .update(identitySessions)
+    .set({ mfaVerifiedAt: new Date() })
+    .where(eq(identitySessions.id, administrator.id));
+  const admin = {
+    id: administrator.id,
+    userId: actor.userId,
+    administratorUserId: administrator.userId,
+  };
+  const transition = {
+    userId: actor.userId,
+    id: requested.id,
+    revision: requested.revision,
+    state: "notified" as const,
+    evidence: { occurredAt: new Date().toISOString(), reference: "Preuve isolée" },
+  };
+  const transitionKey = randomUUID();
+  const notified = await actions.transition(admin, transition, transitionKey);
+  await database.db
+    .update(authorizationSignatures)
+    .set({ revokedAt: new Date() })
+    .where(eq(authorizationSignatures.id, signed.id));
+  await expect(actions.request(actor, data, key)).rejects.toMatchObject({
+    code: "DOCUMENT_MANDATE_REQUIRED",
+  });
+  await expect(actions.request(actor, data, randomUUID())).rejects.toMatchObject({
+    code: "DOCUMENT_MANDATE_REQUIRED",
+  });
+  await expect(actions.transition(admin, transition, transitionKey)).rejects.toMatchObject({
+    code: "DOCUMENT_MANDATE_REQUIRED",
+  });
+  await expect(
+    actions.transition(
+      admin,
+      { ...transition, revision: notified.revision, state: "confirmed" },
+      randomUUID(),
+    ),
+  ).rejects.toMatchObject({ code: "DOCUMENT_MANDATE_REQUIRED" });
+  const [persisted] = await database.db
+    .select()
+    .from(companyServiceRequests)
+    .where(eq(companyServiceRequests.id, requested.id));
+  expect(persisted?.state).toBe("notified");
+  expect(
+    await database.db
+      .select()
+      .from(companyActionEvidence)
+      .where(eq(companyActionEvidence.requestId, requested.id)),
+  ).toHaveLength(1);
 });
 
 it("lists identity-document synchronizations without a company, paginates the combined actions, and removes an explicitly synchronized value", async () => {

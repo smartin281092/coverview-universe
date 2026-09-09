@@ -1,11 +1,22 @@
-import type {
-  ManagedProfile,
-  ProfileSectionName,
-  ProfileSectionValues,
+import {
+  entityProfileValuesSchema,
+  type ManagedProfile,
+  type ProfileSectionName,
+  type ProfileSectionValues,
 } from "./managed-profiles.js";
+import { profileFieldSchema } from "./profile.js";
 
 type Field = keyof ProfileSectionValues;
 type StepCompletion = Readonly<{ information: number; contact?: number; details: number }>;
+
+// Explicit owner decision, 2026-09-09: every General field is required for a
+// complete profile; saving a partial draft remains allowed. Finances/Health are optional.
+export const requiredGeneralProfileFields: Readonly<
+  Record<ManagedProfile["kind"], readonly Field[]>
+> = {
+  person: profileFieldSchema.options,
+  legal_entity: entityProfileValuesSchema.keyof().options,
+};
 
 // Shared presentation groups keep the section score aligned with its visible step indicators.
 export function profileStepFields(
@@ -34,14 +45,7 @@ export function profileStepFields(
     information:
       kind === "legal_entity"
         ? ["companyName", "registrationNumber"]
-        : [
-            "firstName",
-            "lastName",
-            "birthDate",
-            "nationality",
-            "avsNumber",
-            "occupation",
-          ],
+        : ["firstName", "lastName", "birthDate", "nationality", "avsNumber", "occupation"],
     contact: ["phone", "contactEmail"],
     details: ["street", "postalCode", "city", "country"],
   };

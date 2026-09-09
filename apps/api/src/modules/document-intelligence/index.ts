@@ -13,6 +13,8 @@ import {
 import { startDocumentJobs } from "./document.jobs.js";
 import { createCompanyActionRepository } from "./document.company-actions.repository.js";
 import { registerCompanyActionRoutes } from "./document.company-actions.routes.js";
+import { createActionCenterRepository } from "./document.action-center.repository.js";
+import { registerActionCenterRoutes } from "./document.action-center.routes.js";
 export { DocumentError } from "./document.repository.js";
 
 export async function registerDocuments(
@@ -33,11 +35,14 @@ export async function registerDocuments(
   registerAdminDocumentRoutes(app, repository, service, identity);
   const actions = createCompanyActionRepository(database.db);
   registerCompanyActionRoutes(app, actions, identity);
+  const actionCenter = createActionCenterRepository(database.db);
+  registerActionCenterRoutes(app, actionCenter, identity);
   let actionMaintenance: Promise<void> | null = null;
   const maintainActions = () => {
     if (actionMaintenance) return;
     actionMaintenance = actions
       .purgeExpiredCommands()
+      .then(() => actionCenter.purgeExpiredCommands())
       .catch(() =>
         app.log.warn(
           { dependency: "company_action_cleanup" },

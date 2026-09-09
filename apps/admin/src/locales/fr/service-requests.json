@@ -1,5 +1,18 @@
 {
   "nav": "Service client",
+  "tabs": { "coordinates": "Coordonnées", "reviews": "Réponses clients" },
+  "manual": {
+    "title": "Réponse du client",
+    "empty": "Aucune réponse à traiter",
+    "emptyDescription": "Les réponses libres envoyées depuis le Centre d’action apparaîtront ici.",
+    "responseReceived": "Réponse à examiner",
+    "resolution": "Traitement effectué",
+    "resolutionHelp": "Décrivez le traitement réel. La clôture de cette carte ne modifie pas automatiquement le profil et ne constitue pas une notification à une compagnie.",
+    "resolve": "Clôturer avec ce compte rendu",
+    "invalid": "Décrivez le traitement avant de clôturer.",
+    "pagination": "Pagination des réponses clients",
+    "states": { "requested": "À traiter", "in_progress": "En cours", "resolved": "Traitées" }
+  },
   "eyebrow": "Suivi client",
   "title": "Service client",
   "description": "Traitez les demandes de mise à jour et conservez les preuves des notifications et confirmations.",

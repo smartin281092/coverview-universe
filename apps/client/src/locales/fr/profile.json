@@ -20,6 +20,7 @@
     "review": "Validation"
   },
   "optional": "Tous les champs sont facultatifs.",
+  "generalRequired": "Tous les champs de Générales sont nécessaires pour compléter votre profil. Vous pouvez enregistrer vos informations progressivement.",
   "fields": {
     "firstName": "Prénom",
     "lastName": "Nom",

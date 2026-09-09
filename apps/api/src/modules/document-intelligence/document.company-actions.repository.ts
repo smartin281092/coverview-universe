@@ -18,9 +18,11 @@ import {
   type ServiceRequest,
   type ServiceRequestTransitionInput,
   type DocumentSynchronization,
+  type DocumentReviewGroup,
 } from "@coverview/contracts";
 import type { createDatabase } from "../../platform/db/database.js";
 import { lockProfileActor, readDocumentProfile, type ProfileActor } from "../identity/index.js";
+import { readAuthorizationStatus } from "../authorizations/index.js";
 import {
   assertDocumentProfileTarget,
   managedProfiles,
@@ -126,7 +128,49 @@ function cursorValue<T>(cursor: string | undefined, schema: z.ZodType<T>): T | n
   }
 }
 const encode = (value: unknown) => Buffer.from(JSON.stringify(value)).toString("base64url");
-async function project(tx: Database | Tx, userId: string, query: Omit<ActionQuery, "cursor"> = {}) {
+// The caller has locked the owner and built this action from current server data.
+// Reused by the grouped action command so all recipient cards commit together.
+export async function requestCompanyAction(
+  tx: Tx,
+  actor: ProfileActor,
+  action: CompanyAction,
+  auditInitiation = false,
+) {
+  if (action.request && ["requested", "in_progress"].includes(action.status)) return action.request;
+  if (!action.canRequest) throw invalid();
+  const [row] = await tx
+    .insert(companyServiceRequests)
+    .values({
+      id: randomUUID(),
+      userId: actor.userId,
+      managedProfileId: action.profileId === "self" ? null : action.profileId,
+      profileId: action.profileId,
+      profileName: action.profileName,
+      companyId: action.companyId,
+      group: action.group,
+      profileRevision: action.profileRevision,
+      values: action.currentValues,
+      valuesHash: companyValuesHash(action.currentValues),
+    })
+    .returning();
+  if (!row) throw new Error("Company service request insert failed");
+  if (auditInitiation)
+    await tx.insert(companyActionAudit).values({
+      id: randomUUID(),
+      userId: actor.userId,
+      requestId: row.id,
+      actorUserId: actor.administratorUserId ?? actor.userId,
+      sessionId: actor.id,
+      state: "requested",
+      revision: 0,
+    });
+  return toRequest(row, []);
+}
+export async function readCompanyActionContext(
+  tx: Database | Tx,
+  userId: string,
+  query: Omit<ActionQuery, "cursor"> = {},
+) {
   if (query.profileId) await assertDocumentProfileTarget(tx, userId, query.profileId);
   let selectedDocument: typeof documents.$inferSelect | undefined;
   if (query.documentId) {
@@ -232,6 +276,15 @@ async function project(tx: Database | Tx, userId: string, query: Omit<ActionQuer
   >();
   const documentKeys = new Set<string>();
   const synchronizations: DocumentSynchronization[] = [];
+  const reviewSources: {
+    profileId: string;
+    profileName: string;
+    group: DocumentReviewGroup;
+    documentId: string;
+    title: string;
+    companyId: ServiceRequest["companyId"] | null;
+    policyNumber: string | null;
+  }[] = [];
   for (const row of originals.slice(0, 200)) {
     const facts = row.analysis?.insurance;
     const profileId = row.managedProfileId ?? "self";
@@ -239,6 +292,16 @@ async function project(tx: Database | Tx, userId: string, query: Omit<ActionQuer
     if (!profile) continue;
     const groups = buildDocumentGroups(row, profile, corrections);
     for (const group of groups) {
+      if (group.canSync)
+        reviewSources.push({
+          profileId,
+          profileName: profile.name,
+          group,
+          documentId: row.id,
+          title: documentPresentation(row).title ?? row.name,
+          companyId: facts?.companySource ? facts.companyId : null,
+          policyNumber: facts?.policyNumber?.value ?? null,
+        });
       if (group.canSync && group.different && !selectedDocument) {
         synchronizations.push({
           id: `sync:${row.id}:${group.id}`,
@@ -323,6 +386,9 @@ async function project(tx: Database | Tx, userId: string, query: Omit<ActionQuer
       .sort((a, b) => a.id.localeCompare(b.id)),
     incomplete,
     synchronizations,
+    reviewSources,
+    profiles,
+    subjects,
   };
 }
 
@@ -333,6 +399,7 @@ export function createCompanyActionRepository(db: Database) {
     input: unknown,
     rawKey: string,
     run: (tx: Tx) => Promise<ServiceRequest>,
+    prerequisite?: (tx: Tx) => Promise<void>,
   ) {
     const parsedKey = z.uuid().safeParse(rawKey);
     if (!parsedKey.success) throw invalid();
@@ -340,6 +407,8 @@ export function createCompanyActionRepository(db: Database) {
     const actorUserId = actor.administratorUserId ?? actor.userId;
     return db.transaction(async (tx) => {
       await lockProfileActor(tx, actor);
+      // Current authorization also applies to an idempotent replay.
+      await prerequisite?.(tx);
       const now = new Date();
       const [existing] = await tx
         .select()
@@ -393,7 +462,7 @@ export function createCompanyActionRepository(db: Database) {
         z.object({ id: z.string().max(200), scope: z.string().max(200) }).strict(),
       );
       if (cursor && cursor.scope !== scope) throw invalid();
-      const projected = await project(db, userId, query);
+      const projected = await readCompanyActionContext(db, userId, query);
       const visible = [
         ...projected.actions
           .filter((action) => query.documentId || action.status !== "current")
@@ -418,38 +487,34 @@ export function createCompanyActionRepository(db: Database) {
     request(actor: ProfileActor, input: CompanyActionRequestInput, key: string) {
       if (actor.administratorUserId) throw invalid();
       const parsed = companyActionRequestInputSchema.parse(input);
-      return command(actor, "request", parsed, key, async (tx) => {
-        const projected = await project(tx, actor.userId, { profileId: parsed.profileId });
-        const action = projected.actions.find(
-          (item) => item.companyId === parsed.companyId && item.group === parsed.group,
-        );
-        if (
-          !action ||
-          action.profileRevision !== parsed.profileRevision ||
-          companyValuesHash(action.currentValues) !== companyValuesHash(parsed.values)
-        )
-          throw conflict();
-        if (action.request && ["requested", "in_progress"].includes(action.status))
-          return action.request;
-        if (!action.canRequest || projected.incomplete) throw invalid();
-        const [row] = await tx
-          .insert(companyServiceRequests)
-          .values({
-            id: randomUUID(),
-            userId: actor.userId,
-            managedProfileId: parsed.profileId === "self" ? null : parsed.profileId,
+      return command(
+        actor,
+        "request",
+        parsed,
+        key,
+        async (tx) => {
+          const projected = await readCompanyActionContext(tx, actor.userId, {
             profileId: parsed.profileId,
-            profileName: action.profileName,
-            companyId: parsed.companyId,
-            group: parsed.group,
-            profileRevision: action.profileRevision,
-            values: action.currentValues,
-            valuesHash: companyValuesHash(action.currentValues),
-          })
-          .returning();
-        if (!row) throw new Error("Company service request insert failed");
-        return toRequest(row, []);
-      });
+          });
+          const action = projected.actions.find(
+            (item) => item.companyId === parsed.companyId && item.group === parsed.group,
+          );
+          if (
+            !action ||
+            action.profileRevision !== parsed.profileRevision ||
+            companyValuesHash(action.currentValues) !== companyValuesHash(parsed.values)
+          )
+            throw conflict();
+          if (action.request && ["requested", "in_progress"].includes(action.status))
+            return action.request;
+          if (!action.canRequest || projected.incomplete) throw invalid();
+          return requestCompanyAction(tx, actor, action);
+        },
+        async (tx) => {
+          const status = await readAuthorizationStatus(tx, actor.userId, parsed.profileId);
+          if (!status.mandate.signedAt) throw new DocumentError("DOCUMENT_MANDATE_REQUIRED", 409);
+        },
+      );
     },
     async adminList(input: AdminQuery = {}) {
       const query = serviceRequestsQuerySchema.parse(input);
@@ -494,56 +559,78 @@ export function createCompanyActionRepository(db: Database) {
     transition(actor: ProfileActor, input: ServiceRequestTransitionInput, key: string) {
       if (!actor.administratorUserId || actor.userId !== input.userId) throw invalid();
       const parsed = serviceRequestTransitionInputSchema.parse(input);
-      return command(actor, "transition", parsed, key, async (tx) => {
-        const [row] = await tx
-          .select()
-          .from(companyServiceRequests)
-          .where(
-            and(
-              eq(companyServiceRequests.userId, actor.userId),
-              eq(companyServiceRequests.id, parsed.id),
-            ),
+      return command(
+        actor,
+        "transition",
+        parsed,
+        key,
+        async (tx) => {
+          const [row] = await tx
+            .select()
+            .from(companyServiceRequests)
+            .where(
+              and(
+                eq(companyServiceRequests.userId, actor.userId),
+                eq(companyServiceRequests.id, parsed.id),
+              ),
+            )
+            .limit(1)
+            .for("update");
+          if (!row) throw new DocumentError("DOCUMENT_NOT_FOUND", 404);
+          if (row.revision !== parsed.revision) throw conflict();
+          const evidence = await evidenceFor(tx, [row]);
+          if (
+            !toRequest(row, evidence, await requestSuperseded(tx, row)).allowedTransitions.includes(
+              parsed.state,
+            )
           )
-          .limit(1)
-          .for("update");
-        if (!row) throw new DocumentError("DOCUMENT_NOT_FOUND", 404);
-        if (row.revision !== parsed.revision) throw conflict();
-        const evidence = await evidenceFor(tx, [row]);
-        if (
-          !toRequest(row, evidence, await requestSuperseded(tx, row)).allowedTransitions.includes(
-            parsed.state,
-          )
-        )
-          throw conflict();
-        const now = new Date();
-        if (parsed.evidence) {
-          const occurredAt = new Date(parsed.evidence.occurredAt);
-          if (occurredAt > now || (evidence[0] && occurredAt < evidence[0].occurredAt))
-            throw invalid();
-          await tx.insert(companyActionEvidence).values({
-            id: randomUUID(),
-            userId: actor.userId,
-            requestId: row.id,
-            kind: parsed.state as "notified" | "confirmed",
-            occurredAt,
-            recordedAt: now,
-            reference: parsed.evidence.reference,
-            administratorUserId: actor.administratorUserId!,
-          });
-        }
-        const [updated] = await tx
-          .update(companyServiceRequests)
-          .set({ state: parsed.state, revision: row.revision + 1, updatedAt: now })
-          .where(
-            and(
-              eq(companyServiceRequests.userId, actor.userId),
-              eq(companyServiceRequests.id, row.id),
-            ),
-          )
-          .returning();
-        if (!updated) throw new Error("Company service request transition failed");
-        return toRequest(updated, await evidenceFor(tx, [updated]));
-      });
+            throw conflict();
+          const now = new Date();
+          if (parsed.evidence) {
+            const occurredAt = new Date(parsed.evidence.occurredAt);
+            if (occurredAt > now || (evidence[0] && occurredAt < evidence[0].occurredAt))
+              throw invalid();
+            await tx.insert(companyActionEvidence).values({
+              id: randomUUID(),
+              userId: actor.userId,
+              requestId: row.id,
+              kind: parsed.state as "notified" | "confirmed",
+              occurredAt,
+              recordedAt: now,
+              reference: parsed.evidence.reference,
+              administratorUserId: actor.administratorUserId!,
+            });
+          }
+          const [updated] = await tx
+            .update(companyServiceRequests)
+            .set({ state: parsed.state, revision: row.revision + 1, updatedAt: now })
+            .where(
+              and(
+                eq(companyServiceRequests.userId, actor.userId),
+                eq(companyServiceRequests.id, row.id),
+              ),
+            )
+            .returning();
+          if (!updated) throw new Error("Company service request transition failed");
+          return toRequest(updated, await evidenceFor(tx, [updated]));
+        },
+        async (tx) => {
+          if (parsed.state !== "notified" && parsed.state !== "confirmed") return;
+          const [row] = await tx
+            .select({ profileId: companyServiceRequests.profileId })
+            .from(companyServiceRequests)
+            .where(
+              and(
+                eq(companyServiceRequests.userId, actor.userId),
+                eq(companyServiceRequests.id, parsed.id),
+              ),
+            )
+            .limit(1);
+          if (!row) throw new DocumentError("DOCUMENT_NOT_FOUND", 404);
+          const status = await readAuthorizationStatus(tx, actor.userId, row.profileId);
+          if (!status.mandate.signedAt) throw new DocumentError("DOCUMENT_MANDATE_REQUIRED", 409);
+        },
+      );
     },
     async purgeExpiredCommands() {
       await db

@@ -17,6 +17,7 @@ import { isLoopback, type Environment } from "./config.js";
 import { createPlatformDependencies, type PlatformDependencies } from "./dependencies.js";
 import { registerDocuments, DocumentError } from "../modules/document-intelligence/index.js";
 import { registerManagedProfiles, ManagedProfileError } from "../modules/profiles/index.js";
+import { registerAuthorizations } from "../modules/authorizations/index.js";
 import {
   IdentityError,
   registerIdentity,
@@ -168,6 +169,7 @@ export async function buildServer(
 
   const identity = await registerIdentity(app, config, identityService);
   registerManagedProfiles(app, config, identity);
+  registerAuthorizations(app, config, identity);
   await registerDocuments(app, config, identity);
   return app;
 }

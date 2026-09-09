@@ -12,23 +12,23 @@ Les trois frontends importent `@coverview/ui/styles.css`, qui branche Tailwind e
 
 Les composants de présentation statique ne contiennent aucun accès réseau ni état métier. Astro peut les rendre côté serveur sans directive `client:*`. Le composant interactif `Sheet`, ajouté pour le menu Wallet, utilise Radix Dialog dans l’application React ; sa gestion du focus ne doit pas être assimilée à une présentation Astro sans hydratation.
 
-| Composant        | Contrat principal                                                                                                     |
-| ---------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `Container`      | `size="wide"` ou `"reading"`, props div et enfants                                                                    |
-| `Section`        | `tone="white"`, `"soft"` ou `"dark"` ; `spacing="normal"` ou `"compact"` ; props section                              |
-| `Stack`          | `gap="sm"`, `"md"` ou `"lg"` ; direction verticale/horizontale ; alignement start/center                              |
-| `SectionHeading` | `title`, `eyebrow?`, `description?`, `level={1\|2\|3}`, taille display/large/medium, alignement start/center, `id?`   |
-| `TextLink`       | Props anchor, enfants, flèche right/up/false                                                                          |
-| `ButtonLink`     | Props anchor et mêmes `buttonVariants` que `Button` ; destiné notamment au rendu Astro statique                       |
-| `Button`         | Primitive shadcn générée ; composition `asChild` conservée pour les liens TanStack                                     |
-| `Card`           | Primitive générée avec ses slots de contenu ; composition `asChild`, aplat clair sans bordure ni ombre                  |
-| `Skeleton`       | Primitive générée de chargement, utilisée par les états partagés                                                       |
-| `Input`, `Label` | Primitives générées ; valeurs, association accessible et validation restent à la charge du formulaire                  |
-| `Sheet` et slots | Panneau modal généré depuis le même preset ; titre et description accessibles, focus Radix, fermeture traduite fournie par le consommateur |
-| `Bento`          | Compose `Card` autour d’un `article` ; titre et texte courts, `level={2\|3}`, illustration ou valeur justifiée         |
-| `Tabs` et slots | Onglets shadcn/Radix générés avec le même preset ; sélection contrôlée, navigation clavier, contenus associés et libellés fournis par l’application |
-| `AccountLayout`  | Titres, explications et liste de repères injectés par l’app ; slot `heading` facultatif pour l’en-tête applicatif ; aucun état d’identité |
-| États            | Chargement, vide, erreur avec reprise, refus, introuvable et session expirée ; libellés et actions injectés           |
+| Composant        | Contrat principal                                                                                                                                   |
+| ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Container`      | `size="wide"` ou `"reading"`, props div et enfants                                                                                                  |
+| `Section`        | `tone="white"`, `"soft"` ou `"dark"` ; `spacing="normal"` ou `"compact"` ; props section                                                            |
+| `Stack`          | `gap="sm"`, `"md"` ou `"lg"` ; direction verticale/horizontale ; alignement start/center                                                            |
+| `SectionHeading` | `title`, `eyebrow?`, `description?`, `level={1\|2\|3}`, taille display/large/medium, alignement start/center, `id?`                                 |
+| `TextLink`       | Props anchor, enfants, flèche right/up/false                                                                                                        |
+| `ButtonLink`     | Props anchor et mêmes `buttonVariants` que `Button` ; destiné notamment au rendu Astro statique                                                     |
+| `Button`         | Primitive shadcn générée ; composition `asChild` conservée pour les liens TanStack                                                                  |
+| `Card`           | Primitive générée avec ses slots de contenu ; composition `asChild`, aplat clair sans bordure ni ombre                                              |
+| `Skeleton`       | Primitive générée de chargement, utilisée par les états partagés                                                                                    |
+| `Input`, `Label` | Primitives générées ; valeurs, association accessible et validation restent à la charge du formulaire                                               |
+| `Sheet` et slots | Panneau modal généré depuis le même preset ; titre et description accessibles, focus Radix, fermeture traduite fournie par le consommateur          |
+| `Bento`          | Compose `Card` autour d’un `article` ; titre et texte courts, `level={2\|3}`, illustration ou valeur justifiée                                      |
+| `Tabs` et slots  | Onglets shadcn/Radix générés avec le même preset ; sélection contrôlée, navigation clavier, contenus associés et libellés fournis par l’application |
+| `AccountLayout`  | Titres, explications et liste de repères injectés par l’app ; slot `heading` facultatif pour l’en-tête applicatif ; aucun état d’identité           |
+| États            | Chargement, vide, erreur avec reprise, refus, introuvable et session expirée ; libellés et actions injectés                                         |
 
 Les classes de composition `cv-container`, `cv-section`, `cv-heading` et `cv-text-link` restent utilisables dans du HTML Astro lorsque son emplacement de contenu le nécessite. Les actions composent `Button` ou `ButtonLink` pour conserver les variantes communes. `SectionHeading` reçoit l’ID sur le titre pour la relation `aria-labelledby` de la section.
 
@@ -37,6 +37,8 @@ Pour toute nouvelle page à onglets, utiliser la composition `cv-tabbed-page` av
 Les usages de `--cv-font-mono`, y compris l’utilitaire `font-mono` et les sur-titres de `SectionHeading`, utilisent l’espacement commun `--cv-mono-letter-spacing`. Les H1 applicatifs ont une marge basse de 6 px ; la description de `SectionHeading` n’ajoute plus de marge haute. [Correction et vérifications](../../roadmap/evidence/identity-tabs-heading-spacing.md).
 
 ## Règles de présentation et invariants
+
+Les boutons de taille par défaut utilisent une hauteur minimale de 44 px et 16 px de padding horizontal ; la taille large garde davantage d’espace horizontal. Le preset compact initial avait 8 px de padding horizontal, insuffisants lorsqu’une classe tactile augmentait uniquement la hauteur. La hauteur reste extensible pour un texte sur plusieurs lignes. Sur mobile, les tailles compactes conservent ces proportions et les boutons icônes restent carrés.
 
 Une primitive dont le `display` est déclaré hors couche CSS peut primer sur l’utilitaire Tailwind `hidden`. Pour masquer son lien au breakpoint voulu, masquer son conteneur, comme dans le shell Wallet, puis contrôler le rendu. À 320 px, tenir compte de la largeur consommée par une scrollbar classique : un `min-width: 320px` peut provoquer un débordement. [Défauts reproduits et corrections S-013a](../../roadmap/evidence/S-013a.md).
 

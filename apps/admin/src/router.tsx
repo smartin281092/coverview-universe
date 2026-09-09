@@ -19,6 +19,8 @@ const serviceRequestsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/service-requests",
   component: lazyRouteComponent(() => import("./pages/ServiceRequestsPage"), "ServiceRequestsPage"),
+  validateSearch: (search: Record<string, unknown>): { tab?: "reviews" } =>
+    search.tab === "reviews" ? { tab: "reviews" } : {},
 });
 const homeRoute = createRoute({ getParentRoute: () => rootRoute, path: "/", component: HomePage });
 const usersRoute = createRoute({

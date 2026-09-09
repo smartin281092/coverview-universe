@@ -67,6 +67,13 @@
     font-size: var(--text-body-sm);
     white-space: normal;
   }
+  .wallet-shell [data-slot="button"][data-size^="icon"] {
+    min-width: calc(var(--spacing) * 11);
+  }
+  .wallet-shell [data-slot="button"][data-size="sm"],
+  .wallet-shell [data-slot="button"][data-size="xs"] {
+    padding-inline: var(--spacing-16);
+  }
   .wallet-shell {
     padding-bottom: calc(var(--wallet-bottom-nav-height) + env(safe-area-inset-bottom, 0px));
   }

@@ -16,6 +16,7 @@ import {
 } from "@coverview/ui";
 import logo from "../../../assets/logo-coverview.svg";
 import { LogoutFeedback } from "./features/identity/LogoutFeedback";
+import { useActionCount } from "./features/actions/use-action-count";
 
 const destinations = [
   { to: "/profile", key: "profile", icon: UserRound },
@@ -49,6 +50,7 @@ function isEditingControl(target: EventTarget | null) {
 
 export function AppShell() {
   const { t } = useTranslation();
+  const actionCount = useActionCount();
   const { pathname, searchStr } = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -123,6 +125,14 @@ export function AppShell() {
                 className="cv-app-nav-link"
               >
                 {t("mobileNav." + destination.key)}
+                {destination.key === "actions" && actionCount !== undefined && actionCount > 0 && (
+                  <span
+                    className="ml-2 inline-flex min-w-5 items-center justify-center rounded-full bg-chart-3 px-1.5 py-0.5 text-xs text-white"
+                    aria-label={t("actions:badge", { count: actionCount })}
+                  >
+                    {actionCount}
+                  </span>
+                )}
               </Link>
             ))}
           </nav>
@@ -253,7 +263,17 @@ export function AppShell() {
                     >
                       <Icon className="size-5" strokeWidth={current ? 2 : 1.5} aria-hidden="true" />
                     </span>
-                    <span>{t("mobileNav." + key)}</span>
+                    <span className="flex items-center gap-1">
+                      {t("mobileNav." + key)}
+                      {key === "actions" && actionCount !== undefined && actionCount > 0 && (
+                        <span
+                          className="inline-flex min-w-4 items-center justify-center rounded-full bg-chart-3 px-1 text-xs text-white"
+                          aria-label={t("actions:badge", { count: actionCount })}
+                        >
+                          {actionCount}
+                        </span>
+                      )}
+                    </span>
                   </Link>
                 </li>
               );

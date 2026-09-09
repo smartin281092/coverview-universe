@@ -9,6 +9,7 @@ export * from "./companies.js";
 export * from "./documents.js";
 export * from "./admin-users.js";
 export * from "./company-actions.js";
+export * from "./action-center.js";
 
 export const livenessSchema = z.object({ status: z.literal("alive") });
 export const readinessSchema = z.object({ status: z.enum(["ready", "not_ready"]) });
@@ -127,3 +128,4 @@ export const localPersonasSchema = z.object({
 export type Readiness = z.infer<typeof readinessSchema>;
 export type LocalPersona = z.infer<typeof localPersonaSchema>;
 export type PlatformErrorCode = z.infer<typeof platformErrorCodeSchema>;
+export * from "./authorizations.js";
