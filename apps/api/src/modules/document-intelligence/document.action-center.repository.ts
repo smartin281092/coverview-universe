@@ -38,6 +38,7 @@ import {
 } from "../profiles/index.js";
 import { readAuthorizationStatus, readAuthorizationActivity } from "../authorizations/index.js";
 import { DocumentError } from "./document.errors.js";
+import { actionResponseValues } from "./document.action-response.js";
 import { requestCompanyAction } from "./document.company-actions.repository.js";
 import {
   readActionCenter,
@@ -344,8 +345,10 @@ export function createActionCenterRepository(db: Database) {
             values = variant.values;
             sources = variant.sources;
           } else if (input.choice === "correct") {
-            if (!input.values || !Object.keys(input.values).length) throw invalid();
-            values = input.values;
+            values =
+              input.values ??
+              (input.response ? actionResponseValues(item.topic, input.response) : {});
+            if (!Object.keys(values).length) throw invalid();
             const allowed =
               item.topic === "address" ? ["street", "postalCode", "city", "country"] : [item.topic];
             if (Object.keys(values).some((field) => !allowed.includes(field))) throw invalid();

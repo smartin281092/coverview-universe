@@ -79,6 +79,33 @@ function ActionDetails({ identity, id }: { identity: IdentityMe; id: string }) {
       ) : (
         <LoadingState label={t("loading")} />
       )}
+      <nav className="flex flex-wrap justify-between gap-3" aria-label={t("actionNavigation")}>
+        <Button
+          variant="outline"
+          disabled={!query.data?.previousId || state.pending}
+          onClick={() => {
+            if (query.data?.previousId)
+              void navigate({
+                to: "/actions/$actionId",
+                params: { actionId: query.data.previousId },
+              });
+          }}
+        >
+          <ArrowLeft className="size-4" aria-hidden="true" />
+          {t("previousAction")}
+        </Button>
+        <Button
+          variant="outline"
+          disabled={!query.data?.nextId || state.pending}
+          onClick={() => {
+            if (query.data?.nextId)
+              void navigate({ to: "/actions/$actionId", params: { actionId: query.data.nextId } });
+          }}
+        >
+          {t("nextAction")}
+          <ArrowRight className="size-4" aria-hidden="true" />
+        </Button>
+      </nav>
       <header className="space-y-3">
         <p className="cv-meta text-muted-foreground">
           {t("profile", { name: action.profileName })}
@@ -117,36 +144,7 @@ function ActionDetails({ identity, id }: { identity: IdentityMe; id: string }) {
         />
       )}
       <ActionContext action={action} />
-      <nav
-        className="flex flex-wrap justify-between gap-3 border-t border-border pt-6"
-        aria-label={t("actionNavigation")}
-      >
-        <Button
-          variant="outline"
-          disabled={!query.data?.previousId || state.pending}
-          onClick={() => {
-            if (query.data?.previousId)
-              void navigate({
-                to: "/actions/$actionId",
-                params: { actionId: query.data.previousId },
-              });
-          }}
-        >
-          <ArrowLeft className="size-4" aria-hidden="true" />
-          {t("previousAction")}
-        </Button>
-        <Button
-          variant="outline"
-          disabled={!query.data?.nextId || state.pending}
-          onClick={() => {
-            if (query.data?.nextId)
-              void navigate({ to: "/actions/$actionId", params: { actionId: query.data.nextId } });
-          }}
-        >
-          {t("nextAction")}
-          <ArrowRight className="size-4" aria-hidden="true" />
-        </Button>
-      </nav>
+
       <Dialog
         open={blocker.status === "blocked"}
         onOpenChange={(open) => {

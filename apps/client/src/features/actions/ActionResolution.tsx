@@ -13,14 +13,14 @@ import {
   type ActionCenterResolveResult,
   type ActionCenterVariant,
 } from "@coverview/contracts";
-import { Button, Input, Label } from "@coverview/ui";
+import { Button, Input } from "@coverview/ui";
 import { api } from "../../api";
 import { ActionFailure } from "./ActionFailure";
 import { useActionLabel } from "./use-action-label";
 
 const formSchema = actionCenterResolveInputSchema
+  .omit({ values: true })
   .extend({
-    values: z.record(z.string(), z.string()).optional(),
     response: z.string().max(2000).optional(),
   })
   .transform((input): ActionCenterResolveInput => {
@@ -29,17 +29,14 @@ const formSchema = actionCenterResolveInputSchema
       choice: input.choice,
     };
     if (input.choice === "variant" && input.variantId) output.variantId = input.variantId;
-    if (input.choice === "correct")
-      output.values = Object.fromEntries(
-        Object.entries(input.values ?? {})
-          .filter(([, value]) => value.trim())
-          .map(([key, value]) => [key, value.trim()]),
-      );
-    if (input.response?.trim()) output.response = input.response.trim();
+    if (["correct", "custom"].includes(input.choice) && input.response?.trim())
+      output.response = input.response.trim();
     return output;
   })
   .pipe(actionCenterResolveInputSchema)
-  .refine((input) => input.choice !== "custom" || !!input.response, { path: ["response"] });
+  .refine((input) => !["correct", "custom"].includes(input.choice) || !!input.response, {
+    path: ["response"],
+  });
 
 export function ActionResolution({
   action,
@@ -55,7 +52,6 @@ export function ActionResolution({
   onRefresh: () => void;
 }) {
   const { t, i18n } = useTranslation("actions");
-  const { t: fields } = useTranslation("profile");
   const label = useActionLabel();
   const client = useQueryClient();
   const first =
@@ -71,7 +67,6 @@ export function ActionResolution({
     defaultValues: {
       fingerprint: action.fingerprint,
       choice: first?.id ?? "custom",
-      values: action.currentValues,
       response: "",
       ...(first?.id === "variant" && action.variants[0]
         ? { variantId: action.variants[0].id }
@@ -101,13 +96,14 @@ export function ActionResolution({
       for (const variant of action.variants) options.push({ ...item, variant });
     else options.push({ ...item, variant: null });
   }
-  const editableFields = [
-    ...new Set([
-      ...action.requiredFields,
-      ...Object.keys(action.currentValues),
-      ...action.variants.flatMap((variant) => Object.keys(variant.values)),
-    ]),
-  ];
+  const canCorrect = action.choices.some((item) => item.id === "correct" && item.enabled);
+  const responseLabel = canCorrect
+    ? action.topic === "address"
+      ? t("question.addressValue")
+      : action.topic === "birthDate"
+        ? t("question.dateValue")
+        : t("question.value", { field: label(action) })
+    : t("question.custom");
   const submit = form.handleSubmit(async (input) => {
     if (busy.current || !action.canResolve || conflict) return;
     busy.current = true;
@@ -154,7 +150,7 @@ export function ActionResolution({
       </h2>
       <fieldset disabled={pending || !action.canResolve || conflict} className="space-y-2">
         <legend className="sr-only">{t("question.choose")}</legend>
-        {options.map((option, index) => {
+        {(options.length > 1 ? options : []).map((option, index) => {
           const selected =
             choice === option.id && (!option.variant || variantId === option.variant.id);
           return (
@@ -171,6 +167,8 @@ export function ActionResolution({
                 onChange={() => {
                   form.setValue("choice", option.id, { shouldDirty: true });
                   form.setValue("variantId", option.variant?.id);
+                  if (option.id === "correct") form.setFocus("response");
+                  else form.setValue("response", "");
                 }}
               />
               <span
@@ -195,64 +193,53 @@ export function ActionResolution({
             </label>
           );
         })}
-        {choice === "correct" && (
-          <div className="grid gap-4 py-4 sm:grid-cols-2">
-            {editableFields.map((field) => (
-              <div key={field} className="space-y-2">
-                <Label htmlFor={`action-${field}`}>
-                  {fields(`fields.${field}`, {
-                    defaultValue: t(`groups.${field}`, { defaultValue: field }),
-                  })}
-                </Label>
-                <Input
-                  id={`action-${field}`}
-                  className="min-h-11"
-                  type={
-                    field === "birthDate"
-                      ? "date"
-                      : field === "contactEmail"
-                        ? "email"
-                        : field === "phone"
-                          ? "tel"
-                          : "text"
-                  }
-                  autoComplete="off"
-                  maxLength={240}
-                  {...form.register(`values.${field}`)}
-                />
-              </div>
-            ))}
-          </div>
-        )}
-        <div className="mt-3 flex flex-wrap items-center gap-3 border-t border-border pt-3">
+        <div
+          className={`flex flex-wrap items-center gap-3 px-3 py-3 ${options.length > 1 ? "mt-3 border-t border-border" : ""}`}
+        >
           <span
-            className={`flex size-8 shrink-0 items-center justify-center rounded-full border border-border ${choice === "custom" ? "bg-muted" : ""}`}
+            className={`flex size-7 shrink-0 items-center justify-center rounded-full border border-border ${choice === "custom" || choice === "correct" ? "bg-muted" : ""}`}
           >
             <Pencil className="size-4 text-muted-foreground" aria-hidden="true" />
           </span>
           <Input
             className="min-h-11 min-w-0 flex-1 border-0 bg-transparent px-0 shadow-none"
-            aria-label={t("question.custom")}
-            placeholder={t("question.custom")}
+            aria-label={responseLabel}
+            placeholder={responseLabel}
+            autoComplete="off"
             maxLength={2000}
             {...form.register("response", {
               onChange: (event: { target: { value: string } }) => {
-                if (event.target.value) form.setValue("choice", "custom", { shouldDirty: true });
+                form.setValue(
+                  "choice",
+                  event.target.value
+                    ? canCorrect
+                      ? "correct"
+                      : "custom"
+                    : (first?.id ?? "custom"),
+                  { shouldDirty: true },
+                );
               },
             })}
           />
           <Button
             type="submit"
             className="min-h-11"
-            disabled={pending || (choice === "custom" && !response?.trim())}
+            disabled={pending || (["correct", "custom"].includes(choice) && !response?.trim())}
           >
-            {t(pending ? "saving" : "question.send")}
+            {t(
+              pending
+                ? "saving"
+                : options.length === 1 && choice === "notify"
+                  ? "request"
+                  : options.length === 1 && choice === "keep"
+                    ? "question.keep"
+                    : options.length === 1 && choice === "variant"
+                      ? "question.use"
+                      : "question.send",
+            )}
           </Button>
         </div>
       </fieldset>
-      {choice === "custom" && response?.trim() && (
-        <p className="mt-3 text-xs text-muted-foreground">{t("question.customHelp")}</p>
-      )}
       {Object.keys(form.formState.errors).length > 0 && (
         <p role="alert" className="mt-3 text-sm text-destructive">
           {t("question.invalid")}

@@ -16,6 +16,7 @@
   "badge_one": "{{count}} action à faire",
   "badge_other": "{{count}} actions à faire",
   "progress": {
+    "optimized": "Compte optimisé à {{percent}}",
     "inProgress_one": "{{count}} action prise en charge",
     "inProgress_other": "{{count}} actions prises en charge",
     "label": "Progression des actions",
@@ -52,7 +53,11 @@
     "profile_completion": "Complétez « {{field}} » pour le profil de {{name}}.",
     "authorization": "Complétez l’autorisation ci-dessus ou précisez votre demande au service client.",
     "custom": "Ou rédigez votre propre réponse",
-    "customHelp": "Votre réponse sera transmise au service client pour traitement. Elle ne modifie pas automatiquement votre profil.",
+    "value": "Renseignez {{field}}",
+    "addressValue": "Rue et numéro, code postal et localité, pays",
+    "dateValue": "Date de naissance (JJ.MM.AAAA)",
+    "keep": "Conserver mon profil",
+    "use": "Utiliser dans mon profil",
     "send": "Envoyer",
     "invalid": "Vérifiez les informations saisies avant d’envoyer votre réponse."
   },

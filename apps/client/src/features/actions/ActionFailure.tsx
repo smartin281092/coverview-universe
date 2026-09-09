@@ -17,7 +17,7 @@ export function ActionFailure({ error, onRetry }: { error: unknown; onRetry: () 
           ? "mandateRequired"
           : error instanceof ApiError && error.status === 409
             ? "conflict"
-            : error instanceof ApiError && error.status === 400
+            : error instanceof ApiError && (error.status === 400 || error.status === 422)
               ? "question.invalid"
               : "errorDescription",
       )}

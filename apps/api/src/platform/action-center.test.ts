@@ -623,3 +623,124 @@ it("paginates pending and in-progress actions independently and scopes cursors t
     center.list(actor.userId, { state: "pending", cursor: all.nextCursor! }),
   ).rejects.toMatchObject({ statusCode: 422 });
 });
+
+it("saves a correction from the single response input, validates grouped addresses and dates, and replays once", async () => {
+  const actor = await owner();
+  const center = createActionCenterRepository(database.db);
+  const managed = await createManagedProfileRepository(database.db).create(
+    actor,
+    { kind: "legal_entity", displayName: "Société isolée" },
+    randomUUID(),
+  );
+  const registration = await topic(actor, "registrationNumber", managed.id);
+  const input = {
+    fingerprint: registration.fingerprint,
+    choice: "correct" as const,
+    response: "  CHE-123.456.789  ",
+  };
+  const key = randomUUID();
+  const corrected = await center.resolve(actor, registration.id, input, key);
+  expect(corrected.action.currentValues).toEqual({ registrationNumber: "CHE-123.456.789" });
+  expect(corrected.action.state).toBe("complete");
+  expect(corrected.resolution.choice).toBe("correct");
+  expect(await center.resolve(actor, registration.id, input, key)).toEqual(corrected);
+  expect(
+    (await center.history(actor.userId)).entries.filter(
+      (entry) => entry.actionId === registration.id,
+    ),
+  ).toHaveLength(1);
+  expect(
+    await database.db
+      .select()
+      .from(actionCenterManualReviews)
+      .where(eq(actionCenterManualReviews.userId, actor.userId)),
+  ).toHaveLength(0);
+
+  const phone = await topic(actor, "phone");
+  await expect(
+    center.resolve(
+      actor,
+      phone.id,
+      {
+        fingerprint: phone.fingerprint,
+        choice: "correct",
+        response: "pas un téléphone",
+      },
+      randomUUID(),
+    ),
+  ).rejects.toMatchObject({ statusCode: 422 });
+  expect((await readDocumentProfile(database.db, actor.userId)).fields.phone).toBeUndefined();
+
+  const address = await topic(actor, "address");
+  await expect(
+    center.resolve(
+      actor,
+      address.id,
+      {
+        fingerprint: address.fingerprint,
+        choice: "correct",
+        response: "Une ancienne adresse",
+      },
+      randomUUID(),
+    ),
+  ).rejects.toMatchObject({ statusCode: 422 });
+  const addressResult = await center.resolve(
+    actor,
+    address.id,
+    {
+      fingerprint: address.fingerprint,
+      choice: "correct",
+      response: "Rue isolée 4, 1200 Genève, Suisse",
+    },
+    randomUUID(),
+  );
+  expect(addressResult.action.currentValues).toEqual({
+    street: "Rue isolée 4",
+    postalCode: "1200",
+    city: "Genève",
+    country: "Suisse",
+  });
+  const companyAddress = await topic(actor, "address", managed.id);
+  expect(
+    (
+      await center.resolve(
+        actor,
+        companyAddress.id,
+        {
+          fingerprint: companyAddress.fingerprint,
+          choice: "correct",
+          response: "Rue isolée 8; 1000; Lausanne; Suisse",
+        },
+        randomUUID(),
+      )
+    ).action.currentValues,
+  ).toEqual({ street: "Rue isolée 8", postalCode: "1000", city: "Lausanne", country: "Suisse" });
+
+  const birthDate = await topic(actor, "birthDate");
+  await expect(
+    center.resolve(
+      actor,
+      birthDate.id,
+      {
+        fingerprint: birthDate.fingerprint,
+        choice: "correct",
+        response: "31.02.2000",
+      },
+      randomUUID(),
+    ),
+  ).rejects.toMatchObject({ statusCode: 422 });
+  expect(
+    (
+      await center.resolve(
+        actor,
+        birthDate.id,
+        {
+          fingerprint: birthDate.fingerprint,
+          choice: "correct",
+          response: "29.02.2000",
+        },
+        randomUUID(),
+      )
+    ).action.currentValues,
+  ).toEqual({ birthDate: "2000-02-29" });
+});
