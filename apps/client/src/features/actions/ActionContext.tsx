@@ -85,6 +85,8 @@ export function ActionContext({ action }: { action: ActionCenterItem }) {
       ...sources.flatMap((source) => (source.companyId ? [source.companyId] : [])),
     ]),
   ];
+  if (sources.length === 0 && companyIds.length === 0) return null;
+
   return (
     <section className="space-y-5 border-t border-border pt-6">
       <h2 className="cv-app-subheading">{t("context.title")}</h2>
