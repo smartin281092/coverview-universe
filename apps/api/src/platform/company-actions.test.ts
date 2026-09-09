@@ -42,6 +42,7 @@ async function original(
   values: Partial<Record<DocumentExtraction["field"], string>>,
   profileId = "self",
   trustedCompany = true,
+  category: DocumentAnalysis["category"] = "insurance",
 ) {
   const repository = createDocumentRepository(database.db);
   const file = await repository.create(
@@ -65,7 +66,7 @@ async function original(
     box: null,
   };
   const analysis: DocumentAnalysis = {
-    category: "insurance",
+    category,
     evidence: null,
     pages: [{ page: 1, text: "AXA", method: "isolated-test", version: "1" }],
     fields: Object.entries(values).map(([field, value]) => ({
@@ -250,14 +251,12 @@ it("requires admin permission, MFA and dated evidence; retains old proof without
     code: "IDENTITY_ACCESS_DENIED",
   });
   const permission = randomUUID();
-  await database.db
-    .insert(identityAdminPermissions)
-    .values({
-      id: permission,
-      userId: administrator.userId,
-      permission: "administration.access",
-      evidence: "Isolated test",
-    });
+  await database.db.insert(identityAdminPermissions).values({
+    id: permission,
+    userId: administrator.userId,
+    permission: "administration.access",
+    evidence: "Isolated test",
+  });
   await expect(actions.transition(admin, transition, randomUUID())).rejects.toMatchObject({
     code: "IDENTITY_MFA_REQUIRED",
   });
@@ -403,4 +402,83 @@ it("keeps complementary address observations separate from contradictions and co
       observations: [{ ...source, values: { city: "Autre ville" }, documentDate: "2026-01-03" }],
     }).status,
   ).toBe("needs_notification");
+});
+
+it("lists identity-document synchronizations without a company, paginates the combined actions, and removes an explicitly synchronized value", async () => {
+  const actor = await owner();
+  const stranger = await owner();
+  const profiles = createProfileRepository(database.db);
+  const actions = createCompanyActionRepository(database.db);
+  const files = createDocumentRepository(database.db);
+  await profiles.save(
+    actor.userId,
+    actor.id,
+    {
+      revision: 0,
+      step: "information",
+      fields: { firstName: "Prénom actuel", lastName: "Nom actuel", city: "Genève" },
+    },
+    randomUUID(),
+  );
+  const passport = await original(
+    actor,
+    { firstName: "Prénom du passeport", documentNumber: "TEST123" },
+    "self",
+    false,
+    "identity",
+  );
+  const single = await actions.list(actor.userId);
+  expect(single.actions).toEqual([]);
+  expect(single.synchronizations).toHaveLength(1);
+  expect(single.synchronizations[0]).toMatchObject({
+    documentId: passport.id,
+    profileId: "self",
+    group: { id: "firstName", different: true, canSync: true },
+  });
+  expect((await actions.list(actor.userId, { documentId: passport.id })).synchronizations).toEqual(
+    [],
+  );
+  expect((await actions.list(stranger.userId)).synchronizations).toEqual([]);
+  const review = single.synchronizations[0]!.group;
+  await files.fields(
+    actor,
+    passport.id,
+    {
+      revision: passport.revision,
+      profileRevision: review.profileRevision,
+      intent: "sync",
+      values: review.fields.map((field) => ({
+        extractionId: field.extractionId,
+        value: field.value,
+      })),
+    },
+    randomUUID(),
+  );
+  expect((await actions.list(actor.userId)).synchronizations).toEqual([]);
+  expect((await profiles.get(actor.userId)).fields.firstName?.value).toBe("Prénom du passeport");
+  await original(actor, { city: "Lausanne" });
+  for (let index = 0; index < 10; index += 1)
+    await original(
+      actor,
+      { firstName: `Prénom ${index}`, lastName: `Nom ${index}` },
+      "self",
+      false,
+      "identity",
+    );
+  const first = await actions.list(actor.userId);
+  expect(first.actions.length + first.synchronizations.length).toBe(20);
+  expect(first.nextCursor).not.toBeNull();
+  const second = await actions.list(actor.userId, { cursor: first.nextCursor! });
+  expect(second.actions.length + second.synchronizations.length).toBe(2);
+  const ids = [
+    ...first.actions,
+    ...first.synchronizations,
+    ...second.actions,
+    ...second.synchronizations,
+  ].map((item) => item.id);
+  expect(new Set(ids).size).toBe(22);
+  expect(second.nextCursor).toBeNull();
+  await expect(
+    actions.list(actor.userId, { cursor: first.nextCursor!, documentId: passport.id }),
+  ).rejects.toMatchObject({ statusCode: 422 });
 });

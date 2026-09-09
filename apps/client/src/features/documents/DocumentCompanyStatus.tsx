@@ -15,7 +15,7 @@ export function DocumentCompanyStatus({
   const green = action && ["current", "notified", "confirmed"].includes(action.status);
   const pending = action && ["requested", "in_progress"].includes(action.status);
   const label = !action
-    ? "unknownCompany"
+    ? "different"
     : green
       ? action.status
       : pending

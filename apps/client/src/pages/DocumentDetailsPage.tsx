@@ -205,7 +205,7 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
           )}
           <Link
             to="/profile"
-            search={{}}
+            search={{ person: item.profileId ?? "self", tab: "general" }}
             className="inline-flex min-h-11 items-center gap-2 text-sm font-medium underline underline-offset-4"
           >
             {t("profile")}

@@ -17,6 +17,7 @@ import {
   type CompanyActionRequestInput,
   type ServiceRequest,
   type ServiceRequestTransitionInput,
+  type DocumentSynchronization,
 } from "@coverview/contracts";
 import type { createDatabase } from "../../platform/db/database.js";
 import { lockProfileActor, readDocumentProfile, type ProfileActor } from "../identity/index.js";
@@ -230,15 +231,27 @@ async function project(tx: Database | Tx, userId: string, query: Omit<ActionQuer
     { profileId: string; companyId: ServiceRequest["companyId"]; group: CompanyAction["group"] }
   >();
   const documentKeys = new Set<string>();
+  const synchronizations: DocumentSynchronization[] = [];
   for (const row of originals.slice(0, 200)) {
     const facts = row.analysis?.insurance;
-    // A catalog alias in a filename or a general document is not a recipient.
-    if (!facts?.companyId || !facts.companySource) continue;
     const profileId = row.managedProfileId ?? "self";
     const profile = profiles.get(profileId);
     if (!profile) continue;
     const groups = buildDocumentGroups(row, profile, corrections);
     for (const group of groups) {
+      if (group.canSync && group.different && !selectedDocument) {
+        synchronizations.push({
+          id: `sync:${row.id}:${group.id}`,
+          documentId: row.id,
+          documentTitle: documentPresentation(row).title ?? row.name,
+          profileId,
+          profileName: profile.name,
+          group,
+        });
+      }
+      // Profile synchronization does not establish a company relationship. Notifications
+      // still require a structured and sourced issuer from the document analysis.
+      if (!facts?.companyId || !facts.companySource) continue;
       const profileShape =
         profile.kind === "legal_entity"
           ? entityProfileValuesSchema.shape
@@ -309,6 +322,7 @@ async function project(tx: Database | Tx, userId: string, query: Omit<ActionQuer
       )
       .sort((a, b) => a.id.localeCompare(b.id)),
     incomplete,
+    synchronizations,
   };
 }
 
@@ -380,14 +394,23 @@ export function createCompanyActionRepository(db: Database) {
       );
       if (cursor && cursor.scope !== scope) throw invalid();
       const projected = await project(db, userId, query);
-      const visible = projected.actions.filter(
-        (action) =>
-          (!cursor || action.id.localeCompare(cursor.id) > 0) &&
-          (query.documentId || action.status !== "current"),
-      );
+      const visible = [
+        ...projected.actions
+          .filter((action) => query.documentId || action.status !== "current")
+          .map((action) => ({ id: action.id, action })),
+        ...projected.synchronizations.map((synchronization) => ({
+          id: synchronization.id,
+          synchronization,
+        })),
+      ]
+        .filter((item) => !cursor || item.id.localeCompare(cursor.id) > 0)
+        .sort((a, b) => a.id.localeCompare(b.id));
       const page = visible.slice(0, 20);
       return companyActionsSchema.parse({
-        actions: page,
+        actions: page.flatMap((item) => ("action" in item ? [item.action] : [])),
+        synchronizations: page.flatMap((item) =>
+          "synchronization" in item ? [item.synchronization] : [],
+        ),
         incomplete: projected.incomplete,
         nextCursor: visible.length > 20 ? encode({ id: page.at(-1)!.id, scope }) : null,
       });

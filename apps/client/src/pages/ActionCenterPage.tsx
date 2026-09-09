@@ -29,6 +29,7 @@ import {
   CompanyActionValuesView,
 } from "../features/actions/CompanyActionDetails";
 import { ActionSourceReview } from "../features/actions/ActionSourceReview";
+import { ProfileSyncActions } from "../features/actions/ProfileSyncActions";
 
 function ActionCenter({ identity }: { identity: IdentityMe }) {
   const { t } = useTranslation("actions");
@@ -42,7 +43,11 @@ function ActionCenter({ identity }: { identity: IdentityMe }) {
   const [failure, setFailure] = useState<unknown>(null);
   const [notice, setNotice] = useState(false);
   const [sourceNotice, setSourceNotice] = useState(false);
-  const [source, setSource] = useState<{ action: CompanyAction; documentId: string } | null>(null);
+  const [source, setSource] = useState<{
+    documentId: string;
+    groupId: string;
+    profileId: string;
+  } | null>(null);
   const [sourcePending, setSourcePending] = useState(false);
   const busy = useRef(false);
   const controller = useRef<AbortController | null>(null);
@@ -55,6 +60,9 @@ function ActionCenter({ identity }: { identity: IdentityMe }) {
     staleTime: 0,
     gcTime: 0,
     retry: false,
+    refetchInterval: (current) =>
+      pending || source || sourcePending || current.state.status === "error" ? false : 30_000,
+    refetchIntervalInBackground: false,
   });
   const action = query.data?.actions.find((item) => item.id === selected);
   const request = async (item: CompanyAction) => {
@@ -139,7 +147,7 @@ function ActionCenter({ identity }: { identity: IdentityMe }) {
         <LoadingState label={t("loading")} />
       ) : query.isError ? (
         <ActionFailure error={query.error} onRetry={reload} />
-      ) : query.data.actions.length === 0 ? (
+      ) : query.data.actions.length === 0 && query.data.synchronizations.length === 0 ? (
         <EmptyState
           title={t("emptyTitle")}
           description={t("emptyDescription")}
@@ -150,45 +158,70 @@ function ActionCenter({ identity }: { identity: IdentityMe }) {
           }
         />
       ) : (
-        <ul className="divide-y divide-border">
-          {query.data.actions.map((item) => (
-            <li key={item.id} className="grid gap-5 py-6 md:grid-cols-3">
-              <div className="space-y-2">
-                <h2 className="font-medium">{companies(`companies.names.${item.companyId}`)}</h2>
-                <p className="text-sm text-muted-foreground">
-                  {t("profile", { name: item.profileName })}
-                </p>
-                <p className="text-sm">{t(`groups.${item.group}`)}</p>
-              </div>
-              <div className="space-y-3">
-                <CompanyActionStatus action={item} />
-                <CompanyActionValuesView values={item.currentValues} />
-              </div>
-              <div className="flex flex-wrap items-start gap-3 md:justify-end">
-                <Button
-                  variant="outline"
-                  className="min-h-11"
-                  disabled={!!pending}
-                  onClick={() => {
-                    setSelected(item.id);
-                    setFailure(null);
-                  }}
-                >
-                  {t("details")}
-                </Button>
-                {item.canRequest && (
-                  <Button
-                    className="min-h-11"
-                    disabled={!!pending}
-                    onClick={() => void request(item)}
-                  >
-                    {t(pending === item.id ? "requesting" : "request")}
-                  </Button>
-                )}
-              </div>
-            </li>
-          ))}
-        </ul>
+        <>
+          {query.data.synchronizations.length > 0 && (
+            <ProfileSyncActions
+              synchronizations={query.data.synchronizations}
+              pending={!!pending || sourcePending}
+              onReview={(item) => {
+                setSourceNotice(false);
+                setSource({
+                  documentId: item.documentId,
+                  groupId: item.group.id,
+                  profileId: item.profileId,
+                });
+              }}
+            />
+          )}
+          {query.data.actions.length > 0 && (
+            <section className="space-y-4" aria-labelledby="company-actions">
+              <h2 id="company-actions" className="cv-app-subheading">
+                {t("companyActionsTitle")}
+              </h2>
+              <ul className="divide-y divide-border">
+                {query.data.actions.map((item) => (
+                  <li key={item.id} className="grid gap-5 py-6 md:grid-cols-3">
+                    <div className="space-y-2">
+                      <h3 className="font-medium">
+                        {companies(`companies.names.${item.companyId}`)}
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        {t("profile", { name: item.profileName })}
+                      </p>
+                      <p className="text-sm">{t(`groups.${item.group}`)}</p>
+                    </div>
+                    <div className="space-y-3">
+                      <CompanyActionStatus action={item} />
+                      <CompanyActionValuesView values={item.currentValues} />
+                    </div>
+                    <div className="flex flex-wrap items-start gap-3 md:justify-end">
+                      <Button
+                        variant="outline"
+                        className="min-h-11"
+                        disabled={!!pending}
+                        onClick={() => {
+                          setSelected(item.id);
+                          setFailure(null);
+                        }}
+                      >
+                        {t("details")}
+                      </Button>
+                      {item.canRequest && (
+                        <Button
+                          className="min-h-11"
+                          disabled={!!pending}
+                          onClick={() => void request(item)}
+                        >
+                          {t(pending === item.id ? "requesting" : "request")}
+                        </Button>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+        </>
       )}
       {query.data?.incomplete && <p className="text-sm text-muted-foreground">{t("incomplete")}</p>}
       {(search.cursor || query.data?.nextCursor) && (
@@ -243,7 +276,11 @@ function ActionCenter({ identity }: { identity: IdentityMe }) {
                 onRequest={() => void request(action)}
                 onReview={(observation) => {
                   setSourceNotice(false);
-                  setSource({ action, documentId: observation.documentId });
+                  setSource({
+                    groupId: action.group,
+                    profileId: action.profileId,
+                    documentId: observation.documentId,
+                  });
                 }}
               />
             </>
@@ -268,10 +305,11 @@ function ActionCenter({ identity }: { identity: IdentityMe }) {
           </DialogHeader>
           {source && (
             <ActionSourceReview
-              key={`${source.documentId}:${source.action.group}`}
+              key={`${source.documentId}:${source.groupId}`}
               identity={identity}
               documentId={source.documentId}
-              action={source.action}
+              groupId={source.groupId}
+              profileId={source.profileId}
               onDone={() => {
                 setSource(null);
                 setSelected(null);

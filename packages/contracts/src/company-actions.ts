@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { insuranceCompanyIdSchema } from "./companies.js";
 import { managedProfileIdSchema } from "./managed-profiles.js";
+import { documentIdSchema, documentReviewGroupSchema } from "./documents.js";
 
 export const companyActionGroupSchema = z.enum([
   "address",
@@ -95,17 +96,32 @@ export const companyActionsQuerySchema = z
   .object({
     profileId: managedProfileIdSchema.optional(),
     cursor: z.string().max(300).optional(),
+    // A document detail requests company statuses only, so its group status cannot
+    // be displaced by profile synchronization entries on another page.
     documentId: z
       .string()
       .regex(/^doc_[0-9a-f-]{36}$/)
       .optional(),
   })
   .strict();
-export const companyActionsSchema = z.object({
-  actions: z.array(companyActionSchema).max(20),
-  nextCursor: z.string().max(300).nullable(),
-  incomplete: z.boolean(),
+export const documentSynchronizationSchema = z.object({
+  id: z.string().min(1).max(200),
+  documentId: documentIdSchema,
+  documentTitle: z.string().max(240),
+  profileId: managedProfileIdSchema,
+  profileName: z.string().max(160),
+  group: documentReviewGroupSchema,
 });
+export const companyActionsSchema = z
+  .object({
+    actions: z.array(companyActionSchema).max(20),
+    synchronizations: z.array(documentSynchronizationSchema).max(20).default([]),
+    nextCursor: z.string().max(300).nullable(),
+    incomplete: z.boolean(),
+  })
+  .refine((value) => value.actions.length + value.synchronizations.length <= 20, {
+    message: "Action pages contain at most twenty entries",
+  });
 export const companyActionRequestInputSchema = z
   .object({
     profileId: managedProfileIdSchema,
@@ -141,6 +157,7 @@ export const serviceRequestTransitionInputSchema = z
     message: "Evidence is required for a completed notification or confirmation",
   });
 export type CompanyActionGroup = z.infer<typeof companyActionGroupSchema>;
+export type DocumentSynchronization = z.infer<typeof documentSynchronizationSchema>;
 export type CompanyActionValues = z.infer<typeof companyActionValuesSchema>;
 export type CompanyAction = z.infer<typeof companyActionSchema>;
 export type CompanyActionObservation = z.infer<typeof companyActionObservationSchema>;

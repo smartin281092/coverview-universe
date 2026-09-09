@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import type { IdentityMe } from "@coverview/api-client";
-import type { CompanyAction } from "@coverview/contracts";
 import { LoadingState, NotFoundState } from "@coverview/ui";
 import { api } from "../../api";
 import { DocumentReview } from "../documents/DocumentReview";
@@ -10,13 +9,15 @@ import { DocumentFailure } from "../documents/DocumentFailure";
 export function ActionSourceReview({
   identity,
   documentId,
-  action,
+  groupId,
+  profileId,
   onDone,
   onPendingChange,
 }: {
   identity: IdentityMe;
   documentId: string;
-  action: CompanyAction;
+  groupId: string;
+  profileId: string;
   onDone: () => void;
   onPendingChange: (pending: boolean) => void;
 }) {
@@ -29,11 +30,11 @@ export function ActionSourceReview({
     retry: false,
     refetchOnWindowFocus: false,
   });
-  if (query.isPending) return <LoadingState label={t("loading")} />;
+  if (query.isPending || !query.isFetchedAfterMount) return <LoadingState label={t("loading")} />;
   if (query.isError)
     return <DocumentFailure error={query.error} onRetry={() => void query.refetch()} />;
-  const group = query.data.reviewGroups?.find((item) => item.id === action.group);
-  if (!group || query.data.profileId !== action.profileId)
+  const group = query.data.reviewGroups?.find((item) => item.id === groupId);
+  if (!group || query.data.profileId !== profileId)
     return <NotFoundState title={t("sourceTitle")} description={t("sourceUnavailable")} />;
   return (
     <DocumentReview

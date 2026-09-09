@@ -164,7 +164,7 @@
   "startAnalysis": "Analyser le document",
   "saved": "Votre décision a été enregistrée.",
   "extractedTitle": "Informations du document",
-  "extractedHelp": "Informations extraites automatiquement. Vérifiez leur source et confirmez qu’elles vous concernent avant de les utiliser.",
+  "extractedHelp": "Consultez les informations lues et corrigez-les si nécessaire.",
   "noFields": "Aucune information personnelle exploitable n’a été trouvée. L’original reste disponible.",
   "review": "Vérifier",
   "current": "Dans votre profil",

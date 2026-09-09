@@ -44,6 +44,8 @@ function RequestColumn({
     gcTime: 0,
     retry: false,
     refetchOnWindowFocus: false,
+    refetchInterval: (current) => (current.state.status === "error" ? false : 30_000),
+    refetchIntervalInBackground: false,
   });
   const date = new Intl.DateTimeFormat(i18n.language, { dateStyle: "medium" });
   return (
