@@ -24,6 +24,7 @@ import { api } from "../api";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { DocumentFailure } from "../features/documents/DocumentFailure";
 import { DocumentUpload } from "../features/documents/DocumentUpload";
+import { IdentityDocumentPreview } from "../features/documents/IdentityDocumentPreview";
 import { DocumentReview } from "../features/documents/DocumentReview";
 import { DocumentProcessingIndicator } from "../features/documents/DocumentProcessingIndicator";
 import { DocumentProgress } from "../features/documents/DocumentProgress";
@@ -44,6 +45,7 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
   const [sourcePage, setSourcePage] = useState(0);
   const [notice, setNotice] = useState(false);
   const [reviewPending, setReviewPending] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
   const operation = useRef<{ payload: string; key: string } | null>(null);
   const controller = useRef(new AbortController());
   useEffect(() => {
@@ -324,6 +326,9 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
         <DocumentFailure error={download.error} onRetry={() => download.mutate()} />
       )}
       <div className="flex flex-wrap gap-3">
+        <Button variant="outline" disabled={!item.canDownload} onClick={() => setPreviewOpen(true)}>
+          {t("capture.openOriginal")}
+        </Button>
         <Button
           variant="outline"
           disabled={!item.canDownload || download.isPending}
@@ -372,6 +377,15 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
           {t("delete")}
         </Button>
       </div>
+      {previewOpen && (
+        <IdentityDocumentPreview
+          identity={identity}
+          documents={[item]}
+          portalContainer={portalContainer}
+          onClose={() => setPreviewOpen(false)}
+          generic
+        />
+      )}
       <Sheet
         open={panel !== null && !!portalContainer}
         onOpenChange={(open) => {
@@ -424,8 +438,11 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
           {panel === "resume" && (
             <DocumentUpload
               identity={identity}
+              portalContainer={portalContainer}
+              onBusyChange={setReviewPending}
               pending={item}
               onDone={() => {
+                setReviewPending(false);
                 setPanel(null);
                 void query.refetch();
               }}

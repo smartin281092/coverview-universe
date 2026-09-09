@@ -37,6 +37,7 @@ function Documents({ identity }: { identity: IdentityMe }) {
   const [open, setOpen] = useState(false);
   const [noticeDismissed, setNoticeDismissed] = useState(false);
   const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);
+  const [uploadPending, setUploadPending] = useState(false);
   const [cursors, setCursors] = useState<string[]>([]);
   const [searchText, setSearchText] = useState("");
   const [filters, setFilters] = useState<{
@@ -92,7 +93,12 @@ function Documents({ identity }: { identity: IdentityMe }) {
           <h1 className="cv-app-heading">{t("title")}</h1>
           <p className="max-w-xl text-muted-foreground">{t("description")}</p>
         </div>
-        <Sheet open={open && !!portalContainer} onOpenChange={setOpen}>
+        <Sheet
+          open={open && !!portalContainer}
+          onOpenChange={(value) => {
+            if (!uploadPending) setOpen(value);
+          }}
+        >
           <SheetTrigger asChild>
             <Button>
               <Plus className="size-4" aria-hidden="true" />
@@ -112,7 +118,10 @@ function Documents({ identity }: { identity: IdentityMe }) {
             {open && (
               <DocumentUpload
                 identity={identity}
+                portalContainer={portalContainer}
+                onBusyChange={setUploadPending}
                 onDone={(document) => {
+                  setUploadPending(false);
                   setOpen(false);
                   void navigate({
                     to: "/documents/$documentId",

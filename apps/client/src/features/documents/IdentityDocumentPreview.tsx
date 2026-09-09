@@ -26,6 +26,7 @@ type PreviewProps = {
   onClose: () => void;
   scopeKey?: string;
   company?: boolean;
+  generic?: boolean;
 };
 type PreviewAsset = { document: DocumentSummary; url: string; mime: string };
 
@@ -48,6 +49,7 @@ function IdentityPreviewContent({
   onClose,
   sourceKey,
   company = false,
+  generic = false,
 }: PreviewProps & { sourceKey: string }) {
   const { t } = useTranslation("identityPreview");
   const returnFocus = useRef(document.activeElement);
@@ -74,8 +76,9 @@ function IdentityPreviewContent({
   useEffect(() => {
     const loaded = (originals.data ?? []).map(({ document, blob }) => ({
       document,
-      url: URL.createObjectURL(blob),
-      mime: blob.type.toLowerCase().split(";")[0] ?? "",
+      // Downloads deliberately use octet-stream. Only the server-detected, scanned MIME selects a renderer.
+      url: URL.createObjectURL(new Blob([blob], { type: document.mime })),
+      mime: document.mime,
     }));
     setAssets(loaded);
     return () => {
@@ -106,10 +109,16 @@ function IdentityPreviewContent({
         <div className="flex shrink-0 items-start justify-between gap-3">
           <DialogHeader>
             <DialogTitle className="text-lg">
-              {t("title", company ? { context: "company" } : {})}
+              {t(
+                "title",
+                generic ? { context: "document" } : company ? { context: "company" } : {},
+              )}
             </DialogTitle>
             <DialogDescription>
-              {t("description", company ? { context: "company" } : {})}
+              {t(
+                "description",
+                generic ? { context: "document" } : company ? { context: "company" } : {},
+              )}
             </DialogDescription>
           </DialogHeader>
           <DialogClose asChild>
@@ -130,10 +139,17 @@ function IdentityPreviewContent({
           ) : originals.isError ? (
             <DocumentFailure error={originals.error} onRetry={() => void originals.refetch()} />
           ) : originals.isPending || assets.length === 0 ? (
-            <LoadingState label={t("loading", company ? { context: "company" } : {})} />
+            <LoadingState
+              label={t(
+                "loading",
+                generic ? { context: "document" } : company ? { context: "company" } : {},
+              )}
+            />
           ) : (
             <>
-              {images.length > 0 && <IdentityPreviewCanvas images={images} company={company} />}
+              {images.length > 0 && (
+                <IdentityPreviewCanvas images={images} company={company} generic={generic} />
+              )}
               {others.map((asset) => (
                 <section key={asset.document.id} className="flex min-h-0 flex-1 flex-col gap-2">
                   {asset.mime === "application/pdf" && (

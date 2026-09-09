@@ -2,7 +2,7 @@
 
 S-042a ajoute le dépôt, la conservation et la revue des documents dans Wallet. La décision de fournisseur et les preuves effectives restent dans [le plan](../../../../../roadmap/plans/S-042a.plan.md) et [le ledger](../../../../../roadmap/evidence/S-042a.md). Une compilation réussie ne prouve pas une extraction OpenAI.
 
-État de livraison : **review, partielle**. La [revue du 9 septembre 2026](../../../../../roadmap/evidence/S-042a-ship-2026-09-09.md) consolide analyse réelle, intégrité de l’original, suppression physique et contrôles d’isolation ; la recette complète d’identité et de reprise reste à effectuer.
+État : **en cours**, reprise après la [livraison partielle du 9 septembre 2026](../../../../../roadmap/evidence/S-042a-ship-2026-09-09.md). La [capture et relecture du passeport](../../../../../roadmap/evidence/document-capture.md) complètent la recette ; aucune clôture globale déduite de cette extension.
 
 ## Parcours et frontières
 
@@ -23,6 +23,8 @@ BullMQ utilise explicitement l’adapter du client `redis` déjà installé ; de
 Un PING toutes les cinq secondes distingue une connexion saine au repos d’une connexion bloquée : le délai socket mesure l’inactivité et ne doit pas couper une queue vide. Les avertissements de dépendance sont limités à un par minute et par dépendance, avec code technique autorisé et durée de panne ; le rétablissement est signalé une fois. Le relais espace ses échecs de six secondes jusqu’à une minute, puis reprend sa cadence normale après réussite. Si Docker Desktop est arrêté, Redis et PostgreSQL locaux sont indisponibles : rétablir Docker et ses conteneurs existants, sans recréer leurs volumes ou le superviseur WorkOS.
 
 L’adapter commun [LlmProvider](../../platform/llm-provider.ts) utilise Responses, `store:false`, aucun outil, schéma JSON strict, délai de 90 secondes et sortie bornée. Le prompt/version est dans `document.extraction.ts`. Les pages et citations sont proposées par le modèle : leur cohérence est contrôlée, leur exactitude nécessite la confrontation à l’original. La confiance et la zone restent nulles quand non mesurées. Les documents sont des données non fiables, jamais des instructions d’action.
+
+Un résultat refusé conserve `ai_invalid_result` et n’enrichit pas le profil. Un diagnostic technique sur liste fermée distingue format/réponse JSON, schéma d’extraction, pages, citation, date, doublons et preuve de catégorie/titre. Seuls ce code et l’identifiant documentaire sont journalisés, jamais la réponse ou les valeurs rejetées. Une relecture propriétaire conserve les contrôles et utilise une nouvelle réservation ; aucun retry payant automatique n’est ajouté pour un résultat invalide.
 
 Les refus 429 de facturation (`insufficient_quota`, dont `credit_balance_exhausted`) deviennent `ai_quota_exhausted`, sans retry automatique. Seuls les codes/type d’un corps borné à 16 Ko servent à la classification ; aucun message fournisseur brut n’est exposé. Les anciens `ai_rate_limited` pouvant couvrir les deux causes conservent un message prudent. [Diagnostic réel et vérifications](../../../../../roadmap/evidence/document-quota-animation.md).
 

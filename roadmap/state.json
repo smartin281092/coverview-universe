@@ -602,7 +602,7 @@
       ]
     },
     "S-042a": {
-      "status": "review",
+      "status": "running",
       "approval": "Demande explicite utilisateur du 6 septembre 2026 : mobile Wallet puis conservation de tous les documents déposés, y compris identité, classification et extraction profil ; choix locaux délégués PROG-23, aucune validation juridique déduite.",
       "decisions": [
         {
@@ -672,6 +672,12 @@
           "oracle": "V0/V1/V2 et V3 partiel",
           "observed": "35 tests existants sur 6 fichiers passent ; 11 tâches de types/build, lint ciblé, frontières et contrôle des bundles passent. Deux analyses réelles persistées. Téléchargement propriétaire HTTP200 et intégrité de l’original vérifiés ; suppression déjà demandée terminée, objet absent et dérivés/métadonnées effacés. Admin exige toujours une MFA personnelle. Détails et limites C01–C07 : roadmap/evidence/S-042a-ship-2026-09-09.md.",
           "decision": "Passer en review conformément à /ship ; ne pas déclarer done. Compléter pièce d’identité réelle, confirmation/réextraction, refus deuxième session et interruption/reprise avant clôture. Aucune mutation de profil ou suppression supplémentaire pour fabriquer les preuves."
+        },
+        {
+          "target": "Passeport refusé et capture de plusieurs photos",
+          "oracle": "V0/V1/V2 et V3 partiel",
+          "observed": "Original conservé et antivirus passé ; premier résultat ai_invalid_result sans diagnostic fin. Diagnostic borné ajouté ; seconde lecture propriétaire réussie, gardes inchangées. Types/build/lint et 10 tests ciblés passent. Assemblage PDF avec originaux joints identiques contrôlé, aucune fixture déposée.",
+          "decision": "Reprendre running sur demande utilisateur ; vérifier le nouveau dépôt et la visionneuse dans la preview. Aucune clôture globale C01–C07."
         }
       ],
       "ledger": {
@@ -705,7 +711,8 @@
         "Extension Admin/utilisateurs et ciblage des documents en cours dans le checkout partagé le 2026-09-08 : aucune livraison déduite des fichiers modifiés. Préserver son propriétaire et ses travaux ; borner cette extension avant tout nouveau périmètre selon PROG-14.",
         "Extension Admin demandée le 8 septembre 2026 : annuaire utilisateurs, gestion des profils liés et documents explicitement ciblés ; plan roadmap/plans/S-042a-admin-users.plan.md, preuves roadmap/evidence/admin-users.md. Ne clôture pas les critères globaux S-042a encore incomplets.",
         "Demande explicite /ship du 9 septembre 2026 : compte rendu partiel livré, statut review ; aucune clôture done ou dépendance libérée. Artefact canonique roadmap/evidence/S-042a-ship-2026-09-09.md. Les obstacles historiques de clé absente sont dépassés ; les limites actuelles sont détaillées par critère.",
-        "Suite préparée dans le bilan de livraison : brouillon S-080, plan existant et session recommandée gpt-6-astra/ultra ; aucun relais démarré ni travail concurrent pendant cette revue incomplète."
+        "Suite préparée dans le bilan de livraison : brouillon S-080, plan existant et session recommandée gpt-6-astra/ultra ; aucun relais démarré ni travail concurrent pendant cette revue incomplète.",
+        "Reprise explicitement demandée le 9 septembre après /ship : lecture du passeport et capture de plusieurs photos dans Documents. Plan roadmap/plans/S-042a-document-capture.plan.md ; journal roadmap/evidence/document-capture.md. Nouvelle lecture du passeport réussie sans assouplir les contrôles ; préparation photo/PDF et aperçu en cours de recette."
       ],
       "session": "GPT-6 ; effort effectif non exposé — revue de livraison du 9 septembre 2026",
       "cost": "Coût de session non disponible ; aucun nouvel appel OpenAI pendant la revue de livraison"

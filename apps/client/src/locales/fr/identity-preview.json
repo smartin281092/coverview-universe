@@ -20,5 +20,9 @@
   "zoom": "Zoom : {{value}}",
   "canvas": "Images de la pièce d’identité",
   "gestures": "Pincez ou utilisez la molette pour zoomer, puis faites glisser pour déplacer l’image. Au clavier : +, −, flèches et 0 pour réinitialiser.",
-  "imageError": "Cette image ne peut pas être affichée. Son original reste téléchargeable."
+  "imageError": "Cette image ne peut pas être affichée. Son original reste téléchargeable.",
+  "title_document": "Aperçu du document",
+  "description_document": "Consultez le document et téléchargez son original.",
+  "loading_document": "Chargement du document…",
+  "canvas_document": "Images du document"
 }

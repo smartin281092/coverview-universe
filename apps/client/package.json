@@ -9,6 +9,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@cantoo/pdf-lib": "^2.9.2",
     "@coverview/api-client": "workspace:*",
     "@coverview/contracts": "workspace:*",
     "@coverview/ui": "workspace:*",

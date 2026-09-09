@@ -66,9 +66,11 @@ function gesture(points: Point[]) {
 export function IdentityPreviewCanvas({
   images,
   company = false,
+  generic = false,
 }: {
   images: readonly ImageAsset[];
   company?: boolean;
+  generic?: boolean;
 }) {
   const { t, i18n } = useTranslation("identityPreview");
   const instructionsId = useId();
@@ -224,7 +226,10 @@ export function IdentityPreviewCanvas({
         ref={viewportRef}
         role="region"
         tabIndex={0}
-        aria-label={t("canvas", company ? { context: "company" } : {})}
+        aria-label={t(
+          "canvas",
+          generic ? { context: "document" } : company ? { context: "company" } : {},
+        )}
         aria-describedby={instructionsId}
         className="relative min-h-48 flex-1 touch-none overflow-hidden rounded-lg bg-muted gap-4 outline-none select-none focus-visible:ring-2 focus-visible:ring-ring"
         style={{ cursor: view.scale > 1 ? "grab" : "default" }}
