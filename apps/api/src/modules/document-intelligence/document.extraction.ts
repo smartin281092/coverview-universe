@@ -77,7 +77,11 @@ For insurance documents, return insurance with ONLY explicitly labelled facts fo
     signal,
   });
   const result = resultSchema.safeParse(response.value);
-  if (!result.success) throw new LlmError("ai_invalid_result", false, { cause: result.error });
+  if (!result.success)
+    throw new LlmError("ai_invalid_result", false, {
+      cause: result.error,
+      diagnostic: "extraction_schema",
+    });
   const data = result.data;
   const pageNumbers = new Set(data.pages.map((page) => page.page));
   if (
@@ -85,10 +89,11 @@ For insurance documents, return insurance with ONLY explicitly labelled facts fo
     data.pageCount !== pageNumbers.size ||
     !data.pages.every((page) => page.page <= data.pageCount)
   )
-    throw new LlmError("ai_invalid_result", false);
+    throw new LlmError("ai_invalid_result", false, { diagnostic: "page_numbers" });
   const source = (evidence: z.infer<typeof quote>): DocumentSource => {
     const page = data.pages.find((item) => item.page === evidence.page);
-    if (!page?.text.includes(evidence.text)) throw new LlmError("ai_invalid_result", false);
+    if (!page?.text.includes(evidence.text))
+      throw new LlmError("ai_invalid_result", false, { diagnostic: "source_quote" });
     return {
       ...evidence,
       method: "openai_vision",
@@ -102,7 +107,7 @@ For insurance documents, return insurance with ONLY explicitly labelled facts fo
       ["birthDate", "expiresOn"].includes(field.field) &&
       !z.iso.date().safeParse(field.value).success
     )
-      throw new LlmError("ai_invalid_result", false);
+      throw new LlmError("ai_invalid_result", false, { diagnostic: "field_date" });
     return {
       id: randomUUID(),
       field: field.field,
@@ -110,12 +115,12 @@ For insurance documents, return insurance with ONLY explicitly labelled facts fo
       source: source(field.evidence),
     };
   });
-  if (
-    new Set(fields.map((field) => field.field)).size !== fields.length ||
-    (data.category !== "unknown" && !data.evidence) ||
-    Boolean(data.title) !== Boolean(data.titleEvidence)
-  )
-    throw new LlmError("ai_invalid_result", false);
+  if (new Set(fields.map((field) => field.field)).size !== fields.length)
+    throw new LlmError("ai_invalid_result", false, { diagnostic: "duplicate_fields" });
+  if (data.category !== "unknown" && !data.evidence)
+    throw new LlmError("ai_invalid_result", false, { diagnostic: "category_evidence" });
+  if (Boolean(data.title) !== Boolean(data.titleEvidence))
+    throw new LlmError("ai_invalid_result", false, { diagnostic: "title_evidence" });
   const insurance = data.insurance;
   const sourced = <T extends z.infer<typeof fact>>(value: T | null) => {
     if (!value) return null;

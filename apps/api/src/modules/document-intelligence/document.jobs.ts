@@ -166,6 +166,11 @@ export function startDocumentJobs(
         if (error instanceof DocumentError && [404, 409].includes(error.statusCode)) return;
         const known = error instanceof ProcessingError || error instanceof LlmError;
         const code = known ? error.code : "processing_unavailable";
+        if (error instanceof LlmError && error.diagnostic)
+          logger.warn(
+            { documentId: row.id, code, diagnostic: error.diagnostic },
+            "Document reading result rejected",
+          );
         await repository.transition(row.userId, row.id, row.generation, {
           state: code === "malware_detected" ? "quarantined" : "failed",
           failure: code,

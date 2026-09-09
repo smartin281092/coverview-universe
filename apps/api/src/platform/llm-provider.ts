@@ -1,14 +1,28 @@
 import { z } from "zod";
 import { localDocumentSecret } from "./local-document-secrets.js";
 
+export type LlmDiagnostic =
+  | "response_size"
+  | "response_schema"
+  | "response_json"
+  | "extraction_schema"
+  | "page_numbers"
+  | "source_quote"
+  | "field_date"
+  | "duplicate_fields"
+  | "category_evidence"
+  | "title_evidence";
+
 export class LlmError extends Error {
+  readonly diagnostic: LlmDiagnostic | undefined;
   constructor(
     public code: string,
     public retryable: boolean,
-    options?: ErrorOptions,
+    options?: ErrorOptions & { diagnostic?: LlmDiagnostic },
   ) {
     super(code, options);
     this.name = "LlmError";
+    this.diagnostic = options?.diagnostic;
   }
 }
 export interface LlmProvider {
@@ -162,12 +176,13 @@ export function createOpenAiProvider(config: {
         );
       }
       const raw = await response.text();
-      if (raw.length > 1000000) throw new LlmError("ai_invalid_result", false);
+      if (raw.length > 1000000)
+        throw new LlmError("ai_invalid_result", false, { diagnostic: "response_size" });
       let parsed: z.infer<typeof responseSchema>;
       try {
         parsed = responseSchema.parse(JSON.parse(raw));
       } catch (cause) {
-        throw new LlmError("ai_invalid_result", false, { cause });
+        throw new LlmError("ai_invalid_result", false, { cause, diagnostic: "response_schema" });
       }
       if (parsed.status !== "completed") throw new LlmError("ai_incomplete", false);
       const texts = parsed.output.flatMap((item) =>
@@ -182,7 +197,7 @@ export function createOpenAiProvider(config: {
       try {
         value = JSON.parse(texts[0] ?? "");
       } catch (cause) {
-        throw new LlmError("ai_invalid_result", false, { cause });
+        throw new LlmError("ai_invalid_result", false, { cause, diagnostic: "response_json" });
       }
       return {
         value,
