@@ -6,6 +6,7 @@
     "signer": "Nom complet du signataire",
     "signerPlace": "{{name}} · {{place}}",
     "representative": "Je suis habilité à signer pour {{name}}.",
+    "representativeUnnamed": "Je suis habilité à signer pour ce profil.",
     "accept": "J’ai lu ce document et j’accepte de le signer avec le tracé ci-dessus.",
     "evidenceHelp": "Le document présenté, votre acceptation, votre signature et la date sont conservés dans votre compte.",
     "invalid": "Renseignez le signataire et le lieu, tracez votre signature puis acceptez le document. Pour un profil géré, confirmez votre habilitation.",

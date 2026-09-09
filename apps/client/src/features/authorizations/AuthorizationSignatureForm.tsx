@@ -100,7 +100,9 @@ export function AuthorizationSignatureForm({
               type="checkbox"
               {...form.register("representative")}
             />
-            {t("signing.representative", { name: document.profileName })}
+            {document.profileName
+              ? t("signing.representative", { name: document.profileName })
+              : t("signing.representativeUnnamed")}
           </label>
         )}
         <label className="flex min-h-11 items-center gap-3 text-sm">
