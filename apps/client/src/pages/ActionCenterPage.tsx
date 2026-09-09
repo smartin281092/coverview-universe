@@ -52,6 +52,13 @@ function ActionCenter({ identity }: { identity: IdentityMe }) {
         <h1 className="cv-app-heading">{t("title")}</h1>
         <p className="max-w-2xl text-muted-foreground">{t("description")}</p>
       </header>
+      {summary.data ? (
+        <ActionProgress summary={summary.data} />
+      ) : summary.isError ? (
+        <ActionFailure error={summary.error} onRetry={() => void summary.refetch()} />
+      ) : (
+        <LoadingState label={t("loading")} />
+      )}
       <Tabs
         value={search.tab ?? "todo"}
         onValueChange={(tab) =>
@@ -66,15 +73,6 @@ function ActionCenter({ identity }: { identity: IdentityMe }) {
           <TabsTrigger value="in_progress">{t("tabs.inProgress")}</TabsTrigger>
           <TabsTrigger value="activity">{t("tabs.activity")}</TabsTrigger>
         </TabsList>
-        <div className="py-6">
-          {summary.data ? (
-            <ActionProgress summary={summary.data} />
-          ) : summary.isError ? (
-            <ActionFailure error={summary.error} onRetry={() => void summary.refetch()} />
-          ) : (
-            <LoadingState label={t("loading")} />
-          )}
-        </div>
         <TabsContent value={inProgress ? "in_progress" : "todo"} className="space-y-6">
           {query.isPending ? (
             <LoadingState label={t("loading")} />
