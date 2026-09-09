@@ -77,7 +77,11 @@ export const actionCenterSummarySchema = z.object({
   incomplete: z.boolean(),
 });
 export const actionCenterQuerySchema = z
-  .object({ profileId: managedProfileIdSchema.optional(), cursor: z.string().max(500).optional() })
+  .object({
+    profileId: managedProfileIdSchema.optional(),
+    cursor: z.string().max(500).optional(),
+    state: z.enum(["pending", "in_progress"]).optional(),
+  })
   .strict();
 export const actionCenterListSchema = z.object({
   actions: z.array(actionCenterItemSchema).max(20),

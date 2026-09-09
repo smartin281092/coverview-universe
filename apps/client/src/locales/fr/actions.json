@@ -1,6 +1,8 @@
 {
   "eyebrow": "Votre suivi",
-  "tabs": { "todo": "À faire", "activity": "Activité" },
+  "tabs": { "todo": "À faire", "inProgress": "En cours", "activity": "Activité" },
+  "inProgressEmptyTitle": "Aucune demande en cours",
+  "inProgressEmptyDescription": "Vos demandes et actions confiées au service client apparaîtront ici jusqu’à leur résolution.",
   "viewSource": "Voir la source",
   "verify": "Vérifier",
   "saving": "Enregistrement…",

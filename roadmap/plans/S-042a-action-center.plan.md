@@ -31,3 +31,7 @@ Mandat suivant du 9 septembre : une action par donnée et profil, même si plusi
 - Corriger les proportions communes des boutons : la hauteur tactile de 44 px n’est actuellement pas accompagnée d’un espacement horizontal proportionnel. Garder les cibles tactiles et les boutons icône carrés.
 
 Vérifications : PostgreSQL réel pour déduplication multi-source/profil, résolutions/réouverture, historique, révisions/rejeux, signatures/mandat et isolation ; types/lint/build/frontières ; recette des pages et navigation réelles sans signer ni modifier le profil utilisateur pour tester. Root : intégration, signature/retours et boutons ; agents : moteur/contrats/tests, UI centre, prérequis et gardes. Aucune nouvelle slice ni livraison globale anticipée.
+
+## Onglet En cours — complément demandé
+
+Ajouter « En cours » entre « À faire » et « Activité ». À faire affiche les actions `pending`, En cours les demandes `in_progress` déjà confiées au service client ; leurs détails restent accessibles. Filtrage serveur avant pagination, curseurs et cache distincts par état, lien partageable `?tab=in_progress`. Aucun changement de score, de badge, de données ou de preuve d’envoi. Oracle : test PostgreSQL de séparation/pagination, types/build et navigation réelle sans créer de demande dans le compte utilisateur.

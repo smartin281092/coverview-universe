@@ -24,6 +24,8 @@ function ActionCenter({ identity }: { identity: IdentityMe }) {
   const search = useSearch({ from: "/actions" });
   const navigate = useNavigate();
   const activity = search.tab === "activity";
+  const inProgress = search.tab === "in_progress";
+  const listState = inProgress ? "in_progress" : "pending";
   const root = ["private", identity.user.id, identity.session.id, "action-center"];
   const summary = useQuery({
     queryKey: [...root, "summary"],
@@ -34,9 +36,9 @@ function ActionCenter({ identity }: { identity: IdentityMe }) {
     refetchInterval: (query) => (query.state.status === "error" ? false : 30_000),
   });
   const query = useQuery({
-    queryKey: [...root, "list", search.cursor],
+    queryKey: [...root, "list", listState, search.cursor],
     queryFn: ({ signal }) =>
-      api.actionCenter(search.cursor ? { cursor: search.cursor } : {}, { signal }),
+      api.actionCenter({ state: listState, cursor: search.cursor }, { signal }),
     enabled: !activity,
     gcTime: 0,
     staleTime: 0,
@@ -51,13 +53,17 @@ function ActionCenter({ identity }: { identity: IdentityMe }) {
         <p className="max-w-2xl text-muted-foreground">{t("description")}</p>
       </header>
       <Tabs
-        value={activity ? "activity" : "todo"}
+        value={search.tab ?? "todo"}
         onValueChange={(tab) =>
-          void navigate({ to: "/actions", search: tab === "activity" ? { tab: "activity" } : {} })
+          void navigate({
+            to: "/actions",
+            search: tab === "activity" || tab === "in_progress" ? { tab } : {},
+          })
         }
       >
         <TabsList>
           <TabsTrigger value="todo">{t("tabs.todo")}</TabsTrigger>
+          <TabsTrigger value="in_progress">{t("tabs.inProgress")}</TabsTrigger>
           <TabsTrigger value="activity">{t("tabs.activity")}</TabsTrigger>
         </TabsList>
         <div className="py-6">
@@ -69,19 +75,21 @@ function ActionCenter({ identity }: { identity: IdentityMe }) {
             <LoadingState label={t("loading")} />
           )}
         </div>
-        <TabsContent value="todo" className="space-y-6">
+        <TabsContent value={inProgress ? "in_progress" : "todo"} className="space-y-6">
           {query.isPending ? (
             <LoadingState label={t("loading")} />
           ) : query.isError ? (
             <ActionFailure error={query.error} onRetry={() => void query.refetch()} />
           ) : query.data.actions.length === 0 ? (
             <EmptyState
-              title={t("emptyTitle")}
-              description={t("emptyDescription")}
+              title={t(inProgress ? "inProgressEmptyTitle" : "emptyTitle")}
+              description={t(inProgress ? "inProgressEmptyDescription" : "emptyDescription")}
               action={
-                <Button asChild variant="outline">
-                  <Link to="/documents">{t("openDocuments")}</Link>
-                </Button>
+                !inProgress && (
+                  <Button asChild variant="outline">
+                    <Link to="/documents">{t("openDocuments")}</Link>
+                  </Button>
+                )
               }
             />
           ) : (
@@ -114,7 +122,7 @@ function ActionCenter({ identity }: { identity: IdentityMe }) {
                     )}
                     <Button asChild className="min-h-11">
                       <Link to="/actions/$actionId" params={{ actionId: action.id }}>
-                        {t("verify")}
+                        {t(inProgress ? "details" : "verify")}
                       </Link>
                     </Button>
                   </div>
@@ -127,7 +135,12 @@ function ActionCenter({ identity }: { identity: IdentityMe }) {
               <Button
                 variant="outline"
                 disabled={!search.cursor || query.isFetching}
-                onClick={() => void navigate({ to: "/actions", search: {} })}
+                onClick={() =>
+                  void navigate({
+                    to: "/actions",
+                    search: inProgress ? { tab: "in_progress" } : {},
+                  })
+                }
               >
                 {t("firstPage")}
               </Button>
@@ -136,7 +149,13 @@ function ActionCenter({ identity }: { identity: IdentityMe }) {
                 disabled={!query.data?.nextCursor || query.isFetching}
                 onClick={() => {
                   if (query.data?.nextCursor)
-                    void navigate({ to: "/actions", search: { cursor: query.data.nextCursor } });
+                    void navigate({
+                      to: "/actions",
+                      search: {
+                        ...(inProgress ? { tab: "in_progress" as const } : {}),
+                        cursor: query.data.nextCursor,
+                      },
+                    });
                 }}
               >
                 {t("next")}

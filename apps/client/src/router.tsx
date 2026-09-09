@@ -34,8 +34,10 @@ const actionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/actions",
   component: lazyRouteComponent(() => import("./pages/ActionCenterPage"), "ActionCenterPage"),
-  validateSearch: (search: Record<string, unknown>): { cursor?: string; tab?: "activity" } => ({
-    ...(search.tab === "activity" ? { tab: "activity" as const } : {}),
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): { cursor?: string; tab?: "activity" | "in_progress" } => ({
+    ...(search.tab === "activity" || search.tab === "in_progress" ? { tab: search.tab } : {}),
     ...(typeof search.cursor === "string" && search.cursor.length <= 500
       ? { cursor: search.cursor }
       : {}),

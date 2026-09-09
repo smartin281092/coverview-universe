@@ -152,20 +152,36 @@ export function createActionCenterRepository(db: Database) {
       const scope = query.profileId ?? "all";
       const cursor = decode(
         query.cursor,
-        z.object({ id: actionCenterIdSchema, scope: z.string().max(100) }).strict(),
+        z
+          .object({
+            id: actionCenterIdSchema,
+            scope: z.string().max(100),
+            state: z.enum(["pending", "in_progress"]).optional(),
+          })
+          .strict(),
       );
-      if (cursor && cursor.scope !== scope) throw invalid();
+      if (cursor && (cursor.scope !== scope || cursor.state !== query.state)) throw invalid();
       const center = await readActionCenter(db, userId, query.profileId);
       const visible = center.actions
         .map(({ item }) => item)
         .filter(
-          (item) => item.state !== "complete" && (!cursor || item.id.localeCompare(cursor.id) > 0),
+          (item) =>
+            item.state !== "complete" &&
+            (!query.state || item.state === query.state) &&
+            (!cursor || item.id.localeCompare(cursor.id) > 0),
         );
       const actions = visible.slice(0, 20);
       return actionCenterListSchema.parse({
         actions,
         summary: center.summary,
-        nextCursor: visible.length > 20 ? encode({ id: actions.at(-1)!.id, scope }) : null,
+        nextCursor:
+          visible.length > 20
+            ? encode({
+                id: actions.at(-1)!.id,
+                scope,
+                ...(query.state ? { state: query.state } : {}),
+              })
+            : null,
       });
     },
     async summary(userId: string) {

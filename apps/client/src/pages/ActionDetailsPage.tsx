@@ -67,7 +67,7 @@ function ActionDetails({ identity, id }: { identity: IdentityMe; id: string }) {
   return (
     <div ref={setPortalContainer} className="mx-auto max-w-4xl space-y-8">
       <Button asChild variant="ghost">
-        <Link to="/actions">
+        <Link to="/actions" search={action.state === "in_progress" ? { tab: "in_progress" } : {}}>
           <ArrowLeft className="size-4" aria-hidden="true" />
           {t("backToActions")}
         </Link>

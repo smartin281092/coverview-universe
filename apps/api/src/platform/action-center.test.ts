@@ -552,3 +552,74 @@ it("projects mandatory general information, scoped prerequisites and actual sign
     statusCode: 404,
   });
 });
+
+it("paginates pending and in-progress actions independently and scopes cursors to the selected state", async () => {
+  const actor = await owner();
+  const center = createActionCenterRepository(database.db);
+  const managed = createManagedProfileRepository(database.db);
+  for (let index = 0; index < 3; index += 1) {
+    await managed.create(
+      actor,
+      { kind: "person", displayName: `Personne isolée ${index}` },
+      randomUUID(),
+    );
+  }
+  const before = await center.list(actor.userId);
+  const second = await center.list(actor.userId, { cursor: before.nextCursor! });
+  for (const action of [...before.actions, ...second.actions].slice(0, 21)) {
+    await center.resolve(
+      actor,
+      action.id,
+      {
+        fingerprint: action.fingerprint,
+        choice: "custom",
+        response: "Demande prise en charge pour examen.",
+      },
+      randomUUID(),
+    );
+  }
+  const pending = await center.list(actor.userId, { state: "pending" });
+  const inProgress = await center.list(actor.userId, { state: "in_progress" });
+  expect(pending.actions).toHaveLength(20);
+  expect(inProgress.actions).toHaveLength(20);
+  expect(pending.actions.every((action) => action.state === "pending")).toBe(true);
+  expect(inProgress.actions.every((action) => action.state === "in_progress")).toBe(true);
+  expect(pending.summary).toEqual(inProgress.summary);
+  const pendingLast = await center.list(actor.userId, {
+    state: "pending",
+    cursor: pending.nextCursor!,
+  });
+  const inProgressLast = await center.list(actor.userId, {
+    state: "in_progress",
+    cursor: inProgress.nextCursor!,
+  });
+  const pendingIds = [...pending.actions, ...pendingLast.actions].map((action) => action.id);
+  const inProgressIds = [...inProgress.actions, ...inProgressLast.actions].map(
+    (action) => action.id,
+  );
+  expect(pendingIds).toHaveLength(pending.summary.pending);
+  expect(inProgressIds).toHaveLength(21);
+  expect(new Set(pendingIds).size).toBe(pendingIds.length);
+  expect(new Set(inProgressIds).size).toBe(inProgressIds.length);
+  expect(inProgressIds.some((id) => pendingIds.includes(id))).toBe(false);
+  expect(pendingLast.nextCursor).toBeNull();
+  expect(inProgressLast.nextCursor).toBeNull();
+  await expect(
+    center.list(actor.userId, { state: "in_progress", cursor: pending.nextCursor! }),
+  ).rejects.toMatchObject({ statusCode: 422 });
+  await expect(center.list(actor.userId, { cursor: pending.nextCursor! })).rejects.toMatchObject({
+    statusCode: 422,
+  });
+  await expect(
+    center.list(actor.userId, { state: "pending", profileId: "self", cursor: pending.nextCursor! }),
+  ).rejects.toMatchObject({ statusCode: 422 });
+  // Existing unfiltered cursors carry no state and remain accepted for the legacy list.
+  const all = await center.list(actor.userId);
+  expect(JSON.parse(Buffer.from(all.nextCursor!, "base64url").toString("utf8"))).not.toHaveProperty(
+    "state",
+  );
+  expect((await center.list(actor.userId, { cursor: all.nextCursor! })).actions).toHaveLength(20);
+  await expect(
+    center.list(actor.userId, { state: "pending", cursor: all.nextCursor! }),
+  ).rejects.toMatchObject({ statusCode: 422 });
+});
