@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Link, useBlocker, useNavigate, useParams } from "@tanstack/react-router";
+import { useBlocker, useNavigate, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -66,12 +66,6 @@ function ActionDetails({ identity, id }: { identity: IdentityMe; id: string }) {
   if (!action) return <LoadingState label={t("loading")} />;
   return (
     <div ref={setPortalContainer} className="mx-auto max-w-4xl space-y-8">
-      <Button asChild variant="ghost">
-        <Link to="/actions" search={action.state === "in_progress" ? { tab: "in_progress" } : {}}>
-          <ArrowLeft className="size-4" aria-hidden="true" />
-          {t("backToActions")}
-        </Link>
-      </Button>
       {summary.data ? (
         <ActionProgress summary={summary.data} />
       ) : summary.isError ? (
