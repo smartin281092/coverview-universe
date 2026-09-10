@@ -16,7 +16,6 @@ import {
   type ProfileFieldName,
 } from "../features/profile/profile-fields";
 import { useProfileJourney, type ProfileJourney } from "../features/profile/use-profile-journey";
-import { ProfileDocumentDifferences } from "../features/profile/ProfileDocumentDifferences";
 import { ProfileWorkspace } from "../features/profile/ProfileWorkspace";
 import {
   ProfileSteps,
@@ -315,7 +314,6 @@ function ProfileEditor({
         <ProfileChoices identity={identity} onBack={() => setHistory(false)} />
       )}
       <div hidden={history} inert={history} className="space-y-7">
-        {identity && <ProfileDocumentDifferences identity={identity} />}
         {new URLSearchParams(location.searchStr).get("authError") && (
           <p role="alert" className="text-destructive">
             {t("callbackError")}
@@ -440,32 +438,6 @@ function ProfileEditor({
                       <ProfileField key={field} field={field} journey={journey} />
                     ))}
                   </div>
-                  {step === "address" && identity && (
-                    <div className="space-y-4 border-t border-border pt-5">
-                      <label className="flex cursor-pointer items-start gap-3">
-                        <input
-                          type="checkbox"
-                          className="mt-1 size-4 shrink-0 accent-primary"
-                          checked={journey.prefill}
-                          onChange={(event) => journey.setPrefill(event.target.checked)}
-                        />
-                        <span className="space-y-1">
-                          <span className="block text-sm font-medium">{t("prefill.label")}</span>
-                          <span className="block text-sm text-muted-foreground">
-                            {t("prefill.description")}
-                          </span>
-                        </span>
-                      </label>
-                      <Button
-                        type="button"
-                        variant="link"
-                        className="h-auto p-0 text-sm"
-                        onClick={() => setHistory(true)}
-                      >
-                        {t("history.action")}
-                      </Button>
-                    </div>
-                  )}
                   <div className="flex flex-wrap items-center gap-3 pt-2">
                     {stepIndex > 0 && (
                       <Button
