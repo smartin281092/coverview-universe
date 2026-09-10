@@ -55,7 +55,7 @@
   "formats": "Jusqu’à 20 Mo. Lecture automatique : PDF, JPEG, PNG et WebP. Les autres formats sont conservés, sans lecture automatique.",
   "sizeError": "Choisissez un fichier non vide de 20 Mo maximum.",
   "analyzeChoice": "Extraire les informations du document",
-  "aiDisclosure": "Après le contrôle antivirus, le document sera transmis à un service d’analyse externe. Ses informations complètent les champs vides de votre profil ; les valeurs déjà présentes sont conservées et les différences signalées. Décochez pour conserver seulement l’original.",
+  "aiDisclosure": "Après le contrôle antivirus, la lecture externe retrouve ou crée le profil de la personne concernée et complète ses champs vides. En cas de doute, vous choisissez le profil. Les valeurs existantes sont conservées. Décochez pour conserver seulement l’original.",
   "retention": "L’original reste dans votre espace jusqu’à sa suppression. Les informations reprises dans votre profil sont conservées séparément.",
   "saveDocument": "Conserver le document",
   "preparing": "Vérification du fichier…",
