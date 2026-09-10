@@ -59,7 +59,8 @@ function Documents({ identity }: { identity: IdentityMe }) {
       filters,
       cursors.at(-1) ?? null,
     ],
-    queryFn: ({ signal }) => api.documents(cursors.at(-1), { signal }, filters),
+    queryFn: ({ signal }) =>
+      api.documents(cursors.at(-1), { signal }, { ...filters, scope: "account" }),
     staleTime: 0,
     gcTime: 0,
     retry: false,

@@ -91,6 +91,7 @@ export function registerAdminDocumentRoutes(
       return repository.list(actor(request).userId, cursor, {
         ...filters,
         profileId: request.params.profileId,
+        scope: "profile",
       });
     },
   );

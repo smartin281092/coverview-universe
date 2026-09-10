@@ -32,6 +32,7 @@ import { DocumentLoadingMessage } from "../features/documents/DocumentLoadingMes
 import { InsuranceCompanyLink } from "../features/insurance/InsuranceCompanyLink";
 import { DocumentLabels } from "../features/documents/DocumentLabels";
 import { DocumentThumbnails } from "../features/documents/DocumentThumbnails";
+import { DocumentProfileAssignment } from "../features/documents/DocumentProfileAssignment";
 
 type Panel =
   "category" | "delete" | "history" | "source" | "resume" | "analysis" | { fieldId: string } | null;
@@ -45,6 +46,7 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
   const [sourcePage, setSourcePage] = useState(0);
   const [notice, setNotice] = useState(false);
   const [reviewPending, setReviewPending] = useState(false);
+  const [assignmentPending, setAssignmentPending] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewPage, setPreviewPage] = useState(1);
   const operation = useRef<{ payload: string; key: string } | null>(null);
@@ -132,7 +134,10 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
       />
     );
   const item = query.data;
-  const busy = mutation.isPending || reviewPending;
+  const busy = mutation.isPending || reviewPending || assignmentPending;
+  const assigned =
+    item.profileAssignment == null ||
+    ["manual", "matched", "created"].includes(item.profileAssignment);
   const field =
     panel && typeof panel === "object"
       ? item.reviewGroups?.find((group) => group.id === panel.fieldId)
@@ -162,6 +167,14 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
         <DocumentLabels document={item} />
       </header>
       {item.companyId && <InsuranceCompanyLink companyId={item.companyId} />}
+      {item.profileAssignment != null && (
+        <DocumentProfileAssignment
+          key={item.id}
+          identity={identity}
+          document={item}
+          onPendingChange={setAssignmentPending}
+        />
+      )}
       <DocumentThumbnails
         identity={identity}
         document={item}
@@ -191,26 +204,30 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
                       {group.fields.map((field) => field.value).join("\n")}
                     </p>
                   </div>
-                  <Button
-                    variant="outline"
-                    disabled={busy || item.state !== "ready"}
-                    onClick={() => setPanel({ fieldId: group.id })}
-                  >
-                    {t("review")}
-                    <ArrowUpRight className="size-4" aria-hidden="true" />
-                  </Button>
+                  {assigned && (
+                    <Button
+                      variant="outline"
+                      disabled={busy || item.state !== "ready"}
+                      onClick={() => setPanel({ fieldId: group.id })}
+                    >
+                      {t("review")}
+                      <ArrowUpRight className="size-4" aria-hidden="true" />
+                    </Button>
+                  )}
                 </li>
               ))}
             </ul>
           )}
-          <Link
-            to="/profile"
-            search={{ person: item.profileId ?? "self", tab: "general" }}
-            className="inline-flex min-h-11 items-center gap-2 text-sm font-medium underline underline-offset-4"
-          >
-            {t("profile")}
-            <ArrowUpRight className="size-4" aria-hidden="true" />
-          </Link>
+          {assigned && (
+            <Link
+              to="/profile"
+              search={{ person: item.profileId ?? "self", tab: "general" }}
+              className="inline-flex min-h-11 items-center gap-2 text-sm font-medium underline underline-offset-4"
+            >
+              {t("profile")}
+              <ArrowUpRight className="size-4" aria-hidden="true" />
+            </Link>
+          )}
         </section>
       )}
       <section

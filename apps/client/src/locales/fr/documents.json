@@ -1,8 +1,21 @@
 {
   "title": "Vos documents",
+  "assignment": {
+    "loading": "Chargement des profils…",
+    "question": "À quel profil appartient ce document ?",
+    "self": "{{name}} (moi)",
+    "ambiguous": "Plusieurs profils correspondent ou la date de naissance diffère. Choisissez la personne concernée avant de compléter ses informations.",
+    "missing_identity": "La lecture ne permet pas d’identifier une personne avec certitude. Choisissez le profil concerné.",
+    "profile_limit": "Le nombre maximal de profils est atteint. Choisissez un profil existant.",
+    "assigned": "Document associé au profil",
+    "created": "Profil créé à partir de ce document :",
+    "confirm": "Associer au profil",
+    "saving": "Association en cours…",
+    "manage": "Gérer mes profils"
+  },
   "close": "Fermer",
   "retryScan": "Reprendre le contrôle",
-  "analysisDisclosure": "Après le contrôle antivirus, cet original sera transmis à un service d’analyse externe. Les informations extraites complètent les champs vides de votre profil ; toute différence avec une valeur existante est signalée pour vérification.",
+  "analysisDisclosure": "Après le contrôle antivirus, cet original sera transmis à un service d’analyse externe. La lecture peut retrouver ou créer le profil de la personne concernée et compléter ses champs vides. En cas de doute, vous choisissez le profil ; les valeurs existantes sont conservées.",
   "listMeta": "{{date}}",
   "filenameMeta": "{{name}} · {{size}} Ko · Ajouté le {{date}}",
   "companyOpen": "Voir mes assurances chez {{company}}",

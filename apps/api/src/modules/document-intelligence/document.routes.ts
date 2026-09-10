@@ -9,6 +9,7 @@ import {
   documentCreateInputSchema,
   documentRetryInputSchema,
   documentCategoryInputSchema,
+  documentAssignProfileInputSchema,
   documentReviewInputSchema,
   documentReviewResultSchema,
   documentFieldReviewInputSchema,
@@ -173,6 +174,16 @@ export function registerDocumentRoutes(
     "/documents/:id",
     { onRequest: read, config: limited, schema: { params, response: { 200: documentSchema } } },
     async (request) => repository.get(actor(request).userId, request.params.id),
+  );
+  app.post(
+    "/documents/:id/profile",
+    {
+      onRequest: write,
+      config: limited,
+      schema: { params, body: documentAssignProfileInputSchema, response: { 200: documentSchema } },
+    },
+    async (request) =>
+      repository.assignProfile(actor(request), request.params.id, request.body, key(request)),
   );
   app.post(
     "/documents/:id/content",

@@ -1,4 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
+import { assignedDocumentCondition } from "./document.profile-assignment.js";
 import { and, asc, desc, eq, inArray, isNull, lt, lte, or } from "drizzle-orm";
 import { z } from "zod";
 import {
@@ -209,6 +210,7 @@ export async function readCompanyActionContext(
         eq(documents.userId, userId),
         isNull(documents.deletedAt),
         eq(documents.state, "ready"),
+        assignedDocumentCondition(),
         profileFilter
           ? profileFilter === "self"
             ? isNull(documents.managedProfileId)

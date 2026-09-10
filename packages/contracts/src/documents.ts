@@ -56,6 +56,7 @@ export const documentListQuerySchema = z
   .object({
     cursor: z.string().max(200).optional(),
     profileId: managedProfileIdSchema.optional(),
+    scope: z.enum(["profile", "account"]).optional(),
     q: z.string().trim().max(120).optional(),
     classification: documentClassificationSchema.optional(),
     group: z.enum(["date", "type"]).optional(),
@@ -138,8 +139,27 @@ export const documentAnalysisSchema = z.object({
     )
     .max(20),
 });
+export const documentAssignProfileInputSchema = z
+  .object({
+    revision: z.number().int().nonnegative(),
+    profileId: managedProfileIdSchema,
+  })
+  .strict();
 export const documentSummarySchema = z.object({
   profileId: managedProfileIdSchema.optional(),
+  profileAssignment: z
+    .enum([
+      "pending",
+      "matched",
+      "created",
+      "manual",
+      "ambiguous",
+      "missing_identity",
+      "profile_limit",
+    ])
+    .nullable()
+    .optional(),
+  profileAssignedAt: z.iso.datetime().nullable().optional(),
   id: documentIdSchema,
   name: z.string().max(240),
   title: z.string().max(140).nullable().optional(),
@@ -286,6 +306,7 @@ export const insuranceCompanyDetailsSchema = z.object({
 export const documentCreateInputSchema = z
   .object({
     profileId: managedProfileIdSchema.optional(),
+    detectProfile: z.boolean().optional(),
     name: z
       .string()
       .trim()

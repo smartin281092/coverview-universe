@@ -29,6 +29,8 @@ export const documents = pgTable(
       .notNull()
       .references(() => identityUsers.id),
     managedProfileId: text("managed_profile_id"),
+    profileAssignment: text("profile_assignment").$type<DocumentSummary["profileAssignment"]>(),
+    profileAssignedAt: instant("profile_assigned_at"),
     name: text("name").notNull(),
     mime: text("mime").notNull(),
     declaredMime: text("declared_mime").notNull(),
@@ -56,6 +58,14 @@ export const documents = pgTable(
     check(
       "files_state",
       sql`${table.state} in ('pending','queued','scanning','reading','ready','failed','quarantined','deleting','deleted')`,
+    ),
+    check(
+      "files_profile_assignment",
+      sql`${table.profileAssignment} is null or ${table.profileAssignment} in ('pending','matched','created','manual','ambiguous','missing_identity','profile_limit')`,
+    ),
+    check(
+      "files_profile_assignment_target",
+      sql`${table.profileAssignment} is null or ${table.profileAssignment} in ('matched','created','manual') or (${table.managedProfileId} is null and ${table.profileAssignedAt} is null)`,
     ),
     check(
       "files_category",

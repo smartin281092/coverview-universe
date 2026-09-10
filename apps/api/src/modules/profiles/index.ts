@@ -5,6 +5,7 @@ import { createManagedProfileRepository } from "./profiles.repository.js";
 import { registerManagedProfileRoutes } from "./profiles.routes.js";
 export { ManagedProfileError } from "./profiles.repository.js";
 export { managedProfiles } from "./profiles.schema.js";
+export { matchDocumentPerson } from "./profiles.document-matching.js";
 export {
   assertDocumentProfileTarget,
   readManagedDocumentValues,

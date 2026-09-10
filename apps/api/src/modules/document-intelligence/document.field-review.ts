@@ -12,6 +12,7 @@ import { readManagedDocumentProfile } from "../profiles/index.js";
 import { documents } from "./document.schema.js";
 import { documentFieldCorrections } from "./document.field-review.schema.js";
 import { sameProfileValue } from "./document.reconciliation.js";
+import { hasDocumentProfile } from "./document.profile-assignment.js";
 
 type Database = ReturnType<typeof createDatabase>["db"];
 type Tx = Parameters<Parameters<Database["transaction"]>[0]>[0];
@@ -76,6 +77,10 @@ export async function getDocumentGroups(
   row: Row,
 ): Promise<DocumentReviewGroup[]> {
   if (!row.analysis) return [];
+  if (!hasDocumentProfile(row))
+    return buildDocumentGroups(row, { kind: "person", revision: 0, values: {} }, []).map(
+      (group) => ({ ...group, canSync: false, different: false }),
+    );
   const profile = row.managedProfileId
     ? await readManagedDocumentProfile(tx, row.userId, row.managedProfileId)
     : await readDocumentProfile(tx, row.userId).then((value) => ({

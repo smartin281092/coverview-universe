@@ -27,6 +27,7 @@ import {
   documentChangeRequestsSchema,
   documentProfileDifferencesSchema,
   documentFieldReviewInputSchema,
+  documentAssignProfileInputSchema,
   type DocumentFieldReviewInput,
   type DocumentCreateInput,
   type DocumentReviewInput,
@@ -50,6 +51,7 @@ import {
   readManagedDocumentValues,
   enrichManagedDocumentProfile,
   syncManagedDocumentProfile,
+  matchDocumentPerson,
 } from "../profiles/index.js";
 import type { createDatabase } from "../../platform/db/database.js";
 import {
@@ -76,6 +78,7 @@ import {
   effectiveDocumentFields,
 } from "./document.field-review.js";
 import { documentFieldCorrections } from "./document.field-review.schema.js";
+import { assignedDocumentCondition, hasDocumentProfile } from "./document.profile-assignment.js";
 import {
   createIdentityAttachmentRepository,
   cleanupIdentityAttachmentCommands,
@@ -98,6 +101,7 @@ function summary(row: Row) {
   return documentSummarySchema.parse({
     ...row,
     profileId: row.managedProfileId ?? "self",
+    profileAssignedAt: row.profileAssignedAt?.toISOString() ?? null,
     ...documentPresentation(row),
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
@@ -169,7 +173,7 @@ async function detail(tx: Tx | Database, row: Row): Promise<DocumentRecord> {
     decisions: decisions.map((item) => item.decision),
     reviewedValues: accepted.rows,
     reviewGroups,
-    profileComparisons,
+    profileComparisons: hasDocumentProfile(row) ? profileComparisons : [],
     changeRequests: requests.map(changeRequest),
   });
 }
@@ -335,6 +339,7 @@ export function createDocumentRepository(db: Database) {
           and(
             eq(documents.userId, userId),
             isNull(documents.managedProfileId),
+            assignedDocumentCondition(),
             isNull(documents.deletedAt),
             eq(documents.state, "ready"),
           ),
@@ -473,6 +478,7 @@ export function createDocumentRepository(db: Database) {
       await assertDocumentProfileTarget(db, userId, profileId);
       const fingerprint = hash({
         profileId,
+        ...(query.scope === "account" ? { scope: query.scope } : {}),
         q: query.q ?? "",
         classification: query.classification,
         group: query.group ?? "date",
@@ -505,7 +511,7 @@ export function createDocumentRepository(db: Database) {
         .where(
           and(
             eq(documents.userId, userId),
-            targetCondition(profileId),
+            query.scope === "account" ? undefined : targetCondition(profileId),
             isNull(documents.deletedAt),
             ne(documents.state, "deleted"),
           ),
@@ -617,6 +623,13 @@ export function createDocumentRepository(db: Database) {
             id,
             userId: actor.userId,
             managedProfileId: profileId === "self" ? null : profileId,
+            profileAssignment:
+              input.detectProfile &&
+              !input.profileId &&
+              !input.purpose &&
+              !actor.administratorUserId
+                ? "pending"
+                : null,
             declaredMime: input.mime,
             mime: "application/octet-stream",
             objectKey: `documents/${id}/original`,
@@ -740,6 +753,52 @@ export function createDocumentRepository(db: Database) {
         },
       );
     },
+    assignProfile(
+      actor: Actor,
+      id: string,
+      supplied: z.infer<typeof documentAssignProfileInputSchema>,
+      key: string,
+    ) {
+      const input = documentAssignProfileInputSchema.parse(supplied);
+      return command(
+        actor,
+        id,
+        "profile_assigned",
+        key,
+        { id, ...input },
+        documentSchema,
+        async (tx, profile, current) => {
+          const row = live(current);
+          revision(row, input.revision);
+          if (hasDocumentProfile(row) || !["ready", "failed"].includes(row.state))
+            throw new DocumentError("DOCUMENT_CONFLICT", 409);
+          await assertDocumentProfileTarget(tx, actor.userId, input.profileId);
+          if (input.profileId === "self")
+            await enrichDocumentProfile(tx, profile, id, row.analysis?.fields ?? []);
+          else
+            await enrichManagedDocumentProfile(
+              tx,
+              actor.userId,
+              input.profileId,
+              id,
+              row.analysis?.fields ?? [],
+            );
+          const [updated] = await tx
+            .update(documents)
+            .set({
+              managedProfileId: input.profileId === "self" ? null : input.profileId,
+              profileAssignment: "manual",
+              profileAssignedAt: new Date(),
+              revision: row.revision + 1,
+              updatedAt: new Date(),
+            })
+            .where(condition(actor.userId, id))
+            .returning();
+          if (!updated) throw new DocumentError("DOCUMENT_CONFLICT", 409);
+          return { row: updated, response: await detail(tx, updated) };
+        },
+      );
+    },
     fields(actor: Actor, id: string, supplied: DocumentFieldReviewInput, key: string) {
       const input = documentFieldReviewInputSchema.parse(supplied);
       return command(
@@ -751,7 +810,8 @@ export function createDocumentRepository(db: Database) {
         documentSchema,
         async (tx, profile, current) => {
           const row = live(current);
-          if (actor.administratorUserId) throw new DocumentError("DOCUMENT_REVIEW_INVALID", 422);
+          if (actor.administratorUserId || !hasDocumentProfile(row))
+            throw new DocumentError("DOCUMENT_REVIEW_INVALID", 422);
           revision(row, input.revision);
           if (row.state !== "ready") throw new DocumentError("DOCUMENT_CONFLICT", 409);
           const groups = await getDocumentGroups(tx, row);
@@ -840,7 +900,7 @@ export function createDocumentRepository(db: Database) {
         documentReviewResultSchema,
         async (tx, profile, current) => {
           const row = live(current);
-          if (row.managedProfileId || actor.administratorUserId)
+          if (row.managedProfileId || actor.administratorUserId || !hasDocumentProfile(row))
             throw new DocumentError("DOCUMENT_REVIEW_INVALID", 422);
           revision(row, input.revision);
           if (
@@ -1224,14 +1284,27 @@ export function createDocumentRepository(db: Database) {
             ),
           );
         if (!row || row.deletedAt || row.state !== "reading") return;
-        if (row.managedProfileId && profile)
-          await enrichManagedDocumentProfile(tx, userId, row.managedProfileId, id, analysis.fields);
-        else if (!row.managedProfileId && profile)
+        let managedProfileId = row.managedProfileId;
+        let profileAssignment = row.profileAssignment;
+        let profileAssignedAt = row.profileAssignedAt;
+        if (!hasDocumentProfile(row) && profile) {
+          const result = await matchDocumentPerson(tx, userId, analysis.fields);
+          profileAssignment = result.status;
+          managedProfileId = result.profileId === "self" ? null : result.profileId;
+          profileAssignedAt = result.profileId ? new Date() : null;
+        }
+        const assigned = hasDocumentProfile({ profileAssignment });
+        if (managedProfileId && profile && assigned)
+          await enrichManagedDocumentProfile(tx, userId, managedProfileId, id, analysis.fields);
+        else if (!managedProfileId && profile && assigned)
           await enrichDocumentProfile(tx, profile, id, analysis.fields);
         const [updated] = await tx
           .update(documents)
           .set({
             analysis,
+            managedProfileId,
+            profileAssignment,
+            profileAssignedAt,
             state: "ready",
             failure: null,
             category: row.categoryCorrected ? row.category : analysis.category,

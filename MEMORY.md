@@ -6,6 +6,8 @@ Aucune entrée active. Les décisions durables vivent dans leur documentation pr
 
 ## Candidats
 
+Décision explicite du 10 septembre 2026 : demander le profil en cas d’homonymie ou de date de naissance contradictoire lors de l’extraction, sans enrichir ni créer en double. Consignée directement dans le référentiel [profiles](apps/api/src/modules/profiles/README.md#création-depuis-un-document) et le [plan de détection](roadmap/plans/S-042a-document-profile-detection.plan.md) ; aucune copie active à maintenir. Confiance haute.
+
 Décisions explicites du 9 septembre 2026, Centre d’action : tous les champs de Générales à compléter (Finances/Santé facultatifs) et signature tracée dans l’application avec acceptation et archive datée. Enregistrées directement dans les référentiels propriétaires [profiles](apps/api/src/modules/profiles/README.md) et [authorizations](apps/api/src/modules/authorizations/README.md) ; politique exécutable partagée, pas de copie active à maintenir. Source : réponses utilisateur aux deux questions de cette extension, confiance haute.
 
 Aucun candidat en attente après la [revue du 8 septembre 2026](roadmap/evidence/memory-review-2026-09-08.md) : 37 entrées traitées, dont deux occurrences de MEM-123. Destinations, promotions et dépréciations sont conservées dans ce journal et dans Git.

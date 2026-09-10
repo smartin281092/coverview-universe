@@ -1,0 +1,4 @@
+ALTER TABLE "files" ADD COLUMN "profile_assignment" text;--> statement-breakpoint
+ALTER TABLE "files" ADD COLUMN "profile_assigned_at" timestamp (3) with time zone;--> statement-breakpoint
+ALTER TABLE "files" ADD CONSTRAINT "files_profile_assignment" CHECK ("files"."profile_assignment" is null or "files"."profile_assignment" in ('pending','matched','created','manual','ambiguous','missing_identity','profile_limit'));--> statement-breakpoint
+ALTER TABLE "files" ADD CONSTRAINT "files_profile_assignment_target" CHECK ("files"."profile_assignment" is null or "files"."profile_assignment" in ('matched','created','manual') or ("files"."managed_profile_id" is null and "files"."profile_assigned_at" is null));

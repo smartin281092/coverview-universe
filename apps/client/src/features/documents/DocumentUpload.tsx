@@ -83,6 +83,7 @@ export function DocumentUpload({
         const document = await api.createDocument(
           {
             name: file.name,
+            detectProfile: true,
             size: file.size,
             mime: file.type || "application/octet-stream",
             checksum,

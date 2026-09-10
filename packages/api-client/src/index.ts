@@ -32,6 +32,7 @@ import {
   documentFieldReviewInputSchema,
   documentReviewResultSchema,
   documentCategoryInputSchema,
+  documentAssignProfileInputSchema,
   documentRetryInputSchema,
   documentChangeRequestsSchema,
   documentChangeRequestSchema,
@@ -463,6 +464,18 @@ export function createApiClient({
         documentSchema,
         options,
         { body: documentCategoryInputSchema.parse(input), credentials: options },
+        true,
+      ),
+    assignDocumentProfile: (
+      id: string,
+      input: z.infer<typeof documentAssignProfileInputSchema>,
+      options: MutationOptions,
+    ) =>
+      request(
+        `/documents/${encodeURIComponent(id)}/profile`,
+        documentSchema,
+        options,
+        { body: documentAssignProfileInputSchema.parse(input), credentials: options },
         true,
       ),
     reviewDocument: (

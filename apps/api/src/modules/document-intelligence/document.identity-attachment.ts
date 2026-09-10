@@ -1,4 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
+import { hasDocumentProfile } from "./document.profile-assignment.js";
 import { and, asc, eq, inArray, isNull, lte } from "drizzle-orm";
 import { z } from "zod";
 import {
@@ -262,7 +263,12 @@ export function createIdentityAttachmentRepository(
           : [];
         if (
           rows.length !== ids.length ||
-          rows.some((row) => row.deletedAt || ["deleted", "deleting"].includes(row.state))
+          rows.some(
+            (row) =>
+              row.deletedAt ||
+              !hasDocumentProfile(row) ||
+              ["deleted", "deleting"].includes(row.state),
+          )
         )
           throw new DocumentError("DOCUMENT_NOT_FOUND", 404);
         if (
