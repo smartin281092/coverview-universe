@@ -191,6 +191,7 @@
   "extractedTitle": "Informations du document",
   "extractedHelp": "Consultez les informations lues et corrigez-les si nécessaire.",
   "noFields": "Aucune information personnelle exploitable n’a été trouvée. L’original reste disponible.",
+  "noFieldsWithText": "Aucun champ personnel n’a pu être extrait pour compléter un profil. La transcription reste disponible dans « Texte lu ».",
   "review": "Vérifier",
   "current": "Dans votre profil",
   "proposed": "Lu dans le document",

@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1127.0",
+    "@cantoo/pdf-lib": "^2.9.2",
     "@coverview/contracts": "workspace:*",
     "@fastify/cookie": "11.1.2",
     "@fastify/cors": "^11.3.0",

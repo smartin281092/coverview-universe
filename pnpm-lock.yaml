@@ -218,6 +218,9 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.1127.0
         version: 3.1127.0
+      '@cantoo/pdf-lib':
+        specifier: ^2.9.2
+        version: 2.9.2(html-entities@2.6.0)
       '@coverview/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts

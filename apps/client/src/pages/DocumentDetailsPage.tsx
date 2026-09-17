@@ -195,7 +195,9 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
             )}
           </div>
           {item.analysis.fields.length === 0 ? (
-            <p className="rounded-lg bg-muted p-5 text-sm">{t("noFields")}</p>
+            <p className="rounded-lg bg-muted p-5 text-sm">
+              {t(item.analysis.pages.length ? "noFieldsWithText" : "noFields")}
+            </p>
           ) : (
             <ul className="grid gap-x-8 sm:grid-cols-2">
               {(item.reviewGroups ?? []).map((group) => (
@@ -287,7 +289,19 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
           </Button>
         )}
         {stable && (item.state === "ready" || !item.analysisRequested) && (
-          <Button variant="outline" disabled={busy} onClick={() => setPanel("analysis")}>
+          <Button
+            variant="outline"
+            disabled={busy}
+            onClick={() => {
+              if (item.analysisRequested)
+                mutation.mutate({
+                  action: "retry",
+                  revision: item.revision,
+                  analysisRequested: true,
+                });
+              else setPanel("analysis");
+            }}
+          >
             {t(item.analysisRequested ? "reanalyze" : "startAnalysis")}
           </Button>
         )}
