@@ -4,6 +4,8 @@
 
 Wallet propose les profils privés, les documents, les autorisations, le compte et les appareils connectés. Français dès le départ, textes externalisés dans `src/locales/fr/`.
 
+Le menu associe `assets/icon-coverview.svg` au lettrage fourni `assets/wallet.svg`, selon la dernière demande utilisateur. Les fichiers sources, le dégradé Wallet et les proportions sont conservés. Le lien garde le nom accessible « CoverView Wallet » sur mobile et desktop.
+
 ## Périmètre
 
 `/` et `/account` ouvrent le même parcours de compte et vérifient la véritable disponibilité de l’identité. `/profile` prépare un profil en trois étapes facultatives (Informations, Contact et Adresse), avant ou après connexion. Chaque étape s’enregistre sur le serveur ; après WorkOS, le rattachement explicite reprend l’étape du brouillon et propose les divergences sans écraser le profil. `/profile?view=choices` remplace le formulaire par l’historique du choix personnel tout en conservant la saisie en mémoire. Aucun contrat, analyse ni document fictif n’est présenté comme un parcours utilisable.

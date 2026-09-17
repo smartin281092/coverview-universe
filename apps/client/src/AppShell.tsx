@@ -14,7 +14,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@coverview/ui";
-import logo from "../../../assets/logo-coverview.svg";
+import logoIcon from "../../../assets/icon-coverview.svg";
+import walletLogo from "../../../assets/wallet.svg";
 import { LogoutFeedback } from "./features/identity/LogoutFeedback";
 import { useActionCount } from "./features/actions/use-action-count";
 
@@ -105,17 +106,18 @@ export function AppShell() {
       </a>
       <header className="wallet-header sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur-xl">
         <Container className="flex min-h-16 items-center justify-between gap-4 md:grid md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
-          <Link to="/" className="flex min-h-11 items-center gap-3 md:justify-self-start">
+          <Link
+            to="/"
+            className="flex min-h-11 shrink-0 items-center gap-2 sm:gap-3 md:justify-self-start"
+          >
+            <img src={logoIcon} alt="" className="h-5 w-auto md:h-6" width="80" height="73" />
             <img
-              src={logo}
-              alt={t("brand")}
-              className="h-5 w-auto md:h-6"
-              width="444"
-              height="73"
+              src={walletLogo}
+              alt={`${t("brand")} ${t("app")}`}
+              className="h-4 w-auto md:h-5"
+              width="50"
+              height="12"
             />
-            <span className="text-xs text-muted-foreground md:hidden lg:inline lg:text-sm">
-              {t("app")}
-            </span>
           </Link>
           <nav
             aria-label={t("navigation")}
