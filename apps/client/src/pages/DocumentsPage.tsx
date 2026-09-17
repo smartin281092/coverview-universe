@@ -256,28 +256,39 @@ function Documents({ identity }: { identity: IdentityMe }) {
             </Select>
           </div>
           <div className="min-w-0 space-y-2">
-            <Label htmlFor="document-display">
+            <span
+              id="document-display-label"
+              className="flex items-center gap-2 text-sm font-medium"
+            >
               <LayoutGrid className="size-4" strokeWidth={1.5} aria-hidden="true" />
               {t("library.display")}
-            </Label>
-            <Select
-              value={display}
-              onValueChange={(value) => setDisplay(value === "list" ? "list" : "grid")}
+            </span>
+            <div
+              role="group"
+              aria-labelledby="document-display-label"
+              className="flex gap-1 rounded-lg border border-border bg-muted/60 p-1"
             >
-              <SelectTrigger id="document-display" className="min-h-11 w-full text-sm">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent portalContainer={portalContainer}>
-                <SelectItem value="grid">
-                  <LayoutGrid className="size-4" aria-hidden="true" />
-                  {t("library.icons")}
-                </SelectItem>
-                <SelectItem value="list">
-                  <List className="size-4" aria-hidden="true" />
-                  {t("library.list")}
-                </SelectItem>
-              </SelectContent>
-            </Select>
+              <Button
+                type="button"
+                variant={display === "grid" ? "outline" : "ghost"}
+                aria-pressed={display === "grid"}
+                className="min-h-11 flex-1"
+                onClick={() => setDisplay("grid")}
+              >
+                <LayoutGrid className="size-4" aria-hidden="true" />
+                {t("library.icons")}
+              </Button>
+              <Button
+                type="button"
+                variant={display === "list" ? "outline" : "ghost"}
+                aria-pressed={display === "list"}
+                className="min-h-11 flex-1"
+                onClick={() => setDisplay("list")}
+              >
+                <List className="size-4" aria-hidden="true" />
+                {t("library.list")}
+              </Button>
+            </div>
           </div>
         </div>
       </form>
@@ -359,19 +370,21 @@ function Documents({ identity }: { identity: IdentityMe }) {
                               {document.title ??
                                 t(`classification.${document.classification ?? document.category}`)}
                             </h3>
-                            {display === "list" && <DocumentLabels document={document} />}
-                            <p className="text-sm text-muted-foreground">
-                              {t("listMeta", {
-                                date: format.format(new Date(document.createdAt)),
-                              })}
-                            </p>
                             {display === "list" && (
-                              <p className="break-words text-xs text-muted-foreground">
-                                {document.name}
-                              </p>
-                            )}
-                            {document.state !== "ready" && (
-                              <p className="text-sm">{t(`state.${document.state}`)}</p>
+                              <>
+                                <DocumentLabels document={document} />
+                                <p className="text-sm text-muted-foreground">
+                                  {t("listMeta", {
+                                    date: format.format(new Date(document.createdAt)),
+                                  })}
+                                </p>
+                                <p className="break-words text-xs text-muted-foreground">
+                                  {document.name}
+                                </p>
+                                {document.state !== "ready" && (
+                                  <p className="text-sm">{t(`state.${document.state}`)}</p>
+                                )}
+                              </>
                             )}
                           </div>
                           {display === "list" && (
