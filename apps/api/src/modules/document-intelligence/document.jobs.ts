@@ -154,6 +154,7 @@ export function startDocumentJobs(
             inputTokens: result.usage.inputTokens,
             outputTokens: result.usage.outputTokens,
             model: result.usage.model,
+            warnings: result.analysis.warnings,
             costMicroUsdEstimate: Math.ceil(
               result.usage.inputTokens * config.OPENAI_DOCUMENT_INPUT_USD_PER_MILLION +
                 result.usage.outputTokens * config.OPENAI_DOCUMENT_OUTPUT_USD_PER_MILLION,
@@ -168,7 +169,11 @@ export function startDocumentJobs(
         const code = known ? error.code : "processing_unavailable";
         if (error instanceof LlmError && error.diagnostic)
           logger.warn(
-            { documentId: row.id, code, diagnostic: error.diagnostic },
+            {
+              documentId: row.id,
+              code,
+              diagnostic: error.diagnostic,
+            },
             "Document reading result rejected",
           );
         await repository.transition(row.userId, row.id, row.generation, {

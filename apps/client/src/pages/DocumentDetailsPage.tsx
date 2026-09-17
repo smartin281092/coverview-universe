@@ -188,6 +188,11 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
           <div className="space-y-2">
             <h2 className="text-xl font-medium">{t("extractedTitle")}</h2>
             <p className="max-w-2xl text-sm text-muted-foreground">{t("extractedHelp")}</p>
+            {!!item.analysis.warnings?.length && (
+              <p role="status" className="rounded-lg bg-muted p-4 text-sm">
+                {t("partialReading")}
+              </p>
+            )}
           </div>
           {item.analysis.fields.length === 0 ? (
             <p className="rounded-lg bg-muted p-5 text-sm">{t("noFields")}</p>

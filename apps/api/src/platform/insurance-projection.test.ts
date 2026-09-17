@@ -179,7 +179,7 @@ it("derives expiry only from explicit coverage dates and never asserts optimizat
   ]);
 });
 
-it("keeps valid transcription when optional facts cannot be normalized and still rejects fabricated citations", async () => {
+it("keeps valid transcription when optional facts cannot be normalized and discards fabricated citations", async () => {
   const page = "AXA\nPolice d’assurance\nAnnual premium: CHF 120.00\nAssurance spéciale";
   const value = {
     pageCount: 1,
@@ -229,9 +229,15 @@ it("keeps valid transcription when optional facts cannot be normalized and still
     premium: null,
   });
   value.insurance.company.evidence.text = "AXA fabricated quote";
-  await expect(
-    extractDocument(provider, Buffer.from("test"), "application/pdf", AbortSignal.timeout(1000)),
-  ).rejects.toMatchObject({ code: "ai_invalid_result" });
+  const partial = await extractDocument(
+    provider,
+    Buffer.from("test"),
+    "application/pdf",
+    AbortSignal.timeout(1000),
+  );
+  expect(partial.analysis.pages[0]?.text).toBe(page);
+  expect(partial.analysis.insurance?.companyId).toBeNull();
+  expect(partial.analysis.warnings).toContain("insurance");
 });
 
 let container: StartedPostgreSqlContainer;

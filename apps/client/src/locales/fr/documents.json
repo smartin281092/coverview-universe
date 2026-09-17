@@ -11,7 +11,13 @@
     "created": "Profil créé à partir de ce document :",
     "confirm": "Associer au profil",
     "saving": "Association en cours…",
-    "manage": "Gérer mes profils"
+    "manage": "Gérer mes profils",
+    "create": "Créer un nouveau profil",
+    "creating": "Création en cours…",
+    "createDescription": "Indiquez le type et le nom du profil. Ce document lui sera associé. Seules les informations issues d’une lecture validée pourront compléter le profil.",
+    "createAndAssign": "Créer et associer le document",
+    "createHelp": "Nouveau profil proposé : {{name}}. Les informations extraites seront renseignées et ce document lui sera associé.",
+    "createUnavailable": "Vous pouvez saisir le nom d’un nouveau profil, même si la lecture du document est interrompue."
   },
   "close": "Fermer",
   "retryScan": "Reprendre le contrôle",
@@ -164,7 +170,9 @@
     "DOCUMENT_DOWNLOAD_BLOCKED": "Le téléchargement attend un contrôle antivirus réussi.",
     "DOCUMENT_REVIEW_INVALID": "Vérifiez votre correction et confirmez que ces informations vous concernent.",
     "DOCUMENT_LIMIT_REACHED": "Votre espace a atteint sa limite de 200 documents.",
-    "PROFILE_INVALID_BIRTH_DATE": "La date de naissance ne peut pas être dans le futur."
+    "PROFILE_INVALID_BIRTH_DATE": "La date de naissance ne peut pas être dans le futur.",
+    "MANAGED_PROFILE_LIMIT_REACHED": "Le nombre maximal de profils est atteint. Choisissez un profil existant.",
+    "MANAGED_PROFILE_INVALID_FIELDS": "Les informations extraites ne permettent pas de créer un profil. Reprenez la lecture ou choisissez un profil existant."
   },
   "resumeFile": "Resélectionner le même fichier",
   "resumeHelp": "CoverView vérifiera sa taille et son empreinte avant de reprendre ce dépôt.",
@@ -309,5 +317,6 @@
     "pdfHelp": "Si le PDF ne s’affiche pas dans ce navigateur, téléchargez-le pour le consulter.",
     "unsupportedPreview": "Ce format n’a pas d’aperçu intégré. Vous pouvez télécharger le fichier pour le consulter.",
     "openOriginal": "Voir l’original"
-  }
+  },
+  "partialReading": "Lecture partielle : les informations exploitables ont été conservées. Certains éléments n’ont pas pu être vérifiés. Consultez l’original pour compléter les données manquantes."
 }

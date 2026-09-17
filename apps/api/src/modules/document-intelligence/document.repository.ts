@@ -52,6 +52,8 @@ import {
   enrichManagedDocumentProfile,
   syncManagedDocumentProfile,
   matchDocumentPerson,
+  documentProfileCreation,
+  createProfileFromDocument,
 } from "../profiles/index.js";
 import type { createDatabase } from "../../platform/db/database.js";
 import {
@@ -170,6 +172,10 @@ async function detail(tx: Tx | Database, row: Row): Promise<DocumentRecord> {
   return documentSchema.parse({
     ...summary(row),
     analysis: row.analysis,
+    profileCreation:
+      !hasDocumentProfile(row) && row.state === "ready" && row.scanVersion
+        ? documentProfileCreation(row.analysis?.fields ?? [])
+        : null,
     decisions: decisions.map((item) => item.decision),
     reviewedValues: accepted.rows,
     reviewGroups,
@@ -772,22 +778,27 @@ export function createDocumentRepository(db: Database) {
           revision(row, input.revision);
           if (hasDocumentProfile(row) || !["ready", "failed"].includes(row.state))
             throw new DocumentError("DOCUMENT_CONFLICT", 409);
-          await assertDocumentProfileTarget(tx, actor.userId, input.profileId);
-          if (input.profileId === "self")
-            await enrichDocumentProfile(tx, profile, id, row.analysis?.fields ?? []);
-          else
-            await enrichManagedDocumentProfile(
-              tx,
-              actor.userId,
-              input.profileId,
-              id,
-              row.analysis?.fields ?? [],
-            );
+          const creating = "createProfile" in input;
+          if (
+            creating &&
+            !input.profile &&
+            (row.state !== "ready" || !row.scanVersion || !row.analysis)
+          )
+            throw new DocumentError("DOCUMENT_REVIEW_INVALID", 422);
+          const fields =
+            row.state === "ready" && row.scanVersion ? (row.analysis?.fields ?? []) : [];
+          const profileId =
+            "profileId" in input
+              ? input.profileId
+              : await createProfileFromDocument(tx, actor, fields, input.profile);
+          await assertDocumentProfileTarget(tx, actor.userId, profileId);
+          if (profileId === "self") await enrichDocumentProfile(tx, profile, id, fields);
+          else await enrichManagedDocumentProfile(tx, actor.userId, profileId, id, fields);
           const [updated] = await tx
             .update(documents)
             .set({
-              managedProfileId: input.profileId === "self" ? null : input.profileId,
-              profileAssignment: "manual",
+              managedProfileId: profileId === "self" ? null : profileId,
+              profileAssignment: creating ? "created" : "manual",
               profileAssignedAt: new Date(),
               revision: row.revision + 1,
               updatedAt: new Date(),
@@ -1287,16 +1298,23 @@ export function createDocumentRepository(db: Database) {
         let managedProfileId = row.managedProfileId;
         let profileAssignment = row.profileAssignment;
         let profileAssignedAt = row.profileAssignedAt;
-        if (!hasDocumentProfile(row) && profile) {
+        const incompleteIdentity = analysis.warnings?.some(
+          (warning) => warning === "fields" || warning === "pages",
+        );
+        if (!hasDocumentProfile(row) && incompleteIdentity) {
+          profileAssignment = "missing_identity";
+          managedProfileId = null;
+          profileAssignedAt = null;
+        } else if (!hasDocumentProfile(row) && profile) {
           const result = await matchDocumentPerson(tx, userId, analysis.fields);
           profileAssignment = result.status;
           managedProfileId = result.profileId === "self" ? null : result.profileId;
           profileAssignedAt = result.profileId ? new Date() : null;
         }
         const assigned = hasDocumentProfile({ profileAssignment });
-        if (managedProfileId && profile && assigned)
+        if (managedProfileId && profile && assigned && !incompleteIdentity)
           await enrichManagedDocumentProfile(tx, userId, managedProfileId, id, analysis.fields);
-        else if (!managedProfileId && profile && assigned)
+        else if (!managedProfileId && profile && assigned && !incompleteIdentity)
           await enrichDocumentProfile(tx, profile, id, analysis.fields);
         const [updated] = await tx
           .update(documents)

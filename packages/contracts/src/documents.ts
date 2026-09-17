@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { profileSchema, profileValuesSchema, profileFieldSchema } from "./profile.js";
 import { insuranceCompanyIdSchema } from "./companies.js";
-import { managedProfileIdSchema } from "./managed-profiles.js";
+import { managedProfileCreateInputSchema, managedProfileIdSchema } from "./managed-profiles.js";
 
 export const documentIdSchema = z.string().regex(/^doc_[0-9a-f-]{36}$/);
 export const documentCategorySchema = z.enum([
@@ -121,6 +121,10 @@ export const documentInsuranceSchema = z.object({
   premium: insurancePremiumSchema.extend({ source: documentSourceSchema }).nullable(),
 });
 export const documentAnalysisSchema = z.object({
+  warnings: z
+    .array(z.enum(["pages", "fields", "classification", "title", "insurance"]))
+    .max(5)
+    .optional(),
   category: documentCategorySchema,
   title: z.string().trim().min(1).max(140).nullable().optional(),
   titleSource: documentSourceSchema.nullable().optional(),
@@ -139,12 +143,18 @@ export const documentAnalysisSchema = z.object({
     )
     .max(20),
 });
-export const documentAssignProfileInputSchema = z
-  .object({
-    revision: z.number().int().nonnegative(),
-    profileId: managedProfileIdSchema,
-  })
-  .strict();
+export const documentAssignProfileInputSchema = z.union([
+  z
+    .object({ revision: z.number().int().nonnegative(), profileId: managedProfileIdSchema })
+    .strict(),
+  z
+    .object({
+      revision: z.number().int().nonnegative(),
+      createProfile: z.literal(true),
+      profile: managedProfileCreateInputSchema.optional(),
+    })
+    .strict(),
+]);
 export const documentSummarySchema = z.object({
   profileId: managedProfileIdSchema.optional(),
   profileAssignment: z
@@ -241,6 +251,7 @@ export const documentReviewGroupSchema = z.object({
   profileRevision: z.number().int().nonnegative(),
 });
 export const documentSchema = documentSummarySchema.extend({
+  profileCreation: managedProfileCreateInputSchema.nullable().optional(),
   reviewGroups: z.array(documentReviewGroupSchema).max(15).optional(),
   profileComparisons: z
     .array(

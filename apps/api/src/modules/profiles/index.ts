@@ -7,6 +7,10 @@ export { ManagedProfileError } from "./profiles.repository.js";
 export { managedProfiles } from "./profiles.schema.js";
 export { matchDocumentPerson } from "./profiles.document-matching.js";
 export {
+  documentProfileCreation,
+  createProfileFromDocument,
+} from "./profiles.document-creation.js";
+export {
   assertDocumentProfileTarget,
   readManagedDocumentValues,
   readManagedDocumentProfile,

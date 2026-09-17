@@ -347,3 +347,253 @@ it("does not create profiles without a usable first name or for a company and re
       .where(eq(managedProfiles.userId, actor.userId)),
   ).toHaveLength(49);
 });
+
+it("explicitly creates, fills and assigns a new homonym atomically and replays without duplicates", async () => {
+  const actor = await owner({ firstName: "Alex", birthDate: "1980-01-01" });
+  const stranger = await owner();
+  const profiles = createManagedProfileRepository(database.db);
+  const repository = createDocumentRepository(database.db);
+  const canonical = await createProfileRepository(database.db).get(actor.userId);
+  const doc = await prepare(actor, {
+    firstName: "Alex",
+    lastName: "Autre",
+    birthDate: "2000-01-01",
+    street: "Rue de test 2",
+    phone: "+41 22 555 12 34",
+    contactEmail: "alex@isolated.test",
+  });
+  await doc.complete();
+  const original = await doc.read();
+  expect(original).toMatchObject({
+    profileAssignment: "ambiguous",
+    profileCreation: { kind: "person", displayName: "Alex Autre" },
+  });
+  const input = { revision: original.revision, createProfile: true as const };
+  const key = randomUUID();
+  await expect(repository.assignProfile(stranger, original.id, input, key)).rejects.toMatchObject({
+    statusCode: 404,
+  });
+  await expect(
+    repository.assignProfile(
+      actor,
+      original.id,
+      { ...input, revision: original.revision - 1 },
+      randomUUID(),
+    ),
+  ).rejects.toMatchObject({ statusCode: 409 });
+  expect((await profiles.list(actor.userId)).profiles).toHaveLength(1);
+  const [first, replay] = await Promise.all([
+    repository.assignProfile(actor, original.id, input, key),
+    repository.assignProfile(actor, original.id, input, key),
+  ]);
+  expect(replay).toEqual(first);
+  expect(first).toMatchObject({ profileAssignment: "created", profileCreation: null });
+  expect(first.profileId).not.toBe("self");
+  const section = await profiles.section(actor.userId, first.profileId!, "general");
+  expect(section.values).toMatchObject({
+    firstName: "Alex",
+    lastName: "Autre",
+    birthDate: "2000-01-01",
+    street: "Rue de test 2",
+    phone: "+41 22 555 12 34",
+    contactEmail: "alex@isolated.test",
+  });
+  expect(section.documentSources?.street?.documentId).toBe(original.id);
+  expect(section.confirmedAt).toBeNull();
+  expect((await profiles.list(actor.userId)).profiles).toHaveLength(2);
+  expect((await profiles.list(stranger.userId)).profiles).toHaveLength(1);
+  expect(await createProfileRepository(database.db).get(actor.userId)).toEqual(canonical);
+  expect(
+    (await repository.list(actor.userId, undefined, { profileId: first.profileId! })).documents.map(
+      (item) => item.id,
+    ),
+  ).toEqual([original.id]);
+  await expect(
+    repository.assignProfile(actor, original.id, input, randomUUID()),
+  ).rejects.toMatchObject({ statusCode: 409 });
+  expect((await profiles.list(actor.userId)).profiles).toHaveLength(2);
+});
+
+it("creates a company from its extracted identity and rejects missing or mixed identities", async () => {
+  const actor = await owner();
+  const repository = createDocumentRepository(database.db);
+  const profiles = createManagedProfileRepository(database.db);
+  const doc = await prepare(actor, {
+    companyName: "Exemple SA",
+    registrationNumber: "CHE-111.222.333",
+    street: "Rue de test 3",
+  });
+  await doc.complete();
+  const original = await doc.read();
+  expect(original.profileCreation).toEqual({ kind: "legal_entity", displayName: "Exemple SA" });
+  const created = await repository.assignProfile(
+    actor,
+    original.id,
+    { revision: original.revision, createProfile: true },
+    randomUUID(),
+  );
+  expect(
+    (await profiles.list(actor.userId)).profiles.find((item) => item.id === created.profileId),
+  ).toMatchObject({ kind: "legal_entity", displayName: "Exemple SA" });
+  expect(
+    (await profiles.section(actor.userId, created.profileId!, "general")).values,
+  ).toMatchObject({
+    companyName: "Exemple SA",
+    registrationNumber: "CHE-111.222.333",
+    street: "Rue de test 3",
+  });
+  for (const fields of [
+    { lastName: "Sans prénom" },
+    { firstName: "Alex", companyName: "Mélange SA" },
+    {},
+  ]) {
+    const missing = await prepare(actor, fields);
+    await missing.complete();
+    const current = await missing.read();
+    expect(current.profileCreation).toBeNull();
+    await expect(
+      repository.assignProfile(
+        actor,
+        current.id,
+        { revision: current.revision, createProfile: true },
+        randomUUID(),
+      ),
+    ).rejects.toMatchObject({ statusCode: 422 });
+  }
+  const failed = await prepare(actor, {});
+  await repository.transition(actor.userId, failed.doc.id, 1, {
+    state: "failed",
+    failure: "ai_invalid_result",
+  });
+  const interrupted = await failed.read();
+  expect(interrupted.analysis).toBeNull();
+  expect(interrupted.profileCreation).toBeNull();
+  await expect(
+    repository.assignProfile(
+      actor,
+      interrupted.id,
+      { revision: interrupted.revision, createProfile: true },
+      randomUUID(),
+    ),
+  ).rejects.toMatchObject({ statusCode: 422 });
+  expect((await profiles.list(actor.userId)).profiles).toHaveLength(2);
+});
+
+it("retains partial extraction without automatically assigning or enriching an uncertain identity", async () => {
+  const actor = await owner({ firstName: "Alex" });
+  const doc = await prepare(actor, { firstName: "Alex", street: "Rue de test" });
+  doc.extracted.warnings = ["fields"];
+  await doc.complete();
+  const result = await doc.read();
+  expect(result).toMatchObject({
+    state: "ready",
+    profileAssignment: "missing_identity",
+    analysis: { warnings: ["fields"] },
+  });
+  expect(result.analysis?.fields).toHaveLength(2);
+  expect(
+    (await createProfileRepository(database.db).get(actor.userId)).fields.street?.value,
+  ).toBeUndefined();
+  const assigned = await createDocumentRepository(database.db).assignProfile(
+    actor,
+    result.id,
+    { revision: result.revision, profileId: "self" },
+    randomUUID(),
+  );
+  expect(assigned.profileAssignment).toBe("manual");
+  expect((await createProfileRepository(database.db).get(actor.userId)).fields.street?.value).toBe(
+    "Rue de test",
+  );
+});
+
+it.each(["person", "legal_entity"] as const)(
+  "creates a manually named %s for a failed document atomically without rejected fields",
+  async (kind) => {
+    const actor = await owner();
+    const stranger = await owner();
+    const repository = createDocumentRepository(database.db);
+    const profiles = createManagedProfileRepository(database.db);
+    const doc = await prepare(actor, {});
+    await repository.transition(actor.userId, doc.doc.id, 1, {
+      state: "failed",
+      failure: "ai_invalid_result",
+    });
+    const original = await doc.read();
+    const input = {
+      revision: original.revision,
+      createProfile: true as const,
+      profile: { kind, displayName: "  Dossier saisi  " },
+    };
+    const key = randomUUID();
+    await expect(repository.assignProfile(stranger, original.id, input, key)).rejects.toMatchObject(
+      { statusCode: 404 },
+    );
+    await expect(
+      repository.assignProfile(
+        actor,
+        original.id,
+        { ...input, revision: original.revision - 1 },
+        randomUUID(),
+      ),
+    ).rejects.toMatchObject({ statusCode: 409 });
+    expect(() =>
+      repository.assignProfile(
+        actor,
+        original.id,
+        { ...input, profile: { kind, displayName: "  " } },
+        randomUUID(),
+      ),
+    ).toThrow();
+    expect((await profiles.list(actor.userId)).profiles).toHaveLength(1);
+    const [first, replay] = await Promise.all([
+      repository.assignProfile(actor, original.id, input, key),
+      repository.assignProfile(actor, original.id, input, key),
+    ]);
+    expect(first).toEqual(replay);
+    expect(first).toMatchObject({ state: "failed", analysis: null, profileAssignment: "created" });
+    expect(
+      (await profiles.list(actor.userId)).profiles.find((item) => item.id === first.profileId),
+    ).toMatchObject({ kind, displayName: "Dossier saisi" });
+    expect((await profiles.section(actor.userId, first.profileId!, "general")).values).toEqual({});
+    expect((await profiles.list(actor.userId)).profiles).toHaveLength(2);
+    await expect(
+      repository.assignProfile(
+        actor,
+        original.id,
+        { ...input, profile: { kind, displayName: "Autre" } },
+        key,
+      ),
+    ).rejects.toMatchObject({ statusCode: 422 });
+    expect((await profiles.list(stranger.userId)).profiles).toHaveLength(1);
+  },
+);
+
+it.each([undefined, { kind: "person" as const, displayName: "Profil manuel" }])(
+  "enforces the profile limit during explicit creation without assigning the document (%j)",
+  async (profile) => {
+    const actor = await owner();
+    await database.db.insert(managedProfiles).values(
+      Array.from({ length: 49 }, (_, index) => ({
+        id: `prf_${randomUUID()}`,
+        userId: actor.userId,
+        kind: "person" as const,
+        displayName: `Limit ${index}`,
+      })),
+    );
+    const doc = await prepare(actor, { firstName: "Nouvelle personne" });
+    await doc.complete();
+    const original = await doc.read();
+    await expect(
+      createDocumentRepository(database.db).assignProfile(
+        actor,
+        original.id,
+        { revision: original.revision, createProfile: true, ...(profile ? { profile } : {}) },
+        randomUUID(),
+      ),
+    ).rejects.toMatchObject({ code: "MANAGED_PROFILE_LIMIT_REACHED" });
+    expect(await doc.read()).toEqual(original);
+    expect(
+      (await createManagedProfileRepository(database.db).list(actor.userId)).profiles,
+    ).toHaveLength(50);
+  },
+);

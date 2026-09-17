@@ -4,9 +4,10 @@ import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Button, LoadingState } from "@coverview/ui";
 import type { IdentityMe } from "@coverview/api-client";
-import type { DocumentRecord } from "@coverview/contracts";
+import type { DocumentRecord, ManagedProfileCreateInput } from "@coverview/contracts";
 import { api } from "../../api";
 import { DocumentFailure } from "./DocumentFailure";
+import { DocumentProfileCreateDialog } from "./DocumentProfileCreateDialog";
 
 export function DocumentProfileAssignment({
   identity,
@@ -20,6 +21,9 @@ export function DocumentProfileAssignment({
   const { t } = useTranslation("documents");
   const client = useQueryClient();
   const [selected, setSelected] = useState("");
+  const [creating, setCreating] = useState(false);
+  const createTrigger = useRef<HTMLButtonElement>(null);
+  const busy = useRef(false);
   const operation = useRef<{ payload: string; key: string } | null>(null);
   const controller = useRef(new AbortController());
   const root = ["private", identity.user.id, identity.session.id];
@@ -39,8 +43,10 @@ export function DocumentProfileAssignment({
     mutationKey: [...root, "document-profile-assignment", document.id],
     gcTime: 0,
     retry: false,
-    mutationFn: async () => {
-      const input = { revision: document.revision, profileId: selected };
+    mutationFn: async (newProfile: ManagedProfileCreateInput | null) => {
+      const input = newProfile
+        ? { revision: document.revision, createProfile: true as const, profile: newProfile }
+        : { revision: document.revision, profileId: selected };
       const payload = JSON.stringify(input);
       if (operation.current?.payload !== payload)
         operation.current = { payload, key: crypto.randomUUID() };
@@ -53,9 +59,18 @@ export function DocumentProfileAssignment({
     onSuccess: async () => {
       if (controller.current.signal.aborted) return;
       operation.current = null;
+      setCreating(false);
       await client.invalidateQueries({ queryKey: root });
     },
+    onSettled: () => {
+      busy.current = false;
+    },
   });
+  const assign = (profile: ManagedProfileCreateInput | null) => {
+    if (busy.current) return;
+    busy.current = true;
+    mutation.mutate(profile);
+  };
   useEffect(() => {
     onPendingChange(mutation.isPending);
     return () => onPendingChange(false);
@@ -88,7 +103,7 @@ export function DocumentProfileAssignment({
       className="space-y-4 rounded-xl border border-border p-5"
       onSubmit={(event) => {
         event.preventDefault();
-        if (selected && !mutation.isPending) mutation.mutate();
+        if (selected && !mutation.isPending) assign(null);
       }}
     >
       <h2 className="cv-app-subheading">{t("assignment.question")}</h2>
@@ -118,12 +133,44 @@ export function DocumentProfileAssignment({
         <Button disabled={!selected || mutation.isPending} type="submit">
           {t(mutation.isPending ? "assignment.saving" : "assignment.confirm")}
         </Button>
+        <Button
+          ref={createTrigger}
+          type="button"
+          variant="outline"
+          disabled={profiles.data.profiles.length >= 50 || mutation.isPending}
+          onClick={() => {
+            mutation.reset();
+            setCreating(true);
+          }}
+        >
+          {t(
+            mutation.isPending && mutation.variables ? "assignment.creating" : "assignment.create",
+          )}
+        </Button>
         <Button asChild variant="outline" disabled={mutation.isPending}>
           <Link to="/profile">{t("assignment.manage")}</Link>
         </Button>
       </div>
-      {mutation.isError && (
-        <DocumentFailure error={mutation.error} onRetry={() => mutation.mutate()} />
+      <p className="text-sm text-muted-foreground">
+        {document.profileCreation
+          ? t("assignment.createHelp", { name: document.profileCreation.displayName })
+          : t("assignment.createUnavailable")}
+      </p>
+      {creating && (
+        <DocumentProfileCreateDialog
+          proposal={document.profileCreation}
+          pending={mutation.isPending}
+          error={mutation.error}
+          onCreate={assign}
+          onClose={() => setCreating(false)}
+          returnFocus={createTrigger}
+        />
+      )}
+      {mutation.isError && !creating && (
+        <DocumentFailure
+          error={mutation.error}
+          onRetry={() => assign(mutation.variables ?? null)}
+        />
       )}
     </form>
   );
