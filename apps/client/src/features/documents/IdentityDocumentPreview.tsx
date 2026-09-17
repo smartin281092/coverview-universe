@@ -17,6 +17,7 @@ import {
 } from "@coverview/ui";
 import { api } from "../../api";
 import { DocumentFailure } from "./DocumentFailure";
+import { DocumentPdfPreview } from "./DocumentPdfPreview";
 import { IdentityPreviewCanvas } from "./IdentityPreviewCanvas";
 
 type PreviewProps = {
@@ -29,7 +30,7 @@ type PreviewProps = {
   generic?: boolean;
   initialPage?: number;
 };
-type PreviewAsset = { document: DocumentSummary; url: string; mime: string };
+type PreviewAsset = { document: DocumentSummary; blob: Blob; url: string; mime: string };
 
 export function IdentityDocumentPreview(props: PreviewProps) {
   if (!props.portalContainer) return null;
@@ -78,6 +79,7 @@ function IdentityPreviewContent({
   useEffect(() => {
     const loaded = (originals.data ?? []).map(({ document, blob }) => ({
       document,
+      blob,
       // Downloads deliberately use octet-stream. Only the server-detected, scanned MIME selects a renderer.
       url: URL.createObjectURL(new Blob([blob], { type: document.mime })),
       mime: document.mime,
@@ -152,22 +154,20 @@ function IdentityPreviewContent({
               {images.length > 0 && (
                 <IdentityPreviewCanvas images={images} company={company} generic={generic} />
               )}
-              {others.map((asset) => (
-                <section key={asset.document.id} className="flex min-h-0 flex-1 flex-col gap-2">
-                  {asset.mime === "application/pdf" && (
-                    <iframe
-                      src={`${asset.url}#page=${initialPage}`}
-                      title={t("pdfTitle", { name: asset.document.name })}
-                      sandbox=""
-                      referrerPolicy="no-referrer"
-                      className="min-h-64 w-full flex-1 rounded-lg border border-border bg-muted"
-                    />
-                  )}
-                  <p className="text-sm text-muted-foreground">
-                    {t(asset.mime === "application/pdf" ? "pdfFallback" : "unsupported")}
+              {others.map((asset) =>
+                asset.mime === "application/pdf" ? (
+                  <DocumentPdfPreview
+                    key={asset.document.id}
+                    blob={asset.blob}
+                    name={asset.document.name}
+                    initialPage={initialPage}
+                  />
+                ) : (
+                  <p key={asset.document.id} className="text-sm text-muted-foreground">
+                    {t("unsupported")}
                   </p>
-                </section>
-              ))}
+                ),
+              )}
             </>
           )}
         </div>
