@@ -255,24 +255,17 @@ function Documents({ identity }: { identity: IdentityMe }) {
               </SelectContent>
             </Select>
           </div>
-          <div className="min-w-0 space-y-2">
-            <span
-              id="document-display-label"
-              className="flex items-center gap-2 text-sm font-medium"
-            >
-              <LayoutGrid className="size-4" strokeWidth={1.5} aria-hidden="true" />
-              {t("library.display")}
-            </span>
+          <div className="min-w-0 self-end">
             <div
               role="group"
-              aria-labelledby="document-display-label"
+              aria-label={t("library.display")}
               className="flex gap-1 rounded-lg border border-border bg-muted/60 p-1"
             >
               <Button
                 type="button"
                 variant={display === "grid" ? "outline" : "ghost"}
                 aria-pressed={display === "grid"}
-                className="min-h-11 flex-1"
+                className="min-h-11 flex-1 aria-pressed:bg-background aria-pressed:hover:bg-background"
                 onClick={() => setDisplay("grid")}
               >
                 <LayoutGrid className="size-4" aria-hidden="true" />
@@ -282,7 +275,7 @@ function Documents({ identity }: { identity: IdentityMe }) {
                 type="button"
                 variant={display === "list" ? "outline" : "ghost"}
                 aria-pressed={display === "list"}
-                className="min-h-11 flex-1"
+                className="min-h-11 flex-1 aria-pressed:bg-background aria-pressed:hover:bg-background"
                 onClick={() => setDisplay("list")}
               >
                 <List className="size-4" aria-hidden="true" />
@@ -370,9 +363,9 @@ function Documents({ identity }: { identity: IdentityMe }) {
                               {document.title ??
                                 t(`classification.${document.classification ?? document.category}`)}
                             </h3>
+                            <DocumentLabels document={document} />
                             {display === "list" && (
                               <>
-                                <DocumentLabels document={document} />
                                 <p className="text-sm text-muted-foreground">
                                   {t("listMeta", {
                                     date: format.format(new Date(document.createdAt)),

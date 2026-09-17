@@ -104,8 +104,8 @@ export function AppShell() {
         {t("skip")}
       </a>
       <header className="wallet-header sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur-xl">
-        <Container className="flex min-h-16 items-center justify-between gap-4">
-          <Link to="/" className="flex min-h-11 items-center gap-3">
+        <Container className="flex min-h-16 items-center justify-between gap-4 md:grid md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
+          <Link to="/" className="flex min-h-11 items-center gap-3 md:justify-self-start">
             <img
               src={logo}
               alt={t("brand")}
@@ -113,9 +113,14 @@ export function AppShell() {
               width="444"
               height="73"
             />
-            <span className="text-xs text-muted-foreground md:text-sm">{t("app")}</span>
+            <span className="text-xs text-muted-foreground md:hidden lg:inline lg:text-sm">
+              {t("app")}
+            </span>
           </Link>
-          <nav aria-label={t("navigation")} className="hidden items-center gap-x-6 md:flex">
+          <nav
+            aria-label={t("navigation")}
+            className="hidden items-center gap-x-4 md:flex lg:gap-x-6"
+          >
             {destinations.map((destination) => (
               <Link
                 key={destination.to}
@@ -136,7 +141,7 @@ export function AppShell() {
               </Link>
             ))}
           </nav>
-          <div className="hidden md:block">
+          <div className="hidden md:block md:justify-self-end">
             <TextLink href={websiteUrl} arrow="up" className="text-sm">
               {t("website")}
             </TextLink>

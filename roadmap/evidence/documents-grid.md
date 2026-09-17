@@ -12,3 +12,9 @@ Demande utilisateur : choix d’affichage, Icônes par défaut avec première pa
 
 - **Vérifié V3** : les légendes en mode Icônes contiennent uniquement le titre. Profil, date, badges, nom original et statut textuel apparaissent en mode Liste. Deux boutons du preset avec `aria-pressed` remplacent le Select Affichage ; bascule dans les deux sens observée, y compris Tab puis Espace au clavier. Icônes reste le défaut. Contrôle dans un onglet de test distinct, aucun document modifié.
 - **Vérifié V0/V1** : typecheck, lint ciblé et build Wallet passent. Rendu des couvertures et filtres inchangés ; aucune dépendance ni test supplémentaire pour cet ajustement de présentation. README aligné sur cette dernière demande. Session GPT-6, effort non observable ; voie rapide PROG-19.
+
+## Ajustement demandé ensuite — tags et centrage
+
+- **Fait, inspecté** : légende visible Affichage retirée, nom de groupe accessible conservé et option active sur fond blanc du thème. Les tags de domaine et de compagnie suivent le titre dans les deux vues. Le menu desktop est centré grâce à deux colonnes latérales égales ; espacement adapté au seuil desktop.
+- **Vérifié V3** : fond calculé `rgb(255, 255, 255)` en Icônes et en Liste, bascule dans les deux sens, tags visibles sous les titres sur desktop et mobile (390 × 844), sans débordement horizontal. Centres du menu et du conteneur identiques à moins de 0,01 px, y compris à 768 px, sans chevauchement des contrôles latéraux. Recette dans un onglet distinct, aucune donnée documentaire modifiée ; viewport restauré après contrôle.
+- **Vérifié V0/V1** : typecheck Wallet, ESLint ciblé, formatage et build passent ; avertissement de taille des chunks Vite déjà connu. README mis à jour. Aucun ajout de dépendance ou test miroir pour ces ajustements visuels. Session GPT-6, effort non observable ; voie rapide PROG-19.
