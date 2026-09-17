@@ -20,6 +20,10 @@
   "filenameMeta": "{{name}} · {{size}} Ko · Ajouté le {{date}}",
   "companyOpen": "Voir mes assurances chez {{company}}",
   "library": {
+    "display": "Affichage",
+    "icons": "Icônes",
+    "list": "Liste",
+    "cover": "Aperçu de la première page",
     "search": "Rechercher",
     "searchPlaceholder": "Titre, nom de fichier ou type…",
     "searchAction": "Rechercher",

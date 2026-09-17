@@ -2,7 +2,17 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { ArrowUpDown, ArrowUpRight, FileText, Layers3, Plus, Search, Tags } from "lucide-react";
+import {
+  ArrowUpDown,
+  ArrowUpRight,
+  FileText,
+  Layers3,
+  LayoutGrid,
+  List,
+  Plus,
+  Search,
+  Tags,
+} from "lucide-react";
 import {
   Button,
   Input,
@@ -30,6 +40,7 @@ import { DocumentFailure } from "../features/documents/DocumentFailure";
 import { DocumentProcessingIndicator } from "../features/documents/DocumentProcessingIndicator";
 import { AuthorizationNotice } from "../features/documents/AuthorizationNotice";
 import { DocumentLabels } from "../features/documents/DocumentLabels";
+import { DocumentCover } from "../features/documents/DocumentCover";
 
 function Documents({ identity }: { identity: IdentityMe }) {
   const { t, i18n } = useTranslation("documents");
@@ -40,6 +51,7 @@ function Documents({ identity }: { identity: IdentityMe }) {
   const [uploadPending, setUploadPending] = useState(false);
   const [cursors, setCursors] = useState<string[]>([]);
   const [searchText, setSearchText] = useState("");
+  const [display, setDisplay] = useState<"grid" | "list">("grid");
   const [filters, setFilters] = useState<{
     q: string;
     group: "date" | "type";
@@ -172,7 +184,7 @@ function Documents({ identity }: { identity: IdentityMe }) {
             </Button>
           </div>
         </div>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <div className="min-w-0 space-y-2">
             <Label htmlFor="document-group">
               <Layers3 className="size-4" strokeWidth={1.5} aria-hidden="true" />
@@ -243,6 +255,30 @@ function Documents({ identity }: { identity: IdentityMe }) {
               </SelectContent>
             </Select>
           </div>
+          <div className="min-w-0 space-y-2">
+            <Label htmlFor="document-display">
+              <LayoutGrid className="size-4" strokeWidth={1.5} aria-hidden="true" />
+              {t("library.display")}
+            </Label>
+            <Select
+              value={display}
+              onValueChange={(value) => setDisplay(value === "list" ? "list" : "grid")}
+            >
+              <SelectTrigger id="document-display" className="min-h-11 w-full text-sm">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent portalContainer={portalContainer}>
+                <SelectItem value="grid">
+                  <LayoutGrid className="size-4" aria-hidden="true" />
+                  {t("library.icons")}
+                </SelectItem>
+                <SelectItem value="list">
+                  <List className="size-4" aria-hidden="true" />
+                  {t("library.list")}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </form>
       {query.isPending ? (
@@ -285,15 +321,31 @@ function Documents({ identity }: { identity: IdentityMe }) {
                       ? t(`classification.${group}`)
                       : monthFormat.format(new Date(`${group}-01T12:00:00Z`))}
                   </h2>
-                  <ul className="divide-y divide-border">
+                  <ul
+                    className={
+                      display === "grid"
+                        ? "grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4"
+                        : "divide-y divide-border"
+                    }
+                  >
                     {documents.map((document) => (
-                      <li key={document.id}>
+                      <li key={document.id} className="min-w-0">
                         <Link
                           to="/documents/$documentId"
                           params={{ documentId: document.id }}
-                          className="group flex min-w-0 items-start gap-4 rounded-xl p-4 transition-colors duration-200 ease-in-out hover:bg-muted/60 focus-visible:bg-muted/60 motion-reduce:transition-none"
+                          className={
+                            display === "grid"
+                              ? "group flex h-full min-w-0 flex-col gap-3 rounded-xl border border-border p-3 transition-colors hover:bg-muted/60 focus-visible:bg-muted/60 motion-reduce:transition-none"
+                              : "group flex min-w-0 items-start gap-4 rounded-xl p-4 transition-colors duration-200 ease-in-out hover:bg-muted/60 focus-visible:bg-muted/60 motion-reduce:transition-none"
+                          }
                         >
-                          {["queued", "scanning", "reading"].includes(document.state) ? (
+                          {display === "grid" ? (
+                            <DocumentCover
+                              key={`${identity.user.id}:${identity.session.id}:${document.id}:${document.revision}:${document.canDownload}`}
+                              identity={identity}
+                              document={document}
+                            />
+                          ) : ["queued", "scanning", "reading"].includes(document.state) ? (
                             <DocumentProcessingIndicator />
                           ) : (
                             <FileText
@@ -302,25 +354,29 @@ function Documents({ identity }: { identity: IdentityMe }) {
                               aria-hidden="true"
                             />
                           )}
-                          <div className="min-w-0 flex-1 space-y-1">
+                          <div className="w-full min-w-0 flex-1 space-y-1">
                             <h3 className="break-words font-medium">
                               {document.title ??
                                 t(`classification.${document.classification ?? document.category}`)}
                             </h3>
-                            <DocumentLabels document={document} />
+                            {display === "list" && <DocumentLabels document={document} />}
                             <p className="text-sm text-muted-foreground">
                               {t("listMeta", {
                                 date: format.format(new Date(document.createdAt)),
                               })}
                             </p>
-                            <p className="break-words text-xs text-muted-foreground">
-                              {document.name}
-                            </p>
+                            {display === "list" && (
+                              <p className="break-words text-xs text-muted-foreground">
+                                {document.name}
+                              </p>
+                            )}
                             {document.state !== "ready" && (
                               <p className="text-sm">{t(`state.${document.state}`)}</p>
                             )}
                           </div>
-                          <ArrowUpRight className="mt-1 size-4 shrink-0" aria-hidden="true" />
+                          {display === "list" && (
+                            <ArrowUpRight className="mt-1 size-4 shrink-0" aria-hidden="true" />
+                          )}
                         </Link>
                       </li>
                     ))}
