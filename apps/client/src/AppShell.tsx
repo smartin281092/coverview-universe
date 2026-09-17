@@ -143,11 +143,6 @@ export function AppShell() {
               </Link>
             ))}
           </nav>
-          <div className="hidden md:block md:justify-self-end">
-            <TextLink href={websiteUrl} arrow="up" className="text-sm">
-              {t("website")}
-            </TextLink>
-          </div>
           <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
             <SheetTrigger asChild>
               <Button
@@ -238,8 +233,15 @@ export function AppShell() {
         </main>
       </Container>
       <footer className="border-t border-border">
-        <Container className="flex flex-wrap justify-between gap-2 py-6 text-xs text-muted-foreground">
+        <Container className="flex flex-wrap items-center justify-between gap-2 py-6 text-xs text-muted-foreground">
           <p>{t("footer")}</p>
+          <TextLink
+            href={websiteUrl}
+            arrow="up"
+            className="inline-flex min-h-11 items-center text-xs"
+          >
+            {t("website")}
+          </TextLink>
           {import.meta.env.DEV && <p className="cv-meta">{t("identity.local")}</p>}
         </Container>
       </footer>

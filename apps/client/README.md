@@ -4,7 +4,7 @@
 
 Wallet propose les profils privés, les documents, les autorisations, le compte et les appareils connectés. Français dès le départ, textes externalisés dans `src/locales/fr/`.
 
-Le menu associe `assets/icon-coverview.svg` au lettrage fourni `assets/wallet.svg`, selon la dernière demande utilisateur. Les fichiers sources, le dégradé Wallet et les proportions sont conservés. Le lien garde le nom accessible « CoverView Wallet » sur mobile et desktop.
+Le menu associe `assets/icon-coverview.svg` au lettrage fourni `assets/wallet.svg`, selon la dernière demande utilisateur. Les fichiers sources, le dégradé Wallet et les proportions sont conservés. Le lien garde le nom accessible « CoverView Wallet » sur mobile et desktop. Le lien « Site public » est placé dans le footer, sur tous les formats, et retiré du header.
 
 ## Périmètre
 
