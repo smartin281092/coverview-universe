@@ -114,7 +114,7 @@ export function AppShell() {
             <img
               src={walletLogo}
               alt={`${t("brand")} ${t("app")}`}
-              className="h-4 w-auto md:h-5"
+              className="h-4 w-auto"
               width="50"
               height="12"
             />
