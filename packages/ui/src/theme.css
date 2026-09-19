@@ -1,4 +1,4 @@
-@import "@fontsource-variable/geist";
+@import "./fonts/lausanne/fonts.css";
 @import "./preset.css";
 
 @font-face {
@@ -18,7 +18,7 @@
 
 :root {
   color-scheme: light;
-  --cv-font-sans: "Geist Variable", Geist, system-ui, sans-serif;
+  --cv-font-sans: "Lausanne", system-ui, sans-serif;
   --cv-font-mono: "MONTECH V.02", ui-monospace, monospace;
   --cv-mono-letter-spacing: 1px;
   --background: #ffffff;

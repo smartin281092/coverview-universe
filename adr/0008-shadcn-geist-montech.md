@@ -2,6 +2,8 @@
 
 Statut : accepté par instruction explicite utilisateur, 6 septembre 2026.
 
+Évolution du 19 septembre 2026 : [ADR-0009](0009-lausanne.md) remplace Geist par Lausanne. Les décisions restantes ci-dessous sont conservées.
+
 ## Contexte
 
 L’utilisateur demande de reprendre le preset shadcn imposé avec ses composants réels, de remplacer Inter par Geist pour les titres et le corps, et Geist Mono par la fonte de son archive Montech V02. Cette décision remplace la typographie, les tokens et les composants de présentation d’[ADR-0007](0007-xai-design-reference.md). Sa composition ouverte issue de la [référence xAI](../references/xai-style-reference.md) reste applicable. Le partage statique avec Astro autorisé par [ADR-0006](0006-marketing-design-system.md) est conservé.

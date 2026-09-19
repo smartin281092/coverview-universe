@@ -53,7 +53,7 @@
     "theme": "mist",
     "chartColor": "indigo"
   },
-  "adaptation": "Light preset tokens retained in src/preset.css; white background, card uses muted flat fill and no border/ring/shadow. Geist body/headings, supplied MONTECH V.02 in former mono roles. ButtonLink shares generated Button variants; Bento composes generated Card with article. Large public CTA and OTP retain 44px targets. Sheet from the same generator: shared Button import, token overlay, translated close label supplied by consumer, focus management retained.",
+  "adaptation": "Light preset tokens retained in src/preset.css; white background, card uses muted flat fill and no border/ring/shadow. Lausanne body/headings per ADR-0009 (replacing the generated Geist choice), supplied MONTECH V.02 in former mono roles. ButtonLink shares generated Button variants; Bento composes generated Card with article. Large public CTA and OTP retain 44px targets. Sheet from the same generator: shared Button import, token overlay, translated close label supplied by consumer, focus management retained.",
   "executionContext": "Applied in an isolated initialized Vite generation project under ignored .planning-local/preset-shadcn; generated token, component and radius outputs integrated in packages/ui. Manifests and lockfile updated using pnpm, not copied from the generation project.",
   "previousInitialization": {
     "date": "2026-09-05",

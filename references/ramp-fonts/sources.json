@@ -1,0 +1,124 @@
+{
+  "source": "https://ramp.com/",
+  "retrievedAt": "2026-09-19T09:04:22.8693849Z",
+  "verification": "WOFF2 magic signature and declared file length match; SHA-256 recorded",
+  "fonts": [
+    {
+      "file": "IBMPlexMono-400-latin.woff2",
+      "family": "IBM Plex Mono",
+      "weight": "400",
+      "style": "normal",
+      "url": "https://ramp.com/_next/static/immutable/media/99e609270109b47d-s.p.1dgcou5jor5q_.woff2",
+      "bytes": 10052,
+      "sha256": "c36f509c0a8f9f85f29cb44bc8701d8a9e0b14c499e77a884f789ead7093a7ac"
+    },
+    {
+      "file": "TWKLausanne_300.woff2",
+      "family": "lausanne",
+      "weight": "300",
+      "style": "normal",
+      "url": "https://ramp.com/_next/static/immutable/media/TWKLausanne_300-s.p.2c7q5sipsol1_.woff2",
+      "bytes": 29128,
+      "sha256": "b3a5321dee74da7249cad148964484b8506e09e3d7cd972957669b23291b6470"
+    },
+    {
+      "file": "TWKLausanne_300Italic.woff2",
+      "family": "lausanne",
+      "weight": "300",
+      "style": "italic",
+      "url": "https://ramp.com/_next/static/immutable/media/TWKLausanne_300Italic-s.p.1qxx-r_lari3t.woff2",
+      "bytes": 30824,
+      "sha256": "18bf0d0c02d176c0e2edc10e4a4e1d93210b1aedf706e6f0a2d09504279ce78c"
+    },
+    {
+      "file": "TWKLausanne_350.woff2",
+      "family": "lausanne",
+      "weight": "350",
+      "style": "normal",
+      "url": "https://ramp.com/_next/static/immutable/media/TWKLausanne_350-s.p.0xe_c-9e8yzx9.woff2",
+      "bytes": 30132,
+      "sha256": "fc34dbf71f6873c8a23e2c3fc2cb13804029890f9f5fddaeb6588ea17673b59d"
+    },
+    {
+      "file": "TWKLausanne_700.woff2",
+      "family": "lausanne",
+      "weight": "700",
+      "style": "normal",
+      "url": "https://ramp.com/_next/static/immutable/media/TWKLausanne_700-s.p.3ikzgkgeo0dtm.woff2",
+      "bytes": 30056,
+      "sha256": "1b59f5a81bcd4d0ffcdccb45f066ad335fb9f69b3d0dc9a0dcfb9b6b99022b11"
+    },
+    {
+      "file": "TWKLausanne_350Italic.woff2",
+      "family": "lausanne",
+      "weight": "350",
+      "style": "italic",
+      "url": "https://ramp.com/_next/static/immutable/media/TWKLausanne_350Italic-s.p.1e2_2up9y15ww.woff2",
+      "bytes": 31712,
+      "sha256": "aefdcefcf5eed1078e5a0c178f306a0cef939d61a902593b1fb06b0469bf3162"
+    },
+    {
+      "file": "TWKLausanne_400.woff2",
+      "family": "lausanne",
+      "weight": "400",
+      "style": "normal",
+      "url": "https://ramp.com/_next/static/immutable/media/TWKLausanne_400-s.p.14s6_f87oh8wu.woff2",
+      "bytes": 30120,
+      "sha256": "30315718f468ef7fdbd33e3040a9c38cc2679deb172af44153e8cbeaa57ba760"
+    },
+    {
+      "file": "TWKLausanne_400Italic.woff2",
+      "family": "lausanne",
+      "weight": "400",
+      "style": "italic",
+      "url": "https://ramp.com/_next/static/immutable/media/TWKLausanne_400Italic-s.p.1-u9d-lb4udf8.woff2",
+      "bytes": 31704,
+      "sha256": "15d63a7dc8d114dfa83f43b35b4b55066d2f460976f68e1444943ab050d4eac7"
+    },
+    {
+      "file": "TWKLausanne_700Italic.woff2",
+      "family": "lausanne",
+      "weight": "700",
+      "style": "italic",
+      "url": "https://ramp.com/_next/static/immutable/media/TWKLausanne_700Italic-s.p.0xy0k_r8yimtb.woff2",
+      "bytes": 31468,
+      "sha256": "1cea7d825ae2d290b72baac018e8a925e2d3162a8ecc9fe9ef41fffc14826b47"
+    },
+    {
+      "file": "IBMPlexSans-600-latin.woff2",
+      "family": "IBM Plex Sans",
+      "weight": "600",
+      "style": "normal",
+      "url": "https://ramp.com/_next/static/immutable/media/e506d31c18fd42e6-s.p.0k0di8efl80ld.woff2",
+      "bytes": 19192,
+      "sha256": "2f66ab50ff7e70be314df64d8ec6511f04706438cb7a9d39ff945d1f74e19569"
+    },
+    {
+      "file": "IBMPlexMono-500-latin.woff2",
+      "family": "IBM Plex Mono",
+      "weight": "500",
+      "style": "normal",
+      "url": "https://ramp.com/_next/static/immutable/media/effe91970fc4db64-s.p.28xcb7557rbh2.woff2",
+      "bytes": 10060,
+      "sha256": "a76f53ca6612e7b3828eec2311098675b7f9849ae4169a8bcef6302aec02a6c0"
+    },
+    {
+      "file": "MaterialIconsOutlined-Regular.woff2",
+      "family": "Material Icons Outlined",
+      "weight": "400",
+      "style": "normal",
+      "url": "https://assets.ramp.com/fonts/material_icons/MaterialIconsOutlined-Regular.woff2",
+      "bytes": 141208,
+      "sha256": "167aac80d89503a711e447efbbcd5ffb62ae186d8c6dd8fd3f2ec249a4946218"
+    },
+    {
+      "file": "MaterialIcons-Regular.woff2",
+      "family": "Material Icons",
+      "weight": "400",
+      "style": "normal",
+      "url": "https://assets.ramp.com/fonts/material_icons/MaterialIcons-Regular.woff2",
+      "bytes": 128512,
+      "sha256": "057fac792ed88f59b1498cb41063b6c9492a0fb23e4835c581c2f3b06b778190"
+    }
+  ]
+}

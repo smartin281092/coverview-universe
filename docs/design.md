@@ -1,6 +1,6 @@
 # Design système des apps (UI)
 
-> **Direction actuelle** : [ADR-0008](../adr/0008-shadcn-geist-montech.md) gouverne le preset shadcn, les composants et la typographie. [ADR-0007](../adr/0007-xai-design-reference.md) conserve la composition ouverte de la [référence xAI fournie](../references/xai-style-reference.md). Le système commun est documenté dans [UI](../packages/ui/README.md). [ADR-0006](../adr/0006-marketing-design-system.md) conserve l’autorisation de partage statique avec `www`, qui prévaut sur la restriction historique ci-dessous.
+> **Direction actuelle** : [ADR-0008](../adr/0008-shadcn-geist-montech.md) gouverne le preset shadcn et les composants ; [ADR-0009](../adr/0009-lausanne.md) définit la typographie Lausanne/Montech. [ADR-0007](../adr/0007-xai-design-reference.md) conserve la composition ouverte de la [référence xAI fournie](../references/xai-style-reference.md). Le système commun est documenté dans [UI](../packages/ui/README.md). [ADR-0006](../adr/0006-marketing-design-system.md) conserve l’autorisation de partage statique avec `www`, qui prévaut sur la restriction historique ci-dessous.
 
 > **Résumé** : une seule bibliothèque de composants — shadcn/ui initialisée avec le preset imposé — des tokens pour toute valeur visuelle, des primitives d'états partagées, une seule stack de formulaires. La cohérence prime sur la nouveauté : l'agent réutilise l'existant avant de créer.
 

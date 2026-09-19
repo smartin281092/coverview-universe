@@ -17,9 +17,11 @@ export async function downloadAuthorization(
 ) {
   // Browser font fallback preserves names and legal text beyond WinAnsi. The
   // immutable JSON remains attached because raster pages are not searchable text.
-  await document.fonts.load('10px "Geist Variable"');
+  const family = getComputedStyle(document.documentElement)
+    .getPropertyValue("--cv-font-sans")
+    .trim();
+  await Promise.all([400, 600].map((weight) => document.fonts.load(`${weight} 10px ${family}`)));
   await document.fonts.ready;
-  const family = '"Geist Variable", Geist, system-ui, sans-serif';
   const width = 595.28;
   const height = 841.89;
   const margin = 52;

@@ -2,13 +2,13 @@
 
 ## Résumé
 
-Source commune des tokens et primitives de présentation de Wallet, de l’espace équipe et du site Astro. [ADR-0008](../../adr/0008-shadcn-geist-montech.md) gouverne le preset shadcn et les fontes Geist/Montech. La composition ouverte d’[ADR-0007](../../adr/0007-xai-design-reference.md) et le partage statique avec Astro d’[ADR-0006](../../adr/0006-marketing-design-system.md) restent applicables.
+Source commune des tokens et primitives de présentation de Wallet, de l’espace équipe et du site Astro. [ADR-0008](../../adr/0008-shadcn-geist-montech.md) gouverne le preset shadcn ; [ADR-0009](../../adr/0009-lausanne.md) remplace sa police principale par Lausanne, en conservant Montech. La composition ouverte d’[ADR-0007](../../adr/0007-xai-design-reference.md) et le partage statique avec Astro d’[ADR-0006](../../adr/0006-marketing-design-system.md) restent applicables.
 
 ## Périmètre et consommation
 
 Les trois frontends importent `@coverview/ui/styles.css`, qui branche Tailwind et le thème commun. Dans `apps/www/src/styles/global.css`, la directive `@source "../../../../packages/ui/src"` permet à Astro de compiler les utilitaires des composants partagés. Importer uniquement `theme.css` ne suffit pas à leur rendu complet. Les assets et tokens historiques de `assets/brand` sont conservés mais ne sont plus importés par ce package.
 
-`src/theme.css` charge Geist Variable via Fontsource pour les titres et le corps, ainsi que les OTF locaux MONTECH V.02 Regular et Medium pour les usages auparavant attribués à Geist Mono. L’alias `--cv-font-mono` reste compatible avec les consommateurs ; Montech n’est toutefois pas une fonte à chasse fixe. Les fichiers, graisses 400/500, métadonnées et provenance sont décrits dans le [README Montech](src/fonts/montech/README.md).
+`src/theme.css` charge les WOFF2 locaux Lausanne pour les titres et le corps, ainsi que les OTF locaux MONTECH V.02 Regular et Medium pour les usages auparavant attribués à Geist Mono. Les variantes et la provenance de Lausanne sont décrites dans le [README Lausanne](src/fonts/lausanne/README.md). L’alias `--cv-font-mono` reste compatible avec les consommateurs ; Montech n’est toutefois pas une fonte à chasse fixe. Les fichiers, graisses 400/500, métadonnées et provenance sont décrits dans le [README Montech](src/fonts/montech/README.md).
 
 Les composants de présentation statique ne contiennent aucun accès réseau ni état métier. Astro peut les rendre côté serveur sans directive `client:*`. Le composant interactif `Sheet`, ajouté pour le menu Wallet, utilise Radix Dialog dans l’application React ; sa gestion du focus ne doit pas être assimilée à une présentation Astro sans hydratation.
 
@@ -52,7 +52,7 @@ Aucune règle métier, autorisation, identité, donnée privée, cache ou appel 
 
 La génération du 6 septembre utilise réellement `apply --preset b38oXC5rf --yes`, puis `add button skeleton card input label`, dans `.planning-local/preset-shadcn`. Les composants intégrés proviennent de cette sortie, avec les adaptations décrites dans ADR-0008 ; Radix et la composition `asChild` sont conservés. [preset-provenance.json](preset-provenance.json) consigne ces exécutions, leurs sources générées et l’initialisation précédente ; le ledger S-000a conserve les vérifications de cette première étape.
 
-`shadcn`, `radix-ui`, `class-variance-authority`, `cn`, `lucide-react` et `tw-animate-css` restent les dépendances de ce système ; aucune deuxième bibliothèque UI n’est ajoutée. `@fontsource-variable/geist` remplace les paquets Inter et Geist Mono via pnpm. Montech est fourni par les fichiers locaux documentés ci-dessus. Les manifestes et le lockfile portent les dépendances et leurs versions résolues.
+`shadcn`, `radix-ui`, `class-variance-authority`, `cn`, `lucide-react` et `tw-animate-css` restent les dépendances de ce système ; aucune deuxième bibliothèque UI n’est ajoutée. Lausanne et Montech sont fournies par les fichiers locaux documentés ci-dessus ; la dépendance Fontsource Geist est retirée. Les manifestes et le lockfile portent les dépendances et leurs versions résolues.
 
 ## État réel
 

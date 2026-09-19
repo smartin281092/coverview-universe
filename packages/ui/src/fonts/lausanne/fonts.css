@@ -1,0 +1,63 @@
+@font-face {
+  font-family: "Lausanne";
+  src: url("./TWKLausanne_300.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Lausanne";
+  src: url("./TWKLausanne_300Italic.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Lausanne";
+  src: url("./TWKLausanne_350.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 350;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Lausanne";
+  src: url("./TWKLausanne_700.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Lausanne";
+  src: url("./TWKLausanne_350Italic.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 350;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Lausanne";
+  src: url("./TWKLausanne_400.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Lausanne";
+  src: url("./TWKLausanne_400Italic.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Lausanne";
+  src: url("./TWKLausanne_700Italic.woff2") format("woff2");
+  font-display: swap;
+  font-weight: 700;
+  font-style: italic;
+}

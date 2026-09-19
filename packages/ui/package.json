@@ -11,7 +11,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@fontsource-variable/geist": "^5.3.0",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.2.5",
     "lucide-react": "^1.41.0",
