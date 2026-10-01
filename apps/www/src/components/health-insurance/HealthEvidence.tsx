@@ -1,50 +1,22 @@
-import { useEffect, useMemo, useState } from "react";
-import {
-  createRecommendationClient,
-  type EvidenceCatalog,
-} from "@coverview/api-client/health-recommendation";
+import type { EvidenceCatalog } from "@coverview/api-client/health-recommendation";
 import { recommendationCopy as copy } from "../../content/fr/health-recommendation";
 import { HealthIcon } from "./HealthIcon";
+import { modelBenefits } from "./use-health-evidence";
 export function HealthEvidence({
-  apiUrl,
+  catalog,
+  error,
   modelId,
   year,
   view = "all",
 }: {
-  apiUrl: string;
+  catalog: EvidenceCatalog | null;
+  error: boolean;
   modelId: string;
   year: number;
   view?: "all" | "benefits" | "club";
 }) {
-  const api = useMemo(() => createRecommendationClient(apiUrl), [apiUrl]);
-  const [catalog, setCatalog] = useState<EvidenceCatalog | null>(null),
-    [error, setError] = useState(false);
-  useEffect(() => {
-    const abort = new AbortController();
-    setError(false);
-    setCatalog(null);
-    void api
-      .catalog(year, abort.signal)
-      .then((value) => {
-        if (!abort.signal.aborted) setCatalog(value);
-      })
-      .catch(() => {
-        if (!abort.signal.aborted) setError(true);
-      });
-    return () => abort.abort();
-  }, [api, year]);
   const model = catalog?.models.find((item) => item.id === modelId);
-  const benefits =
-    catalog?.benefits.filter(
-      (fact) =>
-        (fact.modelIds.includes(modelId) ||
-          (!fact.modelIds.length && fact.insurerId === model?.insurerId)) &&
-        (view === "all" ||
-          (view === "club") ===
-            (fact.category === "members" ||
-              fact.classification === "commercial" ||
-              fact.classification === "supplementary")),
-    ) ?? [];
+  const benefits = modelBenefits(catalog, modelId, view);
   if (view === "benefits") {
     if (error) return <p role="alert">{copy.failed}</p>;
     if (!catalog) return <p role="status">{copy.loading}</p>;
@@ -62,8 +34,8 @@ export function HealthEvidence({
               <details>
                 <summary>
                   <span>{fact.title}</span>
-                  {!confirmed && <small>{copy.evidence.pending}</small>}
                 </summary>
+                {!confirmed && <p>{copy.evidence.partial}</p>}
                 <p>{fact.effect}</p>
                 {fact.telemedicine !== "not_applicable" && (
                   <p>{copy.evidence.telemedicine[fact.telemedicine]}</p>
@@ -116,13 +88,9 @@ export function HealthEvidence({
             <article className="hi-benefit" key={fact.id}>
               <h4>{fact.title}</h4>
               <span className="hi-source-status">{copy.evidence.nature[fact.classification]}</span>
-              <span
-                className={`hi-source-status ${fact.yearConfirmed && fact.verification === "verified" ? "is-confirmed" : ""}`}
-              >
-                {fact.yearConfirmed && fact.verification === "verified"
-                  ? copy.evidence.confirmed
-                  : copy.evidence.pending}
-              </span>
+              {fact.yearConfirmed && fact.verification === "verified" && (
+                <span className="hi-source-status is-confirmed">{copy.evidence.confirmed}</span>
+              )}
               <p>{fact.effect}</p>
               {fact.telemedicine !== "not_applicable" && (
                 <p className="hi-small">{copy.evidence.telemedicine[fact.telemedicine]}</p>

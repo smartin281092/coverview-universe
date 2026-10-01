@@ -18,6 +18,7 @@ import { offerCopy as copy } from "../../content/fr/insurance-requests";
 import { healthCopy } from "../../content/fr/health-insurance";
 import { HealthDialog } from "./HealthDialog";
 import { HealthSelect } from "./HealthSelect";
+import { HealthProductImage } from "./HealthProductImage";
 import { LocalitySearch } from "./LocalitySearch";
 import { money } from "./health-format";
 export type CheckoutCandidate = {
@@ -296,6 +297,16 @@ export function HealthCheckout({
           </button>
         )}
         <fieldset disabled={!browser} className="hi-checkout-fields">
+          {step < 2 && selectedOffer && (
+            <div className="hi-checkout-product">
+              <HealthProductImage offer={selectedOffer} thumbnail />
+              <div>
+                <span>{selectedOffer.insurerBrand ?? selectedOffer.insurerName}</span>
+                <strong>{selectedOffer.name}</strong>
+                <small>{copy.year}</small>
+              </div>
+            </div>
+          )}
           {step === 0 && access === null && (
             <>
               <p className="hi-small">{copy.accessHint}</p>
@@ -461,13 +472,6 @@ export function HealthCheckout({
                 );
               }}
             >
-              {selectedOffer && (
-                <div className="hi-checkout-product">
-                  <span>{selectedOffer.insurerBrand ?? selectedOffer.insurerName}</span>
-                  <strong>{selectedOffer.name}</strong>
-                  <small>{copy.year}</small>
-                </div>
-              )}
               <div className="hi-form-grid">
                 <label className="hi-field">
                   {copy.firstName}
@@ -636,9 +640,12 @@ export function HealthCheckout({
                             <small>{copy.month}</small>
                           </b>
                         </div>
-                        <p>
-                          {item.offer.insurerBrand ?? item.offer.insurerName} · {item.offer.name}
-                        </p>
+                        <div className="hi-cart-product">
+                          <HealthProductImage offer={item.offer} thumbnail />
+                          <p>
+                            {item.offer.insurerBrand ?? item.offer.insurerName} · {item.offer.name}
+                          </p>
+                        </div>
                         <p className="hi-small">
                           {copy.deductible} : {item.deductible} CHF · {copy.accident} :{" "}
                           {item.accident ? copy.yes : copy.no}

@@ -5,6 +5,8 @@ import { healthCopy as copy } from "../../content/fr/health-insurance";
 import { offerCopy } from "../../content/fr/insurance-requests";
 import { recommendationCopy } from "../../content/fr/health-recommendation";
 import { HealthEvidence } from "./HealthEvidence";
+import { modelBenefits, useHealthEvidence } from "./use-health-evidence";
+import { HealthProductImage } from "./HealthProductImage";
 import { HealthDialog } from "./HealthDialog";
 import { HealthIcon } from "./HealthIcon";
 import { HealthContactTags, HealthInsurerLogo, HealthOfferBadges } from "./HealthOfferIdentity";
@@ -31,6 +33,7 @@ export function HealthModelPanel({
   provisional: boolean;
 }) {
   const [tab, setTab] = useState<"coverage" | "benefits" | "club">("coverage");
+  const evidence = useHealthEvidence(apiUrl, year, !!offer && !offer.residenceCountry);
   useEffect(() => setTab("coverage"), [offer?.id]);
   return (
     <HealthDialog
@@ -48,25 +51,28 @@ export function HealthModelPanel({
       {offer && (
         <>
           <div className="hi-model-brand">
-            <HealthInsurerLogo offer={offer} />
+            <HealthInsurerLogo offer={offer} labelled />
             <div>
-              <p>{offer.insurerBrand ?? offer.insurerName}</p>
               <div className="hi-model-title">
                 <h3>{offer.name}</h3>
                 <HealthContactTags offer={offer} />
               </div>
             </div>
           </div>
-          <HealthOfferBadges cheapest={cheapest} preferred={preferred} provisional={provisional} />
+          <HealthOfferBadges preferred={preferred} provisional={provisional} />
           {preferred && provisional && <p className="hi-small">* {copy.provisionalBadge}</p>}
+          <HealthProductImage offer={offer} />
           <div className="hi-model-price">
-            <p>
-              {money(offer.monthlyPremiumMinor)}
-              <span className="hi-price-unit">
-                <small>{copy.currency}</small>
-                <em>{copy.perMonth}</em>
-              </span>
-            </p>
+            <div className="hi-model-price-line">
+              <p>
+                {money(offer.monthlyPremiumMinor)}
+                <span className="hi-price-unit">
+                  <small>{copy.currency}</small>
+                  <em>{copy.perMonth}</em>
+                </span>
+              </p>
+              <HealthOfferBadges cheapest={cheapest} />
+            </div>
             {offer.redistribution?.year === year && (
               <div className="hi-redistribution">
                 <span>
@@ -133,6 +139,11 @@ export function HealthModelPanel({
                     : value === "benefits"
                       ? copy.benefitsTab
                       : copy.clubTab}
+                  {value !== "coverage" && evidence.catalog && (
+                    <span className="hi-tab-count">
+                      {modelBenefits(evidence.catalog, offer.modelId, value).length}
+                    </span>
+                  )}
                 </button>
               ))}
             </div>
@@ -233,7 +244,7 @@ export function HealthModelPanel({
                 </a>
               </>
             ) : (
-              <HealthEvidence apiUrl={apiUrl} modelId={offer.modelId} year={year} view={tab} />
+              <HealthEvidence {...evidence} modelId={offer.modelId} year={year} view={tab} />
             )}
           </div>
         </>

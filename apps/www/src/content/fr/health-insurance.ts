@@ -1,4 +1,5 @@
 export const healthCopy = {
+  productImage: "Illustration du modèle {{model}} · {{brand}}",
   backToList: "Retour à la liste",
   lowestPrice: "Le moins cher",
   lowestPriceHint:
