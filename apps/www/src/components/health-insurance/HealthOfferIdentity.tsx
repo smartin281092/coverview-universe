@@ -10,12 +10,20 @@ const assets = import.meta.glob<string>("../../assets/health-insurers/*.{svg,png
 const logos = new Map(
   Object.entries(assets).map(([path, url]) => [Number(path.match(/\/(\d+)\./)?.[1]), url]),
 );
-export function HealthInsurerLogo({ offer }: { offer: HealthOffer }) {
+export function HealthInsurerLogo({
+  offer,
+  labelled = false,
+}: {
+  offer: HealthOffer;
+  labelled?: boolean;
+}) {
   const logo = logos.get(offer.insurerId);
   return (
     <span
       className={`hi-insurer-logo${offer.insurerId === 1386 ? " is-reversed" : ""}`}
-      aria-hidden="true"
+      aria-hidden={!labelled}
+      role={labelled ? "img" : undefined}
+      aria-label={labelled ? (offer.insurerBrand ?? offer.insurerName) : undefined}
     >
       {logo ? (
         <img src={logo} alt="" width="84" height="40" />
@@ -75,7 +83,7 @@ export function HealthOfferBadges({
   return (
     <span className="hi-offer-badges">
       {cheapest && (
-        <span className="hi-offer-badge" title={copy.lowestPriceHint}>
+        <span className="hi-offer-badge is-cheapest" title={copy.lowestPriceHint}>
           <HealthIcon name="discount" size={14} />
           {copy.lowestPrice}
         </span>

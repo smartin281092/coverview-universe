@@ -66,7 +66,7 @@ export const healthCopy = {
   mapControls: "Déplacer et zoomer la carte",
   mapZoomIn: "Zoomer",
   mapZoomOut: "Dézoomer",
-  mapReset: "Recentrer la Suisse",
+  mapReset: "Recentrer sur Vaud",
   premiumCountLabel: "primes",
   modelCountLabel: "modèles",
   insurerCountLabel: "assureurs",

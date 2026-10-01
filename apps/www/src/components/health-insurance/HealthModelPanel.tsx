@@ -125,7 +125,7 @@ export function HealthModelPanel({
                   }}
                 >
                   <HealthIcon
-                    name={value === "coverage" ? "shield" : value === "benefits" ? "heart" : "gift"}
+                    name={value === "coverage" ? "info" : value === "benefits" ? "shield" : "gift"}
                     size={18}
                   />
                   {value === "coverage"
@@ -161,7 +161,9 @@ export function HealthModelPanel({
                   </div>
                   <div>
                     <dt>{copy.accident}</dt>
-                    <dd>{offer.accident ? copy.accidentIncluded : copy.accidentExcluded}</dd>
+                    <dd className={offer.accident ? "hi-included" : undefined}>
+                      {offer.accident ? copy.accidentIncluded : copy.accidentExcluded}
+                    </dd>
                   </div>
                   <div>
                     <dt>{copy.annual}</dt>
@@ -199,7 +201,9 @@ export function HealthModelPanel({
                   </div>
                   <div>
                     <dt>{copy.accident}</dt>
-                    <dd>{offer.accident ? copy.accidentIncluded : copy.accidentExcluded}</dd>
+                    <dd className={offer.accident ? "hi-included" : undefined}>
+                      {offer.accident ? copy.accidentIncluded : copy.accidentExcluded}
+                    </dd>
                   </div>
                   <div>
                     <dt>{copy.annual}</dt>

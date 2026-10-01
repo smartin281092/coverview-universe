@@ -32,3 +32,22 @@ L'API annote les offres pour 2027 uniquement. La ligne représente exclusivement
 Aucune migration, aucune donnée personnelle persistée, aucun événement/room/job, aucune permission ou variable d'environnement modifiée. API publique de lecture/calcul existante, Admin/Wallet inchangés. Aucun compte ni demande d'offre créé durant la recette. L'API de développement a redémarré normalement lors des écritures ; un premier appel a été retenté après cette interruption. Les autres travaux préexistants du dépôt ne sont ni réinitialisés ni inclus dans le commit ciblé.
 
 Suite déjà identifiée, non exécutée : validation des conditions frontalières, selon `roadmap/plans/health-frontier-conditions.plan.md`. La couverture documentaire 2027 reste partielle comme indiqué dans le registre opérateur ; cette retouche visuelle ne vaut pas validation contractuelle.
+
+## Retouche du volet et cadrage Vaud — 1 octobre 2026
+
+Mandat visuel supplémentaire de l'utilisateur, changement standard traité en autonomie (G-13, PROG-23). Aucun changement du moteur, des primes ou de la validation documentaire.
+
+### Vérifié
+
+- Listes tarifaire et personnalisée bord à bord dans le volet. Nom du modèle visible à côté du logo ; le nom de marque du logo reste accessible au lecteur d'écran. Même présentation dans la bulle cartographique. Badge « Le moins cher » vert au-dessus du prix ; badge d'adéquation conservé auprès du modèle.
+- Cadrage initial calculé à partir des points des deux régions vaudoises, échelle 1. Le bouton de recentrage revient à ce cadrage ; une localité renseignée centre sa propre région. Navigateur : zoom puis recentrage, transformation finale `translate(374.81 -70.115) scale(1)`.
+- CHF gris clair (`#999`), accident inclus vert (`#23784e`) dans les données et le profil. Question : icône de conversation. Données : point d'exclamation cerclé ; Prestations : bouclier coché.
+- Prestations : liste sans en-tête documentaire ni cartes. Coche verte seulement pour une ligne confirmée pour l'année ; icône neutre et réserve sinon. Conditions, exclusions et nuances de télémédecine accessibles en dépliant la ligne. Club inchangé.
+- Bureau 1280×720 : Vaud, 106 offres, Atupri HMO à 456 CHF. Ligne de 494 px, égale à la largeur intérieure défilante du volet. Badge vert au-dessus du montant. SWICA Favorit Medpharm : deux coches et une ligne à contrôler ; dépliage de santé24 montrant les frais d'appel et l'incertitude sur les consultations. Atupri Medi+ : réserve sans coche verte.
+- Mobile 390×844 : démarrage du guide, prime minimale, classement provisoire puis fiche. Lignes personnalisées de 340 px, égales à la largeur intérieure du volet, aucun débordement horizontal, logos chargés. Console sans erreur. Test en viewport, pas sur matériel tactile physique.
+- Types WWW : 80 fichiers, zéro erreur/avertissement/indice. Build : 45 pages ; avertissement préexistant du chunk ShaderGradient supérieur à 500 kB. Lint et contrôle des espaces ciblés réussis. Pas de nouveau test artificiel pour ces styles réversibles.
+
+### Fait et limites
+
+- Vitesse ShaderGradient de 0.045 à 0.075, mouvement réduit et repli conservés. Animation visible ; cadence GPU non instrumentée.
+- Travaux hors périmètre préservés et hors commit. Un contrôle global des espaces signale des fins de ligne et espaces préexistants dans Admin/Wallet/backlog ; ils ne sont pas corrigés ici.

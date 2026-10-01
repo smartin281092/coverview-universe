@@ -21,12 +21,11 @@ function ResultCard({
   return (
     <article className="hi-ranked-offer">
       <button className="hi-result-row" onClick={() => onOffer(row.offer)}>
-        <HealthInsurerLogo offer={row.offer} />
+        <HealthInsurerLogo offer={row.offer} labelled />
         <span>
-          <strong>{row.offer.insurerBrand ?? row.offer.insurerName}</strong>
+          <strong>{row.offer.name}</strong>
           <HealthContactTags offer={row.offer} />
           <HealthOfferBadges
-            cheapest={result.leaders.premium.includes(row.offer.id)}
             preferred={
               result.questionStates.some(
                 (q) => q.id === "priority" && q.responseStatus === "answered",
@@ -43,6 +42,7 @@ function ResultCard({
           )}
         </span>
         <span className="hi-list-price">
+          <HealthOfferBadges cheapest={result.leaders.premium.includes(row.offer.id)} />
           <strong>{money(row.offer.monthlyPremiumMinor)}</strong>
           <small>
             {healthCopy.currency} {healthCopy.perMonth}
@@ -64,7 +64,9 @@ function ResultCard({
           </div>
           <div>
             <dt>{copy.accident}</dt>
-            <dd>{row.offer.accident ? copy.included : copy.excluded}</dd>
+            <dd className={row.offer.accident ? "hi-included" : undefined}>
+              {row.offer.accident ? copy.included : copy.excluded}
+            </dd>
           </div>
           <div>
             <dt>{copy.price}</dt>

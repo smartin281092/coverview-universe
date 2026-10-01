@@ -308,7 +308,7 @@ export function AdaptiveHealthGuide({
         <section className="hi-guide hi-adaptive-guide" aria-label={copy.start} aria-busy={busy}>
           <div className="hi-guide-heading">
             <span>
-              <HealthIcon name="question" size={15} />
+              <HealthIcon name="message" size={17} />
               {copy.question}
             </span>
             <div>

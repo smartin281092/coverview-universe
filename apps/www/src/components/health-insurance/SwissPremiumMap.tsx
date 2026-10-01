@@ -7,6 +7,20 @@ import { HealthIcon } from "./HealthIcon";
 import { HealthContactTags, HealthInsurerLogo } from "./HealthOfferIdentity";
 import { money, regionName } from "./health-format";
 const frame = { x: -160, y: -100, width: 1320, height: 850 };
+const vaudRegions = map.regions.filter((region) => region.canton === "VD");
+const initialView = {
+  x:
+    frame.x +
+    frame.width / 2 -
+    vaudRegions.reduce((sum, region) => sum + (region.labelPoint[0] ?? 500), 0) /
+      vaudRegions.length,
+  y:
+    frame.y +
+    frame.height / 2 -
+    vaudRegions.reduce((sum, region) => sum + (region.labelPoint[1] ?? 325), 0) /
+      vaudRegions.length,
+  scale: 1,
+};
 
 export function SwissPremiumMap({
   comparison,
@@ -27,7 +41,7 @@ export function SwissPremiumMap({
 }) {
   const [hover, setHover] = useState<string | null>(null);
   const [entry, setEntry] = useState<{ x: number; y: number } | null>(null);
-  const [view, setView] = useState({ x: 0, y: 0, scale: 1 });
+  const [view, setView] = useState(initialView);
   const svg = useRef<SVGSVGElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const wrapper = useRef<HTMLDivElement>(null);
@@ -58,7 +72,16 @@ export function SwissPremiumMap({
   }, []);
   useEffect(() => {
     setHover((current) => (current === selected ? current : null));
-    setView({ x: 0, y: 0, scale: 1 });
+    const target = localityId ? map.regions.find((region) => region.id === selected) : null;
+    setView(
+      target
+        ? {
+            x: frame.x + frame.width / 2 - (target.labelPoint[0] ?? 500),
+            y: frame.y + frame.height / 2 - (target.labelPoint[1] ?? 325),
+            scale: 1,
+          }
+        : initialView,
+    );
   }, [localityId]);
   const bounded = (x: number, y: number, scale: number) => ({
     x: Math.max(
@@ -329,7 +352,7 @@ export function SwissPremiumMap({
           </button>
           <button
             onClick={() => {
-              setView({ x: 0, y: 0, scale: 1 });
+              setView(initialView);
               setHover(null);
             }}
             aria-label={copy.mapReset}
@@ -363,9 +386,9 @@ export function SwissPremiumMap({
             ) : offers.length ? (
               offers.map((offer) => (
                 <button className="hi-map-offer" key={offer.id} onClick={() => onOffer(offer)}>
-                  <HealthInsurerLogo offer={offer} />
+                  <HealthInsurerLogo offer={offer} labelled />
                   <span className="hi-offer-description">
-                    <strong>{offer.insurerBrand ?? offer.insurerName}</strong>
+                    <strong>{offer.name}</strong>
                     <HealthContactTags offer={offer} />
                     {offer.eligibility === "municipality_required" && (
                       <em>{copy.chooseLocality}</em>

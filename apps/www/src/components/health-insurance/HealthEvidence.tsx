@@ -4,6 +4,7 @@ import {
   type EvidenceCatalog,
 } from "@coverview/api-client/health-recommendation";
 import { recommendationCopy as copy } from "../../content/fr/health-recommendation";
+import { HealthIcon } from "./HealthIcon";
 export function HealthEvidence({
   apiUrl,
   modelId,
@@ -44,6 +45,44 @@ export function HealthEvidence({
               fact.classification === "commercial" ||
               fact.classification === "supplementary")),
     ) ?? [];
+  if (view === "benefits") {
+    if (error) return <p role="alert">{copy.failed}</p>;
+    if (!catalog) return <p role="status">{copy.loading}</p>;
+    if (!benefits.length) return <p className="hi-small">{copy.evidence.empty}</p>;
+    return (
+      <ul className="hi-benefits-list">
+        {benefits.map((fact) => {
+          const confirmed =
+            fact.year === year && fact.yearConfirmed && fact.verification === "verified";
+          return (
+            <li key={fact.id}>
+              <span className={confirmed ? "hi-benefit-check" : "hi-benefit-pending"}>
+                <HealthIcon name={confirmed ? "check" : "info"} size={19} />
+              </span>
+              <details>
+                <summary>
+                  <span>{fact.title}</span>
+                  {!confirmed && <small>{copy.evidence.pending}</small>}
+                </summary>
+                <p>{fact.effect}</p>
+                {fact.telemedicine !== "not_applicable" && (
+                  <p>{copy.evidence.telemedicine[fact.telemedicine]}</p>
+                )}
+                <p>
+                  {fact.conditions} {fact.activation}
+                </p>
+                {fact.exclusions && (
+                  <p>
+                    {copy.evidence.exclusions} : {fact.exclusions}
+                  </p>
+                )}
+              </details>
+            </li>
+          );
+        })}
+      </ul>
+    );
+  }
   return (
     <section className="hi-evidence">
       <h3 className="hi-subheading">

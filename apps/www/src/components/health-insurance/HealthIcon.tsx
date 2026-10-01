@@ -11,6 +11,7 @@ export function HealthIcon({
     | "shield"
     | "spark"
     | "question"
+    | "message"
     | "pencil"
     | "check"
     | "bag"
@@ -40,6 +41,7 @@ export function HealthIcon({
     spark: "m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z",
     question:
       "M12 17h.01M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2.5 2-2.5 4M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z",
+    message: "M21 15a4 4 0 0 1-4 4H7l-4 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8ZM7 8h10M7 12h7",
     pencil: "m4 16-1 5 5-1L21 7l-4-4L4 16Zm10-10 4 4",
     check: "m5 12 4 4L19 6",
     bag: "M5 7h14l1 14H4L5 7Zm3 1V6a4 4 0 0 1 8 0v2",

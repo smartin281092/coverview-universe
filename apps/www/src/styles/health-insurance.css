@@ -1002,7 +1002,8 @@
   backdrop-filter: blur(4px);
 }
 .hi-dialog-inner {
-  padding: 27px;
+  --hi-panel-inset: 27px;
+  padding: var(--hi-panel-inset);
 }
 .hi-dialog-header {
   display: flex;
@@ -1192,6 +1193,7 @@
 .hi-price-unit small {
   font-size: 15px;
   letter-spacing: 0;
+  color: #999;
 }
 .hi-model-price em {
   font-size: 12px;
@@ -1322,6 +1324,10 @@
   color: #344fa0;
   background: #eef2ff;
 }
+.hi-offer-badge.is-cheapest {
+  color: #23784e;
+  background: #eaf7ef;
+}
 .hi-map-offer .hi-contact-tag {
   font-size: 9px;
   padding: 3px 4px;
@@ -1412,6 +1418,65 @@
   text-align: right;
   margin: 0;
   color: #5d5d5d;
+}
+.hi-specs dd.hi-included {
+  color: #23784e;
+}
+.hi-segmented .hi-accident-included[aria-pressed="true"] {
+  color: #23784e;
+}
+.hi-benefits-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.hi-benefits-list > li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 15px 0;
+  border-bottom: 1px solid #efefef;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.hi-benefit-check,
+.hi-benefit-pending {
+  display: flex;
+  flex: none;
+  padding-top: 1px;
+  color: #25845b;
+}
+.hi-benefit-pending {
+  color: #929292;
+}
+.hi-benefits-list details {
+  min-width: 0;
+  flex: 1;
+}
+.hi-benefits-list summary {
+  cursor: pointer;
+  list-style: none;
+}
+.hi-benefits-list summary::-webkit-details-marker {
+  display: none;
+}
+.hi-benefits-list summary > span::after {
+  content: "+";
+  float: right;
+  margin-left: 8px;
+  color: #999;
+}
+.hi-benefits-list details[open] summary > span::after {
+  content: "−";
+}
+.hi-benefits-list small,
+.hi-benefits-list p {
+  display: block;
+  font-size: 11px;
+  color: #777;
+}
+.hi-benefits-list p {
+  margin: 8px 0 0;
 }
 .hi-note {
   display: flex;
@@ -1517,6 +1582,15 @@
 .hi-results-list {
   margin-top: 22px;
 }
+.hi-sheet .hi-results-list {
+  margin-inline: calc(-1 * var(--hi-panel-inset));
+}
+.hi-sheet .hi-results-list .hi-result-row {
+  padding-inline: 20px;
+}
+.hi-sheet .hi-ranked-explanation {
+  padding-inline: 20px;
+}
 .hi-result-row {
   display: flex;
   gap: 10px;
@@ -1534,6 +1608,7 @@
 .hi-result-row > span:nth-child(2) {
   flex: 1;
   min-width: 0;
+  overflow-wrap: anywhere;
 }
 .hi-result-row strong {
   font-size: 12px;
@@ -1555,6 +1630,10 @@
 .hi-list-price {
   flex: none;
   text-align: right;
+}
+.hi-list-price .hi-offer-badges {
+  justify-content: flex-end;
+  margin: 0 0 7px;
 }
 .hi-list-price strong {
   font-size: 18px;
@@ -2042,7 +2121,7 @@
     border-radius: 18px 0 0 18px;
   }
   .hi-dialog-inner {
-    padding: 22px;
+    --hi-panel-inset: 22px;
   }
   .hi-dialog-header h2 {
     font-size: 18px;
@@ -2720,6 +2799,11 @@
   margin-top: 12px;
   border: 1px solid #e4e4e4;
   border-radius: 20px;
+}
+.health-comparator .hi-sheet .hi-personal-results {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
 }
 .health-comparator .hi-question-reason {
   background: #fffffff2;

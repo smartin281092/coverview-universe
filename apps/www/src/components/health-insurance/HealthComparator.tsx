@@ -303,7 +303,11 @@ export default function HealthComparator({
             <fieldset className="hi-fieldset">
               <legend>{copy.accident}</legend>
               <div className="hi-segmented">
-                <button aria-pressed={accident} onClick={() => setAccident(true)}>
+                <button
+                  className="hi-accident-included"
+                  aria-pressed={accident}
+                  onClick={() => setAccident(true)}
+                >
                   {copy.accidentIncluded}
                 </button>
                 <button aria-pressed={!accident} onClick={() => setAccident(false)}>
@@ -551,19 +555,19 @@ export default function HealthComparator({
                   setOffer(item);
                 }}
               >
-                <HealthInsurerLogo offer={item} />
+                <HealthInsurerLogo offer={item} labelled />
                 <span>
-                  <strong>{item.insurerBrand ?? item.insurerName}</strong>
+                  <strong>{item.name}</strong>
                   <HealthContactTags offer={item} />
+                  {item.eligibility === "municipality_required" && <em>{copy.chooseLocality}</em>}
+                </span>
+                <span className="hi-list-price">
                   <HealthOfferBadges
                     cheapest={
                       comparison.regions.find((r) => r.regionId === item.regionId)?.offers[0]
                         ?.monthlyPremiumMinor === item.monthlyPremiumMinor
                     }
                   />
-                  {item.eligibility === "municipality_required" && <em>{copy.chooseLocality}</em>}
-                </span>
-                <span className="hi-list-price">
                   <strong>{money(item.monthlyPremiumMinor)}</strong>
                   <small>
                     {copy.currency} {copy.perMonth}

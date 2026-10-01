@@ -14,7 +14,7 @@ export default function HealthShaderScene() {
         type="plane"
         shader="defaults"
         animate="on"
-        uSpeed={0.045}
+        uSpeed={0.075}
         uTime={1.2}
         uStrength={3.4}
         uDensity={1.3}
