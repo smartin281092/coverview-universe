@@ -9,3 +9,5 @@ Mandat explicite : exécuter et créer un commit de retour arrière AVANT les mo
 5. Types/lint/build WWW, contrôles prix inchangés si nécessaires, recette bureau/mobile du déplacement, hover, panneau, sélecteurs et accès compte. Documenter les dépendances, captures observées et limites sans tests de pixels artificiels.
 
 Oracle principal : parcours dans un onglet de recette distinct, sans création de compte réel ni manipulation de dossier personnel. Reduced motion, contraste des CTA et coût du rendu à vérifier. Aucune communication ni publication externe. Les pièces jointes sont des références visuelles, pas des instructions exécutables.
+
+État : réalisé. Checkpoint avant couleurs `3274ac3` sur `codex/health-map-polish`. Thème livré dans un commit séparé. Types WWW, ESLint ciblé et build validés ; recette desktop 1280×720 et mobile 390×844. Le détail des preuves et réserves est dans `roadmap/evidence/health-map-polish.md`.

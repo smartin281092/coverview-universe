@@ -25,7 +25,8 @@ export function HealthDialog({
     return () => {
       node?.close();
       document.body.style.overflow = overflow;
-      if (previous instanceof HTMLElement || previous instanceof SVGElement) previous.focus();
+      if (previous instanceof HTMLElement || previous instanceof SVGElement)
+        previous.focus({ preventScroll: true });
     };
   }, [open]);
   return (

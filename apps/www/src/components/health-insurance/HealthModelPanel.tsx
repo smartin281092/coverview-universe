@@ -1,3 +1,4 @@
+import { HealthGradient } from "./HealthGradient";
 import { useEffect, useState } from "react";
 import type { HealthOffer } from "@coverview/api-client/health-insurance";
 import { healthCopy as copy } from "../../content/fr/health-insurance";
@@ -46,6 +47,7 @@ export function HealthModelPanel({
             <small>{copy.gross}</small>
           </div>
           <button className="hi-primary hi-full hi-request-cta" onClick={() => onRequest(offer)}>
+            <HealthGradient />
             {offerCopy.request}
             <HealthIcon name="arrow" size={16} />
           </button>

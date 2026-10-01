@@ -1,3 +1,4 @@
+import { HealthGradient } from "./HealthGradient";
 import { useRef, useState } from "react";
 import type { createInsuranceClient } from "@coverview/api-client/insurance-requests";
 import { offerCopy as copy } from "../../content/fr/insurance-requests";
@@ -117,6 +118,7 @@ export function HealthRequestRecovery({
             </p>
           )}
           <button className="hi-primary" disabled={pending}>
+            <HealthGradient />
             {pending ? copy.working : sent ? copy.verify : copy.continue}
           </button>
           {sent && !verified && (

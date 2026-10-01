@@ -1,3 +1,4 @@
+import { HealthGradient } from "./HealthGradient";
 import { insurancePersonSchema } from "@coverview/api-client/insurance-requests";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
@@ -411,6 +412,7 @@ export function HealthCheckout({
                   (access === "wallet" && sent === true && !verified && code.length !== 6)
                 }
               >
+                <HealthGradient />
                 {access === "guest" || verified || browser?.accountEmail === email
                   ? copy.continue
                   : sent
@@ -602,6 +604,7 @@ export function HealthCheckout({
                   {copy.back}
                 </button>
                 <button className="hi-primary" disabled={busy}>
+                  <HealthGradient />
                   {items.some((item) => item.id === person.id) ? copy.save : copy.add}
                 </button>
               </div>
@@ -758,6 +761,7 @@ export function HealthCheckout({
                   disabled={busy || !items.length}
                   onClick={() => (step === 2 ? void price(items, 3) : void submit())}
                 >
+                  <HealthGradient />
                   {step === 2 ? copy.continue : busy ? copy.sending : copy.submit}
                 </button>
               </div>

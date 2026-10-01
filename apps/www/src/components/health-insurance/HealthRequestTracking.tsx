@@ -1,3 +1,4 @@
+import { HealthGradient } from "./HealthGradient";
 import { useEffect, useMemo, useState } from "react";
 import { RequestProgress } from "@coverview/ui";
 import {
@@ -133,6 +134,7 @@ export default function HealthRequestTracking({ apiUrl }: { apiUrl: string }) {
             <p className="hi-small">{copy.noPayment}</p>
             {request.saveInWallet ? (
               <a className="hi-primary" href={`${walletUrl}/insurance-requests/${request.id}`}>
+                <HealthGradient />
                 {copy.openWallet}
               </a>
             ) : (

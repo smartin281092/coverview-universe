@@ -193,7 +193,7 @@ export function SwissPremiumMap({
                 dx="0"
                 dy="12"
                 stdDeviation="14"
-                floodColor="#334b46"
+                floodColor="#333333"
                 floodOpacity=".08"
               />
             </filter>

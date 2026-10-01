@@ -1,0 +1,30 @@
+# Comparateur : carte, navigation et thème Wallet — 1er octobre 2026
+
+Mandat utilisateur exécuté sans publication distante. Le checkpoint `3274ac3` précède toute recoloration ; le commit suivant porte le thème. Le checkpoint conserve l'interface du comparateur déjà présente dans le workspace, pas les autres travaux serveur/Admin/Wallet encore non committés. Ne pas utiliser de reset global pour revenir au thème précédent : révoquer uniquement le commit de thème. Aucun changement de prime, de calcul, d'identité juridique ou de compte réel.
+
+## Réalisé et vérifié
+
+- Géométries d'affichage des pays voisins prolongées à 300 km autour de la Suisse ; limites de déplacement ouvertes dès le zoom 1. La géométrie de recherche serveur reste bornée à 90 km. Recette : déplacement desktop `translate(148.75 51.94) scale(1)` et mobile `translate(260.62 192.92) scale(1)`. Zoom/recentrage existants conservés.
+- Bulle ancrée au point d'entrée du pointeur, conservé en coordonnées géographiques pendant le survol. Au clavier, repli sur le centre de la région. Clic et Entrée ouvrent le volet droit. Test réel du Jura : 105 modèles, Sanitas TelMed Basic 456 CHF dans les paramètres de recette ; valeurs lues de l'API, pas de fixture UI.
+- Lignes de bulle bord à bord : sur mobile, bulle 304 px, contenu 302 px, mêmes limites gauche/droite pour les trois lignes et le pied. Bas de la dernière ligne et haut du pied à 386 px : espace nul.
+- Profil : options ouvertes exactement Homme/Femme, boutons −/+ avec noms accessibles, sous-titre retiré. Sélecteurs du design system conservés, déclencheur 36 px et lignes 34 px. Le sexe demeure facultatif ; aucune modification des réponses historiques côté serveur.
+- Menu à x=0/y=0, largeur égale au viewport ; logo réduit, sac panier, accès `/auth/login?surface=wallet` et onboarding Wallet `/profile` selon l'origine configurée. Aucune authentification ni inscription réelle déclenchée. Sources toujours accessibles hors du menu, dans le pied desktop et dans les fiches.
+- En 390×844 : aucun débordement horizontal, ouverture/fermeture du profil, navigation carte et liste fonctionnelles. Correction du défilement interne provoqué par le focus d'un grand polygone : `overflow: clip` et restauration du focus sans scroll. Header y=0 après déplacement.
+- Palette grise et accents bleu nuit/indigo. ShaderGradient réel chargé sur les CTA ; deux canvases visibles au départ. Vérification visuelle bureau/mobile sans erreur JavaScript du renderer. Vitesse 0.035, plan déformé et tourné à 45°, fond #111e38, bleu #3b82f6, indigo #6366f1. Voile sombre pour préserver la lisibilité du texte blanc, y compris au survol.
+- `www typecheck` : 79 fichiers, zéro erreur/avertissement. ESLint composants du comparateur : réussi. `www build` : 45 pages générées.
+
+## Référence et dépendances
+
+Référence utilisateur : `credit-card-coverview-without-border.svg`, SHA-256 `cb13c0c11decc8d762fd608b26f3e386a8c72f711ed2d2f96f611c587698e3f3`. Son fond est une image PNG embarquée 1579×996 : base bleu nuit, pli lumineux bleu/cyan, nuances lavande en bas à droite, grain discret. L'image a été extraite localement pour inspection ; les textes et données de la carte ne sont pas publiés. La référence Framer motive les surfaces gris doux et la rareté des accents. Dérogation visuelle explicite de l'utilisateur, limitée au comparateur.
+
+DEP-01 : ajout demandé de `@shadergradient/react`, avec ses imports runtime externes `@react-three/fiber`, `three` et les types `@types/three`, licences MIT. Source primaire : [documentation du renderer](https://github.com/ruucm/shadergradient). `camera-controls` et `three-stdlib` proposés par le guide ont été retirés après inspection du paquet : cette distribution embarque leur code nécessaire et ne les importe pas extérieurement. Les trois dépendances runtime/types indirectes sont déclarées à Knip, qui ne suit pas les imports internes du paquet ; aucun contrôle applicatif désactivé. Le lockfile ciblé a été produit par pnpm dans un jeu isolé de manifests HEAD + WWW modifié, pour laisser les dépendances non liées déjà en cours hors du commit.
+
+Chargement React.lazy séparé : chunk renderer mesuré à environ 1.15 Mo minifié / 282 ko gzip. Il ne bloque pas l'hydratation du comparateur, mais le coût réseau existe pour les CTA visibles. Le composant ne reçoit aucune réponse personnelle, utilise l'éclairage local `3d` et ne charge ni HDR distant ni iframe. La vitesse lente est un choix visuel, pas une mesure de fréquence de rendu.
+
+## Réserves précises
+
+- **Implémenté, non exercé sur matériel dédié** : arrêt par `prefers-reduced-motion`, masquage de page, sortie du viewport et repli CSS en cas d'échec de chargement/WebGL. Pinch tactile hérité conservé ; recette mobile effectuée par viewport et pointeur du navigateur, pas sur téléphone physique. Pas de test de pixels artificiel ajouté à cette retouche réversible.
+- **Vérifié, hors périmètre** : Knip WWW signale encore les quatre fichiers préexistants Closing.astro, Faq.astro, GuideVisual.astro et ResourceVisual.astro. Aucune nouvelle dépendance inutilisée après la déclaration des imports indirects.
+- **Vérifié, hors périmètre** : audit production du monorepo : 7 alertes modérées, 2 élevées, 0 critique, toutes sur des chemins préexistants (`fast-uri`, `fastify`, `brace-expansion`, `ip-address`), aucune sur le nouveau renderer. Non corrigées dans une retouche visuelle. À traiter dans une maintenance de dépendances séparée.
+- **Vérifié** : avertissement de taille Vite pour le chunk graphique différé ; avertissement Three.Clock obsolète émis par ShaderGradient, sans erreur de rendu observée. Ne pas masquer ces avertissements ni épingler arbitrairement une ancienne version.
+- Le serveur Astro local a cessé de répondre pendant le changement de dépendances. Un contrôle HTTP indépendant a confirmé le blocage ; seul le processus WWW sur 4103 a été relancé. L'incident n'était pas une panne WebGL. Les autres applications et les onglets utilisateur n'ont pas été réinitialisés.

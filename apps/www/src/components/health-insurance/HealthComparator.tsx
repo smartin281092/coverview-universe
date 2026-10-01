@@ -1,3 +1,4 @@
+import { HealthGradient } from "./HealthGradient";
 import { useEffect, useMemo, useState } from "react";
 import { createApiClient } from "@coverview/api-client";
 import {
@@ -211,7 +212,11 @@ export default function HealthComparator({
           {copy.toolName}
         </a>
         <div className="hi-header-right">
-          <button className="hi-cart-link" onClick={() => setCheckout(true)}>
+          <button
+            className="hi-cart-link"
+            aria-label={`${offerCopy.cart} (${cartCount})`}
+            onClick={() => setCheckout(true)}
+          >
             <HealthIcon name="bag" size={19} />
             <span className="hi-cart-label">{offerCopy.cart}</span>{" "}
             <span className="hi-cart-count">{cartCount}</span>
@@ -223,6 +228,7 @@ export default function HealthComparator({
             className="hi-primary hi-create-account"
             href={walletUrl ? `${walletUrl}/profile` : "/account"}
           >
+            <HealthGradient />
             {copy.createAccount}
           </a>
         </div>
@@ -383,6 +389,7 @@ export default function HealthComparator({
                 <h2>{copy.crossBorder}</h2>
                 <p className="hi-small">{copy.foreignGuide}</p>
                 <button className="hi-primary" onClick={() => setShowList(true)}>
+                  <HealthGradient />
                   {copy.viewAll}
                 </button>
               </div>
@@ -466,6 +473,7 @@ export default function HealthComparator({
           ))}
         </fieldset>
         <button className="hi-primary hi-full" onClick={() => setShowFilters(false)}>
+          <HealthGradient />
           {copy.apply}
           <HealthIcon name="arrow" size={16} />
         </button>

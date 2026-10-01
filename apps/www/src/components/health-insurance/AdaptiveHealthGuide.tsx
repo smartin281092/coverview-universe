@@ -1,3 +1,4 @@
+import { HealthGradient } from "./HealthGradient";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   createRecommendationClient,
@@ -336,6 +337,7 @@ export function AdaptiveHealthGuide({
               <p className="hi-small">{copy.intro}</p>
               <p className="hi-small">{copy.privacy}</p>
               <button className="hi-primary" onClick={() => setStarted(true)}>
+                <HealthGradient />
                 {copy.consent}
                 <HealthIcon name="arrow" size={16} />
               </button>

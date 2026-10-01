@@ -30,7 +30,7 @@
       "project": ["src/**/*.{ts,tsx,css}"]
     },
     "apps/www": {
-      "ignoreDependencies": ["gsap"],
+      "ignoreDependencies": ["gsap", "@react-three/fiber", "three", "@types/three"],
       "project": ["src/**/*.{ts,tsx,astro,mdx,css}"]
     },
     "packages/ui": {
