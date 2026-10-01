@@ -1172,16 +1172,16 @@
   letter-spacing: -0.03em;
 }
 .hi-model-price {
-  background: #f4f4f4;
-  border: 1px solid #e9e9e9;
-  border-radius: 15px;
-  padding: 21px 22px;
+  padding: 20px 0;
   color: #686868;
 }
 .hi-model-price > span {
   font-size: 11px;
 }
 .hi-model-price p {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   font-size: 43px;
   font-weight: 400;
   color: #464646;
@@ -1189,7 +1189,7 @@
   line-height: 1.35;
   margin: 2px 0;
 }
-.hi-model-price p > small {
+.hi-price-unit small {
   font-size: 15px;
   letter-spacing: 0;
 }
@@ -1210,6 +1210,9 @@
   gap: 20px;
 }
 .hi-tabs > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   padding: 12px 2px;
   background: none;
   border: 0;
@@ -1219,7 +1222,173 @@
 }
 .hi-tabs > button[aria-selected="true"] {
   color: #505050;
-  border-bottom-color: #626262;
+  border-bottom-color: var(--hi-tab-color);
+}
+.hi-tab-coverage {
+  --hi-tab-color: #3b82f6;
+}
+.hi-tab-benefits {
+  --hi-tab-color: #25845b;
+}
+.hi-tab-club {
+  --hi-tab-color: #d45158;
+}
+.hi-tabs > button > svg {
+  color: var(--hi-tab-color);
+}
+.hi-price-unit {
+  display: grid;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+.health-comparator .hi-back-to-list {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 0;
+  border: 0;
+  background: none;
+  font-size: 13px;
+  font-weight: 700;
+  color: #333;
+}
+.hi-back-to-list:hover {
+  color: #3b82f6;
+}
+.hi-model-title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+.hi-insurer-logo {
+  display: inline-grid;
+  place-items: center;
+  width: 70px;
+  height: 40px;
+  flex: 0 0 70px;
+  border-radius: 7px;
+  background: #fff;
+}
+.hi-insurer-logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.hi-insurer-logo.is-reversed {
+  background: #16518c;
+  padding: 5px;
+}
+.hi-model-brand .hi-insurer-logo {
+  width: 100px;
+  height: 54px;
+  flex-basis: 100px;
+}
+.hi-map-offer .hi-insurer-logo {
+  width: 42px;
+  height: 30px;
+  flex-basis: 42px;
+}
+.hi-contact-tags,
+.hi-offer-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 7px;
+}
+.hi-contact-tag,
+.hi-offer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 5px;
+  padding: 4px 6px;
+  background: #f4f4f4;
+  color: #626262;
+  font-size: 10px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+.hi-contact-tag svg,
+.hi-offer-badge svg {
+  flex: none;
+}
+.hi-offer-badge {
+  background: #f0f0f0;
+  color: #444;
+}
+.hi-offer-badge.is-preferred {
+  color: #344fa0;
+  background: #eef2ff;
+}
+.hi-map-offer .hi-contact-tag {
+  font-size: 9px;
+  padding: 3px 4px;
+}
+.hi-ranked-offer {
+  border-bottom: 1px solid #ebebeb;
+}
+.hi-ranked-offer .hi-result-row {
+  border-bottom: 0;
+}
+.hi-ranked-explanation {
+  font-size: 11px;
+  color: #666;
+  padding: 0 0 15px;
+}
+.hi-ranked-explanation > summary {
+  cursor: pointer;
+  list-style-position: inside;
+}
+.hi-redistribution {
+  position: relative;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.hi-info-tooltip {
+  display: inline-flex;
+}
+.hi-info-tooltip button {
+  display: inline-flex;
+  border: 0;
+  background: none;
+  padding: 5px;
+  color: #757575;
+}
+.hi-info-tooltip [role="tooltip"] {
+  display: none;
+  position: absolute;
+  z-index: 10;
+  top: 100%;
+  left: 0;
+  right: 0;
+  padding: 15px;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  background: #fff;
+  color: #555;
+  box-shadow: 0 8px 28px #0002;
+  font-size: 12px;
+  line-height: 1.65;
+}
+.hi-info-tooltip:hover [role="tooltip"],
+.hi-info-tooltip:focus-within [role="tooltip"] {
+  display: block;
+}
+.hi-info-tooltip a {
+  display: block;
+  margin-top: 8px;
+  text-decoration: underline;
+}
+.hi-sheet #adaptive-health-guide {
+  margin: 8px 0 24px;
+}
+.hi-sheet .hi-adaptive-guide {
+  box-shadow: none;
 }
 .hi-tab-content {
   padding-top: 17px;

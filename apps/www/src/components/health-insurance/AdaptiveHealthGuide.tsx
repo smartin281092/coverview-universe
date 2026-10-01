@@ -1,5 +1,5 @@
 import { HealthGradient } from "./HealthGradient";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
   createRecommendationClient,
   createLatestRecommendationRequest,
@@ -8,12 +8,12 @@ import {
   type RecommendationQuestion,
   type RecommendationResult,
 } from "@coverview/api-client/health-recommendation";
-import type { HealthCompareInput, HealthOffer } from "@coverview/api-client/health-insurance";
+import type { HealthCompareInput } from "@coverview/api-client/health-insurance";
 import { healthCompareInputSchema } from "@coverview/api-client/health-insurance";
 import { recommendationCopy as copy } from "../../content/fr/health-recommendation";
 import { HealthDialog } from "./HealthDialog";
 import { HealthIcon } from "./HealthIcon";
-import { RecommendationResults } from "./RecommendationResults";
+export type HealthGuideSnapshot = { result: RecommendationResult | null; busy: boolean };
 
 function AnswerCard({
   question,
@@ -174,8 +174,7 @@ export function AdaptiveHealthGuide({
   sex,
   scope,
   enabled,
-  trigger,
-  onOffer,
+  onUpdate,
 }: {
   apiUrl: string;
   profile: HealthCompareInput;
@@ -183,8 +182,7 @@ export function AdaptiveHealthGuide({
   sex: RecommendationInput["sex"];
   scope: RecommendationInput["scope"];
   enabled: boolean;
-  trigger: number;
-  onOffer: (offer: HealthOffer) => void;
+  onUpdate: (value: HealthGuideSnapshot) => void;
 }) {
   const api = useMemo(() => createRecommendationClient(apiUrl), [apiUrl]);
   const requests = useMemo(() => createLatestRecommendationRequest(api.recommend), [api]);
@@ -206,21 +204,14 @@ export function AdaptiveHealthGuide({
     reservedHeight = useRef(0),
     changedAnswer = useRef<string | null>(null);
   const previousQuestion = useRef<string[]>([]);
-  useEffect(() => {
-    if (window.matchMedia("(max-width:760px)").matches) setOpen(false);
-  }, []);
-  useEffect(() => {
-    if (trigger) {
-      setOpen(true);
-      document
-        .getElementById("adaptive-health-guide")
-        ?.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  }, [trigger]);
+  // Publish the question and its ranking before paint, including invalidation on each edit.
+  useLayoutEffect(() => {
+    onUpdate({ result: enabled && !busy ? result : null, busy: enabled && busy });
+  }, [result, busy, enabled, onUpdate]);
   useEffect(() => {
     changedAnswer.current = null;
   }, [profile, scope]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!started || !enabled) return;
     const current = ++version.current,
       abort = new AbortController();
@@ -406,7 +397,6 @@ export function AdaptiveHealthGuide({
                 : ""}
             </p>
           )}
-          <RecommendationResults result={result} onOffer={onOffer} />
         </>
       )}
       <HealthDialog open={review} onClose={() => setReview(false)} title={copy.edit} sheet>

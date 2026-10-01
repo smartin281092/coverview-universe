@@ -16,6 +16,17 @@ export function HealthIcon({
     | "bag"
     | "plus"
     | "minus"
+    | "back"
+    | "discount"
+    | "verified"
+    | "heart"
+    | "gift"
+    | "info"
+    | "doctor"
+    | "network"
+    | "phone"
+    | "video"
+    | "pharmacy"
     | "chevron";
   size?: number;
 }) {
@@ -34,6 +45,20 @@ export function HealthIcon({
     bag: "M5 7h14l1 14H4L5 7Zm3 1V6a4 4 0 0 1 8 0v2",
     plus: "M5 12h14M12 5v14",
     minus: "M5 12h14",
+    back: "M20 12H4m6-6-6 6 6 6",
+    discount: "M20 13 11 22 2 13V3h10l8 10ZM7 7h.01M10 12l5 5m0-5-5 5",
+    verified:
+      "m12 2 3 2 4 .5.5 4 2 3-2 3-.5 4-4 .5-3 2-3-2-4-.5-.5-4-2-3 2-3 .5-4 4-.5 3-2Zm-5 10 3 3 6-6",
+    heart:
+      "M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z",
+    gift: "M3 8h18v4H3V8Zm2 4v9h14v-9M12 8v13M12 8H7a3 3 0 1 1 3-3l2 3Zm0 0h5a3 3 0 1 0-3-3l-2 3Z",
+    info: "M12 7v6m0 4h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z",
+    doctor:
+      "M5 3v5a5 5 0 0 0 10 0V3M3 3h4m6 0h4M10 13v3a5 5 0 0 0 10 0v-2m2-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z",
+    network: "M4 21V7l8-4 8 4v14H4Zm5 0v-5h6v5M9 9h6m-3-3v6",
+    phone: "m7 3 3 5-3 3a16 16 0 0 0 6 6l3-3 5 3-1 4C10 22 2 14 3 4l4-1Z",
+    video: "M3 5h12v14H3V5Zm12 5 6-4v12l-6-4",
+    pharmacy: "M9 3h6v6h6v6h-6v6H9v-6H3V9h6V3Z",
     chevron: "m9 5 7 7-7 7",
   };
   return (

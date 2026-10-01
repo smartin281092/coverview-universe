@@ -4,6 +4,7 @@ import map from "../../../../../data/health-insurance/2027/regions-map.json";
 import neighbors from "../../../../../data/health-insurance/2027/neighbors-map.json";
 import { healthCopy as copy } from "../../content/fr/health-insurance";
 import { HealthIcon } from "./HealthIcon";
+import { HealthContactTags, HealthInsurerLogo } from "./HealthOfferIdentity";
 import { money, regionName } from "./health-format";
 const frame = { x: -160, y: -100, width: 1320, height: 850 };
 
@@ -123,6 +124,22 @@ export function SwissPremiumMap({
     <div
       className="hi-map-wrap"
       ref={wrapper}
+      onPointerMove={(event) => {
+        if (event.pointerType === "touch" || pointers.current.size) return;
+        // Hit-test through the floating card so a fast upward move cannot pin it in place.
+        const target =
+          (event.target as Element).closest<SVGPathElement>("[data-region]") ??
+          ((event.target as Element).closest(".hi-region-popover")
+            ? document
+                .elementsFromPoint(event.clientX, event.clientY)
+                .find(
+                  (element): element is SVGPathElement =>
+                    element instanceof SVGPathElement && !!element.dataset.region,
+                )
+            : undefined);
+        if (target?.dataset.region) enter(target.dataset.region, event.clientX, event.clientY);
+        else setHover(null);
+      }}
       onPointerLeave={(event) => {
         if (event.pointerType !== "touch") setHover(null);
       }}
@@ -297,7 +314,6 @@ export function SwissPremiumMap({
                   </text>
                 ))}
             </g>
-            {region && <circle cx={x} cy={y} r="6" className="hi-map-point" />}
           </g>
         </svg>
         <div className="hi-map-controls" aria-label={copy.mapControls}>
@@ -332,7 +348,6 @@ export function SwissPremiumMap({
                 top: `${Math.max(88, Math.min(size.height - 24, anchorY + (below ? 18 : -18)))}px`,
               } as CSSProperties
             }
-            onPointerEnter={() => setHover(region.id)}
           >
             <div className="hi-popover-heading">
               <span className="hi-region-dot" />
@@ -346,12 +361,12 @@ export function SwissPremiumMap({
                 {copy.loading}
               </p>
             ) : offers.length ? (
-              offers.map((offer, index) => (
+              offers.map((offer) => (
                 <button className="hi-map-offer" key={offer.id} onClick={() => onOffer(offer)}>
-                  <span className="hi-offer-rank">{index + 1}</span>
+                  <HealthInsurerLogo offer={offer} />
                   <span className="hi-offer-description">
                     <strong>{offer.insurerBrand ?? offer.insurerName}</strong>
-                    <small>{offer.name}</small>
+                    <HealthContactTags offer={offer} />
                     {offer.eligibility === "municipality_required" && (
                       <em>{copy.chooseLocality}</em>
                     )}

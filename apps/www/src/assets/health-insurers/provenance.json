@@ -1,0 +1,326 @@
+[
+  {
+    "insurerId": 8,
+    "brand": "CSS",
+    "page": "https://www.css.ch/de/privatkunden.html",
+    "source": "https://www.css.ch/de/privatkunden.html",
+    "file": "8.svg",
+    "sha256": "ae78c2e6083af2dbd6fe015e518a5170cf214c460a4ceddc0bc494949db6ceed",
+    "kind": "official_inline_svg",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 32,
+    "brand": "Aquilana",
+    "page": "https://www.aquilana.ch/",
+    "source": "https://www.aquilana.ch/content/miscellaneous/Archiv_Inhalte/aquilana_new_rgb_ohne_padding.svg",
+    "file": "32.svg",
+    "sha256": "c055ef4858bc18fdfe1e5962458ba6a56c91dd050d67f47fcc56921b5452f1b6",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 134,
+    "brand": "Einsiedler",
+    "page": "https://kkeinsiedeln.ch/",
+    "source": "https://kkeinsiedeln.ch/wp-content/uploads/2026/02/einsiedler_krankenkasse_2022_logo_web.png",
+    "file": "134.png",
+    "sha256": "d76e932f53c84b2daddb795552157f3927285c46e2697016ebd32c7a72e94717",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 194,
+    "brand": "Sumiswalder",
+    "page": "https://sumiswalder.ch/",
+    "source": "https://sumiswalder.ch/20/wp-content/uploads/2020/04/sumiswalder_gesamt_rgb_web.png",
+    "file": "194.png",
+    "sha256": "34aa8d9f098afde501f48dbafbc1e9c744e8f662ef422d3d597806037fa8a5be",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 246,
+    "brand": "Steffisburg",
+    "page": "https://www.kkst.ch/home",
+    "source": "https://www.kkst.ch/images/logo.svg",
+    "file": "246.svg",
+    "sha256": "d9ddedfe701ba4438db314959fcbb6a7201b38135a1191f1fc0d677f2ee37bc8",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 290,
+    "brand": "CONCORDIA",
+    "page": "https://www.concordia.ch/de.html",
+    "source": "https://www.concordia.ch/content/dam/concordia-relaunch-app/images/concordia_logo.svg",
+    "file": "290.svg",
+    "sha256": "f5353b37644b31fa161fc2974c7bb6bb4dd931b7409c90469c540d78fc3ccac1",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 312,
+    "brand": "Atupri",
+    "page": "https://atupri.ch/de",
+    "source": "https://a.storyblok.com/f/253863/98x35/f0cb32645a/logo-default.svg",
+    "file": "312.svg",
+    "sha256": "a2fe6715f707585b8ddb790db3844719081bdc81551b04c27ebb5420a49a117f",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 343,
+    "brand": "Groupe Mutuel",
+    "page": "https://www.groupemutuel.ch/fr/clients-prives.html",
+    "source": "https://www.groupemutuel.ch/dam/jcr:6da6cce5-0eb9-4e98-bdc0-5202a18317fe/logo-groupe-mutuel.svg",
+    "file": "343.svg",
+    "sha256": "7a9e4ec32ed49bc8bfbf0a369323195cfee55e7938cecb2fff664b26f088de29",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 360,
+    "brand": "Luzerner Hinterland",
+    "page": "https://www.kklh.ch/",
+    "source": "https://www.kklh.ch/base/Website/Images/Layout/logo.svg",
+    "file": "360.svg",
+    "sha256": "584c3c16b5e76f64aa5489dac3589d62670fcecd4316169eba7a6f504a981d00",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 376,
+    "brand": "KPT",
+    "page": "https://www.kpt.ch/de",
+    "source": "https://www.kpt.ch/_next/static/media/kpt.04u~r-3_e31f4.svg",
+    "file": "376.svg",
+    "sha256": "e04a43c2ff5947ff4967fbfcb91a1c223a296e3729914f1af657d5de3abad2b5",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 455,
+    "brand": "ÖKK",
+    "page": "https://www.oekk.ch/de/privatkunden",
+    "source": "https://www.oekk.ch/assets/img/logo.svg?v=1",
+    "file": "455.svg",
+    "sha256": "61a17266f5ab832346c2bdbfe7451e03ea30bc8bd0fe791c93426184f5df43c3",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 509,
+    "brand": "Sympany",
+    "page": "https://www.sympany.ch/en.html",
+    "source": "https://cdn.sympany.ch/corporate-design/1.0.1/assets/images/logo-without-claim.svg",
+    "file": "509.svg",
+    "sha256": "cc7d0b818fcc7debcd39a5adeda0247f876072a0c6e9402267518df69b911d73",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 780,
+    "brand": "Glarner",
+    "page": "https://www.glkv.ch/",
+    "source": "https://www.glkv.ch/public/upload/assets/13/logo.svg",
+    "file": "780.svg",
+    "sha256": "d00009359c00760f0e8360dfa2adfc634be23278b8e0488b4c37d4ea9971ede2",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 820,
+    "brand": "curaulta",
+    "page": "https://www.curaulta.ch/",
+    "source": "https://www.curaulta.ch/files/logo_curaulta_mit_claim.png",
+    "file": "820.png",
+    "sha256": "a7c47ad3052788ee461663762da9df2e7b8d3d80f318ff3c5ba885f3811dd9cb",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 881,
+    "brand": "EGK",
+    "page": "https://www.egk.ch/de",
+    "source": "https://www.egk.ch/de",
+    "file": "881.svg",
+    "sha256": "4671bfa206d9b70f2f3fdcfa6057b8c99ff4c1a519975300da1e7f24c6285307",
+    "kind": "official_inline_svg",
+    "checkedAt": "2026-10-01",
+    "styleSource": "https://www.egk.ch/static/egk2026/app.13d2a628.css"
+  },
+  {
+    "insurerId": 923,
+    "brand": "SLKK",
+    "page": "https://slkk.ch/de/",
+    "source": "https://slkk.ch/de/",
+    "file": "923.svg",
+    "sha256": "1446f5062d8a4cafa3b3f453cc55741830f6f1258308ea6f8032a249d10a282d",
+    "kind": "official_inline_svg",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 941,
+    "brand": "sodalis",
+    "page": "https://www.sodalis.ch/de",
+    "source": "https://www.sodalis.ch/templates/sodalis/img/logo.svg",
+    "file": "941.svg",
+    "sha256": "df837a88d4ee655924b9ba79975f5ef89c70430f4a6234b98d3b4c0df2d31aef",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 966,
+    "brand": "vita surselva",
+    "page": "https://www.vitasurselva.ch/home/",
+    "source": "https://www.vitasurselva.ch/typo3conf/ext/som_distribution/Resources/Public/Images/Vitasurselva.svg",
+    "file": "966.svg",
+    "sha256": "9111005afb61f1752b2d97e6a05a2a760a57f0990e639ad4d62f7f3625ff5073",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 1040,
+    "brand": "KKV",
+    "page": "https://www.kkv.ch/",
+    "source": "https://www.kkv.ch/wp-content/uploads/2019/03/Logo.png",
+    "file": "1040.png",
+    "sha256": "61205941d7450fec6011999968403986d0f425dd48b903c9c94ddbb43da40830",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 1318,
+    "brand": "Krankenkasse Wädenswil",
+    "page": "https://www.kkwaedenswil.ch/",
+    "source": "https://www.kkwaedenswil.ch/home/kk/design/images/KKW_Logo.svg",
+    "file": "1318.svg",
+    "sha256": "04bac3dea69bb385dc91fc46c93c46274d508b436ad482a8d85111a80fb1121d",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 1322,
+    "brand": "Birchmeier",
+    "page": "https://www.kkbirchmeier.ch/",
+    "source": "https://www.kkbirchmeier.ch/design/logo/logo_kkbirchmeier.png",
+    "file": "1322.png",
+    "sha256": "d50dcb70c0469b2faa191163b21b054b96630d232e49fe4c31b14587f8b518bc",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 1384,
+    "brand": "SWICA",
+    "page": "https://www.swica.ch/de/private",
+    "source": "https://www.swica.ch/swica.svg",
+    "file": "1384.svg",
+    "sha256": "ae4519e82010362ec82b17ea444f2df713dc15c4f7d1c77deb7a643c4eea62ea",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 1386,
+    "brand": "Galenos",
+    "page": "https://www.galenos.ch/de/startseite/",
+    "source": "https://www.galenos.ch/wp-content/uploads/2017/05/gal_logo_white_.svg",
+    "file": "1386.svg",
+    "sha256": "7eecb5804e811052b64e4224372237f38e87b6c99ee4163c5888f90c074bf039",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 1401,
+    "brand": "rhenusana",
+    "page": "https://rhenusana.ch/",
+    "source": "https://rhenusana.ch/wp-content/uploads/2022/11/Logo_Rhenusana.svg",
+    "file": "1401.svg",
+    "sha256": "a0ac06e78c0fd9ec9175e4b7f66123f2cb5e75472e51e98160cf3d1d7c1d29b8",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 1479,
+    "brand": "Mutuel Assurance",
+    "page": "https://www.groupemutuel.ch/fr/clients-prives.html",
+    "source": "https://www.groupemutuel.ch/dam/jcr:6da6cce5-0eb9-4e98-bdc0-5202a18317fe/logo-groupe-mutuel.svg",
+    "file": "1479.svg",
+    "sha256": "7a9e4ec32ed49bc8bfbf0a369323195cfee55e7938cecb2fff664b26f088de29",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01",
+    "note": "Identité commerciale Groupe Mutuel utilisée sur le site officiel de la compagnie ; identifiant et nom de la caisse restent distincts."
+  },
+  {
+    "insurerId": 1509,
+    "brand": "Sanitas",
+    "page": "https://www.sanitas.com/",
+    "source": "https://www.sanitas.com/content/dam/sanitas-internet/Bilder/SA_Logo_ohneClaim_cmyk.png",
+    "file": "1509.png",
+    "sha256": "50778742f5061b30122b9e97387c208e69296fc0a0a5720888d2abe55cad726d",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 1535,
+    "brand": "Philos Assurance",
+    "page": "https://www.groupemutuel.ch/fr/clients-prives.html",
+    "source": "https://www.groupemutuel.ch/dam/jcr:6da6cce5-0eb9-4e98-bdc0-5202a18317fe/logo-groupe-mutuel.svg",
+    "file": "1535.svg",
+    "sha256": "7a9e4ec32ed49bc8bfbf0a369323195cfee55e7938cecb2fff664b26f088de29",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01",
+    "note": "Identité commerciale Groupe Mutuel utilisée sur le site officiel de la compagnie ; identifiant et nom de la caisse restent distincts."
+  },
+  {
+    "insurerId": 1542,
+    "brand": "Assura",
+    "page": "https://www.assura.ch/fr",
+    "source": "https://www.assura.ch/logo.png",
+    "file": "1542.png",
+    "sha256": "e9ec0742b2e89293b98d7522b4f2294113a5ed81412097b0360adc041958a84d",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 1555,
+    "brand": "Visana",
+    "page": "https://www.visana.ch/en/individuals",
+    "source": "https://www.visana.ch/.resources/visana-web-relaunch/webresources/node_modules/@ff-visana/pwr-styleguide-styling/resources/logos/color.svg",
+    "file": "1555.svg",
+    "sha256": "aee9cbc179dc499b8a62a9c1c69a8d8fe7a61c911e3b75dc313d3fea4f7987d1",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 1560,
+    "brand": "Agrisano",
+    "page": "https://www.agrisano.ch/de/",
+    "source": "https://www.agrisano.ch/_assets/feb1d86054ab2e718cccf9db6ed46074/Partials/Logo/Images/agrisano.svg",
+    "file": "1560.svg",
+    "sha256": "6f633190114b732327b31d511c62d6c24fbdbf301bb00165897e33d010f92eeb",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 1562,
+    "brand": "Helsana",
+    "page": "https://www.helsana.ch/de/private.html",
+    "source": "https://www.helsana.ch/content/dam/system/helsana/resources/helsana-logo.svg",
+    "file": "1562.svg",
+    "sha256": "27bdb75e28c6fc9b0ece9f1158e5f7e43b851a6784d5e5f555628df9f60a30d5",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01"
+  },
+  {
+    "insurerId": 1568,
+    "brand": "sana24",
+    "page": "https://www.visana.ch/en/individuals",
+    "source": "https://www.visana.ch/.resources/visana-web-relaunch/webresources/node_modules/@ff-visana/pwr-styleguide-styling/resources/logos/color.svg",
+    "file": "1568.svg",
+    "sha256": "aee9cbc179dc499b8a62a9c1c69a8d8fe7a61c911e3b75dc313d3fea4f7987d1",
+    "kind": "official_asset",
+    "checkedAt": "2026-10-01",
+    "note": "sana24.ch redirige vers Visana, identité commerciale utilisée sur le site officiel ; la caisse sana24 reste distincte."
+  }
+]

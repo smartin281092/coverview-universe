@@ -1,0 +1,56 @@
+# Module `health-insurance`
+
+## Résumé
+
+Catalogue public des primes suisses 2027 pour le comparateur www. Le module recherche les localités, classe les primes par profil et région, expose les prestations sourcées et calcule des scénarios de franchise. Il est propriétaire de ces données de référence publiques.
+
+## Périmètre
+
+**Géré ici** : snapshots Priminfo, assureurs OFSP, modèles/tarifs, primes, régions, communes/localités, disponibilité communale, faits sur les modèles et clubs, calcul de participation ordinaire.
+
+**Hors périmètre** : contrats privés (`document-intelligence`), identité (`identity`), souscription, tarifs des complémentaires, diagnostic médical et décisions d’admission. Le site consomme uniquement `@coverview/api-client/health-insurance` ; aucune lecture SQL depuis www.
+
+## Règles métier et invariants
+
+Le guide WWW courant est décrit dans [Recommandation adaptative](recommendation.md) : catalogue de preuves complet en périmètre, questions par sensibilité, alertes de réserve sans exclusion, configuration et contrôles Admin. Les deux règles `health.guide.1/2` ci-dessous documentent seulement l’ancienne API de compatibilité `/guide`, qui n’est plus consommée par WWW. Elles ne définissent pas le nouveau classement.
+
+- **health.catalogue.1** — Chaque prime garde la ligne officielle brute, l’année, le snapshot et ses empreintes. Montants entiers en centimes. Un seul snapshot actif par année ; import atomique sous verrou PostgreSQL. Réimport identique sans duplication.
+- **health.brand.1** — L’interface utilise la marque commerciale du catalogue publié pour le même snapshot et la même année (`brand` dans les filtres, `insurerBrand` dans les offres). Le nom juridique reste distinct dans `name` / `insurerName` et les preuves. Les identifiants, modèles, prestations et classements ne sont jamais fusionnés par marque. Les champs de marque sont additifs : sans catalogue ou dans un ancien instantané de demande, le nom historique sert de repli. Les nouvelles demandes conservent les deux noms, y compris pour la caisse actuelle.
+- **health.profile.1** — Âge tarifaire = 2027 − année de naissance : enfant ≤18, jeune adulte 19–25, adulte ≥26. Franchises autorisées selon la tranche. K1 pour l’enfant sans hypothèse familiale ; K3/K4/K5 restent archivés. ZE/ZR sont archivés mais exclus du comparateur suisse.
+- **health.location.1** — Le numéro OFS de commune détermine la région. Un NPA ambigu exige le choix de la commune. Un modèle restreint sans commune est signalé comme conditionnel ; avec commune il est exclu si celle-ci n’est pas admise. Le réseau de médecins doit encore être vérifié.
+- **health.ranking.1** — Classement par prime mensuelle approuvée brute, puis identifiants stables. Aucun club, subside, redistribution environnementale ou remboursement de réserves ne réduit le tarif affiché. Le résultat n’est pas une facture nette personnalisée.
+- **health.benefit.1** — `value: true/false/null`, montant éventuel, description, conditions, complémentaire requise ou inconnue, source, date de consultation et validité. Non documenté ≠ absent. Seuls les faits vrais explicitement confirmés pour toute l’année 2027, sans complémentaire, participent aux filtres. L’exonération totale de dépistage mammaire satisfait aussi le filtre d’exonération de franchise ; la réciproque est fausse. Faits retirés du fichier désactivés à l’import. Aucune propagation entre filiales non attestée par une source.
+- **health.guide.1** — Compare les franchises réellement proposées avec le parcours et les filtres choisis. Coût = 12 primes + franchise consommée + quote-part ordinaire de 10 % plafonnée à CHF 700 / CHF 350 enfant. Compare prime minimale ou coût annuel selon l’objectif ; ne recommande aucune franchise si toutes dépassent la réserve indiquée. Réserve inconnue explicitement conservée comme inconnue.
+- **health.guide.2** — Les soins sont une hypothèse, pas une prédiction. Le calcul exclut hospitalisation, exemptions de maternité, quote-part médicaments majorée, exonérations propres aux modèles, complémentaires, rabais de fratrie et subsides. Les autres réponses activent des points de vérification sourcés, sans évaluer l’état de santé ni garantir un meilleur contrat.
+
+## Permissions
+
+**health.foreign.1** — Les primes UE/AELE/UK constituent un snapshot séparé, par pays de résidence (`EU-FR`, distinct de Fribourg `FR-1`), assureur juridique, âge, accident et année. Franchise ordinaire 300 CHF, 0 pour les enfants ; K1 individuel, K3 archivé. Les offres `hfm_<année>_<assureur>` ne reçoivent aucun avantage suisse par héritage. Affiliation/droit d’option à vérifier. Les moteurs de coûts suisses refusent ce périmètre : pays de traitement et règles de participation non encore modélisés. La comparaison de primes, le devis serveur et les demandes WWW/Wallet/Admin sont disponibles.
+
+**health.location.2** — `POST /health-insurance/locate` (20/minute, `no-store`) résout des coordonnées WGS84 par les géométries locales swisstopo/GISCO. Ni fournisseur externe, ni persistance, ni coordonnées en URL. Une précision supérieure à 10 km ou une position hors périmètre retourne aucune suggestion ; l’interface exige confirmation du domicile. Les frontières simplifiées constituent une aide, jamais une preuve de résidence. La commune officielle choisie reste l’autorité tarifaire.
+
+Routes publiques anonymes, lecture/calcul uniquement : `GET /health-insurance/status`, `GET /localities?q=`, `GET /models/:id`, `POST /compare`, `POST /guide` sous le même préfixe. Contrats Zod stricts, SQL paramétré, réponses bornées, limite 90 requêtes/minute (guide 20). Paramètres de profil dans le corps POST ; le logger existant omet corps et query string. Aucun cookie nécessaire, aucune réponse personnelle persistée, aucun service tiers contacté pour le guide. Le texte libre reste dans l’état de la page. Import CLI seulement, garde `assertLocalDatabase`, aucune route d’écriture publique.
+
+## État réel
+
+Extension du 1er octobre 2026 : [moteur, calculs et limites](recommendation.md), [recette](../../../../../roadmap/evidence/health-adaptive.md). Le nouveau catalogue compte 138 fiches et couvre la recherche des 153 modèles ; la liste historique de 88 faits ci-dessous appartient au premier import conservé pour l’API existante. Les volets de modèles WWW lisent désormais les nouvelles preuves. Migration additive 0024 pour catalogues, règles, contrôles et commandes.
+
+Fonctionnel localement : 219 916 primes, 153 modèles, 32 assureurs, 5 468 entrées de localité, 42 régions suisses / 2 104 communes cartographiées ; migrations 0019 et 0020 appliquées et réimport vérifié. Carte issue de la géométrie swisstopo 2026 et des mutations communales officielles 2027, pas d’une géométrie 2027 inventée.
+
+Enrichissement **partiel** : 88 faits sourcés sur les 32 assureurs, dont 24 faits membres/partenaires et 26 modèles enrichis spécifiquement ; seuls 8 faits portent une confirmation explicite 2027 (7 présences et 1 absence). Les autres restent « 2027 à confirmer » ou expirés. Inventaire exhaustif des prestations/clubs et validation humaine spécialisée non acquis. Aucun déploiement public ni souscription effectué.
+
+Preuves, scénarios et limites : [ledger](../../../../../roadmap/evidence/health-2027.md), [sources Priminfo/carte](../../../../../roadmap/evidence/health-2027-source-audit.md), [prestations](../../../../../roadmap/evidence/health-2027-benefits-audit.md).
+
+## Import et maintenance
+
+Présentation WWW : les premiers contacts retournés dans les offres proviennent du catalogue pour la même année et la même catégorie d'âge ; en l'absence de confirmation, le site affiche seulement la catégorie tarifaire. La redistribution environnementale 2027 (475 centimes/mois, 5700/an) est retournée séparément pour les offres suisses, sans modifier la prime ni le coût simulé bruts. Aucun montant n'est reconduit à une autre année ou aux résidents étrangers. Source et recette : [volet résultats](../../../../../roadmap/evidence/health-results-panel.md).
+
+Frontaliers : `python scripts/health-foreign-normalize.py`, puis `pnpm --filter api exec tsx src/modules/health-insurance/health.foreign.import.ts` après migration 0026. Archive CSV, SHA-256 et rapport de qualité dans `data/health-insurance/2027/foreign-*`. Import dépendant des assureurs OFSP déjà présents, atomique et idempotent ; désactiver le snapshot frontalier conserve le classement suisse. Géométries : `python scripts/health-geo-build.py` dans l’environnement de génération (ajout de `pyproj`, aucune dépendance applicative), après téléchargement officiel de swissBOUNDARIES3D 2026 par le générateur de carte. Ne pas reconduire ces données à 2028. [Preuves et limites](../../../../../roadmap/evidence/health-map-profile.md).
+
+Depuis la racine, Python avec `openpyxl` : `python scripts/health-normalize.py` vérifie les empreintes des archives et reconstruit `data/health-insurance/2027/normalized.jsonl.gz` et `quality.json`. `--download` remplace les sources locales par les publications courantes : vérifier année et diff avant import. L’identifiant de snapshot incorpore les empreintes des sources et du normaliseur. Sources originales compressées sans perte conservées avec provenance.
+
+`pnpm --filter api db:migrate`, puis `pnpm --filter api exec tsx src/modules/health-insurance/health.import.ts`. En maintenance locale sans credentials WorkOS, utiliser `AUTH_ENABLED=false` seulement dans le processus de la commande, sans modifier `.env`. Contrôles de compteurs et de jointures avant activation ; toute erreur annule la transaction. Les anciens snapshots demeurent inactifs. Pour rétablir un snapshot, reprendre ses fichiers versionnés et réexécuter le même import : pas de suppression de tables ni de reset de base.
+
+Carte : `python scripts/health-region-map.py` avec `openpyxl`, `pyshp` et `shapely>=2.1` dans un environnement de génération isolé. Aucun nouveau paquet applicatif. Prestations : éditer `benefits.json` avec preuve officielle, puis importer ; la modification d’un avantage n’exige pas un nouveau fichier de primes.
+
+Vérification : `pnpm --filter api exec vitest run src/modules/health-insurance/health.cost.test.ts`, puis, API locale démarrée sur la base importée, `node scripts/verify-health-live.mjs`. Ce dernier ne crée ni utilisateur ni prime de test et n’écrit pas de dossier privé.

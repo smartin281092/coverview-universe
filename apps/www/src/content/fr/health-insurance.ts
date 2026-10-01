@@ -1,4 +1,33 @@
 export const healthCopy = {
+  backToList: "Retour à la liste",
+  lowestPrice: "Le moins cher",
+  lowestPriceHint:
+    "Prime la plus basse parmi les offres retenues pour vos paramètres et contraintes.",
+  mostSuitable: "Le plus adapté",
+  provisionalBadge: "Selon les réponses actuelles · conditions à vérifier",
+  firstContact: "Premier contact",
+  foreignModelType: "LAMal frontaliers",
+  contactVerification: "Parcours précis à confirmer pour 2027",
+  contactLabels: {
+    free: "Libre choix",
+    gp: "Médecin de famille",
+    network: "Réseau médical",
+    phone: "Télémédecine",
+    video: "Application / vidéo",
+    pharmacy: "Pharmacie",
+  },
+  typeLabels: {
+    BASE: "Libre choix",
+    PRAXIS: "Médecin / réseau médical",
+    TEL_DIG: "Télémédecine",
+    FLEX: "Parcours combiné",
+    PHARM: "Pharmacie",
+  },
+  redistributionLabel: "Redistribution environnementale",
+  redistributionHelp: "Comprendre la redistribution",
+  redistributionExplanation:
+    "En {{year}}, les taxes CO₂ et COV sont redistribuées aux personnes domiciliées en Suisse et assurées à la LAMal : {{annual}} CHF par an, soit {{monthly}} CHF par mois complet. Ce crédit est déduit de la facture de votre caisse ; il n’est pas encore retranché de la prime affichée. Il est identique quelle que soit la caisse, distinct des subsides et des éventuelles réductions de réserves.",
+  redistributionSource: "Notice OFEV · page 1",
   crossBorder: "Frontaliers",
   country: "Pays de résidence",
   foreignHint:
@@ -180,7 +209,7 @@ export const healthCopy = {
   modelBenefits: "Prestations & particularités",
   clubBenefits: "Avantages membres",
   modelDetails: "Le modèle en détail",
-  priceTab: "Couverture",
+  priceTab: "Données",
   benefitsTab: "Prestations",
   clubTab: "Club",
   unknown: "Non renseigné",

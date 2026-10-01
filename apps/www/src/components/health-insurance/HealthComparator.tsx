@@ -16,7 +16,9 @@ import { HealthDialog } from "./HealthDialog";
 import { LocalitySearch } from "./LocalitySearch";
 import { SwissPremiumMap } from "./SwissPremiumMap";
 import { HealthModelPanel } from "./HealthModelPanel";
-import { AdaptiveHealthGuide } from "./AdaptiveHealthGuide";
+import { AdaptiveHealthGuide, type HealthGuideSnapshot } from "./AdaptiveHealthGuide";
+import { HealthContactTags, HealthInsurerLogo, HealthOfferBadges } from "./HealthOfferIdentity";
+import { RecommendationResults } from "./RecommendationResults";
 import { HealthSelect } from "./HealthSelect";
 import { HealthLocate } from "./HealthLocate";
 import { HealthCheckout, type CheckoutCandidate } from "./HealthCheckout";
@@ -60,7 +62,10 @@ export default function HealthComparator({
   const [checkout, setCheckout] = useState(false);
   const [candidate, setCandidate] = useState<CheckoutCandidate | null>(null);
   const [cartCount, setCartCount] = useState(0);
-  const [refine, setRefine] = useState(0);
+  const [recommendation, setRecommendation] = useState<HealthGuideSnapshot>({
+    result: null,
+    busy: false,
+  });
   const birthKnown =
     /^\d{4}-\d{2}-\d{2}$/.test(birth) &&
     Number(birth.slice(0, 4)) >= 1900 &&
@@ -383,28 +388,6 @@ export default function HealthComparator({
             onList={() => setShowList(true)}
             loading={loading}
           />
-          <div className="hi-guide-container">
-            {foreign && (
-              <div className="hi-guide hi-foreign-guide">
-                <h2>{copy.crossBorder}</h2>
-                <p className="hi-small">{copy.foreignGuide}</p>
-                <button className="hi-primary" onClick={() => setShowList(true)}>
-                  <HealthGradient />
-                  {copy.viewAll}
-                </button>
-              </div>
-            )}
-            <AdaptiveHealthGuide
-              apiUrl={apiUrl}
-              profile={profile}
-              tariffKnown={{ birth: birthKnown, locality: Boolean(locality), region: regionKnown }}
-              sex={sex}
-              scope={optimize ? "optimize_deductible" : "same_deductible"}
-              enabled={!foreign}
-              trigger={refine}
-              onOffer={setOffer}
-            />
-          </div>
         </div>
       </div>
       <footer className="hi-footer">
@@ -529,15 +512,37 @@ export default function HealthComparator({
         </a>
       </HealthDialog>
       <HealthDialog open={showList} onClose={() => setShowList(false)} title={copy.results} sheet>
+        <AdaptiveHealthGuide
+          apiUrl={apiUrl}
+          profile={profile}
+          tariffKnown={{ birth: birthKnown, locality: Boolean(locality), region: regionKnown }}
+          sex={sex}
+          scope={optimize ? "optimize_deductible" : "same_deductible"}
+          enabled={!foreign}
+          onUpdate={setRecommendation}
+        />
+        {foreign && <p className="hi-small">{copy.foreignGuide}</p>}
         <p className="hi-result-region">{regionName(region)}</p>
-        <p className="hi-small">
-          {interpolate(copy.resultsCount, { count: comparison?.total ?? 0 })}
+        <p className="hi-small" hidden={loading || recommendation.busy}>
+          {interpolate(copy.resultsCount, {
+            count: recommendation.result?.active
+              ? recommendation.result.ranked.length
+              : (comparison?.total ?? 0),
+          })}
         </p>
-        {loading ? (
+        {loading || recommendation.busy ? (
           <p role="status">{copy.loading}</p>
+        ) : recommendation.result?.active ? (
+          <RecommendationResults
+            result={recommendation.result}
+            onOffer={(item) => {
+              setShowList(false);
+              setOffer(item);
+            }}
+          />
         ) : comparison?.offers.length ? (
           <div className="hi-results-list">
-            {comparison.offers.map((item, index) => (
+            {comparison.offers.map((item) => (
               <button
                 className="hi-result-row"
                 key={item.id}
@@ -546,11 +551,16 @@ export default function HealthComparator({
                   setOffer(item);
                 }}
               >
-                <span className="hi-offer-rank">{offset + index + 1}</span>
+                <HealthInsurerLogo offer={item} />
                 <span>
                   <strong>{item.insurerBrand ?? item.insurerName}</strong>
-                  <small>{item.name}</small>
-                  <em>{copy.categoryLabels[item.category]}</em>
+                  <HealthContactTags offer={item} />
+                  <HealthOfferBadges
+                    cheapest={
+                      comparison.regions.find((r) => r.regionId === item.regionId)?.offers[0]
+                        ?.monthlyPremiumMinor === item.monthlyPremiumMinor
+                    }
+                  />
                   {item.eligibility === "municipality_required" && <em>{copy.chooseLocality}</em>}
                 </span>
                 <span className="hi-list-price">
@@ -566,29 +576,47 @@ export default function HealthComparator({
         ) : (
           <p>{failed ? copy.unavailable : copy.empty}</p>
         )}
-        <div className="hi-pagination">
-          <button
-            disabled={loading || offset === 0}
-            onClick={() => setOffset(Math.max(0, offset - 15))}
-          >
-            {copy.previous}
-          </button>
-          <span>{interpolate(copy.page, { page: Math.floor(offset / 15) + 1 })}</span>
-          <button
-            disabled={loading || comparison?.nextOffset == null}
-            onClick={() => setOffset(comparison?.nextOffset ?? 0)}
-          >
-            {copy.next}
-          </button>
-        </div>
+        {!recommendation.result?.active && !recommendation.busy && (
+          <div className="hi-pagination">
+            <button
+              disabled={loading || offset === 0}
+              onClick={() => setOffset(Math.max(0, offset - 15))}
+            >
+              {copy.previous}
+            </button>
+            <span>{interpolate(copy.page, { page: Math.floor(offset / 15) + 1 })}</span>
+            <button
+              disabled={loading || comparison?.nextOffset == null}
+              onClick={() => setOffset(comparison?.nextOffset ?? 0)}
+            >
+              {copy.next}
+            </button>
+          </div>
+        )}
       </HealthDialog>
       <HealthModelPanel
         apiUrl={apiUrl}
         year={profile.year ?? 2027}
-        onRefine={() => {
+        onBack={() => {
+          if (offer && offer.regionId !== region) selectRegion(offer.regionId);
           setOffer(null);
-          setRefine((value) => value + 1);
+          setShowList(true);
         }}
+        cheapest={
+          !!offer &&
+          (recommendation.result?.active && offer.regionId === region
+            ? recommendation.result.leaders.premium.includes(offer.id)
+            : comparison?.regions.find((r) => r.regionId === offer.regionId)?.offers[0]
+                ?.monthlyPremiumMinor === offer.monthlyPremiumMinor)
+        }
+        preferred={
+          !!offer &&
+          !!recommendation.result?.questionStates.some(
+            (q) => q.id === "priority" && q.responseStatus === "answered",
+          ) &&
+          !!recommendation.result.leaders.preferred.includes(offer.id)
+        }
+        provisional={recommendation.result?.outcome !== "established"}
         offer={offer}
         onClose={() => setOffer(null)}
         onRequest={(item) => {

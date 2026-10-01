@@ -7,12 +7,14 @@ export function HealthDialog({
   title,
   children,
   sheet = false,
+  header,
 }: {
   open: boolean;
   onClose: () => void;
   title: string;
   children: ReactNode;
   sheet?: boolean;
+  header?: ReactNode;
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
   useEffect(() => {
@@ -44,7 +46,7 @@ export function HealthDialog({
     >
       <div className="hi-dialog-inner">
         <header className="hi-dialog-header">
-          <h2>{title}</h2>
+          {header ?? <h2>{title}</h2>}
           <button className="hi-icon-button" onClick={onClose} aria-label={copy.close}>
             <HealthIcon name="close" />
           </button>

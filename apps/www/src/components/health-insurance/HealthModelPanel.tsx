@@ -7,63 +7,106 @@ import { recommendationCopy } from "../../content/fr/health-recommendation";
 import { HealthEvidence } from "./HealthEvidence";
 import { HealthDialog } from "./HealthDialog";
 import { HealthIcon } from "./HealthIcon";
-import { francs, money, regionName } from "./health-format";
+import { HealthContactTags, HealthInsurerLogo, HealthOfferBadges } from "./HealthOfferIdentity";
+import { francs, interpolate, money, regionName } from "./health-format";
 export function HealthModelPanel({
   offer,
   onClose,
   onRequest,
   apiUrl,
   year,
-  onRefine,
+  onBack,
+  cheapest,
+  preferred,
+  provisional,
 }: {
   offer: HealthOffer | null;
   onClose: () => void;
   onRequest: (offer: HealthOffer) => void;
   apiUrl: string;
   year: number;
-  onRefine: () => void;
+  onBack: () => void;
+  cheapest: boolean;
+  preferred: boolean;
+  provisional: boolean;
 }) {
   const [tab, setTab] = useState<"coverage" | "benefits" | "club">("coverage");
   useEffect(() => setTab("coverage"), [offer?.id]);
   return (
-    <HealthDialog open={!!offer} onClose={onClose} title={copy.modelDetails} sheet>
+    <HealthDialog
+      open={!!offer}
+      onClose={onClose}
+      title={offer?.name ?? copy.modelDetails}
+      sheet
+      header={
+        <button className="hi-back-to-list" onClick={onBack}>
+          <HealthIcon name="back" size={18} />
+          {copy.backToList}
+        </button>
+      }
+    >
       {offer && (
         <>
           <div className="hi-model-brand">
-            <span className="hi-insurer-monogram">
-              {(offer.insurerBrand ?? offer.insurerName).slice(0, 1)}
-            </span>
+            <HealthInsurerLogo offer={offer} />
             <div>
               <p>{offer.insurerBrand ?? offer.insurerName}</p>
-              <h3>{offer.name}</h3>
+              <div className="hi-model-title">
+                <h3>{offer.name}</h3>
+                <HealthContactTags offer={offer} />
+              </div>
             </div>
           </div>
+          <HealthOfferBadges cheapest={cheapest} preferred={preferred} provisional={provisional} />
+          {preferred && provisional && <p className="hi-small">* {copy.provisionalBadge}</p>}
           <div className="hi-model-price">
-            <span>{copy.monthly}</span>
             <p>
-              <small>{copy.currency}</small> {money(offer.monthlyPremiumMinor)}{" "}
-              <em>{copy.perMonth}</em>
+              {money(offer.monthlyPremiumMinor)}
+              <span className="hi-price-unit">
+                <small>{copy.currency}</small>
+                <em>{copy.perMonth}</em>
+              </span>
             </p>
-            <small>{copy.gross}</small>
+            {offer.redistribution?.year === year && (
+              <div className="hi-redistribution">
+                <span>
+                  − {money(offer.redistribution.monthlyMinor)} CHF {copy.perMonth} ·{" "}
+                  {copy.redistributionLabel}
+                </span>
+                <span className="hi-info-tooltip">
+                  <button
+                    type="button"
+                    aria-label={copy.redistributionHelp}
+                    aria-describedby="health-redistribution-tooltip"
+                  >
+                    <HealthIcon name="info" size={16} />
+                  </button>
+                  <span role="tooltip" id="health-redistribution-tooltip">
+                    {interpolate(copy.redistributionExplanation, {
+                      year,
+                      annual: money(offer.redistribution.annualMinor),
+                      monthly: money(offer.redistribution.monthlyMinor),
+                    })}
+                    <a href={offer.redistribution.sourceUrl} target="_blank" rel="noreferrer">
+                      {copy.redistributionSource} ↗
+                    </a>
+                  </span>
+                </span>
+              </div>
+            )}
           </div>
           <button className="hi-primary hi-full hi-request-cta" onClick={() => onRequest(offer)}>
             <HealthGradient />
             {offerCopy.request}
             <HealthIcon name="arrow" size={16} />
           </button>
-          <p className="hi-small">
-            {offer.residenceCountry ? copy.foreignConditions : recommendationCopy.intro}
-          </p>
-          {!offer.residenceCountry && (
-            <button className="hi-secondary hi-full" onClick={onRefine}>
-              {recommendationCopy.start}
-            </button>
-          )}
+          {offer.residenceCountry && <p className="hi-small">{copy.foreignConditions}</p>}
           {!offer.residenceCountry && (
             <div className="hi-tabs" role="tablist">
               {(["coverage", "benefits", "club"] as const).map((value) => (
                 <button
                   key={value}
+                  className={`hi-tab-${value}`}
                   role="tab"
                   id={`health-tab-${value}`}
                   aria-controls={`health-tabpanel-${value}`}
@@ -81,6 +124,10 @@ export function HealthModelPanel({
                     document.getElementById(`health-tab-${next}`)?.focus();
                   }}
                 >
+                  <HealthIcon
+                    name={value === "coverage" ? "shield" : value === "benefits" ? "heart" : "gift"}
+                    size={18}
+                  />
                   {value === "coverage"
                     ? copy.priceTab
                     : value === "benefits"
