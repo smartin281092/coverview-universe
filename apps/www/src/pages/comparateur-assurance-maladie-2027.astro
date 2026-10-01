@@ -1,0 +1,11 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HealthComparator from '../components/health-insurance/HealthComparator';
+import { healthCopy } from '../content/fr/health-insurance';
+import '../styles/health-insurance.css';
+const apiUrl = import.meta.env.PUBLIC_API_URL ?? (import.meta.env.DEV ? 'http://127.0.0.1:4100' : Astro.site?.origin ?? Astro.url.origin);
+const walletUrl = import.meta.env.PUBLIC_WALLET_URL ?? (import.meta.env.DEV ? 'http://127.0.0.1:4101' : undefined);
+---
+<Layout title={healthCopy.title} description={healthCopy.description} minimal structuredData={{'@context':'https://schema.org','@type':'WebPage',name:healthCopy.title,description:healthCopy.description,url:'https://coverview.ch/comparateur-assurance-maladie-2027',inLanguage:'fr-CH'}}>
+  <HealthComparator apiUrl={apiUrl} walletUrl={walletUrl} client:load />
+</Layout>
