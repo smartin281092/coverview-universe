@@ -63,8 +63,9 @@ import {
   solutionBindingInputSchema,
   solutionBindingQuerySchema,
   solutionBindingDossierSchema,
-  solutionEvidenceQuerySchema,
+  solutionEvidenceVersionQuerySchema,
   solutionEvidenceSchema,
+  boundSolutionEvidenceSchema,
   capacityAdvisorAssessmentSchema,
   referentAssessmentSchema,
   sharedReferentAssessmentSchema,
@@ -281,16 +282,16 @@ export function registerPartnerWorkspace(
       config: limited,
       schema: {
         params: params.extend({ offerId: z.string().min(1).max(100) }).strict(),
-        querystring: solutionEvidenceQuerySchema,
-        response: { 200: solutionEvidenceSchema },
+        querystring: solutionEvidenceVersionQuerySchema,
+        response: { 200: z.union([boundSolutionEvidenceSchema, solutionEvidenceSchema]) },
       },
     },
     async (request) =>
-      repository.solutionEvidence(
+      repository[request.query.version === "2" ? "boundSolutionEvidence" : "solutionEvidence"](
         await actor(request),
         request.params.id,
         request.params.offerId,
-        request.query,
+        request.query.companyId ? { companyId: request.query.companyId } : {},
       ),
   );
   app.get(

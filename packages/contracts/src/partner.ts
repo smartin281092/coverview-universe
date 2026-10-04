@@ -1278,6 +1278,41 @@ export const solutionBindingDossierSchema = z.object({
 export type SolutionBindingInput = z.infer<typeof solutionBindingInputSchema>;
 export type SolutionBindingDossier = z.infer<typeof solutionBindingDossierSchema>;
 
+export const solutionEvidenceVersionQuerySchema = solutionEvidenceQuerySchema
+  .extend({ version: z.enum(["1", "2"]).optional() })
+  .strict();
+export const boundSolutionEvidenceSchema = solutionEvidenceSchema
+  .omit({ version: true, companyMatch: true })
+  .extend({
+    version: z.literal(2),
+    companyMatch: z.literal("unconfirmed"),
+    selection: z.enum([
+      "not_selected",
+      "no_current_binding",
+      "binding_without_company",
+      "different_company",
+      "human_match",
+    ]),
+    binding: z.object({
+      status: solutionBindingDossierSchema.shape.status,
+      revision: z.number().int().nonnegative(),
+      current: solutionBindingRecordSchema
+        .pick({
+          revision: true,
+          companyId: true,
+          mentions: true,
+          reason: true,
+          validUntil: true,
+          recordedAt: true,
+        })
+        .nullable(),
+    }),
+    legalIdentity: z.literal("unverified"),
+    productIdentity: z.literal("unverified"),
+    clauseEvidence: z.literal("not_structured"),
+  });
+export type BoundSolutionEvidence = z.infer<typeof boundSolutionEvidenceSchema>;
+
 export const offerHistoryQuerySchema = z
   .object({ cursor: z.string().max(500).optional() })
   .strict();

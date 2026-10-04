@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { insuranceCompanyIdSchema } from "@coverview/contracts";
-import type { SolutionEvidence } from "@coverview/contracts/partner";
+import { solutionBindingFields, type BoundSolutionEvidence } from "@coverview/contracts/partner";
 import {
   Badge,
   Button,
@@ -34,16 +34,16 @@ export function SolutionEvidenceDialog({
 }) {
   const { t } = useTranslation(),
     session = usePartner();
-  const [companyId, setCompanyId] = useState<SolutionEvidence["companyId"]>(null);
-  const [view, setView] = useState<"offer" | "convention">("offer");
-  const [dossier, setDossier] = useState<SolutionEvidence | null>(null);
+  const [companyId, setCompanyId] = useState<BoundSolutionEvidence["companyId"]>(null);
+  const [view, setView] = useState<"offer" | "association" | "convention">("offer");
+  const [dossier, setDossier] = useState<BoundSolutionEvidence | null>(null);
   const [returning, setReturning] = useState(false);
   const [binding, setBinding] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
   const query = useQuery({
-    queryKey: [...session.queryKey, "solution-evidence", leadId, offerId, companyId],
+    queryKey: [...session.queryKey, "solution-evidence", 2, leadId, offerId, companyId],
     queryFn: ({ signal }) =>
-      partnerApi.solutionEvidence(leadId, offerId, companyId ? { companyId } : {}, signal),
+      partnerApi.boundSolutionEvidence(leadId, offerId, companyId ? { companyId } : {}, signal),
     enabled: !dossier && !binding,
     gcTime: 0,
     staleTime: 0,
@@ -99,7 +99,7 @@ export function SolutionEvidenceDialog({
           <Button
             variant="outline"
             onClick={() => {
-              if (view === "convention") {
+              if (view !== "offer") {
                 setView("offer");
                 reload();
               } else onClose();
@@ -133,7 +133,13 @@ export function SolutionEvidenceDialog({
                 </p>
               )}
               <h3 ref={heading} tabIndex={-1} className="font-medium">
-                {t(view === "offer" ? "solutionEvidence.offer" : "solutionEvidence.convention")}
+                {t(
+                  view === "association"
+                    ? "boundSolutionEvidence.association"
+                    : view === "offer"
+                      ? "solutionEvidence.offer"
+                      : "solutionEvidence.convention",
+                )}
               </h3>
               <p className="break-words text-sm font-medium">
                 {t("solutionEvidence.version", {
@@ -188,6 +194,21 @@ export function SolutionEvidenceDialog({
                     )}
                   </section>
                   <div className="space-y-2">
+                    <h4 className="font-medium">{t("boundSolutionEvidence.association")}</h4>
+                    <p role="status" className="text-sm">
+                      {t(`solutionBinding.status.${value.binding.status}`)}
+                    </p>
+                    {value.binding.current && (
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setView("association");
+                          reload();
+                        }}
+                      >
+                        {t("boundSolutionEvidence.seeAssociation")}
+                      </Button>
+                    )}
                     <Button variant="outline" onClick={() => setBinding(true)}>
                       {t("solutionBinding.open")}
                     </Button>
@@ -226,10 +247,103 @@ export function SolutionEvidenceDialog({
                     {t("solutionEvidence.examine")}
                   </Button>
                 </>
+              ) : view === "association" ? (
+                <section className="space-y-3 text-sm">
+                  <p role="status">{t(`solutionBinding.status.${value.binding.status}`)}</p>
+                  {value.binding.current ? (
+                    <>
+                      <p>
+                        {t("capacity.record", {
+                          revision: value.binding.current.revision,
+                          date: formatDate(value.binding.current.recordedAt),
+                        })}
+                      </p>
+                      {value.binding.current.validUntil && (
+                        <p>
+                          {t("competence.validity", {
+                            date: formatDate(value.binding.current.validUntil),
+                          })}
+                        </p>
+                      )}
+                      <dl className="space-y-3">
+                        {solutionBindingFields.map((field) => {
+                          const mention = value.binding.current?.mentions?.[field];
+                          return (
+                            <div key={field}>
+                              <dt className="font-medium">{t(`solutionBinding.field.${field}`)}</dt>
+                              <dd className="whitespace-pre-wrap break-words">
+                                {mention?.quote ?? t("solutionBinding.unknown")}
+                              </dd>
+                              {mention && (
+                                <dd className="text-muted-foreground">
+                                  {t("solutionBinding.pageValue", { page: mention.page })}
+                                </dd>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </dl>
+                      <h4 className="font-medium">{t("solutionBinding.reason")}</h4>
+                      <p className="whitespace-pre-wrap break-words">
+                        {value.binding.current.reason}
+                      </p>
+                      {value.offer.canDownload && (
+                        <Button asChild variant="outline">
+                          <a href={partnerApi.sourceUrl(leadId, value.offer.id)}>
+                            {t("offer.source")}
+                          </a>
+                        </Button>
+                      )}
+                      {value.binding.current.companyId ? (
+                        <Button
+                          onClick={() => {
+                            const selected = value.binding.current?.companyId;
+                            if (!selected) return;
+                            setView("convention");
+                            setCompanyId(selected);
+                            if (selected === companyId) reload();
+                          }}
+                        >
+                          {t("boundSolutionEvidence.useHumanChoice", {
+                            company: t(`convention.companies.${value.binding.current.companyId}`),
+                          })}
+                        </Button>
+                      ) : (
+                        <p>{t("boundSolutionEvidence.noAssociatedCompany")}</p>
+                      )}
+                    </>
+                  ) : (
+                    <p>{t("boundSolutionEvidence.noCurrentAssociation")}</p>
+                  )}
+                  <Button variant="outline" onClick={() => setBinding(true)}>
+                    {t("solutionBinding.open")}
+                  </Button>
+                </section>
               ) : (
                 convention && (
                   <section className="space-y-3 text-sm">
                     <p className="font-medium">{t(`convention.companies.${value.companyId}`)}</p>
+                    <p role="status">{t(`boundSolutionEvidence.selection.${value.selection}`)}</p>
+                    {value.binding.current && (
+                      <>
+                        <p className="text-xs text-muted-foreground">
+                          {t("capacity.record", {
+                            revision: value.binding.current.revision,
+                            date: formatDate(value.binding.current.recordedAt),
+                          })}
+                        </p>
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            setView("association");
+                            reload();
+                          }}
+                        >
+                          {t("boundSolutionEvidence.seeAssociation")}
+                        </Button>
+                      </>
+                    )}
+                    <p className="text-muted-foreground">{t("boundSolutionEvidence.clauses")}</p>
                     <Badge variant="outline">
                       {t(`convention.status.${convention.summary.status}`)}
                     </Badge>

@@ -52,6 +52,7 @@ import {
   solutionBindingInputSchema,
   type SolutionBindingInput,
   solutionEvidenceSchema,
+  boundSolutionEvidenceSchema,
   solutionEvidenceQuerySchema,
   type SolutionEvidenceQuery,
   capacityAdvisorAssessmentSchema,
@@ -266,6 +267,19 @@ export function createPartnerClient(baseUrl: string) {
         advisorAssessmentSchema,
         signal,
       ),
+    boundSolutionEvidence: (
+      leadId: string,
+      offerId: string,
+      query: SolutionEvidenceQuery = {},
+      signal?: AbortSignal,
+    ) => {
+      const { companyId } = solutionEvidenceQuerySchema.parse(query);
+      return request(
+        `/partner/leads/${encodeURIComponent(leadId)}/offers/${encodeURIComponent(offerId)}/solution-evidence?version=2${companyId ? `&companyId=${encodeURIComponent(companyId)}` : ""}`,
+        boundSolutionEvidenceSchema,
+        signal,
+      );
+    },
     solutionEvidence: (
       leadId: string,
       offerId: string,

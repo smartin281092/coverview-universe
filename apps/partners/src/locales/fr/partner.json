@@ -1929,5 +1929,20 @@
     },
     "readText": "Lire le texte extrait",
     "textHelp": "Consultez la page de l’original, puis copiez un passage distinctif ci-dessous. Le texte extrait peut comporter des erreurs : comparez-le à l’original avant de confirmer."
+  },
+  "boundSolutionEvidence": {
+    "association": "Mon rapprochement documentaire",
+    "seeAssociation": "Relire mes mentions et mon rapprochement",
+    "useHumanChoice": "Examiner ma convention avec {{company}} selon mon rapprochement",
+    "noAssociatedCompany": "Les mentions sont documentées, mais aucune compagnie du répertoire n’a été rapprochée. Revenez à l’offre pour choisir une compagnie à explorer.",
+    "noCurrentAssociation": "Aucun rapprochement actuel à reprendre. Ouvrez le dossier pour consulter l’historique ou documenter à nouveau cette version.",
+    "clauses": "La déclaration et l’examen ci-dessous ne contiennent pas de clauses structurées reliant cette convention au produit exact. Consultez l’original et vérifiez les parties, activités, produits, exclusions et dates avant toute conclusion de distribution.",
+    "selection": {
+      "not_selected": "Aucune compagnie choisie pour cet examen.",
+      "no_current_binding": "Choix exploratoire : aucune association documentaire actuelle ne relie cette offre à la compagnie choisie.",
+      "binding_without_company": "Choix exploratoire : votre association documentaire ne rapproche aucune compagnie du répertoire.",
+      "different_company": "Choix exploratoire différent de la compagnie de votre association actuelle. Aucun lien avec cette convention n’est établi.",
+      "human_match": "Cette compagnie correspond à votre rapprochement documentaire personnel actuel. Ce choix humain ne vérifie ni les parties juridiques ni les droits sur ce produit."
+    }
   }
 }
