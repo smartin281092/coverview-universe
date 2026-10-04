@@ -214,8 +214,19 @@ Il manque **un même rendez-vous réunissant plusieurs spécialistes**. Concepti
 
 **C6c — Rentabilité CoverView (I.21).**
 
-- Le revenu CoverView existe pour les affaires Marketplace (`coverview_revenue`). Il est affiché au pilotage du réseau par période, catégorie et partenaire.
+- Le revenu CoverView existe pour les affaires Marketplace (`coverview_revenue`). Il est affiché au pilotage du réseau par période, pour le réseau et par branche. Le détail par Lead et par partenaire reste dans les statistiques (périmètre organisation), ouvertes depuis l'aperçu avec la même période.
 - Aucune donnée de coûts n'existe : la rentabilité n'est pas calculée et l'interface le dit. Aucun coût n'est supposé.
+
+#### C7 — Brouillon (non exécuté, à fixer à l'entrée de la tranche)
+
+- **Périmètre (I.20, S-130/S-131).**
+  - Consultation et export par le client de ses données Partner : demandes, rendez-vous, offres, préférences, interlocuteurs.
+  - Droit d'accès des professionnels à leurs évaluations et scores internes [R5].
+  - Rectification suivie par CoverView.
+  - Conservation et suppression contrôlée : aucune durée légale inventée, purge inactive tant qu'une politique validée n'existe pas.
+  - Cloisonnement en base des lectures Partner.
+- **Question bloquante** `bible.question.006` : matrice d'export et de conservation. Défaut proposé sous PROG-23 : matrice par catégorie, téléchargement authentifié temporaire, purges désactivées jusqu'à validation.
+- **Session recommandée** : Claude Code, Claude Opus 5.5, effort max.
 
 ### B — Recette réelle et simplification (après C)
 
