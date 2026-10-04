@@ -4,7 +4,15 @@ import { ArrowUpRight, CalendarDays, CheckSquare, Clock3, Flag } from "lucide-re
 import { Badge } from "@coverview/ui";
 import type { LeadSummary } from "@coverview/api-client/partner";
 import { formatDate, formatMoney } from "./Field";
-export function LeadCard({ lead, compact = false }: { lead: LeadSummary; compact?: boolean }) {
+export function LeadCard({
+  lead,
+  compact = false,
+  onOpen,
+}: {
+  lead: LeadSummary;
+  compact?: boolean;
+  onOpen?: () => void;
+}) {
   const { t } = useTranslation();
   return (
     <article
@@ -26,6 +34,7 @@ export function LeadCard({ lead, compact = false }: { lead: LeadSummary; compact
       <Link
         to="/leads/$leadId"
         params={{ leadId: lead.id }}
+        onClick={onOpen}
         className="flex items-start justify-between gap-2 text-base font-semibold leading-snug"
       >
         <span>{lead.title}</span>

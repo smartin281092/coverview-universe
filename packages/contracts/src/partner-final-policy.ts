@@ -61,8 +61,8 @@ export const finalPolicySchema = z.object({
     factor: z.number().int().nullable(),
     differenceMinor: z.number().int().nullable(),
   }),
-  signatureEvidence: z.literal("missing"),
-  insurerAcceptanceEvidence: z.literal("missing"),
+  signatureEvidence: z.enum(["missing", "traced", "invalidated"]),
+  insurerAcceptanceEvidence: z.enum(["missing", "documented", "invalidated"]),
   canDownload: z.boolean(),
   canReview: z.boolean(),
 });

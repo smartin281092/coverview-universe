@@ -1,10 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearch, useNavigate, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Plus, LayoutGrid, List } from "lucide-react";
-import { Button, Input, EmptyState, LoadingState, ErrorState, Badge } from "@coverview/ui";
-import { leadCategorySchema, leadStageSchema, type LeadStage } from "@coverview/contracts/partner";
+import {
+  Button,
+  Input,
+  EmptyState,
+  LoadingState,
+  ErrorState,
+  Badge,
+  parseZurichDateTime,
+  formatZurichDateTime,
+} from "@coverview/ui";
+import {
+  leadCategorySchema,
+  leadStageSchema,
+  leadResultSchema,
+  type LeadStage,
+} from "@coverview/contracts/partner";
 import { usePartner } from "../features/PartnerSession";
 import { useLeads } from "../features/use-leads";
 import { LeadCard } from "../features/LeadCard";
@@ -12,6 +26,8 @@ import { CreateLeadDialog } from "../features/CreateLeadDialog";
 import { LeadActionDialog } from "../features/LeadActionDialog";
 import { SelectOptions, formatDate } from "../features/Field";
 import { partnerApi } from "../api";
+import { SavedLeadViews } from "../features/SavedLeadViews";
+import { publicLeadSearch } from "../features/lead-navigation-state";
 const groups: { key: string; stages: LeadStage[]; target: LeadStage }[] = [
   {
     key: "intake",
@@ -48,11 +64,18 @@ export function LeadsPage() {
     navigate = useNavigate({ from: "/leads" }),
     [create, setCreate] = useState(false),
     [moving, setMoving] = useState<{ id: string; stage: LeadStage } | null>(null);
+  const [queryText, setQueryText] = useState(search.q ?? session.leadReturnSearch?.q ?? "");
+  const [dateError, setDateError] = useState(false);
+  useEffect(() => {
+    if (search.q !== undefined) void navigate({ search: publicLeadSearch(search), replace: true });
+  }, [navigate, search]);
   const { layout = "kanban", ...filters } = search,
     view =
       filters.view ??
       (session.context.administrator ? "all" : session.context.canAdvise ? "mine" : "referred"),
-    leads = useLeads({ ...filters, view });
+    leads = useLeads({ ...filters, q: queryText, view });
+  const remember = () => session.rememberLeadSearch({ ...search, q: queryText, view, layout });
+  const localDate = (value: string | undefined) => (value ? formatZurichDateTime(value) : "");
   const selected = useQuery({
     queryKey: [...session.queryKey, "lead", moving?.id],
     queryFn: ({ signal }) => partnerApi.lead(moving!.id, signal),
@@ -60,7 +83,16 @@ export function LeadsPage() {
     gcTime: 0,
   });
   const change = (next: Partial<typeof search>) => {
-    void navigate({ search: { ...search, ...next, cursor: undefined } as typeof search });
+    void navigate({ search: publicLeadSearch({ ...search, ...next, cursor: undefined }) });
+  };
+  const changeDate = (field: "createdFrom" | "createdTo", value: string) => {
+    try {
+      const instant = value ? parseZurichDateTime(value) : undefined;
+      setDateError(false);
+      change({ [field]: instant });
+    } catch {
+      setDateError(true);
+    }
   };
   return (
     <>
@@ -76,13 +108,25 @@ export function LeadsPage() {
           </Button>
         )}
       </header>
+      <SavedLeadViews
+        filters={{ ...filters, q: queryText, view, layout }}
+        onApply={(value) => {
+          setQueryText(value.q ?? "");
+          session.rememberLeadSearch(value);
+          void navigate({ search: publicLeadSearch(value) });
+        }}
+      />
       <div className="flex flex-wrap items-center gap-3">
         <Input
           className="max-w-xs"
           aria-label={t("search")}
           placeholder={t("search")}
-          value={search.q ?? ""}
-          onChange={(event) => change({ q: event.target.value })}
+          value={queryText}
+          maxLength={120}
+          onChange={(event) => {
+            setQueryText(event.target.value);
+            change({});
+          }}
         />
         <select
           className="h-10 rounded-md border border-input bg-background px-3 text-sm"
@@ -150,6 +194,122 @@ export function LeadsPage() {
           </Button>
         </div>
       </div>
+      <details className="rounded-lg border border-border p-4">
+        <summary className="cursor-pointer text-sm font-medium">{t("navigation:filters")}</summary>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <label className="space-y-2 text-sm">
+            <span>{t("field.priority")}</span>
+            <select
+              className="w-full rounded-md border border-input bg-background p-3"
+              value={search.priority ?? ""}
+              onChange={(event) =>
+                change({
+                  priority: event.target.value
+                    ? (event.target.value as typeof search.priority)
+                    : undefined,
+                })
+              }
+            >
+              <option value="">{t("navigation:all")}</option>
+              <SelectOptions values={["normal", "high", "urgent"]} prefix="priority" />
+            </select>
+          </label>
+          <label className="space-y-2 text-sm">
+            <span>{t("navigation:assignment")}</span>
+            <select
+              className="w-full rounded-md border border-input bg-background p-3"
+              value={search.assignment ?? ""}
+              onChange={(event) =>
+                change({
+                  assignment: event.target.value
+                    ? (event.target.value as typeof search.assignment)
+                    : undefined,
+                })
+              }
+            >
+              <option value="">{t("navigation:all")}</option>
+              <SelectOptions
+                values={[
+                  "unassigned",
+                  "proposed",
+                  "accepted",
+                  "marketplace",
+                  "reassign",
+                  "coverview",
+                ]}
+                prefix="assignment"
+              />
+            </select>
+          </label>
+          <label className="space-y-2 text-sm">
+            <span>{t("field.result")}</span>
+            <select
+              className="w-full rounded-md border border-input bg-background p-3"
+              value={search.result ?? ""}
+              onChange={(event) =>
+                change({
+                  result: event.target.value
+                    ? (event.target.value as typeof search.result)
+                    : undefined,
+                })
+              }
+            >
+              <option value="">{t("navigation:all")}</option>
+              <SelectOptions values={leadResultSchema.options} prefix="result" />
+            </select>
+          </label>
+          <label className="space-y-2 text-sm">
+            <span>{t("navigation:waiting")}</span>
+            <select
+              className="w-full rounded-md border border-input bg-background p-3"
+              value={search.waiting ?? ""}
+              onChange={(event) =>
+                change({
+                  waiting: event.target.value
+                    ? (event.target.value as typeof search.waiting)
+                    : undefined,
+                })
+              }
+            >
+              <option value="">{t("navigation:all")}</option>
+              {["active", "due", "none"].map((v) => (
+                <option key={v} value={v}>
+                  {t(`navigation:wait.${v}`)}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="space-y-2 text-sm">
+            <span>{t("navigation:createdFrom")}</span>
+            <Input
+              type="datetime-local"
+              value={localDate(search.createdFrom)}
+              onChange={(event) => changeDate("createdFrom", event.target.value)}
+            />
+          </label>
+          <label className="space-y-2 text-sm">
+            <span>{t("navigation:createdTo")}</span>
+            <Input
+              type="datetime-local"
+              value={localDate(search.createdTo)}
+              onChange={(event) => changeDate("createdTo", event.target.value)}
+            />
+          </label>
+        </div>
+        <p className="mt-3 text-sm text-muted-foreground">{t("navigation:localTime")}</p>
+        {dateError && <p role="alert">{t("navigation:invalidDate")}</p>}
+        <Button
+          className="mt-3"
+          variant="outline"
+          onClick={() => {
+            setQueryText("");
+            session.rememberLeadSearch({ layout });
+            void navigate({ search: { layout } });
+          }}
+        >
+          {t("navigation:reset")}
+        </Button>
+      </details>
       {leads.isPending ? (
         <LoadingState label={t("loading")} />
       ) : leads.isError ? (
@@ -198,7 +358,7 @@ export function LeadsPage() {
                 {leads.data.items
                   .filter((lead) => group.stages.includes(lead.stage))
                   .map((lead) => (
-                    <LeadCard key={lead.id} lead={lead} />
+                    <LeadCard key={lead.id} lead={lead} onOpen={remember} />
                   ))}
               </div>
             </section>
@@ -223,6 +383,7 @@ export function LeadsPage() {
                     <Link
                       to="/leads/$leadId"
                       params={{ leadId: lead.id }}
+                      onClick={remember}
                       className="font-medium hover:underline"
                     >
                       {lead.title}

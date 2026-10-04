@@ -1,4 +1,4 @@
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { ApiError, type IdentityMe } from "@coverview/api-client";
@@ -11,7 +11,14 @@ import {
   AccessDeniedState,
 } from "@coverview/ui";
 import { api, partnerApi, adminUrl } from "../api";
-type Session = { identity: IdentityMe; context: PartnerContext; queryKey: string[] };
+import type { LeadNavigationSearch } from "./lead-navigation-state";
+type Session = {
+  identity: IdentityMe;
+  context: PartnerContext;
+  queryKey: string[];
+  leadReturnSearch: LeadNavigationSearch | null;
+  rememberLeadSearch: (value: LeadNavigationSearch) => void;
+};
 const Context = createContext<Session | null>(null);
 export function usePartner() {
   const value = useContext(Context);
@@ -20,6 +27,10 @@ export function usePartner() {
 }
 export function PartnerSession({ children }: { children: ReactNode }) {
   const { t } = useTranslation();
+  const [navigation, setNavigation] = useState<{
+    scope: string;
+    search: LeadNavigationSearch;
+  } | null>(null);
   const me = useQuery({
     queryKey: ["identity", "partner"],
     queryFn: ({ signal }) => api.me({ signal }),
@@ -37,6 +48,11 @@ export function PartnerSession({ children }: { children: ReactNode }) {
     retry: false,
     refetchInterval: 30000,
   });
+  const navigationScope =
+    me.data && !me.isError && !ctx.isError ? `${me.data.user.id}:${me.data.session.id}` : null;
+  useEffect(() => {
+    setNavigation((current) => (current?.scope === navigationScope ? current : null));
+  }, [navigationScope]);
   const error = me.error ?? ctx.error;
   if (me.isPending || (!error && me.data && ctx.isPending))
     return <LoadingState label={t("loading")} />;
@@ -92,6 +108,12 @@ export function PartnerSession({ children }: { children: ReactNode }) {
         identity,
         context,
         queryKey: ["private", identity.user.id, identity.session.id, "partner"],
+        leadReturnSearch:
+          navigation?.scope === `${identity.user.id}:${identity.session.id}`
+            ? navigation.search
+            : null,
+        rememberLeadSearch: (search) =>
+          setNavigation({ scope: `${identity.user.id}:${identity.session.id}`, search }),
       }}
     >
       <div

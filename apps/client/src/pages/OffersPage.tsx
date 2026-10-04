@@ -36,6 +36,9 @@ import { ContractComparison } from "../features/offers/ContractComparison";
 import { ContractLinkDialog } from "../features/offers/ContractLinkDialog";
 import { OfferHistoryDialog } from "../features/offers/OfferHistoryDialog";
 import { FinalPoliciesDialog } from "../features/offers/FinalPoliciesDialog";
+import { ConclusionsDialog } from "../features/offers/ConclusionsDialog";
+import { LeadReopeningsDialog } from "../features/offers/LeadReopeningsDialog";
+import { LeadRelationshipsDialog } from "../features/offers/LeadRelationshipsDialog";
 import { ReferentsDialog } from "../features/offers/ReferentsDialog";
 const money = (minor: number) =>
   new Intl.NumberFormat("fr-CH", { style: "currency", currency: "CHF" }).format(minor / 100);
@@ -135,7 +138,10 @@ function Offers({ identity }: { identity: IdentityMe }) {
     [retryCommand, setRetryCommand] = useState<LeadCommand | null>(null),
     [detailed, setDetailed] = useState(false),
     [history, setHistory] = useState(false),
+    [reopenings, setReopenings] = useState(false),
+    [relationships, setRelationships] = useState(false),
     [policies, setPolicies] = useState(false),
+    [conclusionSelection, setConclusionLead] = useState<string | null>(null),
     [referents, setReferents] = useState<{ profile: string; category?: string } | null>(null),
     [advice, setAdvice] = useState<string | null>(null),
     [sharedAppointments, setSharedAppointments] = useState<string | null>(null),
@@ -155,6 +161,8 @@ function Offers({ identity }: { identity: IdentityMe }) {
     qualitySelection ?? (search.section === "quality" ? (search.lead ?? null) : null);
   const communicationsLead =
     communicationsSelection ?? (search.section === "communications" ? (search.lead ?? null) : null);
+  const conclusionLead =
+    conclusionSelection ?? (search.section === "conclusion" ? (search.lead ?? null) : null);
   const closeSection = () => {
     if (search.section) void navigate({ search: search.lead ? { lead: search.lead } : {} });
   };
@@ -282,6 +290,17 @@ function Offers({ identity }: { identity: IdentityMe }) {
           leadId={qualityLead}
           onClose={() => {
             setQualityLead(null);
+            closeSection();
+          }}
+        />
+      )}
+      {conclusionLead && (
+        <ConclusionsDialog
+          key={`${identity.user.id}:${identity.session.id}:${conclusionLead}`}
+          identity={identity}
+          leadId={conclusionLead}
+          onClose={() => {
+            setConclusionLead(null);
             closeSection();
           }}
         />
@@ -592,8 +611,32 @@ function Offers({ identity }: { identity: IdentityMe }) {
                 <Button variant="outline" onClick={() => setHistory(true)}>
                   {t("history.title")}
                 </Button>
+                <Button variant="outline" onClick={() => setReopenings(true)}>
+                  {t("lifecycle:title")}
+                </Button>
+                {reopenings && (
+                  <LeadReopeningsDialog
+                    identity={identity}
+                    leadId={lead.id}
+                    onClose={() => setReopenings(false)}
+                  />
+                )}
+                <Button variant="outline" onClick={() => setRelationships(true)}>
+                  {t("relationships:title")}
+                </Button>
+                {relationships && (
+                  <LeadRelationshipsDialog
+                    key={`${identity.user.id}:${identity.session.id}:${lead.id}`}
+                    identity={identity}
+                    leadId={lead.id}
+                    onClose={() => setRelationships(false)}
+                  />
+                )}
                 <Button variant="outline" onClick={() => setPolicies(true)}>
                   {t("policy.title")}
+                </Button>
+                <Button variant="outline" onClick={() => setConclusionLead(lead.id)}>
+                  {t("conclusion:title")}
                 </Button>
                 <div className="flex flex-wrap gap-3">
                   <Button

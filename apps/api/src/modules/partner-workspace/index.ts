@@ -133,6 +133,9 @@ import type { registerIdentity } from "../identity/index.js";
 import { createPartnerRepository } from "./partner.repository.js";
 import { PartnerError, type PartnerActor } from "./partner.policy.js";
 import { registerQualityRoutes } from "./partner.quality.routes.js";
+import { registerConclusionRoutes } from "./partner.conclusion.routes.js";
+import { registerNavigationRoutes } from "./partner.navigation.routes.js";
+import { registerRelationshipRoutes } from "./partner.relationships.routes.js";
 import { registerCommunicationRoutes } from "./partner.communications.routes.js";
 import { registerPilotageRoutes } from "./partner.pilotage.routes.js";
 import { startPartnerJobs } from "./partner.jobs.js";
@@ -183,6 +186,9 @@ export function registerPartnerWorkspace(
   }
   const economyPage = z.object({ cursor: z.string().max(400).optional() }).strict();
   registerQualityRoutes(server, repository, actor);
+  registerConclusionRoutes(server, repository, actor);
+  registerNavigationRoutes(server, repository, actor);
+  registerRelationshipRoutes(server, repository, actor);
   registerCommunicationRoutes(server, repository, actor);
   registerPilotageRoutes(server, repository, actor);
   app.get(
@@ -1734,6 +1740,20 @@ export function registerPartnerWorkspace(
       wallet: boolean,
     ) {
       return repository.finalPolicySource(await actor(request, wallet), leadId, policyId);
+    },
+    async conclusionCorrespondenceSource(
+      request: FastifyRequest,
+      leadId: string,
+      sourceId: string,
+      wallet: boolean,
+      record = false,
+    ) {
+      return repository.conclusionCorrespondenceSource(
+        await actor(request, wallet),
+        leadId,
+        sourceId,
+        record,
+      );
     },
     async recordFinalPolicySource(
       request: FastifyRequest,

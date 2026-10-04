@@ -15,6 +15,8 @@ import {
 import { requireOfferSource } from "./partner.offers.js";
 import { executeContractCommand } from "./partner.contract.js";
 import { executeFinalPolicyCommand } from "./partner.final-policy.js";
+import { conclusionClosureReady } from "./partner.conclusion-evidence.js";
+import { reopenLead } from "./partner.lifecycle.js";
 import { overlappingAppointment } from "./partner.appointment-assessment.js";
 type LeadRow = typeof partnerLeads.$inferSelect;
 
@@ -56,6 +58,7 @@ export async function executeLeadCommand(
   if (
     lead.stage === "completed" &&
     ![
+      "reopen",
       "note",
       "task_state",
       "task",
@@ -68,6 +71,9 @@ export async function executeLeadCommand(
   )
     fail("PARTNER_INVALID_TRANSITION");
   switch (input.action) {
+    case "reopen":
+      await reopenLead(tx, actor, lead, input);
+      break;
     case "final_policy_link":
     case "final_policy_unlink":
     case "final_policy_review":
@@ -378,6 +384,9 @@ export async function executeLeadCommand(
         input.reason === "current_suitable" ? "resolved_without_contract" : input.result;
       if (result === "contract" && lead.stage !== "contract_issued")
         fail("PARTNER_INVALID_TRANSITION");
+      if (result === "contract") {
+        if (!(await conclusionClosureReady(tx, lead))) fail("PARTNER_INVALID_TRANSITION");
+      }
       if (input.reason === "client_refusal" && result !== "client_refusal")
         fail("PARTNER_INVALID_TRANSITION");
       await tx.query<Record<string, unknown>>(

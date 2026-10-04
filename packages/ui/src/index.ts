@@ -1,4 +1,5 @@
 export { Button } from "./Button";
+export { SignatureEvidence } from "./SignatureEvidence";
 export { SourcedComparison } from "./SourcedComparison";
 export { ButtonLink } from "./Button";
 export { Badge, badgeVariants } from "./Badge";
@@ -52,4 +53,4 @@ export { VersionHistoryDialog } from "./VersionHistoryDialog";
 export { PolicyEvidence } from "./PolicyEvidence";
 
 export { swissCantonNamesFr } from "./swiss-cantons";
-export { parseZurichDateTime } from "./zurich-time";
+export { parseZurichDateTime, formatZurichDateTime } from "./zurich-time";

@@ -22,6 +22,7 @@ import {
 } from "./partner.pilotage-scope.js";
 import { economicMetricKeys, pilotageEconomy } from "./partner.pilotage-economy.js";
 import { comparisonMetricKeys, pilotageComparisons } from "./partner.pilotage-comparisons.js";
+import { signatureMetricKeys, signatureProjection } from "./partner.pilotage-signatures.js";
 
 const numeric = (value: string | number | null) => {
   if (value === null) return null;
@@ -44,22 +45,26 @@ export async function pilotageMeasures(
 ) {
   const population = await pilotagePopulation(tx, actor, query, scope);
   const keys = only ? [only] : pilotageMetricSchema.options;
+  const signature = keys.some((key) => signatureMetricKeys.some((metric) => metric === key))
+    ? await signatureProjection(tx)
+    : { definitions: {}, ctes: "" };
+  const definitions = { ...pilotageMetrics, ...signature.definitions };
   const selections = keys.flatMap((metric) =>
-    pilotageMetrics[metric].sql
-      ? [`select '${metric}'::text metric,m.* from (${pilotageMetrics[metric].sql}) m`]
+    definitions[metric].sql
+      ? [`select '${metric}'::text metric,m.* from (${definitions[metric].sql}) m`]
       : [],
   );
   const rows = selections.length
     ? (
         await tx.query<Aggregate>(
-          `with ${pilotageCtes}, metric_rows as (${selections.join(" union all ")}) select metric,sum(value)::text numerator,sum(denominator)::text denominator,count(*)::text population from metric_rows group by metric`,
+          `with ${pilotageCtes}${signature.ctes}, metric_rows as (${selections.join(" union all ")}) select metric,sum(value)::text numerator,sum(denominator)::text denominator,count(*)::text population from metric_rows group by metric`,
           population.values,
         )
       ).rows
     : [];
   const byMetric = new Map(rows.map((row) => [row.metric, row]));
   const measures: PilotageMeasure[] = keys.map((metric) => {
-    const definition = pilotageMetrics[metric],
+    const definition = definitions[metric],
       row = byMetric.get(metric),
       count = Number(row?.population ?? 0),
       numerator = numeric(row?.numerator ?? null),
@@ -201,8 +206,11 @@ export function createPilotageOperations(pool: Pool) {
       economyRead(pool, actor, async (tx) => {
         const sourceQuery = pilotageSourceQuerySchema.parse(raw),
           { metric, cursor, ...query } = sourceQuery,
-          scope = await resolvePilotageScope(tx, actor, scopeFromQuery(query)),
-          definition = pilotageMetrics[metric];
+          scope = await resolvePilotageScope(tx, actor, scopeFromQuery(query));
+        const signature = signatureMetricKeys.some((key) => key === metric)
+          ? await signatureProjection(tx)
+          : { definitions: {}, ctes: "" };
+        const definition = { ...pilotageMetrics, ...signature.definitions }[metric];
         const population = await pilotagePopulation(tx, actor, query, scope),
           [at, after] = economyCursor(cursor);
         if (comparisonMetricKeys.some((key) => key === metric)) {
@@ -264,7 +272,7 @@ export function createPilotageOperations(pool: Pool) {
             value: string | null;
             denominator: string | null;
           }>(
-            `with ${pilotageCtes},sources as (${definition.sql}) select s.*,l.title from sources s join leads l on l.id=s.lead_id where ($13::timestamptz is null or (coalesce(s.at,'1970-01-01'::timestamptz),s.source_id)<($13::timestamptz,$14::text)) order by coalesce(s.at,'1970-01-01'::timestamptz) desc,s.source_id desc limit 21`,
+            `with ${pilotageCtes}${signature.ctes},sources as (${definition.sql}) select s.*,l.title from sources s join leads l on l.id=s.lead_id where ($13::timestamptz is null or (coalesce(s.at,'1970-01-01'::timestamptz),s.source_id)<($13::timestamptz,$14::text)) order by coalesce(s.at,'1970-01-01'::timestamptz) desc,s.source_id desc limit 21`,
             [...population.values, at, after],
           )
         ).rows;

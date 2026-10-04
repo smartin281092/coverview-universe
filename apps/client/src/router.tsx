@@ -64,11 +64,13 @@ const offersRoute = createRoute({
   path: "/offers",
   validateSearch: (
     search: Record<string, unknown>,
-  ): { lead?: string; section?: "quality" | "communications" } =>
+  ): { lead?: string; section?: "quality" | "communications" | "conclusion" } =>
     typeof search.lead === "string" && /^lead_[0-9a-f-]{36}$/.test(search.lead)
       ? {
           lead: search.lead,
-          ...(search.section === "quality" || search.section === "communications"
+          ...(search.section === "quality" ||
+          search.section === "communications" ||
+          search.section === "conclusion"
             ? { section: search.section }
             : {}),
         }

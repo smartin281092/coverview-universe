@@ -1,5 +1,7 @@
 # CoverView Partner
 
+Lot4 : fiche Lead → signature/conclusion, correction motivée des constats, correspondances partagées par Wallet et contrôle des polices ; vues privées et filtres de liste ; reprise d’un dossier terminé avec archive de clôture. [Conclusion](../api/src/modules/partner-workspace/docs/conclusion.md), [navigation](../api/src/modules/partner-workspace/docs/navigation.md), [reprises](../api/src/modules/partner-workspace/docs/lifecycle.md).0060–0063 hors catalogue ; activation et recette authentifiée ouvertes.
+
 Lot3 : `/statistics`, `/goals`, `/quality` et `/leads/:id/communications`, synthèse des objectifs au dashboard. Sources, définitions, populations, suivi et transcriptions humaines consenties : [règles propriétaires](../api/src/modules/partner-workspace/docs/quality-pilotage.md). V0–V2 vérifiés,0059 hors catalogue et V3 authentifié ouvert.
 
 Lot2 : `/marketplace`, `/commercial-conditions`, `/remunerations` et leurs détails ; publication depuis Collaboration du Lead. Propositions, termes complets, accord et registre réel persisté. Les parties suspendues conservent une consultation financière personnelle sans droits au dossier. [Règles, migration0058 et limites](../api/src/modules/partner-workspace/docs/marketplace-economy.md). V0–V2 vérifiés ; V3 authentifié rempli/clavier/mobile et activation restent ouverts.

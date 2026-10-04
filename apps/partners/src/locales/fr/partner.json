@@ -721,7 +721,9 @@
     "pendingClient": "Rattachement Wallet à vérifier",
     "closed": "Ce Lead est clôturé ; l’historique et les tâches de suivi restent conservés.",
     "continuity": "Suivi ou réexamen attendu le {{review}}. Sans action ni attente justifiée, reprise CoverView à partir du {{escalation}}.",
-    "acceptanceDue": "Acceptation attendue avant le {{date}}"
+    "acceptanceDue": "Acceptation attendue avant le {{date}}",
+    "reopen": "Reprendre le dossier",
+    "reopenNotice": "La reprise conserve le résultat et le motif de la clôture précédente. Indiquez le motif de reprise et la prochaine action à venir (Europe/Zurich). Les tâches annulées, rendez-vous et consentements ne sont pas réactivés ; le référent et son cycle d’attribution restent inchangés. Le motif de reprise et la prochaine action sont visibles par le client dans cet historique."
   },
   "tabs": {
     "overview": "Vue d’ensemble",
@@ -955,7 +957,21 @@
     "counsel.propose.v1": "Collaboration proposée pour l’orientation",
     "counsel.resolve.v1": "Traitement de l’orientation terminé",
     "counsel.withdraw.v1": "Demande d’orientation retirée",
-    "client.appointments_coordinated.v1": "Rendez-vous coordonnés par le client"
+    "client.appointments_coordinated.v1": "Rendez-vous coordonnés par le client",
+    "lead.reopened.v1": "Dossier repris après clôture",
+    "conclusion.prepared.v1": "Offre à signer",
+    "conclusion.signed.v1": "Demande signée par le client",
+    "conclusion.transmitted.v1": "Transmission de la demande consignée",
+    "conclusion.accepted.v1": "Acceptation de la compagnie documentée",
+    "conclusion.declined.v1": "Refus de la compagnie documenté",
+    "conclusion.issued.v1": "Émission de police documentée",
+    "conclusion.withdraw.v1": "Invitation à signer retirée",
+    "conclusion.correct.v1": "Constat de conclusion corrigé",
+    "correspondence.shared.v1": "Correspondance partagée par le client",
+    "correspondence.withdrawn.v1": "Partage de correspondance retiré",
+    "correspondence.viewed.v1": "Correspondance consultée",
+    "lead.relationship_linked.v1": "Lien entre demandes enregistré",
+    "lead.relationship_withdrawn.v1": "Lien entre demandes retiré"
   },
   "benefit": {
     "deductible": "Franchise",
@@ -1025,7 +1041,19 @@
       "quality.pending": "Dossier qualité à traiter",
       "quality.survey_dependency": "Enquête non invitée : propriétaire Wallet manquant à la clôture",
       "quality.updated": "Suivi du dossier qualité",
-      "communication.consent": "Accord préalable attendu"
+      "communication.consent": "Accord préalable attendu",
+      "lead.reopened.v1": "Dossier repris après clôture",
+      "conclusion.prepared.v1": "Offre à signer",
+      "conclusion.signed.v1": "Demande signée par le client",
+      "conclusion.transmitted.v1": "Transmission de la demande consignée",
+      "conclusion.accepted.v1": "Acceptation de la compagnie documentée",
+      "conclusion.declined.v1": "Refus de la compagnie documenté",
+      "conclusion.issued.v1": "Émission de police documentée",
+      "conclusion.withdraw.v1": "Invitation à signer retirée",
+      "conclusion.correct.v1": "Constat de conclusion corrigé",
+      "correspondence.shared.v1": "Correspondance partagée par le client",
+      "correspondence.withdrawn.v1": "Partage de correspondance retiré",
+      "correspondence.viewed.v1": "Correspondance consultée"
     },
     "action": {
       "open": "Ouvrir le dossier",
@@ -1036,6 +1064,7 @@
       "review_response": "Examiner la réponse",
       "review_offer": "Examiner les offres",
       "review_policy": "Examiner la police et ses preuves",
+      "conclusion": "Examiner la signature et les suites",
       "review_quality": "Traiter le suivi qualité",
       "survey": "Donner mon avis",
       "communication": "Consulter les échanges"
@@ -1193,7 +1222,17 @@
     "conflict": "Le dossier, la source ou vos droits ont changé. Fermez ce formulaire, actualisez puis vérifiez les éléments avant une nouvelle tentative.",
     "retryExact": "La confirmation n’a pas été reçue. Réessayez exactement la même commande pour vérifier son enregistrement.",
     "missing": "Non renseigné",
-    "missingProofs": "La signature de cette version d’offre et l’acceptation de la compagnie ne sont pas prouvées dans ce parcours. Le partage et le contrôle de la police ne les remplacent pas ; le suivi reste ouvert.",
+    "conclusionProofs": "Signature : {{signature}}. Compagnie : {{insurer}}. Consultez « Signature et conclusion » pour le dossier exact et ses limites.",
+    "signatureProof": {
+      "missing": "non documentée",
+      "traced": "demande signée avec un tracé natif",
+      "invalidated": "source ou contexte à revoir"
+    },
+    "insurerProof": {
+      "missing": "réponse non documentée",
+      "documented": "réponse documentée par un professionnel",
+      "invalidated": "preuve de réponse à revoir"
+    },
     "caption": "{{status}} · Reliée le {{date}}",
     "status": {
       "available": "Police disponible",

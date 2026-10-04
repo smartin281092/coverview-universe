@@ -1,5 +1,7 @@
 # Partner — Leads et offres partagés avec Wallet
 
+Lot4 en cours : [signature native, correspondances et conclusion documentée](docs/conclusion.md), [vues privées et filtres](docs/navigation.md), [clôtures et reprises](docs/lifecycle.md).0060–0063 hors catalogue normal ; preuves V2 isolées, activation et V3 ouvertes.
+
 Lot3 : [qualité, communications consenties, statistiques et objectifs](docs/quality-pilotage.md). Ce propriétaire remplace les mentions historiques d’absence de ces capacités ;0059 hors catalogue, activation et V3 ouvertes.
 
 Marketplace, conditions/mandats et rémunérations du lot2 : [propriétaire des règles, données, limites et migration0058](docs/marketplace-economy.md). Les dossiers financiers ne donnent aucun accès opérationnel ;0058 reste hors catalogue normal.

@@ -43,7 +43,19 @@
     "market.mandate_changed.v1": "Votre mandat de conseil a été mis à jour",
     "quality.survey": "Votre avis sur l’accompagnement",
     "quality.updated": "Une suite de votre retour est disponible",
-    "communication.consent": "Demande d’accord préalable à un enregistrement"
+    "communication.consent": "Demande d’accord préalable à un enregistrement",
+    "lead.reopened.v1": "Dossier repris après clôture",
+    "conclusion.prepared.v1": "Offre à signer",
+    "conclusion.signed.v1": "Demande signée par le client",
+    "conclusion.transmitted.v1": "Transmission de la demande consignée",
+    "conclusion.accepted.v1": "Acceptation de la compagnie documentée",
+    "conclusion.declined.v1": "Refus de la compagnie documenté",
+    "conclusion.issued.v1": "Émission de police documentée",
+    "conclusion.withdraw.v1": "Invitation à signer retirée",
+    "conclusion.correct.v1": "Constat de conclusion corrigé",
+    "correspondence.shared.v1": "Correspondance partagée par le client",
+    "correspondence.withdrawn.v1": "Partage de correspondance retiré",
+    "correspondence.viewed.v1": "Correspondance consultée"
   },
   "back": "Retour aux offres",
   "inspect": "Ouvrir la demande",
@@ -60,5 +72,6 @@
   "offerTitle": "{{title}} — {{company}} · {{product}} · Version {{version}}",
   "reviewQuality": "Consulter mon suivi",
   "respondSurvey": "Donner mon avis",
-  "reviewCommunication": "Examiner la demande d’accord"
+  "reviewCommunication": "Examiner la demande d’accord",
+  "reviewConclusion": "Examiner la signature et les suites"
 }

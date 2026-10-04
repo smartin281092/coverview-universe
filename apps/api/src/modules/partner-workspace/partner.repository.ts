@@ -1,4 +1,9 @@
 import { readDistributionReview, recordDistributionReview } from "./partner.distribution-review.js";
+import { createConclusionOperations } from "./partner.conclusion.js";
+import { createCorrespondenceOperations } from "./partner.correspondence.js";
+import { readLeadReopenings } from "./partner.lifecycle.js";
+import { createRelationshipOperations } from "./partner.relationships.js";
+import { createNavigationOperations } from "./partner.navigation.js";
 import { readSolutionClauses, recordSolutionClauses } from "./partner.solution-clauses.js";
 import { createHash } from "node:crypto";
 import type { Pool, PoolClient } from "pg";
@@ -101,7 +106,7 @@ import { createAppointmentLinkOperations } from "./partner.appointment-links.js"
 import { createWalletAppointmentOperations } from "./partner.wallet-appointments.js";
 import { createBookingOperations } from "./partner.booking.js";
 import { createCounselOperations } from "./partner.counsel.js";
-import { createCommercialOperations } from "./partner.commercial.js";
+import { createCommercialOperations, economyRead } from "./partner.commercial.js";
 import { createMarketplaceOperations } from "./partner.marketplace.js";
 import { createEconomyOperations } from "./partner.economy.js";
 import { createQualityOperations } from "./partner.quality.js";
@@ -215,6 +220,7 @@ function summary(actor: PartnerActor, row: ReadRow): LeadSummary {
         : [];
   if (!actor.wallet && row.responsibleId === actor.userId && row.assignment === "proposed")
     actions.push("accept");
+  if (controls && row.stage === "completed") actions.push("reopen");
   if (!actor.wallet && actor.administrator) actions.push("assign");
   if (
     active &&
@@ -592,7 +598,9 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         typeof error === "object" &&
         "code" in error &&
         error.code === "23514" &&
-        /^(market|commercial|economy|quality|communication|pilotage)\./u.test(operation)
+        /^(market|commercial|economy|quality|communication|pilotage|conclusion|navigation|relationships)\./u.test(
+          operation,
+        )
       )
         fail("PARTNER_CONFLICT", 409);
       if (
@@ -692,6 +700,36 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
     return { ...authorized, previous, row };
   }
   return {
+    ...createNavigationOperations(pool, transaction),
+    ...createRelationshipOperations(pool, transaction, async (tx, actor, id) => {
+      const lead = await adviceLead(tx, actor, id),
+        view = summary(actor, lead);
+      const ctx = actor.wallet ? null : await context(tx, actor, true);
+      return {
+        lead,
+        summary: view,
+        canControl: !!(
+          ctx &&
+          (ctx.canAdvise || ctx.canManage) &&
+          view.allowedActions?.includes("close")
+        ),
+      };
+    }),
+    leadReopenings: (actor: PartnerActor, id: string, cursor?: string) =>
+      economyRead(pool, actor, async (tx) => {
+        const lead = await adviceLead(tx, actor, id);
+        return readLeadReopenings(tx, lead, cursor);
+      }),
+    ...createCorrespondenceOperations(pool, transaction, adviceLead),
+    ...createConclusionOperations(pool, transaction, async (tx, actor, id) => {
+      const lead = await adviceLead(tx, actor, id);
+      const canManage =
+        !actor.wallet &&
+        (await context(tx, actor, true)).canAdvise &&
+        !!summary(actor, lead).allowedActions?.includes("offer_publish") &&
+        !["draft", "completed"].includes(lead.stage);
+      return { lead, canManage };
+    }),
     ...createQualityOperations(pool, transaction, adviceLead),
     ...createCommunicationOperations(pool, transaction, adviceLead),
     ...createPilotageOperations(pool),
@@ -2213,6 +2251,22 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
           `%${query.q.replace(/[\\%_]/gu, "\\$&")}%`,
         );
       if (query.stage) add("l.stage=?", query.stage);
+      if (
+        query.createdFrom &&
+        query.createdTo &&
+        Date.parse(query.createdFrom) >= Date.parse(query.createdTo)
+      )
+        fail("PARTNER_ACTION_REQUIRED");
+      if (query.priority) add("l.priority=?", query.priority);
+      if (query.assignment) add("l.assignment=?", query.assignment);
+      if (query.result) add("l.result=?", query.result);
+      if (query.createdFrom) add("l.created_at>=?::timestamptz", query.createdFrom);
+      if (query.createdTo) add("l.created_at<?::timestamptz", query.createdTo);
+      if (query.waiting === "active")
+        clauses.push("l.waiting is not null and (l.waiting->>'until')::timestamptz>now()");
+      if (query.waiting === "due")
+        clauses.push("l.waiting is not null and (l.waiting->>'until')::timestamptz<=now()");
+      if (query.waiting === "none") clauses.push("l.waiting is null");
       if (query.category) add("l.category=?", query.category);
       if (query.responsibleId) add("l.responsible_id=?", query.responsibleId);
       if (query.clientUserId)

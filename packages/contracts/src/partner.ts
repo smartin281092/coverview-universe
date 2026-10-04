@@ -1105,6 +1105,7 @@ export const partnerNotificationSchema = z.object({
       "review_response",
       "review_offer",
       "review_policy",
+      "conclusion",
       "review_quality",
       "communication",
       "survey",
@@ -1885,6 +1886,14 @@ export const leadDetailSchema = leadSummarySchema.extend({
 export const leadListQuerySchema = z
   .object({
     q: z.string().trim().max(120).optional(),
+    priority: z.enum(["normal", "high", "urgent"]).optional(),
+    assignment: z
+      .enum(["unassigned", "proposed", "accepted", "marketplace", "reassign", "coverview"])
+      .optional(),
+    result: leadResultSchema.optional(),
+    waiting: z.enum(["active", "due", "none"]).optional(),
+    createdFrom: z.iso.datetime({ offset: true }).optional(),
+    createdTo: z.iso.datetime({ offset: true }).optional(),
     stage: leadStageSchema.optional(),
     category: leadCategorySchema.optional(),
     view: z
@@ -1903,6 +1912,14 @@ export const leadListSchema = z.object({
 });
 export const leadCommandSchema = z
   .discriminatedUnion("action", [
+    z
+      .object({
+        action: z.literal("reopen"),
+        reason: z.string().trim().min(5).max(2000),
+        nextAction: z.string().trim().min(2).max(240),
+        dueAt: instant,
+      })
+      .strict(),
     z.object({ action: z.literal("edit"), lead: leadCreateInputSchema }),
     z.object({
       action: z.literal("next_action"),

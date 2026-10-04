@@ -1,5 +1,8 @@
 import { z } from "zod";
 import { createQualityClient } from "./partner-quality.js";
+import { createConclusionClient } from "./partner-conclusion.js";
+import { createRelationshipClient } from "./partner-relationships.js";
+import { createNavigationClient } from "./partner-navigation.js";
 import { createCommunicationClient } from "./partner-communications.js";
 import { createPilotageClient } from "./partner-pilotage.js";
 import {
@@ -217,6 +220,9 @@ export function createPartnerClient(baseUrl: string) {
   const economyPage = (cursor?: string) => (cursor ? `?cursor=${encodeURIComponent(cursor)}` : "");
   return {
     ...createQualityClient(request),
+    ...createConclusionClient(request, base),
+    ...createRelationshipClient(request),
+    ...createNavigationClient(request),
     ...createCommunicationClient(request),
     ...createPilotageClient(request),
     economyAgreements: (cursor?: string, signal?: AbortSignal) =>
@@ -1168,7 +1174,11 @@ export function createPartnerClient(baseUrl: string) {
       request("/partner/directory", partnerDirectorySchema, signal),
     list: (query: Partial<LeadListQuery>, signal?: AbortSignal, wallet = false) =>
       request(
-        `${path(wallet)}?${new URLSearchParams(Object.entries(leadListQuerySchema.parse(query)).map(([key, value]) => [key, String(value)]))}`,
+        `${path(wallet)}?${new URLSearchParams(
+          Object.entries(leadListQuerySchema.parse(query))
+            .filter(([, value]) => value !== undefined)
+            .map(([key, value]) => [key, String(value)]),
+        )}`,
         leadListSchema,
         signal,
       ),

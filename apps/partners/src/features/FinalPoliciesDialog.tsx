@@ -69,7 +69,10 @@ export function FinalPoliciesDialog({ leadId, onClose }: { leadId: string; onClo
           body: (
             <PolicyEvidence
               status={tr(`reviewState.${policy.reviewState}`)}
-              notice={tr("missingProofs")}
+              notice={tr("conclusionProofs", {
+                signature: tr(`signatureProof.${policy.signatureEvidence}`),
+                insurer: tr(`insurerProof.${policy.insurerAcceptanceEvidence}`),
+              })}
               calculation={tr("calculation", { factor: policy.premium.factor ?? tr("missing") })}
               facts={[
                 {

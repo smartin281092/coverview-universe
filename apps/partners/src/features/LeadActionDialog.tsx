@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogDescription,
   Button,
+  parseZurichDateTime,
 } from "@coverview/ui";
 import {
   leadCommandSchema,
@@ -33,6 +34,7 @@ export type LeadAction =
   | "assign"
   | "wait"
   | "close"
+  | "reopen"
   | "transition"
   | "appointment_state";
 const labels: Record<LeadAction, string> = {
@@ -45,6 +47,7 @@ const labels: Record<LeadAction, string> = {
   assign: "assign",
   wait: "wait",
   close: "close",
+  reopen: "reopen",
   transition: "changeStage",
   appointment_state: "appointment",
 };
@@ -106,6 +109,14 @@ export function LeadActionDialog({
     let payload: unknown;
     try {
       switch (action) {
+        case "reopen":
+          payload = {
+            action,
+            reason: readText(data, "note"),
+            nextAction: readText(data, "nextAction"),
+            dueAt: parseZurichDateTime(readText(data, "dueAt")),
+          };
+          break;
         case "next_action":
           payload = { action, title: readText(data, "nextAction"), dueAt: readDate(data, "dueAt") };
           break;
@@ -241,6 +252,13 @@ export function LeadActionDialog({
             </Field>
           )}
           {action === "next_action" && nextFields}
+          {action === "reopen" && (
+            <>
+              <p className="text-sm text-muted-foreground">{t("detail.reopenNotice")}</p>
+              {note}
+              {nextFields}
+            </>
+          )}
           {action === "contact" && (
             <>
               <p className="text-sm text-muted-foreground">{t("contact.description")}</p>

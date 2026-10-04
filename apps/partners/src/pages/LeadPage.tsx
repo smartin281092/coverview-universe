@@ -22,6 +22,7 @@ import { SolutionEvidenceDialog } from "../features/SolutionEvidenceDialog";
 import { OfferImportDialog } from "../features/OfferImportDialog";
 import { OfferHistoryDialog } from "../features/OfferHistoryDialog";
 import { FinalPoliciesDialog } from "../features/FinalPoliciesDialog";
+import { ConclusionsDialog } from "../features/ConclusionsDialog";
 import { InsuranceRequestDialog } from "../features/InsuranceRequestDialog";
 import { ReferentContinuityDialog } from "../features/ReferentContinuityDialog";
 import { AdvisorAssessmentDialog } from "../features/AdvisorAssessmentDialog";
@@ -41,9 +42,12 @@ import { MarketPublishDialog } from "../features/MarketPublishDialog";
 import { CollaborationList } from "../features/CollaborationList";
 import { formatDate, formatMoney } from "../features/Field";
 import { adminUrl, partnerApi } from "../api";
+import { publicLeadSearch } from "../features/lead-navigation-state";
+import { LeadReopeningsDialog } from "../features/LeadReopeningsDialog";
+import { LeadRelationshipsDialog } from "../features/LeadRelationshipsDialog";
 export function LeadPage() {
   const { leadId } = useParams({ from: "/leads/$leadId" }),
-    { tab } = useSearch({ from: "/leads/$leadId" }),
+    { tab, section } = useSearch({ from: "/leads/$leadId" }),
     navigate = useNavigate({ from: "/leads/$leadId" }),
     { t } = useTranslation(),
     session = usePartner();
@@ -60,7 +64,10 @@ export function LeadPage() {
     [editing, setEditing] = useState(false),
     [reviewContract, setReviewContract] = useState(false),
     [history, setHistory] = useState(false),
+    [reopenings, setReopenings] = useState(false),
+    [relationships, setRelationships] = useState(false),
     [policies, setPolicies] = useState(false),
+    [conclusions, setConclusions] = useState(false),
     [imports, setImports] = useState(false),
     [insuranceSource, setInsuranceSource] = useState(false),
     [referent, setReferent] = useState(false),
@@ -185,6 +192,16 @@ export function LeadPage() {
       {collaborating && <CollaborationDialog lead={lead} onClose={() => setCollaborating(false)} />}
       {history && <OfferHistoryDialog leadId={lead.id} onClose={() => setHistory(false)} />}
       {policies && <FinalPoliciesDialog leadId={lead.id} onClose={() => setPolicies(false)} />}
+      {(conclusions || section === "conclusion") && (
+        <ConclusionsDialog
+          key={session.queryKey.join(":")}
+          leadId={lead.id}
+          onClose={() => {
+            setConclusions(false);
+            if (section) void navigate({ search: { tab: tab ?? "offers" } });
+          }}
+        />
+      )}
       {imports && <OfferImportDialog lead={lead} onClose={() => setImports(false)} />}
       {insuranceSource && lead.insuranceRequestId && lead.access === "operational" && (
         <InsuranceRequestDialog leadId={lead.id} onClose={() => setInsuranceSource(false)} />
@@ -195,7 +212,7 @@ export function LeadPage() {
       <header className="space-y-5">
         <Link
           to="/leads"
-          search={{ view: "all" }}
+          search={publicLeadSearch(session.leadReturnSearch ?? { view: "all" })}
           className="inline-flex items-center gap-2 text-sm text-muted-foreground"
         >
           <ArrowLeft className="size-4" />
@@ -439,6 +456,31 @@ export function LeadPage() {
                 {" · "}
                 {t(`reason.${lead.reason}`)}
               </p>
+            )}
+            {allowed("reopen") && (
+              <Button variant="outline" onClick={() => setAction("reopen")}>
+                {t("detail.reopen")}
+              </Button>
+            )}
+            {lead.access !== "progress" && (
+              <Button variant="outline" onClick={() => setReopenings(true)}>
+                {t("lifecycle:title")}
+              </Button>
+            )}
+            {reopenings && (
+              <LeadReopeningsDialog leadId={lead.id} onClose={() => setReopenings(false)} />
+            )}
+            {lead.access !== "progress" && (
+              <Button variant="outline" onClick={() => setRelationships(true)}>
+                {t("relationships:title")}
+              </Button>
+            )}
+            {relationships && (
+              <LeadRelationshipsDialog
+                key={[...session.queryKey, lead.id].join(":")}
+                leadId={lead.id}
+                onClose={() => setRelationships(false)}
+              />
             )}
             {lead.canEdit && lead.stage !== "completed" && (
               <div className="flex flex-wrap gap-2">
@@ -685,6 +727,9 @@ export function LeadPage() {
           </Button>
           <Button variant="outline" onClick={() => setPolicies(true)}>
             {t("policy.title")}
+          </Button>
+          <Button variant="outline" onClick={() => setConclusions(true)}>
+            {t("conclusion:title")}
           </Button>
           <Button variant="outline" onClick={() => setImports(true)}>
             {t("imports.title")}

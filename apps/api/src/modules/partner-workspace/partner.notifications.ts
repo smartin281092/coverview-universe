@@ -99,6 +99,49 @@ export async function notifyPartnerEvent(
     )
   ).rows[0];
   if (!row) return;
+  if (kind.startsWith("conclusion.")) {
+    if (kind !== "conclusion.prepared.v1")
+      await db.query(
+        "update partner_notifications set resolved_at=now() where lead_id=$1 and left(dedupe_key,length($2))=$2 and resolved_at is null",
+        [leadId, `${subjectId}:conclusion:`],
+      );
+    if (kind === "conclusion.prepared.v1" && row.client_id)
+      await put(db, {
+        leadId,
+        recipientId: row.client_id,
+        audience: "wallet",
+        kind,
+        key: `${subjectId}:conclusion:wallet`,
+        action: "conclusion",
+        priority: "high",
+      });
+    if (
+      [
+        "conclusion.signed.v1",
+        "conclusion.transmitted.v1",
+        "conclusion.accepted.v1",
+        "conclusion.correct.v1",
+      ].includes(kind)
+    )
+      await put(db, {
+        leadId,
+        recipientId: row.responsible_id,
+        audience: row.responsible_id ? "partner" : "coverview",
+        kind,
+        key: `${subjectId}:conclusion:${eventId}`,
+        action: "conclusion",
+        priority: "high",
+      });
+    if (kind !== "conclusion.prepared.v1" && row.client_id)
+      await put(db, {
+        leadId,
+        recipientId: row.client_id,
+        audience: "wallet",
+        kind,
+        key: `${eventId}:wallet`,
+        action: null,
+      });
+  }
   if (["appointment.rescheduled.v1", "client.appointment_reserved.v1"].includes(kind))
     await put(db, {
       leadId,
@@ -243,6 +286,7 @@ export async function notifyPartnerEvent(
       "offer.withdrawn",
       "offer.replaced",
       "lead.closed",
+      "lead.reopened.v1",
       "contract.reviewed",
       "policy.reviewed",
     ].includes(kind)
@@ -287,12 +331,12 @@ export async function syncLeadNotifications(db: Executor, leadId: string) {
   ).rows[0];
   if (!row) return;
   await db.query(
-    "update partner_notifications set recipient_id=$2,audience=case when $2::text is null then 'coverview' else 'partner' end where lead_id=$1 and kind in ('client_response','policy_review') and resolved_at is null",
+    "update partner_notifications set recipient_id=$2,audience=case when $2::text is null then 'coverview' else 'partner' end where lead_id=$1 and (kind in ('client_response','policy_review') or action='conclusion' and audience<>'wallet') and resolved_at is null",
     [leadId, row.responsible_id],
   );
   if (["draft", "completed"].includes(row.stage)) {
     await db.query(
-      "update partner_notifications set resolved_at=now() where lead_id=$1 and resolved_at is null and kind not in ('policy_review','quality.pending','quality.survey','quality.survey_dependency','communication.consent')",
+      "update partner_notifications set resolved_at=now() where lead_id=$1 and resolved_at is null and action is distinct from 'conclusion' and kind not in ('policy_review','quality.pending','quality.survey','quality.survey_dependency','communication.consent')",
       [leadId],
     );
     return;
@@ -415,7 +459,21 @@ export async function readPartnerNotifications(
 ) {
   const values: unknown[] = [actor.userId];
   const clauses = [notificationScope(actor)];
-  if (query.status === "open") clauses.push("n.resolved_at is null");
+  const hasConclusions = !!(
+    await db.query<{ table: string | null }>(
+      "select to_regclass('partner_conclusions')::text as table",
+    )
+  ).rows[0]?.table;
+  // Expiry is derived from the signed invitation and offer, including before anyone opens it.
+  // Keep the historical notification; its effective resolution requires no background write.
+  const resolved = hasConclusions
+    ? `coalesce(n.resolved_at,(select least(c.valid_until,(o.data->>'validUntil')::timestamptz)
+    from partner_conclusions c join partner_offers o on o.id=c.offer_id
+    where n.kind='conclusion.prepared.v1' and n.dedupe_key=c.id||':conclusion:wallet'
+    and not exists(select 1 from partner_offer_signatures s where s.conclusion_id=c.id)
+    and least(c.valid_until,(o.data->>'validUntil')::timestamptz)<=now() limit 1))`
+    : "n.resolved_at";
+  if (query.status === "open") clauses.push(`${resolved} is null`);
   if (query.clientProfileId) {
     if (query.clientProfileId === "self") clauses.push("l.client_profile_id is null");
     else {
@@ -440,7 +498,7 @@ export async function readPartnerNotifications(
   }
   const rows = (
     await db.query<Record<string, unknown>>(
-      `select n.*,case when n.collaboration_id is null then l.title else '' end title,coalesce((select application->>'name' from partner_members where user_id=case when n.audience='wallet' then l.responsible_id else n.recipient_id end),case when n.audience in ('coverview','wallet') then 'CoverView' else '' end) responsible_name,
+      `select n.*,${resolved} resolved_at,case when n.collaboration_id is null then l.title else '' end title,coalesce((select application->>'name' from partner_members where user_id=case when n.audience='wallet' then l.responsible_id else n.recipient_id end),case when n.audience in ('coverview','wallet') then 'CoverView' else '' end) responsible_name,
      (select read_at from partner_notification_reads where notification_id=n.id and user_id=$1) read_at,
      e.kind event_kind,case when o.id is not null then json_build_object('id',o.id,'version',o.version,'company',o.data->>'company','product',o.data->>'product') end offer
      from partner_notifications n join partner_leads l on l.id=n.lead_id

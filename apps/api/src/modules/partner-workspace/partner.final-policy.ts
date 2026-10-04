@@ -13,6 +13,7 @@ import { lockContractSubject } from "./partner.contract.js";
 import { readOffers, requireOfferSource } from "./partner.offers.js";
 import { fail, date, type Executor, type PartnerActor } from "./partner.policy.js";
 import { event, newId } from "./partner.audit.js";
+import { readConclusionEvidence } from "./partner.conclusion-evidence.js";
 
 type Subject = { id: string; clientUserId: string | null; clientProfileId: string | null };
 const snapshotSchema = z.object({
@@ -108,6 +109,7 @@ export async function readFinalPolicies(
       valid && !!offer.reviewedAt && annual !== null && offer.annualPremiumMinor !== null
         ? annual - offer.annualPremiumMinor
         : null;
+    const conclusion = await readConclusionEvidence(db, lead, row.offer_id);
     items.push(
       finalPolicySchema.parse({
         id: row.id,
@@ -143,8 +145,8 @@ export async function readFinalPolicies(
           factor,
           differenceMinor: difference,
         },
-        signatureEvidence: "missing",
-        insurerAcceptanceEvidence: "missing",
+        signatureEvidence: conclusion.signatureEvidence,
+        insurerAcceptanceEvidence: conclusion.insurerAcceptanceEvidence,
         canDownload: status === "available",
         canReview: valid && canReview,
       }),

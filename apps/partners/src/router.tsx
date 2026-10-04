@@ -132,8 +132,9 @@ const leads = createRoute({
 const lead = createRoute({
   getParentRoute: () => root,
   path: "/leads/$leadId",
-  validateSearch: (s: Record<string, unknown>): { tab?: string } => ({
+  validateSearch: (s: Record<string, unknown>): { tab?: string; section?: "conclusion" } => ({
     tab: typeof s.tab === "string" ? s.tab : "overview",
+    ...(s.section === "conclusion" ? { section: "conclusion" as const } : {}),
   }),
   component: lazyRouteComponent(() => import("./pages/LeadPage"), "LeadPage"),
 });
