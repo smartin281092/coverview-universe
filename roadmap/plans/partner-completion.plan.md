@@ -2,7 +2,7 @@
 
 > Statut : **approuvé** — réponses utilisateur du 4 octobre 2026 : « 1a 2a 3b ». diff_from : [lot 4/4](partner-conclusion-integration.plan.md), interrompu le 4 octobre à 01h30.
 > **Session requise** : Claude Code, Claude Opus 5.5, effort max. La reprise quitte la chaîne de relais Codex (décision 1a).
-> **Session réelle** : renseignée à chaque livraison.
+> **Session réelle** : Claude Code, Claude Opus 5.5, effort max (C1 à C5, 4 octobre 2026).
 > **Budget** : plusieurs sessions. Une phase livrée est commitée sur `claude/partner-integration` avant la suivante.
 
 ## Décisions acquises (réponses aux questions bloquantes du bilan du 4 octobre)
@@ -211,6 +211,8 @@ architecture, backend, api, contracts, data, permissions, security, testing, fro
 | 16 | C4b complet | suite complète | 3 échecs : des tests vérifient qu'une relecture du dossier est identique, or la date de calcul changeait | Date des données utilisées (`asOf`), projection déterministe ; 5 fichiers / 93 tests repassés |
 | 17 | Activation locale | état des worktrees | `D:Projectscoverview-astra` basculé sur `main` (`ba49851`, sans le travail Partner) ; une autre session travaille dans `coverview-astra-health` depuis C4a | Aucune avance rapide ni migration de la base locale partagée sans accord (risque d'ordre des migrations entre branches) ; suites complètes dans un worktree figé `coverview-astra-suite` |
 | 18 | C4c proposition | test PostgreSQL | Aucune police candidate : le gabarit de test n'avait ni en-tête de police émise ni textes sources présents sur la page | Gabarit corrigé (« Police automobile », sources sur la page) ; 1/1 |
+| 19 | C4b, C4c, C5a, C5 | suites complètes dans des worktrees figés | `883015b` : 79/79 fichiers, 775/775 tests ; `c3bfd0b` : 81/81, 780/780 ; `3b64bae` : 82/82, 782/782 ; `9a114f8` : 83/83, 784/784 | Branche `claude/partner-integration` avancée sur la pointe vérifiée ; base locale et `D:Projects` inchangés en attendant l'accord |
+| 20 | C5a vues | tests PostgreSQL | Création refusée sans prochaine action, puis conflit en réattribuant un conseiller déjà responsable de sa propre création | Gabarit de test corrigé ; 3/3 |
 
 ## Risques et mitigations
 
