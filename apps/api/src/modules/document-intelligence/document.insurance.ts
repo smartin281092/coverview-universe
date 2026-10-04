@@ -191,7 +191,7 @@ export function companyOverview(companyId: InsuranceCompanyId, entries: Entry[],
   const related = entries.filter(({ document }) => document.companyId === companyId);
   const groups = new Map<string, Entry[]>();
   for (const entry of related) {
-    if (entry.document.classification !== "insurance_policy") continue;
+    if (entry.document.purpose === "lead_offer" || entry.document.classification !== "insurance_policy") continue;
     // An OCR category alone does not turn a quote/application into an issued policy.
     const header =
       entry.analysis?.pages[0]?.text.slice(0, 12000).split(/\r?\n/u).slice(0, 12).join("\n") ?? "";
@@ -220,7 +220,8 @@ export function companyOverview(companyId: InsuranceCompanyId, entries: Entry[],
     const key = facts.policyNumber
       ? `policy:${normalizeDocumentSearch(facts.policyNumber.value).replace(/[^a-z0-9]/gu, "")}`
       : `file:${entry.document.checksum}`;
-    groups.set(key, [...(groups.get(key) ?? []), entry]);
+    const profileKey = `${entry.document.profileId ?? "self"}:${key}`;
+    groups.set(profileKey, [...(groups.get(profileKey) ?? []), entry]);
   }
   const today = now.toISOString().slice(0, 10);
   const soon = new Date(now.getTime() + 30 * 86400000).toISOString().slice(0, 10);
@@ -246,6 +247,7 @@ export function companyOverview(companyId: InsuranceCompanyId, entries: Entry[],
             : "unknown";
     return {
       id: group[0]!.document.id,
+      profileId: group[0]!.document.profileId ?? "self",
       documentIds: group.map((entry) => entry.document.id),
       title: group[0]!.document.title ?? "Contrat d’assurance",
       domain: consensus(facts.map((fact) => fact.domain)),

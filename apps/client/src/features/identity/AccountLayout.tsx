@@ -1,10 +1,14 @@
 import type { ReactNode } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { MonitorSmartphone, ShieldCheck, UserRound } from "lucide-react";
 import { AccountLayout as SharedAccountLayout } from "@coverview/ui";
+import { identityOptions } from "./session-state";
 
 export function AccountLayout({ children }: { children: ReactNode }) {
   const { t } = useTranslation();
+  const client = useQueryClient();
+  const identity = useQuery({ ...identityOptions(client), enabled: false });
   const items = [
     { key: "account", icon: UserRound },
     { key: "access", icon: ShieldCheck },
@@ -25,11 +29,15 @@ export function AccountLayout({ children }: { children: ReactNode }) {
           <p className="max-w-2xl text-muted-foreground">{t("identity.accountDescription")}</p>
         </header>
       }
-      details={items.map(({ key, icon: Icon }) => ({
-        title: t(`accountIntro.${key}.title`),
-        description: t(`accountIntro.${key}.description`),
-        icon: <Icon />,
-      }))}
+      details={
+        identity.data === null
+          ? items.map(({ key, icon: Icon }) => ({
+              title: t(`accountIntro.${key}.title`),
+              description: t(`accountIntro.${key}.description`),
+              icon: <Icon />,
+            }))
+          : []
+      }
     >
       {children}
     </SharedAccountLayout>

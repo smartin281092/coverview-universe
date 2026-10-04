@@ -32,21 +32,23 @@ export function AccountLayout({
         />
       )}
       <div className="cv-account-layout__content">{children}</div>
-      <ul className="cv-account-layout__details">
-        {details.map((detail) => (
-          <li key={detail.title} className="cv-account-layout__detail">
-            {detail.icon && (
-              <span className="cv-account-layout__detail-icon" aria-hidden="true">
-                {detail.icon}
-              </span>
-            )}
-            <div>
-              <h2>{detail.title}</h2>
-              <p>{detail.description}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
+      {details.length > 0 && (
+        <ul className="cv-account-layout__details">
+          {details.map((detail) => (
+            <li key={detail.title} className="cv-account-layout__detail">
+              {detail.icon && (
+                <span className="cv-account-layout__detail-icon" aria-hidden="true">
+                  {detail.icon}
+                </span>
+              )}
+              <div>
+                <h2>{detail.title}</h2>
+                <p>{detail.description}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

@@ -1,0 +1,156 @@
+{
+  "retrievedAt": "2026-09-07",
+  "assets": [
+    {
+      "id": "allianz",
+      "source": "https://www.allianz.ch/content/dam/onemarketing/azch/allianz-logo/AZ_Logo_positive_RGB.png",
+      "file": "allianz.png",
+      "sha256": "4fcc14af5674f5cdffc4b140cedf2b18c6ec6a433bcf0fa0af61d9cf7bc09c13"
+    },
+    {
+      "id": "assura",
+      "source": "https://www.assura.ch/logo.png",
+      "file": "assura.png",
+      "sha256": "e9ec0742b2e89293b98d7522b4f2294113a5ed81412097b0360adc041958a84d"
+    },
+    {
+      "id": "axa",
+      "source": "https://www.axa.ch/etc.clientlibs/axa/sites/core-assets/resources/images/logo-AXA.svg",
+      "file": "axa.svg",
+      "sha256": "c6295da73984e5377e1b48eaeec243003e60d5a8f25632c6e3fff6d1692e0509"
+    },
+    {
+      "id": "baloise",
+      "source": "https://upload.wikimedia.org/wikipedia/commons/8/88/Baloise_Logo_2022.svg",
+      "attribution": "Baloise AG; Wikimedia Commons, PD-textlogo",
+      "file": "baloise.svg",
+      "sha256": "acc70679d1efb8c2d1c40febdb4005976a03c0b0401a00aac8c9e3d898a5673f"
+    },
+    {
+      "id": "css",
+      "source": "https://www.css.ch/fr/clients-prives.html",
+      "file": "css.svg",
+      "sha256": "d5cceb4261645d3c731ef7bbe0d4708616d3c569a731bfb9a841947cf94e8478"
+    },
+    {
+      "id": "generali",
+      "source": "https://www.generali.ch/content/dam/generali/common/media/neutral/GEN_Logo_w_v_RBG_77x95.svg",
+      "file": "generali.svg",
+      "sha256": "e0b96226cc3351a609742def7d2c3ab32f16fbf1fe738a6279a5fa0876433b8d"
+    },
+    {
+      "id": "groupe-mutuel",
+      "source": "https://www.groupemutuel.ch/dam/jcr:6da6cce5-0eb9-4e98-bdc0-5202a18317fe/logo-groupe-mutuel.svg",
+      "file": "groupe-mutuel.svg",
+      "sha256": "95464bbb691a4cedae4298e2ae9523054d192c12ee5506d72b7a81a077bef013"
+    },
+    {
+      "id": "helsana",
+      "source": "https://www.helsana.ch/content/dam/system/helsana/resources/helsana-logo.svg",
+      "file": "helsana.svg",
+      "sha256": "e3f946762cc1cee272d5fa5b76f7d920b5fe8bdaf83d99cfa2448882031008e0"
+    },
+    {
+      "id": "pax",
+      "source": "https://www.pax.ch/pax-logo-hell.svg",
+      "page": "https://www.pax.ch/de",
+      "file": "pax.svg",
+      "retrievedAt": "2026-09-19",
+      "sha256": "a6c07b5fea341b453dc116d91caacc152f731bbe66a4d4b98e147c8b357e51f0"
+    },
+    {
+      "id": "ubs",
+      "source": "https://www.ubs.com/etc.clientlibs/ubs/fit/design/resources/img/logo/UBS_Logo_Semibold.svg",
+      "page": "https://www.ubs.com/ch/fr.html",
+      "file": "ubs.svg",
+      "retrievedAt": "2026-09-19",
+      "sha256": "93235948b9fc64cb3035b1bb481686f7174c423123fdd4a292d3a07704e3dbf1"
+    },
+    {
+      "id": "mobiliere",
+      "source": "https://www.mobiliere.ch/logos/mobiliar-fr.svg?v=20260129",
+      "page": "https://www.mobiliere.ch",
+      "file": "mobiliere.svg",
+      "retrievedAt": "2026-09-19",
+      "sha256": "6de85407120ae2b82c6d79f99ea6559ea5e06da792704a3c3fd4fffa0e69c2d8"
+    },
+    {
+      "id": "raiffeisen",
+      "source": "https://www.raiffeisen.ch/content/dam/www/rch/logo/rch-logo-lg-2x.png",
+      "page": "https://www.raiffeisen.ch",
+      "file": "raiffeisen.png",
+      "retrievedAt": "2026-09-19",
+      "sha256": "e517f94709787cdc32090eee222d42c5b0f6567e86e4dc62bb0e8db7fd267162"
+    },
+    {
+      "id": "zurich",
+      "source": "https://www.zurich.ch/-/media/zurich-site/logo/zurich-logo.png",
+      "page": "https://www.zurich.ch",
+      "file": "zurich.png",
+      "retrievedAt": "2026-09-19",
+      "sha256": "5223cc7352f943d5c2c001f567fd6c999b38d450905c3a7dc19c05732988f3d3"
+    },
+    {
+      "id": "retraites-populaires",
+      "source": "https://www.retraitespopulaires.ch/themes/retraitespopulaires/build/svg/logo-retraitespopulaires.svg",
+      "page": "https://www.retraitespopulaires.ch",
+      "file": "retraites-populaires.svg",
+      "retrievedAt": "2026-09-19",
+      "sha256": "913acf34b4ac1a17c1acbbff20a288cb100e3252f99f9e0f16fd67e8f6b5cc55"
+    },
+    {
+      "id": "helvetia",
+      "source": "https://www.helvetia-baloise.com/content/dam/os/corporate/hb/media/system/logo/helvetia-logo-rgb.svg",
+      "page": "https://www.helvetia-baloise.com/corporate/hb/en/home/news-stories/publications/media-releases/2026/20260205.html",
+      "file": "helvetia.svg",
+      "retrievedAt": "2026-09-19",
+      "sha256": "ee0cbfa5175ea1dfe9ccba987b52cbb3fcecec64a029ee3233995a8bfb1f129f"
+    },
+    {
+      "id": "swisslife",
+      "source": "https://www.swisslife.ch/content/dam/com/site/media/logo/SL_RGB_p.jpg",
+      "page": "https://www.swisslife.ch/de/ueber-uns/news-medien/downloads/logos.html",
+      "file": "swisslife.jpg",
+      "retrievedAt": "2026-09-19",
+      "sha256": "87a2118c2aec1f70474af24917dda9dc281dfc35136a780c5e1b889ce6cb0d56"
+    },
+    {
+      "id": "viac",
+      "source": "https://viac.ch/en/",
+      "file": "viac.svg",
+      "extraction": "SVG de marque présent dans le header officiel, chemins et couleurs conservés.",
+      "retrievedAt": "2026-09-19",
+      "sha256": "bc7b10c3ab263e25c9b32fb93b2ae05f3c3d4d6b589617c8d6ae98e305feb9ea"
+    },
+    {
+      "id": "finpension",
+      "source": "https://finpension.ch/de/",
+      "file": "finpension.svg",
+      "extraction": "SVG de marque présent dans le header officiel, chemins et couleurs conservés.",
+      "retrievedAt": "2026-09-19",
+      "sha256": "0ccd6f5570efb9578f299e5160a54628a0cfd8dfa17deaf7b0a94216416c2c4e"
+    },
+    {
+      "id": "liechtenstein-life",
+      "source": "https://liechtensteinlife.com/de-DE/markets/de",
+      "file": "liechtenstein-life.svg",
+      "sha256": "b070337f6dc7d0475d0ae5dcfd15ccbdeabc8292d7532d56fb05757a4b8650d3"
+    },
+    {
+      "id": "swissquote",
+      "source": "https://www.swissquote.com/_next/static/media/text.0daplh9vduv06.svg",
+      "page": "https://www.swissquote.com/fr-ch/private",
+      "file": "swissquote.svg",
+      "retrievedAt": "2026-09-19",
+      "sha256": "08930c1dbfa1f77598abda9e243b2d762a116255f230278aba04bf17753d2db9"
+    },
+    {
+      "id": "swissquote-icon",
+      "source": "https://www.swissquote.com/_next/static/media/icon.2o162tpggl8ih.svg",
+      "page": "https://www.swissquote.com/fr-ch/private",
+      "file": "swissquote-icon.svg",
+      "retrievedAt": "2026-09-19",
+      "sha256": "06ba389e02b7242bca1a31152c8ec9ec01bb98f8545e4df37bf5886361c976e3"
+    }
+  ]
+}

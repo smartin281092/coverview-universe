@@ -15,6 +15,12 @@ import { AuthenticatorPage } from "./pages/AuthenticatorPage";
 import { CancelAuthenticatorPage } from "./pages/CancelAuthenticatorPage";
 
 const rootRoute = createRootRoute({ component: AppShell, notFoundComponent: MissingPage });
+const partnerRoute=createRoute({getParentRoute:()=>rootRoute,path:"/partner",component:lazyRouteComponent(()=>import("./pages/PartnerPage"),"PartnerPage")});
+const notificationsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/notifications",
+  component: lazyRouteComponent(() => import("./pages/NotificationsPage"), "NotificationsPage"),
+});
 const serviceRequestsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/service-requests",
@@ -23,6 +29,22 @@ const serviceRequestsRoute = createRoute({
     search.tab === "reviews" ? { tab: "reviews" } : {},
 });
 const homeRoute = createRoute({ getParentRoute: () => rootRoute, path: "/", component: HomePage });
+const healthRecommendationRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/configuration/comparateur-maladie",
+  component: lazyRouteComponent(
+    () => import("./pages/HealthRecommendationPage"),
+    "HealthRecommendationPage",
+  ),
+});
+const insuranceRequestsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/insurance-requests",
+  component: lazyRouteComponent(
+    () => import("./pages/InsuranceRequestsPage"),
+    "InsuranceRequestsPage",
+  ),
+});
 const usersRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/users",
@@ -81,7 +103,11 @@ const diagnosticsRoute = createRoute({
 export const router = createRouter({
   routeTree: rootRoute.addChildren([
     homeRoute,
+    partnerRoute,
+    healthRecommendationRoute,
+    insuranceRequestsRoute,
     usersRoute,
+    notificationsRoute,
     serviceRequestsRoute,
     userRoute,
     diagnosticsRoute,

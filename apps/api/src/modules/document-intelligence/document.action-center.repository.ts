@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { and, asc, desc, eq, inArray, lt, lte, or } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, lt, lte, notLike, or } from "drizzle-orm";
 import { z } from "zod";
 import {
   actionCenterIdSchema,
@@ -73,8 +73,16 @@ function navigation(items: ActionCenterItem[], id: string) {
   const active = items.filter((item) => item.state !== "complete");
   const index = active.findIndex((item) => item.id === id);
   return {
-    previousId: index > 0 ? active[index - 1]!.id : null,
-    nextId: index >= 0 ? (active[index + 1]?.id ?? null) : (active[0]?.id ?? null),
+    previousId:
+      active.length > 1 && index >= 0
+        ? active[(index - 1 + active.length) % active.length]!.id
+        : null,
+    nextId:
+      index >= 0
+        ? active.length > 1
+          ? active[(index + 1) % active.length]!.id
+          : null
+        : (active[0]?.id ?? null),
   };
 }
 function manualDto(row: typeof actionCenterManualReviews.$inferSelect) {
@@ -185,12 +193,12 @@ export function createActionCenterRepository(db: Database) {
             : null,
       });
     },
-    async summary(userId: string) {
-      return (await readActionCenter(db, userId)).summary;
+    async summary(userId: string, profileId?: string) {
+      return (await readActionCenter(db, userId, profileId)).summary;
     },
-    async details(userId: string, suppliedId: string) {
+    async details(userId: string, suppliedId: string, profileId?: string) {
       const id = actionCenterIdSchema.parse(suppliedId);
-      const center = await readActionCenter(db, userId);
+      const center = await readActionCenter(db, userId, profileId);
       const action = center.actions.find(({ item }) => item.id === id)?.item;
       if (!action) throw missing();
       return actionCenterDetailsSchema.parse({
@@ -453,6 +461,8 @@ export function createActionCenterRepository(db: Database) {
           before = await readActionCenter(tx, actor.userId);
           const item = before.actions.find((entry) => entry.item.id === id)?.item;
           if (!item) throw missing();
+          // Recheck before cached responses too: old custom commands cannot bypass signing.
+          if (item.kind === "authorization") throw invalid();
           if (
             input.choice === "notify" &&
             !(await readAuthorizationStatus(tx, actor.userId, item.profileId)).mandate.signedAt
@@ -467,15 +477,18 @@ export function createActionCenterRepository(db: Database) {
         .select()
         .from(actionCenterManualReviews)
         .where(
-          cursor
-            ? or(
-                lt(actionCenterManualReviews.createdAt, new Date(cursor.at)),
-                and(
-                  eq(actionCenterManualReviews.createdAt, new Date(cursor.at)),
-                  lt(actionCenterManualReviews.id, cursor.id),
-                ),
-              )
-            : undefined,
+          and(
+            notLike(actionCenterManualReviews.topic, "authorization:%"),
+            cursor
+              ? or(
+                  lt(actionCenterManualReviews.createdAt, new Date(cursor.at)),
+                  and(
+                    eq(actionCenterManualReviews.createdAt, new Date(cursor.at)),
+                    lt(actionCenterManualReviews.id, cursor.id),
+                  ),
+                )
+              : undefined,
+          ),
         )
         .orderBy(desc(actionCenterManualReviews.createdAt), desc(actionCenterManualReviews.id))
         .limit(21);

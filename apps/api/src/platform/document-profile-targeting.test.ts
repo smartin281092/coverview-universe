@@ -142,8 +142,27 @@ it("isolates each document library, target ownership, comparisons, companies and
   expect(detail.profileComparisons).toMatchObject([{ currentValue: "Child", different: true }]);
   expect((await repository.profileDifferences(actor.userId)).fields).toEqual([]);
   expect(
-    (await repository.insuranceCompany(actor.userId, "axa")).documents.map((item) => item.id),
+    (await repository.insuranceCompany(actor.userId, "axa", "self")).documents.map(
+      (item) => item.id,
+    ),
   ).toEqual([self.id]);
+  expect(
+    (await repository.insuranceCompany(actor.userId, "axa", profile.id)).documents.map(
+      (item) => item.id,
+    ),
+  ).toEqual([family.id]);
+  expect(
+    new Set(
+      (await repository.insuranceCompany(actor.userId, "axa")).documents.map((item) => item.id),
+    ),
+  ).toEqual(new Set([self.id, family.id]));
+  expect((await repository.get(actor.userId, family.id, profile.id)).id).toBe(family.id);
+  await expect(repository.get(actor.userId, family.id, "self")).rejects.toMatchObject({
+    statusCode: 404,
+  });
+  await expect(
+    repository.insuranceCompany(stranger.userId, "axa", profile.id),
+  ).rejects.toMatchObject({ statusCode: 404 });
   await expect(
     repository.saveIdentityAttachment(actor, { revision: 0, combinedId: family.id }, randomUUID()),
   ).rejects.toMatchObject({ statusCode: 404 });

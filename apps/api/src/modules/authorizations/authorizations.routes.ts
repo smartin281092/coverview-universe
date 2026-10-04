@@ -8,6 +8,8 @@ import {
   authorizationReceiptSchema,
   authorizationSignInputSchema,
   authorizationStatusSchema,
+  adminNotificationsQuerySchema,
+  adminNotificationsSchema,
   managedProfileIdSchema,
 } from "@coverview/contracts";
 import type { createAuthorizationRepository } from "./authorizations.repository.js";
@@ -19,6 +21,13 @@ export function registerAuthorizationRoutes(
     checkHost(request: FastifyRequest): void;
     checkMutation(request: FastifyRequest): Promise<void>;
     authenticate(request: FastifyRequest): Promise<{ userId: string; id: string }>;
+    authenticateAdministrator(request: FastifyRequest): Promise<{ userId: string; id: string }>;
+    auditAdministratorAccess(
+      request: FastifyRequest,
+      targetUserId: string | null,
+      resource: string,
+      action: string,
+    ): Promise<void>;
   },
 ) {
   const app = server.withTypeProvider<ZodTypeProvider>();
@@ -36,6 +45,22 @@ export function registerAuthorizationRoutes(
   const target = z.object({ profileId: managedProfileIdSchema.default("self") }).strict();
   const kind = z.object({ kind: authorizationKindSchema });
   const limited = { rateLimit: { max: 30, timeWindow: "1 minute" } };
+  app.get(
+    "/admin/notifications",
+    {
+      onRequest: async (request) => {
+        identity.checkHost(request);
+        await identity.authenticateAdministrator(request);
+        await identity.auditAdministratorAccess(request, null, "signature_notifications", "list");
+      },
+      config: limited,
+      schema: {
+        querystring: adminNotificationsQuerySchema,
+        response: { 200: adminNotificationsSchema },
+      },
+    },
+    (request) => repository.notifications(request.query.cursor),
+  );
   app.get(
     "/authorizations/status",
     {

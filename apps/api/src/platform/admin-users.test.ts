@@ -19,6 +19,9 @@ import {
   identityUsers,
 } from "../modules/identity/identity.schema.js";
 import { profileChoices } from "../modules/identity/identity.profile.schema.js";
+import { createDocumentRepository } from "../modules/document-intelligence/document.repository.js";
+import { createDocumentService } from "../modules/document-intelligence/document.service.js";
+import { documents } from "../modules/document-intelligence/document.schema.js";
 
 let container: StartedPostgreSqlContainer;
 let database: ReturnType<typeof createDatabase>;
@@ -76,14 +79,12 @@ it("keeps administrator, session, target and owner authority distinct; rechecks 
     profiles.save(target.userId, administrator.id, input, randomUUID(), administrator.userId),
   ).rejects.toMatchObject({ code: "IDENTITY_ACCESS_DENIED" });
   const permissionId = randomUUID();
-  await database.db
-    .insert(identityAdminPermissions)
-    .values({
-      id: permissionId,
-      userId: administrator.userId,
-      permission: "administration.access",
-      evidence: "Isolated automated-test grant",
-    });
+  await database.db.insert(identityAdminPermissions).values({
+    id: permissionId,
+    userId: administrator.userId,
+    permission: "administration.access",
+    evidence: "Isolated automated-test grant",
+  });
   await expect(
     managed.create(actor, { kind: "person", displayName: "Famille" }, randomUUID()),
   ).rejects.toMatchObject({ code: "IDENTITY_MFA_REQUIRED" });
@@ -142,6 +143,52 @@ it("keeps administrator, session, target and owner authority distinct; rechecks 
   );
   expect(section.values.firstName).toBe("Enfant");
   expect(section.confirmedAt).toBeNull();
+  const sections = {
+    finances: {
+      annualIncomeMinor: 6000000,
+      monthlyExpensesMinor: 250000,
+      savingsMinor: 0,
+      debtsMinor: 10000,
+      currency: "CHF" as const,
+    },
+    health: {
+      insurer: "Test insurer",
+      primaryDoctorName: "Test doctor",
+      deductibleMinor: 250000,
+      accidentCoverage: "yes" as const,
+      heightCm: 170,
+      weightKg: 65,
+      smokingStatus: "never" as const,
+      allergies: "Test note",
+      chronicConditions: "Test note",
+      ongoingTreatments: "Test note",
+    },
+  };
+  for (const profileId of ["self", person.id]) {
+    for (const sectionName of ["finances", "health"] as const) {
+      const fields = sections[sectionName];
+      const written = await managed.saveSection(
+        actor,
+        profileId,
+        sectionName,
+        { revision: 0, step: "information", fields },
+        randomUUID(),
+      );
+      expect((await managed.section(target.userId, profileId, sectionName)).values).toEqual(fields);
+      const cleared = await managed.saveSection(
+        target,
+        profileId,
+        sectionName,
+        {
+          revision: written.revision,
+          step: "information",
+          fields: Object.fromEntries(Object.keys(fields).map((name) => [name, null])),
+        },
+        randomUUID(),
+      );
+      expect(cleared.values).toEqual({});
+    }
+  }
   await expect(
     managed.saveSection(
       actor,
@@ -162,7 +209,7 @@ it("keeps administrator, session, target and owner authority distinct; rechecks 
   ).rejects.toMatchObject({ code: "MANAGED_PROFILE_NOT_FOUND" });
   await database.db
     .update(identitySessions)
-    .set({ mfaVerifiedAt: new Date(Date.now() - 16 * 60000) })
+    .set({ mfaVerifiedAt: new Date(Date.now() - 24 * 3600_000) })
     .where(eq(identitySessions.id, administrator.id));
   await expect(managed.create(actor, creation, randomUUID())).rejects.toMatchObject({
     code: "IDENTITY_MFA_REQUIRED",
@@ -185,6 +232,106 @@ it("keeps administrator, session, target and owner authority distinct; rechecks 
     ),
   ).rejects.toMatchObject({ code: "IDENTITY_ACCESS_DENIED" });
   expect((await profiles.get(target.userId)).revision).toBe(saved.revision);
+});
+
+it("shares Admin uploads with the target Wallet profile and protects originals before scan and outside the owner", async () => {
+  const administrator = await owner();
+  const target = await owner();
+  const stranger = await owner();
+  await database.db.insert(identityAdminPermissions).values({
+    id: randomUUID(),
+    userId: administrator.userId,
+    permission: "administration.access",
+    evidence: "Isolated upload test",
+  });
+  await database.db
+    .update(identitySessions)
+    .set({ mfaVerifiedAt: new Date() })
+    .where(eq(identitySessions.id, administrator.id));
+  const actor = {
+    userId: target.userId,
+    id: administrator.id,
+    administratorUserId: administrator.userId,
+  };
+  const managed = createManagedProfileRepository(database.db);
+  const person = await managed.create(
+    actor,
+    { kind: "person", displayName: "Family" },
+    randomUUID(),
+  );
+  const company = await managed.create(
+    actor,
+    { kind: "legal_entity", displayName: "Company" },
+    randomUUID(),
+  );
+  const repository = createDocumentRepository(database.db);
+  // PostgreSQL and upload/download service are real; object storage and antivirus are explicit doubles.
+  const objects = new Map<string, Buffer>();
+  const service = createDocumentService(repository, {
+    put: (key, bytes) => {
+      objects.set(key, Buffer.from(bytes));
+      return Promise.resolve();
+    },
+    get: (key) => {
+      const bytes = objects.get(key);
+      if (!bytes) return Promise.reject(new Error("Missing test original"));
+      return Promise.resolve(Buffer.from(bytes));
+    },
+    remove: (key) => {
+      objects.delete(key);
+      return Promise.resolve();
+    },
+    close: () => {},
+  });
+  for (const profileId of ["self", person.id, company.id]) {
+    const bytes = Buffer.from(`%PDF-1.7\nIsolated upload ${profileId}\n%%EOF`);
+    const checksum = createHash("sha256").update(bytes).digest("hex");
+    const created = await repository.create(
+      actor,
+      {
+        profileId,
+        name: "original.pdf",
+        mime: "application/pdf",
+        size: bytes.length,
+        checksum,
+        analysisRequested: false,
+      },
+      randomUUID(),
+    );
+    await expect(service.upload(stranger, created.id, bytes)).rejects.toMatchObject({
+      statusCode: 404,
+    });
+    await expect(
+      service.upload(actor, created.id, Buffer.alloc(bytes.length)),
+    ).rejects.toMatchObject({ code: "DOCUMENT_UPLOAD_INVALID" });
+    const uploaded = await service.upload(actor, created.id, bytes);
+    expect(uploaded).toMatchObject({ profileId, state: "queued" });
+    expect(await service.upload(actor, created.id, bytes)).toEqual(uploaded);
+    expect(
+      (await repository.list(target.userId, undefined, { profileId })).documents.map(
+        (file) => file.id,
+      ),
+    ).toContain(created.id);
+    await expect(service.download(target, created.id)).rejects.toMatchObject({
+      code: "DOCUMENT_DOWNLOAD_BLOCKED",
+    });
+    await database.db
+      .update(documents)
+      .set({ state: "ready", scanVersion: "isolated-antivirus" })
+      .where(eq(documents.id, created.id));
+    expect((await service.download(target, created.id)).bytes).toEqual(bytes);
+    expect((await service.download(actor, created.id)).checksum).toBe(checksum);
+    await expect(service.download(stranger, created.id)).rejects.toMatchObject({ statusCode: 404 });
+    await expect(
+      repository.assertTarget(target.userId, profileId === "self" ? person.id : "self", created.id),
+    ).rejects.toMatchObject({ statusCode: 404 });
+  }
+  expect(
+    (await repository.list(target.userId, undefined, { scope: "account" })).documents,
+  ).toHaveLength(3);
+  expect(
+    (await repository.list(administrator.userId, undefined, { scope: "account" })).documents,
+  ).toHaveLength(0);
 });
 
 it("paginates users in stable order, searches literal names/emails, binds cursor to search and records target metadata without PII", async () => {

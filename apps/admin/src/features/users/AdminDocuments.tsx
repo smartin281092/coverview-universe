@@ -62,11 +62,13 @@ function DocumentDetails({
     staleTime: 0,
     gcTime: 0,
     retry: false,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
     refetchInterval: (current) =>
       current.state.data && processing.has(current.state.data.state) && !current.state.error
         ? 5000
-        : false,
+        : current.state.error
+          ? false
+          : 15_000,
   });
   useEffect(() => () => controller.current?.abort(), []);
   useEffect(() => {
@@ -315,12 +317,14 @@ export function AdminDocuments({ identity, userId, profile, blocked, portalConta
     staleTime: 0,
     gcTime: 0,
     retry: false,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
     refetchInterval: (current) =>
       current.state.data?.documents.some((document) => processing.has(document.state)) &&
       !current.state.error
         ? 5000
-        : false,
+        : current.state.error
+          ? false
+          : 15_000,
   });
   const date = new Intl.DateTimeFormat(i18n.language, { dateStyle: "medium" });
   const number = new Intl.NumberFormat(i18n.language, { maximumFractionDigits: 0 });

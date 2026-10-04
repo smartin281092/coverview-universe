@@ -22,6 +22,7 @@ import {
   documentIdentityAttachmentSchema,
   documentIdentityAttachmentInputSchema,
   documentIdentityAttachmentQuerySchema,
+  profileScopeQuerySchema,
 } from "@coverview/contracts";
 import type { createDocumentRepository } from "./document.repository.js";
 import type { createDocumentService } from "./document.service.js";
@@ -96,10 +97,16 @@ export function registerDocumentRoutes(
       config: limited,
       schema: {
         params: z.object({ companyId: insuranceCompanyIdSchema }).strict(),
+        querystring: profileScopeQuerySchema,
         response: { 200: insuranceCompanyDetailsSchema },
       },
     },
-    async (request) => repository.insuranceCompany(actor(request).userId, request.params.companyId),
+    async (request) =>
+      repository.insuranceCompany(
+        actor(request).userId,
+        request.params.companyId,
+        request.query.profileId,
+      ),
   );
   app.get(
     "/documents/profile-differences",
@@ -116,11 +123,18 @@ export function registerDocumentRoutes(
       onRequest: read,
       config: limited,
       schema: {
-        querystring: z.object({ cursor: z.string().max(200).optional() }).strict(),
+        querystring: profileScopeQuerySchema
+          .extend({ cursor: z.string().max(300).optional() })
+          .strict(),
         response: { 200: documentChangeRequestsSchema },
       },
     },
-    async (request) => repository.changeRequests(actor(request).userId, request.query.cursor),
+    async (request) =>
+      repository.changeRequests(
+        actor(request).userId,
+        request.query.cursor,
+        request.query.profileId,
+      ),
   );
   app.post(
     "/documents/:id/change-requests/:requestId/cancel",
@@ -172,8 +186,13 @@ export function registerDocumentRoutes(
   );
   app.get(
     "/documents/:id",
-    { onRequest: read, config: limited, schema: { params, response: { 200: documentSchema } } },
-    async (request) => repository.get(actor(request).userId, request.params.id),
+    {
+      onRequest: read,
+      config: limited,
+      schema: { params, querystring: profileScopeQuerySchema, response: { 200: documentSchema } },
+    },
+    async (request) =>
+      repository.get(actor(request).userId, request.params.id, request.query.profileId),
   );
   app.post(
     "/documents/:id/profile",

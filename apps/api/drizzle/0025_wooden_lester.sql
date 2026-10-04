@@ -1,0 +1,1 @@
+CREATE INDEX "health_premium_offer_cover" ON "health_premiums" USING btree ("dataset_id","age_group","age_subgroup","accident","deductible","region_key","monthly_premium_minor","model_id","id");

@@ -1,0 +1,399 @@
+.lp .performance-section {
+  background: #f8faf9;
+  border-block: 1px solid #e9eeeb;
+}
+.lp .performance-section .lp-section-head {
+  align-items: end;
+}
+.lp .performance-source {
+  font: 10px var(--lp-mono, monospace);
+  letter-spacing: 0.07em;
+  color: #617268;
+  margin: 34px 0 15px;
+}
+.lp .performance-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+.lp .performance-card {
+  border: 1px solid #e0e8e2;
+  border-radius: 15px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 12px 35px #25413405;
+  transition:
+    box-shadow 0.3s,
+    transform 0.3s;
+}
+.lp .performance-card:hover {
+  box-shadow: 0 18px 40px #25413410;
+  transform: translateY(-4px);
+}
+.lp .performance-card-copy {
+  padding: 28px 26px 8px;
+  position: relative;
+  z-index: 1;
+}
+.lp .performance-card-label {
+  font-size: 13px;
+  color: #4d6258;
+}
+.lp .performance-value {
+  font-size: clamp(39px, 4.2vw, 61px);
+  letter-spacing: -0.065em;
+  line-height: 1.12;
+  margin: 17px 0 12px;
+  color: #247861;
+  white-space: nowrap;
+}
+.lp .performance-unit {
+  font-size: 0.54em;
+  margin-left: 5px;
+  letter-spacing: -0.02em;
+}
+.lp .performance-period {
+  min-height: 36px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #2a3d32;
+}
+.lp .performance-metric {
+  color: #66776d;
+  font-size: 10px;
+  margin-top: 5px;
+}
+.lp .performance-chart-preview {
+  aspect-ratio: 2.1;
+  overflow: hidden;
+  position: relative;
+  margin-top: 10px;
+  isolation: isolate;
+}
+.lp .performance-chart-preview img {
+  display: block;
+  position: absolute;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  animation: proof-float 8s ease-in-out infinite;
+}
+.lp .performance-chart-ytd img {
+  top: 0;
+  translate: 0 -33.4%;
+}
+.lp .performance-chart-march img {
+  top: 0;
+  translate: 0 -45%;
+}
+.lp .performance-chart-december img {
+  top: 0;
+  translate: 0 -20%;
+}
+.lp .performance-chart-glint {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, #fff9 49%, transparent 64%);
+  transform: translateX(-120%);
+  animation: proof-glint 9s ease-in-out infinite;
+  pointer-events: none;
+}
+.lp .performance-card-1 img,
+.lp .performance-card-1 .performance-chart-glint {
+  animation-delay: -3s;
+}
+.lp .performance-card-2 img,
+.lp .performance-card-2 .performance-chart-glint {
+  animation-delay: -6s;
+}
+.lp .performance-bottom {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 35px;
+  align-items: start;
+  margin-top: 26px;
+}
+.lp .performance-bottom > p {
+  font-size: 11px;
+  line-height: 1.7;
+  color: #627066;
+}
+.lp .performance-bottom .lp-text-link {
+  text-align: left;
+  margin-top: 0;
+}
+.lp .performance-keep {
+  border-top: 1px solid #e0e8e2;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: center;
+  margin-top: 28px;
+  padding-top: 22px;
+}
+.lp .performance-keep p {
+  color: #536359;
+  font-size: 12px;
+  line-height: 1.6;
+  max-width: 480px;
+}
+.lp .performance-keep .lp-text-link {
+  margin-top: 0;
+  font-size: 12px;
+}
+.lp .lp-dialog.performance-dialog {
+  width: min(980px, calc(100vw - 32px));
+  max-width: 980px;
+}
+.lp .performance-dialog .dialog-top {
+  position: sticky;
+  top: -1px;
+  z-index: 2;
+  background: #fff;
+  padding-block: 8px;
+}
+.lp .performance-reading {
+  background: #f3f6f4;
+  border: 1px solid #e6ece8;
+  border-radius: 12px;
+  padding: 22px;
+  margin: 22px 0;
+}
+.lp .performance-reading h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+.lp .performance-reading p {
+  color: #56675d;
+  font-size: 12px;
+  line-height: 1.65;
+  margin-top: 10px;
+}
+.lp .performance-source-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+.lp .performance-source-grid figure {
+  border: 1px solid #e1e8e4;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 0;
+  align-self: start;
+}
+.lp .performance-source-grid h3 {
+  color: #247861;
+  font-size: 30px;
+  letter-spacing: -0.04em;
+}
+.lp .performance-source-grid p,
+.lp .performance-history p {
+  font-size: 12px;
+  color: #536259;
+  line-height: 1.65;
+  margin-top: 10px;
+}
+.lp .performance-source-grid small {
+  display: block;
+  font-size: 10px;
+  color: #68796e;
+  margin-top: 4px;
+}
+.lp .performance-source-grid img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 20px;
+  border-radius: 5px;
+}
+.lp .performance-history {
+  margin: 30px 0 0;
+  border-top: 1px solid #e2e8e4;
+  padding-top: 24px;
+}
+.lp .performance-history h3 {
+  font-size: 23px;
+}
+.lp .performance-history img {
+  margin-top: 20px;
+  width: 100%;
+  height: auto;
+}
+.lp .retirement-scene .retirement-sheet {
+  padding: 27px;
+}
+.lp .retirement-sheet h3 {
+  margin-top: 27px;
+  font-size: 30px;
+}
+.lp .retirement-example-label {
+  font-size: 11px;
+  color: #696579;
+  margin-top: 12px;
+}
+.lp .retirement-result {
+  padding: 22px 0 19px;
+  border-bottom: 1px solid #ebe9f0;
+}
+.lp .retirement-result > p:first-child {
+  color: #625d71;
+  font-size: 11px;
+}
+.lp .retirement-result .retirement-number {
+  margin: 8px 0;
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  font-size: 54px;
+  letter-spacing: -0.065em;
+  line-height: 1.1;
+  color: #443fa4;
+}
+.lp .retirement-number > span:last-child {
+  font-size: 13px;
+  letter-spacing: 0;
+  color: #625d71;
+}
+.lp .retirement-result-time .retirement-number {
+  color: #ab643d;
+}
+.lp .retirement-result small {
+  display: block;
+  max-width: 290px;
+  font-size: 11px;
+  line-height: 1.55;
+  color: #696579;
+}
+.lp .retirement-example-note {
+  margin-top: 17px;
+  font-size: 10px;
+  line-height: 1.6;
+  color: #696579;
+}
+.lp .retirement-sheet .retirement-details {
+  font-size: 11px;
+  margin-top: 13px;
+  position: relative;
+  z-index: 1;
+}
+.lp .retirement-scene .discovery-flow {
+  gap: 8px;
+}
+.lp .retirement-scene .discovery-flow li {
+  font-size: 10px;
+}
+.lp .retirement-assumption {
+  padding: 20px 0;
+  border-block-start: 1px solid #ebe8f0;
+}
+.lp .retirement-assumption h3 {
+  font-size: 24px;
+  color: #443fa4;
+}
+.lp .retirement-assumption p {
+  font-size: 13px;
+  line-height: 1.75;
+  color: #686072;
+  margin-top: 12px;
+}
+.lp .independence-note {
+  padding-left: 16px;
+  border-left: 2px solid #7771d8;
+  margin-block: 24px;
+  color: #656071;
+  font-size: 13px;
+  line-height: 1.7;
+  max-width: 410px;
+}
+@keyframes proof-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+@keyframes proof-glint {
+  0%,
+  60% {
+    transform: translateX(-120%);
+  }
+  90%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+@media (max-width: 900px) {
+  .lp .performance-grid {
+    gap: 10px;
+  }
+  .lp .performance-card-copy {
+    padding: 22px 16px 8px;
+  }
+  .lp .performance-value {
+    font-size: 40px;
+  }
+  .lp .performance-bottom {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .lp .performance-keep {
+    flex-direction: column;
+    align-items: start;
+  }
+}
+@media (max-width: 680px) {
+  .lp .performance-grid,
+  .lp .performance-source-grid {
+    grid-template-columns: 1fr;
+  }
+  .lp .performance-grid {
+    gap: 18px;
+  }
+  .lp .performance-card-copy {
+    padding: 25px 24px 8px;
+  }
+  .lp .performance-value {
+    font-size: 60px;
+  }
+  .lp .performance-period {
+    min-height: 0;
+  }
+  .lp .performance-source {
+    line-height: 1.6;
+  }
+  .lp .retirement-scene .retirement-sheet {
+    padding: 21px;
+  }
+  .lp .retirement-sheet h3 {
+    font-size: 27px;
+  }
+  .lp .retirement-result .retirement-number {
+    font-size: 49px;
+  }
+  .lp .lp-dialog.performance-dialog {
+    padding: 20px;
+  }
+  .lp .performance-reading {
+    padding: 17px;
+  }
+  .lp .performance-dialog .dialog-top .lp-eyebrow {
+    font-size: 8px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lp .performance-chart-preview img,
+  .lp .performance-chart-glint {
+    animation: none;
+  }
+  .lp .performance-card {
+    transition: none;
+  }
+}
+.lp[data-motion="paused"] .performance-chart-preview img,
+.lp[data-motion="paused"] .performance-chart-glint,
+.lp .performance-grid[data-active="false"] img,
+.lp .performance-grid[data-active="false"] .performance-chart-glint {
+  animation-play-state: paused;
+}

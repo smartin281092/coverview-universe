@@ -10,11 +10,11 @@ export const journeys = [
     action: "Découvrir les points à vérifier",
     heading: "Comprendre mon contrat de 3e pilier",
     description:
-      "L’analyse de contrat n’est pas encore disponible. Découvrez les questions qu’elle devra éclairer avant de transmettre un document.",
+      "Placements, frais, garanties : identifiez les points clés de votre 3e pilier pour savoir ce qu’il vous apporte et quelles questions poser.",
     preparation:
       "Repérez dans votre contrat l’épargne, les frais et les protections. Distinguer ces éléments est le premier pas pour comprendre ce que vous avez.",
     unavailable:
-      "L’analyse et le dépôt de documents ne sont pas encore disponibles. Aucun contrat ne peut être envoyé depuis cette page.",
+      "Votre contrat mérite d’être compris avant d’être modifié. Commencez par les points clés, puis réunissez vos documents dans Wallet après connexion.",
   },
   {
     slug: "calculer-retraite",
@@ -25,11 +25,11 @@ export const journeys = [
     action: "Comprendre l’objectif retraite",
     heading: "Définir mon objectif retraite",
     description:
-      "Le calculateur retraite n’est pas encore disponible. Commencez par distinguer votre objectif de niveau de vie et la trajectoire à évaluer.",
+      "Précisez votre niveau de vie souhaité, votre horizon et vos ressources pour donner un cap à votre épargne retraite.",
     preparation:
       "Commencez par le niveau de vie souhaité et l’horizon de votre retraite. Un âge cible est un objectif ; il ne prouve pas que les ressources nécessaires seront réunies.",
     unavailable:
-      "Le calculateur n’est pas encore disponible. Cette page ne produit aucune estimation personnelle ni probabilité.",
+      "Quelle épargne pour quelle vie à la retraite ? Explorez d’abord l’effet de vos versements, de la durée et de l’inflation avec nos simulateurs gratuits.",
   },
   {
     slug: "comparer",
@@ -41,11 +41,11 @@ export const journeys = [
     action: "Lire les critères de comparaison",
     heading: "Comparer des stratégies pour un même objectif",
     description:
-      "Le comparateur de stratégies n’est pas encore disponible. Découvrez pourquoi une comparaison commence par un objectif et des hypothèses communs.",
+      "Comparez vos options avec le même objectif, le même horizon et des critères clairs : placements, frais, protections et flexibilité.",
     preparation:
       "Pour comparer, gardez le même objectif et le même horizon. Les coûts, les protections et les hypothèses comptent aussi : un chiffre de rendement isolé ne suffit pas.",
     unavailable:
-      "Le comparateur n’est pas encore disponible. Aucune stratégie n’est classée ou recommandée dans cette préversion.",
+      "Un rendement affiché ne raconte pas tout. Remettez vos options sur les mêmes bases pour comprendre les compromis et ce qui compte pour vous.",
   },
 ] as const;
 
@@ -56,9 +56,9 @@ export const plannedPages = [
     owner: "S-021",
     group: "tools",
     description:
-      "Retrouver les avoirs de prévoyance professionnelle est une démarche distincte de l’analyse d’un 3e pilier.",
+      "Un parcours professionnel peut laisser des documents dispersés. Faites le point sur les informations utiles pour retrouver vos avoirs de prévoyance.",
     unavailable:
-      "La demande de recherche LPP n’est pas encore disponible. Aucun organisme n’est contacté depuis cette page.",
+      "Réunissez vos certificats de prévoyance et les informations de vos anciens employeurs. Le parcours de demande de recherche LPP est en préparation.",
   },
   {
     slug: "recuperer-contrats",
@@ -66,9 +66,9 @@ export const plannedPages = [
     owner: "S-020",
     group: "tools",
     description:
-      "Réunir les contrats existants doit permettre de partir des documents et des garanties réellement souscrites.",
+      "Réunissez vos contrats et leurs conditions pour comprendre les garanties, les frais et les possibilités d’adaptation.",
     unavailable:
-      "La demande de récupération n’est pas encore disponible. Aucune compagnie n’est contactée.",
+      "Centralisez les contrats dont vous disposez dans Wallet après connexion. La demande de récupération auprès des compagnies est en préparation.",
   },
   {
     slug: "signature",
@@ -76,9 +76,9 @@ export const plannedPages = [
     owner: "S-018",
     group: "tools",
     description:
-      "Une procuration ou un mandat doit identifier la démarche et le consentement qu’il engage.",
+      "Comprenez le rôle d’un mandat et des autorisations avant de signer : la démarche concernée, son périmètre et les documents utiles.",
     unavailable:
-      "La préparation et la signature de documents ne sont pas encore disponibles. Aucun mandat n’est créé.",
+      "Avant toute signature, prenez connaissance de la démarche et des autorisations demandées. Retrouvez votre espace personnel et vos documents dans Wallet.",
   },
   {
     slug: "partager",
@@ -87,9 +87,9 @@ export const plannedPages = [
     relatedOwners: ["S-013"],
     group: "tools",
     description:
-      "Conserver une analyse et partager un résultat sont deux actions différentes, à réaliser avec le contrôle de leur visibilité.",
+      "Gardez vos repères et choisissez les informations que vous souhaitez partager pour préparer vos décisions.",
     unavailable:
-      "La sauvegarde de résultats, les favoris et leur partage ne sont pas encore disponibles.",
+      "Retrouvez vos documents dans Wallet. La sauvegarde et le partage des résultats des simulateurs publics sont en préparation.",
   },
   {
     slug: "services",
@@ -97,9 +97,9 @@ export const plannedPages = [
     owner: "S-011",
     group: "understand",
     description:
-      "Les besoins envisagés couvrent le 3e pilier, la LPP, l’audit, les contrats, la prévoyance et les assurances.",
+      "Assurances, 3e pilier, prévoyance professionnelle et retraite : abordez votre situation dans son ensemble.",
     unavailable:
-      "Les services sont en préparation. Aucune prestation ne peut être commandée dans cette préversion.",
+      "Commencez par le sujet qui vous concerne, puis découvrez les questions et les outils pour avancer.",
   },
   {
     slug: "vision",
@@ -107,9 +107,8 @@ export const plannedPages = [
     owner: "S-011",
     group: "understand",
     description:
-      "Comprendre l’existant, tenir compte de son horizon, puis suivre et adapter : les principes qui guident le projet CoverView.",
-    unavailable:
-      "La présentation détaillée de la vision est en préparation. Vous pouvez déjà lire les étapes de la méthode.",
+      "Votre objectif avant le produit : comprendre l’existant, comparer les options et suivre les décisions dans le temps.",
+    unavailable: "Découvrez les principes qui guident notre approche de votre prévoyance.",
   },
   {
     slug: "modeles",
@@ -117,8 +116,9 @@ export const plannedPages = [
     owner: "S-011",
     group: "understand",
     description:
-      "Agent, courtier et CoverView : la future présentation distinguera les approches et leurs responsabilités.",
-    unavailable: "La comparaison documentée des modèles de service n’est pas encore publiée.",
+      "Indépendance, frais, analyse de l’existant et suivi : les questions à poser pour choisir votre accompagnement.",
+    unavailable:
+      "Comparez aussi la manière d’être accompagné et les explications que vous pouvez attendre.",
   },
   {
     slug: "benchmark",
@@ -126,9 +126,9 @@ export const plannedPages = [
     owner: "S-011",
     group: "understand",
     description:
-      "Un benchmark situe une solution par rapport à un ensemble comparable, avec des critères et une méthode explicites.",
+      "Frais, risques, protections et flexibilité : comparez les solutions avec des critères compréhensibles.",
     unavailable:
-      "Le contenu détaillé et les références du benchmark sont en préparation. Aucun classement de produits n’est disponible.",
+      "Découvrez comment lire une comparaison et relier les différences à votre objectif.",
   },
   {
     slug: "etudes-de-cas",
@@ -136,9 +136,8 @@ export const plannedPages = [
     owner: "S-011",
     group: "understand",
     description:
-      "Un cas relie une situation, une analyse, un benchmark, une décision et un résultat documenté.",
-    unavailable:
-      "Aucune étude de cas validée n’est publiée ici. La démonstration de l’accueil est entièrement fictive.",
+      "Conserver un contrat ou approfondir une comparaison : deux cas fictifs pour comprendre les raisons d’une décision.",
+    unavailable: "Découvrez des cas pratiques qui rendent la méthode concrète.",
   },
   {
     slug: "rapports",
@@ -146,9 +145,8 @@ export const plannedPages = [
     owner: "S-011",
     group: "understand",
     description:
-      "Un rapport doit permettre de retrouver les observations, les hypothèses et les raisons d’une décision.",
-    unavailable:
-      "Les rapports et extraits validés sont en préparation. Aucun rapport client n’est exposé.",
+      "Comprenez comment un rapport relie vos contrats, votre objectif retraite et les prochaines décisions.",
+    unavailable: "Parcourez les dix volets d’un rapport à travers un exemple fictif.",
   },
   {
     slug: "articles",
@@ -156,9 +154,9 @@ export const plannedPages = [
     owner: "S-011",
     group: "understand",
     description:
-      "Les contenus de référence ont vocation à répondre aux questions de prévoyance avec des sources identifiables.",
+      "Des réponses aux questions de prévoyance pour comprendre vos contrats et avancer à votre rythme.",
     unavailable:
-      "Les articles et la FAQ documentée sont en préparation. Aucun assistant de conseil n’est actif.",
+      "Retrouvez nos guides, nos repères de comparaison et les réponses aux questions fréquentes.",
   },
   {
     slug: "contact",
@@ -166,9 +164,8 @@ export const plannedPages = [
     owner: "S-012",
     group: "understand",
     description:
-      "Un échange avec un expert doit partir de votre besoin et des éléments que vous choisissez de transmettre.",
-    unavailable:
-      "La prise de contact et de rendez-vous n’est pas encore ouverte. Aucun message n’est envoyé depuis cette préversion.",
+      "Un contrat à comprendre, une retraite à préparer ou une offre à comparer : partez de votre question.",
+    unavailable: "Préparez les informations utiles à votre échange avec CoverView.",
   },
   {
     slug: "retire",
@@ -176,9 +173,9 @@ export const plannedPages = [
     owner: "S-050",
     group: "spaces",
     description:
-      "Retire est le volet retraite prévu dans Wallet : explorer le niveau de vie, les budgets et les décisions dans le temps.",
+      "Reliez votre niveau de vie souhaité, votre épargne et les décisions à préparer pour votre retraite.",
     unavailable:
-      "Retire Check et le plan retraite ne sont pas encore disponibles. Aucune offre payante n’est activée.",
+      "Explorez les premières questions de retraite et les simulateurs gratuits. Le parcours personnalisé Retire est en préparation.",
   },
   {
     slug: "miles",
@@ -186,17 +183,18 @@ export const plannedPages = [
     owner: "S-103",
     group: "spaces",
     description:
-      "Le programme de fidélité envisagé reliera les Miles, les avantages et leurs conditions d’utilisation.",
-    unavailable: "Le programme n’est pas encore actif. Aucun Mile ni avantage n’est attribué.",
+      "Découvrez le programme de fidélité CoverView en préparation et les outils déjà accessibles.",
+    unavailable: "Les Miles et leurs avantages seront présentés à l’ouverture du programme.",
   },
   {
     slug: "carte-digitale",
     label: "Carte digitale",
     owner: "S-101",
     group: "spaces",
-    description: "La carte de membre est prévue dans l’espace personnel, avec un accès contrôlé.",
+    description:
+      "Votre carte de membre digitale CoverView réunira vos repères d’adhésion dans votre espace personnel.",
     unavailable:
-      "La création et l’activation de la carte ne sont pas encore disponibles, même après connexion.",
+      "La carte digitale est en préparation. Vous pouvez déjà retrouver vos documents dans Wallet après connexion.",
   },
   {
     slug: "partners",
@@ -204,9 +202,9 @@ export const plannedPages = [
     owner: "S-110",
     group: "spaces",
     description:
-      "L’espace Partners est prévu pour les apporteurs et partenaires, dans leur périmètre autorisé.",
+      "CoverView Partners est le futur espace dédié aux apporteurs et partenaires de CoverView.",
     unavailable:
-      "L’espace partenaire n’est pas encore disponible. Aucun accès ni commission n’est attribué.",
+      "L’espace Partners est en préparation. Découvrez notre approche et les besoins auxquels CoverView répond.",
   },
   {
     slug: "intelligence",
@@ -214,9 +212,9 @@ export const plannedPages = [
     owner: "S-112",
     group: "spaces",
     description:
-      "Intelligence est l’espace envisagé pour les analyses, benchmarks et scénarios professionnels.",
+      "CoverView Intelligence est le futur espace d’analyse, de comparaison et de scénarios destiné aux professionnels.",
     unavailable:
-      "L’espace professionnel n’est pas encore disponible. Aucun catalogue professionnel n’est publié.",
+      "L’espace Intelligence est en préparation. Notre méthode et nos critères de comparaison sont accessibles dès maintenant.",
   },
   {
     slug: "exchange",
@@ -224,9 +222,9 @@ export const plannedPages = [
     owner: "S-114",
     group: "spaces",
     description:
-      "Exchange est un domaine distinct du projet, dont les opérations restent à spécifier et à qualifier.",
+      "Retrouvez la présentation de CoverView Exchange et explorez les espaces CoverView.",
     unavailable:
-      "Exchange n’est pas ouvert. Aucun engagement ni opération financière n’est possible.",
+      "CoverView Exchange est en préparation. Découvrez dès maintenant nos guides et nos simulateurs en accès libre.",
   },
 ] as const;
 
@@ -234,15 +232,20 @@ export const acquisition = {
   editorialLinks: [
     { href: "/outils", label: "Guide des outils" },
     { href: "/glossaire", label: "Glossaire" },
-    { href: "/sources", label: "Sources et provenance" },
+    { href: "/sources", label: "Notre approche et vos repères" },
   ],
-  availabilityTitle: "{{label}} : disponibilité — CoverView",
+  availabilityTitle: "{{label}} | CoverView",
   overview: "Comment ça marche",
   explore: "Explorer CoverView",
   exploreShort: "Explorer",
   method: "La méthode",
   founder: "Sébastien Martin",
   coming: "En préparation",
+  guide: "Guide pratique",
+  toolsAction: "Explorer les outils et simulateurs",
+  savingsTool: "Simulateur d’épargne",
+  inflationTool: "Simulateur d’inflation",
+  freeTool: "Gratuit · sans compte",
   readable: "À lire",
   choose: "Choisir mon point de départ",
   returnHome: "Revenir à l’accueil",
@@ -250,20 +253,31 @@ export const acquisition = {
   returnExplore: "Revenir à l’explorateur",
   preparation: "Un premier repère",
   resume: "Retrouver cette entrée",
-  resumeNote:
-    "Vous pouvez conserver cette adresse pour revenir à ce parcours. Aucun résultat personnel n’est enregistré.",
+  resumeNote: "Gardez cette page dans vos favoris pour retrouver vos repères.",
   home: {
     eyebrow: "Prévoyance · Assurance · Retraite",
     heading: "Votre 3e pilier prépare-t-il vraiment votre retraite ?",
     discover: "Comprendre la méthode",
     account: "Accéder à mon compte",
-    note: "Analyses et simulations en préparation. Les premiers repères sont à lire librement.",
+    note: "Simulateurs gratuits et guides en accès libre, sans compte.",
     readingLabel: "Les premiers repères",
     readingTitle: "Les repères pour avancer.",
     readings: [
-      { href: "/articles", label: "Les questions qui comptent", description: "Articles et réponses pour vous orienter." },
-      { href: "/glossaire", label: "Les mots de la prévoyance", description: "Des définitions pour mieux comprendre." },
-      { href: "/modeles", label: "Les modèles d’accompagnement", description: "Comparer les approches et leurs rôles." },
+      {
+        href: "/articles",
+        label: "Les questions qui comptent",
+        description: "Articles et réponses pour vous orienter.",
+      },
+      {
+        href: "/glossaire",
+        label: "Les mots de la prévoyance",
+        description: "Des définitions pour mieux comprendre.",
+      },
+      {
+        href: "/modeles",
+        label: "Les modèles d’accompagnement",
+        description: "Comparer les approches et leurs rôles.",
+      },
     ],
     methodTeaser: "Choisir. Mesurer. Suivre. Adapter.",
     methodText:
@@ -286,29 +300,28 @@ export const acquisition = {
   overviewPage: {
     title: "Trois parcours pour comprendre votre prévoyance — CoverView",
     description:
-      "Analyse d’un 3e pilier, objectif retraite ou comparaison : choisissez votre entrée et découvrez les questions traitées et la disponibilité de chaque outil.",
+      "Un contrat, un objectif retraite ou une comparaison : choisissez les repères et les outils qui vous aident à avancer.",
     heading: "Partez de votre question.",
     introduction:
       "Vous avez déjà un contrat, un objectif en tête ou des options à comparer. Chaque entrée commence par une question différente.",
     convergenceTitle: "Trois entrées, une même vue d’ensemble.",
     convergence:
-      "Le parcours prévu reliera contrat, objectif et comparaison au même profil et aux mêmes moteurs. Vous pourrez compléter votre point de départ progressivement, puis retrouver vos résultats dans Wallet.",
+      "Votre contrat, votre objectif et vos options font partie de la même réflexion. Commencez par votre question, puis élargissez la vue à votre situation.",
     status:
-      "Aujourd’hui, vous pouvez explorer ces parcours sans compte. Les outils et la sauvegarde de résultats restent en préparation.",
+      "Les guides et les simulateurs sont accessibles sans compte. Retrouvez vos documents personnels dans Wallet après connexion.",
   },
   explorer: {
     title: "Explorer les parcours et espaces CoverView",
     description:
-      "Retrouvez les pages de présentation, les futurs outils et les espaces CoverView. Leur état est indiqué avant toute démarche ou connexion.",
+      "Retrouvez nos guides, les simulateurs gratuits et votre espace Wallet. Choisissez le point de départ qui répond à votre besoin.",
     heading: "Que souhaitez-vous explorer ?",
-    introduction:
-      "Un repère à comprendre, une démarche à découvrir ou un espace à rejoindre.",
+    introduction: "Un repère à comprendre, une démarche à découvrir ou un espace à rejoindre.",
     categories: "Les trois entrées de l’explorateur",
     navigation: "Toutes les destinations CoverView",
     understand: "Comprendre CoverView",
     tools: "Outils & démarches",
     spaces: "Vos espaces",
-    accountStatus: "Disponibilité de la connexion",
+    accountStatus: "Accès après connexion",
     wallet: "Wallet et mon compte",
     open: "Explorer",
     sections: {
@@ -316,24 +329,27 @@ export const acquisition = {
         slug: "comprendre",
         title: "Comprendre la prévoyance et CoverView — Guide",
         heading: "Comprendre, avant de décider.",
-        description: "La méthode, les articles et les exemples pour mieux lire votre prévoyance et vos choix. Retrouvez ici les contenus disponibles de CoverView.",
+        description:
+          "La méthode, les articles et les exemples pour mieux lire votre prévoyance et vos choix. Retrouvez ici les contenus disponibles de CoverView.",
         summary: "Méthode, articles et exemples pour éclairer vos choix.",
         status: "Lectures disponibles",
       },
       tools: {
         slug: "outils",
-        title: "Outils et démarches : ce qui se prépare — CoverView",
+        title: "Vos outils et démarches de prévoyance | CoverView",
         heading: "Les démarches, étape par étape.",
-        description: "Analyse de contrat, objectif retraite, comparaison et documents : découvrez le rôle de chaque futur outil et sa disponibilité actuelle.",
+        description:
+          "Contrat, objectif retraite et comparaison : choisissez votre guide, explorez les simulateurs et réunissez vos documents.",
         summary: "Analyse, retraite et comparaison : comprendre chaque démarche.",
-        status: "Outils en préparation",
+        status: "Guides et simulateurs",
       },
       spaces: {
         slug: "espaces",
         title: "Votre compte et les espaces CoverView",
         heading: "À chaque besoin, son espace.",
-        description: "Rejoignez votre compte Wallet et découvrez les espaces prévus pour la retraite, les partenaires et les professionnels, avec leur disponibilité actuelle.",
-        summary: "Votre compte Wallet et les espaces du projet CoverView.",
+        description:
+          "Accédez à Wallet pour retrouver vos documents et découvrez les espaces CoverView en préparation.",
+        summary: "Votre compte Wallet et les autres espaces CoverView.",
         status: "Compte et espaces à découvrir",
       },
     },

@@ -1,0 +1,1 @@
+ALTER TABLE "health_benefits" ADD COLUMN "active" boolean DEFAULT true NOT NULL;

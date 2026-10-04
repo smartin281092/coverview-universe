@@ -68,12 +68,6 @@ export function structuredEditorial(entry: Editorial, canonical: string) {
     dateModified: data.updatedAt,
     author: { "@id": organization["@id"] },
     isAccessibleForFree: true,
-    creativeWorkStatus: copy.preview,
-    citation: data.sources.map((source) => ({
-      "@type": "CreativeWork",
-      name: source.label,
-      url: "https://coverview.ch/sources#bible-v15",
-    })),
   };
   const nodes: Record<string, unknown>[] = [organization, page];
   if (data.kind === "person")
@@ -107,5 +101,5 @@ function plainMarkdown(text: string) {
 }
 
 export function metadataMarkdown(data: EditorialData) {
-  return `${copy.author} — ${copy.authorNote}\n\n${copy.created} ${data.date} · ${copy.updated} ${data.updatedAt} · ${copy.version} ${data.version}\n\n${copy.preview}${data.fictional ? `\n\n${copy.fictional}` : ""}`;
+  return `${copy.author} · ${copy.updated} ${data.updatedAt}\n\n${copy.created} ${data.date}${data.fictional ? `\n\n${copy.fictional}` : ""}`;
 }

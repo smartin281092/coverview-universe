@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
-import { hasDocumentProfile } from "./document.profile-assignment.js";
-import { and, asc, eq, inArray, isNull, lte } from "drizzle-orm";
+import { assignedDocumentCondition, hasDocumentProfile } from "./document.profile-assignment.js";
+import { and, asc, desc, eq, inArray, isNotNull, isNull, lte } from "drizzle-orm";
 import { z } from "zod";
 import {
   documentIdentityAttachmentSchema,
@@ -90,6 +90,36 @@ export function createIdentityAttachmentRepository(
   db: Database,
   summary: (row: Row) => DocumentSummary,
 ) {
+  async function withDetectedPassport(
+    tx: Database | Tx,
+    userId: string,
+    profileId: string,
+    company: boolean,
+    row: Attachment,
+  ): Promise<Attachment> {
+    // A prior choice, including explicitly removing the attachment, always wins.
+    if (company || row.revision !== 0 || idsOf(row).length) return row;
+    const candidates = await tx
+      .select()
+      .from(documents)
+      .where(
+        and(
+          eq(documents.userId, userId),
+          targetCondition(profileId),
+          assignedDocumentCondition(),
+          eq(documents.category, "identity"),
+          eq(documents.state, "ready"),
+          isNull(documents.deletedAt),
+          isNotNull(documents.scanVersion),
+        ),
+      )
+      .orderBy(desc(documents.createdAt), desc(documents.id))
+      .limit(200);
+    const passport = candidates.find((document) => detectedType([document]) === "passport");
+    // Derived from existing originals; no paid re-analysis or copy of the file.
+    return passport ? { ...row, frontId: passport.id } : row;
+  }
+
   async function read(
     tx: Database | Tx,
     userId: string,
@@ -97,7 +127,7 @@ export function createIdentityAttachmentRepository(
     company: boolean,
     attachment?: Attachment,
   ) {
-    const row =
+    const stored =
       attachment ??
       (
         await tx
@@ -107,6 +137,7 @@ export function createIdentityAttachmentRepository(
           .limit(1)
       )[0] ??
       empty(userId);
+    const row = await withDetectedPassport(tx, userId, profileId, company, stored);
     const ids = idsOf(row);
     const records = ids.length
       ? await tx
@@ -122,7 +153,10 @@ export function createIdentityAttachmentRepository(
           .limit(3)
       : [];
     const visible = records.filter(
-      (record) => !record.deletedAt && !["deleted", "deleting"].includes(record.state),
+      (record) =>
+        hasDocumentProfile(record) &&
+        !record.deletedAt &&
+        !["deleted", "deleting"].includes(record.state),
     );
     const get = (id: string | null) => {
       const record = visible.find((candidate) => candidate.id === id);
@@ -198,7 +232,7 @@ export function createIdentityAttachmentRepository(
         const company = subject?.kind === "legal_entity";
         const now = new Date();
         if (session.expiresAt <= now) throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);
-        const current =
+        const stored =
           (
             await tx
               .select()
@@ -207,6 +241,7 @@ export function createIdentityAttachmentRepository(
               .limit(1)
               .for("update")
           )[0] ?? empty(actor.userId);
+        const current = await withDetectedPassport(tx, actor.userId, profileId, company, stored);
         const previous = (
           await tx
             .select()

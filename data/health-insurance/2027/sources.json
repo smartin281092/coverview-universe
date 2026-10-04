@@ -1,0 +1,37 @@
+[
+  {
+    "file": "premiums.csv.gz",
+    "url": "https://opendata.bagnet.ch/?r=/download&path=L1ByYWVtaWVuL1Byw6RtaWVuX0NILmNzdg%3D%3D",
+    "sha256": "957fef82f47eb8d8243e01be17699d864b98a741c466f5d07015c6e91fecfdaa",
+    "bytes": 25832930,
+    "retrievedAt": "2026-09-30T15:01:20.787445+00:00"
+  },
+  {
+    "file": "tariffs.csv.gz",
+    "url": "https://opendata.bagnet.ch/?r=/download&path=L1ByYWVtaWVuL1RhcmlmZS5jc3Y%3D",
+    "sha256": "7a1eb22bd9ac96fea83b6d0a383c4779c8a5a6ac681d5f30c0991a26e64160a7",
+    "bytes": 32464,
+    "retrievedAt": "2026-09-30T15:01:26.577104+00:00"
+  },
+  {
+    "file": "coverage.csv.gz",
+    "url": "https://opendata.bagnet.ch/?r=/download&path=L1ByYWVtaWVuL0Vpbnp1Z3NnZWJpZXRlLmNzdg%3D%3D",
+    "sha256": "54415ac58e23b88ddc5211ed459b16234b7990d6d411785d351aebf65d322cb5",
+    "bytes": 212607,
+    "retrievedAt": "2026-09-30T15:01:31.878891+00:00"
+  },
+  {
+    "file": "regions.xlsx",
+    "url": "https://www.priminfo.admin.ch/downloads/praemienregionen.xlsx",
+    "sha256": "b1e2676842cd2e2d7a29f7d80e276ebb3a30b57b9d48a457bdeca2dade6ac3bc",
+    "bytes": 690417,
+    "retrievedAt": "2026-09-30T15:01:32.406872+00:00"
+  },
+  {
+    "file": "insurers.xlsx",
+    "url": "https://www.priminfo.admin.ch/downloads/assureurs-maladie-admis-2026-10.xlsx",
+    "sha256": "da5b6c015c7e700172c4e8195aafb056dc31ab71e1f1d027bcf8e4a89117cc53",
+    "bytes": 45037,
+    "retrievedAt": "2026-09-30T15:04:56.699104+00:00"
+  }
+]

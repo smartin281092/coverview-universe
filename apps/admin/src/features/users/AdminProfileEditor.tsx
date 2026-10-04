@@ -183,15 +183,23 @@ export function AdminProfileEditor({
     staleTime: 0,
     gcTime: 0,
     retry: false,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
+    refetchInterval: (query) => (query.state.error ? false : 15_000),
   });
   useEffect(() => () => controller.current?.abort(), []);
   useEffect(() => {
-    if (query.data && !saved) {
+    if (
+      query.data &&
+      (!saved ||
+        (query.data.revision > saved.revision &&
+          !pending &&
+          !isDirty &&
+          !Object.keys(dirtyFields).length))
+    ) {
       setSaved(query.data);
       form.reset(controls(fields, query.data.values));
     }
-  }, [query.data, saved, form, fields]);
+  }, [query.data, saved, form, fields, pending, isDirty, dirtyFields]);
   const conflict =
     (failure instanceof ApiError && failure.status === 409) ||
     Boolean(saved && query.data && query.data.revision > saved.revision);

@@ -1,0 +1,27 @@
+---
+import { retirementPreview as c } from '../../content/fr/retirement-preview';
+import { landing } from '../../content/fr/landing';
+import { formatNumber } from './calculations';
+import TitleText from './TitleText.astro';
+import Arrow from './Arrow.astro';
+import icon from '../../../../../assets/icon-coverview.svg?url';
+import '../../styles/landing-proof.css';
+---
+<div class="discovery-scene retirement-scene" data-scene data-reveal>
+  <div class="report-sheet retirement-sheet">
+    <div class="report-top"><span><img src={icon} width="22" height="20" alt=""/>{c.label}</span><span class="mini-check" aria-hidden="true">↗</span></div>
+    <h3><TitleText text={c.title}/></h3><p class="retirement-example-label">{c.example}</p>
+    <div class="retirement-result"><p>{c.monthly}</p><p class="retirement-number"><span data-count="3000">{formatNumber(3000)}</span><span>{c.monthlyUnit}</span></p><small>{c.monthlyText}</small></div>
+    <div class="retirement-result retirement-result-time"><p>{c.duration}</p><p class="retirement-number"><span data-count="123">123</span><span>{c.durationUnit}</span></p><small>{c.durationText}</small></div>
+    <p class="retirement-example-note">{c.note}</p><button class="lp-text-link retirement-details" data-open-dialog="retirement-examples">{c.details}<Arrow/></button>
+    <div class="scan-line" aria-hidden="true"></div>
+  </div>
+  <div class="report-insight"><span aria-hidden="true">✳</span><p>{c.insight}</p></div>
+  <ol class="discovery-flow">{c.steps.map((step,i)=><li><span>{i+1}</span>{step}</li>)}</ol>
+</div>
+<dialog class="lp-dialog retirement-dialog" id="retirement-examples" aria-labelledby="retirement-dialog-title">
+  <div class="dialog-top"><p class="lp-eyebrow">{c.label}</p><button class="dialog-close" data-close-dialog aria-label={landing.entry.close}>×</button></div>
+  <h2 id="retirement-dialog-title"><TitleText text={c.dialogTitle}/></h2><p>{c.intro}</p>
+  {c.examples.map(example=><div class="retirement-assumption"><h3>{example.title}</h3><p>{example.text}</p></div>)}
+  <p>{c.assumptions}</p><p>{c.personal}</p>
+</dialog>

@@ -1,3 +1,4 @@
+import { useWalletProfileScope } from "../profile/use-wallet-profile-scope";
 import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
@@ -8,6 +9,7 @@ import { forgetIdentity } from "../identity/session-state";
 
 export function DocumentFailure({ error, onRetry }: { error: unknown; onRetry: () => void }) {
   const { t } = useTranslation("documents");
+  const { scope } = useWalletProfileScope();
   const client = useQueryClient();
   useEffect(() => {
     if (error instanceof ApiError && error.status === 401) void forgetIdentity(client);
@@ -15,7 +17,12 @@ export function DocumentFailure({ error, onRetry }: { error: unknown; onRetry: (
   if (error instanceof ApiError && (error.status === 401 || error.code.startsWith("IDENTITY_")))
     return <IdentityFailure error={error} onRetry={onRetry} />;
   if (error instanceof ApiError && error.code === "DOCUMENT_NOT_FOUND")
-    return <NotFoundState title={t("notFound")} description={t("notFoundHelp")} />;
+    return (
+      <NotFoundState
+        title={t("notFound")}
+        description={t(scope === "all" ? "notFoundHelp" : "notFoundProfileHelp")}
+      />
+    );
   const code = error instanceof ApiError ? error.code : "unknown";
   return (
     <ErrorState

@@ -1,0 +1,16 @@
+{
+  "eyebrow":"Pilotage du réseau",
+  "title":"CoverView Partner",
+  "description":"Supervisez les demandes, leurs responsables et le suivi. Les candidatures et les habilitations sont validées séparément pour chaque utilisateur et son organisation.",
+  "open":"Ouvrir le pipeline global",
+  "applications":"Examiner les candidatures",
+  "active":"Leads actifs",
+  "overdue":"Échéances dépassées",
+  "unassigned":"Sans responsable",
+  "resolved":"Résolutions positives",
+  "scope":"Réseau entier · toutes périodes. Actifs : hors brouillons et terminés. Résolutions positives : avec contrat ou sans changement de contrat. Les attentes valides suspendent l’alerte d’échéance.",
+  "loading":"Chargement du réseau…",
+  "error":"Les données sont indisponibles",
+  "retryDescription":"Votre accès doit être actif et protégé par la double authentification.",
+  "retry":"Réessayer"
+}

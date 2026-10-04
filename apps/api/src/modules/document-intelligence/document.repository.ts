@@ -34,6 +34,8 @@ import {
   type DocumentRecord,
   type DocumentAnalysis,
   type InsuranceCompanyId,
+  insuranceCompanyIdSchema,
+  adminProfileContractsSchema,
 } from "@coverview/contracts";
 import {
   lockProfileActor,
@@ -173,7 +175,7 @@ async function detail(tx: Tx | Database, row: Row): Promise<DocumentRecord> {
     ...summary(row),
     analysis: row.analysis,
     profileCreation:
-      !hasDocumentProfile(row) && row.state === "ready" && row.scanVersion
+      row.purpose !== "lead_offer" && !hasDocumentProfile(row) && row.state === "ready" && row.scanVersion
         ? documentProfileCreation(row.analysis?.fields ?? [])
         : null,
     decisions: decisions.map((item) => item.decision),
@@ -376,24 +378,35 @@ export function createDocumentRepository(db: Database) {
       }
       return documentProfileDifferencesSchema.parse({ fields: [...byField.values()] });
     },
-    async changeRequests(userId: string, cursor?: string) {
-      let after: { at: string; id: string } | undefined;
+    async changeRequests(userId: string, cursor?: string, profileId?: string) {
+      if (profileId) await assertDocumentProfileTarget(db, userId, profileId);
+      let after: { at: string; id: string; scope?: string | undefined } | undefined;
       if (cursor) {
         try {
           after = z
-            .object({ at: z.iso.datetime(), id: z.uuid() })
+            .object({ at: z.iso.datetime(), id: z.uuid(), scope: z.string().max(100).optional() })
             .strict()
             .parse(JSON.parse(Buffer.from(cursor, "base64url").toString("utf8")));
         } catch {
           throw new DocumentError("DOCUMENT_REVIEW_INVALID", 400);
         }
+        if ((after.scope ?? "all") !== (profileId ?? "all"))
+          throw new DocumentError("DOCUMENT_REVIEW_INVALID", 400);
       }
       const rows = await db
-        .select()
+        .select(getTableColumns(documentChangeRequests))
         .from(documentChangeRequests)
+        .innerJoin(
+          documents,
+          and(
+            eq(documents.id, documentChangeRequests.documentId),
+            eq(documents.userId, documentChangeRequests.userId),
+          ),
+        )
         .where(
           and(
             eq(documentChangeRequests.userId, userId),
+            profileId ? targetCondition(profileId) : undefined,
             after
               ? or(
                   lt(documentChangeRequests.createdAt, new Date(after.at)),
@@ -413,7 +426,11 @@ export function createDocumentRepository(db: Database) {
         nextCursor:
           rows.length > 20 && last
             ? Buffer.from(
-                JSON.stringify({ at: last.createdAt.toISOString(), id: last.id }),
+                JSON.stringify({
+                  at: last.createdAt.toISOString(),
+                  id: last.id,
+                  scope: profileId ?? "all",
+                }),
               ).toString("base64url")
             : null,
       });
@@ -518,6 +535,7 @@ export function createDocumentRepository(db: Database) {
           and(
             eq(documents.userId, userId),
             query.scope === "account" ? undefined : targetCondition(profileId),
+            query.scope === "profile" ? assignedDocumentCondition() : undefined,
             isNull(documents.deletedAt),
             ne(documents.state, "deleted"),
           ),
@@ -570,7 +588,8 @@ export function createDocumentRepository(db: Database) {
             : null,
       });
     },
-    async insuranceCompany(userId: string, companyId: InsuranceCompanyId) {
+    async insuranceCompany(userId: string, companyId: InsuranceCompanyId, profileId?: string) {
+      if (profileId) await assertDocumentProfileTarget(db, userId, profileId);
       const rows = await db
         .select({
           ...getTableColumns(documents),
@@ -582,7 +601,8 @@ export function createDocumentRepository(db: Database) {
         .where(
           and(
             eq(documents.userId, userId),
-            isNull(documents.managedProfileId),
+            profileId ? targetCondition(profileId) : undefined,
+            assignedDocumentCondition(),
             isNull(documents.deletedAt),
             ne(documents.state, "deleted"),
           ),
@@ -595,10 +615,56 @@ export function createDocumentRepository(db: Database) {
         rows.map((row) => ({ document: summary(row), analysis: row.analysis })),
       );
     },
-    async get(userId: string, id: string) {
+    async profileContracts(userId: string, profileId: string) {
+      await assertDocumentProfileTarget(db, userId, profileId);
+      const rows = await db
+        .select()
+        .from(documents)
+        .where(
+          and(
+            eq(documents.userId, userId),
+            targetCondition(profileId),
+            assignedDocumentCondition(),
+            isNull(documents.deletedAt),
+            ne(documents.state, "deleted"),
+          ),
+        )
+        .orderBy(desc(documents.createdAt), desc(documents.id))
+        .limit(201);
+      if (rows.length > 200) throw new DocumentError("DOCUMENT_LIMIT_REACHED", 422);
+      const entries = rows.map((row) => ({ document: summary(row), analysis: row.analysis }));
+      const companies = insuranceCompanyIdSchema.options
+        .map((companyId) => companyOverview(companyId, entries))
+        .filter((company) => company.contracts.length > 0);
+      return adminProfileContractsSchema.parse({
+        companies,
+        unassigned: entries
+          .filter(
+            (entry) =>
+              entry.document.classification === "insurance_policy" && !entry.document.companyId,
+          )
+          .map((entry) => entry.document),
+      });
+    },
+    async get(userId: string, id: string, profileId?: string) {
+      if (profileId) await assertDocumentProfileTarget(db, userId, profileId);
       return detail(
         db,
-        live((await db.select().from(documents).where(condition(userId, id)).limit(1))[0]),
+        live(
+          (
+            await db
+              .select()
+              .from(documents)
+              .where(
+                and(
+                  condition(userId, id),
+                  profileId ? targetCondition(profileId) : undefined,
+                  profileId ? assignedDocumentCondition() : undefined,
+                ),
+              )
+              .limit(1)
+          )[0],
+        ),
       );
     },
     async original(userId: string, id: string) {
@@ -776,7 +842,7 @@ export function createDocumentRepository(db: Database) {
         async (tx, profile, current) => {
           const row = live(current);
           revision(row, input.revision);
-          if (hasDocumentProfile(row) || !["ready", "failed"].includes(row.state))
+          if (row.purpose === "lead_offer" || hasDocumentProfile(row) || !["ready", "failed"].includes(row.state))
             throw new DocumentError("DOCUMENT_CONFLICT", 409);
           const creating = "createProfile" in input;
           if (
@@ -1068,6 +1134,7 @@ export function createDocumentRepository(db: Database) {
           throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);
         if (!row) throw new DocumentError("DOCUMENT_NOT_FOUND", 404);
         if (row.deletedAt) return;
+        if (row.retainedAt) throw new DocumentError("DOCUMENT_IN_USE",409);
         const [updated] = await tx
           .update(documents)
           .set({
@@ -1301,17 +1368,17 @@ export function createDocumentRepository(db: Database) {
         const incompleteIdentity = analysis.warnings?.some(
           (warning) => warning === "fields" || warning === "pages",
         );
-        if (!hasDocumentProfile(row) && incompleteIdentity) {
+        if (row.purpose !== "lead_offer" && !hasDocumentProfile(row) && incompleteIdentity) {
           profileAssignment = "missing_identity";
           managedProfileId = null;
           profileAssignedAt = null;
-        } else if (!hasDocumentProfile(row) && profile) {
+        } else if (row.purpose !== "lead_offer" && !hasDocumentProfile(row) && profile) {
           const result = await matchDocumentPerson(tx, userId, analysis.fields);
           profileAssignment = result.status;
           managedProfileId = result.profileId === "self" ? null : result.profileId;
           profileAssignedAt = result.profileId ? new Date() : null;
         }
-        const assigned = hasDocumentProfile({ profileAssignment });
+        const assigned = hasDocumentProfile({ profileAssignment, purpose: row.purpose });
         if (managedProfileId && profile && assigned && !incompleteIdentity)
           await enrichManagedDocumentProfile(tx, userId, managedProfileId, id, analysis.fields);
         else if (!managedProfileId && profile && assigned && !incompleteIdentity)

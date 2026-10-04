@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { insuranceLegal as copy } from '../content/fr/insurance-legal';
+import { offerCopy } from '../content/fr/insurance-requests';
+---
+<Layout title={copy.title} description={copy.description}>
+  <article class="mx-auto max-w-3xl px-6 py-16">
+    <h1 class="text-3xl font-medium">{copy.title}</h1>
+    <p class="mt-4 text-muted-foreground">{copy.description}</p>
+    <p class="mt-3 text-xs text-muted-foreground">{copy.updated}</p>
+    {[{ id: 'lsa45', title: offerCopy.lsa45, items: copy.information }, { id: 'protection-des-donnees', title: offerCopy.privacy, items: copy.privacy }, { id: 'cgv', title: offerCopy.terms, items: copy.terms }].map(group => <section id={group.id} class="mt-12 scroll-mt-24">
+      <h2 class="text-2xl font-medium">{group.title}</h2>
+      {group.items.map(item => <section class="mt-6"><h3 class="font-medium">{item.title}</h3><p class="mt-2 text-sm leading-7 text-muted-foreground">{item.text}</p></section>)}
+    </section>)}
+    <a class="mt-8 inline-block underline" href="https://www.finma.ch/fr/autorisation/intermediation-dassurance/registersuche/#query=F01536662" target="_blank" rel="noreferrer">{offerCopy.lsa45} · FINMA F01536662</a>
+  </article>
+</Layout>

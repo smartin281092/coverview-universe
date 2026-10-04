@@ -91,7 +91,7 @@ export const identityLogins = pgTable(
     stateHash: text("state_hash").primaryKey(),
     browserHash: text("browser_hash").notNull(),
     encryptedVerifier: text("encrypted_verifier").notNull(),
-    surface: text("surface", { enum: ["client", "admin", "www"] }).notNull(),
+    surface: text("surface", { enum: ["client", "admin", "www", "partners"] }).notNull(),
     continuation: text("continuation", { enum: ["profile"] }),
     createdAt: instant("created_at").notNull(),
     expiresAt: instant("expires_at").notNull(),
@@ -99,7 +99,7 @@ export const identityLogins = pgTable(
   (table) => [
     check("identity_logins_state_hash", sql`${table.stateHash} ~ '^[0-9a-f]{64}$'`),
     check("identity_logins_browser_hash", sql`${table.browserHash} ~ '^[0-9a-f]{64}$'`),
-    check("identity_logins_surface", sql`${table.surface} in ('client', 'admin', 'www')`),
+    check("identity_logins_surface", sql`${table.surface} in ('client', 'admin', 'www', 'partners')`),
     check("identity_logins_expiration", sql`${table.expiresAt} > ${table.createdAt}`),
     index("identity_logins_expiration_index").on(table.expiresAt),
   ],

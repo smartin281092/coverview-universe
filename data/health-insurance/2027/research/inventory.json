@@ -1,0 +1,1359 @@
+{
+  "year": 2027,
+  "insurers": [
+    {
+      "id": 8,
+      "name": "CSS"
+    },
+    {
+      "id": 32,
+      "name": "Aquilana"
+    },
+    {
+      "id": 134,
+      "name": "Einsiedler Krankenkasse"
+    },
+    {
+      "id": 194,
+      "name": "Sumiswalder"
+    },
+    {
+      "id": 246,
+      "name": "Steffisburg"
+    },
+    {
+      "id": 290,
+      "name": "CONCORDIA"
+    },
+    {
+      "id": 312,
+      "name": "Atupri Gesundheitsversicherung AG"
+    },
+    {
+      "id": 343,
+      "name": "Avenir Krankenversicherung AG"
+    },
+    {
+      "id": 360,
+      "name": "Luzerner Hinterland"
+    },
+    {
+      "id": 376,
+      "name": "KPT"
+    },
+    {
+      "id": 455,
+      "name": "ÖKK"
+    },
+    {
+      "id": 509,
+      "name": "Vivao Sympany"
+    },
+    {
+      "id": 780,
+      "name": "Glarner"
+    },
+    {
+      "id": 820,
+      "name": "curaulta"
+    },
+    {
+      "id": 881,
+      "name": "EGK"
+    },
+    {
+      "id": 923,
+      "name": "SLKK"
+    },
+    {
+      "id": 941,
+      "name": "sodalis"
+    },
+    {
+      "id": 966,
+      "name": "vita surselva"
+    },
+    {
+      "id": 1040,
+      "name": "Visperterminen"
+    },
+    {
+      "id": 1318,
+      "name": "Wädenswil"
+    },
+    {
+      "id": 1322,
+      "name": "Birchmeier"
+    },
+    {
+      "id": 1384,
+      "name": "SWICA"
+    },
+    {
+      "id": 1386,
+      "name": "GALENOS AG"
+    },
+    {
+      "id": 1401,
+      "name": "rhenusana"
+    },
+    {
+      "id": 1479,
+      "name": "Mutuel Krankenversicherung AG"
+    },
+    {
+      "id": 1509,
+      "name": "Sanitas"
+    },
+    {
+      "id": 1535,
+      "name": "Philos Krankenversicherung AG"
+    },
+    {
+      "id": 1542,
+      "name": "Assura-Basis SA"
+    },
+    {
+      "id": 1555,
+      "name": "Visana"
+    },
+    {
+      "id": 1560,
+      "name": "Agrisano"
+    },
+    {
+      "id": 1562,
+      "name": "Helsana"
+    },
+    {
+      "id": 1568,
+      "name": "sana24"
+    }
+  ],
+  "models": [
+    {
+      "id": "hm_315cdd70e037b79ba932d6f41439",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 8,
+      "tariff_code": "01_016",
+      "name": "Assurance Cabinets de santé",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_f8d56f229b6352522d7a9792d64b",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 8,
+      "tariff_code": "01_046",
+      "name": "Assurance du médecin de famille Profit",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_367fe664e913ca628ec200aa5c93",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 8,
+      "tariff_code": "01_131",
+      "name": "Callmed",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_e467b067abc5f80bfbbc68a3e48b",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 8,
+      "tariff_code": "01_170",
+      "name": "Multimed",
+      "category": "FLEX"
+    },
+    {
+      "id": "hm_31286e1835f2d8aa46bfd3603000",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 8,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_30d85a0d95e9b3989d75d6a75d0b",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 32,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_add5c72cb8a9c474213ce21557b6",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 32,
+      "tariff_code": "CASAMED",
+      "name": "CASAMED",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_32fce6036f390f845713d1d8fdab",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 32,
+      "tariff_code": "SMARTMED",
+      "name": "SMARTMED",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_95e52182b550e5fa320d47795432",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 134,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_e5d5acca80bbcc77cf1314172396",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 194,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_28cf9aa3f7dcd85e09f08ca80aa1",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 194,
+      "tariff_code": "HAM",
+      "name": "Modèle du médecin de famille",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_584fd456c50df26a1a8255daf247",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 194,
+      "tariff_code": "HMO plus",
+      "name": "HMO plus",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_e2d9703def043fe9b5712ae482fa",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 194,
+      "tariff_code": "Telmed",
+      "name": "sumis24Telmed",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_fe947e0633dc73983387900c196d",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 246,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_ddd93ae4a11267632e5d96d740aa",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 246,
+      "tariff_code": "Casa",
+      "name": "Casa",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_820b5a52ed41bb73a8c98710c90d",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 246,
+      "tariff_code": "Medcasa",
+      "name": "Medcasa",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_684b529aac92d232e47beb933b3a",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 246,
+      "tariff_code": "Regiomed",
+      "name": "Regiomed",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_f273ceecb429453c6f107bb50dd4",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 246,
+      "tariff_code": "sanmed24",
+      "name": "sanmed24",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_0639a700cef13d8db3b3ba1119a5",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 290,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_4032807c156c2bf3265959229d4a",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 290,
+      "tariff_code": "HAM_DOC",
+      "name": "MyDoc",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_72c70b5c9869dcf9fe837a58de84",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 290,
+      "tariff_code": "HMO_01",
+      "name": "HMO",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_62129be0ac3cfa9c0e43b816b3f0",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 290,
+      "tariff_code": "smartDoc",
+      "name": "smartDoc",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_ccdaf650f2aa5859806acdd2e310",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 312,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_9893124c7dad25de5d84456fde23",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 312,
+      "tariff_code": "CareMed",
+      "name": "CareMed",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_ec1235347db9a87ca6df40881068",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 312,
+      "tariff_code": "FlexCare",
+      "name": "FlexCare",
+      "category": "FLEX"
+    },
+    {
+      "id": "hm_9afe599977db1c2e4b801d4cb723",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 312,
+      "tariff_code": "HMO",
+      "name": "HMO",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_17d7637aac5b5796a46b9da0f55d",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 312,
+      "tariff_code": "SmartCare",
+      "name": "SmartCare",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_c62cb83eb781055e59e23e2ca3d4",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 312,
+      "tariff_code": "TelFirst",
+      "name": "TelFirst",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_b97d799899bd9126a92178cb7a0d",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 343,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_a0a739e912e780db9368ac07f6a0",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 343,
+      "tariff_code": "OptiMed",
+      "name": "OptiMed (Réseau de soins)",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_7c4498357aeb0b339a08049e34a7",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 343,
+      "tariff_code": "PrimaCare",
+      "name": "PrimaCare (Médecin de famille)",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_dddb19e397d60f0d55ad28051ce0",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 343,
+      "tariff_code": "PrimaFlex",
+      "name": "PrimaFlex (Modèle flexible)",
+      "category": "FLEX"
+    },
+    {
+      "id": "hm_64ace350385637e1df2594f71e2e",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 343,
+      "tariff_code": "SanaTel",
+      "name": "SanaTel (Télémédecine)",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_cae0e02b831832f0aecf01394edb",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 360,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_c9c4ef76c5a520dce4ee00504c3e",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 360,
+      "tariff_code": "HM1",
+      "name": "Hausmed",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_05714138adcc57954eb0460824f6",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 360,
+      "tariff_code": "TM1",
+      "name": "Telmed",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_51b9513ebb4d7acd630bbae6b5fe",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 376,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_3e72b38a0d5fd99649e3dd9e7178",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 376,
+      "tariff_code": "HMO_A",
+      "name": "KPTwin.plus - Médecin de famille dans centre HMO",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_dad4917f28ec2fd1cd118b7e4359",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 376,
+      "tariff_code": "KPTwindoc",
+      "name": "KPTwin.doc - Médecin de famille",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_0746947e47f6d75364a8a8c7b2b4",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 376,
+      "tariff_code": "KPTwineasy",
+      "name": "KPTwin.easy - Télémédecine",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_b0a71e24e7561fcad11b99b0e53d",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 376,
+      "tariff_code": "KPTwinsmart",
+      "name": "KPTwin.smart - Médecin de famille avec app",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_ea07ecfb7b49485a10b3ee851669",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 376,
+      "tariff_code": "KPTwinwin",
+      "name": "KPTwin.win - Médecin de famille, télémédecine et pharmacie",
+      "category": "FLEX"
+    },
+    {
+      "id": "hm_66b16462a501496d8842ab7395eb",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 455,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_88e9a8b35ed7f2f7859ef07c335d",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 455,
+      "tariff_code": "HAM_CBA",
+      "name": "ÖKK CASAMED MÉDECIN DE FAMILLE",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_0ba7db5072e2dcf0e2248cb07a2d",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 455,
+      "tariff_code": "HMO_Kt",
+      "name": "ÖKK CASAMED HMO",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_f8099f70b38f56ae6b2c859e6031",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 455,
+      "tariff_code": "Select",
+      "name": "ÖKK CASAMED SELECT",
+      "category": "FLEX"
+    },
+    {
+      "id": "hm_7b676fa5ca8167a059a20d245eb7",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 455,
+      "tariff_code": "Telmed",
+      "name": "ÖKK CASAMED 24",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_0a2338c2b5fd1dfb216e4429bea0",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 509,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_1f423952fddf7ed3693c971be9f9",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 509,
+      "tariff_code": "DIV_XBA",
+      "name": "flexhelp24",
+      "category": "FLEX"
+    },
+    {
+      "id": "hm_c920f1b8716ff6b5c270d9e9d8f0",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 509,
+      "tariff_code": "HAM_CBA",
+      "name": "casamed médecin de famille",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_1cbdee62b667396c9a562eb6e46e",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 509,
+      "tariff_code": "HAM_GBA",
+      "name": "callmed 24",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_a403030c84a6e822520b8a722040",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 509,
+      "tariff_code": "HAM_PBA",
+      "name": "casamed pharm",
+      "category": "FLEX"
+    },
+    {
+      "id": "hm_825ad065af8ecbf0a6cdaf6c3240",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 509,
+      "tariff_code": "HMO",
+      "name": "casamed hmo",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_611754ea398375405504404ef9b4",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 780,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_0b016d7c2e38023bacd1f9a12788",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 780,
+      "tariff_code": "Telmed-Modell",
+      "name": "glarnermed24",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_a900a9aa7b430bfeba1cf1f43819",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 820,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_4d87d0792eadd080cbf2660e9bea",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 820,
+      "tariff_code": "CASAMED",
+      "name": "CASAMED",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_b3b31c38a7a77e357f70b16cb5e6",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 881,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_b0301d3e66dc9487056c5dc462d3",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 881,
+      "tariff_code": "HAM_MC",
+      "name": "EGK-Care",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_d24edd6dbef24030c80c3cd5ee04",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 881,
+      "tariff_code": "Tel_Care",
+      "name": "EGK-TelCare",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_e254c58bbaa47a2a2ecb1ef293e9",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 923,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_ef7a9ad9f419fc0b24d4febf2736",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 923,
+      "tariff_code": "HOMECARE",
+      "name": "HomeCare",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_506c3c6877598d8ef9722ef18840",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 923,
+      "tariff_code": "SMARTMED",
+      "name": "SmartMed",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_c25665219c94cce80b64f6996cae",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 923,
+      "tariff_code": "TELCARE",
+      "name": "TelCare",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_8ebc5f9f892b9b2ccb7080229fbc",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 941,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_6a54aec51e79444742fb1d2e0f51",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 941,
+      "tariff_code": "Digimed",
+      "name": "Digimed",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_e1089b417851fa6caa75380d2fda",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 941,
+      "tariff_code": "Medicasa",
+      "name": "Medicasa",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_0271491de2d21d8f54d1977da97f",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 941,
+      "tariff_code": "Telmed",
+      "name": "Telmed",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_3b0252072ac889439a1997562305",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 966,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_48472a592a540a63b61718101d57",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 966,
+      "tariff_code": "Sparmed",
+      "name": "Sparmed",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_8c9142019ccff863b9b3c349ff0d",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1040,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_edcf3ed793897924e56fda63d434",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1040,
+      "tariff_code": "Medicasa",
+      "name": "Medicasa",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_bd23b55c37d69d69aed9245a50d6",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1040,
+      "tariff_code": "Telmed",
+      "name": "Telmed",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_925514036ed80552e44c45dbec37",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1318,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_a5fee90321852cef796f5980e9cd",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1318,
+      "tariff_code": "RS",
+      "name": "Hausarztversicherung",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_d65338274fe462f475962ea0b16f",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1322,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_fdc7ea446573ae6c9aa8f67a5cf8",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1322,
+      "tariff_code": "HAS",
+      "name": "Médecin de famille",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_848fe4e3b764f65a3cb746464466",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1322,
+      "tariff_code": "Telmed",
+      "name": "Telmed",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_6642c8aa2c52f194f2d3729e63fd",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1384,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_09d6e1bb69cce3964bef0047dd7b",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1384,
+      "tariff_code": "Bestcare (BESTCARE)",
+      "name": "Favorit Bestcare",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_24afd830caec8697ceb942fc032a",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1384,
+      "tariff_code": "Casa",
+      "name": "Favorit Casa",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_2c14709923d4854c9445423bddae",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1384,
+      "tariff_code": "Favorit Start",
+      "name": "Favorit Start",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_19c1b552f42ac88cd8b7d8814594",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1384,
+      "tariff_code": "Medica (MEDICA)",
+      "name": "Favorit Medica",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_46f193ce5522fb4a049032a5d888",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1384,
+      "tariff_code": "Medpharm (PHARMA)",
+      "name": "Favorit Medpharm",
+      "category": "FLEX"
+    },
+    {
+      "id": "hm_965a44b8cd8f689008580adb03b1",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1384,
+      "tariff_code": "Multichoice (MULTICHOICE)",
+      "name": "Favorit Multichoice",
+      "category": "FLEX"
+    },
+    {
+      "id": "hm_6914c2d10fa43f05bd47b54821b8",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1384,
+      "tariff_code": "Santé (HMO)",
+      "name": "Favorit Santé",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_ad8e447ccf0c7c3305c845bbf811",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1384,
+      "tariff_code": "Telmed",
+      "name": "Favorit Telmed",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_d0500f179c4a689f85ad9630470e",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1386,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_5f754b283cc828c2b46cf5ba50fa",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1386,
+      "tariff_code": "COC",
+      "name": "Combi Care",
+      "category": "FLEX"
+    },
+    {
+      "id": "hm_b3633454ff6f3e6c3ea4bd73f3d7",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1386,
+      "tariff_code": "MCMIT",
+      "name": "Managed Care",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_ae60fd798f304827bd4cab0b2aa7",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1386,
+      "tariff_code": "MD",
+      "name": "Med Direct",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_8ddd25a561311ec2f7c5c0919e93",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1386,
+      "tariff_code": "TDO",
+      "name": "Tel Doc",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_34e128f7beea65a277cf289c59f5",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1386,
+      "tariff_code": "VIVA",
+      "name": "Plan de santé VIVA",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_0adbe1ad79f6b6f6e7764f23f682",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1401,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_122bc6f83cb41be68b8ddf8664ef",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1401,
+      "tariff_code": "HAS",
+      "name": "HausarztmodellFR",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_6dc957bd3059cb139e5482edb323",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1401,
+      "tariff_code": "sanmed24",
+      "name": "sanmed24FR",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_de8f285eeee53a1c027730474c19",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1479,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_8984435b62f008c8405dcad87313",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1479,
+      "tariff_code": "OptiMed",
+      "name": "OptiMed (Réseau de soins)",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_1d01fa423c29785dbe5c8b0324b1",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1479,
+      "tariff_code": "PrimaCare",
+      "name": "PrimaCare (Médecin de famille)",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_41e825fe89aacca54e0255dff9f9",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1479,
+      "tariff_code": "PrimaFlex",
+      "name": "PrimaFlex (Modèle flexible)",
+      "category": "FLEX"
+    },
+    {
+      "id": "hm_8b4c62da472cacc7007ce649f683",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1479,
+      "tariff_code": "SanaTel",
+      "name": "SanaTel (Télémédecine)",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_230cb2bb517970411da47df9b984",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1509,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_9aadcdf2667986a15c70f5bd86a0",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1509,
+      "tariff_code": "Hausarztmodell 1 (NetMed 1)",
+      "name": "Médecin de famille 1",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_63d51e4cf957b2ec4b2ff41353d9",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1509,
+      "tariff_code": "Hausarztmodell 2 (NetMed 2)",
+      "name": "Médecin de famille 2",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_c9ed72426cca33ad80520497e2f5",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1509,
+      "tariff_code": "Hausarztmodell 3 (NetMed 3)",
+      "name": "Médecin de famille 3",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_15597ffd7b2aa71c3aa43fe17807",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1509,
+      "tariff_code": "Hausarztmodell 4 (CareMed)",
+      "name": "Médecin de famille 4",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_d8cb09d5714a0f3bee336793c282",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1509,
+      "tariff_code": "MultiAccess (Medbase MultiAccess)",
+      "name": "MultiAccess",
+      "category": "FLEX"
+    },
+    {
+      "id": "hm_7f4ba9ee903cb0cfd1b70f453955",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1509,
+      "tariff_code": "TelMed Basic",
+      "name": "TelMed Basic",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_e302cd84bf5d000ed188a0845ea6",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1509,
+      "tariff_code": "TelMed Plus",
+      "name": "TelMed Plus",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_2cc206b524e00a3a0675dbced1bf",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1535,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_b58dce71d4fbf18eab2449824064",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1535,
+      "tariff_code": "OptiMed",
+      "name": "OptiMed (Réseau de soins)",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_798bec77441b956209504fcf8e28",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1535,
+      "tariff_code": "PrimaCare",
+      "name": "PrimaCare (Médecin de famille)",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_4fb6b87c075c0b6cd065948c6ab0",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1535,
+      "tariff_code": "PrimaFlex",
+      "name": "PrimaFlex (Modèle flexible)",
+      "category": "FLEX"
+    },
+    {
+      "id": "hm_1037f1c5eff5a13b892c240fb7f2",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1535,
+      "tariff_code": "SanaTel",
+      "name": "SanaTel (Télémédecine)",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_a1dbb5320f80257a6b5344b5f94f",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1542,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_69b72714eec993b35beee69eb5c6",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1542,
+      "tariff_code": "FV",
+      "name": "FeminaVita",
+      "category": "FLEX"
+    },
+    {
+      "id": "hm_1137ae548f81f4abaf38f6be8a50",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1542,
+      "tariff_code": "HS",
+      "name": "Hôpital de confiance",
+      "category": "FLEX"
+    },
+    {
+      "id": "hm_6ad1aeb002d285b7a12a822d25f7",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1542,
+      "tariff_code": "MF",
+      "name": "Médecin de famille",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_50a7c30741c599370c7282a1b03b",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1542,
+      "tariff_code": "MediTel",
+      "name": "MediTel",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_1c9d2b72a4731b80b6f1bcd1ceba",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1542,
+      "tariff_code": "PRV",
+      "name": "PreventoMed",
+      "category": "FLEX"
+    },
+    {
+      "id": "hm_35b732259607b4c6db9a15897391",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1542,
+      "tariff_code": "QM",
+      "name": "QualiMed",
+      "category": "FLEX"
+    },
+    {
+      "id": "hm_24e6dac76bac0b4f7017a9b655b3",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1542,
+      "tariff_code": "RPH",
+      "name": "PharMed",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_466425aecc9ba61b95ab04a280de",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1542,
+      "tariff_code": "RS",
+      "name": "Réseau de soins",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_e5da56844b5c4c58ad0740eab8cd",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1555,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_4f243b1b4a09e436a165d6ffce57",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1555,
+      "tariff_code": "COC",
+      "name": "Combi Care",
+      "category": "FLEX"
+    },
+    {
+      "id": "hm_533e98ae9b8ed0e4c58238f346cb",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1555,
+      "tariff_code": "HMO_PLUS",
+      "name": "HMO plus",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_edbd5401add43cfb9960c04fb230",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1555,
+      "tariff_code": "MCA",
+      "name": "Med Call",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_b2b3e4fbdf5be512b28a819d1bc5",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1555,
+      "tariff_code": "MCMIT",
+      "name": "Managed Care",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_20fcf8f2ce146a6342465c4a4f70",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1555,
+      "tariff_code": "MD",
+      "name": "Med Direct",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_75adc59f1a308e3605cca1af74d6",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1555,
+      "tariff_code": "TCA",
+      "name": "Tel Care",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_65a5b5ed71dd00cf54fb21d529e5",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1555,
+      "tariff_code": "TDO",
+      "name": "Tel Doc",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_02c80d62e957d139c94e02416740",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1555,
+      "tariff_code": "VIVA",
+      "name": "Plan de santé VIVA",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_bff312b90d7ab7d3b5501f6f2a9e",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1560,
+      "tariff_code": "AGRIcontact",
+      "name": "AGRIcontact",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_b1822af9554c9deba082951733ce",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1560,
+      "tariff_code": "AGRIeco",
+      "name": "AGRIeco",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_f766640ebcbdc2907d040ac264b1",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1560,
+      "tariff_code": "AGRIsmart",
+      "name": "AGRIsmart",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_24d9d37e72492d15fc2e481a3659",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1560,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_96df4852e7c2b934dc613e8f8749",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1562,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_0a7a6c3967feced51d6f8c90589d",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1562,
+      "tariff_code": "BFP_BF",
+      "name": "Helsana BeneFit PLUS Médecin de famille R4",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_225526bdd49b63a3b242f04c01ef",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1562,
+      "tariff_code": "BFP_CA",
+      "name": "Helsana BeneFit PLUS Médecin de famille R3",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_34bfc6b3d250484fcdc9eba6c46b",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1562,
+      "tariff_code": "BFP_CM",
+      "name": "Helsana BeneFit PLUS Médecin de famille R2",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_5c98985a5a50ef98063296193008",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1562,
+      "tariff_code": "BFP_CP",
+      "name": "Helsana BeneFit PLUS Médecin de famille R1",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_51512a06d64c5da83d421d28c7c3",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1562,
+      "tariff_code": "BFP_CPF",
+      "name": "Helsana BeneFit PLUS Flexmed",
+      "category": "FLEX"
+    },
+    {
+      "id": "hm_2b43107810eaa56a9d948f35fded",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1562,
+      "tariff_code": "BFP_TEL",
+      "name": "Helsana BeneFit PLUS Telemed",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_0fe952b852b9eb92e78bfe7ba37e",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1562,
+      "tariff_code": "PREMED",
+      "name": "Helsana Premed-24",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_93fabfc467bd8b58dbb0d45cada6",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1568,
+      "tariff_code": "BASE",
+      "name": "Assurance de base",
+      "category": "BASE"
+    },
+    {
+      "id": "hm_df9dd538f72afef67c7daac52bdc",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1568,
+      "tariff_code": "COC",
+      "name": "Combi Care",
+      "category": "FLEX"
+    },
+    {
+      "id": "hm_f4b736d84fc980b7175532aa1bb6",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1568,
+      "tariff_code": "MCA",
+      "name": "Med Call",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_0a7a9ecbfc6cdabf673014d570fa",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1568,
+      "tariff_code": "MCMIT",
+      "name": "Managed Care",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_b1f601bbf47d4fbb6270174c868d",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1568,
+      "tariff_code": "MCOHNE",
+      "name": "Managed Care sans capitation",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_f54ca55a9d94f8c02d75c0627089",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1568,
+      "tariff_code": "MD",
+      "name": "Med Direct",
+      "category": "PRAXIS"
+    },
+    {
+      "id": "hm_d79c7fd3e2bd158c133ee55acbfc",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1568,
+      "tariff_code": "TCA",
+      "name": "Tel Care",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_2c8c46010b69c8ace37ee01d9f8c",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1568,
+      "tariff_code": "TDO",
+      "name": "Tel Doc",
+      "category": "TEL_DIG"
+    },
+    {
+      "id": "hm_891a43964f8fb70fc3da97b7391e",
+      "dataset_id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+      "insurer_id": 1568,
+      "tariff_code": "VIVA",
+      "name": "Plan de santé VIVA",
+      "category": "PRAXIS"
+    }
+  ]
+}

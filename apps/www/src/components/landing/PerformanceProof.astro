@@ -1,0 +1,63 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { performanceCopy as c } from '../../content/fr/performance';
+import { formatNumber } from './calculations';
+import TitleText from './TitleText.astro';
+import Arrow from './Arrow.astro';
+import history from '../../assets/performance/allocation-history.png';
+import december from '../../assets/performance/performance-december.png';
+import march from '../../assets/performance/performance-march.png';
+import may from '../../assets/performance/performance-since-may.png';
+import ytd from '../../assets/performance/performance-ytd.png';
+import year from '../../assets/performance/performance-one-year.png';
+import since2018 from '../../assets/performance/performance-since-2018.png';
+import '../../styles/landing-proof.css';
+const images = {
+  'performance-ytd': ytd, 'performance-march': march, 'performance-december': december,
+  'performance-since-may': may, 'performance-one-year': year, 'performance-since-2018': since2018,
+} satisfies Record<(typeof c.captures)[number]['file'], ImageMetadata>;
+const featured = c.captures.slice(0, 3);
+---
+<section class="lp-section performance-section" id="resultats">
+  <div class="lp-container">
+    <div class="lp-section-head" data-reveal>
+      <div><p class="lp-eyebrow">{c.eyebrow}</p><h2><TitleText text={c.title}/></h2></div>
+      <p class="lp-description">{c.description}</p>
+    </div>
+    <p class="performance-source">{c.source}</p>
+    <div class="performance-grid" data-scene>
+      {featured.map((capture, i) => <article class={`performance-card performance-card-${i}`} data-reveal>
+        <div class="performance-card-copy">
+          <p class="performance-card-label">{capture.title}</p>
+          <p class="performance-value"><span aria-hidden="true">+</span><span data-count={capture.value} data-count-digits="2">{formatNumber(capture.value, 2)}</span><span class="performance-unit">%</span></p>
+          <p class="performance-period">{capture.period}</p>
+          <p class="performance-metric">{capture.metric}</p>
+        </div>
+        <div class={`performance-chart-preview performance-chart-${capture.id}`} aria-hidden="true">
+          <Image src={images[capture.file]} width={720} format="webp" quality={90} alt="" loading="lazy"/>
+          <span class="performance-chart-glint"></span>
+        </div>
+      </article>)}
+    </div>
+    <div class="performance-bottom">
+      <button class="lp-text-link" data-open-dialog="performance-sources">{c.all}<Arrow/></button>
+      <p>{c.note}</p>
+    </div>
+    <div class="performance-keep"><p>{c.keep}</p><a class="lp-text-link" href="/etudes-de-cas/maintien">{c.keepLink}<Arrow/></a></div>
+  </div>
+</section>
+<dialog class="lp-dialog performance-dialog" id="performance-sources" aria-labelledby="performance-dialog-title" aria-describedby="performance-dialog-intro">
+  <div class="dialog-top"><p class="lp-eyebrow">{c.source}</p><button class="dialog-close" data-close-dialog aria-label={c.close}>×</button></div>
+  <h2 id="performance-dialog-title"><TitleText text={c.dialogTitle}/></h2>
+  <p id="performance-dialog-intro">{c.dialogIntro}</p>
+  <div class="performance-reading"><h3>{c.limits}</h3><p>{c.attribution}</p><p>{c.twrr}</p><p>{c.note}</p></div>
+  <div class="performance-source-grid">
+    {c.captures.map(capture => <figure>
+      <figcaption><h3>+{formatNumber(capture.value, 2)} %</h3><p>{capture.period}</p><small>{capture.metric}</small></figcaption>
+      <Image src={images[capture.file]} width={Math.min(images[capture.file].width, 1100)} format="webp" quality={95} alt={capture.alt} loading="lazy"/>
+      <p>{capture.note}</p>
+    </figure>)}
+  </div>
+  <figure class="performance-history"><figcaption><h3><TitleText text={c.historyTitle}/></h3><p>{c.historyNote}</p></figcaption><Image src={history} width={1200} format="webp" quality={95} alt={c.history.alt} loading="lazy"/></figure>
+</dialog>

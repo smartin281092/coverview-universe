@@ -5,8 +5,8 @@ import logo from '../../../../assets/logo-coverview.svg?url';
 import icon from '../../../../assets/icon-coverview.svg?url';
 import { content } from '../content/fr/interface';
 import { marketing as copy } from '../content/fr/marketing';
-interface Props { title: string; description: string; markdown?: string; structuredData?: Record<string, unknown>; }
-const { title, description, markdown, structuredData } = Astro.props;
+interface Props { title: string; description: string; markdown?: string; structuredData?: Record<string, unknown>; minimal?: boolean; }
+const { title, description, markdown, structuredData, minimal = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const image = new URL('/og.png', Astro.site);
 const nav = [copy.nav.services, copy.nav.method, copy.nav.resources];
@@ -37,9 +37,9 @@ const nav = [copy.nav.services, copy.nav.method, copy.nav.resources];
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={image} />
   </head>
-  <body>
+  <body class:list={{ 'landing-page': minimal }}>
     <a href="#main" class="skip-link">{content.skip}</a>
-    <header class="site-header">
+    {!minimal && <header class="site-header">
       <Container className="header-inner">
         <a href="/" aria-label={content.home} class="logo-link"><img src={logo} alt={content.brand} width="444" height="73" class="logo" /></a>
         <nav aria-label={content.navigation}>
@@ -47,9 +47,9 @@ const nav = [copy.nav.services, copy.nav.method, copy.nav.resources];
         </nav>
         <div class="header-actions"><ButtonLink href={copy.nav.account.href} variant="outline" className="header-account">{copy.nav.account.label}</ButtonLink><ButtonLink href={copy.hero.primary.href} className="header-primary">{copy.hero.primary.label}</ButtonLink><a class="mobile-explore" href={copy.nav.all.href} aria-label={copy.nav.all.label}><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.5"/></svg></a></div>
       </Container>
-    </header>
+    </header>}
     <main id="main" tabindex="-1"><slot /></main>
-    <footer class="site-footer">
+    {!minimal && <footer class="site-footer">
       <Container>
         <div class="footer-main">
           <div class="footer-brand"><a href="/" aria-label={content.home}><img src={logo} alt={content.brand} width="444" height="73" class="logo" /></a><p>{copy.footer.statement}</p><small>{copy.footer.description}</small></div>
@@ -59,6 +59,6 @@ const nav = [copy.nav.services, copy.nav.method, copy.nav.resources];
         </div>
         <div class="footer-bottom"><p>© {new Date().getFullYear()} {copy.footer.copyright}</p><p>{copy.footer.availability}</p></div>
       </Container>
-    </footer>
+    </footer>}
   </body>
 </html>

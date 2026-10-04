@@ -1,3 +1,4 @@
+import { useWalletProfileScope } from "../features/profile/use-wallet-profile-scope";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -10,6 +11,7 @@ import { DocumentFailure } from "../features/documents/DocumentFailure";
 import { api } from "../api";
 
 function Requests({ identity }: { identity: IdentityMe }) {
+  const { scope, filter } = useWalletProfileScope();
   const { t, i18n } = useTranslation("documents");
   const client = useQueryClient();
   const [cursors, setCursors] = useState<(string | undefined)[]>([undefined]);
@@ -23,8 +25,8 @@ function Requests({ identity }: { identity: IdentityMe }) {
     return () => active.abort();
   }, []);
   const query = useQuery({
-    queryKey: [...root, "change-requests", cursor],
-    queryFn: ({ signal }) => api.documentChangeRequests(cursor, { signal }),
+    queryKey: [...root, "change-requests", scope, cursor],
+    queryFn: ({ signal }) => api.documentChangeRequests(cursor, { signal }, filter),
     gcTime: 0,
     staleTime: 0,
     retry: false,

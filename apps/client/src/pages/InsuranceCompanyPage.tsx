@@ -1,3 +1,4 @@
+import { useWalletProfileScope } from "../features/profile/use-wallet-profile-scope";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useParams, useSearch } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
@@ -24,14 +25,31 @@ import { MissingPage } from "./StatesPage";
 
 const pageSize = 12;
 function Company({ identity, companyId }: { identity: IdentityMe; companyId: InsuranceCompanyId }) {
+  const { scope, filter } = useWalletProfileScope();
   const { t, i18n } = useTranslation("insurance");
   const { t: ta } = useTranslation("authorizations");
   const { t: td } = useTranslation("documents");
   const search = useSearch({ from: "/insurance-companies/$companyId" });
   const navigate = useNavigate();
+  const profiles = useQuery({
+    queryKey: ["private", identity.user.id, identity.session.id, "managed-profiles"],
+    queryFn: ({ signal }) => api.profiles({ signal }),
+    enabled: scope === "all",
+    gcTime: 0,
+    staleTime: 0,
+    retry: false,
+  });
+
   const query = useQuery({
-    queryKey: ["private", identity.user.id, identity.session.id, "insurance-company", companyId],
-    queryFn: ({ signal }) => api.insuranceCompany(companyId, { signal }),
+    queryKey: [
+      "private",
+      identity.user.id,
+      identity.session.id,
+      "insurance-company",
+      companyId,
+      scope,
+    ],
+    queryFn: ({ signal }) => api.insuranceCompany(companyId, { signal }, filter),
     staleTime: 0,
     gcTime: 0,
     retry: false,
@@ -187,7 +205,17 @@ function Company({ identity, companyId }: { identity: IdentityMe; companyId: Ins
                 <>
                   <div className="grid gap-4 md:grid-cols-2">
                     {visibleContracts.slice(start, start + pageSize).map((contract) => (
-                      <InsuranceContractCard key={contract.id} contract={contract} />
+                      <InsuranceContractCard
+                        key={contract.id}
+                        contract={contract}
+                        profileName={
+                          scope === "all"
+                            ? profiles.data?.profiles.find(
+                                (profile) => profile.id === (contract.profileId ?? "self"),
+                              )?.displayName
+                            : undefined
+                        }
+                      />
                     ))}
                   </div>
                   <p className="text-xs text-muted-foreground">{t("statusHelp")}</p>
@@ -223,6 +251,16 @@ function Company({ identity, companyId }: { identity: IdentityMe; companyId: Ins
                               td(`classification.${document.classification ?? document.category}`)}
                           </h3>
                           <DocumentLabels document={document} />
+                          {scope === "all" && (
+                            <p className="text-xs text-muted-foreground">
+                              {td("uploadProfile.name", {
+                                name:
+                                  profiles.data?.profiles.find(
+                                    (profile) => profile.id === (document.profileId ?? "self"),
+                                  )?.displayName ?? td("uploadProfile.unknown"),
+                              })}
+                            </p>
+                          )}
                           <p className="break-words text-xs text-muted-foreground">
                             {t("documentMeta", {
                               name: document.name,

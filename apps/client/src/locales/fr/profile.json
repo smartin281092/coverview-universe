@@ -153,15 +153,28 @@
     "create": "Créer le profil",
     "cancel": "Annuler",
     "sections": "Informations du profil",
-    "tabs": { "general": "Générales", "finances": "Finances", "health": "Santé" },
+    "tabs": {
+      "general": "Générales",
+      "finances": "Finances",
+      "health": "Santé"
+    },
     "notApplicable": "Non concerné",
     "entityHealth": "Les informations de santé concernent uniquement les profils de personnes.",
     "notFound": "Ce profil n’est pas disponible dans votre compte.",
     "returnSelf": "Revenir à mon profil",
     "steps": {
-      "general": { "information": "Informations", "details": "Coordonnées" },
-      "finances": { "information": "Revenus et charges", "details": "Épargne et dettes" },
-      "health": { "information": "Assurance maladie", "details": "Informations médicales" }
+      "general": {
+        "information": "Informations",
+        "details": "Coordonnées"
+      },
+      "finances": {
+        "information": "Revenus et charges",
+        "details": "Épargne et dettes"
+      },
+      "health": {
+        "information": "Assurance maladie",
+        "details": "Informations médicales"
+      }
     },
     "options": {
       "yes": "Oui",
@@ -181,5 +194,14 @@
     "stay": "Rester ici",
     "discard": "Abandonner les modifications",
     "saveLeave": "Enregistrer et continuer"
+  },
+  "scope": {
+    "choose": "Profil utilisé dans Wallet",
+    "all": "Tous les profils",
+    "self": "{{name}} (moi)",
+    "create": "Créer un nouveau profil",
+    "unavailable": "Profils indisponibles",
+    "overview": "Retrouvez les profils de votre compte. Sélectionnez un profil pour consulter et compléter son dossier.",
+    "open": "Ouvrir le profil"
   }
 }

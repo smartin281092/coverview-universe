@@ -20,6 +20,7 @@ import {
 } from "../identity/index.js";
 import { assertDocumentProfileTarget, readManagedDocumentProfile } from "../profiles/index.js";
 import { authorizationSignatures } from "./authorizations.schema.js";
+import { readSignatureNotifications } from "./authorizations.notifications.js";
 type Database = ReturnType<typeof createDatabase>["db"];
 type Tx = Parameters<Parameters<Database["transaction"]>[0]>[0];
 const digest = (value: unknown) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
@@ -132,6 +133,7 @@ async function draft(
 
 export function createAuthorizationRepository(db: Database) {
   return {
+    notifications: (cursor?: string) => readSignatureNotifications(db, cursor),
     draft: (userId: string, kind: "procuration" | "mandate", profileId = "self") =>
       draft(db, userId, kind, profileId),
     status: (userId: string, profileId = "self") => readAuthorizationStatus(db, userId, profileId),

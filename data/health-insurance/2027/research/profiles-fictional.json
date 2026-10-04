@@ -1,0 +1,173 @@
+{
+  "notice": "Profils entièrement fictifs pour le simulateur Admin. Aucun diagnostic ni donnée réelle de client. Copier uniquement le champ profile. Les résultats proviennent des tarifs et preuves actifs, avec leurs réserves.",
+  "examples": [
+    {
+      "name": "Prime minimale — aucun soin estimé — parcours court",
+      "profile": {
+        "profileVersion": 1,
+        "tariff": {
+          "year": 2027,
+          "birthYear": 1990,
+          "accident": true,
+          "deductible": 2500,
+          "regionId": "VD-1",
+          "municipalityId": 5586,
+          "categories": [],
+          "insurerIds": [],
+          "benefitKeys": [],
+          "offset": 0
+        },
+        "tariffKnown": {
+          "birth": true,
+          "locality": true
+        },
+        "scope": "same_deductible",
+        "answers": {
+          "priority": {
+            "version": 2,
+            "status": "answered",
+            "values": [
+              "premium"
+            ]
+          },
+          "access": {
+            "version": 2,
+            "status": "answered",
+            "values": [
+              "gp",
+              "phone"
+            ]
+          },
+          "obligations": {
+            "version": 2,
+            "status": "answered",
+            "values": [
+              "yes"
+            ]
+          },
+          "professionals": {
+            "version": 2,
+            "status": "answered",
+            "values": [
+              "none"
+            ]
+          },
+          "care": {
+            "version": 2,
+            "status": "answered",
+            "values": [
+              "0"
+            ]
+          }
+        },
+        "legacyAnswers": [],
+        "optIn": true,
+        "explore": [],
+        "stop": false
+      }
+    },
+    {
+      "name": "Équilibre — scénarios de soins — optimisation avec réserve limitée",
+      "profile": {
+        "profileVersion": 1,
+        "tariff": {
+          "year": 2027,
+          "birthYear": 1990,
+          "accident": true,
+          "deductible": 2500,
+          "regionId": "VD-1",
+          "municipalityId": 5586,
+          "categories": [],
+          "insurerIds": [],
+          "benefitKeys": [],
+          "offset": 0
+        },
+        "tariffKnown": {
+          "birth": true,
+          "locality": true
+        },
+        "scope": "optimize_deductible",
+        "answers": {
+          "priority": {
+            "version": 2,
+            "status": "answered",
+            "values": [
+              "balance"
+            ]
+          },
+          "access": {
+            "version": 2,
+            "status": "answered",
+            "values": [
+              "gp",
+              "phone"
+            ]
+          },
+          "obligations": {
+            "version": 2,
+            "status": "answered",
+            "values": [
+              "yes"
+            ]
+          },
+          "professionals": {
+            "version": 2,
+            "status": "answered",
+            "values": [
+              "none"
+            ]
+          },
+          "care": {
+            "version": 2,
+            "status": "answered",
+            "values": [
+              "exact"
+            ],
+            "amountMinor": 150000,
+            "upperMinor": 400000
+          },
+          "reserve": {
+            "version": 2,
+            "status": "answered",
+            "values": [
+              "1000to1999"
+            ]
+          },
+          "access_preference": {
+            "version": 2,
+            "status": "answered",
+            "values": [
+              "phone"
+            ]
+          },
+          "prevention": {
+            "version": 2,
+            "status": "answered",
+            "values": [
+              "screening"
+            ]
+          },
+          "supplementary": {
+            "version": 2,
+            "status": "answered",
+            "values": [
+              "keep"
+            ]
+          },
+          "extra_cost": {
+            "version": 2,
+            "status": "answered",
+            "values": [
+              "exact"
+            ],
+            "amountMinor": 2500
+          }
+        },
+        "legacyAnswers": [],
+        "optIn": true,
+        "explore": [],
+        "stop": false
+      }
+    }
+  ]
+}

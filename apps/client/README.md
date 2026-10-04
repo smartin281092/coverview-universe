@@ -4,6 +4,8 @@
 
 Wallet propose les profils privés, les documents, les autorisations, le compte et les appareils connectés. Français dès le départ, textes externalisés dans `src/locales/fr/`.
 
+Extension du 2 octobre : [Offres](src/features/offers/README.md), demandes et propositions issues des mêmes Leads que Partner. État partiel et recette : [ledger Partner](../../roadmap/evidence/partner-core.md).
+
 Le menu associe `assets/icon-coverview.svg` au lettrage fourni `assets/wallet.svg`, selon la dernière demande utilisateur. Les fichiers sources, le dégradé Wallet et les proportions sont conservés. Le lien garde le nom accessible « CoverView Wallet » sur mobile et desktop. Le lien « Site public » est placé dans le footer, sur tous les formats, et retiré du header.
 
 ## Périmètre
@@ -18,9 +20,21 @@ Les outils de développement restent accessibles par leur adresse directe, hors 
 
 L’action Authenticator ouvre la page dédiée de l’espace équipe en développement. En build, elle passe par le retour de connexion équipe fixé par l’API, puis le compte donne accès à Authenticator ; aucune origine d’administration déployée n’est inventée. L’inscription reste une action du propriétaire sans droit administratif implicite.
 
+## Profil actif dans Wallet
+
+Le sélecteur du header s’applique à Documents, aux contrats et statistiques de compagnie, au Centre d’action (liste, progression, badge, historique, détail), aux demandes et aux autorisations. La première entrée « Tous les profils » consolide le compte ; la dernière ouvre la création d’une personne ou entreprise, via le même formulaire que la vue consolidée des profils. Les réglages de connexion et les appareils restent des données de compte.
+
+L’URL porte `profile=all|self|prf_UUID`. Un ancien lien explicite `person=self|prf_UUID` conserve sa priorité et est normalisé vers la portée globale. Le middleware Router conserve cette portée sur les liens et les paginations. Le changement dans le header revient à la liste correspondante depuis un détail de document/action ; depuis une autorisation il revient au compte. La vue Profil consolidée présente les dossiers et leur complétion, puis ouvre une fiche individuelle pour les modifier.
+
+Le serveur filtre avant pagination et calcule les totaux sur le même profil. Les query keys des listes et détails incluent la session, le propriétaire et la portée ; changer de profil remonte le contenu et ferme ses prévisualisations. Les gardes de formulaire existantes protègent les modifications en cours et la navigation est bloquée pendant un upload. La création de profil conserve un identifiant d’idempotence stable en cas de reprise. Aucun choix de profil ni donnée privée n’est stocké dans localStorage.
+
+En vue consolidée, l’upload propose une cible explicite ou l’identification depuis le contenu. Dans un profil précis, le dépôt utilise directement ce profil sans réattribution automatique. Les originaux dont l’attribution reste à résoudre sont visibles dans « Tous les profils » avec ce statut, sans alimenter prématurément un autre profil. Les noms de profils distinguent les documents et contrats de la vue consolidée. Les statuts d’autorisations sont présentés par profil et paginés par six dossiers pour borner les lectures.
+
+Vérifications de navigation et d’isolation du cache : `src/features/profile/wallet-profile-scope.test.ts` et `src/features/identity/session-state.test.ts`. Les tests HTTP de portée sont dans les modules API propriétaires.
+
 ## Règles métier et invariants
 
-Les nouveaux documents déposés dans la bibliothèque demandent la détection de personne après extraction. Le serveur rattache le document à une personne connue ou crée son profil et complète ses champs vides ; les valeurs existantes restent conservées. En cas d’ambiguïté ou d’identité insuffisante, le détail demande explicitement un profil et affiche les données lues sans proposer leur synchronisation prématurée. Le nom du profil attribué ouvre son dossier. Documents demande la portée du compte pour garder tous les originaux visibles, y compris après création d’un profil. Les choix explicites dans les pièces d’identité/autorisations et les anciens documents ne sont pas réattribués. [Règles et vérifications](../../roadmap/evidence/document-profile-detection.md).
+Les nouveaux documents déposés sans profil cible explicite demandent la détection de personne après extraction. Le serveur rattache le document à une personne connue ou crée son profil et complète ses champs vides ; les valeurs existantes restent conservées. En cas d’ambiguïté ou d’identité insuffisante, le détail demande explicitement un profil et affiche les données lues sans proposer leur synchronisation prématurée. Le nom du profil attribué ouvre son dossier. La portée « Tous les profils » garde tous les originaux visibles, y compris après création d’un profil. Les choix explicites dans les pièces d’identité/autorisations et les anciens documents ne sont pas réattribués. [Règles et vérifications](../../roadmap/evidence/document-profile-detection.md).
 
 Le Centre d’action (`/actions`) déduplique les informations par profil et groupe, toutes compagnies et sources confondues ; une adresse reste une entrée. Les onglets À faire et En cours séparent les actions nécessitant une réponse des demandes déjà prises en charge, avec filtrage serveur avant pagination. En cours est partageable via `?tab=in_progress` et propose « Voir le détail ». Les boutons secondaires « Voir la source » ouvrent les documents. « Vérifier » ouvre `/actions/:id` : question et réponses numérotées, sélection visible, saisie libre, champs adaptés au groupe, documents/compagnies/contrats connus, navigation et progression. L’onglet Activité conserve les résolutions, lectures LSA45 et signatures. Le compteur du menu reflète les actions à prendre renvoyées par le serveur. Une réponse libre non structurée crée une demande de traitement dans Admin ; elle ne commande pas arbitrairement une modification du profil.
 

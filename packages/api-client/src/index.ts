@@ -54,12 +54,20 @@ import {
   adminUserSchema,
   adminUsersSchema,
   adminUsersQuerySchema,
+  adminProfileContractsSchema,
+  profileScopeQuerySchema,
   type ApiErrorCode,
 } from "@coverview/contracts";
 import type { z } from "zod";
+import type { ActionStreamOptions } from "./action-stream.js";
+export type { ActionStreamOptions } from "./action-stream.js";
+import { clientActivityMethods } from "./client-activities.js";
+import { createAdminProfileTransferClient } from "./admin-profile-transfer.js";
 import {
   authorizationDocumentSchema,
   authorizationReceiptSchema,
+  adminNotificationsSchema,
+  adminNotificationsQuerySchema,
   authorizationSignInputSchema,
   authorizationStatusSchema,
   authorizationKindSchema,
@@ -101,6 +109,15 @@ export class ApiError extends Error {
 
 type RequestOptions = { signal?: AbortSignal };
 type MutationOptions = RequestOptions & { csrfToken: string; idempotencyKey: string };
+type ProfileScope = z.infer<typeof profileScopeQuerySchema>;
+const scopeParams = (scope: ProfileScope = {}) =>
+  new URLSearchParams(
+    Object.entries(profileScopeQuerySchema.parse(scope)).filter(
+      (entry): entry is [string, string] => typeof entry[1] === "string",
+    ),
+  );
+const adminProfilePath = (userId: string, profileId: string) =>
+  `/admin/users/${encodeURIComponent(adminUserIdSchema.parse(userId))}/profiles/${encodeURIComponent(managedProfileIdSchema.parse(profileId))}`;
 
 export function createApiClient({
   baseUrl,
@@ -179,6 +196,12 @@ export function createApiClient({
   }
 
   return {
+    async openActionStream(options: ActionStreamOptions) {
+      const { createActionStream } = await import("./action-stream.js");
+      return createActionStream(base.origin, options, (code, status) => new ApiError(code, status));
+    },
+    ...clientActivityMethods(request),
+    ...createAdminProfileTransferClient(request),
     authorizationNotice: (options?: RequestOptions) =>
       request("/identity/notices/lsa45", authorizationNoticeSchema, options, undefined, true),
     openAuthorizationNotice: (options: MutationOptions) =>
@@ -392,9 +415,9 @@ export function createApiClient({
         undefined,
         true,
       ),
-    documentChangeRequests: (cursor?: string, options?: RequestOptions) =>
+    documentChangeRequests: (cursor?: string, options?: RequestOptions, scope: ProfileScope = {}) =>
       request(
-        `/document-change-requests${cursor ? `?cursor=${encodeURIComponent(cursor)}` : ""}`,
+        `/document-change-requests?${scopeParams(scope)}${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`,
         documentChangeRequestsSchema,
         options,
         undefined,
@@ -424,8 +447,14 @@ export function createApiClient({
         undefined,
         true,
       ),
-    document: (id: string, options?: RequestOptions) =>
-      request(`/documents/${encodeURIComponent(id)}`, documentSchema, options, undefined, true),
+    document: (id: string, options?: RequestOptions, scope: ProfileScope = {}) =>
+      request(
+        `/documents/${encodeURIComponent(id)}?${scopeParams(scope)}`,
+        documentSchema,
+        options,
+        undefined,
+        true,
+      ),
     createDocument: (input: z.infer<typeof documentCreateInputSchema>, options: MutationOptions) =>
       request(
         "/documents",
@@ -563,6 +592,16 @@ export function createApiClient({
         undefined,
         true,
       ),
+    adminNotifications: (cursor?: string, options?: RequestOptions) => {
+      const query = adminNotificationsQuerySchema.parse({ cursor });
+      return request(
+        `/admin/notifications${query.cursor ? `?${new URLSearchParams({ cursor: query.cursor })}` : ""}`,
+        adminNotificationsSchema,
+        options,
+        undefined,
+        true,
+      );
+    },
     signAuthorization: (
       kind: "procuration" | "mandate",
       input: z.infer<typeof authorizationSignInputSchema>,
@@ -645,9 +684,13 @@ export function createApiClient({
         { body: profileSectionSaveInputSchema.parse(input), credentials: options },
         true,
       ),
-    insuranceCompany: (id: z.infer<typeof insuranceCompanyIdSchema>, options?: RequestOptions) =>
+    insuranceCompany: (
+      id: z.infer<typeof insuranceCompanyIdSchema>,
+      options?: RequestOptions,
+      scope: ProfileScope = {},
+    ) =>
       request(
-        `/documents/companies/${encodeURIComponent(insuranceCompanyIdSchema.parse(id))}`,
+        `/documents/companies/${encodeURIComponent(insuranceCompanyIdSchema.parse(id))}?${scopeParams(scope)}`,
         insuranceCompanyDetailsSchema,
         options,
         undefined,
@@ -675,8 +718,14 @@ export function createApiClient({
       );
       return request(`/action-center?${params}`, actionCenterListSchema, options, undefined, true);
     },
-    actionCenterSummary: (options?: RequestOptions) =>
-      request("/action-center/summary", actionCenterSummarySchema, options, undefined, true),
+    actionCenterSummary: (options?: RequestOptions, scope: ProfileScope = {}) =>
+      request(
+        `/action-center/summary?${scopeParams(scope)}`,
+        actionCenterSummarySchema,
+        options,
+        undefined,
+        true,
+      ),
     actionCenterHistory: (
       query: z.infer<typeof actionCenterQuerySchema> = {},
       options?: RequestOptions,
@@ -694,10 +743,52 @@ export function createApiClient({
         true,
       );
     },
-    actionCenterAction: (id: string, options?: RequestOptions) =>
+    actionCenterAction: (id: string, options?: RequestOptions, scope: ProfileScope = {}) =>
       request(
-        `/action-center/${encodeURIComponent(actionCenterIdSchema.parse(id))}`,
+        `/action-center/${encodeURIComponent(actionCenterIdSchema.parse(id))}?${scopeParams(scope)}`,
         actionCenterDetailsSchema,
+        options,
+        undefined,
+        true,
+      ),
+    adminProfileContracts: (userId: string, profileId: string, options?: RequestOptions) =>
+      request(
+        `${adminProfilePath(userId, profileId)}/contracts`,
+        adminProfileContractsSchema,
+        options,
+        undefined,
+        true,
+      ),
+    adminClientActions: (
+      userId: string,
+      profileId: string,
+      query: Omit<z.infer<typeof actionCenterQuerySchema>, "profileId"> = {},
+      options?: RequestOptions,
+    ) =>
+      request(
+        `${adminProfilePath(userId, profileId)}/action-center?${new URLSearchParams(Object.entries(actionCenterQuerySchema.omit({ profileId: true }).parse(query)).filter((entry): entry is [string, string] => typeof entry[1] === "string"))}`,
+        actionCenterListSchema,
+        options,
+        undefined,
+        true,
+      ),
+    adminClientAction: (userId: string, profileId: string, id: string, options?: RequestOptions) =>
+      request(
+        `${adminProfilePath(userId, profileId)}/action-center/${encodeURIComponent(actionCenterIdSchema.parse(id))}`,
+        actionCenterDetailsSchema,
+        options,
+        undefined,
+        true,
+      ),
+    adminClientActionHistory: (
+      userId: string,
+      profileId: string,
+      query: Omit<z.infer<typeof actionCenterQuerySchema>, "profileId"> = {},
+      options?: RequestOptions,
+    ) =>
+      request(
+        `${adminProfilePath(userId, profileId)}/action-center/history?${new URLSearchParams(Object.entries(actionCenterQuerySchema.omit({ profileId: true }).parse(query)).filter((entry): entry is [string, string] => typeof entry[1] === "string"))}`,
+        actionCenterHistorySchema,
         options,
         undefined,
         true,
@@ -933,7 +1024,7 @@ export function createApiClient({
         true,
       ),
     loginUrl: (
-      surface: "wallet" | "admin" | "www",
+      surface: "wallet" | "admin" | "www" | "partners",
       options: { reauthenticate?: boolean; continuation?: "profile" } = {},
     ) =>
       new URL(

@@ -156,6 +156,7 @@ export const documentAssignProfileInputSchema = z.union([
     .strict(),
 ]);
 export const documentSummarySchema = z.object({
+  purpose: z.enum(["identity_card", "lead_offer"]).nullable().optional(),
   profileId: managedProfileIdSchema.optional(),
   profileAssignment: z
     .enum([
@@ -276,6 +277,7 @@ export const documentListSchema = z.object({
   total: z.number().int().nonnegative().optional(),
 });
 export const insuranceContractSchema = z.object({
+  profileId: managedProfileIdSchema.optional(),
   id: documentIdSchema,
   documentIds: z.array(documentIdSchema).min(1).max(200),
   title: z.string().max(140),
@@ -337,7 +339,7 @@ export const documentCreateInputSchema = z
     checksum: z.string().regex(/^[0-9a-f]{64}$/),
     analysisRequested: z.boolean(),
     // The depositor declares the document's purpose; this never verifies identity.
-    purpose: z.literal("identity_card").optional(),
+    purpose: z.enum(["identity_card", "lead_offer"]).optional(),
   })
   .strict();
 export const documentIdentityDocumentTypeSchema = z.enum([
@@ -442,6 +444,7 @@ export type DocumentCreateInput = z.infer<typeof documentCreateInputSchema>;
 export const documentErrorCodes = [
   "DOCUMENT_NOT_FOUND",
   "DOCUMENT_CONFLICT",
+  "DOCUMENT_IN_USE",
   "DOCUMENT_IDEMPOTENCY_REUSED",
   "DOCUMENT_UPLOAD_INVALID",
   "DOCUMENT_STORAGE_UNAVAILABLE",

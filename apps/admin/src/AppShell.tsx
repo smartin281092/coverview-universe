@@ -40,6 +40,7 @@ export function AppShell() {
             aria-label={t("navigation")}
             className="order-3 flex basis-full flex-wrap gap-x-7 sm:order-none sm:basis-auto"
           >
+            <Link to="/partner" aria-current={pathname === "/partner" ? "page" : undefined} className="cv-app-nav-link">{t("partner:title")}</Link>
             <Link
               to="/users"
               aria-current={pathname.startsWith("/users") ? "page" : undefined}
@@ -55,11 +56,32 @@ export function AppShell() {
               {t("serviceRequests:nav")}
             </Link>
             <Link
+              to="/insurance-requests"
+              aria-current={pathname === "/insurance-requests" ? "page" : undefined}
+              className="cv-app-nav-link"
+            >
+              {t("insuranceRequests:title")}
+            </Link>
+            <Link
+              to="/configuration/comparateur-maladie"
+              aria-current={pathname === "/configuration/comparateur-maladie" ? "page" : undefined}
+              className="cv-app-nav-link"
+            >
+              {t("healthRecommendation:title")}
+            </Link>
+            <Link
               to="/account"
               aria-current={accountPage ? "page" : undefined}
               className="cv-app-nav-link"
             >
               {t("identity.accountTitle")}
+            </Link>
+            <Link
+              to="/notifications"
+              aria-current={pathname === "/notifications" ? "page" : undefined}
+              className="cv-app-nav-link"
+            >
+              {t("notifications:title")}
             </Link>
           </nav>
           <TextLink href={websiteUrl} arrow="up" className="text-sm">

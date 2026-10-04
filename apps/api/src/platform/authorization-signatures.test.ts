@@ -15,6 +15,8 @@ import {
   readAuthorizationActivity,
 } from "../modules/authorizations/index.js";
 import { authorizationSignatures } from "../modules/authorizations/authorizations.schema.js";
+import { createActionCenterRepository } from "../modules/document-intelligence/document.action-center.repository.js";
+import { actionCenterIdentity } from "../modules/document-intelligence/document.action-center.projection.js";
 
 let container: StartedPostgreSqlContainer;
 let database: ReturnType<typeof createDatabase>;
@@ -102,6 +104,27 @@ it("archives the accepted dated document and signature once; later profile edits
     repository.sign(actor, "mandate", data, key),
   ]);
   expect(replay).toEqual(receipt);
+  const notices = await repository.notifications();
+  expect(notices.notifications.filter((item) => item.id === receipt.id)).toEqual([
+    {
+      id: receipt.id,
+      userId: actor.userId,
+      profileId: "self",
+      profileName: receipt.document.profileName,
+      accountEmail: "signatures@isolated.test",
+      kind: "mandate",
+      signedAt: receipt.signedAt,
+      revokedAt: null,
+    },
+  ]);
+  const center = createActionCenterRepository(database.db);
+  const actionId = actionCenterIdentity(actor.userId, "self", "authorization:management_mandate");
+  expect((await center.details(actor.userId, actionId)).action).toMatchObject({
+    state: "complete",
+    canResolve: false,
+    choices: [],
+  });
+  expect((await center.list(actor.userId, { state: "in_progress" })).actions).toEqual([]);
   expect(receipt.accepted).toBe(true);
   expect(receipt.drawing).toEqual(data.drawing);
   expect(new Date(receipt.signedAt).getTime()).toBeGreaterThanOrEqual(before.getTime());
@@ -237,6 +260,13 @@ it("requires explicit representation for each managed person or company and prev
       statusCode: 404,
     });
     const receipt = await repository.sign(actor, "mandate", data, randomUUID());
+    expect(
+      (await repository.notifications()).notifications.find((item) => item.id === receipt.id),
+    ).toMatchObject({
+      userId: actor.userId,
+      profileId: subject.id,
+      profileName: receipt.document.profileName,
+    });
     expect((await repository.status(actor.userId, subject.id)).mandate.id).toBe(receipt.id);
     expect((await repository.status(actor.userId)).mandate.signedAt).toBeNull();
     await expect(repository.receipt(stranger.userId, receipt.id)).rejects.toMatchObject({
@@ -271,4 +301,59 @@ it("rechecks the active session before replay and does not treat a revoked signa
   await expect(repository.sign(actor, "mandate", nextData, nextKey)).rejects.toMatchObject({
     code: "IDENTITY_UNAUTHENTICATED",
   });
+});
+
+it("paginates durable signature notifications without duplicates and retains revocation metadata", async () => {
+  const actor = await owner();
+  await identify(actor);
+  const repository = createAuthorizationRepository(database.db);
+  const data = await input(actor, "procuration");
+  const key = randomUUID();
+  const receipt = await repository.sign(actor, "procuration", data, key);
+  await repository.sign(actor, "procuration", data, key);
+  const center = createActionCenterRepository(database.db);
+  expect(
+    (
+      await center.details(
+        actor.userId,
+        actionCenterIdentity(actor.userId, "self", "authorization:procuration"),
+      )
+    ).action.state,
+  ).toBe("complete");
+  const [template] = await database.db
+    .select()
+    .from(authorizationSignatures)
+    .where(eq(authorizationSignatures.id, receipt.id));
+  if (!template) throw new Error("Missing signature fixture");
+  const copies = Array.from({ length: 22 }, () => {
+    const id = `sig_${randomUUID()}`;
+    return {
+      ...template,
+      id,
+      commandKey: randomUUID(),
+      revokedAt: new Date(),
+      receipt: { ...receipt, id },
+    };
+  });
+  // Historical revoked signatures with identical timestamps exercise the stable tie breaker.
+  await database.db.insert(authorizationSignatures).values(copies);
+  const items = [];
+  let cursor: string | undefined;
+  do {
+    const page = await repository.notifications(cursor);
+    expect(page.notifications.length).toBeLessThanOrEqual(20);
+    items.push(...page.notifications);
+    cursor = page.nextCursor ?? undefined;
+    expect(items.length).toBeLessThan(100);
+  } while (cursor);
+  expect(new Set(items.map((item) => item.id)).size).toBe(items.length);
+  expect(items.filter((item) => item.userId === actor.userId)).toHaveLength(23);
+  expect(items.filter((item) => item.id === receipt.id)).toHaveLength(1);
+  expect(
+    items
+      .filter((item) => copies.some((copy) => copy.id === item.id))
+      .every((item) => item.revokedAt !== null),
+  ).toBe(true);
+  expect(items.every((item) => !("drawing" in item) && !("receipt" in item))).toBe(true);
+  await expect(repository.notifications("invalid")).rejects.toMatchObject({ statusCode: 400 });
 });

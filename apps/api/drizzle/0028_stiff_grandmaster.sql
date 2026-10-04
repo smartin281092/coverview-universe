@@ -1,0 +1,2 @@
+ALTER TABLE "files" ADD COLUMN "retained_at" timestamp (3) with time zone;--> statement-breakpoint
+ALTER TABLE "partner_offers" ADD CONSTRAINT "partner_offers_document_id_files_id_fk" FOREIGN KEY ("document_id") REFERENCES "public"."files"("id") ON DELETE no action ON UPDATE no action;

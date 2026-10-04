@@ -50,6 +50,10 @@ La [carte fonctionnelle](docs/product/capabilities.md) porte l'inventaire dériv
 
 Module implémenté : [platform](apps/api/src/platform/README.md), santé et persistance des seules personas techniques locales. Les frontières métier seront fixées progressivement au plan des slices, avec README propriétaire selon DOC-01. Une seule base métier commune aux applications principales ; Exchange conserve la frontière distincte décrite par §12. Aucun frontend ne lit directement la base.
 
+Module public ajouté le 30.09.2026 : [health-insurance](apps/api/src/modules/health-insurance/README.md), propriétaire du catalogue Priminfo 2027, des régions, des prestations sourcées et du calcul de franchises consommés par www. L’enrichissement des avantages est partiel ; état et preuves dans son README.
+
+Extension Partner du 02.10.2026 : [module commun Leads/offres](apps/api/src/modules/partner-workspace/README.md) et [surface Partner](apps/partners/README.md), reliés à Wallet et Admin. Implémentation partielle du [brief intégral](references/coverview-partner-2026-10-02.md), avec [couverture et reste à faire](roadmap/partner-coverage.md). Cette extension ne clôture pas les slices ni les intégrations antérieures.
+
 ## Offre et intégrations
 
 La bible décrit des offres et niveaux de service, notamment Retire Check / Plan / Strategy / Care / Review. Les montants, droits et arbitrages restent attachés aux sources dans l'inventaire ; aucun catalogue exécutable n'existe. Les décisions commerciales non résolues sont dans [le registre de questions](docs/product/open-questions.md). Aucun tarif, commission ou droit n'est inventé au bootstrap.
@@ -73,3 +77,5 @@ Adresse CoverView fournie par l’utilisateur le 8 septembre 2026 : **Avenue Lou
 Dépôt donné par l'utilisateur : [smartin281092/coverview-universe](https://github.com/smartin281092/coverview-universe). Remote `origin` configuré, branche locale `main`. Lecture distante initiale : aucune référence publiée retournée par `git ls-remote` le 2026-09-05. Le harness fourni et ses sources ont un commit initial conservé ; aucun historique distant remplacé.
 
 Le remote est raccordé ; aucun push ni déploiement n'a été effectué pendant la préparation. Le premier push suit BOOT-07 / ENV-06. Le [journal d'initialisation](roadmap/initialisation.md) donne les preuves et limites.
+
+Extension du 30.09.2026 : [insurance-requests](apps/api/src/modules/insurance-requests/README.md), propriétaire des demandes d’offre familiales, du suivi invité/Wallet et du traitement Admin. [Vérifications et limites](roadmap/evidence/health-offers.md).

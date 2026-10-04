@@ -65,7 +65,7 @@ export function ProfileSteps({
             >
               <span
                 aria-hidden="true"
-                className="relative flex size-12 shrink-0 items-center justify-center rounded-full bg-background text-xs tabular-nums"
+                className={`relative flex size-12 shrink-0 items-center justify-center rounded-full bg-background text-xs tabular-nums transition-transform motion-reduce:transition-none ${value === step ? "scale-110" : ""}`}
               >
                 <svg
                   viewBox="0 0 48 48"
@@ -80,8 +80,8 @@ export function ProfileSteps({
                       cy="24"
                       r="22"
                       pathLength="100"
-                      strokeDasharray="100"
-                      strokeDashoffset={100 - percentage}
+                      strokeDasharray={percentage < 100 ? "100" : undefined}
+                      strokeDashoffset={percentage < 100 ? 100 - percentage : undefined}
                       className="stroke-chart-3"
                     />
                   )}

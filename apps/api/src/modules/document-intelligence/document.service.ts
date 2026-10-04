@@ -10,6 +10,22 @@ export function createDocumentService(
   storage: FileStorage,
 ) {
   return {
+    async downloadShared(userId: string, id: string, authorize: () => Promise<void>) {
+      await authorize();
+      const row = await repository.original(userId, id);
+      if (!row.scanVersion || !["ready", "failed"].includes(row.state))
+        throw new DocumentError("DOCUMENT_DOWNLOAD_BLOCKED", 422);
+      let bytes: Buffer;
+      try { bytes = await storage.get(row.objectKey); }
+      catch (cause) { throw new DocumentError("DOCUMENT_STORAGE_UNAVAILABLE", 503, { cause }); }
+      if (bytes.length !== row.size || createHash("sha256").update(bytes).digest("hex") !== row.checksum)
+        throw new DocumentError("DOCUMENT_STORAGE_UNAVAILABLE", 503);
+      await authorize();
+      const current = await repository.original(userId, id);
+      if (!current.scanVersion || !["ready", "failed"].includes(current.state))
+        throw new DocumentError("DOCUMENT_DOWNLOAD_BLOCKED", 422);
+      return { bytes, name: row.name };
+    },
     async upload(actor: Actor, id: string, bytes: Buffer) {
       await repository.authorizeUpload(actor, id);
       const row = await repository.original(actor.userId, id);

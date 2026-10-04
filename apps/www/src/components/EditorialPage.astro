@@ -18,14 +18,15 @@ const index = listing ? `/${listing.slug}#${editorialAnchor(data.slug)}` : '/exp
     {data.fictional && <p class="fiction-notice">{copy.fictional}</p>}
     <div class="prose-content editorial-body" data-editorial-body><Content components={{ table: EditorialTable }} /></div>
     <div class="editorial-meta">
-      <p>{copy.author} · {copy.authorNote}</p>
-      <p>{copy.created} <time datetime={data.date}>{formatDate(data.date)}</time> · {copy.updated} <time datetime={data.updatedAt}>{formatDate(data.updatedAt)}</time> · {copy.version} {data.version}</p>
-      <p>{copy.preview}</p>
+      <p>{copy.author} · {copy.updated} <time datetime={data.updatedAt}>{formatDate(data.updatedAt)}</time></p>
+      <p>{copy.created} <time datetime={data.date}>{formatDate(data.date)}</time></p>
     </div>
     <aside class="editorial-sources" aria-label={copy.sources}>
       <p class="source-title">{copy.sources}</p>
-      <ul>{data.sources.map((source) => <li><a href="/sources#bible-v15">{source.label}</a></li>)}</ul>
-      <p>{copy.sourceNote}</p>
+      <ul>
+        <li><a href="/#comprendre">{copy.start}</a></li>
+        <li><a href="/sources">{copy.approach}</a></li>
+      </ul>
       <a href={`/${data.slug}.md`} class="text-link">{copy.markdown}</a>
     </aside>
   </article>

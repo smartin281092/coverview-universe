@@ -1,3 +1,4 @@
+import { useWalletProfileScope } from "../features/profile/use-wallet-profile-scope";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
@@ -43,8 +44,18 @@ import { DocumentLabels } from "../features/documents/DocumentLabels";
 import { DocumentCover } from "../features/documents/DocumentCover";
 
 function Documents({ identity }: { identity: IdentityMe }) {
+  const { scope, filter } = useWalletProfileScope();
   const { t, i18n } = useTranslation("documents");
   const navigate = useNavigate();
+  const profiles = useQuery({
+    queryKey: ["private", identity.user.id, identity.session.id, "managed-profiles"],
+    queryFn: ({ signal }) => api.profiles({ signal }),
+    enabled: scope === "all",
+    gcTime: 0,
+    staleTime: 0,
+    retry: false,
+  });
+
   const [open, setOpen] = useState(false);
   const [noticeDismissed, setNoticeDismissed] = useState(false);
   const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);
@@ -68,20 +79,33 @@ function Documents({ identity }: { identity: IdentityMe }) {
       identity.user.id,
       identity.session.id,
       "documents",
+      scope,
       filters,
       cursors.at(-1) ?? null,
     ],
     queryFn: ({ signal }) =>
-      api.documents(cursors.at(-1), { signal }, { ...filters, scope: "account" }),
+      api.documents(
+        cursors.at(-1),
+        { signal },
+        {
+          ...filters,
+          ...(scope === "all"
+            ? { scope: "account" as const }
+            : { ...filter, scope: "profile" as const }),
+        },
+      ),
     staleTime: 0,
     gcTime: 0,
     retry: false,
+    refetchOnWindowFocus: true,
     refetchInterval: (query) =>
-      query.state.data?.documents.some((item) =>
-        ["queued", "scanning", "reading", "deleting"].includes(item.state),
-      )
-        ? 5000
-        : false,
+      query.state.error
+        ? false
+        : query.state.data?.documents.some((item) =>
+              ["queued", "scanning", "reading", "deleting"].includes(item.state),
+            )
+          ? 5000
+          : 15_000,
   });
   const format = new Intl.DateTimeFormat(i18n.language, { dateStyle: "medium" });
   const monthFormat = new Intl.DateTimeFormat(i18n.language, {
@@ -366,6 +390,22 @@ function Documents({ identity }: { identity: IdentityMe }) {
                             <DocumentLabels document={document} />
                             {display === "list" && (
                               <>
+                                {scope === "all" && (
+                                  <p className="text-xs text-muted-foreground">
+                                    {document.profileAssignment &&
+                                    !["manual", "matched", "created"].includes(
+                                      document.profileAssignment,
+                                    )
+                                      ? t("uploadProfile.unassigned")
+                                      : t("uploadProfile.name", {
+                                          name:
+                                            profiles.data?.profiles.find(
+                                              (profile) =>
+                                                profile.id === (document.profileId ?? "self"),
+                                            )?.displayName ?? t("uploadProfile.unknown"),
+                                        })}
+                                  </p>
+                                )}
                                 <p className="text-sm text-muted-foreground">
                                   {t("listMeta", {
                                     date: format.format(new Date(document.createdAt)),

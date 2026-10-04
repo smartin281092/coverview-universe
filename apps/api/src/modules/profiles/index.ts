@@ -54,3 +54,4 @@ export function registerManagedProfiles(
     await database.pool.end();
   });
 }
+export { createInsuranceProfiles } from "./profiles.insurance.js";

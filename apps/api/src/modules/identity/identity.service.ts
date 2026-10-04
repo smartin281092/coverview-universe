@@ -14,7 +14,7 @@ import type { IdentityProvider, RemoteIdentity } from "./identity.workos.js";
 import { createEnrollmentService } from "./identity.enrollment.js";
 
 type Repository = ReturnType<typeof createIdentityRepository>;
-type Surface = "wallet" | "admin" | "www";
+type Surface = "wallet" | "admin" | "www" | "partners";
 export type IdentityService = ReturnType<typeof createIdentityService>;
 
 export function requireAdministration(
@@ -26,7 +26,7 @@ export function requireAdministration(
     requireMfa &&
     (!session.mfaVerifiedAt ||
       session.mfaVerifiedAt.getTime() > Date.now() ||
-      Date.now() - session.mfaVerifiedAt.getTime() >= 15 * 60_000)
+      Date.now() - session.mfaVerifiedAt.getTime() >= 24 * 60 * 60_000)
   ) {
     throw new IdentityError("IDENTITY_MFA_REQUIRED", 403);
   }
@@ -44,6 +44,7 @@ export function createIdentityService(
     wallet: config.AUTH_WALLET_ORIGIN,
     admin: config.AUTH_ADMIN_ORIGIN,
     www: config.AUTH_WWW_ORIGIN,
+    partners: config.AUTH_PARTNER_ORIGIN,
   };
 
   async function localSession(token: string | undefined, includeRevoked = false) {
@@ -134,9 +135,49 @@ export function createIdentityService(
   return {
     ...createEnrollmentService(repository, provider, authenticate),
     authenticate,
+    async startEmail(email: string) {
+      if (!provider.startEmail) throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
+      await provider.startEmail(email);
+    },
+    async verifyEmail(
+      email: string,
+      code: string,
+      startedAt: Date,
+      device: string,
+      requestId: string,
+    ) {
+      if (!provider.verifyEmail) throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
+      const remoteIdentity = await provider.verifyEmail(email, code);
+      await reconcilePending(remoteIdentity);
+      const remote = (await provider.sessions(remoteIdentity.workosUserId)).find(
+        (item) => item.id === remoteIdentity.workosSessionId,
+      );
+      if (!remote) throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);
+      const token = randomSecret();
+      const session = await repository.createSession({
+        ...remoteIdentity,
+        tokenHash: secretHash(token),
+        device: device.slice(0, 256),
+        loginStartedAt: startedAt,
+        requestId,
+        expiresAt: new Date(
+          Math.min(
+            Date.now() + config.AUTH_SESSION_TTL_SECONDS * 1000,
+            Date.parse(remote.expiresAt),
+          ),
+        ),
+      });
+      if (!session) {
+        await provider.revoke(remoteIdentity.workosSessionId);
+        throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);
+      }
+      return { token, session };
+    },
+    realtimeSession: (token: string | undefined) => localSession(token),
     logoutSession: (token: string | undefined) => localSession(token, true),
     csrf: (token: string) => csrfToken(secret, token),
     async login(surface: Surface, reauthenticate = false, continuation?: "profile") {
+      if (!destinations[surface]) throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
       if (continuation && surface !== "wallet")
         throw new IdentityError("IDENTITY_ACCESS_DENIED", 400);
       const authorization = await provider.authorization(reauthenticate);
@@ -169,6 +210,7 @@ export function createIdentityService(
       );
       if (!transaction) throw new IdentityError("IDENTITY_INVALID_CALLBACK", 400);
       const surface = transaction.surface === "client" ? "wallet" : transaction.surface;
+      if (!destinations[surface]) throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
       const destination =
         transaction.continuation === "profile" && surface === "wallet"
           ? `${destinations.wallet}/profile?continue=1`
@@ -203,7 +245,11 @@ export function createIdentityService(
           requestId,
           expiresAt: new Date(
             Math.min(
-              Date.now() + config.AUTH_SESSION_TTL_SECONDS * 1000,
+              Date.now() +
+                (surface === "admin"
+                  ? config.AUTH_ADMIN_SESSION_TTL_SECONDS
+                  : config.AUTH_SESSION_TTL_SECONDS) *
+                  1000,
               Date.parse(remote.expiresAt),
             ),
           ),

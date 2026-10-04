@@ -33,8 +33,15 @@ const domainIcons: Record<InsuranceDomain, typeof Shield> = {
   pet: PawPrint,
   other: Shield,
 };
-export function InsuranceContractCard({ contract }: { contract: InsuranceContract }) {
+export function InsuranceContractCard({
+  contract,
+  profileName,
+}: {
+  contract: InsuranceContract;
+  profileName?: string | undefined;
+}) {
   const { t, i18n } = useTranslation("insurance");
+  const { t: td } = useTranslation("documents");
   const Icon = contract.domain ? domainIcons[contract.domain] : Shield;
   const date = (value: string) =>
     new Intl.DateTimeFormat(i18n.language, { dateStyle: "medium", timeZone: "UTC" }).format(
@@ -55,6 +62,11 @@ export function InsuranceContractCard({ contract }: { contract: InsuranceContrac
           </div>
           <ArrowUpRight className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
         </div>
+        {profileName && (
+          <p className="text-xs text-muted-foreground">
+            {td("uploadProfile.name", { name: profileName })}
+          </p>
+        )}
         <div className="flex min-w-0 items-start gap-2 text-sm">
           <UserRound className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
           <p className="break-words">{contract.insuredSubject ?? t("subjectMissing")}</p>

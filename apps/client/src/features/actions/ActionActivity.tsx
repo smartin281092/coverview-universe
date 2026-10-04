@@ -1,3 +1,4 @@
+import { useWalletProfileScope } from "../profile/use-wallet-profile-scope";
 import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
@@ -27,6 +28,7 @@ export function ActionActivity({
 }) {
   const { t, i18n } = useTranslation("actions");
   const label = useActionLabel();
+  const { scope, filter } = useWalletProfileScope();
   const navigate = useNavigate();
   const [selected, setSelected] = useState<ActionCenterHistoryItem | null>(null);
   const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);
@@ -37,9 +39,11 @@ export function ActionActivity({
       identity.session.id,
       "action-center",
       "history",
+      scope,
       cursor,
     ],
-    queryFn: ({ signal }) => api.actionCenterHistory(cursor ? { cursor } : {}, { signal }),
+    queryFn: ({ signal }) =>
+      api.actionCenterHistory({ ...(cursor ? { cursor } : {}), ...filter }, { signal }),
     gcTime: 0,
     staleTime: 0,
     retry: false,

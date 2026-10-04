@@ -1,0 +1,117 @@
+{
+  "tabs": {
+    "profile": "Profil",
+    "documents": "Documents",
+    "contracts": "Contrats",
+    "activities": "Activités"
+  },
+  "navigation": "Rubriques du dossier",
+  "loading": "Chargement…",
+  "save": "Enregistrer",
+  "saving": "Enregistrement…",
+  "close": "Fermer",
+  "pagination": "Pagination des activités",
+  "firstPage": "Première page",
+  "nextPage": "Page suivante",
+  "activities": {
+    "heading": "Suivi du client",
+    "create": "Créer une activité",
+    "edit": "Détail de l’activité",
+    "internal": "Suivi interne du dossier. Les rendez-vous et événements sont enregistrés ici, sans envoyer d’invitation.",
+    "empty": "Aucune activité enregistrée",
+    "emptyDescription": "Ajoutez une tâche, une note, un événement ou un rendez-vous pour ce profil.",
+    "kind": "Type",
+    "title": "Titre",
+    "description": "Notes et détails",
+    "state": "Statut",
+    "kinds": {
+      "task": "Tâche",
+      "note": "Note",
+      "event": "Événement",
+      "appointment": "Rendez-vous"
+    },
+    "states": { "open": "À faire", "completed": "Terminé", "cancelled": "Annulé" },
+    "due": "Échéance",
+    "start": "Début",
+    "end": "Fin (facultative)",
+    "timezone": "Horaires dans le fuseau {{timezone}}.",
+    "invalid": "Renseignez un titre et vérifiez les dates. Un événement ou un rendez-vous doit avoir une date de début ; la fin doit être postérieure au début.",
+    "conflict": "Cette activité a été modifiée depuis son ouverture. Fermez puis rouvrez-la pour consulter la dernière version avant de corriger."
+  },
+  "actions": {
+    "heading": "Actions du client",
+    "empty": "Aucune action en attente",
+    "emptyDescription": "Les démarches et informations à compléter pour ce profil apparaissent ici.",
+    "details": "Détail de la tâche",
+    "readOnly": "Consultez la démarche et les informations attendues. Les choix et signatures restent effectués par le client dans Wallet.",
+    "current": "Informations actuelles",
+    "required": "Informations à compléter",
+    "requirements": "Étapes attendues",
+    "history": "Historique du client",
+    "noHistory": "Aucune action terminée pour ce profil.",
+    "kinds": {
+      "profile_review": "Données du profil à vérifier",
+      "company_notification": "Informer une compagnie",
+      "authorization": "Autorisation à compléter",
+      "profile_completion": "Profil à compléter"
+    },
+    "states": { "pending": "À faire", "in_progress": "En cours", "complete": "Terminé" },
+    "topics": {
+      "lsa45": "Information LSA45",
+      "procuration": "Procuration",
+      "management_mandate": "Mandat de gestion",
+      "profile_information": "Informations du profil",
+      "address": "Adresse",
+      "identity": "Identité",
+      "contact": "Contact"
+    },
+    "requirementStates": {
+      "missing": "À compléter",
+      "complete": "Complété",
+      "unavailable": "Indisponible"
+    },
+    "recorded": "Enregistré le {{date}}"
+  },
+  "contracts": {
+    "empty": "Aucun contrat pour ce profil",
+    "emptyDescription": "Les contrats apparaissent à partir des documents d’assurance rattachés à ce profil.",
+    "heading": "Contrats du profil",
+    "unknown": "Compagnie non reconnue",
+    "number": "Police {{number}}",
+    "details": "Détail du contrat",
+    "document": "Télécharger l’original",
+    "periodValue": "{{start}} – {{end}}",
+    "states": {
+      "active": "En vigueur",
+      "expired": "Échu",
+      "upcoming": "À venir",
+      "unknown": "État à vérifier"
+    },
+    "frequencies": {
+      "month": "par mois",
+      "quarter": "par trimestre",
+      "half_year": "par semestre",
+      "year": "par an",
+      "once": "unique",
+      "unknown": "périodicité non renseignée"
+    },
+    "companies": {
+      "allianz": "Allianz",
+      "assura": "Assura",
+      "automate": "AutoMate",
+      "axa": "AXA",
+      "baloise": "Baloise",
+      "css": "CSS",
+      "generali": "Generali",
+      "groupe-mutuel": "Groupe Mutuel",
+      "helsana": "Helsana",
+      "liechtenstein-life": "Liechtenstein Life",
+      "tsm": "TSM"
+    },
+    "period": "Période",
+    "premium": "Prime",
+    "missing": "Non renseigné",
+    "source": "Informations issues des documents du profil.",
+    "documents": "Documents contractuels"
+  }
+}

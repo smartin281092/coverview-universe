@@ -137,7 +137,9 @@
           "S-000a-C01..C06 : recette complète depuis checkout vierge 4f04808f2201af5603a54d27fdbbf8a175ba800c passée ; proof roadmap/evidence/S-000a-clean-check.json.",
           "Neuf tests de preview passent aussi dans Linux non-root avec source read-only et réseau désactivé."
         ],
-        "done_unverified": ["CI distante, reset destructif, WorkOS et déploiement non exécutés."],
+        "done_unverified": [
+          "CI distante, reset destructif, WorkOS et déploiement non exécutés."
+        ],
         "assumed": [
           "Français initial et ports réversibles : impact catalogues i18n et configuration locale."
         ]
@@ -506,7 +508,11 @@
         "Les gabarits et contenus ont été repris à la demande de l’utilisateur : voir roadmap/evidence/marketing-redesign.md et ADR-0006. Statut review conservé, collecte commerciale et preuves externes toujours absentes.",
         "Refonte xAI demandée après rejet de la version f8e1e07 : nouveau rendu et limites dans roadmap/evidence/xai-redesign.md. Statut review et dépendance à la collecte persistante conservés.",
         "Correction utilisateur suivante : preset shadcn b38oXC5rf effectivement réappliqué, Geist titres/corps et MONTECH V.02 fourni pour les métadonnées ; composants partagés réutilisés, fond blanc/cards en aplat sans cadre. ADR-0008 et roadmap/evidence/shadcn-typography.md. Statut et limites fonctionnelles conservés.",
-        "Revue 2026-09-08 : S-000b et S-013a sont done ; l’absence ancienne de WorkOS réel et de prochaine slice éligible n’est plus actuelle. Ordre aligné sur execution-policy.md : après S-042a, S-080 puis reste S-011 puis S-012. Statut review conservé ; détails dans roadmap/evidence/roadmap-review-2026-09-08.md."
+        "Revue 2026-09-08 : S-000b et S-013a sont done ; l’absence ancienne de WorkOS réel et de prochaine slice éligible n’est plus actuelle. Ordre aligné sur execution-policy.md : après S-042a, S-080 puis reste S-011 puis S-012. Statut review conservé ; détails dans roadmap/evidence/roadmap-review-2026-09-08.md.",
+        "Extension explicite du 30 septembre 2026 : comparateur public maladie 2027, primes Priminfo importées réellement, carte aux 42 régions et guide de 13 questions. Plan roadmap/plans/health-2027.plan.md et ledger roadmap/evidence/health-2027.md ; prestations/clubs partiellement documentés, aucun déploiement. Cette extension ne clôt ni S-011 ni S-042a.",
+        "Extension autorisée du 1er octobre 2026 : recommandation maladie adaptative WWW/API, catalogue de 138 fiches sur 32 assureurs/153 modèles examinés, 323 contrôles nominatifs et configuration Admin protégée. Plan roadmap/plans/health-adaptive.plan.md ; preuves et limites roadmap/evidence/health-adaptive.md. Aucun modèle entièrement vérifié, aucun déploiement. Ne clôt pas S-011 ni S-042a.",
+        "Extension du 1er octobre 2026 : carte plein écran, primes frontalières 2027 importées (2230 lignes, 14 assureurs, 30 pays), profil et questionnaire ajustés, géolocalisation volontaire. Plan health-map-profile.plan.md et ledger roadmap/evidence/health-map-profile.md ; soins transfrontaliers et avantages hors simulation personnalisée.",
+        "Comparateur maladie : volet liste avec affinage conservé, badges issus du moteur, 32 logos officiels, redistribution environnementale 2027 sourcée et suivi continu de la bulle. Retouche utilisateur livrée localement ; preuves et limites : roadmap/evidence/health-results-panel.md."
       ],
       "cost": "Non disponible ; une session principale et trois sous-tâches bornées."
     },
@@ -676,6 +682,18 @@
           "oracle": "V0/V1/V2 et V3 partiel",
           "observed": "Original conservé et antivirus passé ; premier résultat ai_invalid_result sans diagnostic fin. Diagnostic borné ajouté ; seconde lecture propriétaire réussie, gardes inchangées. Types/build/lint et 10 tests ciblés passent. Assemblage PDF avec originaux joints identiques contrôlé, aucune fixture déposée.",
           "decision": "Reprendre running sur demande utilisateur ; vérifier le nouveau dépôt et la visionneuse dans la preview. Aucune clôture globale C01–C07."
+        },
+        {
+          "target": "Dossiers par profil Admin et portée globale Wallet — 11 septembre",
+          "oracle": "V0/V1/V2 et V3 sans mutation réelle",
+          "observed": "Annuaire, transfert atomique, activités et filtrage global implémentés. Migration0018 locale, six tests transfert, cinq activités, dix assurance/Admin et dix frontend passent ; types/lint/builds/frontières passent. Recette authentifiée annuaire/onglets/dialogues/cartes et filtrage Wallet effectuée. Détails et limites roadmap/evidence/profile-dossiers.md.",
+          "decision": "Extension demandée terminée ; aucune mutation de dossier réel ni clôture globale S-042a. Préserver les critères encore ouverts du plan principal."
+        },
+        {
+          "target": "Signature sans réponse libre et notifications Admin",
+          "oracle": "V0/V1/V2 et V3 sans signature réelle",
+          "observed": "Résolution générique refusée, anciennes demandes sans effet sur le statut, signature complète directement ; notifications persistantes dérivées des preuves. Tests PostgreSQL/HTTP, types/lint/builds/frontières passés ; interface authentifiée sans champ libre et page Notifications vérifiées. Voir roadmap/evidence/signature-notifications.md.",
+          "decision": "Correction terminée sans migration, sans signature de recette réelle ; S-042a globale reste en cours."
         }
       ],
       "ledger": {
@@ -689,7 +707,9 @@
           "Admin utilisateurs/profils/documents ciblés : types, lint, builds, frontières et tests PostgreSQL/HTTP passent ; migration0010 locale et code dans les checkouts de preview. Preuves et limites roadmap/evidence/admin-users.md.",
           "Notice LSA45 autonome : première ouverture persistée par propriétaire/version, coche verte dans Autorisations après rechargement, notice retirée des documents de signature. Migration0011 locale sans reset, 17 tests HTTP/PostgreSQL identity, types/build/lint/frontières et recette réelle mobile/desktop ; preuves et limites dans roadmap/evidence/lsa45-notice.md.",
           "AVS/profession et pièces d’identité par profil : persistance/isolation, migration0012 locale, types/lint/build/frontières et tests ciblés passent. Formulaires segmentés, Validation, passeport une page et pièce commune aux autorisations observés en preview ; preuves et limites dans roadmap/evidence/profile-identity-preview.md.",
-          "Revue de livraison du 9 septembre : contrôles ciblés réussis, téléchargement réel, taille/SHA256 identiques, analyses persistées et suppression physique observée. Bilan consolidé et propositions DOC-13 dans roadmap/evidence/S-042a-ship-2026-09-09.md."
+          "Revue de livraison du 9 septembre : contrôles ciblés réussis, téléchargement réel, taille/SHA256 identiques, analyses persistées et suppression physique observée. Bilan consolidé et propositions DOC-13 dans roadmap/evidence/S-042a-ship-2026-09-09.md.",
+          "Dossiers par profil : annuaire/transfert, onglets/activités Admin et sélection globale Wallet vérifiés en tests isolés et interfaces authentifiées. Migration0018 appliquée sans reset ; preuves et limites roadmap/evidence/profile-dossiers.md.",
+          "Signature directe et notifications Admin : absence de réponse libre, refus serveur même sur ancien cache, signature → complete, notification unique et droits MFA ; roadmap/evidence/signature-notifications.md."
         ],
         "done_unverified": [
           "Extension Admin : recette des données et mutations en navigateur en attente de MFA personnelle ; connexion active constatée mais accès exige toujours vérification. Aucun OCR réel déclaré. Voir roadmap/evidence/admin-users.md.",
@@ -712,10 +732,17 @@
         "Suite préparée dans le bilan de livraison : brouillon S-080, plan existant et session recommandée gpt-6-astra/ultra ; aucun relais démarré ni travail concurrent pendant cette revue incomplète.",
         "Reprise explicitement demandée le 9 septembre après /ship : lecture du passeport et capture de plusieurs photos dans Documents. Plan roadmap/plans/S-042a-document-capture.plan.md ; journal roadmap/evidence/document-capture.md. Nouvelle lecture du passeport réussie sans assouplir les contrôles ; préparation photo/PDF et aperçu en cours de recette.",
         "Extension du 9 septembre : revue simplifiée, adresse groupée, correction distincte de la synchronisation, suivi par compagnie/profil et Centre d’action avec kanban service client Admin. Plan roadmap/plans/S-042a-action-center.plan.md ; vérifications et limites roadmap/evidence/document-action-center.md. Statut running conservé ; aucun envoi externe déduit de la mise en file.",
-        "Deuxième évolution du Centre d’action : regroupement par donnée/profil, page de résolution avec réponses proposées et libres, activité, progression et badge ; Générales à compléter, signatures tracées et archives datées, mandat du profil exact requis pour transmettre. Même plan et ledger ; tests PostgreSQL et quatre builds passent, limites de recette et d’envoi conservées. Aucune clôture globale de S-042a."
+        "Deuxième évolution du Centre d’action : regroupement par donnée/profil, page de résolution avec réponses proposées et libres, activité, progression et badge ; Générales à compléter, signatures tracées et archives datées, mandat du profil exact requis pour transmettre. Même plan et ledger ; tests PostgreSQL et quatre builds passent, limites de recette et d’envoi conservées. Aucune clôture globale de S-042a.",
+        "Extension du 11 septembre : chaque profil possède son entrée Admin et une portée globale Wallet. Un transfert conserve le profil lié sous le compte destination et révoque les consentements historiques sans changer leurs reçus. Les mentions antérieures de l’absence de sélection globale sont historiques. Plan roadmap/plans/S-042a-profile-dossiers.plan.md ; ledger roadmap/evidence/profile-dossiers.md."
       ],
       "session": "GPT-6 ; effort effectif non exposé — revue de livraison du 9 septembre 2026",
       "cost": "Coût de session non disponible ; aucun nouvel appel OpenAI pendant la revue de livraison"
+    },
+    "S-110": {
+      "status": "specified",
+      "notes": [
+        "Extension explicite du 2 octobre 2026 : socle Partner API/Partner/Wallet/Admin implémenté partiellement, brief intégral references/coverview-partner-2026-10-02.md. Plan roadmap/plans/partner-core.plan.md, couverture roadmap/partner-coverage.md et preuves roadmap/evidence/partner-core.md. V0–V2 passent ; V3 limité aux accès non habilités et à Wallet vide/formulaire. Marketplace/économie/continuité/qualité/signature restent ouverts ; aucune clôture de S-110 ni des dépendances antérieures."
+      ]
     }
   },
   "execution": {

@@ -13,6 +13,9 @@ import {
   actionCenterManualReviewsSchema,
   actionCenterManualTransitionInputSchema,
   actionCenterManualReviewSchema,
+  profileScopeQuerySchema,
+  adminUserIdSchema,
+  managedProfileIdSchema,
 } from "@coverview/contracts";
 import type { createActionCenterRepository } from "./document.action-center.repository.js";
 import type { AdminDocumentIdentity } from "./document.admin.routes.js";
@@ -58,9 +61,12 @@ export function registerActionCenterRoutes(
     {
       onRequest: (request) => authorize(request, false, false),
       config: limited,
-      schema: { response: { 200: actionCenterSummarySchema } },
+      schema: {
+        querystring: profileScopeQuerySchema,
+        response: { 200: actionCenterSummarySchema },
+      },
     },
-    async (request) => repository.summary(actor(request).userId),
+    async (request) => repository.summary(actor(request).userId, request.query.profileId),
   );
   app.get(
     "/action-center/history",
@@ -79,9 +85,14 @@ export function registerActionCenterRoutes(
     {
       onRequest: (request) => authorize(request, false, false),
       config: limited,
-      schema: { params, response: { 200: actionCenterDetailsSchema } },
+      schema: {
+        params,
+        querystring: profileScopeQuerySchema,
+        response: { 200: actionCenterDetailsSchema },
+      },
     },
-    async (request) => repository.details(actor(request).userId, request.params.id),
+    async (request) =>
+      repository.details(actor(request).userId, request.params.id, request.query.profileId),
   );
   app.post(
     "/action-center/:id/resolve",
@@ -96,6 +107,69 @@ export function registerActionCenterRoutes(
     },
     async (request) =>
       repository.resolve(actor(request), request.params.id, request.body, key(request)),
+  );
+  const clientParams = z
+    .object({ userId: adminUserIdSchema, profileId: managedProfileIdSchema })
+    .strict();
+  const clientBase = "/admin/users/:userId/profiles/:profileId/action-center";
+  const readClient = async (request: FastifyRequest) => {
+    await authorize(request, true, false);
+    const target = clientParams
+      .extend({ id: actionCenterIdSchema.optional() })
+      .parse(request.params);
+    await identity.auditAdministratorAccess(
+      request,
+      target.userId,
+      target.profileId,
+      "client_actions.read",
+    );
+  };
+  app.get(
+    clientBase,
+    {
+      onRequest: readClient,
+      config: limited,
+      schema: {
+        params: clientParams,
+        querystring: actionCenterQuerySchema.omit({ profileId: true }),
+        response: { 200: actionCenterListSchema },
+      },
+    },
+    async (request) =>
+      repository.list(request.params.userId, {
+        ...request.query,
+        profileId: request.params.profileId,
+      }),
+  );
+  app.get(
+    `${clientBase}/history`,
+    {
+      onRequest: readClient,
+      config: limited,
+      schema: {
+        params: clientParams,
+        querystring: actionCenterQuerySchema.omit({ profileId: true }),
+        response: { 200: actionCenterHistorySchema },
+      },
+    },
+    async (request) =>
+      repository.history(request.params.userId, {
+        ...request.query,
+        profileId: request.params.profileId,
+      }),
+  );
+  app.get(
+    `${clientBase}/:id`,
+    {
+      onRequest: readClient,
+      config: limited,
+      schema: {
+        params: clientParams.extend({ id: actionCenterIdSchema }),
+        response: { 200: actionCenterDetailsSchema },
+      },
+    },
+    async (request) =>
+      repository.details(request.params.userId, request.params.id, request.params.profileId),
   );
   app.get(
     "/admin/action-reviews",

@@ -5,6 +5,10 @@ import {
   lazyRouteComponent,
   redirect,
 } from "@tanstack/react-router";
+import {
+  parseWalletProfileScope,
+  retainWalletProfileScope,
+} from "./features/profile/wallet-profile-scope";
 import { AppShell } from "./AppShell";
 import { HomePage } from "./pages/HomePage";
 import { DiagnosticsPage } from "./pages/DiagnosticsPage";
@@ -19,7 +23,15 @@ import { AuthorizationDetailsPage } from "./pages/AuthorizationDetailsPage";
 import { RequestsPage } from "./pages/RequestsPage";
 import { InsuranceCompanyPage } from "./pages/InsuranceCompanyPage";
 
-const rootRoute = createRootRoute({ component: AppShell, notFoundComponent: MissingPage });
+const rootRoute = createRootRoute({
+  component: AppShell,
+  notFoundComponent: MissingPage,
+  validateSearch: (search: Record<string, unknown>): { profile?: string } => {
+    const profile = parseWalletProfileScope(search.profile);
+    return profile ? { profile } : {};
+  },
+  search: { middlewares: [({ search, next }) => retainWalletProfileScope(search, next(search))] },
+});
 const documentsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/documents",
@@ -30,6 +42,14 @@ const requestsRoute = createRoute({
   path: "/requests",
   component: RequestsPage,
 });
+const offersRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/offers",
+  validateSearch: (search: Record<string, unknown>): {lead?: string} => typeof search.lead === "string" && /^lead_[0-9a-f-]{36}$/.test(search.lead) ? {lead: search.lead} : {},
+  component: lazyRouteComponent(() => import("./pages/OffersPage"), "OffersPage"),
+});
+const insuranceRequestsRoute = createRoute({ getParentRoute: () => rootRoute, path: "/insurance-requests", component: lazyRouteComponent(() => import("./pages/InsuranceRequestsPage"), "InsuranceRequestsPage") });
+const insuranceRequestRoute = createRoute({ getParentRoute: () => rootRoute, path: "/insurance-requests/$requestId", component: lazyRouteComponent(() => import("./pages/InsuranceRequestsPage"), "InsuranceRequestsPage") });
 const actionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/actions",
@@ -160,6 +180,8 @@ const diagnosticsRoute = createRoute({
 export const router = createRouter({
   routeTree: rootRoute.addChildren([
     homeRoute,
+    insuranceRequestsRoute,
+    insuranceRequestRoute,
     diagnosticsRoute,
     previewRoute,
     statesRoute,
@@ -170,6 +192,7 @@ export const router = createRouter({
     profileRoute,
     documentsRoute,
     requestsRoute,
+    offersRoute,
     actionsRoute,
     actionRoute,
     documentRoute,

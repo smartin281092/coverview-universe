@@ -1,4 +1,5 @@
 import cookie from "@fastify/cookie";
+import type { IncomingHttpHeaders } from "node:http";
 import rateLimit from "@fastify/rate-limit";
 import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
@@ -86,7 +87,7 @@ export async function registerIdentity(
     const current = token(request);
     if (
       !origin ||
-      ![config.AUTH_WALLET_ORIGIN, config.AUTH_ADMIN_ORIGIN, config.AUTH_WWW_ORIGIN].includes(
+      ![config.AUTH_WALLET_ORIGIN, config.AUTH_ADMIN_ORIGIN, config.AUTH_WWW_ORIGIN, config.AUTH_PARTNER_ORIGIN].includes(
         origin,
       ) ||
       !current ||
@@ -115,7 +116,7 @@ export async function registerIdentity(
       schema: {
         querystring: z
           .object({
-            surface: z.enum(["wallet", "admin", "www"]),
+            surface: z.enum(["wallet", "admin", "www", "partners"]),
             reauthenticate: z.literal("true").optional(),
             continuation: z.literal("profile").optional(),
           })
@@ -416,6 +417,37 @@ export async function registerIdentity(
   });
   const administrators = new WeakMap<FastifyRequest, IdentitySession>();
   const identity = {
+    startEmail: (email: string) => requiredService().startEmail(email),
+    verifyEmail: async (
+      request: FastifyRequest,
+      reply: FastifyReply,
+      email: string,
+      code: string,
+      startedAt: Date,
+    ) => {
+      const result = await requiredService().verifyEmail(
+        email,
+        code,
+        startedAt,
+        request.headers["user-agent"] ?? "Browser",
+        request.id,
+      );
+      setSession(reply, result.token, result.session.expiresAt);
+      return result.session;
+    },
+    authenticateRealtime: async (headers: IncomingHttpHeaders, csrf: string, remote = false) => {
+      if (
+        headers.host !== new URL(config.AUTH_API_ORIGIN).host ||
+        headers.origin !== config.AUTH_WALLET_ORIGIN
+      )
+        throw new IdentityError("IDENTITY_ACCESS_DENIED", 403);
+      const auth = requiredService();
+      const current = app.parseCookie(headers.cookie ?? "")[sessionName];
+      if (!current) throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);
+      if (!matchesSecret(csrf, auth.csrf(current)))
+        throw new IdentityError("IDENTITY_CSRF_INVALID", 403);
+      return remote ? auth.authenticate(current) : auth.realtimeSession(current);
+    },
     authenticate: (request: FastifyRequest) => requiredService().authenticate(token(request)),
     authenticateAdministrator: async (request: FastifyRequest) => {
       checkHost(request);

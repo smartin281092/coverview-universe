@@ -1,0 +1,157 @@
+/* Couronne de cartes verticales : perspective réelle et opacité selon la profondeur. */
+.hero-scene.brand-wheel-scene {
+  --wheel-scale: 0.5;
+  height: 455px;
+  perspective: 1150px;
+  perspective-origin: 50% 45%;
+}
+.brand-wheel-stage {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform: rotateZ(-19deg) rotateX(-35deg)
+    scale3d(var(--wheel-scale), var(--wheel-scale), var(--wheel-scale));
+  transform-style: preserve-3d;
+}
+.brand-wheel-rotor {
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.brand-wheel-card {
+  position: absolute;
+  left: -80px;
+  top: -74px;
+  width: 160px;
+  height: 148px;
+  transform: rotateY(var(--angle)) translateZ(436px);
+  transform-style: preserve-3d;
+}
+.brand-wheel-face {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 17px;
+  border: 1px solid #e6e6ec;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #fff 35%, #f5f5f8);
+  box-shadow:
+    0 3px 5px #161c2d08,
+    0 14px 30px #2634510b;
+  backface-visibility: visible;
+  will-change: opacity;
+}
+.brand-wheel-face img {
+  display: block;
+  width: 100%;
+  height: 72px;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.brand-wheel-logo {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-width: 0;
+  gap: 7px;
+}
+.brand-wheel-logo > span {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.15;
+  text-align: center;
+  color: #171920;
+}
+.brand-wheel-swissquote .brand-wheel-logo {
+  display: flex;
+  gap: 6px;
+}
+.brand-wheel-swissquote .brand-wheel-logo-icon {
+  width: 25px;
+  height: 25px;
+  flex: 0 0 25px;
+}
+.brand-wheel-swissquote img:last-child {
+  width: calc(100% - 31px);
+}
+.brand-wheel-liechtenstein-life img {
+  width: 56px;
+  height: 56px;
+}
+.brand-wheel-pax {
+  background: #17372d;
+  border-color: #17372d;
+}
+.brand-wheel-mobiliere {
+  background: #e30613;
+  border-color: #e30613;
+}
+.brand-wheel-swisslife {
+  background: #fff;
+}
+.brand-wheel-swisslife img,
+.brand-wheel-zurich img,
+.brand-wheel-retraites-populaires img {
+  height: 95px;
+}
+.brand-wheel-axa img {
+  width: 70px;
+}
+.brand-wheel-generali {
+  background: linear-gradient(140deg, #d92a37, #bd1124);
+  border-color: #c4182a;
+}
+.brand-wheel-generali img {
+  height: 90px;
+  width: 78px;
+}
+.brand-wheel-shadow {
+  position: absolute;
+  top: 77%;
+  left: 14%;
+  width: 76%;
+  height: 56px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, #39335419, transparent 70%);
+  filter: blur(13px);
+  transform: rotate(-10deg);
+}
+@media (max-width: 1150px) {
+  .hero-scene.brand-wheel-scene {
+    --wheel-scale: 0.42;
+    height: 395px;
+  }
+}
+@media (max-width: 900px) and (min-width: 681px) {
+  .hero-scene.brand-wheel-scene {
+    --wheel-scale: 0.31;
+    height: 340px;
+  }
+}
+@media (max-width: 680px) {
+  .hero-scene.brand-wheel-scene {
+    --wheel-scale: 0.43;
+    height: 310px;
+    margin-block: 0;
+  }
+  .brand-wheel-shadow {
+    top: 82%;
+  }
+}
+@media (max-width: 460px) {
+  .hero-scene.brand-wheel-scene {
+    --wheel-scale: 0.34;
+    height: 275px;
+  }
+}
+@media (max-width: 370px) {
+  .hero-scene.brand-wheel-scene {
+    --wheel-scale: 0.27;
+    height: 235px;
+  }
+}

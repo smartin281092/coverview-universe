@@ -1,0 +1,11 @@
+---
+interface Props { text: string }
+const { text } = Astro.props;
+const lineBreak = text.indexOf('\n');
+const sentenceBreak = /[.!?] /.exec(text);
+const split = lineBreak >= 0 ? lineBreak : sentenceBreak ? sentenceBreak.index + 1 : -1;
+const first = split >= 0 ? text.slice(0, split) : text;
+const rest = split >= 0 ? text.slice(split + 1) : '';
+const separator = lineBreak >= 0 ? '\n' : ' ';
+---
+{first}{rest && <>{separator}<span class="lp-heading-muted">{rest}</span></>}

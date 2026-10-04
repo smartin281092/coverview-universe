@@ -1,0 +1,28 @@
+---
+import TitleText from './TitleText.astro';
+import { landing } from '../../content/fr/landing';
+import { formatNumber, purchasingPower } from './calculations';
+const c = landing.inflation;
+const initial = purchasingPower(300000,30,.04);
+---
+<section class="lp-section lp-inflation" id="inflation" data-inflation>
+  <div class="lp-container inflation-layout">
+    <div class="inflation-copy" data-reveal><p class="lp-eyebrow">{c.eyebrow}</p><h2><TitleText text={c.title}/></h2><p class="lp-description">{c.description}</p><p class="inflation-detail">{c.detail}</p><button class="lp-text-link" data-open-dialog="start-analysis">{c.cta}<span aria-hidden="true">↗</span></button></div>
+    <div class="inflation-panel" data-reveal>
+      <div class="inflation-result"><p class="lp-eyebrow">{c.result}</p><p class="inflation-big"><span data-result="power" data-count={initial}>{formatNumber(initial)}</span><span>CHF</span></p><span class="inflation-loss"><span data-result="loss">69</span> % {c.loss}</span></div>
+      <div class="inflation-bars" aria-hidden="true">
+        <div class="capital-bars">{Array.from({length:26}, (_,i)=><span style={`--i:${i};--height:${60+i*2.8}px`}></span>)}</div>
+        <div class="power-mask" style="--power:30.83%" data-power-mask><div class="power-bars">{Array.from({length:26}, (_,i)=><span style={`--i:${i};--height:${60+i*2.8}px`}></span>)}</div></div>
+      </div>
+      <div class="inflation-labels"><span>{c.purchasing}</span><span>{c.future}</span></div>
+      <div class="inflation-fields">
+        <div><label for="inflation-capital">{c.capital}</label><div class="light-field"><input id="inflation-capital" type="number" min="0" max="5000000" step="10000" value="300000" data-input="capital" /><span>CHF</span></div></div>
+        <div><label for="inflation-years">{c.duration}</label><div class="light-field"><input id="inflation-years" type="number" min="1" max="50" step="1" value="30" data-input="years" /><span>{c.years}</span></div></div>
+      </div>
+      <div class="inflation-rate"><label for="inflation-rate">{c.rate}</label><div><input id="inflation-rate" type="number" min="0" max="6" step="0.1" value="4" data-input="inflation" /><span>%</span></div></div>
+      <input aria-label={c.rate} type="range" min="0" max="6" step="0.1" value="4" data-input="inflation" />
+      <div class="range-bounds" aria-hidden="true"><span>0 %</span><span>6 %</span></div>
+      <p class="inflation-note">{c.note}</p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,15 @@
+{
+  "title": "Notifications",
+  "description": "Les procurations et mandats signés reçus, du plus récent au plus ancien.",
+  "loading": "Chargement des notifications…",
+  "empty": "Aucun document signé reçu",
+  "emptyDescription": "Une notification apparaîtra ici dès qu’un client signera une procuration ou un mandat.",
+  "procuration": "Nouvelle procuration signée reçue",
+  "mandate": "Nouveau mandat de gestion signé reçu",
+  "account": "Compte : {{email}}",
+  "revoked": "Autorisation révoquée depuis sa réception",
+  "open": "Ouvrir le dossier client",
+  "pagination": "Pages de notifications",
+  "latest": "Les plus récentes",
+  "older": "Plus anciennes"
+}

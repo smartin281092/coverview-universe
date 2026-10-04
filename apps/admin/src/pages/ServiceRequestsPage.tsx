@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { CheckCircle2, RefreshCw } from "lucide-react";
@@ -140,6 +140,7 @@ function ServiceRequests({ identity, blocked }: { identity: IdentityMe; blocked:
         <h1 className="cv-app-heading">{t("title")}</h1>
         <p className="max-w-2xl text-muted-foreground">{t("description")}</p>
       </header>
+      <Button asChild variant="outline"><Link to="/insurance-requests">{t("insuranceOffers")}</Link></Button>
       <Tabs
         value={tab}
         onValueChange={(value) => {

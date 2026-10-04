@@ -70,7 +70,9 @@ export const environmentSchema = z
     AUTH_WALLET_ORIGIN: httpUrl.default("http://127.0.0.1:4101"),
     AUTH_ADMIN_ORIGIN: httpUrl.default("http://127.0.0.1:4102"),
     AUTH_WWW_ORIGIN: httpUrl.default("http://127.0.0.1:4103"),
+    AUTH_PARTNER_ORIGIN: httpUrl.optional(),
     AUTH_SESSION_TTL_SECONDS: z.coerce.number().int().min(60).max(86400).default(28800),
+    AUTH_ADMIN_SESSION_TTL_SECONDS: z.coerce.number().int().min(60).max(86400).default(86400),
     WORKOS_TIMEOUT_MS: z.coerce.number().int().min(100).max(5000).default(3000),
   })
   .superRefine((config, context) => {
@@ -123,6 +125,15 @@ export const environmentSchema = z
         }
       }
       // Local cookies are host-only: mixing localhost and 127.0.0.1 loses the shared session.
+      if (config.AUTH_PARTNER_ORIGIN) {
+        const origin = new URL(config.AUTH_PARTNER_ORIGIN);
+        if (origin.origin !== config.AUTH_PARTNER_ORIGIN ||
+          (origin.protocol !== "https:" && !(isLocal && isLoopback(origin.hostname))) ||
+          !config.CORS_ORIGINS.includes(config.AUTH_PARTNER_ORIGIN) ||
+          (isLocal && origin.hostname !== new URL(config.AUTH_API_ORIGIN).hostname)) {
+          context.addIssue({code: "custom", path: ["AUTH_PARTNER_ORIGIN"], message: "Partner requires an exact permitted origin on the authentication host"});
+        }
+      }
       if (
         isLocal &&
         [config.AUTH_WALLET_ORIGIN, config.AUTH_ADMIN_ORIGIN, config.AUTH_WWW_ORIGIN].some(

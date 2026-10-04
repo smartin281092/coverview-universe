@@ -42,3 +42,15 @@ Extension autorisée le 7 septembre : onglet « Autorisations », sélection mul
 Lint/typage/build ciblés ; recherche/tri/pagination et isolation du propriétaire vérifiés sur PostgreSQL réel sans modifier les pièces de l’utilisateur ; navigation et rendu réel Wallet sur ordinateur et smartphone. Un traitement documentaire ne prouve ni un droit de récupération ni une capacité de gestion d’assurance.
 
 Règles : G-02/G-06/G-12/G-13/G-14, DATA-06/07, FRONT-14, LLM-04/08. Aucun secret, droits nouveaux, fichier utilisateur effacé ou transmission à un prestataire de signature non défini. Modules concernés : document-intelligence, contrats/client API, Wallet ; périmètre signatures à compléter après réponse.
+
+## Cartes d’action — 16 septembre 2026
+
+Demande autorisée : remplacer les titres redondants par « Question sur le profil de … », cartes de hauteur commune, glissement horizontal et commandes précédent/suivant avec la même animation, cartes voisines visibles, boucle première/dernière. Réutiliser GSAP, préserver le défilement vertical, les champs interactifs, la réduction des animations et la confirmation avant abandon d’une réponse. Le geste ne résout aucune action. Navigation circulaire calculée par le serveur dans le profil privé déjà filtré ; aucun changement de permission ni stockage. Oracles : lint/types/build ciblés, test PostgreSQL de boucle et isolation, navigation/brouillon/rendu dans le Wallet réel sans envoyer de réponse de test. Travail ciblé dans le checkout actif D:/Projects/coverview-astra en préservant ses modifications préexistantes.
+
+## Navigation continue et WebSocket — 16 septembre 2026
+
+Mandat explicite : supprimer les flashs de changement d’action, cache privé en mémoire et préchargement des voisines via WebSocket. Vue/carrousel persistants lors des changements d’URL, ancienne carte visible jusqu’à disponibilité de la suivante, TanStack Query limité à la session et au profil. Gateway Socket.IO de lecture uniquement, contrats versionnés, cookie/Origin/CSRF contrôlés, session relue avant lecture et réponse, reconnexion/resynchronisation HTTP et limites de volume. Aucun déplacement ne soumet de réponse. Ajouter Socket.IO officiel côté serveur et client API, déjà imposé par la stack ; aucune alternative existante. Vérifier transport réel, refus session/origine/CSRF/ressource étrangère, annulation et cache, garde de brouillon et animation réelle sans requête de document HTML.
+
+Validation navigation continue : 32 tests ciblés réussis, typecheck/build API et Wallet, lint ciblé, dependency-cruiser et audit production sans vulnérabilité. Navigation, boucle et garde de brouillon vérifiées dans la preview active ; détails et limites dans roadmap/evidence/action-carousel.md.
+
+Contexte des cartes : demande du 16 septembre, déplacer documents et compagnies sous le carrousel en deux sections distinctes. Fondu GSAP en opacité synchronisé au départ/arrivée, réduction du mouvement respectée, pagination des sources propre à chaque action. Vérification ciblée lint/types/build et navigateur, aucun changement de données ni API.

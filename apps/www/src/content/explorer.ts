@@ -1,6 +1,7 @@
 import { acquisition as copy, journeys, plannedPages } from "./fr/acquisition";
 import { content } from "./fr/interface";
 import { readableEditorialPaths } from "./editorial";
+import { healthCopy } from "./fr/health-insurance";
 
 const status = (slug: string) =>
   readableEditorialPaths.has(slug) && !["contact", "retire", "miles"].includes(slug)
@@ -16,11 +17,13 @@ export const explorerGroups = [
       { href: "/overview", label: copy.overview, status: copy.readable },
       { href: "/methode", label: copy.method, status: copy.readable },
       { href: "/sebastien-martin", label: copy.founder, status: copy.readable },
-      ...plannedPages.filter((page) => page.group === "understand").map((page) => ({
-        href: `/${page.slug}`,
-        label: page.label,
-        status: status(page.slug),
-      })),
+      ...plannedPages
+        .filter((page) => page.group === "understand")
+        .map((page) => ({
+          href: `/${page.slug}`,
+          label: page.label,
+          status: status(page.slug),
+        })),
       ...copy.editorialLinks.map((link) => ({ ...link, status: copy.readable })),
     ],
   },
@@ -28,12 +31,21 @@ export const explorerGroups = [
     ...copy.explorer.sections.tools,
     label: copy.explorer.tools,
     links: [
-      ...journeys.map((page) => ({ href: `/${page.slug}`, label: page.label, status: copy.coming })),
-      ...plannedPages.filter((page) => page.group === "tools").map((page) => ({
-        href: `/${page.slug}`,
-        label: page.label,
-        status: copy.coming,
-      })),
+      { href: "/#simuler", label: copy.savingsTool, status: copy.freeTool },
+      { href: "/#inflation", label: copy.inflationTool, status: copy.freeTool },
+      {
+        href: "/comparateur-assurance-maladie-2027",
+        label: `${healthCopy.toolName} 2027`,
+        status: copy.freeTool,
+      },
+      ...journeys.map((page) => ({ href: `/${page.slug}`, label: page.label, status: copy.guide })),
+      ...plannedPages
+        .filter((page) => page.group === "tools")
+        .map((page) => ({
+          href: `/${page.slug}`,
+          label: page.label,
+          status: copy.coming,
+        })),
     ],
   },
   {
@@ -41,11 +53,13 @@ export const explorerGroups = [
     label: copy.explorer.spaces,
     links: [
       { href: "/account", label: copy.explorer.wallet, status: copy.explorer.accountStatus },
-      ...plannedPages.filter((page) => page.group === "spaces").map((page) => ({
-        href: `/${page.slug}`,
-        label: page.label,
-        status: copy.coming,
-      })),
+      ...plannedPages
+        .filter((page) => page.group === "spaces")
+        .map((page) => ({
+          href: `/${page.slug}`,
+          label: page.label,
+          status: copy.coming,
+        })),
     ],
   },
 ];

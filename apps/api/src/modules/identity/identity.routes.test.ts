@@ -39,6 +39,7 @@ let isUnavailable: boolean;
 let isMfaValid: boolean;
 let mfaChecks: number;
 let remoteClockOffset: number;
+let remoteSessionLifetime: number;
 const host = "127.0.0.1:4100";
 const origin = "http://127.0.0.1:4101";
 
@@ -65,6 +66,7 @@ beforeEach(async () => {
   isMfaValid = true;
   mfaChecks = 0;
   remoteClockOffset = 0;
+  remoteSessionLifetime = 3600_000;
   const provider: IdentityProvider = {
     // Existing route cases do not exercise credential enrollment.
     factors: () => Promise.reject(new Error("Enrollment is outside these existing cases")),
@@ -87,7 +89,7 @@ beforeEach(async () => {
         status: "active",
         authMethod: "magic_code",
         createdAt: new Date(Date.now() + remoteClockOffset).toISOString(),
-        expiresAt: new Date(Date.now() + 3600_000).toISOString(),
+        expiresAt: new Date(Date.now() + remoteSessionLifetime).toISOString(),
       };
       remotes.push(remote);
       return Promise.resolve({
@@ -176,6 +178,34 @@ async function login(identity = `user_${randomUUID()}`, surface = "wallet") {
   return { cookie, fullCookie, body, identity, callback };
 }
 type Login = Awaited<ReturnType<typeof login>>;
+
+it("gives new Admin logins 24 hours, keeps Wallet at eight hours and respects WorkOS expiry", async () => {
+  remoteSessionLifetime = 48 * 3600_000;
+  for (const [surface, expectedHours] of [
+    ["admin", 24],
+    ["wallet", 8],
+  ] as const) {
+    const before = Date.now();
+    const session = await login(undefined, surface);
+    const [row] = await database.db
+      .select()
+      .from(identitySessions)
+      .where(eq(identitySessions.id, session.body.session.id));
+    expect(row!.expiresAt.getTime()).toBeGreaterThanOrEqual(before + expectedHours * 3600_000);
+    expect(row!.expiresAt.getTime()).toBeLessThanOrEqual(Date.now() + expectedHours * 3600_000);
+    expect((await request("/identity/admin", session.cookie)).statusCode).toBe(403);
+  }
+  remoteSessionLifetime = 3600_000;
+  const capped = await login(undefined, "admin");
+  const [row] = await database.db
+    .select()
+    .from(identitySessions)
+    .where(eq(identitySessions.id, capped.body.session.id));
+  expect(row!.expiresAt.toISOString()).toBe(
+    remotes.find((remote) => remote.userId === capped.identity)!.expiresAt,
+  );
+});
+
 function mutation(
   url: string,
   session: Login,
@@ -204,6 +234,8 @@ describe("identity HTTP with real PostgreSQL and an explicit WorkOS double", () 
     const stranger = await login();
     const base = `/admin/users/${owner.body.user.id}`;
     expect((await request("/admin/users")).statusCode).toBe(401);
+    expect((await request("/admin/notifications")).statusCode).toBe(401);
+    expect((await request("/admin/notifications", owner.cookie)).statusCode).toBe(403);
     expect((await request(base, owner.cookie)).statusCode).toBe(403);
     expect((await request(`${base}/profile`, admin.cookie)).statusCode).toBe(403);
     expect(
@@ -219,6 +251,9 @@ describe("identity HTTP with real PostgreSQL and an explicit WorkOS double", () 
     expect((await request("/admin/users", admin.cookie)).json()).toMatchObject({
       error: { code: "IDENTITY_MFA_REQUIRED" },
     });
+    expect((await request("/admin/notifications", admin.cookie)).json()).toMatchObject({
+      error: { code: "IDENTITY_MFA_REQUIRED" },
+    });
     await database.db
       .update(identitySessions)
       .set({ mfaVerifiedAt: new Date() })
@@ -228,6 +263,12 @@ describe("identity HTTP with real PostgreSQL and an explicit WorkOS double", () 
       admin.cookie,
     );
     expect(listing.statusCode, listing.body).toBe(200);
+    const notifications = await request("/admin/notifications", admin.cookie);
+    expect(notifications.statusCode, notifications.body).toBe(200);
+    expect(notifications.json()).toEqual({ notifications: [], nextCursor: null });
+    expect((await request("/admin/notifications?cursor=invalid", admin.cookie)).statusCode).toBe(
+      400,
+    );
     expect(adminUsersSchema.parse(listing.json()).users).toMatchObject([
       { id: owner.body.user.id },
     ]);
@@ -236,7 +277,20 @@ describe("identity HTTP with real PostgreSQL and an explicit WorkOS double", () 
     const input = {
       revision: profile.revision,
       step: "information",
-      fields: { firstName: "Edited by administrator" },
+      fields: {
+        firstName: "Edited by administrator",
+        lastName: "Test",
+        birthDate: "1990-02-03",
+        nationality: "CHE",
+        avsNumber: "756.0000.0000.02",
+        occupation: "Testeur",
+        street: "Rue de test 1",
+        postalCode: "1000",
+        city: "Lausanne",
+        country: "Suisse",
+        phone: "+41 79 000 00 00",
+        contactEmail: "profile@isolated.test",
+      },
     };
     expect(
       (await mutation(`${base}/profile`, admin, input, { "x-csrf-token": "invalid" })).statusCode,
@@ -255,6 +309,27 @@ describe("identity HTTP with real PostgreSQL and an explicit WorkOS double", () 
       profileSchema.parse((await request("/identity/profile", owner.cookie)).json()).fields
         .firstName?.value,
     ).toBe("Edited by administrator");
+    const walletProfile = profileSchema.parse(
+      (await request("/identity/profile", owner.cookie)).json(),
+    );
+    expect(
+      Object.fromEntries(
+        Object.entries(walletProfile.fields).map(([name, field]) => [name, field.value]),
+      ),
+    ).toEqual(input.fields);
+    expect(profileSchema.parse((await request(`${base}/profile`, admin.cookie)).json())).toEqual(
+      walletProfile,
+    );
+    const clearedAvs = await mutation(`${base}/profile`, admin, {
+      revision: walletProfile.revision,
+      step: "information",
+      fields: { avsNumber: null },
+    });
+    expect(clearedAvs.statusCode).toBe(200);
+    expect(
+      profileSchema.parse((await request("/identity/profile", owner.cookie)).json()).fields
+        .avsNumber,
+    ).toBeUndefined();
     expect(
       profileSchema.parse((await request("/identity/profile", admin.cookie)).json()).fields
         .firstName,
@@ -295,6 +370,7 @@ describe("identity HTTP with real PostgreSQL and an explicit WorkOS double", () 
       .set({ revokedAt: new Date() })
       .where(eq(identityAdminPermissions.userId, admin.body.user.id));
     expect((await request(base, admin.cookie)).statusCode).toBe(403);
+    expect((await request("/admin/notifications", admin.cookie)).statusCode).toBe(403);
     expect((await mutation(section, admin, values, { "idempotency-key": key })).statusCode).toBe(
       403,
     );

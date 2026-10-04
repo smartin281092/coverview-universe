@@ -11,6 +11,7 @@ import { AdminFailure } from "../features/users/AdminFailure";
 
 function Users({ identity, blocked }: { identity: IdentityMe; blocked: boolean }) {
   const { t, i18n } = useTranslation("users");
+  const { t: transferText } = useTranslation("profileTransfer");
   const location = useLocation();
   const navigate = useNavigate();
   const params = new URLSearchParams(location.searchStr);
@@ -20,12 +21,16 @@ function Users({ identity, blocked }: { identity: IdentityMe; blocked: boolean }
   const users = useQuery({
     queryKey: ["private", identity.user.id, identity.session.id, "admin-users", q, cursor],
     queryFn: ({ signal }) =>
-      api.adminUsers({ ...(q ? { q } : {}), ...(cursor ? { cursor } : {}), limit: 20 }, { signal }),
+      api.adminProfileDirectory(
+        { ...(q ? { q } : {}), ...(cursor ? { cursor } : {}), limit: 20 },
+        { signal },
+      ),
     enabled: !blocked,
     staleTime: 0,
     gcTime: 0,
     retry: false,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
+    refetchInterval: (query) => (query.state.status === "error" ? false : 15000),
   });
   const date = new Intl.DateTimeFormat(i18n.language, { dateStyle: "medium" });
   return (
@@ -33,7 +38,7 @@ function Users({ identity, blocked }: { identity: IdentityMe; blocked: boolean }
       <header className="space-y-3">
         <p className="cv-meta text-muted-foreground">{t("eyebrow")}</p>
         <h1 className="cv-app-heading">{t("title")}</h1>
-        <p className="max-w-2xl text-muted-foreground">{t("description")}</p>
+        <p className="max-w-2xl text-muted-foreground">{transferText("directoryDescription")}</p>
       </header>
       <form
         role="search"
@@ -65,29 +70,39 @@ function Users({ identity, blocked }: { identity: IdentityMe; blocked: boolean }
         <AdminFailure error={users.error} onRetry={() => void users.refetch()} />
       ) : users.isPending ? (
         <LoadingState label={t("loading")} />
-      ) : users.data.users.length === 0 ? (
+      ) : users.data.profiles.length === 0 ? (
         <EmptyState
           title={t("empty.title")}
           description={t(q ? "empty.search" : "empty.description")}
         />
       ) : (
         <ul className="divide-y divide-border" aria-label={t("title")}>
-          {users.data.users.map((user) => (
-            <li key={user.id}>
+          {users.data.profiles.map((profile) => (
+            <li key={`${profile.userId}:${profile.profileId}`}>
               <Link
                 to="/users/$userId"
-                params={{ userId: user.id }}
+                params={{ userId: profile.userId }}
+                search={{ profile: profile.profileId }}
                 className="group flex min-h-20 items-center gap-4 rounded-lg px-3 py-4 transition-colors hover:bg-muted/50 motion-reduce:transition-none"
               >
                 <UserRound className="size-5 shrink-0 text-muted-foreground" aria-hidden="true" />
                 <span className="min-w-0 flex-1 space-y-1">
-                  <span className="block truncate font-medium">
-                    {user.displayName || user.email}
+                  <span className="block truncate font-medium">{profile.displayName}</span>
+                  <span className="block truncate text-sm text-muted-foreground">
+                    {transferText("account", { email: profile.accountEmail })}
                   </span>
-                  <span className="block truncate text-sm text-muted-foreground">{user.email}</span>
+                  <span className="block text-xs text-muted-foreground">
+                    {transferText(
+                      profile.isSelf
+                        ? "holder"
+                        : profile.kind === "legal_entity"
+                          ? "entity"
+                          : "person",
+                    )}
+                  </span>
                 </span>
                 <span className="hidden text-xs text-muted-foreground sm:block">
-                  {t("created", { date: date.format(new Date(user.createdAt)) })}
+                  {t("created", { date: date.format(new Date(profile.createdAt)) })}
                 </span>
                 <ArrowRight className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />
               </Link>

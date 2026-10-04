@@ -11,6 +11,7 @@ import { DocumentProcessingIndicator } from "../documents/DocumentProcessingIndi
 import { DocumentProgress } from "../documents/DocumentProgress";
 import { IdentityAttachmentPicker } from "./IdentityAttachmentPicker";
 import { IdentityDocumentPreview } from "../documents/IdentityDocumentPreview";
+import { DocumentThumbnails } from "../documents/DocumentThumbnails";
 
 export function IdentityAttachment({
   identity,
@@ -26,13 +27,11 @@ export function IdentityAttachment({
   onChanged?: () => void;
 }) {
   const { t } = useTranslation("authorizations");
-  const piece = (key: string) =>
-    t(`identityPiece.${key}`, company ? { context: "company" } : {});
+  const piece = (key: string) => t(`identityPiece.${key}`, company ? { context: "company" } : {});
   const AttachmentIcon = company ? FileText : IdCard;
-  const { t: td } = useTranslation("documents");
   const client = useQueryClient();
   const [open, setOpen] = useState(false);
-  const [previewOpen, setPreviewOpen] = useState(false);
+  const [preview, setPreview] = useState<{ documentId: string; page: number } | null>(null);
   const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null);
   const queryKey = [
     "private",
@@ -48,6 +47,7 @@ export function IdentityAttachment({
     gcTime: 0,
     staleTime: 0,
     retry: false,
+    refetchOnWindowFocus: true,
     refetchInterval: (query) => {
       if (query.state.status === "error") return false;
       const value = query.state.data;
@@ -55,12 +55,12 @@ export function IdentityAttachment({
         (document) => document && ["queued", "scanning", "reading"].includes(document.state),
       )
         ? 5000
-        : false;
+        : 15_000;
     },
   });
   useEffect(() => {
     if (blocked) {
-      setPreviewOpen(false);
+      setPreview(null);
     }
   }, [blocked]);
   const value = query.data;
@@ -153,37 +153,17 @@ export function IdentityAttachment({
             )}
             {piece(`status.${query.data.status}`)}
           </p>
-          {entries.length > 0 && !company && (
-            <p className="text-sm text-muted-foreground">
-              {t(`identityPiece.types.${query.data.documentType}`)}
-            </p>
-          )}
-          {entries.length > 0 && (
-            <ul className="grid gap-3 sm:grid-cols-2">
-              {entries.map(({ side, document }) =>
-                document ? (
-                  <li key={side} className="min-w-0 space-y-1 text-sm">
-                    <p className="text-xs font-medium text-muted-foreground">
-                      {company
-                        ? piece("document")
-                        : t(
-                            query.data.documentType === "passport" && side !== "back"
-                              ? "identityPiece.passportPage"
-                              : `identityPiece.side.${side}`,
-                          )}
-                    </p>
-                    <button
-                      type="button"
-                      disabled={blocked || !document.canDownload || !portalContainer}
-                      onClick={() => setPreviewOpen(true)}
-                      className="inline-flex min-h-11 items-center break-words rounded-lg text-left text-sm font-medium text-indigo-600 underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                      {document.name}
-                    </button>
-                    <p className="text-xs text-muted-foreground">{td(`state.${document.state}`)}</p>
-                  </li>
-                ) : null,
-              )}
+          {documents.length > 0 && !blocked && (
+            <ul className="flex flex-wrap gap-3">
+              {documents.map((document) => (
+                <li key={document.id} className="min-w-0 max-w-full">
+                  <DocumentThumbnails
+                    identity={identity}
+                    document={document}
+                    onOpen={(page) => setPreview({ documentId: document.id, page })}
+                  />
+                </li>
+              ))}
             </ul>
           )}
           {query.data.status === "processing" && (
@@ -191,14 +171,15 @@ export function IdentityAttachment({
           )}
         </>
       )}
-      {previewOpen && !blocked && !query.isError && (
+      {preview && !blocked && !query.isError && (
         <IdentityDocumentPreview
           identity={identity}
-          documents={documents}
+          documents={documents.filter((document) => document.id === preview.documentId)}
+          initialPage={preview.page}
           company={company}
           scopeKey={profileId}
           portalContainer={portalContainer}
-          onClose={() => setPreviewOpen(false)}
+          onClose={() => setPreview(null)}
         />
       )}
       {open && value && !query.isError && (

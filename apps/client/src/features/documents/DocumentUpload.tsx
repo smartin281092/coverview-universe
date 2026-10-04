@@ -1,9 +1,19 @@
+import { useBlocker } from "@tanstack/react-router";
+import { useWalletProfileScope } from "../profile/use-wallet-profile-scope";
 import { useEffect, useRef, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { ArrowDown, ArrowUp, Camera, FileText, Plus, Trash2 } from "lucide-react";
-import { Button } from "@coverview/ui";
+import {
+  Button,
+  Label,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@coverview/ui";
 import type { IdentityMe } from "@coverview/api-client";
 import type { DocumentRecord } from "@coverview/contracts";
 import { api } from "../../api";
@@ -34,6 +44,16 @@ export function DocumentUpload({
   onBusyChange?: (busy: boolean) => void;
 }) {
   const { t, i18n } = useTranslation("documents");
+  const { scope, profileId } = useWalletProfileScope();
+  const [targetProfile, setTargetProfile] = useState(profileId ?? "detect");
+  const profiles = useQuery({
+    queryKey: ["private", identity.user.id, identity.session.id, "managed-profiles"],
+    queryFn: ({ signal }) => api.profiles({ signal }),
+    enabled: !pending && scope === "all",
+    gcTime: 0,
+    staleTime: 0,
+    retry: false,
+  });
   const [files, setFiles] = useState<SelectedDocumentFile[]>([]);
   const [selectionError, setSelectionError] = useState<string>();
   const [previewId, setPreviewId] = useState<string>();
@@ -44,6 +64,7 @@ export function DocumentUpload({
   const urls = useRef(new Map<string, string>());
   const prepared = useRef<File | undefined>(undefined);
   const operation = useRef({ key: crypto.randomUUID(), id: pending?.id });
+  const completed = useRef(false);
   const controller = useRef(new AbortController());
   useEffect(() => {
     const active = new AbortController();
@@ -57,7 +78,14 @@ export function DocumentUpload({
   }, []);
   const form = useForm({ defaultValues: { analysisRequested: true } });
   const mutation = useMutation({
-    mutationKey: ["private", identity.user.id, identity.session.id, "document-upload"],
+    mutationKey: [
+      "private",
+      identity.user.id,
+      identity.session.id,
+      "document-upload",
+      scope,
+      targetProfile,
+    ],
     gcTime: 0,
     mutationFn: async (analysisRequested: boolean) => {
       setStep("preparing");
@@ -83,7 +111,9 @@ export function DocumentUpload({
         const document = await api.createDocument(
           {
             name: file.name,
-            detectProfile: true,
+            ...(targetProfile === "detect"
+              ? { detectProfile: true }
+              : { profileId: targetProfile, detectProfile: false }),
             size: file.size,
             mime: file.type || "application/octet-stream",
             checksum,
@@ -97,9 +127,16 @@ export function DocumentUpload({
       return api.uploadDocument(operation.current.id, file, options);
     },
     onSuccess: (result) => {
-      if (!controller.current.signal.aborted) onDone(result);
+      if (!controller.current.signal.aborted) {
+        completed.current = true;
+        onDone(result);
+      }
     },
     retry: false,
+  });
+  useBlocker({
+    shouldBlockFn: () => mutation.isPending && !completed.current,
+    enableBeforeUnload: () => mutation.isPending && !completed.current,
   });
   useEffect(() => {
     onBusyChange?.(mutation.isPending);
@@ -332,6 +369,35 @@ export function DocumentUpload({
         {files.length > 1 && (
           <p className="text-sm text-muted-foreground">{t("capture.combineHelp")}</p>
         )}
+        {!pending && scope === "all" && (
+          <div className="space-y-2">
+            <Label htmlFor="upload-profile">{t("uploadProfile.label")}</Label>
+            <Select
+              value={targetProfile}
+              disabled={locked}
+              onValueChange={(value) => {
+                setTargetProfile(value);
+                resetPreparation();
+              }}
+            >
+              <SelectTrigger id="upload-profile" className="min-h-11 w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent portalContainer={portalContainer}>
+                <SelectItem value="detect">{t("uploadProfile.detect")}</SelectItem>
+                {profiles.data?.profiles.map((profile) => (
+                  <SelectItem key={profile.id} value={profile.id}>
+                    {profile.displayName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="text-sm text-muted-foreground">{t("uploadProfile.help")}</p>
+            {profiles.isError && (
+              <DocumentFailure error={profiles.error} onRetry={() => void profiles.refetch()} />
+            )}
+          </div>
+        )}
         {!pending && (
           <label className="flex items-start gap-3 text-sm">
             <input
@@ -342,7 +408,9 @@ export function DocumentUpload({
             />
             <span>
               <span className="block font-medium">{t("analyzeChoice")}</span>
-              <span className="mt-2 block text-muted-foreground">{t("aiDisclosure")}</span>
+              <span className="mt-2 block text-muted-foreground">
+                {t(targetProfile === "detect" ? "aiDisclosure" : "aiDisclosureAssigned")}
+              </span>
             </span>
           </label>
         )}

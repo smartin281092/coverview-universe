@@ -1,0 +1,3271 @@
+{
+  "checkedAt": "2026-10-01",
+  "insurers": [
+    {
+      "insurerId": 8,
+      "legalName": "CSS Assurance-maladie SA",
+      "brand": "CSS",
+      "groupName": "Groupe CSS",
+      "aliases": [
+        "CSS Kranken-Versicherung AG"
+      ],
+      "models": [
+        {
+          "modelId": "hm_315cdd70e037b79ba932d6f41439",
+          "tariffCode": "01_016",
+          "name": "Assurance Cabinets de santé",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/reglement/403_f_css_reglement_gesundheitspraxis.pdf",
+              "title": "CSS Cabinets de santé — règlement",
+              "passage": "Paraphrase : Choix d'un coordinateur du réseau dans le rayon de soins ; le contrat peut étendre des restrictions aux complémentaires.",
+              "page": 2,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Coordinateur reconnu obligatoire ; zone desservie à contrôler individuellement."
+          ],
+          "missing": [
+            "Conditions contractuelles complètes applicables en 2027.",
+            "Réseau exact et disponibilité du premier interlocuteur pour la localité.",
+            "Inventaire exhaustif des avantages et exclusions."
+          ],
+          "operatorQuestion": "Pouvez-vous fournir les conditions 2027 et annexes de Assurance Cabinets de santé, ainsi que le réseau et les avantages applicables ?",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_f8d56f229b6352522d7a9792d64b",
+          "tariffCode": "01_046",
+          "name": "Assurance du médecin de famille Profit",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/reglement/404_f_css_reglement_profit_hausarzt_ausgabe-01.2026.pdf",
+              "title": "CSS Profit — règlement 01.2026",
+              "passage": "Paraphrase : Partenaire de coordination choisi dans une liste selon le domicile ; pas exclusivement un cabinet classique.",
+              "page": 3,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Liste de partenaires pouvant comprendre pharmacie et centre de santé ; participation ordinaire, exonérations seulement selon liste CSS."
+          ],
+          "missing": [
+            "Conditions contractuelles complètes applicables en 2027.",
+            "Réseau exact et disponibilité du premier interlocuteur pour la localité.",
+            "Inventaire exhaustif des avantages et exclusions."
+          ],
+          "operatorQuestion": "Pouvez-vous fournir les conditions 2027 et annexes de Assurance du médecin de famille Profit, ainsi que le réseau et les avantages applicables ?",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_367fe664e913ca628ec200aa5c93",
+          "tariffCode": "01_131",
+          "name": "Callmed",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/reglement/407_f_css_reglement_callmed.pdf",
+              "title": "CSS Callmed — règlement",
+              "passage": "Paraphrase : Triage numérique/télémédecine ; recommandations obligatoires. Exceptions gynécologie, yeux, dentiste, sage-femme ; urgence annoncée sous dix jours.",
+              "page": 3,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Délégation et durée à respecter ; originaux à quote-part majorée remboursés à 50 % sauf nécessité médicale attestée."
+          ],
+          "missing": [
+            "Conditions contractuelles complètes applicables en 2027.",
+            "Réseau exact et disponibilité du premier interlocuteur pour la localité.",
+            "Inventaire exhaustif des avantages et exclusions."
+          ],
+          "operatorQuestion": "Pouvez-vous fournir les conditions 2027 et annexes de Callmed, ainsi que le réseau et les avantages applicables ?",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_e467b067abc5f80bfbbc68a3e48b",
+          "tariffCode": "01_170",
+          "name": "Multimed",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-de-base/multimed.html",
+              "title": "CSS Multimed",
+              "passage": "Paraphrase : Quote-part annoncée CHF 400 ; premier conseil gratuit, consultation médicale facturée avec participation légale.",
+              "page": null,
+              "yearExplicit": false
+            },
+            {
+              "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/reglement/570_f_css_reglement_multimed.pdf",
+              "title": "CSS Multimed — règlement 01.2024",
+              "passage": "Paraphrase : Coordinateur reconnu ou télémédecine ; une quote-part réduite peut être accordée, sans plafond chiffré dans l'article 5.",
+              "page": 3,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Plafond CHF 400 présenté sur la page actuelle, validité 2027 et plafond enfant non établis."
+          ],
+          "missing": [
+            "Conditions contractuelles complètes applicables en 2027.",
+            "Réseau exact et disponibilité du premier interlocuteur pour la localité.",
+            "Inventaire exhaustif des avantages et exclusions."
+          ],
+          "operatorQuestion": "Pouvez-vous fournir les conditions 2027 et annexes de Multimed, ainsi que le réseau et les avantages applicables ?",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_31286e1835f2d8aa46bfd3603000",
+          "tariffCode": "BASE",
+          "name": "Assurance de base",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.css.ch/fr/clients-prives/vite-regle/faire-soi-meme/commande/cga.html",
+              "title": "CSS — règlements et CGA",
+              "passage": "Paraphrase : Index officiel : règlements LAMal et modèles ; des complémentaires portent une édition 2027, sans confirmation identique pour les modèles de base.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Modèle LAMal standard identifié ; règlement général accessible dans l'index."
+          ],
+          "missing": [
+            "Conditions contractuelles complètes applicables en 2027.",
+            "Réseau exact et disponibilité du premier interlocuteur pour la localité.",
+            "Inventaire exhaustif des avantages et exclusions."
+          ],
+          "operatorQuestion": "Pouvez-vous fournir les conditions 2027 et annexes de Assurance de base, ainsi que le réseau et les avantages applicables ?",
+          "priority": "important"
+        }
+      ],
+      "benefits": [
+        {
+          "modelIds": [
+            "hm_e467b067abc5f80bfbbc68a3e48b"
+          ],
+          "excluded": "Non précisé dans la source consultée.",
+          "activation": "Selon les modalités de l'assureur.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": 40000,
+          "frequency": "année",
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?",
+          "title": "Multimed : plafond de quote-part annoncé",
+          "equivalenceGroup": "cost_sharing_copay_cap",
+          "classification": "model_condition",
+          "category": "cost_sharing",
+          "effect": "Plafond adulte annoncé de CHF 400 au lieu de CHF 700.",
+          "conditions": "Multimed ; confirmation 2027 et traitement des enfants requis.",
+          "source": {
+            "url": "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-de-base/multimed.html",
+            "title": "CSS Multimed",
+            "passage": "Paraphrase : Quote-part annoncée CHF 400 ; premier conseil gratuit, consultation médicale facturée avec participation légale.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [
+            "hm_e467b067abc5f80bfbbc68a3e48b"
+          ],
+          "excluded": "Consultation médicale, ordonnance et certificat : facturés avec franchise/quote-part.",
+          "activation": "Selon les modalités de l'assureur.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?",
+          "title": "Multimed : premier conseil téléphonique",
+          "equivalenceGroup": "telemedicine_initial_advice",
+          "classification": "base_service",
+          "category": "telemedicine",
+          "effect": "Premier conseil annoncé offert au 058 277 77 77.",
+          "conditions": "Conseil initial seulement.",
+          "source": {
+            "url": "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-de-base/multimed.html",
+            "title": "CSS Multimed",
+            "passage": "Paraphrase : Quote-part annoncée CHF 400 ; premier conseil gratuit, consultation médicale facturée avec participation légale.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [],
+          "excluded": "Non précisé dans la source consultée.",
+          "activation": "Rubrique partenaires, sans connexion.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?",
+          "title": "enjoy365 — partenaires accessibles avec la base",
+          "equivalenceGroup": "member_partner_discounts",
+          "classification": "commercial",
+          "category": "members",
+          "effect": "Accès à une sélection d'offres partenaires.",
+          "conditions": "Client CSS de base ; offres variables.",
+          "source": {
+            "url": "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/economiser-optimiser/enjoy365.html",
+            "title": "CSS enjoy365",
+            "passage": "Paraphrase : Offres partenaires pour la base ; boutique à rabais réservée aux complémentaires dès 16 ans, avantage annuel plafonné.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [],
+          "excluded": "Non précisé dans la source consultée.",
+          "activation": "Compte enjoy365 distinct de myCSS.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": 200000,
+          "frequency": "année civile",
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": true,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?",
+          "title": "enjoy365 — boutique avec complémentaire",
+          "equivalenceGroup": "member_shop_discounts",
+          "classification": "commercial",
+          "category": "members",
+          "effect": "Rabais de 30–70 % annoncés ; plafond d'avantage CHF 2'000.",
+          "conditions": "Dès 16 ans avec complémentaire CSS ; ne représente pas un versement.",
+          "source": {
+            "url": "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/economiser-optimiser/enjoy365.html",
+            "title": "CSS enjoy365",
+            "passage": "Paraphrase : Offres partenaires pour la base ; boutique à rabais réservée aux complémentaires dès 16 ans, avantage annuel plafonné.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [],
+          "excluded": "Contrats de moins de 360 jours ; récompense non garantie.",
+          "activation": "Compte active365 ; 300 points minimum pour versement, sauf offres partenaires.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": 40000,
+          "frequency": "année",
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": null,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer barème 2027 et produits éligibles ; la validité de points 2026 jusqu'en 2027 ne reconduit pas le programme.",
+          "title": "active365 — utilisation et récompenses distinctes",
+          "equivalenceGroup": "activity_rewards",
+          "classification": "commercial",
+          "category": "members",
+          "effect": "Application gratuite ; jusqu'à CHF 400 annoncés selon activités.",
+          "conditions": "Dès 16 ans ; versement exige complémentaire ou assurance de choses CSS.",
+          "source": {
+            "url": "https://www.css.ch/fr/clients-prives/ma-sante/promouvoir-sante/active365.html",
+            "title": "CSS active365",
+            "passage": "Paraphrase : Application gratuite dès 16 ans ; conversion des points avec complémentaire ou assurance de choses CSS, exclusions des contrats courts.",
+            "page": null
+          }
+        }
+      ]
+    },
+    {
+      "insurerId": 32,
+      "legalName": "Aquilana Versicherungen",
+      "brand": "Aquilana",
+      "groupName": null,
+      "aliases": [],
+      "models": [
+        {
+          "modelId": "hm_30d85a0d95e9b3989d75d6a75d0b",
+          "tariffCode": "BASE",
+          "name": "Assurance de base",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.aquilana.ch/versicherungen/grundversicherungen/smartmed",
+              "title": "Aquilana SMARTMED",
+              "passage": "Paraphrase : Comparatif des trois modèles ; tri numérique gratuit, acte médical SMARTMED facturé, conseil OKP/CASAMED gratuit.",
+              "page": null,
+              "yearExplicit": false
+            },
+            {
+              "url": "https://www.aquilana.ch/content/downloads/tarife-und-bestimmungen/AVB_KVG.pdf",
+              "title": "Aquilana AVB KVG — édition 2024",
+              "passage": "Paraphrase : SMARTMED impose l'application et BetterDoc avant hospitalisation planifiée ; exceptions téléphoniques et participation légale.",
+              "page": 18,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Libre choix du médecin dans le comparatif officiel."
+          ],
+          "missing": [
+            "Conditions contractuelles complètes applicables en 2027.",
+            "Réseau exact et disponibilité du premier interlocuteur pour la localité.",
+            "Inventaire exhaustif des avantages et exclusions."
+          ],
+          "operatorQuestion": "Pouvez-vous fournir les conditions 2027 et annexes de Assurance de base, ainsi que le réseau et les avantages applicables ?",
+          "priority": "important"
+        },
+        {
+          "modelId": "hm_add5c72cb8a9c474213ce21557b6",
+          "tariffCode": "CASAMED",
+          "name": "CASAMED",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.aquilana.ch/versicherungen/grundversicherungen/smartmed",
+              "title": "Aquilana SMARTMED",
+              "passage": "Paraphrase : Comparatif des trois modèles ; tri numérique gratuit, acte médical SMARTMED facturé, conseil OKP/CASAMED gratuit.",
+              "page": null,
+              "yearExplicit": false
+            },
+            {
+              "url": "https://www.aquilana.ch/content/downloads/tarife-und-bestimmungen/AVB_KVG.pdf",
+              "title": "Aquilana AVB KVG — édition 2024",
+              "passage": "Paraphrase : SMARTMED impose l'application et BetterDoc avant hospitalisation planifiée ; exceptions téléphoniques et participation légale.",
+              "page": 18,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Médecin de famille premier contact ; réseau et territoires CASAMED à contrôler."
+          ],
+          "missing": [
+            "Conditions contractuelles complètes applicables en 2027.",
+            "Réseau exact et disponibilité du premier interlocuteur pour la localité.",
+            "Inventaire exhaustif des avantages et exclusions."
+          ],
+          "operatorQuestion": "Pouvez-vous fournir les conditions 2027 et annexes de CASAMED, ainsi que le réseau et les avantages applicables ?",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_32fce6036f390f845713d1d8fdab",
+          "tariffCode": "SMARTMED",
+          "name": "SMARTMED",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.aquilana.ch/versicherungen/grundversicherungen/smartmed",
+              "title": "Aquilana SMARTMED",
+              "passage": "Paraphrase : Comparatif des trois modèles ; tri numérique gratuit, acte médical SMARTMED facturé, conseil OKP/CASAMED gratuit.",
+              "page": null,
+              "yearExplicit": false
+            },
+            {
+              "url": "https://www.aquilana.ch/content/downloads/tarife-und-bestimmungen/AVB_KVG.pdf",
+              "title": "Aquilana AVB KVG — édition 2024",
+              "passage": "Paraphrase : SMARTMED impose l'application et BetterDoc avant hospitalisation planifiée ; exceptions téléphoniques et participation légale.",
+              "page": 18,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Application obligatoire avec exceptions ; plan imposé ; BetterDoc obligatoire avant séjour/intervention stationnaire planifié.",
+            "Les actes médicaux Medgate sont facturés ; la gratuité du tri ne s'étend pas au traitement."
+          ],
+          "missing": [
+            "Conditions contractuelles complètes applicables en 2027.",
+            "Réseau exact et disponibilité du premier interlocuteur pour la localité.",
+            "Inventaire exhaustif des avantages et exclusions."
+          ],
+          "operatorQuestion": "Pouvez-vous fournir les conditions 2027 et annexes de SMARTMED, ainsi que le réseau et les avantages applicables ?",
+          "priority": "blocking"
+        }
+      ],
+      "benefits": [
+        {
+          "modelIds": [
+            "hm_30d85a0d95e9b3989d75d6a75d0b",
+            "hm_add5c72cb8a9c474213ce21557b6"
+          ],
+          "excluded": "SMARTMED : actes médicaux facturés.",
+          "activation": "+41 56 203 44 88.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?",
+          "title": "Conseil téléphonique OKP/CASAMED",
+          "equivalenceGroup": "telemedicine_initial_advice",
+          "classification": "base_service",
+          "category": "telemedicine",
+          "effect": "Conseil national Medgate annoncé gratuit.",
+          "conditions": "Assurance OKP ou CASAMED.",
+          "source": {
+            "url": "https://www.aquilana.ch/versicherungen/grundversicherungen/smartmed",
+            "title": "Aquilana SMARTMED",
+            "passage": "Paraphrase : Comparatif des trois modèles ; tri numérique gratuit, acte médical SMARTMED facturé, conseil OKP/CASAMED gratuit.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [
+            "hm_32fce6036f390f845713d1d8fdab"
+          ],
+          "excluded": "Non précisé dans la source consultée.",
+          "activation": "061 551 01 88 ; obligatoire avant stationnaire planifié.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?",
+          "title": "SMARTMED — orientation BetterDoc",
+          "equivalenceGroup": "specialist_navigation",
+          "classification": "base_service",
+          "category": "access",
+          "effect": "Recommandation de spécialiste/second avis ambulatoire annoncée gratuite.",
+          "conditions": "Service d'orientation ; consultation du spécialiste distincte.",
+          "source": {
+            "url": "https://www.aquilana.ch/versicherungen/grundversicherungen/smartmed",
+            "title": "Aquilana SMARTMED",
+            "passage": "Paraphrase : Comparatif des trois modèles ; tri numérique gratuit, acte médical SMARTMED facturé, conseil OKP/CASAMED gratuit.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [],
+          "excluded": "Cumul avec autres rabais.",
+          "activation": "Selon les modalités de l'assureur.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": null,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?",
+          "title": "Hôtel Collinetta",
+          "equivalenceGroup": "member_hotel_discounts",
+          "classification": "commercial",
+          "category": "members",
+          "effect": "Rabais de séjour 15 % ou 5 %.",
+          "conditions": "Clients Aquilana ; catégories définies par l'offre.",
+          "source": {
+            "url": "https://www.aquilana.ch/service",
+            "title": "Aquilana — services membres",
+            "passage": "Paraphrase : Collinetta : rabais chambre/petit-déjeuner 15 %, forfait semaine 5 %, non cumulables.",
+            "page": null
+          }
+        }
+      ]
+    },
+    {
+      "insurerId": 134,
+      "legalName": "Einsiedler Krankenkasse",
+      "brand": "Einsiedler",
+      "groupName": null,
+      "aliases": [],
+      "models": [
+        {
+          "modelId": "hm_95e52182b550e5fa320d47795432",
+          "tariffCode": "BASE",
+          "name": "Assurance de base",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://kkeinsiedeln.ch/grundversicherung/",
+              "title": "Einsiedler — Grundversicherung",
+              "passage": "Paraphrase : L'assureur propose le modèle standard avec libre choix du médecin et franchises variables.",
+              "page": null,
+              "yearExplicit": false
+            },
+            {
+              "url": "https://kkeinsiedeln.ch/notfallkontakt/",
+              "title": "Einsiedler — contact 24 h",
+              "passage": "Paraphrase : Conseil suisse et prescriptions annoncés gratuits ; organisation locale, garanties et rapatriement exclus de ce service.",
+              "page": null,
+              "yearExplicit": false
+            },
+            {
+              "url": "https://kkeinsiedeln.ch/wp-content/uploads/2026/06/Versicherungsbedingungen-KVG-1.pdf",
+              "title": "Einsiedler — AVB LAMal, édition 2018",
+              "passage": "Paraphrase : Entrée en vigueur 01.01.2018 ; art. 11 participation ordinaire, art. 14 assurance obligatoire. L'URL 2026 n'actualise pas l'édition.",
+              "page": 3,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Standard libre choix documenté ; service de conseil 24 h présent."
+          ],
+          "missing": [
+            "Confirmation des CGA applicables en 2027 : document publié sous chemin 2026, mais édition 2018.",
+            "Inventaire des clubs non établi après recherche officielle ; aucune absence déduite.",
+            "Ancien magazine 1/2024 promet assistance mondiale ; page Notfallkontakt actuelle exclut ces services. Confirmer le périmètre actuel."
+          ],
+          "operatorQuestion": "Pouvez-vous fournir les conditions 2027 et annexes de Assurance de base, ainsi que le réseau et les avantages applicables ?",
+          "priority": "important"
+        }
+      ],
+      "benefits": [
+        {
+          "modelIds": [],
+          "excluded": "Organisation des soins locaux, garantie de paiement, transport/rapatriement et suivi de retour.",
+          "activation": "+41 55 418 07 49 ; consultation Medi24 en ligne non instantanée.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": null,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?",
+          "title": "Conseil médical 24 h",
+          "equivalenceGroup": "telemedicine_initial_advice",
+          "classification": "base_service",
+          "category": "telemedicine",
+          "effect": "Conseil et établissement de prescriptions annoncés gratuits.",
+          "conditions": "Service en Suisse ; preuve contractuelle de l'éligibilité exacte à obtenir.",
+          "source": {
+            "url": "https://kkeinsiedeln.ch/notfallkontakt/",
+            "title": "Einsiedler — contact 24 h",
+            "passage": "Paraphrase : Conseil suisse et prescriptions annoncés gratuits ; organisation locale, garanties et rapatriement exclus de ce service.",
+            "page": null
+          }
+        }
+      ]
+    },
+    {
+      "insurerId": 194,
+      "legalName": "Sumiswalder Krankenkasse",
+      "brand": "Sumiswalder",
+      "groupName": null,
+      "aliases": [],
+      "models": [
+        {
+          "modelId": "hm_e5d5acca80bbcc77cf1314172396",
+          "tariffCode": "BASE",
+          "name": "Assurance de base",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://sumiswalder.ch/privatkunden/angebot/grundversicherung/",
+              "title": "Sumiswalder — modèles",
+              "passage": "Paraphrase : Standard et trois alternatives identifiés ; leur cumul n'est pas prévu.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Libre choix standard explicitement identifié."
+          ],
+          "missing": [
+            "Conditions contractuelles complètes applicables en 2027.",
+            "Réseau exact et disponibilité du premier interlocuteur pour la localité.",
+            "Inventaire exhaustif des avantages et exclusions."
+          ],
+          "operatorQuestion": "Pouvez-vous fournir les conditions 2027 et annexes de Assurance de base, ainsi que le réseau et les avantages applicables ?",
+          "priority": "important"
+        },
+        {
+          "modelId": "hm_28cf9aa3f7dcd85e09f08ca80aa1",
+          "tariffCode": "HAM",
+          "name": "Modèle du médecin de famille",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://sumiswalder.ch/privatkunden/angebot/grundversicherung/hausarztmodell/",
+              "title": "Sumiswalder médecin de famille",
+              "passage": "Paraphrase : Médecin sur liste ; exceptions urgence, prévention gynécologique, ophtalmologie.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Médecin choisi dans le réseau comme entrée."
+          ],
+          "missing": [
+            "Conditions contractuelles complètes applicables en 2027.",
+            "Réseau exact et disponibilité du premier interlocuteur pour la localité.",
+            "Inventaire exhaustif des avantages et exclusions."
+          ],
+          "operatorQuestion": "Pouvez-vous fournir les conditions 2027 et annexes de Modèle du médecin de famille, ainsi que le réseau et les avantages applicables ?",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_584fd456c50df26a1a8255daf247",
+          "tariffCode": "HMO plus",
+          "name": "HMO plus",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://sumiswalder.ch/20/wp-content/uploads/2026/09/HMO-plus-AVB-Sumiswalder-2027.pdf",
+              "title": "Sumiswalder HMO plus — AVB 01.01.2027",
+              "passage": "Paraphrase : Médecin reconnu, télémédecine ou pharmacie pour l'entrée ; délégations par médecin/télémédecine. Obligations, exclusions et sanctions.",
+              "page": 2,
+              "yearExplicit": true
+            }
+          ],
+          "confirmed": [
+            "AVB explicitement en vigueur au 01.01.2027, pages 2, 5 et 6 examinées.",
+            "Génériques/biosimilaires requis sauf nécessité médicale ; urgence annoncée sous 30 jours ; sanctions progressives.",
+            "Réseaux pharmacies, aides et Spitex imposables ; programmes de suivi obligatoires sur prescription."
+          ],
+          "missing": [
+            "Liste de prestataires locale actualisée et coûts des services non chiffrés.",
+            "Aucune exonération de franchise établie."
+          ],
+          "operatorQuestion": "Pouvez-vous fournir les conditions 2027 et annexes de HMO plus, ainsi que le réseau et les avantages applicables ?",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_e2d9703def043fe9b5712ae482fa",
+          "tariffCode": "Telmed",
+          "name": "sumis24Telmed",
+          "status": "review",
+          "sources": [
+            {
+              "url": "https://sumiswalder.ch/privatkunden/angebot/grundversicherung/",
+              "title": "Sumiswalder — modèles",
+              "passage": "Paraphrase : Standard et trois alternatives identifiés ; leur cumul n'est pas prévu.",
+              "page": null,
+              "yearExplicit": false
+            },
+            {
+              "url": "https://sumiswalder.ch/privatkunden/eoffice/medizinische-beratung/sumis24/",
+              "title": "Sumis24 — conseil médical",
+              "passage": "Paraphrase : Conseil gratuit pour tous les assurés de base ; frais d'itinérance possibles à l'étranger.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "sumis24Telmed existe dans la navigation officielle."
+          ],
+          "missing": [
+            "Page dédiée retournant deux erreurs de lecture malgré lien officiel ; CGA, exceptions et facturation à contrôler.",
+            "Validité 2027."
+          ],
+          "operatorQuestion": "Pouvez-vous fournir les conditions 2027 et annexes de sumis24Telmed, ainsi que le réseau et les avantages applicables ?",
+          "priority": "blocking"
+        }
+      ],
+      "benefits": [
+        {
+          "modelIds": [],
+          "excluded": "Roaming étranger.",
+          "activation": "+41 800 786 472 ; alternative +41 34 432 30 80.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?",
+          "title": "sumis24 — conseil pour la base",
+          "equivalenceGroup": "telemedicine_initial_advice",
+          "classification": "base_service",
+          "category": "telemedicine",
+          "effect": "Accès et conseil Medi24 annoncés gratuits.",
+          "conditions": "Tous assurés de base Sumiswalder.",
+          "source": {
+            "url": "https://sumiswalder.ch/privatkunden/eoffice/medizinische-beratung/sumis24/",
+            "title": "Sumis24 — conseil médical",
+            "passage": "Paraphrase : Conseil gratuit pour tous les assurés de base ; frais d'itinérance possibles à l'étranger.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [
+            "hm_584fd456c50df26a1a8255daf247"
+          ],
+          "excluded": "Aucune gratuité promise.",
+          "activation": "Réseau de la police ; exceptions urgence, gynécologie, yeux ambulatoires et dentiste.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": "2027-01-01",
+          "validUntil": null,
+          "yearConfirmed": true,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "verified",
+          "operatorQuestion": "Fournir listes locales et tarifs des services.",
+          "title": "HMO plus — trois portes d'entrée",
+          "equivalenceGroup": "first_contact_flexible",
+          "classification": "model_condition",
+          "category": "access",
+          "effect": "Choix médecin, télémédecine ou pharmacie partenaire.",
+          "conditions": "Médecin déclaré ; délégation spécialiste par médecin ou télémédecine.",
+          "source": {
+            "url": "https://sumiswalder.ch/20/wp-content/uploads/2026/09/HMO-plus-AVB-Sumiswalder-2027.pdf",
+            "title": "Sumiswalder HMO plus — AVB 01.01.2027",
+            "passage": "Paraphrase : Médecin reconnu, télémédecine ou pharmacie pour l'entrée ; délégations par médecin/télémédecine. Obligations, exclusions et sanctions.",
+            "page": 2
+          }
+        },
+        {
+          "title": "Complémentaires enfants — rabais familial annoncé",
+          "equivalenceGroup": "family_supplementary_discount",
+          "modelIds": [],
+          "classification": "supplementary",
+          "category": "members",
+          "effect": "FAQ : exemption de prime de certaines complémentaires dès le deuxième enfant.",
+          "conditions": "Enfants concernés et premier enfant assurés en base chez Sumiswalder ; premier enfant avec complémentaire au moins équivalente.",
+          "excluded": "Uniquement Krankenpflege-Zusatz et Komplementär ; ne pas déduire de la prime AOS.",
+          "activation": "Contrat familial conforme ; validation du rabais auprès de l'assureur.",
+          "beneficiary": "household",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": true,
+          "supplementaryProducts": [
+            "Krankenpflege-Zusatz",
+            "Komplementär"
+          ],
+          "source": {
+            "url": "https://sumiswalder.ch/privatkunden/eoffice/haeufige-fragen/",
+            "title": "Sumiswalder — FAQ, rabais familiaux",
+            "passage": "Paraphrase : 100 % de rabais annoncé dès le deuxième enfant pour deux complémentaires, avec base commune et première couverture équivalente.",
+            "page": null
+          },
+          "verification": "partial",
+          "operatorQuestion": "Confirmer conditions familiales, âge limite, commercialisation et barème 2027."
+        }
+      ]
+    },
+    {
+      "insurerId": 246,
+      "legalName": "Genossenschaft Krankenkasse Steffisburg",
+      "brand": "Steffisburg",
+      "groupName": null,
+      "aliases": [
+        "KKST"
+      ],
+      "models": [
+        {
+          "modelId": "hm_fe947e0633dc73983387900c196d",
+          "tariffCode": "BASE",
+          "name": "Assurance de base",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.kkst.ch/grundversicherung",
+              "title": "Assurance de base",
+              "passage": "Paraphrase : Prestations obligatoires légales.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Validité contractuelle explicite 2027.",
+            "Réseau et admissions pour la localité.",
+            "Catalogue exhaustif des services et clubs, limites et exclusions."
+          ],
+          "operatorQuestion": "Fournir les conditions 2027, réseaux et annexes des avantages de Assurance de base.",
+          "priority": "important"
+        },
+        {
+          "modelId": "hm_ddd93ae4a11267632e5d96d740aa",
+          "tariffCode": "Casa",
+          "name": "Casa",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.kkst.ch/grundversicherung/hausarztmodell-casa",
+              "title": "Casa",
+              "passage": "Paraphrase : Médecin de famille choisi comme première adresse ; exceptions gynécologie, maternité, yeux et dents.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Parcours médecin de famille décrit sur la page officielle."
+          ],
+          "missing": [
+            "Validité contractuelle explicite 2027.",
+            "Réseau et admissions pour la localité.",
+            "Catalogue exhaustif des services et clubs, limites et exclusions."
+          ],
+          "operatorQuestion": "Fournir les conditions 2027, réseaux et annexes des avantages de Casa.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_820b5a52ed41bb73a8c98710c90d",
+          "tariffCode": "Medcasa",
+          "name": "Medcasa",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.kkst.ch/grundversicherung/hausarztmodell-medcasa",
+              "title": "Medcasa",
+              "passage": "Paraphrase : Médecin reconnu, capacité d'accueil à vérifier ; zones BE1–3, AG, SO, ZH1 annoncées.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Annuaire lié : https://www.hausarztverzeichnis.ch/kkst ; actualité 2027 non établie."
+          ],
+          "missing": [
+            "Validité contractuelle explicite 2027.",
+            "Réseau et admissions pour la localité.",
+            "Catalogue exhaustif des services et clubs, limites et exclusions."
+          ],
+          "operatorQuestion": "Fournir les conditions 2027, réseaux et annexes des avantages de Medcasa.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_684b529aac92d232e47beb933b3a",
+          "tariffCode": "Regiomed",
+          "name": "Regiomed",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.kkst.ch/grundversicherung/hausarztmodell-regiomed",
+              "title": "Regiomed",
+              "passage": "Paraphrase : BE2, MediZentrum Landhaus ou Burgergut Steffisburg ; admission à vérifier.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Ancien nom : MediZentrum Steffisburg."
+          ],
+          "missing": [
+            "Validité contractuelle explicite 2027.",
+            "Réseau et admissions pour la localité.",
+            "Catalogue exhaustif des services et clubs, limites et exclusions."
+          ],
+          "operatorQuestion": "Fournir les conditions 2027, réseaux et annexes des avantages de Regiomed.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_f273ceecb429453c6f107bb50dd4",
+          "tariffCode": "sanmed24",
+          "name": "sanmed24",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.kkst.ch/grundversicherung/sanmed24",
+              "title": "Sanmed24",
+              "passage": "Paraphrase : Appel Medgate avant rendez-vous ; centre de conseil annoncé gratuit, appel au tarif local.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Premier contact : 0844 844 911, 24 h/24."
+          ],
+          "missing": [
+            "Validité contractuelle explicite 2027.",
+            "Réseau et admissions pour la localité.",
+            "Catalogue exhaustif des services et clubs, limites et exclusions."
+          ],
+          "operatorQuestion": "Fournir les conditions 2027, réseaux et annexes des avantages de sanmed24.",
+          "priority": "blocking"
+        }
+      ],
+      "benefits": [
+        {
+          "modelIds": [
+            "hm_f273ceecb429453c6f107bb50dd4"
+          ],
+          "excluded": "Frais de communication ; gratuité de tous les actes médicaux non établie.",
+          "activation": "0844 844 911.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer la portée et les conditions applicables en 2027.",
+          "title": "Conseil médical Sanmed24",
+          "equivalenceGroup": "telemedicine_initial_advice",
+          "classification": "base_service",
+          "category": "telemedicine",
+          "effect": "Accès au conseil Medgate 24 h/24.",
+          "conditions": "Modèle Sanmed24 ; appel avant tout rendez-vous.",
+          "source": {
+            "url": "https://www.kkst.ch/grundversicherung/sanmed24",
+            "title": "Sanmed24",
+            "passage": "Paraphrase : Le centre conseille gratuitement ; l'appel reste au tarif local.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [],
+          "excluded": "Auto-parrainage, même foyer, nouveau-né inscrit par ses parents, parrain non assuré.",
+          "activation": "Formulaire de recommandation avant affiliation aboutie.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": 10000,
+          "frequency": "Par affiliation éligible.",
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": true,
+          "supplementaryProducts": [
+            "InVita",
+            "Vario",
+            "Hospital"
+          ],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer la portée et les conditions applicables en 2027.",
+          "title": "Parrainage Steffisburg",
+          "equivalenceGroup": "customer_referral_reward",
+          "classification": "commercial",
+          "category": "members",
+          "effect": "Commission ponctuelle de CHF 100 par nouvelle affiliation remplissant les conditions.",
+          "conditions": "Parrain assuré ; nouvel assuré avec base et contrat pluriannuel InVita ou Vario et Hospital.",
+          "source": {
+            "url": "https://www.kkst.ch/kundenservice/kunden-werben-kunden",
+            "title": "Kunden werben Kunden",
+            "passage": "Paraphrase : CHF 100 sous conditions d'affiliation base et complémentaires, hors foyer commun.",
+            "page": null
+          }
+        }
+      ]
+    },
+    {
+      "insurerId": 290,
+      "legalName": "CONCORDIA Assurance suisse de maladie et accidents SA",
+      "brand": "CONCORDIA",
+      "groupName": "CONCORDIA",
+      "aliases": [],
+      "models": [
+        {
+          "modelId": "hm_0639a700cef13d8db3b3ba1119a5",
+          "tariffCode": "BASE",
+          "name": "Assurance de base",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.concordia.ch/fr/service/sparen/bei-der-versicherung/mydoc-und-hmo.html",
+              "title": "Modèles AOS",
+              "passage": "Paraphrase : Comparaison avec assurance ordinaire ; prestations légales communes.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Validité contractuelle explicite 2027.",
+            "Réseau et admissions pour la localité.",
+            "Catalogue exhaustif des services et clubs, limites et exclusions."
+          ],
+          "operatorQuestion": "Fournir les conditions 2027, réseaux et annexes des avantages de Assurance de base.",
+          "priority": "important"
+        },
+        {
+          "modelId": "hm_4032807c156c2bf3265959229d4a",
+          "tariffCode": "HAM_DOC",
+          "name": "MyDoc",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/grundversicherung/2.04_Zusatzreglement_myDoc_fr.pdf",
+              "title": "Règlement myDoc 2026",
+              "passage": "Paraphrase : Médecin de famille sur liste régionale ; distance compatible avec visites à domicile.",
+              "page": 2,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Médecin choisi déclaré à l'assureur et consulté d'abord."
+          ],
+          "missing": [
+            "Validité contractuelle explicite 2027.",
+            "Réseau et admissions pour la localité.",
+            "Catalogue exhaustif des services et clubs, limites et exclusions."
+          ],
+          "operatorQuestion": "Fournir les conditions 2027, réseaux et annexes des avantages de MyDoc.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_72c70b5c9869dcf9fe837a58de84",
+          "tariffCode": "HMO_01",
+          "name": "HMO",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/grundversicherung/2.03_Zusatzreglement_HMO_fr.pdf",
+              "title": "Règlement HMO 2026",
+              "passage": "Paraphrase : Médecin HMO d'abord ; exceptions préventives gynécologiques/obstétricales, lunettes et urgence.",
+              "page": 2,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Accord préalable pour soins ultérieurs ; restrictions pouvant aussi concerner les complémentaires."
+          ],
+          "missing": [
+            "Validité contractuelle explicite 2027.",
+            "Réseau et admissions pour la localité.",
+            "Catalogue exhaustif des services et clubs, limites et exclusions."
+          ],
+          "operatorQuestion": "Fournir les conditions 2027, réseaux et annexes des avantages de HMO.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_62129be0ac3cfa9c0e43b816b3f0",
+          "tariffCode": "smartDoc",
+          "name": "smartDoc",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/grundversicherung/CON_B.47_Zusatzreglement_smartDoc_210x297mm_FR_low.pdf",
+              "title": "Règlement smartDoc 2025",
+              "passage": "Paraphrase : Centre télémédical contraignant ; actes médicaux peuvent engendrer participation ; exceptions et génériques réglementés.",
+              "page": 2,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Medgate via téléphone ou application CONCORDIA Medgate ; pas de gratuité générale démontrée."
+          ],
+          "missing": [
+            "Validité contractuelle explicite 2027.",
+            "Réseau et admissions pour la localité.",
+            "Catalogue exhaustif des services et clubs, limites et exclusions."
+          ],
+          "operatorQuestion": "Fournir les conditions 2027, réseaux et annexes des avantages de smartDoc.",
+          "priority": "blocking"
+        }
+      ],
+      "benefits": [
+        {
+          "modelIds": [],
+          "excluded": "Coût d'appel au tarif local/mobile ; aucun remboursement universel des soins impliqué.",
+          "activation": "+41 41 210 02 50.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": null,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer la portée et les conditions applicables en 2027.",
+          "title": "concordiaMed",
+          "equivalenceGroup": "telemedicine_initial_advice",
+          "classification": "base_service",
+          "category": "telemedicine",
+          "effect": "Conseils de santé gratuits 24 h/24 pour les assurés.",
+          "conditions": "Présenter son numéro d'assurance.",
+          "source": {
+            "url": "https://www.concordia.ch/fr/gesundheit/concordiamed.html",
+            "title": "concordiaMed",
+            "passage": "Paraphrase : Conseil réservé aux assurés, gratuit hors communications ; service premium lié à l'hospitalisation privée.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [],
+          "excluded": "Non cessible, non cumulable. Les offres observées expirent en 2026.",
+          "activation": "Présentation des justificatifs ou code propre à l'offre.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": null,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer la portée et les conditions applicables en 2027.",
+          "title": "CONCORDIA Active",
+          "equivalenceGroup": "member_partner_discounts",
+          "classification": "commercial",
+          "category": "members",
+          "effect": "Rabais loisirs pour assurés ; offres limitées dans le temps.",
+          "conditions": "Carte d'assurance et identité, modalités propres à chaque offre.",
+          "source": {
+            "url": "https://www.concordia.ch/fr/magazin/active.html",
+            "title": "CONCORDIA Active",
+            "passage": "Paraphrase : Programme d'offres loisirs, carte et identité requises ; avantages non cumulables.",
+            "page": null
+          }
+        }
+      ]
+    },
+    {
+      "insurerId": 312,
+      "legalName": "Atupri Assurance de la santé SA",
+      "brand": "Atupri",
+      "groupName": null,
+      "aliases": [
+        "Atupri Gesundheitsversicherung AG"
+      ],
+      "models": [
+        {
+          "modelId": "hm_ccdaf650f2aa5859806acdd2e310",
+          "tariffCode": "BASE",
+          "name": "Assurance de base",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://atupri.ch/assets/f/253863/x/53ffc4af97/atupri_conditions-generales_lamal.pdf",
+              "title": "CGA LAMal, couverture 2024 et annexes 2026",
+              "passage": "Paraphrase : Standard et modèles alternatifs recensés ; droit légal commun.",
+              "page": 4,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Validité contractuelle explicite 2027.",
+            "Réseau et admissions pour la localité.",
+            "Catalogue exhaustif des services et clubs, limites et exclusions."
+          ],
+          "operatorQuestion": "Fournir les conditions 2027, réseaux et annexes des avantages de Assurance de base.",
+          "priority": "important"
+        },
+        {
+          "modelId": "hm_9893124c7dad25de5d84456fde23",
+          "tariffCode": "CareMed",
+          "name": "CareMed",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://atupri.ch/assets/f/253863/x/53ffc4af97/atupri_conditions-generales_lamal.pdf",
+              "title": "Annexe CareMed 2026",
+              "passage": "Paraphrase : Médecin dans réseau CareMed ; disponibilité et proximité requises.",
+              "page": 15,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Validité contractuelle explicite 2027.",
+            "Réseau et admissions pour la localité.",
+            "Catalogue exhaustif des services et clubs, limites et exclusions."
+          ],
+          "operatorQuestion": "Fournir les conditions 2027, réseaux et annexes des avantages de CareMed.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_ec1235347db9a87ca6df40881068",
+          "tariffCode": "FlexCare",
+          "name": "FlexCare",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://atupri.ch/assets/f/253863/x/53ffc4af97/atupri_conditions-generales_lamal.pdf",
+              "title": "Annexe FlexCare 2026",
+              "passage": "Paraphrase : Centre de santé ou télémédecine ; plan contraignant, exceptions et urgence à annoncer sous 20 jours.",
+              "page": 18,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Validité contractuelle explicite 2027.",
+            "Réseau et admissions pour la localité.",
+            "Catalogue exhaustif des services et clubs, limites et exclusions."
+          ],
+          "operatorQuestion": "Fournir les conditions 2027, réseaux et annexes des avantages de FlexCare.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_9afe599977db1c2e4b801d4cb723",
+          "tariffCode": "HMO",
+          "name": "HMO",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://atupri.ch/assets/f/253863/x/53ffc4af97/atupri_conditions-generales_lamal.pdf",
+              "title": "Annexe HMO 2026",
+              "passage": "Paraphrase : Médecin coordinateur accepté, réseau régional et distance compatibles.",
+              "page": 12,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Validité contractuelle explicite 2027.",
+            "Réseau et admissions pour la localité.",
+            "Catalogue exhaustif des services et clubs, limites et exclusions."
+          ],
+          "operatorQuestion": "Fournir les conditions 2027, réseaux et annexes des avantages de HMO.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_17d7637aac5b5796a46b9da0f55d",
+          "tariffCode": "SmartCare",
+          "name": "SmartCare",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://atupri.ch/assets/f/253863/x/53ffc4af97/atupri_conditions-generales_lamal.pdf",
+              "title": "Annexe SmartCare 2026",
+              "passage": "Paraphrase : Application, triage et portail myAtupri obligatoires ; procédure contraignante.",
+              "page": 21,
+              "yearExplicit": false
+            },
+            {
+              "url": "https://atupri.ch/fr/assurances/assurance-de-base/smartcare",
+              "title": "SmartCare",
+              "passage": "Paraphrase : Symptom checker gratuit ; accès médecin selon orientation.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Validité contractuelle explicite 2027.",
+            "Réseau et admissions pour la localité.",
+            "Catalogue exhaustif des services et clubs, limites et exclusions."
+          ],
+          "operatorQuestion": "Fournir les conditions 2027, réseaux et annexes des avantages de SmartCare.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_c62cb83eb781055e59e23e2ca3d4",
+          "tariffCode": "TelFirst",
+          "name": "TelFirst",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://atupri.ch/assets/f/253863/x/53ffc4af97/atupri_conditions-generales_lamal.pdf",
+              "title": "Annexe TelFirst 2026",
+              "passage": "Paraphrase : Téléconsultation préalable et plan de traitement contraignant.",
+              "page": 9,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Validité contractuelle explicite 2027.",
+            "Réseau et admissions pour la localité.",
+            "Catalogue exhaustif des services et clubs, limites et exclusions."
+          ],
+          "operatorQuestion": "Fournir les conditions 2027, réseaux et annexes des avantages de TelFirst.",
+          "priority": "blocking"
+        }
+      ],
+      "benefits": [
+        {
+          "modelIds": [
+            "hm_ccdaf650f2aa5859806acdd2e310",
+            "hm_9893124c7dad25de5d84456fde23",
+            "hm_ec1235347db9a87ca6df40881068",
+            "hm_9afe599977db1c2e4b801d4cb723",
+            "hm_17d7637aac5b5796a46b9da0f55d",
+            "hm_c62cb83eb781055e59e23e2ca3d4"
+          ],
+          "excluded": "Ne dispense pas de payer médicaments ou actes médicaux.",
+          "activation": "Compte personnel ou application Zur Rose.",
+          "beneficiary": "person",
+          "extraCostMinor": 0,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": "2026-06-02",
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer la portée et les conditions applicables en 2027.",
+          "title": "Medi+ de Zur Rose",
+          "equivalenceGroup": "digital_medication_management",
+          "classification": "base_service",
+          "category": "pharmacy",
+          "effect": "Assistant numérique de gestion des médicaments sans frais de service.",
+          "conditions": "Assurance de base Atupri ; indépendant du lieu d'achat des médicaments.",
+          "source": {
+            "url": "https://atupri.ch/fr/atupri/news/cp-mediplus",
+            "title": "Medi+ pour tous les assurés de base",
+            "passage": "Paraphrase : Plan de prise, rappels et demandes numériques disponibles gratuitement.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [
+            "hm_17d7637aac5b5796a46b9da0f55d"
+          ],
+          "excluded": "La gratuité du triage ne signifie pas gratuité de la téléconsultation.",
+          "activation": "App, rubrique Réserver une téléconsultation.",
+          "beneficiary": "person",
+          "extraCostMinor": 0,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer la portée et les conditions applicables en 2027.",
+          "title": "Analyse numérique des symptômes SmartCare",
+          "equivalenceGroup": "digital_symptom_checker",
+          "classification": "model_condition",
+          "category": "telemedicine",
+          "effect": "Analyse initiale sans frais ; orientation contraignante.",
+          "conditions": "Application Atupri Medgate et portail client obligatoires.",
+          "source": {
+            "url": "https://atupri.ch/fr/assurances/assurance-de-base/smartcare",
+            "title": "SmartCare",
+            "passage": "Paraphrase : L'analyse des symptômes est gratuite ; il faut suivre son orientation.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [
+            "hm_ec1235347db9a87ca6df40881068"
+          ],
+          "excluded": "Téléphone/Internet et actes soumis à participation légale.",
+          "activation": "Selon les modalités de l'assureur.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer la portée et les conditions applicables en 2027.",
+          "title": "Conseil FlexCare",
+          "equivalenceGroup": "telemedicine_initial_advice",
+          "classification": "model_condition",
+          "category": "telemedicine",
+          "effect": "Conseils du centre sans frais de service.",
+          "conditions": "Plan thérapeutique à respecter.",
+          "source": {
+            "url": "https://atupri.ch/assets/f/253863/x/53ffc4af97/atupri_conditions-generales_lamal.pdf",
+            "title": "Annexe FlexCare 2026, article 15",
+            "passage": "Paraphrase : Conseil gratuit hors communications ; participation légale aux prestations.",
+            "page": 20
+          }
+        }
+      ]
+    },
+    {
+      "insurerId": 343,
+      "legalName": "Avenir Assurance",
+      "brand": "Groupe Mutuel",
+      "groupName": "Groupe Mutuel Holding SA",
+      "aliases": [
+        "Avenir Krankenversicherung AG"
+      ],
+      "models": [
+        {
+          "modelId": "hm_b97d799899bd9126a92178cb7a0d",
+          "tariffCode": "BASE",
+          "name": "Assurance de base",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins.html",
+              "title": "Assurance obligatoire",
+              "passage": "Paraphrase : Modèle ordinaire et modèles alternatifs présentés.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Validité contractuelle explicite 2027.",
+            "Réseau et admissions pour la localité.",
+            "Catalogue exhaustif des services et clubs, limites et exclusions."
+          ],
+          "operatorQuestion": "Fournir les conditions 2027, réseaux et annexes des avantages de Assurance de base.",
+          "priority": "important"
+        },
+        {
+          "modelId": "hm_a0a739e912e780db9368ac07f6a0",
+          "tariffCode": "OptiMed",
+          "name": "OptiMed (Réseau de soins)",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.groupemutuel.ch/fr/doc/jcr:06d446da-2155-43f2-a068-c09e61376bcf/lang:fr/RSGM02-F5.pdfRSGM02-F5.pdf",
+              "title": "OptiMed CP 01.04.2025",
+              "passage": "Paraphrase : Premier médecin sur liste, ou centre télémédical reconnu ; délégation requise. Enfants : choix élargi.",
+              "page": 1,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Validité contractuelle explicite 2027.",
+            "Réseau et admissions pour la localité.",
+            "Catalogue exhaustif des services et clubs, limites et exclusions."
+          ],
+          "operatorQuestion": "Fournir les conditions 2027, réseaux et annexes des avantages de OptiMed (Réseau de soins).",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_7c4498357aeb0b339a08049e34a7",
+          "tariffCode": "PrimaCare",
+          "name": "PrimaCare (Médecin de famille)",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.groupemutuel.ch/fr/doc/jcr:80aa1941-3c36-4ffe-8292-7197bb3de981/lang:fr/RFGM02-F5.pdfRFGM02-F5.pdf",
+              "title": "PrimaCare CP 01.04.2025",
+              "passage": "Paraphrase : Médecin LAMal librement choisi et déclaré ; premier recours obligatoire, bons de délégation.",
+              "page": 1,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Validité contractuelle explicite 2027.",
+            "Réseau et admissions pour la localité.",
+            "Catalogue exhaustif des services et clubs, limites et exclusions."
+          ],
+          "operatorQuestion": "Fournir les conditions 2027, réseaux et annexes des avantages de PrimaCare (Médecin de famille).",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_dddb19e397d60f0d55ad28051ce0",
+          "tariffCode": "PrimaFlex",
+          "name": "PrimaFlex (Modèle flexible)",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.groupemutuel.ch/fr/doc/jcr:6af9e78c-c08d-4230-baa5-549f90d08368/lang:fr/RXGM01-F3.pdfRXGM01-F3.pdf",
+              "title": "PrimaFlex CP 01.04.2025",
+              "passage": "Paraphrase : Pharmacie/télémédecine partenaires ou médecin déclaré ; conseil initial non facturé ; choix ultérieur libre pendant période.",
+              "page": 1,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Article 8 renvoie la liste des exemptions de participation au site internet ; liste 2027 à confirmer."
+          ],
+          "missing": [
+            "Validité contractuelle explicite 2027.",
+            "Réseau et admissions pour la localité.",
+            "Catalogue exhaustif des services et clubs, limites et exclusions."
+          ],
+          "operatorQuestion": "Fournir les conditions 2027, réseaux et annexes des avantages de PrimaFlex (Modèle flexible).",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_64ace350385637e1df2594f71e2e",
+          "tariffCode": "SanaTel",
+          "name": "SanaTel (Télémédecine)",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.groupemutuel.ch/fr/doc/jcr:9fec869e-5187-445d-ad23-ee9fb747a169/lang:fr/RTGM02-F10.pdfRTGM02-F10.pdf",
+              "title": "SanaTel CP 01.04.2025",
+              "passage": "Paraphrase : Conseil initial partenaire obligatoire, recommandation ensuite libre pendant la période définie ; exceptions précisées.",
+              "page": 1,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Validité contractuelle explicite 2027.",
+            "Réseau et admissions pour la localité.",
+            "Catalogue exhaustif des services et clubs, limites et exclusions."
+          ],
+          "operatorQuestion": "Fournir les conditions 2027, réseaux et annexes des avantages de SanaTel (Télémédecine).",
+          "priority": "blocking"
+        }
+      ],
+      "benefits": [
+        {
+          "modelIds": [
+            "hm_dddb19e397d60f0d55ad28051ce0"
+          ],
+          "excluded": "Médicaments et traitements ultérieurs ne sont pas tous gratuits.",
+          "activation": "Carte d'assuré présentée au partenaire.",
+          "beneficiary": "person",
+          "extraCostMinor": 0,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer la portée et les conditions applicables en 2027.",
+          "title": "Conseil initial PrimaFlex en pharmacie",
+          "equivalenceGroup": "pharmacy_initial_advice",
+          "classification": "model_condition",
+          "category": "pharmacy",
+          "effect": "Entretien d'orientation partenaire non facturé.",
+          "conditions": "Pharmacie partenaire, prestations de conseil relevant de sa compétence.",
+          "source": {
+            "url": "https://www.groupemutuel.ch/fr/doc/jcr:6af9e78c-c08d-4230-baa5-549f90d08368/lang:fr/RXGM01-F3.pdfRXGM01-F3.pdf",
+            "title": "PrimaFlex CP, art. 4",
+            "passage": "Paraphrase : L'entretien d'orientation en pharmacie partenaire n'est pas facturé.",
+            "page": 1
+          }
+        },
+        {
+          "modelIds": [
+            "hm_dddb19e397d60f0d55ad28051ce0"
+          ],
+          "excluded": "Quote-part non déclarée supprimée ; autres lignes de facture restent soumises aux règles ordinaires.",
+          "activation": "Selon les modalités de l'assureur.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer la portée et les conditions applicables en 2027.",
+          "title": "Génériques sans franchise PrimaFlex",
+          "equivalenceGroup": "generic_deductible_waiver",
+          "classification": "model_condition",
+          "category": "cost_sharing",
+          "effect": "Franchise supprimée pour génériques admissibles.",
+          "conditions": "Médicament considéré générique à l'achat ou dans les 90 jours précédents ; critères AOS remplis.",
+          "source": {
+            "url": "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/PrimaFlex/services-exclusifs-PrimaFlex.html",
+            "title": "Services exclusifs PrimaFlex",
+            "passage": "Paraphrase : Exemption de franchise pour génériques et certains forfaits pharmacie.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [
+            "hm_dddb19e397d60f0d55ad28051ce0"
+          ],
+          "excluded": "Ne signifie pas dépistage universel gratuit ; quote-part non annoncée supprimée.",
+          "activation": "0800 852 852, annoncer PrimaFlex et demander le parcours.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer la portée et les conditions applicables en 2027.",
+          "title": "Examens mammaires sans franchise PrimaFlex",
+          "equivalenceGroup": "breast_screening_deductible_waiver",
+          "classification": "model_condition",
+          "category": "prevention",
+          "effect": "Exemption de franchise sur examens et codes TARDOC limitativement listés.",
+          "conditions": "Critères AOS et parcours de conseil ; programme cantonal utilisé si admissible, sinon évaluation individualisée.",
+          "source": {
+            "url": "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/PrimaFlex/services-exclusifs-PrimaFlex.html",
+            "title": "Services exclusifs PrimaFlex",
+            "passage": "Paraphrase : Après conseil, certains examens mammaires éligibles sont dispensés de franchise.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [],
+          "excluded": "Conditions et périodes propres aux offres ; aucun gain déduit de la prime.",
+          "activation": "Carte ou code exclusif, sans inscription au programme.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer la portée et les conditions applicables en 2027.",
+          "title": "LeClub",
+          "equivalenceGroup": "member_partner_discounts",
+          "classification": "commercial",
+          "category": "members",
+          "effect": "Offres partenaires santé, sport et loisirs.",
+          "conditions": "Assuré d'une caisse du Groupe Mutuel, carte d'assurance.",
+          "source": {
+            "url": "https://www.groupemutuel.ch/fr/clients-prives/nos-services/Questions-reponses-les-plus-frequentes/LeClub.html",
+            "title": "FAQ LeClub",
+            "passage": "Paraphrase : Accès automatique par carte, rabais partenaires sans financement par les primes ; certains événements ont un financement complémentaire.",
+            "page": null
+          }
+        }
+      ]
+    },
+    {
+      "insurerId": 360,
+      "legalName": "Krankenkasse Luzerner Hinterland",
+      "brand": "Luzerner Hinterland",
+      "groupName": null,
+      "aliases": [
+        "KKLH"
+      ],
+      "models": [
+        {
+          "modelId": "hm_cae0e02b831832f0aecf01394edb",
+          "tariffCode": "BASE",
+          "name": "Assurance de base",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.kklh.ch/versicherungen/grundversicherung/",
+              "title": "Assurance de base",
+              "passage": "Paraphrase : Modèle ordinaire : accès direct aux spécialistes.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Conditions contractuelles explicitement applicables en 2027.",
+            "Réseau local et capacité d'admission.",
+            "Inventaire complet des clubs/avantages et annexes."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de Assurance de base.",
+          "priority": "important"
+        },
+        {
+          "modelId": "hm_c9c4ef76c5a520dce4ee00504c3e",
+          "tariffCode": "HM1",
+          "name": "Hausmed",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.kklh.ch/versicherungen/grundversicherung/hausarzt-modell/",
+              "title": "Hausarzt-Modell",
+              "passage": "Paraphrase : Médecin choisi d'abord ; exceptions urgence, gynécologue et ophtalmologue.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Conditions contractuelles explicitement applicables en 2027.",
+            "Réseau local et capacité d'admission.",
+            "Inventaire complet des clubs/avantages et annexes."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de Hausmed.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_05714138adcc57954eb0460824f6",
+          "tariffCode": "TM1",
+          "name": "Telmed",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.kklh.ch/files/Files/Dokumente/PDF_s/AVB_s/AVB_Telmed.pdf",
+              "title": "AVB Telmed",
+              "passage": "Paraphrase : Medi24 fixe parcours et délai ; rappel requis pour contrôles ou nouvelles orientations.",
+              "page": 1,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Premier contact 041 989 70 10 ; pas de gratuité générale prouvée dans le passage inspecté."
+          ],
+          "missing": [
+            "Conditions contractuelles explicitement applicables en 2027.",
+            "Réseau local et capacité d'admission.",
+            "Inventaire complet des clubs/avantages et annexes."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de Telmed.",
+          "priority": "blocking"
+        }
+      ],
+      "benefits": [
+        {
+          "modelIds": [],
+          "excluded": "Prix des médicaments et participation non supprimés ; page comportant aussi des indications anciennes de 2006.",
+          "activation": "Ordonnance et fiche à Zur Rose, 8501 Frauenfeld.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": null,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "L'accord Zur Rose et les frais annoncés sont-ils toujours valables en 2027 ?",
+          "title": "Livraison de médicaments Zur Rose",
+          "equivalenceGroup": "mail_order_pharmacy_delivery",
+          "classification": "commercial",
+          "category": "pharmacy",
+          "effect": "Page assureur annonçant livraison sans port ni frais de checks.",
+          "conditions": "Ordonnance originale et formulaire initial ; actualité de l'accord à confirmer.",
+          "source": {
+            "url": "https://www.kklh.ch/kundenservice/sparen/",
+            "title": "Sparen – pharmacies",
+            "passage": "Paraphrase : Livraison annoncée sans port/checks ; page mêlant des informations anciennes.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [],
+          "excluded": "Ne pas convertir ce rabais en économie garantie ; pas d'exemption de franchise.",
+          "activation": "Selon les modalités de l'assureur.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": null,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Fournir conditions contemporaines et exclusions de l'offre MediService.",
+          "title": "Offre MediService affichée",
+          "equivalenceGroup": "pharmacy_partner_discount",
+          "classification": "commercial",
+          "category": "pharmacy",
+          "effect": "Page annonçant 5 % pour nouveaux clients un an et génériques sans limite annoncée.",
+          "conditions": "Actualité de l'offre non établie ; ordonnance et formulaire.",
+          "source": {
+            "url": "https://www.kklh.ch/kundenservice/sparen/",
+            "title": "Sparen – MediService",
+            "passage": "Paraphrase : Rabais et absence de port annoncés sans période actuelle de validité.",
+            "page": null
+          }
+        }
+      ]
+    },
+    {
+      "insurerId": 376,
+      "legalName": "KPT Caisse-maladie SA",
+      "brand": "KPT",
+      "groupName": "KPT",
+      "aliases": [
+        "CPT"
+      ],
+      "models": [
+        {
+          "modelId": "hm_51b9513ebb4d7acd630bbae6b5fe",
+          "tariffCode": "BASE",
+          "name": "Assurance de base",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.kpt.ch/de/versicherungen/krankenkassenvergleich",
+              "title": "Comparaison KPT 2027",
+              "passage": "Paraphrase : Assurance ordinaire à libre choix.",
+              "page": null,
+              "yearExplicit": true
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Le titre 2027 ne confirme pas les annexes de prestations 2027.",
+            "Catalogue membres/avantages et exclusions."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de Assurance de base.",
+          "priority": "important"
+        },
+        {
+          "modelId": "hm_3e72b38a0d5fd99649e3dd9e7178",
+          "tariffCode": "HMO_A",
+          "name": "KPTwin.plus - Médecin de famille dans centre HMO",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.kpt.ch/documents/486623c6-07dc-4b9c-b578-dea226b1efb7/AVB_PLUS_en_01.2020.pdf",
+              "title": "KPTwin.plus CG 01.2020",
+              "passage": "Paraphrase : Médecin de premier recours du réseau sous contrat KPT.",
+              "page": 1,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Conditions contractuelles explicitement applicables en 2027.",
+            "Réseau local et capacité d'admission.",
+            "Inventaire complet des clubs/avantages et annexes."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de KPTwin.plus - Médecin de famille dans centre HMO.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_dad4917f28ec2fd1cd118b7e4359",
+          "tariffCode": "KPTwindoc",
+          "name": "KPTwin.doc - Médecin de famille",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.kpt.ch/documents/6f0ffec7-a6ab-4b0f-b066-0ddf867e1374/GC_WD_en_01.2020.pdf",
+              "title": "KPTwin.doc CG 01.2020",
+              "passage": "Paraphrase : Médecin de famille reconnu chargé de coordonner les soins.",
+              "page": 1,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Conditions contractuelles explicitement applicables en 2027.",
+            "Réseau local et capacité d'admission.",
+            "Inventaire complet des clubs/avantages et annexes."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de KPTwin.doc - Médecin de famille.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_0746947e47f6d75364a8a8c7b2b4",
+          "tariffCode": "KPTwineasy",
+          "name": "KPTwin.easy - Télémédecine",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.kpt.ch/documents/892606aa-c100-4e53-94d8-82358a6a45e8/AVB_wineasy_e_01.20.pdf",
+              "title": "KPTwin.easy CG 01.2020",
+              "passage": "Paraphrase : Téléconseil et médicaments par fournisseur désigné ; participation légale.",
+              "page": 1,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Conditions contractuelles explicitement applicables en 2027.",
+            "Réseau local et capacité d'admission.",
+            "Inventaire complet des clubs/avantages et annexes."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de KPTwin.easy - Télémédecine.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_b0a71e24e7561fcad11b99b0e53d",
+          "tariffCode": "KPTwinsmart",
+          "name": "KPTwin.smart - Médecin de famille avec app",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.kpt.ch/documents/0b191638-6e2f-46c0-a1a1-1ea35809f18d/GC_SMART_en_01.2026.pdf",
+              "title": "KPTwin.smart CG 01.2026",
+              "passage": "Paraphrase : Triage app obligatoire ; pharmacie désignée ; conseil spécialiste avant hospitalisation planifiée.",
+              "page": 2,
+              "yearExplicit": false
+            },
+            {
+              "url": "https://www.kpt.ch/documents/e90312bc-57b8-4c6b-ad3d-4d502871d74f/kpt_kostenlose-dienstleistungen_win-smart_de_2026.pdf",
+              "title": "Services gratuits smart 01.2026",
+              "passage": "Paraphrase : App nécessaire et conseil télémédical gratuits ; OnlineDoctor sous critères AOS.",
+              "page": 1,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Well-App, téléphone +41 58 310 99 99 pour exceptions ; règles de suivi et de génériques."
+          ],
+          "missing": [
+            "Confirmer l'ensemble des règles 2027 et la liste annuelle d'exemptions.",
+            "Clarifier accès direct au généraliste après triage versus parcours contraignant."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de KPTwin.smart - Médecin de famille avec app.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_ea07ecfb7b49485a10b3ee851669",
+          "tariffCode": "KPTwinwin",
+          "name": "KPTwin.win - Médecin de famille, télémédecine et pharmacie",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.kpt.ch/documents/afda80b6-a2b9-44ca-9f9e-2629d334114e/GC_WIN_en_01.2026.pdf",
+              "title": "KPTwin.win CG 01.2026",
+              "passage": "Paraphrase : Choix du premier contact : médecin, téléconseil ou pharmacie ; orientation obligatoire puis spécialiste sur délégation.",
+              "page": 2,
+              "yearExplicit": false
+            },
+            {
+              "url": "https://www.kpt.ch/documents/9638699f-514c-4b6f-956c-19ab258840c6/kpt_kostenlose-dienstleistungen_win-win_de_2026.pdf",
+              "title": "Services gratuits win 01.2026",
+              "passage": "Paraphrase : Conseil/pharmacie et sélection de contrôles gratuits ; peau exemptée sous critères AOS.",
+              "page": 1,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Conditions contractuelles explicitement applicables en 2027.",
+            "Réseau local et capacité d'admission.",
+            "Inventaire complet des clubs/avantages et annexes."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de KPTwin.win - Médecin de famille, télémédecine et pharmacie.",
+          "priority": "blocking"
+        }
+      ],
+      "benefits": [
+        {
+          "modelIds": [
+            "hm_ea07ecfb7b49485a10b3ee851669"
+          ],
+          "excluded": "Ne couvre pas tous les traitements chez d'autres médecins.",
+          "activation": "Selon les modalités de l'assureur.",
+          "beneficiary": "person",
+          "extraCostMinor": 0,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": "2026-01-01",
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer portée, exclusions et conditions 2027.",
+          "title": "Conseil télémédical KPTwin.win",
+          "equivalenceGroup": "telemedicine_initial_advice",
+          "classification": "model_condition",
+          "category": "telemedicine",
+          "effect": "Conseil réglé directement par KPT.",
+          "conditions": "Prestations du centre partenaire désigné.",
+          "source": {
+            "url": "https://www.kpt.ch/documents/9638699f-514c-4b6f-956c-19ab258840c6/kpt_kostenlose-dienstleistungen_win-win_de_2026.pdf",
+            "title": "Services gratuits KPTwin.win 2026",
+            "passage": "Paraphrase : Conseil du centre payé directement, sans facture à l'assuré.",
+            "page": 1
+          }
+        },
+        {
+          "modelIds": [
+            "hm_ea07ecfb7b49485a10b3ee851669"
+          ],
+          "excluded": "Médicaments sans ordonnance à payer ; pas de droit général à chaque test.",
+          "activation": "Selon les modalités de l'assureur.",
+          "beneficiary": "person",
+          "extraCostMinor": 0,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": "2026-01-01",
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer portée, exclusions et conditions 2027.",
+          "title": "Contrôles ciblés en pharmacie KPTwin.win",
+          "equivalenceGroup": "pharmacy_prevention_checks",
+          "classification": "model_condition",
+          "category": "prevention",
+          "effect": "Conseil et contrôles diabète, cœur, allergies, streptocoques ou CRP selon indication.",
+          "conditions": "Pharmacie partenaire ; appréciation du pharmacien ; disponibilité variable.",
+          "source": {
+            "url": "https://www.kpt.ch/documents/9638699f-514c-4b6f-956c-19ab258840c6/kpt_kostenlose-dienstleistungen_win-win_de_2026.pdf",
+            "title": "Services gratuits KPTwin.win 2026",
+            "passage": "Paraphrase : Contrôles sélectionnés selon pertinence ; tous les partenaires ne proposent pas tout.",
+            "page": 1
+          }
+        },
+        {
+          "modelIds": [
+            "hm_ea07ecfb7b49485a10b3ee851669"
+          ],
+          "excluded": "Autres services et traitements ultérieurs non inclus.",
+          "activation": "onlinedoctor.ch.",
+          "beneficiary": "person",
+          "extraCostMinor": 0,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": "2026-01-01",
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer portée, exclusions et conditions 2027.",
+          "title": "Examen dermatologique numérique KPTwin.win",
+          "equivalenceGroup": "digital_skin_check_cost_sharing_waiver",
+          "classification": "model_condition",
+          "category": "cost_sharing",
+          "effect": "OnlineDoctor sans franchise ni quote-part.",
+          "conditions": "Critères de remboursement par la base remplis ; prestation décrite dans la liste.",
+          "source": {
+            "url": "https://www.kpt.ch/documents/9638699f-514c-4b6f-956c-19ab258840c6/kpt_kostenlose-dienstleistungen_win-win_de_2026.pdf",
+            "title": "Services gratuits KPTwin.win 2026",
+            "passage": "Paraphrase : Examen numérique OnlineDoctor dispensé de participation si admissible AOS.",
+            "page": 2
+          }
+        },
+        {
+          "modelIds": [
+            "hm_b0a71e24e7561fcad11b99b0e53d"
+          ],
+          "excluded": "Services supplémentaires Well peuvent être payants.",
+          "activation": "onlinedoctor.ch.",
+          "beneficiary": "person",
+          "extraCostMinor": 0,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": "2026-01-01",
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer portée, exclusions et conditions 2027.",
+          "title": "Examen dermatologique numérique KPTwin.smart",
+          "equivalenceGroup": "digital_skin_check_cost_sharing_waiver",
+          "classification": "model_condition",
+          "category": "cost_sharing",
+          "effect": "OnlineDoctor sans franchise ni quote-part.",
+          "conditions": "Critères de remboursement AOS remplis.",
+          "source": {
+            "url": "https://www.kpt.ch/documents/e90312bc-57b8-4c6b-ad3d-4d502871d74f/kpt_kostenlose-dienstleistungen_win-smart_de_2026.pdf",
+            "title": "Services gratuits KPTwin.smart 2026",
+            "passage": "Paraphrase : Exemption pour OnlineDoctor ; services nécessaires de l'app et conseil gratuits.",
+            "page": 1
+          }
+        },
+        {
+          "modelIds": [],
+          "excluded": "Être client seul ne démontre pas avoir demandé l'adhésion ; catalogue périodique.",
+          "activation": "Formulaire d'adhésion lors de la souscription ou ensuite.",
+          "beneficiary": "person",
+          "extraCostMinor": 0,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": null,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer portée, exclusions et conditions 2027.",
+          "title": "Société Coopérative KPT",
+          "equivalenceGroup": "member_partner_discounts",
+          "classification": "commercial",
+          "category": "members",
+          "effect": "Offres spéciales réservées aux sociétaires.",
+          "conditions": "Assuré KPT et demande d'adhésion.",
+          "source": {
+            "url": "https://www.kpt.ch/fr/notre-profil/l-entreprise/la-societe-cooperative-de-la-kpt",
+            "title": "Société Coopérative KPT",
+            "passage": "Paraphrase : Adhésion gratuite et sans engagement pour assurés ; offres réservées aux membres.",
+            "page": null
+          }
+        }
+      ]
+    },
+    {
+      "insurerId": 455,
+      "legalName": "ÖKK Kranken- und Unfallversicherungen AG",
+      "brand": "ÖKK",
+      "groupName": "ÖKK",
+      "aliases": [
+        "OEKK"
+      ],
+      "models": [
+        {
+          "modelId": "hm_66b16462a501496d8842ab7395eb",
+          "tariffCode": "BASE",
+          "name": "Assurance de base",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.oekk.ch/uploads/files/02_Dokumente/01_PK/01_Angebot/Infoblaetter/DE/1004_CASAMED_versicherungsmodell_de1.pdf",
+              "title": "CASAMED, fiche 04.2025",
+              "passage": "Paraphrase : Choix libre de médecin.",
+              "page": 1,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Conditions contractuelles explicitement applicables en 2027.",
+            "Réseau local et capacité d'admission.",
+            "Inventaire complet des clubs/avantages et annexes."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de Assurance de base.",
+          "priority": "important"
+        },
+        {
+          "modelId": "hm_88e9a8b35ed7f2f7859ef07c335d",
+          "tariffCode": "HAM_CBA",
+          "name": "ÖKK CASAMED MÉDECIN DE FAMILLE",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.oekk.ch/uploads/files/02_Dokumente/01_PK/01_Angebot/Infoblaetter/DE/1004_CASAMED_versicherungsmodell_de1.pdf",
+              "title": "CASAMED, fiche 04.2025",
+              "passage": "Paraphrase : Médecin ou télé-médecin de famille dans la liste ÖKK.",
+              "page": 1,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Exceptions de contrôle gynécologie/yeux et pédiatrie avant 18 ans ; urgence à annoncer sous 20 jours (p. 2)."
+          ],
+          "missing": [
+            "Conditions contractuelles explicitement applicables en 2027.",
+            "Réseau local et capacité d'admission.",
+            "Inventaire complet des clubs/avantages et annexes."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de ÖKK CASAMED MÉDECIN DE FAMILLE.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_0ba7db5072e2dcf0e2248cb07a2d",
+          "tariffCode": "HMO_Kt",
+          "name": "ÖKK CASAMED HMO",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.oekk.ch/uploads/files/02_Dokumente/01_PK/01_Angebot/Infoblaetter/DE/1004_CASAMED_versicherungsmodell_de1.pdf",
+              "title": "CASAMED, fiche 04.2025",
+              "passage": "Paraphrase : Médecin du centre HMO choisi.",
+              "page": 1,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Exceptions de contrôle gynécologie/yeux et pédiatrie avant 18 ans ; urgence à annoncer sous 20 jours (p. 2)."
+          ],
+          "missing": [
+            "Conditions contractuelles explicitement applicables en 2027.",
+            "Réseau local et capacité d'admission.",
+            "Inventaire complet des clubs/avantages et annexes."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de ÖKK CASAMED HMO.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_f8099f70b38f56ae6b2c859e6031",
+          "tariffCode": "Select",
+          "name": "ÖKK CASAMED SELECT",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.oekk.ch/uploads/files/02_Dokumente/01_PK/01_Angebot/Infoblaetter/DE/1004_CASAMED_versicherungsmodell_de1.pdf",
+              "title": "CASAMED, fiche 04.2025",
+              "passage": "Paraphrase : Premier recours Medgate ou pharmacie partenaire.",
+              "page": 1,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Exceptions de contrôle gynécologie/yeux et pédiatrie avant 18 ans ; urgence à annoncer sous 20 jours (p. 2)."
+          ],
+          "missing": [
+            "Conditions contractuelles explicitement applicables en 2027.",
+            "Réseau local et capacité d'admission.",
+            "Inventaire complet des clubs/avantages et annexes."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de ÖKK CASAMED SELECT.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_7b676fa5ca8167a059a20d245eb7",
+          "tariffCode": "Telmed",
+          "name": "ÖKK CASAMED 24",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.oekk.ch/uploads/files/02_Dokumente/01_PK/01_Angebot/Infoblaetter/DE/1004_CASAMED_versicherungsmodell_de1.pdf",
+              "title": "CASAMED, fiche 04.2025",
+              "passage": "Paraphrase : Premier recours Medgate, téléphone, vidéo ou application.",
+              "page": 1,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Exceptions de contrôle gynécologie/yeux et pédiatrie avant 18 ans ; urgence à annoncer sous 20 jours (p. 2)."
+          ],
+          "missing": [
+            "Conditions contractuelles explicitement applicables en 2027.",
+            "Réseau local et capacité d'admission.",
+            "Inventaire complet des clubs/avantages et annexes."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de ÖKK CASAMED 24.",
+          "priority": "blocking"
+        }
+      ],
+      "benefits": [
+        {
+          "modelIds": [],
+          "excluded": "Offre révocable ; plafonds globaux du compte santé. Tableau PDF en cache lu, téléchargement a ensuite retourné 404 ; plafond non activé.",
+          "activation": "Soumettre justificatifs nominatifs.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": "2025-04-01",
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": true,
+          "supplementaryProducts": [
+            "ÖKK START + ÖKK PRÄVENTION",
+            "ÖKK FAMILY",
+            "ÖKK FAMILY FLEX",
+            "ÖKK OPTIMA",
+            "ÖKK PREMIUM"
+          ],
+          "verification": "inaccessible",
+          "operatorQuestion": "Fournir tableau authentifié 2027, plafonds par produit et conditions exactes BikeBonus.",
+          "title": "BikeBonus",
+          "equivalenceGroup": "cycling_prevention_contribution",
+          "classification": "supplementary",
+          "category": "prevention",
+          "effect": "Participation annoncée de 50 % aux dépenses cyclistes reconnues ; plafond selon complémentaire.",
+          "conditions": "START + PRÄVENTION, ou FAMILY/FAMILY FLEX/OPTIMA/PREMIUM. Fournisseur suisse reconnu et justificatif nominatif en CHF.",
+          "source": {
+            "url": "https://www.oekk.ch/uploads/files/02_Dokumente/01_PK/01_Angebot/Leistungsuebersichten/EN/5119_OEKK_LIVE_BikeBonus_Leistungsuebersicht_2025_en1.pdf",
+            "title": "BikeBonus conditions 2025",
+            "passage": "Paraphrase : Contribution conditionnée aux complémentaires et sous-plafond santé ; offre modifiable ou retirée.",
+            "page": 1
+          }
+        },
+        {
+          "modelIds": [],
+          "excluded": "Ne pas présenter comme droit offert avec la base seule.",
+          "activation": "Selon les modalités de l'assureur.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": null,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Quelles couvertures, seuils et règles d'échange Simpla sont requis en 2027 ?",
+          "title": "Simpla, programme de récompense annoncé",
+          "equivalenceGroup": "activity_rewards",
+          "classification": "unknown",
+          "category": "members",
+          "effect": "Brochure 2026 annonce récompenses jusqu'à CHF 200/an.",
+          "conditions": "Éligibilité détaillée non établie ; page dédiée inaccessible.",
+          "source": {
+            "url": "https://www.oekk.ch/uploads/files/02_Dokumente/01_PK/01_Angebot/Broschueren/PK_Leistungsuebersicht_2026_fr_web.pdf",
+            "title": "Aperçu ÖKK 2026",
+            "passage": "Paraphrase : Présentation de Simpla et récompense annuelle, sans conditions complètes dans l'extrait lu.",
+            "page": null
+          }
+        }
+      ]
+    },
+    {
+      "insurerId": 509,
+      "legalName": "Vivao Sympany SA",
+      "brand": "Sympany",
+      "groupName": "Sympany",
+      "aliases": [
+        "Vivao Sympany"
+      ],
+      "models": [
+        {
+          "modelId": "hm_0a2338c2b5fd1dfb216e4429bea0",
+          "tariffCode": "BASE",
+          "name": "Assurance de base",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.sympany.ch/fr/particuliers/assurance-de-base.html",
+              "title": "Assurances de base",
+              "passage": "Paraphrase : Classic à libre choix ; prestations légales.",
+              "page": null,
+              "yearExplicit": false
+            },
+            {
+              "url": "https://www.sympany.ch/fr/particuliers/bon-a-savoir/avantages/conseil-medical.html",
+              "title": "Conseil médical",
+              "passage": "Paraphrase : Consultation Medgate classic facturée avec participation éventuelle.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Conditions contractuelles explicitement applicables en 2027.",
+            "Réseau local et capacité d'admission.",
+            "Inventaire complet des clubs/avantages et annexes."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de Assurance de base.",
+          "priority": "important"
+        },
+        {
+          "modelId": "hm_1f423952fddf7ed3693c971be9f9",
+          "tariffCode": "DIV_XBA",
+          "name": "flexhelp24",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.sympany.ch/dam/jcr:e2fc82d1-5855-4f43-9459-e1cff0b6bd0e/VB-flexhelp24-2024-Sympany-it.2023-10-06-14-18-19.pdf",
+              "title": "flexhelp24 CA 2024",
+              "passage": "Paraphrase : Fournisseur coordinateur et parcours contraignant.",
+              "page": 3,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Conditions contractuelles explicitement applicables en 2027.",
+            "Réseau local et capacité d'admission.",
+            "Inventaire complet des clubs/avantages et annexes."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de flexhelp24.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_c920f1b8716ff6b5c270d9e9d8f0",
+          "tariffCode": "HAM_CBA",
+          "name": "casamed médecin de famille",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.sympany.ch/dam/jcr:4b670e31-a673-4b98-827d-92743b96edae/VB-casamed-hausarzt-2024-Sympany-it.2023-10-06-13-56-57.pdf",
+              "title": "casamed médecin de famille CA 2024",
+              "passage": "Paraphrase : Cabinet dans liste consulté d'abord, orientation par coordinateur.",
+              "page": 3,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Conditions contractuelles explicitement applicables en 2027.",
+            "Réseau local et capacité d'admission.",
+            "Inventaire complet des clubs/avantages et annexes."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de casamed médecin de famille.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_1cbdee62b667396c9a562eb6e46e",
+          "tariffCode": "HAM_GBA",
+          "name": "callmed 24",
+          "status": "review",
+          "sources": [
+            {
+              "url": "https://www.sympany.ch/dam/jcr:709f9436-8bcd-446d-bcd8-c2ab8c88111d/VB-callmed_24-2022-Sympany-1091-0222-en.2022-07-04-17-40-54.pdf",
+              "title": "callmed24 CA 2022",
+              "passage": "Paraphrase : Lien indexé 2024 renvoyant à une version anglaise 2022 ; exceptions yeux/gynécologie/dents et pédiatrie avant 16 ans.",
+              "page": 4,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Résoudre la version erronée du lien documentaire.",
+            "Vérifier conditions 2027, sanctions et exceptions."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de callmed 24.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_a403030c84a6e822520b8a722040",
+          "tariffCode": "HAM_PBA",
+          "name": "casamed pharm",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.sympany.ch/dam/jcr:7ccda988-e303-43f6-a363-faeb9fb344a9/VB-casamed-pharm-2024-Sympany-it.2023-10-06-14-13-51.pdf",
+              "title": "casamed pharm CA 2024",
+              "passage": "Paraphrase : Document accessible ; contrôle complet des articles et annexes 2027 restant.",
+              "page": null,
+              "yearExplicit": false
+            },
+            {
+              "url": "https://www.sympany.ch/fr/particuliers/bon-a-savoir/avantages/conseil-medical.html",
+              "title": "Conseil médical",
+              "passage": "Paraphrase : Pharmacie partenaire ou Medgate, consultation sans participation.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Conditions contractuelles explicitement applicables en 2027.",
+            "Réseau local et capacité d'admission.",
+            "Inventaire complet des clubs/avantages et annexes."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de casamed pharm.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_825ad065af8ecbf0a6cdaf6c3240",
+          "tariffCode": "HMO",
+          "name": "casamed hmo",
+          "status": "review",
+          "sources": [
+            {
+              "url": "https://www.sympany.ch/dam/jcr:6093b428-cbdb-4f61-9f06-b5e61b97350c/VB-casamed-hmo-2022-Sympany-1094-0222-it.2022-07-04-16-07-39.pdf",
+              "title": "casamed hmo CA 2022",
+              "passage": "Paraphrase : Lien indexé 2024 renvoyant au document nommé 2022.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [],
+          "missing": [
+            "Résoudre la version erronée du lien documentaire.",
+            "Vérifier CGA et réseau HMO 2027."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de casamed hmo.",
+          "priority": "blocking"
+        }
+      ],
+      "benefits": [
+        {
+          "modelIds": [
+            "hm_1f423952fddf7ed3693c971be9f9",
+            "hm_1cbdee62b667396c9a562eb6e46e",
+            "hm_a403030c84a6e822520b8a722040"
+          ],
+          "excluded": "Communications téléphoniques ; classic facturé au tarif ordinaire.",
+          "activation": "flexhelp24 : +41 844 654 654 ; autres : +41 844 852 852.",
+          "beneficiary": "person",
+          "extraCostMinor": 0,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer portée, exclusions et conditions 2027.",
+          "title": "Téléconsultations Medgate sans participation",
+          "equivalenceGroup": "telemedicine_consultation_cost_sharing_waiver",
+          "classification": "model_condition",
+          "category": "telemedicine",
+          "effect": "Coûts de consultation intégralement couverts sans participation.",
+          "conditions": "flexhelp24, callmed24 ou casamed pharm.",
+          "source": {
+            "url": "https://www.sympany.ch/fr/particuliers/bon-a-savoir/avantages/conseil-medical.html",
+            "title": "Conseil médical Sympany",
+            "passage": "Paraphrase : Trois modèles dispensés de participation sur consultation Medgate.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [
+            "hm_a403030c84a6e822520b8a722040"
+          ],
+          "excluded": "Médicaments prescrits soumis à la participation.",
+          "activation": "Annuaire officiel lié : https://aposearch.ifakdata.ch.",
+          "beneficiary": "person",
+          "extraCostMinor": 0,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer portée, exclusions et conditions 2027.",
+          "title": "Consultation pharmacie casamed pharm",
+          "equivalenceGroup": "pharmacy_initial_advice",
+          "classification": "model_condition",
+          "category": "pharmacy",
+          "effect": "Consultation partenaire sans frais.",
+          "conditions": "Modèle casamed pharm et réseau reconnu.",
+          "source": {
+            "url": "https://www.sympany.ch/fr/particuliers/bon-a-savoir/avantages/conseil-medical.html",
+            "title": "Conseil médical Sympany",
+            "passage": "Paraphrase : Consultation pharmacie gratuite, médicaments avec participation.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [],
+          "excluded": "Base seule/euroline non éligible. Page contradictoire : naissance 2001 ou 2000 selon paragraphe.",
+          "activation": "Carte-piscine nominative envoyée ; carte d'assuré insuffisante.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": true,
+          "supplementaryProducts": [
+            "Complémentaire ambulatoire",
+            "Complémentaire hospitalisation"
+          ],
+          "verification": "contradictory",
+          "operatorQuestion": "Confirmer date de naissance limite, assurances admises et piscines pour la saison 2027.",
+          "title": "Carte-piscine Sympany",
+          "equivalenceGroup": "member_swimming_access",
+          "classification": "supplementary",
+          "category": "members",
+          "effect": "Entrée aux piscines partenaires pendant saison pour jeunes éligibles.",
+          "conditions": "Au moins complémentaire ambulatoire et hospitalisation ; âge jusqu'à 25 ans annoncé.",
+          "source": {
+            "url": "https://www.sympany.ch/fr/particuliers/bon-a-savoir/avantages/gratuitement-aux-bains.html",
+            "title": "Gratuitement aux bains",
+            "passage": "Paraphrase : Deux complémentaires requises ; limites de naissance incohérentes, millésime 2026.",
+            "page": null
+          }
+        }
+      ]
+    },
+    {
+      "insurerId": 780,
+      "legalName": "Genossenschaft Glarner Krankenversicherung",
+      "brand": "Glarner",
+      "groupName": null,
+      "aliases": [
+        "GLKV",
+        "glarnermed24"
+      ],
+      "models": [
+        {
+          "modelId": "hm_611754ea398375405504404ef9b4",
+          "tariffCode": "BASE",
+          "name": "Assurance de base",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.glkv.ch/online-schalter/medizinische-beratung/telemedizinische-beratung.html/70",
+              "title": "GLKV — conseil télémédical",
+              "passage": "Paraphrase : Conseil Medi24 gratuit, permanent ; téléphone +41 55 642 65 45 ou demande de rappel.",
+              "page": null,
+              "yearExplicit": false
+            },
+            {
+              "url": "https://www.glkv.ch/ueber-glkv/partner/partner.html/44",
+              "title": "GLKV — partenaires",
+              "passage": "Paraphrase : Liste de partenaires institutionnels et fournisseurs ; aucun avantage commercial chiffré identifié dans cette page.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Modèle BASE présent dans l'inventaire OFSP ; portée du conseil gratuit à confirmer."
+          ],
+          "missing": [
+            "CGA du modèle standard et validation 2027.",
+            "La page partenaires n'établit pas de club de rabais ; existence éventuelle non résolue."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de Assurance de base.",
+          "priority": "important"
+        },
+        {
+          "modelId": "hm_0b016d7c2e38023bacd1f9a12788",
+          "tariffCode": "Telmed-Modell",
+          "name": "glarnermed24",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.glkv.ch/versicherungen/grundversicherung/telmedmodell-glarnermed24.html/88",
+              "title": "GLKV — glarnermed24",
+              "passage": "Paraphrase : Appeler +41 55 642 65 45 avant consultation ; service permanent. Exceptions et délai de notification des urgences.",
+              "page": null,
+              "yearExplicit": false
+            },
+            {
+              "url": "https://www.glkv.ch/public/upload/assets/410/AVB_01_GLKV-glarnermed24_2021-v3.pdf?fp=1",
+              "title": "GLKV — AVB glarnermed24",
+              "passage": "Paraphrase : Conditions entrées en vigueur le 01.01.2022 ; Medi24 oriente le traitement, fixe le délai et doit être recontacté pour les suites.",
+              "page": 2,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Medi24 est le premier contact ; parcours et délai à respecter.",
+            "PDF 2022 : urgences à annoncer sous 20 jours ; exceptions notamment prévention gynécologique, maternité, yeux, dentiste, certains soins pédiatriques.",
+            "Participation aux coûts ordinaire dans le PDF. Pas de gratuité générale des traitements démontrée."
+          ],
+          "missing": [
+            "Confirmation que l'édition 2022 reste celle applicable à 2027.",
+            "Distinguer conseil et actes médicaux facturables.",
+            "Règles du séjour à l'étranger : exemption PDF limitée aux urgences à vérifier."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de glarnermed24.",
+          "priority": "blocking"
+        }
+      ],
+      "benefits": [
+        {
+          "modelIds": [],
+          "excluded": "Gratuité des consultations ou traitements ultérieurs non démontrée.",
+          "activation": "Appel au +41 55 642 65 45 ou rappel Medi24.",
+          "beneficiary": "person",
+          "extraCostMinor": 0,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": null,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Accessible à BASE et glarnermed24 sans complémentaire ? Quels actes restent facturés ?",
+          "title": "Conseil médical Medi24",
+          "equivalenceGroup": "telemedicine_initial_advice",
+          "classification": "base_service",
+          "category": "telemedicine",
+          "effect": "Service de conseil annoncé gratuit et disponible 24 h/24.",
+          "conditions": "Page de service GLKV ; périmètre des assurés et actes couverts à confirmer.",
+          "source": {
+            "url": "https://www.glkv.ch/online-schalter/medizinische-beratung/telemedizinische-beratung.html/70",
+            "title": "GLKV — conseil télémédical",
+            "passage": "Paraphrase : Conseil Medi24 gratuit, permanent ; téléphone +41 55 642 65 45 ou demande de rappel.",
+            "page": null
+          }
+        }
+      ]
+    },
+    {
+      "insurerId": 820,
+      "legalName": "curaulta",
+      "brand": "curaulta",
+      "groupName": null,
+      "aliases": [
+        "Cassa da malsauns Lumneziana",
+        "sanavals"
+      ],
+      "models": [
+        {
+          "modelId": "hm_a900a9aa7b430bfeba1cf1f43819",
+          "tariffCode": "BASE",
+          "name": "Assurance de base",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.curaulta.ch/versicherungen/standardversicherung",
+              "title": "curaulta — standard",
+              "passage": "Paraphrase : Libre choix du médecin et accès direct au spécialiste présentés pour le modèle standard.",
+              "page": null,
+              "yearExplicit": false
+            },
+            {
+              "url": "https://www.curaulta.ch/",
+              "title": "curaulta — accueil",
+              "passage": "Paraphrase : La caisse issue de Lumneziana et sanavals propose l'assurance de base dans les Grisons.",
+              "page": null,
+              "yearExplicit": false
+            },
+            {
+              "url": "https://www.curaulta.ch/versicherungen/surselva-cumpletta",
+              "title": "curaulta — Surselva Cumpletta",
+              "passage": "Paraphrase : Complémentaire présentée séparément ; conditions fournies par vita surselva.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Libre choix du médecin annoncé.",
+            "Les prestations Cumpletta relèvent d'un produit complémentaire distinct."
+          ],
+          "missing": [
+            "CGA standard 2027.",
+            "Club commercial non établi par les pages parcourues ; demander le catalogue éventuel."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de Assurance de base.",
+          "priority": "important"
+        },
+        {
+          "modelId": "hm_4d87d0792eadd080cbf2660e9bea",
+          "tariffCode": "CASAMED",
+          "name": "CASAMED",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.curaulta.ch/versicherungen/hausarztversicherung-casamed",
+              "title": "curaulta — casamed",
+              "passage": "Paraphrase : Médecin de famille choisi en premier ; exceptions urgences, gynécologie et ophtalmologie. Liste officielle : https://hausarztverzeichnis.nambu.one/curaulta.",
+              "page": null,
+              "yearExplicit": false
+            },
+            {
+              "url": "https://www.curaulta.ch/files/dokumente/AVB_Hausarztversicherung%20KVG.pdf",
+              "title": "curaulta — AVB Hausarztversicherung",
+              "passage": "Paraphrase : PDF de six pages sans texte exploitable ; contenu contractuel non vérifié.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Parcours médecin de famille annoncé ; exceptions indiquées sur la page produit."
+          ],
+          "missing": [
+            "PDF contractuel non exploitable avec l'outil ; lecture manuelle nécessaire.",
+            "Conditions 2027, liste des médecins et acceptation de nouveaux patients.",
+            "Éligibilité complète des prestations ou clubs."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de CASAMED.",
+          "priority": "blocking"
+        }
+      ],
+      "benefits": [
+        {
+          "modelIds": [],
+          "excluded": "Frais déjà couverts par l'AOS ou un autre payeur.",
+          "activation": "Souscription complémentaire et décompte ; confirmation préalable des conditions actuelles.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": 30000,
+          "frequency": "calendar_year",
+          "validFrom": "2004-01-01",
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": true,
+          "supplementaryProducts": [
+            "Surselva Cumpletta (vita surselva)"
+          ],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer assureur porteur, commercialisation aux clients curaulta et conditions Cumpletta 2027 ; fournir CGA et annexes actualisées.",
+          "title": "Cumpletta — contribution au check-up",
+          "equivalenceGroup": "preventive_checkup",
+          "classification": "supplementary",
+          "category": "prevention",
+          "effect": "Dans l'édition 2004 liée par curaulta : 90 % des frais, plafond annuel 300 CHF.",
+          "conditions": "Contrôle non pris en charge par l'AOS ; produit Cumpletta et prestataires reconnus.",
+          "source": {
+            "url": "https://www.curaulta.ch/files/dokumente/ZB_CUMP.pdf",
+            "title": "vita surselva — conditions Cumpletta proposées par curaulta",
+            "passage": "Paraphrase : Édition 01.01.2004, C8.2 : contrôle non couvert par l'AOS remboursé à 90 %, au maximum 300 CHF par an.",
+            "page": 2
+          }
+        }
+      ]
+    },
+    {
+      "insurerId": 881,
+      "legalName": "EGK Grundversicherungen AG",
+      "brand": "EGK",
+      "groupName": "EGK-Caisse de Santé",
+      "aliases": [
+        "EGK Gesundheitskasse",
+        "EGK-Grundversicherungen"
+      ],
+      "models": [
+        {
+          "modelId": "hm_b3b31c38a7a77e357f70b16cb5e6",
+          "tariffCode": "BASE",
+          "name": "Assurance de base",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.egk.ch/fr/assurances/assurances-de-base/medecin-de-famille",
+              "title": "EGK — médecin de famille",
+              "passage": "Paraphrase : Réseau consultable sur https://egk.arztmap.ch ; exceptions pour prévention gynécologique, examen visuel annuel et soins dentaires.",
+              "page": null,
+              "yearExplicit": false
+            },
+            {
+              "url": "https://www.egk.ch/fr/services/connaissances-aide/services-de-conseil",
+              "title": "EGK — services de conseil",
+              "passage": "Paraphrase : BetterDoc recherche gratuitement un spécialiste pour les assurés EGK ; ParaPhone gratuit avec EGK-SUN, mais consultation sur place payante.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "BASE inventorié séparément des modèles à premier contact obligatoire.",
+            "BetterDoc est présenté comme service pour tous les assurés EGK."
+          ],
+          "missing": [
+            "CGA standard 2027.",
+            "Conditions exhaustives des offres partenaires."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de Assurance de base.",
+          "priority": "important"
+        },
+        {
+          "modelId": "hm_b0301d3e66dc9487056c5dc462d3",
+          "tariffCode": "HAM_MC",
+          "name": "EGK-Care",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.egk.ch/fr/assurances/assurances-de-base/medecin-de-famille",
+              "title": "EGK — médecin de famille",
+              "passage": "Paraphrase : Réseau consultable sur https://egk.arztmap.ch ; exceptions pour prévention gynécologique, examen visuel annuel et soins dentaires.",
+              "page": null,
+              "yearExplicit": false
+            },
+            {
+              "url": "https://www.egk.ch/egk-2026/versicherungen/dokumente/hausarztmodell-care/conditions-complementaires-d-assurance-egk-care-assurance-managed-care-conformement-a-la-loi-sur-l-assurancemaladie-fr.pdf",
+              "title": "EGK-Care — CCA 2011",
+              "passage": "Paraphrase : Édition 2011 : médecin MCO premier interlocuteur ; spécialiste sur transfert ; participation légale et contractuelle.",
+              "page": 4,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Médecin MCO du réseau, nommé à la demande d'assurance ; orientation préalable.",
+            "CCA 2011 : accès direct pédiatre jusqu'à 12 ans révolus, prévention gynécologique, maternité, examen visuel annuel, dentiste.",
+            "Les restrictions du parcours peuvent aussi viser les complémentaires EGK associées."
+          ],
+          "missing": [
+            "Confirmation de l'édition applicable en 2027 ; PDF toujours daté 2011.",
+            "Réseau et admissions locales actualisés.",
+            "Portée exacte des contraintes sur les complémentaires."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de EGK-Care.",
+          "priority": "blocking"
+        },
+        {
+          "modelId": "hm_d24edd6dbef24030c80c3cd5ee04",
+          "tariffCode": "Tel_Care",
+          "name": "EGK-TelCare",
+          "status": "partial",
+          "sources": [
+            {
+              "url": "https://www.egk.ch/fr/assurances/assurances-de-base/telcare",
+              "title": "EGK — TelCare",
+              "passage": "Paraphrase : Medgate au 0800 800 735, application ou vidéo ; plan contraignant et suivi à annoncer. Conseil annoncé gratuit, urgences à annoncer sous dix jours.",
+              "page": null,
+              "yearExplicit": false
+            },
+            {
+              "url": "https://www.egk.ch/egk-2026/versicherungen/dokumente/telcare/conditions-complementaires-d-assurance-egk-telcare-conformement-a-la-loi-sur-l-assurance-maladie-cca-lamal-egk-telcare--fr.pdf",
+              "title": "EGK-TelCare — CCA 2014",
+              "passage": "Paraphrase : Conditions 2014, art. 8 : participation légale et contractuelle. Premier appel avant recours médical, hospitalier ou prescription.",
+              "page": 4,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Medgate au premier contact, plan contraignant ; information en cas de suite ou transfert.",
+            "Page produit : accès direct gynécologue, ophtalmologue et dentiste ; centre partenaire Medgate également indiqué.",
+            "Conseil gratuit annoncé ; ne pas généraliser à tous les actes médicaux."
+          ],
+          "missing": [
+            "Confirmation écrite des règles et de la gratuité applicables en 2027.",
+            "Liste des centres partenaires et exceptions contractuelles complètes."
+          ],
+          "operatorQuestion": "Confirmer conditions, réseaux et services 2027 de EGK-TelCare.",
+          "priority": "blocking"
+        }
+      ],
+      "benefits": [
+        {
+          "modelIds": [],
+          "excluded": "Consultation, second avis médical et traitement ne sont pas rendus gratuits par cette annonce.",
+          "activation": "061 551 01 88, lundi–vendredi 8 h–17 h.",
+          "beneficiary": "person",
+          "extraCostMinor": 0,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": null,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer accès avec assurance de base seule et conditions 2027.",
+          "title": "BetterDoc — recherche de spécialiste",
+          "equivalenceGroup": "specialist_navigation",
+          "classification": "base_service",
+          "category": "access",
+          "effect": "Recherche de médecin spécialiste annoncée gratuite pour les assurés EGK, retour annoncé sous deux jours ouvrables.",
+          "conditions": "Service d'orientation BetterDoc.",
+          "source": {
+            "url": "https://www.egk.ch/fr/services/connaissances-aide/services-de-conseil",
+            "title": "EGK — services de conseil",
+            "passage": "Paraphrase : BetterDoc recherche gratuitement un spécialiste pour les assurés EGK ; ParaPhone gratuit avec EGK-SUN, mais consultation sur place payante.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [],
+          "excluded": "Consultations en présence au centre Paramed de Baar payantes.",
+          "activation": "0800 42 42 00, jours ouvrables 8 h–12 h et 13 h 30–17 h.",
+          "beneficiary": "person",
+          "extraCostMinor": 0,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": true,
+          "supplementaryProducts": [
+            "EGK-SUN"
+          ],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer portée, exclusions et conditions 2027.",
+          "title": "ParaPhone — conseil de médecine complémentaire",
+          "equivalenceGroup": "complementary_medicine_advice",
+          "classification": "supplementary",
+          "category": "telemedicine",
+          "effect": "Conseil téléphonique gratuit avec EGK-SUN.",
+          "conditions": "Complémentaire EGK-SUN requise.",
+          "source": {
+            "url": "https://www.egk.ch/fr/services/connaissances-aide/services-de-conseil",
+            "title": "EGK — services de conseil",
+            "passage": "Paraphrase : BetterDoc recherche gratuitement un spécialiste pour les assurés EGK ; ParaPhone gratuit avec EGK-SUN, mais consultation sur place payante.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [
+            "hm_d24edd6dbef24030c80c3cd5ee04"
+          ],
+          "excluded": "Ne prouve pas une exonération générale pour tous les actes ou traitements.",
+          "activation": "0800 800 735 ou application Medgate.",
+          "beneficiary": "person",
+          "extraCostMinor": 0,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": true,
+          "requiresSupplementary": false,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer portée, exclusions et conditions 2027.",
+          "title": "Medgate — conseil TelCare",
+          "equivalenceGroup": "telemedicine_initial_advice",
+          "classification": "model_condition",
+          "category": "telemedicine",
+          "effect": "Conseil téléphonique ou vidéo annoncé gratuit, disponible en permanence.",
+          "conditions": "EGK-TelCare et respect du parcours.",
+          "source": {
+            "url": "https://www.egk.ch/fr/assurances/assurances-de-base/telcare",
+            "title": "EGK — TelCare",
+            "passage": "Paraphrase : Medgate au 0800 800 735, application ou vidéo ; plan contraignant et suivi à annoncer. Conseil annoncé gratuit, urgences à annoncer sous dix jours.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [],
+          "excluded": "Tarif inutilisable en ligne sans remise du prospectus sur place ; aucune prise en charge AOS promise.",
+          "activation": "Réserver via le lien ORTHO-TEAM de la page EGK puis remettre le prospectus lors du rendez-vous.",
+          "beneficiary": "person",
+          "extraCostMinor": 14900,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": "2025-04-01",
+          "validUntil": "2027-12-31",
+          "yearConfirmed": true,
+          "requiresSameBase": null,
+          "requiresSupplementary": null,
+          "supplementaryProducts": [],
+          "verification": "verified",
+          "operatorQuestion": "Préciser si un contrat complémentaire seul suffit et contrôler les centres ouverts au rendez-vous.",
+          "title": "ORTHO-TEAM — tarif analyse de foulée",
+          "equivalenceGroup": "member_partner_discounts",
+          "classification": "commercial",
+          "category": "members",
+          "effect": "Prix 149 CHF au lieu de 198 CHF pour l'analyse de foulée.",
+          "conditions": "Être assuré EGK ; offre explicitement valable jusqu'au 31 décembre 2027.",
+          "source": {
+            "url": "https://www.egk.ch/fr/votre-egk/notre-profil/egk-partenaires/groupe-ortho-team",
+            "title": "EGK / ORTHO-TEAM — analyse de foulée",
+            "passage": "Paraphrase : Tarif assuré 149 CHF contre 198 CHF ; prospectus à remettre sur place. Offre du 01.04.2025 au 31.12.2027.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [],
+          "excluded": "Ne pas proposer comme avantage 2027.",
+          "activation": "Ancien code EGK20 ; ne pas suggérer une validité actuelle.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": "2026-06-01",
+          "validUntil": "2026-08-31",
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": null,
+          "supplementaryProducts": [],
+          "verification": "verified",
+          "operatorQuestion": "Une nouvelle campagne 2027 existe-t-elle ?",
+          "title": "SanerNatur — offre EGK20 expirée",
+          "equivalenceGroup": "member_partner_discounts",
+          "classification": "commercial",
+          "category": "members",
+          "effect": "Réduction de 20 % annoncée pour une campagne achevée au 31 août 2026.",
+          "conditions": "Archive d'offre ; aucun bénéfice actif 2027 établi.",
+          "source": {
+            "url": "https://www.egk.ch/fr/votre-egk/notre-profil/egk-partenaires/saner-natur",
+            "title": "EGK / SanerNatur",
+            "passage": "Paraphrase : Code EGK20 donnant 20 % de remise uniquement du 01.06.2026 au 31.08.2026.",
+            "page": null
+          }
+        }
+      ]
+    },
+    {
+      "insurerId": 923,
+      "legalName": "Genossenschaft KRANKENKASSE SLKK",
+      "brand": "SLKK",
+      "groupName": "SLKK",
+      "aliases": [
+        "Schweizerische Lehrerkrankenkasse"
+      ],
+      "models": [
+        {
+          "modelId": "hm_e254c58bbaa47a2a2ecb1ef293e9",
+          "tariffCode": "BASE",
+          "name": "Assurance de base",
+          "status": "partial",
+          "operatorQuestion": "Fournir version 2027 et parcours complet de Assurance de base.",
+          "priority": "important",
+          "sources": [
+            {
+              "url": "https://slkk.ch/de/grundversicherung-krankenkasse/",
+              "title": "SLKK — assurance de base",
+              "passage": "Paraphrase : Présentation séparée du libre choix, du médecin de famille, de TelCare et du modèle numérique SmartMed.",
+              "page": null,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Libre choix du médecin présenté pour la base ordinaire."
+          ],
+          "missing": [
+            "CGA de base et version 2027.",
+            "Éligibilité exhaustive aux offres commerciales."
+          ]
+        },
+        {
+          "modelId": "hm_ef7a9ad9f419fc0b24d4febf2736",
+          "tariffCode": "HOMECARE",
+          "name": "HomeCare",
+          "status": "partial",
+          "operatorQuestion": "Fournir version 2027 et parcours complet de HomeCare.",
+          "priority": "blocking",
+          "sources": [
+            {
+              "url": "https://media.slkk.ch/filer_public/f6/f7/f6f771f7-9fa7-4831-a634-ff21859d9ed4/2025-09-09-slkk-40-grund-vers-eb-home-care.pdf",
+              "title": "SLKK — HomeCare EB",
+              "passage": "Paraphrase : Édition effective 01.01.2019 ; médecin MCO du réseau en premier, coordonnant le parcours ; exceptions et participation aux coûts aux art. 4–5.",
+              "page": 4,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Médecin MCO du réseau, indiqué à l'inscription, à consulter en premier.",
+            "Exceptions PDF : séjour temporaire étranger, prévention gynécologique, grossesse, pédiatrie jusqu'à 16 ans, examen visuel annuel pour aide visuelle et dentiste.",
+            "Urgence : informer le MCO dès que possible ; suites coordonnées."
+          ],
+          "missing": [
+            "Conditions réellement en vigueur en 2027 ; PDF 2019 malgré nom de fichier 2025.",
+            "Réseau officiel et admissions locales."
+          ]
+        },
+        {
+          "modelId": "hm_506c3c6877598d8ef9722ef18840",
+          "tariffCode": "SMARTMED",
+          "name": "SmartMed",
+          "status": "partial",
+          "operatorQuestion": "Fournir version 2027 et parcours complet de SmartMed.",
+          "priority": "blocking",
+          "sources": [
+            {
+              "url": "https://media.slkk.ch/filer_public/2f/79/2f793e96-36c7-4616-80d6-49fad336adee/2025-09-25-slkk-eb-smartmed.pdf",
+              "title": "SLKK — SmartMed EB",
+              "passage": "Paraphrase : Édition effective 01.01.2022 ; triage numérique Medgate et plan contraignants ; actes médicaux Medgate soumis à participation légale.",
+              "page": 6,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Triage numérique Medgate obligatoire ; choix du prestataire après orientation.",
+            "PDF : exceptions prévention gynécologique, maternité, pédiatrie jusqu'à 16 ans et urgences ; accès téléphonique adapté pour difficultés de lecture/écriture.",
+            "Les actes médicaux Medgate sont facturables ; soins en cours à déclarer sous 14 jours de l'entrée."
+          ],
+          "missing": [
+            "Version 2027 : document 2022, non renouvelé par son nom de fichier 2025.",
+            "Territoires exclus dans l'ancien PDF à recroiser avec primes 2027 avant affichage.",
+            "Règles exactes pour séjour étranger et suivi chronique en 2027."
+          ]
+        },
+        {
+          "modelId": "hm_c25665219c94cce80b64f6996cae",
+          "tariffCode": "TELCARE",
+          "name": "TelCare",
+          "status": "partial",
+          "operatorQuestion": "Fournir version 2027 et parcours complet de TelCare.",
+          "priority": "blocking",
+          "sources": [
+            {
+              "url": "https://media.slkk.ch/filer_public/2a/e9/2ae9ade2-0b55-4dca-8f42-d435c336e89d/2025-09-09-slkk-41-grund-vers-eb-telcare.pdf",
+              "title": "SLKK — TelCare EB",
+              "passage": "Paraphrase : Édition effective 01.01.2019 ; conseil téléphonique préalable obligatoire, sans acte diagnostique ou thérapeutique par ce service ; suivi à annoncer.",
+              "page": 3,
+              "yearExplicit": false
+            }
+          ],
+          "confirmed": [
+            "Appel avant rendez-vous ; orientations et suites à annoncer.",
+            "PDF : gynécologie préventive, maternité, pédiatrie jusqu'à 16 ans et séjour étranger dispensés ; pas d'exception yeux/dentiste explicitement trouvée.",
+            "Suivi d'affection chronique : rappel tous les trois mois dans l'édition lue."
+          ],
+          "missing": [
+            "Version 2027 et numéro d'entrée exact à confirmer.",
+            "Exonération tarifaire éventuelle du conseil ; ne pas assimiler tout Medgate à gratuit."
+          ]
+        }
+      ],
+      "benefits": [
+        {
+          "modelIds": [],
+          "excluded": "Tarif enfants 0–5 ans et cumul d'autres réductions exclus.",
+          "activation": "Présenter la carte SLKK à l'entrée.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": null,
+          "supplementaryProducts": [],
+          "verification": "verified",
+          "operatorQuestion": "Confirmer portée, exclusions et conditions 2027.",
+          "title": "Alpamare — réduction sur les entrées",
+          "equivalenceGroup": "member_partner_discounts",
+          "classification": "commercial",
+          "category": "members",
+          "effect": "15 % de réduction pour l'assuré SLKK et jusqu'à trois accompagnants.",
+          "conditions": "Offre publiée le 2 juillet 2026 ; renouvellement 2027 non prouvé.",
+          "source": {
+            "url": "https://slkk.ch/de/aktuelles/15-im-alpamare/",
+            "title": "SLKK — Alpamare",
+            "passage": "Paraphrase : 15 % pour l'assuré et trois accompagnants, sur présentation de la carte ; petits enfants exclus, non cumulable.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [],
+          "excluded": "Aucune nuitée gratuite garantie ; offres hôtelières et disponibilité propres au partenaire.",
+          "activation": "Demander l'offre auprès du conseil clientèle SLKK ; aucun message envoyé pendant l'audit.",
+          "beneficiary": "person",
+          "extraCostMinor": 7900,
+          "capMinor": null,
+          "frequency": "one_year_subscription",
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": null,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "Confirmer conditions 2027, assuré éligible et renouvellement de l'abonnement.",
+          "title": "HotelCard — abonnement au tarif partenaire",
+          "equivalenceGroup": "member_partner_discounts",
+          "classification": "commercial",
+          "category": "members",
+          "effect": "Abonnement un an 79 CHF au lieu de 99 CHF ; accès aux offres hôtelières variables.",
+          "conditions": "Nouveaux clients HotelCard ; offre SLKK publiée le 8 janvier 2026.",
+          "source": {
+            "url": "https://slkk.ch/de/aktuelles/bis-zu-50-rabatt-ueber-500-hotels/",
+            "title": "SLKK — HotelCard",
+            "passage": "Paraphrase : Tarifs : 79 CHF un an, 149 CHF deux ans, 197 CHF trois ans ; réservation avec jusqu'à 50 % de réduction selon offre.",
+            "page": null
+          }
+        },
+        {
+          "modelIds": [],
+          "excluded": "Codes non cumulables ; remise 20 % limitée aux versions Alpenfrische et sans parfum.",
+          "activation": "Codes partenaires indiqués sur la page officielle SLKK, au paiement chez bluu.",
+          "beneficiary": "person",
+          "extraCostMinor": null,
+          "capMinor": null,
+          "frequency": null,
+          "validFrom": null,
+          "validUntil": null,
+          "yearConfirmed": false,
+          "requiresSameBase": null,
+          "requiresSupplementary": null,
+          "supplementaryProducts": [],
+          "verification": "partial",
+          "operatorQuestion": "L'offre et les références demeurent-elles disponibles en 2027 ?",
+          "title": "bluu — remises partenaires",
+          "equivalenceGroup": "member_partner_discounts",
+          "classification": "commercial",
+          "category": "members",
+          "effect": "15 % sur la première commande ; autre code à 20 % pour certains paquets de 60 feuilles.",
+          "conditions": "Offre de durée indéterminée publiée en 2024 ; validité 2027 non explicitement attestée.",
+          "source": {
+            "url": "https://slkk.ch/de/aktuelles/15-20-rabatt-auf-bluu-waschstreifen/",
+            "title": "SLKK — bluu",
+            "passage": "Paraphrase : Offre : 15 % première commande ou 20 % sur les paquets de 60 feuilles désignés, codes non cumulables.",
+            "page": null
+          }
+        }
+      ]
+    }
+  ]
+}

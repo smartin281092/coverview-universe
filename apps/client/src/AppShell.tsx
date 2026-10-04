@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, Outlet, useLocation } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { ArrowUpRight, FileText, Menu, Settings2, UserRound, X, ListChecks } from "lucide-react";
+import { ArrowUpRight, FileText, Menu, Settings2, UserRound, X, ListChecks, Files } from "lucide-react";
 import {
   Button,
   Container,
@@ -17,12 +17,16 @@ import {
 import logoIcon from "../../../assets/icon-coverview.svg";
 import walletLogo from "../../../assets/wallet.svg";
 import { LogoutFeedback } from "./features/identity/LogoutFeedback";
+import { WalletProfileSwitcher } from "./features/profile/WalletProfileSwitcher";
+import { useWalletProfileScope } from "./features/profile/use-wallet-profile-scope";
 import { useActionCount } from "./features/actions/use-action-count";
 
 const destinations = [
   { to: "/profile", key: "profile", icon: UserRound },
   { to: "/documents", key: "documents", icon: FileText },
+  { to: "/offers", key: "offers", icon: Files },
   { to: "/actions", key: "actions", icon: ListChecks },
+  { to: "/insurance-requests", key: "insuranceRequests", icon: FileText },
   { to: "/account", key: "account", icon: Settings2 },
 ] as const;
 
@@ -52,6 +56,7 @@ function isEditingControl(target: EventTarget | null) {
 export function AppShell() {
   const { t } = useTranslation();
   const actionCount = useActionCount();
+  const { scope } = useWalletProfileScope();
   const { pathname, searchStr } = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -105,7 +110,7 @@ export function AppShell() {
         {t("skip")}
       </a>
       <header className="wallet-header sticky top-0 z-20 border-b border-border bg-background/95 backdrop-blur-xl">
-        <Container className="flex min-h-16 items-center justify-between gap-4 md:grid md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
+        <Container className="flex min-h-16 items-center justify-between gap-2 sm:gap-4 md:grid md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
           <Link
             to="/"
             className="flex min-h-11 shrink-0 items-center gap-2 sm:gap-3 md:justify-self-start"
@@ -143,81 +148,87 @@ export function AppShell() {
               </Link>
             ))}
           </nav>
-          <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
-            <SheetTrigger asChild>
-              <Button
-                ref={menuTrigger}
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="size-11 md:hidden"
-                aria-label={t("mobileNav.openMenu")}
+          <div className="ml-auto flex min-w-0 items-center gap-2 sm:gap-3 md:ml-0 md:max-w-full md:justify-self-end">
+            <WalletProfileSwitcher />
+            <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+              <SheetTrigger asChild>
+                <Button
+                  ref={menuTrigger}
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="size-11 shrink-0 md:hidden"
+                  aria-label={t("mobileNav.openMenu")}
+                >
+                  <Menu className="size-5" strokeWidth={1.5} aria-hidden="true" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent
+                side="right"
+                showCloseButton={false}
+                className="wallet-mobile-menu gap-8 overflow-y-auto overscroll-contain border-0 bg-background shadow-none"
+                onCloseAutoFocus={(event) => {
+                  if (!menuTrigger.current?.getClientRects().length) {
+                    event.preventDefault();
+                    main.current?.focus({ preventScroll: true });
+                  }
+                }}
               >
-                <Menu className="size-5" strokeWidth={1.5} aria-hidden="true" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent
-              side="right"
-              showCloseButton={false}
-              className="wallet-mobile-menu gap-8 overflow-y-auto overscroll-contain border-0 bg-background shadow-none"
-              onCloseAutoFocus={(event) => {
-                if (!menuTrigger.current?.getClientRects().length) {
-                  event.preventDefault();
-                  main.current?.focus({ preventScroll: true });
-                }
-              }}
-            >
-              <SheetHeader className="gap-4 p-0 text-left">
-                <div className="flex items-center justify-between gap-4">
-                  <SheetTitle className="text-xl font-medium">
-                    {t("mobileNav.menuTitle")}
-                  </SheetTitle>
+                <SheetHeader className="gap-4 p-0 text-left">
+                  <div className="flex items-center justify-between gap-4">
+                    <SheetTitle className="text-xl font-medium">
+                      {t("mobileNav.menuTitle")}
+                    </SheetTitle>
+                    <SheetClose asChild>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="size-11 shrink-0"
+                        aria-label={t("mobileNav.closeMenu")}
+                      >
+                        <X className="size-5" strokeWidth={1.5} aria-hidden="true" />
+                      </Button>
+                    </SheetClose>
+                  </div>
+                  <SheetDescription className="text-sm leading-relaxed">
+                    {t("mobileNav.menuDescription")}
+                  </SheetDescription>
+                </SheetHeader>
+                <nav aria-label={t("navigation")} className="grid gap-2">
+                  {destinations.map(({to,key,icon:Icon}) => <SheetClose asChild key={to}><Link to={to} search={{}} className="flex min-h-11 items-center gap-3 rounded-md px-3 hover:bg-muted" aria-current={isCurrent(to)?"page":undefined}><Icon className="size-5" />{t("mobileNav."+key)}</Link></SheetClose>)}
+                </nav>
+                <nav aria-label={t("mobileNav.secondaryNavigation")}>
+                  <ul className="divide-y divide-border">
+                    {publicLinks.map((link) => (
+                      <li key={link.path}>
+                        <SheetClose asChild>
+                          <a
+                            href={new URL(link.path, websiteUrl).href}
+                            className="flex min-h-14 items-center justify-between gap-4 py-4 text-base font-medium"
+                          >
+                            <span>{t("mobileNav." + link.key)}</span>
+                            <ArrowUpRight
+                              className="size-5 shrink-0 text-muted-foreground"
+                              strokeWidth={1.5}
+                              aria-hidden="true"
+                            />
+                          </a>
+                        </SheetClose>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+                <div className="mt-auto border-t border-border pt-6">
                   <SheetClose asChild>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      className="size-11 shrink-0"
-                      aria-label={t("mobileNav.closeMenu")}
-                    >
-                      <X className="size-5" strokeWidth={1.5} aria-hidden="true" />
+                    <Button variant="outline" className="min-h-11 w-full text-sm">
+                      {t("mobileNav.backToWallet")}
                     </Button>
                   </SheetClose>
                 </div>
-                <SheetDescription className="text-sm leading-relaxed">
-                  {t("mobileNav.menuDescription")}
-                </SheetDescription>
-              </SheetHeader>
-              <nav aria-label={t("mobileNav.secondaryNavigation")}>
-                <ul className="divide-y divide-border">
-                  {publicLinks.map((link) => (
-                    <li key={link.path}>
-                      <SheetClose asChild>
-                        <a
-                          href={new URL(link.path, websiteUrl).href}
-                          className="flex min-h-14 items-center justify-between gap-4 py-4 text-base font-medium"
-                        >
-                          <span>{t("mobileNav." + link.key)}</span>
-                          <ArrowUpRight
-                            className="size-5 shrink-0 text-muted-foreground"
-                            strokeWidth={1.5}
-                            aria-hidden="true"
-                          />
-                        </a>
-                      </SheetClose>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-              <div className="mt-auto border-t border-border pt-6">
-                <SheetClose asChild>
-                  <Button variant="outline" className="min-h-11 w-full text-sm">
-                    {t("mobileNav.backToWallet")}
-                  </Button>
-                </SheetClose>
-              </div>
-            </SheetContent>
-          </Sheet>
+              </SheetContent>
+            </Sheet>
+          </div>
         </Container>
       </header>
       <Container className="flex-1">
@@ -228,7 +239,7 @@ export function AppShell() {
           className="app-content cv-section cv-section--compact space-y-10"
         >
           <LogoutFeedback>
-            <Outlet />
+            <Outlet key={scope} />
           </LogoutFeedback>
         </main>
       </Container>
@@ -251,7 +262,7 @@ export function AppShell() {
           className="wallet-bottom-nav fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur-xl md:hidden"
         >
           <ul className="grid grid-cols-4">
-            {destinations.map(({ to, key, icon: Icon }) => {
+            {destinations.filter(({key})=>key!=="account"&&key!=="insuranceRequests").map(({ to, key, icon: Icon }) => {
               const current = isCurrent(to);
               return (
                 <li key={to}>

@@ -45,7 +45,7 @@ module.exports = {
         "authentifiées. Le contenu vit en Markdown/MDX ou dans un CMS.",
       severity: "error",
       from: { path: "^apps/www/" },
-      to: { path: "^apps/(api|client|admin)/" },
+      to: { path: "^apps/(api|client|admin|partners)/" },
     },
 
     {
@@ -64,7 +64,7 @@ module.exports = {
         "ARCH-13 — un frontend parle au backend par le client API typé (packages/api-client), " +
         "jamais en important son code. Le backend reste l'autorité (G-11).",
       severity: "error",
-      from: { path: "^(apps/(client|admin|www)|packages/(ui|api-client))/" },
+      from: { path: "^(apps/(client|admin|partners|www)|packages/(ui|api-client))/" },
       to: { path: "^apps/api/" },
     },
 
@@ -73,7 +73,7 @@ module.exports = {
       comment:
         "C02 — aucun driver SQL/Redis, credential serveur ou builtin Node dans le code navigateur.",
       severity: "error",
-      from: { path: "^(apps/(client|admin|www)/src|packages/(ui|api-client|contracts)/src)/" },
+      from: { path: "^(apps/(client|admin|partners|www)/src|packages/(ui|api-client|contracts)/src)/" },
       to: { path: "(^|/)(pg|postgres|drizzle-orm|redis|ioredis)(/|$)" },
     },
 
@@ -82,7 +82,7 @@ module.exports = {
       comment: "C02 — dependency-cruiser normalise node:fs en fs ; tester sa catégorie core.",
       severity: "error",
       from: {
-        path: "^(apps/(client|admin|www)/src|packages/(ui|api-client|contracts)/src)/",
+        path: "^(apps/(client|admin|partners|www)/src|packages/(ui|api-client|contracts)/src)/",
         pathNot: "\\.(test|spec)\\.[jt]sx?$",
       },
       to: { dependencyTypes: ["core"] },

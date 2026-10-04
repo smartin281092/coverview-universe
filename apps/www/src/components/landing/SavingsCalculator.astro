@@ -1,0 +1,61 @@
+---
+import TitleText from './TitleText.astro';
+import { landing } from '../../content/fr/landing';
+import { chartPath, formatNumber, futureCapital, savingsDefaults } from './calculations';
+const c = landing.savings;
+const {monthly, years, rateA, rateB} = savingsDefaults;
+const a = futureCapital(monthly,years,rateA/100), b = futureCapital(monthly,years,rateB/100);
+const pathA = chartPath(monthly,years,rateA/100,b), pathB = chartPath(monthly,years,rateB/100,b);
+---
+<section id="simuler" class="lp-section lp-savings" data-savings data-label-a={c.lower} data-label-b={c.upper} data-years-label={c.years}>
+  <div class="lp-container">
+    <div class="lp-section-head" data-reveal>
+      <div><p class="lp-eyebrow">{c.eyebrow}</p><h2><TitleText text={c.title}/></h2></div>
+      <div><p class="lp-description">{c.description}</p><p class="lp-handnote">↙ {c.hint}</p></div>
+    </div>
+    <div class="savings-panel" data-reveal>
+      <div class="savings-controls">
+        <div class="lp-control">
+          <label for="monthly-number">{c.contribution}</label>
+          <div class="lp-number-field"><input id="monthly-number" type="number" min="0" max="2000" step="1" value="300" data-input="monthly" /><span>{c.monthlyUnit}</span></div>
+          <input aria-label={c.contribution} type="range" min="0" max="2000" step="1" value="300" data-input="monthly" />
+        </div>
+        <div class="lp-control">
+          <label for="years-number">{c.duration}</label>
+          <div class="lp-number-field"><input id="years-number" type="number" min="1" max="45" step="1" value="30" data-input="years" /><span>{c.years}</span></div>
+          <input aria-label={c.duration} type="range" min="1" max="45" step="1" value="30" data-input="years" />
+        </div>
+        <div class="rate-controls">
+          <div><label for="rate-a">{c.rateA}</label><div class="rate-field"><i class="dot dot-a"></i><input id="rate-a" type="number" min="0" max="20" step="0.1" value={rateA} data-input="rateA" /><span>%</span></div></div>
+          <div><label for="rate-b">{c.rateB}</label><div class="rate-field"><i class="dot dot-b"></i><input id="rate-b" type="number" min="0" max="20" step="0.1" value={rateB} data-input="rateB" /><span>%</span></div></div>
+        </div>
+        <p class="invested-line">{c.invested}<strong><span data-result="invested">{formatNumber(108000)}</span> CHF</strong></p>
+      </div>
+      <div class="savings-visual">
+        <div class="savings-delta"><p><span data-result="delta" data-count={b-a}>{formatNumber(b-a)}</span><span class="unit">CHF</span></p><span>{c.delta}</span></div>
+        <div class="graph-legend">
+          <div><span><i class="dot dot-a"></i>{c.lower} · <span data-result="rateA">{rateA}</span> %</span><strong><span data-result="a">{formatNumber(a)}</span> CHF</strong></div>
+          <div><span><i class="dot dot-b"></i>{c.upper} · <span data-result="rateB">{rateB}</span> %</span><strong><span data-result="b">{formatNumber(b)}</span> CHF</strong></div>
+        </div>
+        <div class="comparison-chart" data-chart>
+          <svg viewBox="0 0 720 260" role="img" aria-label={c.chart}>
+            <defs><linearGradient id="savings-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#6563ff" stop-opacity=".19"/><stop offset="100%" stop-color="#6563ff" stop-opacity="0"/></linearGradient></defs>
+            {[30,99,168,237].map(y=><path d={`M16,${y} H704`} class="graph-grid" />)}
+            <path d={`${pathB} L704,236 L16,236 Z`} fill="url(#savings-fill)" data-path="fill" />
+            <path d={pathA} class="graph-line graph-line-a" data-path="a" />
+            <path d={pathB} class="graph-line graph-line-b" data-path="b" />
+            <line x1="704" x2="704" y1="20" y2="237" class="chart-cursor" data-cursor />
+            <circle cx="704" cy="30" r="5" class="graph-dot" data-chart-dot />
+          </svg>
+          <div class="chart-tooltip" hidden data-chart-tooltip></div>
+        </div>
+        <div class="graph-axis"><span>{c.axisStart}</span><span><span data-result="years">30</span> {c.years}</span></div>
+      </div>
+    </div>
+    <div class="calculator-notes"><p>{c.disclaimer}</p><button class="lp-text-link" data-open-dialog="calculation-details">{c.details}<span aria-hidden="true">↗</span></button></div>
+    <p class="lp-savings-foot" data-reveal>{c.early}</p>
+  </div>
+</section>
+<dialog class="lp-dialog" id="calculation-details" aria-labelledby="calculation-title"><div class="dialog-top"><p class="lp-eyebrow">{c.eyebrow}</p><button class="dialog-close" data-close-dialog aria-label={landing.entry.close}>×</button></div><h2 id="calculation-title"><TitleText text={c.details}/></h2><p>{c.assumptions}</p><p>{c.disclaimer}</p></dialog>
+
+

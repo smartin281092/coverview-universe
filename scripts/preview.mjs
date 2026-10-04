@@ -16,8 +16,8 @@ import {
 import { createRequire } from "node:module";
 import { createConnection, createServer } from "node:net";
 import { dirname, join, resolve } from "node:path";
-import { loadEnvFile } from "node:process";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { parseEnv } from "node:util";
 
 const SCRIPT = fileURLToPath(import.meta.url);
 const ROOT = resolve(dirname(SCRIPT), "..");
@@ -214,9 +214,29 @@ function validateConfig(config) {
   }
 }
 
-async function configuration(root) {
+export function previewEnvironment(root, key, environment = process.env) {
   const envPath = join(root, ".env");
-  if (existsSync(envPath)) loadEnvFile(envPath);
+  const values = {
+    ...(existsSync(envPath) ? parseEnv(readFileSync(envPath, "utf8")) : {}),
+    ...environment,
+  };
+  requireLocal(values);
+  if (key === "api" && values.WORKOS_ENV_FILE) {
+    const source = parseEnv(readFileSync(resolve(root, values.WORKOS_ENV_FILE), "utf8"));
+    for (const name of [
+      "WORKOS_API_KEY",
+      "WORKOS_CLIENT_ID",
+      "AUTH_SESSION_SECRET",
+      "WORKOS_ISSUER",
+    ]) {
+      if (!values[name] && source[name]) values[name] = source[name];
+    }
+  }
+  return childEnvironment(key, values);
+}
+
+async function configuration(root, key = "api") {
+  Object.assign(process.env, previewEnvironment(root, key));
   requireLocal(process.env);
   const config = await import(pathToFileURL(join(root, "preview.config.mjs")).href);
   validateConfig(config);
@@ -290,7 +310,7 @@ function stopOwnTree() {
 
 async function worker(key, token, root) {
   if (!validRecord({ pid: process.pid, token })) throw new Error("Jeton de superviseur invalide.");
-  const config = await configuration(root);
+  const config = await configuration(root, key);
   const app = config.apps.find((entry) => entry.key === key);
   if (!app) throw new Error("Application preview inconnue.");
   const cwd = resolve(root, app.dir);
@@ -382,13 +402,13 @@ async function panel(config, records, root) {
 export async function main(args = process.argv.slice(2), root = ROOT) {
   const [command = "start"] = args;
   if (
-    !["start", "stop", "status", "info", "check-auth"].includes(command) ||
+    !["start", "restart-api", "stop", "status", "info", "check-auth"].includes(command) ||
     args.slice(1).some((arg) => !["--all", "--require-auth"].includes(arg)) ||
     (args.includes("--all") && command !== "stop") ||
-    (args.includes("--require-auth") && command !== "start")
+    (args.includes("--require-auth") && !["start", "restart-api"].includes(command))
   ) {
     throw new Error(
-      "Usage : node scripts/preview.mjs start [--require-auth]|stop [--all]|status|info|check-auth",
+      "Usage : node scripts/preview.mjs start|restart-api [--require-auth]|stop [--all]|status|info|check-auth",
     );
   }
   const config = await configuration(root);
@@ -432,8 +452,16 @@ export async function main(args = process.argv.slice(2), root = ROOT) {
     if (failed) throw new Error("La preview ne répond pas intégralement.");
     return;
   }
-  if (args.includes("--require-auth")) {
+  const requireAuth = args.includes("--require-auth") || process.env.AUTH_ENABLED === "true";
+  if (requireAuth) {
     await checkAuthConfiguration(root, config);
+  }
+  if (command === "restart-api" && records.api) {
+    await stopRecord(root, "api", records.api);
+    delete records.api;
+    saveRecords(root, records);
+  }
+  if (requireAuth) {
     if (
       (await control(root, records.api)) &&
       (await authenticationStatus(config, records, root)) !== true
@@ -512,10 +540,7 @@ export async function main(args = process.argv.slice(2), root = ROOT) {
       throw new Error(
         `Probe en échec : ${[...pending].join(", ")}. Voir les logs .preview/ concernés; aucune migration exécutée.`,
       );
-    if (
-      args.includes("--require-auth") &&
-      (await authenticationStatus(config, records, root)) !== true
-    )
+    if (requireAuth && (await authenticationStatus(config, records, root)) !== true)
       throw new Error(
         "REFUSÉ — l'API démarrée n'a pas activé la connexion. Aucun parcours WorkOS déclaré fonctionnel.",
       );

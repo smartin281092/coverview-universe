@@ -188,4 +188,41 @@ describe("official WorkOS SDK protocol with local HTTP responses only", () => {
     factor = "factor_other";
     expect(await provider.verify("challenge_fixture", "factor_fixture", "123456")).toBe(false);
   });
+  it("uses WorkOS Magic Auth provisioning without returning its OTP and maps invalid codes generically", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn((url: string | URL | Request, options?: RequestInit) => {
+        const target = url instanceof Request ? url.url : url.toString();
+        expect(typeof options?.body).toBe("string");
+        const body = JSON.parse(options!.body as string);
+        expect(body.email).toBe("user@example.test");
+        if (target.endsWith("/magic_auth"))
+          return Promise.resolve(
+            Response.json({
+              object: "magic_auth",
+              id: "magic_fixture",
+              user_id: "user_fixture",
+              email: "user@example.test",
+              code: "123456",
+              expires_at: new Date(Date.now() + 600000).toISOString(),
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            }),
+          );
+        expect(body).toMatchObject({
+          grant_type: "urn:workos:oauth:grant-type:magic-auth:code",
+          code: "000000",
+        });
+        return Promise.resolve(
+          Response.json({ code: "invalid_grant", message: "invalid" }, { status: 400 }),
+        );
+      }),
+    );
+    const provider = createWorkosProvider(config);
+    expect(await provider.startEmail!("user@example.test")).toBeUndefined();
+    await expect(provider.verifyEmail!("user@example.test", "000000")).rejects.toMatchObject({
+      code: "IDENTITY_INVALID_CALLBACK",
+      statusCode: 400,
+    });
+  });
 });

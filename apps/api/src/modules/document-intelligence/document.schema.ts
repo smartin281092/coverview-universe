@@ -40,6 +40,8 @@ export const documents = pgTable(
     state: text("state").$type<DocumentSummary["state"]>().notNull().default("pending"),
     category: text("category").$type<DocumentSummary["category"]>().notNull().default("unknown"),
     categoryCorrected: boolean("category_corrected").notNull().default(false),
+    purpose: text("purpose").$type<"identity_card" | "lead_offer">(),
+    retainedAt: instant("retained_at"),
     analysisRequested: boolean("analysis_requested").notNull().default(false),
     revision: integer("revision").notNull().default(0),
     generation: integer("generation").notNull().default(0),
@@ -59,6 +61,7 @@ export const documents = pgTable(
       "files_state",
       sql`${table.state} in ('pending','queued','scanning','reading','ready','failed','quarantined','deleting','deleted')`,
     ),
+    check("files_purpose", sql`${table.purpose} is null or ${table.purpose} in ('identity_card','lead_offer')`),
     check(
       "files_profile_assignment",
       sql`${table.profileAssignment} is null or ${table.profileAssignment} in ('pending','matched','created','manual','ambiguous','missing_identity','profile_limit')`,

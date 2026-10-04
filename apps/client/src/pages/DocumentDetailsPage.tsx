@@ -1,3 +1,4 @@
+import { useWalletProfileScope } from "../features/profile/use-wallet-profile-scope";
 import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "@tanstack/react-router";
@@ -37,6 +38,7 @@ import { DocumentProfileAssignment } from "../features/documents/DocumentProfile
 type Panel =
   "category" | "delete" | "history" | "source" | "resume" | "analysis" | { fieldId: string } | null;
 function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string }) {
+  const { scope, filter } = useWalletProfileScope();
   const { t, i18n } = useTranslation("documents");
   const client = useQueryClient();
   const navigate = useNavigate();
@@ -58,15 +60,18 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
   }, []);
   const rootKey = ["private", identity.user.id, identity.session.id];
   const query = useQuery({
-    queryKey: [...rootKey, "document", id],
-    queryFn: ({ signal }) => api.document(id, { signal }),
+    queryKey: [...rootKey, "document", id, scope],
+    queryFn: ({ signal }) => api.document(id, { signal }, filter),
     gcTime: 0,
     staleTime: 0,
     retry: false,
+    refetchOnWindowFocus: true,
     refetchInterval: (query) =>
-      query.state.data && ["queued", "scanning", "reading"].includes(query.state.data.state)
-        ? 5000
-        : false,
+      query.state.error
+        ? false
+        : query.state.data && ["queued", "scanning", "reading"].includes(query.state.data.state)
+          ? 5000
+          : 15_000,
   });
   const mutation = useMutation({
     mutationKey: [...rootKey, "document-command"],

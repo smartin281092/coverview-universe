@@ -1,3 +1,5 @@
+import { AccountAuthorizations } from "../features/identity/AccountAuthorizations";
+import { useWalletProfileScope } from "../features/profile/use-wallet-profile-scope";
 import { useState } from "react";
 import { Link, useNavigate, useParams, useSearch } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -24,7 +26,7 @@ function Authorization({
   const { t, i18n } = useTranslation("authorizations");
   const { t: fields } = useTranslation("documents");
   const search = useSearch({ from: "/authorizations/$kind" });
-  const profileId = search.person ?? "self";
+  const { scope: profileId } = useWalletProfileScope();
   const navigate = useNavigate();
   const client = useQueryClient();
   const [downloadError, setDownloadError] = useState(false);
@@ -210,6 +212,7 @@ function Authorization({
   );
 }
 export function AuthorizationDetailsPage() {
+  const { scope } = useWalletProfileScope();
   const { kind } = useParams({ from: "/authorizations/$kind" });
   if (kind === "lsa45")
     return (
@@ -220,7 +223,13 @@ export function AuthorizationDetailsPage() {
   if (kind !== "mandate" && kind !== "procuration") return <MissingPage />;
   return (
     <IdentityBoundary>
-      {(identity) => <Authorization key={kind} identity={identity} kind={kind} />}
+      {(identity) =>
+        scope === "all" ? (
+          <AccountAuthorizations identity={identity} />
+        ) : (
+          <Authorization key={`${kind}:${scope}`} identity={identity} kind={kind} />
+        )
+      }
     </IdentityBoundary>
   );
 }

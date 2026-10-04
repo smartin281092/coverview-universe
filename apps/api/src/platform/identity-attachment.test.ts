@@ -50,6 +50,107 @@ async function owner() {
   if (!session) throw new Error("Isolated identity unavailable");
   return session;
 }
+it("makes a detected passport available only to its assigned profile, while preserving explicit choices", async () => {
+  const actor = await owner();
+  const stranger = await owner();
+  const repository = createDocumentRepository(database.db);
+  const profiles = createManagedProfileRepository(database.db);
+  const person = await profiles.create(
+    actor,
+    { kind: "person", displayName: "Family" },
+    randomUUID(),
+  );
+  const company = await profiles.create(
+    actor,
+    { kind: "legal_entity", displayName: "Company" },
+    randomUUID(),
+  );
+  const passportAnalysis: DocumentAnalysis = {
+    category: "identity",
+    evidence: null,
+    pages: [{ page: 1, text: "PASSEPORT", method: "isolated", version: "1" }],
+    fields: [
+      {
+        id: randomUUID(),
+        field: "documentType",
+        value: "Passeport",
+        source: {
+          page: 1,
+          text: "PASSEPORT",
+          method: "isolated",
+          version: "1",
+          confidence: null,
+          box: null,
+        },
+      },
+    ],
+  };
+  const original = await repository.create(
+    actor,
+    {
+      profileId: person.id,
+      name: "original.pdf",
+      mime: "application/pdf",
+      size: 80,
+      checksum: digest(randomUUID()),
+      analysisRequested: true,
+    },
+    randomUUID(),
+  );
+  const update = async (patch: Partial<typeof documents.$inferInsert>) => {
+    await database.db.update(documents).set(patch).where(eq(documents.id, original.id));
+  };
+  await update({
+    state: "ready",
+    category: "identity",
+    scanVersion: "isolated",
+    analysis: passportAnalysis,
+  });
+  expect(await repository.identityAttachment(actor.userId, person.id)).toMatchObject({
+    status: "ready",
+    front: { id: original.id },
+    documentType: "passport",
+    documentTypeSource: "detected",
+    backRequired: false,
+  });
+  expect((await repository.identityAttachment(actor.userId)).status).toBe("missing");
+  expect((await repository.identityAttachment(stranger.userId)).status).toBe("missing");
+  await expect(repository.identityAttachment(stranger.userId, person.id)).rejects.toMatchObject({
+    statusCode: 404,
+  });
+  await update({ managedProfileId: company.id });
+  expect((await repository.identityAttachment(actor.userId, company.id)).status).toBe("missing");
+  await update({ managedProfileId: null, profileAssignment: "ambiguous" });
+  expect((await repository.identityAttachment(actor.userId)).status).toBe("missing");
+  await update({ profileAssignment: "manual" });
+  expect((await repository.identityAttachment(actor.userId)).status).toBe("ready");
+  for (const state of ["quarantined", "deleting", "deleted"] as const) {
+    await update({ state });
+    expect((await repository.identityAttachment(actor.userId)).status).toBe("missing");
+  }
+  await update({ state: "ready", scanVersion: null });
+  expect((await repository.identityAttachment(actor.userId)).status).toBe("missing");
+  await update({ scanVersion: "isolated", analysis: { ...passportAnalysis, pages: [] } });
+  expect((await repository.identityAttachment(actor.userId)).status).toBe("missing");
+  await update({ analysis: passportAnalysis });
+  const corrected = await repository.saveIdentityAttachment(
+    actor,
+    { revision: 0, documentType: "identity_card" },
+    randomUUID(),
+  );
+  expect(corrected).toMatchObject({
+    front: { id: original.id },
+    documentType: "identity_card",
+    status: "incomplete",
+  });
+  const removed = await repository.saveIdentityAttachment(
+    actor,
+    { revision: 1, combinedId: null, frontId: null, backId: null },
+    randomUUID(),
+  );
+  expect(removed.status).toBe("missing");
+  expect((await repository.identityAttachment(actor.userId)).status).toBe("missing");
+});
 it("persists both faces with partial recovery, owner isolation and replay without a false ready state", async () => {
   const actor = await owner();
   const stranger = await owner();

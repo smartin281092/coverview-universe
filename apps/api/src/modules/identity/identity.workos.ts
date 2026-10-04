@@ -36,6 +36,8 @@ export interface IdentityProvider {
     reauthenticate?: boolean,
   ): Promise<{ url: string; state: string; codeVerifier: string }>;
   exchange(code: string, verifier: string): Promise<RemoteIdentity>;
+  startEmail?(email: string): Promise<void>;
+  verifyEmail?(email: string, code: string): Promise<RemoteIdentity>;
   sessions(userId: string, signal?: AbortSignal): Promise<RemoteSession[]>;
   revoke(sessionId: string, signal?: AbortSignal): Promise<void>;
   challenge(userId: string): Promise<{ challengeId: string; factorId: string; expiresAt: Date }>;
@@ -68,7 +70,7 @@ export function createWorkosProvider(config: Environment): IdentityProvider {
         }),
     });
   }
-  const cookiePassword = config.AUTH_SESSION_SECRET;
+  const cookiePassword = config.AUTH_SESSION_SECRET ?? "";
   if (!cookiePassword) throw new Error("Missing authentication server key");
 
   async function external<T>(
@@ -139,7 +141,118 @@ export function createWorkosProvider(config: Environment): IdentityProvider {
     if (expiresAt.getTime() <= Date.now()) throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
     return { challengeId: challenge.id, factorId, expiresAt };
   }
+  async function validateAuthentication(result: {
+    sealedSession?: string;
+    accessToken: string;
+  }): Promise<RemoteIdentity> {
+    const sealedSession = result.sealedSession;
+    if (!sealedSession) throw invalid("sealed_session", "session_missing");
+    // Verify the provider JWT using its official helper; keep all returned tokens in memory only.
+    const verified = await external(
+      () =>
+        workos.userManagement
+          .loadSealedSession({
+            sessionData: sealedSession,
+            cookiePassword,
+          })
+          .authenticate(),
+      "session_authentication",
+    );
+    if (!verified.authenticated)
+      throw invalid(
+        "session_authentication",
+        verified.reason === AuthenticateWithSessionCookieFailureReason.INVALID_JWT
+          ? "invalid_jwt"
+          : "invalid_session",
+      );
+    if (verified.impersonator) throw invalid("session_authentication", "impersonation");
+    if (!verified.user.emailVerified) throw invalid("session_authentication", "email_unverified");
+    // The SDK checks signature/time; also bind the verified JWT claims to this issuer and identity.
+    const claims = await external(
+      () =>
+        z
+          .object({
+            sub: z.string(),
+            sid: z.string(),
+            iss: z.url(),
+            exp: z.number(),
+            iat: z.number(),
+            auth_time: z.number().int().positive().optional(),
+            aud: z.union([z.string(), z.array(z.string())]).optional(),
+          })
+          .safeParse(
+            JSON.parse(
+              Buffer.from(result.accessToken.split(".")[1] ?? "", "base64url").toString("utf8"),
+            ),
+          ),
+      "token_claims",
+    );
+    if (!claims.success) throw invalid("token_claims", "claims_invalid");
+    if (claims.data.sub !== verified.user.id) throw invalid("token_claims", "subject_mismatch");
+    if (claims.data.sid !== verified.sessionId) throw invalid("token_claims", "session_mismatch");
+    if (new URL(claims.data.iss).href !== new URL(config.WORKOS_ISSUER).href)
+      throw invalid("token_claims", "issuer_mismatch", {
+        configuredIssuer: issuerKind(config.WORKOS_ISSUER),
+        tokenIssuer: issuerKind(claims.data.iss),
+        issuerMatches: false,
+      });
+    if (claims.data.exp <= Date.now() / 1000) throw invalid("token_claims", "token_expired");
+    if (claims.data.iat > Date.now() / 1000 + 30) throw invalid("token_claims", "token_future");
+    if (
+      claims.data.auth_time &&
+      (claims.data.auth_time > claims.data.iat || claims.data.auth_time > Date.now() / 1000 + 30)
+    )
+      throw invalid("token_claims", "token_future");
+    if (claims.data.aud && ![claims.data.aud].flat().includes(clientId))
+      throw invalid("token_claims", "audience_mismatch");
+    const identity = z
+      .object({
+        workosUserId: z.string().min(1),
+        email: z.email(),
+        workosSessionId: z.string().min(1),
+        authenticatedAt: z.date().nullable(),
+      })
+      .safeParse({
+        workosUserId: verified.user.id,
+        email: verified.user.email,
+        workosSessionId: verified.sessionId,
+        authenticatedAt: claims.data.auth_time ? new Date(claims.data.auth_time * 1000) : null,
+      });
+    if (!identity.success) throw invalid("token_claims", "identity_invalid");
+    return identity.data;
+  }
+
   return {
+    startEmail: (email) =>
+      external(async () => {
+        // WorkOS provisions an unverified user and sends its authentication email.
+        // The returned OTP is discarded, never stored or logged.
+        await workos.userManagement.createMagicAuth({ email });
+      }, "authorization"),
+    verifyEmail: (email, code) =>
+      external(async () => {
+        let result;
+        try {
+          result = await workos.userManagement.authenticateWithMagicAuth({
+            email,
+            code,
+            session: { sealSession: true, cookiePassword },
+          });
+        } catch (cause) {
+          if (
+            typeof cause === "object" &&
+            cause !== null &&
+            "status" in cause &&
+            [400, 401, 422].includes(Number(cause.status))
+          )
+            throw new IdentityError("IDENTITY_INVALID_CALLBACK", 400);
+          throw cause;
+        }
+        const identity = await validateAuthentication(result);
+        if (identity.email.toLowerCase() !== email.toLowerCase())
+          throw invalid("token_claims", "identity_invalid");
+        return identity;
+      }, "code_exchange"),
     factors: (userId) => external(() => factors(userId), "mfa_enrollment"),
     enroll: (userId, email) =>
       external(async () => {
@@ -225,84 +338,7 @@ export function createWorkosProvider(config: Environment): IdentityProvider {
           }
           throw cause;
         }
-        const sealedSession = result.sealedSession;
-        if (!sealedSession) throw invalid("sealed_session", "session_missing");
-        // Verify the provider JWT using its official helper; keep all returned tokens in memory only.
-        const verified = await external(
-          () =>
-            workos.userManagement
-              .loadSealedSession({
-                sessionData: sealedSession,
-                cookiePassword,
-              })
-              .authenticate(),
-          "session_authentication",
-        );
-        if (!verified.authenticated)
-          throw invalid(
-            "session_authentication",
-            verified.reason === AuthenticateWithSessionCookieFailureReason.INVALID_JWT
-              ? "invalid_jwt"
-              : "invalid_session",
-          );
-        if (verified.impersonator) throw invalid("session_authentication", "impersonation");
-        if (!verified.user.emailVerified)
-          throw invalid("session_authentication", "email_unverified");
-        // The SDK checks signature/time; also bind the verified JWT claims to this issuer and identity.
-        const claims = await external(
-          () =>
-            z
-              .object({
-                sub: z.string(),
-                sid: z.string(),
-                iss: z.url(),
-                exp: z.number(),
-                iat: z.number(),
-                auth_time: z.number().int().positive().optional(),
-                aud: z.union([z.string(), z.array(z.string())]).optional(),
-              })
-              .safeParse(
-                JSON.parse(
-                  Buffer.from(result.accessToken.split(".")[1] ?? "", "base64url").toString("utf8"),
-                ),
-              ),
-          "token_claims",
-        );
-        if (!claims.success) throw invalid("token_claims", "claims_invalid");
-        if (claims.data.sub !== verified.user.id) throw invalid("token_claims", "subject_mismatch");
-        if (claims.data.sid !== verified.sessionId)
-          throw invalid("token_claims", "session_mismatch");
-        if (new URL(claims.data.iss).href !== new URL(config.WORKOS_ISSUER).href)
-          throw invalid("token_claims", "issuer_mismatch", {
-            configuredIssuer: issuerKind(config.WORKOS_ISSUER),
-            tokenIssuer: issuerKind(claims.data.iss),
-            issuerMatches: false,
-          });
-        if (claims.data.exp <= Date.now() / 1000) throw invalid("token_claims", "token_expired");
-        if (claims.data.iat > Date.now() / 1000 + 30) throw invalid("token_claims", "token_future");
-        if (
-          claims.data.auth_time &&
-          (claims.data.auth_time > claims.data.iat ||
-            claims.data.auth_time > Date.now() / 1000 + 30)
-        )
-          throw invalid("token_claims", "token_future");
-        if (claims.data.aud && ![claims.data.aud].flat().includes(clientId))
-          throw invalid("token_claims", "audience_mismatch");
-        const identity = z
-          .object({
-            workosUserId: z.string().min(1),
-            email: z.email(),
-            workosSessionId: z.string().min(1),
-            authenticatedAt: z.date().nullable(),
-          })
-          .safeParse({
-            workosUserId: verified.user.id,
-            email: verified.user.email,
-            workosSessionId: verified.sessionId,
-            authenticatedAt: claims.data.auth_time ? new Date(claims.data.auth_time * 1000) : null,
-          });
-        if (!identity.success) throw invalid("token_claims", "identity_invalid");
-        return identity.data;
+        return validateAuthentication(result);
       }, "code_exchange"),
     sessions: (userId, signal) =>
       external(async () => {

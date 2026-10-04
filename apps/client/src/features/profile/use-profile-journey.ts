@@ -64,7 +64,8 @@ export function useProfileJourney({
     staleTime: 0,
     gcTime: 0,
     retry: false,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
+    refetchInterval: (query) => (query.state.error ? false : 15_000),
   });
   const draftQuery = useQuery({
     queryKey: ["private", ownerId ?? "anonymous", "profile-draft"],
@@ -115,9 +116,28 @@ export function useProfileJourney({
       saved &&
       ownerId &&
       profileQuery.data.revision > saved.revision
-    )
-      setFailure("conflict");
-  }, [initialized, profileQuery.data, saved, ownerId]);
+    ) {
+      if (pending) return;
+      if (isDirty || Object.keys(dirtyFields).length || prefillDirty || explicit.current.size) {
+        setFailure("conflict");
+      } else {
+        setSaved(profileQuery.data);
+        form.reset(profileValues(profileQuery.data));
+        setPrefill(profileQuery.data.prefill.enabled);
+        setFailure((current) => (current === "conflict" ? null : current));
+      }
+    }
+  }, [
+    initialized,
+    profileQuery.data,
+    saved,
+    ownerId,
+    pending,
+    isDirty,
+    dirtyFields,
+    prefillDirty,
+    form,
+  ]);
   const keyFor = (operation: string, input: unknown) => {
     const signature = JSON.stringify(input);
     const previous = keys.current.get(operation);

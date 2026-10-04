@@ -1,9 +1,11 @@
+import { useWalletProfileScope } from "../profile/use-wallet-profile-scope";
 import { useQuery } from "@tanstack/react-query";
 import type { IdentityMe } from "@coverview/api-client";
 import { api } from "../../api";
 import { identityKey } from "../identity/session-state";
 
 export function useActionCount() {
+  const { scope, filter } = useWalletProfileScope();
   // Subscribe to the page's identity boundary; the navigation never starts authentication.
   const identity = useQuery<IdentityMe | null>({
     queryKey: identityKey,
@@ -13,8 +15,8 @@ export function useActionCount() {
   const current = identity.data;
   const visible = !!current && !identity.isFetching && !identity.isError;
   const summary = useQuery({
-    queryKey: ["private", current?.user.id, current?.session.id, "action-center", "summary"],
-    queryFn: ({ signal }) => api.actionCenterSummary({ signal }),
+    queryKey: ["private", current?.user.id, current?.session.id, "action-center", scope, "summary"],
+    queryFn: ({ signal }) => api.actionCenterSummary({ signal }, filter),
     enabled: visible,
     gcTime: 0,
     staleTime: 0,

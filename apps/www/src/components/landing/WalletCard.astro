@@ -1,0 +1,13 @@
+---
+import { Image } from 'astro:assets';
+import card from '../../../../../assets/credit-card-coverview.png';
+import { landing } from '../../content/fr/landing';
+interface Props { hero?: boolean; }
+const { hero=false } = Astro.props;
+---
+<div class:list={['wallet-card-stage', { 'wallet-card-hero': hero }]} data-tilt aria-label={landing.wallet.cardAlt} role="img">
+  <div class="wallet-card-float"><div class="wallet-card-surface">
+    <Image src={card} width={hero ? 640 : 900} format="webp" quality={85} alt="" loading={hero ? 'eager' : 'lazy'} />
+    <div class="card-specular" aria-hidden="true"></div>
+  </div></div>
+</div>

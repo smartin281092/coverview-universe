@@ -1,0 +1,10 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HealthRequestTracking from '../components/health-insurance/HealthRequestTracking';
+import { offerCopy } from '../content/fr/insurance-requests';
+import '../styles/health-insurance.css';
+const apiUrl = import.meta.env.PUBLIC_API_URL ?? (import.meta.env.DEV ? 'http://127.0.0.1:4100' : Astro.site?.origin ?? Astro.url.origin);
+---
+<Layout title={offerCopy.tracking} description={offerCopy.trackingHint} minimal>
+  <HealthRequestTracking apiUrl={apiUrl} client:load />
+</Layout>

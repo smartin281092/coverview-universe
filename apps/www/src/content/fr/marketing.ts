@@ -264,9 +264,9 @@ export const marketing = {
       {
         question: "Puis-je déjà envoyer un contrat ou obtenir une simulation ?",
         answer:
-          "Pas encore. Le dépôt de contrats, les analyses personnalisées et les simulateurs ne sont pas ouverts. Les guides et la méthode sont déjà accessibles.",
+          "Oui. Les simulateurs d’épargne et d’inflation sont accessibles gratuitement, sans compte. Pour centraliser vos documents personnels, accédez à Wallet après connexion.",
         href: "/outils",
-        linkLabel: "Voir les parcours et leur disponibilité",
+        linkLabel: "Explorer les outils et simulateurs",
       },
       {
         question: "CoverView s’adresse-t-il uniquement à la retraite ?",
@@ -336,7 +336,7 @@ export const marketing = {
     convergenceDescription:
       "Comprendre votre contrat aide à préciser les ressources dont vous disposez. Votre objectif donne le cadre de la comparaison. La méthode CoverView relie ces étapes pour garder le sens de chaque décision.",
     availability:
-      "Les lectures sont ouvertes. Les analyses personnalisées, les calculs et la sauvegarde de résultats seront disponibles dans les parcours dédiés ; ils ne sont pas encore activés.",
+      "Commencez librement avec les guides et les simulateurs gratuits. Pour retrouver vos documents, accédez à votre espace Wallet après connexion.",
     action: { label: "Découvrir la méthode complète", href: "/methode" },
   },
   services: {
@@ -350,7 +350,7 @@ export const marketing = {
     description:
       "Votre protection, votre épargne et votre futur niveau de vie se répondent. Commencez par le sujet qui vous concerne, puis replacez-le dans votre situation.",
     availability:
-      "Cette page vous aide à préparer votre réflexion. Les demandes de documents, analyses personnalisées et démarches ne sont pas encore ouvertes.",
+      "Une première question suffit. Explorez les simulateurs sans compte ou réunissez vos documents dans votre espace Wallet.",
     action: { label: "Choisir mon point de départ", href: "/overview" },
   },
   account: {
@@ -366,7 +366,7 @@ export const marketing = {
     resources: "Comprendre",
     company: "CoverView",
     account: "Votre espace",
-    availability: "Les outils personnalisés sont en préparation.",
+    availability: "Simulateurs gratuits. Accès personnel dans Wallet.",
     links: {
       glossary: { label: "Glossaire", href: "/glossaire" },
       vision: { label: "Notre vision", href: "/vision" },

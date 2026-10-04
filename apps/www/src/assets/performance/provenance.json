@@ -1,0 +1,44 @@
+[
+  {
+    "providedAt": "2026-09-22",
+    "sha256": "9ec7418eb714ae36ff906e1af6fbbec199c63073d52c78a5552114599a0142d0",
+    "sourceAttachment": "codex-clipboard-b2e95948-a2fd-4ab3-a3d3-cfeabae20063.png",
+    "file": "allocation-history.png"
+  },
+  {
+    "providedAt": "2026-09-22",
+    "sha256": "1ce5ed01cec8cc733c91bb88433551712051f24a92463cf92b654a7ec710689a",
+    "sourceAttachment": "codex-clipboard-3dea74b4-1a6f-4f01-b981-682133a0c2d2.png",
+    "file": "performance-december.png"
+  },
+  {
+    "providedAt": "2026-09-22",
+    "sha256": "fdd141c2a2e0575e4c678614793edc6d0982c979a7b0aaa87a33a5532ccfd6f0",
+    "sourceAttachment": "codex-clipboard-65880d4c-6423-49a0-9249-59349bbb8e20.png",
+    "file": "performance-march.png"
+  },
+  {
+    "providedAt": "2026-09-22",
+    "sha256": "9379c64e616e74cc51f7c936f9c7d2ac3b2de5c996592aa4ffe35c7af5b97c30",
+    "sourceAttachment": "codex-clipboard-dca796ae-bbab-4ad6-8747-c71af1fb08c5.png",
+    "file": "performance-since-may.png"
+  },
+  {
+    "providedAt": "2026-09-22",
+    "sha256": "895fb5a63f2c7a6e34421b1520ad28d3e6d812320e146d8672fddc6b28f3b6fc",
+    "sourceAttachment": "codex-clipboard-2d005dd5-63cf-4218-8cd8-5bac2828e350.png",
+    "file": "performance-ytd.png"
+  },
+  {
+    "providedAt": "2026-09-22",
+    "sha256": "35d3de6aca6913012384dd0eaa81afd8c266ae5200bb3e258e92559930e80aea",
+    "sourceAttachment": "codex-clipboard-c5199c60-6286-435b-b4b1-54d17b8cf025.png",
+    "file": "performance-one-year.png"
+  },
+  {
+    "providedAt": "2026-09-22",
+    "sha256": "b5abba2719ec852d5e817039354b06165f1ccc8f78e3b2caf807aa89cf5969d0",
+    "sourceAttachment": "codex-clipboard-0206c21f-a6e5-4047-a957-285bc64b1941.png",
+    "file": "performance-since-2018.png"
+  }
+]

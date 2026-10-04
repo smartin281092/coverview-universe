@@ -14,6 +14,14 @@ Il s’agit de la signature du client, pas d’une contresignature CoverView sim
 
 La table `authorization_signatures` conserve des données personnelles et le tracé ; elles ne sont pas écrites dans les logs. Les helpers d’activité ne retournent que les métadonnées datées, bornées à 200 entrées avec indicateur de troncature. L’archive signée ne dépend pas de la suppression d’un scan. Les durées légales et les parcours globaux d’export/effacement restent à traiter dans S-130/S-131, sans durée inventée. Aucun événement externe, email ou job de signature ; aucune dépendance ajoutée.
 
+## Réception dans l’Admin et clôture des actions
+
+Une signature courante termine immédiatement l’action correspondante dans Wallet. Les actions procuration/mandat et lecture LSA45 n’acceptent aucune réponse libre ni commande générique de résolution ; les anciens messages conservés en historique ne remplacent pas la preuve et ne créent plus un état En cours. La notice exige sa propre ouverture enregistrée et ne produit pas de notification de signature.
+
+`GET /admin/notifications`, protégé par `administration.access`, MFA et audit d’accès, fournit les réceptions de procurations/mandats signés. La signature persistée constitue directement la notification : aucun envoi asynchrone susceptible d’être perdu et aucun doublon lors du rejeu. Projection SQL limitée aux identifiants, type, nom du profil lors de la signature, compte de rattachement actuel, date et révocation éventuelle ; ni tracé ni contenu signé complet dans la liste. Pagination stable par date/identifiant, 20 entrées par page. L’Admin actualise cette liste toutes les 15 secondes et ouvre le dossier du bon profil ; pas de statut lu/non lu ni de validation administrative exigée pour terminer l’action. Les signatures déjà enregistrées sont incluses. Un transfert garde sa date de réception et montre le nouveau rattachement avec la révocation, sans fabriquer une nouvelle réception.
+
+Extension sans migration : les tables de preuves et leur idempotence existantes restent la source de vérité. Les tests de signatures contrôlent la notification unique, les deux types de document, la pagination et les métadonnées révoquées ; les tests HTTP identity couvrent absence de session, permission, MFA et retrait des droits pour cette route.
+
 ## Vérifications
 
 Migration additive `0015` ; tests PostgreSQL de signature, isolation, révisions, acceptation, bornes, rejeu, session/révocation et stabilité du contenu après modification du profil. Résultats et limites de recette : [journal du Centre d’action](../../../../../roadmap/evidence/document-action-center.md).

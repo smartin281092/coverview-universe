@@ -17,7 +17,11 @@ async function main() {
   ) {
     throw new Error("Reset requires --confirm-local-reset and the coverview_local database");
   }
-  const database = createDatabase(config);
+  // Building an index over imported reference data is a bounded maintenance operation,
+  // not an interactive readiness query. Keep the API's short dependency timeout unchanged.
+  const database = createDatabase(
+    operation === "migrate" ? { ...config, DEPENDENCY_TIMEOUT_MS: 60000 } : config,
+  );
   database.pool.on("error", () => {
     process.stderr.write("Database idle connection failed\n");
   });

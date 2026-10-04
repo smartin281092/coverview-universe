@@ -1,0 +1,1 @@
+DROP INDEX "insurance_requests_owner_draft";

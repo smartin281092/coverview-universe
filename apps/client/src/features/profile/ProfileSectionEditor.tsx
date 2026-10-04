@@ -178,7 +178,8 @@ export function ProfileSectionEditor({
     staleTime: 0,
     gcTime: 0,
     retry: false,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
+    refetchInterval: (query) => (query.state.error ? false : 15_000),
   });
   useEffect(() => {
     mounted.current = true;
@@ -201,8 +202,15 @@ export function ProfileSectionEditor({
       setSaved(query.data);
       form.reset(formValues(Object.values(fieldsFor(profile, section)).flat(), query.data));
       setStep(visibleStep(requestedStep ?? query.data.step, section));
-    } else if (query.data.revision > saved.revision) setFailure("conflict");
-  }, [query.data, saved, form, profile, section, requestedStep]);
+    } else if (query.data.revision > saved.revision && !pending) {
+      if (isDirty || Object.keys(dirtyFields).length) setFailure("conflict");
+      else {
+        setSaved(query.data);
+        form.reset(formValues(Object.values(fieldsFor(profile, section)).flat(), query.data));
+        setFailure((current) => (current === "conflict" ? null : current));
+      }
+    }
+  }, [query.data, saved, form, profile, section, requestedStep, pending, isDirty, dirtyFields]);
   useEffect(() => {
     if (query.error instanceof ApiError && query.error.code === "IDENTITY_UNAUTHENTICATED")
       void forgetIdentity(client);

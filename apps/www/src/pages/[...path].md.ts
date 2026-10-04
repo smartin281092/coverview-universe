@@ -10,11 +10,8 @@ export const getStaticPaths: GetStaticPaths = () =>
 
 export const GET: APIRoute = ({ props }) => {
   const { data, body } = (props as { entry: Editorial }).entry;
-  const sources = data.sources
-    .map((source) => `- [${source.label}](https://coverview.ch/sources#bible-v15)`)
-    .join("\n");
   return new Response(
-    `${metadataMarkdown(data)}\n\nURL canonique : https://coverview.ch/${data.slug}\n\n${body}\n\n${copy.sources}\n\n${sources}\n\n${copy.sourceNote}\n`,
+    `${metadataMarkdown(data)}\n\nURL canonique : https://coverview.ch/${data.slug}\n\n${body}\n\n${copy.sources}\n\n- [${copy.start}](https://coverview.ch/#comprendre)\n- [${copy.approach}](https://coverview.ch/sources)\n- [${copy.markdown}](https://coverview.ch/${data.slug}.md)\n`,
     {
       headers: {
         "Content-Type": "text/markdown; charset=utf-8",

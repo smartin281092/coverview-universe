@@ -7,6 +7,7 @@ import { afterAll, beforeAll, expect, it } from "vitest";
 import { authorizationTexts } from "@coverview/contracts";
 import type {
   ActionCenterItem,
+  ActionCenterHistoryItem,
   DocumentAnalysis,
   DocumentExtraction,
   ProfileValues,
@@ -26,10 +27,15 @@ import { createActionCenterRepository } from "../modules/document-intelligence/d
 import {
   actionCenterResolutions,
   actionCenterManualReviews,
+  actionCenterCommands,
 } from "../modules/document-intelligence/document.action-center.schema.js";
 import { companyServiceRequests } from "../modules/document-intelligence/document.company-actions.schema.js";
 import { createAuthorizationRepository } from "../modules/authorizations/index.js";
 import { authorizationSignatures } from "../modules/authorizations/authorizations.schema.js";
+import Fastify from "fastify";
+import { io, type Socket } from "socket.io-client";
+import { actionReadEvent, actionSocketPath, actionReadResultSchema } from "@coverview/contracts";
+import { registerActionRealtime } from "../modules/document-intelligence/document.action-realtime.js";
 
 let container: StartedPostgreSqlContainer;
 let database: ReturnType<typeof createDatabase>;
@@ -192,43 +198,206 @@ afterAll(async () => {
   if (container) await container.stop();
 });
 
-it("reopens an authorization requirement when an older text version has an unresolved manual review", async () => {
+it("reads real action cards over WebSocket and rejects foreign owners, invalid input and revoked sessions", async () => {
+  const actor = await owner();
+  const stranger = await owner();
+  const center = createActionCenterRepository(database.db);
+  const own = (await center.list(actor.userId, { profileId: "self" })).actions[0]!;
+  const foreign = (await center.list(stranger.userId, { profileId: "self" })).actions[0]!;
+  const app = Fastify();
+  const wallet = "http://wallet.isolated.test";
+  let revoked = false;
+  let revokeDuringRead = false;
+  let reads = 0;
+  // Identity provider double only; the socket transport, DTO validation and SQL owner checks are real.
+  registerActionRealtime(
+    app,
+    {
+      details: async (...args) => {
+        reads++;
+        const data = await center.details(...args);
+        if (revokeDuringRead) revoked = true;
+        return data;
+      },
+    },
+    {
+      authenticateRealtime: (headers, csrf) => {
+        if (headers.cookie !== "session=isolated" || csrf !== "isolated-csrf" || revoked)
+          throw Object.assign(new Error("Rejected"), {
+            code: "IDENTITY_UNAUTHENTICATED",
+            statusCode: 401,
+          });
+        return Promise.resolve(actor);
+      },
+    },
+    { wallet, api: "http://socket.isolated.test" },
+  );
+  const address = await app.listen({ host: "127.0.0.1", port: 0 });
+  const sockets: Socket[] = [];
+  const connect = (origin = wallet, csrfToken = "isolated-csrf", cookie = "session=isolated") => {
+    const socket = io(address, {
+      path: actionSocketPath,
+      transports: ["websocket"],
+      reconnection: false,
+      extraHeaders: { Origin: origin, Host: "socket.isolated.test", Cookie: cookie },
+      auth: { csrfToken },
+      autoConnect: false,
+    });
+    sockets.push(socket);
+    return socket;
+  };
+  try {
+    for (const socket of [
+      connect("http://foreign.test"),
+      connect(wallet, "wrong"),
+      connect(wallet, "isolated-csrf", ""),
+    ]) {
+      await expect(
+        new Promise<void>((resolve, reject) => {
+          socket.once("connect", resolve);
+          socket.once("connect_error", reject);
+          socket.connect();
+        }),
+      ).rejects.toBeInstanceOf(Error);
+    }
+    expect(reads).toBe(0);
+    const socket = connect();
+    await new Promise<void>((resolve, reject) => {
+      socket.once("connect", resolve);
+      socket.once("connect_error", reject);
+      socket.connect();
+    });
+    const read = async (input: unknown) =>
+      actionReadResultSchema.parse(await socket.timeout(3000).emitWithAck(actionReadEvent, input));
+    expect(await read({ id: own.id, profileId: "self" })).toMatchObject({
+      ok: true,
+      data: { action: { id: own.id } },
+    });
+    expect(await read({ id: foreign.id, profileId: "self" })).toMatchObject({
+      ok: false,
+      status: 404,
+    });
+    expect(await read({ id: own.id, userId: stranger.userId })).toMatchObject({
+      ok: false,
+      status: 400,
+    });
+    expect(reads).toBe(2);
+    revokeDuringRead = true;
+    expect(await read({ id: own.id, profileId: "self" })).toMatchObject({ ok: false, status: 401 });
+  } finally {
+    for (const socket of sockets) socket.disconnect();
+    await app.close();
+  }
+});
+
+it("cycles action navigation in both directions within the selected private profile", async () => {
+  const actor = await owner();
+  const stranger = await owner();
+  const center = createActionCenterRepository(database.db);
+  const page = await center.list(actor.userId, { profileId: "self" });
+  expect(page.actions.length).toBeGreaterThan(1);
+  expect(page.nextCursor).toBeNull();
+  const first = page.actions[0]!;
+  const last = page.actions.at(-1)!;
+  const before = await center.summary(actor.userId, "self");
+  expect(await center.details(actor.userId, first.id, "self")).toMatchObject({
+    previousId: last.id,
+    nextId: page.actions[1]!.id,
+  });
+  expect(await center.details(actor.userId, last.id, "self")).toMatchObject({
+    nextId: first.id,
+    previousId: page.actions.at(-2)!.id,
+  });
+  await expect(center.details(stranger.userId, first.id, "self")).rejects.toMatchObject({
+    code: "DOCUMENT_NOT_FOUND",
+  });
+  expect(await center.summary(actor.userId, "self")).toEqual(before);
+});
+
+it("rejects free text and old cached authorization resolutions; only signature evidence completes the action", async () => {
   const actor = await owner();
   const center = createActionCenterRepository(database.db);
+  for (const kind of ["lsa45", "procuration", "management_mandate"]) {
+    const requirement = await topic(actor, `authorization:${kind}`);
+    expect(requirement).toMatchObject({ state: "pending", choices: [], canResolve: false });
+    await expect(
+      center.resolve(
+        actor,
+        requirement.id,
+        {
+          fingerprint: requirement.fingerprint,
+          choice: "custom",
+          response: "n'importe quoi",
+        },
+        randomUUID(),
+      ),
+    ).rejects.toMatchObject({ code: "DOCUMENT_REVIEW_INVALID" });
+  }
   const action = await topic(actor, "authorization:management_mandate");
-  const result = await center.resolve(
-    actor,
-    action.id,
-    {
-      fingerprint: action.fingerprint,
-      choice: "custom",
-      response: "Merci de m’aider à signer ce document.",
+  const key = randomUUID();
+  const input = {
+    fingerprint: action.fingerprint,
+    choice: "custom" as const,
+    response: "Ancienne demande",
+  };
+  // Explicit fixture of a command accepted by the previous version, never a new valid command.
+  const history: ActionCenterHistoryItem = {
+    id: randomUUID(),
+    actionId: action.id,
+    profileId: "self",
+    profileName: action.profileName,
+    topic: action.topic,
+    kind: "authorization",
+    choice: "custom",
+    beforeValues: {},
+    afterValues: {},
+    response: input.response,
+    sources: [],
+    createdAt: new Date().toISOString(),
+    actor: "owner",
+  };
+  await database.db.insert(actionCenterResolutions).values({
+    id: history.id,
+    userId: actor.userId,
+    profileId: "self",
+    actionId: action.id,
+    topic: action.topic,
+    observedHash: digest(JSON.stringify([action.topic, authorizationTexts.version])),
+    profileHash: digest("{}"),
+    fingerprint: action.fingerprint,
+    history,
+    actorUserId: actor.userId,
+    sessionId: actor.id,
+  });
+  await database.db.insert(actionCenterManualReviews).values({
+    id: randomUUID(),
+    userId: actor.userId,
+    resolutionId: history.id,
+    actionId: action.id,
+    profileId: "self",
+    profileName: action.profileName,
+    topic: action.topic,
+    response: input.response,
+  });
+  await database.db.insert(actionCenterCommands).values({
+    id: randomUUID(),
+    userId: actor.userId,
+    actorUserId: actor.userId,
+    operation: "resolve",
+    key,
+    requestHash: digest(JSON.stringify({ id: action.id, input })),
+    expiresAt: new Date(Date.now() + 86400000),
+    response: {
+      resolution: history,
+      action: { ...action, state: "in_progress" },
+      summary: await center.summary(actor.userId),
+      nextId: null,
+      requests: [],
     },
-    randomUUID(),
-  );
-  expect(result.action.state).toBe("in_progress");
-  const [resolution] = await database.db
-    .select()
-    .from(actionCenterResolutions)
-    .where(
-      and(
-        eq(actionCenterResolutions.userId, actor.userId),
-        eq(actionCenterResolutions.id, result.resolution.id),
-      ),
-    );
-  expect(resolution?.observedHash).toBe(
-    digest(JSON.stringify([action.topic, authorizationTexts.version])),
-  );
-  // A stored decision about an earlier legal text must not absorb a new version's prerequisite.
-  await database.db
-    .update(actionCenterResolutions)
-    .set({ observedHash: digest(JSON.stringify([action.topic, "isolated-earlier-version"])) })
-    .where(
-      and(
-        eq(actionCenterResolutions.userId, actor.userId),
-        eq(actionCenterResolutions.id, result.resolution.id),
-      ),
-    );
+  });
+  await expect(center.resolve(actor, action.id, input, key)).rejects.toMatchObject({
+    code: "DOCUMENT_REVIEW_INVALID",
+  });
   const reopened = (await center.details(actor.userId, action.id)).action;
   expect(reopened).toMatchObject({
     id: action.id,
@@ -236,8 +405,15 @@ it("reopens an authorization requirement when an older text version has an unres
     requirements: [{ kind: "management_mandate", state: "missing" }],
   });
   expect(
-    (await center.history(actor.userId)).entries.some((entry) => entry.id === result.resolution.id),
+    (await center.history(actor.userId)).entries.some((entry) => entry.id === history.id),
   ).toBe(true);
+  expect((await center.list(actor.userId, { state: "in_progress" })).actions).toEqual([]);
+  expect(
+    (await center.manualReviews()).reviews.some((review) => review.actionId === action.id),
+  ).toBe(false);
+  await save(actor, completeProfile);
+  await sign(actor, "mandate");
+  expect((await center.details(actor.userId, action.id)).action.state).toBe("complete");
 });
 
 it("enforces a non-null resolution at the PostgreSQL boundary for resolved manual reviews", async () => {
@@ -545,6 +721,19 @@ it("projects mandatory general information, scoped prerequisites and actual sign
   expect(scoped.actions.some((action) => action.topic === "authorization:lsa45")).toBe(false);
   expect(scoped.actions.some((action) => action.topic === "firstName")).toBe(false);
   expect(scoped.actions.some((action) => action.topic === "companyName")).toBe(true);
+  expect(await center.summary(actor.userId, managed.id)).toEqual(scoped.summary);
+  const scopedDetail = await center.details(actor.userId, scoped.actions[0]!.id, managed.id);
+  expect(scopedDetail.action.profileId).toBe(managed.id);
+  if (scopedDetail.nextId)
+    expect(
+      (await center.details(actor.userId, scopedDetail.nextId, managed.id)).action.profileId,
+    ).toBe(managed.id);
+  await expect(center.details(actor.userId, scoped.actions[0]!.id, "self")).rejects.toMatchObject({
+    statusCode: 404,
+  });
+  await expect(center.summary(stranger.userId, managed.id)).rejects.toMatchObject({
+    statusCode: 404,
+  });
   await expect(center.list(stranger.userId, { profileId: managed.id })).rejects.toMatchObject({
     statusCode: 404,
   });
@@ -566,7 +755,9 @@ it("paginates pending and in-progress actions independently and scopes cursors t
   }
   const before = await center.list(actor.userId);
   const second = await center.list(actor.userId, { cursor: before.nextCursor! });
-  for (const action of [...before.actions, ...second.actions].slice(0, 21)) {
+  for (const action of [...before.actions, ...second.actions]
+    .filter((item) => item.kind !== "authorization")
+    .slice(0, 21)) {
     await center.resolve(
       actor,
       action.id,

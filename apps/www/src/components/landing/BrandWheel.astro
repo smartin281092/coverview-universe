@@ -1,0 +1,60 @@
+---
+import axa from '../../assets/companies/axa.svg?url';
+import generali from '../../assets/companies/generali.svg?url';
+import groupeMutuel from '../../assets/companies/groupe-mutuel.svg?url';
+import allianz from '../../assets/companies/allianz.png?url';
+import pax from '../../assets/companies/pax.svg?url';
+import liechtensteinLife from '../../assets/companies/liechtenstein-life.svg?url';
+import finpension from '../../assets/companies/finpension.svg?url';
+import viac from '../../assets/companies/viac.svg?url';
+import ubs from '../../assets/companies/ubs.svg?url';
+import swissquote from '../../assets/companies/swissquote.svg?url';
+import swissquoteIcon from '../../assets/companies/swissquote-icon.svg?url';
+import mobiliere from '../../assets/companies/mobiliere.svg?url';
+import swisslife from '../../assets/companies/swisslife.jpg?url';
+import raiffeisen from '../../assets/companies/raiffeisen.png?url';
+import zurich from '../../assets/companies/zurich.png?url';
+import retraitesPopulaires from '../../assets/companies/retraites-populaires.svg?url';
+import helvetia from '../../assets/companies/helvetia.svg?url';
+import { landing } from '../../content/fr/landing';
+import '../../styles/brand-wheel.css';
+
+const companies = [
+  { name: 'AXA', src: axa, tone: 'axa' },
+  { name: 'Pax', src: pax, tone: 'pax' },
+  { name: 'Finpension', src: finpension, tone: 'finpension' },
+  { name: 'Helvetia', src: helvetia, tone: 'helvetia' },
+  { name: 'UBS', src: ubs, tone: 'ubs' },
+  { name: 'Swiss Life', src: swisslife, tone: 'swisslife' },
+  { name: 'VIAC', src: viac, tone: 'viac' },
+  { name: 'Generali', src: generali, tone: 'generali' },
+  { name: 'Swissquote', src: swissquote, tone: 'swissquote' },
+  { name: 'La Mobilière', src: mobiliere, tone: 'mobiliere' },
+  { name: 'Raiffeisen', src: raiffeisen, tone: 'raiffeisen' },
+  { name: 'Groupe Mutuel', src: groupeMutuel, tone: 'mutuel' },
+  { name: 'Zurich', src: zurich, tone: 'zurich' },
+  { name: 'Liechtenstein Life', src: liechtensteinLife, tone: 'liechtenstein-life' },
+  { name: 'Allianz', src: allianz, tone: 'allianz' },
+  { name: 'Retraites Populaires', src: retraitesPopulaires, tone: 'retraites-populaires' },
+];
+---
+<div class="hero-scene brand-wheel-scene" data-scene data-brand-wheel role="img" aria-label={landing.hero.wheelLabel}>
+  <div class="brand-wheel-shadow" aria-hidden="true"></div>
+  <div class="brand-wheel-stage" aria-hidden="true">
+    <div class="brand-wheel-rotor" data-wheel-rotor>
+      {companies.map((company, i) => {
+        const angle = i * 360 / companies.length;
+        const opacity = .12 + .88 * Math.pow((Math.cos(angle * Math.PI / 180) + 1) / 2, 1.5);
+        return <div class="brand-wheel-card" style={`--angle:${angle}deg`} data-wheel-card data-angle={angle}>
+          <div class={`brand-wheel-face brand-wheel-${company.tone}`} style={`opacity:${opacity}`} data-wheel-face>
+            <div class="brand-wheel-logo">
+              {company.tone === 'swissquote' && <img class="brand-wheel-logo-icon" src={swissquoteIcon} alt="" width="28" height="28" loading="eager" decoding="async" />}
+              <img src={company.src} alt={company.name} width="140" height="72" loading="eager" decoding="async" />
+              {company.tone === 'liechtenstein-life' && <span>{company.name}</span>}
+            </div>
+          </div>
+        </div>;
+      })}
+    </div>
+  </div>
+</div>

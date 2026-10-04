@@ -15,12 +15,17 @@ import { createCompanyActionRepository } from "./document.company-actions.reposi
 import { registerCompanyActionRoutes } from "./document.company-actions.routes.js";
 import { createActionCenterRepository } from "./document.action-center.repository.js";
 import { registerActionCenterRoutes } from "./document.action-center.routes.js";
+import { registerActionRealtime, type RealtimeIdentity } from "./document.action-realtime.js";
+import { registerLeadDocumentRoutes, type LeadSourceAuthorization } from "./document.lead.routes.js";
 export { DocumentError } from "./document.repository.js";
+export {retainLeadSource} from "./document.lead-source.js";
+export {documents} from "./document.schema.js";
 
 export async function registerDocuments(
   app: FastifyInstance,
   environment: Environment,
-  identity: Parameters<typeof registerDocumentRoutes>[3] & AdminDocumentIdentity,
+  identity: Parameters<typeof registerDocumentRoutes>[3] & AdminDocumentIdentity & RealtimeIdentity,
+  leadSources?: LeadSourceAuthorization,
 ) {
   const config = await documentConfig(environment);
   if (!config.enabled) return;
@@ -31,12 +36,17 @@ export async function registerDocuments(
   const storage = createS3Storage(config);
   const repository = createDocumentRepository(database.db);
   const service = createDocumentService(repository, storage);
+  if (leadSources) registerLeadDocumentRoutes(app, database.pool, service, leadSources);
   registerDocumentRoutes(app, repository, service, identity);
   registerAdminDocumentRoutes(app, repository, service, identity);
   const actions = createCompanyActionRepository(database.db);
   registerCompanyActionRoutes(app, actions, identity);
   const actionCenter = createActionCenterRepository(database.db);
   registerActionCenterRoutes(app, actionCenter, identity);
+  registerActionRealtime(app, actionCenter, identity, {
+    wallet: environment.AUTH_WALLET_ORIGIN,
+    api: environment.AUTH_API_ORIGIN,
+  });
   let actionMaintenance: Promise<void> | null = null;
   const maintainActions = () => {
     if (actionMaintenance) return;

@@ -1,0 +1,88 @@
+---
+import TitleText from './TitleText.astro';
+import { ButtonLink } from '@coverview/ui';
+import { landing as c } from '../../content/fr/landing';
+import logo from '../../../../../assets/logo-coverview.svg?url';
+import icon from '../../../../../assets/icon-coverview.svg?url';
+import WalletCard from './WalletCard.astro';
+import SavingsCalculator from './SavingsCalculator.astro';
+import InflationCalculator from './InflationCalculator.astro';
+import Arrow from './Arrow.astro';
+import BrandWheel from './BrandWheel.astro';
+import RetirementPreview from './RetirementPreview.astro';
+import PerformanceProof from './PerformanceProof.astro';
+import '../../styles/landing.css';
+const walletOrigin = import.meta.env.PUBLIC_WALLET_URL ?? (import.meta.env.DEV ? 'http://127.0.0.1:4101' : undefined);
+const walletAccount = walletOrigin ? new URL('/account', walletOrigin).href : '/account';
+const walletDocuments = walletOrigin ? new URL('/documents', walletOrigin).href : '/account';
+---
+<div class="lp" data-landing>
+  <header class="lp-header">
+    <div class="lp-container lp-header-inner">
+      <a class="lp-logo" href="/" aria-label="CoverView"><img src={logo} alt="CoverView" width="444" height="73" /></a>
+      <nav aria-label={c.navLabel}>{c.nav.map(item=><a href={item.href}>{item.label}</a>)}</nav>
+      <div class="lp-header-actions"><a class="lp-account" href={walletAccount}>{c.account}<span aria-hidden="true">↗</span></a><button class="lp-button lp-button-small" data-open-dialog="start-analysis">{c.cta}<Arrow /></button><button class="motion-toggle" data-motion-toggle data-play-label={c.motion.play} aria-label={c.motion.pause} aria-pressed="false"><span class="pause-icon" aria-hidden="true">Ⅱ</span><span class="play-icon" aria-hidden="true">▷</span></button></div>
+    </div>
+  </header>
+
+  <section class="lp-hero" aria-labelledby="hero-title">
+    <div class="hero-aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="lp-container hero-grid">
+      <div class="hero-copy" data-reveal>
+        <p class="lp-eyebrow hero-eyebrow"><span class="live-dot" aria-hidden="true"></span>{c.hero.eyebrow}</p>
+        <h1 id="hero-title"><TitleText text={c.hero.title.join("\n")}/></h1>
+        <p class="hero-description">{c.hero.description}</p>
+        <button class="lp-button hero-cta" data-open-dialog="start-analysis">{c.cta}<Arrow /></button>
+        <a class="hero-alternative" href="#simuler">{c.alternative}<span aria-hidden="true">↗</span></a>
+        <ul class="hero-assurances">{c.hero.assurances.map(text=><li><span aria-hidden="true">✓</span>{text}</li>)}</ul>
+      </div>
+      <BrandWheel />
+    </div>
+    <div class="lp-container hero-baseline"><p>{c.hero.caption}</p><a href="#comprendre" aria-label={c.arrow}><span aria-hidden="true">↓</span></a></div>
+  </section>
+
+  <div class="lp-dimensions"><div class="lp-container"><p>{c.strip.lead}</p><div>{c.strip.items.map((item,i)=><span><span class="dimension-symbol" aria-hidden="true">{['◈','≋','◇','↗','◎','⊕'][i]}</span>{item}</span>)}</div></div></div>
+
+  <section class="lp-section" id="comprendre"><div class="lp-container discovery-grid">
+    <div data-reveal><p class="lp-eyebrow">{c.discovery.eyebrow}</p><h2><TitleText text={c.discovery.title}/></h2><p class="lp-description">{c.discovery.description}</p><ol class="discovery-list">{c.discovery.items.map(item=><li><span>{item.number}</span><div><h3><TitleText text={item.title}/></h3><p>{item.description}</p></div></li>)}</ol></div>
+    <RetirementPreview />
+  </div></section>
+
+  <SavingsCalculator />
+  <InflationCalculator />
+
+  <section class="lp-section evidence-section"><div class="lp-container">
+    <div class="lp-section-head" data-reveal><div><p class="lp-eyebrow">{c.evidence.eyebrow}</p><h2><TitleText text={c.evidence.title}/></h2></div><p class="lp-description">{c.evidence.description}</p></div>
+    <div class="evidence-grid" data-reveal><div class="evidence-number"><span data-count="6">6</span><p>{c.evidence.number}</p></div><div class="evidence-dimensions">{c.evidence.dimensions.map((dim,i)=><div><span class="evidence-index">0{i+1}</span><span>{dim}</span><span class="evidence-line" style={`--length:${55+i*7}%`} aria-hidden="true"><i></i></span></div>)}</div></div>
+    <div class="evidence-bottom"><a class="lp-text-link" href="/benchmark">{c.evidence.link}<Arrow/></a><p>{c.evidence.note}</p></div>
+  </div></section>
+
+  <section class="lp-section method-section" id="methode"><div class="lp-container method-grid">
+    <div class="method-scene" data-scene data-reveal><p class="lp-eyebrow">{c.method.visual.top}</p><div class="orbital-system" aria-hidden="true"><div class="orbit-ring ring-one"></div><div class="orbit-ring ring-two"></div><div class="orbit-ring ring-three"></div><div class="orbit-center"><img src={icon} alt="" width="60" height="55"/><span>{c.method.visual.center}</span></div>{c.method.visual.satellites.map((label,i)=><div class={`orbit-label orbit-label-${i}`}><i></i>{label}</div>)}<span class="orbit-particle particle-one"></span><span class="orbit-particle particle-two"></span></div><p class="method-scene-note">{c.method.visual.bottom}</p></div>
+    <div data-reveal><p class="lp-eyebrow">{c.method.eyebrow}</p><h2><TitleText text={c.method.title}/></h2><p class="lp-description">{c.method.description}</p><ol class="method-list">{c.method.items.map((item,i)=><li><span>0{i+1}</span><div><h3><TitleText text={item.title}/></h3><p>{item.description}</p></div></li>)}</ol><a href="/methode" class="lp-text-link">{c.method.link}<Arrow/></a></div>
+  </div></section>
+
+  <section class="strategy-section"><div class="strategy-glow" aria-hidden="true"></div><div class="lp-container strategy-grid">
+    <div data-reveal><p class="lp-eyebrow">{c.strategy.eyebrow}</p><h2><TitleText text={c.strategy.title}/></h2><p class="lp-description">{c.strategy.description}</p><p class="independence-note">{c.strategy.independence}</p><a href="#resultats" class="lp-button">{c.strategy.link}<Arrow/></a></div>
+    <div class="strategy-visual" data-scene data-reveal><p class="lp-eyebrow">{c.strategy.visual}</p><div class="strategy-sculpture" aria-hidden="true">{Array.from({length:16},(_,i)=><div class="sculpture-bar" style={`--i:${i};--bar-height:${45+Math.pow(i,1.45)*6}px`}></div>)}</div><div class="strategy-labels">{c.strategy.labels.map(label=><span>{label}</span>)}</div><p class="strategy-caption">{c.strategy.caption}</p></div>
+  </div><p class="strategy-foot">{c.strategy.foot}</p></section>
+
+  <PerformanceProof />
+
+  <section class="lp-section follow-section"><div class="lp-container"><div class="lp-section-head" data-reveal><div><p class="lp-eyebrow">{c.follow.eyebrow}</p><h2><TitleText text={c.follow.title}/></h2></div><p class="lp-description">{c.follow.description}</p></div><ol class="follow-timeline">{c.follow.items.map((item,i)=><li data-reveal><div class="timeline-rail"><span>0{i+1}</span><i></i></div><p class="timeline-time">{item.time}</p><h3><TitleText text={item.title}/></h3><p>{item.text}</p></li>)}</ol></div></section>
+
+  <section class="lp-section wallet-section"><div class="lp-container wallet-grid"><div class="wallet-scene" data-scene data-reveal><div class="wallet-halo" aria-hidden="true"></div><div class="wallet-rings" aria-hidden="true"></div><p class="lp-eyebrow">{c.wallet.visualLabel}</p><WalletCard/><span class="wallet-badge"><i class="live-dot"></i>{c.wallet.badge}</span></div><div data-reveal><p class="lp-eyebrow">{c.wallet.eyebrow}</p><h2><TitleText text={c.wallet.title}/></h2><p class="lp-description">{c.wallet.description}</p><ul class="wallet-benefits">{c.wallet.benefits.map(item=><li><span aria-hidden="true">✓</span>{item}</li>)}</ul><ButtonLink href={walletAccount} className="lp-button">{c.wallet.cta}<Arrow/></ButtonLink><p class="wallet-caption">{c.wallet.caption}</p></div></div></section>
+
+  <section class="lp-section faq-section" id="questions"><div class="lp-container faq-grid"><div data-reveal><p class="lp-eyebrow">{c.faq.eyebrow}</p><h2><TitleText text={c.faq.title}/></h2></div><div class="landing-faq">{c.faq.items.map(item=><details><summary>{item.question}<span aria-hidden="true"></span></summary><div><p>{item.answer}</p></div></details>)}</div></div></section>
+
+  <section class="closing-section"><div class="closing-aurora" aria-hidden="true"></div><div class="lp-container center-heading" data-reveal><p class="lp-eyebrow">{c.closing.eyebrow}</p><h2><TitleText text={c.closing.title}/></h2><p class="lp-description">{c.closing.description}</p><button class="lp-button" data-open-dialog="start-analysis">{c.cta}<Arrow/></button><a class="hero-alternative" href="#simuler">{c.alternative}<span aria-hidden="true">↗</span></a><p class="closing-note">{c.closing.note}</p></div></section>
+
+  <footer class="lp-footer"><div class="lp-container"><div class="lp-footer-top"><div><a href="/" class="lp-logo"><img src={logo} alt="CoverView" width="444" height="73"/></a><p>{c.footer.tagline}</p></div><nav aria-label={c.footerLabel}>{c.footer.links.map(link=><a href={link.href}>{link.label}<span aria-hidden="true">↗</span></a>)}</nav></div><div class="lp-footer-bottom"><p>© {new Date().getFullYear()} {c.footer.copyright}</p><p>{c.footer.address}</p><span>{c.footer.status}</span></div></div></footer>
+
+  <dialog class="lp-dialog entry-dialog" id="start-analysis" aria-labelledby="entry-title" aria-describedby="entry-description"><div class="dialog-top"><img src={icon} width="30" height="28" alt=""/><button class="dialog-close" data-close-dialog aria-label={c.entry.close}>×</button></div><h2 id="entry-title"><TitleText text={c.entry.title}/></h2><p id="entry-description">{c.entry.description}</p><div class="entry-options"><div><span class="entry-icon" aria-hidden="true">▤</span><h3><TitleText text={c.entry.with}/></h3><p>{c.entry.withText}</p><small>{c.entry.withNote}</small><a href={walletDocuments} class="lp-button">{c.entry.withCta}<Arrow/></a></div><div><span class="entry-icon" aria-hidden="true">↗</span><h3><TitleText text={c.entry.without}/></h3><p>{c.entry.withoutText}</p><small>{c.entry.withoutNote}</small><a href="#simuler" class="lp-button lp-button-secondary" data-close-dialog>{c.entry.withoutCta}<Arrow/></a></div></div></dialog>
+  <noscript><style>.motion-toggle{display:none!important}</style><div class="lp-container"><a class="lp-text-link" href={walletDocuments}>{c.entry.withCta} ↗</a></div></noscript>
+</div>
+<script>import './landing';</script>
+
+
+

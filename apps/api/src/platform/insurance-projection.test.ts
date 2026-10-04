@@ -56,6 +56,17 @@ function entry(content: DocumentAnalysis, checksum = randomUUID()) {
   return { document, analysis: content };
 }
 const today = new Date("2026-09-07T12:00:00Z");
+it("keeps policies with the same number in different profiles separate in the consolidated view", () => {
+  const first = entry(analysis(policy("COMMON-1")));
+  const second = entry(analysis(policy("COMMON-1")));
+  first.document.profileId = "self";
+  second.document.profileId = `prf_${randomUUID()}`;
+  const result = companyOverview("axa", [first, second], today);
+  expect(result.contracts).toHaveLength(2);
+  expect(new Set(result.contracts.map((contract) => contract.profileId))).toEqual(
+    new Set(["self", second.document.profileId]),
+  );
+});
 
 it("uses content consistently, avoids address numbers as domains and leaves ambiguous insurers unknown", () => {
   expect(detectedInsuranceDomain("AXA\nAdresse : rue du Lac 3A")).toBeNull();
@@ -294,6 +305,17 @@ it("projects only the current owner's undeleted documents with the same detail/l
     .where(eq(documents.id, doc.id));
   const overview = await repository.insuranceCompany(actor.userId, "axa");
   expect(overview.documents.map((item) => item.id)).toEqual([doc.id]);
+  const dossier = await repository.profileContracts(actor.userId, "self");
+  expect(dossier.companies).toHaveLength(1);
+  expect(dossier.companies[0]?.contracts[0]).toMatchObject({
+    profileId: "self",
+    documentIds: [doc.id],
+  });
+  expect(dossier.unassigned).toEqual([]);
+  expect(await repository.profileContracts(stranger.userId, "self")).toEqual({
+    companies: [],
+    unassigned: [],
+  });
   const detail = await repository.get(actor.userId, doc.id);
   const list = await repository.list(actor.userId);
   expect(detail.title).toBe("Police d’assurance automobile");
@@ -315,7 +337,18 @@ it("projects only the current owner's undeleted documents with the same detail/l
   await expect(repository.get(stranger.userId, doc.id)).rejects.toMatchObject({ statusCode: 404 });
   await database.db
     .update(documents)
+    .set({ analysis: analysis(policy("PRIVATE-1").replace("AXA", "Assureur inconnu")) })
+    .where(eq(documents.id, doc.id));
+  const unknownInsurer = await repository.profileContracts(actor.userId, "self");
+  expect(unknownInsurer.companies).toEqual([]);
+  expect(unknownInsurer.unassigned.map((item) => item.id)).toEqual([doc.id]);
+  await database.db
+    .update(documents)
     .set({ state: "deleted", deletedAt: new Date() })
     .where(eq(documents.id, doc.id));
   expect((await repository.insuranceCompany(actor.userId, "axa")).documents).toEqual([]);
+  expect(await repository.profileContracts(actor.userId, "self")).toEqual({
+    companies: [],
+    unassigned: [],
+  });
 });

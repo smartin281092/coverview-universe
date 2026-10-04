@@ -1,4 +1,10 @@
+import { registerPartnerWorkspace, PartnerError } from "../modules/partner-workspace/index.js";
 import { randomUUID } from "node:crypto";
+import {
+  registerInsuranceRequests,
+  InsuranceRequestError,
+} from "../modules/insurance-requests/index.js";
+import { registerHealthInsurance, RecommendationError } from "../modules/health-insurance/index.js";
 import {
   apiErrorSchema,
   livenessSchema,
@@ -17,6 +23,12 @@ import { isLoopback, type Environment } from "./config.js";
 import { createPlatformDependencies, type PlatformDependencies } from "./dependencies.js";
 import { registerDocuments, DocumentError } from "../modules/document-intelligence/index.js";
 import { registerManagedProfiles, ManagedProfileError } from "../modules/profiles/index.js";
+import { registerAdminProfileTransfers } from "./admin-profile-transfer.routes.js";
+import { ProfileTransferError } from "./admin-profile-transfer.repository.js";
+import {
+  registerClientActivities,
+  ClientActivityError,
+} from "../modules/client-activities/index.js";
 import { registerAuthorizations } from "../modules/authorizations/index.js";
 import {
   IdentityError,
@@ -97,9 +109,12 @@ export async function buildServer(
       errorStatus >= 400 &&
       errorStatus < 500;
     const status =
+      error instanceof PartnerError || error instanceof RecommendationError || error instanceof InsuranceRequestError ||
       error instanceof IdentityError ||
       error instanceof DocumentError ||
-      error instanceof ManagedProfileError
+      error instanceof ManagedProfileError ||
+      error instanceof ClientActivityError ||
+      error instanceof ProfileTransferError
         ? error.statusCode
         : isClientError
           ? errorStatus
@@ -107,9 +122,12 @@ export async function buildServer(
             ? 400
             : 500;
     const code =
+      error instanceof PartnerError || error instanceof RecommendationError || error instanceof InsuranceRequestError ||
       error instanceof IdentityError ||
       error instanceof DocumentError ||
-      error instanceof ManagedProfileError
+      error instanceof ManagedProfileError ||
+      error instanceof ClientActivityError ||
+      error instanceof ProfileTransferError
         ? error.code
         : status === 429
           ? "IDENTITY_RATE_LIMITED"
@@ -168,8 +186,13 @@ export async function buildServer(
   }
 
   const identity = await registerIdentity(app, config, identityService);
+  registerHealthInsurance(app, config, identity);
+  registerInsuranceRequests(app, config, identity);
   registerManagedProfiles(app, config, identity);
+  registerClientActivities(app, config, identity);
+  registerAdminProfileTransfers(app, config, identity);
   registerAuthorizations(app, config, identity);
-  await registerDocuments(app, config, identity);
+  const partner = registerPartnerWorkspace(app, config, identity);
+  await registerDocuments(app, config, identity, partner);
   return app;
 }

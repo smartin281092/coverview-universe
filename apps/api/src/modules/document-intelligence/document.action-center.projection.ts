@@ -336,11 +336,9 @@ export async function readActionCenter(tx: Database | Tx, userId: string, profil
         check.kind === "lsa45" ? notice.version : authorizationTexts.version,
       ]);
       const profileHash = actionValuesHash({});
-      const resolved = latestResolution(resolutions, id, observedHash, profileHash);
-      const review = resolved
-        ? manual.find((entry) => entry.resolutionId === resolved.id && entry.state !== "resolved")
-        : undefined;
-      const state = check.at ? "complete" : review ? "in_progress" : "pending";
+      // Only the recorded signature (or notice opening) completes an authorization.
+      // Historical free-text requests never replace that evidence or move it in progress.
+      const state = check.at ? "complete" : "pending";
       const item = actionCenterItemSchema.parse({
         id,
         profileId,
@@ -348,19 +346,12 @@ export async function readActionCenter(tx: Database | Tx, userId: string, profil
         topic,
         kind: "authorization",
         state,
-        fingerprint: actionDigest([id, check.at, observedHash, review?.revision ?? null]),
+        fingerprint: actionDigest([id, check.at, observedHash]),
         profileRevision: profile.revision,
         currentValues: {},
         variants: [],
         companies: [],
-        choices: [
-          {
-            id: "custom",
-            labelKey: "choices.custom",
-            recommended: false,
-            enabled: !incomplete && state === "pending",
-          },
-        ],
+        choices: [],
         requirements: [
           {
             kind: check.kind,
@@ -371,7 +362,7 @@ export async function readActionCenter(tx: Database | Tx, userId: string, profil
           },
         ],
         requiredFields: [],
-        canResolve: !incomplete && state === "pending",
+        canResolve: false,
         resolvedAt: check.at,
       });
       actions.push({ item, observedHash, profileHash });

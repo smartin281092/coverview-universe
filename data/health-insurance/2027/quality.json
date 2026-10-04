@@ -1,0 +1,58 @@
+{
+  "datasetId": "hi_eb1eceb51a217fd4a4f4cd529e81",
+  "normalizerSha256": "e3cdcf1fba2b6dc3dc170724846d1ddf143024e882278969ff76e224acb0d9b1",
+  "counts": {
+    "premiums": 219916,
+    "models": 153,
+    "insurers": 32,
+    "localities": 5468,
+    "regions": 44,
+    "swissRegions": 42,
+    "eligibility": 4992
+  },
+  "years": [
+    2027
+  ],
+  "duplicates": 0,
+  "missingModels": 0,
+  "missingEligibility": 0,
+  "cantons": {
+    "AG": 5926,
+    "AI": 5026,
+    "AR": 5070,
+    "BE": 17342,
+    "BL": 10226,
+    "BS": 5172,
+    "FR": 10284,
+    "GE": 4662,
+    "GL": 5176,
+    "GR": 15442,
+    "JU": 4614,
+    "LU": 16260,
+    "NE": 4688,
+    "NW": 5390,
+    "OW": 5154,
+    "SG": 16012,
+    "SH": 10092,
+    "SO": 5622,
+    "SZ": 5604,
+    "TG": 5184,
+    "TI": 9140,
+    "UR": 5404,
+    "VD": 9300,
+    "VS": 10534,
+    "ZG": 5528,
+    "ZH": 16900,
+    "ZE": 146,
+    "ZR": 18
+  },
+  "ageSubgroups": {
+    "E1": "Adulte",
+    "J1": "Jeune adulte",
+    "K1": "Prime enfant - sans réduction supplémentaire",
+    "K3": "Prime enfant avec réduction à partir du 3ème enfant",
+    "K5": "Prime enfant avec réduction à partir du 3ème enfant et s'applique à tous les enfants",
+    "K4": "Prime enfant avec réduction à partir du 2ème enfant et s'applique à tous les enfants"
+  },
+  "note": "ZE/ZR archived, excluded from Swiss map and comparison. K1 used for children; family discounts retained but require insurer eligibility confirmation."
+}

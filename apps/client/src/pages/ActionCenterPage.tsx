@@ -1,3 +1,4 @@
+import { useWalletProfileScope } from "../features/profile/use-wallet-profile-scope";
 import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
@@ -19,6 +20,7 @@ import { ActionActivity } from "../features/actions/ActionActivity";
 import { useActionLabel } from "../features/actions/use-action-label";
 
 function ActionCenter({ identity }: { identity: IdentityMe }) {
+  const { scope, filter } = useWalletProfileScope();
   const { t } = useTranslation("actions");
   const label = useActionLabel();
   const search = useSearch({ from: "/actions" });
@@ -26,10 +28,10 @@ function ActionCenter({ identity }: { identity: IdentityMe }) {
   const activity = search.tab === "activity";
   const inProgress = search.tab === "in_progress";
   const listState = inProgress ? "in_progress" : "pending";
-  const root = ["private", identity.user.id, identity.session.id, "action-center"];
+  const root = ["private", identity.user.id, identity.session.id, "action-center", scope];
   const summary = useQuery({
     queryKey: [...root, "summary"],
-    queryFn: ({ signal }) => api.actionCenterSummary({ signal }),
+    queryFn: ({ signal }) => api.actionCenterSummary({ signal }, filter),
     gcTime: 0,
     staleTime: 0,
     retry: false,
@@ -38,7 +40,7 @@ function ActionCenter({ identity }: { identity: IdentityMe }) {
   const query = useQuery({
     queryKey: [...root, "list", listState, search.cursor],
     queryFn: ({ signal }) =>
-      api.actionCenter({ state: listState, cursor: search.cursor }, { signal }),
+      api.actionCenter({ state: listState, cursor: search.cursor, ...filter }, { signal }),
     enabled: !activity,
     gcTime: 0,
     staleTime: 0,

@@ -1,0 +1,139 @@
+import { Link, Outlet, useLocation } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
+import {
+  LayoutDashboard,
+  PanelsTopLeft,
+  Users,
+  CalendarDays,
+  CheckSquare,
+  UserRound,
+  ShieldCheck,
+  ArrowUpRight,
+  Menu,
+} from "lucide-react";
+import { Button, Sheet, SheetContent, SheetHeader, SheetTitle } from "@coverview/ui";
+import { useState } from "react";
+import logo from "../../../assets/logo-coverview.svg";
+import { PartnerSession, usePartner } from "./features/PartnerSession";
+import { ApplicationPage } from "./pages/ApplicationPage";
+import { adminUrl, walletUrl } from "./api";
+const links = [
+  { to: "/", label: "dashboard", icon: LayoutDashboard },
+  { to: "/leads", label: "leads", icon: PanelsTopLeft },
+  { to: "/clients", label: "clients", icon: Users },
+  { to: "/tasks", label: "tasks", icon: CheckSquare },
+  { to: "/agenda", label: "agenda", icon: CalendarDays },
+  { to: "/profile", label: "profile", icon: UserRound },
+] as const;
+function Workspace() {
+  const { t } = useTranslation(),
+    { pathname } = useLocation(),
+    { identity, context } = usePartner();
+  const [open, setOpen] = useState(false);
+  const navigation = (
+    <>
+      <div className="mb-8 px-3">
+        <img src={logo} alt={t("brand")} className="h-5 w-auto" />
+        <p className="mt-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+          {t("app")}
+        </p>
+      </div>
+      <nav aria-label={t("navigation")} className="space-y-1">
+        {links
+          .filter((link) => context.operational || link.label === "profile")
+          .map(({ to, label, icon: Icon }) => (
+            <Link
+              key={to}
+              to={to}
+              onClick={() => setOpen(false)}
+              className={`flex items-center gap-3 rounded-lg px-3 py-3 text-sm ${pathname === to || (to === "/leads" && pathname.startsWith("/leads/")) ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}
+            >
+              <Icon className="size-4" />
+              {t(`nav.${label}`)}
+            </Link>
+          ))}
+        {context.administrator && (
+          <Link
+            to="/applications"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-muted-foreground hover:bg-muted"
+          >
+            <ShieldCheck className="size-4" />
+            {t("nav.applications")}
+          </Link>
+        )}
+      </nav>
+      <div className="mt-auto space-y-3 border-t border-border px-3 pt-5 text-xs text-muted-foreground">
+        <a href={walletUrl} className="flex items-center justify-between">
+          {t("nav.wallet")}
+          <ArrowUpRight className="size-3.5" />
+        </a>
+        {context.administrator && (
+          <a href={adminUrl} className="flex items-center justify-between">
+            {t("nav.admin")}
+            <ArrowUpRight className="size-3.5" />
+          </a>
+        )}
+        <p className="truncate pt-3">{identity.user.email}</p>
+      </div>
+    </>
+  );
+  return (
+    <div className="min-h-svh bg-background">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:z-50 focus:bg-background focus:p-4"
+      >
+        {t("skip")}
+      </a>
+      <aside className="fixed inset-y-0 left-0 z-20 hidden w-64 flex-col border-r border-border bg-card p-5 lg:flex">
+        {navigation}
+      </aside>
+      <div className="lg:pl-64">
+        <header className="sticky top-0 z-10 flex h-16 items-center justify-between gap-4 border-b border-border bg-background/95 px-5 backdrop-blur-xl sm:px-8">
+          <div className="flex items-center gap-3">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setOpen(true)}
+              className="lg:hidden"
+              aria-label={t("navigation")}
+            >
+              <Menu className="size-5" />
+            </Button>
+            <span className="text-sm text-muted-foreground">
+              {context.administrator ? t("network") : t("workspace")}
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <ShieldCheck className="size-4" />
+            {t("private")}
+          </div>
+        </header>
+        <main id="main" tabIndex={-1} className="mx-auto max-w-screen-2xl space-y-8 p-5 sm:p-8">
+          {context.operational ? <Outlet /> : <ApplicationPage />}
+        </main>
+      </div>
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetContent
+          side="left"
+          className="flex w-72 flex-col p-5"
+          showCloseButton
+          closeLabel={t("close")}
+        >
+          <SheetHeader>
+            <SheetTitle className="sr-only">{t("navigation")}</SheetTitle>
+          </SheetHeader>
+          {navigation}
+        </SheetContent>
+      </Sheet>
+    </div>
+  );
+}
+export function AppShell() {
+  return (
+    <PartnerSession>
+      <Workspace />
+    </PartnerSession>
+  );
+}

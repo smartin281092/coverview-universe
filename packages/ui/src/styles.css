@@ -68,3 +68,113 @@
     @apply font-sans;
   }
 }
+.cv-request-progress {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.cv-request-animation {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+.cv-request-animation > svg {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  top: 38px;
+  left: 38px;
+  color: var(--muted-foreground);
+}
+.cv-request-animation > div {
+  position: relative;
+}
+.cv-request-animation:has(> div > svg) > svg {
+  visibility: hidden;
+}
+.cv-request-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.cv-request-steps li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 16px;
+  padding-bottom: 28px;
+}
+.cv-request-steps li:not(:last-child)::before,
+.cv-request-steps li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 36px;
+  left: 17px;
+  bottom: 0;
+  width: 2px;
+  background: var(--border);
+  transform-origin: top;
+}
+.cv-request-steps li.is-done::after {
+  background: var(--primary);
+}
+.cv-request-steps li.is-current:not(:last-child)::after {
+  background: var(--primary);
+  animation: cv-request-fill 2s ease-in-out infinite;
+}
+.cv-request-step-icon {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--muted-foreground);
+  background: var(--background);
+  font-size: 12px;
+}
+.is-current > .cv-request-step-icon,
+.is-done > .cv-request-step-icon {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+.cv-request-steps strong {
+  display: block;
+  padding-top: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.cv-request-steps p,
+.cv-request-steps time {
+  display: block;
+  margin: 5px 0 0;
+  font-size: 12px;
+  color: var(--muted-foreground);
+  line-height: 1.5;
+}
+@keyframes cv-request-fill {
+  0% {
+    transform: scaleY(0);
+  }
+  75%,
+  100% {
+    transform: scaleY(1);
+  }
+}
+@media (max-width: 600px) {
+  .cv-request-progress {
+    grid-template-columns: 1fr;
+  }
+  .cv-request-animation {
+    margin: 0 auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cv-request-steps li.is-current::after {
+    animation: none;
+  }
+}

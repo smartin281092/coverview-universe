@@ -6,6 +6,7 @@
         "preview.config.mjs",
         "scripts/verify-brand.mjs",
         "scripts/verify-planning.mjs",
+        "scripts/verify-health-live.mjs",
         ".claude/hooks/guard-bash.mjs"
       ],
       "project": [
@@ -19,6 +20,9 @@
     "apps/api": {
       "entry": [
         "src/**/*.test.ts",
+        "src/modules/health-insurance/health.import.ts",
+        "src/modules/health-insurance/health.foreign.import.ts",
+        "src/modules/health-insurance/recommendation.import.ts",
         "src/modules/document-intelligence/document.pdf-annotations-worker.ts"
       ],
       "project": ["src/**/*.ts", "*.ts", "*.mjs"]
@@ -27,6 +31,9 @@
       "project": ["src/**/*.{ts,tsx,css}"]
     },
     "apps/admin": {
+      "project": ["src/**/*.{ts,tsx,css}"]
+    },
+    "apps/partners": {
       "project": ["src/**/*.{ts,tsx,css}"]
     },
     "apps/www": {

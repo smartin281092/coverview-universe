@@ -4,6 +4,8 @@
 
 Application Admin destinée aux équipes CoverView, avec `admin.coverview.ch` comme sous-domaine cible. Le compte donne accès à la gestion des utilisateurs, de leurs profils et de leurs documents, avec autorisation administrative et MFA côté serveur.
 
+`/partner` ouvre les compteurs du réseau et les liens vers la supervision des candidatures et le pipeline global de [Partner](../partners/README.md), sous les mêmes contrôles administratifs. État partiel et limites : [ledger](../../roadmap/evidence/partner-core.md).
+
 ## Périmètre
 
 `/` et `/account` ouvrent le même parcours d’accès à Admin. L’action de connexion et les erreurs arrivent avant les explications secondaires sur mobile. La navigation produit expose Utilisateurs et Mon accès Admin, sans diagnostics ni données de démonstration.
@@ -33,6 +35,8 @@ La frontière Admin relit `/identity/admin` et masque les panneaux avec le reste
 Les commandes CSRF et idempotence restent en mémoire. Dès la demande de logout, le profil disparaît et la commande est conservée hors du parcours privé. Une réponse perdue laisse le résultat à confirmer ; une réponse pending confirme la fermeture locale et permet la reprise distante. Recharger/fermer la page abandonne ce contexte de reprise sans prouver l’état distant. Pendant une simple revalidation de la même session, le formulaire MFA reste monté mais masqué/inactif ; le challenge et le code restent utilisables au retour d’un authentificateur. Source du socle : [API platform](../api/src/platform/README.md).
 
 ## Permissions
+
+`/configuration/comparateur-maladie` est la configuration privée du comparateur : règles et catalogue versionnés, préparation de retour arrière, simulateur de profils fictifs, couverture documentaire, dossiers opérateur avec responsable/historique et exports JSON/CSV/rapport. Chaque route serveur exige l’habilitation administrative et MFA ; CSRF, révision et idempotence protègent les modifications. Les preuves et limites réelles sont détaillées dans le [module de recommandation](../api/src/modules/health-insurance/recommendation.md). Aucun profil de santé n’est enregistré par ce simulateur.
 
 `/service-requests` est le kanban des mises à jour demandées dans le Centre d’action Wallet. Il utilise la même frontière Admin+MFA, les portails privés, l’audit des lectures et commandes, révisions et idempotence. Les cartes figent compte, profil, compagnie et coordonnées demandées. Une transmission ou confirmation exige date effective et référence de preuve ; une tâche créée ne prouve pas l’envoi. Les demandes devenues obsolètes après modification du profil sont identifiées. Aucun email n’est envoyé automatiquement depuis cet écran. [Contrats et conservation](../api/src/modules/document-intelligence/README.md#revue-simplifiée-et-centre-daction--demande-du-9-septembre).
 

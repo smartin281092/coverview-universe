@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, Building2, Plus, UserRound } from "lucide-react";
+import { ArrowLeft, Plus } from "lucide-react";
 import type { IdentityMe } from "@coverview/api-client";
 import { managedProfileIdSchema } from "@coverview/contracts";
 import {
-  Badge,
   Button,
   LoadingState,
   NotFoundState,
@@ -16,19 +15,15 @@ import {
   SelectTrigger,
   SelectValue,
   Label,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
 } from "@coverview/ui";
 import { api } from "../api";
 import { AdminBoundary } from "../features/users/AdminBoundary";
 import { AdminFailure } from "../features/users/AdminFailure";
-import { AdminProfileEditor } from "../features/users/AdminProfileEditor";
 import { CreateProfileDialog } from "../features/users/CreateProfileDialog";
-import { AdminDocuments } from "../features/users/AdminDocuments";
+import { AdminDossierTabs } from "../features/users/AdminDossierTabs";
+import { ProfileTransferDialog } from "../features/users/ProfileTransferDialog";
 
-const tabs = ["general", "finances", "health", "documents"] as const;
+const tabs = ["general", "finances", "health", "documents", "contracts", "activities"] as const;
 type Tab = (typeof tabs)[number];
 
 function User({
@@ -40,7 +35,7 @@ function User({
   userId: string;
   blocked: boolean;
 }) {
-  const { t, i18n } = useTranslation("users");
+  const { t } = useTranslation("users");
   const client = useQueryClient();
   const location = useLocation();
   const navigate = useNavigate();
@@ -57,7 +52,8 @@ function User({
     staleTime: 0,
     gcTime: 0,
     retry: false,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
+    refetchInterval: (query) => (query.state.error ? false : 15_000),
   });
   const profiles = useQuery({
     queryKey: [...key, "profiles"],
@@ -66,12 +62,12 @@ function User({
     staleTime: 0,
     gcTime: 0,
     retry: false,
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
+    refetchInterval: (query) => (query.state.error ? false : 15_000),
   });
   const selected = profiles.data?.profiles.find((profile) => profile.id === profileId);
   const tab =
     selected?.kind === "legal_entity" && requestedTab === "health" ? "general" : requestedTab;
-  const visibleTabs = tabs.filter((item) => item !== "health" || selected?.kind !== "legal_entity");
   useEffect(() => {
     if (!blocked && selected?.kind === "legal_entity" && requestedTab === "health")
       void navigate({
@@ -98,11 +94,6 @@ function User({
       />
     );
   if (!user.data || !profiles.data) return <LoadingState label={t("profile.loading")} />;
-  const percent = new Intl.NumberFormat(i18n.language, {
-    style: "percent",
-    maximumFractionDigits: 0,
-  });
-  const Icon = selected?.kind === "legal_entity" ? Building2 : UserRound;
   return (
     <div className="space-y-7">
       <div ref={setPortalContainer} className="contents" />
@@ -120,7 +111,7 @@ function User({
               <Label htmlFor="admin-selected-profile">{t("profile.choose")}</Label>
               <Select
                 value={profileId}
-                onValueChange={(value) => navigateProfile(value)}
+                onValueChange={(value) => navigateProfile(value, tab)}
                 disabled={blocked}
               >
                 <SelectTrigger id="admin-selected-profile" className="min-h-11 w-full">
@@ -144,6 +135,22 @@ function User({
               <Plus className="size-4" aria-hidden="true" />
               {t("profile.add")}
             </Button>
+            {selected && (
+              <ProfileTransferDialog
+                identity={identity}
+                userId={userId}
+                profile={selected}
+                blocked={blocked}
+                portalContainer={portalContainer}
+                onTransferred={(destinationUserId) => {
+                  void navigate({
+                    to: "/users/$userId",
+                    params: { userId: destinationUserId },
+                    search: { profile: profileId, tab },
+                  });
+                }}
+              />
+            )}
           </div>
         </header>
         {!selected ? (
@@ -155,69 +162,16 @@ function User({
             }
           />
         ) : (
-          <Tabs
-            value={tab}
-            onValueChange={(value) => {
-              const next = visibleTabs.find((item) => item === value);
-              if (next) navigateProfile(profileId, next);
-            }}
-            className="min-w-0 gap-6"
-          >
-            <TabsList
-              className="h-auto min-h-14 w-full sm:w-auto"
-              aria-label={t("profile.sections")}
-            >
-              {visibleTabs.map((item) => (
-                <TabsTrigger
-                  key={item}
-                  value={item}
-                  className="min-h-11 min-w-0 flex-1 px-2 sm:px-5"
-                >
-                  <span className="flex flex-col items-center gap-1 text-sm">
-                    <span>{t(`tabs.${item}`)}</span>
-                    {item !== "documents" && (
-                      <span className="text-xs font-normal opacity-75">
-                        {selected.completion[item] === null
-                          ? t("profile.notApplicable")
-                          : percent.format((selected.completion[item] ?? 0) / 100)}
-                      </span>
-                    )}
-                  </span>
-                </TabsTrigger>
-              ))}
-            </TabsList>
-            <TabsContent value={tab} className="min-w-0 space-y-6">
-              <div className="flex flex-wrap items-center gap-2">
-                <Icon className="size-4 text-muted-foreground" aria-hidden="true" />
-                <p className="break-words font-medium">
-                  {selected.isSelf ? t("profile.self") : selected.displayName}
-                </p>
-                <Badge variant="secondary">
-                  {t(selected.kind === "legal_entity" ? "profile.entity" : "profile.person")}
-                </Badge>
-              </div>
-              {tab === "documents" ? (
-                <AdminDocuments
-                  key={`${userId}:${profileId}`}
-                  identity={identity}
-                  userId={userId}
-                  profile={selected}
-                  blocked={blocked}
-                  portalContainer={portalContainer}
-                />
-              ) : (
-                <AdminProfileEditor
-                  key={`${userId}:${profileId}:${tab}`}
-                  identity={identity}
-                  userId={userId}
-                  profile={selected}
-                  section={tab}
-                  blocked={blocked}
-                  portalContainer={portalContainer}
-                />
-              )}
-            </TabsContent>
-          </Tabs>
+          <AdminDossierTabs
+            key={`${userId}:${profileId}`}
+            identity={identity}
+            userId={userId}
+            profile={selected}
+            blocked={blocked}
+            portalContainer={portalContainer}
+            tab={tab}
+            onTabChange={(value) => navigateProfile(profileId, value)}
+          />
         )}
       </div>
       <CreateProfileDialog

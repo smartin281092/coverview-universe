@@ -1,11 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { Container, Section, SectionHeading, ButtonLink, TextLink, Bento } from '@coverview/ui';
-import GuideVisual from '../components/GuideVisual.astro';
-import ResourceVisual from '../components/ResourceVisual.astro';
-import Closing from '../components/Closing.astro';
-import Faq from '../components/Faq.astro';
-import { marketing as copy } from '../content/fr/marketing';
+import Landing from '../components/landing/Landing.astro';
+import { landing as copy } from '../content/fr/landing';
 const schema = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -15,42 +11,4 @@ const schema = {
   ],
 };
 ---
-<Layout title={copy.seo.title} description={copy.seo.description} structuredData={schema}>
-  <section class="marketing-hero" aria-labelledby="hero-title">
-    <Container>
-      <SectionHeading id="hero-title" level={1} size="display" align="center" eyebrow={copy.hero.eyebrow} title={copy.hero.title} description={copy.hero.description} />
-      <div class="hero-actions">
-        <ButtonLink href={copy.hero.primary.href} className="h-11 px-5 text-sm">{copy.hero.primary.label}</ButtonLink>
-        <ButtonLink href={copy.hero.secondary.href} className="h-11 px-5 text-sm" variant="ghost">{copy.hero.secondary.label}<span aria-hidden="true">↗</span></ButtonLink>
-      </div>
-      <p class="hero-note">{copy.hero.note}</p>
-    </Container>
-  </section>
-  <Container>
-    <div class="showcase-grid">{copy.showcases.items.map((item, index) => <Bento level={2} className="showcase" title={item.title} description={item.description}>
-      <GuideVisual slot="illustration" preview={item.preview} variant={index} />
-      <TextLink href={item.href}>{item.linkLabel}</TextLink>
-    </Bento>)}</div>
-  </Container>
-  <Section><Container>
-    <div class="method-layout">
-      <div class="method-intro">
-        <SectionHeading eyebrow={copy.steps.eyebrow} title={copy.steps.title} description={copy.steps.description} />
-        <ButtonLink href={copy.steps.action.href} variant="outline">{copy.steps.action.label}<span aria-hidden="true">↗</span></ButtonLink>
-      </div>
-      <ol class="method-steps">{copy.steps.items.map(item => <li>
-        <span class="step-number">{item.number}</span>
-        <div><h3>{item.title}</h3><p>{item.description}</p></div>
-      </li>)}</ol>
-    </div>
-  </Container></Section>
-  <Section className="resources-section"><Container>
-    <div class="section-top"><SectionHeading title={copy.resources.heading} size="medium" description={copy.resources.description} /><TextLink href={copy.nav.resources.href}>{copy.nav.resources.label}</TextLink></div>
-    <div class="resource-grid">{copy.resources.items.map((item,index) => <a class="resource-item" href={item.href}>
-      <ResourceVisual kind={index} />
-      <p class="resource-label">{item.label}</p><h3>{item.title}<span aria-hidden="true">↗</span></h3><p>{item.description}</p>
-    </a>)}</div>
-  </Container></Section>
-  <Faq />
-  <Closing />
-</Layout>
+<Layout title={copy.seo.title} description={copy.seo.description} structuredData={schema} minimal><Landing /></Layout>

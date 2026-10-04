@@ -10,6 +10,7 @@ import {
   documentRetryInputSchema,
   documentSchema,
   managedProfileIdSchema,
+  adminProfileContractsSchema,
 } from "@coverview/contracts";
 import { IdentityError, type ProfileActor } from "../identity/index.js";
 import type { createDocumentRepository } from "./document.repository.js";
@@ -74,6 +75,15 @@ export function registerAdminDocumentRoutes(
   const limited = { rateLimit: { max: 60, timeWindow: "1 minute" } };
   const uploadLimited = { rateLimit: { max: 10, timeWindow: "1 minute" } };
   const base = "/admin/users/:userId/profiles/:profileId/documents";
+  app.get(
+    "/admin/users/:userId/profiles/:profileId/contracts",
+    {
+      onRequest: read,
+      config: limited,
+      schema: { params: targetParams, response: { 200: adminProfileContractsSchema } },
+    },
+    async (request) => repository.profileContracts(request.params.userId, request.params.profileId),
+  );
 
   app.get(
     base,
@@ -91,7 +101,9 @@ export function registerAdminDocumentRoutes(
       return repository.list(actor(request).userId, cursor, {
         ...filters,
         profileId: request.params.profileId,
-        scope: "profile",
+        // Preserve access to the account's unresolved originals in its self dossier.
+        // The selected target still overrides any caller-supplied account scope.
+        scope: undefined,
       });
     },
   );

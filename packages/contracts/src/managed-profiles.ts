@@ -35,6 +35,12 @@ export const financialProfileValuesSchema = z
   .strict();
 export const healthProfileValuesSchema = z
   .object({
+    requestedInsurer: z.string().max(160).optional(),
+    requestedModel: z.string().max(160).optional(),
+    requestedDeductibleMinor: money.optional(),
+    requestedAccidentCoverage: z.boolean().optional(),
+    insuranceBirthYear: z.number().int().min(1900).max(2100).optional(),
+    insuranceSex: z.enum(["female", "male", "other"]).optional(),
     insurer: z.string().trim().min(1).max(160).optional(),
     primaryDoctorName: z.string().trim().min(1).max(160).optional(),
     deductibleMinor: money.optional(),
@@ -87,6 +93,9 @@ export const managedProfileSchema = z.object({
   }),
 });
 export const managedProfilesSchema = z.object({ profiles: z.array(managedProfileSchema).max(50) });
+export const profileScopeQuerySchema = z
+  .object({ profileId: managedProfileIdSchema.optional() })
+  .strict();
 export const managedProfileCreateInputSchema = z
   .object({ kind: managedProfileKindSchema, displayName: z.string().trim().min(1).max(160) })
   .strict();

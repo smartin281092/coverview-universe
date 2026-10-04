@@ -44,6 +44,23 @@ const mime = {
 
 const normalize = (text) => text.replace(/\s+/g, " ").trim();
 
+// Le contenu livré s'adresse aux visiteurs, sans notes de fabrication éditoriale.
+function checkPublicCopy(files) {
+  const internalNotes =
+    /rédaction assistée|assistée par IA|assistance d[’']intelligence artificielle|validation éditoriale|avant publication|Bible produit|document produit fourni|Les frais inclus ne sont pas précisés dans les captures|Selon le fondateur/i;
+  let checked = 0;
+  for (const [path, body] of files) {
+    if (![".html", ".md"].includes(extname(path))) continue;
+    assert.doesNotMatch(
+      body.toString(),
+      internalNotes,
+      `${path} : note interne dans le contenu public`,
+    );
+    checked++;
+  }
+  return { checked, internalNotes: "absent" };
+}
+
 // Le corpus autorisé emploie du Markdown standard. Cet oracle n'importe ni le
 // catalogue ni la fonction de miroir de l'application : il relit les sources.
 async function editorialSources() {
@@ -145,9 +162,17 @@ function checkStructured(html, route) {
       if (type === "FAQPage") {
         assert(Array.isArray(node.mainEntity) && node.mainEntity.length > 0, `${route} : FAQ vide`);
         for (const question of node.mainEntity) {
-          assert(html.headings.includes(question.name), `${route} : question FAQ invisible`);
+          // Une FAQ native garde sa question visible dans <summary> et sa réponse
+          // dans le HTML initial de <details>, même lorsqu’elle est repliée.
+          const disclosure = html.faqDisclosures.find((item) => item.question === question.name);
           assert(
-            normalize(html.mainText).includes(normalize(question.acceptedAnswer?.text ?? "")),
+            html.headings.includes(question.name) || disclosure,
+            `${route} : question FAQ invisible`,
+          );
+          assert(
+            normalize(disclosure?.answer ?? html.mainText).includes(
+              normalize(question.acceptedAnswer?.text ?? ""),
+            ),
             `${route} : réponse FAQ différente`,
           );
           assert(question.acceptedAnswer?.text?.trim(), `${route} : réponse FAQ vide`);
@@ -301,6 +326,13 @@ async function checkHtml(browser, files, origin) {
           headings: [...document.querySelectorAll("main h2, main h3")].map((heading) =>
             heading.textContent.trim(),
           ),
+          faqDisclosures: [...document.querySelectorAll("main details")].map((details) => ({
+            question: details.querySelector("summary")?.textContent.trim(),
+            answer: [...details.children]
+              .filter((child) => child.tagName !== "SUMMARY")
+              .map((child) => child.textContent)
+              .join(" "),
+          })),
           dates: [...document.querySelectorAll("main time[datetime]")].map((date) =>
             date.getAttribute("datetime"),
           ),
@@ -311,6 +343,10 @@ async function checkHtml(browser, files, origin) {
             (script) => JSON.parse(script.textContent),
           ),
           scripts: scripts.map((script) => ({ src: script.src, body: script.textContent })),
+          islands: [...document.querySelectorAll("astro-island")].map((island) => ({
+            component: island.getAttribute("component-url"),
+            renderer: island.getAttribute("renderer-url"),
+          })),
           activeAttributes: [...document.querySelectorAll("*")].some((element) =>
             [...element.attributes].some(
               (attribute) =>
@@ -359,7 +395,27 @@ async function checkHtml(browser, files, origin) {
         assert.equal(await mirrorResponse.text(), markdown, `${route} : corps du miroir servi`);
         mirrors++;
       }
-      if (route !== "/account") {
+      if (route === "/") {
+        // Accueil interactif : un module local pour les simulateurs et le mouvement.
+        // Le contenu et les valeurs initiales sont déjà vérifiés sans JavaScript.
+        assert.equal(html.scripts.length, 1, `${route} : module de landing unique`);
+        assert(html.scripts[0].src, `${route} : module de landing externe attendu`);
+        assert.equal(html.activeAttributes, false, `${route} : JavaScript dans les attributs HTML`);
+      } else if (
+        ["/comparateur-assurance-maladie-2027", "/suivi-demande-assurance"].includes(route)
+      ) {
+        // Comparison and private tracking each require one hydrated island; editorial gates stay strict.
+        assert.equal(html.islands.length, 1, `${route} : îlot interactif unique`);
+        assert.equal(html.scripts.length, 2, `${route} : runtime Astro uniquement`);
+        assert(
+          html.scripts.every((script) => !script.src && script.body.includes("Astro")),
+          `${route} : scripts Astro attendus`,
+        );
+        for (const asset of [html.islands[0].component, html.islands[0].renderer]) {
+          assert(asset && files.has(asset), `${route} : îlot absent du build local`);
+        }
+        assert.equal(html.activeAttributes, false, `${route} : JavaScript dans les attributs HTML`);
+      } else if (route !== "/account") {
         assert.equal(
           html.scripts.length,
           0,
@@ -428,7 +484,9 @@ async function checkHtml(browser, files, origin) {
     assert.equal((await page.goto(`${origin}/page-absente-build-check`)).status(), 404);
     return {
       pages: routes.length,
-      nonAccountExecutableScripts: 0,
+      landingExecutableScripts: pages.get("/").scripts.length,
+      comparatorIslands: pages.get("/comparateur-assurance-maladie-2027")?.islands.length ?? 0,
+      otherEditorialExecutableScripts: 0,
       inlineGzipBytes,
       real404: true,
       mirrors,
@@ -442,10 +500,14 @@ async function checkHtml(browser, files, origin) {
   }
 }
 
-async function measurePage(browser, origin, route) {
+async function measurePage(browser, origin, route, files) {
   const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
   const unexpected = [];
   const page = await context.newPage();
+  const requestedScripts = new Set();
+  page.on("request", (request) => {
+    if (request.resourceType() === "script") requestedScripts.add(new URL(request.url()).pathname);
+  });
   page.setDefaultTimeout(10000);
   try {
     await context.route("**/*", (requestRoute) => {
@@ -492,7 +554,13 @@ async function measurePage(browser, origin, route) {
     );
     await page.evaluate(async () => {
       await document.fonts.ready;
-      await Promise.all([...document.images].map((image) => image.decode()));
+      // Une image différée hors écran ne participe pas au rendu initial et peut
+      // attendre indéfiniment son intersection avant de commencer son chargement.
+      await Promise.all(
+        [...document.images]
+          .filter((image) => image.loading !== "lazy")
+          .map((image) => image.decode()),
+      );
       await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
     });
     // Fenêtre d’observation déclarée, après chargement des polices et images ; aucun throttling.
@@ -522,8 +590,48 @@ async function measurePage(browser, origin, route) {
     );
     assert(metrics.cls < limits.cls, `${route} : CLS local ${metrics.cls}`);
     assert.deepEqual(unexpected, [], `${route} : tentative de requête externe`);
+    // MKT-06 borne le JavaScript chargé par gabarit, pas les chunks inutilisés
+    // que les intégrations Astro peuvent émettre pour d’autres pages.
+    let javascriptGzipBytes = 0;
+    for (const path of requestedScripts) {
+      assert(files.has(path), `${route} : script chargé absent du build ${path}`);
+      javascriptGzipBytes += gzipSync(files.get(path)).length;
+    }
+    const inlineScripts = await page.evaluate(() =>
+      [...document.scripts]
+        .filter(
+          (script) =>
+            !script.src && !["application/ld+json", "application/json"].includes(script.type),
+        )
+        .map((script) => script.textContent),
+    );
+    for (const body of inlineScripts) javascriptGzipBytes += gzipSync(body).length;
+    assert(
+      javascriptGzipBytes < limits.javascriptGzipBytes,
+      `${route} : budget JavaScript chargé ${javascriptGzipBytes} octets gzip`,
+    );
+    if (route === "/") {
+      // Régression observée : une animation d’ouverture gelée à opacity:0
+      // rendait le dialogue invisible après activation du bouton pause.
+      await page
+        .getByRole("button", { name: "Mettre les animations en pause", exact: true })
+        .click();
+      await page
+        .getByRole("button", { name: "Analyser mon 3e pilier", exact: true })
+        .first()
+        .click();
+      const dialog = page.getByRole("dialog", { name: "Commençons par vous." });
+      assert(await dialog.isVisible(), "Dialogue invisible avec les animations en pause");
+      assert.equal(
+        await dialog.evaluate((element) => window.getComputedStyle(element).opacity),
+        "1",
+      );
+      await page.keyboard.press("Escape");
+      assert.equal(await dialog.count(), 0, "Échap doit fermer le dialogue");
+    }
     return {
       route,
+      javascriptGzipBytes,
       lcpMs: Math.round(metrics.lcpMs),
       cls: Number(metrics.cls.toFixed(4)),
       skipLink: "passed",
@@ -541,6 +649,7 @@ let server;
 let browser;
 try {
   const files = await buildFiles();
+  const publicCopy = checkPublicCopy(files);
   const indexes = checkIndexes(files);
   const hosted = await serve(files);
   server = hosted.server;
@@ -551,19 +660,20 @@ try {
     (sum, [, body]) => sum + gzipSync(body).length,
     html.inlineGzipBytes,
   );
-  assert(
-    javascriptGzipBytes < limits.javascriptGzipBytes,
-    `Budget JavaScript global : ${javascriptGzipBytes} octets gzip`,
-  );
   const synthetic = [];
   for (const route of representatives)
-    synthetic.push(await measurePage(browser, hosted.origin, route));
+    synthetic.push(await measurePage(browser, hosted.origin, route, files));
   console.log(
     JSON.stringify({
       status: "passed",
       html,
+      publicCopy,
       indexes,
-      javascript: { files: jsFiles.length, gzipBytes: javascriptGzipBytes },
+      javascript: {
+        emittedFiles: jsFiles.length,
+        emittedGzipBytes: javascriptGzipBytes,
+        budgetScope: "JavaScript effectivement chargé par page représentative",
+      },
       limits,
       method:
         "Chromium headless, HTTP loopback, contexte neuf par page, 1280x900, sans throttling, observation 750 ms après polices/images",

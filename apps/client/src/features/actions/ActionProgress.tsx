@@ -1,8 +1,10 @@
+import { useWalletProfileScope } from "../profile/use-wallet-profile-scope";
 import { useTranslation } from "react-i18next";
 import type { ActionCenterSummary } from "@coverview/contracts";
 
 export function ActionProgress({ summary }: { summary: ActionCenterSummary }) {
   const { t, i18n } = useTranslation("actions");
+  const { scope } = useWalletProfileScope();
   const percent = new Intl.NumberFormat(i18n.language, {
     style: "percent",
     maximumFractionDigits: 0,
@@ -10,7 +12,9 @@ export function ActionProgress({ summary }: { summary: ActionCenterSummary }) {
   return (
     <section className="space-y-3" aria-label={t("progress.label")}>
       <p className="font-medium">
-        {t("progress.optimized", { percent: percent.format(summary.optimizationPercent / 100) })}
+        {t(scope === "all" ? "progress.optimized" : "progress.profileOptimized", {
+          percent: percent.format(summary.optimizationPercent / 100),
+        })}
       </p>
       <div
         role="progressbar"

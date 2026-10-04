@@ -61,7 +61,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ["apps/{client,admin}/**/*.tsx", "packages/ui/**/*.tsx"],
+    files: ["apps/{client,admin,partners}/**/*.tsx", "packages/ui/**/*.tsx"],
     rules: {
       "no-restricted-syntax": [
         "error",

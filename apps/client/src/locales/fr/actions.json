@@ -1,6 +1,10 @@
 {
   "eyebrow": "Votre suivi",
-  "tabs": { "todo": "À faire", "inProgress": "En cours", "activity": "Activité" },
+  "tabs": {
+    "todo": "À faire",
+    "inProgress": "En cours",
+    "activity": "Activité"
+  },
   "inProgressEmptyTitle": "Aucune demande en cours",
   "inProgressEmptyDescription": "Vos demandes et actions confiées au service client apparaîtront ici jusqu’à leur résolution.",
   "viewSource": "Voir la source",
@@ -25,7 +29,8 @@
     "completed_one": "{{count}} action terminée sur {{total}}",
     "completed_other": "{{count}} actions terminées sur {{total}}",
     "optimization": "Optimisation",
-    "optimizationValue": "Optimisation des actions identifiées : {{percent}}"
+    "optimizationValue": "Optimisation des actions identifiées : {{percent}}",
+    "profileOptimized": "Profil optimisé à {{percent}}"
   },
   "kinds": {
     "profile_review": "Information à vérifier",
@@ -46,12 +51,12 @@
     "custom": "Rédiger ma propre réponse"
   },
   "question": {
-    "label": "Question",
+    "label": "Question sur le profil de {{name}}",
     "choose": "Choisir une réponse",
     "profile_review": "Quelle information souhaitez-vous conserver pour « {{field}} » dans le profil de {{name}} ?",
     "company_notification": "Comment souhaitez-vous mettre à jour « {{field}} » auprès des compagnies concernées ?",
     "profile_completion": "Complétez « {{field}} » pour le profil de {{name}}.",
-    "authorization": "Complétez l’autorisation ci-dessus ou précisez votre demande au service client.",
+    "authorization": "Comment souhaitez-vous poursuivre cette démarche ?",
     "custom": "Ou rédigez votre propre réponse",
     "value": "Renseignez {{field}}",
     "addressValue": "Rue et numéro, code postal et localité, pays",
@@ -75,7 +80,8 @@
     "openSign": "Ouvrir et signer"
   },
   "context": {
-    "title": "Documents et compagnies concernés",
+    "documents": "Documents concernés",
+    "companies": "Compagnies concernées",
     "contract": "Contrat : {{reference}}",
     "profile": "Cette action concerne les informations ou autorisations du profil."
   },
@@ -92,7 +98,10 @@
     "emptyTitle": "Aucune activité enregistrée",
     "emptyDescription": "Vos réponses et les actions effectuées apparaîtront ici avec leur date.",
     "recorded": "{{actor}} · {{date}}",
-    "actors": { "owner": "Vous", "administrator": "Service client" },
+    "actors": {
+      "owner": "Vous",
+      "administrator": "Service client"
+    },
     "before": "Avant",
     "after": "Après",
     "openAction": "Ouvrir l’action",

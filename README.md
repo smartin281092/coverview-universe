@@ -4,6 +4,8 @@ Harness Claude Code / Codex et roadmap complète préparés pour la v1 décrite 
 
 ## Commencer
 
+Partner est disponible en développement sur `http://127.0.0.1:4104` : [parcours et lancement](apps/partners/README.md), [état vérifié et limites](roadmap/evidence/partner-core.md). Les candidatures requièrent une validation explicite avant accès opérationnel.
+
 Installer la LTS de Node indiquée dans `.node-version`, pnpm indiqué dans `package.json`, et Docker avec Compose. Depuis un checkout propre :
 
 ```powershell
@@ -15,7 +17,7 @@ pnpm db:seed
 node scripts/preview.mjs start
 ```
 
-Le panneau affiche les trois interfaces et les personas provenant des seeds. `pnpm dev` lance aussi les quatre applications au premier plan. Le [README platform](apps/api/src/platform/README.md) décrit les gardes et la persistance technique. Le module [identity](apps/api/src/modules/identity/README.md) porte la connexion WorkOS et les espaces protégés : son [activation locale](apps/api/src/modules/identity/README.md#activer-et-vérifier-localement) requiert `AUTH_ENABLED=true` et des secrets injectés uniquement dans le processus API, jamais dans `.env` ou les builds frontend. L’exemple conserve l’authentification désactivée ; les personas ne sont pas des comptes de connexion.
+Le panneau affiche les trois interfaces et les personas provenant des seeds. `pnpm dev` lance aussi les quatre applications au premier plan. Le [README platform](apps/api/src/platform/README.md) décrit les gardes et la persistance technique. Le module [identity](apps/api/src/modules/identity/README.md) porte la connexion WorkOS et les espaces protégés : son [activation locale](apps/api/src/modules/identity/README.md#activer-et-vérifier-localement) requiert `AUTH_ENABLED=true` et des credentials réservés à l’API. La preview accepte aussi leur lecture depuis un `.env` local existant, conformément à la demande utilisateur du 11 septembre 2026 ; voir la procédure du module identity. Ils restent exclus des serveurs et builds frontend. L’exemple conserve l’authentification désactivée ; les personas ne sont pas des comptes de connexion.
 
 Les services Docker sont liés à `127.0.0.1`, avec des ports dédiés dans le compose. Pour un autre checkout concurrent, choisir un `COMPOSE_PROJECT_NAME` et des ports distincts avant démarrage. Ne pas reprendre les volumes d'un autre projet.
 

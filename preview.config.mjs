@@ -42,4 +42,13 @@ export const apps = [
     tool: "astro",
     args: ["dev", "--host", "127.0.0.1", "--port", "4103"],
   },
+  {
+    key: "partners",
+    label: "Partner — Leads et suivi client",
+    dir: "apps/partners",
+    port: 4104,
+    entry: "/",
+    tool: "vite",
+    args: ["--host", "127.0.0.1", "--port", "4104", "--strictPort"],
+  },
 ];

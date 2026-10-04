@@ -1,7 +1,13 @@
+import { healthRecommendationErrorCodes } from "./health-recommendation-errors.js";
 import { z } from "zod";
+import { insuranceRequestErrorCodes } from "./insurance-request-errors.js";
 export * from "./authorization-notice.js";
 import { documentErrorCodes } from "./documents.js";
 import { managedProfileErrorCodes } from "./managed-profiles.js";
+import { clientActivityErrorCodes } from "./client-activities.js";
+export * from "./client-activities.js";
+import { adminProfileTransferErrorCodes } from "./admin-profile-transfer.js";
+export * from "./admin-profile-transfer.js";
 export * from "./managed-profiles.js";
 export * from "./profile.js";
 export * from "./profile-completion.js";
@@ -10,6 +16,7 @@ export * from "./documents.js";
 export * from "./admin-users.js";
 export * from "./company-actions.js";
 export * from "./action-center.js";
+export * from "./action-realtime.js";
 
 export const livenessSchema = z.object({ status: z.literal("alive") });
 export const readinessSchema = z.object({ status: z.enum(["ready", "not_ready"]) });
@@ -42,6 +49,10 @@ export const identityErrorCodeSchema = z.enum([
   "PROFILE_INVALID_BIRTH_DATE",
 ]);
 export const apiErrorCodeSchema = z.union([
+  z.enum(healthRecommendationErrorCodes),
+  z.enum(insuranceRequestErrorCodes),
+  z.enum(adminProfileTransferErrorCodes),
+  z.enum(clientActivityErrorCodes),
   platformErrorCodeSchema,
   identityErrorCodeSchema,
   z.enum(documentErrorCodes),
@@ -129,3 +140,5 @@ export type Readiness = z.infer<typeof readinessSchema>;
 export type LocalPersona = z.infer<typeof localPersonaSchema>;
 export type PlatformErrorCode = z.infer<typeof platformErrorCodeSchema>;
 export * from "./authorizations.js";
+export * from "./admin-profile-contracts.js";
+export * from "./admin-notifications.js";

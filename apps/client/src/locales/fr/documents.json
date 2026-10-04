@@ -20,6 +20,7 @@
     "createUnavailable": "Vous pouvez saisir le nom d’un nouveau profil, même si la lecture du document est interrompue."
   },
   "close": "Fermer",
+  "partialReading": "Lecture partielle : les informations exploitables ont été conservées. Certains éléments n’ont pas pu être vérifiés. Consultez l’original pour compléter les données manquantes.",
   "retryScan": "Reprendre le contrôle",
   "analysisDisclosure": "Après le contrôle antivirus, cet original sera transmis à un service d’analyse externe. La lecture peut retrouver ou créer le profil de la personne concernée et compléter ses champs vides. En cas de doute, vous choisissez le profil ; les valeurs existantes sont conservées.",
   "listMeta": "{{date}}",
@@ -164,15 +165,16 @@
   "notFoundHelp": "Ce document a été supprimé ou n’est pas accessible avec votre compte.",
   "errors": {
     "DOCUMENT_CONFLICT": "Le document ou le profil a changé. Fermez ce panneau et rechargez avant de confirmer.",
+    "DOCUMENT_IN_USE": "Cet original est lié à une offre et doit rester dans son historique. Contactez CoverView pour traiter une demande de suppression.",
     "PROFILE_CONFIRMATION_REQUIRED": "Résolvez d’abord la proposition en attente dans votre profil.",
     "DOCUMENT_UPLOAD_INVALID": "Ce fichier ne correspond pas à l’original attendu. Sélectionnez exactement le même fichier.",
     "DOCUMENT_STORAGE_UNAVAILABLE": "Le stockage est momentanément indisponible. Le dépôt peut être repris.",
     "DOCUMENT_DOWNLOAD_BLOCKED": "Le téléchargement attend un contrôle antivirus réussi.",
     "DOCUMENT_REVIEW_INVALID": "Vérifiez votre correction et confirmez que ces informations vous concernent.",
     "DOCUMENT_LIMIT_REACHED": "Votre espace a atteint sa limite de 200 documents.",
-    "PROFILE_INVALID_BIRTH_DATE": "La date de naissance ne peut pas être dans le futur.",
     "MANAGED_PROFILE_LIMIT_REACHED": "Le nombre maximal de profils est atteint. Choisissez un profil existant.",
-    "MANAGED_PROFILE_INVALID_FIELDS": "Les informations extraites ne permettent pas de créer un profil. Reprenez la lecture ou choisissez un profil existant."
+    "MANAGED_PROFILE_INVALID_FIELDS": "Les informations extraites ne permettent pas de créer un profil. Reprenez la lecture ou choisissez un profil existant.",
+    "PROFILE_INVALID_BIRTH_DATE": "La date de naissance ne peut pas être dans le futur."
   },
   "resumeFile": "Resélectionner le même fichier",
   "resumeHelp": "CoverView vérifiera sa taille et son empreinte avant de reprendre ce dépôt.",
@@ -319,5 +321,14 @@
     "unsupportedPreview": "Ce format n’a pas d’aperçu intégré. Vous pouvez télécharger le fichier pour le consulter.",
     "openOriginal": "Voir l’original"
   },
-  "partialReading": "Lecture partielle : les informations exploitables ont été conservées. Certains éléments n’ont pas pu être vérifiés. Consultez l’original pour compléter les données manquantes."
+  "uploadProfile": {
+    "label": "Profil concerné",
+    "detect": "Identifier le profil depuis le document",
+    "help": "Choisissez un profil ou laissez la lecture identifier la personne. En cas de doute, vous pourrez choisir ou créer le profil après la lecture.",
+    "name": "Profil : {{name}}",
+    "unassigned": "Profil à identifier",
+    "unknown": "indisponible"
+  },
+  "notFoundProfileHelp": "Ce document est indisponible pour le profil sélectionné. Choisissez le profil concerné ou Tous les profils dans le menu.",
+  "aiDisclosureAssigned": "Après le contrôle antivirus, la lecture externe extrait les informations pour le profil sélectionné. Les valeurs déjà renseignées sont conservées. Décochez pour conserver seulement l’original."
 }

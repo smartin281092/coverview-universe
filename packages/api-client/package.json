@@ -4,7 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./health-insurance": "./src/health-insurance.ts",
+    "./insurance-requests": "./src/insurance-requests.ts",
+    "./health-recommendation": "./src/health-recommendation.ts",
+    "./partner": "./src/partner.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
@@ -13,6 +17,7 @@
   },
   "dependencies": {
     "@coverview/contracts": "workspace:*",
+    "socket.io-client": "^4.8.3",
     "zod": "4.5.4"
   }
 }

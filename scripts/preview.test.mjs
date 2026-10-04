@@ -22,6 +22,7 @@ import {
   endpoint,
   portAvailable,
   probe,
+  previewEnvironment,
   requireLocal,
 } from "./preview.mjs";
 
@@ -146,6 +147,69 @@ async function fixture({
     },
   };
 }
+
+test("les credentials du fichier WorkOS restent réservés à l'API", async () => {
+  const item = await fixture();
+  try {
+    writeFileSync(
+      join(item.root, ".env"),
+      "APP_ENV=local\nWORKOS_ENV_FILE=workos.env\nAUTH_ENABLED=true\n",
+    );
+    writeFileSync(
+      join(item.root, "workos.env"),
+      "WORKOS_API_KEY=FAKE_FILE_KEY\nWORKOS_CLIENT_ID=client_example\nAUTH_SESSION_SECRET=FAKE_SESSION_KEY\nDATABASE_URL=ignored\n",
+    );
+    const api = previewEnvironment(item.root, "api", {});
+    assert.equal(api.WORKOS_API_KEY, "FAKE_FILE_KEY");
+    assert.equal(api.WORKOS_CLIENT_ID, "client_example");
+    assert.equal(api.AUTH_SESSION_SECRET, "FAKE_SESSION_KEY");
+    assert.equal(api.DATABASE_URL, undefined);
+    assert.equal(
+      previewEnvironment(item.root, "api", { WORKOS_API_KEY: "FAKE_PROCESS_KEY" }).WORKOS_API_KEY,
+      "FAKE_PROCESS_KEY",
+    );
+    for (const key of ["client", "admin", "www", "infrastructure"]) {
+      const frontend = previewEnvironment(item.root, key, api);
+      assert.equal(frontend.WORKOS_API_KEY, undefined);
+      assert.equal(frontend.AUTH_SESSION_SECRET, undefined);
+    }
+    writeFileSync(
+      join(item.root, ".env"),
+      "APP_ENV=local\nWORKOS_API_KEY=FAKE_ROOT_KEY\nAUTH_SESSION_SECRET=FAKE_ROOT_SESSION\n",
+    );
+    assert.equal(previewEnvironment(item.root, "api", {}).WORKOS_API_KEY, "FAKE_ROOT_KEY");
+    assert.equal(previewEnvironment(item.root, "admin", {}).WORKOS_API_KEY, undefined);
+    assert.throws(() => previewEnvironment(item.root, "api", { APP_ENV: "production" }), /REFUSÉ/);
+  } finally {
+    await item.cleanup();
+  }
+});
+
+test("la clé OpenAI du .env est rechargée au lancement et réservée à l'API", async () => {
+  const item = await fixture();
+  try {
+    const writeKey = (value) =>
+      writeFileSync(join(item.root, ".env"), `APP_ENV=local\nOPENAI_API_KEY=${value}\n`);
+    writeKey("FAKE_OPENAI_FIRST_KEY");
+    const api = previewEnvironment(item.root, "api", {});
+    assert.equal(api.OPENAI_API_KEY, "FAKE_OPENAI_FIRST_KEY");
+    for (const key of ["client", "admin", "www", "infrastructure", "control"]) {
+      assert.equal(previewEnvironment(item.root, key, {}).OPENAI_API_KEY, undefined);
+      assert.equal(previewEnvironment(item.root, key, api).OPENAI_API_KEY, undefined);
+    }
+    writeKey("FAKE_OPENAI_UPDATED_KEY");
+    assert.equal(
+      previewEnvironment(item.root, "api", {}).OPENAI_API_KEY,
+      "FAKE_OPENAI_UPDATED_KEY",
+    );
+    assert.equal(
+      previewEnvironment(item.root, "api", { OPENAI_API_KEY: "FAKE_INJECTED_KEY" }).OPENAI_API_KEY,
+      "FAKE_INJECTED_KEY",
+    );
+  } finally {
+    await item.cleanup();
+  }
+});
 
 test("APP_ENV absent, staging, production et NODE_ENV seul refusés", () => {
   for (const environment of [

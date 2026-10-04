@@ -1,0 +1,494 @@
+import { useState } from "react";
+import { useParams, useSearch, useNavigate, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
+import { ArrowLeft, ArrowUpRight, Phone, Mail, Plus, CalendarDays, Clock3 } from "lucide-react";
+import {
+  Badge,
+  Button,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  EmptyState,
+  ErrorState,
+  LoadingState,
+} from "@coverview/ui";
+import { PartnerApiError, type LeadOffer } from "@coverview/api-client/partner";
+import { usePartner } from "../features/PartnerSession";
+import { useLeadCommand } from "../features/use-lead-command";
+import { LeadActionDialog, type LeadAction } from "../features/LeadActionDialog";
+import { OfferDialog } from "../features/OfferDialog";
+import { CreateLeadDialog } from "../features/CreateLeadDialog";
+import { formatDate, formatMoney } from "../features/Field";
+import { adminUrl, partnerApi } from "../api";
+export function LeadPage() {
+  const { leadId } = useParams({ from: "/leads/$leadId" }),
+    { tab } = useSearch({ from: "/leads/$leadId" }),
+    navigate = useNavigate({ from: "/leads/$leadId" }),
+    { t } = useTranslation(),
+    session = usePartner();
+  const leadQuery = useQuery({
+    queryKey: [...session.queryKey, "lead", leadId],
+    queryFn: ({ signal }) => partnerApi.lead(leadId, signal),
+    gcTime: 0,
+    staleTime: 0,
+    refetchInterval: 15000,
+    retry: false,
+  });
+  const command = useLeadCommand(leadId),
+    [action, setAction] = useState<LeadAction | null>(null),
+    [editing, setEditing] = useState(false),
+    [appointment, setAppointment] = useState<string>(),
+    [offer, setOffer] = useState<LeadOffer | "new" | null>(null);
+  if (leadQuery.isPending) return <LoadingState label={t("loading")} />;
+  if (leadQuery.isError)
+    return (
+      <ErrorState
+        title={t("error")}
+        description={t("errors.PARTNER_NOT_FOUND")}
+        retryLabel={t("retry")}
+        pendingLabel={t("loading")}
+        onRetry={() => void leadQuery.refetch()}
+      />
+    );
+  const lead = leadQuery.data,
+    activeTab = lead.availableTabs.includes(tab as (typeof lead.availableTabs)[number])
+      ? tab
+      : "overview";
+  return (
+    <>
+      {editing && <CreateLeadDialog open onOpenChange={setEditing} lead={lead} />}
+      <header className="space-y-5">
+        <Link
+          to="/leads"
+          search={{ view: "all" }}
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground"
+        >
+          <ArrowLeft className="size-4" />
+          {t("back")}
+        </Link>
+        <div className="flex flex-wrap items-start justify-between gap-5">
+          <div>
+            <div className="mb-3 flex flex-wrap gap-2">
+              <Badge variant="outline">{t(`category.${lead.category}`)}</Badge>
+              <Badge>{t(`stage.${lead.stage}`)}</Badge>
+              {lead.priority !== "normal" && (
+                <Badge variant="outline">{t(`priority.${lead.priority}`)}</Badge>
+              )}
+            </div>
+            <h1 className="text-3xl font-semibold tracking-tight">{lead.title}</h1>
+            <p className="mt-2 text-lg text-muted-foreground">
+              {lead.clientName}
+              {lead.object && ` · ${lead.object}`}
+            </p>
+          </div>
+          <div className="flex gap-2">
+            {lead.canEdit && lead.stage !== "completed" && (
+              <Button variant="outline" onClick={() => setEditing(true)}>
+                {t("create.edit")}
+              </Button>
+            )}
+            {lead.phone && (
+              <Button variant="outline" asChild>
+                <a href={`tel:${lead.phone}`}>
+                  <Phone className="mr-2 size-4" />
+                  {t("detail.call")}
+                </a>
+              </Button>
+            )}
+            {lead.email && (
+              <Button variant="outline" asChild>
+                <a href={`mailto:${lead.email}`}>
+                  <Mail className="mr-2 size-4" />
+                  {t("detail.email")}
+                </a>
+              </Button>
+            )}
+          </div>
+        </div>
+        <div className="grid gap-4 rounded-xl border border-border bg-card p-5 sm:grid-cols-3">
+          <div>
+            <p className="text-xs text-muted-foreground">{t("field.responsible")}</p>
+            <p className="mt-2 text-sm font-medium">
+              {lead.responsibleName ?? t("detail.noResponsible")}
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {t(`assignment.${lead.assignment}`)}
+            </p>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">{t("detail.next")}</p>
+            <p className="mt-2 text-sm font-medium">{lead.nextAction || t("detail.noAction")}</p>
+            <p className="mt-1 text-xs text-muted-foreground">{formatDate(lead.dueAt)}</p>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">{t("detail.potential")}</p>
+            <p className="mt-2 text-sm font-medium">
+              {lead.estimatedCommissionMinor === null
+                ? t("detail.notEstimable")
+                : formatMoney(lead.estimatedCommissionMinor)}
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">{t("detail.notAcquired")}</p>
+          </div>
+        </div>
+        {lead.canEdit &&
+          lead.stage !== "draft" &&
+          (session.context.canAdvise || session.context.canManage) && (
+            <div className="flex flex-wrap gap-2">
+              {lead.assignment === "proposed" &&
+                lead.responsibleId === session.identity.user.id && (
+                  <Button
+                    disabled={command.isPending}
+                    onClick={() => command.mutate({ action: "accept", revision: lead.revision })}
+                  >
+                    {t("detail.accept")}
+                  </Button>
+                )}
+              {lead.stage !== "completed" && (
+                <>
+                  <Button variant="outline" onClick={() => setAction("contact")}>
+                    {t("detail.contact")}
+                  </Button>
+                  <Button variant="outline" onClick={() => setAction("transition")}>
+                    {t("detail.changeStage")}
+                  </Button>
+                  <Button variant="outline" onClick={() => setAction("appointment")}>
+                    {t("detail.appointment")}
+                  </Button>
+                </>
+              )}
+              <Button variant="outline" onClick={() => setAction("task")}>
+                <Plus className="mr-2 size-4" />
+                {t("detail.task")}
+              </Button>
+              <Button variant="outline" onClick={() => setAction("note")}>
+                {t("detail.note")}
+              </Button>
+              {lead.canAssign && lead.stage !== "completed" && (
+                <Button variant="outline" onClick={() => setAction("assign")}>
+                  {t("detail.assign")}
+                </Button>
+              )}
+            </div>
+          )}
+        {command.isError && (
+          <p role="alert" className="text-sm text-destructive">
+            {command.error instanceof PartnerApiError
+              ? t(`errors.${command.error.code}`, { defaultValue: t("error") })
+              : t("error")}
+          </p>
+        )}
+      </header>
+      <Tabs
+        value={activeTab ?? "overview"}
+        onValueChange={(value) => {
+          void navigate({ search: { tab: value }, replace: true });
+        }}
+      >
+        <TabsList className="max-w-full overflow-x-auto">
+          {lead.availableTabs.map((value) => (
+            <TabsTrigger key={value} value={value}>
+              {t(`tabs.${value}`)}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+      {activeTab === "overview" && (
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+          <section className="space-y-5 rounded-xl border border-border p-6">
+            <h2 className="text-lg font-semibold">{t("field.context")}</h2>
+            <p className="whitespace-pre-wrap text-sm leading-7">{lead.context || "—"}</p>
+            {lead.access === "progress" && (
+              <p className="text-sm text-muted-foreground">{t("detail.progressOnly")}</p>
+            )}
+            {lead.waiting && (
+              <div className="rounded-lg bg-muted p-4">
+                <p className="text-sm font-medium">
+                  {t("detail.waiting", { date: formatDate(lead.waiting.until) })}
+                </p>
+                <p className="mt-2 text-sm">{lead.waiting.reason}</p>
+                <Button
+                  className="mt-3"
+                  size="sm"
+                  variant="outline"
+                  disabled={command.isPending}
+                  onClick={() =>
+                    command.mutate({ action: "wait", waiting: null, revision: lead.revision })
+                  }
+                >
+                  {t("detail.resume")}
+                </Button>
+              </div>
+            )}
+            {lead.result && (
+              <p className="rounded-lg bg-muted p-4 text-sm">
+                {t(`result.${lead.result}`)}
+                {" · "}
+                {t(`reason.${lead.reason}`)}
+              </p>
+            )}
+            {lead.canEdit && lead.stage !== "completed" && (
+              <div className="flex flex-wrap gap-2">
+                <Button onClick={() => setAction("next_action")}>{t("detail.nextAction")}</Button>
+                <Button variant="outline" onClick={() => setAction("wait")}>
+                  {t("detail.wait")}
+                </Button>
+                <Button variant="ghost" onClick={() => setAction("close")}>
+                  {t("detail.close")}
+                </Button>
+              </div>
+            )}
+          </section>
+          <aside className="space-y-4 rounded-xl border border-border p-6">
+            {lead.alerts.map((alert) => (
+              <p key={alert} className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+                {t(`alerts.${alert}`)}
+              </p>
+            ))}
+            {lead.firstActionDueAt && !lead.firstUsefulAt && (
+              <p className="text-sm">
+                {t("detail.firstAction", { date: formatDate(lead.firstActionDueAt) })}
+              </p>
+            )}
+            <p className="text-xs text-muted-foreground">
+              {t("detail.created", { date: formatDate(lead.createdAt) })}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {t("detail.since", { date: formatDate(lead.stageChangedAt) })}
+            </p>
+            {session.context.administrator && lead.clientUserId ? (
+              <Button variant="outline" asChild>
+                <a
+                  href={`${adminUrl}/users/${encodeURIComponent(lead.clientUserId)}?profile=${encodeURIComponent(lead.clientProfileId ?? "self")}`}
+                >
+                  {t("detail.client")}
+                  <ArrowUpRight className="ml-2 size-4" />
+                </a>
+              </Button>
+            ) : (
+              !lead.clientUserId && (
+                <p className="text-xs text-muted-foreground">{t("detail.pendingClient")}</p>
+              )
+            )}
+          </aside>
+        </div>
+      )}
+      {(activeTab === "activity" || activeTab === "notes") && (
+        <div className="space-y-5">
+          {lead.events
+            .filter((item) => activeTab !== "notes" || item.kind === "lead.note")
+            .map((item) => (
+              <article key={item.id} className="relative border-l-2 border-border pb-4 pl-6">
+                <p className="text-xs text-muted-foreground">
+                  {formatDate(item.createdAt)}
+                  {" · "}
+                  {t(`audience.${item.audience}`)}
+                </p>
+                <h3 className="mt-2 text-sm font-semibold">
+                  {t(`event.${item.kind}`, { defaultValue: item.kind })}
+                </h3>
+                <p className="mt-2 whitespace-pre-wrap text-sm text-muted-foreground">
+                  {item.kind === "lead.stage_changed" ? t(`stage.${item.text}`) : item.text}
+                </p>
+              </article>
+            ))}
+          {!lead.events.some((item) => activeTab !== "notes" || item.kind === "lead.note") && (
+            <EmptyState title={t("detail.emptyTab")} description={t("tabs.activity")} />
+          )}
+        </div>
+      )}
+      {activeTab === "tasks" && (
+        <div className="space-y-3">
+          {lead.tasks.map((task) => (
+            <article
+              key={task.id}
+              className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border p-5"
+            >
+              <div>
+                <h3
+                  className={`font-medium ${task.state === "done" ? "line-through text-muted-foreground" : ""}`}
+                >
+                  {task.title}
+                </h3>
+                <p className="mt-1 text-sm text-muted-foreground">{task.description}</p>
+                <p className="mt-2 text-xs text-muted-foreground">
+                  {formatDate(task.dueAt)}
+                  {" · "}
+                  {t(`task.${task.state === "done" ? "completed" : task.state}`)}
+                </p>
+              </div>
+              {lead.canEdit && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={command.isPending}
+                  onClick={() =>
+                    command.mutate({
+                      action: "task_state",
+                      revision: lead.revision,
+                      taskId: task.id,
+                      state: task.state === "done" ? "open" : "done",
+                    })
+                  }
+                >
+                  {t(task.state === "done" ? "task.reopen" : "task.done")}
+                </Button>
+              )}
+            </article>
+          ))}
+          {!lead.tasks.length && (
+            <EmptyState title={t("detail.emptyTab")} description={t("tabs.tasks")} />
+          )}
+        </div>
+      )}
+      {activeTab === "appointments" && (
+        <div className="space-y-3">
+          {lead.appointments.map((appt) => (
+            <article
+              key={appt.id}
+              className="flex flex-wrap items-center gap-4 rounded-xl border border-border p-5"
+            >
+              <CalendarDays className="size-6 text-muted-foreground" />
+              <div className="flex-1">
+                <p className="font-medium">{formatDate(appt.startsAt)}</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {t(`appointment.${appt.mode}`)}
+                  {" · "}
+                  {appt.location}
+                </p>
+                <p className="mt-2 flex items-center gap-1 text-xs text-muted-foreground">
+                  <Clock3 className="size-3" />
+                  {new Intl.NumberFormat("fr-CH", { style: "unit", unit: "minute" }).format(
+                    appt.durationMinutes,
+                  )}
+                </p>
+              </div>
+              <Badge variant="outline">{t(`appointment.${appt.state}`)}</Badge>
+              {lead.canEdit && appt.state === "scheduled" && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    setAppointment(appt.id);
+                    setAction("appointment_state");
+                  }}
+                >
+                  {t("appointment.report")}
+                </Button>
+              )}
+            </article>
+          ))}
+          {!lead.appointments.length && (
+            <EmptyState title={t("detail.emptyTab")} description={t("tabs.appointments")} />
+          )}
+        </div>
+      )}
+      {activeTab === "offers" && (
+        <div className="space-y-5">
+          {lead.canEdit && session.context.canAdvise && lead.stage !== "completed" && (
+            <Button onClick={() => setOffer("new")}>
+              <Plus className="mr-2 size-4" />
+              {t("detail.offer")}
+            </Button>
+          )}
+          {lead.offers.map((item) => (
+            <article
+              key={item.id}
+              className={`rounded-xl border border-border p-6 ${item.active ? "" : "opacity-60"}`}
+            >
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">
+                    {item.company}
+                    {" · "}
+                    {t("offer.version", { version: item.version })}
+                  </p>
+                  <h3 className="mt-2 text-lg font-semibold">{item.product}</h3>
+                  <p className="mt-2 text-xl font-medium">
+                    {item.annualPremiumMinor === null
+                      ? t("detail.notEstimable")
+                      : formatMoney(item.annualPremiumMinor)}
+                  </p>
+                </div>
+                <Badge variant="outline">{t(`offer.${item.state}`)}</Badge>
+              </div>
+              {item.summary && <p className="mt-4 whitespace-pre-wrap text-sm">{item.summary}</p>}
+              {item.limitations && (
+                <p className="mt-3 whitespace-pre-wrap text-sm text-muted-foreground">
+                  {item.limitations}
+                </p>
+              )}
+              <div className="mt-5 flex flex-wrap gap-2">
+                <Button asChild size="sm" variant="outline">
+                  <a href={partnerApi.sourceUrl(lead.id, item.id)}>{t("offer.source")}</a>
+                </Button>
+                {lead.canEdit &&
+                  session.context.canAdvise &&
+                  item.active &&
+                  lead.stage !== "completed" && (
+                    <>
+                      <Button size="sm" variant="outline" onClick={() => setOffer(item)}>
+                        {t("offer.newVersion")}
+                      </Button>
+                      {item.state === "to_verify" && (
+                        <Button
+                          size="sm"
+                          disabled={command.isPending}
+                          onClick={() =>
+                            command.mutate({
+                              action: "offer_review",
+                              offerId: item.id,
+                              revision: lead.revision,
+                            })
+                          }
+                        >
+                          {t("offer.review")}
+                        </Button>
+                      )}
+                      {item.state === "ready" && (
+                        <Button
+                          size="sm"
+                          disabled={command.isPending || !lead.clientUserId}
+                          onClick={() =>
+                            command.mutate({
+                              action: "offer_publish",
+                              offerId: item.id,
+                              revision: lead.revision,
+                            })
+                          }
+                        >
+                          {t("offer.publish")}
+                        </Button>
+                      )}
+                    </>
+                  )}
+              </div>
+              {item.state === "ready" && (
+                <p className="mt-3 text-xs text-muted-foreground">{t("offer.publishHelp")}</p>
+              )}
+            </article>
+          ))}
+          {!lead.offers.length && (
+            <EmptyState title={t("offer.noOffers")} description={t("offer.sourceHelp")} />
+          )}
+        </div>
+      )}
+      {action && (
+        <LeadActionDialog
+          key={action}
+          lead={lead}
+          action={action}
+          onClose={() => setAction(null)}
+          {...(appointment ? { appointmentId: appointment } : {})}
+        />
+      )}{" "}
+      {offer && (
+        <OfferDialog
+          lead={lead}
+          {...(offer === "new" ? {} : { previous: offer })}
+          onClose={() => setOffer(null)}
+        />
+      )}
+    </>
+  );
+}

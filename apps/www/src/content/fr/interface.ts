@@ -5,7 +5,7 @@ export const content = {
   home: "Accueil",
   accountLink: "Mon compte",
   account: {
-    local: "Préversion locale",
+    local: "CoverView",
     title: "Mon compte — CoverView",
     description:
       "Retrouvez votre connexion CoverView et rejoignez votre espace personnel dans Wallet.",
@@ -31,12 +31,12 @@ export const content = {
   },
   wallet: "Ouvrir Wallet",
   team: "Admin",
-  local: "Préversion locale · Données fictives",
-  construction: "Projet en construction",
+  local: "Prévoyance · Assurance · Retraite",
+  construction: "Votre prévoyance en clair",
   eyebrow: "Votre protection, plus claire",
   heading: "Tout commence par une vue d’ensemble.",
-  note: "Cette préversion présente les premières interfaces. Les analyses, simulations et démarches ne sont pas encore disponibles.",
-  cardLabel: "L’espace qui se prépare",
+  note: "Explorez les simulateurs gratuits et retrouvez vos documents dans Wallet après connexion.",
+  cardLabel: "Votre espace personnel",
   cardTitle: "Les bons repères, au même endroit.",
   points: [
     {
@@ -59,9 +59,9 @@ export const content = {
   notFound: {
     title: "Page introuvable — CoverView",
     description:
-      "Cette page est introuvable. Retrouvez le point de départ de la préversion CoverView.",
+      "Cette page est introuvable. Retrouvez les simulateurs, les guides et votre accès Wallet depuis l’accueil CoverView.",
     heading: "Cette page est introuvable.",
-    body: "Son adresse a peut-être changé. Retrouvez la préversion depuis l’accueil.",
+    body: "Son adresse a peut-être changé. Retrouvez les guides et les outils depuis l’accueil.",
     action: "Revenir à l’accueil",
   },
 };
