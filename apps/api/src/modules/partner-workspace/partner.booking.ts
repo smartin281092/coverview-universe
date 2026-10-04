@@ -5,6 +5,9 @@ import {
   bookingChoiceSchema,
   bookingProposalsSchema,
   bookingWithdrawalSchema,
+  coordinatedBookingInputSchema,
+  coordinatedBookingReceiptSchema,
+  type CoordinatedBookingInput,
   type BookingProposalInput,
   type BookingChoice,
   type PartnerApplication,
@@ -220,8 +223,189 @@ async function project(tx: PoolClient, actor: PartnerActor, id: string) {
   return bookingProposalsSchema.parse({ canPropose: !actor.wallet && !active.rowCount, proposals });
 }
 
+async function reserveOne(
+  tx: PoolClient,
+  actor: PartnerActor,
+  id: string,
+  proposalId: string,
+  input: BookingChoice,
+  coordinationId?: string,
+) {
+  const data = await locked(tx, actor, id, proposalId);
+  const row = data.rows.find((r) => r.id === proposalId);
+  if (!row) fail("PARTNER_NOT_FOUND", 404);
+  const value = await inspect(tx, actor, data, row);
+  if (
+    value.state !== "offered" ||
+    !value.slots[input.slot]?.canBook ||
+    value.slots[input.slot]?.basis !== input.basis
+  )
+    fail("PARTNER_CONFLICT", 409);
+  const offered = bookingProposalInputSchema.parse(row.input),
+    slot = offered.slots[input.slot]!;
+  // All blocking source reads are finished; elapsed expiry/session/mandate must still be valid.
+  await lockActor(tx, actor);
+  if (row.expires_at.getTime() <= Date.now() || !eligible(data.lead, data.member))
+    fail("PARTNER_CONFLICT", 409);
+  const preview = await previewPersonalAppointment(
+    tx,
+    actor,
+    { ...data.lead, clientUserId: data.lead.ownerId },
+    contextForApplication(data.member),
+    { appointment: slot.appointment, time: slot.time },
+    undefined,
+    row.advisor_id,
+  );
+  if (!preview.canConfirm || preview.basis !== slot.basis) fail("PARTNER_CONFLICT", 409);
+  const appointmentId = await executeLeadCommand(tx, actor, data.lead, {
+    action: "appointment",
+    revision: data.lead.revision,
+    appointment: { ...slot.appointment, advisorId: row.advisor_id },
+  });
+  if (!appointmentId) throw new Error("Booking returned no appointment");
+  // Preserve deliberate work on the origin; unrelated Leads are never updated.
+  if (data.lead.waiting || data.lead.nextAction)
+    await tx.query("update partner_leads set next_action=$2,due_at=$3,waiting=$4 where id=$1", [
+      id,
+      data.lead.nextAction,
+      data.lead.dueAt,
+      data.lead.waiting,
+    ]);
+  await recordAppointmentTime(
+    tx,
+    actor,
+    appointmentId,
+    1,
+    { ...slot.time, basis: slot.basis, confirmed: true },
+    new Date(preview.occupiedStartsAt),
+    new Date(preview.occupiedEndsAt),
+    {
+      booking: {
+        proposalId,
+        ...(coordinationId ? { coordinationId } : {}),
+        advisorId: row.advisor_id,
+        input: offered,
+        choice: input,
+        clientUserId: actor.userId,
+        clientProfileId: data.lead.clientProfileId,
+      },
+      declaration: preview.assessment.declaration,
+      client: preview.assessment.client,
+      appointment: slot.appointment,
+    },
+    row.advisor_id,
+  );
+  await tx.query(
+    "update partner_booking_proposals set state='booked',appointment_id=$2,selected_slot=$3 where id=$1",
+    [proposalId, appointmentId, input.slot],
+  );
+  await tx.query("update partner_leads set revision=revision+1,updated_at=now() where id=$1", [id]);
+  await event(tx, actor, id, "client.appointment_reserved.v1", "", "client", appointmentId);
+  await syncLeadNotifications(tx, id);
+  if (coordinationId)
+    await event(tx, actor, id, "client.appointments_coordinated.v1", "", "client", coordinationId);
+  return proposalId;
+}
+
 export function createBookingOperations(pool: Pool, transaction: Mutation) {
   return {
+    reserveCoordinatedBookings(actor: PartnerActor, raw: CoordinatedBookingInput, key: string) {
+      const input = coordinatedBookingInputSchema.parse(raw);
+      if (!actor.wallet) fail("PARTNER_ACCESS_DENIED", 403);
+      const ordered = [...input.choices].sort((a, b) => a.leadId.localeCompare(b.leadId));
+      const guards: { data: Locked; expires: number; starts: number }[] = [];
+      return transaction(
+        actor,
+        "booking.coordinate:v1",
+        key,
+        input,
+        async (tx) => {
+          const seeds = [];
+          for (const choice of ordered) {
+            const seed = (
+              await tx.query<Proposal>(
+                `select b.* from partner_booking_proposals b join partner_leads l on l.id=b.lead_id
+             where b.id=$2 and b.lead_id=$3 and (${ownedClient})`,
+                [actor.userId, choice.proposalId, choice.leadId],
+              )
+            ).rows[0];
+            if (!seed) fail("PARTNER_NOT_FOUND", 404);
+            seeds.push(seed);
+          }
+          const advisors = [...new Set(seeds.map((s) => s.advisor_id))].sort();
+          if (advisors.length < 2) fail("PARTNER_ACTION_REQUIRED");
+          for (const advisor of advisors) await membership(tx, advisor, true);
+          for (const choice of ordered) {
+            await tx.query("select id from partner_leads where id=$1 for update", [choice.leadId]);
+            await tx.query(
+              "select id from partner_contributors where lead_id=$1 order by id for share",
+              [choice.leadId],
+            );
+            await tx.query(
+              "select id from partner_booking_proposals where lead_id=$1 order by id for update",
+              [choice.leadId],
+            );
+          }
+          for (const advisor of advisors)
+            await tx.query("select pg_advisory_xact_lock(hashtextextended($1,1))", [advisor]);
+          let subject: string | undefined;
+          const periods: { start: number; end: number }[] = [];
+          for (const choice of ordered) {
+            const data = await locked(tx, actor, choice.leadId, choice.proposalId);
+            const row = data.rows.find((r) => r.id === choice.proposalId);
+            if (!row) fail("PARTNER_NOT_FOUND", 404);
+            if (subject && subject !== subjectKey(data.lead)) fail("PARTNER_ACTION_REQUIRED");
+            subject = subjectKey(data.lead);
+            const value = await inspect(tx, actor, data, row),
+              slot = value.slots[choice.slot];
+            if (value.state !== "offered" || !slot?.canBook || slot.basis !== choice.basis)
+              fail("PARTNER_CONFLICT", 409);
+            const start = Date.parse(slot.appointment.startsAt),
+              end = start + slot.appointment.durationMinutes * 60000;
+            if (periods.some((p) => p.start < end && p.end > start))
+              fail("PARTNER_APPOINTMENT_CONFLICT", 409);
+            periods.push({ start, end });
+            guards.push({ data, expires: row.expires_at.getTime(), starts: start });
+          }
+          const id = newId("coordination");
+          for (const choice of ordered)
+            await reserveOne(
+              tx,
+              actor,
+              choice.leadId,
+              choice.proposalId,
+              bookingChoiceSchema.parse({
+                slot: choice.slot,
+                basis: choice.basis,
+                confirmed: true,
+              }),
+              id,
+            );
+          return id;
+        },
+        async (tx, id) => {
+          const items = [];
+          for (const choice of ordered) {
+            const booking = await project(tx, actor, choice.leadId);
+            const proposal = booking.proposals.find((p) => p.id === choice.proposalId);
+            if (!proposal) fail("PARTNER_NOT_FOUND", 404);
+            items.push({ leadId: choice.leadId, proposal });
+          }
+          await lockActor(tx, actor);
+          // A delayed last write/projection must roll back every preceding reservation too.
+          if (
+            guards.some(
+              (g) =>
+                g.expires <= Date.now() ||
+                g.starts <= Date.now() ||
+                !eligible(g.data.lead, g.data.member),
+            )
+          )
+            fail("PARTNER_CONFLICT", 409);
+          return coordinatedBookingReceiptSchema.parse({ id, items });
+        },
+      );
+    },
     async bookingProposals(actor: PartnerActor, id: string) {
       const tx = await pool.connect();
       try {
@@ -339,80 +523,7 @@ export function createBookingOperations(pool: Pool, transaction: Mutation) {
         `booking.reserve:${id}:${proposalId}`,
         key,
         input,
-        async (tx) => {
-          const data = await locked(tx, actor, id, proposalId);
-          const row = data.rows.find((r) => r.id === proposalId);
-          if (!row) fail("PARTNER_NOT_FOUND", 404);
-          const value = await inspect(tx, actor, data, row);
-          if (
-            value.state !== "offered" ||
-            !value.slots[input.slot]?.canBook ||
-            value.slots[input.slot]?.basis !== input.basis
-          )
-            fail("PARTNER_CONFLICT", 409);
-          const offered = bookingProposalInputSchema.parse(row.input),
-            slot = offered.slots[input.slot]!;
-          // All blocking source reads are finished; elapsed expiry/session/mandate must still be valid.
-          await lockActor(tx, actor);
-          if (row.expires_at.getTime() <= Date.now() || !eligible(data.lead, data.member))
-            fail("PARTNER_CONFLICT", 409);
-          const preview = await previewPersonalAppointment(
-            tx,
-            actor,
-            { ...data.lead, clientUserId: data.lead.ownerId },
-            contextForApplication(data.member),
-            { appointment: slot.appointment, time: slot.time },
-            undefined,
-            row.advisor_id,
-          );
-          if (!preview.canConfirm || preview.basis !== slot.basis) fail("PARTNER_CONFLICT", 409);
-          const appointmentId = await executeLeadCommand(tx, actor, data.lead, {
-            action: "appointment",
-            revision: data.lead.revision,
-            appointment: { ...slot.appointment, advisorId: row.advisor_id },
-          });
-          if (!appointmentId) throw new Error("Booking returned no appointment");
-          // Preserve deliberate work on the origin; unrelated Leads are never updated.
-          if (data.lead.waiting || data.lead.nextAction)
-            await tx.query(
-              "update partner_leads set next_action=$2,due_at=$3,waiting=$4 where id=$1",
-              [id, data.lead.nextAction, data.lead.dueAt, data.lead.waiting],
-            );
-          await recordAppointmentTime(
-            tx,
-            actor,
-            appointmentId,
-            1,
-            { ...slot.time, basis: slot.basis, confirmed: true },
-            new Date(preview.occupiedStartsAt),
-            new Date(preview.occupiedEndsAt),
-            {
-              booking: {
-                proposalId,
-                advisorId: row.advisor_id,
-                input: offered,
-                choice: input,
-                clientUserId: actor.userId,
-                clientProfileId: data.lead.clientProfileId,
-              },
-              declaration: preview.assessment.declaration,
-              client: preview.assessment.client,
-              appointment: slot.appointment,
-            },
-            row.advisor_id,
-          );
-          await tx.query(
-            "update partner_booking_proposals set state='booked',appointment_id=$2,selected_slot=$3 where id=$1",
-            [proposalId, appointmentId, input.slot],
-          );
-          await tx.query(
-            "update partner_leads set revision=revision+1,updated_at=now() where id=$1",
-            [id],
-          );
-          await event(tx, actor, id, "client.appointment_reserved.v1", "", "client", appointmentId);
-          await syncLeadNotifications(tx, id);
-          return proposalId;
-        },
+        (tx) => reserveOne(tx, actor, id, proposalId, input),
         async (tx) => project(tx, actor, id),
       );
     },

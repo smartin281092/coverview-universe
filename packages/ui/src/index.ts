@@ -52,3 +52,4 @@ export { VersionHistoryDialog } from "./VersionHistoryDialog";
 export { PolicyEvidence } from "./PolicyEvidence";
 
 export { swissCantonNamesFr } from "./swiss-cantons";
+export { parseZurichDateTime } from "./zurich-time";

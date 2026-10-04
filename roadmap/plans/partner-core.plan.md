@@ -1,6 +1,8 @@
 # Partner — parcours opérationnel, brief du 2 octobre 2026
 
-Pilotage mis à jour après la tranche811d : prochaines tâches **Astra Max**, suite regroupée en **quatre lots** (objectif3–5tâches), selon le [plan de regroupement](partner-remaining-batches.plan.md). Cette instruction ultérieure remplace les anciens relais Ultra par petite tranche ; le mandat I–III reste entier.
+Pilotage corrigé pendant le lot1/96ad : prochaines tâches **Astra Très élevé (`xhigh`)**, suite regroupée en **quatre lots** (objectif3–5tâches), selon le [plan de regroupement](partner-remaining-batches.plan.md). Cette instruction remplace Max/Ultra et les relais par petite tranche ; le mandat I–III reste entier.
+
+Journal96ad : [plan CO1–5 et journal](partner-counsel-orchestration.plan.md). Orientation explicite datée vers CoverView, sélection manuelle de critères sourcés et collaboration effective, coordination atomique de plusieurs réservations Wallet.35tests distincts/4fichiers dont17nouveaux ;0057 hors catalogue, activation/V3 ouverts. Le [ledger](../evidence/partner-core.md#lot-14--conseil-et-orchestration-96ad) distingue les preuves des limites. Suite regroupée : lot2 marketplace/accords/économie ; aucun avis favorable de distribution ou matching global inventé depuis les sources insuffisantes. Brief I–III/S-110/S-042a ouverts.
 
 Journal811d : [plan BKG, journal et suite](partner-booking-slots.plan.md), [propriétaire BKG1–5](../../apps/api/src/modules/partner-workspace/docs/booking-proposals.md). Créneaux proposés personnellement puis choix Wallet, réservation unique/temps protégé/accords persistés et cycles conservés ;124tests distincts/7fichiers dont18nouveaux.0056 hors catalogue, activation/V3 ouverts. Les réserves historiques « pas de réservation Wallet » sont levées pour ce parcours précis seulement ; matching complet/multi-spécialistes et TOUS tracks I–III restent mandatés.
 

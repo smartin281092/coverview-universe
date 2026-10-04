@@ -5,6 +5,7 @@ import type { IdentityMe } from "@coverview/api-client";
 import { createPartnerClient } from "@coverview/api-client/partner";
 import { Button, LoadingState, ErrorState } from "@coverview/ui";
 import { AdminBoundary } from "../features/users/AdminBoundary";
+import { CounselQueue } from "../features/partner/CounselQueue";
 
 const client = createPartnerClient(
   import.meta.env.VITE_API_URL ??
@@ -70,6 +71,7 @@ function Overview({ identity, blocked }: { identity: IdentityMe; blocked: boolea
         </div>
       )}
       <p className="text-xs text-muted-foreground">{t("scope")}</p>
+      <CounselQueue identity={identity} blocked={blocked} />
     </div>
   );
 }

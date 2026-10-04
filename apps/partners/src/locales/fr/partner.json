@@ -946,7 +946,13 @@
     "client.appointment_cancelled.v1": "Rendez-vous annulé par le client",
     "appointment.slots_offered.v1": "Créneaux proposés au client",
     "appointment.slots_withdrawn.v1": "Proposition de créneaux retirée",
-    "client.appointment_reserved.v1": "Rendez-vous réservé par le client"
+    "client.appointment_reserved.v1": "Rendez-vous réservé par le client",
+    "counsel.requested.v1": "Demande d’orientation transmise à CoverView",
+    "counsel.follow_up.v1": "Suite datée par CoverView",
+    "counsel.propose.v1": "Collaboration proposée pour l’orientation",
+    "counsel.resolve.v1": "Traitement de l’orientation terminé",
+    "counsel.withdraw.v1": "Demande d’orientation retirée",
+    "client.appointments_coordinated.v1": "Rendez-vous coordonnés par le client"
   },
   "benefit": {
     "deductible": "Franchise",
@@ -2112,5 +2118,60 @@
     "withdraw": "Retirer la proposition",
     "withdrawConfirm": "Je retire toutes les options de cette proposition. Le client ne pourra plus les réserver.",
     "invalid": "Vérifiez la date de validité et les créneaux distincts avant de proposer."
+  },
+  "counsel": {
+    "title": "Organiser la suite avec CoverView",
+    "description": "Transmettre une difficulté et suivre sa prise en charge. Les démarches et délais de la demande restent en cours.",
+    "kindLabel": "Suite souhaitée",
+    "kind": {
+      "specialist": "Appui d’un spécialiste",
+      "reassignment": "Changement de responsable à examiner",
+      "clarification": "Clarification avec CoverView"
+    },
+    "state": {
+      "open": "À traiter par CoverView",
+      "awaiting_specialist": "Réponse du spécialiste attendue",
+      "accepted": "Collaboration acceptée",
+      "withdrawn": "Demande retirée",
+      "resolved": "Traitement terminé",
+      "context_changed": "Contexte modifié : réexamen nécessaire"
+    },
+    "nextAction": "Prochaine action",
+    "dueAt": "Échéance — heure de Zurich",
+    "conflict": "Le contexte ou les droits ont changé. Relisez les informations avant une nouvelle décision.",
+    "uncertain": "La réponse n’a pas été reçue. Réessayez exactement la même commande pour connaître son résultat.",
+    "retryExact": "Reprendre la même commande",
+    "failed": "Ces informations ne sont pas disponibles. Actualisez pour vérifier vos accès.",
+    "invalid": "Complétez les champs, choisissez une échéance valide et confirmez les engagements demandés. Les heures ambiguës lors du changement d’heure sont refusées.",
+    "saved": "La suite a été enregistrée.",
+    "first": "Première page",
+    "more": "Page suivante",
+    "historyLimit": "Les 20 dernières actions sont affichées.",
+    "assessedAt": "Sources examinées le {{date}}",
+    "summary": "Résumé à transmettre",
+    "privacy": "Seuls ce résumé, la suite souhaitée, l’action et l’échéance sont partagés avec CoverView. N’y recopiez pas de notes ni de preuves privées inutiles.",
+    "shareConfirmed": "Je confirme le partage de ces informations avec CoverView pour traiter cette demande.",
+    "create": "Préparer une demande à CoverView",
+    "choose": "Choisir une suite",
+    "send": "Transmettre à CoverView",
+    "personal": "Mes constats personnels pour ce besoin",
+    "distribution": "Ces constats ne donnent aucun avis favorable de distribution. Les vérifications spécifiques encore manquantes doivent être poursuivies.",
+    "history": "Mes demandes et leurs suites",
+    "empty": "Aucune demande transmise pour ce besoin.",
+    "withdraw": "Retirer ma demande",
+    "withdrawReason": "Motif du retrait",
+    "person": "{{name}} · {{organization}}",
+    "authorAt": "{{name}} · {{date}}",
+    "historyEntry": "{{date}} · {{reason}}",
+    "competenceScope": "{{state}} · {{scope}}",
+    "authorState": "{{name}} · {{state}}",
+    "assessment": "{{name}} : {{result}}",
+    "sourceStatus": {
+      "missing": "Source absente",
+      "disabled": "Accès aux preuves désactivé",
+      "unavailable": "Source indisponible",
+      "changed": "Source modifiée depuis l’examen",
+      "available": "Source accessible"
+    }
   }
 }

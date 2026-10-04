@@ -5,6 +5,17 @@ import {
   bookingProposalInputSchema,
   bookingChoiceSchema,
   bookingWithdrawalSchema,
+  coordinatedBookingInputSchema,
+  coordinatedBookingReceiptSchema,
+  type CoordinatedBookingInput,
+  counselRequestInputSchema,
+  counselActionInputSchema,
+  counselRequestSchema,
+  counselPersonalSchema,
+  counselQueueSchema,
+  counselCandidatesSchema,
+  type CounselRequestInput,
+  type CounselActionInput,
   type BookingProposalInput,
   type BookingChoice,
   walletAppointmentCancellationSchema,
@@ -437,6 +448,50 @@ export function createPartnerClient(baseUrl: string) {
         `/${wallet ? "wallet" : "partner"}/leads/${encodeURIComponent(id)}/booking-proposals`,
         bookingProposalsSchema,
         signal,
+      ),
+    counselPersonal: (id: string, cursor?: string, signal?: AbortSignal) =>
+      request(
+        `/partner/leads/${encodeURIComponent(id)}/counsel${cursor ? `?cursor=${encodeURIComponent(cursor)}` : ""}`,
+        counselPersonalSchema,
+        signal,
+      ),
+    requestCounsel: (id: string, input: CounselRequestInput, options: PartnerMutation) =>
+      request(
+        `/partner/leads/${encodeURIComponent(id)}/counsel`,
+        counselRequestSchema,
+        options.signal,
+        counselRequestInputSchema.parse(input),
+        options,
+      ),
+    counselRequest: (id: string, signal?: AbortSignal) =>
+      request(`/partner/counsel/${encodeURIComponent(id)}`, counselRequestSchema, signal),
+    actCounsel: (id: string, input: CounselActionInput, options: PartnerMutation) =>
+      request(
+        `/partner/counsel/${encodeURIComponent(id)}/actions`,
+        counselRequestSchema,
+        options.signal,
+        counselActionInputSchema.parse(input),
+        options,
+      ),
+    counselQueue: (cursor?: string, signal?: AbortSignal) =>
+      request(
+        `/admin/partner/counsel${cursor ? `?cursor=${encodeURIComponent(cursor)}` : ""}`,
+        counselQueueSchema,
+        signal,
+      ),
+    counselCandidates: (id: string, cursor?: string, signal?: AbortSignal) =>
+      request(
+        `/admin/partner/counsel/${encodeURIComponent(id)}/candidates${cursor ? `?cursor=${encodeURIComponent(cursor)}` : ""}`,
+        counselCandidatesSchema,
+        signal,
+      ),
+    reserveCoordinatedBookings: (input: CoordinatedBookingInput, options: PartnerMutation) =>
+      request(
+        "/wallet/coordinated-bookings",
+        coordinatedBookingReceiptSchema,
+        options.signal,
+        coordinatedBookingInputSchema.parse(input),
+        options,
       ),
     proposeBooking: (id: string, input: BookingProposalInput, options: PartnerMutation) =>
       request(

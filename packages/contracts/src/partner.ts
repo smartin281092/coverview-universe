@@ -1051,6 +1051,28 @@ export const bookingProposalsSchema = z.object({
     .max(20),
 });
 export type BookingProposals = z.infer<typeof bookingProposalsSchema>;
+export const coordinatedBookingInputSchema = z
+  .object({
+    choices: z
+      .array(bookingChoiceSchema.extend({ leadId: id, proposalId: id }).strict())
+      .min(2)
+      .max(5),
+    confirmed: z.literal(true),
+  })
+  .strict()
+  .refine((v) => new Set(v.choices.map((c) => c.leadId)).size === v.choices.length, {
+    path: ["choices"],
+    message: "Distinct requests required",
+  });
+export type CoordinatedBookingInput = z.infer<typeof coordinatedBookingInputSchema>;
+export const coordinatedBookingReceiptSchema = z.object({
+  id,
+  items: z
+    .array(z.object({ leadId: id, proposal: bookingProposalsSchema.shape.proposals.element }))
+    .min(2)
+    .max(5),
+});
+export type CoordinatedBookingReceipt = z.infer<typeof coordinatedBookingReceiptSchema>;
 export const partnerNotificationQuerySchema = z
   .object({
     status: z.enum(["open", "all"]).default("open"),
@@ -1655,6 +1677,126 @@ export const collaborationResponseSchema = z
 export type Collaboration = z.infer<typeof collaborationSchema>;
 export type CollaborationTerms = z.infer<typeof collaborationTermsSchema>;
 export type CollaborationResponse = z.infer<typeof collaborationResponseSchema>;
+const counselHash = z.string().regex(/^[a-f0-9]{64}$/u);
+export const counselRequestInputSchema = z
+  .object({
+    basis: counselHash,
+    kind: z.enum(["specialist", "reassignment", "clarification"]),
+    summary: z.string().trim().min(10).max(1500),
+    nextAction: z.string().trim().min(3).max(240),
+    dueAt: instant,
+    shareConfirmed: z.literal(true),
+  })
+  .strict();
+export type CounselRequestInput = z.infer<typeof counselRequestInputSchema>;
+export const counselQuerySchema = z.object({ cursor: z.string().max(500).optional() }).strict();
+export const counselActionInputSchema = z.discriminatedUnion("action", [
+  z
+    .object({
+      action: z.enum(["withdraw", "resolve"]),
+      revision: z.number().int().nonnegative(),
+      reason: text,
+    })
+    .strict(),
+  z
+    .object({
+      action: z.literal("follow_up"),
+      revision: z.number().int().nonnegative(),
+      reason: text,
+      nextAction: z.string().trim().min(3).max(240),
+      dueAt: instant,
+    })
+    .strict(),
+  z
+    .object({
+      action: z.literal("propose"),
+      revision: z.number().int().nonnegative(),
+      reason: text,
+      nextAction: z.string().trim().min(3).max(240),
+      dueAt: instant,
+      candidateBasis: counselHash,
+      terms: collaborationTermsSchema,
+      humanReviewConfirmed: z.literal(true),
+    })
+    .strict(),
+]);
+export type CounselActionInput = z.infer<typeof counselActionInputSchema>;
+export const counselRequestSchema = z.object({
+  id,
+  leadId: id,
+  leadTitle: z.string(),
+  authorName: z.string(),
+  createdAt: instant,
+  request: counselRequestInputSchema.omit({ basis: true, shareConfirmed: true }),
+  revision: z.number().int().nonnegative(),
+  state: z.enum([
+    "open",
+    "awaiting_specialist",
+    "accepted",
+    "withdrawn",
+    "resolved",
+    "context_changed",
+  ]),
+  nextAction: z.string(),
+  dueAt: instant.nullable(),
+  canWithdraw: z.boolean(),
+  canAct: z.boolean(),
+  collaboration: collaborationSchema.nullable(),
+  history: z
+    .array(
+      z.object({
+        revision: z.number().int().positive(),
+        action: z.enum(["withdraw", "follow_up", "propose", "resolve"]),
+        reason: z.string(),
+        nextAction: z.string().nullable(),
+        dueAt: instant.nullable(),
+        recordedAt: instant,
+      }),
+    )
+    .max(20),
+});
+export type CounselRequest = z.infer<typeof counselRequestSchema>;
+export const counselQueueSchema = z.object({
+  items: z.array(counselRequestSchema).max(20),
+  nextCursor: z.string().nullable(),
+});
+export const counselPersonalSchema = z.object({
+  basis: counselHash,
+  assessedAt: instant,
+  canRequest: z.boolean(),
+  capacity: needCapacityDossierSchema.pick({ status: true, effectivePosition: true }),
+  conflict: needConflictDossierSchema.pick({ status: true, effectivePosition: true }),
+  expertise: needExpertiseDossierSchema.pick({ status: true, effectivePosition: true }),
+  requests: counselQueueSchema,
+});
+const counselComparisonSchema = z.enum(["matches", "differs", "unknown", "not_applicable"]);
+export const counselCandidateSchema = z.object({
+  id,
+  name: z.string(),
+  organization: z.string(),
+  basis: counselHash,
+  assessedAt: instant,
+  competence: competenceSummarySchema,
+  competenceSourceStatus: needExpertiseEvidenceSchema.shape.competence.shape.sourceStatus,
+  practice: professionalPracticeSummarySchema,
+  capacity: capacityAdvisorAssessmentSchema.shape.capacity,
+  language: counselComparisonSchema,
+  region: counselComparisonSchema,
+  mode: counselComparisonSchema,
+  confirmedReferent: z.boolean(),
+  availabilityDeclaredAt: instant.nullable(),
+  remainingChecks: z
+    .array(
+      z.enum(["need_expertise", "need_capacity", "conflicts", "distribution", "client_agreement"]),
+    )
+    .length(5),
+  decision: z.literal("human_review_required"),
+});
+export type CounselCandidate = z.infer<typeof counselCandidateSchema>;
+export const counselCandidatesSchema = z.object({
+  items: z.array(counselCandidateSchema).max(20),
+  nextCursor: z.string().nullable(),
+});
 export const leadSummarySchema = z.object({
   id,
   revision: z.number().int().nonnegative(),

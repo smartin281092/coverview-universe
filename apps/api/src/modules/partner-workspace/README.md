@@ -2,6 +2,8 @@
 
 | Si la tâche porte sur… | Lire aussi |
 | --- | --- |
+| Orientation personnelle, file CoverView et choix manuel sourcé | [Demande, responsabilités et confidentialité](docs/counsel-orchestration.md) |
+| Réserver plusieurs créneaux pour plusieurs spécialistes depuis Wallet | [Coordination atomique](docs/coordinated-bookings.md) |
 | Créneaux proposés personnellement et réservation Wallet | [Deux accords, unicité et activation](docs/booking-proposals.md) |
 | Annulation explicite d’un rendez-vous depuis Wallet | [Propriétaire, suivi et preuve](docs/wallet-appointment-cancellation.md) |
 | Un rendez-vous personnel relié à plusieurs demandes | [Liaisons et cycles indépendants](docs/appointment-links.md) |

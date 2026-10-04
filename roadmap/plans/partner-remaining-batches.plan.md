@@ -1,6 +1,6 @@
 # Partner — regroupement de la suite en quatre lots
 
-Instruction explicite du 3 octobre 2026, reçue après la tranche811d : prochaines tâches **gpt-6-astra / max**, pas ultra ; idéalement **3–5 tâches restantes**, donc cible opérationnelle de **quatre lots**. [Politique propriétaire](../execution-policy.md#pilotage-courant--instruction-du-3-octobre-2026). Le [brief intégral I–III](../../references/coverview-partner-2026-10-02.md) reste la source des exigences ; ce regroupement n’en réduit aucune.
+Instruction explicite du 3 octobre 2026, corrigée pendant le lot1 : prochaines tâches **gpt-6-astra / xhigh (« Très élevé »)**, remplaçant Max/Ultra ; idéalement **3–5 tâches restantes**, donc cible opérationnelle de **quatre lots**. [Politique propriétaire](../execution-policy.md#pilotage-courant--instruction-du-3-octobre-2026). Le [brief intégral I–III](../../references/coverview-partner-2026-10-02.md) reste la source des exigences ; ce regroupement n’en réduit aucune.
 
 ## Méthode de travail
 
@@ -26,4 +26,4 @@ Regrouper signature réelle et acceptation compagnie, raccordements restants, co
 
 ## Relais et état initial
 
-Lot1 à démarrer dans l’unique successeur de811d. Lots2–4 non lancés. Aucun lot suivant n’est créé en parallèle. Après un lot : propriétaires/plan+journal/brouillon/ledger/coverage/mémoire, état dans le périmètre autorisé, checkpoint court, snapshot cumulatif complet et audit indépendant, puis **un seul successeur Astra Max** si nécessaire ; gel immédiat de la source et premier état réel du successeur. Les tâches créées par l’outil restent la preuve du modèle demandé ; réglages/coûts non observables ne sont pas inventés.
+Lot1 implémenté dans96ad, unique successeur de811d : orientation datée CoverView, sélection manuelle sourcée avec collaboration réelle et coordination Wallet ; [preuves et limites](../evidence/partner-core.md#lot-14--conseil-et-orchestration-96ad). Distribution favorable/matching global et V3/activation restent à reprendre avec les faits manquants au lot4. Lot2 est le prochain lot ; lots3–4 non lancés. Aucun lot suivant n’est créé en parallèle. Après un lot : propriétaires/plan+journal/brouillon/ledger/coverage/mémoire, état dans le périmètre autorisé, checkpoint court, snapshot cumulatif complet et audit indépendant, puis **un seul successeur Astra Très élevé (`xhigh`)** si nécessaire ; gel immédiat de la source et premier état réel du successeur. Les tâches créées par l’outil restent la preuve du modèle demandé ; réglages/coûts non observables ne sont pas inventés.

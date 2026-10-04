@@ -20,6 +20,7 @@ import { NeedConflictPanel } from "./NeedConflictPanel";
 import { NeedCapacityPanel } from "./NeedCapacityPanel";
 import { AdvisorCapacity } from "./AdvisorCapacity";
 import { NeedExpertiseDialog } from "./NeedExpertiseDialog";
+import { CounselDialog } from "./CounselDialog";
 
 export function AdvisorAssessmentDialog({
   leadId,
@@ -33,14 +34,14 @@ export function AdvisorAssessmentDialog({
   const { t, i18n } = useTranslation(),
     session = usePartner();
   const [view, setView] = useState<
-    "assessment" | "sources" | "capacity" | "decision" | "conflicts" | "expertise"
+    "assessment" | "sources" | "capacity" | "decision" | "conflicts" | "expertise" | "counsel"
   >("assessment");
   const [busy, setBusy] = useState(false);
   const [returning, setReturning] = useState(false);
   const query = useQuery({
     queryKey: [...session.queryKey, "advisor-assessment", 2, leadId],
     queryFn: ({ signal }) => partnerApi.advisorCapacityAssessment(leadId, signal),
-    enabled: view !== "expertise",
+    enabled: view !== "expertise" && view !== "counsel",
     gcTime: 0,
     staleTime: 0,
     refetchInterval: 10000,
@@ -53,6 +54,17 @@ export function AdvisorAssessmentDialog({
     values.length
       ? new Intl.ListFormat(i18n.language).format(values)
       : t("advisorAssessment.unspecified");
+  if (view === "counsel")
+    return (
+      <CounselDialog
+        leadId={leadId}
+        onClose={() => {
+          setReturning(true);
+          setView("assessment");
+          void query.refetch().finally(() => setReturning(false));
+        }}
+      />
+    );
   if (view === "expertise")
     return (
       <NeedExpertiseDialog
@@ -104,6 +116,9 @@ export function AdvisorAssessmentDialog({
                 {t(`advisorAssessment.continuity.${value.continuity.status}`)}
               </p>
               <div className="flex flex-wrap gap-2">
+                <Button variant="outline" disabled={busy} onClick={() => setView("counsel")}>
+                  {t("counsel.title")}
+                </Button>
                 <Button
                   variant="outline"
                   disabled={busy}

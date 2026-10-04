@@ -1,5 +1,7 @@
 # Offres Wallet
 
+« Coordonner mes rendez-vous » sélectionne explicitement 2–5 demandes du même sujet et les créneaux exacts de plusieurs conseillers, puis confirme l'ensemble dans une transaction unique. Chaque rendez-vous conserve son propre suivi. [Règles et limites](../../../../api/src/modules/partner-workspace/docs/coordinated-bookings.md). Dépendance0056 hors catalogue ; activation/V3 ouverts.
+
 « Mes rendez-vous » propose désormais le choix d’un horaire partagé personnellement, suivi d’une confirmation explicite de ses modalités. Une seule réservation revalidée, sans publication d’agenda privé ; les autres demandes restent indépendantes. [Règles canoniques](../../../../api/src/modules/partner-workspace/docs/booking-proposals.md).0056 hors catalogue ; activation/V3 ouverts.
 
 « Mes rendez-vous » remplace la fiche par la liste puis le détail et l’annulation explicite d’un engagement futur. Motif partagé, confirmation vide, état annulé et suivi du responsable ; première commande conservée après réponse incertaine et contenu masqué sur erreur. [Règles canoniques](../../../../api/src/modules/partner-workspace/docs/wallet-appointment-cancellation.md). Dépendance0055 hors catalogue ; activation et V3 rempli/clavier/mobile ouverts.

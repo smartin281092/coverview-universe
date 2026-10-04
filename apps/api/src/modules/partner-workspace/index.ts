@@ -8,6 +8,15 @@ import {
   bookingProposalInputSchema,
   bookingChoiceSchema,
   bookingWithdrawalSchema,
+  coordinatedBookingInputSchema,
+  coordinatedBookingReceiptSchema,
+  counselRequestInputSchema,
+  counselActionInputSchema,
+  counselRequestSchema,
+  counselPersonalSchema,
+  counselQueueSchema,
+  counselCandidatesSchema,
+  counselQuerySchema,
   walletAppointmentCancellationSchema,
   appointmentLinksManagementSchema,
   appointmentLinksPreviewSchema,
@@ -148,6 +157,56 @@ export function registerPartnerWorkspace(
     }
     return { userId: session.userId, id: session.id, administrator: false, wallet };
   }
+  app.get(
+    "/partner/leads/:id/counsel",
+    {
+      config: limited,
+      schema: { params, querystring: counselQuerySchema, response: { 200: counselPersonalSchema } },
+    },
+    async (r) => repository.counselPersonal(await actor(r), r.params.id, r.query.cursor),
+  );
+  app.post(
+    "/partner/leads/:id/counsel",
+    {
+      config: limited,
+      schema: { params, body: counselRequestInputSchema, response: { 200: counselRequestSchema } },
+    },
+    async (r) => repository.requestCounsel(await actor(r), r.params.id, r.body, key(r)),
+  );
+  app.get(
+    "/partner/counsel/:id",
+    { config: limited, schema: { params, response: { 200: counselRequestSchema } } },
+    async (r) => repository.counselRequest(await actor(r), r.params.id),
+  );
+  app.post(
+    "/partner/counsel/:id/actions",
+    {
+      config: limited,
+      schema: { params, body: counselActionInputSchema, response: { 200: counselRequestSchema } },
+    },
+    async (r) => repository.actCounsel(await actor(r), r.params.id, r.body, key(r)),
+  );
+  app.get(
+    "/admin/partner/counsel",
+    {
+      config: limited,
+      schema: { querystring: counselQuerySchema, response: { 200: counselQueueSchema } },
+    },
+    async (r) => repository.counselQueue(await actor(r, false, true), r.query.cursor),
+  );
+  app.get(
+    "/admin/partner/counsel/:id/candidates",
+    {
+      config: limited,
+      schema: {
+        params,
+        querystring: counselQuerySchema,
+        response: { 200: counselCandidatesSchema },
+      },
+    },
+    async (r) =>
+      repository.counselCandidates(await actor(r, false, true), r.params.id, r.query.cursor),
+  );
   app.get(
     "/partner/leads/:id/capacity-decision",
     {
@@ -438,6 +497,18 @@ export function registerPartnerWorkspace(
   }
   const linkParams = params.extend({ appointmentId: z.string().min(1).max(100) });
   const bookingParams = params.extend({ proposalId: z.string().min(1).max(100) });
+  app.post(
+    "/wallet/coordinated-bookings",
+    {
+      config: limited,
+      schema: {
+        body: coordinatedBookingInputSchema,
+        response: { 200: coordinatedBookingReceiptSchema },
+      },
+    },
+    async (request) =>
+      repository.reserveCoordinatedBookings(await actor(request, true), request.body, key(request)),
+  );
   for (const wallet of [false, true])
     app.get(
       `/${wallet ? "wallet" : "partner"}/leads/:id/booking-proposals`,

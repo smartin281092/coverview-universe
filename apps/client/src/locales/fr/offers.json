@@ -662,5 +662,26 @@
     "unavailable": "Ce créneau ne peut pas être réservé actuellement.",
     "success": "Votre rendez-vous est réservé. Vous pouvez consulter ses détails ci-dessous.",
     "sending": "Confirmation en cours…"
+  },
+  "coordination": {
+    "title": "Coordonner mes rendez-vous",
+    "description": "Choisissez 2 à 5 demandes pour une même personne ou entreprise, avec au moins deux conseillers. Chaque demande doit déjà avoir des créneaux proposés.",
+    "selected": "Sélection : {{count}} rendez-vous",
+    "remove": "Retirer ce choix",
+    "choose": "Choisir une demande",
+    "add": "Ajouter ce créneau",
+    "first": "Première page",
+    "next": "Demandes suivantes",
+    "review": "Vérifier ma sélection",
+    "edit": "Modifier la sélection",
+    "confirmHelp": "Tous les créneaux sont vérifiés au moment de la réservation. Si l’un est indisponible, aucun rendez-vous de cette sélection n’est réservé. Vérifiez aussi vos déplacements et vos engagements externes.",
+    "confirm": "Je confirme les horaires, les durées et les modalités de chaque rendez-vous de cette sélection.",
+    "reserve": "Réserver les rendez-vous",
+    "changed": "Un choix n’est plus disponible ou n’a pas pu être vérifié. Retirez-le, puis sélectionnez à nouveau son créneau.",
+    "conflict": "La sélection n’a pas pu être réservée. Actualisez-la : même profil, au moins deux conseillers, créneaux distincts et encore disponibles.",
+    "success": "Les rendez-vous sont réservés. Vous pouvez retrouver, reporter avec le conseiller ou annuler chaque rendez-vous dans la demande correspondante.",
+    "receipt": "Référence de coordination : {{id}}",
+    "confirmRequired": "Confirmez explicitement les modalités de tous les rendez-vous.",
+    "request": "{{client}} · {{title}}"
   }
 }

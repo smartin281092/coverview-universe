@@ -10,6 +10,7 @@ import { PracticeSummaryDialog } from "../features/offers/PracticeSummaryDialog"
 import { AdvicePreferencesDialog } from "../features/offers/AdvicePreferencesDialog";
 import { SharedAppointmentsDialog } from "../features/offers/SharedAppointmentsDialog";
 import { WalletAppointmentsDialog } from "../features/offers/WalletAppointmentsDialog";
+import { CoordinatedBookingsDialog } from "../features/offers/CoordinatedBookingsDialog";
 import { ReferentAssessmentDialog } from "../features/offers/ReferentAssessmentDialog";
 import {
   Badge,
@@ -136,6 +137,7 @@ function Offers({ identity }: { identity: IdentityMe }) {
     [advice, setAdvice] = useState<string | null>(null),
     [sharedAppointments, setSharedAppointments] = useState<string | null>(null),
     [appointments, setAppointments] = useState<string | null>(null),
+    [coordination, setCoordination] = useState(false),
     [referentAssessment, setReferentAssessment] = useState<string | null>(null),
     [linkContract, setLinkContract] = useState(false),
     [pending, setPending] = useState(false),
@@ -236,6 +238,14 @@ function Offers({ identity }: { identity: IdentityMe }) {
   }
   return (
     <>
+      {coordination && (
+        <CoordinatedBookingsDialog
+          key={`${identity.user.id}:${identity.session.id}:${scope}`}
+          identity={identity}
+          scope={scope}
+          onClose={() => setCoordination(false)}
+        />
+      )}
       {appointments && (
         <WalletAppointmentsDialog
           key={`${identity.user.id}:${identity.session.id}:${appointments}`}
@@ -299,6 +309,9 @@ function Offers({ identity }: { identity: IdentityMe }) {
         </Button>
         <Button variant="outline" onClick={() => setReferents({ profile: scope })}>
           {t("referents.title")}
+        </Button>
+        <Button variant="outline" onClick={() => setCoordination(true)}>
+          {t("coordination.title")}
         </Button>
       </header>
       {list.isPending ? (

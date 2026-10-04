@@ -1,5 +1,7 @@
 # CoverView Partner
 
+Bilan personnel → « Organiser la suite avec CoverView » transmet un résumé choisi, une action et une échéance vers une file traitable. Le conseiller retrouve ensuite suivi, retrait et résultat de collaboration. [Règles propriétaires](../api/src/modules/partner-workspace/docs/counsel-orchestration.md). Les notes et preuves privées restent privées ;0057 hors catalogue, activation/V3 ouverts.
+
 Demande → Rendez-vous → « Créneaux proposés » : un conseiller mandaté propose des options exactes, vérifie chaque période et confirme son engagement ; le propriétaire choisit ensuite dans Wallet. Retrait et expiration sont explicites. [Propriétaire et limites](../api/src/modules/partner-workspace/docs/booking-proposals.md).0056 hors catalogue, activation/V3 ouverts.
 
 Une annulation explicite depuis Wallet retire l’engagement programmé de l’agenda et crée une réponse client à traiter pour le responsable courant, avec motif dans la fiche. Lire la notification ne clôt pas le suivi ; les demandes associées conservent leurs cycles. [Règles et activation](../api/src/modules/partner-workspace/docs/wallet-appointment-cancellation.md). V3 rempli ouvert.

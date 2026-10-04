@@ -98,6 +98,7 @@ export async function proposeCollaboration(
     terms.targetId,
   );
   await notifyCollaboration(tx, id, "proposed");
+  return id;
 }
 
 // Called with the Lead lock by commands and the continuity worker. Terms are never edited.

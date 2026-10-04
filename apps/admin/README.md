@@ -1,5 +1,7 @@
 # Admin — accès protégé
 
+Partner → Demandes d'orientation reçoit les résumés explicitement transmis par les conseillers, suit une action datée et permet d'examiner des intervenants à partir de leurs sources avant une proposition manuelle de collaboration. [Règles, audiences et limites](../api/src/modules/partner-workspace/docs/counsel-orchestration.md). Aucun dossier personnel par besoin n'est révélé ;0057 hors catalogue, activation/V3 ouverts.
+
 Candidatures dans la supervision Partner permet la consultation de la [capacité personnelle](../api/src/modules/partner-workspace/docs/personal-capacity.md) sous permission/MFA : déclaration, validité, historique et liens de travail observés. Aucun acte au nom du conseiller ni attribution automatique.
 
 Candidatures dans la supervision Partner permet la lecture du [dossier de modes explicitement partagés](../api/src/modules/partner-workspace/docs/shared-modes.md), sous permission/MFA. Publication et retrait restent personnels ; aucun acte au nom du conseiller.

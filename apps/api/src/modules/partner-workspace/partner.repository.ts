@@ -99,6 +99,7 @@ import { previewPersonalAppointment } from "./partner.appointment-creation.js";
 import { createAppointmentLinkOperations } from "./partner.appointment-links.js";
 import { createWalletAppointmentOperations } from "./partner.wallet-appointments.js";
 import { createBookingOperations } from "./partner.booking.js";
+import { createCounselOperations } from "./partner.counsel.js";
 import { createPracticeOperations } from "./partner.practice.js";
 import { readAdvicePreferences, confirmAdvicePreferences } from "./partner.advice.js";
 import { readNeedConflict, decideNeedConflict } from "./partner.need-conflicts.js";
@@ -671,6 +672,20 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
     ...createCompetenceOperations(pool, transaction, documentsAvailable),
     ...createWalletAppointmentOperations(pool, transaction),
     ...createBookingOperations(pool, transaction),
+    ...createCounselOperations(
+      pool,
+      transaction,
+      personalAdvisorLead,
+      async (tx, actor, id) => {
+        if (!actor.administrator || actor.wallet) fail("PARTNER_ACCESS_DENIED", 403);
+        const lead = await readLead(tx, actor, id, true);
+        return {
+          lead: { ...lead, clientUserId: lead.currentClientUserId },
+          ctx: await context(tx, actor),
+        };
+      },
+      documentsAvailable,
+    ),
     ...createAppointmentLinkOperations(pool, transaction, async (db, actor, id) => {
       const lead = await readLead(db, actor, id);
       if (!actor.wallet && summary(actor, lead).access !== "operational")

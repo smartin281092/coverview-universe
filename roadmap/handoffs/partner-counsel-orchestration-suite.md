@@ -1,0 +1,59 @@
+# Relais Partner — après le lot 1/4, conseil et orchestration
+
+## Mission et autorisation
+
+Poursuivre TOUT le [brief Partner I–III](../../references/coverview-partner-2026-10-02.md), mandat « Recommence », PROG-23 et [politique courante](../execution-policy.md). Autonomie maximale, décisions déléguées, aucun nouveau GO. Correction utilisateur du3octobre : **gpt-6-astra/xhigh (« Très élevé »)** remplace Max/Ultra. Quatre grands lots, idéal3–5tâches ; une tâche réalise plusieurs parcours cohérents séquentiellement. Aucun sous-agent/fork/auteur concurrent. Une compaction impose de relire SON plan/journal, jamais de relayer par confort. Brief/S-110/S-042a restent ouverts.
+
+Après le lot : propriétaires/plan+journal/brouillon/ledger/coverage/mémoire, seule S-110.notes et ses deux vues générées sauf instruction applicable, checkpoint8sections<12000caractères, snapshot cumulatif COMPLET et audit séparé. Un unique successeur en worktree neuf, gel source immédiat, résolution de l'identifiant sans doublon et attente du premier état réel. Aucun commit global WIP/push/deploy/archive/stash/reset/clean. Réglage effectif/coût/contexte non observables.
+
+## État du dépôt
+
+Source96ad gelée dès dispatch : `C:/Users/sebm1/.codex/worktrees/96ad/coverview-astra`, HEAD détaché `4fef49a095739260b9ab9d1becc1a2bf3320a928`. WIP cumulatif non committé. Entrant811d restauré et audité avant code :710WIP/44422284octets/arbre1748/129protections/71tests-specs, source entière/HEAD/statut inchangés et tous entrants conservés.
+
+**NE PAS CODER avant restauration complète.** Snapshot96ad `.planning-local/partner-relay-counsel-orchestration-20261003` ; hashes manifest/restore/status et comptes exacts dans le prompt de création et les rapports. Vérifier les empreintes, lire restore.mjs ENTIER, inspecter le worktree neuf. Si propre au mauvais HEAD, switch detach au HEAD ci-dessus autorisé uniquement dans ce nouveau worktree. Restaurer vers cible ABSOLUE, puis auditer indépendamment chaque fichier/taille/SHA/bytes, arbre complet, HEAD, statut exact porcelain-v1-z-untracked-all et protections. Refuser toute perte/divergence, ne jamais reset.
+
+132protections pour la suite : quatre fichiers apps/admin/src/api.ts, apps/admin/src/locales/fr/service-requests.json, apps/client/src/api.ts, apps/client/src/locales/fr/common.json ; pnpm-lock.yaml ;100fichiers du catalogue apps/api/drizzle ;27artefacts SQL/snapshot/entry pending0049–0057.74tests/specs deviennent entrants immuables. Liste exacte et empreintes dans `.planning-local/outgoing-baseline.json`.0046–0048 NON appliquées partagées ;0049–0057 HORS catalogue normal. Aucune0058 créée. Aucun accès/lecture/décompte/migration de base partagée.
+
+Lire les rapports ignorés96ad incoming-baseline.json, restoration-verification.json, counsel-work-audit.json, pre-export-audit.json, outgoing-baseline.json, snapshot-verification.json et verification-summary.json. Ils ne remplacent pas SON audit. Aucun secret/config privée/node_modules/dist/preview exporté. Ne modifier aucun ancien worktree ni D:/Projects.
+
+## Sources à lire
+
+AGENTS→CLAUDE entier, PROJECT, MEMORY actives, docs/codex, politique et satellites routés. [Brief entier](../../references/coverview-partner-2026-10-02.md), [regroupement quatre lots](../plans/partner-remaining-batches.plan.md), [coverage](../partner-coverage.md), [plan général](../plans/partner-core.plan.md), [plan96ad et journal](../plans/partner-counsel-orchestration.plan.md), [ledger courant](../evidence/partner-core.md#lot-14--conseil-et-orchestration-96ad), [index produit](../../docs/product/README.md), [prompt lot2](../prompts/partner-marketplace-economy.prompt.md). Checkpoint≠sources ; sortie tronquée≠lecture entière.
+
+README API/Partner/Wallet Offres/Admin/UI et module Partner ; propriétaires [orientation CoverView](../../apps/api/src/modules/partner-workspace/docs/counsel-orchestration.md), [coordination Wallet](../../apps/api/src/modules/partner-workspace/docs/coordinated-bookings.md), collaboration explicite dans README, conventions/portée/continuité et offres selon parcours économique. Dossiers personnels et rendez-vous acquis restent canoniques. Lire les satellites routés par CLAUDE pour les parcours travaillés ; billing/catalog/storage selon intégration. Aucune donnée externe présumée validée par96ad.
+
+## Décisions acquises
+
+Client≠Lead, cycles par besoin, sujet canonique et droits actuels. Responsabilité/accès/contribution/mandat/droit économique distincts. SOL6–21 et CO1 : aucune identité juridique/produit, fidélité/exhaustivité ou distribution favorable vérifiée ; un passage personnel ou une attestation ne lève aucun contrôle. Aucun score économique dans la sélection.
+
+CO2–3 : auteur conseiller personnel habilité et mandaté, demande explicite immuable vers CoverView depuis bilan, résumé choisi + action/date + partage confirmé. Aucune note/preuve/position privée des dossiers personnels dans Admin. Un dossier ouvert/auteur/Lead, journal append-only, retrait et suivi/résolution motivés ; file réelle persistée. Candidats de catégorie opérationnels, pagination20, compétence documentaire et état de source distincts, pratique déclarée/langue/canton/modes/capacité générale, référent confirmé signalé seulement. Comparaison avec préférences confirmées ; inconnu et écart distincts, région non applicable en distant. Cinq contrôles spécifiques restent humains : expertise/capacité/conflits/distribution/accord client. Toujours human_review_required.
+
+Proposition manuelle motivée avec modalités complètes via la collaboration acquise, identifiant lié au dossier. Aucun accès avant acceptation ; refus/annulation/fin reviennent au suivi. Suivi daté possible pendant attente, retrait/résolution bloqués tant que proposition pendante. Contexte invalidé monotone, propriétaire/sujet aller-retour sans résurrection. Sources/candidat/action/date revérifiés après attentes et après commande. Lectures REPEATABLE READ,40001→conflit, verrouillage ordonné. Aucun cycle, première action utile ou délai existant réinitialisé.
+
+CO4 : Wallet sélectionne explicitement2–5propositions exactes, au moins2conseillers, même sujet canonique/propriétaire actuel, aucun chevauchement entre rendez-vous. Prévalidation de tous les choix, membres puis Leads/propositions/plannings triés puis profil ; réservation individuelle acquise réutilisée dans une commande atomique. Revalidation finale acteur/sources/horloge après toutes les écritures. Reçu commun dans preuve/événement, aucun groupe de données supplémentaires ; cycles et engagements distincts. Pas de réunion conjointe ni de liaison implicite, pas de calendrier client externe exhaustif. Réessai réseau incertain reprend clé et corps exacts ; annulations/reports individuels acquis conservés.
+
+0057 : demandes immuables (seule invalidated_at monotone autorisée), actions append-only et triggers de contexte/profil. Catalogue complet temporaire normal+0049–0056 et trois globs de schéma ;100tables, seconde génération sans delta. Toutes les migrations pending restent hors catalogue normal. Pour0058 éventuelle : catalogue temporaire normal+TOUS pending0049–0057, même procédure, double migrate PostgreSQL18 jetable. Ne pas réexécuter le helper d'export0057 : il précède les gardes SQL manuelles.
+
+## Livraison et preuves
+
+**Vérifié V2 :35tests distincts/4fichiers,17nouveaux** : counsel10, coordinated-bookings6, coordination-time1, booking18entrant inchangé. Rapports `.planning-local/counsel-orchestration-tests.json`(34), counsel-time-tests.json(1), counsel-final-review-tests.json(10 répétés après revue, non additionnés). Permissions/confidentialité, sources/révisions/propriété aller-retour, immutabilité, collaboration acceptée/refusée, dates conservées, concurrence/rejeu, rollback tardif, deux attentes PostgreSQL réelles après persistance avec expiration, pagination21, chevauchements/sujets/spécialistes, heure Zurich/DST ambiguë ou inexistante.0057 migrate DEUX fois dans PostgreSQL18 Testcontainers jetable.
+
+**Vérifié V0/V1 :** types/builds API/Partner/Wallet/Admin, lint19TS/TSX, frontières630modules/3021dépendances zéro erreur, Knip ciblé quatre workspaces. Derniers types/lint/build API repris après revue des lectures/verrous ; campagne counsel10 verte. Trois orphelins www, ApplicationPage/chunks Wallet et moteur Node24.13.1<24.20 hérités. Knip global non relancé/non présenté vert. Aucune dépendance/variable/permission/room/job/fournisseur ni émission externe ajoutés.
+
+Deux revues statiques même auteur, sans indépendance : sécurité puis UX/états/cache/formulaires RHF-Zod/traductions/diff. Confirmations vierges, champs privés omis, contenus masqués après refus/erreur GET, commandes incertaines préservées. **Non vérifié : V3 authentifié rempli/clavier/mobile et activation**, distribution favorable/matching global, RLS/S-130/S-131 et intégrations. Tests isolés ne prouvent pas une session, un paiement, une signature ou une validation externe. Les contrôles documentaires et comptes/hashes finaux figurent aux rapports audités.
+
+## Prochaine action bornée
+
+Restaurer/auditer/lire, puis persister SON plan du **lot2/4 marketplace, accords et économie traçable** avant code. Plusieurs parcours utilisables dans la même tâche : fiches anonymisées avant attribution, candidatures/réservation unique temporaire/acceptation/refus/expiration, mandat et versions acceptées immuables, fixe OU succès et modalités payeur/déclencheur/validité/contestation/remboursement ; bases/déductions/partages explicites, encaissements partiels/preuves/bordereaux, réserves/reprises/rapprochement et deux circuits CoverView distincts. Pas de taux/montant/accord/bénéficiaire/paiement réel inventé, pas de frais CoverView sur vente initiale ni d'enchères activées.
+
+Lot3 : statistiques/objectifs, qualité/réclamations/canaux/transcriptions consenties et enquête EXACTEMENT5étoiles→positifs multiples/commentaire facultatif→Google ;≤4→améliorations/rappel sans Google. Lot4 : vraie signature/acceptation compagnie, intégration/activation et recette exhaustive, dont reliquats conseil/distribution/matching. Tous tracks I–III restent mandatés ; ne fermer brief/S-110/S-042a qu'avec preuves réelles. Ne pas s'arrêter après une petite projection ; poursuivre les parcours indépendants des faits externes absents.
+
+## Obstacles et tentatives
+
+Docker/API4100/préviews4101–4139/services anciens protégés, ne pas adopter/arrêter. Ne jamais reprendre callbacks4133/4136 ou montages invalidés7db2/9ff1/c902, lire secrets processus, fabriquer session/grant/client réel, contourner auth/MFA. Aucun accès WorkOS réel nouveau observé, V3 toujours ouvert. Pnpm shim cassé : node C:/Users/sebm1/AppData/Local/pnpm/.tools/@pnpm+exe/12.3.4/node_modules/@pnpm/exe/bin/pnpm.mjs install --frozen-lockfile --ignore-scripts dans le nouveau worktree seulement.
+
+Pièges corrigés : drizzle-kit out absolu Windows échouait silencieusement(code0/ENOENT), utiliser out relatif ; projection Zod strict : champs désormais explicites ; variance formulaires : sortie unknown puis contrat. Erreurs de tests corrigées sans affaiblir les gardes. Root Vitest exclut packages/ui : test Zurich dans apps/client. Ne pas compter l'essai non sélectionné ni les campagnes répétées. Build Vite depuis chaque app ; API node build.mjs. Conteneurs de test jetables arrêtés.
+
+## Coordination
+
+Un unique lot2 ; aucun fork/second relais/sous-agent. Projet attendu3d3d24c3-45c9-4853-9487-9cd0df7317a8 à vérifier avec list_projects, puis create_thread gpt-6-astra/xhigh/worktree neuf. clientThreadId n'est pas threadId : résoudre par listing, sans dupliquer. Source96ad gelée dès dispatch, aucune écriture ultérieure. Attendre le premier état réel du successeur et fournir son lien/directive. Aucun auteur applicatif concurrent ni processus de vérification propre encore actif. Après lot2 complet et audit, unique lot3 Astra Très élevé, même protocole et mandat entier.

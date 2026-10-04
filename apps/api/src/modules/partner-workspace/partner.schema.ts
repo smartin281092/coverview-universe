@@ -22,6 +22,70 @@ import { documents } from "../document-intelligence/index.js";
 import { insuranceRequests } from "../insurance-requests/index.js";
 
 const instant = (name: string) => timestamp(name, { withTimezone: true, precision: 3 });
+export const partnerCounselRequests = pgTable(
+  "partner_counsel_requests",
+  {
+    id: text("id").primaryKey(),
+    leadId: text("lead_id")
+      .notNull()
+      .references(() => partnerLeads.id),
+    authorId: text("author_id")
+      .notNull()
+      .references(() => identityUsers.id),
+    subjectKey: text("subject_key").notNull(),
+    ownerId: text("owner_id")
+      .notNull()
+      .references(() => identityUsers.id),
+    context: text("context").notNull(),
+    sourceBasis: text("source_basis").notNull(),
+    invalidatedAt: instant("invalidated_at"),
+    input: jsonb("input").notNull(),
+    createdAt: instant("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    index("partner_counsel_author").on(t.authorId, t.leadId, t.createdAt, t.id),
+    index("partner_counsel_queue").on(t.createdAt, t.id),
+    check(
+      "partner_counsel_hashes",
+      sql`${t.context} ~ '^[a-f0-9]{64}$' and ${t.sourceBasis} ~ '^[a-f0-9]{64}$'`,
+    ),
+  ],
+);
+export const partnerCounselActions = pgTable(
+  "partner_counsel_actions",
+  {
+    id: text("id").primaryKey(),
+    requestId: text("request_id")
+      .notNull()
+      .references(() => partnerCounselRequests.id),
+    revision: integer("revision").notNull(),
+    actorId: text("actor_id")
+      .notNull()
+      .references(() => identityUsers.id),
+    action: text("action").notNull(),
+    reason: text("reason").notNull(),
+    nextAction: text("next_action"),
+    dueAt: instant("due_at"),
+    collaborationId: text("collaboration_id").references(() => partnerCollaborations.id),
+    evidence: jsonb("evidence"),
+    createdAt: instant("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("partner_counsel_action_revision").on(t.requestId, t.revision),
+    check(
+      "partner_counsel_action_kind",
+      sql`${t.action} in ('withdraw','follow_up','propose','resolve')`,
+    ),
+    check(
+      "partner_counsel_action_due",
+      sql`(${t.action} in ('follow_up','propose') and ${t.nextAction} is not null and ${t.dueAt} is not null) or (${t.action} in ('withdraw','resolve') and ${t.nextAction} is null and ${t.dueAt} is null)`,
+    ),
+    check(
+      "partner_counsel_action_collaboration",
+      sql`(${t.action}='propose')=(${t.collaborationId} is not null)`,
+    ),
+  ],
+);
 export const partnerBookingProposals = pgTable(
   "partner_booking_proposals",
   {
