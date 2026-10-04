@@ -1,5 +1,7 @@
 # Partner — Leads et offres partagés avec Wallet
 
+Marketplace, conditions/mandats et rémunérations du lot2 : [propriétaire des règles, données, limites et migration0058](docs/marketplace-economy.md). Les dossiers financiers ne donnent aucun accès opérationnel ;0058 reste hors catalogue normal.
+
 | Si la tâche porte sur… | Lire aussi |
 | --- | --- |
 | Orientation personnelle, file CoverView et choix manuel sourcé | [Demande, responsabilités et confidentialité](docs/counsel-orchestration.md) |

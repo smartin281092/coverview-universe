@@ -11,6 +11,34 @@ import {
 } from "@coverview/contracts/partner";
 import { AppShell } from "./AppShell";
 const root = createRootRoute({ component: AppShell });
+const marketplace = createRoute({
+  getParentRoute: () => root,
+  path: "/marketplace",
+  component: lazyRouteComponent(() => import("./pages/MarketplacePage"), "MarketplacePage"),
+});
+const marketDetail = createRoute({
+  getParentRoute: () => root,
+  path: "/marketplace/$marketId",
+  component: lazyRouteComponent(() => import("./pages/MarketDetailPage"), "MarketDetailPage"),
+});
+const commercial = createRoute({
+  getParentRoute: () => root,
+  path: "/commercial-conditions",
+  component: lazyRouteComponent(
+    () => import("./pages/CommercialConditionsPage"),
+    "CommercialConditionsPage",
+  ),
+});
+const remunerations = createRoute({
+  getParentRoute: () => root,
+  path: "/remunerations",
+  component: lazyRouteComponent(() => import("./pages/RemunerationsPage"), "RemunerationsPage"),
+});
+const economyCase = createRoute({
+  getParentRoute: () => root,
+  path: "/remunerations/$caseId",
+  component: lazyRouteComponent(() => import("./pages/EconomyCasePage"), "EconomyCasePage"),
+});
 const collaborations = createRoute({
   getParentRoute: () => root,
   path: "/collaborations",
@@ -89,6 +117,11 @@ const agenda = createRoute({
 export const router = createRouter({
   routeTree: root.addChildren([
     home,
+    marketplace,
+    marketDetail,
+    commercial,
+    remunerations,
+    economyCase,
     notifications,
     collaborations,
     account,

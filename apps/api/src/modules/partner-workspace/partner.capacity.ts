@@ -9,6 +9,7 @@ import {
   type PartnerApplication,
 } from "@coverview/contracts/partner";
 import {
+  authorityCurrent,
   fail,
   lockActor,
   membership,
@@ -130,14 +131,14 @@ export async function readCapacityWorkload(db: Executor, userId: string, observe
       contributing: number;
     }>(
       `select coalesce($2::timestamptz,clock_timestamp()) observed_at,
-    count(*) filter(where l.responsible_id=$1 and l.assignment='accepted')::int accepted,
-    count(*) filter(where l.responsible_id=$1 and l.assignment='proposed')::int proposed,
+    count(*) filter(where (l.responsible_id=$1 and ${authorityCurrent("l")}) and l.assignment='accepted')::int accepted,
+    count(*) filter(where (l.responsible_id=$1 and ${authorityCurrent("l")}) and l.assignment='proposed')::int proposed,
     count(*) filter(where l.responsible_id is distinct from $1 and exists(
       select 1 from partner_contributors c where c.lead_id=l.id and c.user_id=$1
-      and c.revoked_at is null and c.access_scope='advice' and c.can_edit))::int contributing
+      and c.revoked_at is null and ${authorityCurrent("c")} and c.access_scope='advice' and c.can_edit))::int contributing
     from partner_leads l where l.stage not in ('draft','completed')
-    and (l.responsible_id=$1 or exists(select 1 from partner_contributors c
-      where c.lead_id=l.id and c.user_id=$1 and c.revoked_at is null
+    and ((l.responsible_id=$1 and ${authorityCurrent("l")}) or exists(select 1 from partner_contributors c
+      where c.lead_id=l.id and c.user_id=$1 and c.revoked_at is null and ${authorityCurrent("c")}
       and c.access_scope='advice' and c.can_edit))`,
       [userId, observedAt ?? null],
     )

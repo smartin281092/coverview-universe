@@ -1,5 +1,26 @@
 import { z } from "zod";
 import {
+  commercialInputSchema,
+  commercialReviewSchema,
+  commercialConditionSchema,
+  commercialListSchema,
+  marketQuerySchema,
+  marketPublicationSchema,
+  marketApplicationInputSchema,
+  marketReservationInputSchema,
+  marketDecisionSchema,
+  marketMandateInputSchema,
+  marketDetailSchema,
+  marketListSchema,
+  marketReservationSchema,
+  marketMandatesSchema,
+  economyCaseInputSchema,
+  economyRecordSchema,
+  economyCaseSchema,
+  economyCasesSchema,
+  economyAgreementsSchema,
+} from "@coverview/contracts/partner-economy";
+import {
   walletAppointmentSchema,
   bookingProposalsSchema,
   bookingProposalInputSchema,
@@ -188,7 +209,164 @@ export function createPartnerClient(baseUrl: string) {
     return schema.parse(payload);
   }
   const path = (wallet = false) => (wallet ? "/wallet/leads" : "/partner/leads");
+  const economyPath = (root: string, id: string) => `${root}/${encodeURIComponent(id)}`;
+  const economyPage = (cursor?: string) => (cursor ? `?cursor=${encodeURIComponent(cursor)}` : "");
   return {
+    economyAgreements: (cursor?: string, signal?: AbortSignal) =>
+      request("/partner/economy/agreements" + economyPage(cursor), economyAgreementsSchema, signal),
+    economyCases: (cursor?: string, signal?: AbortSignal) =>
+      request("/partner/economy/cases" + economyPage(cursor), economyCasesSchema, signal),
+    economyCase: (id: string, cursor?: string, signal?: AbortSignal) =>
+      request(
+        economyPath("/partner/economy/cases", id) + economyPage(cursor),
+        economyCaseSchema,
+        signal,
+      ),
+    createEconomyCase: (input: z.infer<typeof economyCaseInputSchema>, options: PartnerMutation) =>
+      request(
+        "/partner/economy/cases",
+        economyCaseSchema,
+        options.signal,
+        economyCaseInputSchema.parse(input),
+        options,
+      ),
+    recordEconomy: (
+      id: string,
+      input: z.infer<typeof economyRecordSchema>,
+      options: PartnerMutation,
+    ) =>
+      request(
+        economyPath("/partner/economy/cases", id) + "/entries",
+        economyCaseSchema,
+        options.signal,
+        economyRecordSchema.parse(input),
+        options,
+      ),
+    commercialConditions: (cursor?: string, signal?: AbortSignal) =>
+      request("/partner/commercial-conditions" + economyPage(cursor), commercialListSchema, signal),
+    createCommercialCondition: (
+      input: z.infer<typeof commercialInputSchema>,
+      options: PartnerMutation,
+    ) =>
+      request(
+        "/partner/commercial-conditions",
+        commercialConditionSchema,
+        options.signal,
+        commercialInputSchema.parse(input),
+        options,
+      ),
+    reviewCommercialCondition: (
+      id: string,
+      input: z.infer<typeof commercialReviewSchema>,
+      options: PartnerMutation,
+    ) =>
+      request(
+        economyPath("/partner/commercial-conditions", id) + "/reviews",
+        commercialConditionSchema,
+        options.signal,
+        commercialReviewSchema.parse(input),
+        options,
+      ),
+    marketplace: (query: z.input<typeof marketQuerySchema>, signal?: AbortSignal) => {
+      const parsed = marketQuerySchema.parse(query);
+      return request(
+        "/partner/marketplace?" +
+          new URLSearchParams({
+            view: parsed.view,
+            ...(parsed.cursor ? { cursor: parsed.cursor } : {}),
+          }).toString(),
+        marketListSchema,
+        signal,
+      );
+    },
+    marketDetail: (id: string, cursor?: string, signal?: AbortSignal) =>
+      request(
+        economyPath("/partner/marketplace", id) + economyPage(cursor),
+        marketDetailSchema,
+        signal,
+      ),
+    publishMarket: (
+      id: string,
+      input: z.infer<typeof marketPublicationSchema>,
+      options: PartnerMutation,
+    ) =>
+      request(
+        economyPath("/partner/leads", id) + "/marketplace",
+        marketDetailSchema,
+        options.signal,
+        marketPublicationSchema.parse(input),
+        options,
+      ),
+    applyMarket: (
+      id: string,
+      input: z.infer<typeof marketApplicationInputSchema>,
+      options: PartnerMutation,
+    ) =>
+      request(
+        economyPath("/partner/marketplace", id) + "/applications",
+        marketDetailSchema,
+        options.signal,
+        marketApplicationInputSchema.parse(input),
+        options,
+      ),
+    withdrawMarketApplication: (id: string, options: PartnerMutation) =>
+      request(
+        economyPath("/partner/marketplace", id) + "/applications/withdraw",
+        marketDetailSchema,
+        options.signal,
+        {},
+        options,
+      ),
+    reserveMarket: (
+      id: string,
+      input: z.infer<typeof marketReservationInputSchema>,
+      options: PartnerMutation,
+    ) =>
+      request(
+        economyPath("/partner/marketplace", id) + "/reservations",
+        marketDetailSchema,
+        options.signal,
+        marketReservationInputSchema.parse(input),
+        options,
+      ),
+    withdrawMarket: (id: string, reason: string, options: PartnerMutation) =>
+      request(
+        economyPath("/partner/marketplace", id) + "/withdraw",
+        marketDetailSchema,
+        options.signal,
+        { reason },
+        options,
+      ),
+    decideMarket: (
+      id: string,
+      input: z.infer<typeof marketDecisionSchema>,
+      options: PartnerMutation,
+    ) =>
+      request(
+        economyPath("/partner/market-reservations", id) + "/decision",
+        marketReservationSchema,
+        options.signal,
+        marketDecisionSchema.parse(input),
+        options,
+      ),
+    marketMandates: (leadId: string, cursor?: string, signal?: AbortSignal) =>
+      request(
+        economyPath("/wallet/leads", leadId) + "/market-mandates" + economyPage(cursor),
+        marketMandatesSchema,
+        signal,
+      ),
+    decideMarketMandate: (
+      id: string,
+      input: z.infer<typeof marketMandateInputSchema>,
+      options: PartnerMutation,
+    ) =>
+      request(
+        economyPath("/wallet/market-reservations", id) + "/mandate",
+        marketReservationSchema,
+        options.signal,
+        marketMandateInputSchema.parse(input),
+        options,
+      ),
     distributionReview: (
       leadId: string,
       offerId: string,

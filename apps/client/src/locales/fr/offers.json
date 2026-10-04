@@ -683,5 +683,63 @@
     "receipt": "Référence de coordination : {{id}}",
     "confirmRequired": "Confirmez explicitement les modalités de tous les rendez-vous.",
     "request": "{{client}} · {{title}}"
+  },
+  "marketMandates": {
+    "title": "Mandats et transmissions",
+    "intro": "Examinez la mission exacte proposée et ses limites. Votre décision autorise ou refuse cette intervention. Les accords économiques entre professionnels restent séparés de votre mandat.",
+    "close": "Fermer",
+    "loading": "Chargement…",
+    "retry": "Recharger",
+    "retrySame": "Renvoyer la même décision",
+    "changed": "Le contexte ou les droits ont changé. Fermez puis rechargez avant une nouvelle décision.",
+    "uncertain": "Le résultat est incertain. Renvoyez la même décision pour éviter un doublon.",
+    "empty": "Aucune proposition de mandat pour cette demande.",
+    "reason": "Motif de votre décision",
+    "consent": "J’ai relu la mission, les pouvoirs, les limites et la durée. Je confirme cette décision pour cette intervention précise.",
+    "review": "Relire puis confirmer",
+    "confirm": "Confirmer la décision",
+    "saving": "Enregistrement…",
+    "invalid": "Indiquez un motif de 10 à 2 000 caractères et confirmez votre lecture.",
+    "back": "Revenir à la liste",
+    "scope": "Périmètre",
+    "responsibilities": "Responsabilités",
+    "powers": "Pouvoirs accordés",
+    "limitations": "Limites et exclusions",
+    "validUntil": "Mission valable jusqu’au",
+    "responseUntil": "Réponse attendue avant le",
+    "first": "Première page",
+    "next": "Page suivante",
+    "decision": {
+      "accept": "Autoriser cette mission",
+      "decline": "Refuser cette mission",
+      "withdraw": "Retirer mon mandat"
+    },
+    "state": {
+      "pending": "Mandat à examiner",
+      "reserved": "Proposition réservée",
+      "accepted": "Accepté",
+      "declined": "Refusé",
+      "cancelled": "Annulé",
+      "withdrawn": "Retiré",
+      "expired": "Expiré",
+      "context_changed": "Contexte modifié"
+    },
+    "mode": {
+      "co_advice": "Conseil à plusieurs",
+      "one_off": "Intervention ponctuelle",
+      "transfer": "Transfert du suivi"
+    },
+    "access": {
+      "read": "Consultation du dossier",
+      "contribute": "Contribution au dossier"
+    },
+    "communication": {
+      "referent_only": "Communication via le référent",
+      "client_direct": "Contact direct avec vous"
+    },
+    "separator": " · ",
+    "arrow": " → ",
+    "backArrow": "← ",
+    "minus": " −"
   }
 }

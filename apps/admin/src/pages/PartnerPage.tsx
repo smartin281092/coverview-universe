@@ -45,6 +45,11 @@ function Overview({ identity, blocked }: { identity: IdentityMe; blocked: boolea
         <Button variant="outline" asChild>
           <a href={`${partnerUrl}/notifications`}>{t("notifications")}</a>
         </Button>
+        {(["marketplace", "commercial-conditions", "remunerations"] as const).map((path) => (
+          <Button key={path} variant="outline" asChild>
+            <a href={`${partnerUrl}/${path}`}>{t(`economy.${path}`)}</a>
+          </Button>
+        ))}
       </div>
       {dashboard.isPending ? (
         <LoadingState label={t("loading")} />

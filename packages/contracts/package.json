@@ -8,7 +8,8 @@
     "./health-insurance": "./src/health-insurance.ts",
     "./insurance-requests": "./src/insurance-requests.ts",
     "./health-recommendation": "./src/health-recommendation.ts",
-    "./partner": "./src/partner.ts"
+    "./partner": "./src/partner.ts",
+    "./partner-economy": "./src/partner-economy.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",

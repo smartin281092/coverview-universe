@@ -192,5 +192,10 @@
       "changed": "Source modifiée depuis l’examen",
       "available": "Source accessible"
     }
+  },
+  "economy": {
+    "marketplace": "Superviser la marketplace",
+    "commercial-conditions": "Examiner les conditions commerciales",
+    "remunerations": "Suivre les accords et règlements"
   }
 }

@@ -958,6 +958,8 @@ export const partnerLeads = pgTable(
       .notNull()
       .references(() => identityUsers.id),
     responsibleId: text("responsible_id").references(() => identityUsers.id),
+    marketMandateId: text("market_mandate_id"),
+    marketValidUntil: instant("market_valid_until"),
     clientUserId: text("client_user_id").references(() => identityUsers.id),
     clientProfileId: text("client_profile_id").references(() => managedProfiles.id),
     title: text("title").notNull(),
@@ -1118,6 +1120,8 @@ export const partnerContributors = pgTable(
     canContact: boolean("can_contact").notNull().default(true),
     collaborationId: text("collaboration_id").references(() => partnerCollaborations.id),
     revokedAt: instant("revoked_at"),
+    marketMandateId: text("market_mandate_id"),
+    marketValidUntil: instant("market_valid_until"),
   },
   (t) => [
     check(

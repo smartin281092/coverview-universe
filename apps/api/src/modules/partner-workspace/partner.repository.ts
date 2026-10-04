@@ -62,6 +62,7 @@ import {
   date,
   fail,
   lockActor,
+  authorityCurrent,
   managed,
   membership,
   ownedClient,
@@ -100,6 +101,9 @@ import { createAppointmentLinkOperations } from "./partner.appointment-links.js"
 import { createWalletAppointmentOperations } from "./partner.wallet-appointments.js";
 import { createBookingOperations } from "./partner.booking.js";
 import { createCounselOperations } from "./partner.counsel.js";
+import { createCommercialOperations } from "./partner.commercial.js";
+import { createMarketplaceOperations } from "./partner.marketplace.js";
+import { createEconomyOperations } from "./partner.economy.js";
 import { createPracticeOperations } from "./partner.practice.js";
 import { readAdvicePreferences, confirmAdvicePreferences } from "./partner.advice.js";
 import { readNeedConflict, decideNeedConflict } from "./partner.need-conflicts.js";
@@ -137,8 +141,8 @@ const selectLead = `select l.*, coalesce((select application->>'name' from partn
  (select count(*)::int from partner_tasks t where t.lead_id=l.id and t.state='open' and t.due_at<now()) overdue_tasks,
  (select min(starts_at) from partner_appointments a where a.lead_id=l.id and a.state='scheduled' and a.starts_at>=now()) next_appointment_at,
  ${assigned} assigned_access, ${managed} managed_access, ${ownedClient} client_access,
- exists(select 1 from partner_contributors ec where ec.lead_id=l.id and ec.user_id=$1 and ec.revoked_at is null and ec.can_edit and ec.access_scope='advice') contributor_edit,
- exists(select 1 from partner_contributors ec where ec.lead_id=l.id and ec.user_id=$1 and ec.revoked_at is null and ec.can_contact and ec.access_scope='advice') contributor_contact
+ exists(select 1 from partner_contributors ec where ec.lead_id=l.id and ec.user_id=$1 and ec.revoked_at is null and ${authorityCurrent("ec")} and ec.can_edit and ec.access_scope='advice') contributor_edit,
+ exists(select 1 from partner_contributors ec where ec.lead_id=l.id and ec.user_id=$1 and ec.revoked_at is null and ${authorityCurrent("ec")} and ec.can_contact and ec.access_scope='advice') contributor_contact
  from partner_leads l`;
 type ReadRow = LeadRow & {
   currentClientUserId: string | null;
@@ -168,8 +172,7 @@ function summary(actor: PartnerActor, row: ReadRow): LeadSummary {
   const firstActionDueAt = date(deadlines.firstActionDueAt);
   const suspended = waiting && new Date(waiting.until).getTime() > now;
   const controls =
-    !actor.wallet &&
-    (actor.administrator || row.responsibleId === actor.userId || row.managedAccess);
+    operational && (actor.administrator || row.responsibleId === actor.userId || row.managedAccess);
   const actions = controls
     ? [
         "edit",
@@ -220,7 +223,7 @@ function summary(actor: PartnerActor, row: ReadRow): LeadSummary {
   const canCollaborate =
     active &&
     !!row.responsibleId &&
-    !actor.wallet &&
+    operational &&
     (actor.administrator || row.responsibleId === actor.userId);
   if (canCollaborate) actions.push("collaboration_propose");
   if (active && operational && (row.responsibleId === actor.userId || row.assignedAccess))
@@ -568,10 +571,26 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
       }
       // Re-project with current permissions, never replay a stale private response after transfer.
       const result = await project(tx, target);
+      await lockActor(tx, actor);
       await tx.query<Record<string, unknown>>("commit");
       return result;
     } catch (error) {
       await tx.query<Record<string, unknown>>("rollback");
+      if (
+        error &&
+        typeof error === "object" &&
+        "code" in error &&
+        ["23505", "40001", "40P01"].includes(String(error.code))
+      )
+        fail("PARTNER_CONFLICT", 409);
+      if (
+        error &&
+        typeof error === "object" &&
+        "code" in error &&
+        error.code === "23514" &&
+        /^(market|commercial|economy)\./u.test(operation)
+      )
+        fail("PARTNER_CONFLICT", 409);
       if (
         error &&
         typeof error === "object" &&
@@ -669,6 +688,9 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
     return { ...authorized, previous, row };
   }
   return {
+    ...createCommercialOperations(pool, transaction),
+    ...createMarketplaceOperations(pool, transaction),
+    ...createEconomyOperations(pool, transaction),
     ...createCompetenceOperations(pool, transaction, documentsAvailable),
     ...createWalletAppointmentOperations(pool, transaction),
     ...createBookingOperations(pool, transaction),

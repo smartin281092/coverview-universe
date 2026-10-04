@@ -4,6 +4,7 @@ import { handoffWork } from "./partner.participants.js";
 import { reconcileCollaborations } from "./partner.collaboration.js";
 import { syncLeadNotifications } from "./partner.notifications.js";
 import { followUpDeadline } from "./partner.follow-up.js";
+import { authorityCurrent } from "./partner.policy.js";
 
 const system: PartnerAuditActor = { userId: null, systemActor: "partner-continuity-v1" };
 // Full matching is not connected yet: zero automatic assignments to another advisor.
@@ -29,7 +30,7 @@ export async function processPartnerContinuity(pool: Pool) {
     let escalated = 0;
     for (const { id } of rows) {
       const removed = await tx.query(
-        `update partner_contributors pc set revoked_at=now() from partner_leads l where l.id=$1 and pc.lead_id=l.id and pc.revoked_at is null and not ${eligible("pc.user_id")}`,
+        `update partner_contributors pc set revoked_at=now() from partner_leads l where l.id=$1 and pc.lead_id=l.id and pc.revoked_at is null and (not ${eligible("pc.user_id")} or not ${authorityCurrent("pc")})`,
         [id],
       );
       if (removed.rowCount) {
@@ -59,7 +60,7 @@ export async function processPartnerContinuity(pool: Pool) {
           waiting: { until: string } | null;
           now: Date;
         }>(
-          `select responsible_id,${eligible("l.responsible_id")} valid,waiting,now() as now,notified_at,first_useful_at,due_at,first_action_due_at,acceptance_due_at
+          `select responsible_id,(${eligible("l.responsible_id")} and ${authorityCurrent("l")}) valid,waiting,now() as now,notified_at,first_useful_at,due_at,first_action_due_at,acceptance_due_at
          from partner_leads l where id=$1`,
           [id],
         )

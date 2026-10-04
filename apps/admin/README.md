@@ -1,5 +1,7 @@
 # Admin — accès protégé
 
+Supervision Partner : accès aux pages Marketplace, Conditions commerciales et Accords/rémunérations, sous session/permission/MFA réelles. Examen motivé des conditions, ouverture et administration des dossiers économiques ; aucune substitution au mandat Wallet ou à l’acceptation du fournisseur. [Règles et limites du lot2](../api/src/modules/partner-workspace/docs/marketplace-economy.md).
+
 Partner → Demandes d'orientation reçoit les résumés explicitement transmis par les conseillers, suit une action datée et permet d'examiner des intervenants à partir de leurs sources avant une proposition manuelle de collaboration. [Règles, audiences et limites](../api/src/modules/partner-workspace/docs/counsel-orchestration.md). Aucun dossier personnel par besoin n'est révélé ;0057 hors catalogue, activation/V3 ouverts.
 
 Candidatures dans la supervision Partner permet la consultation de la [capacité personnelle](../api/src/modules/partner-workspace/docs/personal-capacity.md) sous permission/MFA : déclaration, validité, historique et liens de travail observés. Aucun acte au nom du conseiller ni attribution automatique.

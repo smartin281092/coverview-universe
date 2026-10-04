@@ -13,6 +13,7 @@ import {
   type PartnerApplication,
 } from "@coverview/contracts/partner";
 import {
+  authorityCurrent,
   camel,
   contextForApplication,
   fail,
@@ -59,7 +60,7 @@ type Proposal = {
 const hash = (value: unknown) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
 const subjectKey = (lead: Lead) =>
   lead.clientProfileId ? `profile:${lead.clientProfileId}` : `self:${lead.ownerId}`;
-const personal = `(l.responsible_id=$3 and l.assignment='accepted' or exists(select 1 from partner_contributors c where c.lead_id=l.id and c.user_id=$3 and c.revoked_at is null and c.access_scope='advice' and c.can_edit and c.can_contact))`;
+const personal = `((l.responsible_id=$3 and ${authorityCurrent("l")}) and l.assignment='accepted' or exists(select 1 from partner_contributors c where c.lead_id=l.id and c.user_id=$3 and c.revoked_at is null and ${authorityCurrent("c")} and c.access_scope='advice' and c.can_edit and c.can_contact))`;
 
 async function readLead(tx: PoolClient, actor: PartnerActor, id: string, advisorId: string | null) {
   const row = (

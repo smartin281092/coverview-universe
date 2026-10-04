@@ -38,7 +38,9 @@
     "lead.closed": "Votre demande a été clôturée",
     "appointment.slots_offered.v1": "Créneaux proposés au client",
     "appointment.slots_withdrawn.v1": "Proposition de créneaux retirée",
-    "client.appointment_reserved.v1": "Rendez-vous réservé par le client"
+    "client.appointment_reserved.v1": "Rendez-vous réservé par le client",
+    "market.mandate_requested.v1": "Une mission de conseil attend votre autorisation",
+    "market.mandate_changed.v1": "Votre mandat de conseil a été mis à jour"
   },
   "back": "Retour aux offres",
   "inspect": "Ouvrir la demande",

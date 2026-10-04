@@ -137,9 +137,7 @@
           "S-000a-C01..C06 : recette complète depuis checkout vierge 4f04808f2201af5603a54d27fdbbf8a175ba800c passée ; proof roadmap/evidence/S-000a-clean-check.json.",
           "Neuf tests de preview passent aussi dans Linux non-root avec source read-only et réseau désactivé."
         ],
-        "done_unverified": [
-          "CI distante, reset destructif, WorkOS et déploiement non exécutés."
-        ],
+        "done_unverified": ["CI distante, reset destructif, WorkOS et déploiement non exécutés."],
         "assumed": [
           "Français initial et ports réversibles : impact catalogues i18n et configuration locale."
         ]
@@ -782,7 +780,8 @@
         "Relais811d : créneaux personnels proposés puis réservation Wallet unique revalidée, deux accords persistés/temps protégé et cycles indépendants.124tests distincts/7fichiers dont18nouveaux ; types/lint/builds quatre apps/frontières/Knip ciblé vérifiés.0056 hors catalogue,126protections/70tests entrants inchangés ; source1bc1 conservée. V3/activation/S-130/S-131 et brief/S-110/S-042a ouverts. Plan partner-booking-slots, propriétaire booking-proposals, ledger et checkpoint partner-wallet-booking-suite ; suite qualité exacte après prestation ou autre tranche utile puis TOUS tracks I–III, unique relais Astra/ultra.",
         "Instruction ultérieure utilisateur du3octobre2026 : prochaines tâches gpt-6-astra/max, pas ultra ; regroupement idéal3–5tâches, cible quatre lots. Plan canonique roadmap/plans/partner-remaining-batches.plan.md et priorité roadmap/execution-policy.md ; prochain relais lot1 Conseil et orchestration, plusieurs parcours cohérents par tâche, aucun auteur concurrent ni réduction du brief I–III. Remplace les anciennes consignes Ultra/un relais par petite tranche.",
         "Correction utilisateur du3octobre2026 pendant le lot1 : utiliser gpt-6-astra/xhigh (« Très élevé »), remplace Max/Ultra pour les prochaines tâches. Quatre lots regroupés, sans sous-agent/fork/concurrence ; politique et plan partner-remaining-batches canoniques. Réglage effectif courant non prétendu modifié.",
-        "Lot1/4 dans96ad : orientation personnelle datée CoverView, file Admin et sélection manuelle sourcée avec vraie collaboration, réservations Wallet coordonnées atomiques.35tests distincts/4fichiers dont17nouveaux ; types/lint19TS/builds quatre apps/frontières/Knip ciblé vérifiés.0057 hors catalogue normal ;129protections et71tests entrants conservés, source811d inchangée. V3 authentifié/activation/distribution favorable/matching global ouverts, brief I–III/S-110/S-042a non clos. Plan partner-counsel-orchestration, ledger partner-core ; checkpoint partner-counsel-orchestration-suite et prompt lot2 partner-marketplace-economy. Prochain relais unique Astra Très élevé après snapshot cumulatif audité."
+        "Lot1/4 dans96ad : orientation personnelle datée CoverView, file Admin et sélection manuelle sourcée avec vraie collaboration, réservations Wallet coordonnées atomiques.35tests distincts/4fichiers dont17nouveaux ; types/lint19TS/builds quatre apps/frontières/Knip ciblé vérifiés.0057 hors catalogue normal ;129protections et71tests entrants conservés, source811d inchangée. V3 authentifié/activation/distribution favorable/matching global ouverts, brief I–III/S-110/S-042a non clos. Plan partner-counsel-orchestration, ledger partner-core ; checkpoint partner-counsel-orchestration-suite et prompt lot2 partner-marketplace-economy. Prochain relais unique Astra Très élevé après snapshot cumulatif audité.",
+        "Lot2/935e : marketplace anonymisée, mandat Wallet borné et accords immuables, conditions/examen et registre économique par police ;95tests distincts/6fichiers dont10nouveaux, types/lint/builds4apps/frontières/Knip ciblé verts.0058 additive hors catalogue normal ; activation/V3, preuves externes et S-130/S-131/RLS ouverts. Plan ME1–6, propriétaire marketplace-economy, ledger et relais lot3 Astra Très élevé ; aucune clôture du brief/S-110/S-042a."
       ]
     }
   },

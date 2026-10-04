@@ -110,9 +110,13 @@ export function contextForApplication(
   };
 }
 export const ownedClient = `(l.client_profile_id is null and l.client_user_id=$1 or exists(select 1 from managed_profiles cp where cp.id=l.client_profile_id and cp.user_id=$1))`;
-export const assigned = `(exists(select 1 from partner_members am where am.user_id=$1 and am.roles ? 'advisor') and (l.responsible_id=$1 or exists(select 1 from partner_contributors pc where pc.lead_id=l.id and pc.user_id=$1 and pc.revoked_at is null and pc.access_scope='advice')))`;
-const contribution = `exists(select 1 from partner_contributors pc where pc.lead_id=l.id and pc.user_id=$1 and pc.revoked_at is null)`;
-export const managed = `exists(select 1 from partner_members me join partner_members colleague on colleague.organization_id=me.organization_id where me.user_id=$1 and me.roles ? 'manager' and colleague.user_id=l.responsible_id)`;
+// JSON access keeps the permission predicate compatible with pre-0058 catalogues.
+// Absence means an ordinary existing assignment; a marketplace mandate always has a bound.
+export const authorityCurrent = (alias: string) =>
+  `coalesce((to_jsonb(${alias})->>'market_valid_until')::timestamptz>clock_timestamp(),true)`;
+export const assigned = `(exists(select 1 from partner_members am where am.user_id=$1 and am.roles ? 'advisor') and ((l.responsible_id=$1 and ${authorityCurrent("l")}) or exists(select 1 from partner_contributors pc where pc.lead_id=l.id and pc.user_id=$1 and pc.revoked_at is null and ${authorityCurrent("pc")} and pc.access_scope='advice')))`;
+const contribution = `exists(select 1 from partner_contributors pc where pc.lead_id=l.id and pc.user_id=$1 and pc.revoked_at is null and ${authorityCurrent("pc")})`;
+export const managed = `(${authorityCurrent("l")} and exists(select 1 from partner_members me join partner_members colleague on colleague.organization_id=me.organization_id where me.user_id=$1 and me.roles ? 'manager' and colleague.user_id=l.responsible_id))`;
 export function visible(actor: PartnerActor) {
   if (actor.wallet) return ownedClient;
   if (actor.administrator) return "($1::text is not null)";

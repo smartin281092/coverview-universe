@@ -491,7 +491,10 @@
     "admin": "Ouvrir Admin",
     "wallet": "Ouvrir Wallet",
     "notifications": "Notifications",
-    "collaborations": "Collaborations"
+    "collaborations": "Collaborations",
+    "marketplace": "Marketplace",
+    "commercial": "Conditions commerciales",
+    "remunerations": "Accords et rémunérations"
   },
   "login": "Se connecter",
   "loginTitle": "Votre réseau. Vos affaires.",

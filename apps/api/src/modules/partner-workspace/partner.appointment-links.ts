@@ -14,6 +14,7 @@ import {
   type PartnerApplication,
 } from "@coverview/contracts/partner";
 import {
+  authorityCurrent,
   context,
   fail,
   lockActor,
@@ -115,13 +116,13 @@ async function facts(db: Executor, id: string, userId: string) {
     coalesce(p.user_id,l.client_user_id) owner_id,l.client_profile_id profile_id,
     coalesce(p.revision,0) profile_revision,
     case when p.id is not null then 'profile:'||p.id when l.client_user_id is not null then 'self:'||l.client_user_id end subject_key,
-    (l.responsible_id=$2 or exists(select 1 from partner_contributors c where c.lead_id=l.id
-      and c.user_id=$2 and c.revoked_at is null and c.access_scope='advice' and c.can_edit and c.can_contact)) personal,
+    ((l.responsible_id=$2 and ${authorityCurrent("l")}) or exists(select 1 from partner_contributors c where c.lead_id=l.id
+      and c.user_id=$2 and c.revoked_at is null and ${authorityCurrent("c")} and c.access_scope='advice' and c.can_edit and c.can_contact)) personal,
     jsonb_build_array(l.advice_scope_revision,coalesce(p.user_id,l.client_user_id),l.client_profile_id,
       coalesce(p.revision,0),l.responsible_id,l.assignment,l.notification_cycle,
       (select coalesce(max(revision),0) from partner_advice_preferences where lead_id=l.id),
       (select jsonb_agg(jsonb_build_array(c.id,c.collaboration_id,c.access_scope,c.can_edit,c.can_contact) order by c.id)
-        from partner_contributors c where c.lead_id=l.id and c.user_id=$2 and c.revoked_at is null),
+        from partner_contributors c where c.lead_id=l.id and c.user_id=$2 and c.revoked_at is null and ${authorityCurrent("c")}),
       (select jsonb_build_array(n.id,n.resolved_at) from partner_notifications n where n.lead_id=l.id
         and n.kind='interlocutor_request' order by n.created_at desc,n.id desc limit 1)) basis
     from partner_leads l left join managed_profiles p on p.id=l.client_profile_id where l.id=$1`,
@@ -245,8 +246,8 @@ export function createAppointmentLinkOperations(pool: Pool, transaction: Mutatio
         `select l.id from partner_leads l
       left join managed_profiles p on p.id=l.client_profile_id where l.id<>$1 and l.stage not in ('draft','completed')
       and coalesce(p.user_id,l.client_user_id)=$2 and l.client_profile_id is not distinct from $3
-      and l.category=any($4::text[]) and (l.responsible_id=$5 or exists(select 1 from partner_contributors c
-        where c.lead_id=l.id and c.user_id=$5 and c.revoked_at is null and c.access_scope='advice' and c.can_edit and c.can_contact))
+      and l.category=any($4::text[]) and ((l.responsible_id=$5 and ${authorityCurrent("l")}) or exists(select 1 from partner_contributors c
+        where c.lead_id=l.id and c.user_id=$5 and c.revoked_at is null and ${authorityCurrent("c")} and c.access_scope='advice' and c.can_edit and c.can_contact))
       order by l.id limit 51`,
         [
           sourceId,

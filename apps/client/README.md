@@ -1,5 +1,7 @@
 # Wallet — espace personnel
 
+Wallet Offres : « Mandats et transmissions » présente la mission exacte, ses pouvoirs/limites et sa durée ; accepter/refuser/retirer reste un acte du propriétaire courant. Aucune condition B2B divulguée. Notifications de demande/changement de mandat. [Règles du lot2](../api/src/modules/partner-workspace/docs/marketplace-economy.md). V3 authentifié et activation0058 restent ouverts.
+
 ## Résumé
 
 Wallet propose les profils privés, les documents, les autorisations, le compte et les appareils connectés. Français dès le départ, textes externalisés dans `src/locales/fr/`.

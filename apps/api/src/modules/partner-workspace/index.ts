@@ -1,4 +1,25 @@
 import { insuranceCompanyIdSchema } from "@coverview/contracts";
+import {
+  commercialInputSchema,
+  commercialReviewSchema,
+  commercialConditionSchema,
+  commercialListSchema,
+  marketQuerySchema,
+  marketPublicationSchema,
+  marketApplicationInputSchema,
+  marketReservationInputSchema,
+  marketDecisionSchema,
+  marketMandateInputSchema,
+  marketDetailSchema,
+  marketListSchema,
+  marketReservationSchema,
+  marketMandatesSchema,
+  economyCaseInputSchema,
+  economyRecordSchema,
+  economyCaseSchema,
+  economyCasesSchema,
+  economyAgreementsSchema,
+} from "@coverview/contracts/partner-economy";
 import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
@@ -157,6 +178,163 @@ export function registerPartnerWorkspace(
     }
     return { userId: session.userId, id: session.id, administrator: false, wallet };
   }
+  const economyPage = z.object({ cursor: z.string().max(400).optional() }).strict();
+  app.get(
+    "/partner/economy/agreements",
+    {
+      config: limited,
+      schema: { querystring: economyPage, response: { 200: economyAgreementsSchema } },
+    },
+    async (r) => repository.economyAgreements(await actor(r), r.query.cursor),
+  );
+  app.get(
+    "/partner/economy/cases",
+    {
+      config: limited,
+      schema: { querystring: economyPage, response: { 200: economyCasesSchema } },
+    },
+    async (r) => repository.economyCases(await actor(r), r.query.cursor),
+  );
+  app.get(
+    "/partner/economy/cases/:id",
+    {
+      config: limited,
+      schema: { params, querystring: economyPage, response: { 200: economyCaseSchema } },
+    },
+    async (r) => repository.economyCase(await actor(r), r.params.id, r.query.cursor),
+  );
+  app.post(
+    "/partner/economy/cases",
+    {
+      config: limited,
+      schema: { body: economyCaseInputSchema, response: { 200: economyCaseSchema } },
+    },
+    async (r) => repository.createEconomyCase(await actor(r), r.body, key(r)),
+  );
+  app.post(
+    "/partner/economy/cases/:id/entries",
+    {
+      config: limited,
+      schema: { params, body: economyRecordSchema, response: { 200: economyCaseSchema } },
+    },
+    async (r) => repository.recordEconomy(await actor(r), r.params.id, r.body, key(r)),
+  );
+  app.get(
+    "/partner/commercial-conditions",
+    {
+      config: limited,
+      schema: { querystring: economyPage, response: { 200: commercialListSchema } },
+    },
+    async (r) => repository.commercialConditions(await actor(r), r.query.cursor),
+  );
+  app.post(
+    "/partner/commercial-conditions",
+    {
+      config: limited,
+      schema: { body: commercialInputSchema, response: { 200: commercialConditionSchema } },
+    },
+    async (r) => repository.createCommercialCondition(await actor(r), r.body, key(r)),
+  );
+  app.post(
+    "/partner/commercial-conditions/:id/reviews",
+    {
+      config: limited,
+      schema: {
+        params,
+        body: commercialReviewSchema,
+        response: { 200: commercialConditionSchema },
+      },
+    },
+    async (r) => repository.reviewCommercialCondition(await actor(r), r.params.id, r.body, key(r)),
+  );
+  app.get(
+    "/partner/marketplace",
+    {
+      config: limited,
+      schema: { querystring: marketQuerySchema, response: { 200: marketListSchema } },
+    },
+    async (r) => repository.marketplace(await actor(r), r.query),
+  );
+  app.get(
+    "/partner/marketplace/:id",
+    {
+      config: limited,
+      schema: { params, querystring: economyPage, response: { 200: marketDetailSchema } },
+    },
+    async (r) => repository.marketDetail(await actor(r), r.params.id, r.query.cursor),
+  );
+  app.post(
+    "/partner/leads/:id/marketplace",
+    {
+      config: limited,
+      schema: { params, body: marketPublicationSchema, response: { 200: marketDetailSchema } },
+    },
+    async (r) => repository.publishMarket(await actor(r), r.params.id, r.body, key(r)),
+  );
+  app.post(
+    "/partner/marketplace/:id/applications",
+    {
+      config: limited,
+      schema: { params, body: marketApplicationInputSchema, response: { 200: marketDetailSchema } },
+    },
+    async (r) => repository.applyMarket(await actor(r), r.params.id, r.body, key(r)),
+  );
+  app.post(
+    "/partner/marketplace/:id/applications/withdraw",
+    {
+      config: limited,
+      schema: { params, body: z.object({}).strict(), response: { 200: marketDetailSchema } },
+    },
+    async (r) => repository.withdrawMarketApplication(await actor(r), r.params.id, key(r)),
+  );
+  app.post(
+    "/partner/marketplace/:id/reservations",
+    {
+      config: limited,
+      schema: { params, body: marketReservationInputSchema, response: { 200: marketDetailSchema } },
+    },
+    async (r) => repository.reserveMarket(await actor(r), r.params.id, r.body, key(r)),
+  );
+  app.post(
+    "/partner/marketplace/:id/withdraw",
+    {
+      config: limited,
+      schema: {
+        params,
+        body: z.object({ reason: z.string().trim().min(10).max(2000) }).strict(),
+        response: { 200: marketDetailSchema },
+      },
+    },
+    async (r) => repository.withdrawMarket(await actor(r), r.params.id, r.body.reason, key(r)),
+  );
+  app.post(
+    "/partner/market-reservations/:id/decision",
+    {
+      config: limited,
+      schema: { params, body: marketDecisionSchema, response: { 200: marketReservationSchema } },
+    },
+    async (r) => repository.decideMarket(await actor(r), r.params.id, r.body, key(r)),
+  );
+  app.get(
+    "/wallet/leads/:id/market-mandates",
+    {
+      config: limited,
+      schema: { params, querystring: economyPage, response: { 200: marketMandatesSchema } },
+    },
+    async (r) => repository.marketMandates(await actor(r, true), r.params.id, r.query.cursor),
+  );
+  app.post(
+    "/wallet/market-reservations/:id/mandate",
+    {
+      config: limited,
+      schema: {
+        params,
+        body: marketMandateInputSchema,
+        response: { 200: marketReservationSchema },
+      },
+    },
+    async (r) => repository.decideMarketMandate(await actor(r, true), r.params.id, r.body, key(r)),
+  );
   app.get(
     "/partner/leads/:id/counsel",
     {

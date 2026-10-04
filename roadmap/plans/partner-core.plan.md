@@ -1,5 +1,7 @@
 # Partner — parcours opérationnel, brief du 2 octobre 2026
 
+Lot2/935e réalisé selon le [plan ME1–6 et son journal](partner-marketplace-economy.plan.md). [Propriétaire](../../apps/api/src/modules/partner-workspace/docs/marketplace-economy.md) et [ledger](../evidence/partner-core.md#lot-24--marketplace-et-economie-935e) portent les règles/preuves ; suite lot3 qualité/pilotage, puis lot4 intégration/recette. Mandat I–III inchangé, programme non clos.
+
 Pilotage corrigé pendant le lot1/96ad : prochaines tâches **Astra Très élevé (`xhigh`)**, suite regroupée en **quatre lots** (objectif3–5tâches), selon le [plan de regroupement](partner-remaining-batches.plan.md). Cette instruction remplace Max/Ultra et les relais par petite tranche ; le mandat I–III reste entier.
 
 Journal96ad : [plan CO1–5 et journal](partner-counsel-orchestration.plan.md). Orientation explicite datée vers CoverView, sélection manuelle de critères sourcés et collaboration effective, coordination atomique de plusieurs réservations Wallet.35tests distincts/4fichiers dont17nouveaux ;0057 hors catalogue, activation/V3 ouverts. Le [ledger](../evidence/partner-core.md#lot-14--conseil-et-orchestration-96ad) distingue les preuves des limites. Suite regroupée : lot2 marketplace/accords/économie ; aucun avis favorable de distribution ou matching global inventé depuis les sources insuffisantes. Brief I–III/S-110/S-042a ouverts.

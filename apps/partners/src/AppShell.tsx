@@ -25,6 +25,9 @@ const links = [
   { to: "/tasks", label: "tasks", icon: CheckSquare },
   { to: "/notifications", label: "notifications", icon: Bell },
   { to: "/collaborations", label: "collaborations", icon: Users },
+  { to: "/marketplace", label: "marketplace", icon: PanelsTopLeft },
+  { to: "/commercial-conditions", label: "commercial", icon: ShieldCheck },
+  { to: "/remunerations", label: "remunerations", icon: CheckSquare },
   { to: "/agenda", label: "agenda", icon: CalendarDays },
   { to: "/profile", label: "profile", icon: UserRound },
 ] as const;
@@ -43,7 +46,10 @@ function Workspace() {
       </div>
       <nav aria-label={t("navigation")} className="space-y-1">
         {links
-          .filter((link) => context.operational || link.label === "profile")
+          .filter(
+            (link) =>
+              context.operational || link.label === "profile" || link.label === "remunerations",
+          )
           .map(({ to, label, icon: Icon }) => (
             <Link
               key={to}
@@ -114,7 +120,13 @@ function Workspace() {
           </div>
         </header>
         <main id="main" tabIndex={-1} className="mx-auto max-w-screen-2xl space-y-8 p-5 sm:p-8">
-          {context.operational ? <Outlet /> : <ApplicationPage />}
+          {context.operational ||
+          pathname === "/remunerations" ||
+          pathname.startsWith("/remunerations/") ? (
+            <Outlet />
+          ) : (
+            <ApplicationPage />
+          )}
         </main>
       </div>
       <Sheet open={open} onOpenChange={setOpen}>

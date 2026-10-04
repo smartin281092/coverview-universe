@@ -10,6 +10,7 @@ import { PracticeSummaryDialog } from "../features/offers/PracticeSummaryDialog"
 import { AdvicePreferencesDialog } from "../features/offers/AdvicePreferencesDialog";
 import { SharedAppointmentsDialog } from "../features/offers/SharedAppointmentsDialog";
 import { WalletAppointmentsDialog } from "../features/offers/WalletAppointmentsDialog";
+import { MarketMandatesDialog } from "../features/offers/MarketMandatesDialog";
 import { CoordinatedBookingsDialog } from "../features/offers/CoordinatedBookingsDialog";
 import { ReferentAssessmentDialog } from "../features/offers/ReferentAssessmentDialog";
 import {
@@ -137,6 +138,7 @@ function Offers({ identity }: { identity: IdentityMe }) {
     [advice, setAdvice] = useState<string | null>(null),
     [sharedAppointments, setSharedAppointments] = useState<string | null>(null),
     [appointments, setAppointments] = useState<string | null>(null),
+    [marketMandates, setMarketMandates] = useState<string | null>(null),
     [coordination, setCoordination] = useState(false),
     [referentAssessment, setReferentAssessment] = useState<string | null>(null),
     [linkContract, setLinkContract] = useState(false),
@@ -252,6 +254,14 @@ function Offers({ identity }: { identity: IdentityMe }) {
           identity={identity}
           leadId={appointments}
           onClose={() => setAppointments(null)}
+        />
+      )}
+      {marketMandates && (
+        <MarketMandatesDialog
+          key={`${identity.user.id}:${identity.session.id}:${marketMandates}`}
+          identity={identity}
+          leadId={marketMandates}
+          onClose={() => setMarketMandates(null)}
         />
       )}
       {sharedAppointments && (
@@ -401,6 +411,13 @@ function Offers({ identity }: { identity: IdentityMe }) {
               <>
                 <Button variant="outline" disabled={pending} onClick={() => setAdvice(lead.id)}>
                   {t("advice.title")}
+                </Button>
+                <Button
+                  variant="outline"
+                  disabled={pending}
+                  onClick={() => setMarketMandates(lead.id)}
+                >
+                  {t("marketMandates.title")}
                 </Button>
                 <Button
                   variant="outline"

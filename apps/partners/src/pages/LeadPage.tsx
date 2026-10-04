@@ -37,6 +37,7 @@ import { ContractComparison } from "../features/ContractComparison";
 import { ContractReviewDialog } from "../features/ContractReviewDialog";
 import { CreateLeadDialog } from "../features/CreateLeadDialog";
 import { CollaborationDialog } from "../features/CollaborationDialog";
+import { MarketPublishDialog } from "../features/MarketPublishDialog";
 import { CollaborationList } from "../features/CollaborationList";
 import { formatDate, formatMoney } from "../features/Field";
 import { adminUrl, partnerApi } from "../api";
@@ -68,6 +69,7 @@ export function LeadPage() {
     [solutionOfferId, setSolutionOfferId] = useState<string>(),
     [withdraw, setWithdraw] = useState<LeadOffer | null>(null),
     [collaborating, setCollaborating] = useState(false),
+    [publishingMarket, setPublishingMarket] = useState<LeadDetail | null>(null),
     [appointment, setAppointment] = useState<string>(),
     [linkingAppointment, setLinkingAppointment] = useState<string>(),
     [sharedAppointments, setSharedAppointments] = useState(false),
@@ -83,10 +85,22 @@ export function LeadPage() {
       onClose={() => setBookingProposals(null)}
     />
   );
+  const marketDialog = publishingMarket && (
+    <MarketPublishDialog
+      lead={publishingMarket}
+      enabled={
+        !leadQuery.isError &&
+        !!leadQuery.data?.canCollaborate &&
+        leadQuery.data.revision === publishingMarket.revision
+      }
+      onClose={() => setPublishingMarket(null)}
+    />
+  );
   if (leadQuery.isPending)
     return (
       <>
         {bookingDialog}
+        {marketDialog}
         <LoadingState label={t("loading")} />
       </>
     );
@@ -94,6 +108,7 @@ export function LeadPage() {
     return (
       <>
         {bookingDialog}
+        {marketDialog}
         <ErrorState
           title={t("error")}
           description={t("errors.PARTNER_NOT_FOUND")}
@@ -111,6 +126,7 @@ export function LeadPage() {
   return (
     <>
       {bookingDialog}
+      {marketDialog}
       {linkingAppointment && (
         <AppointmentLinksDialog
           key={[...session.queryKey, lead.id, linkingAppointment].join(":")}
@@ -361,7 +377,12 @@ export function LeadPage() {
       {activeTab === "collaboration" && (
         <div className="space-y-5">
           {lead.canCollaborate && (
-            <Button onClick={() => setCollaborating(true)}>{t("collaboration.propose")}</Button>
+            <div className="flex flex-wrap gap-3">
+              <Button onClick={() => setCollaborating(true)}>{t("collaboration.propose")}</Button>
+              <Button variant="outline" onClick={() => setPublishingMarket(lead)}>
+                {t("economy:publish")}
+              </Button>
+            </div>
           )}
           <CollaborationList items={lead.collaborations} />
         </div>

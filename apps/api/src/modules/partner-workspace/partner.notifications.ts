@@ -7,6 +7,7 @@ import {
   type PartnerNotificationQuery,
 } from "@coverview/contracts/partner";
 import {
+  authorityCurrent,
   assigned,
   managed,
   visible,
@@ -192,7 +193,7 @@ export async function notifyPartnerEvent(
         and m.state='approved' and o.state='approved' and m.roles ? 'advisor'
         and (m.review_due_at is null or m.review_due_at>clock_timestamp())
         and exists(select 1 from partner_contributors c where c.lead_id=l.id and c.user_id=a.advisor_id
-          and c.revoked_at is null and c.access_scope='advice')`,
+          and c.revoked_at is null and ${authorityCurrent("c")} and c.access_scope='advice')`,
         [subjectId, leadId],
       )
     ).rows[0];
@@ -229,6 +230,8 @@ export async function notifyPartnerEvent(
       "lead.transferred",
       "collaboration.accepted",
       "collaboration.ended",
+      "market.mandate_requested.v1",
+      "market.mandate_changed.v1",
       "lead.reassignment_required",
       "lead.continuity_escalated",
       "appointment.scheduled",
