@@ -1235,6 +1235,58 @@ export const partnerAppointmentLinks = pgTable(
     check("partner_appointment_link_action", sql`${t.action} in ('linked','unlinked')`),
   ],
 );
+// Joint appointment (C6b): a professional invited by the Wallet owner joins an appointment hosted
+// on another of the owner's requests, through their own request. Hand-written guards in 0073.
+export const partnerAppointmentParticipants = pgTable(
+  "partner_appointment_participants",
+  {
+    id: text("id").primaryKey(),
+    appointmentId: text("appointment_id")
+      .notNull()
+      .references(() => partnerAppointments.id),
+    leadId: text("lead_id")
+      .notNull()
+      .references(() => partnerLeads.id),
+    userId: text("user_id")
+      .notNull()
+      .references(() => identityUsers.id),
+    invitedBy: text("invited_by")
+      .notNull()
+      .references(() => identityUsers.id),
+    state: text("state").notNull().default("invited"),
+    termsRevision: integer("terms_revision").notNull(),
+    preparationMinutes: integer("preparation_minutes").notNull().default(0),
+    travelBeforeMinutes: integer("travel_before_minutes").notNull().default(0),
+    travelAfterMinutes: integer("travel_after_minutes").notNull().default(0),
+    outcome: text("outcome"),
+    revision: integer("revision").notNull().default(1),
+    evidence: jsonb("evidence").notNull(),
+    createdAt: instant("created_at").notNull().defaultNow(),
+    decidedAt: instant("decided_at"),
+  },
+  (t) => [
+    uniqueIndex("partner_participant_active_user")
+      .on(t.appointmentId, t.userId)
+      .where(sql`${t.state} in ('invited','confirmed')`),
+    uniqueIndex("partner_participant_active_lead")
+      .on(t.appointmentId, t.leadId)
+      .where(sql`${t.state} in ('invited','confirmed')`),
+    index("partner_participant_user").on(t.userId, t.state),
+    index("partner_participant_lead").on(t.leadId),
+    check(
+      "partner_participant_state",
+      sql`${t.state} in ('invited','confirmed','declined','withdrawn','ended')`,
+    ),
+    check(
+      "partner_participant_outcome",
+      sql`${t.outcome} is null or (${t.state}='confirmed' and ${t.outcome} in ('completed','client_absent','advisor_absent'))`,
+    ),
+    check(
+      "partner_participant_bounds",
+      sql`${t.revision}>0 and ${t.termsRevision}>0 and ${t.preparationMinutes} between 0 and 240 and ${t.travelBeforeMinutes} between 0 and 240 and ${t.travelAfterMinutes} between 0 and 240`,
+    ),
+  ],
+);
 export const partnerAppointmentTimePlans = pgTable(
   "partner_appointment_time_plans",
   {

@@ -935,5 +935,37 @@
     "attention": "Points d’attention : {{value}}",
     "decision": "La décision vous appartient : choisir, poser une question ou conserver votre contrat restent possibles."
   },
-  "objectReference": "Numéro de police actuel, plaque ou n° de châssis (facultatif)"
+  "objectReference": "Numéro de police actuel, plaque ou n° de châssis (facultatif)",
+  "joint": {
+    "title": "Rendez-vous conjoint",
+    "description": "Vous pouvez inviter le conseiller d’une autre de vos demandes à rejoindre ce rendez-vous. Il confirme lui-même ; chaque demande garde son propre suivi.",
+    "participants": "Participants invités",
+    "participant": "{{name}} ({{organization}}) · {{request}}",
+    "stale": "à reconfirmer après un changement",
+    "state": {
+      "invited": "En attente de réponse",
+      "confirmed": "Participation confirmée",
+      "declined": "A décliné",
+      "withdrawn": "S’est retiré",
+      "ended": "Terminée"
+    },
+    "candidates": "Inviter un autre de vos conseillers",
+    "candidate": "{{name}} ({{organization}}) · {{request}}",
+    "status": {
+      "available": "Paraît disponible à cet horaire",
+      "unavailable": "Pas disponible à cet horaire : préférez des rendez-vous coordonnés",
+      "declined": "A déjà répondu pour ce rendez-vous"
+    },
+    "none": "Aucune autre demande ouverte ne peut rejoindre ce rendez-vous.",
+    "closed": "Ce rendez-vous ne peut plus recevoir d’invitation.",
+    "invite": "Inviter",
+    "consent": "J’accepte que ce conseiller voie l’horaire, le mode et le lieu de ce rendez-vous ainsi que le nom de mon conseiller actuel, et inversement.",
+    "sending": "Envoi…",
+    "retryExact": "Réessayer la même invitation",
+    "success": "Invitation envoyée. Le conseiller confirmera lui-même sa participation.",
+    "conflict": "La situation a changé : vérifiez la liste mise à jour.",
+    "failed": "Le rendez-vous conjoint n’a pas pu être chargé.",
+    "joined": "Rendez-vous conjoints de cette demande",
+    "joinedItem": "{{date}} · organisé par {{name}} · {{state}}"
+  }
 }

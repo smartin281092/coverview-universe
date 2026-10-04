@@ -13,6 +13,7 @@ import {
   failOnConcurrentAbort,
 } from "./partner.policy.js";
 import { event } from "./partner.audit.js";
+import { settleJointAppointments } from "./partner.joint-appointments.js";
 
 type Mutation = <T>(
   actor: PartnerActor,
@@ -161,6 +162,7 @@ export function createWalletAppointmentOperations(pool: Pool, transaction: Mutat
           await tx.query("update partner_appointments set state='cancelled' where id=$1", [
             appointmentId,
           ]);
+          await settleJointAppointments(tx, actor, [appointmentId]);
           await tx.query(
             `update partner_leads l set
           stage=case when stage='appointment_scheduled' and not exists(select 1 from partner_appointments a

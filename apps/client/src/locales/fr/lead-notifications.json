@@ -56,7 +56,13 @@
     "correspondence.shared.v1": "Correspondance partagée par le client",
     "correspondence.withdrawn.v1": "Partage de correspondance retiré",
     "correspondence.viewed.v1": "Correspondance consultée",
-    "recommendation.published": "Votre conseiller a formulé sa recommandation"
+    "recommendation.published": "Votre conseiller a formulé sa recommandation",
+    "appointment.joint_invited.v1": "Spécialiste invité à un rendez-vous conjoint",
+    "appointment.joint_confirmed.v1": "Un spécialiste rejoint votre rendez-vous",
+    "appointment.joint_declined.v1": "Un spécialiste ne peut pas rejoindre votre rendez-vous",
+    "appointment.joint_withdrawn.v1": "Un spécialiste ne participera plus à votre rendez-vous",
+    "appointment.joint_ended.v1": "Rendez-vous conjoint annulé",
+    "appointment.joint_reconfirm.v1": "Rendez-vous conjoint déplacé : participation à reconfirmer"
   },
   "back": "Retour aux offres",
   "inspect": "Ouvrir la demande",

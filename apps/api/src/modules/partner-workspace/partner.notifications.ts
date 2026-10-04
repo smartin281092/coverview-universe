@@ -107,6 +107,68 @@ export async function notifyCollaboration(db: Executor, id: string, state: strin
     });
 }
 
+// Joint appointment (C6b). On the joining request: the invited professional is asked to decide,
+// and told when the appointment is cancelled or must be reconfirmed. On the hosting request: its
+// professional and the owner learn each decision. An open question closes with the next answer.
+async function notifyJointAppointment(
+  db: Executor,
+  leadId: string,
+  eventId: string,
+  kind: string,
+  participationId: string,
+  clientId: string | null,
+) {
+  const p = (
+    await db.query<{ lead_id: string; user_id: string; advisor_id: string; host_lead_id: string }>(
+      `select p.lead_id,p.user_id,a.advisor_id,a.lead_id host_lead_id from partner_appointment_participants p
+      join partner_appointments a on a.id=p.appointment_id where p.id=$1`,
+      [participationId],
+    )
+  ).rows[0];
+  if (!p) return;
+  const question = `${participationId}:decision:`;
+  // The invitation is recorded on both requests: only its copy on the joining one asks.
+  const settles =
+    kind !== "appointment.joint_outcome.v1" &&
+    (leadId === p.lead_id || kind !== "appointment.joint_invited.v1");
+  if (settles)
+    await db.query(
+      "update partner_notifications set resolved_at=now() where left(dedupe_key,length($1))=$1 and resolved_at is null",
+      [question],
+    );
+  if (leadId === p.lead_id) {
+    const ask = ["appointment.joint_invited.v1", "appointment.joint_reconfirm.v1"].includes(kind);
+    if (ask || kind === "appointment.joint_ended.v1")
+      await put(db, {
+        leadId,
+        recipientId: p.user_id,
+        audience: "partner",
+        kind,
+        key: ask ? `${question}${eventId}` : `${eventId}:participant`,
+        action: ask ? "review_participation" : null,
+        priority: ask ? "high" : "normal",
+      });
+  } else if (leadId === p.host_lead_id) {
+    await put(db, {
+      leadId,
+      recipientId: p.advisor_id,
+      audience: "partner",
+      kind,
+      key: `${eventId}:host`,
+      action: null,
+    });
+    if (kind !== "appointment.joint_invited.v1" && clientId)
+      await put(db, {
+        leadId,
+        recipientId: clientId,
+        audience: "wallet",
+        kind,
+        key: `${eventId}:wallet`,
+        action: null,
+      });
+  }
+}
+
 // An in-app delivery is itself durable: no external send is claimed. Call only in the business transaction.
 export async function notifyPartnerEvent(
   db: Executor,
@@ -200,6 +262,8 @@ export async function notifyPartnerEvent(
       action: null,
     });
   }
+  if (kind.startsWith("appointment.joint_") && subjectId)
+    await notifyJointAppointment(db, leadId, eventId, kind, subjectId, row.client_id);
   if (kind === "client.interlocutor_requested")
     await put(db, {
       leadId,

@@ -6,7 +6,7 @@ import {
   type PartnerContext,
   appointmentTimeRecordSchema,
 } from "@coverview/contracts/partner";
-import { fail, type PartnerActor } from "./partner.policy.js";
+import { fail, type Executor, type PartnerActor } from "./partner.policy.js";
 import { readCurrentAvailability } from "./partner.availability.js";
 import { readAdvicePreferences, type AdviceTarget } from "./partner.advice.js";
 
@@ -30,17 +30,25 @@ export function availabilityPeriod(
       : "unreported";
 }
 export async function overlappingAppointment(
-  tx: PoolClient,
+  tx: Executor,
   advisorId: string,
   appointmentId: string | null,
   start: Date,
   end: Date,
 ) {
+  // C6b: a confirmed participation in another appointment occupies the professional too, with
+  // their own buffers, while it matches that appointment's current terms.
   return !!(
     await tx.query(
       `select id from partner_appointments where advisor_id=$1 and ($2::text is null or id<>$2) and state='scheduled'
      and starts_at - occupied_before_minutes * interval '1 minute' < $4
-     and starts_at + (duration_minutes + occupied_after_minutes) * interval '1 minute' > $3 limit 1`,
+     and starts_at + (duration_minutes + occupied_after_minutes) * interval '1 minute' > $3
+     union all
+     select a.id from partner_appointment_participants p join partner_appointments a on a.id=p.appointment_id
+     where p.user_id=$1 and p.state='confirmed' and p.terms_revision=a.link_terms_revision and a.state='scheduled'
+     and ($2::text is null or a.id<>$2)
+     and a.starts_at - (p.preparation_minutes + p.travel_before_minutes) * interval '1 minute' < $4
+     and a.starts_at + (a.duration_minutes + p.travel_after_minutes) * interval '1 minute' > $3 limit 1`,
       [advisorId, appointmentId, start, end],
     )
   ).rowCount;

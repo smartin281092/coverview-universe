@@ -897,7 +897,8 @@
   },
   "agenda": {
     "title": "Agenda",
-    "subtitle": "Vos prochains rendez-vous, reliés à leurs Leads. Les cycles restent indépendants."
+    "subtitle": "Vos prochains rendez-vous, reliés à leurs Leads. Les cycles restent indépendants.",
+    "joint": "Rendez-vous conjoint"
   },
   "event": {
     "client.advice_preferences_confirmed.v1": "Préférences de conseil confirmées par le client",
@@ -987,7 +988,14 @@
     "correspondence.viewed.v1": "Correspondance consultée",
     "lead.relationship_linked.v1": "Lien entre demandes enregistré",
     "lead.relationship_withdrawn.v1": "Lien entre demandes retiré",
-    "recommendation.published": "Recommandation publiée dans Wallet"
+    "recommendation.published": "Recommandation publiée dans Wallet",
+    "appointment.joint_invited.v1": "Spécialiste invité à un rendez-vous conjoint",
+    "appointment.joint_confirmed.v1": "Participation au rendez-vous conjoint confirmée",
+    "appointment.joint_declined.v1": "Participation au rendez-vous conjoint déclinée",
+    "appointment.joint_withdrawn.v1": "Participation au rendez-vous conjoint retirée",
+    "appointment.joint_ended.v1": "Rendez-vous conjoint annulé",
+    "appointment.joint_reconfirm.v1": "Rendez-vous conjoint déplacé : participation à reconfirmer",
+    "appointment.joint_outcome.v1": "Issue du rendez-vous conjoint consignée"
   },
   "notifications": {
     "title": "Notifications",
@@ -1058,7 +1066,13 @@
       "correspondence.shared.v1": "Correspondance partagée par le client",
       "correspondence.withdrawn.v1": "Partage de correspondance retiré",
       "correspondence.viewed.v1": "Correspondance consultée",
-      "analysis.incomplete": "Analyse comparative à compléter"
+      "analysis.incomplete": "Analyse comparative à compléter",
+      "appointment.joint_invited.v1": "Invitation à un rendez-vous conjoint",
+      "appointment.joint_confirmed.v1": "Participation au rendez-vous conjoint confirmée",
+      "appointment.joint_declined.v1": "Participation au rendez-vous conjoint déclinée",
+      "appointment.joint_withdrawn.v1": "Participation au rendez-vous conjoint retirée",
+      "appointment.joint_ended.v1": "Rendez-vous conjoint annulé",
+      "appointment.joint_reconfirm.v1": "Rendez-vous conjoint déplacé : participation à reconfirmer"
     },
     "action": {
       "open": "Ouvrir le dossier",
@@ -1072,7 +1086,8 @@
       "conclusion": "Examiner la signature et les suites",
       "review_quality": "Traiter le suivi qualité",
       "survey": "Donner mon avis",
-      "communication": "Consulter les échanges"
+      "communication": "Consulter les échanges",
+      "review_participation": "Répondre à l’invitation"
     }
   },
   "collaboration": {
@@ -2413,5 +2428,51 @@
     "daysInStage_other": "{{count}} jours dans l’étape",
     "tasks_one": "{{count}} tâche",
     "tasks_other": "{{count}} tâches"
+  },
+  "joint": {
+    "title": "Rendez-vous conjoints",
+    "description": "Le client vous invite à un rendez-vous tenu sur une autre de ses demandes. Votre participation suit les règles de vos propres rendez-vous ; cette demande garde son étape et sa prochaine action.",
+    "host": "Organisé par {{name}} ({{organization}})",
+    "unknownHost": "Organisé par un autre professionnel",
+    "participants": "Rendez-vous conjoint avec :",
+    "participant": "{{name}} ({{organization}}) · {{state}}",
+    "stale": "à reconfirmer",
+    "state": {
+      "invited": "À confirmer",
+      "confirmed": "Confirmée",
+      "declined": "Déclinée",
+      "withdrawn": "Retirée",
+      "ended": "Terminée"
+    },
+    "appointmentState": "Rendez-vous : {{state}}",
+    "check": {
+      "covered": "Votre disponibilité déclarée couvre ce créneau.",
+      "uncovered": "Votre disponibilité déclarée ne couvre pas ce créneau, ou ce mode n’y est pas proposé : mettez-la à jour avant de confirmer.",
+      "conflict": "Un autre de vos engagements occupe déjà ce créneau."
+    },
+    "outcomeValue": "Issue : {{outcome}}",
+    "confirm": "Confirmer ma participation",
+    "decline": "Décliner",
+    "withdraw": "Me retirer",
+    "outcome": "Consigner l’issue pour cette demande",
+    "confirmHelp": "Indiquez votre propre temps de préparation et vos trajets. Le temps protégé est revérifié à la confirmation.",
+    "travelVirtual": "Aucun trajet pour un rendez-vous par téléphone ou en visio.",
+    "externalCommitments": "J’ai vérifié mes engagements hors CoverView sur ce créneau.",
+    "capacity": "Je confirme pouvoir assurer ce rendez-vous.",
+    "declineHelp": "Le client et l’organisateur seront informés. Vous ne serez plus sollicité pour ce rendez-vous.",
+    "reason": "Motif du retrait",
+    "reasonHelp": "Visible du client et de l’organisateur. 3 à 1000 caractères.",
+    "outcomes": {
+      "completed": "Rendez-vous effectué",
+      "client_absent": "Client absent",
+      "advisor_absent": "Je n’ai pas pu y assister"
+    },
+    "submit": "Valider",
+    "cancel": "Annuler",
+    "sending": "Envoi…",
+    "retryExact": "Réessayer la même demande",
+    "changed": "La situation a changé : la liste a été mise à jour.",
+    "failed": "Les rendez-vous conjoints n’ont pas pu être chargés.",
+    "retry": "Réessayer"
   }
 }

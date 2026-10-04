@@ -975,6 +975,24 @@ export const leadAppointmentSchema = leadAppointmentInputSchema
     state: z.enum(["scheduled", "completed", "cancelled", "client_absent", "advisor_absent"]),
   })
   .strip();
+export const jointParticipationStateSchema = z.enum([
+  "invited",
+  "confirmed",
+  "declined",
+  "withdrawn",
+  "ended",
+]);
+export const jointOutcomeSchema = z.enum(["completed", "client_absent", "advisor_absent"]);
+// Joint appointment (C6b): who joins the hosting appointment. Names only, never the joining
+// professional's request, and only for the appointment's professionals, its owner and the Admin.
+export const jointParticipantSchema = z.object({
+  id,
+  name: z.string().nullable(),
+  organization: z.string().nullable(),
+  state: jointParticipationStateSchema,
+  termsCurrent: z.boolean(),
+  outcome: jointOutcomeSchema.nullable(),
+});
 export const personalAppointmentProposalSchema = z
   .object({
     appointment: leadAppointmentInputSchema.omit({ advisorId: true }),
@@ -1899,7 +1917,11 @@ export const leadDetailSchema = leadSummarySchema.extend({
   insuranceRequestId: insuranceRequestIdSchema.nullable().default(null),
   transmissionAuthorized: z.boolean().nullable(),
   tasks: z.array(leadTaskSchema),
-  appointments: z.array(leadAppointmentSchema),
+  appointments: z.array(
+    leadAppointmentSchema.extend({
+      participants: z.array(jointParticipantSchema).max(10).optional(),
+    }),
+  ),
   events: z.array(leadEventSchema),
   offers: z.array(leadOfferSchema),
   currentContract: currentContractSchema.nullable().default(null),
@@ -2096,7 +2118,16 @@ export const partnerWorkSchema = z.object({
     leadTaskSchema.extend({ leadId: id, leadTitle: z.string(), clientName: z.string() }),
   ),
   appointments: z.array(
-    leadAppointmentSchema.extend({ leadId: id, leadTitle: z.string(), clientName: z.string() }),
+    leadAppointmentSchema.extend({
+      leadId: id,
+      leadTitle: z.string(),
+      clientName: z.string(),
+      // Set when the reader joins an appointment hosted on another request (C6b): the item then
+      // shows that appointment through the reader's own request.
+      participation: z
+        .object({ id, state: jointParticipationStateSchema, termsCurrent: z.boolean() })
+        .optional(),
+    }),
   ),
   truncated: z.boolean(),
 });

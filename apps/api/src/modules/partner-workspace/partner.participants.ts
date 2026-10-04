@@ -2,6 +2,7 @@ import type { PoolClient } from "pg";
 import type { partnerLeads } from "./partner.schema.js";
 import { fail, membership, authorityCurrent, type PartnerActor } from "./partner.policy.js";
 import { event, type PartnerAuditActor } from "./partner.audit.js";
+import { leaveJointAppointments, settleJointAppointments } from "./partner.joint-appointments.js";
 type LeadRow = typeof partnerLeads.$inferSelect;
 export async function requireAssignee(
   tx: PoolClient,
@@ -48,10 +49,18 @@ export async function handoffWork(
 ) {
   // Future commitments cannot stay assigned to an intervenant who no longer has access.
   const remainingParticipant = `exists(select 1 from partner_contributors pc where pc.lead_id=$1 and pc.user_id=a.advisor_id and pc.revoked_at is null and ${authorityCurrent("pc")} and pc.access_scope='advice' and pc.can_edit and pc.can_contact)`;
-  const cancelled = await tx.query(
-    `update partner_appointments a set state='cancelled' where lead_id=$1 and state='scheduled' and starts_at>now() and advisor_id is distinct from $2 and not ${remainingParticipant}`,
+  const cancelled = await tx.query<{ id: string }>(
+    `update partner_appointments a set state='cancelled' where lead_id=$1 and state='scheduled' and starts_at>now() and advisor_id is distinct from $2 and not ${remainingParticipant} returning a.id`,
     [leadId, responsibleId],
   );
+  // Joint appointments follow (C6b): hosted ones end their participations, and a professional
+  // who lost the personal right on this request leaves the appointments joined through it.
+  await settleJointAppointments(
+    tx,
+    actor,
+    cancelled.rows.map((row) => row.id),
+  );
+  await leaveJointAppointments(tx, actor, leadId, false);
   if (responsibleId)
     await tx.query(
       `update partner_tasks t set responsible_id=$2 where lead_id=$1 and state='open' and responsible_id<>$2 and not exists(select 1 from partner_contributors pc where pc.lead_id=$1 and pc.user_id=t.responsible_id and pc.revoked_at is null and ${authorityCurrent("pc")} and pc.access_scope='advice' and pc.can_edit)`,

@@ -23,6 +23,7 @@ import {
 } from "@coverview/ui";
 import { partnerApi } from "../../partner-api";
 import { WalletBookingChoices } from "./WalletBookingChoices";
+import { JointAppointmentPanel, JoinedAppointments } from "./JointAppointmentPanel";
 
 const confirmation = walletAppointmentCancellationSchema.omit({ basis: true });
 const formSchema = confirmation.extend({ confirmed: z.boolean() }).pipe(confirmation);
@@ -130,6 +131,12 @@ function AppointmentScreen({
             </p>
             <p>{t("appointmentLinks.duration", { count: current.appointment.durationMinutes })}</p>
             <p>{t("appointments.advisor", { name: current.advisorName ?? t("coverviewQueue") })}</p>
+            <JointAppointmentPanel
+              identity={identity}
+              leadId={leadId}
+              appointmentId={appointmentId}
+              onBusy={onBusy}
+            />
             {saved ? (
               <p role="status">{t("appointments.success")}</p>
             ) : review ? (
@@ -302,6 +309,7 @@ export function WalletAppointmentsDialog({
               ))}
             </ul>
             {list.data.appointments.length === 100 && <p>{t("appointments.limit")}</p>}
+            <JoinedAppointments identity={identity} leadId={leadId} />
           </>
         )}
       </DialogContent>

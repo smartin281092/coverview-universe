@@ -118,6 +118,11 @@ import { protectAppointmentTime, recordAppointmentTime } from "./partner.appoint
 import { previewPersonalAppointment } from "./partner.appointment-creation.js";
 import { createAppointmentLinkOperations } from "./partner.appointment-links.js";
 import { createWalletAppointmentOperations } from "./partner.wallet-appointments.js";
+import {
+  appointmentParticipants,
+  createJointAppointmentOperations,
+  settleJointAppointments,
+} from "./partner.joint-appointments.js";
 import { createBookingOperations } from "./partner.booking.js";
 import { createCounselOperations } from "./partner.counsel.js";
 import { createCommercialOperations, economyRead } from "./partner.commercial.js";
@@ -398,7 +403,7 @@ async function detail(db: Executor, actor: PartnerActor, id: string): Promise<Le
         });
       })
     : [];
-  const appointments =
+  const hosted =
     operational || actor.wallet
       ? (
           await db.query<Record<string, unknown>>(
@@ -412,6 +417,10 @@ async function detail(db: Executor, actor: PartnerActor, id: string): Promise<Le
           }),
         )
       : [];
+  const participants = await appointmentParticipants(db, actor, hosted);
+  const appointments = hosted.map((appt) =>
+    participants.has(appt.id) ? { ...appt, participants: participants.get(appt.id) } : appt,
+  );
   const events =
     base.access !== "progress"
       ? (
@@ -655,7 +664,7 @@ export function createPartnerRepository(
         typeof error === "object" &&
         "code" in error &&
         error.code === "23514" &&
-        /^(market|commercial|economy|quality|communication|pilotage|conclusion|navigation|relationships)\./u.test(
+        /^(market|commercial|economy|quality|communication|pilotage|conclusion|navigation|relationships|joint)\./u.test(
           operation,
         )
       )
@@ -814,6 +823,7 @@ export function createPartnerRepository(
     ...createEconomyOperations(pool, transaction),
     ...createCompetenceOperations(pool, transaction, documentsAvailable),
     ...createWalletAppointmentOperations(pool, transaction),
+    ...createJointAppointmentOperations(pool, transaction),
     ...createBookingOperations(pool, transaction),
     ...createCounselOperations(
       pool,
@@ -1586,6 +1596,8 @@ export function createPartnerRepository(
             "client",
             appointmentId,
           );
+          // Joined professionals reconfirm the new terms; their old confirmation protects nothing.
+          await settleJointAppointments(tx, actor, [appointmentId]);
           await syncLeadNotifications(tx, id);
           return appointmentId;
         },
@@ -2174,12 +2186,36 @@ export function createPartnerRepository(
           [actor.userId],
         )
       ).rows;
-      const appointments = (
+      const hosted = (
         await pool.query<Record<string, unknown>>(
           `select a.*,l.title lead_title,l.client_name from partner_appointments a join partner_leads l on l.id=a.lead_id where ${scope} and a.state='scheduled' and a.starts_at>now()-interval '1 day' order by a.starts_at,a.id limit 101`,
           [actor.userId],
         )
       ).rows;
+      // C6b: appointments the reader joins appear through the reader's own request.
+      const joined = (
+        await pool.query<Record<string, unknown>>(
+          `select a.id,a.advisor_id,a.starts_at,a.duration_minutes,a.mode,a.location,a.timezone,a.state,
+          l.id lead_id,l.title lead_title,l.client_name,p.id participation_id,p.state participation_state,
+          p.terms_revision=a.link_terms_revision terms_current
+          from partner_appointment_participants p join partner_appointments a on a.id=p.appointment_id
+          join partner_leads l on l.id=p.lead_id where p.user_id=$1 and p.state in ('invited','confirmed')
+          and a.state='scheduled' and a.starts_at>now()-interval '1 day' order by a.starts_at,a.id limit 101`,
+          [actor.userId],
+        )
+      ).rows.map((row): Record<string, unknown> => ({
+        ...row,
+        participation: {
+          id: row.participation_id,
+          state: row.participation_state,
+          termsCurrent: row.terms_current,
+        },
+      }));
+      const appointments = [...hosted, ...joined].sort(
+        (a, b) =>
+          (a.starts_at as Date).getTime() - (b.starts_at as Date).getTime() ||
+          String(a.id).localeCompare(String(b.id)),
+      );
       return partnerWorkSchema.parse({
         tasks: tasks.slice(0, 100).map((row) => ({
           ...camel<Record<string, unknown>>(row),
@@ -2191,7 +2227,7 @@ export function createPartnerRepository(
           ...camel<Record<string, unknown>>(row),
           startsAt: date(row.starts_at as Date),
         })),
-        truncated: tasks.length > 100 || appointments.length > 100,
+        truncated: tasks.length > 100 || hosted.length > 100 || appointments.length > 100,
       });
     },
     async dashboard(actor: PartnerActor) {

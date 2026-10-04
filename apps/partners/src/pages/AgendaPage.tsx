@@ -46,7 +46,7 @@ export function AgendaPage() {
       <div className="space-y-4">
         {query.data.appointments.map((appt) => (
           <article
-            key={appt.id}
+            key={`${appt.id}:${appt.participation?.id ?? "host"}`}
             className="flex flex-wrap items-center gap-5 rounded-xl border border-border p-6"
           >
             <CalendarDays className="size-7 text-muted-foreground" />
@@ -66,6 +66,15 @@ export function AgendaPage() {
               </p>
               <p className="mt-1 text-xs text-muted-foreground">{appt.location}</p>
             </div>
+            {appt.participation && (
+              <Badge variant="secondary">
+                {t("agenda.joint")}
+                {" · "}
+                {appt.participation.state === "confirmed" && !appt.participation.termsCurrent
+                  ? t("joint.stale")
+                  : t(`joint.state.${appt.participation.state}`)}
+              </Badge>
+            )}
             <Badge variant="outline">{t(`appointment.${appt.mode}`)}</Badge>
             <span className="text-sm text-muted-foreground">
               {new Intl.NumberFormat("fr-CH", { style: "unit", unit: "minute" }).format(

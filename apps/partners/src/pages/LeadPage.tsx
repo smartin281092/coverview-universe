@@ -32,6 +32,7 @@ import { PersonalAppointmentDialog } from "../features/PersonalAppointmentDialog
 import { BookingProposalsDialog } from "../features/BookingProposalsDialog";
 import { AppointmentLinksDialog } from "../features/AppointmentLinksDialog";
 import { SharedAppointmentsDialog } from "../features/SharedAppointmentsDialog";
+import { JointParticipationsPanel } from "../features/JointParticipationsPanel";
 import type { LeadDetail } from "@coverview/contracts/partner";
 import { OfferWithdrawDialog } from "../features/OfferWithdrawDialog";
 import { ContractComparison } from "../features/ContractComparison";
@@ -658,6 +659,7 @@ export function LeadPage() {
               {t("personalAppointment.title")}
             </Button>
           )}
+          <JointParticipationsPanel leadId={lead.id} />
           {lead.appointments.map((appt) => (
             <article
               key={appt.id}
@@ -677,6 +679,26 @@ export function LeadPage() {
                     appt.durationMinutes,
                   )}
                 </p>
+                {!!appt.participants?.length && (
+                  <div className="mt-2 text-sm">
+                    <p>{t("joint.participants")}</p>
+                    <ul className="list-disc pl-5">
+                      {appt.participants.map((participant) => (
+                        <li key={participant.id}>
+                          {t("joint.participant", {
+                            name: participant.name ?? "",
+                            organization: participant.organization ?? "",
+                            state:
+                              t(`joint.state.${participant.state}`) +
+                              (participant.state === "confirmed" && !participant.termsCurrent
+                                ? ` · ${t("joint.stale")}`
+                                : ""),
+                          })}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
               <Badge variant="outline">{t(`appointment.${appt.state}`)}</Badge>
               {allowed("personal_appointment") && appt.advisorId === session.identity.user.id && (

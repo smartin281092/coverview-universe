@@ -20,6 +20,7 @@ import { reopenLead } from "./partner.lifecycle.js";
 import { overlappingAppointment } from "./partner.appointment-assessment.js";
 import { computeMatching, recordMatchingDecision } from "./partner.matching.js";
 import { syncAnalysisNotice } from "./partner.recommendations.js";
+import { leaveJointAppointments, settleJointAppointments } from "./partner.joint-appointments.js";
 type LeadRow = typeof partnerLeads.$inferSelect;
 
 async function changeStage(tx: PoolClient, lead: LeadRow, stage: string) {
@@ -352,6 +353,8 @@ export async function executeLeadCommand(
         "update partner_appointments set state=$2 where id=$1",
         [input.appointmentId, input.state],
       );
+      // A cancellation ends the joined participations; an outcome stays each request's own.
+      await settleJointAppointments(tx, actor, [input.appointmentId]);
       if (input.state === "completed") await changeStage(tx, lead, "appointment_completed");
       else if (lead.stage === "appointment_scheduled")
         await changeStage(tx, lead, "appointment_needed");
@@ -438,11 +441,18 @@ export async function executeLeadCommand(
           "update partner_tasks set state='cancelled' where lead_id=$1 and state='open'",
           [id],
         );
-        await tx.query<Record<string, unknown>>(
-          "update partner_appointments set state='cancelled' where lead_id=$1 and state='scheduled' and starts_at>now()",
+        const cancelled = await tx.query<{ id: string }>(
+          "update partner_appointments set state='cancelled' where lead_id=$1 and state='scheduled' and starts_at>now() returning id",
           [id],
         );
+        await settleJointAppointments(
+          tx,
+          actor,
+          cancelled.rows.map((row) => row.id),
+        );
       }
+      // A closed request also leaves the appointments it joined on other requests.
+      await leaveJointAppointments(tx, actor, id, true);
       await event(tx, actor, id, "lead.closed", input.comment, "client");
       break;
     }

@@ -25,7 +25,8 @@
     "./partner-recommendations": "./src/partner-recommendations.ts",
     "./partner-overview": "./src/partner-overview.ts",
     "./partner-navigation": "./src/partner-navigation.ts",
-    "./partner-live": "./src/partner-live.ts"
+    "./partner-live": "./src/partner-live.ts",
+    "./partner-joint": "./src/partner-joint.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
