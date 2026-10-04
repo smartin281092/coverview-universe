@@ -15,6 +15,8 @@ import {
 } from "@coverview/ui";
 import { partnerApi } from "../api";
 import { useLeadCommand } from "./use-lead-command";
+import { BenefitFields } from "./BenefitFields";
+import { benefitCategoryOf } from "@coverview/contracts/partner-benefits";
 export function ContractReviewDialog({ lead, onClose }: { lead: LeadDetail; onClose: () => void }) {
   const { t } = useTranslation();
   const tr = (key: string) => t(`contract.${key}`);
@@ -79,46 +81,20 @@ export function ContractReviewDialog({ lead, onClose }: { lead: LeadDetail; onCl
               key={field.id}
               className="grid gap-3 rounded-lg border border-border p-4 sm:grid-cols-2"
             >
-              <div className="space-y-2">
-                <Label htmlFor={`contract-key-${index}`}>{tr("key")}</Label>
-                <select
-                  id={`contract-key-${index}`}
-                  className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
-                  {...form.register(`features.${index}.key`)}
-                >
-                  {[
-                    ...new Set([
-                      "deductible",
-                      "collision",
-                      "parking",
-                      "assistance",
-                      "replacement_vehicle",
-                      "hospitalization",
-                      "dental",
-                      "death",
-                      "disability",
-                      "fees",
-                      "exclusions",
-                      "other",
-                      ...current.features.map((feature) => feature.key),
-                      ...lead.offers.flatMap((offer) =>
-                        offer.features.map((feature) => feature.key),
-                      ),
-                    ]),
-                  ].map((key) => (
-                    <option key={key} value={key}>
-                      {t(`benefit.${key}`, {
-                        defaultValue:
-                          current.features.find((feature) => feature.key === key)?.label ??
-                          lead.offers
-                            .flatMap((offer) => offer.features)
-                            .find((feature) => feature.key === key)?.label ??
-                          key,
-                      })}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <BenefitFields
+                id={`contract-benefit-${index}`}
+                need={lead.category}
+                label={form.watch(`features.${index}.label`)}
+                category={form.watch(`features.${index}.category`) ?? benefitCategoryOf(field)}
+                limit={form.watch(`features.${index}.limit`) ?? null}
+                onCategory={(category) => {
+                  form.setValue(`features.${index}.category`, category, { shouldDirty: true });
+                  form.setValue(`features.${index}.key`, category, { shouldDirty: true });
+                }}
+                onLimit={(limit) =>
+                  form.setValue(`features.${index}.limit`, limit, { shouldDirty: true })
+                }
+              />
               {(["label", "value", "conditions", "exclusions", "quote"] as const).map((name) => (
                 <div key={name} className="space-y-2">
                   <Label htmlFor={`contract-${name}-${index}`}>{tr(name)}</Label>

@@ -1,6 +1,6 @@
 export { Button } from "./Button";
 export { SignatureEvidence } from "./SignatureEvidence";
-export { SourcedComparison } from "./SourcedComparison";
+export { ComparisonMatrix } from "./ComparisonMatrix";
 export { ButtonLink } from "./Button";
 export { Badge, badgeVariants } from "./Badge";
 export {

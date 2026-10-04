@@ -25,6 +25,8 @@ import { api, partnerApi } from "../api";
 import { usePartner } from "./PartnerSession";
 import { useLeadCommand } from "./use-lead-command";
 import { localDateTime, formatMoney, zurichInstant } from "./Field";
+import { BenefitFields } from "./BenefitFields";
+import { benefitCategoryOf } from "@coverview/contracts/partner-benefits";
 const schema = leadOfferInputSchema
   .omit({ annualPremiumMinor: true, validUntil: true })
   .extend({ premium: z.string().regex(/^(?:\d{1,8}(?:[.,]\d{1,2})?)?$/u), validUntil: z.string() });
@@ -318,37 +320,24 @@ export function OfferDialog({
                 key={field.id}
                 className="grid gap-3 rounded-lg border border-border p-4 sm:grid-cols-2"
               >
-                <div className="space-y-2">
-                  <Label htmlFor={`key-${index}`}>{t("field.featureLabel")}</Label>
-                  <select
-                    id={`key-${index}`}
-                    {...form.register(`features.${index}.key`)}
-                    className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
-                  >
-                    {[
-                      "deductible",
-                      "collision",
-                      "parking",
-                      "assistance",
-                      "replacement_vehicle",
-                      "hospitalization",
-                      "dental",
-                      "death",
-                      "disability",
-                      "fees",
-                      "exclusions",
-                      "other",
-                    ].map((key) => (
-                      <option key={key} value={key}>
-                        {t(`benefit.${key}`)}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="space-y-2">
+                <div className="space-y-2 sm:col-span-2">
                   <Label htmlFor={`label-${index}`}>{t("field.featureLabel")}</Label>
                   <Input id={`label-${index}`} {...form.register(`features.${index}.label`)} />
                 </div>
+                <BenefitFields
+                  id={`benefit-${index}`}
+                  need={lead.category}
+                  label={form.watch(`features.${index}.label`)}
+                  category={form.watch(`features.${index}.category`) ?? benefitCategoryOf(field)}
+                  limit={form.watch(`features.${index}.limit`) ?? null}
+                  onCategory={(category) => {
+                    form.setValue(`features.${index}.category`, category, { shouldDirty: true });
+                    form.setValue(`features.${index}.key`, category, { shouldDirty: true });
+                  }}
+                  onLimit={(limit) =>
+                    form.setValue(`features.${index}.limit`, limit, { shouldDirty: true })
+                  }
+                />
                 <div className="space-y-2">
                   <Label htmlFor={`value-${index}`}>{t("field.featureValue")}</Label>
                   <Input id={`value-${index}`} {...form.register(`features.${index}.value`)} />

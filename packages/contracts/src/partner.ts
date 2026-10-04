@@ -24,6 +24,8 @@ import {
 export * from "./partner-contract.js";
 export * from "./partner-final-policy.js";
 import { finalPolicyReviewSchema } from "./partner-final-policy.js";
+import { benefitCategorySchema, benefitLimitSchema } from "./partner-benefits.js";
+import { offerComparisonSchema } from "./partner-comparison.js";
 import { insuranceItemSchema, insuranceRequestIdSchema } from "./insurance-requests.js";
 import { documentCreateInputSchema, documentStateSchema } from "./documents.js";
 
@@ -1148,6 +1150,9 @@ export const offerFeatureSchema = z
     verification: z.enum(["to_verify", "verified", "missing"]),
     source: z.string().trim().max(300),
     sourcePage: z.number().int().min(1).max(20).nullable().optional(),
+    // benefit-catalog-v1: normalized category and structured amount, both additive.
+    category: benefitCategorySchema.optional(),
+    limit: benefitLimitSchema.nullable().optional(),
   })
   .strict();
 export const leadOfferInputSchema = z
@@ -1878,6 +1883,7 @@ export const leadDetailSchema = leadSummarySchema.extend({
   offers: z.array(leadOfferSchema),
   currentContract: currentContractSchema.nullable().default(null),
   comparisons: z.array(contractComparisonSchema).default([]),
+  offerComparison: offerComparisonSchema.optional(),
   collaborations: z.array(collaborationSchema).default([]),
   participants: z
     .array(z.object({ id, name: z.string(), canContact: z.boolean(), canWork: z.boolean() }))

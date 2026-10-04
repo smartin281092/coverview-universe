@@ -35,6 +35,7 @@ import { SharedAppointmentsDialog } from "../features/SharedAppointmentsDialog";
 import type { LeadDetail } from "@coverview/contracts/partner";
 import { OfferWithdrawDialog } from "../features/OfferWithdrawDialog";
 import { ContractComparison } from "../features/ContractComparison";
+import { OfferMatrix } from "../features/OfferMatrix";
 import { ContractReviewDialog } from "../features/ContractReviewDialog";
 import { CreateLeadDialog } from "../features/CreateLeadDialog";
 import { CollaborationDialog } from "../features/CollaborationDialog";
@@ -850,6 +851,7 @@ export function LeadPage() {
           {!lead.offers.some((item) => item.active) && (
             <EmptyState title={t("offer.noOffers")} description={t("offer.sourceHelp")} />
           )}
+          {lead.offerComparison && <OfferMatrix comparison={lead.offerComparison} />}
         </div>
       )}
       {action && (

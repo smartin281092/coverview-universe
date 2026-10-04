@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { documentInsuranceSchema, insuranceContractSchema } from "./documents.js";
+import { benefitCategorySchema, benefitLimitSchema } from "./partner-benefits.js";
 
 export const contractCandidateSchema = z.object({
   documentId: z.string(),
@@ -23,6 +24,8 @@ export const contractFeatureSchema = z
     verification: z.enum(["verified", "to_verify", "missing"]),
     page: z.number().int().positive().max(200).nullable(),
     quote: z.string().trim().max(1000),
+    category: benefitCategorySchema.optional(),
+    limit: benefitLimitSchema.nullable().optional(),
   })
   .strict();
 export const contractReviewInputSchema = z

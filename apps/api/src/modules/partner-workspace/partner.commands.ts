@@ -553,10 +553,12 @@ export async function executeLeadCommand(
         fail("PARTNER_INVALID_TRANSITION");
       const source = await requireOfferSource(tx, offer.content.documentId, offer.sourceSnapshot);
       const analysis = documentAnalysisSchema.safeParse(source.analysis);
+      // An inclusion, an exclusion or a structured amount must cite its page in this exact source.
       for (const feature of offer.content.features) {
+        if (feature.limit && (feature.verification === "missing" || feature.origin === "missing"))
+          fail("PARTNER_OFFER_NOT_READY");
         if (
-          feature.coverage &&
-          feature.coverage !== "unknown" &&
+          ((feature.coverage && feature.coverage !== "unknown") || feature.limit) &&
           (feature.origin === "calculated" ||
             !feature.sourcePage ||
             !feature.source ||

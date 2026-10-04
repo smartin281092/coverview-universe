@@ -140,7 +140,7 @@ export async function executeContractCommand(
     // Human annotations must point to a quote actually present in this exact analysis version.
     for (const feature of review.features) {
       if (feature.verification === "missing") {
-        if (feature.coverage !== "unknown" || feature.value || feature.quote)
+        if (feature.coverage !== "unknown" || feature.value || feature.quote || feature.limit)
           fail("PARTNER_ACTION_REQUIRED");
       } else if (
         !feature.page ||
@@ -167,6 +167,20 @@ export async function executeContractCommand(
   }
 }
 
+// Annual CHF premium of the current contract: month ×12, quarter ×4, half-year ×2, year ×1.
+// A single, unknown or foreign-currency premium has no annual amount.
+export function currentAnnualFactor(current: CurrentContract) {
+  const premium = current.source?.facts.premium;
+  return premium && premium.period !== "once" && premium.period !== "unknown"
+    ? { month: 12, quarter: 4, half_year: 2, year: 1 }[premium.period]
+    : null;
+}
+export function currentAnnualPremium(current: CurrentContract) {
+  const premium = current.source?.facts.premium,
+    factor = currentAnnualFactor(current);
+  return premium?.currency === "CHF" && factor ? premium.amountMinor * factor : null;
+}
+
 export function compareCurrentContract(
   current: CurrentContract | null,
   offers: LeadOffer[],
@@ -175,12 +189,8 @@ export function compareCurrentContract(
   return offers
     .filter((offer) => offer.active && !["cancelled", "replaced", "expired"].includes(offer.state))
     .map((offer) => {
-      const premium = current.source?.facts.premium;
-      const factor =
-        premium && premium.period !== "once" && premium.period !== "unknown"
-          ? { month: 12, quarter: 4, half_year: 2, year: 1 }[premium.period]
-          : null;
-      const annual = premium?.currency === "CHF" && factor ? premium.amountMinor * factor : null;
+      const factor = currentAnnualFactor(current);
+      const annual = currentAnnualPremium(current);
       const offerVerified =
         offer.canCompare === true &&
         !!offer.reviewedAt &&

@@ -34,6 +34,7 @@ import { useWalletProfileScope } from "../features/profile/use-wallet-profile-sc
 import { ChoiceDialog, type WalletChoice } from "../features/offers/ChoiceDialog";
 import { WalletLeadDialog } from "../features/offers/WalletLeadDialog";
 import { ContractComparison } from "../features/offers/ContractComparison";
+import { OfferMatrix } from "../features/offers/OfferMatrix";
 import { ContractLinkDialog } from "../features/offers/ContractLinkDialog";
 import { OfferHistoryDialog } from "../features/offers/OfferHistoryDialog";
 import { FinalPoliciesDialog } from "../features/offers/FinalPoliciesDialog";
@@ -47,87 +48,6 @@ const date = (value: string) =>
   new Intl.DateTimeFormat("fr-CH", { dateStyle: "medium", timeZone: "Europe/Zurich" }).format(
     new Date(value),
   );
-function CompareTable({ offers, all }: { offers: LeadOffer[]; all: boolean }) {
-  const { t } = useTranslation("offers");
-  const keys = [
-    ...new Set(
-      offers.flatMap((offer) =>
-        offer.features.map((feature) =>
-          feature.key === "other" ? `other:${feature.label}` : feature.key,
-        ),
-      ),
-    ),
-  ];
-  return (
-    <div className="overflow-x-auto rounded-xl border border-border">
-      <table className="w-full min-w-max text-left text-sm">
-        <thead className="bg-muted">
-          <tr>
-            <th className="p-4">{t("compare")}</th>
-            {offers.map((offer) => (
-              <th key={offer.id} className="max-w-72 p-4">
-                <p>{offer.company}</p>
-                <p className="mt-1 font-normal text-muted-foreground">{offer.product}</p>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          <tr className="border-t border-border">
-            <th className="p-4">{t("premium")}</th>
-            {offers.map((offer) => (
-              <td key={offer.id} className="p-4 font-semibold">
-                {offer.annualPremiumMinor === null ? t("missing") : money(offer.annualPremiumMinor)}
-              </td>
-            ))}
-          </tr>
-          {(all ? keys : keys.slice(0, 6)).map((key) => {
-            const matches = (offer: LeadOffer) =>
-              offer.features.filter(
-                (feature) =>
-                  (feature.key === "other" ? `other:${feature.label}` : feature.key) === key,
-              );
-            const label = offers.flatMap(matches)[0]?.label;
-            return (
-              <tr key={key} className="border-t border-border">
-                <th className="max-w-52 p-4 align-top font-medium">{label}</th>
-                {offers.map((offer) => {
-                  const features = matches(offer);
-                  return (
-                    <td key={offer.id} className="max-w-80 p-4 align-top">
-                      {features.length
-                        ? features.map((feature, index) => (
-                            <div key={index} className="space-y-2">
-                              <p>
-                                {feature.verification === "missing" || feature.origin === "missing"
-                                  ? t("missing")
-                                  : feature.value || t("missing")}
-                              </p>
-                              {feature.verification === "to_verify" && (
-                                <Badge variant="outline">{t("uncertain")}</Badge>
-                              )}
-                              {feature.conditions && (
-                                <p className="whitespace-pre-wrap text-xs text-muted-foreground">
-                                  {feature.conditions}
-                                </p>
-                              )}
-                              {all && feature.source && (
-                                <p className="text-xs text-muted-foreground">{feature.source}</p>
-                              )}
-                            </div>
-                          ))
-                        : t("missing")}
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
-  );
-}
 function Offers({ identity }: { identity: IdentityMe }) {
   const { t } = useTranslation("offers"),
     { scope } = useWalletProfileScope(),
@@ -137,7 +57,6 @@ function Offers({ identity }: { identity: IdentityMe }) {
   const [cursor, setCursor] = useState<string>(),
     [choice, setChoice] = useState<WalletChoice | null>(null),
     [retryCommand, setRetryCommand] = useState<LeadCommand | null>(null),
-    [detailed, setDetailed] = useState(false),
     [history, setHistory] = useState(false),
     [reopenings, setReopenings] = useState(false),
     [relationships, setRelationships] = useState(false),
@@ -776,11 +695,8 @@ function Offers({ identity }: { identity: IdentityMe }) {
                         </article>
                       ))}
                     </div>
-                    <CompareTable offers={offers.filter((offer) => offer.canCompare)} all={false} />
-                    <div className="flex flex-wrap items-center justify-between gap-3">
-                      <Button variant="outline" onClick={() => setDetailed(true)}>
-                        {t("detailed")}
-                      </Button>
+                    {lead.offerComparison && <OfferMatrix comparison={lead.offerComparison} />}
+                    <div className="flex flex-wrap items-center justify-end gap-3">
                       <Button
                         variant="ghost"
                         disabled={pending || lead.stage === "completed"}
@@ -840,19 +756,6 @@ function Offers({ identity }: { identity: IdentityMe }) {
           }}
         />
       )}
-      <Dialog open={detailed} onOpenChange={setDetailed}>
-        <DialogContent
-          className="max-h-[90svh] overflow-y-auto sm:max-w-6xl"
-          showCloseButton
-          closeLabel={t("close")}
-        >
-          <DialogHeader>
-            <DialogTitle>{t("detailed")}</DialogTitle>
-            <DialogDescription>{lead?.title}</DialogDescription>
-          </DialogHeader>
-          <CompareTable offers={offers.filter((offer) => offer.canCompare)} all />
-        </DialogContent>
-      </Dialog>
       <ChoiceDialog
         key={
           choice

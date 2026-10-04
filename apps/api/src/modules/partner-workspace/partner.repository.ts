@@ -7,6 +7,7 @@ import { createNavigationOperations } from "./partner.navigation.js";
 import { createMatchingOperations } from "./partner.matching.js";
 import { createProfileOperations } from "./partner.profiles.js";
 import { createInvitationOperations, type InvitationDelivery } from "./partner.invitations.js";
+import { compareOffers } from "./partner.comparison.js";
 import { readSolutionClauses, recordSolutionClauses } from "./partner.solution-clauses.js";
 import { createHash } from "node:crypto";
 import type { Pool, PoolClient } from "pg";
@@ -457,6 +458,7 @@ async function detail(db: Executor, actor: PartnerActor, id: string): Promise<Le
     offers,
     currentContract,
     comparisons: compareCurrentContract(currentContract, offers),
+    offerComparison: compareOffers(currentContract, offers),
     collaborations:
       !actor.wallet && base.access !== "progress" ? await readCollaborations(db, actor, id) : [],
     participants:

@@ -31,7 +31,7 @@ Rendre tout le [brief I–III](../../references/coverview-partner-2026-10-02.md)
 1. **Matching système et réattribution automatique bornée** (I.10.2–10.4, I.11.3, II.9). Classement expliqué depuis les déclarations validées, exclusion des conflits déclarés, départage par choix client, capacité et répartition, rémunération exclue. Écart manuel motivé. Après 24 h sans action utile : proposition au candidat suivant, nombre maximal configuré, puis reprise humaine CoverView. — *Livré le 4 octobre (`c9998c9`, `641d3ef`), V0–V2 : suite complète 748/748.*
 2. **Profils publics et évaluations** (I.18, I.12) : profil publiable, trois dimensions séparées, note avec période, volume et méthode, prudence à faible volume, contestation, évaluation des apporteurs. — *Livré le 4 octobre, V0–V2 : suite complète 74/74 fichiers, 751/751 tests. Photo de profil et profil d’organisation reportés en C8 (C2b).*
 3. **Wallet d'un nouveau client** (I.6.2, scénario 3) : espace préparé, invitation et activation encadrées, sans révélation ni consentement implicite. Traitement des emails erronés et des adresses partagées. — *Livré le 4 octobre, V0–V2 et envoi Mailpit réel ; parcours Wallet avec un vrai compte WorkOS en phase B.*
-4. **Comparaison** (I.13, III.7–10) : catégories de prestations normalisées, proposition automatique du contrat actuel quand l'objet est identifiable (confirmation sinon), orientation initiale automatique distincte de la recommandation finale, spécificités prévoyance.
+4. **Comparaison** (I.13, III.7–10) : catégories de prestations normalisées, proposition automatique du contrat actuel quand l'objet est identifiable (confirmation sinon), orientation initiale automatique distincte de la recommandation finale, spécificités prévoyance. — *C4a livré le 4 octobre (prestations normalisées, montants structurés, matrice serveur), V0–V2 ; C4b et C4c en cours.*
 5. **Pilotage quotidien** (I.7, II.6/10/14) : vues d'équipe et prédéfinies, indicateurs de carte, dashboard Admin complet.
 6. **Temps réel et agenda** (III.16, I.12, I.21) : diffusion Partner↔Wallet, rendez-vous conjoint, rentabilité CoverView si ses données existent.
 7. **Droits des personnes** (I.20, S-130/S-131) : export, rectification, conservation et suppression contrôlée, cloisonnement en base. Aucune durée légale inventée.
@@ -200,6 +200,10 @@ architecture, backend, api, contracts, data, permissions, security, testing, fro
 | 6 | C3 invitations | tests ciblés | 5/6 : une annulation invalide lève l'erreur Zod de façon synchrone | Assertion corrigée (`toThrow` synchrone) ; 6/6 |
 | 7 | Adaptateur Mailpit | envoi réel vers Mailpit local | Message reçu : texte et HTML, lien, notice, étiquette, référence ; score HTML 94 % | Oracle réel de l'adaptateur |
 | 8 | C3 complet | suite complète Vitest, builds API/Partner/Wallet, depcruise, knip | 75/75 fichiers, 758/758 tests ; builds verts ; depcruise sans erreur ; knip identique au commit précédent (préexistant) | Commit C3, travail C4 exclu |
+| 9 | C4a moteur | tests unitaires | 8/8 après correction d'une attente (« à vérifier » distinct de « absente ») | — |
+| 10 | C4a bout en bout | test PostgreSQL | Échec : colonnes attendues dans l'ordre de création, servies dans l'ordre des cartes (récentes d'abord) | Attente corrigée, ordre des cartes conservé ; 1/1 |
+| 11 | C4a frontières | dependency-cruiser | 4 cycles : import de type `partner-benefits` → `partner` | Liste des besoins locale, cohérence imposée au typecheck des appelants ; 0 erreur |
+| 12 | C4a complet | suite complète, builds, knip | 77/77 fichiers, 767/767 tests ; builds verts ; knip inchangé (préexistant) | Commit C4a, brouillon C4b hors dépôt |
 
 ## Risques et mitigations
 
