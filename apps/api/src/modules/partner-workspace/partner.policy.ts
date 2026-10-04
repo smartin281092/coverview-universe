@@ -45,6 +45,7 @@ export async function membership(
     ...z.record(z.string(), z.unknown()).parse(row.application),
     userId: row.user_id,
     organizationId: row.organization_id,
+    professionalRevision: row.professional_revision,
     state: row.state,
     organizationState: row.organization_state,
     grantedRoles: row.roles,
@@ -53,6 +54,28 @@ export async function membership(
     reviewedAt: date(row.reviewed_at as Date | null),
     reviewDueAt: date(row.review_due_at as Date | null),
   });
+}
+export function professionalScope(
+  row: {
+    organization_id: string;
+    declared_name: string;
+    declared_organization: string;
+    professional_revision: number | null;
+  },
+  member: Pick<
+    PartnerApplication,
+    "name" | "organization" | "organizationId" | "professionalRevision"
+  > | null,
+): "current" | "changed" | "unknown" {
+  if (!row.professional_revision || !row.declared_name || !row.declared_organization)
+    return "unknown";
+  return member &&
+    row.professional_revision === member.professionalRevision &&
+    row.organization_id === member.organizationId &&
+    row.declared_name === member.name &&
+    row.declared_organization === member.organization
+    ? "current"
+    : "changed";
 }
 export async function context(
   db: Executor,

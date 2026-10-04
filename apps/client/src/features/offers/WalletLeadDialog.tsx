@@ -58,6 +58,7 @@ export function WalletLeadDialog({
           <DialogTitle>{t("requestTitle")}</DialogTitle>
           <DialogDescription>{t("requestDescription")}</DialogDescription>
         </DialogHeader>
+        <p className="text-sm text-muted-foreground">{t("advice.afterCreate")}</p>
         {profiles.isError && (
           <div role="alert" className="space-y-2 text-sm">
             <p>{t("error")}</p>

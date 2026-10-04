@@ -1,0 +1,2 @@
+ALTER TABLE "partner_convention_declarations" ADD COLUMN "declared_name" text DEFAULT '' NOT NULL;--> statement-breakpoint
+ALTER TABLE "partner_convention_declarations" ADD COLUMN "declared_organization" text DEFAULT '' NOT NULL;

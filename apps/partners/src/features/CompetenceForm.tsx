@@ -15,6 +15,7 @@ import { Button, Input, Label } from "@coverview/ui";
 import { partnerApi } from "../api";
 import { usePartner } from "./PartnerSession";
 import { zurichInstant } from "./Field";
+import { ProfessionalScopeDetails } from "./ProfessionalScopeDetails";
 
 type Props = {
   dossier: CompetenceDossier;
@@ -95,6 +96,7 @@ export function CompetenceDeclarationForm(props: Props) {
               request.current = {
                 input: competenceDeclarationSchema.parse({
                   revision: dossier.current?.revision ?? 0,
+                  professionalRevision: dossier.professionalRevision,
                   ...values,
                   file: { name: file.name, mime: file.type, size: file.size, checksum },
                 }),
@@ -250,6 +252,7 @@ export function CompetenceDecisionForm(props: Props) {
         {t(`competence.${mode === "withdraw" ? "withdrawHelp" : "reviewHelp"}`)}
       </p>
       <p className="whitespace-pre-wrap text-sm">{captured.declaration}</p>
+      <ProfessionalScopeDetails record={captured} />
       {captured.canDownload && (
         <Button variant="outline" asChild>
           <a href={partnerApi.competenceSourceUrl(dossier.userId, dossier.category, captured.id)}>

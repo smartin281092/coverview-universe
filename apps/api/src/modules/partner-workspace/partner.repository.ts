@@ -3,6 +3,10 @@ import type { Pool, PoolClient } from "pg";
 import { z } from "zod";
 import { documentAnalysisSchema } from "@coverview/contracts";
 import {
+  needConflictInputSchema,
+  type NeedConflictInput,
+  needCapacityInputSchema,
+  type NeedCapacityInput,
   leadSummarySchema,
   leadCommandSchema,
   leadDetailSchema,
@@ -21,6 +25,14 @@ import {
   offerImportRetrySchema,
   referentUpdateSchema,
   referentQuerySchema,
+  advicePreferencesInputSchema,
+  appointmentTimeInputSchema,
+  personalAppointmentProposalSchema,
+  personalAppointmentConfirmSchema,
+  type PersonalAppointmentProposal,
+  type PersonalAppointmentConfirm,
+  type AppointmentTimeInput,
+  type AdvicePreferencesInput,
   type PartnerContinuityUpdate,
   type LeadCreateInput,
   type LeadListQuery,
@@ -59,7 +71,20 @@ import {
   reconcileCollaborations,
 } from "./partner.collaboration.js";
 import { handoffWork } from "./partner.participants.js";
+import { createConventionOperations } from "./partner.convention.js";
 import { createCompetenceOperations } from "./partner.competence.js";
+import { createAvailabilityOperations } from "./partner.availability.js";
+import { createCapacityOperations } from "./partner.capacity.js";
+import { createSharedModesOperations } from "./partner.shared-modes.js";
+import { readAppointmentAssessment } from "./partner.appointment-assessment.js";
+import { protectAppointmentTime, recordAppointmentTime } from "./partner.appointment-time.js";
+import { previewPersonalAppointment } from "./partner.appointment-creation.js";
+import { createPracticeOperations } from "./partner.practice.js";
+import { readAdvicePreferences, confirmAdvicePreferences } from "./partner.advice.js";
+import { readNeedConflict, decideNeedConflict } from "./partner.need-conflicts.js";
+import { readNeedCapacity, decideNeedCapacity } from "./partner.need-capacity.js";
+import { readAdvisorAssessment } from "./partner.advisor-assessment.js";
+import { readReferentAssessment } from "./partner.referent-assessment.js";
 import { followUpDeadline, followUpOverdueSql } from "./partner.follow-up.js";
 import { readContinuitySettings, updateContinuitySettings } from "./partner.settings.js";
 import {
@@ -161,12 +186,22 @@ function summary(actor: PartnerActor, row: ReadRow): LeadSummary {
   if (!actor.wallet && row.responsibleId === actor.userId && row.assignment === "proposed")
     actions.push("accept");
   if (!actor.wallet && actor.administrator) actions.push("assign");
+  if (
+    active &&
+    !actor.wallet &&
+    (actor.administrator ||
+      (row.assignedAccess &&
+        (row.responsibleId === actor.userId || (row.contributorEdit && row.contributorContact))))
+  )
+    actions.push("personal_appointment");
   const canCollaborate =
     active &&
     !!row.responsibleId &&
     !actor.wallet &&
     (actor.administrator || row.responsibleId === actor.userId);
   if (canCollaborate) actions.push("collaboration_propose");
+  if (active && operational && (row.responsibleId === actor.userId || row.assignedAccess))
+    actions.push("advisor_assessment");
   if (active && operational) {
     if (!row.responsibleId) alerts.push("unassigned");
     if (!suspended) {
@@ -306,8 +341,20 @@ async function detail(db: Executor, actor: PartnerActor, id: string): Promise<Le
              from partner_events e
              left join partner_final_policies p on p.id=e.subject_id and p.lead_id=e.lead_id
              left join partner_offers o on o.id=coalesce(p.offer_id,e.subject_id) and o.lead_id=e.lead_id and (not $3::boolean or o.published_at is not null)
-             where e.lead_id=$1 and (e.audience='client' or (not $3::boolean and (e.audience='private' and e.actor_id=$2 or e.audience='assigned' or e.audience='coverview' and $4::boolean))) order by e.created_at desc,e.id desc limit 100`,
-            [id, actor.userId, !!actor.wallet, actor.administrator],
+             where e.lead_id=$1 and (e.audience='client' or (not $3::boolean and (e.audience='private' and e.actor_id=$2 or e.audience='assigned' or e.audience='coverview' and $4::boolean)))
+             and (e.kind<>'client.advice_preferences_confirmed.v1' or exists(select 1 from partner_advice_preferences ap where ap.id=e.subject_id and ap.lead_id=e.lead_id and ap.subject_id=$5))
+             order by e.created_at desc,e.id desc limit 100`,
+            [
+              id,
+              actor.userId,
+              !!actor.wallet,
+              actor.administrator,
+              row.clientProfileId
+                ? `profile:${row.clientProfileId}`
+                : row.currentClientUserId
+                  ? `self:${row.currentClientUserId}`
+                  : null,
+            ],
           )
         ).rows.map((r) =>
           leadEventSchema.parse({
@@ -393,6 +440,15 @@ async function detail(db: Executor, actor: PartnerActor, id: string): Promise<Le
   });
 }
 export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
+  async function adviceLead(tx: PoolClient, actor: PartnerActor, id: string, write = false) {
+    if (write && (!actor.wallet || actor.administrator)) fail("PARTNER_ACCESS_DENIED", 403);
+    if (!actor.wallet && !(await context(tx, actor, true)).operational)
+      fail("PARTNER_ACCESS_DENIED", 403);
+    const lead = await readLead(tx, actor, id, true);
+    if (summary(actor, lead).access === "progress") fail("PARTNER_NOT_FOUND", 404);
+    if (write && lead.stage === "completed") fail("PARTNER_ACCESS_DENIED", 403);
+    return { ...lead, clientUserId: lead.currentClientUserId };
+  }
   async function importLead(tx: PoolClient, actor: PartnerActor, id: string, write = false) {
     if (actor.wallet) fail("PARTNER_ACCESS_DENIED", 403);
     const ctx = await context(tx, actor, true);
@@ -493,13 +549,568 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
       return result;
     } catch (error) {
       await tx.query<Record<string, unknown>>("rollback");
+      if (
+        error &&
+        typeof error === "object" &&
+        "code" in error &&
+        error.code === "23P01" &&
+        "constraint" in error &&
+        error.constraint === "partner_protected_time_conflict"
+      )
+        fail("PARTNER_APPOINTMENT_CONFLICT", 409);
       throw error;
     } finally {
       tx.release();
     }
   }
+  async function personalAdvisorLead(tx: PoolClient, actor: PartnerActor, id: string) {
+    if (actor.wallet) fail("PARTNER_ACCESS_DENIED", 403);
+    const ctx = await context(tx, actor, true);
+    if (!ctx.canAdvise) fail("PARTNER_ACCESS_DENIED", 403);
+    const lead = await readLead(tx, actor, id, true);
+    if (summary(actor, lead).access !== "operational") fail("PARTNER_NOT_FOUND", 404);
+    if (
+      ["draft", "completed"].includes(lead.stage) ||
+      (lead.responsibleId !== actor.userId && !lead.assignedAccess) ||
+      (!actor.administrator && !ctx.application?.categories.some((c) => c === lead.category))
+    )
+      fail("PARTNER_ACCESS_DENIED", 403);
+    return { ctx, lead: { ...lead, clientUserId: lead.currentClientUserId } };
+  }
+  async function personalAssessment(
+    tx: PoolClient,
+    actor: PartnerActor,
+    id: string,
+    appointmentId: string,
+  ) {
+    if (actor.wallet) fail("PARTNER_ACCESS_DENIED", 403);
+    const ctx = await context(tx, actor, true);
+    if (!ctx.operational) fail("PARTNER_ACCESS_DENIED", 403);
+    const lead = await readLead(tx, actor, id, true);
+    const access = summary(actor, lead);
+    if (access.access !== "operational") fail("PARTNER_NOT_FOUND", 404);
+    const result = await readAppointmentAssessment(
+      tx,
+      actor,
+      { ...lead, clientUserId: lead.currentClientUserId },
+      appointmentId,
+      ctx,
+      !!access.allowedActions?.includes("appointment") &&
+        !["draft", "completed"].includes(lead.stage) &&
+        (actor.administrator ||
+          lead.responsibleId === actor.userId ||
+          (lead.contributorEdit && lead.contributorContact)),
+      lead.revision,
+    );
+    return { result, ctx };
+  }
+  async function personalCreationLead(tx: PoolClient, actor: PartnerActor, id: string) {
+    if (actor.wallet) fail("PARTNER_ACCESS_DENIED", 403);
+    const ctx = await context(tx, actor, true);
+    if (!ctx.canAdvise) fail("PARTNER_ACCESS_DENIED", 403);
+    const lead = await readLead(tx, actor, id, true);
+    if (summary(actor, lead).access !== "operational") fail("PARTNER_NOT_FOUND", 404);
+    if (
+      ["draft", "completed"].includes(lead.stage) ||
+      (!actor.administrator &&
+        (!ctx.application?.categories.some((c) => c === lead.category) ||
+          (lead.responsibleId !== actor.userId &&
+            !(lead.contributorEdit && lead.contributorContact))))
+    )
+      fail("PARTNER_ACCESS_DENIED", 403);
+    return { ctx, lead: { ...lead, clientUserId: lead.currentClientUserId } };
+  }
+  async function personalRescheduling(
+    tx: PoolClient,
+    actor: PartnerActor,
+    id: string,
+    appointmentId: string,
+  ) {
+    const authorized = await personalCreationLead(tx, actor, id);
+    const row = (
+      await tx.query<Record<string, unknown>>(
+        "select * from partner_appointments where id=$1 and lead_id=$2 and advisor_id=$3 for update",
+        [appointmentId, id, actor.userId],
+      )
+    ).rows[0];
+    if (!row) fail("PARTNER_NOT_FOUND", 404);
+    const terms = leadAppointmentSchema.parse({
+      ...camel<Record<string, unknown>>(row),
+      startsAt: date(row.starts_at as Date),
+    });
+    const previous = {
+      ...terms,
+      occupiedBeforeMinutes: Number(row.occupied_before_minutes),
+      occupiedAfterMinutes: Number(row.occupied_after_minutes),
+    };
+    return { ...authorized, previous, row };
+  }
   return {
     ...createCompetenceOperations(pool, transaction, documentsAvailable),
+    async referentAssessment(actor: PartnerActor, id: string, includeSharedModes = false) {
+      const tx = await pool.connect();
+      try {
+        await tx.query("begin isolation level repeatable read");
+        const snapshot = (await tx.query<{ at: Date }>("select transaction_timestamp() as at"))
+          .rows[0]!;
+        await lockActor(tx, actor);
+        const lead = await adviceLead(tx, actor, id);
+        const result = await readReferentAssessment(
+          tx,
+          actor,
+          lead,
+          snapshot.at.toISOString(),
+          includeSharedModes,
+        );
+        await tx.query("commit");
+        return result;
+      } catch (cause) {
+        await tx.query("rollback");
+        if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+          fail("PARTNER_CONFLICT", 409);
+        throw cause;
+      } finally {
+        tx.release();
+      }
+    },
+    async advisorAssessment(actor: PartnerActor, id: string, includeCapacity = false) {
+      if (actor.wallet) fail("PARTNER_ACCESS_DENIED", 403);
+      const tx = await pool.connect();
+      try {
+        // Sources can change independently. Never combine different committed generations.
+        await tx.query("begin isolation level repeatable read");
+        const snapshot = (await tx.query<{ at: Date }>("select transaction_timestamp() as at"))
+          .rows[0]!;
+        await lockActor(tx, actor);
+        const { ctx, lead } = await personalAdvisorLead(tx, actor, id);
+        const result = await readAdvisorAssessment(
+          tx,
+          actor,
+          { ...lead, clientUserId: lead.currentClientUserId },
+          ctx.application,
+          snapshot.at.toISOString(),
+          includeCapacity,
+        );
+        await tx.query("commit");
+        return result;
+      } catch (cause) {
+        await tx.query("rollback");
+        if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+          fail("PARTNER_CONFLICT", 409);
+        throw cause;
+      } finally {
+        tx.release();
+      }
+    },
+    async needConflict(actor: PartnerActor, id: string, beforeRevision?: number) {
+      referentQuerySchema.parse(beforeRevision === undefined ? {} : { beforeRevision });
+      const tx = await pool.connect();
+      try {
+        await tx.query("begin isolation level repeatable read");
+        const now = (await tx.query<{ at: Date }>("select transaction_timestamp() at")).rows[0]!.at;
+        await lockActor(tx, actor);
+        const { lead, ctx } = await personalAdvisorLead(tx, actor, id);
+        const result = await readNeedConflict(
+          tx,
+          actor,
+          lead,
+          ctx.application,
+          now.toISOString(),
+          beforeRevision,
+        );
+        await tx.query("commit");
+        return result;
+      } catch (cause) {
+        await tx.query("rollback");
+        if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+          fail("PARTNER_CONFLICT", 409);
+        throw cause;
+      } finally {
+        tx.release();
+      }
+    },
+    decideNeedConflict(actor: PartnerActor, id: string, raw: NeedConflictInput, key: string) {
+      const input = needConflictInputSchema.parse(raw);
+      return transaction(
+        actor,
+        `need-conflicts:${id}`,
+        key,
+        input,
+        async (tx) => {
+          const { lead, ctx } = await personalAdvisorLead(tx, actor, id);
+          return decideNeedConflict(tx, actor, lead, ctx.application, input);
+        },
+        async (tx) => {
+          const { lead, ctx } = await personalAdvisorLead(tx, actor, id);
+          await readAdvicePreferences(tx, actor, lead);
+          const now = (await tx.query<{ at: Date }>("select clock_timestamp() at")).rows[0]!.at;
+          return readNeedConflict(tx, actor, lead, ctx.application, now.toISOString());
+        },
+      );
+    },
+    async needCapacity(actor: PartnerActor, id: string, beforeRevision?: number) {
+      referentQuerySchema.parse(beforeRevision === undefined ? {} : { beforeRevision });
+      const tx = await pool.connect();
+      try {
+        await tx.query("begin isolation level repeatable read");
+        const now = (await tx.query<{ at: Date }>("select transaction_timestamp() at")).rows[0]!.at;
+        await lockActor(tx, actor);
+        const { lead, ctx } = await personalAdvisorLead(tx, actor, id);
+        const result = await readNeedCapacity(
+          tx,
+          actor,
+          lead,
+          ctx.application,
+          now.toISOString(),
+          beforeRevision,
+        );
+        await tx.query("commit");
+        return result;
+      } catch (cause) {
+        await tx.query("rollback");
+        if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+          fail("PARTNER_CONFLICT", 409);
+        throw cause;
+      } finally {
+        tx.release();
+      }
+    },
+    decideNeedCapacity(actor: PartnerActor, id: string, raw: NeedCapacityInput, key: string) {
+      const input = needCapacityInputSchema.parse(raw);
+      return transaction(
+        actor,
+        `need-capacity:${id}`,
+        key,
+        input,
+        async (tx) => {
+          const { lead, ctx } = await personalAdvisorLead(tx, actor, id);
+          return decideNeedCapacity(tx, actor, lead, ctx.application, input);
+        },
+        async (tx) => {
+          const { lead, ctx } = await personalAdvisorLead(tx, actor, id);
+          await readAdvicePreferences(tx, actor, lead);
+          const now = (await tx.query<{ at: Date }>("select clock_timestamp() at")).rows[0]!.at;
+          return readNeedCapacity(tx, actor, lead, ctx.application, now.toISOString());
+        },
+      );
+    },
+    async previewPersonalRescheduling(
+      actor: PartnerActor,
+      id: string,
+      appointmentId: string,
+      raw: PersonalAppointmentProposal,
+    ) {
+      const proposal = personalAppointmentProposalSchema.parse(raw);
+      const tx = await pool.connect();
+      try {
+        await tx.query("begin");
+        await lockActor(tx, actor);
+        const { lead, ctx, previous } = await personalRescheduling(tx, actor, id, appointmentId);
+        if (previous.state !== "scheduled") fail("PARTNER_INVALID_TRANSITION");
+        const result = await previewPersonalAppointment(tx, actor, lead, ctx, proposal, previous);
+        await tx.query("commit");
+        return result;
+      } catch (cause) {
+        await tx.query("rollback");
+        throw cause;
+      } finally {
+        tx.release();
+      }
+    },
+    confirmPersonalRescheduling(
+      actor: PartnerActor,
+      id: string,
+      appointmentId: string,
+      raw: PersonalAppointmentConfirm,
+      key: string,
+    ) {
+      const input = personalAppointmentConfirmSchema.parse(raw);
+      return transaction(
+        actor,
+        `personal-rescheduling:${id}:${appointmentId}`,
+        key,
+        input,
+        async (tx) => {
+          const { lead, ctx, previous, row } = await personalRescheduling(
+            tx,
+            actor,
+            id,
+            appointmentId,
+          );
+          if (previous.state !== "scheduled") fail("PARTNER_INVALID_TRANSITION");
+          const preview = await previewPersonalAppointment(
+            tx,
+            actor,
+            lead,
+            ctx,
+            { appointment: input.appointment, time: input.time },
+            previous,
+          );
+          if (preview.basis !== input.basis) fail("PARTNER_CONFLICT", 409);
+          if (preview.assessment.overlappingCommitment) fail("PARTNER_APPOINTMENT_CONFLICT", 409);
+          if (!preview.canConfirm) fail("PARTNER_ACTION_REQUIRED");
+          const oldPlan = (
+            await tx.query<{ id: string; revision: number }>(
+              "select id,revision from partner_appointment_time_plans where appointment_id=$1 and advisor_id=$2 order by revision desc limit 1",
+              [appointmentId, actor.userId],
+            )
+          ).rows[0];
+          const appt = input.appointment;
+          // One SQL change: the guard must inspect the new terms with the new buffers.
+          await tx.query(
+            `update partner_appointments set starts_at=$2,duration_minutes=$3,mode=$4,location=$5,timezone=$6,
+             occupied_before_minutes=$7,occupied_after_minutes=$8 where id=$1`,
+            [
+              appointmentId,
+              appt.startsAt,
+              appt.durationMinutes,
+              appt.mode,
+              appt.location,
+              appt.timezone,
+              input.time.preparationMinutes + input.time.travelBeforeMinutes,
+              input.time.travelAfterMinutes,
+            ],
+          );
+          await recordAppointmentTime(
+            tx,
+            actor,
+            appointmentId,
+            (oldPlan?.revision ?? 0) + 1,
+            { ...input.time, basis: input.basis, confirmed: true },
+            new Date(preview.occupiedStartsAt),
+            new Date(preview.occupiedEndsAt),
+            {
+              rescheduling: {
+                previous: personalAppointmentProposalSchema.shape.appointment.parse({
+                  startsAt: previous.startsAt,
+                  durationMinutes: previous.durationMinutes,
+                  mode: previous.mode,
+                  location: previous.location,
+                  timezone: previous.timezone,
+                }),
+                next: appt,
+              },
+              previousProtection: {
+                versionId: oldPlan?.id ?? null,
+                occupiedBeforeMinutes: row.occupied_before_minutes,
+                occupiedAfterMinutes: row.occupied_after_minutes,
+              },
+              declaration: preview.assessment.declaration,
+              client: preview.assessment.client,
+              leadRevision: lead.revision,
+              clientUserId: lead.currentClientUserId,
+              clientProfileId: lead.clientProfileId,
+              personalConfirmation: {
+                version: 1,
+                clientAgreementConfirmed: input.clientAgreementConfirmed,
+                externalCommitmentsChecked: input.externalCommitmentsChecked,
+                capacityConfirmed: input.capacityConfirmed,
+                preparationAndTravelChecked: input.preparationAndTravelChecked,
+              },
+            },
+          );
+          // An unrelated next action or waiting period must never be postponed by a report.
+          await tx.query(
+            `update partner_leads set due_at=case when waiting is null and due_at=$2
+             and next_action='Tenir le rendez-vous convenu' then $3 else due_at end,
+             revision=revision+1,updated_at=now() where id=$1`,
+            [id, previous.startsAt, appt.startsAt],
+          );
+          await event(
+            tx,
+            actor,
+            id,
+            "appointment.rescheduled.v1",
+            `${previous.startsAt} · ${previous.mode} → ${appt.startsAt} · ${appt.mode}`,
+            "client",
+            appointmentId,
+          );
+          await syncLeadNotifications(tx, id);
+          return appointmentId;
+        },
+        async (tx) => {
+          // Replay projects current state, even after cancellation, but never after loss of mandate.
+          await personalRescheduling(tx, actor, id, appointmentId);
+          return detail(tx, actor, id);
+        },
+      );
+    },
+    async previewPersonalAppointment(
+      actor: PartnerActor,
+      id: string,
+      raw: PersonalAppointmentProposal,
+    ) {
+      const proposal = personalAppointmentProposalSchema.parse(raw);
+      const tx = await pool.connect();
+      try {
+        await tx.query("begin");
+        await lockActor(tx, actor);
+        const { lead, ctx } = await personalCreationLead(tx, actor, id);
+        const result = await previewPersonalAppointment(tx, actor, lead, ctx, proposal);
+        await tx.query("commit");
+        return result;
+      } catch (cause) {
+        await tx.query("rollback");
+        throw cause;
+      } finally {
+        tx.release();
+      }
+    },
+    confirmPersonalAppointment(
+      actor: PartnerActor,
+      id: string,
+      raw: PersonalAppointmentConfirm,
+      key: string,
+    ) {
+      const input = personalAppointmentConfirmSchema.parse(raw);
+      return transaction(
+        actor,
+        `personal-appointment:${id}`,
+        key,
+        input,
+        async (tx) => {
+          const { lead, ctx } = await personalCreationLead(tx, actor, id);
+          const proposal = { appointment: input.appointment, time: input.time };
+          const preview = await previewPersonalAppointment(tx, actor, lead, ctx, proposal);
+          if (preview.basis !== input.basis) fail("PARTNER_CONFLICT", 409);
+          if (preview.assessment.overlappingCommitment) fail("PARTNER_APPOINTMENT_CONFLICT", 409);
+          if (!preview.canConfirm) fail("PARTNER_ACTION_REQUIRED");
+          const appointmentId = await executeLeadCommand(tx, actor, lead, {
+            action: "appointment",
+            revision: lead.revision,
+            appointment: { ...input.appointment, advisorId: actor.userId },
+          });
+          if (!appointmentId) throw new Error("Appointment creation returned no identifier");
+          await recordAppointmentTime(
+            tx,
+            actor,
+            appointmentId,
+            1,
+            { ...input.time, basis: input.basis, confirmed: true },
+            new Date(preview.occupiedStartsAt),
+            new Date(preview.occupiedEndsAt),
+            {
+              declaration: preview.assessment.declaration,
+              client: preview.assessment.client,
+              appointmentStartsAt: preview.assessment.startsAt,
+              appointmentEndsAt: preview.assessment.endsAt,
+              appointment: input.appointment,
+              leadRevision: lead.revision,
+              clientUserId: lead.currentClientUserId,
+              clientProfileId: lead.clientProfileId,
+              mode: input.appointment.mode,
+              personalConfirmation: {
+                version: 1,
+                clientAgreementConfirmed: input.clientAgreementConfirmed,
+                externalCommitmentsChecked: input.externalCommitmentsChecked,
+                capacityConfirmed: input.capacityConfirmed,
+                preparationAndTravelChecked: input.preparationAndTravelChecked,
+              },
+            },
+          );
+          await tx.query(
+            "update partner_leads set revision=revision+1,updated_at=now() where id=$1",
+            [id],
+          );
+          await syncLeadNotifications(tx, id);
+          await reconcileCollaborations(tx, id, actor);
+          return appointmentId;
+        },
+        async (tx, appointmentId) => {
+          await personalCreationLead(tx, actor, id);
+          if (
+            !(
+              await tx.query(
+                "select id from partner_appointments where id=$1 and lead_id=$2 and advisor_id=$3",
+                [appointmentId, id, actor.userId],
+              )
+            ).rowCount
+          )
+            fail("PARTNER_NOT_FOUND", 404);
+          return detail(tx, actor, id);
+        },
+      );
+    },
+    protectAppointmentTime(
+      actor: PartnerActor,
+      id: string,
+      appointmentId: string,
+      raw: AppointmentTimeInput,
+      key: string,
+    ) {
+      const input = appointmentTimeInputSchema.parse(raw);
+      return transaction(
+        actor,
+        `appointment-time:${id}:${appointmentId}`,
+        key,
+        input,
+        async (tx) => {
+          const { result, ctx } = await personalAssessment(tx, actor, id, appointmentId);
+          await protectAppointmentTime(tx, actor, ctx, result, input);
+          return appointmentId;
+        },
+        async (tx) => {
+          const { result } = await personalAssessment(tx, actor, id, appointmentId);
+          if (result.responsibility !== "current") fail("PARTNER_ACCESS_DENIED", 403);
+          return result;
+        },
+      );
+    },
+    async appointmentAssessment(actor: PartnerActor, id: string, appointmentId: string) {
+      if (actor.wallet) fail("PARTNER_ACCESS_DENIED", 403);
+      const tx = await pool.connect();
+      try {
+        await tx.query("begin");
+        await lockActor(tx, actor);
+        const { result } = await personalAssessment(tx, actor, id, appointmentId);
+        await tx.query("commit");
+        return result;
+      } catch (cause) {
+        await tx.query("rollback");
+        throw cause;
+      } finally {
+        tx.release();
+      }
+    },
+    async advicePreferences(actor: PartnerActor, id: string, beforeRevision?: number) {
+      referentQuerySchema.parse(beforeRevision === undefined ? {} : { beforeRevision });
+      const tx = await pool.connect();
+      try {
+        await tx.query("begin");
+        await lockActor(tx, actor);
+        const lead = await adviceLead(tx, actor, id);
+        const result = await readAdvicePreferences(tx, actor, lead, beforeRevision);
+        await tx.query("commit");
+        return result;
+      } catch (cause) {
+        await tx.query("rollback");
+        throw cause;
+      } finally {
+        tx.release();
+      }
+    },
+    confirmAdvicePreferences(
+      actor: PartnerActor,
+      id: string,
+      raw: AdvicePreferencesInput,
+      key: string,
+    ) {
+      const input = advicePreferencesInputSchema.parse(raw);
+      return transaction(
+        actor,
+        `advice:${id}`,
+        key,
+        input,
+        async (tx) =>
+          confirmAdvicePreferences(tx, actor, await adviceLead(tx, actor, id, true), input),
+        async (tx) => readAdvicePreferences(tx, actor, await adviceLead(tx, actor, id, true)),
+      );
+    },
+    ...createPracticeOperations(pool, transaction),
+    ...createAvailabilityOperations(pool, transaction),
+    ...createSharedModesOperations(pool, transaction),
+    ...createCapacityOperations(pool, transaction),
+    ...createConventionOperations(pool, transaction, documentsAvailable),
     async referentProfile(
       actor: PartnerActor,
       profileId: string,

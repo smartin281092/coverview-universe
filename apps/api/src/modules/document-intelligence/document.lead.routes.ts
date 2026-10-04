@@ -1,3 +1,4 @@
+import { insuranceCompanyIdSchema } from "@coverview/contracts";
 import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import type { Pool } from "pg";
@@ -5,6 +6,7 @@ import { z } from "zod";
 import {
   offerImportResultSchema,
   competenceDossierSchema,
+  conventionDossierSchema,
   leadCategorySchema,
 } from "@coverview/contracts/partner";
 import { DocumentError } from "./document.repository.js";
@@ -25,6 +27,23 @@ export type LeadSourceAuthorization = {
     id: string,
     mime: string,
   ): Promise<z.infer<typeof competenceDossierSchema>>;
+  authorizeConventionSource(
+    request: FastifyRequest,
+    userId: string,
+    category: string,
+    companyId: string,
+    id: string,
+    write: boolean,
+    record?: boolean,
+  ): Promise<{ userId: string; documentId: string }>;
+  completeConventionUpload(
+    request: FastifyRequest,
+    userId: string,
+    category: string,
+    companyId: string,
+    id: string,
+    mime: string,
+  ): Promise<z.infer<typeof conventionDossierSchema>>;
   authorizeFinalPolicySource(
     request: FastifyRequest,
     leadId: string,
@@ -131,6 +150,81 @@ export function registerLeadDocumentRoutes(
         },
       );
       await competenceSource(request, false, true);
+      return reply
+        .header("content-type", "application/octet-stream")
+        .header(
+          "content-disposition",
+          `attachment; filename="document"; filename*=UTF-8''${encodeURIComponent(result.name).replace(/'/gu, "%27")}`,
+        )
+        .header("x-content-type-options", "nosniff")
+        .send(result.bytes);
+    },
+  );
+  const conventionParams = z
+    .object({
+      userId: z.string().min(1).max(100),
+      category: leadCategorySchema,
+      companyId: insuranceCompanyIdSchema,
+      id: z.string().min(1).max(100),
+    })
+    .strict();
+  const conventionSource = (request: FastifyRequest, write: boolean, record = false) => {
+    const p = conventionParams.parse(request.params);
+    return access.authorizeConventionSource(
+      request,
+      p.userId,
+      p.category,
+      p.companyId,
+      p.id,
+      write,
+      record,
+    );
+  };
+  app.post(
+    "/partner/convention/:userId/:category/:companyId/:id/content",
+    {
+      bodyLimit: 20 * 1024 * 1024,
+      config: { rateLimit: { max: 10, timeWindow: "1 minute" } },
+      onRequest: async (request) => {
+        await conventionSource(request, true);
+      },
+      schema: { params: conventionParams, response: { 200: conventionDossierSchema } },
+    },
+    async (request) => {
+      const original = await conventionSource(request, true),
+        p = request.params;
+      return service.uploadShared(
+        original.userId,
+        original.documentId,
+        z.instanceof(Buffer).parse(request.body),
+        async () => {
+          const current = await conventionSource(request, true);
+          if (current.documentId !== original.documentId || current.userId !== original.userId)
+            throw new DocumentError("DOCUMENT_NOT_FOUND", 404);
+        },
+        (mime) =>
+          access.completeConventionUpload(request, p.userId, p.category, p.companyId, p.id, mime),
+      );
+    },
+  );
+  app.get(
+    "/partner/convention/:userId/:category/:companyId/:id/source",
+    {
+      config: { rateLimit: { max: 30, timeWindow: "1 minute" } },
+      schema: { params: conventionParams },
+    },
+    async (request, reply) => {
+      const original = await conventionSource(request, false);
+      const result = await service.downloadShared(
+        original.userId,
+        original.documentId,
+        async () => {
+          const current = await conventionSource(request, false);
+          if (current.documentId !== original.documentId || current.userId !== original.userId)
+            throw new DocumentError("DOCUMENT_NOT_FOUND", 404);
+        },
+      );
+      await conventionSource(request, false, true);
       return reply
         .header("content-type", "application/octet-stream")
         .header(

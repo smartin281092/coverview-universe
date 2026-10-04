@@ -6,7 +6,13 @@ export const assignedDocumentCondition = () =>
   and(
     or(
       isNull(documents.purpose),
-      and(ne(documents.purpose, "lead_offer"), ne(documents.purpose, "partner_competence")),
+      and(
+        ne(documents.purpose, "lead_offer"),
+        and(
+          ne(documents.purpose, "partner_competence"),
+          ne(documents.purpose, "partner_convention"),
+        ),
+      ),
     ),
     or(
       isNull(documents.profileAssignment),
@@ -18,6 +24,7 @@ export function hasDocumentProfile(row: Pick<DocumentSummary, "profileAssignment
   return (
     row.purpose !== "lead_offer" &&
     row.purpose !== "partner_competence" &&
+    row.purpose !== "partner_convention" &&
     (row.profileAssignment == null ||
       ["matched", "created", "manual"].includes(row.profileAssignment))
   );

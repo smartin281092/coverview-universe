@@ -1,7 +1,12 @@
+import { insuranceCompanyIdSchema } from "@coverview/contracts";
 import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
 import {
+  needConflictInputSchema,
+  needConflictDossierSchema,
+  needCapacityInputSchema,
+  needCapacityDossierSchema,
   leadCreateInputSchema,
   leadCommandSchema,
   leadDetailSchema,
@@ -42,6 +47,29 @@ import {
   competenceDeclarationSchema,
   competenceDecisionSchema,
   competenceQuerySchema,
+  conventionDossierSchema,
+  conventionDeclarationSchema,
+  conventionDecisionSchema,
+  conventionQuerySchema,
+  professionalAvailabilityInputSchema,
+  professionalAvailabilityDossierSchema,
+  professionalPracticeInputSchema,
+  professionalPracticeDossierSchema,
+  advicePreferencesSchema,
+  advisorAssessmentSchema,
+  capacityAdvisorAssessmentSchema,
+  referentAssessmentSchema,
+  sharedReferentAssessmentSchema,
+  capacityInputSchema,
+  capacityDossierSchema,
+  sharedModesInputSchema,
+  sharedModesDossierSchema,
+  advicePreferencesInputSchema,
+  appointmentAssessmentSchema,
+  appointmentTimeInputSchema,
+  personalAppointmentProposalSchema,
+  personalAppointmentPreviewSchema,
+  personalAppointmentConfirmSchema,
 } from "@coverview/contracts/partner";
 import { insuranceRequestIdSchema } from "@coverview/contracts/insurance-requests";
 import type { Environment } from "../../platform/config.js";
@@ -95,7 +123,392 @@ export function registerPartnerWorkspace(
     }
     return { userId: session.userId, id: session.id, administrator: false, wallet };
   }
+  app.get(
+    "/partner/leads/:id/capacity-decision",
+    {
+      config: limited,
+      schema: {
+        params,
+        querystring: referentQuerySchema,
+        response: { 200: needCapacityDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.needCapacity(
+        await actor(request),
+        request.params.id,
+        request.query.beforeRevision,
+      ),
+  );
+  app.post(
+    "/partner/leads/:id/capacity-decision",
+    {
+      config: limited,
+      schema: {
+        params,
+        body: needCapacityInputSchema,
+        response: { 200: needCapacityDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.decideNeedCapacity(
+        await actor(request),
+        request.params.id,
+        request.body,
+        key(request),
+      ),
+  );
+  app.get(
+    "/partner/leads/:id/conflict-review",
+    {
+      config: limited,
+      schema: {
+        params,
+        querystring: referentQuerySchema,
+        response: { 200: needConflictDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.needConflict(
+        await actor(request),
+        request.params.id,
+        request.query.beforeRevision,
+      ),
+  );
+  app.post(
+    "/partner/leads/:id/conflict-review",
+    {
+      config: limited,
+      schema: {
+        params,
+        body: needConflictInputSchema,
+        response: { 200: needConflictDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.decideNeedConflict(
+        await actor(request),
+        request.params.id,
+        request.body,
+        key(request),
+      ),
+  );
   const insuranceParams = z.object({ id: insuranceRequestIdSchema }).strict();
+  app.get(
+    "/partner/leads/:id/advisor-assessment",
+    {
+      config: limited,
+      schema: {
+        params,
+        querystring: z.object({ version: z.enum(["1", "2"]).optional() }).strict(),
+        response: { 200: z.union([capacityAdvisorAssessmentSchema, advisorAssessmentSchema]) },
+      },
+    },
+    async (request) =>
+      repository.advisorAssessment(
+        await actor(request),
+        request.params.id,
+        request.query.version === "2",
+      ),
+  );
+  app.post(
+    "/partner/leads/:id/appointments/:appointmentId/rescheduling/preview",
+    {
+      config: limited,
+      schema: {
+        params: params.extend({ appointmentId: z.string().min(1).max(100) }),
+        body: personalAppointmentProposalSchema,
+        response: { 200: personalAppointmentPreviewSchema },
+      },
+    },
+    async (request) =>
+      repository.previewPersonalRescheduling(
+        await actor(request),
+        request.params.id,
+        request.params.appointmentId,
+        request.body,
+      ),
+  );
+  app.post(
+    "/partner/leads/:id/appointments/:appointmentId/rescheduling/confirm",
+    {
+      config: limited,
+      schema: {
+        params: params.extend({ appointmentId: z.string().min(1).max(100) }),
+        body: personalAppointmentConfirmSchema,
+        response: { 200: leadDetailSchema },
+      },
+    },
+    async (request) =>
+      repository.confirmPersonalRescheduling(
+        await actor(request),
+        request.params.id,
+        request.params.appointmentId,
+        request.body,
+        key(request),
+      ),
+  );
+  app.post(
+    "/partner/leads/:id/personal-appointments/preview",
+    {
+      config: limited,
+      schema: {
+        params,
+        body: personalAppointmentProposalSchema,
+        response: { 200: personalAppointmentPreviewSchema },
+      },
+    },
+    async (request) =>
+      repository.previewPersonalAppointment(await actor(request), request.params.id, request.body),
+  );
+  app.post(
+    "/partner/leads/:id/personal-appointments/confirm",
+    {
+      config: limited,
+      schema: {
+        params,
+        body: personalAppointmentConfirmSchema,
+        response: { 200: leadDetailSchema },
+      },
+    },
+    async (request) =>
+      repository.confirmPersonalAppointment(
+        await actor(request),
+        request.params.id,
+        request.body,
+        key(request),
+      ),
+  );
+  app.post(
+    "/partner/leads/:id/appointments/:appointmentId/time-protection",
+    {
+      config: limited,
+      schema: {
+        params: params.extend({ appointmentId: z.string().min(1).max(100) }),
+        body: appointmentTimeInputSchema,
+        response: { 200: appointmentAssessmentSchema },
+      },
+    },
+    async (request) =>
+      repository.protectAppointmentTime(
+        await actor(request),
+        request.params.id,
+        request.params.appointmentId,
+        request.body,
+        key(request),
+      ),
+  );
+  app.get(
+    "/partner/leads/:id/appointments/:appointmentId/assessment",
+    {
+      config: limited,
+      schema: {
+        params: params.extend({ appointmentId: z.string().min(1).max(100) }),
+        response: { 200: appointmentAssessmentSchema },
+      },
+    },
+    async (request) =>
+      repository.appointmentAssessment(
+        await actor(request),
+        request.params.id,
+        request.params.appointmentId,
+      ),
+  );
+  for (const wallet of [false, true]) {
+    app.get(
+      `/${wallet ? "wallet" : "partner"}/leads/:id/referent-assessment`,
+      {
+        config: limited,
+        schema: {
+          params,
+          querystring: z.object({ version: z.enum(["1", "2"]).optional() }).strict(),
+          response: { 200: z.union([sharedReferentAssessmentSchema, referentAssessmentSchema]) },
+        },
+      },
+      async (request) =>
+        repository.referentAssessment(
+          await actor(request, wallet),
+          request.params.id,
+          request.query.version === "2",
+        ),
+    );
+    app.get(
+      `/${wallet ? "wallet" : "partner"}/leads/:id/advice-preferences`,
+      {
+        config: limited,
+        schema: {
+          params,
+          querystring: referentQuerySchema,
+          response: { 200: advicePreferencesSchema },
+        },
+      },
+      async (request) =>
+        repository.advicePreferences(
+          await actor(request, wallet),
+          request.params.id,
+          request.query.beforeRevision,
+        ),
+    );
+  }
+  app.post(
+    "/wallet/leads/:id/advice-preferences",
+    {
+      config: limited,
+      schema: {
+        params,
+        body: advicePreferencesInputSchema,
+        response: { 200: advicePreferencesSchema },
+      },
+    },
+    async (request) =>
+      repository.confirmAdvicePreferences(
+        await actor(request, true),
+        request.params.id,
+        request.body,
+        key(request),
+      ),
+  );
+  const practiceParams = z.object({ userId: z.string().min(1).max(100) }).strict();
+  app.get(
+    "/partner/capacity/:userId",
+    {
+      config: limited,
+      schema: {
+        params: practiceParams,
+        querystring: referentQuerySchema,
+        response: { 200: capacityDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.capacity(
+        await actor(request),
+        request.params.userId,
+        request.query.beforeRevision,
+      ),
+  );
+  app.post(
+    "/partner/capacity/:userId",
+    {
+      config: limited,
+      schema: {
+        params: practiceParams,
+        body: capacityInputSchema,
+        response: { 200: capacityDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.declareCapacity(
+        await actor(request),
+        request.params.userId,
+        request.body,
+        key(request),
+      ),
+  );
+  app.get(
+    "/partner/shared-modes/:userId",
+    {
+      config: limited,
+      schema: {
+        params: practiceParams,
+        querystring: referentQuerySchema,
+        response: { 200: sharedModesDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.sharedModes(
+        await actor(request),
+        request.params.userId,
+        request.query.beforeRevision,
+      ),
+  );
+  app.post(
+    "/partner/shared-modes/:userId",
+    {
+      config: limited,
+      schema: {
+        params: practiceParams,
+        body: sharedModesInputSchema,
+        response: { 200: sharedModesDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.declareSharedModes(
+        await actor(request),
+        request.params.userId,
+        request.body,
+        key(request),
+      ),
+  );
+  app.get(
+    "/partner/practice/:userId",
+    {
+      config: limited,
+      schema: {
+        params: practiceParams,
+        querystring: referentQuerySchema,
+        response: { 200: professionalPracticeDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.practice(
+        await actor(request),
+        request.params.userId,
+        request.query.beforeRevision,
+      ),
+  );
+  app.post(
+    "/partner/practice/:userId",
+    {
+      config: limited,
+      schema: {
+        params: practiceParams,
+        body: professionalPracticeInputSchema,
+        response: { 200: professionalPracticeDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.declarePractice(
+        await actor(request),
+        request.params.userId,
+        request.body,
+        key(request),
+      ),
+  );
+  app.get(
+    "/partner/availability/:userId",
+    {
+      config: limited,
+      schema: {
+        params: practiceParams,
+        querystring: referentQuerySchema,
+        response: { 200: professionalAvailabilityDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.availability(
+        await actor(request),
+        request.params.userId,
+        request.query.beforeRevision,
+      ),
+  );
+  app.post(
+    "/partner/availability/:userId",
+    {
+      config: limited,
+      schema: {
+        params: practiceParams,
+        body: professionalAvailabilityInputSchema,
+        response: { 200: professionalAvailabilityDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.declareAvailability(
+        await actor(request),
+        request.params.userId,
+        request.body,
+        key(request),
+      ),
+  );
   const competenceParams = z
     .object({ userId: z.string().min(1).max(100), category: leadCategorySchema })
     .strict();
@@ -170,6 +583,93 @@ export function registerPartnerWorkspace(
         await actor(request),
         request.params.userId,
         request.params.category,
+        request.params.id,
+        request.body.revision,
+        key(request),
+      ),
+  );
+  const conventionParams = z
+    .object({
+      userId: z.string().min(1).max(100),
+      category: leadCategorySchema,
+      companyId: insuranceCompanyIdSchema,
+    })
+    .strict();
+  app.get(
+    "/partner/convention/:userId/:category/:companyId",
+    {
+      config: limited,
+      schema: {
+        params: conventionParams,
+        querystring: conventionQuerySchema,
+        response: { 200: conventionDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.convention(
+        await actor(request),
+        request.params.userId,
+        request.params.category,
+        request.params.companyId,
+        request.query.beforeRevision,
+      ),
+  );
+  app.post(
+    "/partner/convention/:userId/:category/:companyId",
+    {
+      config: limited,
+      schema: {
+        params: conventionParams,
+        body: conventionDeclarationSchema,
+        response: { 200: conventionDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.declareConvention(
+        await actor(request),
+        request.params.userId,
+        request.params.category,
+        request.params.companyId,
+        request.body,
+        key(request),
+      ),
+  );
+  app.post(
+    "/partner/convention/:userId/:category/:companyId/decisions",
+    {
+      config: limited,
+      schema: {
+        params: conventionParams,
+        body: conventionDecisionSchema,
+        response: { 200: conventionDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.decideConvention(
+        await actor(request),
+        request.params.userId,
+        request.params.category,
+        request.params.companyId,
+        request.body,
+        key(request),
+      ),
+  );
+  app.post(
+    "/partner/convention/:userId/:category/:companyId/:id/retry",
+    {
+      config: limited,
+      schema: {
+        params: conventionParams.extend({ id: z.string().min(1).max(100) }),
+        body: z.object({ revision: z.number().int().nonnegative() }).strict(),
+        response: { 200: conventionDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.retryConventionUpload(
+        await actor(request),
+        request.params.userId,
+        request.params.category,
+        request.params.companyId,
         request.params.id,
         request.body.revision,
         key(request),
@@ -541,6 +1041,42 @@ export function registerPartnerWorkspace(
       mime: string,
     ) {
       return repository.completeCompetenceUpload(await actor(request), userId, category, id, mime);
+    },
+    async authorizeConventionSource(
+      request: FastifyRequest,
+      userId: string,
+      category: string,
+      companyId: string,
+      id: string,
+      write: boolean,
+      record = false,
+    ) {
+      return repository.conventionSource(
+        await actor(request),
+        userId,
+        category,
+        companyId,
+        id,
+        write,
+        record,
+      );
+    },
+    async completeConventionUpload(
+      request: FastifyRequest,
+      userId: string,
+      category: string,
+      companyId: string,
+      id: string,
+      mime: string,
+    ) {
+      return repository.completeConventionUpload(
+        await actor(request),
+        userId,
+        category,
+        companyId,
+        id,
+        mime,
+      );
     },
     async authorizeFinalPolicySource(
       request: FastifyRequest,

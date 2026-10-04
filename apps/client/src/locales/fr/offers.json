@@ -1,4 +1,62 @@
 {
+  "advice": {
+    "title": "Préférences de conseil",
+    "description": "Vos souhaits pour cette demande, partagés avec les professionnels autorisés à la traiter.",
+    "language": "Langue souhaitée",
+    "mode": "Mode souhaité",
+    "canton": "Canton souhaité",
+    "unknown": "Non renseigné",
+    "remote": "Sans déplacement",
+    "modes": {
+      "phone": "Téléphone",
+      "video": "Visioconférence",
+      "office": "Au bureau du conseiller",
+      "home": "À domicile"
+    },
+    "status": {
+      "unlinked": "Cette demande doit être rattachée à un profil Wallet avant de confirmer des préférences.",
+      "unset": "Aucune préférence de conseil confirmée pour cette demande.",
+      "confirmed": "Ces préférences ont été confirmées pour le besoin actuel. Les champs non renseignés restent à préciser.",
+      "confirmation_required": "Le profil ou le besoin a changé depuis la dernière confirmation. Confirmez à nouveau vos souhaits pour cette demande."
+    },
+    "limits": "Ces souhaits servent à préparer le conseil. Le professionnel doit encore vérifier leur adéquation, le lieu et les disponibilités avec vous. Aucun rendez-vous ni changement de conseiller n’en découle.",
+    "forNeed": "{{name}} · {{title}}",
+    "category": "Catégorie : {{category}}",
+    "object": "Objet : {{object}}",
+    "edit": "Préciser mes préférences",
+    "history": "Voir l’historique",
+    "record": "Confirmation {{revision}} · {{date}}",
+    "ownerCurrent": "Confirmée par le propriétaire actuel du profil, dans sa version actuelle. Le besoin peut avoir changé depuis cette date.",
+    "ownerChanged": "Confirmée pour une version ou un propriétaire antérieur du profil. Cette confirmation doit être renouvelée.",
+    "back": "Retour",
+    "latest": "Les plus récentes",
+    "older": "Plus anciennes",
+    "loading": "Chargement des préférences…",
+    "error": "Les préférences ne sont pas disponibles. Réessayez pour vérifier votre accès actuel.",
+    "saved": "Vos préférences ont été enregistrées.",
+    "placeHelp": "Indiquez le canton où vous souhaitez le rendez-vous. L’adresse et le créneau seront convenus séparément.",
+    "emptyHelp": "Laissez un champ non renseigné si vous n’avez pas encore de souhait à préciser. Cela ne signifie pas que tous les choix vous conviennent.",
+    "confirm": "Je confirme ces informations pour le profil et le besoin affichés et leur partage avec les professionnels autorisés à traiter cette demande.",
+    "invalid": "Confirmez les informations avant d’enregistrer.",
+    "conflict": "Le besoin, le profil ou vos droits ont changé, ou la demande ne peut plus être confirmée. Revenez à la lecture pour vérifier les informations.",
+    "retryExact": "La réponse n’a pas pu être confirmée. Réessayez le même envoi pour vérifier son résultat.",
+    "saving": "Enregistrement…",
+    "save": "Confirmer mes préférences",
+    "retry": "Réessayer le même envoi",
+    "afterCreate": "Après la création, ouvrez « Préférences de conseil » dans cette demande pour confirmer la langue, le mode et le canton souhaités."
+  },
+  "practice": {
+    "title": "Langues et zones du référent",
+    "limits": "Informations déclarées par le référent. La langue et le lieu de votre demande restent à examiner avec CoverView, ainsi que la disponibilité et les autres critères. Aucune attribution n’est automatique.",
+    "languages": "Langues de conseil déclarées",
+    "cantons": "Cantons entiers d’intervention déclarés",
+    "unspecified": "Non renseigné",
+    "status": {
+      "unset": "Aucune déclaration structurée enregistrée.",
+      "declared": "Déclaration pour le périmètre professionnel actuel, sans validation d’adéquation à votre demande.",
+      "scope_changed": "Le référent doit reconfirmer sa déclaration après modification de son périmètre professionnel."
+    }
+  },
   "referents": {
     "title": "Mes référents habituels",
     "help": "Votre préférence par profil et catégorie aide CoverView à organiser les prochaines demandes. Chaque demande garde son propre responsable.",
@@ -413,5 +471,90 @@
     "quoteLabel": "{{source}} : extrait exact",
     "requiredSources": "Ajoutez un constat et les deux pages/extraits exacts pour affirmer une concordance ou une différence. Les informations manquantes restent à vérifier.",
     "saveReview": "Enregistrer le contrôle"
+  },
+  "referentAssessment": {
+    "title": "Adéquation du référent au besoin",
+    "at": "Bilan au {{date}}",
+    "error": "Le bilan ne peut pas être consulté. Actualisez pour vérifier vos accès et les sources actuelles.",
+    "unspecified": "Non renseigné",
+    "refresh": "Actualiser",
+    "sources": "Consulter les sources",
+    "back": "Revenir au bilan",
+    "criteriaTitle": "Rapprochement des déclarations",
+    "competence": "Compétence documentée pour la catégorie",
+    "remainingTitle": "À vérifier pour ce besoin",
+    "limits": "Cette lecture déclarative ne confirme aucune adéquation globale, habilitation, disponibilité ou réservation. Le référent reste distinct du responsable de cette demande ; le choix du client et le suivi restent inchangés.",
+    "clientSource": "Souhaits confirmés pour ce besoin",
+    "practiceSource": "Langues et cantons déclarés par le référent",
+    "confirmed": "Confirmation du {{date}}",
+    "declared": "Déclaration du {{date}}",
+    "reviewed": "Examen du {{date}} · validité indiquée jusqu’au {{until}}",
+    "languageValue": "Langue : {{value}}",
+    "modeValue": "Mode : {{value}}",
+    "cantonValue": "Canton : {{value}}",
+    "criteria": {
+      "language": "Langue de conseil",
+      "canton": "Canton souhaité",
+      "mode": "Mode de rendez-vous"
+    },
+    "status": {
+      "matches": "Correspondance déclarée",
+      "differs": "Écart déclaré",
+      "unknown": "À préciser",
+      "not_applicable": "Sans comparaison territoriale"
+    },
+    "reason": {
+      "preferences_unlinked": "Le besoin ne possède pas de rattachement Wallet confirmé.",
+      "preferences_unset": "Aucun souhait structuré n’a été confirmé pour ce besoin.",
+      "preferences_confirmation_required": "Le propriétaire Wallet actuel doit reconfirmer ses souhaits pour le besoin actuel.",
+      "preference_unspecified": "Ce souhait n’est pas renseigné. Une absence de choix ne signifie pas que tout convient.",
+      "declaration_missing": "La déclaration structurée du référent manque. Les anciens textes libres ne permettent pas cette comparaison.",
+      "declaration_scope_changed": "La déclaration du référent ne correspond plus à son périmètre professionnel actuel.",
+      "declaration_unspecified": "Cette partie de la déclaration est vide. Elle ne démontre ni compatibilité ni incapacité.",
+      "declared_match": "Le souhait confirmé figure dans la déclaration actuelle du référent. La correspondance reste déclarative.",
+      "declared_difference": "Le souhait confirmé ne figure pas dans la liste déclarée du référent. Cet écart reste à clarifier.",
+      "remote_mode": "Le client souhaite un échange par téléphone ou visioconférence. Aucun canton de rendez-vous physique n’est à comparer.",
+      "shared_source_unavailable": "Aucun mode actuellement partagé ne permet cette comparaison. Le dossier privé de disponibilités n’est jamais utilisé ici."
+    },
+    "preferenceStatus": {
+      "unlinked": "Besoin non rattaché",
+      "unset": "Aucune confirmation",
+      "confirmed": "Souhaits actuellement confirmés",
+      "confirmation_required": "Confirmation à renouveler ; les anciens choix ne sont pas utilisés."
+    },
+    "remaining": {
+      "conventions": "Conventions et solution exacte distribuable : compagnie et produit du besoin à établir, même en présence d’une convention examinée.",
+      "availability": "Disponibilité réelle et créneau convenu, préparation et déplacements : à vérifier pour le rendez-vous précis.",
+      "capacity": "Capacité d’accueil et de suivi : non établie par les plages déclarées.",
+      "conflicts": "Conflits d’agenda, engagements externes et conflits d’intérêts : à examiner.",
+      "need_expertise": "Expertise sur le besoin précis et sa complexité : un examen de catégorie ne suffit pas.",
+      "quality": "Qualité du suivi pour ce besoin : aucune évaluation déduite."
+    },
+    "description": "Lecture des souhaits actuels et des déclarations partageables du référent.",
+    "advisor": "{{name}} · {{organization}}",
+    "state": {
+      "human_review": "Référent confirmé pour cette catégorie : critères à examiner avec CoverView. Le client conserve son choix.",
+      "client_change_requested": "Un changement d’interlocuteur a été demandé. Cette demande est prioritaire ; aucun bilan du référent n’est proposé.",
+      "closed": "Cette demande est terminée. Aucun bilan de réorientation ni réouverture du suivi.",
+      "unlinked": "Aucun profil Wallet rattaché : le référent ne peut pas être rapproché.",
+      "unset": "Aucun référent confirmé pour cette catégorie.",
+      "coverview": "Le client a choisi de laisser CoverView organiser le suivi sans privilégier de référent.",
+      "unavailable": "Le référent choisi ne remplit plus les conditions d’accès de base. CoverView doit examiner la continuité.",
+      "confirmation_required": "Le propriétaire Wallet actuel doit reconfirmer le choix du référent."
+    },
+    "practiceStatus": {
+      "unset": "Aucune déclaration structurée",
+      "declared": "Déclaration dans le périmètre professionnel actuel",
+      "scope_changed": "Périmètre modifié : déclaration à reconfirmer"
+    },
+    "subject": "{{title}} · {{category}}",
+    "selectionSource": "Choix du référent pour cette catégorie",
+    "modesSource": "Modes explicitement partagés par le référent",
+    "modesStatus": {
+      "missing": "Aucune déclaration partageable",
+      "withdrawn": "Le partage des modes a été retiré.",
+      "scope_changed": "Périmètre professionnel modifié : nouvelle confirmation nécessaire.",
+      "declared": "Modes déclarés pour le partage dans le périmètre actuel"
+    }
   }
 }

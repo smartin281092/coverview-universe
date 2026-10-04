@@ -38,6 +38,43 @@ import {
   competenceDecisionSchema,
   type CompetenceDeclaration,
   type CompetenceDecision,
+  conventionDossierSchema,
+  conventionDeclarationSchema,
+  conventionDecisionSchema,
+  professionalAvailabilityInputSchema,
+  professionalAvailabilityDossierSchema,
+  professionalPracticeInputSchema,
+  professionalPracticeDossierSchema,
+  advicePreferencesSchema,
+  advisorAssessmentSchema,
+  capacityAdvisorAssessmentSchema,
+  sharedReferentAssessmentSchema,
+  needConflictInputSchema,
+  needConflictDossierSchema,
+  type NeedConflictInput,
+  needCapacityInputSchema,
+  needCapacityDossierSchema,
+  type NeedCapacityInput,
+  capacityInputSchema,
+  capacityDossierSchema,
+  type CapacityInput,
+  sharedModesInputSchema,
+  sharedModesDossierSchema,
+  type SharedModesInput,
+  advicePreferencesInputSchema,
+  appointmentAssessmentSchema,
+  appointmentTimeInputSchema,
+  personalAppointmentProposalSchema,
+  personalAppointmentPreviewSchema,
+  personalAppointmentConfirmSchema,
+  type PersonalAppointmentProposal,
+  type PersonalAppointmentConfirm,
+  type AppointmentTimeInput,
+  type AdvicePreferencesInput,
+  type ProfessionalAvailabilityInput,
+  type ProfessionalPracticeInput,
+  type ConventionDeclaration,
+  type ConventionDecision,
   type ReferentUpdate,
   type CollaborationResponse,
   type PartnerContinuityUpdate,
@@ -106,6 +143,204 @@ export function createPartnerClient(baseUrl: string) {
   }
   const path = (wallet = false) => (wallet ? "/wallet/leads" : "/partner/leads");
   return {
+    referentAssessment: (leadId: string, wallet = false, signal?: AbortSignal) =>
+      request(
+        `${path(wallet)}/${encodeURIComponent(leadId)}/referent-assessment?version=2`,
+        sharedReferentAssessmentSchema,
+        signal,
+      ),
+    needConflict: (leadId: string, beforeRevision?: number, signal?: AbortSignal) =>
+      request(
+        `/partner/leads/${encodeURIComponent(leadId)}/conflict-review${beforeRevision ? `?beforeRevision=${beforeRevision}` : ""}`,
+        needConflictDossierSchema,
+        signal,
+      ),
+    decideNeedConflict: (leadId: string, input: NeedConflictInput, options: PartnerMutation) =>
+      request(
+        `/partner/leads/${encodeURIComponent(leadId)}/conflict-review`,
+        needConflictDossierSchema,
+        options.signal,
+        needConflictInputSchema.parse(input),
+        options,
+      ),
+    needCapacity: (leadId: string, beforeRevision?: number, signal?: AbortSignal) =>
+      request(
+        `/partner/leads/${encodeURIComponent(leadId)}/capacity-decision${beforeRevision ? `?beforeRevision=${beforeRevision}` : ""}`,
+        needCapacityDossierSchema,
+        signal,
+      ),
+    decideNeedCapacity: (leadId: string, input: NeedCapacityInput, options: PartnerMutation) =>
+      request(
+        `/partner/leads/${encodeURIComponent(leadId)}/capacity-decision`,
+        needCapacityDossierSchema,
+        options.signal,
+        needCapacityInputSchema.parse(input),
+        options,
+      ),
+    capacity: (userId: string, beforeRevision?: number, signal?: AbortSignal) =>
+      request(
+        `/partner/capacity/${encodeURIComponent(userId)}${beforeRevision ? `?beforeRevision=${beforeRevision}` : ""}`,
+        capacityDossierSchema,
+        signal,
+      ),
+    declareCapacity: (userId: string, input: CapacityInput, options: PartnerMutation) =>
+      request(
+        `/partner/capacity/${encodeURIComponent(userId)}`,
+        capacityDossierSchema,
+        options.signal,
+        capacityInputSchema.parse(input),
+        options,
+      ),
+    sharedModes: (userId: string, beforeRevision?: number, signal?: AbortSignal) =>
+      request(
+        `/partner/shared-modes/${encodeURIComponent(userId)}${beforeRevision ? `?beforeRevision=${beforeRevision}` : ""}`,
+        sharedModesDossierSchema,
+        signal,
+      ),
+    declareSharedModes: (userId: string, input: SharedModesInput, options: PartnerMutation) =>
+      request(
+        `/partner/shared-modes/${encodeURIComponent(userId)}`,
+        sharedModesDossierSchema,
+        options.signal,
+        sharedModesInputSchema.parse(input),
+        options,
+      ),
+    advisorCapacityAssessment: (leadId: string, signal?: AbortSignal) =>
+      request(
+        `/partner/leads/${encodeURIComponent(leadId)}/advisor-assessment?version=2`,
+        capacityAdvisorAssessmentSchema,
+        signal,
+      ),
+    advisorAssessment: (leadId: string, signal?: AbortSignal) =>
+      request(
+        `/partner/leads/${encodeURIComponent(leadId)}/advisor-assessment`,
+        advisorAssessmentSchema,
+        signal,
+      ),
+    previewPersonalRescheduling: (
+      leadId: string,
+      appointmentId: string,
+      input: PersonalAppointmentProposal,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/leads/${encodeURIComponent(leadId)}/appointments/${encodeURIComponent(appointmentId)}/rescheduling/preview`,
+        personalAppointmentPreviewSchema,
+        options.signal,
+        personalAppointmentProposalSchema.parse(input),
+        options,
+      ),
+    confirmPersonalRescheduling: (
+      leadId: string,
+      appointmentId: string,
+      input: PersonalAppointmentConfirm,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/leads/${encodeURIComponent(leadId)}/appointments/${encodeURIComponent(appointmentId)}/rescheduling/confirm`,
+        leadDetailSchema,
+        options.signal,
+        personalAppointmentConfirmSchema.parse(input),
+        options,
+      ),
+    previewPersonalAppointment: (
+      leadId: string,
+      input: PersonalAppointmentProposal,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/leads/${encodeURIComponent(leadId)}/personal-appointments/preview`,
+        personalAppointmentPreviewSchema,
+        options.signal,
+        personalAppointmentProposalSchema.parse(input),
+        options,
+      ),
+    confirmPersonalAppointment: (
+      leadId: string,
+      input: PersonalAppointmentConfirm,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/leads/${encodeURIComponent(leadId)}/personal-appointments/confirm`,
+        leadDetailSchema,
+        options.signal,
+        personalAppointmentConfirmSchema.parse(input),
+        options,
+      ),
+    protectAppointmentTime: (
+      leadId: string,
+      appointmentId: string,
+      input: AppointmentTimeInput,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/leads/${encodeURIComponent(leadId)}/appointments/${encodeURIComponent(appointmentId)}/time-protection`,
+        appointmentAssessmentSchema,
+        options.signal,
+        appointmentTimeInputSchema.parse(input),
+        options,
+      ),
+    appointmentAssessment: (leadId: string, appointmentId: string, signal?: AbortSignal) =>
+      request(
+        `/partner/leads/${encodeURIComponent(leadId)}/appointments/${encodeURIComponent(appointmentId)}/assessment`,
+        appointmentAssessmentSchema,
+        signal,
+      ),
+    advicePreferences: (
+      id: string,
+      beforeRevision?: number,
+      signal?: AbortSignal,
+      wallet = false,
+    ) =>
+      request(
+        `${path(wallet)}/${encodeURIComponent(id)}/advice-preferences${beforeRevision ? `?beforeRevision=${beforeRevision}` : ""}`,
+        advicePreferencesSchema,
+        signal,
+      ),
+    confirmAdvicePreferences: (
+      id: string,
+      input: AdvicePreferencesInput,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `${path(true)}/${encodeURIComponent(id)}/advice-preferences`,
+        advicePreferencesSchema,
+        options.signal,
+        advicePreferencesInputSchema.parse(input),
+        options,
+      ),
+    practice: (userId: string, beforeRevision?: number, signal?: AbortSignal) =>
+      request(
+        `/partner/practice/${encodeURIComponent(userId)}${beforeRevision ? `?beforeRevision=${beforeRevision}` : ""}`,
+        professionalPracticeDossierSchema,
+        signal,
+      ),
+    declarePractice: (userId: string, input: ProfessionalPracticeInput, options: PartnerMutation) =>
+      request(
+        `/partner/practice/${encodeURIComponent(userId)}`,
+        professionalPracticeDossierSchema,
+        options.signal,
+        professionalPracticeInputSchema.parse(input),
+        options,
+      ),
+    availability: (userId: string, beforeRevision?: number, signal?: AbortSignal) =>
+      request(
+        `/partner/availability/${encodeURIComponent(userId)}${beforeRevision ? `?beforeRevision=${beforeRevision}` : ""}`,
+        professionalAvailabilityDossierSchema,
+        signal,
+      ),
+    declareAvailability: (
+      userId: string,
+      input: ProfessionalAvailabilityInput,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/availability/${encodeURIComponent(userId)}`,
+        professionalAvailabilityDossierSchema,
+        options.signal,
+        professionalAvailabilityInputSchema.parse(input),
+        options,
+      ),
     competence: (userId: string, category: string, beforeRevision?: number, signal?: AbortSignal) =>
       request(
         `/partner/competence/${encodeURIComponent(userId)}/${encodeURIComponent(category)}${beforeRevision ? `?beforeRevision=${beforeRevision}` : ""}`,
@@ -170,6 +405,82 @@ export function createPartnerClient(baseUrl: string) {
     competenceSourceUrl: (userId: string, category: string, id: string) =>
       new URL(
         `/partner/competence/${encodeURIComponent(userId)}/${encodeURIComponent(category)}/${encodeURIComponent(id)}/source`,
+        base,
+      ).href,
+    convention: (
+      userId: string,
+      category: string,
+      companyId: string,
+      beforeRevision?: number,
+      signal?: AbortSignal,
+    ) =>
+      request(
+        `/partner/convention/${encodeURIComponent(userId)}/${encodeURIComponent(category)}/${encodeURIComponent(companyId)}${beforeRevision ? `?beforeRevision=${beforeRevision}` : ""}`,
+        conventionDossierSchema,
+        signal,
+      ),
+    declareConvention: (
+      userId: string,
+      category: string,
+      companyId: string,
+      input: ConventionDeclaration,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/convention/${encodeURIComponent(userId)}/${encodeURIComponent(category)}/${encodeURIComponent(companyId)}`,
+        conventionDossierSchema,
+        options.signal,
+        conventionDeclarationSchema.parse(input),
+        options,
+      ),
+    decideConvention: (
+      userId: string,
+      category: string,
+      companyId: string,
+      input: ConventionDecision,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/convention/${encodeURIComponent(userId)}/${encodeURIComponent(category)}/${encodeURIComponent(companyId)}/decisions`,
+        conventionDossierSchema,
+        options.signal,
+        conventionDecisionSchema.parse(input),
+        options,
+      ),
+    uploadConvention: (
+      userId: string,
+      category: string,
+      companyId: string,
+      id: string,
+      file: File,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/convention/${encodeURIComponent(userId)}/${encodeURIComponent(category)}/${encodeURIComponent(companyId)}/${encodeURIComponent(id)}/content`,
+        conventionDossierSchema,
+        options.signal,
+        file,
+        options,
+        true,
+      ),
+    retryConvention: (
+      userId: string,
+      category: string,
+      companyId: string,
+      id: string,
+      revision: number,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/convention/${encodeURIComponent(userId)}/${encodeURIComponent(category)}/${encodeURIComponent(companyId)}/${encodeURIComponent(id)}/retry`,
+        conventionDossierSchema,
+        options.signal,
+        { revision },
+        options,
+      ),
+    conventionSourceUrl: (userId: string, category: string, companyId: string, id: string) =>
+      new URL(
+        `/partner/convention/${encodeURIComponent(userId)}/${encodeURIComponent(category)}/${encodeURIComponent(companyId)}/${encodeURIComponent(id)}/source`,
         base,
       ).href,
     referentProfile: (

@@ -15,6 +15,7 @@ import {
 import { requireOfferSource } from "./partner.offers.js";
 import { executeContractCommand } from "./partner.contract.js";
 import { executeFinalPolicyCommand } from "./partner.final-policy.js";
+import { overlappingAppointment } from "./partner.appointment-assessment.js";
 type LeadRow = typeof partnerLeads.$inferSelect;
 
 async function changeStage(tx: PoolClient, lead: LeadRow, stage: string) {
@@ -252,6 +253,7 @@ export async function executeLeadCommand(
     }
     case "appointment": {
       const appt = input.appointment;
+      const appointmentId = newId("appt");
       await requireParticipant(tx, lead, appt.advisorId, actor);
       await requireAssignee(tx, lead, appt.advisorId, actor);
       if (
@@ -270,15 +272,20 @@ export async function executeLeadCommand(
         "select pg_advisory_xact_lock(hashtextextended($1,1))",
         [appt.advisorId],
       );
-      const conflict = await tx.query<Record<string, unknown>>(
-        "select id from partner_appointments where advisor_id=$1 and state='scheduled' and starts_at < $2::timestamptz + $3 * interval '1 minute' and starts_at + duration_minutes * interval '1 minute' > $2::timestamptz limit 1",
-        [appt.advisorId, appt.startsAt, appt.durationMinutes],
-      );
-      if (conflict.rowCount) fail("PARTNER_APPOINTMENT_CONFLICT", 409);
+      if (
+        await overlappingAppointment(
+          tx,
+          appt.advisorId,
+          null,
+          new Date(appt.startsAt),
+          new Date(Date.parse(appt.startsAt) + appt.durationMinutes * 60000),
+        )
+      )
+        fail("PARTNER_APPOINTMENT_CONFLICT", 409);
       await tx.query<Record<string, unknown>>(
         "insert into partner_appointments(id,lead_id,advisor_id,starts_at,duration_minutes,mode,location,timezone) values($1,$2,$3,$4,$5,$6,$7,$8)",
         [
-          newId("appt"),
+          appointmentId,
           id,
           appt.advisorId,
           appt.startsAt,
@@ -301,7 +308,7 @@ export async function executeLeadCommand(
         `${appt.startsAt} · ${appt.mode}`,
         "client",
       );
-      break;
+      return appointmentId;
     }
     case "appointment_state": {
       const appt = (

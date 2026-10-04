@@ -102,7 +102,10 @@ const targetCondition = (profileId: string) =>
 const condition = (userId: string, id: string) =>
   and(eq(documents.userId, userId), eq(documents.id, id));
 const personalDocument = () =>
-  or(isNull(documents.purpose), ne(documents.purpose, "partner_competence"));
+  or(
+    isNull(documents.purpose),
+    and(ne(documents.purpose, "partner_competence"), ne(documents.purpose, "partner_convention")),
+  );
 const personalCondition = (userId: string, id: string) =>
   and(condition(userId, id), personalDocument());
 function summary(row: Row) {
@@ -181,6 +184,7 @@ async function detail(tx: Tx | Database, row: Row): Promise<DocumentRecord> {
     profileCreation:
       row.purpose !== "lead_offer" &&
       row.purpose !== "partner_competence" &&
+      row.purpose !== "partner_convention" &&
       !hasDocumentProfile(row) &&
       row.state === "ready" &&
       row.scanVersion
@@ -1392,6 +1396,7 @@ export function createDocumentRepository(db: Database) {
         if (
           row.purpose !== "lead_offer" &&
           row.purpose !== "partner_competence" &&
+          row.purpose !== "partner_convention" &&
           !hasDocumentProfile(row) &&
           incompleteIdentity
         ) {
@@ -1401,6 +1406,7 @@ export function createDocumentRepository(db: Database) {
         } else if (
           row.purpose !== "lead_offer" &&
           row.purpose !== "partner_competence" &&
+          row.purpose !== "partner_convention" &&
           !hasDocumentProfile(row) &&
           profile
         ) {

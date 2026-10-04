@@ -1,4 +1,19 @@
+import { insuranceCompanyIdSchema } from "./companies.js";
 import { z } from "zod";
+import {
+  professionalPracticeSummarySchema,
+  professionalLanguageSchema,
+  swissCantonSchema,
+} from "./professional-practice.js";
+import { advicePreferencesSchema, leadAppointmentModeSchema } from "./partner-advice.js";
+import {
+  appointmentAssessmentSchema,
+  appointmentTimeInputSchema,
+} from "./partner-appointment-assessment.js";
+export * from "./partner-advice.js";
+export * from "./professional-practice.js";
+export * from "./partner-availability.js";
+export * from "./partner-appointment-assessment.js";
 import {
   currentContractSchema,
   contractComparisonSchema,
@@ -152,6 +167,7 @@ export const competenceSummarySchema = z.object({
 export const competenceDeclarationSchema = z
   .object({
     revision: z.number().int().nonnegative(),
+    professionalRevision: z.number().int().positive().nullable().default(null),
     declaration: text,
     file: documentCreateInputSchema.pick({ name: true, mime: true, size: true, checksum: true }),
     confirmed: z.literal(true),
@@ -182,6 +198,10 @@ export const competenceQuerySchema = z
 export const competenceRecordSchema = z.object({
   id,
   revision: z.number().int().positive(),
+  professionalRevision: z.number().int().positive().nullable().default(null),
+  declaredName: z.string().default(""),
+  declaredOrganization: z.string().default(""),
+  professionalScope: z.enum(["current", "changed", "unknown"]).default("unknown"),
   declaration: text,
   decision: z.enum(["submitted", "reviewed", "needs_information", "rejected", "withdrawn"]),
   reason: z.string(),
@@ -198,6 +218,7 @@ export const competenceRecordSchema = z.object({
 });
 export const competenceDossierSchema = z.object({
   documentsAvailable: z.boolean().default(true),
+  professionalRevision: z.number().int().positive().nullable().default(null),
   userId: id,
   name: z.string(),
   organization: z.string(),
@@ -205,6 +226,7 @@ export const competenceDossierSchema = z.object({
   current: competenceRecordSchema.nullable(),
   summary: competenceSummarySchema,
   canDeclare: z.boolean(),
+  canResume: z.boolean().default(false),
   canReview: z.boolean(),
   canWithdraw: z.boolean(),
   history: z.array(competenceRecordSchema).max(20),
@@ -213,6 +235,48 @@ export const competenceDossierSchema = z.object({
 export type CompetenceDeclaration = z.infer<typeof competenceDeclarationSchema>;
 export type CompetenceDecision = z.infer<typeof competenceDecisionSchema>;
 export type CompetenceDossier = z.infer<typeof competenceDossierSchema>;
+export const conventionDeclarationSchema = competenceDeclarationSchema.extend({
+  subjectName: z.string().trim().min(1).max(160),
+  subjectOrganization: z.string().trim().min(1).max(200),
+});
+export const conventionDecisionSchema = z
+  .object(competenceDecisionSchema.shape)
+  .extend({
+    validFrom: instant.nullable(),
+    memberCovered: z.boolean(),
+  })
+  .strict()
+  .refine((v) =>
+    v.decision === "reviewed"
+      ? !!v.scope &&
+        !!v.coverage &&
+        !!v.validFrom &&
+        !!v.validUntil &&
+        v.originalChecked &&
+        v.memberCovered &&
+        Date.parse(v.validFrom) < Date.parse(v.validUntil)
+      : v.coverage === null && v.validFrom === null && v.validUntil === null && v.scope === "",
+  );
+export const conventionQuerySchema = competenceQuerySchema;
+export const conventionSummarySchema = competenceSummarySchema.extend({
+  status: z.enum([...competenceStatusSchema.options, "scheduled"]),
+  validFrom: instant.nullable(),
+});
+export const conventionRecordSchema = competenceRecordSchema.extend({
+  declaredName: z.string(),
+  declaredOrganization: z.string(),
+  validFrom: instant.nullable(),
+  memberCovered: z.boolean(),
+});
+export const conventionDossierSchema = competenceDossierSchema.extend({
+  companyId: insuranceCompanyIdSchema,
+  current: conventionRecordSchema.nullable(),
+  summary: conventionSummarySchema,
+  history: z.array(conventionRecordSchema).max(20),
+});
+export type ConventionDeclaration = z.infer<typeof conventionDeclarationSchema>;
+export type ConventionDecision = z.infer<typeof conventionDecisionSchema>;
+export type ConventionDossier = z.infer<typeof conventionDossierSchema>;
 export const referentSelectionSchema = z.object({
   revision: z.number().int().nonnegative(),
   advisor: referentAdvisorSchema.nullable(),
@@ -253,6 +317,7 @@ export const referentProfileSchema = z.object({
   nextBeforeRevision: z.number().int().positive().nullable(),
 });
 export const referentContinuitySchema = z.object({
+  practice: professionalPracticeSummarySchema.optional(),
   competence: competenceSummarySchema.optional(),
   selection: referentSelectionSchema,
   status: z.enum(["human_review", "client_change_requested", "closed"]),
@@ -272,6 +337,397 @@ export const referentContinuitySchema = z.object({
 export type ReferentProfile = z.infer<typeof referentProfileSchema>;
 export type ReferentUpdate = z.infer<typeof referentUpdateSchema>;
 export type ReferentContinuity = z.infer<typeof referentContinuitySchema>;
+const advisorCriterionSchema = z.object({
+  status: z.enum(["matches", "differs", "unknown", "not_applicable"]),
+  reason: z.enum([
+    "preferences_unlinked",
+    "preferences_unset",
+    "preferences_confirmation_required",
+    "preference_unspecified",
+    "declaration_missing",
+    "declaration_scope_changed",
+    "declaration_unspecified",
+    "declared_match",
+    "declared_difference",
+    "remote_mode",
+  ]),
+});
+// Private composition for the current advisor only; never embedded in a shared Lead DTO.
+export const advisorAssessmentSchema = z.object({
+  leadId: id,
+  advisorId: id,
+  assessedAt: instant,
+  category: leadCategorySchema,
+  preferences: advicePreferencesSchema.pick({ status: true, scopeRevision: true }).extend({
+    current: advicePreferencesSchema.shape.current
+      .unwrap()
+      .pick({
+        revision: true,
+        profileRevision: true,
+        confirmedAt: true,
+        languageCode: true,
+        mode: true,
+        canton: true,
+      })
+      .nullable(),
+  }),
+  practice: professionalPracticeSummarySchema,
+  modes: z.object({
+    status: z.enum(["missing", "scope_changed", "declared"]),
+    revision: z.number().int().positive().nullable(),
+    declaredAt: instant.nullable(),
+    values: z.array(leadAppointmentModeSchema).max(4),
+  }),
+  competence: competenceSummarySchema,
+  continuity: z.object({
+    status: z.enum([
+      "unlinked",
+      "unset",
+      "chosen_self",
+      "chosen_other",
+      "coverview",
+      "unavailable",
+      "confirmation_required",
+    ]),
+    confirmedAt: instant.nullable(),
+    changeRequested: z.boolean(),
+  }),
+  criteria: z.object({
+    language: advisorCriterionSchema,
+    canton: advisorCriterionSchema,
+    mode: advisorCriterionSchema,
+  }),
+  remainingChecks: z
+    .array(
+      z.enum(["conventions", "availability", "capacity", "conflicts", "need_expertise", "quality"]),
+    )
+    .max(6),
+});
+export type AdvisorAssessment = z.infer<typeof advisorAssessmentSchema>;
+// Explicit shared projection, independent of the personal advisor dossier.
+export const referentAssessmentSchema = z.object({
+  leadId: id,
+  title: z.string(),
+  category: leadCategorySchema,
+  assessedAt: instant,
+  status: z.enum([
+    "human_review",
+    "client_change_requested",
+    "closed",
+    "unlinked",
+    "unset",
+    "coverview",
+    "unavailable",
+    "confirmation_required",
+  ]),
+  selection: referentSelectionSchema.nullable(),
+  assessment: z
+    .object({
+      preferences: z.object({
+        status: advicePreferencesSchema.shape.status,
+        confirmedAt: instant.nullable(),
+        languageCode: professionalLanguageSchema.nullable(),
+        canton: swissCantonSchema.nullable(),
+        mode: leadAppointmentModeSchema.nullable(),
+      }),
+      practice: professionalPracticeSummarySchema,
+      competence: competenceSummarySchema,
+      criteria: z.object({
+        language: advisorCriterionSchema,
+        canton: advisorCriterionSchema,
+        mode: z.object({
+          status: z.literal("unknown"),
+          reason: z.literal("shared_source_unavailable"),
+        }),
+      }),
+      remainingChecks: z
+        .array(
+          z.enum([
+            "conventions",
+            "availability",
+            "capacity",
+            "conflicts",
+            "need_expertise",
+            "quality",
+          ]),
+        )
+        .max(6),
+    })
+    .nullable(),
+});
+export type ReferentAssessment = z.infer<typeof referentAssessmentSchema>;
+
+// Personal statement, separate from recorded workload and any admission decision.
+export const capacityPositionSchema = z.enum(["open", "case_by_case", "unavailable"]);
+export const capacityInputSchema = z
+  .object({
+    revision: z.number().int().nonnegative(),
+    professionalRevision: z.number().int().positive(),
+    action: z.enum(["declare", "withdraw"]),
+    position: capacityPositionSchema.nullable(),
+    validUntil: instant.nullable(),
+    confirmed: z.literal(true),
+  })
+  .strict()
+  .refine((value) =>
+    value.action === "declare"
+      ? value.position !== null && value.validUntil !== null
+      : value.position === null && value.validUntil === null,
+  );
+const capacityDeclarationSchema = z.object({
+  revision: z.number().int().positive(),
+  professionalRevision: z.number().int().positive(),
+  declaredName: z.string(),
+  declaredOrganization: z.string(),
+  categories: z.array(leadCategorySchema).max(7),
+  professionalScope: z.enum(["current", "changed"]),
+  action: capacityInputSchema.shape.action,
+  position: capacityPositionSchema.nullable(),
+  validUntil: instant.nullable(),
+  status: z.enum(["declared", "withdrawn", "expired", "scope_changed"]),
+  declaredAt: instant,
+});
+export const capacityDossierSchema = z.object({
+  userId: id,
+  name: z.string(),
+  organization: z.string(),
+  categories: z.array(leadCategorySchema).max(7),
+  professionalRevision: z.number().int().positive(),
+  canDeclare: z.boolean(),
+  canWithdraw: z.boolean(),
+  activeAdvisor: z.boolean(),
+  workload: z.object({
+    observedAt: instant,
+    accepted: z.number().int().nonnegative(),
+    proposed: z.number().int().nonnegative(),
+    contributing: z.number().int().nonnegative(),
+  }),
+  current: capacityDeclarationSchema.nullable(),
+  history: z.array(capacityDeclarationSchema).max(20),
+  nextBeforeRevision: z.number().int().positive().nullable(),
+});
+export type CapacityInput = z.infer<typeof capacityInputSchema>;
+export type CapacityDossier = z.infer<typeof capacityDossierSchema>;
+
+// Explicit private v2; v1 remains readable without the capacity table.
+export const capacityAdvisorAssessmentSchema = advisorAssessmentSchema.extend({
+  version: z.literal(2),
+  capacity: z.object({
+    source: z.literal("personal_declaration"),
+    status: z.enum([
+      "missing",
+      "withdrawn",
+      "scope_changed",
+      "expired",
+      "category_not_covered",
+      "declared",
+    ]),
+    position: capacityPositionSchema.nullable(),
+    declaration: capacityDeclarationSchema
+      .pick({
+        revision: true,
+        professionalRevision: true,
+        categories: true,
+        professionalScope: true,
+        declaredAt: true,
+        validUntil: true,
+      })
+      .nullable(),
+    decision: z.literal("human_review_required"),
+  }),
+  workload: capacityDossierSchema.shape.workload,
+});
+export type CapacityAdvisorAssessment = z.infer<typeof capacityAdvisorAssessmentSchema>;
+
+// A personal decision for one need. Never an assignment, acceptance or shared assessment.
+export const needCapacityPositionSchema = z.enum([
+  "capacity_confirmed",
+  "capacity_insufficient",
+  "clarification_needed",
+]);
+export const needCapacityInputSchema = z
+  .object({
+    revision: z.number().int().nonnegative(),
+    scopeFingerprint: z.string().regex(/^[a-f0-9]{64}$/u),
+    action: z.enum(["decide", "withdraw"]),
+    position: needCapacityPositionSchema.nullable(),
+    reason: z.string().trim().min(10).max(1000),
+    validUntil: instant.nullable(),
+    confirmed: z.literal(true),
+  })
+  .strict()
+  .refine((value) =>
+    value.action === "decide"
+      ? value.position !== null && value.validUntil !== null
+      : value.position === null && value.validUntil === null,
+  );
+const needCapacityBasisSchema = z.object({
+  scopeRevision: z.number().int().positive(),
+  profileRevision: z.number().int().nonnegative().nullable(),
+  professionalRevision: z.number().int().positive().nullable(),
+  preferencesRevision: z.number().int().nonnegative(),
+  capacityRevision: z.number().int().nonnegative(),
+  availabilityRevision: z.number().int().nonnegative(),
+  workload: capacityDossierSchema.shape.workload,
+});
+const needCapacityRecordSchema = z.object({
+  revision: z.number().int().positive(),
+  action: needCapacityInputSchema.shape.action,
+  position: needCapacityPositionSchema.nullable(),
+  reason: z.string(),
+  validUntil: instant.nullable(),
+  recordedAt: instant,
+  scope: advicePreferencesSchema.shape.scope,
+  basis: needCapacityBasisSchema,
+});
+export const needCapacityDossierSchema = z.object({
+  leadId: id,
+  advisorId: id,
+  assessedAt: instant,
+  scope: advicePreferencesSchema.shape.scope,
+  scopeFingerprint: needCapacityInputSchema.shape.scopeFingerprint,
+  revision: z.number().int().nonnegative(),
+  canConfirmCapacity: z.boolean(),
+  canWithdraw: z.boolean(),
+  status: z.enum(["missing", "recorded", "withdrawn", "expired", "review_required"]),
+  effectivePosition: needCapacityPositionSchema.nullable(),
+  current: needCapacityRecordSchema.nullable(),
+  history: z.array(needCapacityRecordSchema).max(20),
+  nextBeforeRevision: z.number().int().positive().nullable(),
+  assessment: capacityAdvisorAssessmentSchema,
+  basis: needCapacityBasisSchema,
+});
+export type NeedCapacityInput = z.infer<typeof needCapacityInputSchema>;
+export type NeedCapacityDossier = z.infer<typeof needCapacityDossierSchema>;
+
+// A private human conflict review, distinct from scheduling and capacity.
+export const needConflictPositionSchema = z.enum([
+  "none_declared",
+  "blocking_conflict_declared",
+  "clarification_needed",
+]);
+export const needConflictInputSchema = z
+  .object({
+    revision: z.number().int().nonnegative(),
+    scopeFingerprint: z.string().regex(/^[a-f0-9]{64}$/u),
+    action: z.enum(["decide", "withdraw"]),
+    position: needConflictPositionSchema.nullable(),
+    reviewedScope: z.string().trim().min(10).max(500).nullable(),
+    reason: z.string().trim().min(10).max(1000),
+    validUntil: instant.nullable(),
+    confirmed: z.literal(true),
+  })
+  .strict()
+  .refine((value) =>
+    value.action === "decide"
+      ? value.position !== null && value.validUntil !== null && value.reviewedScope !== null
+      : value.position === null && value.validUntil === null && value.reviewedScope === null,
+  );
+const needConflictBasisSchema = z.object({
+  scopeRevision: z.number().int().positive(),
+  profileRevision: z.number().int().nonnegative().nullable(),
+  professionalRevision: z.number().int().positive().nullable(),
+  preferencesRevision: z.number().int().nonnegative(),
+  referentRevision: z.number().int().nonnegative(),
+});
+const needConflictRecordSchema = z.object({
+  revision: z.number().int().positive(),
+  action: needConflictInputSchema.shape.action,
+  position: needConflictPositionSchema.nullable(),
+  reviewedScope: z.string().nullable(),
+  reason: z.string(),
+  validUntil: instant.nullable(),
+  recordedAt: instant,
+  scope: advicePreferencesSchema.shape.scope,
+  basis: needConflictBasisSchema,
+});
+export const needConflictDossierSchema = z.object({
+  leadId: id,
+  advisorId: id,
+  assessedAt: instant,
+  scope: advicePreferencesSchema.shape.scope,
+  scopeFingerprint: needConflictInputSchema.shape.scopeFingerprint,
+  revision: z.number().int().nonnegative(),
+  canDeclareAbsence: z.boolean(),
+  canWithdraw: z.boolean(),
+  status: z.enum(["missing", "recorded", "withdrawn", "expired", "review_required"]),
+  effectivePosition: needConflictPositionSchema.nullable(),
+  current: needConflictRecordSchema.nullable(),
+  history: z.array(needConflictRecordSchema).max(20),
+  nextBeforeRevision: z.number().int().positive().nullable(),
+  changeRequested: z.boolean(),
+  basis: needConflictBasisSchema,
+});
+export type NeedConflictInput = z.infer<typeof needConflictInputSchema>;
+export type NeedConflictDossier = z.infer<typeof needConflictDossierSchema>;
+
+// Separate consent from the private availability dossier; no legacy values are imported.
+export const sharedModesAudienceSchema = z.literal("confirmed-referent-leads-v1");
+export const sharedModesInputSchema = z
+  .object({
+    revision: z.number().int().nonnegative(),
+    professionalRevision: z.number().int().positive(),
+    action: z.enum(["publish", "withdraw"]),
+    modes: z
+      .array(leadAppointmentModeSchema)
+      .max(4)
+      .refine((values) => new Set(values).size === values.length),
+    audience: sharedModesAudienceSchema,
+    confirmed: z.literal(true),
+  })
+  .strict()
+  .refine((value) =>
+    value.action === "publish" ? value.modes.length > 0 : value.modes.length === 0,
+  );
+const sharedModesDeclarationSchema = z.object({
+  revision: z.number().int().positive(),
+  professionalRevision: z.number().int().positive(),
+  declaredName: z.string(),
+  declaredOrganization: z.string(),
+  categories: z.array(leadCategorySchema).max(7),
+  professionalScope: z.enum(["current", "changed"]),
+  action: sharedModesInputSchema.shape.action,
+  modes: sharedModesInputSchema.shape.modes,
+  audience: sharedModesAudienceSchema,
+  declaredAt: instant,
+});
+export const sharedModesDossierSchema = z.object({
+  userId: id,
+  name: z.string(),
+  organization: z.string(),
+  categories: z.array(leadCategorySchema).max(7),
+  professionalRevision: z.number().int().positive(),
+  canPublish: z.boolean(),
+  canWithdraw: z.boolean(),
+  current: sharedModesDeclarationSchema.nullable(),
+  history: z.array(sharedModesDeclarationSchema).max(20),
+  nextBeforeRevision: z.number().int().positive().nullable(),
+});
+export const sharedModesSummarySchema = z.object({
+  status: z.enum(["missing", "scope_changed", "withdrawn", "declared"]),
+  modes: sharedModesInputSchema.shape.modes,
+  declaredAt: instant.nullable(),
+});
+// Opt-in v2 preserves v1's literal unknown mode for already deployed clients.
+export const sharedReferentAssessmentSchema = referentAssessmentSchema.extend({
+  assessment: referentAssessmentSchema.shape.assessment
+    .unwrap()
+    .extend({
+      sharedModes: sharedModesSummarySchema,
+      criteria: z.object({
+        language: advisorCriterionSchema,
+        canton: advisorCriterionSchema,
+        mode: z.union([
+          advisorCriterionSchema,
+          referentAssessmentSchema.shape.assessment.unwrap().shape.criteria.shape.mode,
+        ]),
+      }),
+    })
+    .nullable(),
+});
+export type SharedModesInput = z.infer<typeof sharedModesInputSchema>;
+export type SharedModesDossier = z.infer<typeof sharedModesDossierSchema>;
+export type SharedReferentAssessment = z.infer<typeof sharedReferentAssessmentSchema>;
 export const partnerRoleSchema = z.enum(["advisor", "referrer", "manager"]);
 export const applicationStateSchema = z.enum([
   "draft",
@@ -328,6 +784,7 @@ export const partnerApplicationInputSchema = z
 export const partnerApplicationSchema = partnerApplicationInputSchema.extend({
   userId: id,
   organizationId: id,
+  professionalRevision: z.number().int().positive().nullable().default(null),
   state: applicationStateSchema,
   organizationState: applicationStateSchema,
   grantedRoles: z.array(partnerRoleSchema),
@@ -396,7 +853,7 @@ export const leadAppointmentInputSchema = z
     advisorId: id,
     startsAt: instant,
     durationMinutes: z.number().int().min(15).max(240),
-    mode: z.enum(["phone", "video", "office", "home"]),
+    mode: leadAppointmentModeSchema,
     location: z.string().trim().min(3).max(1000),
     timezone: z.literal("Europe/Zurich"),
   })
@@ -407,6 +864,33 @@ export const leadAppointmentSchema = leadAppointmentInputSchema
     state: z.enum(["scheduled", "completed", "cancelled", "client_absent", "advisor_absent"]),
   })
   .strip();
+export const personalAppointmentProposalSchema = z
+  .object({
+    appointment: leadAppointmentInputSchema.omit({ advisorId: true }),
+    time: appointmentTimeInputSchema.omit({ basis: true, confirmed: true }),
+  })
+  .strict();
+export type PersonalAppointmentProposal = z.infer<typeof personalAppointmentProposalSchema>;
+export const personalAppointmentPreviewSchema = z.object({
+  proposal: personalAppointmentProposalSchema,
+  previous: leadAppointmentSchema.optional(),
+  assessment: appointmentAssessmentSchema.omit({ appointmentId: true, timeProtection: true }),
+  basis: z.string().regex(/^[a-f0-9]{64}$/u),
+  occupiedStartsAt: instant,
+  occupiedEndsAt: instant,
+  canConfirm: z.boolean(),
+});
+export type PersonalAppointmentPreview = z.infer<typeof personalAppointmentPreviewSchema>;
+export const personalAppointmentConfirmSchema = personalAppointmentProposalSchema
+  .extend({
+    basis: z.string().regex(/^[a-f0-9]{64}$/u),
+    clientAgreementConfirmed: z.literal(true),
+    externalCommitmentsChecked: z.literal(true),
+    capacityConfirmed: z.literal(true),
+    preparationAndTravelChecked: z.literal(true),
+  })
+  .strict();
+export type PersonalAppointmentConfirm = z.infer<typeof personalAppointmentConfirmSchema>;
 export const partnerNotificationQuerySchema = z
   .object({
     status: z.enum(["open", "all"]).default("open"),

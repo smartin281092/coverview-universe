@@ -8,6 +8,7 @@ import {
 import { fail, type Executor, type PartnerActor } from "./partner.policy.js";
 import { newId, event } from "./partner.audit.js";
 import { readCompetenceSummary } from "./partner.competence.js";
+import { readPracticeSummary } from "./partner.practice.js";
 
 type Subject = {
   id: string;
@@ -186,7 +187,15 @@ export async function updateReferent(
   await event(db, actor, null, "referent.selected.v1", "", "private", id);
   return profileId;
 }
-export async function readReferentContinuity(
+export async function readLeadReferentSelection(
+  db: Executor,
+  lead: { clientUserId: string | null; clientProfileId: string | null; category: string },
+) {
+  if (!lead.clientUserId) return null;
+  const target = await subject(db, lead.clientUserId, lead.clientProfileId);
+  return selection(target, await latest(db, target, lead.category));
+}
+export async function readLeadReferentState(
   db: Executor,
   lead: {
     id: string;
@@ -196,9 +205,7 @@ export async function readReferentContinuity(
     stage: string;
   },
 ) {
-  if (!lead.clientUserId) return null;
-  const target = await subject(db, lead.clientUserId, lead.clientProfileId);
-  const current = selection(target, await latest(db, target, lead.category));
+  const current = await readLeadReferentSelection(db, lead);
   const changeRequested = (
     await db.query(
       `select id from partner_notifications
@@ -212,8 +219,17 @@ export async function readReferentContinuity(
       : changeRequested
         ? "client_change_requested"
         : "human_review";
+  return { selection: current, status } as const;
+}
+export async function readReferentContinuity(
+  db: Executor,
+  lead: Parameters<typeof readLeadReferentState>[1],
+) {
+  const { selection: current, status } = await readLeadReferentState(db, lead);
+  if (!current) return null;
   const competence = await readCompetenceSummary(db, current.advisor?.id ?? null, lead.category);
   return referentContinuitySchema.parse({
+    practice: await readPracticeSummary(db, current.advisor?.id ?? null),
     competence,
     selection: current,
     status,

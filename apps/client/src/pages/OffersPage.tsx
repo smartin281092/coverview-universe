@@ -6,6 +6,9 @@ import { ArrowUpRight, FileText, Plus } from "lucide-react";
 import type { IdentityMe } from "@coverview/api-client";
 import { PartnerApiError, type LeadOffer } from "@coverview/api-client/partner";
 import type { LeadCommand } from "@coverview/contracts/partner";
+import { PracticeSummaryDialog } from "../features/offers/PracticeSummaryDialog";
+import { AdvicePreferencesDialog } from "../features/offers/AdvicePreferencesDialog";
+import { ReferentAssessmentDialog } from "../features/offers/ReferentAssessmentDialog";
 import {
   Badge,
   Button,
@@ -128,6 +131,8 @@ function Offers({ identity }: { identity: IdentityMe }) {
     [history, setHistory] = useState(false),
     [policies, setPolicies] = useState(false),
     [referents, setReferents] = useState<{ profile: string; category?: string } | null>(null),
+    [advice, setAdvice] = useState<string | null>(null),
+    [referentAssessment, setReferentAssessment] = useState<string | null>(null),
     [linkContract, setLinkContract] = useState(false),
     [pending, setPending] = useState(false),
     [error, setError] = useState(""),
@@ -227,6 +232,21 @@ function Offers({ identity }: { identity: IdentityMe }) {
   }
   return (
     <>
+      {referentAssessment && (
+        <ReferentAssessmentDialog
+          key={`${identity.user.id}:${identity.session.id}:${referentAssessment}`}
+          identity={identity}
+          leadId={referentAssessment}
+          onClose={() => setReferentAssessment(null)}
+        />
+      )}
+      {advice && (
+        <AdvicePreferencesDialog
+          identity={identity}
+          leadId={advice}
+          onClose={() => setAdvice(null)}
+        />
+      )}
       {referents && (
         <ReferentsDialog
           identity={identity}
@@ -346,6 +366,9 @@ function Offers({ identity }: { identity: IdentityMe }) {
           ) : (
             lead && (
               <>
+                <Button variant="outline" disabled={pending} onClick={() => setAdvice(lead.id)}>
+                  {t("advice.title")}
+                </Button>
                 <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border p-4">
                   <div>
                     <p className="text-sm font-medium">
@@ -417,6 +440,12 @@ function Offers({ identity }: { identity: IdentityMe }) {
                         <p>{t("referents.competenceLimits")}</p>
                       </div>
                     )}
+                    {lead.referentContinuity.practice && (
+                      <PracticeSummaryDialog value={lead.referentContinuity.practice} />
+                    )}
+                    <Button variant="outline" onClick={() => setReferentAssessment(lead.id)}>
+                      {t("referentAssessment.title")}
+                    </Button>
                     <Button
                       variant="outline"
                       disabled={pending}

@@ -33,6 +33,7 @@
     "lead.reassignment_required": "CoverView suit la reprise de votre demande",
     "lead.continuity_escalated": "CoverView reprend le suivi de votre demande",
     "appointment.scheduled": "Rendez-vous confirmé",
+    "appointment.rescheduled.v1": "Rendez-vous reporté",
     "appointment.cancelled": "Rendez-vous à replanifier",
     "lead.closed": "Votre demande a été clôturée"
   },

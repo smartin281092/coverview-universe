@@ -6,11 +6,19 @@ import {
   competenceSummarySchema,
   competenceQuerySchema,
   leadCategorySchema,
+  partnerApplicationInputSchema,
   type CompetenceDeclaration,
   type CompetenceDecision,
 } from "@coverview/contracts/partner";
 import { createPartnerProof, queuePartnerProof } from "../document-intelligence/index.js";
-import { fail, lockActor, membership, type Executor, type PartnerActor } from "./partner.policy.js";
+import {
+  fail,
+  lockActor,
+  membership,
+  professionalScope,
+  type Executor,
+  type PartnerActor,
+} from "./partner.policy.js";
 import { newId, event } from "./partner.audit.js";
 
 type Mutation = <T>(
@@ -33,6 +41,9 @@ type Row = {
   created_at: Date;
   actor_name: string;
   organization_id: string;
+  professional_revision: number | null;
+  declared_name: string;
+  declared_organization: string;
   document_id: string;
   checksum: string;
   document_revision: number;
@@ -45,12 +56,17 @@ type Row = {
   document_state: string;
   scan_version: string | null;
   deleted_at: Date | null;
+  current_application: unknown;
+  current_organization_id: string;
+  current_professional_revision: number;
 };
-const select = `select d.*,s.declaration,s.organization_id,s.document_id,s.checksum,
+const select = `select d.*,s.declaration,s.organization_id,s.professional_revision,s.declared_name,s.declared_organization,s.document_id,s.checksum,
   coalesce(a.application->>'name','CoverView') actor_name,
   f.revision file_revision,f.checksum file_checksum,f.user_id file_user_id,f.managed_profile_id,f.purpose,
-  f.name document_name,f.state document_state,f.scan_version,f.deleted_at
+  f.name document_name,f.state document_state,f.scan_version,f.deleted_at,
+  m.application current_application,m.organization_id current_organization_id,m.professional_revision current_professional_revision
   from partner_competence_decisions d join partner_competence_declarations s on s.id=d.declaration_id
+  join partner_members m on m.user_id=d.user_id
   join files f on f.id=s.document_id left join partner_members a on a.user_id=d.decided_by`;
 const safe = (row: Row, userId: string) =>
   row.file_user_id === userId &&
@@ -71,7 +87,7 @@ async function latest(db: Executor, userId: string, category: string) {
 function summary(
   row: Row | undefined,
   userId: string,
-  organizationId: string | undefined,
+  member: Parameters<typeof professionalScope>[1],
   categoryAllowed = true,
 ) {
   const reviewed = row?.decision === "reviewed";
@@ -81,7 +97,7 @@ function summary(
       ? "withdrawn"
       : reviewed && row.valid_until && row.valid_until.getTime() <= Date.now()
         ? "expired"
-        : row.organization_id !== organizationId || !categoryAllowed
+        : professionalScope(row, member) !== "current" || !categoryAllowed
           ? "unavailable"
           : reviewed && (!safe(row, userId) || row.document_revision !== row.file_revision)
             ? "unavailable"
@@ -96,20 +112,32 @@ function summary(
   });
 }
 export async function readCompetenceSummary(db: Executor, userId: string | null, category: string) {
-  if (!userId) return summary(undefined, "", undefined);
-  const member = await membership(db, userId);
+  if (!userId) return summary(undefined, "", null);
+  // Read the declaration and its current subject in the same PostgreSQL snapshot.
+  const row = await latest(db, userId, category);
+  if (!row) return summary(undefined, userId, null);
+  const application = partnerApplicationInputSchema.parse(row.current_application);
+  const member = {
+    ...application,
+    organizationId: row.current_organization_id,
+    professionalRevision: row.current_professional_revision,
+  };
   return summary(
-    await latest(db, userId, category),
+    row,
     userId,
-    member?.organizationId,
-    member?.categories.includes(leadCategorySchema.parse(category)) ?? false,
+    member,
+    member.categories.includes(leadCategorySchema.parse(category)),
   );
 }
-function project(row: Row, userId: string) {
+function project(row: Row, userId: string, member: Awaited<ReturnType<typeof membership>>) {
   return {
     id: row.id,
     revision: row.revision,
     declaration: row.declaration,
+    professionalRevision: row.professional_revision,
+    professionalScope: professionalScope(row, member),
+    declaredName: row.declared_name,
+    declaredOrganization: row.declared_organization,
     decision: row.decision,
     reason: row.reason,
     scope: row.scope,
@@ -154,19 +182,27 @@ async function dossier(
     userId,
     name: member.name,
     organization: member.organization,
+    professionalRevision: member.professionalRevision,
     category,
-    current: row ? project(row, userId) : null,
-    summary: summary(row, userId, member.organizationId, categoryAllowed),
+    current: row ? project(row, userId, member) : null,
+    summary: summary(row, userId, member, categoryAllowed),
     canDeclare: actor.userId === userId && member.state !== "closed" && categoryAllowed,
+    canResume:
+      actor.userId === userId &&
+      member.state !== "closed" &&
+      categoryAllowed &&
+      !!row &&
+      row.decision === "submitted" &&
+      professionalScope(row, member) === "current",
     canReview:
       actor.administrator &&
       actor.userId !== userId &&
       !!row &&
       row.decision !== "withdrawn" &&
-      row.organization_id === member.organizationId &&
+      professionalScope(row, member) === "current" &&
       categoryAllowed,
     canWithdraw: !!row && row.decision !== "withdrawn",
-    history: history.slice(0, 20).map((entry) => project(entry, userId)),
+    history: history.slice(0, 20).map((entry) => project(entry, userId, member)),
     nextBeforeRevision: history.length > 20 ? history[19]!.revision : null,
   });
 }
@@ -188,6 +224,7 @@ export function createCompetenceOperations(
       ...result,
       documentsAvailable: false,
       canDeclare: false,
+      canResume: false,
       canReview: false,
       current: result.current ? { ...result.current, canDownload: false } : null,
       history: result.history.map((row) => ({ ...row, canDownload: false })),
@@ -235,7 +272,7 @@ export function createCompetenceOperations(
         !current ||
         current.id !== row.id ||
         current.decision !== "submitted" ||
-        row.organization_id !== member.organizationId
+        professionalScope(row, member) !== "current"
       )
         fail("PARTNER_ACCESS_DENIED", 403);
     } else if (!safe(row, userId)) fail("PARTNER_INVALID_DOCUMENT");
@@ -264,12 +301,17 @@ export function createCompetenceOperations(
           const current = await dossier(tx, actor, userId, category);
           if (!current.canDeclare) fail("PARTNER_ACCESS_DENIED", 403);
           if ((current.current?.revision ?? 0) !== input.revision) fail("PARTNER_CONFLICT", 409);
+          if (
+            !input.professionalRevision ||
+            current.professionalRevision !== input.professionalRevision
+          )
+            fail("PARTNER_CONFLICT", 409);
           const member = (await membership(tx, userId))!,
             documentId = await createPartnerProof(tx, userId, input.file),
             id = newId("pcdecl");
           await tx.query(
-            `insert into partner_competence_declarations(id,user_id,organization_id,category,declaration,document_id,checksum)
-          values($1,$2,$3,$4,$5,$6,$7)`,
+            `insert into partner_competence_declarations(id,user_id,organization_id,category,declaration,document_id,checksum,professional_revision,declared_name,declared_organization)
+          values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
             [
               id,
               userId,
@@ -278,6 +320,9 @@ export function createCompetenceOperations(
               input.declaration,
               documentId,
               input.file.checksum,
+              member.professionalRevision,
+              member.name,
+              member.organization,
             ],
           );
           const decisionId = newId("pcdec");

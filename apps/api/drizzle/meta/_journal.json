@@ -281,6 +281,69 @@
       "when": 1790981367753,
       "tag": "0039_low_kulan_gath",
       "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1790984078101,
+      "tag": "0040_square_power_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1790984714544,
+      "tag": "0041_complex_omega_sentinel",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1790986092080,
+      "tag": "0042_partner_professional_scope",
+      "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1790988123068,
+      "tag": "0043_partner_practice_declarations",
+      "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1790990692904,
+      "tag": "0044_partner_advice_preferences",
+      "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "7",
+      "when": 1790993043144,
+      "tag": "0045_dazzling_kang",
+      "breakpoints": true
+    },
+    {
+      "idx": 46,
+      "version": "7",
+      "when": 1790995976725,
+      "tag": "0046_partner_appointment_time",
+      "breakpoints": true
+    },
+    {
+      "idx": 47,
+      "version": "7",
+      "when": 1791005927504,
+      "tag": "0047_partner_shared_modes",
+      "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "7",
+      "when": 1791007582421,
+      "tag": "0048_partner_personal_capacity",
+      "breakpoints": true
     }
   ]
 }

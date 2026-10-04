@@ -3,15 +3,22 @@ import type { PoolClient } from "pg";
 import { documentCreateInputSchema } from "@coverview/contracts";
 import { DocumentError } from "./document.errors.js";
 
+type ProfessionalPurpose = "partner_competence" | "partner_convention";
+
 // Caller holds the declarant's membership lock; no client profile or AI processing is involved.
-export async function createPartnerProof(tx: PoolClient, userId: string, raw: unknown) {
+export async function createPartnerProof(
+  tx: PoolClient,
+  userId: string,
+  raw: unknown,
+  purpose: ProfessionalPurpose = "partner_competence",
+) {
   const input = documentCreateInputSchema
     .pick({ name: true, mime: true, size: true, checksum: true })
     .parse(raw);
   const existing = (
     await tx.query<{ id: string }>(
-      "select id from files where user_id=$1 and checksum=$2 and purpose='partner_competence' and managed_profile_id is null and deleted_at is null order by created_at,id limit 1",
-      [userId, input.checksum],
+      "select id from files where user_id=$1 and checksum=$2 and purpose=$3 and managed_profile_id is null and deleted_at is null order by created_at,id limit 1",
+      [userId, input.checksum, purpose],
     )
   ).rows[0];
   if (existing) return existing.id;
@@ -23,8 +30,17 @@ export async function createPartnerProof(tx: PoolClient, userId: string, raw: un
   const id = `doc_${randomUUID()}`;
   await tx.query(
     `insert into files(id,user_id,name,mime,declared_mime,size,checksum,object_key,purpose,analysis_requested,retained_at)
-    values($1,$2,$3,'application/octet-stream',$4,$5,$6,$7,'partner_competence',false,now())`,
-    [id, userId, input.name, input.mime, input.size, input.checksum, `documents/${id}/original`],
+    values($1,$2,$3,'application/octet-stream',$4,$5,$6,$7,$8,false,now())`,
+    [
+      id,
+      userId,
+      input.name,
+      input.mime,
+      input.size,
+      input.checksum,
+      `documents/${id}/original`,
+      purpose,
+    ],
   );
   await tx.query(
     `insert into document_audit_events(id,document_id,user_id,actor,action,revision)
@@ -39,11 +55,12 @@ export async function queuePartnerProof(
   userId: string,
   id: string,
   action: { mime: string } | { revision: number },
+  purpose: ProfessionalPurpose = "partner_competence",
 ) {
   const row = (
     await tx.query<{ state: string; revision: number }>(
-      "select state,revision from files where id=$1 and user_id=$2 and purpose='partner_competence' and managed_profile_id is null and deleted_at is null for update",
-      [id, userId],
+      "select state,revision from files where id=$1 and user_id=$2 and purpose=$3 and managed_profile_id is null and deleted_at is null for update",
+      [id, userId, purpose],
     )
   ).rows[0];
   if (!row) throw new DocumentError("DOCUMENT_NOT_FOUND", 404);

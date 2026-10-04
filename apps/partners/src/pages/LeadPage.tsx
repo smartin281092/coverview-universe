@@ -23,6 +23,11 @@ import { OfferHistoryDialog } from "../features/OfferHistoryDialog";
 import { FinalPoliciesDialog } from "../features/FinalPoliciesDialog";
 import { InsuranceRequestDialog } from "../features/InsuranceRequestDialog";
 import { ReferentContinuityDialog } from "../features/ReferentContinuityDialog";
+import { AdvisorAssessmentDialog } from "../features/AdvisorAssessmentDialog";
+import { AdvicePreferencesDialog } from "../features/AdvicePreferencesDialog";
+import { AppointmentAssessmentDialog } from "../features/AppointmentAssessmentDialog";
+import { PersonalAppointmentDialog } from "../features/PersonalAppointmentDialog";
+import type { LeadDetail } from "@coverview/contracts/partner";
 import { OfferWithdrawDialog } from "../features/OfferWithdrawDialog";
 import { ContractComparison } from "../features/ContractComparison";
 import { ContractReviewDialog } from "../features/ContractReviewDialog";
@@ -54,9 +59,13 @@ export function LeadPage() {
     [imports, setImports] = useState(false),
     [insuranceSource, setInsuranceSource] = useState(false),
     [referent, setReferent] = useState(false),
+    [advice, setAdvice] = useState(false),
+    [advisorAssessment, setAdvisorAssessment] = useState(false),
     [withdraw, setWithdraw] = useState<LeadOffer | null>(null),
     [collaborating, setCollaborating] = useState(false),
     [appointment, setAppointment] = useState<string>(),
+    [assessedAppointment, setAssessedAppointment] = useState<string>(),
+    [rescheduling, setRescheduling] = useState<LeadDetail["appointments"][number]>(),
     [offer, setOffer] = useState<LeadOffer | "new" | null>(null);
   if (leadQuery.isPending) return <LoadingState label={t("loading")} />;
   if (leadQuery.isError)
@@ -76,7 +85,37 @@ export function LeadPage() {
   const allowed = (value: string) => lead.allowedActions?.includes(value) ?? lead.canEdit;
   return (
     <>
-      {referent && <ReferentContinuityDialog lead={lead} onClose={() => setReferent(false)} />}
+      {rescheduling && (
+        <PersonalAppointmentDialog
+          key={[...session.queryKey, lead.id, rescheduling.id].join(":")}
+          lead={lead}
+          appointment={rescheduling}
+          onClose={() => setRescheduling(undefined)}
+        />
+      )}
+      {assessedAppointment && (
+        <AppointmentAssessmentDialog
+          leadId={lead.id}
+          appointmentId={assessedAppointment}
+          onClose={() => setAssessedAppointment(undefined)}
+        />
+      )}
+      {advice && <AdvicePreferencesDialog leadId={lead.id} onClose={() => setAdvice(false)} />}
+      {advisorAssessment && (
+        <AdvisorAssessmentDialog
+          key={[...session.queryKey, lead.id].join(":")}
+          leadId={lead.id}
+          title={lead.title}
+          onClose={() => setAdvisorAssessment(false)}
+        />
+      )}
+      {referent && (
+        <ReferentContinuityDialog
+          key={[...session.queryKey, lead.id].join(":")}
+          lead={lead}
+          onClose={() => setReferent(false)}
+        />
+      )}
       {editing && <CreateLeadDialog open onOpenChange={setEditing} lead={lead} />}
       {collaborating && <CollaborationDialog lead={lead} onClose={() => setCollaborating(false)} />}
       {history && <OfferHistoryDialog leadId={lead.id} onClose={() => setHistory(false)} />}
@@ -153,6 +192,21 @@ export function LeadPage() {
                 onClick={() => setReferent(true)}
               >
                 {t("referents.title")}
+              </Button>
+            )}
+            {lead.access === "operational" && (
+              <Button size="sm" variant="outline" className="mt-3" onClick={() => setAdvice(true)}>
+                {t("advice.title")}
+              </Button>
+            )}
+            {allowed("advisor_assessment") && (
+              <Button
+                size="sm"
+                variant="outline"
+                className="mt-3"
+                onClick={() => setAdvisorAssessment(true)}
+              >
+                {t("advisorAssessment.title")}
               </Button>
             )}
           </div>
@@ -452,6 +506,11 @@ export function LeadPage() {
       )}
       {activeTab === "appointments" && (
         <div className="space-y-3">
+          {allowed("personal_appointment") && (
+            <Button onClick={() => setAction("personal_appointment")}>
+              {t("personalAppointment.title")}
+            </Button>
+          )}
           {lead.appointments.map((appt) => (
             <article
               key={appt.id}
@@ -473,6 +532,18 @@ export function LeadPage() {
                 </p>
               </div>
               <Badge variant="outline">{t(`appointment.${appt.state}`)}</Badge>
+              {allowed("personal_appointment") &&
+                appt.advisorId === session.identity.user.id &&
+                appt.state === "scheduled" && (
+                  <Button variant="outline" size="sm" onClick={() => setRescheduling(appt)}>
+                    {t("personalRescheduling.title")}
+                  </Button>
+                )}
+              {appt.advisorId === session.identity.user.id && appt.state === "scheduled" && (
+                <Button variant="outline" size="sm" onClick={() => setAssessedAppointment(appt.id)}>
+                  {t("appointmentAssessment.open")}
+                </Button>
+              )}
               {allowed("appointment_state") && appt.state === "scheduled" && (
                 <Button
                   variant="outline"

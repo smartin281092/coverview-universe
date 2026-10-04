@@ -98,6 +98,15 @@ export async function notifyPartnerEvent(
     )
   ).rows[0];
   if (!row) return;
+  if (kind === "appointment.rescheduled.v1")
+    await put(db, {
+      leadId,
+      recipientId: row.responsible_id,
+      audience: row.responsible_id ? "partner" : "coverview",
+      kind,
+      key: `${eventId}:responsible`,
+      action: null,
+    });
   if (kind === "policy.linked")
     await put(db, {
       leadId,
@@ -194,6 +203,7 @@ export async function notifyPartnerEvent(
       "lead.reassignment_required",
       "lead.continuity_escalated",
       "appointment.scheduled",
+      "appointment.rescheduled.v1",
       "appointment.cancelled",
       "offer.published",
       "offer.withdrawn",

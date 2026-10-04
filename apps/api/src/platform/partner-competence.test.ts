@@ -31,6 +31,7 @@ const proofBytes = Buffer.from("%PDF-1.7\nIsolated professional evidence, no rea
 const proofInput = (revision = 0) =>
   competenceDeclarationSchema.parse({
     revision,
+    professionalRevision: 1,
     declaration: "Compétence véhicule déclarée, justificatif synthétique isolé",
     confirmed: true,
     file: {
@@ -514,6 +515,54 @@ it("disables document operations without losing withdrawal or allowing a self-re
   expect(await disabled.decideCompetence(member, member.userId, "vehicle", input, attempt)).toEqual(
     withdrawn,
   );
+});
+
+it("keeps an old competence review unavailable after application parties change and return", async () => {
+  const person = await actor();
+  await approve(person);
+  let dossier = await preparedProof(person);
+  dossier = await repository.decideCompetence(
+    administrator,
+    person.userId,
+    "vehicle",
+    proofDecision(dossier),
+    key(),
+  );
+  const original = (await repository.context(person)).application!;
+  for (const name of ["Autre intervenant", original.name]) {
+    const member = (await repository.context(person)).application!;
+    await repository.review(
+      administrator,
+      person.userId,
+      {
+        revision: member.revision,
+        state: "needs_information",
+        roles: [],
+        reason: "Clarification des parties",
+        reviewDueAt: null,
+      },
+      key(),
+    );
+    await repository.apply(
+      person,
+      {
+        name,
+        organization: original.organization,
+        phone: original.phone,
+        roles: original.roles,
+        categories: original.categories,
+        languages: original.languages,
+        regions: original.regions,
+        qualifications: original.qualifications,
+      },
+      key(),
+    );
+    const current = await repository.competence(administrator, person.userId, "vehicle");
+    expect(current.summary.status).toBe("unavailable");
+    expect(current.canReview).toBe(false);
+    expect(current.current!.id).toBe(dossier.current!.id);
+    expect(current.current!.canDownload).toBe(true);
+  }
 });
 
 const due = () => new Date(Date.now() + 2 * 86400000).toISOString();

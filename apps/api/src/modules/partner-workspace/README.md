@@ -1,10 +1,40 @@
 # Partner — Leads et offres partagés avec Wallet
 
+Pour l’examen privé des conflits bloquants par besoin, lire [les règles et limites](docs/need-conflicts.md). Dossier distinct de la capacité et des bilans ;0050 préparée hors catalogue, activation et V3 ouvertes.
+
+Pour enregistrer, retirer ou réexaminer sa propre appréciation de capacité pour un Lead, lire [la décision personnelle par besoin](docs/need-capacity.md). Nouveau dossier privé distinct des bilans existants ; migration0049 préparée hors catalogue protégé, activation et V3 encore ouverts.
+
+Pour la déclaration privée de capacité, son échéance/retrait et les compteurs de liens enregistrés, lire [la capacité personnelle](docs/personal-capacity.md). Sa [projection dans le bilan personnel v2](docs/advisor-assessment.md#capacité-personnelle-dans-la-version2) conserve les six vérifications humaines et l'audience privée ; aucun partage au bilan du référent.
+
+Pour la déclaration personnelle distincte, le retrait et la comparaison versionnée des modes de rendez-vous, lire [les modes explicitement partagés](docs/shared-modes.md). Aucun mode ou plage privé publié rétroactivement.
+
+Pour examiner le référent confirmé d'un besoin depuis Wallet ou une fiche opérationnelle Partner/Admin, lire [l'adéquation minimale du référent](docs/referent-assessment.md). Cette projection possède son contrat et son audience ; les sources privées du bilan personnel n'y sont pas copiées.
+
+Pour rapprocher ses propres déclarations et justificatifs des souhaits courants d'un besoin, lire [le bilan d'adéquation personnelle](docs/advisor-assessment.md). Lecture privée sans score ni attribution ; matching entre conseillers reste ouvert.
+
+Pour déplacer un engagement personnel convenu sans le recréer, lire [le report explicite](docs/appointment-rescheduling.md) : même identifiant/conseiller, contrôle des nouvelles modalités, preuve avant/après, occupation atomique et notification minimale du changement.
+
+Pour la création personnelle avec préparation/trajets dès confirmation atomique, lire [le parcours de création](docs/appointment-creation.md) : vérification privée, attestations explicites et effets historiques du rendez-vous. Aucun nouveau droit sur les conditions d'un collègue.
+
 ## Résumé
 
 Ce module fournit le dossier opérationnel de chaque besoin. Partner sert le conseiller/apporteur ; Admin supervise ; Wallet présente les offres et enregistre les décisions du client. Le brief du 2 octobre 2026 est suivi dans [le plan](../../../../../roadmap/plans/partner-core.plan.md). Frontière et permissions : [ADR-0010](../../../../../adr/0010-partner-leads-wallet.md).
 
 ## Périmètre
+
+Pour protéger préparation et trajets autour de ses rendez-vous, lire [le temps personnel protégé](docs/appointment-time.md) : confirmation privée atomique depuis Agenda/Lead, historique et conflits avec anciennes commandes, migration0046 testée mais non appliquée à la base locale partagée. Ce parcours conserve les dates convenues et ne prouve aucune disponibilité réelle.
+
+Pour rapprocher ses rendez-vous convenus des déclarations actuelles, lire [le contrôle privé des rendez-vous](docs/appointment-assessment.md) : lecture personnelle depuis Agenda/Lead, sans réservation, modification d'engagement ni nouveau droit.
+
+Pour les modes proposés, plages datées et absences personnelles, lire [les disponibilités déclarées](docs/professional-availability.md) : déclaration versionnée et lecture Admin, migration0045. Le raccordement aux créneaux réellement libres, à la capacité et au matching reste ouvert.
+
+Pour les souhaits de langue, mode et canton confirmés par le client pour chaque besoin, lire [les préférences de conseil](docs/advice-preferences.md) : propriétaire Wallet courant, lecture opérationnelle Partner/Admin et historique par sujet, migration0044.
+
+Pour les déclarations structurées de langues et cantons d'intervention, lire [le référentiel dédié](docs/professional-practice.md) : déclaration personnelle, historique et résumé de continuité, migration0043. Les autres critères de matching restent ouverts.
+
+Pour les changements de candidature et l'applicabilité des examens de compétence/convention, lire [la stabilité du périmètre professionnel](docs/professional-scope.md). Ce référentiel remplace la comparaison des seules valeurs courantes, couvre les aller-retour et conserve les anciennes preuves sans parties inventées.
+
+Routage de la nouvelle capacité : pour une convention, une preuve de distribution ou son examen par compagnie/catégorie, lire [docs/conventions.md](docs/conventions.md). Ce sous-document porte ses règles canoniques ; les autres capacités ci-dessous restent inchangées. Le README historique dépasse le budget DOC-13 : aucune scission globale hors périmètre dans ce relais.
 
 Candidature puis validation séparée utilisateur/organisation ; création et édition de Leads ; pipeline/liste ; attribution administrative ; contact utile, prochaine action, attente motivée, tâches, rendez-vous sans chevauchement, notes et clôture motivée. Chaque Lead possède ses offres versionnées, originales conservées, extraction existante, revue humaine, publication et choix Wallet. Les listes sont bornées et filtrées avant pagination.
 
@@ -220,7 +250,7 @@ API privée : GET/POST `/partner/competence/:userId/:category`, POST `/decisions
 
 Finalité files **partner_competence**, distincte de lead_offer et des documents personnels ; taille 20 Mio, borne documentaire existante de 200 par compte, réemploi par propriétaire/SHA sans copier les octets. Upload vérifie taille/empreinte puis stockage, recontrôle les droits avant confirmation ; antivirus existant via outbox, **analysis_requested=false**, aucun OCR/LLM ni enrichissement/affectation de profil. Reprise exige le même original, retry de scan sur révision exacte ; quarantaine non contournée. Bibliothèque/API génériques Wallet/Admin-client, pièces d’identité, contrats, compagnies et sources d’offre excluent cette finalité. Original retenu dès déclaration, y compris pending ; retrait ne supprime pas la preuve. DOCUMENTS_ENABLED=false masque dépôt/examen/download, refuse opérations de fichier, conserve lecture d’historique et retrait. Aucun nouveau paramètre, fournisseur, worker ou paquet.
 
-Continuité Partner/Wallet : seul statut de compétence, portée publique de l’examen, dates de revue/validité sont projetés. Jamais fichier/nom de fichier, déclaration, motif ou examinateur. L’Admin est averti de ne mettre aucune donnée privée dans la portée. Seul favorable couvrant toute la catégorie, non expiré, organisation/catégorie inchangées et original sûr à la même révision retire competence des critères manquants. Portée limitée, expiration, remplacement, retrait ou invalidation de source restent à examiner. Les conventions/langue/zone/disponibilité/conflits/préférences restent manquants et toute suggestion reste humaine, sans attribution automatique.
+Continuité Partner/Wallet : seul statut de compétence, portée publique de l’examen, dates de revue/validité sont projetés. Jamais fichier/nom de fichier, déclaration, motif ou examinateur. L’Admin est averti de ne mettre aucune donnée privée dans la portée. Seul favorable couvrant toute la catégorie, non expiré, [périmètre professionnel courant](docs/professional-scope.md) et original sûr à la même révision retire competence des critères manquants. Portée limitée, expiration, remplacement, retrait ou invalidation de source restent à examiner. Les conventions/langue/zone/disponibilité/conflits/préférences restent manquants et toute suggestion reste humaine, sans attribution automatique.
 
 Audit privé competence.declared/reviewed/needs_information/rejected/withdrawn/source_viewed.v1, sans texte sensible ni leadId ; file outbox documentaire existante et aucun fanout/room/notification client. PII : justificatif professionnel, déclaration, motif et références d’auteur ; rétention/export/effacement S-130/S-131 restent ouverts, aucune durée juridique inventée. Déployer0039 puis API **et worker** compatibles avant activation ; rollback ferme les écritures et conserve tables/originaux retenus, sans revenir à un nettoyage incompatible. Les anciens clients ignorent le résumé additif ; aucun droit issu d’un ancien écran.
 

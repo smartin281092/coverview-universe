@@ -22,12 +22,14 @@ import { usePartner } from "./PartnerSession";
 import { useLeadCommand } from "./use-lead-command";
 import { Field, SelectOptions, readText, readDate, localDateTime } from "./Field";
 import { partnerApi } from "../api";
+import { PersonalAppointmentDialog } from "./PersonalAppointmentDialog";
 export type LeadAction =
   | "next_action"
   | "contact"
   | "note"
   | "task"
   | "appointment"
+  | "personal_appointment"
   | "assign"
   | "wait"
   | "close"
@@ -39,6 +41,7 @@ const labels: Record<LeadAction, string> = {
   note: "note",
   task: "task",
   appointment: "appointment",
+  personal_appointment: "appointment",
   assign: "assign",
   wait: "wait",
   close: "close",
@@ -69,6 +72,14 @@ export function LeadActionDialog({
     gcTime: 0,
   });
   if (!action) return null;
+  if (action === "personal_appointment")
+    return (
+      <PersonalAppointmentDialog
+        key={[...session.queryKey, lead.id].join(":")}
+        lead={lead}
+        onClose={onClose}
+      />
+    );
   const nextFields = (
     <>
       <Field

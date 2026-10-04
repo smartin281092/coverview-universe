@@ -50,3 +50,5 @@ export { RequestProgress } from "./RequestProgress";
 export { NotificationList } from "./NotificationList";
 export { VersionHistoryDialog } from "./VersionHistoryDialog";
 export { PolicyEvidence } from "./PolicyEvidence";
+
+export { swissCantonNamesFr } from "./swiss-cantons";

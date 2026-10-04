@@ -19,6 +19,7 @@ import { usePartner } from "./PartnerSession";
 import { CompetenceDeclarationForm, CompetenceDecisionForm } from "./CompetenceForm";
 import { formatDate } from "./Field";
 import { partnerApi } from "../api";
+import { ProfessionalScopeDetails } from "./ProfessionalScopeDetails";
 
 export function CompetenceDialog({ userId, onClose }: { userId: string; onClose: () => void }) {
   const { t } = useTranslation(),
@@ -70,12 +71,20 @@ export function CompetenceDialog({ userId, onClose }: { userId: string; onClose:
         </DialogHeader>
         {value && (
           <p className="text-sm font-medium">
-            {t("competence.subject", { name: value.name, organization: value.organization })}
+            {t("competence.subject", {
+              name: edit?.dossier.name ?? value.name,
+              organization: edit?.dossier.organization ?? value.organization,
+            })}
           </p>
         )}
         {value && !value.documentsAvailable && (
           <p role="status" className="text-sm text-muted-foreground">
             {t("competence.documentsUnavailable")}
+          </p>
+        )}
+        {value && edit && value.professionalRevision !== edit.dossier.professionalRevision && (
+          <p role="alert" className="text-sm text-destructive">
+            {t("professionalScope.changedDuringEdit")}
           </p>
         )}
         <div className="space-y-2">
@@ -157,6 +166,7 @@ export function CompetenceDialog({ userId, onClose }: { userId: string; onClose:
                       </Badge>
                       {value.current ? (
                         <section className="space-y-3 rounded-lg border border-border p-4">
+                          <ProfessionalScopeDetails record={value.current} />
                           <p className="whitespace-pre-wrap text-sm">{value.current.declaration}</p>
                           <p className="break-words text-sm text-muted-foreground">
                             {value.current.documentName}
@@ -211,7 +221,7 @@ export function CompetenceDialog({ userId, onClose }: { userId: string; onClose:
                             {t("competence.declare")}
                           </Button>
                         )}
-                        {value.canDeclare &&
+                        {value.canResume &&
                           value.current?.decision === "submitted" &&
                           value.current.documentState === "pending" && (
                             <Button
@@ -221,7 +231,7 @@ export function CompetenceDialog({ userId, onClose }: { userId: string; onClose:
                               {t("competence.resume")}
                             </Button>
                           )}
-                        {value.canDeclare &&
+                        {value.canResume &&
                           value.current?.decision === "submitted" &&
                           value.current.documentState === "failed" && (
                             <Button
@@ -293,6 +303,7 @@ export function CompetenceDialog({ userId, onClose }: { userId: string; onClose:
                               })}
                             </p>
                             <p className="whitespace-pre-wrap">{record.declaration}</p>
+                            <ProfessionalScopeDetails record={record} />
                             {record.reason && (
                               <p className="whitespace-pre-wrap">{record.reason}</p>
                             )}

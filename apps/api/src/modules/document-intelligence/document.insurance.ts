@@ -194,6 +194,7 @@ export function companyOverview(companyId: InsuranceCompanyId, entries: Entry[],
     if (
       entry.document.purpose === "lead_offer" ||
       entry.document.purpose === "partner_competence" ||
+      entry.document.purpose === "partner_convention" ||
       entry.document.classification !== "insurance_policy"
     )
       continue;

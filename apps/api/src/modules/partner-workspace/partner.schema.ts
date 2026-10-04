@@ -1,5 +1,10 @@
 import { sql } from "drizzle-orm";
 import {
+  swissCantonSchema,
+  professionalLanguageSchema,
+  leadCategorySchema,
+} from "@coverview/contracts/partner";
+import {
   pgTable,
   text,
   timestamp,
@@ -17,6 +22,289 @@ import { documents } from "../document-intelligence/index.js";
 import { insuranceRequests } from "../insurance-requests/index.js";
 
 const instant = (name: string) => timestamp(name, { withTimezone: true, precision: 3 });
+export const partnerNeedCapacityDecisions = pgTable(
+  "partner_need_capacity_decisions",
+  {
+    id: text("id").primaryKey(),
+    leadId: text("lead_id")
+      .notNull()
+      .references(() => partnerLeads.id),
+    userId: text("user_id")
+      .notNull()
+      .references(() => identityUsers.id),
+    organizationId: text("organization_id").references(() => partnerOrganizations.id),
+    subjectKey: text("subject_key").notNull(),
+    revision: integer("revision").notNull(),
+    scopeFingerprint: text("scope_fingerprint").notNull(),
+    scope: jsonb("scope").notNull(),
+    basis: jsonb("basis").notNull(),
+    action: text("action").notNull(),
+    position: text("position"),
+    reason: text("reason").notNull(),
+    validUntil: instant("valid_until"),
+    createdAt: instant("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("partner_need_capacity_revision").on(t.userId, t.leadId, t.revision),
+    index("partner_need_capacity_subject").on(t.userId, t.leadId, t.subjectKey, t.revision),
+    check("partner_need_capacity_revision_positive", sql`${t.revision}>0`),
+    check("partner_need_capacity_fingerprint", sql`${t.scopeFingerprint} ~ '^[a-f0-9]{64}$'`),
+    check("partner_need_capacity_reason", sql`length(trim(${t.reason})) between 10 and 1000`),
+    check(
+      "partner_need_capacity_json",
+      sql`jsonb_typeof(${t.scope})='object' and jsonb_typeof(${t.basis})='object'`,
+    ),
+    check(
+      "partner_need_capacity_values",
+      sql`coalesce((${t.action}='decide' and ${t.position} in ('capacity_confirmed','capacity_insufficient','clarification_needed') and ${t.validUntil}>${t.createdAt}) or (${t.action}='withdraw' and ${t.position} is null and ${t.validUntil} is null),false)`,
+    ),
+  ],
+);
+export const partnerNeedConflictReviews = pgTable(
+  "partner_need_conflict_reviews",
+  {
+    id: text("id").primaryKey(),
+    leadId: text("lead_id")
+      .notNull()
+      .references(() => partnerLeads.id),
+    userId: text("user_id")
+      .notNull()
+      .references(() => identityUsers.id),
+    organizationId: text("organization_id").references(() => partnerOrganizations.id),
+    subjectKey: text("subject_key").notNull(),
+    revision: integer("revision").notNull(),
+    scopeFingerprint: text("scope_fingerprint").notNull(),
+    scope: jsonb("scope").notNull(),
+    basis: jsonb("basis").notNull(),
+    action: text("action").notNull(),
+    position: text("position"),
+    reviewedScope: text("reviewed_scope"),
+    reason: text("reason").notNull(),
+    validUntil: instant("valid_until"),
+    createdAt: instant("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("partner_need_conflict_revision").on(t.userId, t.leadId, t.revision),
+    index("partner_need_conflict_subject").on(t.userId, t.leadId, t.subjectKey, t.revision),
+    check("partner_need_conflict_revision_positive", sql`${t.revision}>0`),
+    check("partner_need_conflict_fingerprint", sql`${t.scopeFingerprint} ~ '^[a-f0-9]{64}$'`),
+    check("partner_need_conflict_reason", sql`length(trim(${t.reason})) between 10 and 1000`),
+    check(
+      "partner_need_conflict_json",
+      sql`jsonb_typeof(${t.scope})='object' and jsonb_typeof(${t.basis})='object'`,
+    ),
+    check(
+      "partner_need_conflict_values",
+      sql`coalesce((${t.action}='decide' and ${t.position} in ('none_declared','blocking_conflict_declared','clarification_needed') and length(trim(${t.reviewedScope})) between 10 and 500 and ${t.validUntil}>${t.createdAt}) or (${t.action}='withdraw' and ${t.position} is null and ${t.validUntil} is null and ${t.reviewedScope} is null),false)`,
+    ),
+  ],
+);
+export const partnerAdvicePreferences = pgTable(
+  "partner_advice_preferences",
+  {
+    id: text("id").primaryKey(),
+    leadId: text("lead_id")
+      .notNull()
+      .references(() => partnerLeads.id),
+    subjectId: text("subject_id").notNull(),
+    selfUserId: text("self_user_id").references(() => identityUsers.id),
+    profileId: text("profile_id").references(() => managedProfiles.id),
+    profileRevision: integer("profile_revision").notNull(),
+    scopeRevision: integer("scope_revision").notNull(),
+    scope: jsonb("scope").notNull(),
+    revision: integer("revision").notNull(),
+    languageCode: text("language_code"),
+    mode: text("mode"),
+    canton: text("canton"),
+    confirmedBy: text("confirmed_by")
+      .notNull()
+      .references(() => identityUsers.id),
+    confirmationVersion: integer("confirmation_version").notNull().default(1),
+    createdAt: instant("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("partner_advice_revision").on(t.leadId, t.revision),
+    index("partner_advice_subject_history").on(t.leadId, t.subjectId, t.revision),
+    check(
+      "partner_advice_subject",
+      sql`(${t.profileId} is not null and ${t.selfUserId} is null and ${t.subjectId}='profile:'||${t.profileId}) or (${t.profileId} is null and ${t.selfUserId} is not null and ${t.subjectId}='self:'||${t.selfUserId} and ${t.confirmedBy}=${t.selfUserId} and ${t.profileRevision}=0)`,
+    ),
+    check(
+      "partner_advice_bounds",
+      sql`${t.revision}>0 and ${t.scopeRevision}>0 and ${t.profileRevision}>=0 and ${t.confirmationVersion}=1`,
+    ),
+    check(
+      "partner_advice_language",
+      sql`${t.languageCode} is null or ${t.languageCode} in (${sql.raw(professionalLanguageSchema.options.map((code) => `'${code}'`).join(", "))})`,
+    ),
+    check(
+      "partner_advice_mode",
+      sql`${t.mode} is null or ${t.mode} in ('phone','video','office','home')`,
+    ),
+    check(
+      "partner_advice_canton",
+      sql`${t.canton} is null or (${t.mode} is not null and ${t.mode} in ('office','home') and ${t.canton} in (${sql.raw(swissCantonSchema.options.map((code) => `'${code}'`).join(", "))}))`,
+    ),
+  ],
+);
+export const partnerCapacityDeclarations = pgTable(
+  "partner_capacity_declarations",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => partnerMembers.userId),
+    organizationId: text("organization_id")
+      .notNull()
+      .references(() => partnerOrganizations.id),
+    revision: integer("revision").notNull(),
+    professionalRevision: integer("professional_revision").notNull(),
+    declaredName: text("declared_name").notNull(),
+    declaredOrganization: text("declared_organization").notNull(),
+    categories: text("categories").array().notNull(),
+    action: text("action").notNull(),
+    position: text("position"),
+    validUntil: instant("valid_until"),
+    createdAt: instant("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("partner_capacity_declarations_revision").on(t.userId, t.revision),
+    check(
+      "partner_capacity_declarations_scope",
+      sql`${t.revision}>0 and ${t.professionalRevision}>0 and length(trim(${t.declaredName})) between 2 and 160 and length(trim(${t.declaredOrganization})) between 2 and 160`,
+    ),
+    check(
+      "partner_capacity_declarations_values",
+      sql`coalesce((${t.action}='declare' and ${t.position} in ('open','case_by_case','unavailable') and ${t.validUntil}>${t.createdAt}) or (${t.action}='withdraw' and ${t.position} is null and ${t.validUntil} is null),false)`,
+    ),
+    check(
+      "partner_capacity_declarations_categories",
+      sql`cardinality(${t.categories}) between 1 and 7 and array_position(${t.categories},null) is null and ${t.categories}<@array[${sql.raw(leadCategorySchema.options.map((code) => `'${code}'`).join(", "))}]::text[]`,
+    ),
+  ],
+);
+export const partnerSharedModes = pgTable(
+  "partner_shared_modes",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => partnerMembers.userId),
+    organizationId: text("organization_id")
+      .notNull()
+      .references(() => partnerOrganizations.id),
+    revision: integer("revision").notNull(),
+    professionalRevision: integer("professional_revision").notNull(),
+    declaredName: text("declared_name").notNull(),
+    declaredOrganization: text("declared_organization").notNull(),
+    categories: text("categories").array().notNull(),
+    action: text("action").notNull(),
+    modes: text("modes").array().notNull(),
+    audience: text("audience").notNull(),
+    createdAt: instant("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("partner_shared_modes_revision").on(t.userId, t.revision),
+    check(
+      "partner_shared_modes_scope",
+      sql`${t.revision}>0 and ${t.professionalRevision}>0 and length(trim(${t.declaredName})) between 2 and 160 and length(trim(${t.declaredOrganization})) between 2 and 160`,
+    ),
+    check(
+      "partner_shared_modes_values",
+      sql`cardinality(${t.modes})<=4 and array_position(${t.modes},null) is null and ${t.modes}<@array['phone','video','office','home']::text[] and ((${t.action}='publish' and cardinality(${t.modes})>0) or (${t.action}='withdraw' and cardinality(${t.modes})=0))`,
+    ),
+    check("partner_shared_modes_audience", sql`${t.audience}='confirmed-referent-leads-v1'`),
+    check(
+      "partner_shared_modes_categories",
+      sql`cardinality(${t.categories}) between 1 and 7 and array_position(${t.categories},null) is null and ${t.categories}<@array[${sql.raw(leadCategorySchema.options.map((code) => `'${code}'`).join(", "))}]::text[]`,
+    ),
+  ],
+);
+export const partnerAvailabilityDeclarations = pgTable(
+  "partner_availability_declarations",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => partnerMembers.userId),
+    organizationId: text("organization_id")
+      .notNull()
+      .references(() => partnerOrganizations.id),
+    revision: integer("revision").notNull(),
+    professionalRevision: integer("professional_revision").notNull(),
+    declaredName: text("declared_name").notNull(),
+    declaredOrganization: text("declared_organization").notNull(),
+    modes: text("modes").array().notNull(),
+    timezone: text("timezone").notNull(),
+    createdAt: instant("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("partner_availability_revision").on(t.userId, t.revision),
+    check(
+      "partner_availability_scope",
+      sql`${t.revision}>0 and ${t.professionalRevision}>0 and length(trim(${t.declaredName})) between 2 and 160 and length(trim(${t.declaredOrganization})) between 2 and 160`,
+    ),
+    check(
+      "partner_availability_modes",
+      sql`cardinality(${t.modes})<=4 and array_position(${t.modes},null) is null and ${t.modes}<@array['phone','video','office','home']::text[]`,
+    ),
+    check("partner_availability_timezone", sql`${t.timezone}='Europe/Zurich'`),
+  ],
+);
+export const partnerAvailabilityPeriods = pgTable(
+  "partner_availability_periods",
+  {
+    declarationId: text("declaration_id")
+      .notNull()
+      .references(() => partnerAvailabilityDeclarations.id),
+    position: integer("position").notNull(),
+    kind: text("kind").notNull(),
+    startsAt: instant("starts_at").notNull(),
+    endsAt: instant("ends_at").notNull(),
+  },
+  (t) => [
+    uniqueIndex("partner_availability_period_position").on(t.declarationId, t.position),
+    check(
+      "partner_availability_period_bounds",
+      sql`${t.position}>=0 and ${t.position}<60 and ${t.endsAt}>${t.startsAt} and ${t.endsAt}-${t.startsAt}<=interval '366 days'`,
+    ),
+    check("partner_availability_period_kind", sql`${t.kind} in ('available','absent')`),
+  ],
+);
+export const partnerPracticeDeclarations = pgTable(
+  "partner_practice_declarations",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => partnerMembers.userId),
+    organizationId: text("organization_id")
+      .notNull()
+      .references(() => partnerOrganizations.id),
+    revision: integer("revision").notNull(),
+    professionalRevision: integer("professional_revision").notNull(),
+    declaredName: text("declared_name").notNull(),
+    declaredOrganization: text("declared_organization").notNull(),
+    languageCodes: text("language_codes").array().notNull(),
+    cantons: text("cantons").array().notNull(),
+    createdAt: instant("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("partner_practice_revision").on(t.userId, t.revision),
+    check(
+      "partner_practice_scope",
+      sql`${t.revision}>0 and ${t.professionalRevision}>0 and length(trim(${t.declaredName})) between 2 and 160 and length(trim(${t.declaredOrganization})) between 2 and 160`,
+    ),
+    check(
+      "partner_practice_languages",
+      sql`cardinality(${t.languageCodes})<=20 and array_position(${t.languageCodes},null) is null and ${t.languageCodes}<@array[${sql.raw(professionalLanguageSchema.options.map((code) => `'${code}'`).join(", "))}]::text[]`,
+    ),
+    check(
+      "partner_practice_cantons",
+      sql`cardinality(${t.cantons})<=26 and array_position(${t.cantons},null) is null and ${t.cantons}<@array[${sql.raw(swissCantonSchema.options.map((code) => `'${code}'`).join(", "))}]::text[]`,
+    ),
+  ],
+);
 export const partnerCompetenceDeclarations = pgTable(
   "partner_competence_declarations",
   {
@@ -28,6 +316,9 @@ export const partnerCompetenceDeclarations = pgTable(
       .notNull()
       .references(() => partnerOrganizations.id),
     category: text("category").notNull(),
+    professionalRevision: integer("professional_revision"),
+    declaredName: text("declared_name").notNull().default(""),
+    declaredOrganization: text("declared_organization").notNull().default(""),
     declaration: text("declaration").notNull(),
     documentId: text("document_id")
       .notNull()
@@ -37,6 +328,7 @@ export const partnerCompetenceDeclarations = pgTable(
   },
   (t) => [
     index("partner_competence_document").on(t.documentId),
+    check("partner_competence_professional_revision", sql`${t.professionalRevision}>0`),
     uniqueIndex("partner_competence_subject").on(t.id, t.userId, t.category),
     check(
       "partner_competence_declaration_bounds",
@@ -81,6 +373,82 @@ export const partnerCompetenceDecisions = pgTable(
     check(
       "partner_competence_review_scope",
       sql`case when ${t.decision}='reviewed' then (${t.decidedBy}<>${t.userId} and length(trim(${t.scope}))>0 and ${t.coverage} is not null and ${t.coverage} in ('category','limited') and ${t.validUntil} is not null and ${t.validUntil}>${t.createdAt}) else (${t.coverage} is null and ${t.validUntil} is null and ${t.scope}='') end`,
+    ),
+  ],
+);
+export const partnerConventionDeclarations = pgTable(
+  "partner_convention_declarations",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => identityUsers.id),
+    organizationId: text("organization_id")
+      .notNull()
+      .references(() => partnerOrganizations.id),
+    category: text("category").notNull(),
+    professionalRevision: integer("professional_revision"),
+    companyId: text("company_id").notNull(),
+    declaredName: text("declared_name").notNull().default(""),
+    declaredOrganization: text("declared_organization").notNull().default(""),
+    declaration: text("declaration").notNull(),
+    documentId: text("document_id")
+      .notNull()
+      .references(() => documents.id),
+    checksum: text("checksum").notNull(),
+    createdAt: instant("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    index("partner_convention_document").on(t.documentId),
+    check("partner_convention_professional_revision", sql`${t.professionalRevision}>0`),
+    uniqueIndex("partner_convention_subject").on(t.id, t.userId, t.category, t.companyId),
+    check(
+      "partner_convention_declaration_bounds",
+      sql`${t.companyId} in ('allianz','assura','automate','axa','baloise','css','generali','groupe-mutuel','helsana','liechtenstein-life','tsm') and ${t.category} in ('health','vehicle','pension','household','legal','business','other') and length(trim(${t.declaration})) between 1 and 2000 and ${t.checksum} ~ '^[a-f0-9]{64}$'`,
+    ),
+  ],
+);
+export const partnerConventionDecisions = pgTable(
+  "partner_convention_decisions",
+  {
+    id: text("id").primaryKey(),
+    declarationId: text("declaration_id").notNull(),
+    userId: text("user_id").notNull(),
+    category: text("category").notNull(),
+    companyId: text("company_id").notNull(),
+    revision: integer("revision").notNull(),
+    decision: text("decision").notNull(),
+    reason: text("reason").notNull().default(""),
+    scope: text("scope").notNull().default(""),
+    coverage: text("coverage"),
+    validUntil: instant("valid_until"),
+    validFrom: instant("valid_from"),
+    memberCovered: boolean("member_covered").notNull().default(false),
+    documentRevision: integer("document_revision").notNull(),
+    decidedBy: text("decided_by")
+      .notNull()
+      .references(() => identityUsers.id),
+    createdAt: instant("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    foreignKey({
+      name: "partner_convention_decision_subject",
+      columns: [t.declarationId, t.userId, t.category, t.companyId],
+      foreignColumns: [
+        partnerConventionDeclarations.id,
+        partnerConventionDeclarations.userId,
+        partnerConventionDeclarations.category,
+        partnerConventionDeclarations.companyId,
+      ],
+    }),
+    uniqueIndex("partner_convention_revision").on(t.userId, t.category, t.companyId, t.revision),
+    check(
+      "partner_convention_decision_bounds",
+      sql`${t.revision}>0 and ${t.documentRevision}>=0 and ${t.decision} in ('submitted','reviewed','needs_information','rejected','withdrawn') and length(${t.reason})<=2000 and length(${t.scope})<=2000 and (${t.decision}='submitted' or length(trim(${t.reason}))>0)`,
+    ),
+    check(
+      "partner_convention_review_scope",
+      sql`case when ${t.decision}='reviewed' then (${t.decidedBy}<>${t.userId} and length(trim(${t.scope}))>0 and ${t.coverage} is not null and ${t.coverage} in ('category','limited') and ${t.memberCovered}=true and ${t.validFrom} is not null and ${t.validUntil} is not null and ${t.validUntil}>${t.validFrom} and ${t.validUntil}>${t.createdAt}) else (${t.coverage} is null and ${t.memberCovered}=false and ${t.validFrom} is null and ${t.validUntil} is null and ${t.scope}='') end`,
     ),
   ],
 );
@@ -237,6 +605,7 @@ export const partnerMembers = pgTable(
     application: jsonb("application").notNull(),
     roles: jsonb("roles").$type<string[]>().notNull().default([]),
     revision: integer("revision").notNull().default(0),
+    professionalRevision: integer("professional_revision").notNull().default(1),
     reviewedBy: text("reviewed_by").references(() => identityUsers.id),
     reviewReason: text("review_reason"),
     reviewedAt: instant("reviewed_at"),
@@ -245,6 +614,7 @@ export const partnerMembers = pgTable(
   },
   (t) => [
     index("partner_members_org").on(t.organizationId, t.state),
+    check("partner_member_professional_revision", sql`${t.professionalRevision}>0`),
     check(
       "partner_member_state",
       sql`${t.state} in ('draft','submitted','needs_information','approved','rejected','suspended','closed')`,
@@ -277,6 +647,7 @@ export const partnerLeads = pgTable(
     reason: text("reason"),
     estimatedCommissionMinor: integer("estimated_commission_minor"),
     revision: integer("revision").notNull().default(0),
+    adviceScopeRevision: integer("advice_scope_revision").notNull().default(1),
     notifiedAt: instant("notified_at"),
     firstActionDueAt: instant("first_action_due_at"),
     acceptanceDueAt: instant("acceptance_due_at"),
@@ -295,6 +666,7 @@ export const partnerLeads = pgTable(
     index("partner_leads_creator").on(t.creatorId, t.createdAt, t.id),
     index("partner_leads_client").on(t.clientUserId, t.clientProfileId),
     index("partner_leads_profile").on(t.clientProfileId),
+    check("partner_lead_advice_scope", sql`${t.adviceScopeRevision}>0`),
     index("partner_leads_continuity")
       .on(t.continuityCheckedAt, t.id)
       .where(sql`${t.stage} not in ('draft','completed')`),
@@ -469,14 +841,48 @@ export const partnerAppointments = pgTable(
     location: text("location").notNull(),
     timezone: text("timezone").notNull(),
     state: text("state").notNull().default("scheduled"),
+    occupiedBeforeMinutes: integer("occupied_before_minutes").notNull().default(0),
+    occupiedAfterMinutes: integer("occupied_after_minutes").notNull().default(0),
   },
   (t) => [
     index("partner_appointment_lead").on(t.leadId),
     index("partner_appointment_advisor").on(t.advisorId, t.startsAt),
     check("partner_appointment_duration", sql`${t.durationMinutes} between 15 and 240`),
     check(
+      "partner_appointment_buffers",
+      sql`${t.occupiedBeforeMinutes} between 0 and 480 and ${t.occupiedAfterMinutes} between 0 and 240`,
+    ),
+    check(
       "partner_appointment_state",
       sql`${t.state} in ('scheduled','completed','cancelled','client_absent','advisor_absent')`,
+    ),
+  ],
+);
+export const partnerAppointmentTimePlans = pgTable(
+  "partner_appointment_time_plans",
+  {
+    id: text("id").primaryKey(),
+    appointmentId: text("appointment_id")
+      .notNull()
+      .references(() => partnerAppointments.id),
+    advisorId: text("advisor_id")
+      .notNull()
+      .references(() => identityUsers.id),
+    revision: integer("revision").notNull(),
+    basis: text("basis").notNull(),
+    preparationMinutes: integer("preparation_minutes").notNull(),
+    travelBeforeMinutes: integer("travel_before_minutes").notNull(),
+    travelAfterMinutes: integer("travel_after_minutes").notNull(),
+    startsAt: instant("starts_at").notNull(),
+    endsAt: instant("ends_at").notNull(),
+    evidence: jsonb("evidence").notNull(),
+    recordedAt: instant("recorded_at").notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("partner_appointment_time_revision").on(t.appointmentId, t.revision),
+    check(
+      "partner_appointment_time_bounds",
+      sql`${t.revision}>0 and ${t.preparationMinutes} between 0 and 240 and ${t.travelBeforeMinutes} between 0 and 240 and ${t.travelAfterMinutes} between 0 and 240 and ${t.endsAt}>${t.startsAt}`,
     ),
   ],
 );

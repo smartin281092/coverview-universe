@@ -1,5 +1,27 @@
 # CoverView Partner
 
+Fiche Lead → Mon adéquation → Examiner mes conflits : périmètre examiné, trois positions explicites, motif, échéance et confirmation ; retrait/historique privés. [Règles et activation](../api/src/modules/partner-workspace/docs/need-conflicts.md).0050 hors catalogue, V3 rempli/clavier/mobile ouvert.
+
+Fiche Lead → Mon adéquation → « Décider de ma capacité pour ce besoin » : appréciation personnelle, motif/échéance/confirmation vides, retrait et historique privés, sans attribution ni effet sur le suivi. [Règles et activation](../api/src/modules/partner-workspace/docs/need-capacity.md).0049 préparée hors catalogue ; ne pas activer le parcours avant son intégration/migration. V3 rempli/clavier/mobile ouvert.
+
+Profil → « Capacité personnelle » : appréciation privée avec échéance choisie, retrait et historique ; compteurs séparés de responsabilités/contributions. Candidatures permet la lecture Admin. [Règles propriétaires](../api/src/modules/partner-workspace/docs/personal-capacity.md). Migration0048 isolée seulement ; V3 rempli ouvert.
+
+Profil → « Modes partagés avec mes clients » : publication personnelle avec audience explicite, retrait et historique ; consultation Admin depuis Candidatures. Le bilan du référent demande v2 et compare ces seuls modes aux souhaits courants. [Règles propriétaires](../api/src/modules/partner-workspace/docs/shared-modes.md). Migration0047 isolée seulement ; V3 rempli ouvert.
+
+« Référent habituel et continuité » lit désormais le [bilan minimal du référent](../api/src/modules/partner-workspace/docs/referent-assessment.md) : critères langue/canton/mode explicitement partagé et sources datées dans une seconde vue. Demande client/clôture/choix invalide empêchent le bilan candidat ; relecture10s/manuelle et masquage sur erreur. V3 rempli reste ouvert.
+
+Fiche Lead → « Mon adéquation au besoin » : critères séparés langue/canton/mode, compétence documentée, continuité et inconnues, puis sources datées dans une seconde vue du dialogue. « Examiner ma capacité » ouvre une vue remplaçante privée : dernière déclaration, portée/échéance/état et compteurs séparés ; les six vérifications humaines restent ouvertes. Le lecteur demande explicitement v2, cache utilisateur/session/version/Lead et erreur masquant le bilan. Réservé au conseiller personnellement affecté, sans modification du suivi. [Règles et limites](../api/src/modules/partner-workspace/docs/advisor-assessment.md). V3 rempli reste ouvert.
+
+Fiche Lead → Rendez-vous → « Reporter mon rendez-vous » : récapitulatif avant/après, contrôles et nouvelles attestations, même engagement/conseiller et histoire conservée. [Règles](../api/src/modules/partner-workspace/docs/appointment-rescheduling.md). Historique privé dans le contrôle ; notification interne minimale Wallet/Partner. V0–V2 vérifiés,0046 requise et V3 rempli ouvert.
+
+Fiche Lead → Rendez-vous → « Programmer mon rendez-vous » : proposition personnelle avec préparation/trajets, contrôle serveur, récapitulatif et attestations explicites avant création atomique. [Règles](../api/src/modules/partner-workspace/docs/appointment-creation.md). Le suivi existant est réutilisé ; durées/attestations privées.0046 requise, V3 rempli ouvert.
+
+Dans « Contrôler mon rendez-vous », « Organiser mon temps » permet de confirmer préparation et trajets, avec récapitulatif, historique et conflits atomiques. [Règles et limites](../api/src/modules/partner-workspace/docs/appointment-time.md). La date convenue est conservée ; migration0046 requise avant activation, testée en PostgreSQL isolé seulement. V3 rempli reste ouvert.
+
+Agenda et l'onglet Rendez-vous proposent « Contrôler mon rendez-vous » sur ses engagements programmés. Le [contrôle privé](../api/src/modules/partner-workspace/docs/appointment-assessment.md) compare déclarations actuelles, chevauchement et souhait client sans modifier l'engagement. Préparation/déplacement/capacité restent à vérifier ; V3 rempli est ouvert.
+
+Depuis Profil et Agenda, « Modes et disponibilités » ouvre la déclaration personnelle et son historique ; Candidatures permet la consultation Admin. [Règles et limites canoniques](../api/src/modules/partner-workspace/docs/professional-availability.md). Les plages déclarées ne sont pas encore des créneaux réservables et ne modifient pas les rendez-vous convenus. V3 rempli reste ouvert faute de configuration WorkOS.
+
 Dans la synthèse d’un Lead autorisé, « Référent habituel et continuité » ouvre la préférence de catégorie et les raisons/critères encore à examiner. Demande de changement d’interlocuteur et clôture priment la suggestion ; aucune affectation ou disponibilité annoncée par ce dialogue. [Règles canoniques](../api/src/modules/partner-workspace/README.md#référents-habituels-et-continuité--relais-b920). Types/build et PostgreSQL vérifiés ; projection remplie et mobile non vérifiés V3, aucune habilitation réelle créée.
 
 ## Résumé
@@ -20,11 +42,19 @@ Connexion WorkOS sur la surface `partners`. Aucun accès opérationnel avant app
 
 ## État réel
 
+La synthèse opérationnelle du Lead propose « Préférences de conseil », également en supervision Admin : consultation des souhaits confirmés par le propriétaire Wallet, sans édition professionnelle. [Règles et migration0044](../api/src/modules/partner-workspace/docs/advice-preferences.md). V0–V2 vérifiés en6469 ; V3 rempli/clavier/mobile non effectué faute de configuration WorkOS, aucun runtime6469 lancé.
+
+Profil et Candidatures proposent « Langues et zones d'intervention » : déclaration personnelle, lecture Admin, historique paginé et réessai identique. Le résumé autorisé du référent reste déclaratif. [Règles et migration0043](../api/src/modules/partner-workspace/docs/professional-practice.md). V0–V2 vérifiés en ce17 ; formulaire rempli, clavier/mobile non vérifiés, configuration WorkOS source absente et aucun runtime ce17 lancé.
+
+Les dossiers professionnels affichent les parties figées et les périmètres modifiés/inconnus. Candidature et formulaires expliquent la nouvelle déclaration nécessaire ; une modification pendant l'édition laisse le périmètre d'ouverture visible, la reprise est déterminée côté serveur. [Règles et migration0042](../api/src/modules/partner-workspace/docs/professional-scope.md). V0–V2 vérifiés, recette habilitée/clavier/mobile non vérifiée ; aucun runtime lancé en5944 faute de configuration WorkOS source.
+
 Profil/candidature donne accès aux justificatifs professionnels après première candidature ; Admin les examine depuis Candidatures. Dialogue par catégorie avec aperçu/historique20, déclaration+original, reprise/réessai, examen motivé et retrait. Formulaires RHF/Zod, clé/contenu figés au retry, conflit impose relecture, cache privé supprimé à fermeture et masque le contenu après erreur ; favorable indisponible sans original sûr. [Règles canoniques](../api/src/modules/partner-workspace/README.md#justificatifs-professionnels-et-examen--relais-8a00). V0–V2 passent ; V3 8a00 limité à connexion absente puis callback WorkOS4136 refusé. Aucun formulaire rempli, clavier/mobile ou fournisseur réel revendiqué.
 
 Build, TypeScript et lint ciblés vérifiés. Candidature mobile et retour WorkOS réels observés. La recette opérationnelle nécessite une session habilitée existante ; aucune permission de test n'a été accordée au compte réel. [Ledger](../../roadmap/evidence/partner-core.md).
 
 ## Développement
+
+Depuis Profil et supervision Candidatures, « Conventions de distribution » ouvre un dossier privé par compagnie/catégorie : dépôt, reprise exacte, examen motivé, retrait et historique paginé. Les parties d'origine et la portée sont visibles ; requête privée relue toutes les 10 s, cache masqué sur erreur, commande figée au réessai et relecture après conflit. RHF/Zod et composants existants ; aucune habilitation déduite. [Règles canoniques](../api/src/modules/partner-workspace/docs/conventions.md). V0–V2 vérifiés ; recette remplie/clavier/mobile non vérifiée, configuration WorkOS source absente en cc1c.
 
 L’onglet Offres propose la file d’import multiple : 10 originaux par sélection, 20 Mio chacun, envoi séquentiel et résultat/réessai individuel. Les dépôts restent liés au Lead après fermeture ; resélectionner le même fichier termine un envoi interrompu. La file paginée est relue toutes les 5 secondes et indique traitement, quarantaine, lecture partielle/absente/échouée ; seules les capacités API proposent lecture, retry explicite et préparation. L’ajout est masqué en lecture seule. Préparer ouvre le formulaire de revue existant avec la source exacte, aucune publication automatique. [Règles canoniques](../api/src/modules/partner-workspace/README.md#import-multiple-doriginaux--relais-c0e2). V0/V1 et tests PostgreSQL passent ; formulaire rempli, erreurs/clavier/mobile et stockage HTTP réels restent non vérifiés faute d’habilitation/dossier réels.
 
