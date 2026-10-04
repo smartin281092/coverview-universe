@@ -7,6 +7,7 @@ import { Button, EmptyState, ErrorState, LoadingState, RequestProgress } from "@
 import { insuranceApi } from "../insurance-api";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { useWalletProfileScope } from "../features/profile/use-wallet-profile-scope";
+import { InsuranceLeadAction } from "../features/offers/InsuranceLeadAction";
 const stages = ["submitted", "reviewing", "insurer_contacted", "offer_ready", "completed"] as const;
 const amount = (minor: number) =>
   new Intl.NumberFormat("fr-CH", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(
@@ -123,6 +124,16 @@ function Requests({ identity }: { identity: IdentityMe }) {
                     {t("profile")}
                   </Link>
                 )}
+                <div>
+                  <InsuranceLeadAction
+                    key={`${selected.id}:${item.id}:${identity.session.id}`}
+                    identity={identity}
+                    requestId={selected.id}
+                    personId={item.id}
+                    profileId={item.profileId}
+                    name={`${item.firstName} ${item.lastName}`}
+                  />
+                </div>
               </li>
             ))}
           </ul>

@@ -20,6 +20,8 @@ import {
 } from "../modules/health-insurance/health.foreign.schema.js";
 import { createHealthRepository } from "../modules/health-insurance/health.repository.js";
 import { createAdminProfileTransferRepository } from "./admin-profile-transfer.repository.js";
+import { createPartnerRepository } from "../modules/partner-workspace/partner.repository.js";
+import { insuranceLeadConsentSchema, leadCreateInputSchema } from "@coverview/contracts/partner";
 import {
   insuranceRequests,
   insuranceEmailChallenges,
@@ -196,6 +198,509 @@ afterAll(async () => {
   await database?.pool.end();
   await container?.stop();
 });
+it("links a canonical request person only with explicit consent, once under concurrency, preserving the guest receipt", async () => {
+  const browser = fingerprint(randomUUID()),
+    email = `${randomUUID()}@fixture.test`,
+    input = cart();
+  const owner = await session(email),
+    outsider = await session(`other-${email}`);
+  const actor = { ...owner, administrator: false, wallet: true };
+  const partner = createPartnerRepository(database.pool);
+  const draft = await repository.email(browser, email, randomUUID(), undefined, "guest");
+  const items = await repository.price(input);
+  await repository.save(browser, draft.id, input, items, randomUUID());
+  const submitKey = randomUUID();
+  const submitted = await repository.submit(browser, draft.id, input, items, submitKey);
+  const consent = { personId: input.items[0]!.id, transmissionAuthorized: true as const };
+  await expect(partner.linkInsurance(actor, draft.id, consent, randomUUID())).rejects.toMatchObject(
+    { statusCode: 404 },
+  );
+  expect((await repository.receipt(browser, draft.id, input, submitKey))?.history).toEqual(
+    submitted.history,
+  );
+  expect((await repository.get(draft.id, browser)).items).toEqual(submitted.items);
+  const claimed = await repository.verifyOwner(browser, draft.id, owner);
+  expect((await partner.insuranceLinks(actor, draft.id)).people.map((x) => x.status)).toEqual([
+    "consent_required",
+    "consent_required",
+  ]);
+  expect(
+    insuranceLeadConsentSchema.safeParse({ ...consent, transmissionAuthorized: false }).success,
+  ).toBe(false);
+  expect(() =>
+    partner.linkInsurance(
+      actor,
+      draft.id,
+      { ...consent, transmissionAuthorized: false } as never,
+      randomUUID(),
+    ),
+  ).toThrow();
+  await expect(
+    partner.linkInsurance(
+      { ...outsider, administrator: false, wallet: true },
+      draft.id,
+      consent,
+      randomUUID(),
+    ),
+  ).rejects.toMatchObject({ statusCode: 404 });
+  expect(
+    (await partner.insuranceLinks({ ...outsider, administrator: false, wallet: true }, draft.id))
+      .people,
+  ).toEqual([]);
+  const key = randomUUID();
+  const leads = await Promise.all(
+    [key, key, randomUUID(), randomUUID()].map((k) =>
+      partner.linkInsurance(actor, draft.id, consent, k),
+    ),
+  );
+  const lead = leads[0]!;
+  expect(new Set(leads.map((x) => x.id)).size).toBe(1);
+  expect(lead).toMatchObject({
+    insuranceRequestId: draft.id,
+    clientProfileId: claimed.items[0]!.profileId,
+    clientUserId: owner.userId,
+    stage: "new",
+    assignment: "unassigned",
+    offers: [],
+  });
+  expect(lead.context).not.toContain(input.items[1]!.lastName);
+  expect(JSON.stringify(lead)).not.toContain(email);
+  expect((await repository.get(draft.id, browser, owner.userId)).history).toEqual(
+    submitted.history,
+  );
+  expect(
+    (await database.pool.query("select id from managed_profiles where user_id=$1", [owner.userId]))
+      .rowCount,
+  ).toBe(2);
+  expect(
+    (
+      await database.pool.query("select * from partner_insurance_sources where request_id=$1", [
+        draft.id,
+      ])
+    ).rows,
+  ).toMatchObject([
+    {
+      consent_user_id: owner.userId,
+      consent_version: "insurance-partner-v1",
+      profile_id: claimed.items[0]!.profileId,
+    },
+  ]);
+  expect(
+    (
+      await database.pool.query(
+        "select id from partner_events where lead_id=$1 and kind='lead.insurance_request_linked'",
+        [lead.id],
+      )
+    ).rowCount,
+  ).toBe(1);
+  expect(
+    (
+      await database.pool.query(
+        "select id from partner_notifications where lead_id=$1 and audience='coverview' and resolved_at is null",
+        [lead.id],
+      )
+    ).rowCount,
+  ).toBe(1);
+  await expect(
+    partner.linkInsurance(actor, draft.id, { ...consent, personId: input.items[1]!.id }, key),
+  ).rejects.toMatchObject({ code: "PARTNER_IDEMPOTENCY_REUSED" });
+  await expect(repository.get(draft.id, browser)).rejects.toMatchObject({ statusCode: 404 });
+});
+
+it("keeps a single source and its evidence through a real profile transfer, denies old-owner replay and preserves the other person", async () => {
+  const browser = fingerprint(randomUUID()),
+    email = `${randomUUID()}@fixture.test`,
+    input = cart(true);
+  const owner = await session(email),
+    destination = await session(`next-${email}`),
+    admin = await session(`admin-${email}`);
+  const wallet = { ...owner, administrator: false, wallet: true },
+    next = { ...destination, administrator: false, wallet: true };
+  const partner = createPartnerRepository(database.pool);
+  const draft = await repository.email(browser, email, randomUUID(), owner);
+  const items = await repository.price(input);
+  await repository.save(browser, draft.id, input, items, randomUUID(), owner);
+  const submitted = await repository.submit(browser, draft.id, input, items, randomUUID(), owner);
+  const consent = { personId: input.items[0]!.id, transmissionAuthorized: true as const },
+    key = randomUUID();
+  const lead = await partner.linkInsurance(wallet, draft.id, consent, key);
+  await database.db.insert(identityAdminPermissions).values({
+    id: randomUUID(),
+    userId: admin.userId,
+    permission: "administration.access",
+    evidence: "Isolated PostgreSQL transfer test",
+  });
+  await database.db
+    .update(identitySessions)
+    .set({ mfaVerifiedAt: new Date() })
+    .where(eq(identitySessions.id, admin.id));
+  const profileId = submitted.items[0]!.profileId!;
+  const initialSource = await partner.insuranceSource({ ...admin, administrator: true }, lead.id);
+  await createAdminProfileTransferRepository(database.db).transfer(
+    { id: admin.id, userId: owner.userId, administratorUserId: admin.userId },
+    profileId,
+    {
+      destinationUserId: destination.userId,
+      revision: 0,
+    },
+    randomUUID(),
+  );
+  await expect(partner.linkInsurance(wallet, draft.id, consent, key)).rejects.toMatchObject({
+    statusCode: 404,
+  });
+  await expect(
+    partner.linkInsurance(wallet, draft.id, consent, randomUUID()),
+  ).rejects.toMatchObject({ statusCode: 404 });
+  const replay = await partner.linkInsurance(next, draft.id, consent, randomUUID());
+  expect(await partner.insuranceSource({ ...admin, administrator: true }, lead.id)).toEqual(
+    initialSource,
+  );
+  await expect(
+    partner.insuranceSource({ ...owner, administrator: false }, lead.id),
+  ).rejects.toMatchObject({ statusCode: 403 });
+  expect(replay).toMatchObject({
+    insuranceRequestId: draft.id,
+    id: lead.id,
+    clientUserId: destination.userId,
+    clientProfileId: profileId,
+  });
+  expect((await partner.insuranceLinks(wallet, draft.id)).people.map((x) => x.personId)).toEqual([
+    input.items[1]!.id,
+  ]);
+  expect((await partner.insuranceLinks(next, draft.id)).people).toMatchObject([
+    { personId: input.items[0]!.id, leadId: lead.id },
+  ]);
+  expect((await repository.get(draft.id, "", destination.userId)).items).toHaveLength(1);
+  expect((await repository.get(draft.id, "", destination.userId)).email).toBeNull();
+  expect(
+    (
+      await database.pool.query<{ consent_user_id: string }>(
+        "select consent_user_id from partner_insurance_sources where lead_id=$1",
+        [lead.id],
+      )
+    ).rows[0]?.consent_user_id,
+  ).toBe(owner.userId);
+  const edit = leadCreateInputSchema.parse({
+    title: lead.title,
+    category: lead.category,
+    object: "Autre objet",
+    context: "Correction",
+    clientUserId: destination.userId,
+    clientProfileId: profileId,
+    clientName: lead.clientName,
+    email: "",
+    phone: "",
+    language: "fr",
+    source: "Demande initiale",
+    transmissionAuthorized: true,
+    priority: "normal",
+    draft: false,
+    nextAction: "Vérifier",
+    dueAt: new Date(Date.now() + 86400000).toISOString(),
+  });
+  await expect(
+    partner.command(
+      { ...admin, administrator: true },
+      lead.id,
+      { action: "edit", revision: lead.revision, lead: edit },
+      randomUUID(),
+    ),
+  ).rejects.toMatchObject({ code: "PARTNER_INVALID_TRANSITION" });
+  await database.db
+    .update(identitySessions)
+    .set({ revokedAt: new Date() })
+    .where(eq(identitySessions.id, destination.id));
+  await expect(partner.linkInsurance(next, draft.id, consent, randomUUID())).rejects.toMatchObject({
+    statusCode: 403,
+  });
+});
+
+it("inspects only the consented person with current operational rights, preserving provenance and missing or uncertain fields", async () => {
+  const browser = fingerprint(randomUUID()),
+    email = `${randomUUID()}@fixture.test`;
+  const owner = await session(email),
+    admin = await session(`admin-${email}`);
+  const wallet = { ...owner, administrator: false, wallet: true };
+  const administrator = { ...admin, administrator: true };
+  const advisor = { ...(await session(`advisor-${email}`)), administrator: false };
+  const colleague = { ...(await session(`colleague-${email}`)), administrator: false };
+  const partner = createPartnerRepository(database.pool);
+  await database.db
+    .insert(identityAdminPermissions)
+    .values({
+      id: randomUUID(),
+      userId: admin.userId,
+      permission: "administration.access",
+      evidence: "Isolated source inspection test",
+    });
+  await database.db
+    .update(identitySessions)
+    .set({ mfaVerifiedAt: new Date() })
+    .where(eq(identitySessions.id, admin.id));
+  for (const person of [advisor, colleague, { ...owner, administrator: false }]) {
+    await partner.apply(
+      person,
+      {
+        name: "Intervenant isolé",
+        organization: "Organisation isolée",
+        phone: "",
+        roles: ["advisor"],
+        categories: ["health"],
+        languages: "fr",
+        regions: "Vaud",
+        qualifications: "Test isolé",
+      },
+      randomUUID(),
+    );
+    await partner.review(
+      administrator,
+      person.userId,
+      {
+        revision: (await partner.context(person)).application!.revision,
+        state: "approved",
+        organizationState: "approved",
+        roles: ["advisor"],
+        reason: "Vérification isolée",
+        reviewDueAt: null,
+      },
+      randomUUID(),
+    );
+  }
+  await database.pool.query("update partner_members set organization_id=$2 where user_id=$1", [
+    colleague.userId,
+    (await partner.context(advisor)).application!.organizationId,
+  ]);
+  const input = cart(true),
+    draft = await repository.email(browser, email, randomUUID(), owner);
+  const items = await repository.price(input);
+  items[0]!.offer.firstContacts = ["phone", "gp"];
+  items[0]!.offer.contactsVerified = false;
+  items[0]!.offer.eligibility = "municipality_required";
+  items[0]!.offer.restricted = true;
+  await repository.save(browser, draft.id, input, items, randomUUID(), owner);
+  const submitted = await repository.submit(browser, draft.id, input, items, randomUUID(), owner);
+  const lead = await partner.linkInsurance(
+    wallet,
+    draft.id,
+    { personId: input.items[0]!.id, transmissionAuthorized: true },
+    randomUUID(),
+  );
+  await expect(partner.insuranceSource(wallet, lead.id)).rejects.toMatchObject({ statusCode: 403 });
+  await expect(
+    partner.insuranceSource({ ...owner, administrator: false }, lead.id),
+  ).rejects.toMatchObject({ statusCode: 404 });
+  await expect(partner.insuranceSource(advisor, lead.id)).rejects.toMatchObject({
+    statusCode: 404,
+  });
+  let assigned = await partner.command(
+    administrator,
+    lead.id,
+    {
+      action: "assign",
+      revision: lead.revision,
+      responsibleId: advisor.userId,
+      reason: "Affectation de test",
+    },
+    randomUUID(),
+  );
+  const baseline = await partner.detail(administrator, lead.id);
+  const reads = await Promise.all([
+    partner.insuranceSource(advisor, lead.id),
+    partner.insuranceSource(advisor, lead.id),
+  ]);
+  const source = reads[0];
+  expect(reads[1]).toEqual(source);
+  expect(source).toMatchObject({
+    status: "available",
+    leadId: lead.id,
+    requestId: draft.id,
+    personId: input.items[0]!.id,
+    profileId: submitted.items[0]!.profileId,
+    requestRevision: submitted.revision,
+    consentVersion: "insurance-partner-v1",
+    item: {
+      currentInsurerName: null,
+      offer: {
+        monthlyPremiumMinor: 40000,
+        contactsVerified: false,
+        eligibility: "municipality_required",
+        restricted: true,
+      },
+    },
+  });
+  expect(source.item).toEqual(submitted.items[0]);
+  expect(source.item?.birthDate).toBeUndefined();
+  expect(JSON.stringify(source)).not.toContain(input.items[1]!.lastName);
+  expect(JSON.stringify(source)).not.toContain(email);
+  expect(JSON.stringify(source)).not.toContain("totalMonthlyMinor");
+  expect(JSON.stringify(source)).not.toContain("legalVersion");
+  expect(
+    (await partner.detail(advisor, lead.id)).events.filter(
+      (entry) => entry.kind === "lead.insurance_request_viewed",
+    ),
+  ).toHaveLength(1);
+  expect(
+    (await partner.detail(wallet, lead.id)).events.some(
+      (entry) => entry.kind === "lead.insurance_request_viewed",
+    ),
+  ).toBe(false);
+  expect(await partner.detail(advisor, lead.id)).toMatchObject({
+    revision: baseline.revision,
+    notifiedAt: baseline.notifiedAt,
+    firstUsefulAt: null,
+    offers: [],
+  });
+  await expect(partner.insuranceSource(colleague, lead.id)).rejects.toMatchObject({
+    statusCode: 404,
+  });
+  assigned = await partner.command(
+    advisor,
+    lead.id,
+    {
+      action: "collaboration_propose",
+      revision: assigned.revision,
+      terms: {
+        targetId: colleague.userId,
+        mode: "co_advice",
+        access: "read",
+        communication: "referent_only",
+        scope: "Contexte de ce Lead uniquement",
+        responsibilities: "Examiner la demande individuelle",
+        reason: "Seconde lecture",
+        economicNote: "Aucun droit économique supplémentaire",
+        existingRightsPreserved: true,
+        transmissionConfirmed: true,
+      },
+    },
+    randomUUID(),
+  );
+  const proposal = assigned.collaborations[0]!;
+  await expect(partner.insuranceSource(colleague, lead.id)).rejects.toMatchObject({
+    statusCode: 404,
+  });
+  const accepted = await partner.respondCollaboration(
+    colleague,
+    proposal.id,
+    { revision: proposal.revision, decision: "accept", reason: "Lecture acceptée" },
+    randomUUID(),
+  );
+  expect(await partner.insuranceSource(colleague, lead.id)).toEqual(source);
+  await partner.respondCollaboration(
+    colleague,
+    proposal.id,
+    { revision: accepted.revision, decision: "end", reason: "Lecture terminée" },
+    randomUUID(),
+  );
+  await expect(partner.insuranceSource(colleague, lead.id)).rejects.toMatchObject({
+    statusCode: 404,
+  });
+  // Later request/profile edits are not substitutions for the immutable consented source.
+  await database.pool.query(
+    "update insurance_requests set items=jsonb_set(items,'{0,firstName}','\"Changed\"'), revision=revision+1 where id=$1",
+    [draft.id],
+  );
+  await database.pool.query(
+    "update managed_profiles set display_name='Updated profile' where id=$1",
+    [source.profileId],
+  );
+  expect(await partner.insuranceSource(advisor, lead.id)).toEqual(source);
+  const beforeTransfer = await partner.detail(administrator, lead.id);
+  await partner.command(
+    administrator,
+    lead.id,
+    {
+      action: "assign",
+      revision: beforeTransfer.revision,
+      responsibleId: colleague.userId,
+      reason: "Transfert isolé",
+    },
+    randomUUID(),
+  );
+  await expect(partner.insuranceSource(advisor, lead.id)).rejects.toMatchObject({
+    statusCode: 404,
+  });
+  expect(await partner.insuranceSource(colleague, lead.id)).toEqual(source);
+  // Progress-only rights cannot retrieve the source, even when the Lead itself is visible.
+  await database.pool.query(
+    "insert into partner_contributors(id,lead_id,user_id,can_edit,access_scope,can_contact) values($1,$2,$3,false,'progress',false)",
+    [randomUUID(), lead.id, advisor.userId],
+  );
+  expect((await partner.detail(advisor, lead.id)).access).toBe("progress");
+  await expect(partner.insuranceSource(advisor, lead.id)).rejects.toMatchObject({
+    statusCode: 404,
+  });
+  // Corrupt or unsupported historical fields fail closed; no fabricated defaults.
+  await database.pool.query(
+    "update partner_insurance_sources set snapshot=jsonb_set(snapshot,'{offer,accident}','false') where lead_id=$1",
+    [lead.id],
+  );
+  expect(await partner.insuranceSource(colleague, lead.id)).toMatchObject({
+    status: "unavailable",
+    item: null,
+    requestRevision: source.requestRevision,
+  });
+  await database.pool.query(
+    "update partner_insurance_sources set snapshot=snapshot-'offer' where lead_id=$1",
+    [lead.id],
+  );
+  expect(await partner.insuranceSource(colleague, lead.id)).toMatchObject({
+    status: "unavailable",
+    item: null,
+  });
+  await database.pool.query(
+    "update partner_members set review_due_at=now()-interval '1 hour' where user_id=$1",
+    [colleague.userId],
+  );
+  await expect(partner.insuranceSource(colleague, lead.id)).rejects.toMatchObject({
+    statusCode: 403,
+  });
+  await database.db
+    .update(identitySessions)
+    .set({ mfaVerifiedAt: null })
+    .where(eq(identitySessions.id, admin.id));
+  await expect(partner.insuranceSource(administrator, lead.id)).rejects.toMatchObject({
+    statusCode: 403,
+  });
+  await database.db
+    .update(identitySessions)
+    .set({ revokedAt: new Date() })
+    .where(eq(identitySessions.id, advisor.id));
+  await expect(partner.insuranceSource(advisor, lead.id)).rejects.toMatchObject({
+    statusCode: 403,
+  });
+});
+
+it("does not reopen cancelled historical requests or create Leads for them", async () => {
+  const browser = fingerprint(randomUUID()),
+    email = `${randomUUID()}@fixture.test`,
+    input = cart(true);
+  const owner = await session(email),
+    wallet = { ...owner, administrator: false, wallet: true };
+  const partner = createPartnerRepository(database.pool);
+  const draft = await repository.email(browser, email, randomUUID(), owner),
+    items = await repository.price(input);
+  await repository.save(browser, draft.id, input, items, randomUUID(), owner);
+  await repository.submit(browser, draft.id, input, items, randomUUID(), owner);
+  await database.db
+    .update(insuranceRequests)
+    .set({ state: "cancelled" })
+    .where(eq(insuranceRequests.id, draft.id));
+  expect(
+    (await partner.insuranceLinks(wallet, draft.id)).people.every((x) => x.status === "closed"),
+  ).toBe(true);
+  await expect(
+    partner.linkInsurance(
+      wallet,
+      draft.id,
+      { personId: input.items[0]!.id, transmissionAuthorized: true },
+      randomUUID(),
+    ),
+  ).rejects.toMatchObject({ code: "PARTNER_INVALID_TRANSITION" });
+  expect(
+    (await database.pool.query("select id from partner_leads where creator_id=$1", [owner.userId]))
+      .rowCount,
+  ).toBe(0);
+});
 it("quotes foreign offers from PostgreSQL, rejects wrong deductibles and creates country-only Wallet profiles", async () => {
   await database.db
     .insert(healthDatasets)
@@ -203,15 +708,13 @@ it("quotes foreign offers from PostgreSQL, rejects wrong deductibles and creates
   await database.db
     .insert(healthInsurers)
     .values({ id: 987654, name: "Fictional cross-border insurer" });
-  await database.db
-    .insert(healthForeignDatasets)
-    .values({
-      id: "foreign_test",
-      year: 2027,
-      active: true,
-      sourceUrl: "https://example.test/fictional.csv",
-      sha256: "a".repeat(64),
-    });
+  await database.db.insert(healthForeignDatasets).values({
+    id: "foreign_test",
+    year: 2027,
+    active: true,
+    sourceUrl: "https://example.test/fictional.csv",
+    sha256: "a".repeat(64),
+  });
   await database.db.insert(healthForeignPremiums).values([
     {
       id: "foreign_test_adult",
@@ -241,15 +744,13 @@ it("quotes foreign offers from PostgreSQL, rejects wrong deductibles and creates
   const health = createHealthRepository(database.pool),
     foreignRequests = createInsuranceRequestRepository(database.db, health.quote);
   const input = cart(true);
-  input.items = input.items
-    .slice(0, 1)
-    .map((person) => ({
-      ...person,
-      modelId: "hfm_2027_987654",
-      localityId: "hfl_FR",
-      deductible: 300,
-      accident: true,
-    }));
+  input.items = input.items.slice(0, 1).map((person) => ({
+    ...person,
+    modelId: "hfm_2027_987654",
+    localityId: "hfl_FR",
+    deductible: 300,
+    accident: true,
+  }));
   const priced = await foreignRequests.price(input);
   expect(priced[0]?.offer).toMatchObject({
     monthlyPremiumMinor: 23456,

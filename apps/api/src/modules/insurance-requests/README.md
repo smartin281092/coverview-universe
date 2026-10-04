@@ -34,4 +34,8 @@ Configuration : origines `AUTH_API_ORIGIN`, `AUTH_WWW_ORIGIN`, `AUTH_WALLET_ORIG
 
 ## Vérifier
 
+Raccordement Partner du 2 octobre : la frontière publique `insuranceLeadCandidates` fournit seulement les personnes actuellement possédées, sans email du demandeur ni autres membres du panier. Le [référentiel Partner](../partner-workspace/README.md#demandes-dassurance-existantes--relais-f41b) porte l’accord explicite, le lien unique, la reprise des anciennes demandes et les limites. Submit/claim, cookie invité, projection après transfert et transitions/historique initiaux sont conservés ; aucun traitement Partner ne réécrit la demande source. Les tests PostgreSQL ci-dessous couvrent désormais aussi le raccordement, sa concurrence et le transfert réel via le repository Admin.
+
 `pnpm --filter api test src/platform/insurance-requests.test.ts src/modules/identity/identity.workos.test.ts` utilise PostgreSQL réel isolé et un double HTTP explicite du fournisseur. Ne jamais présenter ces tests comme la preuve d’une livraison d’email WorkOS réelle. Recette et limites : [ledger](../../../../../roadmap/evidence/health-offers.md).
+
+L’[inspection individuelle Partner](../partner-workspace/README.md#inspection-de-la-demande-individuelle--relais-7a52) lit exclusivement la copie autorisée dans partner_insurance_sources. Elle ne relit ni le panier original ni le profil courant ni le catalogue pour reconstruire une preuve historique. Les tests de ce module couvrent immutabilité, transfert réel de profil, confidentialité et révocation ; le parcours Wallet d’origine est conservé.

@@ -1,3 +1,8 @@
+import { AvailabilityDialog } from "../features/AvailabilityDialog";
+import { CapacityDialog } from "../features/CapacityDialog";
+import { SharedModesDialog } from "../features/SharedModesDialog";
+import { ConventionDialog } from "../features/ConventionDialog";
+import { PracticeDialog } from "../features/PracticeDialog";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQueryClient } from "@tanstack/react-query";
@@ -13,11 +18,18 @@ import { Badge, Button, Input, Label } from "@coverview/ui";
 import { partnerApi } from "../api";
 import { usePartner } from "../features/PartnerSession";
 import { formatDate } from "../features/Field";
+import { CompetenceDialog } from "../features/CompetenceDialog";
 export function ApplicationPage() {
   const { t } = useTranslation(),
     { identity, context } = usePartner(),
     client = useQueryClient();
   const [error, setError] = useState("");
+  const [conventionOpen, setConventionOpen] = useState(false);
+  const [availabilityOpen, setAvailabilityOpen] = useState(false);
+  const [capacityOpen, setCapacityOpen] = useState(false);
+  const [sharedModesOpen, setSharedModesOpen] = useState(false);
+  const [practiceOpen, setPracticeOpen] = useState(false);
+  const [competenceOpen, setCompetenceOpen] = useState(false);
   const application = context.application;
   const form = useForm<z.infer<typeof partnerApplicationInputSchema>>({
     resolver: zodResolver(partnerApplicationInputSchema),
@@ -70,6 +82,29 @@ export function ApplicationPage() {
           {!context.operational && (
             <p className="mt-4 text-sm text-muted-foreground">{t("application.restricted")}</p>
           )}
+          {editable && (
+            <p className="mt-4 text-sm text-muted-foreground">
+              {t("professionalScope.applicationChange")}
+            </p>
+          )}
+          <Button className="mt-4" variant="outline" onClick={() => setCompetenceOpen(true)}>
+            {t("competence.title")}
+          </Button>
+          <Button className="mt-4" variant="outline" onClick={() => setAvailabilityOpen(true)}>
+            {t("availability.title")}
+          </Button>
+          <Button className="mt-4" variant="outline" onClick={() => setCapacityOpen(true)}>
+            {t("capacity.title")}
+          </Button>
+          <Button className="mt-4" variant="outline" onClick={() => setSharedModesOpen(true)}>
+            {t("sharedModes.title")}
+          </Button>
+          <Button className="mt-4" variant="outline" onClick={() => setPracticeOpen(true)}>
+            {t("practice.title")}
+          </Button>
+          <Button className="mt-4" variant="outline" onClick={() => setConventionOpen(true)}>
+            {t("convention.title")}
+          </Button>
           {context.operational && (
             <div className="mt-4 flex gap-2">
               {application.grantedRoles.map((role) => (
@@ -80,6 +115,32 @@ export function ApplicationPage() {
             </div>
           )}
         </section>
+      )}
+      {conventionOpen && (
+        <ConventionDialog userId={identity.user.id} onClose={() => setConventionOpen(false)} />
+      )}
+      {availabilityOpen && (
+        <AvailabilityDialog userId={identity.user.id} onClose={() => setAvailabilityOpen(false)} />
+      )}
+      {capacityOpen && (
+        <CapacityDialog
+          key={`${identity.user.id}:${identity.session.id}`}
+          userId={identity.user.id}
+          onClose={() => setCapacityOpen(false)}
+        />
+      )}
+      {sharedModesOpen && (
+        <SharedModesDialog
+          key={`${identity.user.id}:${identity.session.id}`}
+          userId={identity.user.id}
+          onClose={() => setSharedModesOpen(false)}
+        />
+      )}
+      {practiceOpen && (
+        <PracticeDialog userId={identity.user.id} onClose={() => setPracticeOpen(false)} />
+      )}
+      {competenceOpen && (
+        <CompetenceDialog userId={identity.user.id} onClose={() => setCompetenceOpen(false)} />
       )}
       {editable && (
         <form

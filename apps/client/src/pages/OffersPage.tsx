@@ -1,11 +1,20 @@
 import { useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useNavigate, useSearch } from "@tanstack/react-router";
+import { useNavigate, useSearch, Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { ArrowUpRight, FileText, Plus } from "lucide-react";
 import type { IdentityMe } from "@coverview/api-client";
-import { PartnerApiError, type LeadOffer, type LeadDetail } from "@coverview/api-client/partner";
+import { PartnerApiError, type LeadOffer } from "@coverview/api-client/partner";
 import type { LeadCommand } from "@coverview/contracts/partner";
+import { PracticeSummaryDialog } from "../features/offers/PracticeSummaryDialog";
+import { AdvicePreferencesDialog } from "../features/offers/AdvicePreferencesDialog";
+import { SharedAppointmentsDialog } from "../features/offers/SharedAppointmentsDialog";
+import { WalletAppointmentsDialog } from "../features/offers/WalletAppointmentsDialog";
+import { MarketMandatesDialog } from "../features/offers/MarketMandatesDialog";
+import { WalletQualityDialog } from "../features/offers/WalletQualityDialog";
+import { WalletCommunicationsDialog } from "../features/offers/WalletCommunicationsDialog";
+import { CoordinatedBookingsDialog } from "../features/offers/CoordinatedBookingsDialog";
+import { ReferentAssessmentDialog } from "../features/offers/ReferentAssessmentDialog";
 import {
   Badge,
   Button,
@@ -21,7 +30,16 @@ import {
 import { partnerApi } from "../partner-api";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { useWalletProfileScope } from "../features/profile/use-wallet-profile-scope";
+import { ChoiceDialog, type WalletChoice } from "../features/offers/ChoiceDialog";
 import { WalletLeadDialog } from "../features/offers/WalletLeadDialog";
+import { ContractComparison } from "../features/offers/ContractComparison";
+import { ContractLinkDialog } from "../features/offers/ContractLinkDialog";
+import { OfferHistoryDialog } from "../features/offers/OfferHistoryDialog";
+import { FinalPoliciesDialog } from "../features/offers/FinalPoliciesDialog";
+import { ConclusionsDialog } from "../features/offers/ConclusionsDialog";
+import { LeadReopeningsDialog } from "../features/offers/LeadReopeningsDialog";
+import { LeadRelationshipsDialog } from "../features/offers/LeadRelationshipsDialog";
+import { ReferentsDialog } from "../features/offers/ReferentsDialog";
 const money = (minor: number) =>
   new Intl.NumberFormat("fr-CH", { style: "currency", currency: "CHF" }).format(minor / 100);
 const date = (value: string) =>
@@ -116,15 +134,38 @@ function Offers({ identity }: { identity: IdentityMe }) {
     navigate = useNavigate({ from: "/offers" }),
     client = useQueryClient();
   const [cursor, setCursor] = useState<string>(),
-    [choice, setChoice] = useState<{
-      type: "select" | "question" | "modification" | "keep_current";
-      offer?: LeadOffer;
-    } | null>(null),
+    [choice, setChoice] = useState<WalletChoice | null>(null),
+    [retryCommand, setRetryCommand] = useState<LeadCommand | null>(null),
     [detailed, setDetailed] = useState(false),
+    [history, setHistory] = useState(false),
+    [reopenings, setReopenings] = useState(false),
+    [relationships, setRelationships] = useState(false),
+    [policies, setPolicies] = useState(false),
+    [conclusionSelection, setConclusionLead] = useState<string | null>(null),
+    [referents, setReferents] = useState<{ profile: string; category?: string } | null>(null),
+    [advice, setAdvice] = useState<string | null>(null),
+    [sharedAppointments, setSharedAppointments] = useState<string | null>(null),
+    [appointments, setAppointments] = useState<string | null>(null),
+    [marketMandates, setMarketMandates] = useState<string | null>(null),
+    [qualitySelection, setQualityLead] = useState<string | null>(null),
+    [communicationsSelection, setCommunicationsLead] = useState<string | null>(null),
+    [coordination, setCoordination] = useState(false),
+    [referentAssessment, setReferentAssessment] = useState<string | null>(null),
+    [linkContract, setLinkContract] = useState(false),
     [pending, setPending] = useState(false),
     [error, setError] = useState(""),
-    [success, setSuccess] = useState(false),
+    [success, setSuccess] = useState<string | null>(null),
+    [interlocutorSent, setInterlocutorSent] = useState(false),
     [create, setCreate] = useState(false);
+  const qualityLead =
+    qualitySelection ?? (search.section === "quality" ? (search.lead ?? null) : null);
+  const communicationsLead =
+    communicationsSelection ?? (search.section === "communications" ? (search.lead ?? null) : null);
+  const conclusionLead =
+    conclusionSelection ?? (search.section === "conclusion" ? (search.lead ?? null) : null);
+  const closeSection = () => {
+    if (search.section) void navigate({ search: search.lead ? { lead: search.lead } : {} });
+  };
   const attempt = useRef<{ payload: string; key: string } | null>(null),
     root = ["private", identity.user.id, identity.session.id, "wallet-leads", scope];
   const list = useQuery({
@@ -162,7 +203,7 @@ function Offers({ identity }: { identity: IdentityMe }) {
     if (!lead || pending) return;
     setError("");
     setPending(true);
-    const payload = JSON.stringify(command);
+    const payload = JSON.stringify({ leadId: lead.id, command });
     if (attempt.current?.payload !== payload)
       attempt.current = { payload, key: crypto.randomUUID() };
     try {
@@ -175,9 +216,15 @@ function Offers({ identity }: { identity: IdentityMe }) {
       client.setQueryData([...root, "lead", lead.id], result);
       await client.invalidateQueries({ queryKey: root });
       if (command.action !== "client_choice" || command.choice !== "view") setChoice(null);
-      setSuccess(command.action === "client_choice" && command.choice === "select");
+      setSuccess(
+        command.action === "client_choice" && command.choice !== "view" ? command.choice : null,
+      );
+      setInterlocutorSent(command.action === "client_interlocutor");
       attempt.current = null;
+      setRetryCommand(null);
+      return result;
     } catch (cause) {
+      setRetryCommand(!(cause instanceof PartnerApiError) || cause.status >= 500 ? command : null);
       setError(
         cause instanceof PartnerApiError && cause.status === 409
           ? t("conflict")
@@ -189,28 +236,144 @@ function Offers({ identity }: { identity: IdentityMe }) {
       setPending(false);
     }
   }
-  function inspect(offer: LeadOffer) {
-    setChoice({ type: "select", offer });
-    setSuccess(false);
-    if (lead && offer.state === "published")
-      void send({
+  async function openChoice(type: WalletChoice["type"], offer?: LeadOffer) {
+    if (!lead || pending || detail.isError) return;
+    setError("");
+    setSuccess(null);
+    setInterlocutorSent(false);
+    setRetryCommand(null);
+    attempt.current = null;
+    let presented = lead;
+    if (type === "select" && offer?.state === "published") {
+      const result = await send({
         action: "client_choice",
         revision: lead.revision,
         choice: "view",
         offerId: offer.id,
         text: "",
       });
+      if (!result) return;
+      presented = result;
+    }
+    setChoice({ type, lead: presented, scope, ...(offer ? { offer } : {}) });
   }
   return (
     <>
+      {coordination && (
+        <CoordinatedBookingsDialog
+          key={`${identity.user.id}:${identity.session.id}:${scope}`}
+          identity={identity}
+          scope={scope}
+          onClose={() => setCoordination(false)}
+        />
+      )}
+      {appointments && (
+        <WalletAppointmentsDialog
+          key={`${identity.user.id}:${identity.session.id}:${appointments}`}
+          identity={identity}
+          leadId={appointments}
+          onClose={() => setAppointments(null)}
+        />
+      )}
+      {marketMandates && (
+        <MarketMandatesDialog
+          key={`${identity.user.id}:${identity.session.id}:${marketMandates}`}
+          identity={identity}
+          leadId={marketMandates}
+          onClose={() => setMarketMandates(null)}
+        />
+      )}
+      {qualityLead && (
+        <WalletQualityDialog
+          key={`${identity.user.id}:${identity.session.id}:${qualityLead}`}
+          identity={identity}
+          leadId={qualityLead}
+          onClose={() => {
+            setQualityLead(null);
+            closeSection();
+          }}
+        />
+      )}
+      {conclusionLead && (
+        <ConclusionsDialog
+          key={`${identity.user.id}:${identity.session.id}:${conclusionLead}`}
+          identity={identity}
+          leadId={conclusionLead}
+          onClose={() => {
+            setConclusionLead(null);
+            closeSection();
+          }}
+        />
+      )}
+      {communicationsLead && (
+        <WalletCommunicationsDialog
+          key={`${identity.user.id}:${identity.session.id}:${communicationsLead}`}
+          identity={identity}
+          leadId={communicationsLead}
+          onClose={() => {
+            setCommunicationsLead(null);
+            closeSection();
+          }}
+        />
+      )}
+      {sharedAppointments && (
+        <SharedAppointmentsDialog
+          key={`${identity.user.id}:${identity.session.id}:${sharedAppointments}`}
+          identity={identity}
+          leadId={sharedAppointments}
+          onClose={() => setSharedAppointments(null)}
+        />
+      )}
+      {referentAssessment && (
+        <ReferentAssessmentDialog
+          key={`${identity.user.id}:${identity.session.id}:${referentAssessment}`}
+          identity={identity}
+          leadId={referentAssessment}
+          onClose={() => setReferentAssessment(null)}
+        />
+      )}
+      {advice && (
+        <AdvicePreferencesDialog
+          identity={identity}
+          leadId={advice}
+          onClose={() => setAdvice(null)}
+        />
+      )}
+      {referents && (
+        <ReferentsDialog
+          identity={identity}
+          initialProfile={referents.profile}
+          {...(referents.category ? { initialCategory: referents.category } : {})}
+          onClose={() => setReferents(null)}
+        />
+      )}
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="cv-app-heading">{t("title")}</h1>
           <p className="mt-3 text-muted-foreground">{t("subtitle")}</p>
         </div>
+        <Button variant="outline" asChild>
+          <Link
+            to="/offers/notifications"
+            search={{ status: "all", ...(scope === "all" ? {} : { clientProfileId: scope }) }}
+          >
+            {t("notifications")}
+          </Link>
+        </Button>
+        <Button variant="outline" asChild>
+          <Link to="/insurance-requests" search={{ profile: scope }}>
+            {t("resumeInsurance")}
+          </Link>
+        </Button>
         <Button variant="outline" onClick={() => setCreate(true)}>
           <Plus className="mr-2 size-4" />
           {t("newRequest")}
+        </Button>
+        <Button variant="outline" onClick={() => setReferents({ profile: scope })}>
+          {t("referents.title")}
+        </Button>
+        <Button variant="outline" onClick={() => setCoordination(true)}>
+          {t("coordination.title")}
         </Button>
       </header>
       {list.isPending ? (
@@ -233,7 +396,7 @@ function Offers({ identity }: { identity: IdentityMe }) {
               type="button"
               className={`rounded-xl border p-6 text-left ${search.lead === item.id ? "border-primary bg-primary/5" : "border-border"}`}
               onClick={() => {
-                setSuccess(false);
+                setSuccess(null);
                 setError("");
                 void navigate({ search: (previous) => ({ ...previous, lead: item.id }) });
               }}
@@ -262,7 +425,13 @@ function Offers({ identity }: { identity: IdentityMe }) {
         )}
       </div>
       <Dialog
-        open={!!search.lead}
+        open={
+          !!search.lead &&
+          !sharedAppointments &&
+          !appointments &&
+          !qualityLead &&
+          !communicationsLead
+        }
         onOpenChange={(open) => {
           if (!open && !pending)
             void navigate({
@@ -298,6 +467,201 @@ function Offers({ identity }: { identity: IdentityMe }) {
           ) : (
             lead && (
               <>
+                <Button
+                  variant="outline"
+                  disabled={pending}
+                  onClick={() => setQualityLead(lead.id)}
+                >
+                  {t("quality:title")}
+                </Button>
+                <Button
+                  variant="outline"
+                  disabled={pending}
+                  onClick={() => setCommunicationsLead(lead.id)}
+                >
+                  {t("communications:title")}
+                </Button>
+                <Button variant="outline" disabled={pending} onClick={() => setAdvice(lead.id)}>
+                  {t("advice.title")}
+                </Button>
+                <Button
+                  variant="outline"
+                  disabled={pending}
+                  onClick={() => setMarketMandates(lead.id)}
+                >
+                  {t("marketMandates.title")}
+                </Button>
+                <Button
+                  variant="outline"
+                  disabled={pending}
+                  onClick={() => setAppointments(lead.id)}
+                >
+                  {t("appointments.title")}
+                </Button>
+                <Button
+                  variant="outline"
+                  disabled={pending}
+                  onClick={() => setSharedAppointments(lead.id)}
+                >
+                  {t("appointmentLinks.shared")}
+                </Button>
+                <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border p-4">
+                  <div>
+                    <p className="text-sm font-medium">
+                      {t("referent", { name: lead.responsibleName ?? t("coverviewQueue") })}
+                    </p>
+                    {lead.participants
+                      .filter((p) => p.id !== lead.responsibleId)
+                      .map((p) => (
+                        <p className="mt-1 text-sm text-muted-foreground" key={p.id}>
+                          {t("coAdvisor", { name: p.name })}
+                        </p>
+                      ))}
+                  </div>
+                  <Button
+                    variant="outline"
+                    disabled={pending || lead.stage === "completed"}
+                    onClick={() => {
+                      setInterlocutorSent(false);
+                      void openChoice("interlocutor");
+                    }}
+                  >
+                    {t("interlocutor")}
+                  </Button>
+                </div>
+                {interlocutorSent && (
+                  <p role="status" className="text-sm">
+                    {t("interlocutorSent")}
+                  </p>
+                )}
+                {lead.referentContinuity && (
+                  <div className="space-y-3 rounded-xl border border-border p-4">
+                    <p className="text-sm font-medium">
+                      {t("referents.categorySelection", {
+                        category: t(`categories.${lead.category}`),
+                        name:
+                          lead.referentContinuity.selection.advisor?.name ??
+                          t("referents.noReferent"),
+                      })}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {t(`referents.status.${lead.referentContinuity.selection.status}`)}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {t(`referents.continuity.${lead.referentContinuity.status}`)}
+                    </p>
+                    {lead.referentContinuity.competence && (
+                      <div className="space-y-2 text-sm text-muted-foreground">
+                        <p>
+                          {t("referents.competence", {
+                            status: t(
+                              `referents.competenceStatus.${lead.referentContinuity.competence.status}`,
+                            ),
+                          })}
+                        </p>
+                        {lead.referentContinuity.competence.scope && (
+                          <p className="whitespace-pre-wrap">
+                            {t("referents.competenceScope", {
+                              scope: lead.referentContinuity.competence.scope,
+                            })}
+                          </p>
+                        )}
+                        {lead.referentContinuity.competence.validUntil && (
+                          <p>
+                            {t("referents.competenceUntil", {
+                              date: date(lead.referentContinuity.competence.validUntil),
+                            })}
+                          </p>
+                        )}
+                        <p>{t("referents.competenceLimits")}</p>
+                      </div>
+                    )}
+                    {lead.referentContinuity.practice && (
+                      <PracticeSummaryDialog value={lead.referentContinuity.practice} />
+                    )}
+                    <Button variant="outline" onClick={() => setReferentAssessment(lead.id)}>
+                      {t("referentAssessment.title")}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      disabled={pending}
+                      onClick={() =>
+                        setReferents({
+                          profile: lead.clientProfileId ?? "self",
+                          category: lead.category,
+                        })
+                      }
+                    >
+                      {t("referents.change")}
+                    </Button>
+                  </div>
+                )}
+                {lead.insuranceRequestId && (
+                  <Button variant="outline" asChild>
+                    <Link
+                      to="/insurance-requests/$requestId"
+                      params={{ requestId: lead.insuranceRequestId }}
+                      search={{ profile: lead.clientProfileId ?? "self" }}
+                    >
+                      {t("originalInsuranceRequest")}
+                    </Link>
+                  </Button>
+                )}
+                <ContractComparison lead={lead} />
+                <Button variant="outline" onClick={() => setHistory(true)}>
+                  {t("history.title")}
+                </Button>
+                <Button variant="outline" onClick={() => setReopenings(true)}>
+                  {t("lifecycle:title")}
+                </Button>
+                {reopenings && (
+                  <LeadReopeningsDialog
+                    identity={identity}
+                    leadId={lead.id}
+                    onClose={() => setReopenings(false)}
+                  />
+                )}
+                <Button variant="outline" onClick={() => setRelationships(true)}>
+                  {t("relationships:title")}
+                </Button>
+                {relationships && (
+                  <LeadRelationshipsDialog
+                    key={`${identity.user.id}:${identity.session.id}:${lead.id}`}
+                    identity={identity}
+                    leadId={lead.id}
+                    onClose={() => setRelationships(false)}
+                  />
+                )}
+                <Button variant="outline" onClick={() => setPolicies(true)}>
+                  {t("policy.title")}
+                </Button>
+                <Button variant="outline" onClick={() => setConclusionLead(lead.id)}>
+                  {t("conclusion:title")}
+                </Button>
+                <div className="flex flex-wrap gap-3">
+                  <Button
+                    variant="outline"
+                    disabled={pending || lead.stage === "completed"}
+                    onClick={() => setLinkContract(true)}
+                  >
+                    {t("contract.link")}
+                  </Button>
+                  {lead.currentContract && (
+                    <Button
+                      variant="ghost"
+                      disabled={pending}
+                      onClick={() =>
+                        void send({
+                          action: "contract_unlink",
+                          referenceId: lead.currentContract!.referenceId,
+                          revision: lead.revision,
+                        })
+                      }
+                    >
+                      {t("contract.unlink")}
+                    </Button>
+                  )}
+                </div>
                 {offers.length ? (
                   <>
                     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -308,6 +672,17 @@ function Offers({ identity }: { identity: IdentityMe }) {
                             <Badge variant="outline">{t(`state.${offer.state}`)}</Badge>
                           </div>
                           <h3 className="mt-2 font-semibold">{offer.product}</h3>
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            {t("version", { version: offer.version })}
+                          </p>
+                          {offer.updatedSinceViewed && (
+                            <p className="mt-2 text-sm">{t("updatedSinceViewed")}</p>
+                          )}
+                          {offer.sourceStatus !== "current" && (
+                            <p role="status" className="mt-3 text-sm">
+                              {t(`history.sourceStatus.${offer.sourceStatus ?? "unbound"}`)}
+                            </p>
+                          )}
                           <p className="mt-4 text-2xl font-medium">
                             {offer.annualPremiumMinor === null
                               ? t("missing")
@@ -335,44 +710,55 @@ function Offers({ identity }: { identity: IdentityMe }) {
                               size="sm"
                               disabled={
                                 pending ||
+                                !offer.canChoose ||
                                 !["published", "viewed", "selected"].includes(offer.state) ||
                                 (!!offer.validUntil &&
                                   new Date(offer.validUntil).getTime() < Date.now()) ||
                                 lead.stage === "completed"
                               }
-                              onClick={() => inspect(offer)}
+                              onClick={() => void openChoice("select", offer)}
                             >
                               {t(offer.state === "selected" ? "selected" : "choose")}
                             </Button>
-                            <Button size="sm" asChild variant="outline">
-                              <a href={partnerApi.sourceUrl(lead.id, offer.id, true)}>
-                                <FileText className="mr-1 size-3.5" />
-                                {t("source")}
-                              </a>
-                            </Button>
+                            {offer.canDownload && (
+                              <Button size="sm" asChild variant="outline">
+                                <a href={partnerApi.sourceUrl(lead.id, offer.id, true)}>
+                                  <FileText className="mr-1 size-3.5" />
+                                  {t("source")}
+                                </a>
+                              </Button>
+                            )}
                           </div>
                           <div className="mt-3 flex flex-wrap gap-3 text-xs">
                             <button
                               type="button"
-                              disabled={pending || lead.stage === "completed"}
+                              disabled={pending || !offer.canChoose || lead.stage === "completed"}
                               className="underline underline-offset-4"
-                              onClick={() => setChoice({ type: "question", offer })}
+                              onClick={() => void openChoice("question", offer)}
                             >
                               {t("question")}
                             </button>
                             <button
                               type="button"
-                              disabled={pending || lead.stage === "completed"}
+                              disabled={pending || !offer.canChoose || lead.stage === "completed"}
                               className="underline underline-offset-4"
-                              onClick={() => setChoice({ type: "modification", offer })}
+                              onClick={() => void openChoice("modification", offer)}
                             >
                               {t("modification")}
+                            </button>
+                            <button
+                              type="button"
+                              disabled={pending || !offer.canChoose || lead.stage === "completed"}
+                              className="underline underline-offset-4 disabled:opacity-50"
+                              onClick={() => void openChoice("refuse", offer)}
+                            >
+                              {t("refuse")}
                             </button>
                           </div>
                         </article>
                       ))}
                     </div>
-                    <CompareTable offers={offers} all={false} />
+                    <CompareTable offers={offers.filter((offer) => offer.canCompare)} all={false} />
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <Button variant="outline" onClick={() => setDetailed(true)}>
                         {t("detailed")}
@@ -380,20 +766,19 @@ function Offers({ identity }: { identity: IdentityMe }) {
                       <Button
                         variant="ghost"
                         disabled={pending || lead.stage === "completed"}
-                        onClick={() => setChoice({ type: "keep_current" })}
+                        onClick={() => void openChoice("keep_current")}
                       >
                         {t("keep")}
                       </Button>
                     </div>
-                    <p className="text-xs text-muted-foreground">{t("noReference")}</p>
                   </>
                 ) : (
                   <EmptyState title={t("noOffers")} description={t("noOffersDescription")} />
                 )}{" "}
                 {success && (
                   <div role="status" className="rounded-lg bg-muted p-4 text-sm">
-                    <p className="font-semibold">{t("selected")}</p>
-                    <p className="mt-2">{t("selectedDescription")}</p>
+                    <p className="font-semibold">{t("decision.saved")}</p>
+                    <p className="mt-2">{t(`decision.success.${success}`)}</p>
                   </div>
                 )}
                 {error && (
@@ -406,6 +791,37 @@ function Offers({ identity }: { identity: IdentityMe }) {
           )}
         </DialogContent>
       </Dialog>
+      {linkContract && lead && (
+        <ContractLinkDialog
+          key={lead.id}
+          lead={lead}
+          identity={identity}
+          onClose={() => setLinkContract(false)}
+          onSaved={(value) => {
+            client.setQueryData([...root, "lead", lead.id], value);
+            void client.invalidateQueries({ queryKey: root });
+          }}
+        />
+      )}
+      {history && lead && (
+        <OfferHistoryDialog
+          key={lead.id}
+          leadId={lead.id}
+          identity={identity}
+          onClose={() => setHistory(false)}
+        />
+      )}
+      {policies && lead && !detail.isError && (
+        <FinalPoliciesDialog
+          key={lead.id}
+          lead={lead}
+          identity={identity}
+          onClose={() => setPolicies(false)}
+          onSaved={() => {
+            void client.invalidateQueries({ queryKey: root });
+          }}
+        />
+      )}
       <Dialog open={detailed} onOpenChange={setDetailed}>
         <DialogContent
           className="max-h-[90svh] overflow-y-auto sm:max-w-6xl"
@@ -416,14 +832,24 @@ function Offers({ identity }: { identity: IdentityMe }) {
             <DialogTitle>{t("detailed")}</DialogTitle>
             <DialogDescription>{lead?.title}</DialogDescription>
           </DialogHeader>
-          <CompareTable offers={offers} all />
+          <CompareTable offers={offers.filter((offer) => offer.canCompare)} all />
         </DialogContent>
       </Dialog>
       <ChoiceDialog
-        choice={choice}
+        key={
+          choice
+            ? `${choice.lead.id}:${choice.lead.revision}:${choice.type}:${choice.offer?.id ?? ""}`
+            : "none"
+        }
+        choice={
+          choice?.scope === scope && choice.lead.id === search.lead && !detail.isError
+            ? choice
+            : null
+        }
         lead={lead}
         pending={pending}
         error={error}
+        retryCommand={retryCommand}
         onClose={() => setChoice(null)}
         onSend={send}
       />
@@ -437,119 +863,6 @@ function Offers({ identity }: { identity: IdentityMe }) {
         }}
       />
     </>
-  );
-}
-function ChoiceDialog({
-  choice,
-  lead,
-  pending,
-  error,
-  onClose,
-  onSend,
-}: {
-  choice: {
-    type: "select" | "question" | "modification" | "keep_current";
-    offer?: LeadOffer;
-  } | null;
-  lead: LeadDetail | undefined;
-  pending: boolean;
-  error: string;
-  onClose: () => void;
-  onSend: (command: LeadCommand) => Promise<void>;
-}) {
-  const { t } = useTranslation("offers");
-  return (
-    <Dialog
-      open={!!choice}
-      onOpenChange={(open) => {
-        if (!open && !pending) onClose();
-      }}
-    >
-      <DialogContent showCloseButton={!pending} closeLabel={t("close")}>
-        <DialogHeader>
-          <DialogTitle>
-            {t(
-              choice?.type === "select"
-                ? "confirmTitle"
-                : choice?.type === "keep_current"
-                  ? "keep"
-                  : (choice?.type ?? "question"),
-            )}
-          </DialogTitle>
-          <DialogDescription>
-            {t(choice?.type === "select" ? "confirmDescription" : "subtitle")}
-          </DialogDescription>
-        </DialogHeader>
-        {choice && lead && (
-          <form
-            className="space-y-4"
-            onSubmit={(event) => {
-              event.preventDefault();
-              const data = new FormData(event.currentTarget);
-              void onSend({
-                action: "client_choice",
-                revision: lead.revision,
-                choice: choice.type,
-                ...(choice.offer ? { offerId: choice.offer.id } : {}),
-                text:
-                  typeof data.get("message") === "string" ? (data.get("message") as string) : "",
-              });
-            }}
-          >
-            {choice.offer && (
-              <div className="rounded-lg bg-muted p-4">
-                <p className="font-semibold">
-                  {choice.offer.company}
-                  {" · "}
-                  {choice.offer.product}
-                </p>
-                <p className="mt-2">
-                  {choice.offer.annualPremiumMinor === null
-                    ? t("missing")
-                    : money(choice.offer.annualPremiumMinor)}
-                </p>
-                {choice.offer.effectiveDate && (
-                  <p className="mt-2 text-sm">
-                    {t("effect", { date: date(choice.offer.effectiveDate) })}
-                  </p>
-                )}
-                <a
-                  className="mt-3 inline-flex text-sm underline"
-                  href={partnerApi.sourceUrl(lead.id, choice.offer.id, true)}
-                >
-                  {t("source")}
-                </a>
-              </div>
-            )}
-            {choice.type !== "select" && (
-              <label className="block space-y-2 text-sm">
-                <span>{t("message")}</span>
-                <textarea
-                  name="message"
-                  required={choice.type !== "keep_current"}
-                  maxLength={2000}
-                  rows={4}
-                  className="w-full rounded-md border border-input bg-background p-3"
-                />
-              </label>
-            )}
-            {error && (
-              <p role="alert" className="text-sm text-destructive">
-                {error}
-              </p>
-            )}
-            <div className="flex justify-end gap-3">
-              <Button type="button" variant="outline" disabled={pending} onClick={onClose}>
-                {t("cancel")}
-              </Button>
-              <Button type="submit" disabled={pending}>
-                {t(choice.type === "select" ? "confirm" : "send")}
-              </Button>
-            </div>
-          </form>
-        )}
-      </DialogContent>
-    </Dialog>
   );
 }
 export function OffersPage() {

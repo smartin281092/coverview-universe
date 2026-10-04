@@ -191,7 +191,13 @@ export function companyOverview(companyId: InsuranceCompanyId, entries: Entry[],
   const related = entries.filter(({ document }) => document.companyId === companyId);
   const groups = new Map<string, Entry[]>();
   for (const entry of related) {
-    if (entry.document.purpose === "lead_offer" || entry.document.classification !== "insurance_policy") continue;
+    if (
+      entry.document.purpose === "lead_offer" ||
+      entry.document.purpose === "partner_competence" ||
+      entry.document.purpose === "partner_convention" ||
+      entry.document.classification !== "insurance_policy"
+    )
+      continue;
     // An OCR category alone does not turn a quote/application into an issued policy.
     const header =
       entry.analysis?.pages[0]?.text.slice(0, 12000).split(/\r?\n/u).slice(0, 12).join("\n") ?? "";

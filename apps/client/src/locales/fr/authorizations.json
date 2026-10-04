@@ -1,6 +1,9 @@
 {
   "signing": {
     "drawHelp": "Tracez votre signature avec le doigt, un stylet ou la souris.",
+    "keyboardHelp": "Au clavier : Tab pour entrer dans la zone, flèches pour déplacer le curseur, Espace pour commencer ou terminer un trait, Échap pour lever le stylo.",
+    "penDown": "Le stylo trace. Utilisez les flèches.",
+    "penUp": "Stylo levé. Appuyez sur Espace pour commencer un trait.",
     "drawLabel": "Zone de signature manuscrite",
     "clear": "Effacer le tracé",
     "signer": "Nom complet du signataire",

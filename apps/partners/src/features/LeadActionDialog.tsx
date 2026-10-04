@@ -8,6 +8,7 @@ import {
   DialogTitle,
   DialogDescription,
   Button,
+  parseZurichDateTime,
 } from "@coverview/ui";
 import {
   leadCommandSchema,
@@ -22,15 +23,18 @@ import { usePartner } from "./PartnerSession";
 import { useLeadCommand } from "./use-lead-command";
 import { Field, SelectOptions, readText, readDate, localDateTime } from "./Field";
 import { partnerApi } from "../api";
+import { PersonalAppointmentDialog } from "./PersonalAppointmentDialog";
 export type LeadAction =
   | "next_action"
   | "contact"
   | "note"
   | "task"
   | "appointment"
+  | "personal_appointment"
   | "assign"
   | "wait"
   | "close"
+  | "reopen"
   | "transition"
   | "appointment_state";
 const labels: Record<LeadAction, string> = {
@@ -39,9 +43,11 @@ const labels: Record<LeadAction, string> = {
   note: "note",
   task: "task",
   appointment: "appointment",
+  personal_appointment: "appointment",
   assign: "assign",
   wait: "wait",
   close: "close",
+  reopen: "reopen",
   transition: "changeStage",
   appointment_state: "appointment",
 };
@@ -69,6 +75,14 @@ export function LeadActionDialog({
     gcTime: 0,
   });
   if (!action) return null;
+  if (action === "personal_appointment")
+    return (
+      <PersonalAppointmentDialog
+        key={[...session.queryKey, lead.id].join(":")}
+        lead={lead}
+        onClose={onClose}
+      />
+    );
   const nextFields = (
     <>
       <Field
@@ -95,6 +109,14 @@ export function LeadActionDialog({
     let payload: unknown;
     try {
       switch (action) {
+        case "reopen":
+          payload = {
+            action,
+            reason: readText(data, "note"),
+            nextAction: readText(data, "nextAction"),
+            dueAt: parseZurichDateTime(readText(data, "dueAt")),
+          };
+          break;
         case "next_action":
           payload = { action, title: readText(data, "nextAction"), dueAt: readDate(data, "dueAt") };
           break;
@@ -116,7 +138,8 @@ export function LeadActionDialog({
             task: {
               title: readText(data, "title"),
               description: readText(data, "description"),
-              responsibleId: lead.responsibleId ?? session.identity.user.id,
+              responsibleId:
+                readText(data, "participantId") || lead.responsibleId || session.identity.user.id,
               dueAt: readDate(data, "dueAt"),
               priority: readText(data, "priority"),
               reminderAt: readDate(data, "reminderAt"),
@@ -127,7 +150,8 @@ export function LeadActionDialog({
           payload = {
             action,
             appointment: {
-              advisorId: lead.responsibleId ?? session.identity.user.id,
+              advisorId:
+                readText(data, "participantId") || lead.responsibleId || session.identity.user.id,
               startsAt: readDate(data, "startsAt"),
               durationMinutes: Number(readText(data, "duration")),
               mode: readText(data, "mode"),
@@ -211,7 +235,30 @@ export function LeadActionDialog({
           </DialogDescription>
         </DialogHeader>
         <form className="space-y-5" onSubmit={(event) => void submit(event)}>
+          {(action === "task" || action === "appointment") && (
+            <Field
+              name="participantId"
+              label={t("field.responsible")}
+              defaultValue={lead.responsibleId ?? ""}
+              required
+            >
+              {lead.participants
+                .filter((p) => p.canWork && (action !== "appointment" || p.canContact))
+                .map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name}
+                  </option>
+                ))}
+            </Field>
+          )}
           {action === "next_action" && nextFields}
+          {action === "reopen" && (
+            <>
+              <p className="text-sm text-muted-foreground">{t("detail.reopenNotice")}</p>
+              {note}
+              {nextFields}
+            </>
+          )}
           {action === "contact" && (
             <>
               <p className="text-sm text-muted-foreground">{t("contact.description")}</p>
@@ -230,7 +277,9 @@ export function LeadActionDialog({
                   values={
                     session.context.administrator
                       ? ["private", "assigned", "client", "coverview"]
-                      : ["private", "assigned", "client"]
+                      : lead.allowedActions?.includes("contact")
+                        ? ["private", "assigned", "client"]
+                        : ["private", "assigned"]
                   }
                   prefix="audience"
                 />

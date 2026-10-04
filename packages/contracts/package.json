@@ -8,7 +8,15 @@
     "./health-insurance": "./src/health-insurance.ts",
     "./insurance-requests": "./src/insurance-requests.ts",
     "./health-recommendation": "./src/health-recommendation.ts",
-    "./partner": "./src/partner.ts"
+    "./partner": "./src/partner.ts",
+    "./partner-economy": "./src/partner-economy.ts",
+    "./partner-quality": "./src/partner-quality.ts",
+    "./partner-communications": "./src/partner-communications.ts",
+    "./partner-pilotage": "./src/partner-pilotage.ts",
+    "./partner-conclusion": "./src/partner-conclusion.ts",
+    "./partner-lifecycle": "./src/partner-lifecycle.ts",
+    "./partner-relationships": "./src/partner-relationships.ts",
+    "./partner-navigation": "./src/partner-navigation.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",

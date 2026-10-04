@@ -1,3 +1,8 @@
+import { AvailabilityDialog } from "../features/AvailabilityDialog";
+import { CapacityDialog } from "../features/CapacityDialog";
+import { SharedModesDialog } from "../features/SharedModesDialog";
+import { ConventionDialog } from "../features/ConventionDialog";
+import { PracticeDialog } from "../features/PracticeDialog";
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
@@ -22,11 +27,18 @@ import {
 import { usePartner } from "../features/PartnerSession";
 import { Field, SelectOptions, readText, readDate } from "../features/Field";
 import { partnerApi } from "../api";
+import { CompetenceDialog } from "../features/CompetenceDialog";
 export function ApplicationsPage() {
   const { t } = useTranslation(),
     session = usePartner(),
     client = useQueryClient(),
     [selected, setSelected] = useState<PartnerApplication | null>(null),
+    [availabilityUserId, setAvailabilityUserId] = useState<string | null>(null),
+    [capacityUserId, setCapacityUserId] = useState<string | null>(null),
+    [sharedModesUserId, setSharedModesUserId] = useState<string | null>(null),
+    [practiceUserId, setPracticeUserId] = useState<string | null>(null),
+    [conventionUserId, setConventionUserId] = useState<string | null>(null),
+    [competenceUserId, setCompetenceUserId] = useState<string | null>(null),
     [pending, setPending] = useState(false),
     [error, setError] = useState(""),
     [key, setKey] = useState(() => crypto.randomUUID());
@@ -82,6 +94,48 @@ export function ApplicationsPage() {
                 }}
               >
                 {t("application.review")}
+              </Button>
+              <Button
+                className="mt-3"
+                variant="outline"
+                onClick={() => setCompetenceUserId(person.userId)}
+              >
+                {t("competence.title")}
+              </Button>
+              <Button
+                className="mt-3"
+                variant="outline"
+                onClick={() => setAvailabilityUserId(person.userId)}
+              >
+                {t("availability.title")}
+              </Button>
+              <Button
+                className="mt-3"
+                variant="outline"
+                onClick={() => setCapacityUserId(person.userId)}
+              >
+                {t("capacity.title")}
+              </Button>
+              <Button
+                className="mt-3"
+                variant="outline"
+                onClick={() => setSharedModesUserId(person.userId)}
+              >
+                {t("sharedModes.title")}
+              </Button>
+              <Button
+                className="mt-3"
+                variant="outline"
+                onClick={() => setPracticeUserId(person.userId)}
+              >
+                {t("practice.title")}
+              </Button>
+              <Button
+                className="mt-3"
+                variant="outline"
+                onClick={() => setConventionUserId(person.userId)}
+              >
+                {t("convention.title")}
               </Button>
             </article>
           ))}
@@ -210,6 +264,35 @@ export function ApplicationsPage() {
           )}
         </DialogContent>
       </Dialog>
+      {conventionUserId && (
+        <ConventionDialog userId={conventionUserId} onClose={() => setConventionUserId(null)} />
+      )}
+      {availabilityUserId && (
+        <AvailabilityDialog
+          userId={availabilityUserId}
+          onClose={() => setAvailabilityUserId(null)}
+        />
+      )}
+      {practiceUserId && (
+        <PracticeDialog userId={practiceUserId} onClose={() => setPracticeUserId(null)} />
+      )}
+      {capacityUserId && (
+        <CapacityDialog
+          key={`${session.identity.user.id}:${session.identity.session.id}:${capacityUserId}`}
+          userId={capacityUserId}
+          onClose={() => setCapacityUserId(null)}
+        />
+      )}
+      {sharedModesUserId && (
+        <SharedModesDialog
+          key={`${session.identity.user.id}:${session.identity.session.id}:${sharedModesUserId}`}
+          userId={sharedModesUserId}
+          onClose={() => setSharedModesUserId(null)}
+        />
+      )}
+      {competenceUserId && (
+        <CompetenceDialog userId={competenceUserId} onClose={() => setCompetenceUserId(null)} />
+      )}
     </>
   );
 }

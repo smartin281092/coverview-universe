@@ -1,5 +1,5 @@
 {
-  "id": "e32744ca-c315-485b-9116-9dd3ff6d6bb4",
+  "id": "2e1c76b7-7d8a-4d54-a065-7e29949f93f3",
   "prevId": "777c686c-3b48-4326-8e15-51da276117af",
   "version": "7",
   "dialect": "postgresql",
@@ -4279,13 +4279,6 @@
           "type": "jsonb",
           "primaryKey": false,
           "notNull": true
-        },
-        "insurer_identities": {
-          "name": "insurer_identities",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'[]'::jsonb"
         }
       },
       "indexes": {
@@ -7833,7 +7826,13 @@
           "name": "actor_id",
           "type": "text",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
+        },
+        "system_actor": {
+          "name": "system_actor",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "subject_id": {
           "name": "subject_id",
@@ -7928,6 +7927,10 @@
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {
+        "partner_event_actor": {
+          "name": "partner_event_actor",
+          "value": "(\"partner_events\".\"actor_id\" is not null and \"partner_events\".\"system_actor\" is null) or (\"partner_events\".\"actor_id\" is null and \"partner_events\".\"system_actor\" = 'partner-continuity-v1')"
+        },
         "partner_event_audience": {
           "name": "partner_event_audience",
           "value": "\"partner_events\".\"audience\" in ('private','assigned','client','coverview')"
@@ -8068,6 +8071,19 @@
           "primaryKey": false,
           "notNull": false
         },
+        "notification_cycle": {
+          "name": "notification_cycle",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
+        "continuity_checked_at": {
+          "name": "continuity_checked_at",
+          "type": "timestamp (3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
         "first_useful_at": {
           "name": "first_useful_at",
           "type": "timestamp (3) with time zone",
@@ -8183,6 +8199,28 @@
             }
           ],
           "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "partner_leads_continuity": {
+          "name": "partner_leads_continuity",
+          "columns": [
+            {
+              "expression": "continuity_checked_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "where": "\"partner_leads\".\"stage\" not in ('draft','completed')",
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -8423,6 +8461,266 @@
         "partner_member_revision": {
           "name": "partner_member_revision",
           "value": "\"partner_members\".\"revision\" >= 0"
+        }
+      },
+      "isRLSEnabled": false
+    },
+    "public.partner_notification_reads": {
+      "name": "partner_notification_reads",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "notification_id": {
+          "name": "notification_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "read_at": {
+          "name": "read_at",
+          "type": "timestamp (3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "partner_notification_read_once": {
+          "name": "partner_notification_read_once",
+          "columns": [
+            {
+              "expression": "notification_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "partner_notification_reads_notification_id_partner_notifications_id_fk": {
+          "name": "partner_notification_reads_notification_id_partner_notifications_id_fk",
+          "tableFrom": "partner_notification_reads",
+          "tableTo": "partner_notifications",
+          "columnsFrom": [
+            "notification_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "partner_notification_reads_user_id_identity_users_id_fk": {
+          "name": "partner_notification_reads_user_id_identity_users_id_fk",
+          "tableFrom": "partner_notification_reads",
+          "tableTo": "identity_users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.partner_notifications": {
+      "name": "partner_notifications",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "lead_id": {
+          "name": "lead_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "recipient_id": {
+          "name": "recipient_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "audience": {
+          "name": "audience",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kind": {
+          "name": "kind",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "dedupe_key": {
+          "name": "dedupe_key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "action": {
+          "name": "action",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "priority": {
+          "name": "priority",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "due_at": {
+          "name": "due_at",
+          "type": "timestamp (3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp (3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "resolved_at": {
+          "name": "resolved_at",
+          "type": "timestamp (3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "partner_notification_inbox": {
+          "name": "partner_notification_inbox",
+          "columns": [
+            {
+              "expression": "recipient_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "partner_notification_lead": {
+          "name": "partner_notification_lead",
+          "columns": [
+            {
+              "expression": "lead_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "resolved_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "partner_notifications_lead_id_partner_leads_id_fk": {
+          "name": "partner_notifications_lead_id_partner_leads_id_fk",
+          "tableFrom": "partner_notifications",
+          "tableTo": "partner_leads",
+          "columnsFrom": [
+            "lead_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "partner_notifications_recipient_id_identity_users_id_fk": {
+          "name": "partner_notifications_recipient_id_identity_users_id_fk",
+          "tableFrom": "partner_notifications",
+          "tableTo": "identity_users",
+          "columnsFrom": [
+            "recipient_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "partner_notifications_dedupe_key_unique": {
+          "name": "partner_notifications_dedupe_key_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "dedupe_key"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {
+        "partner_notification_recipient": {
+          "name": "partner_notification_recipient",
+          "value": "(\"partner_notifications\".\"audience\" = 'coverview' and \"partner_notifications\".\"recipient_id\" is null) or (\"partner_notifications\".\"audience\" in ('partner','wallet') and \"partner_notifications\".\"recipient_id\" is not null)"
+        },
+        "partner_notification_priority": {
+          "name": "partner_notification_priority",
+          "value": "\"partner_notifications\".\"priority\" in ('normal','high','urgent')"
         }
       },
       "isRLSEnabled": false

@@ -1,3 +1,4 @@
+import { defaultPilotageQuery } from "./features/pilotage-display";
 import { Link, Outlet, useLocation } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import {
@@ -10,6 +11,7 @@ import {
   ShieldCheck,
   ArrowUpRight,
   Menu,
+  Bell,
 } from "lucide-react";
 import { Button, Sheet, SheetContent, SheetHeader, SheetTitle } from "@coverview/ui";
 import { useState } from "react";
@@ -22,6 +24,11 @@ const links = [
   { to: "/leads", label: "leads", icon: PanelsTopLeft },
   { to: "/clients", label: "clients", icon: Users },
   { to: "/tasks", label: "tasks", icon: CheckSquare },
+  { to: "/notifications", label: "notifications", icon: Bell },
+  { to: "/collaborations", label: "collaborations", icon: Users },
+  { to: "/marketplace", label: "marketplace", icon: PanelsTopLeft },
+  { to: "/commercial-conditions", label: "commercial", icon: ShieldCheck },
+  { to: "/remunerations", label: "remunerations", icon: CheckSquare },
   { to: "/agenda", label: "agenda", icon: CalendarDays },
   { to: "/profile", label: "profile", icon: UserRound },
 ] as const;
@@ -40,7 +47,10 @@ function Workspace() {
       </div>
       <nav aria-label={t("navigation")} className="space-y-1">
         {links
-          .filter((link) => context.operational || link.label === "profile")
+          .filter(
+            (link) =>
+              context.operational || link.label === "profile" || link.label === "remunerations",
+          )
           .map(({ to, label, icon: Icon }) => (
             <Link
               key={to}
@@ -52,6 +62,42 @@ function Workspace() {
               {t(`nav.${label}`)}
             </Link>
           ))}
+        {context.operational && (
+          <>
+            <Link
+              to="/statistics"
+              search={{
+                ...defaultPilotageQuery(),
+                scope: context.administrator ? "network" : "self",
+              }}
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-muted-foreground hover:bg-muted"
+            >
+              <PanelsTopLeft className="size-4" />
+              {t("pilotage:title")}
+            </Link>
+            <Link
+              to="/goals"
+              search={{ state: "active" }}
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-muted-foreground hover:bg-muted"
+            >
+              <CheckSquare className="size-4" />
+              {t("pilotage:goalsTitle")}
+            </Link>
+          </>
+        )}
+        {context.administrator && (
+          <Link
+            to="/quality"
+            search={{ state: "open" }}
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-muted-foreground hover:bg-muted"
+          >
+            <ShieldCheck className="size-4" />
+            {t("quality:title")}
+          </Link>
+        )}
         {context.administrator && (
           <Link
             to="/applications"
@@ -111,7 +157,13 @@ function Workspace() {
           </div>
         </header>
         <main id="main" tabIndex={-1} className="mx-auto max-w-screen-2xl space-y-8 p-5 sm:p-8">
-          {context.operational ? <Outlet /> : <ApplicationPage />}
+          {context.operational ||
+          pathname === "/remunerations" ||
+          pathname.startsWith("/remunerations/") ? (
+            <Outlet />
+          ) : (
+            <ApplicationPage />
+          )}
         </main>
       </div>
       <Sheet open={open} onOpenChange={setOpen}>

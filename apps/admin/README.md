@@ -1,10 +1,26 @@
 # Admin — accès protégé
 
+Supervision Partner : synthèse des objectifs, accès au pilotage réseau et à la file Qualité. Traitement motivé, partage explicite, clôture vérifiée et configuration sourcée de Google sous Admin/MFA. [Propriétaire lot3](../api/src/modules/partner-workspace/docs/quality-pilotage.md) ; aucune substitution au client pour répondre ou consentir.
+
+Supervision Partner : accès aux pages Marketplace, Conditions commerciales et Accords/rémunérations, sous session/permission/MFA réelles. Examen motivé des conditions, ouverture et administration des dossiers économiques ; aucune substitution au mandat Wallet ou à l’acceptation du fournisseur. [Règles et limites du lot2](../api/src/modules/partner-workspace/docs/marketplace-economy.md).
+
+Partner → Demandes d'orientation reçoit les résumés explicitement transmis par les conseillers, suit une action datée et permet d'examiner des intervenants à partir de leurs sources avant une proposition manuelle de collaboration. [Règles, audiences et limites](../api/src/modules/partner-workspace/docs/counsel-orchestration.md). Aucun dossier personnel par besoin n'est révélé ;0057 hors catalogue, activation/V3 ouverts.
+
+Candidatures dans la supervision Partner permet la consultation de la [capacité personnelle](../api/src/modules/partner-workspace/docs/personal-capacity.md) sous permission/MFA : déclaration, validité, historique et liens de travail observés. Aucun acte au nom du conseiller ni attribution automatique.
+
+Candidatures dans la supervision Partner permet la lecture du [dossier de modes explicitement partagés](../api/src/modules/partner-workspace/docs/shared-modes.md), sous permission/MFA. Publication et retrait restent personnels ; aucun acte au nom du conseiller.
+
 ## Résumé
+
+Depuis la supervision Partner, la fiche Lead ouvre aussi [l'adéquation minimale du référent](../api/src/modules/partner-workspace/docs/referent-assessment.md), sous les contrôles Admin/MFA existants. Les dossiers professionnels privés gardent leurs entrées distinctes ; recette habilitée non vérifiée.
 
 Application Admin destinée aux équipes CoverView, avec `admin.coverview.ch` comme sous-domaine cible. Le compte donne accès à la gestion des utilisateurs, de leurs profils et de leurs documents, avec autorisation administrative et MFA côté serveur.
 
 `/partner` ouvre les compteurs du réseau et les liens vers la supervision des candidatures et le pipeline global de [Partner](../partners/README.md), sous les mêmes contrôles administratifs. État partiel et limites : [ledger](../../roadmap/evidence/partner-core.md).
+
+La fiche opérationnelle Partner permet aussi la lecture des [préférences de conseil par besoin](../api/src/modules/partner-workspace/docs/advice-preferences.md). Leur confirmation reste au propriétaire Wallet courant ; aucune confirmation Admin au nom du client. Recette habilitée toujours ouverte.
+
+`/partner/continuity` configure l'acceptation et le calendrier des prochaines attributions, avec motif obligatoire et historique des vingt dernières versions dans un panneau. Les règles serveur et les échéances figées sont décrites dans le [module Partner](../api/src/modules/partner-workspace/README.md#paramètres-et-calendrier-de-continuité--relais-fb54). Cache privé par utilisateur/session, actualisation explicite pour préserver la saisie, conflit de révision sans écrasement. Types/build vérifiés ; le compte réel disponible reste refusé, formulaire opérationnel non vérifié en navigateur.
 
 ## Périmètre
 

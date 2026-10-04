@@ -116,6 +116,7 @@ export function CreateLeadDialog({
           <DialogTitle>{t(lead ? "create.edit" : "create.title")}</DialogTitle>
           <DialogDescription>{t("create.description")}</DialogDescription>
         </DialogHeader>
+        <p className="text-sm text-muted-foreground">{t("advice.afterCreate")}</p>
         <form
           className="space-y-5"
           onChange={() => setKey(crypto.randomUUID())}

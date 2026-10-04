@@ -6,6 +6,12 @@ Source commune des tokens et primitives de présentation de Wallet, de l’espac
 
 ## Périmètre et consommation
 
+`SignatureEvidence` présente des faits déjà autorisés et un tracé reçu, sans décision métier. `formatZurichDateTime` et `parseZurichDateTime` partagent la conversion civile Europe/Zurich, à la minute ou à la seconde pour les constats post-signature ; le parseur refuse les heures ambiguës/inexistantes. Le pad Wallet dispose de commandes clavier en plus du pointeur et du tactile.
+
+`parseZurichDateTime` convertit un champ civil `datetime-local` en instant pour les échéances explicites d'orientation. Indépendant du fuseau du navigateur, il refuse les heures inexistantes ou ambiguës au changement d'heure ; les contraintes métier et la validation finale restent dans les contrats/API. Son oracle DST est exécuté depuis Wallet.
+
+`swissCantonNamesFr` centralise les libellés cantonaux auparavant détenus par www, réemployés par Partner et Wallet. Il reste une présentation sans règle d'éligibilité ; les identifiants validables et leurs usages sont décrits dans [le module propriétaire](../../apps/api/src/modules/partner-workspace/docs/professional-practice.md).
+
 Les trois frontends importent `@coverview/ui/styles.css`, qui branche Tailwind et le thème commun. Dans `apps/www/src/styles/global.css`, la directive `@source "../../../../packages/ui/src"` permet à Astro de compiler les utilitaires des composants partagés. Importer uniquement `theme.css` ne suffit pas à leur rendu complet. Les assets et tokens historiques de `assets/brand` sont conservés mais ne sont plus importés par ce package.
 
 `src/theme.css` charge les WOFF2 locaux Lausanne pour les titres et le corps, ainsi que les OTF locaux MONTECH V.02 Regular et Medium pour les usages auparavant attribués à Geist Mono. Les variantes et la provenance de Lausanne sont décrites dans le [README Lausanne](src/fonts/lausanne/README.md). L’alias `--cv-font-mono` reste compatible avec les consommateurs ; Montech n’est toutefois pas une fonte à chasse fixe. Les fichiers, graisses 400/500, métadonnées et provenance sont décrits dans le [README Montech](src/fonts/montech/README.md).

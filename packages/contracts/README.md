@@ -1,5 +1,9 @@
 # Contrats publics
 
+`partner-conclusion` porte l’invitation exacte, le reçu natif et les constats séparés ; `partner-navigation` les vues privées versionnées. Règles et limites : [conclusion](../../apps/api/src/modules/partner-workspace/docs/conclusion.md), [navigation](../../apps/api/src/modules/partner-workspace/docs/navigation.md).
+
+Les sous-chemins `partner-quality`, `partner-communications` et `partner-pilotage` définissent les entrées/DTO exécutables du [lot3 Partner](../../apps/api/src/modules/partner-workspace/docs/quality-pilotage.md). Aucune signature ni zéro financier inférés d’une source absente.
+
 ## Résumé
 
 Schémas Zod exécutables consommés par Fastify et le client HTTP commun.

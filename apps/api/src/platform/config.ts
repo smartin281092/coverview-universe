@@ -62,6 +62,10 @@ export const environmentSchema = z
       .enum(["true", "false"])
       .default("true")
       .transform((value) => value === "true"),
+    PARTNER_JOBS_ENABLED: z
+      .enum(["true", "false"])
+      .default("true")
+      .transform((value) => value === "true"),
     WORKOS_API_KEY: z.string().min(1).optional(),
     WORKOS_CLIENT_ID: z.string().startsWith("client_").optional(),
     WORKOS_ISSUER: httpUrl.default("https://api.workos.com/"),
@@ -127,11 +131,17 @@ export const environmentSchema = z
       // Local cookies are host-only: mixing localhost and 127.0.0.1 loses the shared session.
       if (config.AUTH_PARTNER_ORIGIN) {
         const origin = new URL(config.AUTH_PARTNER_ORIGIN);
-        if (origin.origin !== config.AUTH_PARTNER_ORIGIN ||
+        if (
+          origin.origin !== config.AUTH_PARTNER_ORIGIN ||
           (origin.protocol !== "https:" && !(isLocal && isLoopback(origin.hostname))) ||
           !config.CORS_ORIGINS.includes(config.AUTH_PARTNER_ORIGIN) ||
-          (isLocal && origin.hostname !== new URL(config.AUTH_API_ORIGIN).hostname)) {
-          context.addIssue({code: "custom", path: ["AUTH_PARTNER_ORIGIN"], message: "Partner requires an exact permitted origin on the authentication host"});
+          (isLocal && origin.hostname !== new URL(config.AUTH_API_ORIGIN).hostname)
+        ) {
+          context.addIssue({
+            code: "custom",
+            path: ["AUTH_PARTNER_ORIGIN"],
+            message: "Partner requires an exact permitted origin on the authentication host",
+          });
         }
       }
       if (

@@ -1,0 +1,35 @@
+# Association documentaire personnelle d’une version d’offre
+
+Le relais a685 corrige le lecteur de texte selon FRONT-14 : vue remplaçante dédiée, retour conservant saisie/commande incertaine. Une association courante à une compagnie permet de préparer ses [passages personnels de convention](solution-clauses.md), sans conclure à une identité juridique ou un droit de distribution.
+
+La [lecture conjointe v2](bound-solution-evidence.md) permet de relire cette association courante avec la convention d’une compagnie choisie explicitement, sans persister d’avis de distribution ni transformer le rapprochement humain en identité vérifiée.
+
+Propriétaire : partner-workspace. Décisions déléguées SOL6–9 du 3 octobre 2026, relais214e ; brief I.13 et III.1–3/15. [Plan et audit](../../../../../../roadmap/plans/partner-solution-binding.plan.md), [preuves](../../../../../../roadmap/evidence/partner-core.md#relais-214e--association-documentaire-personnelle). Les [sources de solution](solution-evidence.md) et [conventions](conventions.md) gardent leurs règles propres.
+
+## Sens et preuve
+
+**partner.solution-binding.1** — Une association appartient à son auteur et à une version exacte d’offre. Elle consigne cinq mentions : compagnie, partie juridique nommée, produit, variante et version du produit. Chacune est un passage exact unique sur une page de l’analyse canonique de l’original, ou une inconnue explicite. Le serveur contrôle les caractères et coordonnées ; le sens du passage reste une appréciation humaine. Une extraction erronée n’acquiert aucune valeur probante par cette validation.
+
+**partner.solution-binding.2** — Les libellés libres de l’offre ne sont jamais rapprochés automatiquement. Une compagnie du répertoire commercial peut être choisie explicitement avec une mention compagnie sourcée et un motif. Le répertoire ne constitue pas un registre juridique ; aucune identité de partie/produit/variante/version canonique n’existe dans les sources actuelles. Les deux identités restent donc non vérifiées et l’appréciation reste humaine. Aucun droit de distribution, admission, choix du client ou accord économique n’en découle. Les six autres contrôles des bilans restent inchangés.
+
+**partner.solution-binding.3** — La table conserve les coordonnées page/début/fin, la référence exacte de source et le contexte personnel ; elle ne copie ni le document, ni son analyse, ni les passages. La lecture résout les passages seulement si le même original sûr est encore courant, avec la même empreinte et révision documentaire. En historique aussi, une source changée/indisponible masque les extraits. Une page courante à la fois peut être consultée pour citer le texte, au maximum30000caractères ; les20numéros de pages au plus permettent de naviguer. Cette lecture possède la même audience personnelle et ne transporte aucune convention tierce.
+
+## Portée, audience et concurrence
+
+**partner.solution-binding.4** — Le contexte commun du besoin fige sujet/propriétaire, révision monotone du besoin et du profil, périmètre professionnel et mandat personnels, préférences, référent et dernière demande de changement ; s’y ajoutent ID/version/activité d’offre et référence de source. Un aller-retour de portée ou de révision documentaire ne rétablit jamais l’ancien enregistrement. L’historique est filtré par sujet courant,20versions par page ; la dernière version globale fixe toujours la révision optimiste. Un nouveau sujet ne voit pas l’ancien historique.
+
+**partner.solution-binding.5** — Session, activité, organisation, catégorie et responsabilité ou contribution de conseil sont vérifiées. Wallet, manager seul, voisin et Admin non affecté sont exclus ; l’Admin personnellement affecté requiert permission/MFA actuels. Aucun advisorId client n’est reçu. Rejouer une clé relit les droits et la situation actuelle, sans restaurer une ancienne projection. Le GET utilise repeatable read et un instant daté ; il revérifie les échéances d’accès après les attentes. Une erreur409 exige relecture.
+
+**partner.solution-binding.6** — La commande verrouille acteur/mandat/Lead, profil canonique puis original ; elle relit la révision de fichier et les échéances après attente, contrôle la portée et la révision, puis enregistre une version et son audit privé dans la même transaction. Une seule clé pour le même contenu rejoue la projection courante ; une clé réutilisée pour un autre contenu est refusée. Le motif est requis. L’échéance personnelle est future et plafonnée par celle de l’offre lorsqu’elle est connue. Source sans texte, désactivée ou non courante, offre inactive/expirée/refusée/annulée/remplacée et demande client ouverte empêchent une nouvelle association. Le retrait motivé demeure possible sous droits actuels et conserve l’historique.
+
+## Parcours et contrats
+
+Partner → Lead → Offres → Sources de solution → Association documentaire. Les dialogues se remplacent. Courant, formulaire en six étapes, historique et détail sont distincts. Chaque mention est vide initialement ; texte extrait consultable page par page et original via la route privée existante. Le rapprochement commercial, motif, échéance et confirmation sont explicites. Cache session/Lead/offre/page, gcTime0, relecture10s/manuelle/retour et erreur masquante ; aucune persistance navigateur. Une commande à résultat incertain conserve en mémoire son contenu et sa clé à travers une erreur GET, pour réessai identique. Une réponse4xx impose une relecture. Retour/fermeture sont bloqués pendant l’envoi.
+
+GET et POST `/partner/leads/:id/offers/:offerId/solution-binding` ; GET strict beforeRevision/sourcePage facultatifs, POST contrat Zod strict partagé. Le client HTTP commun valide les réponses et commandes. L’audit enregistré/retiré est privé, sans lead_id et sans extrait ni motif. Aucun événement visible dans la timeline, notification, tâche, rendez-vous, horloge, convention, contrôle d’expertise/capacité/conflit, choix Wallet ou attribution n’est modifié.
+
+## Activation et limites
+
+0052_partner_solution_binding reste hors du catalogue de déploiement protégé. Elle a été générée dans une copie temporaire complète incluant0049+0050+0051 et les trois globs de schéma ; le second passage est sans delta. Intégration du catalogue explicitement autorisée puis migrations→API→UI nécessaires avant activation.0046–0048 ne sont pas appliquées à la base partagée ; aucune base partagée n’a été lue ou migrée. Rollback applicatif : retirer l’entrée et les routes sans supprimer les versions conservées. Pas de nouvelle dépendance, variable, permission, room, job ou fournisseur.
+
+Les preuves et nombres V0/V1/V2 sont au ledger. PostgreSQL18 isolé et antivirus/extraction synthétiques ne constituent pas une recette d’original réel. V3 rempli/clavier/mobile reste ouvert sans nouvel accès WorkOS ; aucune session/grant/client réel fabriqué. RLS et rétention/export/effacement S-130/S-131 hérités restent ouverts. L’appréciation précise des conventions/distribution, leur source courante et les identités externes restent à traiter ; brief/S-110/S-042a non clos.

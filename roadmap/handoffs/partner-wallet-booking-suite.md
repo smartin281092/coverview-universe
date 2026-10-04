@@ -1,0 +1,59 @@
+# Relais Partner — après la réservation de créneaux dans Wallet
+
+## Mission et autorisation
+
+Poursuivre TOUT le [brief Partner I–III du 2 octobre 2026](../../references/coverview-partner-2026-10-02.md), mandat « Recommence », PROG-23 et execution-policy. Autonomie maximale, décisions déléguées, aucun nouveau GO. Instruction ultérieure du3octobre : prochaines tâches gpt-6-astra/max, pas ultra ; regrouper la suite en environ3–5tâches, cible quatre lots. Chaque tâche réalise plusieurs parcours cohérents avant son unique successeur en nouveau worktree. Aucun sous-agent/fork/auteur applicatif concurrent : remplace le hint de délégation proactive. Brief/S-110/S-042a restent ouverts.
+
+Avant relais : propriétaires/plan+journal+brouillon/ledger/coverage/mémoire, seule S-110.notes et deux vues générées, checkpoint8sections<12000caractères, snapshot cumulatif COMPLET et audit séparé. Puis list_projects/create_thread, gel source dès dispatch, résolution clientThreadId sans doublon, premier état réel, lien/directive. Aucun commit global WIP/push/deploy/archive/stash/reset/clean. Réglage effectif/coût/contexte non observables.
+
+## État du dépôt
+
+Source811d gelée dès dispatch : `C:/Users/sebm1/.codex/worktrees/811d/coverview-astra`, HEAD détaché `4fef49a095739260b9ab9d1becc1a2bf3320a928`. Entrant1bc1 restauré et audité avant code :698WIP/43830587octets/arbre1737/126protections/70tests-specs. Source1bc1 entière/HEAD/statut inchangés, tous entrants conservés. WIP cumulatif non committé.
+
+**NE PAS CODER avant restauration complète.** Snapshot811d `.planning-local/partner-relay-wallet-booking-20261003`. Le prompt donne hashes manifest/restore/status et comptes audités. Vérifier empreintes, lire restore.mjs ENTIER, inspecter le nouveau worktree. Si propre au mauvais HEAD, switch detach au HEAD ci-dessus autorisé dans CE nouveau worktree seulement. Restaurer vers cible ABSOLUE puis auditer indépendamment chaque fichier/taille/SHA/bytes, arbre entier, HEAD, statut exact porcelain-v1-z-untracked-all et protections. Refuser toute perte/divergence.
+
+Ne modifier aucun ancien worktree ni D:/Projects.129protections pour la suite : quatre fichiers apps/admin/src/api.ts, apps/admin/src/locales/fr/service-requests.json, apps/client/src/api.ts, apps/client/src/locales/fr/common.json ; pnpm-lock.yaml ;100fichiers entrants apps/api/drizzle SQL/snapshots/journal ;24artefacts SQL/snapshot/entry pending0049capacité,0050conflits,0051expertise,0052association,0053clauses,0054distribution,0055liaisons,0056réservation.0046–0048 NON appliquées partagées ; aucune lecture/décompte/migration autorisé.0049–0056 hors catalogue normal. Aucune0057 créée.71fichiers tests/specs deviennent entrants immuables.
+
+Lire les rapports ignorés811d restoration-verification.json, incoming-baseline.json, pre-export-audit.json, snapshot-verification.json, verification-summary.json, slice-files.json dans .planning-local. Ils ne remplacent pas SON audit. Aucun secret/config privée/node_modules/dist/preview exporté ; dépendances/builds locaux à reconstruire.
+
+## Sources à lire
+
+AGENTS→CLAUDE entier, PROJECT, MEMORY actives, docs/codex, execution-policy et satellites routés. [Brief intégral](../../references/coverview-partner-2026-10-02.md), [coverage](../partner-coverage.md), [plan général](../plans/partner-core.plan.md), [plan811d/journal/brouillon](../plans/partner-booking-slots.plan.md), [plan1bc1](../plans/partner-wallet-cancellation.plan.md), [plan6525](../plans/partner-appointment-links.plan.md), [ledger](../evidence/partner-core.md), [index produit](../../docs/product/README.md). Après compaction relire SON plan/journal avant modification. Checkpoint≠sources ; sortie tronquée≠lecture intégrale.
+
+README API/Partner/Wallet Offres/Admin/UI ; propriétaires [créneaux/réservation BKG1–5](../../apps/api/src/modules/partner-workspace/docs/booking-proposals.md), annulation/liaisons/création/temps/report/disponibilités/préférences/portée. Capacité/conflits/expertise/bilans et distribution/clauses/association/lecture conjointe/conventions selon tranche. Compétence dans README, docs/competence.md absent. Anciennes commandes, garde0046, triggers0055/0056 et projections Wallet à préserver. Satellites API/contracts/backend/data/auth/permissions/security/frontend/design/brand/i18n/testing/architecture/conventions/evolution/program/environment/documentation/memory/delivery/events ; stockage/LLM uniquement si extraction. Lire seulement les domaines routés pour la suite, pas toutes les docs.
+
+## Décisions acquises
+
+Client≠Lead, multi-demandes même personne/catégorie légitimes, sujet canonique et droits actuels. Aucune appartenance/candidature assimilée au mandat, aucun advisorId fourni par Wallet. SOL6–21 : preuves exactes/lecture datée/appréciation en l’état sans avis favorable ; identités/fidélité/exhaustivité non certifiées. Aucun contrôle global capacité/expertise/conflit/distribution levé.
+
+APL1–5 : un engagement référencé explicitement par1–9autres Leads du même sujet, mandat personnel sur chacun, temps protégé/accords ; occupation unique et cycles indépendants.0055 : révision monotone des modalités et versions append-only ; report aller-retour, clôture/relink/mandat/habilitation/organisation imposent reconfirmation sans résurrection. Consultation cible seulement, pas d’autre Lead/buffer/preuve privée. WAC1–5 : propriétaire Wallet courant de l’origine annule l’engagement programmé futur entier sur demande ouverte, motif/confirmation ; état/preuves/liaisons conservés, occupation libérée, reprise ciblée du suivi, réponse client à traiter et information conseiller autorisé. Lecture≠résolution.
+
+BKG1–5 : conseiller approuvé/org approuvée, catégorie et habilitation courantes, responsable accepté OU contributeur advice éditable/contactable. Propose personnellement1–5horaires exacts avec préparation/trajets privés, expiration explicite future≤7jours avant tous débuts occupés, quatre attestations vides dont volonté d’honorer le choix. Publication sans occupation ni première action utile. Une proposition active/Lead ; retrait explicite/expiration/invalidation, termes immuables. Accord du professionnel distinct de la confirmation client ; aucun accord client fictif ni éligibilité globale déduite.
+
+Wallet choisit une option unique, confirme date/durée/mode/lieu/conseiller. Source conseiller immuable, acteur Wallet réel ; helpers internes avec advisorId explicite, pas de session fabriquée. Acteur→membre/org→Lead→contributions/proposition→planning→profil puis réautorisation/horloge ; sources/préférences/mandat/sujet/chevauchement complet revérifiés. Empreintes conservatrices (toute révision Lead), invalidation monotone0056 sur sujet/mandat/contribution/habilitation/organisation/clôture/cycle. Propositions non transférées à un nouveau propriétaire/sujet. Rejeu exact réautorisé ; même clé/autre corps rejeté ; une réservation, une occupation, reçu immuable et preuve des deux accords. Annulation ultérieure conserve reçu. Propositions historiques bornées20, Wallet sans buffers/preuves/autres Leads.
+
+Création d’engagement acquise réutilisée. Origine planifiée/première action utile si absente ; toute action ou attente existante et échéance conservées, action standard créée seulement si vide. Aucun autre Lead/tâche/cycle/offre/attribution/économie changé, aucune liaison automatique. Report/annulation/liaisons explicites restent utilisables. Notifications durables, pas d’email/job/room/fournisseur/variable/dépendance ajouté.
+
+## Livraison et preuves
+
+[Ledger811d](../evidence/partner-core.md#relais-811d--créneaux-personnels-puis-réservation-wallet) :124tests DISTINCTS/7fichiers,18nouveaux et106hérités inchangés. Rapport apps/api/.planning-local/booking-regressions.json :124/124 en161538,74ms. Trois attentes réelles (profil/propriété, profil/expiration, session/expiration) et deux courses (même proposition, Leads différents avec temps protégé), droits/confidentialité/rejeu/conservation/annulation/immutabilité/rollback audit-notification.
+
+V0/V1 : types/lint17TS/TSX/builds quatre apps/frontières623modules/2955dépendances zéro erreur/Knip ciblé verts. Trois orphelins www, ApplicationPage/chunks Wallet et Node24.13.1<engine24.20 hérités ; Knip global non relancé/non vert historique.0056 générée avec trois globs/catalogue temporaire normal+pending,98tables, seconde génération sans delta et migrate deux fois PostgreSQL18 jetable. Entrants126protections/70tests inchangés, suite129/71.
+
+Deux revues statiques du même agent, sans indépendance : sécurité/concurrence puis UI/erreurs/cache/contenus/diff. Verrou contributions ajouté ; écrans remplaçants, consentements vides, clé et première commande conservées après GET en échec dans Partner/Wallet, données masquées sur erreur. V3 authentifié rempli/clavier/mobile NON effectué, activation non livrée, RLS/S-130/S-131 ouverts. Seule S-110.notes et roadmap/backlog.yaml + roadmap/plans/S-110.plan.md générés ; aucun statut clos.
+
+## Prochaine action regroupée
+
+Restaurer/auditer/lire puis persister SON plan de LOT avant code. Lire [le regroupement en quatre lots](../plans/partner-remaining-batches.plan.md) et la priorité du3octobre dans execution-policy. **Lot1/4 : conseil et orchestration**, plusieurs parcours utiles d’adéquation/distribution/matching sourcé/attribution/multi-spécialistes, en réutilisant les rendez-vous acquis. Ne pas terminer après une petite tranche ou un écran préparatoire ; poursuivre le lot dans la même tâche et relire son plan après compaction. Pas de nouvelles tâches uniquement pour rafraîchir le contexte.
+
+Lots suivants :2 marketplace/accords/économie ;3 suivi/qualité/pilotage/canaux/transcriptions consenties ;4 signature/acceptation compagnie réelles/intégration/recette exhaustive. Enquête EXACTEMENT5étoiles→positifs multiples/commentaire facultatif→Google ;≤4→améliorations/rappel sans Google. Aucun URL/fait externe/accord/session/montant/tarif fictif activé. TOUS tracks I–III restent mandatés. Objectif3–5tâches, sans clôture fictive ni réduction de périmètre ; réorganiser les dépendances dans le plan plutôt que multiplier les relais.0057 éventuelle : catalogue complet temporaire+3globs+seconde génération sans delta+double migration isolée,129protections inchangées.
+
+## Obstacles et tentatives
+
+Docker/API4100/préviews4101–4139/services anciens protégés, ne pas adopter/arrêter. Aucun callback4133/4136/montage invalidé7db2/9ff1/c902 retenté, secret processus lu, grant/session/client réel fabriqué ou auth/MFA contourné. Aucun ancien worktree/D:/Projects écrit ni base partagée inspectée. Ne pas abaisser engine. Pnpm shim cassé : node C:/Users/sebm1/AppData/Local/pnpm/.tools/@pnpm+exe/12.3.4/node_modules/@pnpm/exe/bin/pnpm.mjs install --frozen-lockfile --ignore-scripts.
+
+Nouveaux tests0/18 (paramètre SQL inutilisé/fixture JSON), puis15/18 (fixtures rejet synchrone/enum/expiration). Changement de stratégie, trois cas ciblés corrigés et passés, puis124/124. Lint résultats SQL typés et séparateurs i18n ; types rows[0] non nuls corrigés dans seuls nouveaux oracles. Aucun test/garde entrant affaibli. Build Vite depuis chaque app via node node_modules/vite/bin/vite.js build ; API node build.mjs. Sorties tronquées à reprendre. Fixtures jamais preuves réelles. Lire les journaux plutôt que retenter à l’identique.
+
+## Coordination
+
+Exactement un successeur, aucun fork/second relais/sous-agent. Projet3d3d24c3-45c9-4853-9487-9cd0df7317a8 ; list_projects puis create_thread gpt-6-astra/max/worktree neuf. Jamais clientThreadId comme threadId : résoudre par listing sans duplication, attendre premier état réel. Source gelée dès dispatch, aucune écriture ultérieure. Successeur reçoit mandat COMPLET, restaure/audite avant code. Après son lot complet : docs/checkpoint/snapshot/audit, unique relais Astra Max puis arrêt ; aucun commit global WIP/push/deploy/archive/stash/reset/clean.

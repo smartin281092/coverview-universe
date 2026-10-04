@@ -18,7 +18,7 @@ Les mutations sensibles verrouillent la session, l'habilitation et le Lead, vér
 
 Une table Client autonome et une copie des PDF dans Partner ont été écartées : elles dupliqueraient les identités et le contrôle des accès. Un rôle organisationnel implicite serait contraire au brief. Les ajouts sont des tables additives et des sous-chemins de contrats ; les clients existants continuent à fonctionner.
 
-Les prises de décision Wallet sont persistées. Elles ne simulent pas une signature ou une acceptation d'assureur. Le premier parcours rafraîchit les lectures toutes les 10–15 secondes ; notification durable, diffusion temps réel et réattribution automatique restent ouvertes dans le plan. Le journal local ne prétend pas être un outbox livré.
+Les prises de décision Wallet sont persistées. Elles ne simulent pas une signature ou une acceptation d'assureur. Le premier parcours rafraîchit les lectures toutes les 10–15 secondes ; des notifications de service internes atomiques et un scheduler de continuité sont désormais raccordés. Aucun outbox externe, email/SMS ni diffusion immédiate revendiqués. La réattribution automatique à un conseiller attend le matching complet ; la reprise humaine est bornée. Règles et exploitation : README propriétaire.
 
 ## Migration et reprise
 

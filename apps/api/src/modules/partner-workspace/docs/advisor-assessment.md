@@ -1,0 +1,53 @@
+# Adéquation personnelle pour un besoin
+
+Depuis les sources, l’[appréciation personnelle précise](need-expertise.md) conserve un dossier privé distinct. Aucun de ses résultats ne remplace les six contrôles des contrats v1/v2.
+
+Les [sources personnelles d’expertise](need-expertise-evidence.md) ouvrent une consultation privée distincte depuis la rubrique Compétence. Elle rapproche le besoin et le dossier documentaire existant sans enrichir les contrats du bilan ni lever son contrôle d’expertise précise.
+
+L’[examen personnel des conflits](need-conflicts.md) s’ouvre dans une vue remplaçante du même dialogue. Il conserve un dossier séparé ; les contrats v1/v2, leur résultat et leurs six contrôles restent inchangés.
+
+## Périmètre et parcours
+
+Propriétaire : partner-workspace. Ce bilan rapproche les sources existantes pour le conseiller qui le consulte, dans un Lead où il intervient déjà. Il répond au brief I.10.2–10.4/18/20 et II.7, sans classement ni attribution. Fiche Lead → « Mon adéquation au besoin » → critères, puis « Consulter les sources » dans une vue qui remplace le bilan du dialogue. Le matching entre candidats reste ouvert. Le [bilan minimal du référent](referent-assessment.md) dispose désormais de son propre contrat pour les audiences existantes du Lead ; il ne partage pas ce DTO personnel.
+
+## Sources et interprétation
+
+Les [préférences du besoin](advice-preferences.md) fournissent uniquement les souhaits confirmés par le propriétaire Wallet courant, dans la portée actuelle. Un changement de besoin/profil/propriétaire, même suivi d'un retour aux anciennes valeurs, impose la reconfirmation existante. Aucun ancien souhait n'est projeté dans ce bilan, ni historique d'un autre sujet. Langue libre, interface et domicile ne fournissent aucun défaut.
+
+Les [langues et cantons](professional-practice.md) et les modes issus des [disponibilités déclarées](professional-availability.md) ne sont utilisés que dans leur périmètre professionnel courant. Le bilan distingue correspondance déclarée, écart déclaré, inconnu et absence de comparaison territoriale. Vide ne signifie ni toutes les possibilités ni incapacité ; l'absence d'un code dans une liste renseignée constitue un écart à clarifier. Pour téléphone/visio confirmés, aucun canton de rendez-vous physique n'est comparé ; cela ne statue sur aucun droit territorial. Les plages, absences et engagements ne sont pas projetés.
+
+L'examen de compétence par catégorie conserve ses règles de source sûre, révision exacte, portée, validité, retrait et [périmètre professionnel](professional-scope.md). Son résumé ne démontre pas l'expertise nécessaire au besoin précis. Le bilan distingue le choix de référent confirmé pour la catégorie et l'affectation actuelle ; il ne révèle pas les justificatifs d'un autre conseiller. Une demande client de changement non résolue est signalée en priorité, même si le conseiller est aussi le référent choisi.
+
+Les conventions et la solution exacte distribuable restent à vérifier : aucune compagnie ni produit canonique du besoin ne sont déduits d'un texte ou d'un [dossier convention](conventions.md). Disponibilité réelle, capacité pour ce besoin, conflits, expertise précise et qualité restent à vérifier humainement, y compris avec une déclaration de capacité courante. Aucun score global, supériorité, habilitation, certification, commission, réservation ou décision d'attribution n'est calculé.
+
+## Capacité personnelle dans la version2
+
+Le nouveau [dossier de décision personnelle par besoin](need-capacity.md) permet une appréciation humaine privée depuis ce dialogue. Il possède une route/persistance séparées ; aucun résultat n'est injecté dans les contrats v1/v2 décrits ici. Leur contrôle de capacité demeure volontairement à vérifier. Activation0049 différée et recette V3 ouvertes.
+
+**partner.advisor-capacity.1** — Le bilan peut rapprocher la dernière [déclaration personnelle de capacité](personal-capacity.md) et ses liens de travail enregistrés, dans sa seule audience personnelle existante. Il ne publie ces informations ni dans Wallet, ni à l'organisation, ni dans le bilan du référent ou le détail partagé du Lead. Admin n'accède pas au bilan personnel d'un tiers ; son entrée de supervision du dossier de capacité demeure distincte.
+
+**partner.advisor-capacity.2** — États explicites : manquant, retiré, portée professionnelle modifiée, expiré, catégorie non couverte ou déclaré. La portée modifiée prime l'expiration ; le retrait prime les deux. La position qualitative est projetée seulement si la dernière déclaration est actuelle, non expirée et couvre la catégorie du besoin. Elle reste nulle dans tous les autres cas, sans retour à une ancienne version. L'exception de catégorie d'un conseiller Admin ne rend pas sa déclaration applicable hors catégories déclarées. Révision de déclaration/professionnelle, catégories, portée, date d'enregistrement et échéance de cette dernière source restent visibles ; aucun historique complet ni nom de partie n'est ajouté.
+
+**partner.advisor-capacity.3** — Les trois compteurs utilisent la définition du propriétaire capacité, dans une rubrique distincte. Leur instant d'observation et l'évaluation d'expiration sont ceux du début du bilan (`assessedAt`), au sein du même instantané repeatable read. Un changement ultérieur ne réécrit pas ce bilan ; la relecture montre le nouvel état. Une expiration pendant une attente de verrou n'est pas artificiellement présentée comme connue au début de l'instantané. L'interface date explicitement le résultat et le relit toutes les10secondes ou manuellement.
+
+**partner.advisor-capacity.4** — Déclaration globale aux catégories, compteurs et décision humaine pour ce besoin demeurent trois notions distinctes. Le résultat reste `human_review_required`, même avec position `open`, aucun lien enregistré ou une correspondance des autres critères. Les six `remainingChecks` restent inchangés. `unavailable` informe sans retirer une responsabilité, déplacer un rendez-vous ou clore un dossier. Choix du client et demande de changement restent prioritaires. Aucune activité, capacité horaire, limite universelle, admission ou attribution automatique n'en découle.
+
+## Audience, contrat et cohérence
+
+GET `/partner/leads/:id/advisor-assessment`, sans identifiant de conseiller reçu, conserve le contrat `advisorAssessmentSchema` sans version ou avec `version=1`, et ne lit alors aucune table0048. `version=2` retourne `capacityAdvisorAssessmentSchema` avec version explicite, capacité et compteurs privés ; le client HTTP possède une méthode dédiée, sans changer la méthode v1. Session courante, activité opérationnelle et catégorie requises ; conseiller responsable ou contributeur explicitement affecté avec accès de conseil. La visibilité de manager ou d'apporteur ne suffit pas. Admin vérifie permission/MFA et doit lui-même être affecté ; son exception de catégorie ne fournit pas de preuves professionnelles. Wallet, voisin, Lead brouillon/clos ou mandat retiré sont refusés. Les lecteurs Admin ne peuvent pas demander le bilan privé d'un tiers.
+
+Lecture dans un instantané PostgreSQL repeatable read, avec garde session/membre/organisation/Lead/profil, timestamp de début et timeout du pool existant. Les sources peuvent changer après cet instant : une nouvelle lecture recalcule le bilan. Un changement concurrent d'une ligne verrouillée peut produire `PARTNER_CONFLICT` et exige une relecture ; aucune ancienne génération n'est assemblée avec une nouvelle. Les listes sont bornées et les résumés propriétaires réutilisés.
+
+Projection personnelle minimale : critères et raisons, souhaits courants/date/révisions, langues/cantons actuels/date, modes actuels/date/révision, statut/portée/dates de compétence et état du choix de référent. Aucun fichier, nom de fichier, déclaration libre, motif/examinateur, plage/absence, autre Lead ou historique de préférences. Le contrat de détail partagé d'un Lead et les résumés de continuité Wallet ne sont pas enrichis de ces données. La capacité d'ouverture ajoutée au Lead reste une aide UI ; le serveur réautorise chaque lecture.
+
+Cache privé par utilisateur/session/version/Lead, sans stockage navigateur persistant ; suppression à fermeture, relecture toutes les dix secondes et bouton Actualiser. Chargement et erreur utilisent les primitives existantes, toute erreur masque les anciennes données. Les raisons et inconnues sont textuelles et ne dépendent pas de la couleur. Sources et « Examiner ma capacité » remplacent le contenu du même dialogue, avec retour au bilan ; aucun empilement de page ni calcul métier frontend. La source de capacité affiche dates et portée ; la gestion personnelle reste accessible depuis Profil.
+
+## Persistance et exploitation
+
+Aucune écriture métier : responsabilités, horloges, préférences, rendez-vous, tâches, événements et notifications restent inchangés. L'audit administratif d'accès existant reste à la frontière HTTP. Aucun nouvel événement/job/room/fournisseur/paquet/variable, aucune migration. Les migrations entrantes sont conservées ;0046 reste non appliquée à la base partagée. Les règles de rétention/export/effacement S-130/S-131 des sources restent ouvertes, aucune nouvelle preuve persistée ni durée juridique.
+
+Pour la version2, appliquer0048 avant l'API puis l'interface ; aucune migration nouvelle dans980f.0046–0048 restent non appliquées à la base partagée. Sans schéma0048, v1 demeure disponible mais v2 échoue explicitement : une erreur de déploiement n'est pas transformée en capacité manquante. Rollback : revenir au lecteur v1 et conserver les preuves, sans transformation de données. La dérogation RLS héritée reste inchangée.
+
+## État réel
+
+Implémentation initiale au [ledger4eac](../../../../../../roadmap/evidence/partner-core.md#relais-4eac--adéquation-personnelle-sourcée), extension de capacité au [ledger980f](../../../../../../roadmap/evidence/partner-core.md#relais-980f--capacité-privée-dans-le-bilan-personnel). Tests PostgreSQL isolés et deux revues du même agent, sans indépendance revendiquée. V3 rempli/clavier/mobile reste non effectué : aucun nouvel accès WorkOS n'a été fourni depuis le blocage c902. Aucun callback historique retenté, session/habilitation/client réel fabriqué, runtime partagé adopté ou démarré. Le brief intégral, S-110 et S-042a restent ouverts.

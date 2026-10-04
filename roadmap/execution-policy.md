@@ -1,5 +1,15 @@
 # Exécution séquentielle autorisée
 
+## Pilotage courant — instruction du 3 octobre 2026
+
+Dans le mandat Partner, l’utilisateur demande désormais : « Continue les prochaine tâches en Astra Max (pas ultra) et regroupe les tâches histoire d’avoir d’en avoir plus que plus ou moins 3-5 à lancer idéalement ».
+
+Correction ultérieure du même jour, pendant le lot1 : « Je vois que y’a pas Max alors utilise le niveau de raisonnement le plus élevé soit Très élevé ». Utiliser désormais `model: gpt-6-astra`, `thinking: xhigh` (« Très élevé »), et non Max/Ultra. Le réglage effectif de la tâche en cours n’est pas prétendu modifié par cette consigne persistée.
+
+Ces instructions remplacent, pour les prochaines tâches de ce mandat, les anciens réglages et le relais systématique après chaque petite tranche. Viser quatre grands lots, idéalement trois à cinq tâches restantes au total, suivant le [plan de regroupement](plans/partner-remaining-batches.plan.md). Une tâche réalise plusieurs parcours cohérents séquentiellement, avec plans/journaux et preuves ; une compaction ne déclenche pas à elle seule une nouvelle tâche. Ne pas relayer après un petit écran ou un dossier préparatoire.
+
+Un seul auteur et un seul lot actifs, sans sous-agent/fork ; exactement un successeur à la fin du lot s’il reste du travail. Chaque relais conserve le mandat I–III complet et actualise les lots restants. Les protections du WIP, des worktrees, des bases/services et le protocole snapshot/audit/gel restent obligatoires ; aucun commit global WIP/push/deploy n’est autorisé par ce regroupement. Le nombre visé n’autorise ni suppression d’exigences ni validation fictive d’un accès externe manquant. Les mentions Ultra/par-slice ci-dessous décrivent le mandat antérieur et sont supplantées ici.
+
 ## Mandat utilisateur
 
 Le 2026-09-05, dans la tâche `01a072f8-6263-7ed0-8b49-0b384c54bf9d`, message utilisateur `01a0734f-fd18-76a0-a2e5-d0cf7ddd7c78` :

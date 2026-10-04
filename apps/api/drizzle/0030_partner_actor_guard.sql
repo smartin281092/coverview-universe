@@ -1,0 +1,2 @@
+ALTER TABLE "partner_events" DROP CONSTRAINT "partner_event_actor";--> statement-breakpoint
+ALTER TABLE "partner_events" ADD CONSTRAINT "partner_event_actor" CHECK (("partner_events"."actor_id" is not null and "partner_events"."system_actor" is null) or ("partner_events"."actor_id" is null and "partner_events"."system_actor" is not null and "partner_events"."system_actor" = 'partner-continuity-v1'));

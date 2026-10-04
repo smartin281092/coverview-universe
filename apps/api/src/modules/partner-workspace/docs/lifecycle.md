@@ -1,0 +1,15 @@
+# Clôtures et reprises
+
+Une reprise traite une suite tardive du même besoin. Un besoin différent doit conserver son propre Lead et son cycle. Le responsable courant, un manager déjà autorisé ou un administrateur peut reprendre un dossier terminé ; un apporteur avec simple suivi, un contributeur sans contrôle et Wallet ne disposent pas de cette commande.
+
+La commande `reopen` exige la révision courante, un motif de cinq caractères minimum, une prochaine action et une échéance future. Ces informations sont visibles au client. Le serveur revalide session, rôles, contrôle et sujet canonique sous verrous. Le dossier revient à la qualification, sans résultat courant ; le résultat, le motif et la date de clôture précédents restent dans une archive immuable avec acteur/date/motif/suite de reprise. La révision et l’idempotence empêchent une double reprise.
+
+Ni référent, ni cycle et horloges d’attribution, ni tâches annulées, rendez-vous annulés, partages retirés, signatures invalidées ou consentements ne sont réactivés. Une reprise ne certifie aucun fait de conclusion et ne déclenche aucun paiement. La clôture suivante réutilise les contrôles normaux. L’enquête de clôture déjà créée reste unique par Lead : une correction tardive ne multiplie pas les sollicitations du client. Les alertes de suivi reprennent selon l’état réellement conservé, sans remise à zéro des retards.
+
+`partner_lead_reopenings` conserve l’archive par révision de Lead. Le guard SQL compare l’archive à la clôture exacte et interdit une sortie de l’état terminé sans archive et prochaine action correspondantes. L’API GET `/{partner|wallet}/leads/:id/reopenings` pagine par20, avec droits opérationnels ou Wallet courant et même sujet/propriétaire ; elle ne donne pas à un nouveau propriétaire l’historique nominatif d’un autre propriétaire. Les clients n’ont pas de mutation de reprise. Sans0063, l’historique et la commande retournent503.
+
+Partner offre l’action de reprise et les deux apps affichent l’historique. L’événement `lead.reopened.v1` porte une référence d’archive, sans texte du motif ; la notification Wallet est informative. Le détail de l’archive reste derrière les droits de lecture. Aucun job, appel fournisseur ou nouvelle dépendance.
+
+0063 est générée depuis le catalogue temporaire complet0–62, deuxième génération sans delta puis guards ajoutés. Elle reste hors du catalogue de déploiement normal. Déployer les lecteurs avant ouverture du parcours ; en cas de rollback, fermer la commande et conserver les archives. Motifs et prochaines actions peuvent être identifiants : ils entrent dans les exports/droits/rétention S-130/S-131, sans durée juridique inventée et sans confondre masquage avec purge.
+
+[Tests jetables de l’intégration](../../../platform/partner-conclusion-integration.test.ts) : contrôles courants, date future, archive obligatoire/immuable, rejeu, concurrence, conservation des travaux annulés/horloges et enquête unique. Leur résultat est consigné dans le plan du lot4 ; aucune recette réelle authentifiée n’est déduite du code ou des fixtures.

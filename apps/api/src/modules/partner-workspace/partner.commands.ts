@@ -1,38 +1,25 @@
+import { requireAssignee, requireParticipant, handoffWork } from "./partner.participants.js";
+import { proposeCollaboration } from "./partner.collaboration.js";
 import type { PoolClient } from "pg";
 import { z } from "zod";
+import { documentAnalysisSchema } from "@coverview/contracts";
 import { leadOfferInputSchema, type LeadCommand } from "@coverview/contracts/partner";
 import type { partnerLeads } from "./partner.schema.js";
-import { fail, membership, type PartnerActor } from "./partner.policy.js";
+import { fail, type PartnerActor } from "./partner.policy.js";
 import { event, newId } from "./partner.audit.js";
-import { retainLeadSource } from "../document-intelligence/index.js";
+import {
+  retainLeadSource,
+  leadSourceSnapshot,
+  leadSourceReviewRevisionSql,
+} from "../document-intelligence/index.js";
+import { requireOfferSource } from "./partner.offers.js";
+import { executeContractCommand } from "./partner.contract.js";
+import { executeFinalPolicyCommand } from "./partner.final-policy.js";
+import { conclusionClosureReady } from "./partner.conclusion-evidence.js";
+import { reopenLead } from "./partner.lifecycle.js";
+import { overlappingAppointment } from "./partner.appointment-assessment.js";
 type LeadRow = typeof partnerLeads.$inferSelect;
 
-async function requireAssignee(tx: PoolClient, lead: LeadRow, userId: string, actor: PartnerActor) {
-  if (actor.administrator && userId === actor.userId) return;
-  const person = await membership(tx, userId, true);
-  if (
-    !person ||
-    person.state !== "approved" ||
-    person.organizationState !== "approved" ||
-    !person.grantedRoles.includes("advisor") ||
-    !person.categories.includes(lead.category as (typeof person.categories)[number]) ||
-    (person.reviewDueAt && new Date(person.reviewDueAt).getTime() <= Date.now())
-  )
-    fail("PARTNER_INVALID_ASSIGNEE");
-}
-async function requireParticipant(
-  tx: PoolClient,
-  lead: LeadRow,
-  userId: string,
-  actor: PartnerActor,
-) {
-  if (userId === lead.responsibleId || (userId === actor.userId && actor.administrator)) return;
-  const participant = await tx.query<Record<string, unknown>>(
-    "select id from partner_contributors where lead_id=$1 and user_id=$2 and revoked_at is null",
-    [lead.id, userId],
-  );
-  if (!participant.rowCount) fail("PARTNER_INVALID_ASSIGNEE");
-}
 async function changeStage(tx: PoolClient, lead: LeadRow, stage: string) {
   await tx.query<Record<string, unknown>>(
     "update partner_leads set stage=$2,stage_changed_at=case when stage=$2 then stage_changed_at else now() end where id=$1",
@@ -55,50 +42,9 @@ async function getOffer(tx: PoolClient, lead: LeadRow, id: string) {
     family_id: String(offer.family_id),
     published_at: offer.published_at,
     reviewed_at: offer.reviewed_at,
+    sourceSnapshot: offer.source_snapshot,
     content: leadOfferInputSchema.parse(offer.data),
   };
-}
-async function availableSource(tx: PoolClient, documentId: string) {
-  const row = (
-    await tx.query<Record<string, unknown>>(
-      "select id from files where id=$1 and deleted_at is null and scan_version is not null and state in ('ready','failed') for share",
-      [documentId],
-    )
-  ).rows[0];
-  if (!row) fail("PARTNER_INVALID_DOCUMENT");
-}
-export async function handoffWork(
-  tx: PoolClient,
-  actor: PartnerActor,
-  leadId: string,
-  responsibleId: string | null,
-) {
-  // Future commitments cannot stay assigned to an intervenant who no longer has access.
-  const remainingParticipant =
-    "exists(select 1 from partner_contributors pc where pc.lead_id=$1 and pc.user_id=a.advisor_id and pc.revoked_at is null)";
-  const cancelled = await tx.query(
-    `update partner_appointments a set state='cancelled' where lead_id=$1 and state='scheduled' and starts_at>now() and advisor_id is distinct from $2 and not ${remainingParticipant}`,
-    [leadId, responsibleId],
-  );
-  if (responsibleId)
-    await tx.query(
-      "update partner_tasks t set responsible_id=$2 where lead_id=$1 and state='open' and responsible_id<>$2 and not exists(select 1 from partner_contributors pc where pc.lead_id=$1 and pc.user_id=t.responsible_id and pc.revoked_at is null)",
-      [leadId, responsibleId],
-    );
-  if (cancelled.rowCount) {
-    await tx.query(
-      "update partner_leads set stage='appointment_needed',stage_changed_at=now(),next_action='Replanifier le rendez-vous avec le client' where id=$1 and stage='appointment_scheduled' and not exists(select 1 from partner_appointments where lead_id=$1 and state='scheduled' and starts_at>now())",
-      [leadId],
-    );
-    await event(
-      tx,
-      actor,
-      leadId,
-      "appointment.cancelled",
-      "Le rendez-vous avec l’intervenant sortant doit être replanifié. CoverView suit la reprise du dossier.",
-      "client",
-    );
-  }
 }
 export async function executeLeadCommand(
   tx: PoolClient,
@@ -111,10 +57,40 @@ export async function executeLeadCommand(
     fail("PARTNER_ACTION_REQUIRED");
   if (
     lead.stage === "completed" &&
-    !["note", "task_state", "task", "offer_withdraw"].includes(input.action)
+    ![
+      "reopen",
+      "note",
+      "task_state",
+      "task",
+      "offer_withdraw",
+      "contract_unlink",
+      "final_policy_link",
+      "final_policy_unlink",
+      "final_policy_review",
+    ].includes(input.action)
   )
     fail("PARTNER_INVALID_TRANSITION");
   switch (input.action) {
+    case "reopen":
+      await reopenLead(tx, actor, lead, input);
+      break;
+    case "final_policy_link":
+    case "final_policy_unlink":
+    case "final_policy_review":
+      await executeFinalPolicyCommand(tx, actor, lead, input);
+      break;
+    case "contract_link":
+    case "contract_unlink":
+    case "contract_review":
+      await executeContractCommand(tx, actor, lead, input);
+      break;
+    case "collaboration_propose":
+      await proposeCollaboration(tx, actor, lead, input.terms);
+      break;
+    case "client_interlocutor":
+      if (!actor.wallet) fail("PARTNER_ACCESS_DENIED", 403);
+      await event(tx, actor, id, "client.interlocutor_requested", input.reason, "client");
+      break;
     case "edit": {
       const data = input.lead;
       if (lead.stage !== "draft" && data.draft) fail("PARTNER_INVALID_TRANSITION");
@@ -123,12 +99,49 @@ export async function executeLeadCommand(
       const relink =
         data.clientUserId !== lead.clientUserId || data.clientProfileId !== lead.clientProfileId;
       if (
+        (relink || data.category !== lead.category || data.object !== lead.object) &&
+        (await tx.query("select id from partner_final_policies where lead_id=$1 limit 1", [id]))
+          .rowCount
+      )
+        fail("PARTNER_INVALID_TRANSITION");
+      if (
+        (relink || data.category !== lead.category || data.object !== lead.object) &&
+        (await tx.query("select id from partner_offer_imports where lead_id=$1 limit 1", [id]))
+          .rowCount
+      )
+        fail("PARTNER_INVALID_TRANSITION");
+      if (
+        (relink || data.category !== lead.category || data.object !== lead.object) &&
+        (
+          await tx.query("select id from partner_contract_references where lead_id=$1 limit 1", [
+            id,
+          ])
+        ).rowCount
+      )
+        fail("PARTNER_INVALID_TRANSITION");
+      if (
+        (relink || data.category !== lead.category || data.object !== lead.object) &&
+        (await tx.query("select lead_id from partner_insurance_sources where lead_id=$1", [id]))
+          .rowCount
+      )
+        fail("PARTNER_INVALID_TRANSITION");
+      if (
         (data.category !== lead.category || data.object !== lead.object) &&
         (await tx.query("select id from partner_offers where lead_id=$1 limit 1", [id])).rowCount
       )
         fail("PARTNER_INVALID_TRANSITION");
       if (data.category !== lead.category && lead.responsibleId)
         await requireAssignee(tx, { ...lead, category: data.category }, lead.responsibleId, actor);
+      if (
+        (relink || data.category !== lead.category || data.object !== lead.object) &&
+        (
+          await tx.query(
+            "select id from partner_contributors where lead_id=$1 and revoked_at is null union all select id from partner_collaborations where lead_id=$1 and state='proposed' limit 1",
+            [id],
+          )
+        ).rowCount
+      )
+        fail("PARTNER_INVALID_TRANSITION");
       if (relink && !actor.administrator) fail("PARTNER_ACCESS_DENIED", 403);
       if (
         relink &&
@@ -181,7 +194,7 @@ export async function executeLeadCommand(
       if (lead.stage === "draft" && !data.draft) {
         await changeStage(tx, lead, "new");
         await tx.query<Record<string, unknown>>(
-          "update partner_leads set notified_at=case when responsible_id is null then null else now() end where id=$1",
+          "update partner_leads set notified_at=null where id=$1",
           [id],
         );
       }
@@ -246,23 +259,39 @@ export async function executeLeadCommand(
     }
     case "appointment": {
       const appt = input.appointment;
+      const appointmentId = newId("appt");
       await requireParticipant(tx, lead, appt.advisorId, actor);
       await requireAssignee(tx, lead, appt.advisorId, actor);
+      if (
+        appt.advisorId !== lead.responsibleId &&
+        !(actor.administrator && appt.advisorId === actor.userId)
+      ) {
+        const direct = await tx.query(
+          "select id from partner_contributors where lead_id=$1 and user_id=$2 and revoked_at is null and can_contact and can_edit and access_scope='advice'",
+          [id, appt.advisorId],
+        );
+        if (!direct.rowCount) fail("PARTNER_ACCESS_DENIED", 403);
+      }
       if (new Date(appt.startsAt).getTime() <= Date.now()) fail("PARTNER_ACTION_REQUIRED");
       // Serialize the advisor's schedule across Leads, including simultaneous requests.
       await tx.query<Record<string, unknown>>(
         "select pg_advisory_xact_lock(hashtextextended($1,1))",
         [appt.advisorId],
       );
-      const conflict = await tx.query<Record<string, unknown>>(
-        "select id from partner_appointments where advisor_id=$1 and state='scheduled' and starts_at < $2::timestamptz + $3 * interval '1 minute' and starts_at + duration_minutes * interval '1 minute' > $2::timestamptz limit 1",
-        [appt.advisorId, appt.startsAt, appt.durationMinutes],
-      );
-      if (conflict.rowCount) fail("PARTNER_APPOINTMENT_CONFLICT", 409);
+      if (
+        await overlappingAppointment(
+          tx,
+          appt.advisorId,
+          null,
+          new Date(appt.startsAt),
+          new Date(Date.parse(appt.startsAt) + appt.durationMinutes * 60000),
+        )
+      )
+        fail("PARTNER_APPOINTMENT_CONFLICT", 409);
       await tx.query<Record<string, unknown>>(
         "insert into partner_appointments(id,lead_id,advisor_id,starts_at,duration_minutes,mode,location,timezone) values($1,$2,$3,$4,$5,$6,$7,$8)",
         [
-          newId("appt"),
+          appointmentId,
           id,
           appt.advisorId,
           appt.startsAt,
@@ -285,7 +314,7 @@ export async function executeLeadCommand(
         `${appt.startsAt} · ${appt.mode}`,
         "client",
       );
-      break;
+      return appointmentId;
     }
     case "appointment_state": {
       const appt = (
@@ -315,7 +344,7 @@ export async function executeLeadCommand(
         fail("PARTNER_ACTION_REQUIRED");
       if (input.responsibleId === lead.responsibleId) fail("PARTNER_CONFLICT", 409);
       await tx.query<Record<string, unknown>>(
-        "update partner_leads set responsible_id=$2,assignment='proposed',notified_at=now(),first_useful_at=null where id=$1",
+        "update partner_leads set responsible_id=$2,assignment='proposed',notified_at=null,first_action_due_at=null,acceptance_due_at=null,continuity_policy_revision=null,first_useful_at=null,waiting=null,notification_cycle=notification_cycle+1 where id=$1",
         [id, input.responsibleId],
       );
       await tx.query<Record<string, unknown>>(
@@ -355,6 +384,9 @@ export async function executeLeadCommand(
         input.reason === "current_suitable" ? "resolved_without_contract" : input.result;
       if (result === "contract" && lead.stage !== "contract_issued")
         fail("PARTNER_INVALID_TRANSITION");
+      if (result === "contract") {
+        if (!(await conclusionClosureReady(tx, lead))) fail("PARTNER_INVALID_TRANSITION");
+      }
       if (input.reason === "client_refusal" && result !== "client_refusal")
         fail("PARTNER_INVALID_TRANSITION");
       await tx.query<Record<string, unknown>>(
@@ -397,6 +429,7 @@ export async function executeLeadCommand(
         const offer = await getOffer(tx, lead, input.offerId ?? "");
         if (!offer.active || (input.stage !== "offer_received" && !offer.published_at))
           fail("PARTNER_ACTION_REQUIRED");
+        await requireOfferSource(tx, offer.content.documentId, offer.sourceSnapshot);
       }
       await changeStage(tx, lead, input.stage);
       await event(tx, actor, id, "lead.stage_changed", input.stage, "client");
@@ -405,6 +438,13 @@ export async function executeLeadCommand(
     case "offer": {
       const offer = input.offer;
       const previous = offer.replacesId ? await getOffer(tx, lead, offer.replacesId) : null;
+      const imported = (
+        await tx.query<{ id: string; offer_id: string | null }>(
+          "select id,offer_id from partner_offer_imports where lead_id=$1 and document_id=$2 for update",
+          [id, offer.documentId],
+        )
+      ).rows[0];
+      if (imported?.offer_id && !previous) fail("PARTNER_CONFLICT", 409);
       if (
         !(await retainLeadSource(
           tx,
@@ -414,10 +454,19 @@ export async function executeLeadCommand(
             userId: lead.clientUserId,
             profileId: lead.clientProfileId,
           },
-          previous?.content.documentId === offer.documentId,
+          previous?.content.documentId === offer.documentId || !!imported,
         ))
       )
         fail("PARTNER_INVALID_DOCUMENT");
+      const sourceRow = (
+        await tx.query<Record<string, unknown>>(
+          `select f.*, ${leadSourceReviewRevisionSql} source_review_revision from files f where f.id=$1`,
+          [offer.documentId],
+        )
+      ).rows[0]!;
+      const snapshot = leadSourceSnapshot(sourceRow);
+      if (!snapshot) fail("PARTNER_INVALID_DOCUMENT");
+      if (offer.sourceFingerprint !== snapshot.fingerprint) fail("PARTNER_CONFLICT", 409);
       let version = 1;
       const offerId = newId("offer");
       let familyId = offerId;
@@ -429,19 +478,65 @@ export async function executeLeadCommand(
           "update partner_offers set active=false,state='replaced' where id=$1",
           [offer.replacesId],
         );
+        if (previous.published_at)
+          await event(
+            tx,
+            actor,
+            id,
+            "offer.replaced",
+            `${previous.content.company} · ${previous.content.product}`,
+            "client",
+            previous.id,
+          );
       }
       await tx.query<Record<string, unknown>>(
-        "insert into partner_offers(id,lead_id,document_id,data,version,family_id) values($1,$2,$3,$4,$5,$6)",
-        [offerId, id, offer.documentId, JSON.stringify(offer), version, familyId],
+        "insert into partner_offers(id,lead_id,document_id,data,version,family_id,source_snapshot) values($1,$2,$3,$4,$5,$6,$7)",
+        [
+          offerId,
+          id,
+          offer.documentId,
+          JSON.stringify(offer),
+          version,
+          familyId,
+          JSON.stringify(snapshot),
+        ],
       );
-      await event(tx, actor, id, "offer.received", `${offer.company} · ${offer.product}`);
+      await event(
+        tx,
+        actor,
+        id,
+        "offer.received",
+        `${offer.company} · ${offer.product}`,
+        "assigned",
+        offerId,
+      );
+      if (imported && !imported.offer_id)
+        await tx.query("update partner_offer_imports set offer_id=$2 where id=$1", [
+          imported.id,
+          offerId,
+        ]);
       break;
     }
     case "offer_review": {
       const offer = await getOffer(tx, lead, input.offerId);
-      if (!offer.active || !["received", "to_verify", "ready"].includes(String(offer.state)))
+      if (!offer.active || !["received", "to_verify"].includes(String(offer.state)))
         fail("PARTNER_INVALID_TRANSITION");
-      await availableSource(tx, offer.content.documentId);
+      const source = await requireOfferSource(tx, offer.content.documentId, offer.sourceSnapshot);
+      const analysis = documentAnalysisSchema.safeParse(source.analysis);
+      for (const feature of offer.content.features) {
+        if (
+          feature.coverage &&
+          feature.coverage !== "unknown" &&
+          (feature.origin === "calculated" ||
+            !feature.sourcePage ||
+            !feature.source ||
+            !analysis.success ||
+            !analysis.data.pages.some(
+              (page) => page.page === feature.sourcePage && page.text.includes(feature.source),
+            ))
+        )
+          fail("PARTNER_INVALID_DOCUMENT");
+      }
       if (
         offer.content.features.some(
           (f) =>
@@ -451,10 +546,10 @@ export async function executeLeadCommand(
       )
         fail("PARTNER_OFFER_NOT_READY");
       await tx.query<Record<string, unknown>>(
-        "update partner_offers set reviewed_at=now(),state='ready' where id=$1",
-        [input.offerId],
+        "update partner_offers set reviewed_at=now(),reviewed_by=$2,state='ready' where id=$1",
+        [input.offerId, actor.userId],
       );
-      await event(tx, actor, id, "offer.reviewed", offer.content.company);
+      await event(tx, actor, id, "offer.reviewed", offer.content.company, "assigned", offer.id);
       break;
     }
     case "offer_publish": {
@@ -463,10 +558,10 @@ export async function executeLeadCommand(
         fail("PARTNER_OFFER_NOT_READY");
       if (offer.content.validUntil && new Date(offer.content.validUntil).getTime() <= Date.now())
         fail("PARTNER_OFFER_EXPIRED");
-      await availableSource(tx, offer.content.documentId);
+      await requireOfferSource(tx, offer.content.documentId, offer.sourceSnapshot);
       await tx.query<Record<string, unknown>>(
-        "update partner_offers set published_at=now(),state='published' where id=$1",
-        [input.offerId],
+        "update partner_offers set published_at=now(),published_by=$2,state='published' where id=$1",
+        [input.offerId, actor.userId],
       );
       if (!["signing", "signed", "awaiting_insurer", "contract_issued"].includes(lead.stage))
         await changeStage(tx, lead, "offer_presented");
@@ -477,12 +572,13 @@ export async function executeLeadCommand(
         "offer.published",
         `${offer.content.company} · ${offer.content.product}`,
         "client",
+        offer.id,
       );
       break;
     }
     case "offer_withdraw": {
       const offer = await getOffer(tx, lead, input.offerId);
-      if (offer.state === "signed") fail("PARTNER_INVALID_TRANSITION");
+      if (!offer.active || offer.state === "signed") fail("PARTNER_INVALID_TRANSITION");
       await tx.query<Record<string, unknown>>(
         "update partner_offers set state='cancelled',active=false where id=$1",
         [input.offerId],
@@ -494,11 +590,14 @@ export async function executeLeadCommand(
         "offer.withdrawn",
         input.reason,
         offer.published_at ? "client" : "assigned",
+        offer.id,
       );
       break;
     }
     case "client_choice": {
       if (!actor.wallet) fail("PARTNER_ACCESS_DENIED", 403);
+      if (["refuse", "question", "modification"].includes(input.choice) && !input.text.trim())
+        fail("PARTNER_ACTION_REQUIRED");
       if (input.choice === "keep_current") {
         await tx.query<Record<string, unknown>>(
           "update partner_offers set state='viewed' where lead_id=$1 and state='selected'",
@@ -512,11 +611,12 @@ export async function executeLeadCommand(
       if (
         !offer.published_at ||
         !offer.active ||
-        ["cancelled", "replaced", "signed", "refused"].includes(String(offer.state))
+        !["published", "viewed", "selected"].includes(String(offer.state))
       )
         fail("PARTNER_INVALID_TRANSITION");
       if (offer.content.validUntil && new Date(offer.content.validUntil).getTime() <= Date.now())
         fail("PARTNER_OFFER_EXPIRED");
+      await requireOfferSource(tx, offer.content.documentId, offer.sourceSnapshot);
       if (input.choice === "select") {
         await tx.query<Record<string, unknown>>(
           "update partner_offers set state='viewed' where lead_id=$1 and state='selected'",
@@ -538,7 +638,8 @@ export async function executeLeadCommand(
           "update partner_offers set state='viewed' where id=$1",
           [input.offerId],
         );
-      } else if (!input.text.trim()) fail("PARTNER_ACTION_REQUIRED");
+      }
+      if (input.choice !== "view") await changeStage(tx, lead, "client_decision");
       await event(
         tx,
         actor,
@@ -546,6 +647,7 @@ export async function executeLeadCommand(
         `client.${input.choice}`,
         input.text || `${offer.content.company} · ${offer.content.product}`,
         "client",
+        offer.id,
       );
       break;
     }

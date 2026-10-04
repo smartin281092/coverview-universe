@@ -1,5 +1,9 @@
 # Wallet — espace personnel
 
+Wallet Offres : « Qualité et suivi » et « Communications » ouvrent enquête/rappel/suites partagées, préférences et accord/refus/retrait d’enregistrement. Les notifications mènent directement au dialogue concerné. [Règles et limites du lot3](../api/src/modules/partner-workspace/docs/quality-pilotage.md) ; aucune réponse ou transcription réelle créée, activation0059/V3 ouvertes.
+
+Wallet Offres : « Mandats et transmissions » présente la mission exacte, ses pouvoirs/limites et sa durée ; accepter/refuser/retirer reste un acte du propriétaire courant. Aucune condition B2B divulguée. Notifications de demande/changement de mandat. [Règles du lot2](../api/src/modules/partner-workspace/docs/marketplace-economy.md). V3 authentifié et activation0058 restent ouverts.
+
 ## Résumé
 
 Wallet propose les profils privés, les documents, les autorisations, le compte et les appareils connectés. Français dès le départ, textes externalisés dans `src/locales/fr/`.

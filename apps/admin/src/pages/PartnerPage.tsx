@@ -1,9 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import type { IdentityMe } from "@coverview/api-client";
 import { createPartnerClient } from "@coverview/api-client/partner";
 import { Button, LoadingState, ErrorState } from "@coverview/ui";
 import { AdminBoundary } from "../features/users/AdminBoundary";
+import { CounselQueue } from "../features/partner/CounselQueue";
+import { GoalSummary } from "../features/partner/GoalSummary";
 
 const client = createPartnerClient(
   import.meta.env.VITE_API_URL ??
@@ -31,12 +34,25 @@ function Overview({ identity, blocked }: { identity: IdentityMe; blocked: boolea
         <p className="mt-4 max-w-2xl text-muted-foreground">{t("description")}</p>
       </header>
       <div className="flex flex-wrap gap-3">
+        <Button variant="outline" asChild>
+          <Link to="/partner/continuity">{t("continuity.title")}</Link>
+        </Button>
         <Button asChild>
           <a href={partnerUrl}>{t("open")}</a>
         </Button>
         <Button variant="outline" asChild>
           <a href={`${partnerUrl}/applications`}>{t("applications")}</a>
         </Button>
+        <Button variant="outline" asChild>
+          <a href={`${partnerUrl}/notifications`}>{t("notifications")}</a>
+        </Button>
+        {(["marketplace", "commercial-conditions", "remunerations", "quality"] as const).map(
+          (path) => (
+            <Button key={path} variant="outline" asChild>
+              <a href={`${partnerUrl}/${path}`}>{t(`economy.${path}`)}</a>
+            </Button>
+          ),
+        )}
       </div>
       {dashboard.isPending ? (
         <LoadingState label={t("loading")} />
@@ -63,6 +79,8 @@ function Overview({ identity, blocked }: { identity: IdentityMe; blocked: boolea
         </div>
       )}
       <p className="text-xs text-muted-foreground">{t("scope")}</p>
+      <CounselQueue identity={identity} blocked={blocked} />
+      <GoalSummary identity={identity} blocked={blocked} client={client} partnerUrl={partnerUrl} />
     </div>
   );
 }
