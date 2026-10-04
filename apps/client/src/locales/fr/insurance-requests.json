@@ -1,5 +1,20 @@
 {
   "title": "Demandes d’assurance",
+  "lead": {
+    "start": "Demander un accompagnement",
+    "open": "Ouvrir le suivi et les offres",
+    "title": "Accompagner {{name}}",
+    "description": "CoverView prépare le suivi de cette personne dans Offres, puis organise son attribution à un conseiller habilité.",
+    "consent": "J’autorise la transmission de la demande de {{name}} et de sa configuration d’assurance à CoverView et au conseiller habilité affecté à ce dossier. Je confirme pouvoir effectuer cette demande pour cette personne.",
+    "limit": "Les autres profils et documents Wallet ne sont pas transmis. La demande initiale reste conservée. Ce geste ne souscrit aucune assurance et ne garantit pas encore un rendez-vous.",
+    "confirm": "Transmettre cette demande",
+    "close": "Fermer",
+    "noOwner": "Rattachez d’abord cette demande à votre Wallet pour demander un accompagnement sur un profil identifié.",
+    "unavailable": "Seul le propriétaire actuel du profil peut transmettre cette demande ou consulter son lien.",
+    "closed": "Cette demande est terminée ou annulée. Un nouvel accompagnement peut être demandé depuis Offres.",
+    "error": "La transmission n’a pas pu être confirmée. Réessayez ou actualisez la demande pour vérifier vos droits actuels.",
+    "loadError": "Le lien de suivi est indisponible. Actualisez avant de créer un autre dossier."
+  },
   "description": "Vos offres, les personnes assurées et chaque étape de la démarche.",
   "adminDescription": "Traitez les demandes d’offre reçues depuis le comparateur et actualisez leur progression.",
   "loading": "Chargement des demandes…",

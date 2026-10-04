@@ -7,6 +7,7 @@ import { createDatabase } from "./db/database.js";
 import { createIdentityRepository } from "../modules/identity/identity.repository.js";
 import { createProfileRepository } from "../modules/identity/identity.profile.repository.js";
 import { createDocumentRepository } from "../modules/document-intelligence/document.repository.js";
+import { createDocumentService } from "../modules/document-intelligence/document.service.js";
 import { documents } from "../modules/document-intelligence/document.schema.js";
 import { profileSaveInputSchema, type DocumentAnalysis } from "@coverview/contracts";
 import { eq } from "drizzle-orm";
@@ -53,6 +54,64 @@ beforeAll(async () => {
 afterAll(async () => {
   if (database) await database.pool.end();
   if (container) await container.stop();
+});
+
+it("retains pending Lead originals and rechecks access and exact bytes around shared storage", async () => {
+  const actor = await owner();
+  const bytes = Buffer.from("%PDF-1.7\nIsolated original");
+  const original = await repository.create(
+    actor,
+    {
+      name: "Original.pdf",
+      mime: "application/pdf",
+      size: bytes.length,
+      checksum: digest(bytes.toString()),
+      analysisRequested: true,
+      purpose: "lead_offer",
+    },
+    randomUUID(),
+  );
+  await database.pool.query(
+    "update files set retained_at=now(),updated_at=now()-interval '2 days' where id=$1",
+    [original.id],
+  );
+  await repository.cleanup();
+  expect((await repository.get(actor.userId, original.id)).state).toBe("pending");
+  const stored = new Map<string, Buffer>();
+  let revokeDuringPut = false;
+  const service = createDocumentService(repository, {
+    async put(key, value) {
+      stored.set(key, value);
+      if (revokeDuringPut)
+        await database.pool.query("update identity_sessions set revoked_at=now() where id=$1", [
+          actor.id,
+        ]);
+    },
+    get: (key) => Promise.resolve(stored.get(key)!),
+    remove: (key) => {
+      stored.delete(key);
+      return Promise.resolve();
+    },
+    close: () => {},
+  });
+  const authorize = () => repository.authorizeUpload(actor, original.id);
+  const confirm = (mime: string) => repository.uploaded(actor, original.id, mime);
+  await expect(
+    service.uploadShared(actor.userId, original.id, Buffer.from("wrong"), authorize, confirm),
+  ).rejects.toMatchObject({ code: "DOCUMENT_UPLOAD_INVALID" });
+  expect(stored.size).toBe(0);
+  revokeDuringPut = true;
+  await expect(
+    service.uploadShared(actor.userId, original.id, bytes, authorize, confirm),
+  ).rejects.toMatchObject({ code: "IDENTITY_UNAUTHENTICATED" });
+  expect((await repository.original(actor.userId, original.id)).state).toBe("pending");
+  expect(
+    (
+      await database.pool.query("select id from document_outbox where document_id=$1", [
+        original.id,
+      ])
+    ).rowCount,
+  ).toBe(0);
 });
 
 it("persists contact and company choices with owner sessions, revision conflicts and retry safety", async () => {

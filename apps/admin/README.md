@@ -6,6 +6,8 @@ Application Admin destinée aux équipes CoverView, avec `admin.coverview.ch` co
 
 `/partner` ouvre les compteurs du réseau et les liens vers la supervision des candidatures et le pipeline global de [Partner](../partners/README.md), sous les mêmes contrôles administratifs. État partiel et limites : [ledger](../../roadmap/evidence/partner-core.md).
 
+`/partner/continuity` configure l'acceptation et le calendrier des prochaines attributions, avec motif obligatoire et historique des vingt dernières versions dans un panneau. Les règles serveur et les échéances figées sont décrites dans le [module Partner](../api/src/modules/partner-workspace/README.md#paramètres-et-calendrier-de-continuité--relais-fb54). Cache privé par utilisateur/session, actualisation explicite pour préserver la saisie, conflit de révision sans écrasement. Types/build vérifiés ; le compte réel disponible reste refusé, formulaire opérationnel non vérifié en navigateur.
+
 ## Périmètre
 
 `/` et `/account` ouvrent le même parcours d’accès à Admin. L’action de connexion et les erreurs arrivent avant les explications secondaires sur mobile. La navigation produit expose Utilisateurs et Mon accès Admin, sans diagnostics ni données de démonstration.

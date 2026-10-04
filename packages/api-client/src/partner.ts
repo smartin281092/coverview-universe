@@ -13,7 +13,30 @@ import {
   partnerDirectorySchema,
   partnerDashboardSchema,
   offerExtractionSchema,
+  offerHistorySchema,
   partnerWorkSchema,
+  partnerNotificationQuerySchema,
+  partnerNotificationsSchema,
+  partnerContinuitySettingsSchema,
+  partnerContinuityUpdateSchema,
+  collaborationListSchema,
+  collaborationResponseSchema,
+  collaborationSchema,
+  insuranceLeadConsentSchema,
+  insuranceLeadLinksSchema,
+  insuranceLeadSourceSchema,
+  contractCandidatesSchema,
+  finalPoliciesSchema,
+  offerImportInputSchema,
+  offerImportRetrySchema,
+  offerImportsSchema,
+  offerImportResultSchema,
+  referentProfileSchema,
+  referentUpdateSchema,
+  type ReferentUpdate,
+  type CollaborationResponse,
+  type PartnerContinuityUpdate,
+  type PartnerNotificationQuery,
   type LeadCreateInput,
   type LeadCommand,
   type LeadListQuery,
@@ -45,25 +68,26 @@ export function createPartnerClient(baseUrl: string) {
     signal?: AbortSignal,
     body?: unknown,
     options?: PartnerMutation,
+    binary = false,
   ) {
     const response = await fetch(new URL(path, base), {
       method: body === undefined ? "GET" : "POST",
       credentials: "include",
       cache: "no-store",
       signal: signal
-        ? AbortSignal.any([AbortSignal.timeout(20000), signal])
-        : AbortSignal.timeout(20000),
+        ? AbortSignal.any([AbortSignal.timeout(binary ? 60000 : 20000), signal])
+        : AbortSignal.timeout(binary ? 60000 : 20000),
       headers: {
         Accept: "application/json",
         ...(body === undefined
           ? {}
           : {
-              "Content-Type": "application/json",
+              "Content-Type": binary ? "application/octet-stream" : "application/json",
               "X-CSRF-Token": options?.csrfToken ?? "",
               "Idempotency-Key": options?.idempotencyKey ?? "",
             }),
       },
-      ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+      ...(body === undefined ? {} : { body: binary ? (body as File) : JSON.stringify(body) }),
     });
     const payload: unknown = await response.json();
     if (!response.ok) {
@@ -77,6 +101,158 @@ export function createPartnerClient(baseUrl: string) {
   }
   const path = (wallet = false) => (wallet ? "/wallet/leads" : "/partner/leads");
   return {
+    referentProfile: (
+      profileId: string,
+      category: string,
+      beforeRevision?: number,
+      signal?: AbortSignal,
+    ) =>
+      request(
+        `/wallet/referents/${encodeURIComponent(profileId)}/${encodeURIComponent(category)}${beforeRevision ? `?beforeRevision=${beforeRevision}` : ""}`,
+        referentProfileSchema,
+        signal,
+      ),
+    updateReferent: (
+      profileId: string,
+      category: string,
+      input: ReferentUpdate,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/wallet/referents/${encodeURIComponent(profileId)}/${encodeURIComponent(category)}`,
+        referentProfileSchema,
+        options.signal,
+        referentUpdateSchema.parse(input),
+        options,
+      ),
+    offerImports: (id: string, cursor?: string, signal?: AbortSignal) =>
+      request(
+        `/partner/leads/${encodeURIComponent(id)}/offer-imports${cursor ? `?cursor=${encodeURIComponent(cursor)}` : ""}`,
+        offerImportsSchema,
+        signal,
+      ),
+    prepareOfferImport: (
+      id: string,
+      input: z.infer<typeof offerImportInputSchema>,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/leads/${encodeURIComponent(id)}/offer-imports`,
+        offerImportResultSchema,
+        options.signal,
+        offerImportInputSchema.parse(input),
+        options,
+      ),
+    uploadOfferImport: (id: string, importId: string, file: File, options: PartnerMutation) =>
+      request(
+        `/partner/leads/${encodeURIComponent(id)}/offer-imports/${encodeURIComponent(importId)}/content`,
+        offerImportResultSchema,
+        options.signal,
+        file,
+        options,
+        true,
+      ),
+    retryOfferImport: (
+      id: string,
+      importId: string,
+      input: z.infer<typeof offerImportRetrySchema>,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/leads/${encodeURIComponent(id)}/offer-imports/${encodeURIComponent(importId)}/retry`,
+        offerImportResultSchema,
+        options.signal,
+        offerImportRetrySchema.parse(input),
+        options,
+      ),
+    importSourceUrl: (id: string, importId: string) =>
+      new URL(
+        `/partner/leads/${encodeURIComponent(id)}/offer-imports/${encodeURIComponent(importId)}/source`,
+        base,
+      ).href,
+    insuranceSource: (id: string, signal?: AbortSignal) =>
+      request(
+        `/partner/leads/${encodeURIComponent(id)}/insurance-request`,
+        insuranceLeadSourceSchema,
+        signal,
+      ),
+    offerHistory: (id: string, cursor?: string, signal?: AbortSignal, wallet = false) =>
+      request(
+        `${path(wallet)}/${encodeURIComponent(id)}/offers/history${cursor ? `?cursor=${encodeURIComponent(cursor)}` : ""}`,
+        offerHistorySchema,
+        signal,
+      ),
+    contractCandidates: (id: string, signal?: AbortSignal) =>
+      request(
+        `/wallet/leads/${encodeURIComponent(id)}/contracts`,
+        contractCandidatesSchema,
+        signal,
+      ),
+    finalPolicies: (id: string, cursor?: string, signal?: AbortSignal, wallet = false) =>
+      request(
+        `${path(wallet)}/${encodeURIComponent(id)}/final-policies${cursor ? `?cursor=${encodeURIComponent(cursor)}` : ""}`,
+        finalPoliciesSchema,
+        signal,
+      ),
+    finalPolicySourceUrl: (id: string, policyId: string, wallet = false) =>
+      new URL(
+        `${path(wallet)}/${encodeURIComponent(id)}/final-policies/${encodeURIComponent(policyId)}/source`,
+        base,
+      ).href,
+    contractSourceUrl: (id: string, wallet = false) =>
+      new URL(`${path(wallet)}/${encodeURIComponent(id)}/current-contract/source`, base).href,
+    insuranceLinks: (id: string, signal?: AbortSignal) =>
+      request(
+        `/wallet/insurance-request-leads/${encodeURIComponent(id)}`,
+        insuranceLeadLinksSchema,
+        signal,
+      ),
+    linkInsurance: (id: string, personId: string, options: PartnerMutation) =>
+      request(
+        `/wallet/insurance-request-leads/${encodeURIComponent(id)}`,
+        leadDetailSchema,
+        options.signal,
+        insuranceLeadConsentSchema.parse({ personId, transmissionAuthorized: true }),
+        options,
+      ),
+    collaborations: (signal?: AbortSignal) =>
+      request("/partner/collaborations", collaborationListSchema, signal),
+    respondCollaboration: (id: string, input: CollaborationResponse, options: PartnerMutation) =>
+      request(
+        `/partner/collaborations/${encodeURIComponent(id)}/respond`,
+        collaborationSchema,
+        options.signal,
+        collaborationResponseSchema.parse(input),
+        options,
+      ),
+    continuitySettings: (signal?: AbortSignal) =>
+      request("/admin/partner/continuity", partnerContinuitySettingsSchema, signal),
+    updateContinuitySettings: (input: PartnerContinuityUpdate, options: PartnerMutation) =>
+      request(
+        "/admin/partner/continuity",
+        partnerContinuitySettingsSchema,
+        options.signal,
+        partnerContinuityUpdateSchema.parse(input),
+        options,
+      ),
+    notifications: (input: PartnerNotificationQuery, signal?: AbortSignal, wallet = false) => {
+      const query = new URLSearchParams();
+      for (const [key, value] of Object.entries(partnerNotificationQuerySchema.parse(input)))
+        if (value !== undefined) query.set(key, value);
+      return request(
+        `/${wallet ? "wallet" : "partner"}/notifications?${query}`,
+        partnerNotificationsSchema,
+        signal,
+      );
+    },
+    readNotification: (id: string, options: PartnerMutation, wallet = false) =>
+      request(
+        `/${wallet ? "wallet" : "partner"}/notifications/${encodeURIComponent(id)}/read`,
+        z.object({ read: z.literal(true) }),
+        options.signal,
+        {},
+        options,
+      ),
     dashboard: (signal?: AbortSignal) =>
       request("/partner/dashboard", partnerDashboardSchema, signal),
     work: (signal?: AbortSignal) => request("/partner/work", partnerWorkSchema, signal),

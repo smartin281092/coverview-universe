@@ -180,7 +180,7 @@ export function LeadsPage() {
                   leads.data.items.some(
                     (lead) =>
                       lead.id === id &&
-                      lead.canEdit &&
+                      (lead.allowedActions?.includes("transition") ?? lead.canEdit) &&
                       lead.stage !== "draft" &&
                       lead.stage !== "completed",
                   )

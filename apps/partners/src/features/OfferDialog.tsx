@@ -8,6 +8,7 @@ import {
   leadOfferInputSchema,
   type LeadDetail,
   type LeadOffer,
+  type OfferImport,
 } from "@coverview/contracts/partner";
 import { PartnerApiError } from "@coverview/api-client/partner";
 import {
@@ -35,15 +36,18 @@ function minor(value: string) {
 export function OfferDialog({
   lead,
   previous,
+  imported,
   onClose,
 }: {
   lead: LeadDetail;
   previous?: LeadOffer;
+  imported?: OfferImport;
   onClose: () => void;
 }) {
   const { t } = useTranslation(),
     session = usePartner(),
     command = useLeadCommand(lead.id),
+    [revision] = useState(lead.revision),
     [error, setError] = useState(""),
     [uploading, setUploading] = useState(false);
   const operation = useRef<{ key: string; id?: string; file?: File }>({ key: crypto.randomUUID() });
@@ -52,7 +56,7 @@ export function OfferDialog({
     defaultValues: {
       company: previous?.company ?? "",
       product: previous?.product ?? "",
-      documentId: previous?.documentId ?? "",
+      documentId: imported?.documentId ?? previous?.documentId ?? "",
       replacesId: previous?.id ?? null,
       reference: previous?.reference ?? "",
       premium:
@@ -67,15 +71,14 @@ export function OfferDialog({
   });
   const features = useFieldArray({ control: form.control, name: "features" }),
     documentId = form.watch("documentId");
+  const [sourceFingerprint, setSourceFingerprint] = useState<string | null>(null);
   const extraction = useQuery({
     queryKey: [...session.queryKey, "extraction", lead.id, documentId],
     queryFn: ({ signal }) => partnerApi.extraction(lead.id, documentId, signal),
     enabled: !!documentId,
     gcTime: 0,
-    refetchInterval: (query) =>
-      query.state.data && !["ready", "failed", "quarantined"].includes(query.state.data.state)
-        ? 5000
-        : false,
+    refetchInterval: 5000,
+    retry: false,
   });
   async function upload(file: File) {
     if (!file.size || file.size > 20 * 1024 * 1024) {
@@ -111,6 +114,7 @@ export function OfferDialog({
       }
       const document = await api.uploadDocument(operation.current.id, file, options);
       form.setValue("documentId", document.id, { shouldValidate: true });
+      setSourceFingerprint(null);
     } catch {
       setError(t("error"));
     } finally {
@@ -159,9 +163,10 @@ export function OfferDialog({
                 const { premium, validUntil, ...offer } = values;
                 await command.mutateAsync({
                   action: "offer",
-                  revision: lead.revision,
+                  revision,
                   offer: {
                     ...offer,
+                    sourceFingerprint: sourceFingerprint!,
                     annualPremiumMinor: minor(premium),
                     validUntil: validUntil ? zurichInstant(validUntil) : null,
                   },
@@ -178,25 +183,46 @@ export function OfferDialog({
           }}
         >
           <div className="rounded-xl border border-dashed border-input p-5">
-            <Label htmlFor="offer-file">{t("offer.upload")}</Label>
-            <Input
-              id="offer-file"
-              type="file"
-              className="mt-3"
-              disabled={uploading || command.isPending}
-              accept="application/pdf,image/png,image/jpeg,image/webp"
-              onChange={(event) => {
-                const file = event.target.files?.[0];
-                if (file) void upload(file);
-              }}
-            />
+            {imported ? (
+              <p className="break-words font-medium">{imported.name}</p>
+            ) : (
+              <>
+                <Label htmlFor="offer-file">{t("offer.upload")}</Label>
+                <Input
+                  id="offer-file"
+                  type="file"
+                  className="mt-3"
+                  disabled={uploading || command.isPending}
+                  accept="application/pdf,image/png,image/jpeg,image/webp"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0];
+                    if (file) void upload(file);
+                  }}
+                />
+              </>
+            )}
             {uploading && (
               <p role="status" className="mt-3 text-sm">
                 {t("offer.uploading")}
               </p>
             )}
-            {documentId && (
+            {documentId && !extraction.data && !extraction.isError && (
               <p className="mt-3 text-xs text-muted-foreground">{t("offer.processing")}</p>
+            )}
+            {extraction.data && (
+              <div className="mt-3 space-y-2 text-sm" role="status">
+                <p>{t(`imports.state.${extraction.data.state}`)}</p>
+                <p className="text-muted-foreground">
+                  {t(`imports.analysis.${extraction.data.analysisStatus ?? "absent"}`)}
+                </p>
+                {extraction.data.failure && (
+                  <p>
+                    {t(`imports.failure.${extraction.data.failure}`, {
+                      defaultValue: t("imports.failure.other"),
+                    })}
+                  </p>
+                )}
+              </div>
             )}
             {extraction.data?.annualPremiumMinor != null && (
               <div className="mt-4 space-y-2">
@@ -226,6 +252,57 @@ export function OfferDialog({
               </div>
             )}
           </div>
+          {extraction.data?.sourceFingerprint && (
+            <div className="space-y-2">
+              {imported ? (
+                <Button type="button" variant="outline" asChild>
+                  <a href={partnerApi.importSourceUrl(lead.id, imported.id)}>{t("offer.source")}</a>
+                </Button>
+              ) : previous?.documentId === documentId ? (
+                <Button type="button" variant="outline" asChild>
+                  <a href={partnerApi.sourceUrl(lead.id, previous.id)}>{t("offer.source")}</a>
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    void api
+                      .downloadDocument(documentId)
+                      .then((blob) => {
+                        const url = URL.createObjectURL(blob),
+                          anchor = document.createElement("a");
+                        anchor.href = url;
+                        anchor.download = operation.current.file?.name ?? "document";
+                        anchor.click();
+                        setTimeout(() => URL.revokeObjectURL(url), 1000);
+                      })
+                      .catch(() => setError(t("error")));
+                  }}
+                >
+                  {t("offer.source")}
+                </Button>
+              )}
+              <p className="text-sm text-muted-foreground">{t("offer.bindHelp")}</p>
+              <label className="flex items-start gap-3 text-sm">
+                <input
+                  type="checkbox"
+                  checked={sourceFingerprint === extraction.data.sourceFingerprint}
+                  onChange={(event) =>
+                    setSourceFingerprint(
+                      event.target.checked ? (extraction.data?.sourceFingerprint ?? null) : null,
+                    )
+                  }
+                />
+                {t("offer.bindSource")}
+              </label>
+            </div>
+          )}
+          {extraction.isError && (
+            <p role="alert" className="text-sm text-destructive">
+              {t("error")}
+            </p>
+          )}
           <div className="grid gap-4 sm:grid-cols-2">
             {input("company")}
             {input("product")}
@@ -299,6 +376,39 @@ export function OfferDialog({
                     <option value="missing">{t("offer.missing")}</option>
                   </select>
                 </div>
+                <div className="space-y-2">
+                  <Label htmlFor={`coverage-${index}`}>{t("contract.coverageLabel")}</Label>
+                  <select
+                    id={`coverage-${index}`}
+                    {...form.register(`features.${index}.coverage`)}
+                    className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+                  >
+                    {["unknown", "included", "excluded"].map((value) => (
+                      <option key={value} value={value}>
+                        {t(`contract.coverage.${value}`)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor={`exclusions-${index}`}>{t("contract.exclusions")}</Label>
+                  <Input
+                    id={`exclusions-${index}`}
+                    {...form.register(`features.${index}.exclusions`)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor={`source-page-${index}`}>{t("contract.sourcePage")}</Label>
+                  <Input
+                    id={`source-page-${index}`}
+                    type="number"
+                    min={1}
+                    max={20}
+                    {...form.register(`features.${index}.sourcePage`, {
+                      setValueAs: (value: string) => (value ? Number(value) : null),
+                    })}
+                  />
+                </div>
                 <Button type="button" variant="ghost" onClick={() => features.remove(index)}>
                   {t("offer.removeFeature")}
                 </Button>
@@ -347,7 +457,17 @@ export function OfferDialog({
             >
               {t("cancel")}
             </Button>
-            <Button type="submit" disabled={!documentId || uploading || command.isPending}>
+            <Button
+              type="submit"
+              disabled={
+                !documentId ||
+                !sourceFingerprint ||
+                sourceFingerprint !== extraction.data?.sourceFingerprint ||
+                extraction.isError ||
+                uploading ||
+                command.isPending
+              }
+            >
               {t("offer.add")}
             </Button>
           </div>

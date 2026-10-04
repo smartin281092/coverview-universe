@@ -4,9 +4,24 @@ import {
   createRouter,
   lazyRouteComponent,
 } from "@tanstack/react-router";
-import { leadListQuerySchema, type LeadListQuery } from "@coverview/contracts/partner";
+import {
+  leadListQuerySchema,
+  partnerNotificationQuerySchema,
+  type LeadListQuery,
+} from "@coverview/contracts/partner";
 import { AppShell } from "./AppShell";
 const root = createRootRoute({ component: AppShell });
+const collaborations = createRoute({
+  getParentRoute: () => root,
+  path: "/collaborations",
+  component: lazyRouteComponent(() => import("./pages/CollaborationsPage"), "CollaborationsPage"),
+});
+const notifications = createRoute({
+  getParentRoute: () => root,
+  path: "/notifications",
+  validateSearch: (search: Record<string, unknown>) => partnerNotificationQuerySchema.parse(search),
+  component: lazyRouteComponent(() => import("./pages/NotificationsPage"), "NotificationsPage"),
+});
 const home = createRoute({
   getParentRoute: () => root,
   path: "/",
@@ -74,6 +89,8 @@ const agenda = createRoute({
 export const router = createRouter({
   routeTree: root.addChildren([
     home,
+    notifications,
+    collaborations,
     account,
     leads,
     lead,

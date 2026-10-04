@@ -1,0 +1,9 @@
+{
+  "title": "Assurance maladie · {name}",
+  "context": "Demande initiale du {date} : {insurer} · {model}. Prime mensuelle indicative : {premium}. Franchise : {deductible}. Accident : {accident}. Commune : {locality}. Année de naissance : {year}. Caisse actuelle déclarée : {currentInsurer}. Configuration à vérifier, aucune offre reçue ni couverture confirmée.",
+  "included": "inclus",
+  "excluded": "exclu",
+  "missing": "non renseignée",
+  "nextAction": "Qualifier la demande d’assurance et convenir du prochain échange",
+  "event": "Demande d’assurance transmise avec l’accord du propriétaire du profil."
+}

@@ -42,14 +42,48 @@ const requestsRoute = createRoute({
   path: "/requests",
   component: RequestsPage,
 });
+const leadNotificationsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/offers/notifications",
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): { status: "open" | "all"; cursor?: string; clientProfileId?: string } => ({
+    status: search.status === "open" ? "open" : "all",
+    ...(typeof search.cursor === "string" ? { cursor: search.cursor } : {}),
+    ...(typeof search.clientProfileId === "string"
+      ? { clientProfileId: search.clientProfileId }
+      : {}),
+  }),
+  component: lazyRouteComponent(
+    () => import("./pages/LeadNotificationsPage"),
+    "LeadNotificationsPage",
+  ),
+});
 const offersRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/offers",
-  validateSearch: (search: Record<string, unknown>): {lead?: string} => typeof search.lead === "string" && /^lead_[0-9a-f-]{36}$/.test(search.lead) ? {lead: search.lead} : {},
+  validateSearch: (search: Record<string, unknown>): { lead?: string } =>
+    typeof search.lead === "string" && /^lead_[0-9a-f-]{36}$/.test(search.lead)
+      ? { lead: search.lead }
+      : {},
   component: lazyRouteComponent(() => import("./pages/OffersPage"), "OffersPage"),
 });
-const insuranceRequestsRoute = createRoute({ getParentRoute: () => rootRoute, path: "/insurance-requests", component: lazyRouteComponent(() => import("./pages/InsuranceRequestsPage"), "InsuranceRequestsPage") });
-const insuranceRequestRoute = createRoute({ getParentRoute: () => rootRoute, path: "/insurance-requests/$requestId", component: lazyRouteComponent(() => import("./pages/InsuranceRequestsPage"), "InsuranceRequestsPage") });
+const insuranceRequestsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/insurance-requests",
+  component: lazyRouteComponent(
+    () => import("./pages/InsuranceRequestsPage"),
+    "InsuranceRequestsPage",
+  ),
+});
+const insuranceRequestRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/insurance-requests/$requestId",
+  component: lazyRouteComponent(
+    () => import("./pages/InsuranceRequestsPage"),
+    "InsuranceRequestsPage",
+  ),
+});
 const actionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/actions",
@@ -193,6 +227,7 @@ export const router = createRouter({
     documentsRoute,
     requestsRoute,
     offersRoute,
+    leadNotificationsRoute,
     actionsRoute,
     actionRoute,
     documentRoute,

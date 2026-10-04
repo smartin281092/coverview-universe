@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import type { IdentityMe } from "@coverview/api-client";
 import { createPartnerClient } from "@coverview/api-client/partner";
@@ -31,11 +32,17 @@ function Overview({ identity, blocked }: { identity: IdentityMe; blocked: boolea
         <p className="mt-4 max-w-2xl text-muted-foreground">{t("description")}</p>
       </header>
       <div className="flex flex-wrap gap-3">
+        <Button variant="outline" asChild>
+          <Link to="/partner/continuity">{t("continuity.title")}</Link>
+        </Button>
         <Button asChild>
           <a href={partnerUrl}>{t("open")}</a>
         </Button>
         <Button variant="outline" asChild>
           <a href={`${partnerUrl}/applications`}>{t("applications")}</a>
+        </Button>
+        <Button variant="outline" asChild>
+          <a href={`${partnerUrl}/notifications`}>{t("notifications")}</a>
         </Button>
       </div>
       {dashboard.isPending ? (

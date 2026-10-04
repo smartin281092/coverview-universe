@@ -8,7 +8,7 @@ export function LeadCard({ lead, compact = false }: { lead: LeadSummary; compact
   const { t } = useTranslation();
   return (
     <article
-      draggable={lead.canEdit}
+      draggable={lead.allowedActions?.includes("transition") ?? lead.canEdit}
       onDragStart={(event) => event.dataTransfer.setData("text/lead-id", lead.id)}
       className="group rounded-xl border border-border bg-card p-4 shadow-sm transition-shadow hover:shadow-md"
     >

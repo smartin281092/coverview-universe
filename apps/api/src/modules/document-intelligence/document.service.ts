@@ -9,16 +9,65 @@ export function createDocumentService(
   repository: ReturnType<typeof createDocumentRepository>,
   storage: FileStorage,
 ) {
+  async function storeOriginal(
+    row: Awaited<ReturnType<typeof repository.original>>,
+    bytes: Buffer,
+  ) {
+    let mime = "application/octet-stream";
+    // Signature detection only; document parsing is forbidden before antivirus.
+    try {
+      mime = (await fileTypeFromBuffer(bytes.subarray(0, 32)))?.mime ?? mime;
+    } catch {
+      /* Undetectable/truncated content is preserved as unknown, scanned before any parser. */
+    }
+    try {
+      await storage.put(row.objectKey, bytes);
+      const saved = await storage.get(row.objectKey);
+      if (
+        saved.length !== row.size ||
+        createHash("sha256").update(saved).digest("hex") !== row.checksum
+      )
+        throw new Error("Stored original integrity failed");
+    } catch (cause) {
+      throw new DocumentError("DOCUMENT_STORAGE_UNAVAILABLE", 503, { cause });
+    }
+
+    return mime;
+  }
   return {
+    async uploadShared<T>(
+      userId: string,
+      id: string,
+      bytes: Buffer,
+      authorize: () => Promise<void>,
+      confirm: (mime: string) => Promise<T>,
+    ) {
+      await authorize();
+      const row = await repository.original(userId, id);
+      if (
+        bytes.length !== row.size ||
+        createHash("sha256").update(bytes).digest("hex") !== row.checksum
+      )
+        throw new DocumentError("DOCUMENT_UPLOAD_INVALID", 422);
+      const mime = row.state === "pending" ? await storeOriginal(row, bytes) : row.mime;
+      await authorize();
+      return confirm(mime);
+    },
     async downloadShared(userId: string, id: string, authorize: () => Promise<void>) {
       await authorize();
       const row = await repository.original(userId, id);
       if (!row.scanVersion || !["ready", "failed"].includes(row.state))
         throw new DocumentError("DOCUMENT_DOWNLOAD_BLOCKED", 422);
       let bytes: Buffer;
-      try { bytes = await storage.get(row.objectKey); }
-      catch (cause) { throw new DocumentError("DOCUMENT_STORAGE_UNAVAILABLE", 503, { cause }); }
-      if (bytes.length !== row.size || createHash("sha256").update(bytes).digest("hex") !== row.checksum)
+      try {
+        bytes = await storage.get(row.objectKey);
+      } catch (cause) {
+        throw new DocumentError("DOCUMENT_STORAGE_UNAVAILABLE", 503, { cause });
+      }
+      if (
+        bytes.length !== row.size ||
+        createHash("sha256").update(bytes).digest("hex") !== row.checksum
+      )
         throw new DocumentError("DOCUMENT_STORAGE_UNAVAILABLE", 503);
       await authorize();
       const current = await repository.original(userId, id);
@@ -35,24 +84,7 @@ export function createDocumentService(
       )
         throw new DocumentError("DOCUMENT_UPLOAD_INVALID", 422);
       if (row.state !== "pending") return repository.get(actor.userId, id);
-      let mime = "application/octet-stream";
-      // Signature detection only; document parsing is forbidden before antivirus.
-      try {
-        mime = (await fileTypeFromBuffer(bytes.subarray(0, 32)))?.mime ?? mime;
-      } catch {
-        /* Undetectable/truncated content is preserved as unknown, scanned before any parser. */
-      }
-      try {
-        await storage.put(row.objectKey, bytes);
-        const saved = await storage.get(row.objectKey);
-        if (
-          saved.length !== row.size ||
-          createHash("sha256").update(saved).digest("hex") !== row.checksum
-        )
-          throw new Error("Stored original integrity failed");
-      } catch (cause) {
-        throw new DocumentError("DOCUMENT_STORAGE_UNAVAILABLE", 503, { cause });
-      }
+      const mime = await storeOriginal(row, bytes);
       try {
         return await repository.uploaded(actor, id, mime);
       } catch (error) {

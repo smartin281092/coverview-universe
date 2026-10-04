@@ -82,12 +82,13 @@ export async function context(
   };
 }
 export const ownedClient = `(l.client_profile_id is null and l.client_user_id=$1 or exists(select 1 from managed_profiles cp where cp.id=l.client_profile_id and cp.user_id=$1))`;
-export const assigned = `(exists(select 1 from partner_members am where am.user_id=$1 and am.roles ? 'advisor') and (l.responsible_id=$1 or exists(select 1 from partner_contributors pc where pc.lead_id=l.id and pc.user_id=$1 and pc.revoked_at is null)))`;
+export const assigned = `(exists(select 1 from partner_members am where am.user_id=$1 and am.roles ? 'advisor') and (l.responsible_id=$1 or exists(select 1 from partner_contributors pc where pc.lead_id=l.id and pc.user_id=$1 and pc.revoked_at is null and pc.access_scope='advice')))`;
+const contribution = `exists(select 1 from partner_contributors pc where pc.lead_id=l.id and pc.user_id=$1 and pc.revoked_at is null)`;
 export const managed = `exists(select 1 from partner_members me join partner_members colleague on colleague.organization_id=me.organization_id where me.user_id=$1 and me.roles ? 'manager' and colleague.user_id=l.responsible_id)`;
 export function visible(actor: PartnerActor) {
   if (actor.wallet) return ownedClient;
   if (actor.administrator) return "($1::text is not null)";
-  return `exists(select 1 from partner_members vm join partner_organizations vo on vo.id=vm.organization_id where vm.user_id=$1 and vm.state='approved' and vo.state='approved' and (vm.review_due_at is null or vm.review_due_at>now())) and (${assigned} or l.creator_id=$1 or ${managed})`;
+  return `exists(select 1 from partner_members vm join partner_organizations vo on vo.id=vm.organization_id where vm.user_id=$1 and vm.state='approved' and vo.state='approved' and (vm.review_due_at is null or vm.review_due_at>now())) and (${assigned} or ${contribution} or (l.creator_id=$1 and not exists(select 1 from partner_insurance_sources s where s.lead_id=l.id)) or ${managed})`;
 }
 export async function lockActor(db: Executor, actor: PartnerActor) {
   const user = await db.query<Record<string, unknown>>(

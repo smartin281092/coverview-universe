@@ -52,6 +52,7 @@ beforeAll(async () => {
     LOG_LEVEL: "silent",
     AUTH_ENABLED: "true",
     DOCUMENTS_ENABLED: "false",
+    PARTNER_JOBS_ENABLED: "false",
     WORKOS_API_KEY: "fixture_not_real",
     WORKOS_CLIENT_ID: "client_fixture",
     AUTH_SESSION_SECRET: Buffer.alloc(32, 3).toString("base64"),

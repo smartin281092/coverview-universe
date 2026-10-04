@@ -16,10 +16,24 @@ import { registerCompanyActionRoutes } from "./document.company-actions.routes.j
 import { createActionCenterRepository } from "./document.action-center.repository.js";
 import { registerActionCenterRoutes } from "./document.action-center.routes.js";
 import { registerActionRealtime, type RealtimeIdentity } from "./document.action-realtime.js";
-import { registerLeadDocumentRoutes, type LeadSourceAuthorization } from "./document.lead.routes.js";
+import {
+  registerLeadDocumentRoutes,
+  type LeadSourceAuthorization,
+} from "./document.lead.routes.js";
 export { DocumentError } from "./document.repository.js";
-export {retainLeadSource} from "./document.lead-source.js";
-export {documents} from "./document.schema.js";
+export {
+  retainLeadSource,
+  leadSourceSnapshot,
+  leadSourceSnapshotSchema,
+  leadSourceReviewRevisionSql,
+} from "./document.lead-source.js";
+export { documents } from "./document.schema.js";
+export {
+  createLeadOfferUpload,
+  queueLeadOfferUpload,
+  leadImportAnalysis,
+} from "./document.lead-import.js";
+export { readContractCandidates, retainContractReference } from "./document.contract-reference.js";
 
 export async function registerDocuments(
   app: FastifyInstance,

@@ -1447,6 +1447,7 @@ export function createDocumentRepository(db: Database) {
         .where(
           and(
             eq(documents.state, "pending"),
+            isNull(documents.retainedAt),
             lt(documents.updatedAt, new Date(Date.now() - 86400000)),
           ),
         )
@@ -1462,7 +1463,7 @@ export function createDocumentRepository(db: Database) {
               generation: item.generation + 1,
               updatedAt: new Date(),
             })
-            .where(and(condition(item.userId, item.id), eq(documents.state, "pending")))
+            .where(and(condition(item.userId, item.id), eq(documents.state, "pending"), isNull(documents.retainedAt)))
             .returning();
           if (row) await event(tx, row, "document.deletion_requested.v1");
         });

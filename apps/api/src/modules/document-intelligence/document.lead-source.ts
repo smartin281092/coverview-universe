@@ -1,4 +1,40 @@
 import type { PoolClient } from "pg";
+import { createHash } from "node:crypto";
+import { z } from "zod";
+
+export const leadSourceSnapshotSchema = z.object({
+  checksum: z.string().regex(/^[a-f0-9]{64}$/u),
+  generation: z.number().int().nonnegative(),
+  reviewRevision: z.number().int().nonnegative(),
+  analysis: z.unknown(),
+  category: z.string(),
+  categoryCorrected: z.boolean(),
+  fingerprint: z.string().regex(/^[a-f0-9]{64}$/u),
+});
+
+// Immutable review records survive ownership transfer; files.revision alone also changes on transfer.
+export const leadSourceReviewRevisionSql = `greatest(
+  coalesce((select max(document_revision) from document_field_corrections where document_id=f.id and generation=f.generation),0),
+  coalesce((select max(revision) from document_decisions where document_id=f.id),0))`;
+
+// The caller must authorize the Lead or the owned upload before reading this projection.
+export function leadSourceSnapshot(row: Record<string, unknown>) {
+  if (row.deleted_at || !row.scan_version || !["ready", "failed"].includes(String(row.state)))
+    return null;
+  const content = {
+    checksum: row.checksum,
+    generation: row.generation,
+    reviewRevision: Number(row.source_review_revision),
+    analysis: row.analysis ?? null,
+    category: row.category,
+    categoryCorrected: row.category_corrected,
+  };
+  // JSONB key order is stable for rows read from PostgreSQL; persist this exact payload.
+  return leadSourceSnapshotSchema.parse({
+    ...content,
+    fingerprint: createHash("sha256").update(JSON.stringify(content)).digest("hex"),
+  });
+}
 
 // Called inside the Lead transaction. The row lock also serializes deletion of the source.
 export async function retainLeadSource(

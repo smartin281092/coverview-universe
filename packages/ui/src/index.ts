@@ -1,4 +1,5 @@
 export { Button } from "./Button";
+export { SourcedComparison } from "./SourcedComparison";
 export { ButtonLink } from "./Button";
 export { Badge, badgeVariants } from "./Badge";
 export {
@@ -46,3 +47,6 @@ export {
   SessionExpiredState,
 } from "./States";
 export { RequestProgress } from "./RequestProgress";
+export { NotificationList } from "./NotificationList";
+export { VersionHistoryDialog } from "./VersionHistoryDialog";
+export { PolicyEvidence } from "./PolicyEvidence";

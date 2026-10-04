@@ -18,7 +18,17 @@ import { usePartner } from "../features/PartnerSession";
 import { useLeadCommand } from "../features/use-lead-command";
 import { LeadActionDialog, type LeadAction } from "../features/LeadActionDialog";
 import { OfferDialog } from "../features/OfferDialog";
+import { OfferImportDialog } from "../features/OfferImportDialog";
+import { OfferHistoryDialog } from "../features/OfferHistoryDialog";
+import { FinalPoliciesDialog } from "../features/FinalPoliciesDialog";
+import { InsuranceRequestDialog } from "../features/InsuranceRequestDialog";
+import { ReferentContinuityDialog } from "../features/ReferentContinuityDialog";
+import { OfferWithdrawDialog } from "../features/OfferWithdrawDialog";
+import { ContractComparison } from "../features/ContractComparison";
+import { ContractReviewDialog } from "../features/ContractReviewDialog";
 import { CreateLeadDialog } from "../features/CreateLeadDialog";
+import { CollaborationDialog } from "../features/CollaborationDialog";
+import { CollaborationList } from "../features/CollaborationList";
 import { formatDate, formatMoney } from "../features/Field";
 import { adminUrl, partnerApi } from "../api";
 export function LeadPage() {
@@ -38,6 +48,14 @@ export function LeadPage() {
   const command = useLeadCommand(leadId),
     [action, setAction] = useState<LeadAction | null>(null),
     [editing, setEditing] = useState(false),
+    [reviewContract, setReviewContract] = useState(false),
+    [history, setHistory] = useState(false),
+    [policies, setPolicies] = useState(false),
+    [imports, setImports] = useState(false),
+    [insuranceSource, setInsuranceSource] = useState(false),
+    [referent, setReferent] = useState(false),
+    [withdraw, setWithdraw] = useState<LeadOffer | null>(null),
+    [collaborating, setCollaborating] = useState(false),
     [appointment, setAppointment] = useState<string>(),
     [offer, setOffer] = useState<LeadOffer | "new" | null>(null);
   if (leadQuery.isPending) return <LoadingState label={t("loading")} />;
@@ -55,9 +73,21 @@ export function LeadPage() {
     activeTab = lead.availableTabs.includes(tab as (typeof lead.availableTabs)[number])
       ? tab
       : "overview";
+  const allowed = (value: string) => lead.allowedActions?.includes(value) ?? lead.canEdit;
   return (
     <>
+      {referent && <ReferentContinuityDialog lead={lead} onClose={() => setReferent(false)} />}
       {editing && <CreateLeadDialog open onOpenChange={setEditing} lead={lead} />}
+      {collaborating && <CollaborationDialog lead={lead} onClose={() => setCollaborating(false)} />}
+      {history && <OfferHistoryDialog leadId={lead.id} onClose={() => setHistory(false)} />}
+      {policies && <FinalPoliciesDialog leadId={lead.id} onClose={() => setPolicies(false)} />}
+      {imports && <OfferImportDialog lead={lead} onClose={() => setImports(false)} />}
+      {insuranceSource && lead.insuranceRequestId && lead.access === "operational" && (
+        <InsuranceRequestDialog leadId={lead.id} onClose={() => setInsuranceSource(false)} />
+      )}
+      {withdraw && (
+        <OfferWithdrawDialog lead={lead} offer={withdraw} onClose={() => setWithdraw(null)} />
+      )}
       <header className="space-y-5">
         <Link
           to="/leads"
@@ -83,7 +113,7 @@ export function LeadPage() {
             </p>
           </div>
           <div className="flex gap-2">
-            {lead.canEdit && lead.stage !== "completed" && (
+            {allowed("edit") && lead.stage !== "completed" && (
               <Button variant="outline" onClick={() => setEditing(true)}>
                 {t("create.edit")}
               </Button>
@@ -115,11 +145,31 @@ export function LeadPage() {
             <p className="mt-1 text-xs text-muted-foreground">
               {t(`assignment.${lead.assignment}`)}
             </p>
+            {lead.referentContinuity && (
+              <Button
+                size="sm"
+                variant="outline"
+                className="mt-3"
+                onClick={() => setReferent(true)}
+              >
+                {t("referents.title")}
+              </Button>
+            )}
           </div>
           <div>
             <p className="text-xs text-muted-foreground">{t("detail.next")}</p>
             <p className="mt-2 text-sm font-medium">{lead.nextAction || t("detail.noAction")}</p>
             <p className="mt-1 text-xs text-muted-foreground">{formatDate(lead.dueAt)}</p>
+            {lead.events.some((item) => item.responsePending) && (
+              <Button
+                size="sm"
+                variant="outline"
+                className="mt-3"
+                onClick={() => void navigate({ search: { tab: "activity" } })}
+              >
+                {t("decision.pending")}
+              </Button>
+            )}
           </div>
           <div>
             <p className="text-xs text-muted-foreground">{t("detail.potential")}</p>
@@ -146,13 +196,25 @@ export function LeadPage() {
                 )}
               {lead.stage !== "completed" && (
                 <>
-                  <Button variant="outline" onClick={() => setAction("contact")}>
+                  <Button
+                    disabled={!allowed("contact")}
+                    variant="outline"
+                    onClick={() => setAction("contact")}
+                  >
                     {t("detail.contact")}
                   </Button>
-                  <Button variant="outline" onClick={() => setAction("transition")}>
+                  <Button
+                    disabled={!allowed("transition")}
+                    variant="outline"
+                    onClick={() => setAction("transition")}
+                  >
                     {t("detail.changeStage")}
                   </Button>
-                  <Button variant="outline" onClick={() => setAction("appointment")}>
+                  <Button
+                    disabled={!allowed("appointment")}
+                    variant="outline"
+                    onClick={() => setAction("appointment")}
+                  >
                     {t("detail.appointment")}
                   </Button>
                 </>
@@ -193,11 +255,24 @@ export function LeadPage() {
           ))}
         </TabsList>
       </Tabs>
+      {activeTab === "collaboration" && (
+        <div className="space-y-5">
+          {lead.canCollaborate && (
+            <Button onClick={() => setCollaborating(true)}>{t("collaboration.propose")}</Button>
+          )}
+          <CollaborationList items={lead.collaborations} />
+        </div>
+      )}
       {activeTab === "overview" && (
         <div className="grid gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
           <section className="space-y-5 rounded-xl border border-border p-6">
             <h2 className="text-lg font-semibold">{t("field.context")}</h2>
             <p className="whitespace-pre-wrap text-sm leading-7">{lead.context || "—"}</p>
+            {lead.insuranceRequestId && lead.access === "operational" && (
+              <Button variant="outline" onClick={() => setInsuranceSource(true)}>
+                {t("insuranceSource.open")}
+              </Button>
+            )}
             {lead.access === "progress" && (
               <p className="text-sm text-muted-foreground">{t("detail.progressOnly")}</p>
             )}
@@ -211,7 +286,7 @@ export function LeadPage() {
                   className="mt-3"
                   size="sm"
                   variant="outline"
-                  disabled={command.isPending}
+                  disabled={command.isPending || !allowed("wait")}
                   onClick={() =>
                     command.mutate({ action: "wait", waiting: null, revision: lead.revision })
                   }
@@ -229,11 +304,21 @@ export function LeadPage() {
             )}
             {lead.canEdit && lead.stage !== "completed" && (
               <div className="flex flex-wrap gap-2">
-                <Button onClick={() => setAction("next_action")}>{t("detail.nextAction")}</Button>
-                <Button variant="outline" onClick={() => setAction("wait")}>
+                <Button disabled={!allowed("next_action")} onClick={() => setAction("next_action")}>
+                  {t("detail.nextAction")}
+                </Button>
+                <Button
+                  disabled={!allowed("wait")}
+                  variant="outline"
+                  onClick={() => setAction("wait")}
+                >
                   {t("detail.wait")}
                 </Button>
-                <Button variant="ghost" onClick={() => setAction("close")}>
+                <Button
+                  disabled={!allowed("close")}
+                  variant="ghost"
+                  onClick={() => setAction("close")}
+                >
                   {t("detail.close")}
                 </Button>
               </div>
@@ -248,6 +333,19 @@ export function LeadPage() {
             {lead.firstActionDueAt && !lead.firstUsefulAt && (
               <p className="text-sm">
                 {t("detail.firstAction", { date: formatDate(lead.firstActionDueAt) })}
+              </p>
+            )}
+            {lead.acceptanceDueAt && (
+              <p className="text-sm text-muted-foreground">
+                {t("detail.acceptanceDue", { date: formatDate(lead.acceptanceDueAt) })}
+              </p>
+            )}
+            {lead.continuityDueAt && lead.escalationDueAt && (
+              <p className="text-sm text-muted-foreground">
+                {t("detail.continuity", {
+                  review: formatDate(lead.continuityDueAt),
+                  escalation: formatDate(lead.escalationDueAt),
+                })}
               </p>
             )}
             <p className="text-xs text-muted-foreground">
@@ -287,6 +385,17 @@ export function LeadPage() {
                 <h3 className="mt-2 text-sm font-semibold">
                   {t(`event.${item.kind}`, { defaultValue: item.kind })}
                 </h3>
+                {item.offer && <p className="mt-2 text-sm">{t("decision.offer", item.offer)}</p>}
+                {item.responsePending && (
+                  <div className="mt-2 flex flex-wrap items-center gap-3">
+                    <Badge variant="outline">{t("decision.pending")}</Badge>
+                    {allowed("contact") && lead.stage !== "completed" && (
+                      <Button size="sm" variant="outline" onClick={() => setAction("contact")}>
+                        {t("decision.followUp")}
+                      </Button>
+                    )}
+                  </div>
+                )}
                 <p className="mt-2 whitespace-pre-wrap text-sm text-muted-foreground">
                   {item.kind === "lead.stage_changed" ? t(`stage.${item.text}`) : item.text}
                 </p>
@@ -364,7 +473,7 @@ export function LeadPage() {
                 </p>
               </div>
               <Badge variant="outline">{t(`appointment.${appt.state}`)}</Badge>
-              {lead.canEdit && appt.state === "scheduled" && (
+              {allowed("appointment_state") && appt.state === "scheduled" && (
                 <Button
                   variant="outline"
                   size="sm"
@@ -385,90 +494,132 @@ export function LeadPage() {
       )}
       {activeTab === "offers" && (
         <div className="space-y-5">
+          <ContractComparison lead={lead} />
+          {lead.currentContract?.status === "available" &&
+            allowed("contract_review") &&
+            session.context.canAdvise &&
+            lead.stage !== "completed" && (
+              <Button variant="outline" onClick={() => setReviewContract(true)}>
+                {t("contract.review")}
+              </Button>
+            )}
           {lead.canEdit && session.context.canAdvise && lead.stage !== "completed" && (
             <Button onClick={() => setOffer("new")}>
               <Plus className="mr-2 size-4" />
               {t("detail.offer")}
             </Button>
           )}
-          {lead.offers.map((item) => (
-            <article
-              key={item.id}
-              className={`rounded-xl border border-border p-6 ${item.active ? "" : "opacity-60"}`}
-            >
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div>
-                  <p className="text-sm text-muted-foreground">
-                    {item.company}
-                    {" · "}
-                    {t("offer.version", { version: item.version })}
-                  </p>
-                  <h3 className="mt-2 text-lg font-semibold">{item.product}</h3>
-                  <p className="mt-2 text-xl font-medium">
-                    {item.annualPremiumMinor === null
-                      ? t("detail.notEstimable")
-                      : formatMoney(item.annualPremiumMinor)}
-                  </p>
+          <Button variant="outline" onClick={() => setHistory(true)}>
+            {t("history.title")}
+          </Button>
+          <Button variant="outline" onClick={() => setPolicies(true)}>
+            {t("policy.title")}
+          </Button>
+          <Button variant="outline" onClick={() => setImports(true)}>
+            {t("imports.title")}
+          </Button>
+          {lead.offers
+            .filter((item) => item.active)
+            .map((item) => (
+              <article
+                key={item.id}
+                className={`rounded-xl border border-border p-6 ${item.active ? "" : "opacity-60"}`}
+              >
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div>
+                    <p className="text-sm text-muted-foreground">
+                      {item.company}
+                      {" · "}
+                      {t("offer.version", { version: item.version })}
+                    </p>
+                    <h3 className="mt-2 text-lg font-semibold">{item.product}</h3>
+                    <p className="mt-2 text-xl font-medium">
+                      {item.annualPremiumMinor === null
+                        ? t("detail.notEstimable")
+                        : formatMoney(item.annualPremiumMinor)}
+                    </p>
+                  </div>
+                  <Badge variant="outline">{t(`offer.${item.state}`)}</Badge>
                 </div>
-                <Badge variant="outline">{t(`offer.${item.state}`)}</Badge>
-              </div>
-              {item.summary && <p className="mt-4 whitespace-pre-wrap text-sm">{item.summary}</p>}
-              {item.limitations && (
-                <p className="mt-3 whitespace-pre-wrap text-sm text-muted-foreground">
-                  {item.limitations}
-                </p>
-              )}
-              <div className="mt-5 flex flex-wrap gap-2">
-                <Button asChild size="sm" variant="outline">
-                  <a href={partnerApi.sourceUrl(lead.id, item.id)}>{t("offer.source")}</a>
-                </Button>
-                {lead.canEdit &&
-                  session.context.canAdvise &&
-                  item.active &&
-                  lead.stage !== "completed" && (
-                    <>
-                      <Button size="sm" variant="outline" onClick={() => setOffer(item)}>
-                        {t("offer.newVersion")}
-                      </Button>
-                      {item.state === "to_verify" && (
-                        <Button
-                          size="sm"
-                          disabled={command.isPending}
-                          onClick={() =>
-                            command.mutate({
-                              action: "offer_review",
-                              offerId: item.id,
-                              revision: lead.revision,
-                            })
-                          }
-                        >
-                          {t("offer.review")}
-                        </Button>
-                      )}
-                      {item.state === "ready" && (
-                        <Button
-                          size="sm"
-                          disabled={command.isPending || !lead.clientUserId}
-                          onClick={() =>
-                            command.mutate({
-                              action: "offer_publish",
-                              offerId: item.id,
-                              revision: lead.revision,
-                            })
-                          }
-                        >
-                          {t("offer.publish")}
-                        </Button>
-                      )}
-                    </>
+                {item.summary && <p className="mt-4 whitespace-pre-wrap text-sm">{item.summary}</p>}
+                {item.sourceStatus !== "current" && (
+                  <p role="status" className="mt-3 text-sm">
+                    {t(`history.sourceStatus.${item.sourceStatus ?? "unbound"}`)}
+                  </p>
+                )}
+                {item.updatedSinceViewed && (
+                  <p className="mt-3 text-sm">{t("offer.updatedSinceViewed")}</p>
+                )}
+                {item.limitations && (
+                  <p className="mt-3 whitespace-pre-wrap text-sm text-muted-foreground">
+                    {item.limitations}
+                  </p>
+                )}
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {item.canDownload && (
+                    <Button asChild size="sm" variant="outline">
+                      <a href={partnerApi.sourceUrl(lead.id, item.id)}>{t("offer.source")}</a>
+                    </Button>
                   )}
-              </div>
-              {item.state === "ready" && (
-                <p className="mt-3 text-xs text-muted-foreground">{t("offer.publishHelp")}</p>
-              )}
-            </article>
-          ))}
-          {!lead.offers.length && (
+                  {item.active && allowed("offer_withdraw") && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      disabled={command.isPending}
+                      onClick={() => setWithdraw(item)}
+                    >
+                      {t("offer.withdraw")}
+                    </Button>
+                  )}
+                  {lead.canEdit &&
+                    session.context.canAdvise &&
+                    item.active &&
+                    lead.stage !== "completed" && (
+                      <>
+                        <Button size="sm" variant="outline" onClick={() => setOffer(item)}>
+                          {t("offer.newVersion")}
+                        </Button>
+                        {item.state === "to_verify" && item.sourceStatus === "current" && (
+                          <Button
+                            size="sm"
+                            disabled={command.isPending}
+                            onClick={() =>
+                              command.mutate({
+                                action: "offer_review",
+                                offerId: item.id,
+                                revision: lead.revision,
+                              })
+                            }
+                          >
+                            {t("offer.review")}
+                          </Button>
+                        )}
+                        {item.state === "ready" &&
+                          item.sourceStatus === "current" &&
+                          allowed("offer_publish") && (
+                            <Button
+                              size="sm"
+                              disabled={command.isPending || !lead.clientUserId}
+                              onClick={() =>
+                                command.mutate({
+                                  action: "offer_publish",
+                                  offerId: item.id,
+                                  revision: lead.revision,
+                                })
+                              }
+                            >
+                              {t("offer.publish")}
+                            </Button>
+                          )}
+                      </>
+                    )}
+                </div>
+                {item.state === "ready" && (
+                  <p className="mt-3 text-xs text-muted-foreground">{t("offer.publishHelp")}</p>
+                )}
+              </article>
+            ))}
+          {!lead.offers.some((item) => item.active) && (
             <EmptyState title={t("offer.noOffers")} description={t("offer.sourceHelp")} />
           )}
         </div>
@@ -488,6 +639,9 @@ export function LeadPage() {
           {...(offer === "new" ? {} : { previous: offer })}
           onClose={() => setOffer(null)}
         />
+      )}
+      {reviewContract && lead.currentContract && (
+        <ContractReviewDialog lead={lead} onClose={() => setReviewContract(false)} />
       )}
     </>
   );

@@ -116,7 +116,8 @@ export function LeadActionDialog({
             task: {
               title: readText(data, "title"),
               description: readText(data, "description"),
-              responsibleId: lead.responsibleId ?? session.identity.user.id,
+              responsibleId:
+                readText(data, "participantId") || lead.responsibleId || session.identity.user.id,
               dueAt: readDate(data, "dueAt"),
               priority: readText(data, "priority"),
               reminderAt: readDate(data, "reminderAt"),
@@ -127,7 +128,8 @@ export function LeadActionDialog({
           payload = {
             action,
             appointment: {
-              advisorId: lead.responsibleId ?? session.identity.user.id,
+              advisorId:
+                readText(data, "participantId") || lead.responsibleId || session.identity.user.id,
               startsAt: readDate(data, "startsAt"),
               durationMinutes: Number(readText(data, "duration")),
               mode: readText(data, "mode"),
@@ -211,6 +213,22 @@ export function LeadActionDialog({
           </DialogDescription>
         </DialogHeader>
         <form className="space-y-5" onSubmit={(event) => void submit(event)}>
+          {(action === "task" || action === "appointment") && (
+            <Field
+              name="participantId"
+              label={t("field.responsible")}
+              defaultValue={lead.responsibleId ?? ""}
+              required
+            >
+              {lead.participants
+                .filter((p) => p.canWork && (action !== "appointment" || p.canContact))
+                .map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name}
+                  </option>
+                ))}
+            </Field>
+          )}
           {action === "next_action" && nextFields}
           {action === "contact" && (
             <>
@@ -230,7 +248,9 @@ export function LeadActionDialog({
                   values={
                     session.context.administrator
                       ? ["private", "assigned", "client", "coverview"]
-                      : ["private", "assigned", "client"]
+                      : lead.allowedActions?.includes("contact")
+                        ? ["private", "assigned", "client"]
+                        : ["private", "assigned"]
                   }
                   prefix="audience"
                 />

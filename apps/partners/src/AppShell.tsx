@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   ArrowUpRight,
   Menu,
+  Bell,
 } from "lucide-react";
 import { Button, Sheet, SheetContent, SheetHeader, SheetTitle } from "@coverview/ui";
 import { useState } from "react";
@@ -22,6 +23,8 @@ const links = [
   { to: "/leads", label: "leads", icon: PanelsTopLeft },
   { to: "/clients", label: "clients", icon: Users },
   { to: "/tasks", label: "tasks", icon: CheckSquare },
+  { to: "/notifications", label: "notifications", icon: Bell },
+  { to: "/collaborations", label: "collaborations", icon: Users },
   { to: "/agenda", label: "agenda", icon: CalendarDays },
   { to: "/profile", label: "profile", icon: UserRound },
 ] as const;

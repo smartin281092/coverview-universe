@@ -23,6 +23,8 @@ import {
   InsuranceRequestError,
 } from "./insurance-requests.repository.js";
 export { InsuranceRequestError } from "./insurance-requests.repository.js";
+export { insuranceLeadCandidates } from "./insurance-requests.partner.js";
+export { insuranceRequests } from "./insurance-requests.schema.js";
 type Identity = Awaited<ReturnType<typeof registerIdentity>>;
 const hash = (value: string) => createHash("sha256").update(value).digest("hex");
 const csrf = (value: string) => hash(`insurance-csrf:${value}`);

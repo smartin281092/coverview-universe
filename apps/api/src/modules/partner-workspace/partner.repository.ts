@@ -4,21 +4,30 @@ import { z } from "zod";
 import { documentAnalysisSchema } from "@coverview/contracts";
 import {
   leadSummarySchema,
+  leadCommandSchema,
   leadDetailSchema,
   leadTaskSchema,
   leadAppointmentSchema,
   leadEventSchema,
-  leadOfferSchema,
   partnerApplicationInputSchema,
   partnerReviewInputSchema,
   partnerDirectorySchema,
   partnerDashboardSchema,
   offerExtractionSchema,
   partnerWorkSchema,
+  partnerContinuityUpdateSchema,
+  insuranceLeadConsentSchema,
+  offerImportInputSchema,
+  offerImportRetrySchema,
+  referentUpdateSchema,
+  referentQuerySchema,
+  type PartnerContinuityUpdate,
   type LeadCreateInput,
   type LeadListQuery,
   type LeadSummary,
   type LeadDetail,
+  type PartnerNotificationQuery,
+  type CollaborationResponse,
 } from "@coverview/contracts/partner";
 import {
   assigned,
@@ -35,16 +44,52 @@ import {
   type PartnerActor,
 } from "./partner.policy.js";
 import type { partnerLeads } from "./partner.schema.js";
-import { executeLeadCommand, handoffWork } from "./partner.commands.js";
+import { executeLeadCommand } from "./partner.commands.js";
+import { readOffers } from "./partner.offers.js";
+import { readFinalPolicies } from "./partner.final-policy.js";
+import { readOfferImports } from "./partner.imports.js";
+import {
+  readReferentProfile,
+  updateReferent,
+  readReferentContinuity,
+} from "./partner.referents.js";
+import {
+  readCollaborations,
+  respondCollaboration,
+  reconcileCollaborations,
+} from "./partner.collaboration.js";
+import { handoffWork } from "./partner.participants.js";
+import { followUpDeadline, followUpOverdueSql } from "./partner.follow-up.js";
+import { readContinuitySettings, updateContinuitySettings } from "./partner.settings.js";
+import {
+  syncLeadNotifications,
+  readPartnerNotifications,
+  markPartnerNotificationRead,
+} from "./partner.notifications.js";
 type LeadRow = typeof partnerLeads.$inferSelect;
 import { newId, event } from "./partner.audit.js";
+import { createInsuranceLead, insuranceLinks, readInsuranceSource } from "./partner.insurance.js";
+import {
+  readCurrentContract,
+  compareCurrentContract,
+  lockContractSubject,
+} from "./partner.contract.js";
+import {
+  readContractCandidates,
+  leadSourceSnapshot,
+  leadSourceReviewRevisionSql,
+  createLeadOfferUpload,
+  queueLeadOfferUpload,
+  leadImportAnalysis,
+} from "../document-intelligence/index.js";
 const selectLead = `select l.*, coalesce((select application->>'name' from partner_members where user_id=l.responsible_id),(select email from identity_users where id=l.responsible_id)) responsible_name,
  coalesce((select cp.user_id from managed_profiles cp where cp.id=l.client_profile_id),l.client_user_id) current_client_user_id,
  (select count(*)::int from partner_tasks t where t.lead_id=l.id and t.state='open') open_tasks,
  (select count(*)::int from partner_tasks t where t.lead_id=l.id and t.state='open' and t.due_at<now()) overdue_tasks,
  (select min(starts_at) from partner_appointments a where a.lead_id=l.id and a.state='scheduled' and a.starts_at>=now()) next_appointment_at,
  ${assigned} assigned_access, ${managed} managed_access, ${ownedClient} client_access,
- exists(select 1 from partner_contributors ec where ec.lead_id=l.id and ec.user_id=$1 and ec.revoked_at is null and ec.can_edit) contributor_edit
+ exists(select 1 from partner_contributors ec where ec.lead_id=l.id and ec.user_id=$1 and ec.revoked_at is null and ec.can_edit and ec.access_scope='advice') contributor_edit,
+ exists(select 1 from partner_contributors ec where ec.lead_id=l.id and ec.user_id=$1 and ec.revoked_at is null and ec.can_contact and ec.access_scope='advice') contributor_contact
  from partner_leads l`;
 type ReadRow = LeadRow & {
   currentClientUserId: string | null;
@@ -56,6 +101,7 @@ type ReadRow = LeadRow & {
   managedAccess: boolean;
   clientAccess: boolean;
   contributorEdit: boolean;
+  contributorContact: boolean;
 };
 function summary(actor: PartnerActor, row: ReadRow): LeadSummary {
   const operational =
@@ -69,15 +115,69 @@ function summary(actor: PartnerActor, row: ReadRow): LeadSummary {
   const now = Date.now(),
     active = row.stage !== "completed" && row.stage !== "draft";
   const alerts: LeadSummary["alerts"] = [];
-  const firstActionDueAt = row.notifiedAt
-    ? new Date(row.notifiedAt.getTime() + 86400000).toISOString()
-    : null;
+  const deadlines = followUpDeadline({ ...row, waiting });
+  const firstActionDueAt = date(deadlines.firstActionDueAt);
   const suspended = waiting && new Date(waiting.until).getTime() > now;
+  const controls =
+    !actor.wallet &&
+    (actor.administrator || row.responsibleId === actor.userId || row.managedAccess);
+  const actions = controls
+    ? [
+        "edit",
+        "next_action",
+        "transition",
+        "contact",
+        "note",
+        "task",
+        "task_state",
+        "appointment",
+        "appointment_state",
+        "wait",
+        "close",
+        "offer",
+        "offer_review",
+        "contract_review",
+        "final_policy_review",
+        "offer_publish",
+        "offer_withdraw",
+      ]
+    : operational && row.contributorEdit
+      ? [
+          "note",
+          "task",
+          "task_state",
+          "offer",
+          "offer_review",
+          "contract_review",
+          "final_policy_review",
+          ...(row.contributorContact
+            ? ["contact", "appointment", "appointment_state", "offer_publish", "offer_withdraw"]
+            : []),
+        ]
+      : operational && row.stage === "draft" && row.creatorId === actor.userId
+        ? ["edit"]
+        : [];
+  if (!actor.wallet && row.responsibleId === actor.userId && row.assignment === "proposed")
+    actions.push("accept");
+  if (!actor.wallet && actor.administrator) actions.push("assign");
+  const canCollaborate =
+    active &&
+    !!row.responsibleId &&
+    !actor.wallet &&
+    (actor.administrator || row.responsibleId === actor.userId);
+  if (canCollaborate) actions.push("collaboration_propose");
   if (active && operational) {
     if (!row.responsibleId) alerts.push("unassigned");
     if (!suspended) {
+      if (
+        row.assignment === "proposed" &&
+        !row.firstUsefulAt &&
+        deadlines.acceptanceDueAt &&
+        deadlines.acceptanceDueAt.getTime() <= now
+      )
+        alerts.push("acceptance_overdue");
       if (!row.nextAction || !row.dueAt) alerts.push("no_next_action");
-      if (row.dueAt && row.dueAt.getTime() < now) alerts.push("overdue");
+      if (row.firstUsefulAt && row.dueAt && row.dueAt.getTime() <= now) alerts.push("overdue");
       if (!row.firstUsefulAt && firstActionDueAt) {
         const remaining = new Date(firstActionDueAt).getTime() - now;
         if (remaining <= 0) alerts.push("first_action_overdue");
@@ -111,6 +211,19 @@ function summary(actor: PartnerActor, row: ReadRow): LeadSummary {
     notifiedAt: operational ? date(row.notifiedAt) : null,
     firstUsefulAt: operational ? date(row.firstUsefulAt) : null,
     firstActionDueAt: operational ? firstActionDueAt : null,
+    acceptanceDueAt:
+      active &&
+      operational &&
+      row.responsibleId &&
+      row.assignment === "proposed" &&
+      !row.firstUsefulAt
+        ? date(deadlines.acceptanceDueAt)
+        : null,
+    continuityPolicyRevision: operational ? row.continuityPolicyRevision : null,
+    continuityDueAt:
+      active && operational && row.responsibleId ? date(deadlines.reviewDueAt) : null,
+    escalationDueAt:
+      active && operational && row.responsibleId ? date(deadlines.escalationDueAt) : null,
     createdAt: date(row.createdAt),
     stageChangedAt: date(row.stageChangedAt),
     updatedAt: date(row.updatedAt),
@@ -127,6 +240,8 @@ function summary(actor: PartnerActor, row: ReadRow): LeadSummary {
         (row.creatorId === actor.userId && row.stage === "draft" && !row.responsibleId) ||
         row.managedAccess),
     canAssign: !actor.wallet && actor.administrator,
+    canCollaborate,
+    allowedActions: actions,
   });
 }
 async function readLead(db: Executor, actor: PartnerActor, id: string, lock = false) {
@@ -185,61 +300,160 @@ async function detail(db: Executor, actor: PartnerActor, id: string): Promise<Le
     base.access !== "progress"
       ? (
           await db.query<Record<string, unknown>>(
-            `select * from partner_events where lead_id=$1 and (audience='client' or (not $3::boolean and (audience='private' and actor_id=$2 or audience='assigned' or audience='coverview' and $4::boolean))) order by created_at desc,id desc limit 100`,
+            `select e.*,case when o.id is not null then json_build_object('id',o.id,'version',o.version,'company',o.data->>'company','product',o.data->>'product') end offer,
+             exists(select 1 from partner_notifications n where n.lead_id=e.lead_id and n.dedupe_key=e.id||':response' and n.resolved_at is null) response_pending
+             from partner_events e
+             left join partner_final_policies p on p.id=e.subject_id and p.lead_id=e.lead_id
+             left join partner_offers o on o.id=coalesce(p.offer_id,e.subject_id) and o.lead_id=e.lead_id and (not $3::boolean or o.published_at is not null)
+             where e.lead_id=$1 and (e.audience='client' or (not $3::boolean and (e.audience='private' and e.actor_id=$2 or e.audience='assigned' or e.audience='coverview' and $4::boolean))) order by e.created_at desc,e.id desc limit 100`,
             [id, actor.userId, !!actor.wallet, actor.administrator],
           )
         ).rows.map((r) =>
           leadEventSchema.parse({
             id: r.id,
+            subjectId: r.subject_id,
+            offer: r.offer,
+            responsePending: r.response_pending,
             kind: r.kind,
-            authorId: r.actor_id,
+            authorId: r.actor_id ?? "system_partner_continuity",
+            systemActor: r.system_actor,
             audience: r.audience,
             text: r.text,
             createdAt: date(r.created_at as Date),
           }),
         )
       : [];
-  const offers =
+  const offers = base.access !== "progress" ? (await readOffers(db, id, !!actor.wallet)).items : [];
+  const currentContract =
     base.access !== "progress"
-      ? (
-          await db.query<Record<string, unknown>>(
-            `select * from partner_offers where lead_id=$1 ${actor.wallet ? "and published_at is not null" : ""} order by created_at desc,id limit 100`,
-            [id],
-          )
-        ).rows.map((r) =>
-          leadOfferSchema.parse({
-            ...z.record(z.string(), z.unknown()).parse(r.data),
-            id: r.id,
-            version: r.version,
-            active: r.active,
-            state: r.state,
-            reviewedAt: date(r.reviewed_at as Date | null),
-            publishedAt: date(r.published_at as Date | null),
-            createdAt: date(r.created_at as Date),
-          }),
-        )
-      : [];
+      ? await readCurrentContract(db, { ...row, clientUserId: row.currentClientUserId })
+      : null;
   return leadDetailSchema.parse({
     ...base,
+    referentContinuity:
+      operational || actor.wallet
+        ? await readReferentContinuity(db, { ...row, clientUserId: row.currentClientUserId })
+        : null,
     context: operational || actor.wallet ? info.context : null,
-    email: operational ? info.email : null,
-    phone: operational ? info.phone : null,
+    email:
+      operational &&
+      (actor.administrator ||
+        row.responsibleId === actor.userId ||
+        row.managedAccess ||
+        row.contributorContact)
+        ? info.email
+        : null,
+    phone:
+      operational &&
+      (actor.administrator ||
+        row.responsibleId === actor.userId ||
+        row.managedAccess ||
+        row.contributorContact)
+        ? info.phone
+        : null,
     language: operational ? info.language : null,
     source: operational ? info.source : null,
+    insuranceRequestId:
+      operational || actor.wallet
+        ? ((
+            await db.query<{ request_id: string }>(
+              "select request_id from partner_insurance_sources where lead_id=$1",
+              [id],
+            )
+          ).rows[0]?.request_id ?? null)
+        : null,
     transmissionAuthorized: operational ? info.transmissionAuthorized : null,
     tasks,
     appointments,
     events,
     offers,
+    currentContract,
+    comparisons: compareCurrentContract(currentContract, offers),
+    collaborations:
+      !actor.wallet && base.access !== "progress" ? await readCollaborations(db, actor, id) : [],
+    participants:
+      operational || actor.wallet
+        ? (
+            await db.query(
+              `select u.id,coalesce(m.application->>'name','CoverView') name,
+              (u.id=$2 or coalesce(c.can_contact,false)) "canContact", (u.id=$2 or coalesce(c.can_edit,false)) "canWork" from identity_users u
+      left join partner_members m on m.user_id=u.id left join partner_contributors c on c.user_id=u.id and c.lead_id=$1 and c.revoked_at is null
+              where u.id=$2 or c.access_scope='advice' order by u.id limit 100`,
+              [id, row.responsibleId],
+            )
+          ).rows
+        : [],
     availableTabs:
       operational && (actor.administrator || row.assignedAccess || row.managedAccess)
-        ? ["overview", "activity", "tasks", "appointments", "notes", "offers"]
+        ? ["overview", "activity", "tasks", "appointments", "notes", "offers", "collaboration"]
         : actor.wallet
           ? ["overview", "activity", "appointments", "offers"]
           : ["overview"],
   });
 }
 export function createPartnerRepository(pool: Pool) {
+  async function importLead(tx: PoolClient, actor: PartnerActor, id: string, write = false) {
+    if (actor.wallet) fail("PARTNER_ACCESS_DENIED", 403);
+    const ctx = await context(tx, actor, true);
+    const lead = await readLead(tx, actor, id, true);
+    const access = summary(actor, lead);
+    if (!ctx.operational || access.access !== "operational") fail("PARTNER_NOT_FOUND", 404);
+    const writable =
+      ctx.canAdvise &&
+      !!access.allowedActions?.includes("offer") &&
+      !["draft", "completed"].includes(lead.stage);
+    if (write && !writable) fail("PARTNER_ACCESS_DENIED", 403);
+    return { lead, writable };
+  }
+  async function importResult(
+    tx: PoolClient,
+    actor: PartnerActor,
+    leadId: string,
+    id: string,
+    write = false,
+  ) {
+    const { lead, writable } = await importLead(tx, actor, leadId, write);
+    const item = (await readOfferImports(tx, leadId, writable, { id })).items[0];
+    if (!item) return fail("PARTNER_NOT_FOUND", 404);
+    return { leadRevision: lead.revision, item };
+  }
+  async function accessibleOffer(
+    db: Executor,
+    actor: PartnerActor,
+    leadId: string,
+    offerId: string,
+  ) {
+    const lead = await readLead(db, actor, leadId);
+    if (summary(actor, lead).access === "progress") fail("PARTNER_NOT_FOUND", 404);
+    const offer = (await readOffers(db, leadId, !!actor.wallet, { offerId })).items[0];
+    if (!offer || !offer.canDownload) return fail("PARTNER_NOT_FOUND", 404);
+    return offer;
+  }
+  async function withOfferAccess<T>(
+    actor: PartnerActor,
+    id: string,
+    read: (tx: PoolClient) => Promise<T>,
+  ) {
+    const tx = await pool.connect();
+    try {
+      await tx.query("begin");
+      await lockActor(tx, actor);
+      const lead = await readLead(tx, actor, id, true);
+      if (summary(actor, lead).access === "progress") fail("PARTNER_NOT_FOUND", 404);
+      if (actor.wallet) {
+        const subject = await lockContractSubject(tx, lead);
+        if (subject.clientUserId !== actor.userId) fail("PARTNER_NOT_FOUND", 404);
+      }
+      const result = await read(tx);
+      await tx.query("commit");
+      return result;
+    } catch (cause) {
+      await tx.query("rollback");
+      throw cause;
+    } finally {
+      tx.release();
+    }
+  }
   async function transaction<T>(
     actor: PartnerActor,
     operation: string,
@@ -284,19 +498,359 @@ export function createPartnerRepository(pool: Pool) {
     }
   }
   return {
+    async referentProfile(
+      actor: PartnerActor,
+      profileId: string,
+      category: string,
+      beforeRevision?: number,
+    ) {
+      referentQuerySchema.parse(beforeRevision === undefined ? {} : { beforeRevision });
+      const tx = await pool.connect();
+      try {
+        await tx.query("begin");
+        await lockActor(tx, actor);
+        const result = await readReferentProfile(tx, actor, profileId, category, beforeRevision);
+        await tx.query("commit");
+        return result;
+      } catch (cause) {
+        await tx.query("rollback");
+        throw cause;
+      } finally {
+        tx.release();
+      }
+    },
+    updateReferent(
+      actor: PartnerActor,
+      profileId: string,
+      category: string,
+      raw: z.infer<typeof referentUpdateSchema>,
+      key: string,
+    ) {
+      const input = referentUpdateSchema.parse(raw);
+      return transaction(
+        actor,
+        `referent:${profileId}:${category}`,
+        key,
+        input,
+        (tx) => updateReferent(tx, actor, profileId, category, input),
+        (tx) => readReferentProfile(tx, actor, profileId, category),
+      );
+    },
+    async offerImports(actor: PartnerActor, id: string, cursor?: string) {
+      return withOfferAccess(actor, id, async (tx) => {
+        const { lead, writable } = await importLead(tx, actor, id);
+        return {
+          leadRevision: lead.revision,
+          ...(await readOfferImports(tx, id, writable, cursor ? { cursor } : {})),
+        };
+      });
+    },
+    prepareOfferImport(
+      actor: PartnerActor,
+      leadId: string,
+      raw: z.infer<typeof offerImportInputSchema>,
+      key: string,
+    ) {
+      const input = offerImportInputSchema.parse(raw);
+      return transaction(
+        actor,
+        `import:${leadId}`,
+        key,
+        input,
+        async (tx) => {
+          const { lead } = await importLead(tx, actor, leadId, true);
+          const existing = (
+            await tx.query<{ id: string }>(
+              "select id from partner_offer_imports where lead_id=$1 and checksum=$2",
+              [leadId, input.source.checksum],
+            )
+          ).rows[0];
+          if (existing) return existing.id;
+          if (input.revision !== lead.revision) fail("PARTNER_CONFLICT", 409);
+          const documentId = await createLeadOfferUpload(tx, actor.userId, input.source);
+          const id = newId("pimport");
+          await tx.query(
+            "insert into partner_offer_imports(id,lead_id,document_id,checksum,created_by) values($1,$2,$3,$4,$5)",
+            [id, leadId, documentId, input.source.checksum, actor.userId],
+          );
+          await tx.query(
+            "update partner_leads set revision=revision+1,updated_at=now() where id=$1",
+            [leadId],
+          );
+          await event(tx, actor, leadId, "offer.import_started", "", "assigned", id);
+          return id;
+        },
+        (tx, id) => importResult(tx, actor, leadId, id, true),
+      );
+    },
+    async importSource(actor: PartnerActor, leadId: string, id: string, write = false) {
+      return withOfferAccess(actor, leadId, async (tx) => {
+        const result = await importResult(tx, actor, leadId, id, write);
+        if (!write && !result.item.canDownload) fail("PARTNER_INVALID_DOCUMENT");
+        const row = (
+          await tx.query<{ user_id: string }>(
+            "select user_id from files where id=$1 and deleted_at is null",
+            [result.item.documentId],
+          )
+        ).rows[0];
+        if (!row) return fail("PARTNER_NOT_FOUND", 404);
+        return { documentId: result.item.documentId, userId: row.user_id };
+      });
+    },
+    async completeImportUpload(actor: PartnerActor, leadId: string, id: string, mime: string) {
+      return withOfferAccess(actor, leadId, async (tx) => {
+        const result = await importResult(tx, actor, leadId, id, true);
+        await queueLeadOfferUpload(tx, result.item.documentId, actor.userId, { mime });
+        return importResult(tx, actor, leadId, id, true);
+      });
+    },
+    retryOfferImport(
+      actor: PartnerActor,
+      leadId: string,
+      id: string,
+      raw: z.infer<typeof offerImportRetrySchema>,
+      key: string,
+    ) {
+      const input = offerImportRetrySchema.parse(raw);
+      return transaction(
+        actor,
+        `import_retry:${leadId}:${id}`,
+        key,
+        input,
+        async (tx) => {
+          const result = await importResult(tx, actor, leadId, id, true);
+          if (!result.item.canRetry) fail("PARTNER_INVALID_TRANSITION");
+          await queueLeadOfferUpload(tx, result.item.documentId, actor.userId, {
+            revision: input.revision,
+          });
+          await event(tx, actor, leadId, "offer.import_retried", "", "assigned", id);
+          return id;
+        },
+        (tx, target) => importResult(tx, actor, leadId, target, true),
+      );
+    },
+    async importSourceConsulted(actor: PartnerActor, leadId: string, id: string) {
+      return withOfferAccess(actor, leadId, async (tx) => {
+        const result = await importResult(tx, actor, leadId, id);
+        if (!result.item.canDownload) fail("PARTNER_INVALID_DOCUMENT");
+        const existing = await tx.query(
+          "select id from partner_events where lead_id=$1 and actor_id=$2 and subject_id=$3 and kind='offer.import_viewed' and created_at>now()-interval '30 minutes' limit 1",
+          [leadId, actor.userId, id],
+        );
+        if (!existing.rowCount)
+          await event(tx, actor, leadId, "offer.import_viewed", "", "assigned", id);
+      });
+    },
+    async insuranceSource(actor: PartnerActor, id: string) {
+      if (actor.wallet) fail("PARTNER_ACCESS_DENIED", 403);
+      const tx = await pool.connect();
+      try {
+        await tx.query("begin");
+        await lockActor(tx, actor);
+        if (!(await context(tx, actor, true)).operational) fail("PARTNER_ACCESS_DENIED", 403);
+        const lead = await readLead(tx, actor, id, true);
+        if (summary(actor, lead).access !== "operational") fail("PARTNER_NOT_FOUND", 404);
+        const result = await readInsuranceSource(tx, actor, id);
+        await tx.query("commit");
+        return result;
+      } catch (cause) {
+        await tx.query("rollback");
+        throw cause;
+      } finally {
+        tx.release();
+      }
+    },
+    async offerHistory(actor: PartnerActor, id: string, cursor?: string) {
+      return withOfferAccess(actor, id, (tx) =>
+        readOffers(tx, id, !!actor.wallet, { history: true, ...(cursor ? { cursor } : {}) }),
+      );
+    },
+    async finalPolicies(actor: PartnerActor, id: string, cursor?: string) {
+      return withOfferAccess(actor, id, async (tx) => {
+        const lead = await readLead(tx, actor, id);
+        const canReview =
+          summary(actor, lead).allowedActions?.includes("final_policy_review") === true &&
+          (await context(tx, actor)).canAdvise;
+        return {
+          leadRevision: lead.revision,
+          ...(await readFinalPolicies(
+            tx,
+            { ...lead, clientUserId: lead.currentClientUserId },
+            canReview,
+            cursor ? { cursor } : {},
+          )),
+        };
+      });
+    },
+    async finalPolicySource(actor: PartnerActor, id: string, policyId: string, record = false) {
+      return withOfferAccess(actor, id, async (tx) => {
+        const lead = await readLead(tx, actor, id);
+        const policy = (
+          await readFinalPolicies(tx, { ...lead, clientUserId: lead.currentClientUserId }, false, {
+            id: policyId,
+          })
+        ).items[0];
+        if (!policy?.canDownload) return fail("PARTNER_NOT_FOUND", 404);
+        if (
+          record &&
+          !(
+            await tx.query(
+              "select id from partner_events where lead_id=$1 and actor_id=$2 and subject_id=$3 and kind='policy.viewed' and created_at>now()-interval '30 minutes' limit 1",
+              [id, actor.userId, policyId],
+            )
+          ).rowCount
+        )
+          await event(
+            tx,
+            actor,
+            id,
+            "policy.viewed",
+            "",
+            actor.wallet ? "client" : "assigned",
+            policyId,
+          );
+        return policy.documentId;
+      });
+    },
+    async offerSource(actor: PartnerActor, id: string, offerId: string) {
+      return withOfferAccess(
+        actor,
+        id,
+        async (tx) => (await accessibleOffer(tx, actor, id, offerId)).documentId,
+      );
+    },
+    async contractCandidates(actor: PartnerActor, id: string) {
+      if (!actor.wallet) fail("PARTNER_ACCESS_DENIED", 403);
+      const tx = await pool.connect();
+      try {
+        await tx.query("begin");
+        await lockActor(tx, actor);
+        const lead = await readLead(tx, actor, id);
+        const target = await lockContractSubject(tx, {
+          ...lead,
+          clientUserId: lead.currentClientUserId,
+        });
+        if (target.clientUserId !== actor.userId) fail("PARTNER_ACCESS_DENIED", 403);
+        const result = await readContractCandidates(tx, actor.userId, target.clientProfileId);
+        await tx.query("commit");
+        return {
+          items: result.entries.map((entry) => entry.candidate),
+          truncated: result.truncated,
+        };
+      } catch (error) {
+        await tx.query("rollback");
+        throw error;
+      } finally {
+        tx.release();
+      }
+    },
+    insuranceLinks: (actor: PartnerActor, requestId: string) =>
+      insuranceLinks(pool, actor, requestId),
+    linkInsurance(
+      actor: PartnerActor,
+      requestId: string,
+      input: z.infer<typeof insuranceLeadConsentSchema>,
+      key: string,
+    ) {
+      const consent = insuranceLeadConsentSchema.parse(input);
+      return transaction(
+        actor,
+        `insurance:${requestId}`,
+        key,
+        consent,
+        (tx) => createInsuranceLead(tx, actor, requestId, consent.personId),
+        (tx, id) => detail(tx, actor, id),
+      );
+    },
+    async collaborations(actor: PartnerActor) {
+      if (actor.wallet || !(await context(pool, actor)).operational)
+        fail("PARTNER_ACCESS_DENIED", 403);
+      return { items: await readCollaborations(pool, actor) };
+    },
+    respondCollaboration(
+      actor: PartnerActor,
+      id: string,
+      input: CollaborationResponse,
+      key: string,
+    ) {
+      return transaction(
+        actor,
+        `collaboration:${id}`,
+        key,
+        input,
+        async (tx) => {
+          if (actor.wallet || !(await context(tx, actor, true)).operational)
+            fail("PARTNER_ACCESS_DENIED", 403);
+          return respondCollaboration(tx, actor, id, input);
+        },
+        async (tx, target) => {
+          if (!(await context(tx, actor)).operational) fail("PARTNER_ACCESS_DENIED", 403);
+          const result = (await readCollaborations(tx, actor, undefined, target))[0];
+          if (!result) return fail("PARTNER_NOT_FOUND", 404);
+          return result;
+        },
+      );
+    },
+    continuitySettings: (actor: PartnerActor) => readContinuitySettings(pool, actor),
+    updateContinuitySettings(actor: PartnerActor, raw: PartnerContinuityUpdate, key: string) {
+      const input = partnerContinuityUpdateSchema.parse(raw);
+      return transaction(
+        actor,
+        "continuity:settings",
+        key,
+        input,
+        async (tx) => {
+          const revision = await updateContinuitySettings(tx, actor, input);
+          await event(
+            tx,
+            actor,
+            null,
+            "continuity.settings_changed",
+            input.reason,
+            "coverview",
+            revision,
+          );
+          return revision;
+        },
+        (tx) => readContinuitySettings(tx, actor),
+      );
+    },
     context: (actor: PartnerActor) => context(pool, actor),
-    async sourceConsulted(actor: PartnerActor, id: string, offerId: string) {
+    notifications: (actor: PartnerActor, query: PartnerNotificationQuery) =>
+      readPartnerNotifications(pool, actor, query),
+    readNotification(actor: PartnerActor, id: string, key: string) {
+      return transaction(
+        actor,
+        `notification:${id}:read`,
+        key,
+        { id },
+        async (tx) => {
+          await markPartnerNotificationRead(tx, actor, id);
+          return id;
+        },
+        async (tx, notificationId) => {
+          await markPartnerNotificationRead(tx, actor, notificationId);
+          return { read: true as const };
+        },
+      );
+    },
+    async sourceConsulted(actor: PartnerActor, id: string, offerId: string | null) {
       const tx = await pool.connect();
       try {
         await tx.query("begin");
         await lockActor(tx, actor);
         await readLead(tx, actor, id, true);
         const lead = await detail(tx, actor, id),
-          offer = lead.offers.find((value) => value.id === offerId);
-        if (!offer) fail("PARTNER_NOT_FOUND", 404);
+          offer = offerId ? await accessibleOffer(tx, actor, id, offerId) : null;
+        const contract =
+          offerId === null && lead.currentContract?.status === "available"
+            ? lead.currentContract
+            : null;
+        if (!offer && !contract) fail("PARTNER_NOT_FOUND", 404);
+        const subjectId = offer?.id ?? contract!.referenceId;
         const recent = await tx.query(
           "select id from partner_events where lead_id=$1 and actor_id=$2 and subject_id=$3 and kind='document.viewed' and created_at>now()-interval '30 minutes' limit 1",
-          [id, actor.userId, offerId],
+          [id, actor.userId, subjectId],
         );
         if (!recent.rowCount)
           await event(
@@ -304,9 +858,9 @@ export function createPartnerRepository(pool: Pool) {
             actor,
             id,
             "document.viewed",
-            `${offer.company} · ${offer.product}`,
+            offer ? `${offer.company} · ${offer.product}` : "",
             actor.wallet ? "client" : "assigned",
-            offerId,
+            subjectId,
           );
         await tx.query("commit");
       } catch (cause) {
@@ -349,7 +903,7 @@ export function createPartnerRepository(pool: Pool) {
       if (!(await context(pool, actor)).operational) fail("PARTNER_ACCESS_DENIED", 403);
       const rows = (
         await pool.query<Record<string, unknown>>(
-          `select l.stage,count(*)::int count,count(*) filter(where l.stage not in ('draft','completed'))::int active,count(*) filter(where l.stage not in ('draft','completed') and l.due_at<now() and (l.waiting is null or (l.waiting->>'until')::timestamptz<=now()))::int overdue,count(*) filter(where l.responsible_id is null and l.stage not in ('draft','completed'))::int unassigned,count(*) filter(where l.result in ('contract','resolved_without_contract'))::int resolved from partner_leads l where ${visible(actor)} group by l.stage`,
+          `select l.stage,count(*)::int count,count(*) filter(where l.stage not in ('draft','completed'))::int active,count(*) filter(where ${followUpOverdueSql})::int overdue,count(*) filter(where l.responsible_id is null and l.stage not in ('draft','completed'))::int unassigned,count(*) filter(where l.result in ('contract','resolved_without_contract'))::int resolved from partner_leads l where ${visible(actor)} group by l.stage`,
           [actor.userId],
         )
       ).rows;
@@ -465,6 +1019,14 @@ export function createPartnerRepository(pool: Pool) {
                     )
                   ).rows.map((r) => String(r.user_id))
                 : [userId];
+            const affected = (
+              await tx.query<{ id: string }>(
+                `select l.id from partner_leads l where
+              l.responsible_id=any($1::text[]) or exists(select 1 from partner_contributors c where c.lead_id=l.id and c.user_id=any($1::text[]) and c.revoked_at is null)
+              or exists(select 1 from partner_collaborations c where c.lead_id=l.id and c.target_id=any($1::text[]) and c.state='proposed') order by l.id for update of l`,
+                [revoked],
+              )
+            ).rows;
             const leads = (
               await tx.query<Record<string, unknown>>(
                 "update partner_leads set responsible_id=null,assignment='reassign',updated_at=now(),revision=revision+1 where responsible_id=any($1::text[]) and stage<>'completed' returning id",
@@ -485,6 +1047,24 @@ export function createPartnerRepository(pool: Pool) {
                 "CoverView recherche un nouvel interlocuteur pour votre demande.",
                 "client",
               );
+              await syncLeadNotifications(tx, String(lead.id));
+            }
+            for (const lead of affected) {
+              if (!leads.some((value) => value.id === lead.id)) {
+                const current = (
+                  await tx.query<{ responsible_id: string | null }>(
+                    "select responsible_id from partner_leads where id=$1",
+                    [lead.id],
+                  )
+                ).rows[0]!;
+                await handoffWork(tx, actor, lead.id, current.responsible_id);
+                await tx.query(
+                  "update partner_leads set revision=revision+1,updated_at=now() where id=$1",
+                  [lead.id],
+                );
+                await event(tx, actor, lead.id, "lead.contributor_access_expired", "", "assigned");
+              }
+              await reconcileCollaborations(tx, lead.id, actor);
             }
           }
           await event(
@@ -540,10 +1120,7 @@ export function createPartnerRepository(pool: Pool) {
       if (query.view === "mine" && !actor.wallet && !actor.administrator) clauses.push(assigned);
       if (query.view === "referred") clauses.push("l.creator_id=$1");
       if (query.view === "urgent") clauses.push("l.priority='urgent'");
-      if (query.view === "overdue")
-        clauses.push(
-          "l.due_at<now() and l.stage<>'completed' and (l.waiting is null or (l.waiting->>'until')::timestamptz<=now())",
-        );
+      if (query.view === "overdue") clauses.push(`(${followUpOverdueSql})`);
       if (query.view === "no_action")
         clauses.push(
           "(l.next_action='' or l.due_at is null) and l.stage not in ('draft','completed')",
@@ -582,40 +1159,57 @@ export function createPartnerRepository(pool: Pool) {
     },
     detail: (actor: PartnerActor, id: string) => detail(pool, actor, id),
     async extraction(actor: PartnerActor, leadId: string, documentId: string) {
-      const lead = await readLead(pool, actor, leadId);
-      if (!summary(actor, lead).canEdit) fail("PARTNER_ACCESS_DENIED", 403);
-      const source = (
-        await pool.query<Record<string, unknown>>(
-          "select * from files where id=$1 and user_id=$2 and deleted_at is null",
-          [documentId, actor.userId],
-        )
-      ).rows[0];
-      if (!source) fail("PARTNER_INVALID_DOCUMENT");
-      const parsed = documentAnalysisSchema.safeParse(source.analysis),
-        analysis = parsed.success ? parsed.data : null,
-        insurance = analysis?.insurance;
-      const premium = insurance?.premium,
-        factor =
-          premium?.period === "year"
-            ? 1
-            : premium?.period === "month"
-              ? 12
-              : premium?.period === "quarter"
-                ? 4
-                : premium?.period === "half_year"
-                  ? 2
-                  : null;
-      return offerExtractionSchema.parse({
-        documentId,
-        state: source.state,
-        company: insurance?.companyId ?? null,
-        product: analysis?.title ?? null,
-        annualPremiumMinor:
-          premium?.currency === "CHF" && factor ? premium.amountMinor * factor : null,
-        premiumOrigin: factor === 1 ? "extracted" : factor ? "calculated" : "missing",
-        premiumSource: premium ? JSON.stringify(premium.source) : null,
-        reference: insurance?.policyNumber?.value ?? null,
-        effectiveDate: insurance?.startsOn?.value ?? null,
+      return withOfferAccess(actor, leadId, async (tx) => {
+        const { lead } = await importLead(tx, actor, leadId, true);
+        await tx.query("select id from files where id=$1 for share", [documentId]);
+        const source = (
+          await tx.query<Record<string, unknown>>(
+            `select f.*, ${leadSourceReviewRevisionSql} source_review_revision from files f where f.id=$1 and f.deleted_at is null and
+          (f.user_id=$2 or exists(select 1 from partner_offers where lead_id=$3 and document_id=$1)
+          or exists(select 1 from partner_offer_imports where lead_id=$3 and document_id=$1)
+          or ($4::boolean and f.user_id=$5 and f.managed_profile_id is not distinct from $6))`,
+            [
+              documentId,
+              actor.userId,
+              leadId,
+              actor.administrator,
+              lead.currentClientUserId,
+              lead.clientProfileId,
+            ],
+          )
+        ).rows[0];
+        if (!source) fail("PARTNER_INVALID_DOCUMENT");
+        const parsed = documentAnalysisSchema.safeParse(
+            leadSourceSnapshot(source) ? source.analysis : null,
+          ),
+          analysis = parsed.success ? parsed.data : null,
+          insurance = analysis?.insurance;
+        const premium = insurance?.premium,
+          factor =
+            premium?.period === "year"
+              ? 1
+              : premium?.period === "month"
+                ? 12
+                : premium?.period === "quarter"
+                  ? 4
+                  : premium?.period === "half_year"
+                    ? 2
+                    : null;
+        return offerExtractionSchema.parse({
+          documentId,
+          sourceFingerprint: leadSourceSnapshot(source)?.fingerprint ?? null,
+          state: source.state,
+          company: insurance?.companyId ?? null,
+          product: analysis?.title ?? null,
+          annualPremiumMinor:
+            premium?.currency === "CHF" && factor ? premium.amountMinor * factor : null,
+          premiumOrigin: factor === 1 ? "extracted" : factor ? "calculated" : "missing",
+          premiumSource: premium ? JSON.stringify(premium.source) : null,
+          reference: insurance?.policyNumber?.value ?? null,
+          effectiveDate: insurance?.startsOn?.value ?? null,
+          analysisStatus: leadImportAnalysis(source),
+          failure: source.failure,
+        });
       });
     },
     create(actor: PartnerActor, input: LeadCreateInput, key: string) {
@@ -671,7 +1265,7 @@ export function createPartnerRepository(pool: Pool) {
                 ? actor.userId
                 : null;
           await tx.query<Record<string, unknown>>(
-            `insert into partner_leads(id,creator_id,responsible_id,client_user_id,client_profile_id,title,category,object,client_name,details,stage,assignment,priority,next_action,due_at,notified_at) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,case when $3::text is null or $11='draft' then null else now() end)`,
+            `insert into partner_leads(id,creator_id,responsible_id,client_user_id,client_profile_id,title,category,object,client_name,details,stage,assignment,priority,next_action,due_at) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)`,
             [
               id,
               actor.userId,
@@ -698,6 +1292,7 @@ export function createPartnerRepository(pool: Pool) {
             ],
           );
           await event(tx, actor, id, "lead.created", input.title, "client");
+          await syncLeadNotifications(tx, id);
           return id;
         },
         (tx, id) => detail(tx, actor, id),
@@ -706,9 +1301,10 @@ export function createPartnerRepository(pool: Pool) {
     command(
       actor: PartnerActor,
       id: string,
-      input: Parameters<typeof executeLeadCommand>[3],
+      rawInput: Parameters<typeof executeLeadCommand>[3],
       key: string,
     ) {
+      const input = leadCommandSchema.parse(rawInput);
       return transaction(
         actor,
         `lead:${id}`,
@@ -720,13 +1316,39 @@ export function createPartnerRepository(pool: Pool) {
           const lead = await readLead(tx, actor, id, true),
             access = summary(actor, lead);
           if (lead.revision !== input.revision) fail("PARTNER_CONFLICT", 409);
-          if (actor.wallet ? input.action !== "client_choice" : !access.canEdit)
+          if (
+            actor.wallet
+              ? ![
+                  "client_choice",
+                  "client_interlocutor",
+                  "contract_link",
+                  "contract_unlink",
+                  "final_policy_link",
+                  "final_policy_unlink",
+                ].includes(input.action)
+              : !access.allowedActions?.includes(input.action)
+          )
+            fail("PARTNER_ACCESS_DENIED", 403);
+          if (
+            input.action === "note" &&
+            input.audience === "client" &&
+            !actor.administrator &&
+            lead.responsibleId !== actor.userId &&
+            !lead.managedAccess &&
+            !lead.contributorContact
+          )
             fail("PARTNER_ACCESS_DENIED", 403);
           if (!actor.wallet && !ctx.canAdvise && !ctx.canManage && input.action !== "edit")
             fail("PARTNER_ACCESS_DENIED", 403);
           if (
             !actor.wallet &&
-            ["offer", "offer_review", "offer_publish"].includes(input.action) &&
+            [
+              "offer",
+              "offer_review",
+              "offer_publish",
+              "contract_review",
+              "final_policy_review",
+            ].includes(input.action) &&
             !ctx.canAdvise
           )
             fail("PARTNER_ACCESS_DENIED", 403);
@@ -740,6 +1362,8 @@ export function createPartnerRepository(pool: Pool) {
             "update partner_leads set revision=revision+1,updated_at=now() where id=$1",
             [id],
           );
+          await syncLeadNotifications(tx, id);
+          await reconcileCollaborations(tx, id, actor);
           return id;
         },
         (tx, target) => detail(tx, actor, target),

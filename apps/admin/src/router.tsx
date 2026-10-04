@@ -15,7 +15,19 @@ import { AuthenticatorPage } from "./pages/AuthenticatorPage";
 import { CancelAuthenticatorPage } from "./pages/CancelAuthenticatorPage";
 
 const rootRoute = createRootRoute({ component: AppShell, notFoundComponent: MissingPage });
-const partnerRoute=createRoute({getParentRoute:()=>rootRoute,path:"/partner",component:lazyRouteComponent(()=>import("./pages/PartnerPage"),"PartnerPage")});
+const partnerContinuityRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/partner/continuity",
+  component: lazyRouteComponent(
+    () => import("./pages/PartnerContinuityPage"),
+    "PartnerContinuityPage",
+  ),
+});
+const partnerRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/partner",
+  component: lazyRouteComponent(() => import("./pages/PartnerPage"), "PartnerPage"),
+});
 const notificationsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/notifications",
@@ -104,6 +116,7 @@ export const router = createRouter({
   routeTree: rootRoute.addChildren([
     homeRoute,
     partnerRoute,
+    partnerContinuityRoute,
     healthRecommendationRoute,
     insuranceRequestsRoute,
     usersRoute,

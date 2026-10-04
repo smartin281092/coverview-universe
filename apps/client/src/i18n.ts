@@ -1,5 +1,6 @@
 import insuranceRequests from "./locales/fr/insurance-requests.json";
 import offers from "./locales/fr/offers.json";
+import leadNotifications from "./locales/fr/lead-notifications.json";
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
 import common from "./locales/fr/common.json";
@@ -12,7 +13,18 @@ import actions from "./locales/fr/actions.json";
 
 void i18next.use(initReactI18next).init({
   resources: {
-    fr: { offers, insuranceRequests, common, profile, documents, authorizations, insurance, identityPreview, actions },
+    fr: {
+      leadNotifications,
+      offers,
+      insuranceRequests,
+      common,
+      profile,
+      documents,
+      authorizations,
+      insurance,
+      identityPreview,
+      actions,
+    },
   },
   lng: "fr",
   fallbackLng: "fr",
