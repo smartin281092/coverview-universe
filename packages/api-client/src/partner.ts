@@ -50,8 +50,11 @@ import {
   needExpertiseEvidenceSchema,
   capacityAdvisorAssessmentSchema,
   sharedReferentAssessmentSchema,
+  needExpertiseInputSchema,
+  needExpertiseDossierSchema,
   needConflictInputSchema,
   needConflictDossierSchema,
+  type NeedExpertiseInput,
   type NeedConflictInput,
   needCapacityInputSchema,
   needCapacityDossierSchema,
@@ -149,6 +152,20 @@ export function createPartnerClient(baseUrl: string) {
         `${path(wallet)}/${encodeURIComponent(leadId)}/referent-assessment?version=2`,
         sharedReferentAssessmentSchema,
         signal,
+      ),
+    needExpertise: (leadId: string, beforeRevision?: number, signal?: AbortSignal) =>
+      request(
+        `/partner/leads/${encodeURIComponent(leadId)}/expertise-review${beforeRevision ? `?beforeRevision=${beforeRevision}` : ""}`,
+        needExpertiseDossierSchema,
+        signal,
+      ),
+    decideNeedExpertise: (leadId: string, input: NeedExpertiseInput, options: PartnerMutation) =>
+      request(
+        `/partner/leads/${encodeURIComponent(leadId)}/expertise-review`,
+        needExpertiseDossierSchema,
+        options.signal,
+        needExpertiseInputSchema.parse(input),
+        options,
       ),
     needConflict: (leadId: string, beforeRevision?: number, signal?: AbortSignal) =>
       request(

@@ -3,6 +3,8 @@ import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
 import {
+  needExpertiseInputSchema,
+  needExpertiseDossierSchema,
   needConflictInputSchema,
   needConflictDossierSchema,
   needCapacityInputSchema,
@@ -153,6 +155,41 @@ export function registerPartnerWorkspace(
     },
     async (request) =>
       repository.decideNeedCapacity(
+        await actor(request),
+        request.params.id,
+        request.body,
+        key(request),
+      ),
+  );
+  app.get(
+    "/partner/leads/:id/expertise-review",
+    {
+      config: limited,
+      schema: {
+        params,
+        querystring: referentQuerySchema,
+        response: { 200: needExpertiseDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.needExpertise(
+        await actor(request),
+        request.params.id,
+        request.query.beforeRevision,
+      ),
+  );
+  app.post(
+    "/partner/leads/:id/expertise-review",
+    {
+      config: limited,
+      schema: {
+        params,
+        body: needExpertiseInputSchema,
+        response: { 200: needExpertiseDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.decideNeedExpertise(
         await actor(request),
         request.params.id,
         request.body,

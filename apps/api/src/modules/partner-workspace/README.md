@@ -1,5 +1,7 @@
 # Partner — Leads et offres partagés avec Wallet
 
+Pour consigner son avis précis sourcé, ses limites et sa suite pour un besoin, lire [l’appréciation personnelle d’expertise](docs/need-expertise.md). Versions privées, retrait/historique ;0051 hors catalogue et V3 ouvert. La consultation de sources décrite ci-dessous reste distincte.
+
 Pour rapprocher ses preuves privées du besoin exact, lire [les sources personnelles d’expertise](docs/need-expertise-evidence.md). Consultation datée et accès au dossier existant ; aucune appréciation précise enregistrée ni nouvelle audience.
 
 Pour l’examen privé des conflits bloquants par besoin, lire [les règles et limites](docs/need-conflicts.md). Dossier distinct de la capacité et des bilans ;0050 préparée hors catalogue, activation et V3 ouvertes.

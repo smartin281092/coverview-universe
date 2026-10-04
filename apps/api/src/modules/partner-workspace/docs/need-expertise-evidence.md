@@ -1,5 +1,7 @@
 # Sources personnelles d’expertise pour un besoin
 
+Cette consultation donne désormais accès à une [appréciation personnelle précise](need-expertise.md). Ses règles de confirmation, sources exactes, échéance et retrait sont distinctes ; la route de lecture décrite ici reste sans écriture.
+
 ## Sens et parcours
 
 Propriétaire : partner-workspace ; brief I.10.3/18/20. Fiche Lead → Mon adéquation → Mes preuves pour ce besoin. Cette consultation rapproche le besoin actuel des preuves déjà présentes dans le dossier personnel de compétence de sa catégorie : déclaration, parties déclarées, dernier examen motivé, couverture, portée et dates. Elle permet de vérifier les limites documentaires avant une appréciation humaine précise, sans recopier une déclaration dans un deuxième formulaire.

@@ -1790,7 +1790,52 @@
     "openDossier": "Ouvrir mon dossier de cette catégorie",
     "dossierHelp": "Le dossier personnel permet de consulter l’original, son historique et de demander un nouvel examen. Aucune information de ce client n’y est ajoutée.",
     "reviewTitle": "Expertise précise à examiner",
-    "review": "Rapprochez le besoin, sa complexité et ses limites du périmètre réellement examiné. Repérez les compléments ou l’intervention d’un spécialiste nécessaires.",
-    "limits": "Cette consultation n’enregistre aucune appréciation pour le besoin. Une compétence documentée ne suffit pas à établir l’habilitation, une solution distribuable ou l’adéquation complète. Les autres vérifications restent nécessaires."
+    "review": "Après examen du besoin et des sources, vous pouvez enregistrer votre appréciation personnelle, ses limites et la suite à donner.",
+    "limits": "Une compétence documentée et votre appréciation personnelle ne suffisent pas à établir l’habilitation, une solution distribuable ou l’adéquation complète. Les autres vérifications restent nécessaires."
+  },
+  "needExpertiseDecision": {
+    "title": "Mon expertise pour ce besoin",
+    "open": "Apprécier mon expertise",
+    "audience": "Appréciation privée, visible uniquement par vous tant que votre intervention sur ce Lead est autorisée.",
+    "limits": "Cette appréciation ne vaut ni habilitation, ni certification, ni solution distribuable. Les autres contrôles du bilan restent à vérifier ; aucun suivi ni rendez-vous n’est modifié.",
+    "decide": "Enregistrer une appréciation",
+    "withdraw": "Retirer mon appréciation",
+    "choose": "Votre appréciation",
+    "position": {
+      "expertise_confirmed_within_scope": "Expertise confirmée personnellement dans le périmètre examiné",
+      "specialist_required": "Recours à un spécialiste nécessaire",
+      "clarification_needed": "Éléments à clarifier"
+    },
+    "reviewedScope": "Périmètre du besoin réellement examiné",
+    "scopeHelp": "Précisez les aspects du besoin couverts par votre examen et le lien avec les preuves. Ne saisissez pas de données confidentielles de tiers.",
+    "limitations": "Limites et inconnues examinées",
+    "nextStep": "Compléments, spécialiste ou prochaine vérification",
+    "reason": "Motif et lien avec les sources",
+    "reasonHelp": "Expliquez brièvement votre appréciation à partir des versions affichées. Pour un retrait, indiquez son motif. Évitez toute identité de tiers ou détail inutile.",
+    "validUntil": "À réexaminer au plus tard (heure suisse)",
+    "basis": "Besoin et sources relus le {{date}}.",
+    "confirmEffect": "Votre appréciation concerne ce besoin et les versions de sources affichées. Elle deviendra à réexaminer si leur portée change. Une appréciation positive ne peut pas dépasser la fin de validité de l’examen documentaire.",
+    "withdrawEffect": "Le retrait rend votre position inconnue. Les anciennes versions restent conservées dans cet historique privé.",
+    "confirm": "J’ai examiné ce besoin et les sources affichées ; je confirme personnellement le périmètre, les limites, la suite, l’échéance et l’audience privée.",
+    "confirmWithdraw": "Je confirme le retrait de mon appréciation, en conservant son historique privé.",
+    "conflict": "Le besoin, les sources ou les droits ont changé, ou cette échéance dépasse la validité des preuves. Revenez au dossier et relisez les informations avant une nouvelle appréciation.",
+    "invalid": "Complétez chaque champ, choisissez une appréciation, une échéance future non ambiguë et confirmez votre examen.",
+    "error": "Le dossier d’expertise ne peut pas être relu. Les anciennes informations sont masquées.",
+    "historical": "Version historique : son appréciation et ses sources ne représentent pas nécessairement la situation actuelle.",
+    "scopeValue": "Périmètre examiné : {{value}}",
+    "noHistory": "Aucune appréciation enregistrée pour ce sujet.",
+    "saved": "Appréciation enregistrée. Les autres contrôles du bilan restent à vérifier.",
+    "positiveUnavailable": "Une appréciation positive exige une source examinée courante et disponible, ainsi que l’absence de demande client de changement ouverte. Vous pouvez consigner les compléments ou le besoin de spécialiste.",
+    "sources": "Examiner le besoin et les sources actuelles",
+    "reference": "Déclaration {{declaration}} · examen {{decision}} · version {{revision}}",
+    "sourceVersions": "Original : version {{current}} ; version examinée : {{reviewed}}.",
+    "sourceUntil": "Validité de l’examen documentaire : {{date}}.",
+    "status": {
+      "missing": "Aucune appréciation pour ce besoin.",
+      "recorded": "Appréciation enregistrée dans la portée et la durée indiquées.",
+      "withdrawn": "Appréciation retirée ; position actuelle inconnue.",
+      "expired": "Appréciation expirée ; nouvel examen nécessaire.",
+      "review_required": "Besoin ou sources modifiés ; nouvel examen nécessaire."
+    }
   }
 }

@@ -1,5 +1,7 @@
 # Adéquation personnelle pour un besoin
 
+Depuis les sources, l’[appréciation personnelle précise](need-expertise.md) conserve un dossier privé distinct. Aucun de ses résultats ne remplace les six contrôles des contrats v1/v2.
+
 Les [sources personnelles d’expertise](need-expertise-evidence.md) ouvrent une consultation privée distincte depuis la rubrique Compétence. Elle rapproche le besoin et le dossier documentaire existant sans enrichir les contrats du bilan ni lever son contrôle d’expertise précise.
 
 L’[examen personnel des conflits](need-conflicts.md) s’ouvre dans une vue remplaçante du même dialogue. Il conserve un dossier séparé ; les contrats v1/v2, leur résultat et leurs six contrôles restent inchangés.

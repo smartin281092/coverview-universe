@@ -43,6 +43,10 @@ CLAUDE, PROJECT, MEMORY actives, codex, execution-policy, program, architecture,
 
 ## Journal
 
+### Relais84e4 — appréciation personnelle précise
+
+[Plan avant code](partner-need-expertise-decision.plan.md), [propriétaire](../../apps/api/src/modules/partner-workspace/docs/need-expertise.md), [ledger](../evidence/partner-core.md#relais-84e4--appréciation-personnelle-de-lexpertise).132tests distincts/6fichiers dont20nouveaux, V0/V1 verts ;0051 hors catalogue, aucune activation partagée ni V3 rempli. Deux revues même agent sans indépendance. Suite bornée : audit de la solution exacte envisagée et portée des conventions, puis tous tracks I–III. Brief/S-110/S-042a ouverts.
+
 ### Relais 5ce9 — sources personnelles d’expertise par besoin
 
 [Plan avant code](partner-need-expertise-evidence.plan.md), [propriétaire](../../apps/api/src/modules/partner-workspace/docs/need-expertise-evidence.md), [ledger](../evidence/partner-core.md#relais-5ce9--sources-personnelles-dexpertise-par-besoin). Lecture privée datée du besoin et du dernier dossier, réutilisation de son original/historique ; aucun nouvel avis persisté.82tests distincts validés en campagnes séparées dont7nouveaux, types/lint/builds quatre apps/frontières/Knip ciblé verts. Deux revues même agent, retour UI masqué pendant relecture ; V3 non effectué. Aucune migration nouvelle ni activation partagée. Suite : appréciation précise personnelle sourcée après audit/plan, puis tous tracks I–III ; [checkpoint](../handoffs/partner-need-expertise-decision-suite.md), snapshot/audit séparés et relais unique Astra/ultra. Brief/S-110/S-042a ouverts, statuts inchangés.

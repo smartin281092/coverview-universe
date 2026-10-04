@@ -99,6 +99,47 @@ export const partnerNeedConflictReviews = pgTable(
     ),
   ],
 );
+export const partnerNeedExpertiseReviews = pgTable(
+  "partner_need_expertise_reviews",
+  {
+    id: text("id").primaryKey(),
+    leadId: text("lead_id")
+      .notNull()
+      .references(() => partnerLeads.id),
+    userId: text("user_id")
+      .notNull()
+      .references(() => identityUsers.id),
+    organizationId: text("organization_id").references(() => partnerOrganizations.id),
+    subjectKey: text("subject_key").notNull(),
+    revision: integer("revision").notNull(),
+    scopeFingerprint: text("scope_fingerprint").notNull(),
+    scope: jsonb("scope").notNull(),
+    basis: jsonb("basis").notNull(),
+    action: text("action").notNull(),
+    position: text("position"),
+    reviewedScope: text("reviewed_scope"),
+    limitations: text("limitations"),
+    nextStep: text("next_step"),
+    reason: text("reason").notNull(),
+    validUntil: instant("valid_until"),
+    createdAt: instant("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("partner_need_expertise_revision").on(t.userId, t.leadId, t.revision),
+    index("partner_need_expertise_subject").on(t.userId, t.leadId, t.subjectKey, t.revision),
+    check("partner_need_expertise_revision_positive", sql`${t.revision}>0`),
+    check("partner_need_expertise_fingerprint", sql`${t.scopeFingerprint} ~ '^[a-f0-9]{64}$'`),
+    check("partner_need_expertise_reason", sql`length(trim(${t.reason})) between 10 and 1000`),
+    check(
+      "partner_need_expertise_json",
+      sql`jsonb_typeof(${t.scope})='object' and jsonb_typeof(${t.basis})='object'`,
+    ),
+    check(
+      "partner_need_expertise_values",
+      sql`coalesce((${t.action}='decide' and ${t.position} in ('expertise_confirmed_within_scope','specialist_required','clarification_needed') and length(trim(${t.reviewedScope})) between 10 and 500 and length(trim(${t.limitations})) between 10 and 1000 and length(trim(${t.nextStep})) between 10 and 1000 and ${t.validUntil}>${t.createdAt}) or (${t.action}='withdraw' and ${t.position} is null and ${t.validUntil} is null and ${t.reviewedScope} is null and ${t.limitations} is null and ${t.nextStep} is null),false)`,
+    ),
+  ],
+);
 export const partnerAdvicePreferences = pgTable(
   "partner_advice_preferences",
   {

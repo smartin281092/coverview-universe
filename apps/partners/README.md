@@ -1,5 +1,7 @@
 # CoverView Partner
 
+Fiche Lead → Mon adéquation → Mes preuves → « Apprécier mon expertise » : périmètre/limites/suite explicites, versions exactes des sources, retrait et historique privés. [Règles et activation](../api/src/modules/partner-workspace/docs/need-expertise.md).0051 hors catalogue, V3 rempli/clavier/mobile ouvert.
+
 Fiche Lead → Mon adéquation → Mes preuves pour ce besoin : besoin actuel, déclaration et dernier examen documenté, limites et état de l’original. Ouverture du dossier personnel à la catégorie exacte, puis relecture au retour. [Règles et limites](../api/src/modules/partner-workspace/docs/need-expertise-evidence.md) ; V3 rempli/clavier/mobile ouvert.
 
 Fiche Lead → Mon adéquation → Examiner mes conflits : périmètre examiné, trois positions explicites, motif, échéance et confirmation ; retrait/historique privés. [Règles et activation](../api/src/modules/partner-workspace/docs/need-conflicts.md).0050 hors catalogue, V3 rempli/clavier/mobile ouvert.

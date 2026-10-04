@@ -32,6 +32,7 @@ type Mutation = <T>(
 ) => Promise<T>;
 type Row = {
   id: string;
+  declaration_id: string;
   revision: number;
   declaration: string;
   decision: string;
@@ -77,10 +78,10 @@ const safe = (row: Row, userId: string) =>
   !row.deleted_at &&
   !!row.scan_version &&
   ["ready", "failed"].includes(row.document_state);
-async function latest(db: Executor, userId: string, category: string) {
+async function latest(db: Executor, userId: string, category: string, lockSource = false) {
   return (
     await db.query<Row>(
-      `${select} where d.user_id=$1 and d.category=$2 order by d.revision desc limit 1`,
+      `${select} where d.user_id=$1 and d.category=$2 order by d.revision desc limit 1${lockSource ? " for share of f" : ""}`,
       [userId, category],
     )
   ).rows[0];
@@ -164,6 +165,16 @@ export async function readNeedCompetenceEvidence(
   documentsAvailable: boolean,
 ) {
   const row = await latest(db, userId, category);
+  return needEvidence(row, userId, category, member, assessedAt, documentsAvailable);
+}
+function needEvidence(
+  row: Row | undefined,
+  userId: string,
+  category: string,
+  member: Awaited<ReturnType<typeof membership>>,
+  assessedAt: string,
+  documentsAvailable: boolean,
+) {
   return needExpertiseEvidenceSchema.shape.competence.parse({
     summary: summary(
       row,
@@ -185,6 +196,40 @@ export async function readNeedCompetenceEvidence(
     reviewedDocumentRevision: row?.decision === "reviewed" ? row.document_revision : null,
     canOpenDossier: !!member,
   });
+}
+
+// The caller already locks the member (declarations/reviews) and the canonical need.
+// For a mutation/replay, lock the original too and choose time AFTER that wait.
+export async function readNeedExpertiseSource(
+  db: Executor,
+  userId: string,
+  category: string,
+  member: Awaited<ReturnType<typeof membership>>,
+  assessedAt: string,
+  documentsAvailable: boolean,
+  lockSource = false,
+) {
+  const row = await latest(db, userId, category, lockSource);
+  const at = lockSource
+    ? (await db.query<{ at: Date }>("select clock_timestamp() at")).rows[0]!.at.toISOString()
+    : assessedAt;
+  const evidence = needEvidence(row, userId, category, member, at, documentsAvailable);
+  return {
+    assessedAt: at,
+    evidence,
+    reference: row
+      ? {
+          declarationId: row.declaration_id,
+          decisionId: row.id,
+          decisionRevision: row.revision,
+          documentRevision: row.file_revision,
+          reviewedDocumentRevision: evidence.reviewedDocumentRevision,
+          sourceStatus: evidence.sourceStatus,
+          summaryStatus: evidence.summary.status,
+          validUntil: evidence.summary.validUntil,
+        }
+      : null,
+  };
 }
 async function target(db: Executor, actor: PartnerActor, userId: string, category: string) {
   leadCategorySchema.parse(category);

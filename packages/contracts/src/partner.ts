@@ -681,6 +681,85 @@ export const needExpertiseEvidenceSchema = z.object({
 });
 export type NeedExpertiseEvidence = z.infer<typeof needExpertiseEvidenceSchema>;
 
+export const needExpertisePositionSchema = z.enum([
+  "expertise_confirmed_within_scope",
+  "specialist_required",
+  "clarification_needed",
+]);
+export const needExpertiseInputSchema = z
+  .object({
+    revision: z.number().int().nonnegative(),
+    scopeFingerprint: z.string().regex(/^[a-f0-9]{64}$/u),
+    action: z.enum(["decide", "withdraw"]),
+    position: needExpertisePositionSchema.nullable(),
+    reviewedScope: z.string().trim().min(10).max(500).nullable(),
+    limitations: z.string().trim().min(10).max(1000).nullable(),
+    nextStep: z.string().trim().min(10).max(1000).nullable(),
+    reason: z.string().trim().min(10).max(1000),
+    validUntil: instant.nullable(),
+    confirmed: z.literal(true),
+  })
+  .strict()
+  .refine((value) =>
+    value.action === "decide"
+      ? value.position !== null &&
+        value.validUntil !== null &&
+        value.reviewedScope !== null &&
+        value.limitations !== null &&
+        value.nextStep !== null
+      : value.position === null &&
+        value.validUntil === null &&
+        value.reviewedScope === null &&
+        value.limitations === null &&
+        value.nextStep === null,
+  );
+const needExpertiseSourceSchema = z.object({
+  declarationId: id,
+  decisionId: id,
+  decisionRevision: z.number().int().positive(),
+  documentRevision: z.number().int().nonnegative(),
+  reviewedDocumentRevision: z.number().int().nonnegative().nullable(),
+  sourceStatus: needExpertiseEvidenceSchema.shape.competence.shape.sourceStatus,
+  summaryStatus: competenceSummarySchema.shape.status,
+  validUntil: instant.nullable(),
+});
+const needExpertiseBasisSchema = needConflictBasisSchema.extend({
+  source: needExpertiseSourceSchema.nullable(),
+});
+const needExpertiseRecordSchema = z.object({
+  revision: z.number().int().positive(),
+  action: needExpertiseInputSchema.shape.action,
+  position: needExpertisePositionSchema.nullable(),
+  reviewedScope: z.string().nullable(),
+  limitations: z.string().nullable(),
+  nextStep: z.string().nullable(),
+  reason: z.string(),
+  validUntil: instant.nullable(),
+  recordedAt: instant,
+  scope: advicePreferencesSchema.shape.scope,
+  basis: needExpertiseBasisSchema,
+});
+export const needExpertiseDossierSchema = z.object({
+  leadId: id,
+  advisorId: id,
+  assessedAt: instant,
+  scope: advicePreferencesSchema.shape.scope.extend({ category: leadCategorySchema }),
+  scopeFingerprint: needExpertiseInputSchema.shape.scopeFingerprint,
+  revision: z.number().int().nonnegative(),
+  canConfirmExpertise: z.boolean(),
+  canWithdraw: z.boolean(),
+  status: z.enum(["missing", "recorded", "withdrawn", "expired", "review_required"]),
+  effectivePosition: needExpertisePositionSchema.nullable(),
+  current: needExpertiseRecordSchema.nullable(),
+  history: z.array(needExpertiseRecordSchema).max(20),
+  nextBeforeRevision: z.number().int().positive().nullable(),
+  changeRequested: z.boolean(),
+  basis: needExpertiseBasisSchema,
+  competence: needExpertiseEvidenceSchema.shape.competence,
+});
+export type NeedExpertiseInput = z.infer<typeof needExpertiseInputSchema>;
+export type NeedExpertiseDossier = z.infer<typeof needExpertiseDossierSchema>;
+
 // Separate consent from the private availability dossier; no legacy values are imported.
 export const sharedModesAudienceSchema = z.literal("confirmed-referent-leads-v1");
 export const sharedModesInputSchema = z

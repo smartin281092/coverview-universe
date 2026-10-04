@@ -4,6 +4,8 @@ import { z } from "zod";
 import { documentAnalysisSchema } from "@coverview/contracts";
 import {
   needExpertiseEvidenceSchema,
+  needExpertiseInputSchema,
+  type NeedExpertiseInput,
   needConflictInputSchema,
   type NeedConflictInput,
   needCapacityInputSchema,
@@ -83,6 +85,7 @@ import { previewPersonalAppointment } from "./partner.appointment-creation.js";
 import { createPracticeOperations } from "./partner.practice.js";
 import { readAdvicePreferences, confirmAdvicePreferences } from "./partner.advice.js";
 import { readNeedConflict, decideNeedConflict } from "./partner.need-conflicts.js";
+import { readNeedExpertise, decideNeedExpertise } from "./partner.need-expertise.js";
 import { readPersonalNeedContext } from "./partner.need-context.js";
 import { readNeedCapacity, decideNeedCapacity } from "./partner.need-capacity.js";
 import { readAdvisorAssessment } from "./partner.advisor-assessment.js";
@@ -742,6 +745,62 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
       } finally {
         tx.release();
       }
+    },
+    async needExpertise(actor: PartnerActor, id: string, beforeRevision?: number) {
+      referentQuerySchema.parse(beforeRevision === undefined ? {} : { beforeRevision });
+      const tx = await pool.connect();
+      try {
+        await tx.query("begin isolation level repeatable read");
+        const now = (await tx.query<{ at: Date }>("select transaction_timestamp() at")).rows[0]!.at;
+        await lockActor(tx, actor);
+        const { lead, ctx } = await personalAdvisorLead(tx, actor, id);
+        const result = await readNeedExpertise(
+          tx,
+          actor,
+          lead,
+          ctx.application,
+          now.toISOString(),
+          documentsAvailable,
+          beforeRevision,
+        );
+        await tx.query("commit");
+        return result;
+      } catch (cause) {
+        await tx.query("rollback");
+        if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+          fail("PARTNER_CONFLICT", 409);
+        throw cause;
+      } finally {
+        tx.release();
+      }
+    },
+    decideNeedExpertise(actor: PartnerActor, id: string, raw: NeedExpertiseInput, key: string) {
+      const input = needExpertiseInputSchema.parse(raw);
+      return transaction(
+        actor,
+        `need-expertise:${id}`,
+        key,
+        input,
+        async (tx) => {
+          const { lead, ctx } = await personalAdvisorLead(tx, actor, id);
+          return decideNeedExpertise(tx, actor, lead, ctx.application, input, documentsAvailable);
+        },
+        async (tx) => {
+          const { lead, ctx } = await personalAdvisorLead(tx, actor, id);
+          await readAdvicePreferences(tx, actor, lead);
+          const now = (await tx.query<{ at: Date }>("select clock_timestamp() at")).rows[0]!.at;
+          return readNeedExpertise(
+            tx,
+            actor,
+            lead,
+            ctx.application,
+            now.toISOString(),
+            documentsAvailable,
+            undefined,
+            true,
+          );
+        },
+      );
     },
     async needConflict(actor: PartnerActor, id: string, beforeRevision?: number) {
       referentQuerySchema.parse(beforeRevision === undefined ? {} : { beforeRevision });
