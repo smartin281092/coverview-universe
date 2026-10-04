@@ -27,6 +27,7 @@ Formatage : les données générées par les scripts (`recommendation-catalog.js
 - La table historique `health_benefits` (88 faits, ancienne API `/models/:id` et filtres hérités) n’est pas réalignée sur la taxonomie.
 - Le catalogue public est téléchargé en entier à l’ouverture d’une fiche ; un point d’accès par modèle ou la compression au proxy reste à décider.
 - La base clonée `coverview_health_benefits` (conteneur partagé `coverview-s000b-postgres-1`) et le conteneur `coverview-health-benefits-pg` sont conservés ; leur suppression demande une confirmation explicite (G-05).
+- Catalogue non importé dans la base locale partagée `coverview_local` : l’API de la session partenaire exécute encore le code antérieur, dont le schéma strict refuserait `benefitTypes`. Import à faire après alignement de ces processus (README, ordre d’activation).
 
 ## Limites
 
