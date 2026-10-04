@@ -24,6 +24,7 @@ import { defaultRecommendationRules, recommend } from "./recommendation.engine.j
 import { healthAgeGroup, healthDeductibles } from "./health.cost.js";
 import { healthInsurerBrands } from "./health.brands.js";
 import { healthOfferPresentation } from "./health.presentation.js";
+import { legacyBenefitFilterKeys } from "./recommendation.utility.js";
 export class RecommendationError extends Error {
   constructor(
     readonly code: string,
@@ -66,6 +67,16 @@ export function validateCatalog(catalog: EvidenceCatalog) {
     )
       fail("HEALTH_RECOMMENDATION_INVALID_CATALOG", 422);
   }
+  // With a taxonomy, every fact belongs to exactly one canonical type of the same family. Keys of
+  // the historical compare filters stay reserved to avoid two meanings for one filter.
+  const types = new Map(catalog.benefitTypes.map((type) => [type.key, type]));
+  if (
+    types.size !== catalog.benefitTypes.length ||
+    catalog.benefitTypes.some((type) => legacyBenefitFilterKeys.includes(type.key)) ||
+    (types.size > 0 &&
+      catalog.benefits.some((fact) => types.get(fact.equivalenceGroup)?.family !== fact.category))
+  )
+    fail("HEALTH_RECOMMENDATION_INVALID_CATALOG", 422);
   for (const fact of catalog.benefits) {
     if (
       fact.verification === "verified" &&

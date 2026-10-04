@@ -2,6 +2,15 @@ import { z } from "zod";
 
 export const healthYear = 2027;
 export const healthCategorySchema = z.enum(["BASE", "PRAXIS", "TEL_DIG", "FLEX", "PHARM"]);
+// Families of the canonical benefit taxonomy (evidence catalogue, compare filters).
+export const benefitFamilySchema = z.enum([
+  "pharmacy",
+  "telemedicine",
+  "cost_sharing",
+  "prevention",
+  "access",
+  "members",
+]);
 export const healthRegionIdSchema = z.string().regex(/^(?:[A-Z]{2}-[0-3]|EU-[A-Z]{2})$/);
 export const healthCompareInputSchema = z
   .object({
@@ -110,6 +119,20 @@ export const healthStatusSchema = z.object({
     .max(100),
   sources: z.array(z.object({ url: z.url(), sha256: z.string(), file: z.string() })).max(20),
   foreign: healthForeignStatusSchema.nullable().optional(),
+  // Canonical benefit types usable as compare filters, with the number of models offering each
+  // one with the basic insurance alone (announced on an official source, 2027 not always dated).
+  benefitTypes: z
+    .array(
+      z.object({
+        key: z.string(),
+        family: benefitFamilySchema,
+        label: z.string(),
+        description: z.string(),
+        models: z.number().int().positive(),
+      }),
+    )
+    .max(200)
+    .optional(),
 });
 export const healthComparisonSchema = z.object({
   year: z.literal(healthYear),

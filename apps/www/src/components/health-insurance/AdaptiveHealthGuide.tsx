@@ -1,5 +1,5 @@
 import { HealthGradient } from "./HealthGradient";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
   createRecommendationClient,
   createLatestRecommendationRequest,
@@ -14,6 +14,8 @@ import { recommendationCopy as copy } from "../../content/fr/health-recommendati
 import { HealthDialog } from "./HealthDialog";
 import { HealthIcon } from "./HealthIcon";
 export type HealthGuideSnapshot = { result: RecommendationResult | null; busy: boolean };
+// Server contract: at most 12 values per answer.
+const maxChoices = 12;
 
 function AnswerCard({
   question,
@@ -67,14 +69,17 @@ function AnswerCard({
         ? [value]
         : current.includes(value)
           ? current.filter((x) => x !== value)
-          : [
-              ...current.filter(
-                (x) => !question.options.find((item) => item.value === x)?.exclusive,
-              ),
-              value,
-            ],
+          : current.length >= maxChoices
+            ? current
+            : [
+                ...current.filter(
+                  (x) => !question.options.find((item) => item.value === x)?.exclusive,
+                ),
+                value,
+              ],
     );
   };
+  const full = question.multiple && selected.length >= maxChoices;
   const exact = selected.includes("exact");
   const validAmount =
     amount !== "" &&
@@ -88,20 +93,29 @@ function AnswerCard({
       <p className="hi-small">{question.help}</p>
       {question.multiple && <p className="hi-small">{copy.multiple}</p>}
       {question.id === "tariff" && <p className="hi-note">{copy.tariff}</p>}
+      {full && <p className="hi-small">{copy.maxChoices}</p>}
       <div className="hi-guide-choices" role="group" aria-label={question.title}>
         {question.options.map((option, index) => (
-          <button
-            type="button"
-            aria-pressed={selected.includes(option.value)}
-            className={`hi-guide-choice ${selected.includes(option.value) ? "is-selected" : ""}`}
-            key={option.value}
-            onClick={() => choose(option.value)}
-          >
-            <span className="hi-choice-number">
-              {selected.includes(option.value) ? "✓" : index + 1}
-            </span>
-            <span>{option.label}</span>
-          </button>
+          <Fragment key={option.value}>
+            {option.group && option.group !== question.options[index - 1]?.group && (
+              <p className="hi-guide-choice-group">{option.group}</p>
+            )}
+            <button
+              type="button"
+              aria-pressed={selected.includes(option.value)}
+              className={`hi-guide-choice ${selected.includes(option.value) ? "is-selected" : ""}`}
+              disabled={full && !option.exclusive && !selected.includes(option.value)}
+              onClick={() => choose(option.value)}
+            >
+              <span className="hi-choice-number">
+                {selected.includes(option.value) ? "✓" : index + 1}
+              </span>
+              <span>
+                {option.label}
+                {option.description && <small>{option.description}</small>}
+              </span>
+            </button>
+          </Fragment>
         ))}
       </div>
       {exact && (

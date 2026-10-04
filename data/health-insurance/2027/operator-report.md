@@ -1,10 +1,216 @@
 # Contrôle documentaire maladie 2027
 
-Version catalog_dc44a68b5544d501235d7f86 · consulté le 2026-10-01.
+Version catalog_fe98064955579fb8923847f0 · conditions consultées le 2026-10-01, pages produit et prestations le 2026-10-04.
 
-32 assureurs, 153 modèles examinés sur 153. 0 modèles entièrement vérifiés ; 0 non examinés. 138 fiches, 215 passages de source, 323 dossiers de contrôle.
+32 assureurs, 153 modèles examinés sur 153. 0 modèles entièrement vérifiés ; 0 non examinés. 514 fiches, 40 types uniformisés, 812 passages de source, 227 dossiers de contrôle.
 
 La couverture de recherche n’est pas une certification d’exhaustivité des prestations. Les sources non confirmées pour 2027 restent conditionnelles. Aucun message aux assureurs envoyé. Les modèles et entités sont rapprochés des identifiants Priminfo, sans extrapolation de groupe.
+
+## Fiches du 1er octobre remplacées par la recherche du 4 octobre
+
+Une fiche partielle est remplacée lorsque la recherche plus récente documente le même type de prestation pour le même assureur, ou retirée après revue explicite.
+
+- 8 · Multimed : plafond de quote-part annoncé → copay_cap_reduced (superseded_by_review_c)
+
+- 8 · Multimed : premier conseil téléphonique → medical_advice_hotline_free (superseded_by_review_c)
+
+- 8 · enjoy365 — partenaires accessibles avec la base → partner_discounts (superseded_by_review_c)
+
+- 8 · enjoy365 — boutique avec complémentaire → partner_discounts (superseded_by_review_c)
+
+- 8 · active365 — utilisation et récompenses distinctes → activity_rewards_program (superseded_by_review_c)
+
+- 32 · Conseil téléphonique OKP/CASAMED → medical_advice_hotline_free (superseded_by_review_c)
+
+- 32 · SMARTMED — orientation BetterDoc → specialist_appointment_service (superseded_by_review_c)
+
+- 32 · Hôtel Collinetta → partner_discounts (superseded_by_review_c)
+
+- 134 · Conseil médical 24 h → medical_advice_hotline_free (superseded_by_review_c)
+
+- 194 · sumis24 — conseil pour la base → medical_advice_hotline_free (superseded_by_review_c)
+
+- 194 · Complémentaires enfants — rabais familial annoncé → supplementary_premium_discount (superseded_by_review_c)
+
+- 246 · Conseil médical Sanmed24 → medical_advice_hotline_free (superseded_by_review_c)
+
+- 246 · Parrainage Steffisburg → referral_reward (superseded_by_review_c)
+
+- 290 · concordiaMed → medical_advice_hotline_free (superseded_by_review_c)
+
+- 290 · CONCORDIA Active → partner_discounts (superseded_by_review_c)
+
+- 312 · Medi+ de Zur Rose → digital_health_services (superseded_by_review_c)
+
+- 312 · Analyse numérique des symptômes SmartCare → digital_health_services (superseded_by_review_c)
+
+- 343 · Conseil initial PrimaFlex en pharmacie → pharmacy_first_consultation_free (superseded_by_review_c)
+
+- 343 · Génériques sans franchise PrimaFlex → generic_cost_share_waiver (superseded_by_review_c)
+
+- 343 · Examens mammaires sans franchise PrimaFlex → screening_cost_share_waiver (superseded_by_review_c)
+
+- 343 · LeClub → partner_discounts (superseded_by_review_c)
+
+- 360 · Livraison de médicaments Zur Rose → mail_order_pharmacy (superseded_by_review_c)
+
+- 376 · Conseil télémédical KPTwin.win → medical_advice_hotline_free (superseded_by_review_c)
+
+- 376 · Contrôles ciblés en pharmacie KPTwin.win → pharmacy_health_checks (superseded_by_review_c)
+
+- 376 · Examen dermatologique numérique KPTwin.win → skin_check (superseded_by_review_c)
+
+- 376 · Examen dermatologique numérique KPTwin.smart → skin_check (superseded_by_review_c)
+
+- 376 · Société Coopérative KPT → partner_discounts (superseded_by_review_c)
+
+- 455 · BikeBonus → fitness_contribution (superseded_by_review_c)
+
+- 455 · Simpla, programme de récompense annoncé → activity_rewards_program (superseded_by_review_c)
+
+- 509 · Téléconsultations Medgate sans participation → teleconsultation_cost_share_waiver (superseded_by_review_c)
+
+- 509 · Consultation pharmacie casamed pharm → pharmacy_first_consultation_free (superseded_by_review_c)
+
+- 509 · Carte-piscine Sympany → fitness_discounts (Carte-piscine décrite à nouveau le 4 octobre avec ses conditions (complémentaires, âge) ; ancienne contradiction levée.)
+
+- 780 · Conseil médical Medi24 → medical_advice_hotline_free (superseded_by_review_c)
+
+- 820 · Cumpletta — contribution au check-up → preventive_checkup (superseded_by_review_c)
+
+- 881 · BetterDoc — recherche de spécialiste → specialist_appointment_service (superseded_by_review_c)
+
+- 881 · ParaPhone — conseil de médecine complémentaire → medical_advice_hotline_free (superseded_by_review_c)
+
+- 881 · Medgate — conseil TelCare → medical_advice_hotline_free (superseded_by_review_c)
+
+- 881 · ORTHO-TEAM — tarif analyse de foulée → partner_discounts (Offre ORTHO-TEAM reprise le 4 octobre avec la même validité (jusqu’au 31.12.2027) sous le type des produits de santé.)
+
+- 881 · SanerNatur — offre EGK20 expirée → partner_discounts (superseded_by_review_c)
+
+- 923 · Alpamare — réduction sur les entrées → partner_discounts (superseded_by_review_c)
+
+- 923 · HotelCard — abonnement au tarif partenaire → partner_discounts (superseded_by_review_c)
+
+- 923 · bluu — remises partenaires → partner_discounts (superseded_by_review_c)
+
+- 941 · Réductions des partenaires sodalis → partner_discounts (superseded_by_review_c)
+
+- 941 · Participation fitness complémentaire → fitness_contribution (superseded_by_review_c)
+
+- 966 · Promotion de la santé complémentaire → fitness_contribution (Remplacée par la fiche du 4 octobre sur les cours de promotion de la santé (complémentaires).)
+
+- 1040 · Conseil médical Medgate → medical_advice_hotline_free (superseded_by_review_c)
+
+- 1040 · Pharmacie Mediservice → mail_order_pharmacy (superseded_by_review_c)
+
+- 1322 · HotelCard à prix préférentiel → partner_discounts (superseded_by_review_c)
+
+- 1322 · Bon Migros de bienvenue Zur Rose → pharmacy_purchase_discount (Remplacée par la fiche du 4 octobre (bon Migros limité au 31.12.2026).)
+
+- 1384 · santé24 sans participation pour Favorit → teleconsultation_cost_share_waiver (superseded_by_review_c)
+
+- 1384 · active4life → partner_discounts (superseded_by_review_c)
+
+- 1384 · BENEVITA : rabais de complémentaires → supplementary_premium_discount (superseded_by_review_c)
+
+- 1384 · Conditions d'accès au bonus BENEVITA → activity_rewards_program (superseded_by_review_c)
+
+- 1384 · Conseil santé24 gratuit → medical_advice_hotline_free (Conseil santé24 repris le 4 octobre depuis les conditions spéciales 2027 et la page produit.)
+
+- 1384 · Conseil santé24 gratuit → medical_advice_hotline_free (Conseil santé24 repris le 4 octobre depuis les conditions spéciales 2027 et la page produit.)
+
+- 1384 · Conseil santé24 gratuit → medical_advice_hotline_free (Conseil santé24 repris le 4 octobre depuis les conditions spéciales 2027 et la page produit.)
+
+- 1386 · Conseil téléphonique Tel Doc → medical_advice_hotline_free (superseded_by_review_c)
+
+- 1386 · Conseil médical 24 h/24 → medical_advice_hotline_free (superseded_by_review_c)
+
+- 1386 · myPoints sous condition LCA du groupe → activity_rewards_program (superseded_by_review_c)
+
+- 1401 · Journée de vaccination grippe 2026 → vaccination_cost_share_waiver (superseded_by_review_c)
+
+- 1401 · Téléconsultation partenaire annoncée gratuite → teleconsultation_cost_share_waiver (Non confirmée le 4 octobre : la page partenaires citée renvoie une erreur.)
+
+- 1479 · Génériques sans franchise → generic_cost_share_waiver (superseded_by_review_c)
+
+- 1479 · Examens mammaires sans franchise → screening_cost_share_waiver (superseded_by_review_c)
+
+- 1479 · Services pharmacie gratuits → pharmacy_health_checks (superseded_by_review_c)
+
+- 1479 · LeClub → partner_discounts (superseded_by_review_c)
+
+- 1509 · Active dans Health Navigator → activity_rewards_program (superseded_by_review_c)
+
+- 1535 · Génériques sans franchise → generic_cost_share_waiver (superseded_by_review_c)
+
+- 1535 · Examens mammaires sans franchise → screening_cost_share_waiver (superseded_by_review_c)
+
+- 1535 · Services pharmacie gratuits → pharmacy_health_checks (superseded_by_review_c)
+
+- 1535 · LeClub → partner_discounts (superseded_by_review_c)
+
+- 1542 · Coordination EHC dès 2027 → care_coordination_program (Coordination Hôpital de confiance reprise le 4 octobre (coordinatrice dédiée dès 2027).)
+
+- 1542 · Recherche BetterDoc sans frais → specialist_appointment_service (superseded_by_review_c)
+
+- 1542 · Rabais pharmacie du modèle → medication_price_discount (superseded_by_review_c)
+
+- 1542 · Rabais pharmacie du modèle → medication_price_discount (superseded_by_review_c)
+
+- 1542 · Génériques sans franchise → generic_cost_share_waiver (superseded_by_review_c)
+
+- 1542 · Dépistages cancer sans franchise → screening_cost_share_waiver (superseded_by_review_c)
+
+- 1542 · Tests diabète et cardiovasculaires → pharmacy_health_checks (superseded_by_review_c)
+
+- 1542 · Téléconsultation PreventoMed → teleconsultation_cost_share_waiver (superseded_by_review_c)
+
+- 1542 · Conseil en pharmacie partenaire → pharmacy_first_consultation_free (superseded_by_review_c)
+
+- 1542 · Prévention FeminaVita sans franchise → screening_cost_share_waiver (superseded_by_review_c)
+
+- 1542 · Téléconsultation FeminaVita → teleconsultation_cost_share_waiver (superseded_by_review_c)
+
+- 1542 · Zur Rose : rabais médicaments → medication_price_discount (superseded_by_review_c)
+
+- 1542 · Zur Rose : bon de bienvenue → pharmacy_purchase_discount (superseded_by_review_c)
+
+- 1542 · Let's Go Fitness : Energy → fitness_discounts (superseded_by_review_c)
+
+- 1542 · Sunclub Premium : adhésion réduite → pharmacy_purchase_discount (superseded_by_review_c)
+
+- 1555 · Conseil téléphonique Tel Doc → medical_advice_hotline_free (superseded_by_review_c)
+
+- 1555 · Rabais médicaments HMO plus → medication_price_discount (superseded_by_review_c)
+
+- 1555 · myPoints → activity_rewards_program (superseded_by_review_c)
+
+- 1560 · BetterDoc avant séjour planifié → specialist_appointment_service (superseded_by_review_c)
+
+- 1560 · Téléconsultation partenaire → teleconsultation_cost_share_waiver (superseded_by_review_c)
+
+- 1560 · Cours agriTOP et boutique SPAA → occupational_prevention (superseded_by_review_c)
+
+- 1560 · Contrôle sécurité de l'exploitation → occupational_prevention (superseded_by_review_c)
+
+- 1560 · Rabais boutique SPAA → occupational_prevention (superseded_by_review_c)
+
+- 1560 · Dépannage agricole → assistance_services (superseded_by_review_c)
+
+- 1560 · Fonds pour cas de rigueur → hardship_fund (superseded_by_review_c)
+
+- 1562 · Conseil approfondi pharmacie → pharmacy_first_consultation_free (superseded_by_review_c)
+
+- 1562 · Recherche de spécialistes BetterDoc → specialist_appointment_service (superseded_by_review_c)
+
+- 1562 · Helsana+ version de base actuelle → activity_rewards_program (superseded_by_review_c)
+
+- 1562 · Helsana+ version complète actuelle → activity_rewards_program (superseded_by_review_c)
+
+- 1568 · Conseil téléphonique Tel Doc → medical_advice_hotline_free (superseded_by_review_c)
+
+- 1568 · myPoints sous condition LCA du groupe → activity_rewards_program (superseded_by_review_c)
 
 ## CSS Assurance-maladie SA (8) — Assurance Cabinets de santé
 
@@ -14,7 +220,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 **Confirmé** : Coordinateur reconnu obligatoire ; zone desservie à contrôler individuellement.
 
-**À confirmer** : Conditions contractuelles complètes applicables en 2027. Réseau exact et disponibilité du premier interlocuteur pour la localité. Inventaire exhaustif des avantages et exclusions.
+**À confirmer** : Conditions contractuelles complètes applicables en 2027. Réseau exact et disponibilité du premier interlocuteur pour la localité. Maintien 2027 des avantages annoncés sur la page produit (recherche du 4 octobre 2026).
 
 **Impact** : Une condition de parcours peut changer la compatibilité ; une condition financière ou d’éligibilité peut modifier le coût ou l’utilité.
 
@@ -26,6 +232,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [CSS Cabinets de santé — règlement](https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/reglement/403_f_css_reglement_gesundheitspraxis.pdf) · p. 2 : Paraphrase : Choix d'un coordinateur du réseau dans le rayon de soins ; le contrat peut étendre des restrictions aux complémentaires.
 
+- [CSS — page produit Assurance Cabinets de santé](https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-de-base/modele-hmo.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## CSS Assurance-maladie SA (8) — Assurance du médecin de famille Profit
 
 review_885bd1a9dfb014b28ec4d63e · 2027 · blocking · open · responsable non attribué
@@ -34,7 +242,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 **Confirmé** : Liste de partenaires pouvant comprendre pharmacie et centre de santé ; participation ordinaire, exonérations seulement selon liste CSS.
 
-**À confirmer** : Conditions contractuelles complètes applicables en 2027. Réseau exact et disponibilité du premier interlocuteur pour la localité. Inventaire exhaustif des avantages et exclusions.
+**À confirmer** : Conditions contractuelles complètes applicables en 2027. Réseau exact et disponibilité du premier interlocuteur pour la localité. Maintien 2027 des avantages annoncés sur la page produit (recherche du 4 octobre 2026).
 
 **Impact** : Une condition de parcours peut changer la compatibilité ; une condition financière ou d’éligibilité peut modifier le coût ou l’utilité.
 
@@ -46,6 +254,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [CSS Profit — règlement 01.2026](https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/reglement/404_f_css_reglement_profit_hausarzt_ausgabe-01.2026.pdf) · p. 3 : Paraphrase : Partenaire de coordination choisi dans une liste selon le domicile ; pas exclusivement un cabinet classique.
 
+- [CSS — page produit Assurance du médecin de famille Profit](https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-de-base/modele-du-medecin-de-famille.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## CSS Assurance-maladie SA (8) — Callmed
 
 review_caa8d9cd61fcd9a83fc8808d · 2027 · blocking · open · responsable non attribué
@@ -54,7 +264,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 **Confirmé** : Délégation et durée à respecter ; originaux à quote-part majorée remboursés à 50 % sauf nécessité médicale attestée.
 
-**À confirmer** : Conditions contractuelles complètes applicables en 2027. Réseau exact et disponibilité du premier interlocuteur pour la localité. Inventaire exhaustif des avantages et exclusions.
+**À confirmer** : Conditions contractuelles complètes applicables en 2027. Réseau exact et disponibilité du premier interlocuteur pour la localité. Maintien 2027 des avantages annoncés sur la page produit (recherche du 4 octobre 2026).
 
 **Impact** : Une condition de parcours peut changer la compatibilité ; une condition financière ou d’éligibilité peut modifier le coût ou l’utilité.
 
@@ -66,6 +276,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [CSS Callmed — règlement](https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/reglement/407_f_css_reglement_callmed.pdf) · p. 3 : Paraphrase : Triage numérique/télémédecine ; recommandations obligatoires. Exceptions gynécologie, yeux, dentiste, sage-femme ; urgence annoncée sous dix jours.
 
+- [CSS — page produit Callmed](https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-de-base/telmed.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## CSS Assurance-maladie SA (8) — Multimed
 
 review_d0a3c7a5c74618002a5cb472 · 2027 · blocking · open · responsable non attribué
@@ -74,7 +286,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 **Confirmé** : Plafond CHF 400 présenté sur la page actuelle, validité 2027 et plafond enfant non établis.
 
-**À confirmer** : Conditions contractuelles complètes applicables en 2027. Réseau exact et disponibilité du premier interlocuteur pour la localité. Inventaire exhaustif des avantages et exclusions.
+**À confirmer** : Conditions contractuelles complètes applicables en 2027. Réseau exact et disponibilité du premier interlocuteur pour la localité. Maintien 2027 des avantages annoncés sur la page produit (recherche du 4 octobre 2026).
 
 **Impact** : Une condition de parcours peut changer la compatibilité ; une condition financière ou d’éligibilité peut modifier le coût ou l’utilité.
 
@@ -88,6 +300,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [CSS Multimed — règlement 01.2024](https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/reglement/570_f_css_reglement_multimed.pdf) · p. 3 : Paraphrase : Coordinateur reconnu ou télémédecine ; une quote-part réduite peut être accordée, sans plafond chiffré dans l'article 5.
 
+- [CSS — page produit Multimed](https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-de-base/multimed.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Aquilana Versicherungen (32) — SMARTMED
 
 review_097041fb2a5b9ea6ffa05c1c · 2027 · blocking · open · responsable non attribué
@@ -96,7 +310,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 **Confirmé** : Application obligatoire avec exceptions ; plan imposé ; BetterDoc obligatoire avant séjour/intervention stationnaire planifié. Les actes médicaux Medgate sont facturés ; la gratuité du tri ne s'étend pas au traitement.
 
-**À confirmer** : Conditions contractuelles complètes applicables en 2027. Réseau exact et disponibilité du premier interlocuteur pour la localité. Inventaire exhaustif des avantages et exclusions.
+**À confirmer** : Conditions contractuelles complètes applicables en 2027. Réseau exact et disponibilité du premier interlocuteur pour la localité. Maintien 2027 des avantages annoncés sur la page produit (recherche du 4 octobre 2026).
 
 **Impact** : Une condition de parcours peut changer la compatibilité ; une condition financière ou d’éligibilité peut modifier le coût ou l’utilité.
 
@@ -110,6 +324,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Aquilana AVB KVG — édition 2024](https://www.aquilana.ch/content/downloads/tarife-und-bestimmungen/AVB_KVG.pdf) · p. 18 : Paraphrase : SMARTMED impose l'application et BetterDoc avant hospitalisation planifiée ; exceptions téléphoniques et participation légale.
 
+- [Aquilana — page produit SMARTMED](https://www.aquilana.ch/versicherungen/grundversicherungen/smartmed) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Aquilana Versicherungen (32) — CASAMED
 
 review_b37f2ba6c17d3e88170e8ef9 · 2027 · blocking · open · responsable non attribué
@@ -118,7 +334,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-
 
 **Confirmé** : Médecin de famille premier contact ; réseau et territoires CASAMED à contrôler.
 
-**À confirmer** : Conditions contractuelles complètes applicables en 2027. Réseau exact et disponibilité du premier interlocuteur pour la localité. Inventaire exhaustif des avantages et exclusions.
+**À confirmer** : Conditions contractuelles complètes applicables en 2027. Réseau exact et disponibilité du premier interlocuteur pour la localité. Maintien 2027 des avantages annoncés sur la page produit (recherche du 4 octobre 2026).
 
 **Impact** : Une condition de parcours peut changer la compatibilité ; une condition financière ou d’éligibilité peut modifier le coût ou l’utilité.
 
@@ -131,6 +347,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-
 - [Aquilana SMARTMED](https://www.aquilana.ch/versicherungen/grundversicherungen/smartmed) : Paraphrase : Comparatif des trois modèles ; tri numérique gratuit, acte médical SMARTMED facturé, conseil OKP/CASAMED gratuit.
 
 - [Aquilana AVB KVG — édition 2024](https://www.aquilana.ch/content/downloads/tarife-und-bestimmungen/AVB_KVG.pdf) · p. 18 : Paraphrase : SMARTMED impose l'application et BetterDoc avant hospitalisation planifiée ; exceptions téléphoniques et participation légale.
+
+- [Aquilana — page produit CASAMED](https://www.aquilana.ch/versicherungen/grundversicherungen/hausarztmodell-casamed) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Sumiswalder Krankenkasse (194) — HMO plus
 
@@ -152,6 +370,8 @@ Régions : BE-1, BE-2, BE-3
 
 - [Sumiswalder HMO plus — AVB 01.01.2027](https://sumiswalder.ch/20/wp-content/uploads/2026/09/HMO-plus-AVB-Sumiswalder-2027.pdf) · p. 2 : Paraphrase : Médecin reconnu, télémédecine ou pharmacie pour l'entrée ; délégations par médecin/télémédecine. Obligations, exclusions et sanctions.
 
+- [Sumiswalder — page produit HMO plus](https://sumiswalder.ch/privatkunden/angebot/grundversicherung/hmo-plus/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Sumiswalder Krankenkasse (194) — Modèle du médecin de famille
 
 review_393da0c13312425906f62496 · 2027 · blocking · open · responsable non attribué
@@ -160,7 +380,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-
 
 **Confirmé** : Médecin choisi dans le réseau comme entrée.
 
-**À confirmer** : Conditions contractuelles complètes applicables en 2027. Réseau exact et disponibilité du premier interlocuteur pour la localité. Inventaire exhaustif des avantages et exclusions.
+**À confirmer** : Conditions contractuelles complètes applicables en 2027. Réseau exact et disponibilité du premier interlocuteur pour la localité. Maintien 2027 des avantages annoncés sur la page produit (recherche du 4 octobre 2026).
 
 **Impact** : Une condition de parcours peut changer la compatibilité ; une condition financière ou d’éligibilité peut modifier le coût ou l’utilité.
 
@@ -171,6 +391,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Sumiswalder médecin de famille](https://sumiswalder.ch/privatkunden/angebot/grundversicherung/hausarztmodell/) : Paraphrase : Médecin sur liste ; exceptions urgence, prévention gynécologique, ophtalmologie.
+
+- [Sumiswalder — page produit Modèle du médecin de famille](https://sumiswalder.ch/privatkunden/angebot/grundversicherung/hausarztmodell/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Sumiswalder Krankenkasse (194) — sumis24Telmed
 
@@ -194,6 +416,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-
 
 - [Sumis24 — conseil médical](https://sumiswalder.ch/privatkunden/eoffice/medizinische-beratung/sumis24/) : Paraphrase : Conseil gratuit pour tous les assurés de base ; frais d'itinérance possibles à l'étranger.
 
+- [Sumiswalder — page produit sumis24Telmed](https://sumiswalder.ch/privatkunden/angebot/grundversicherung/sumis24-telmed/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Genossenschaft Krankenkasse Steffisburg (246) — sanmed24
 
 review_236a9a8d2b5da68fe64a41e9 · 2027 · blocking · open · responsable non attribué
@@ -213,6 +437,8 @@ Régions : AG-0, BE-1, BE-2, BE-3, GL-0, NW-0, OW-0, SO-0, SZ-0, UR-0, VS-2, ZG-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Sanmed24](https://www.kkst.ch/grundversicherung/sanmed24) : Paraphrase : Appel Medgate avant rendez-vous ; centre de conseil annoncé gratuit, appel au tarif local.
+
+- [Steffisburg — page produit sanmed24](https://www.kkst.ch/grundversicherung/sanmed24) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Genossenschaft Krankenkasse Steffisburg (246) — Casa
 
@@ -234,6 +460,8 @@ Régions : AG-0, BE-1, BE-2, BE-3, GL-0, NW-0, OW-0, SO-0, SZ-0, UR-0, VS-2, ZG-
 
 - [Casa](https://www.kkst.ch/grundversicherung/hausarztmodell-casa) : Paraphrase : Médecin de famille choisi comme première adresse ; exceptions gynécologie, maternité, yeux et dents.
 
+- [Steffisburg — page produit Casa](https://www.kkst.ch/grundversicherung/hausarztmodell-casa) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Genossenschaft Krankenkasse Steffisburg (246) — Medcasa
 
 review_a28476b9fbf30b02ec14a74d · 2027 · blocking · open · responsable non attribué
@@ -253,6 +481,8 @@ Régions : AG-0, BE-1, BE-2, BE-3, SO-0, ZH-1
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Medcasa](https://www.kkst.ch/grundversicherung/hausarztmodell-medcasa) : Paraphrase : Médecin reconnu, capacité d'accueil à vérifier ; zones BE1–3, AG, SO, ZH1 annoncées.
+
+- [Steffisburg — page produit Medcasa](https://www.kkst.ch/grundversicherung/hausarztmodell-medcasa) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Genossenschaft Krankenkasse Steffisburg (246) — Regiomed
 
@@ -274,6 +504,8 @@ Régions : BE-2
 
 - [Regiomed](https://www.kkst.ch/grundversicherung/hausarztmodell-regiomed) : Paraphrase : BE2, MediZentrum Landhaus ou Burgergut Steffisburg ; admission à vérifier.
 
+- [Steffisburg — page produit Regiomed](https://www.kkst.ch/grundversicherung/hausarztmodell-regiomed) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## CONCORDIA Assurance suisse de maladie et accidents SA (290) — HMO
 
 review_179359b99d2df8418224e084 · 2027 · blocking · open · responsable non attribué
@@ -293,6 +525,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Règlement HMO 2026](https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/grundversicherung/2.03_Zusatzreglement_HMO_fr.pdf) · p. 2 : Paraphrase : Médecin HMO d'abord ; exceptions préventives gynécologiques/obstétricales, lunettes et urgence.
+
+- [CONCORDIA — page produit HMO](https://www.concordia.ch/fr/versicherungen/grundversicherung/hmo.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [CONCORDIA — page produit HMO](https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/grundversicherung/2.03_Zusatzreglement_HMO_fr.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## CONCORDIA Assurance suisse de maladie et accidents SA (290) — smartDoc
 
@@ -314,6 +550,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Règlement smartDoc 2025](https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/grundversicherung/CON_B.47_Zusatzreglement_smartDoc_210x297mm_FR_low.pdf) · p. 2 : Paraphrase : Centre télémédical contraignant ; actes médicaux peuvent engendrer participation ; exceptions et génériques réglementés.
 
+- [CONCORDIA — page produit smartDoc](https://www.concordia.ch/fr/versicherungen/grundversicherung/smartdoc.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [CONCORDIA — page produit smartDoc](https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/grundversicherung/CON_B.47_Zusatzreglement_smartDoc_210x297mm_FR_low.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## CONCORDIA Assurance suisse de maladie et accidents SA (290) — MyDoc
 
 review_bdd4874e73de117251689b04 · 2027 · blocking · open · responsable non attribué
@@ -333,6 +573,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Règlement myDoc 2026](https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/grundversicherung/2.04_Zusatzreglement_myDoc_fr.pdf) · p. 2 : Paraphrase : Médecin de famille sur liste régionale ; distance compatible avec visites à domicile.
+
+- [CONCORDIA — page produit MyDoc](https://www.concordia.ch/fr/versicherungen/grundversicherung/mydoc.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [CONCORDIA — page produit MyDoc](https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/grundversicherung/2.04_Zusatzreglement_myDoc_fr.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Atupri Assurance de la santé SA (312) — CareMed
 
@@ -354,6 +598,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Annexe CareMed 2026](https://atupri.ch/assets/f/253863/x/53ffc4af97/atupri_conditions-generales_lamal.pdf) · p. 15 : Paraphrase : Médecin dans réseau CareMed ; disponibilité et proximité requises.
 
+- [Atupri — page produit CareMed](https://atupri.ch/fr/assurances/assurance-de-base/caremed) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Atupri — page produit TelFirst](https://atupri.ch/assets/f/253863/x/53ffc4af97/atupri_conditions-generales_lamal.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Atupri Assurance de la santé SA (312) — HMO
 
 review_39621893fcfc555fa7e56672 · 2027 · blocking · open · responsable non attribué
@@ -373,6 +621,30 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Annexe HMO 2026](https://atupri.ch/assets/f/253863/x/53ffc4af97/atupri_conditions-generales_lamal.pdf) · p. 12 : Paraphrase : Médecin coordinateur accepté, réseau régional et distance compatibles.
+
+- [Atupri — page produit HMO](https://atupri.ch/fr/assurances/assurance-de-base/hmo) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Atupri — page produit TelFirst](https://atupri.ch/assets/f/253863/x/53ffc4af97/atupri_conditions-generales_lamal.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+## Atupri Assurance de la santé SA (312) — Assurance de base
+
+review_4b14fa58174a7b58ed094e73 · 2027 · blocking · open · responsable non attribué
+
+Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
+
+**Confirmé** : 5 % de rabais sur la complémentaire Mivita Reala en choisissant une assurance de base Atupri, y compris le modèle Standard.
+
+**À confirmer** : Sources officielles contradictoires ou illisibles pour cette prestation.
+
+**Impact** : Présence, gratuité ou périmètre de la prestation à confirmer avant toute valorisation.
+
+**Traitement provisoire** : Prestation affichée avec réserve ; aucune utilité ni économie tant que la contradiction n’est pas levée.
+
+**Question** : Confirmez pour 2027 la prestation « Rabais de 5 % sur Mivita Reala avec toute assurance de base » : modèles concernés, gratuité et conditions.
+
+**Action** : Comparer les sources citées ; demander une confirmation écrite à l’assureur si elles divergent. Aucun message envoyé automatiquement.
+
+- [Atupri — Assurances complémentaires](https://atupri.ch/fr/assurances/assurances-complementaires) : Paraphrase : en choisissant une assurance de base, rabais de 5 % sur Mivita Reala ; avec SmartCare, TelFirst, CareMed, FlexCare ou HMO, rabais supplémentaire de 5 % sur Comforta et Hôpital.
 
 ## Atupri Assurance de la santé SA (312) — TelFirst
 
@@ -394,6 +666,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Annexe TelFirst 2026](https://atupri.ch/assets/f/253863/x/53ffc4af97/atupri_conditions-generales_lamal.pdf) · p. 9 : Paraphrase : Téléconsultation préalable et plan de traitement contraignant.
 
+- [Atupri — page produit TelFirst](https://atupri.ch/fr/assurances/assurance-de-base/telfirst) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Atupri — page produit TelFirst](https://atupri.ch/assets/f/253863/x/53ffc4af97/atupri_conditions-generales_lamal.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Atupri Assurance de la santé SA (312) — FlexCare
 
 review_5b23da633a4438fb788ed9bb · 2027 · blocking · open · responsable non attribué
@@ -413,6 +689,10 @@ Régions : BE-1, BL-1, LU-1, SG-1, SO-0, ZG-0, ZH-1
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Annexe FlexCare 2026](https://atupri.ch/assets/f/253863/x/53ffc4af97/atupri_conditions-generales_lamal.pdf) · p. 18 : Paraphrase : Centre de santé ou télémédecine ; plan contraignant, exceptions et urgence à annoncer sous 20 jours.
+
+- [Atupri — page produit FlexCare](https://atupri.ch/fr/assurances/assurance-de-base/flexcare) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Atupri — page produit TelFirst](https://atupri.ch/assets/f/253863/x/53ffc4af97/atupri_conditions-generales_lamal.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Atupri Assurance de la santé SA (312) — SmartCare
 
@@ -436,6 +716,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [SmartCare](https://atupri.ch/fr/assurances/assurance-de-base/smartcare) : Paraphrase : Symptom checker gratuit ; accès médecin selon orientation.
 
+- [Atupri — page produit SmartCare](https://atupri.ch/fr/assurances/assurance-de-base/smartcare) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Atupri — page produit TelFirst](https://atupri.ch/assets/f/253863/x/53ffc4af97/atupri_conditions-generales_lamal.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Avenir Assurance (343) — SanaTel (Télémédecine)
 
 review_05bff1b5e2bb52b375ab68c5 · 2027 · blocking · open · responsable non attribué
@@ -455,6 +739,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [SanaTel CP 01.04.2025](https://www.groupemutuel.ch/fr/doc/jcr:9fec869e-5187-445d-ad23-ee9fb747a169/lang:fr/RTGM02-F10.pdfRTGM02-F10.pdf) · p. 1 : Paraphrase : Conseil initial partenaire obligatoire, recommandation ensuite libre pendant la période définie ; exceptions précisées.
+
+- [Philos Assurance — page produit SanaTel (Télémédecine)](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/SanaTel.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Philos Assurance — page produit SanaTel (Télémédecine)](https://www.groupemutuel.ch/fr/clients-prives/nos-services/compassana.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Avenir Assurance (343) — OptiMed (Réseau de soins)
 
@@ -476,6 +764,12 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [OptiMed CP 01.04.2025](https://www.groupemutuel.ch/fr/doc/jcr:06d446da-2155-43f2-a068-c09e61376bcf/lang:fr/RSGM02-F5.pdfRSGM02-F5.pdf) · p. 1 : Paraphrase : Premier médecin sur liste, ou centre télémédical reconnu ; délégation requise. Enfants : choix élargi.
 
+- [Philos Assurance — page produit OptiMed (Réseau de soins)](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/Optimed.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Philos Assurance — page produit OptiMed (Réseau de soins)](https://www.groupemutuel.ch/fr/clients-prives/nos-services/contacts-et-services/conseil-medical/Medgate.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Philos Assurance — page produit OptiMed (Réseau de soins)](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/Optimed/Optimed-DeltaSante.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Avenir Assurance (343) — PrimaCare (Médecin de famille)
 
 review_f582f19556cefca0254d5f9d · 2027 · blocking · open · responsable non attribué
@@ -495,6 +789,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [PrimaCare CP 01.04.2025](https://www.groupemutuel.ch/fr/doc/jcr:80aa1941-3c36-4ffe-8292-7197bb3de981/lang:fr/RFGM02-F5.pdfRFGM02-F5.pdf) · p. 1 : Paraphrase : Médecin LAMal librement choisi et déclaré ; premier recours obligatoire, bons de délégation.
+
+- [Philos Assurance — page produit PrimaCare (Médecin de famille)](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/Primacare.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Avenir Assurance (343) — PrimaFlex (Modèle flexible)
 
@@ -516,6 +812,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [PrimaFlex CP 01.04.2025](https://www.groupemutuel.ch/fr/doc/jcr:6af9e78c-c08d-4230-baa5-549f90d08368/lang:fr/RXGM01-F3.pdfRXGM01-F3.pdf) · p. 1 : Paraphrase : Pharmacie/télémédecine partenaires ou médecin déclaré ; conseil initial non facturé ; choix ultérieur libre pendant période.
 
+- [Philos Assurance — page produit PrimaFlex (Modèle flexible)](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/PrimaFlex.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Philos Assurance — page produit PrimaFlex (Modèle flexible)](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/PrimaFlex/services-exclusifs-PrimaFlex.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Krankenkasse Luzerner Hinterland (360) — Hausmed
 
 review_6a9b7b851b7e8eb1a21b60f9 · 2027 · blocking · open · responsable non attribué
@@ -536,6 +836,10 @@ Régions : AG-0, BE-1, BE-2, BE-3, LU-1, LU-2, LU-3, NW-0, OW-0, SO-0, SZ-0, UR-
 
 - [Hausarzt-Modell](https://www.kklh.ch/versicherungen/grundversicherung/hausarzt-modell/) : Paraphrase : Médecin choisi d'abord ; exceptions urgence, gynécologue et ophtalmologue.
 
+- [Luzerner Hinterland — page produit Hausmed](https://www.kklh.ch/versicherungen/grundversicherung/hausarzt-modell/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Luzerner Hinterland — page produit Hausmed](https://www.kklh.ch/files/Files/Dokumente/PDF_s/AVB_s/AVB_Hausmed.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Krankenkasse Luzerner Hinterland (360) — Telmed
 
 review_d6842e2d9d93d75d057f40ab · 2027 · blocking · open · responsable non attribué
@@ -555,6 +859,10 @@ Régions : AG-0, BE-1, BE-2, BE-3, LU-1, LU-2, LU-3, NW-0, OW-0, SO-0, SZ-0, UR-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [AVB Telmed](https://www.kklh.ch/files/Files/Dokumente/PDF_s/AVB_s/AVB_Telmed.pdf) · p. 1 : Paraphrase : Medi24 fixe parcours et délai ; rappel requis pour contrôles ou nouvelles orientations.
+
+- [Luzerner Hinterland — page produit Telmed](https://www.kklh.ch/versicherungen/grundversicherung/telmed-modell/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Luzerner Hinterland — page produit Telmed](https://www.kklh.ch/files/Files/Dokumente/PDF_s/AVB_s/AVB_Telmed.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## KPT Caisse-maladie SA (376) — KPTwin.smart - Médecin de famille avec app
 
@@ -578,6 +886,12 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Services gratuits smart 01.2026](https://www.kpt.ch/documents/e90312bc-57b8-4c6b-ad3d-4d502871d74f/kpt_kostenlose-dienstleistungen_win-smart_de_2026.pdf) · p. 1 : Paraphrase : App nécessaire et conseil télémédical gratuits ; OnlineDoctor sous critères AOS.
 
+- [KPT — page produit KPTwin.smart - Médecin de famille avec app](https://www.kpt.ch/fr/assurances-de-base/assurance-numerique) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [KPT — page produit KPTwin.smart - Médecin de famille avec app](https://www.kpt.ch/documents/df41ff45-9fe4-4596-85ee-6589d56766a1/CG_SMART_fr_01.2026.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [KPT — page produit KPTwin.smart - Médecin de famille avec app](https://www.kpt.ch/documents/e90312bc-57b8-4c6b-ad3d-4d502871d74f/kpt_kostenlose-dienstleistungen_win-smart_de_2026.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## KPT Caisse-maladie SA (376) — KPTwin.plus - Médecin de famille dans centre HMO
 
 review_aae25ea8ac207fa0e85c8835 · 2027 · blocking · open · responsable non attribué
@@ -597,6 +911,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [KPTwin.plus CG 01.2020](https://www.kpt.ch/documents/486623c6-07dc-4b9c-b578-dea226b1efb7/AVB_PLUS_en_01.2020.pdf) · p. 1 : Paraphrase : Médecin de premier recours du réseau sous contrat KPT.
+
+- [KPT — page produit KPTwin.plus - Médecin de famille dans centre HMO](https://www.kpt.ch/fr/assurances-de-base/modele-hmo) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [KPT — page produit KPTwin.plus - Médecin de famille dans centre HMO](https://www.kpt.ch/documents/58e3f57f-b008-48a0-af24-8fecafc99e97/AVB_PLUS_fr_01.2020.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## KPT Caisse-maladie SA (376) — KPTwin.easy - Télémédecine
 
@@ -618,6 +936,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [KPTwin.easy CG 01.2020](https://www.kpt.ch/documents/892606aa-c100-4e53-94d8-82358a6a45e8/AVB_wineasy_e_01.20.pdf) · p. 1 : Paraphrase : Téléconseil et médicaments par fournisseur désigné ; participation légale.
 
+- [KPT — page produit KPTwin.easy - Télémédecine](https://www.kpt.ch/fr/assurances-de-base/modele-medi) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [KPT — page produit KPTwin.easy - Télémédecine](https://www.kpt.ch/documents/ab82fcf7-e343-498c-a688-82ea7e11e256/AVB_wineasy_f_01.20.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## KPT Caisse-maladie SA (376) — KPTwin.doc - Médecin de famille
 
 review_f1c27fc42bd4d15d478c9331 · 2027 · blocking · open · responsable non attribué
@@ -637,6 +959,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [KPTwin.doc CG 01.2020](https://www.kpt.ch/documents/6f0ffec7-a6ab-4b0f-b066-0ddf867e1374/GC_WD_en_01.2020.pdf) · p. 1 : Paraphrase : Médecin de famille reconnu chargé de coordonner les soins.
+
+- [KPT — page produit KPTwin.doc - Médecin de famille](https://www.kpt.ch/fr/assurances-de-base/modele-medecin-de-famille) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [KPT — page produit KPTwin.doc - Médecin de famille](https://www.kpt.ch/documents/d79e8922-0c32-4e9b-b340-3dd13435fb4b/CG_WD_fr_01.2020.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## KPT Caisse-maladie SA (376) — KPTwin.win - Médecin de famille, télémédecine et pharmacie
 
@@ -660,6 +986,12 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Services gratuits win 01.2026](https://www.kpt.ch/documents/9638699f-514c-4b6f-956c-19ab258840c6/kpt_kostenlose-dienstleistungen_win-win_de_2026.pdf) · p. 1 : Paraphrase : Conseil/pharmacie et sélection de contrôles gratuits ; peau exemptée sous critères AOS.
 
+- [KPT — page produit KPTwin.win - Médecin de famille, télémédecine et pharmacie](https://www.kpt.ch/fr/assurances-de-base/modele-telmed) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [KPT — page produit KPTwin.win - Médecin de famille, télémédecine et pharmacie](https://www.kpt.ch/documents/fea229b2-90af-4304-bd05-3245537756de/CG_WIN_fr_01.2026.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [KPT — page produit KPTwin.win - Médecin de famille, télémédecine et pharmacie](https://www.kpt.ch/documents/9638699f-514c-4b6f-956c-19ab258840c6/kpt_kostenlose-dienstleistungen_win-win_de_2026.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## ÖKK Kranken- und Unfallversicherungen AG (455) — ÖKK CASAMED SELECT
 
 review_039e2c3059807da6b76b8fbe · 2027 · blocking · open · responsable non attribué
@@ -679,6 +1011,30 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [CASAMED, fiche 04.2025](https://www.oekk.ch/uploads/files/02_Dokumente/01_PK/01_Angebot/Infoblaetter/DE/1004_CASAMED_versicherungsmodell_de1.pdf) · p. 1 : Paraphrase : Premier recours Medgate ou pharmacie partenaire.
+
+- [ÖKK — page produit ÖKK CASAMED SELECT](https://www.oekk.ch/fr/clients-prives/assurances/assurance-de-base/telmed-appli-pharmacie) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [ÖKK — page produit ÖKK CASAMED SELECT](https://www.oekk.ch/uploads/files/02_Dokumente/01_PK/01_Angebot/Infoblaetter/FR/5046_casamed_select_fr_2026.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+## ÖKK Kranken- und Unfallversicherungen AG (455) — Assurance de base, ÖKK CASAMED HMO, ÖKK CASAMED SELECT, ÖKK CASAMED 24
+
+review_576ba699e68a2c1aadb0353e · 2027 · blocking · open · responsable non attribué
+
+Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
+
+**Confirmé** : Commande de médicaments sur ordonnance chez Zur Rose : 10 % de rabais sur les génériques et biosimilaires de la liste des spécialités, pas de taxes de pharmacie (sauf blistérisation), livraison discrète sans frais de port généralement sous 2 jours ouvrables, règlement direct avec ÖKK ; carte cadeau Migros de CHF 30 pour la première ordonnance permanente (jusqu'au 31.12.2026).
+
+**À confirmer** : Sources officielles contradictoires ou illisibles pour cette prestation.
+
+**Impact** : Présence, gratuité ou périmètre de la prestation à confirmer avant toute valorisation.
+
+**Traitement provisoire** : Prestation affichée avec réserve ; aucune utilité ni économie tant que la contradiction n’est pas levée.
+
+**Question** : Confirmez pour 2027 la prestation « 10 % de rabais sur génériques et biosimilaires, sans taxes ni frais de port chez Zur Rose » : modèles concernés, gratuité et conditions.
+
+**Action** : Comparer les sources citées ; demander une confirmation écrite à l’assureur si elles divergent. Aucun message envoyé automatiquement.
+
+- [ÖKK — Rabais dans la pharmacie en ligne Zur Rose](https://www.oekk.ch/fr/clients-prives/avantages/economies-rabais/envoi-de-medicaments) : Paraphrase : avec l'assurance de base, 10 % de rabais sur les génériques et biosimilaires chez Zur Rose, pas de taxes de pharmacie, livraison sans frais de port et règlement direct avec ÖKK.
 
 ## ÖKK Kranken- und Unfallversicherungen AG (455) — ÖKK CASAMED 24
 
@@ -700,6 +1056,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [CASAMED, fiche 04.2025](https://www.oekk.ch/uploads/files/02_Dokumente/01_PK/01_Angebot/Infoblaetter/DE/1004_CASAMED_versicherungsmodell_de1.pdf) · p. 1 : Paraphrase : Premier recours Medgate, téléphone, vidéo ou application.
 
+- [ÖKK — page produit ÖKK CASAMED 24](https://www.oekk.ch/fr/clients-prives/assurances/assurance-de-base/telmed-appli) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## ÖKK Kranken- und Unfallversicherungen AG (455) — ÖKK CASAMED MÉDECIN DE FAMILLE
 
 review_ad0b79cbf360c5f07c7d1e9f · 2027 · blocking · open · responsable non attribué
@@ -719,6 +1077,30 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [CASAMED, fiche 04.2025](https://www.oekk.ch/uploads/files/02_Dokumente/01_PK/01_Angebot/Infoblaetter/DE/1004_CASAMED_versicherungsmodell_de1.pdf) · p. 1 : Paraphrase : Médecin ou télé-médecin de famille dans la liste ÖKK.
+
+- [ÖKK — page produit ÖKK CASAMED MÉDECIN DE FAMILLE](https://www.oekk.ch/fr/clients-prives/assurances/assurance-de-base/modele-du-medecin-de-famille) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [ÖKK — page produit ÖKK CASAMED MÉDECIN DE FAMILLE](https://www.oekk.ch/fr/clients-prives/avantages/conseils-medicaux/telemedecin-de-famille) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+## ÖKK Kranken- und Unfallversicherungen AG (455) — ÖKK CASAMED MÉDECIN DE FAMILLE
+
+review_c9a1bf8a59ba25b066b47929 · 2027 · blocking · open · responsable non attribué
+
+Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
+
+**Confirmé** : Pour les assurés du modèle médecin de famille : 12 % de rabais sur les génériques et 10 % sur les biosimilaires chez Zur Rose, sans taxes de pharmacie (sauf blistérisation), livraison sans frais de port, règlement direct avec ÖKK ; carte cadeau Migros de CHF 30 pour la première ordonnance permanente (jusqu'au 31.12.2026).
+
+**À confirmer** : Sources officielles contradictoires ou illisibles pour cette prestation.
+
+**Impact** : Présence, gratuité ou périmètre de la prestation à confirmer avant toute valorisation.
+
+**Traitement provisoire** : Prestation affichée avec réserve ; aucune utilité ni économie tant que la contradiction n’est pas levée.
+
+**Question** : Confirmez pour 2027 la prestation « 12 % sur les génériques et 10 % sur les biosimilaires chez Zur Rose (CASAMED MÉDECIN DE FAMILLE) » : modèles concernés, gratuité et conditions.
+
+**Action** : Comparer les sources citées ; demander une confirmation écrite à l’assureur si elles divergent. Aucun message envoyé automatiquement.
+
+- [ÖKK — Rabais dans la pharmacie en ligne Zur Rose](https://www.oekk.ch/fr/clients-prives/avantages/economies-rabais/envoi-de-medicaments) : Paraphrase : avec ÖKK CASAMED MÉDECIN DE FAMILLE, 12 % de rabais sur les génériques et 10 % sur les biosimilaires chez Zur Rose, sans taxes de pharmacie ni frais de port.
 
 ## ÖKK Kranken- und Unfallversicherungen AG (455) — ÖKK CASAMED HMO
 
@@ -740,6 +1122,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [CASAMED, fiche 04.2025](https://www.oekk.ch/uploads/files/02_Dokumente/01_PK/01_Angebot/Infoblaetter/DE/1004_CASAMED_versicherungsmodell_de1.pdf) · p. 1 : Paraphrase : Médecin du centre HMO choisi.
 
+- [ÖKK — page produit ÖKK CASAMED HMO](https://www.oekk.ch/fr/clients-prives/assurances/assurance-de-base/modele-hmo) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Vivao Sympany SA (509) — casamed hmo
 
 review_08415326eef4b2b0720f12e1 · 2027 · blocking · open · responsable non attribué
@@ -759,6 +1143,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [casamed hmo CA 2022](https://www.sympany.ch/dam/jcr:6093b428-cbdb-4f61-9f06-b5e61b97350c/VB-casamed-hmo-2022-Sympany-1094-0222-it.2022-07-04-16-07-39.pdf) : Paraphrase : Lien indexé 2024 renvoyant au document nommé 2022.
+
+- [Sympany — page produit casamed hmo](https://www.sympany.ch/fr/particuliers/assurance-de-base/casamed-hmo.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Vivao Sympany SA (509) — casamed médecin de famille
 
@@ -780,6 +1166,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [casamed médecin de famille CA 2024](https://www.sympany.ch/dam/jcr:4b670e31-a673-4b98-827d-92743b96edae/VB-casamed-hausarzt-2024-Sympany-it.2023-10-06-13-56-57.pdf) · p. 3 : Paraphrase : Cabinet dans liste consulté d'abord, orientation par coordinateur.
 
+- [Sympany — page produit casamed médecin de famille](https://www.sympany.ch/fr/particuliers/assurance-de-base/casamed-medecin-famille.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Vivao Sympany SA (509) — flexhelp24
 
 review_4ead03b64824c52f3dacbc66 · 2027 · blocking · open · responsable non attribué
@@ -799,6 +1187,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [flexhelp24 CA 2024](https://www.sympany.ch/dam/jcr:e2fc82d1-5855-4f43-9459-e1cff0b6bd0e/VB-flexhelp24-2024-Sympany-it.2023-10-06-14-18-19.pdf) · p. 3 : Paraphrase : Fournisseur coordinateur et parcours contraignant.
+
+- [Sympany — page produit flexhelp24](https://www.sympany.ch/fr/particuliers/assurance-de-base/flexhelp24.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Vivao Sympany SA (509) — callmed 24
 
@@ -820,25 +1210,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [callmed24 CA 2022](https://www.sympany.ch/dam/jcr:709f9436-8bcd-446d-bcd8-c2ab8c88111d/VB-callmed_24-2022-Sympany-1091-0222-en.2022-07-04-17-40-54.pdf) · p. 4 : Paraphrase : Lien indexé 2024 renvoyant à une version anglaise 2022 ; exceptions yeux/gynécologie/dents et pédiatrie avant 16 ans.
 
-## Vivao Sympany SA (509) — Assurance de base, flexhelp24, casamed médecin de famille, callmed 24, casamed pharm, casamed hmo
-
-review_cb3baf47800da8615a394fd9 · 2027 · blocking · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Entrée aux piscines partenaires pendant saison pour jeunes éligibles.
-
-**À confirmer** : Confirmer date de naissance limite, assurances admises et piscines pour la saison 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer date de naissance limite, assurances admises et piscines pour la saison 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Gratuitement aux bains](https://www.sympany.ch/fr/particuliers/bon-a-savoir/avantages/gratuitement-aux-bains.html) : Paraphrase : Deux complémentaires requises ; limites de naissance incohérentes, millésime 2026.
+- [Sympany — page produit callmed 24](https://www.sympany.ch/fr/particuliers/assurance-de-base/callmed-24.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Vivao Sympany SA (509) — casamed pharm
 
@@ -862,6 +1234,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Conseil médical](https://www.sympany.ch/fr/particuliers/bon-a-savoir/avantages/conseil-medical.html) : Paraphrase : Pharmacie partenaire ou Medgate, consultation sans participation.
 
+- [Sympany — page produit casamed pharm](https://www.sympany.ch/fr/particuliers/assurance-de-base/casamed-pharm.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Genossenschaft Glarner Krankenversicherung (780) — glarnermed24
 
 review_247a8ebd75b76675401306e8 · 2027 · blocking · open · responsable non attribué
@@ -883,6 +1257,8 @@ Régions : GL-0, SG-1, SG-2, SG-3, SZ-0
 - [GLKV — glarnermed24](https://www.glkv.ch/versicherungen/grundversicherung/telmedmodell-glarnermed24.html/88) : Paraphrase : Appeler +41 55 642 65 45 avant consultation ; service permanent. Exceptions et délai de notification des urgences.
 
 - [GLKV — AVB glarnermed24](https://www.glkv.ch/public/upload/assets/410/AVB_01_GLKV-glarnermed24_2021-v3.pdf?fp=1) · p. 2 : Paraphrase : Conditions entrées en vigueur le 01.01.2022 ; Medi24 oriente le traitement, fixe le délai et doit être recontacté pour les suites.
+
+- [Glarner — page produit glarnermed24](https://www.glkv.ch/versicherungen/grundversicherung/telmedmodell-glarnermed24.html/88) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## curaulta (820) — CASAMED
 
@@ -906,6 +1282,8 @@ Régions : GR-1, GR-2, GR-3
 
 - [curaulta — AVB Hausarztversicherung](https://www.curaulta.ch/files/dokumente/AVB_Hausarztversicherung%20KVG.pdf) : Paraphrase : PDF de six pages sans texte exploitable ; contenu contractuel non vérifié.
 
+- [curaulta — page produit CASAMED](https://www.curaulta.ch/versicherungen/hausarztversicherung-casamed) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## EGK Grundversicherungen AG (881) — EGK-TelCare
 
 review_17c54c0d1012be06ee46e00e · 2027 · blocking · open · responsable non attribué
@@ -927,6 +1305,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 - [EGK — TelCare](https://www.egk.ch/fr/assurances/assurances-de-base/telcare) : Paraphrase : Medgate au 0800 800 735, application ou vidéo ; plan contraignant et suivi à annoncer. Conseil annoncé gratuit, urgences à annoncer sous dix jours.
 
 - [EGK-TelCare — CCA 2014](https://www.egk.ch/egk-2026/versicherungen/dokumente/telcare/conditions-complementaires-d-assurance-egk-telcare-conformement-a-la-loi-sur-l-assurance-maladie-cca-lamal-egk-telcare--fr.pdf) · p. 4 : Paraphrase : Conditions 2014, art. 8 : participation légale et contractuelle. Premier appel avant recours médical, hospitalier ou prescription.
+
+- [EGK — page produit EGK-TelCare](https://www.egk.ch/fr/assurances/assurances-de-base/telcare) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## EGK Grundversicherungen AG (881) — EGK-Care
 
@@ -950,6 +1330,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [EGK-Care — CCA 2011](https://www.egk.ch/egk-2026/versicherungen/dokumente/hausarztmodell-care/conditions-complementaires-d-assurance-egk-care-assurance-managed-care-conformement-a-la-loi-sur-l-assurancemaladie-fr.pdf) · p. 4 : Paraphrase : Édition 2011 : médecin MCO premier interlocuteur ; spécialiste sur transfert ; participation légale et contractuelle.
 
+- [EGK — page produit EGK-Care](https://www.egk.ch/fr/assurances/assurances-de-base/medecin-de-famille) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Genossenschaft KRANKENKASSE SLKK (923) — SmartMed
 
 review_1d272945c5f78a342e7a00a3 · 2027 · blocking · open · responsable non attribué
@@ -969,6 +1351,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [SLKK — SmartMed EB](https://media.slkk.ch/filer_public/2f/79/2f793e96-36c7-4616-80d6-49fad336adee/2025-09-25-slkk-eb-smartmed.pdf) · p. 6 : Paraphrase : Édition effective 01.01.2022 ; triage numérique Medgate et plan contraignants ; actes médicaux Medgate soumis à participation légale.
+
+- [SLKK — page produit TelCare](https://slkk.ch/de/grundversicherung-krankenkasse/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Genossenschaft KRANKENKASSE SLKK (923) — HomeCare
 
@@ -990,6 +1374,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-
 
 - [SLKK — HomeCare EB](https://media.slkk.ch/filer_public/f6/f7/f6f771f7-9fa7-4831-a634-ff21859d9ed4/2025-09-09-slkk-40-grund-vers-eb-home-care.pdf) · p. 4 : Paraphrase : Édition effective 01.01.2019 ; médecin MCO du réseau en premier, coordonnant le parcours ; exceptions et participation aux coûts aux art. 4–5.
 
+- [SLKK — page produit TelCare](https://slkk.ch/de/grundversicherung-krankenkasse/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Genossenschaft KRANKENKASSE SLKK (923) — TelCare
 
 review_7b2fd5e3b46f0f5a98bcb786 · 2027 · blocking · open · responsable non attribué
@@ -1009,6 +1395,28 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [SLKK — TelCare EB](https://media.slkk.ch/filer_public/2a/e9/2ae9ade2-0b55-4dca-8f42-d435c336e89d/2025-09-09-slkk-41-grund-vers-eb-telcare.pdf) · p. 3 : Paraphrase : Édition effective 01.01.2019 ; conseil téléphonique préalable obligatoire, sans acte diagnostique ou thérapeutique par ce service ; suivi à annoncer.
+
+- [SLKK — page produit TelCare](https://slkk.ch/de/grundversicherung-krankenkasse/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+## sodalis gesundheitsgruppe (941) — Medicasa
+
+review_b4fe23b7fcff05742765fbc1 · 2027 · blocking · open · responsable non attribué
+
+Régions : VS-1, VS-2
+
+**Confirmé** : Le prospectus Medicasa (FR et DE) cite une « réduction de la quote-part » parmi les avantages, sans préciser les prestations concernées ni le montant.
+
+**À confirmer** : Sources officielles contradictoires ou illisibles pour cette prestation.
+
+**Impact** : Présence, gratuité ou périmètre de la prestation à confirmer avant toute valorisation.
+
+**Traitement provisoire** : Prestation affichée avec réserve ; aucune utilité ni économie tant que la contradiction n’est pas levée.
+
+**Question** : Confirmez pour 2027 la prestation « Réduction de la quote-part annoncée (Medicasa) » : modèles concernés, gratuité et conditions.
+
+**Action** : Comparer les sources citées ; demander une confirmation écrite à l’assureur si elles divergent. Aucun message envoyé automatiquement.
+
+- [sodalis — Prospekt Medicasa](https://www.sodalis.ch?action=get_file&language=de&id=10&resource_link_id=934) : Paraphrase : le prospectus liste « Reduktion Selbstbehalt » et la commande de médicaments via des pharmacies par correspondance parmi les avantages ; les Bestimmungen Medicasa 0609 (art. 4.2) prélèvent franchise et quote-part sur toutes les prestations.
 
 ## SWICA Assurance-maladie SA (1384) — Favorit Start
 
@@ -1030,6 +1438,8 @@ Régions : AG-0, SH-1, SH-2, ZH-2, ZH-3
 
 - [SWICA – CS Favorit Start 2027](https://dam.swica.ch/image/upload/v1789112483/025_f_ZB_Favorit_Start_nn8ptv.pdf) · p. 3 : Paraphrase : Édition 2027; parcours du modèle.
 
+- [SWICA — page produit Favorit Start](https://www.swica.ch/fr/prive/assurances/assurance-base/modele-start) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Sanitas Grundversicherungen AG (1509) — Médecin de famille 2
 
 review_398d375c6f0324a925626d07 · 2027 · blocking · open · responsable non attribué
@@ -1049,6 +1459,12 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Sanitas – CGA/CC version 2027](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6009_Sanitas_AVB_KVG_fr.pdf) · p. 6 : Paraphrase : Médecin agréé coordinateur.
+
+- [Sanitas — page produit Médecin de famille 4](https://www.sanitas.com/fr/clients-prives/assurances/assurance-de-base/modele-du-medecin-de-famille.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Sanitas — page produit TelMed Plus](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6009_Sanitas_AVB_KVG_fr.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Sanitas — page produit Médecin de famille 4](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/KOBE_Befreiung_Hausarztmodell_fr.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Sanitas Grundversicherungen AG (1509) — Médecin de famille 3
 
@@ -1070,6 +1486,12 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Sanitas – CGA/CC version 2027](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6009_Sanitas_AVB_KVG_fr.pdf) · p. 6 : Paraphrase : Médecin agréé coordinateur.
 
+- [Sanitas — page produit Médecin de famille 4](https://www.sanitas.com/fr/clients-prives/assurances/assurance-de-base/modele-du-medecin-de-famille.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Sanitas — page produit TelMed Plus](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6009_Sanitas_AVB_KVG_fr.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Sanitas — page produit Médecin de famille 4](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/KOBE_Befreiung_Hausarztmodell_fr.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Sanitas Grundversicherungen AG (1509) — Médecin de famille 4
 
 review_a7c033d68474fd4c77137ca5 · 2027 · blocking · open · responsable non attribué
@@ -1090,6 +1512,12 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Sanitas – CGA/CC version 2027](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6009_Sanitas_AVB_KVG_fr.pdf) · p. 6 : Paraphrase : Médecin agréé coordinateur.
 
+- [Sanitas — page produit Médecin de famille 4](https://www.sanitas.com/fr/clients-prives/assurances/assurance-de-base/modele-du-medecin-de-famille.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Sanitas — page produit TelMed Plus](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6009_Sanitas_AVB_KVG_fr.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Sanitas — page produit Médecin de famille 4](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/KOBE_Befreiung_Hausarztmodell_fr.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Sanitas Grundversicherungen AG (1509) — Médecin de famille 1
 
 review_f5163a7dba482fe2607bb5cf · 2027 · blocking · open · responsable non attribué
@@ -1109,6 +1537,32 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Sanitas – CGA/CC version 2027](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6009_Sanitas_AVB_KVG_fr.pdf) · p. 6 : Paraphrase : Médecin agréé coordinateur.
+
+- [Sanitas — page produit Médecin de famille 4](https://www.sanitas.com/fr/clients-prives/assurances/assurance-de-base/modele-du-medecin-de-famille.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Sanitas — page produit TelMed Plus](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6009_Sanitas_AVB_KVG_fr.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Sanitas — page produit Médecin de famille 4](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/KOBE_Befreiung_Hausarztmodell_fr.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+## Assura-Basis SA (1542) — Assurance de base, FeminaVita, Hôpital de confiance, Médecin de famille, MediTel, PreventoMed, QualiMed, PharMed, Réseau de soins
+
+review_41d413f0b5392d904ed03b7e · 2027 · blocking · open · responsable non attribué
+
+Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
+
+**Confirmé** : 30 % de réduction sur montures et verres correcteurs ou solaires ; examen de la vue offert (valeur CHF 40) et bilan auditif offert (valeur CHF 65).
+
+**À confirmer** : Sources officielles contradictoires ou illisibles pour cette prestation.
+
+**Impact** : Présence, gratuité ou périmètre de la prestation à confirmer avant toute valorisation.
+
+**Traitement provisoire** : Prestation affichée avec réserve ; aucune utilité ni économie tant que la contradiction n’est pas levée.
+
+**Question** : Confirmez pour 2027 la prestation « Club Assura — Berdoz : 30 % sur montures et verres, examens de la vue et de l'audition offerts » : modèles concernés, gratuité et conditions.
+
+**Action** : Comparer les sources citées ; demander une confirmation écrite à l’assureur si elles divergent. Aucun message envoyé automatiquement.
+
+- [Assura — Club : Berdoz – Vision & Audition](https://www.assura.ch/fr/club/offres-sante/berdozoptic) : Paraphrase : 30 % de réduction sur les montures, examen de la vue (CHF 40) et bilan auditif (CHF 65) offerts aux assurés d'Assura ; offre indiquée valable jusqu'au 31.12.2025.
 
 ## Assura-Basis SA (1542) — PreventoMed
 
@@ -1132,6 +1586,12 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Assura – CSA PreventoMed 2025](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2024/10/08/Assura-Basis_CSA_PreventoMed_2025.01_F_uid_6704e1e22ac27.pdf) · p. 3 : Paraphrase : Liste des exonérations modifiable au premier janvier.
 
+- [Assura — page produit PreventoMed](https://www.assura.ch/fr/assurances/assurance-de-base/preventomed) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Assura — page produit PreventoMed](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2026/08/26/Fiche_Produit_LAMal_PreventoMed_FR_A5_V4_05.2026_BD_uid_6a8e93d4cab7d.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Assura — page produit PreventoMed](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2025/12/22/Welcome-Pack_PreventoMed_FR_V3_11.2025_BD_uid_6949198b46efc.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Assura-Basis SA (1542) — Hôpital de confiance
 
 review_e80038764648b1b95c900d1c · 2027 · blocking · open · responsable non attribué
@@ -1153,6 +1613,12 @@ Régions : AG-0, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, NE-0, SO-0, VD-1, VD-2
 - [Assura/EHC – communiqué 16.09.2026](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2026/09/16/16.09.2026-Communiqu-presse_Assura_EHC_Hopital-de-Confiance_WEB_uid_6aaa437a8306f.pdf) · p. 1 : Paraphrase : Hôpital de confiance EHC entre en vigueur au 01.01.2027.
 
 - [Assura – parcours Hausspital](https://www.assura.ch/fr/client/calculator/hausspital) : Paraphrase : Page décrit encore KSBL.
+
+- [Assura — page produit Hôpital de confiance](https://www.assura.ch/fr/assurances/assurance-de-base/hausspital) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Assura — page produit Hôpital de confiance](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2026/09/16/Assura-Basis_CSA_Hpital-de-confiance_2027.01_F_uid_6aaaa2c79e1e7.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Assura — page produit Hôpital de confiance](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2026/09/16/Fiche_Produit_LAMal_Hausspital_FR_A5_V2_09.2026_uid_6aaaa1e96b736.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Visana AG (1555) — HMO plus
 
@@ -1194,6 +1660,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Helsana – BeneFit PLUS médecin de famille](https://www.helsana.ch/de/private/versicherungen/grundversicherung/benefit-plus-hausarzt.html) : Paraphrase : Premier recours médecin agréé.
 
+- [Helsana — page produit Helsana BeneFit PLUS Médecin de famille R1](https://www.helsana.ch/fr/prives/assurances/assurance-de-base/benefit-plus-medecin-de-famille.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Helsana — page produit Helsana BeneFit PLUS Médecin de famille R1](https://www.helsana.ch/de/private/versicherungen/grundversicherung/benefit-plus-hausarzt.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Helsana Assurances SA (1562) — Helsana BeneFit PLUS Médecin de famille R2
 
 review_5c3dc991cf000227a7ee931d · 2027 · blocking · open · responsable non attribué
@@ -1213,6 +1683,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Helsana – BeneFit PLUS médecin de famille](https://www.helsana.ch/de/private/versicherungen/grundversicherung/benefit-plus-hausarzt.html) : Paraphrase : Premier recours médecin agréé.
+
+- [Helsana — page produit Helsana BeneFit PLUS Médecin de famille R1](https://www.helsana.ch/fr/prives/assurances/assurance-de-base/benefit-plus-medecin-de-famille.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Helsana — page produit Helsana BeneFit PLUS Médecin de famille R1](https://www.helsana.ch/de/private/versicherungen/grundversicherung/benefit-plus-hausarzt.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Helsana Assurances SA (1562) — Helsana BeneFit PLUS Médecin de famille R1
 
@@ -1234,6 +1708,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Helsana – BeneFit PLUS médecin de famille](https://www.helsana.ch/de/private/versicherungen/grundversicherung/benefit-plus-hausarzt.html) : Paraphrase : Premier recours médecin agréé.
 
+- [Helsana — page produit Helsana BeneFit PLUS Médecin de famille R1](https://www.helsana.ch/fr/prives/assurances/assurance-de-base/benefit-plus-medecin-de-famille.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Helsana — page produit Helsana BeneFit PLUS Médecin de famille R1](https://www.helsana.ch/de/private/versicherungen/grundversicherung/benefit-plus-hausarzt.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Helsana Assurances SA (1562) — Helsana BeneFit PLUS Médecin de famille R4
 
 review_6effec15144326dcac0b2d19 · 2027 · blocking · open · responsable non attribué
@@ -1253,6 +1731,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Helsana – BeneFit PLUS médecin de famille](https://www.helsana.ch/de/private/versicherungen/grundversicherung/benefit-plus-hausarzt.html) : Paraphrase : Premier recours médecin agréé.
+
+- [Helsana — page produit Helsana BeneFit PLUS Médecin de famille R1](https://www.helsana.ch/fr/prives/assurances/assurance-de-base/benefit-plus-medecin-de-famille.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Helsana — page produit Helsana BeneFit PLUS Médecin de famille R1](https://www.helsana.ch/de/private/versicherungen/grundversicherung/benefit-plus-hausarzt.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## sana24 AG (1568) — Managed Care sans capitation
 
@@ -1298,86 +1780,6 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [OFSP — franchise et quote-part des vaccinations](https://www.bag.admin.ch/fr/vaccinations-prophylactiques) : Vaccinations et conseils admissibles OPAS 12a exonérés de franchise depuis 2026 ; quote-part restante. Conditions de prestations à lire avec RO 2026 336.
 
-## CSS Assurance-maladie SA (8) — Assurance Cabinets de santé, Assurance du médecin de famille Profit, Callmed, Multimed, Assurance de base
-
-review_1c73505be863a9bf27544809 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Accès à une sélection d'offres partenaires.
-
-**À confirmer** : Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [CSS enjoy365](https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/economiser-optimiser/enjoy365.html) : Paraphrase : Offres partenaires pour la base ; boutique à rabais réservée aux complémentaires dès 16 ans, avantage annuel plafonné.
-
-## CSS Assurance-maladie SA (8) — Multimed
-
-review_2c1443c508f36c45a75e043e · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Premier conseil annoncé offert au 058 277 77 77.
-
-**À confirmer** : Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [CSS Multimed](https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-de-base/multimed.html) : Paraphrase : Quote-part annoncée CHF 400 ; premier conseil gratuit, consultation médicale facturée avec participation légale.
-
-## CSS Assurance-maladie SA (8) — Assurance Cabinets de santé, Assurance du médecin de famille Profit, Callmed, Multimed, Assurance de base
-
-review_54473d4723539f1f131729a9 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Rabais de 30–70 % annoncés ; plafond d'avantage CHF 2'000.
-
-**À confirmer** : Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [CSS enjoy365](https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/economiser-optimiser/enjoy365.html) : Paraphrase : Offres partenaires pour la base ; boutique à rabais réservée aux complémentaires dès 16 ans, avantage annuel plafonné.
-
-## CSS Assurance-maladie SA (8) — Assurance Cabinets de santé, Assurance du médecin de famille Profit, Callmed, Multimed, Assurance de base
-
-review_77f1798081fab25bf7584f58 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Application gratuite ; jusqu'à CHF 400 annoncés selon activités.
-
-**À confirmer** : Confirmer barème 2027 et produits éligibles ; la validité de points 2026 jusqu'en 2027 ne reconduit pas le programme.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer barème 2027 et produits éligibles ; la validité de points 2026 jusqu'en 2027 ne reconduit pas le programme.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [CSS active365](https://www.css.ch/fr/clients-prives/ma-sante/promouvoir-sante/active365.html) : Paraphrase : Application gratuite dès 16 ans ; conversion des points avec complémentaire ou assurance de choses CSS, exclusions des contrats courts.
-
 ## CSS Assurance-maladie SA (8) — Assurance de base
 
 review_b13133138260f193cc2cff61 · 2027 · important · open · responsable non attribué
@@ -1386,7 +1788,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 **Confirmé** : Modèle LAMal standard identifié ; règlement général accessible dans l'index.
 
-**À confirmer** : Conditions contractuelles complètes applicables en 2027. Réseau exact et disponibilité du premier interlocuteur pour la localité. Inventaire exhaustif des avantages et exclusions.
+**À confirmer** : Conditions contractuelles complètes applicables en 2027. Réseau exact et disponibilité du premier interlocuteur pour la localité. Maintien 2027 des avantages annoncés sur la page produit (recherche du 4 octobre 2026).
 
 **Impact** : Une condition de parcours peut changer la compatibilité ; une condition financière ou d’éligibilité peut modifier le coût ou l’utilité.
 
@@ -1398,25 +1800,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [CSS — règlements et CGA](https://www.css.ch/fr/clients-prives/vite-regle/faire-soi-meme/commande/cga.html) : Paraphrase : Index officiel : règlements LAMal et modèles ; des complémentaires portent une édition 2027, sans confirmation identique pour les modèles de base.
 
-## CSS Assurance-maladie SA (8) — Multimed
-
-review_d2b7c78f88a6e7e59b71f786 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Plafond adulte annoncé de CHF 400 au lieu de CHF 700.
-
-**À confirmer** : Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [CSS Multimed](https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-de-base/multimed.html) : Paraphrase : Quote-part annoncée CHF 400 ; premier conseil gratuit, consultation médicale facturée avec participation légale.
+- [CSS — page produit Assurance de base](https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-de-base/modele-standard.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Aquilana Versicherungen (32) — Assurance de base, CASAMED, SMARTMED
 
@@ -1450,7 +1834,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 **Confirmé** : Libre choix du médecin dans le comparatif officiel.
 
-**À confirmer** : Conditions contractuelles complètes applicables en 2027. Réseau exact et disponibilité du premier interlocuteur pour la localité. Inventaire exhaustif des avantages et exclusions.
+**À confirmer** : Conditions contractuelles complètes applicables en 2027. Réseau exact et disponibilité du premier interlocuteur pour la localité. Maintien 2027 des avantages annoncés sur la page produit (recherche du 4 octobre 2026).
 
 **Impact** : Une condition de parcours peut changer la compatibilité ; une condition financière ou d’éligibilité peut modifier le coût ou l’utilité.
 
@@ -1464,65 +1848,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Aquilana AVB KVG — édition 2024](https://www.aquilana.ch/content/downloads/tarife-und-bestimmungen/AVB_KVG.pdf) · p. 18 : Paraphrase : SMARTMED impose l'application et BetterDoc avant hospitalisation planifiée ; exceptions téléphoniques et participation légale.
 
-## Aquilana Versicherungen (32) — Assurance de base, CASAMED, SMARTMED
-
-review_5307ab62150395f4e3939aa4 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Rabais de séjour 15 % ou 5 %.
-
-**À confirmer** : Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Aquilana — services membres](https://www.aquilana.ch/service) : Paraphrase : Collinetta : rabais chambre/petit-déjeuner 15 %, forfait semaine 5 %, non cumulables.
-
-## Aquilana Versicherungen (32) — Assurance de base, CASAMED
-
-review_6fcbc744e0881af37275a985 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Conseil national Medgate annoncé gratuit.
-
-**À confirmer** : Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Aquilana SMARTMED](https://www.aquilana.ch/versicherungen/grundversicherungen/smartmed) : Paraphrase : Comparatif des trois modèles ; tri numérique gratuit, acte médical SMARTMED facturé, conseil OKP/CASAMED gratuit.
-
-## Aquilana Versicherungen (32) — SMARTMED
-
-review_b7bed8a963d6ad68006e8dd8 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Recommandation de spécialiste/second avis ambulatoire annoncée gratuite.
-
-**À confirmer** : Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Aquilana SMARTMED](https://www.aquilana.ch/versicherungen/grundversicherungen/smartmed) : Paraphrase : Comparatif des trois modèles ; tri numérique gratuit, acte médical SMARTMED facturé, conseil OKP/CASAMED gratuit.
+- [Aquilana — page produit Assurance de base](https://www.aquilana.ch/versicherungen/grundversicherungen) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Einsiedler Krankenkasse (134) — Assurance de base
 
@@ -1550,26 +1876,6 @@ Régions : GL-0, LU-1, LU-2, LU-3, NW-0, OW-0, SG-1, SG-2, SG-3, SZ-0, UR-0, ZG-
 
 ## Einsiedler Krankenkasse (134) — Assurance de base
 
-review_2bf5d3790f6f89533c40866d · 2027 · important · open · responsable non attribué
-
-Régions : GL-0, LU-1, LU-2, LU-3, NW-0, OW-0, SG-1, SG-2, SG-3, SZ-0, UR-0, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Conseil et établissement de prescriptions annoncés gratuits.
-
-**À confirmer** : Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Einsiedler — contact 24 h](https://kkeinsiedeln.ch/notfallkontakt/) : Paraphrase : Conseil suisse et prescriptions annoncés gratuits ; organisation locale, garanties et rapatriement exclus de ce service.
-
-## Einsiedler Krankenkasse (134) — Assurance de base
-
 review_8a8f545b6fe8cb6be4cf4fcb · 2027 · important · open · responsable non attribué
 
 Régions : GL-0, LU-1, LU-2, LU-3, NW-0, OW-0, SG-1, SG-2, SG-3, SZ-0, UR-0, ZG-0, ZH-1, ZH-2, ZH-3
@@ -1591,6 +1897,8 @@ Régions : GL-0, LU-1, LU-2, LU-3, NW-0, OW-0, SG-1, SG-2, SG-3, SZ-0, UR-0, ZG-
 - [Einsiedler — contact 24 h](https://kkeinsiedeln.ch/notfallkontakt/) : Paraphrase : Conseil suisse et prescriptions annoncés gratuits ; organisation locale, garanties et rapatriement exclus de ce service.
 
 - [Einsiedler — AVB LAMal, édition 2018](https://kkeinsiedeln.ch/wp-content/uploads/2026/06/Versicherungsbedingungen-KVG-1.pdf) · p. 3 : Paraphrase : Entrée en vigueur 01.01.2018 ; art. 11 participation ordinaire, art. 14 assurance obligatoire. L'URL 2026 n'actualise pas l'édition.
+
+- [Einsiedler — page produit Assurance de base](https://kkeinsiedeln.ch/grundversicherung/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Sumiswalder Krankenkasse (194) — Assurance de base, Modèle du médecin de famille, HMO plus, sumis24Telmed
 
@@ -1615,26 +1923,6 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-
 - [OPAS consolidée — état affiché au 01.01.2027](https://www.fedlex.admin.ch/filestore/fedlex.data.admin.ch/eli/cc/1995/4964_4964_4964/20270101/fr/pdf-a/fedlex-data-admin-ch-eli-cc-1995-4964_4964_4964-20270101-fr-pdf-a.pdf) · p. 33 : Divergence constatée le 01.10.2026, pages 24 et 33 : ancienne clause HPV et liste sans Glaris, malgré le RO publié. Ne pas résoudre par une question personnelle.
 
 - [OFSP — franchise et quote-part des vaccinations](https://www.bag.admin.ch/fr/vaccinations-prophylactiques) : Vaccinations et conseils admissibles OPAS 12a exonérés de franchise depuis 2026 ; quote-part restante. Conditions de prestations à lire avec RO 2026 336.
-
-## Sumiswalder Krankenkasse (194) — Assurance de base, Modèle du médecin de famille, HMO plus, sumis24Telmed
-
-review_4499a838723192a992a9ef14 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-0, GR-1, GR-2, GR-3, LU-1, LU-2, LU-3, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, UR-0, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : FAQ : exemption de prime de certaines complémentaires dès le deuxième enfant.
-
-**À confirmer** : Confirmer conditions familiales, âge limite, commercialisation et barème 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer conditions familiales, âge limite, commercialisation et barème 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Sumiswalder — FAQ, rabais familiaux](https://sumiswalder.ch/privatkunden/eoffice/haeufige-fragen/) : Paraphrase : 100 % de rabais annoncé dès le deuxième enfant pour deux complémentaires, avec base commune et première couverture équivalente.
 
 ## Sumiswalder Krankenkasse (194) — HMO plus
 
@@ -1664,7 +1952,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-
 
 **Confirmé** : Libre choix standard explicitement identifié.
 
-**À confirmer** : Conditions contractuelles complètes applicables en 2027. Réseau exact et disponibilité du premier interlocuteur pour la localité. Inventaire exhaustif des avantages et exclusions.
+**À confirmer** : Conditions contractuelles complètes applicables en 2027. Réseau exact et disponibilité du premier interlocuteur pour la localité. Maintien 2027 des avantages annoncés sur la page produit (recherche du 4 octobre 2026).
 
 **Impact** : Une condition de parcours peut changer la compatibilité ; une condition financière ou d’éligibilité peut modifier le coût ou l’utilité.
 
@@ -1676,25 +1964,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-
 
 - [Sumiswalder — modèles](https://sumiswalder.ch/privatkunden/angebot/grundversicherung/) : Paraphrase : Standard et trois alternatives identifiés ; leur cumul n'est pas prévu.
 
-## Sumiswalder Krankenkasse (194) — Assurance de base, Modèle du médecin de famille, HMO plus, sumis24Telmed
-
-review_d997b95a15912a3d146c904b · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-0, GR-1, GR-2, GR-3, LU-1, LU-2, LU-3, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, UR-0, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Accès et conseil Medi24 annoncés gratuits.
-
-**À confirmer** : Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Quelles conditions contractuelles et quelle validité explicite s'appliquent en 2027 ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Sumis24 — conseil médical](https://sumiswalder.ch/privatkunden/eoffice/medizinische-beratung/sumis24/) : Paraphrase : Conseil gratuit pour tous les assurés de base ; frais d'itinérance possibles à l'étranger.
+- [Sumiswalder — page produit Assurance de base](https://sumiswalder.ch/privatkunden/angebot/grundversicherung/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Genossenschaft Krankenkasse Steffisburg (246) — Assurance de base, Casa, Medcasa, Regiomed, sanmed24
 
@@ -1720,26 +1990,6 @@ Régions : AG-0, BE-1, BE-2, BE-3, GL-0, NW-0, OW-0, SO-0, SZ-0, UR-0, VS-1, VS-
 
 - [OFSP — franchise et quote-part des vaccinations](https://www.bag.admin.ch/fr/vaccinations-prophylactiques) : Vaccinations et conseils admissibles OPAS 12a exonérés de franchise depuis 2026 ; quote-part restante. Conditions de prestations à lire avec RO 2026 336.
 
-## Genossenschaft Krankenkasse Steffisburg (246) — sanmed24
-
-review_f0f96f45bb8bb526dfb4960b · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, BE-1, BE-2, BE-3, GL-0, NW-0, OW-0, SO-0, SZ-0, UR-0, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Accès au conseil Medgate 24 h/24.
-
-**À confirmer** : Confirmer la portée et les conditions applicables en 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la portée et les conditions applicables en 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Sanmed24](https://www.kkst.ch/grundversicherung/sanmed24) : Paraphrase : Le centre conseille gratuitement ; l'appel reste au tarif local.
-
 ## Genossenschaft Krankenkasse Steffisburg (246) — Assurance de base
 
 review_f4c24db8063e6a0c53d70281 · 2027 · important · open · responsable non attribué
@@ -1760,25 +2010,7 @@ Régions : AG-0, BE-1, BE-2, BE-3, GL-0, NW-0, OW-0, SO-0, SZ-0, UR-0, VS-1, VS-
 
 - [Assurance de base](https://www.kkst.ch/grundversicherung) : Paraphrase : Prestations obligatoires légales.
 
-## Genossenschaft Krankenkasse Steffisburg (246) — Assurance de base, Casa, Medcasa, Regiomed, sanmed24
-
-review_ff68a1bb0fba8622f9bd0732 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, BE-1, BE-2, BE-3, GL-0, NW-0, OW-0, SO-0, SZ-0, UR-0, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Commission ponctuelle de CHF 100 par nouvelle affiliation remplissant les conditions.
-
-**À confirmer** : Confirmer la portée et les conditions applicables en 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la portée et les conditions applicables en 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Kunden werben Kunden](https://www.kkst.ch/kundenservice/kunden-werben-kunden) : Paraphrase : CHF 100 sous conditions d'affiliation base et complémentaires, hors foyer commun.
+- [Steffisburg — page produit Assurance de base](https://www.kkst.ch/grundversicherung) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## CONCORDIA Assurance suisse de maladie et accidents SA (290) — Assurance de base, MyDoc, HMO, smartDoc
 
@@ -1824,45 +2056,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Modèles AOS](https://www.concordia.ch/fr/service/sparen/bei-der-versicherung/mydoc-und-hmo.html) : Paraphrase : Comparaison avec assurance ordinaire ; prestations légales communes.
 
-## CONCORDIA Assurance suisse de maladie et accidents SA (290) — Assurance de base, MyDoc, HMO, smartDoc
-
-review_39adc8cdf407e15e13e4df50 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Conseils de santé gratuits 24 h/24 pour les assurés.
-
-**À confirmer** : Confirmer la portée et les conditions applicables en 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la portée et les conditions applicables en 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [concordiaMed](https://www.concordia.ch/fr/gesundheit/concordiamed.html) : Paraphrase : Conseil réservé aux assurés, gratuit hors communications ; service premium lié à l'hospitalisation privée.
-
-## CONCORDIA Assurance suisse de maladie et accidents SA (290) — Assurance de base, MyDoc, HMO, smartDoc
-
-review_a1c95d6b16f1e0683e73def7 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Rabais loisirs pour assurés ; offres limitées dans le temps.
-
-**À confirmer** : Confirmer la portée et les conditions applicables en 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la portée et les conditions applicables en 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [CONCORDIA Active](https://www.concordia.ch/fr/magazin/active.html) : Paraphrase : Programme d'offres loisirs, carte et identité requises ; avantages non cumulables.
+- [CONCORDIA — page produit Assurance de base](https://www.concordia.ch/fr/versicherungen/grundversicherung.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Atupri Assurance de la santé SA (312) — Assurance de base, CareMed, FlexCare, HMO, SmartCare, TelFirst
 
@@ -1908,46 +2102,6 @@ Régions : BE-1, BL-1, LU-1, SG-1, SO-0, ZG-0, ZH-1
 
 - [Annexe FlexCare 2026, article 15](https://atupri.ch/assets/f/253863/x/53ffc4af97/atupri_conditions-generales_lamal.pdf) · p. 20 : Paraphrase : Conseil gratuit hors communications ; participation légale aux prestations.
 
-## Atupri Assurance de la santé SA (312) — SmartCare
-
-review_35f0d68de3b106923599ceeb · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Analyse initiale sans frais ; orientation contraignante.
-
-**À confirmer** : Confirmer la portée et les conditions applicables en 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la portée et les conditions applicables en 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [SmartCare](https://atupri.ch/fr/assurances/assurance-de-base/smartcare) : Paraphrase : L'analyse des symptômes est gratuite ; il faut suivre son orientation.
-
-## Atupri Assurance de la santé SA (312) — Assurance de base, CareMed, FlexCare, HMO, SmartCare, TelFirst
-
-review_3f43f11227f65302f5f10564 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Assistant numérique de gestion des médicaments sans frais de service.
-
-**À confirmer** : Confirmer la portée et les conditions applicables en 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la portée et les conditions applicables en 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Medi+ pour tous les assurés de base](https://atupri.ch/fr/atupri/news/cp-mediplus) : Paraphrase : Plan de prise, rappels et demandes numériques disponibles gratuitement.
-
 ## Atupri Assurance de la santé SA (312) — Assurance de base
 
 review_f07cbcde7f76a026a79b7971 · 2027 · important · open · responsable non attribué
@@ -1967,6 +2121,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [CGA LAMal, couverture 2024 et annexes 2026](https://atupri.ch/assets/f/253863/x/53ffc4af97/atupri_conditions-generales_lamal.pdf) · p. 4 : Paraphrase : Standard et modèles alternatifs recensés ; droit légal commun.
+
+- [Atupri — page produit Assurance de base](https://atupri.ch/fr/assurances/assurance-de-base/standard) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Avenir Assurance (343) — Assurance de base, OptiMed (Réseau de soins), PrimaCare (Médecin de famille), PrimaFlex (Modèle flexible), SanaTel (Télémédecine)
 
@@ -1992,26 +2148,6 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [OFSP — franchise et quote-part des vaccinations](https://www.bag.admin.ch/fr/vaccinations-prophylactiques) : Vaccinations et conseils admissibles OPAS 12a exonérés de franchise depuis 2026 ; quote-part restante. Conditions de prestations à lire avec RO 2026 336.
 
-## Avenir Assurance (343) — PrimaFlex (Modèle flexible)
-
-review_10fec78f7e1d8f6e004d4ead · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Franchise supprimée pour génériques admissibles.
-
-**À confirmer** : Confirmer la portée et les conditions applicables en 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la portée et les conditions applicables en 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Services exclusifs PrimaFlex](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/PrimaFlex/services-exclusifs-PrimaFlex.html) : Paraphrase : Exemption de franchise pour génériques et certains forfaits pharmacie.
-
 ## Avenir Assurance (343) — Assurance de base
 
 review_18b695c2956c5062bb488e44 · 2027 · important · open · responsable non attribué
@@ -2032,65 +2168,9 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Assurance obligatoire](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins.html) : Paraphrase : Modèle ordinaire et modèles alternatifs présentés.
 
-## Avenir Assurance (343) — PrimaFlex (Modèle flexible)
+- [Philos Assurance — page produit Assurance de base](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/Standard.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-review_b3b688d270cc3434f6d0609e · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Entretien d'orientation partenaire non facturé.
-
-**À confirmer** : Confirmer la portée et les conditions applicables en 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la portée et les conditions applicables en 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [PrimaFlex CP, art. 4](https://www.groupemutuel.ch/fr/doc/jcr:6af9e78c-c08d-4230-baa5-549f90d08368/lang:fr/RXGM01-F3.pdfRXGM01-F3.pdf) · p. 1 : Paraphrase : L'entretien d'orientation en pharmacie partenaire n'est pas facturé.
-
-## Avenir Assurance (343) — PrimaFlex (Modèle flexible)
-
-review_d847e07e36fdb3508c9d5e69 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Exemption de franchise sur examens et codes TARDOC limitativement listés.
-
-**À confirmer** : Confirmer la portée et les conditions applicables en 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la portée et les conditions applicables en 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Services exclusifs PrimaFlex](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/PrimaFlex/services-exclusifs-PrimaFlex.html) : Paraphrase : Après conseil, certains examens mammaires éligibles sont dispensés de franchise.
-
-## Avenir Assurance (343) — Assurance de base, OptiMed (Réseau de soins), PrimaCare (Médecin de famille), PrimaFlex (Modèle flexible), SanaTel (Télémédecine)
-
-review_f72a133572f9bc0407cc1e6d · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Offres partenaires santé, sport et loisirs.
-
-**À confirmer** : Confirmer la portée et les conditions applicables en 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la portée et les conditions applicables en 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [FAQ LeClub](https://www.groupemutuel.ch/fr/clients-prives/nos-services/Questions-reponses-les-plus-frequentes/LeClub.html) : Paraphrase : Accès automatique par carte, rabais partenaires sans financement par les primes ; certains événements ont un financement complémentaire.
+- [Philos Assurance — page produit Assurance de base](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Krankenkasse Luzerner Hinterland (360) — Assurance de base, Hausmed, Telmed
 
@@ -2116,26 +2196,6 @@ Régions : AG-0, BE-1, BE-2, BE-3, LU-1, LU-2, LU-3, NW-0, OW-0, SO-0, SZ-0, UR-
 
 - [OFSP — franchise et quote-part des vaccinations](https://www.bag.admin.ch/fr/vaccinations-prophylactiques) : Vaccinations et conseils admissibles OPAS 12a exonérés de franchise depuis 2026 ; quote-part restante. Conditions de prestations à lire avec RO 2026 336.
 
-## Krankenkasse Luzerner Hinterland (360) — Assurance de base, Hausmed, Telmed
-
-review_6b4b264d5c11a8b4a24c0bd9 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, BE-1, BE-2, BE-3, LU-1, LU-2, LU-3, NW-0, OW-0, SO-0, SZ-0, UR-0, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Page assureur annonçant livraison sans port ni frais de checks.
-
-**À confirmer** : L'accord Zur Rose et les frais annoncés sont-ils toujours valables en 2027 ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : L'accord Zur Rose et les frais annoncés sont-ils toujours valables en 2027 ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Sparen – pharmacies](https://www.kklh.ch/kundenservice/sparen/) : Paraphrase : Livraison annoncée sans port/checks ; page mêlant des informations anciennes.
-
 ## Krankenkasse Luzerner Hinterland (360) — Assurance de base
 
 review_7d6aa6b9e85918b99f116e73 · 2027 · important · open · responsable non attribué
@@ -2155,6 +2215,8 @@ Régions : AG-0, BE-1, BE-2, BE-3, LU-1, LU-2, LU-3, NW-0, OW-0, SO-0, SZ-0, UR-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Assurance de base](https://www.kklh.ch/versicherungen/grundversicherung/) : Paraphrase : Modèle ordinaire : accès direct aux spécialistes.
+
+- [Luzerner Hinterland — page produit Assurance de base](https://www.kklh.ch/versicherungen/grundversicherung/traditionelles-modell/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Krankenkasse Luzerner Hinterland (360) — Assurance de base, Hausmed, Telmed
 
@@ -2200,46 +2262,6 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [OFSP — franchise et quote-part des vaccinations](https://www.bag.admin.ch/fr/vaccinations-prophylactiques) : Vaccinations et conseils admissibles OPAS 12a exonérés de franchise depuis 2026 ; quote-part restante. Conditions de prestations à lire avec RO 2026 336.
 
-## KPT Caisse-maladie SA (376) — KPTwin.win - Médecin de famille, télémédecine et pharmacie
-
-review_10b45f0942ddc74627b5c9f2 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Conseil et contrôles diabète, cœur, allergies, streptocoques ou CRP selon indication.
-
-**À confirmer** : Confirmer portée, exclusions et conditions 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer portée, exclusions et conditions 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Services gratuits KPTwin.win 2026](https://www.kpt.ch/documents/9638699f-514c-4b6f-956c-19ab258840c6/kpt_kostenlose-dienstleistungen_win-win_de_2026.pdf) · p. 1 : Paraphrase : Contrôles sélectionnés selon pertinence ; tous les partenaires ne proposent pas tout.
-
-## KPT Caisse-maladie SA (376) — KPTwin.win - Médecin de famille, télémédecine et pharmacie
-
-review_42e167258c8e1f744ce08c9a · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : OnlineDoctor sans franchise ni quote-part.
-
-**À confirmer** : Confirmer portée, exclusions et conditions 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer portée, exclusions et conditions 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Services gratuits KPTwin.win 2026](https://www.kpt.ch/documents/9638699f-514c-4b6f-956c-19ab258840c6/kpt_kostenlose-dienstleistungen_win-win_de_2026.pdf) · p. 2 : Paraphrase : Examen numérique OnlineDoctor dispensé de participation si admissible AOS.
-
 ## KPT Caisse-maladie SA (376) — Assurance de base
 
 review_c9c9966ebed2aaebb15deb68 · 2027 · important · open · responsable non attribué
@@ -2260,65 +2282,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Comparaison KPT 2027](https://www.kpt.ch/de/versicherungen/krankenkassenvergleich) : Paraphrase : Assurance ordinaire à libre choix.
 
-## KPT Caisse-maladie SA (376) — Assurance de base, KPTwin.plus - Médecin de famille dans centre HMO, KPTwin.doc - Médecin de famille, KPTwin.easy - Télémédecine, KPTwin.smart - Médecin de famille avec app, KPTwin.win - Médecin de famille, télémédecine et pharmacie
-
-review_d715a8aa1528cb8a301769cb · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Offres spéciales réservées aux sociétaires.
-
-**À confirmer** : Confirmer portée, exclusions et conditions 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer portée, exclusions et conditions 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Société Coopérative KPT](https://www.kpt.ch/fr/notre-profil/l-entreprise/la-societe-cooperative-de-la-kpt) : Paraphrase : Adhésion gratuite et sans engagement pour assurés ; offres réservées aux membres.
-
-## KPT Caisse-maladie SA (376) — KPTwin.smart - Médecin de famille avec app
-
-review_e0bd256e2ae1b38601990114 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : OnlineDoctor sans franchise ni quote-part.
-
-**À confirmer** : Confirmer portée, exclusions et conditions 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer portée, exclusions et conditions 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Services gratuits KPTwin.smart 2026](https://www.kpt.ch/documents/e90312bc-57b8-4c6b-ad3d-4d502871d74f/kpt_kostenlose-dienstleistungen_win-smart_de_2026.pdf) · p. 1 : Paraphrase : Exemption pour OnlineDoctor ; services nécessaires de l'app et conseil gratuits.
-
-## KPT Caisse-maladie SA (376) — KPTwin.win - Médecin de famille, télémédecine et pharmacie
-
-review_e6dd9d4df8b46130a115a3b2 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Conseil réglé directement par KPT.
-
-**À confirmer** : Confirmer portée, exclusions et conditions 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer portée, exclusions et conditions 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Services gratuits KPTwin.win 2026](https://www.kpt.ch/documents/9638699f-514c-4b6f-956c-19ab258840c6/kpt_kostenlose-dienstleistungen_win-win_de_2026.pdf) · p. 1 : Paraphrase : Conseil du centre payé directement, sans facture à l'assuré.
+- [KPT — page produit Assurance de base](https://www.kpt.ch/fr/assurances-de-base/modele-libre-choix-du-medecin) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## ÖKK Kranken- und Unfallversicherungen AG (455) — Assurance de base, ÖKK CASAMED MÉDECIN DE FAMILLE, ÖKK CASAMED HMO, ÖKK CASAMED SELECT, ÖKK CASAMED 24
 
@@ -2344,26 +2308,6 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [OFSP — franchise et quote-part des vaccinations](https://www.bag.admin.ch/fr/vaccinations-prophylactiques) : Vaccinations et conseils admissibles OPAS 12a exonérés de franchise depuis 2026 ; quote-part restante. Conditions de prestations à lire avec RO 2026 336.
 
-## ÖKK Kranken- und Unfallversicherungen AG (455) — Assurance de base, ÖKK CASAMED MÉDECIN DE FAMILLE, ÖKK CASAMED HMO, ÖKK CASAMED SELECT, ÖKK CASAMED 24
-
-review_31d0ba6404cb2ae9d4eefc20 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Brochure 2026 annonce récompenses jusqu'à CHF 200/an.
-
-**À confirmer** : Quelles couvertures, seuils et règles d'échange Simpla sont requis en 2027 ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Quelles couvertures, seuils et règles d'échange Simpla sont requis en 2027 ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Aperçu ÖKK 2026](https://www.oekk.ch/uploads/files/02_Dokumente/01_PK/01_Angebot/Broschueren/PK_Leistungsuebersicht_2026_fr_web.pdf) : Paraphrase : Présentation de Simpla et récompense annuelle, sans conditions complètes dans l'extrait lu.
-
 ## ÖKK Kranken- und Unfallversicherungen AG (455) — Assurance de base
 
 review_ab06ab2e6fbb8b57c306a4f5 · 2027 · important · open · responsable non attribué
@@ -2384,25 +2328,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [CASAMED, fiche 04.2025](https://www.oekk.ch/uploads/files/02_Dokumente/01_PK/01_Angebot/Infoblaetter/DE/1004_CASAMED_versicherungsmodell_de1.pdf) · p. 1 : Paraphrase : Choix libre de médecin.
 
-## ÖKK Kranken- und Unfallversicherungen AG (455) — Assurance de base, ÖKK CASAMED MÉDECIN DE FAMILLE, ÖKK CASAMED HMO, ÖKK CASAMED SELECT, ÖKK CASAMED 24
-
-review_c5aaa3a41d3ee75f43473623 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Participation annoncée de 50 % aux dépenses cyclistes reconnues ; plafond selon complémentaire.
-
-**À confirmer** : Fournir tableau authentifié 2027, plafonds par produit et conditions exactes BikeBonus.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Fournir tableau authentifié 2027, plafonds par produit et conditions exactes BikeBonus.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [BikeBonus conditions 2025](https://www.oekk.ch/uploads/files/02_Dokumente/01_PK/01_Angebot/Leistungsuebersichten/EN/5119_OEKK_LIVE_BikeBonus_Leistungsuebersicht_2025_en1.pdf) · p. 1 : Paraphrase : Contribution conditionnée aux complémentaires et sous-plafond santé ; offre modifiable ou retirée.
+- [ÖKK — page produit Assurance de base](https://www.oekk.ch/fr/clients-prives/assurances/assurance-de-base/libre-choix-du-medecin) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Vivao Sympany SA (509) — Assurance de base, flexhelp24, casamed médecin de famille, callmed 24, casamed pharm, casamed hmo
 
@@ -2428,26 +2354,6 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [OFSP — franchise et quote-part des vaccinations](https://www.bag.admin.ch/fr/vaccinations-prophylactiques) : Vaccinations et conseils admissibles OPAS 12a exonérés de franchise depuis 2026 ; quote-part restante. Conditions de prestations à lire avec RO 2026 336.
 
-## Vivao Sympany SA (509) — casamed pharm
-
-review_61cacb27c2599ad65499762d · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Consultation partenaire sans frais.
-
-**À confirmer** : Confirmer portée, exclusions et conditions 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer portée, exclusions et conditions 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Conseil médical Sympany](https://www.sympany.ch/fr/particuliers/bon-a-savoir/avantages/conseil-medical.html) : Paraphrase : Consultation pharmacie gratuite, médicaments avec participation.
-
 ## Vivao Sympany SA (509) — Assurance de base
 
 review_6696a933ca75cbc348754350 · 2027 · important · open · responsable non attribué
@@ -2470,25 +2376,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Conseil médical](https://www.sympany.ch/fr/particuliers/bon-a-savoir/avantages/conseil-medical.html) : Paraphrase : Consultation Medgate classic facturée avec participation éventuelle.
 
-## Vivao Sympany SA (509) — flexhelp24, callmed 24, casamed pharm
-
-review_cce05111ffae0fa07954c702 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Coûts de consultation intégralement couverts sans participation.
-
-**À confirmer** : Confirmer portée, exclusions et conditions 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer portée, exclusions et conditions 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Conseil médical Sympany](https://www.sympany.ch/fr/particuliers/bon-a-savoir/avantages/conseil-medical.html) : Paraphrase : Trois modèles dispensés de participation sur consultation Medgate.
+- [Sympany — page produit Assurance de base](https://www.sympany.ch/fr/particuliers/assurance-de-base/classic.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Genossenschaft Glarner Krankenversicherung (780) — Assurance de base, glarnermed24
 
@@ -2536,25 +2424,7 @@ Régions : GL-0, SG-1, SG-2, SG-3, SZ-0
 
 - [GLKV — partenaires](https://www.glkv.ch/ueber-glkv/partner/partner.html/44) : Paraphrase : Liste de partenaires institutionnels et fournisseurs ; aucun avantage commercial chiffré identifié dans cette page.
 
-## Genossenschaft Glarner Krankenversicherung (780) — Assurance de base, glarnermed24
-
-review_2cef48c330b99aa1d4d0180a · 2027 · important · open · responsable non attribué
-
-Régions : GL-0, SG-1, SG-2, SG-3, SZ-0
-
-**Confirmé** : Service de conseil annoncé gratuit et disponible 24 h/24.
-
-**À confirmer** : Accessible à BASE et glarnermed24 sans complémentaire ? Quels actes restent facturés ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Accessible à BASE et glarnermed24 sans complémentaire ? Quels actes restent facturés ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [GLKV — conseil télémédical](https://www.glkv.ch/online-schalter/medizinische-beratung/telemedizinische-beratung.html/70) : Paraphrase : Conseil Medi24 gratuit, permanent ; téléphone +41 55 642 65 45 ou demande de rappel.
+- [Glarner — page produit Assurance de base](https://www.glkv.ch/versicherungen/grundversicherung/grundversicherung.html/48) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## curaulta (820) — Assurance de base, CASAMED
 
@@ -2604,25 +2474,7 @@ Régions : GR-1, GR-2, GR-3
 
 - [curaulta — Surselva Cumpletta](https://www.curaulta.ch/versicherungen/surselva-cumpletta) : Paraphrase : Complémentaire présentée séparément ; conditions fournies par vita surselva.
 
-## curaulta (820) — Assurance de base, CASAMED
-
-review_5481fc772f399ed17091a497 · 2027 · important · open · responsable non attribué
-
-Régions : GR-1, GR-2, GR-3
-
-**Confirmé** : Dans l'édition 2004 liée par curaulta : 90 % des frais, plafond annuel 300 CHF.
-
-**À confirmer** : Confirmer assureur porteur, commercialisation aux clients curaulta et conditions Cumpletta 2027 ; fournir CGA et annexes actualisées.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer assureur porteur, commercialisation aux clients curaulta et conditions Cumpletta 2027 ; fournir CGA et annexes actualisées.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [vita surselva — conditions Cumpletta proposées par curaulta](https://www.curaulta.ch/files/dokumente/ZB_CUMP.pdf) · p. 2 : Paraphrase : Édition 01.01.2004, C8.2 : contrôle non couvert par l'AOS remboursé à 90 %, au maximum 300 CHF par an.
+- [curaulta — page produit Assurance de base](https://www.curaulta.ch/versicherungen/standardversicherung) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## EGK Grundversicherungen AG (881) — Assurance de base, EGK-Care, EGK-TelCare
 
@@ -2648,26 +2500,6 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [OFSP — franchise et quote-part des vaccinations](https://www.bag.admin.ch/fr/vaccinations-prophylactiques) : Vaccinations et conseils admissibles OPAS 12a exonérés de franchise depuis 2026 ; quote-part restante. Conditions de prestations à lire avec RO 2026 336.
 
-## EGK Grundversicherungen AG (881) — EGK-TelCare
-
-review_0204868b10ff501d2bd88307 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Conseil téléphonique ou vidéo annoncé gratuit, disponible en permanence.
-
-**À confirmer** : Confirmer portée, exclusions et conditions 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer portée, exclusions et conditions 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [EGK — TelCare](https://www.egk.ch/fr/assurances/assurances-de-base/telcare) : Paraphrase : Medgate au 0800 800 735, application ou vidéo ; plan contraignant et suivi à annoncer. Conseil annoncé gratuit, urgences à annoncer sous dix jours.
-
 ## EGK Grundversicherungen AG (881) — Assurance de base
 
 review_0d60d428f1ac5fc026f05523 · 2027 · important · open · responsable non attribué
@@ -2690,85 +2522,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [EGK — services de conseil](https://www.egk.ch/fr/services/connaissances-aide/services-de-conseil) : Paraphrase : BetterDoc recherche gratuitement un spécialiste pour les assurés EGK ; ParaPhone gratuit avec EGK-SUN, mais consultation sur place payante.
 
-## EGK Grundversicherungen AG (881) — Assurance de base, EGK-Care, EGK-TelCare
-
-review_2b1a3257bfc79e8ab3bf30de · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Réduction de 20 % annoncée pour une campagne achevée au 31 août 2026.
-
-**À confirmer** : Une nouvelle campagne 2027 existe-t-elle ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Une nouvelle campagne 2027 existe-t-elle ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [EGK / SanerNatur](https://www.egk.ch/fr/votre-egk/notre-profil/egk-partenaires/saner-natur) : Paraphrase : Code EGK20 donnant 20 % de remise uniquement du 01.06.2026 au 31.08.2026.
-
-## EGK Grundversicherungen AG (881) — Assurance de base, EGK-Care, EGK-TelCare
-
-review_466b1de771fe89ac67849623 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Prix 149 CHF au lieu de 198 CHF pour l'analyse de foulée.
-
-**À confirmer** : Préciser si un contrat complémentaire seul suffit et contrôler les centres ouverts au rendez-vous.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Préciser si un contrat complémentaire seul suffit et contrôler les centres ouverts au rendez-vous.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [EGK / ORTHO-TEAM — analyse de foulée](https://www.egk.ch/fr/votre-egk/notre-profil/egk-partenaires/groupe-ortho-team) : Paraphrase : Tarif assuré 149 CHF contre 198 CHF ; prospectus à remettre sur place. Offre du 01.04.2025 au 31.12.2027.
-
-## EGK Grundversicherungen AG (881) — Assurance de base, EGK-Care, EGK-TelCare
-
-review_b6c97920a512b05dc65ce14c · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Recherche de médecin spécialiste annoncée gratuite pour les assurés EGK, retour annoncé sous deux jours ouvrables.
-
-**À confirmer** : Confirmer accès avec assurance de base seule et conditions 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer accès avec assurance de base seule et conditions 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [EGK — services de conseil](https://www.egk.ch/fr/services/connaissances-aide/services-de-conseil) : Paraphrase : BetterDoc recherche gratuitement un spécialiste pour les assurés EGK ; ParaPhone gratuit avec EGK-SUN, mais consultation sur place payante.
-
-## EGK Grundversicherungen AG (881) — Assurance de base, EGK-Care, EGK-TelCare
-
-review_e977a09d562686c0a2253552 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Conseil téléphonique gratuit avec EGK-SUN.
-
-**À confirmer** : Confirmer portée, exclusions et conditions 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer portée, exclusions et conditions 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [EGK — services de conseil](https://www.egk.ch/fr/services/connaissances-aide/services-de-conseil) : Paraphrase : BetterDoc recherche gratuitement un spécialiste pour les assurés EGK ; ParaPhone gratuit avec EGK-SUN, mais consultation sur place payante.
+- [EGK — page produit Assurance de base](https://www.egk.ch/fr/assurances/assurances-de-base/libre-choix-du-medecin) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Genossenschaft KRANKENKASSE SLKK (923) — Assurance de base, HomeCare, SmartMed, TelCare
 
@@ -2794,46 +2548,6 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-
 
 - [OFSP — franchise et quote-part des vaccinations](https://www.bag.admin.ch/fr/vaccinations-prophylactiques) : Vaccinations et conseils admissibles OPAS 12a exonérés de franchise depuis 2026 ; quote-part restante. Conditions de prestations à lire avec RO 2026 336.
 
-## Genossenschaft KRANKENKASSE SLKK (923) — Assurance de base, HomeCare, SmartMed, TelCare
-
-review_51d15c049a0962b92571f78d · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-0, GR-1, GR-2, GR-3, LU-1, LU-2, LU-3, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, UR-0, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : 15 % sur la première commande ; autre code à 20 % pour certains paquets de 60 feuilles.
-
-**À confirmer** : L'offre et les références demeurent-elles disponibles en 2027 ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : L'offre et les références demeurent-elles disponibles en 2027 ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [SLKK — bluu](https://slkk.ch/de/aktuelles/15-20-rabatt-auf-bluu-waschstreifen/) : Paraphrase : Offre : 15 % première commande ou 20 % sur les paquets de 60 feuilles désignés, codes non cumulables.
-
-## Genossenschaft KRANKENKASSE SLKK (923) — Assurance de base, HomeCare, SmartMed, TelCare
-
-review_7ada7fae26f2d0af3e970e57 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-0, GR-1, GR-2, GR-3, LU-1, LU-2, LU-3, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, UR-0, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : 15 % de réduction pour l'assuré SLKK et jusqu'à trois accompagnants.
-
-**À confirmer** : Confirmer portée, exclusions et conditions 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer portée, exclusions et conditions 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [SLKK — Alpamare](https://slkk.ch/de/aktuelles/15-im-alpamare/) : Paraphrase : 15 % pour l'assuré et trois accompagnants, sur présentation de la carte ; petits enfants exclus, non cumulable.
-
 ## Genossenschaft KRANKENKASSE SLKK (923) — Assurance de base
 
 review_b04ceb0e912dbd12742738c8 · 2027 · important · open · responsable non attribué
@@ -2854,25 +2568,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-
 
 - [SLKK — assurance de base](https://slkk.ch/de/grundversicherung-krankenkasse/) : Paraphrase : Présentation séparée du libre choix, du médecin de famille, de TelCare et du modèle numérique SmartMed.
 
-## Genossenschaft KRANKENKASSE SLKK (923) — Assurance de base, HomeCare, SmartMed, TelCare
-
-review_d471ba8e854218a0e61b8d71 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-0, GR-1, GR-2, GR-3, LU-1, LU-2, LU-3, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, UR-0, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Abonnement un an 79 CHF au lieu de 99 CHF ; accès aux offres hôtelières variables.
-
-**À confirmer** : Confirmer conditions 2027, assuré éligible et renouvellement de l'abonnement.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer conditions 2027, assuré éligible et renouvellement de l'abonnement.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [SLKK — HotelCard](https://slkk.ch/de/aktuelles/bis-zu-50-rabatt-ueber-500-hotels/) : Paraphrase : Tarifs : 79 CHF un an, 149 CHF deux ans, 197 CHF trois ans ; réservation avec jusqu'à 50 % de réduction selon offre.
+- [SLKK — page produit TelCare](https://slkk.ch/de/grundversicherung-krankenkasse/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## sodalis gesundheitsgruppe (941) — Assurance de base, Digimed, Medicasa, Telmed
 
@@ -2918,6 +2614,8 @@ Régions : BE-1, BE-2, BE-3, VS-1, VS-2
 
 - [sodalis – comparaison des modèles](https://www.sodalis.ch/fr/pour-clients-prives/nos-produits/assurance-de-base/quelles-sont-les-differences) : Paraphrase : Medica, Medicasa, Telmed et Digimed ont des parcours distincts.
 
+- [sodalis — page produit Assurance de base](https://www.sodalis.ch/fr/pour-clients-prives/nos-produits/assurance-de-base/modele-de-base-medica) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## sodalis gesundheitsgruppe (941) — Telmed
 
 review_6088e72fb45e375f9c62626f · 2027 · important · open · responsable non attribué
@@ -2937,6 +2635,10 @@ Régions : BE-1, BE-2, BE-3, VS-1, VS-2
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [sodalis – choisir son modèle](https://www.sodalis.ch/fr/pour-clients-prives/nos-produits/comprendre-lassurance-maladie/choisir-fute%2C-cest-economiser-fute-75) : Paraphrase : Médecin agréé, téléphone ou application selon modèle.
+
+- [sodalis — page produit Telmed](https://www.sodalis.ch/fr/pour-clients-prives/nos-produits/assurance-de-base/modele-telemedecine-telmed) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [sodalis — page produit Telmed](https://www.sodalis.ch/de/fuer-private/versicherungen/grundversicherung-/telemedizinisches-modell-telmed) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## sodalis gesundheitsgruppe (941) — Medicasa
 
@@ -2958,45 +2660,9 @@ Régions : VS-1, VS-2
 
 - [sodalis – choisir son modèle](https://www.sodalis.ch/fr/pour-clients-prives/nos-produits/comprendre-lassurance-maladie/choisir-fute%2C-cest-economiser-fute-75) : Paraphrase : Médecin agréé, téléphone ou application selon modèle.
 
-## sodalis gesundheitsgruppe (941) — Assurance de base, Digimed, Medicasa, Telmed
+- [sodalis — page produit Medicasa](https://www.sodalis.ch/fr/pour-clients-prives/nos-produits/assurance-de-base/modele-medecin-de-famille-medicasa) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-review_8f904249da7db73998d5cb06 · 2027 · important · open · responsable non attribué
-
-Régions : BE-1, BE-2, BE-3, VS-1, VS-2
-
-**Confirmé** : 50 % des coûts, au maximum CHF 200/an.
-
-**À confirmer** : Confirmer établissements reconnus, cumul, produits hospitaliers et maintien du plafond en 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer établissements reconnus, cumul, produits hospitaliers et maintien du plafond en 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [sodalis – jeunes adultes](https://www.sodalis.ch/de/fuer-private/lebensphase/jugendliche-junge-erwachsene) : Paraphrase : Fitness : complémentaire ambulatoire et hospitalière nécessaires.
-
-## sodalis gesundheitsgruppe (941) — Assurance de base, Digimed, Medicasa, Telmed
-
-review_a8b03d301746bae0fdbaadef · 2027 · important · open · responsable non attribué
-
-Régions : BE-1, BE-2, BE-3, VS-1, VS-2
-
-**Confirmé** : Réductions auprès de partenaires loisirs, sport, optique et hôtellerie.
-
-**À confirmer** : Quels partenaires, prix, exclusions et dates sont maintenus en 2027 ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Quels partenaires, prix, exclusions et dates sont maintenus en 2027 ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [sodalis – Kundenaktion](https://www.sodalis.ch/de/fuer-private/kontakt-beratung/policen-verwalten/kundenaktion) : Paraphrase : Réductions partenaires avec justificatif d'assurance.
+- [sodalis — page produit Medicasa](https://www.sodalis.ch/de/fuer-private/versicherungen/grundversicherung-/hausarztmodell-medicasa) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## sodalis gesundheitsgruppe (941) — Digimed
 
@@ -3017,6 +2683,10 @@ Régions : BE-1, BE-2, BE-3, VS-1, VS-2
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [sodalis – choisir son modèle](https://www.sodalis.ch/fr/pour-clients-prives/nos-produits/comprendre-lassurance-maladie/choisir-fute%2C-cest-economiser-fute-75) : Paraphrase : Médecin agréé, téléphone ou application selon modèle.
+
+- [sodalis — page produit Digimed](https://www.sodalis.ch/fr/pour-clients-prives/nos-produits/assurance-de-base/modele-digital-digimed) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [sodalis — page produit Digimed](https://www.sodalis.ch/de/fuer-private/versicherungen/grundversicherung-/digitales-modell-digimed) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## sodalis gesundheitsgruppe (941) — Medicasa
 
@@ -3102,25 +2772,9 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, GL-0, GR-1, GR-2, GR-3, LU-1, LU-
 
 - [vita surselva – règlement médecin de famille 2019](https://www.vitasurselva.ch/fileadmin/user_upload/customers/vitasurselva/Reglemente/AVB/Krankenversicherung/Hausarztversicherung.pdf) · p. 3 : Paraphrase : Médecin agréé préalable; opérations oculaires/gynécologiques soumises à accord.
 
-## vita surselva (966) — Assurance de base, Sparmed
+- [vita surselva — page produit Sparmed](https://www.vitasurselva.ch/privatkunde/angebot/obligatorische-krankenversicherung/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-review_948d2bd6265582163f8016e9 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Prestations supplémentaires de promotion de la santé annoncées.
-
-**À confirmer** : Fournir tableau 2027 : montants, sports/cours reconnus, cumul et éventuelle base obligatoire.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Fournir tableau 2027 : montants, sports/cours reconnus, cumul et éventuelle base obligatoire.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [vita surselva – prestations complémentaires](https://www.vitasurselva.ch/privatkunde/angebot/zusatzversicherungen/zusatzleistungen/) : Paraphrase : Promotion de la santé et autres prestations par complémentaire.
+- [vita surselva — page produit Sparmed](https://www.vitasurselva.ch/fileadmin/user_upload/customers/vitasurselva/Reglemente/AVB/Krankenversicherung/Hausarztversicherung.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## vita surselva (966) — Assurance de base
 
@@ -3141,6 +2795,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [vita surselva – assurance obligatoire](https://www.vitasurselva.ch/privatkunde/angebot/obligatorische-krankenversicherung/) : Paraphrase : Offre ordinaire et modèle familial Sparmed.
+
+- [vita surselva — page produit Sparmed](https://www.vitasurselva.ch/privatkunde/angebot/obligatorische-krankenversicherung/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Verein Krankenkasse Visperterminen (1040) — Assurance de base, Medicasa, Telmed
 
@@ -3186,6 +2842,8 @@ Régions : VS-2
 
 - [KKV – Medica Basis](https://www.kkv.ch/privatpersonen/grundversicherungen/grundversicherung/) : Paraphrase : Couverture ordinaire.
 
+- [KKV — page produit Assurance de base](https://www.kkv.ch/privatpersonen/grundversicherungen/grundversicherung/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Verein Krankenkasse Visperterminen (1040) — Medicasa
 
 review_94364002a353b1a20fbcc4c1 · 2027 · important · open · responsable non attribué
@@ -3205,6 +2863,10 @@ Régions : VS-2
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [KKV – Medicasa](https://www.kkv.ch/privatpersonen/grundversicherungen/medicasa-hausarzt/) : Paraphrase : Modèle de médecin de famille à choix restreint.
+
+- [KKV — page produit Medicasa](https://www.kkv.ch/privatpersonen/grundversicherungen/medicasa-hausarzt/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [KKV — page produit Medicasa](https://www.kkv.ch/privatpersonen/sparen/medicasa-hausarzt/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Verein Krankenkasse Visperterminen (1040) — Telmed
 
@@ -3228,45 +2890,9 @@ Régions : VS-2
 
 - [KKV – AVB Telmed 2024](https://www.kkv.ch/wp-content/uploads/2023/12/AVB-Telmed-1.1.2024.pdf) · p. 3 : Paraphrase : PDF scanné lu visuellement, pages 2–4; premier contact et choix légal ultérieur.
 
-## Verein Krankenkasse Visperterminen (1040) — Assurance de base, Medicasa, Telmed
+- [KKV — page produit Telmed](https://www.kkv.ch/privatpersonen/grundversicherungen/telmed/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-review_ee253f49aa4f8f7948e1336e · 2027 · important · open · responsable non attribué
-
-Régions : VS-2
-
-**Confirmé** : Conseil médical 24 h/24 annoncé gratuit.
-
-**À confirmer** : La gratuité 2027 couvre-t-elle la téléconsultation définitive, tous modèles, sans franchise ni quote-part ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : La gratuité 2027 couvre-t-elle la téléconsultation définitive, tous modèles, sans franchise ni quote-part ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [KKV – conseil médical](https://www.kkv.ch/privatpersonen/grundversicherungen/medizinische-beratung/) : Paraphrase : Conseil Medgate disponible gratuitement; appel au tarif local.
-
-## Verein Krankenkasse Visperterminen (1040) — Assurance de base, Medicasa, Telmed
-
-review_fba54d18f49be4456455d984 · 2027 · important · open · responsable non attribué
-
-Régions : VS-2
-
-**Confirmé** : Livraison gratuite, sans taxes pharmacien/patient, rabais annoncés.
-
-**À confirmer** : Confirmer rabais chiffrés, exclusions et maintien 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer rabais chiffrés, exclusions et maintien 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [KKV – pharmacie par correspondance](https://www.kkv.ch/privatpersonen/sparen/versandapotheke/) : Paraphrase : Livraison et taxes de pharmacie offertes chez le partenaire.
+- [KKV — page produit Telmed](https://www.kkv.ch/privatpersonen/sparen/telmed-telemedizin/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Stiftung Krankenkasse Wädenswil (1318) — Assurance de base, Hausarztversicherung
 
@@ -3314,6 +2940,10 @@ Régions : AG-0, SZ-0, ZH-1, ZH-2, ZH-3
 
 - [Wädenswil – conditions médecin de famille 2019](https://www.kkwaedenswil.ch/home/kk/files/dokumente/AVB_Hausarztversicherung_Ausgabe_2019.pdf) · p. 3 : Paraphrase : Accord du médecin de famille avant recours spécialisé.
 
+- [Krankenkasse Wädenswil — page produit Hausarztversicherung](https://www.kkwaedenswil.ch/versicherungen/grundversicherung/hausarztversicherung) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Krankenkasse Wädenswil — page produit Hausarztversicherung](https://www.kkwaedenswil.ch/home/kk/files/dokumente/AVB_Hausarztversicherung_Ausgabe_2019.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Stiftung Krankenkasse Wädenswil (1318) — Assurance de base
 
 review_5cfb5995ca2d2075cc835334 · 2027 · important · open · responsable non attribué
@@ -3333,6 +2963,8 @@ Régions : AG-0, SZ-0, ZG-0, ZH-1, ZH-2, ZH-3
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Wädenswil – assurance médecin de famille](https://www.kkwaedenswil.ch/versicherungen/grundversicherung/hausarztversicherung) : Paraphrase : Offre annoncée à Zurich, Argovie et Schwyz.
+
+- [Krankenkasse Wädenswil — page produit Assurance de base](https://www.kkwaedenswil.ch/versicherungen/grundversicherung/standardmodell) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Stiftung Krankenkasse Wädenswil (1318) — Hausarztversicherung
 
@@ -3398,6 +3030,10 @@ Régions : AG-0
 
 - [Birchmeier – ZVB Telmed édition 2026](https://www.kkbirchmeier.ch/index.cfm?action=act_getfile&doc_id=100303) · p. 2 : Paraphrase : Medi24 avant rendez-vous; nouveaux suivis à annoncer.
 
+- [Birchmeier — page produit Telmed](https://www.kkbirchmeier.ch/Versicherungen/Grundversicherung/TELMED-Versicherungsmodell) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Birchmeier — page produit Telmed](https://www.kkbirchmeier.ch/index.cfm?action=act_getfile&doc_id=100303) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Krankenkasse Birchmeier (1322) — Médecin de famille
 
 review_98f8a1a197f4132a883aa043 · 2027 · important · open · responsable non attribué
@@ -3417,6 +3053,10 @@ Régions : AG-0
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Birchmeier – modèles de base](https://www.kkbirchmeier.ch/Versicherungen/Grundversicherung) : Paraphrase : Ordinaire et modèle médecin de famille.
+
+- [Birchmeier — page produit Médecin de famille](https://www.kkbirchmeier.ch/Versicherungen/Grundversicherung/Hausarztsystem) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Birchmeier — page produit Médecin de famille](https://www.kkbirchmeier.ch/index.cfm?action=act_getfile&doc_id=100108) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Krankenkasse Birchmeier (1322) — Assurance de base
 
@@ -3438,25 +3078,7 @@ Régions : AG-0
 
 - [Birchmeier – modèles de base](https://www.kkbirchmeier.ch/Versicherungen/Grundversicherung) : Paraphrase : Ordinaire et modèle médecin de famille.
 
-## Krankenkasse Birchmeier (1322) — Assurance de base, Médecin de famille, Telmed
-
-review_c3c7f719d8fc5b3ca0d19eaa · 2027 · important · open · responsable non attribué
-
-Régions : AG-0
-
-**Confirmé** : Carte 1 an CHF 79; 2 ans CHF 149; 3 ans CHF 197.
-
-**À confirmer** : Fournir durée de validité 2027, modalités de renouvellement et accès base seule.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Fournir durée de validité 2027, modalités de renouvellement et accès base seule.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Birchmeier – HotelCard](https://www.kkbirchmeier.ch/Kundenaktionen/HotelCard) : Paraphrase : Carte annuelle à tarif réduit.
+- [Birchmeier — page produit Assurance de base](https://www.kkbirchmeier.ch/Versicherungen/Grundversicherung/Freie-Arztwahl) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Krankenkasse Birchmeier (1322) — Telmed
 
@@ -3477,26 +3099,6 @@ Régions : AG-0
 **Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
 
 - [Birchmeier – ZVB Telmed édition 2026](https://www.kkbirchmeier.ch/index.cfm?action=act_getfile&doc_id=100303) · p. 2 : Paraphrase : Medi24 avant rendez-vous; nouveaux suivis à annoncer.
-
-## Krankenkasse Birchmeier (1322) — Assurance de base, Médecin de famille, Telmed
-
-review_ff235a070bf982ee6fbfbb49 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0
-
-**Confirmé** : Bon CHF 30 pour première ordonnance permanente.
-
-**À confirmer** : Existe-t-il une nouvelle offre 2027 ? Ne pas reconduire celle-ci.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Existe-t-il une nouvelle offre 2027 ? Ne pas reconduire celle-ci.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Birchmeier – Zur Rose](https://www.kkbirchmeier.ch/Kundenaktionen/Zur-Rose/cont-zurrosetext/navi-60) : Paraphrase : Bon pour première ordonnance permanente, limité à fin 2026.
 
 ## SWICA Assurance-maladie SA (1384) — Assurance de base, Favorit Bestcare, Favorit Casa, Favorit Start, Favorit Medica, Favorit Medpharm, Favorit Multichoice, Favorit Santé, Favorit Telmed
 
@@ -3521,26 +3123,6 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 - [OPAS consolidée — état affiché au 01.01.2027](https://www.fedlex.admin.ch/filestore/fedlex.data.admin.ch/eli/cc/1995/4964_4964_4964/20270101/fr/pdf-a/fedlex-data-admin-ch-eli-cc-1995-4964_4964_4964-20270101-fr-pdf-a.pdf) · p. 33 : Divergence constatée le 01.10.2026, pages 24 et 33 : ancienne clause HPV et liste sans Glaris, malgré le RO publié. Ne pas résoudre par une question personnelle.
 
 - [OFSP — franchise et quote-part des vaccinations](https://www.bag.admin.ch/fr/vaccinations-prophylactiques) : Vaccinations et conseils admissibles OPAS 12a exonérés de franchise depuis 2026 ; quote-part restante. Conditions de prestations à lire avec RO 2026 336.
-
-## SWICA Assurance-maladie SA (1384) — Favorit Bestcare, Favorit Casa, Favorit Start, Favorit Medica, Favorit Medpharm, Favorit Multichoice, Favorit Santé, Favorit Telmed
-
-review_03bbc0ad38565d8b77193281 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Facturation TARDOC depuis avril 2026; SWICA reprend la participation des assurés Favorit.
-
-**À confirmer** : Confirmer explicitement le maintien de la reprise intégrale franchise/quote-part pour 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer explicitement le maintien de la reprise intégrale franchise/quote-part pour 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [SWICA – facturation santé24 TARDOC](https://www.swica.ch/de/private/gesundheitswelt/medizinische-unterstuetzung/medizinische-beratung-sante24/faq-tardoc) : Paraphrase : Participation aux consultations santé24 payée pour Favorit.
 
 ## SWICA Assurance-maladie SA (1384) — Favorit Medica
 
@@ -3602,6 +3184,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [SWICA – CS Favorit Casa 2026](https://dam.swica.ch/image/upload/v1764339702/020_f_ZB_Favorit_Casa_smg8xz.pdf) · p. 3 : Paraphrase : Édition 2026; parcours du modèle.
 
+- [SWICA — page produit Favorit Casa](https://www.swica.ch/fr/prive/assurances/assurance-base/modele-du-medecin-de-famille) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## SWICA Assurance-maladie SA (1384) — Favorit Casa
 
 review_2f2adcd424a61f365defa8d8 · 2027 · important · open · responsable non attribué
@@ -3621,26 +3205,6 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
 
 - [SWICA – CS Favorit Casa 2026](https://dam.swica.ch/image/upload/v1764339702/020_f_ZB_Favorit_Casa_smg8xz.pdf) · p. 3 : Paraphrase : Édition 2026; parcours du modèle.
-
-## SWICA Assurance-maladie SA (1384) — Favorit Start
-
-review_35c50cdb9f11be82eb5e0e00 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, SH-1, SH-2, ZH-2, ZH-3
-
-**Confirmé** : Conseil gratuit.
-
-**À confirmer** : Distinguer conseil gratuit et téléconsultation définitive facturée/TARDOC.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Distinguer conseil gratuit et téléconsultation définitive facturée/TARDOC.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [SWICA – CS 2027](https://dam.swica.ch/image/upload/v1789112483/025_f_ZB_Favorit_Start_nn8ptv.pdf) · p. 4 : Paraphrase : Conseil santé24 gratuit, taxe téléphonique usuelle.
 
 ## SWICA Assurance-maladie SA (1384) — Favorit Multichoice
 
@@ -3662,6 +3226,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [SWICA – CS Favorit Multichoice 2026](https://dam.swica.ch/image/upload/v1764339930/094_f_ZB_FAVORIT_Multichoice_tulw57.pdf) · p. 3 : Paraphrase : Édition 2026; parcours du modèle.
 
+- [SWICA — page produit Favorit Multichoice](https://www.swica.ch/fr/prive/assurances/assurance-base/modele-multichoice) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## SWICA Assurance-maladie SA (1384) — Favorit Santé
 
 review_39d434e5b362a001343aef19 · 2027 · important · open · responsable non attribué
@@ -3682,25 +3248,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [SWICA – CS Favorit Santé 2027](https://dam.swica.ch/image/upload/v1775120853/011_f_ZB_Favorit_Sante_lgz50g.pdf) · p. 3 : Paraphrase : Édition 2027; parcours du modèle.
 
-## SWICA Assurance-maladie SA (1384) — Assurance de base, Favorit Bestcare, Favorit Casa, Favorit Start, Favorit Medica, Favorit Medpharm, Favorit Multichoice, Favorit Santé, Favorit Telmed
-
-review_3d7790b1045669648011cb10 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Base seule ne donne pas droit aux bonus ni bons.
-
-**À confirmer** : Fournir calendrier et conditions BENEVITA 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Fournir calendrier et conditions BENEVITA 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [SWICA – conditions BENEVITA](https://www.swica.ch/de/private/gesundheitswelt/gesundheitsfoerderung/benevita/besondere-bedingungen) : Paraphrase : Bonus réservé aux complémentaires; échéances spécifiques.
+- [SWICA — page produit Favorit Santé](https://www.swica.ch/fr/prive/assurances/assurance-base/modele-hmo) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## SWICA Assurance-maladie SA (1384) — Favorit Medpharm
 
@@ -3722,25 +3270,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [SWICA – CS Favorit Medpharm 2027](https://dam.swica.ch/image/upload/v1775120874/018_f_ZB_Favorit_Medpharm_ywq7in.pdf) · p. 3 : Paraphrase : Édition 2027; parcours du modèle.
 
-## SWICA Assurance-maladie SA (1384) — Favorit Telmed
-
-review_5c2359115084fecf8511ad6a · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Conseil gratuit.
-
-**À confirmer** : Distinguer conseil gratuit et téléconsultation définitive facturée/TARDOC.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Distinguer conseil gratuit et téléconsultation définitive facturée/TARDOC.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [SWICA – CS 2027](https://dam.swica.ch/image/upload/v1775120876/017_f_ZB_Favorit_Telmed_hmdmme.pdf) · p. 4 : Paraphrase : Conseil santé24 gratuit, taxe téléphonique usuelle.
+- [SWICA — page produit Favorit Medpharm](https://www.swica.ch/fr/prive/assurances/assurance-base/modele-des-pharmacies) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## SWICA Assurance-maladie SA (1384) — Favorit Medica
 
@@ -3762,6 +3292,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [SWICA – CS Favorit Medica 2027](https://dam.swica.ch/image/upload/v1775120854/016_f_ZB_Favorit_Medica_ybulqt.pdf) · p. 3 : Paraphrase : Édition 2027; parcours du modèle.
 
+- [SWICA — page produit Favorit Medica](https://www.swica.ch/fr/prive/assurances/assurance-base/modele-liste-des-medecins) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## SWICA Assurance-maladie SA (1384) — Favorit Santé
 
 review_6756f308eb78b988d0cb07be · 2027 · important · open · responsable non attribué
@@ -3781,26 +3313,6 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
 
 - [SWICA – CS Favorit Santé 2027](https://dam.swica.ch/image/upload/v1775120853/011_f_ZB_Favorit_Sante_lgz50g.pdf) · p. 3 : Paraphrase : Édition 2027; parcours du modèle.
-
-## SWICA Assurance-maladie SA (1384) — Assurance de base, Favorit Bestcare, Favorit Casa, Favorit Start, Favorit Medica, Favorit Medpharm, Favorit Multichoice, Favorit Santé, Favorit Telmed
-
-review_7d97e261ba1175b6de0b799e · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Offres sport, santé et loisirs financées par les partenaires.
-
-**À confirmer** : Confirmer les offres et tarifs partenaires 2027, sans les déduire d'office de la prime.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer les offres et tarifs partenaires 2027, sans les déduire d'office de la prime.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [SWICA – active4life](https://www.swica.ch/de/private/gesundheitswelt/gesundheitsfoerderung/active4life) : Paraphrase : Avantages partenaires pour les assurés SWICA.
 
 ## SWICA Assurance-maladie SA (1384) — Favorit Start
 
@@ -3882,26 +3394,6 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [SWICA – CS Favorit Medpharm 2027](https://dam.swica.ch/image/upload/v1775120874/018_f_ZB_Favorit_Medpharm_ywq7in.pdf) · p. 3 : Paraphrase : Édition 2027; parcours du modèle.
 
-## SWICA Assurance-maladie SA (1384) — Favorit Medpharm
-
-review_e5cd25cb8d3b87a99742638a · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Conseil gratuit.
-
-**À confirmer** : Distinguer conseil gratuit et téléconsultation définitive facturée/TARDOC.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Distinguer conseil gratuit et téléconsultation définitive facturée/TARDOC.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [SWICA – CS 2027](https://dam.swica.ch/image/upload/v1775120874/018_f_ZB_Favorit_Medpharm_ywq7in.pdf) · p. 4 : Paraphrase : Conseil santé24 gratuit, taxe téléphonique usuelle.
-
 ## SWICA Assurance-maladie SA (1384) — Favorit Bestcare
 
 review_eef19ecee8050190ca7315a6 · 2027 · important · open · responsable non attribué
@@ -3921,6 +3413,8 @@ Régions : AR-0, SG-1, SG-2, SG-3, TG-0, VD-1, VD-2, ZH-1, ZH-2, ZH-3
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [SWICA – CS Favorit Bestcare 2026](https://dam.swica.ch/image/upload/v1764339729/029_f_ZB_Favorit_Bestcare_wf4ka4.pdf) · p. 3 : Paraphrase : Édition 2026; parcours du modèle.
+
+- [SWICA — page produit Favorit Bestcare](https://www.swica.ch/fr/prive/assurances/assurance-base/modele-bestcare) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## SWICA Assurance-maladie SA (1384) — Assurance de base
 
@@ -3942,6 +3436,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [SWICA – modèles de base](https://www.swica.ch/fr/prive/assurances/assurance-base/apercu) : Paraphrase : Standard et gamme Favorit.
 
+- [SWICA — page produit Assurance de base](https://www.swica.ch/fr/prive/assurances/assurance-base/modele-standard) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [SWICA — page produit Assurance de base](https://www.swica.ch/fr/prive/assurances/assurance-base/apercu) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## SWICA Assurance-maladie SA (1384) — Favorit Telmed
 
 review_fb466961eee1d888eec2f3b7 · 2027 · important · open · responsable non attribué
@@ -3962,25 +3460,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [SWICA – CS Favorit Telmed 2027](https://dam.swica.ch/image/upload/v1775120876/017_f_ZB_Favorit_Telmed_hmdmme.pdf) · p. 3 : Paraphrase : Édition 2027; parcours du modèle.
 
-## SWICA Assurance-maladie SA (1384) — Assurance de base, Favorit Bestcare, Favorit Casa, Favorit Start, Favorit Medica, Favorit Medpharm, Favorit Multichoice, Favorit Santé, Favorit Telmed
-
-review_ff4482d4ffef938feeea0c7d · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : 5 % COMPLETA TOP/FORTE; jusqu'à 15 % HOSPITA selon points.
-
-**À confirmer** : Confirmer paliers 300/700/1500, délais et rabais applicables aux primes 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer paliers 300/700/1500, délais et rabais applicables aux primes 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [SWICA – BENEVITA avantages](https://www.swica.ch/de/private/gesundheitswelt/gesundheitsfoerderung/benevita/benefits) : Paraphrase : Rabais de complémentaire contre points d'activité.
+- [SWICA — page produit Favorit Telmed](https://www.swica.ch/fr/prive/assurances/assurance-base/telemedecine) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Galenos AG (1386) — Assurance de base, Combi Care, Managed Care, Med Direct, Tel Doc, Plan de santé VIVA
 
@@ -4026,25 +3506,9 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Galenos – modèles](https://www.galenos.ch/de/fuer-private/versicherungen/grundversicherung/) : Paraphrase : Traditionnel : choix libre.
 
-## Galenos AG (1386) — Assurance de base, Combi Care, Managed Care, Med Direct, Tel Doc, Plan de santé VIVA
+- [Galenos — page produit Plan de santé VIVA](https://www.galenos.ch/fr/personnes-privees/assurances/assurance-de-base/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-review_4cb91fc4332e413f63cc93e9 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Conseil santé gratuit pour les clients Galenos.
-
-**À confirmer** : Quels actes exacts et quelles participations en 2027 ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Quels actes exacts et quelles participations en 2027 ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Galenos – conseil médical](https://www.galenos.ch/de/fuer-private/versicherungen/grundversicherung/) : Paraphrase : Ligne de conseil gratuite pour clients Galenos.
+- [Galenos — page produit Assurance de base](https://www.galenos.ch/de/fuer-private/versicherungen/grundversicherung/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Galenos AG (1386) — Managed Care
 
@@ -4066,6 +3530,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Visana/sana24/Galenos – Managed Care 2024](https://www.galenos.ch/wp-content/uploads/2020/09/AVB_Krankenpflegeversicherung_Managed_Care_KVG_de.pdf) · p. 1 : Paraphrase : Médecin du réseau coordinateur.
 
+- [Galenos — page produit Plan de santé VIVA](https://www.galenos.ch/fr/personnes-privees/assurances/assurance-de-base/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [sana24 — page produit Managed Care sans capitation](https://www.galenos.ch/wp-content/uploads/2020/09/AVB_Krankenpflegeversicherung_Managed_Care_KVG_de.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Galenos AG (1386) — Med Direct
 
 review_5b77ad10a5f53e66229c87c5 · 2027 · important · open · responsable non attribué
@@ -4086,25 +3554,9 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Visana/sana24/Galenos – Med Direct 2024](https://www.galenos.ch/wp-content/uploads/2020/09/AVB_Krankenpflegeversicherung_Med_Direct_KVG_de.pdf) · p. 3 : Paraphrase : Médecin reconnu préalable.
 
-## Galenos AG (1386) — Assurance de base, Combi Care, Managed Care, Med Direct, Tel Doc, Plan de santé VIVA
+- [Galenos — page produit Plan de santé VIVA](https://www.galenos.ch/fr/personnes-privees/assurances/assurance-de-base/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-review_73d72985ba8d3c7c5b90c8f2 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Éligibilité liée à la complémentaire et au compte myVisana.
-
-**À confirmer** : Quelles polices LCA associées aux clients de cette marque ouvrent myPoints en 2027 ? Montant non transféré automatiquement.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Quelles polices LCA associées aux clients de cette marque ouvrent myPoints en 2027 ? Montant non transféré automatiquement.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Groupe Visana – conditions myPoints 05.2025](https://www.visana.ch/fr/dam/jcr%3A920c5faf-aaa7-435c-a464-f8e5dcc42f5e/mypoints-teilnahmebedingungen-2025-f.2026-02-06-10-33-33.pdf) · p. 3 : Paraphrase : Accès par LCA active visible à l'inscription.
+- [sana24 — page produit Med Direct](https://www.galenos.ch/wp-content/uploads/2020/09/AVB_Krankenpflegeversicherung_Med_Direct_KVG_de.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Galenos AG (1386) — Combi Care
 
@@ -4146,6 +3598,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Visana/sana24/Galenos – Combi Care 2026](https://www.galenos.ch/wp-content/uploads/2025/08/avb-krankenpflegeversicherung-combi-care.pdf) · p. 1 : Paraphrase : Premier recours et instructions obligatoires.
 
+- [Galenos — page produit Plan de santé VIVA](https://www.galenos.ch/fr/personnes-privees/assurances/assurance-de-base/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [sana24 — page produit Combi Care](https://www.galenos.ch/wp-content/uploads/2025/08/cga-assurance-obligatoire-des-soins-combi-care.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Galenos AG (1386) — Plan de santé VIVA
 
 review_a23ebae7b3dd47b04f0463f5 · 2027 · important · open · responsable non attribué
@@ -4165,6 +3621,10 @@ Régions : AG-0
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Visana/sana24/Galenos – VIVA valable 2026](https://www.galenos.ch/wp-content/uploads/2025/10/AVB_Krankenpflegeversicherung_VIVA_-_Gesundheitsplan_KVG_2025-01_de.pdf) · p. 4 : Paraphrase : Organisation intégrée et génériques.
+
+- [Galenos — page produit Plan de santé VIVA](https://www.galenos.ch/fr/personnes-privees/assurances/assurance-de-base/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [sana24 — page produit Plan de santé VIVA](https://www.galenos.ch/wp-content/uploads/2025/10/CGA_Assurance_obligatoire_des_soins_Plan_de_sante_VIVA_LAMal_2025-01_fr.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Galenos AG (1386) — Plan de santé VIVA
 
@@ -4206,25 +3666,9 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Visana/sana24/Galenos – Tel Doc 2026](https://www.galenos.ch/wp-content/uploads/2025/08/avb-krankenpflegeversicherung-tel-doc.pdf) · p. 4 : Paraphrase : Medi24 fixe le parcours.
 
-## Galenos AG (1386) — Tel Doc
+- [Galenos — page produit Plan de santé VIVA](https://www.galenos.ch/fr/personnes-privees/assurances/assurance-de-base/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-review_d641d14f3c9808423668f3c8 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Conseil Medi24 annoncé gratuit.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Visana/sana24/Galenos – Tel Doc 2026](https://www.galenos.ch/wp-content/uploads/2025/08/avb-krankenpflegeversicherung-tel-doc.pdf) · p. 5 : Paraphrase : Conseil téléphonique gratuit.
+- [sana24 — page produit Tel Doc](https://www.galenos.ch/wp-content/uploads/2025/08/avb-krankenpflegeversicherung-tel-doc.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## rhenusana (1401) — Assurance de base, HausarztmodellFR, sanmed24FR
 
@@ -4250,26 +3694,6 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [OFSP — franchise et quote-part des vaccinations](https://www.bag.admin.ch/fr/vaccinations-prophylactiques) : Vaccinations et conseils admissibles OPAS 12a exonérés de franchise depuis 2026 ; quote-part restante. Conditions de prestations à lire avec RO 2026 336.
 
-## rhenusana (1401) — Assurance de base, HausarztmodellFR, sanmed24FR
-
-review_00f766bbfa8c12b970484aec · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Vaccin offert aux clients lors de l'événement.
-
-**À confirmer** : Une opération distincte est-elle prévue en 2027 ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Une opération distincte est-elle prévue en 2027 ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [rhenusana – journée vaccin grippe 2026](https://rhenusana.ch/news-archiv/grippeimpftag-2026/) : Paraphrase : Vaccination gratuite à Heerbrugg sur réservation.
-
 ## rhenusana (1401) — HausarztmodellFR
 
 review_14c7a5cdd075287ce24968ef · 2027 · important · open · responsable non attribué
@@ -4289,6 +3713,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, GL-0, GR-1, GR-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [rhenusana – Hausarztsystem](https://rhenusana.ch/grundversicherung/rabattmodell-hausarztsystem/) : Paraphrase : Médecin ou centre agréé comme premier recours.
+
+- [rhenusana — page produit HausarztmodellFR](https://rhenusana.ch/grundversicherung/rabattmodell-hausarztsystem/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [rhenusana — page produit HausarztmodellFR](https://rhenusana.ch/wp-content/uploads/2022/11/KVG_KRANKENPFLEGEhausarzt_BAG_01_19.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## rhenusana (1401) — sanmed24FR
 
@@ -4312,25 +3740,9 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, GL-0, GR-1, GR-
 
 - [rhenusana – sanmed24](https://rhenusana.ch/grundversicherung/rabattmodell-sanmed24/) : Paraphrase : Medgate accessible par téléphone ou application.
 
-## rhenusana (1401) — Assurance de base, HausarztmodellFR, sanmed24FR
+- [rhenusana — page produit sanmed24FR](https://rhenusana.ch/grundversicherung/rabattmodell-sanmed24/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-review_590541f48580ad0f570bdc28 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Le fournisseur Medgate indique une téléconsultation gratuite pour les assurés rhenusana.
-
-**À confirmer** : L'assureur confirme-t-il franchise et quote-part intégralement reprises pour BASE, HAS et sanmed24 en 2027 ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : L'assureur confirme-t-il franchise et quote-part intégralement reprises pour BASE, HAS et sanmed24 en 2027 ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Medgate – partenaires au 01.01.2026](https://www.medgate.ch/en-us/about-us/our-partners) : Paraphrase : rhenusana : téléconsultation gratuite indiquée pour les assurés.
+- [rhenusana — page produit sanmed24FR](https://rhenusana.ch/wp-content/uploads/2022/11/KVG_KRANKENPFLEGEsanmed24_BAG_01_19.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## rhenusana (1401) — sanmed24FR
 
@@ -4371,6 +3783,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [rhenusana – Standard](https://rhenusana.ch/grundversicherung/standardmodell-grundversicherung/) : Paraphrase : Choix ordinaire sans concertation préalable.
+
+- [rhenusana — page produit Assurance de base](https://rhenusana.ch/grundversicherung/standardmodell-grundversicherung/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Mutuel Assurance Maladie SA (1479) — Assurance de base, OptiMed (Réseau de soins), PrimaCare (Médecin de famille), PrimaFlex (Modèle flexible), SanaTel (Télémédecine)
 
@@ -4416,6 +3830,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Groupe Mutuel – conditions communes](https://www.groupemutuel.ch/fr/clients-prives/nos-services/Questions-reponses-les-plus-frequentes/adaptation-cga-cp-lamal.html) : Paraphrase : Mutuel et Philos nommés parmi les assureurs concernés.
 
+- [Philos Assurance — page produit Assurance de base](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/Standard.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Philos Assurance — page produit Assurance de base](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Mutuel Assurance Maladie SA (1479) — PrimaFlex (Modèle flexible)
 
 review_3b899d4f2cbf3dce9d13b42b · 2027 · important · open · responsable non attribué
@@ -4436,25 +3854,9 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Groupe Mutuel – CP PrimaFlex 2025](https://www.groupemutuel.ch/fr/doc/jcr%3A6af9e78c-c08d-4230-baa5-549f90d08368/lang%3Afr/RXGM01-F3.pdfRXGM01-F3.pdf) · p. 1 : Paraphrase : Premier recours flexible; conseil non contraignant.
 
-## Mutuel Assurance Maladie SA (1479) — PrimaFlex (Modèle flexible)
+- [Philos Assurance — page produit PrimaFlex (Modèle flexible)](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/PrimaFlex.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-review_64d92174b79e4a11942bb9e1 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Franchise supprimée.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [PrimaFlex – services](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/PrimaFlex/services-exclusifs-PrimaFlex.html) : Paraphrase : Liste actuelle, non datée 2027.
+- [Philos Assurance — page produit PrimaFlex (Modèle flexible)](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/PrimaFlex/services-exclusifs-PrimaFlex.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Mutuel Assurance Maladie SA (1479) — OptiMed (Réseau de soins)
 
@@ -4476,6 +3878,12 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Groupe Mutuel – CP OptiMed 2025](https://www.groupemutuel.ch/fr/doc/jcr%3A06d446da-2155-43f2-a068-c09e61376bcf/lang%3Afr/RSGM02-F5.pdfRSGM02-F5.pdf) · p. 1 : Paraphrase : Premier recours de la liste reconnue.
 
+- [Philos Assurance — page produit OptiMed (Réseau de soins)](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/Optimed.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Philos Assurance — page produit OptiMed (Réseau de soins)](https://www.groupemutuel.ch/fr/clients-prives/nos-services/contacts-et-services/conseil-medical/Medgate.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Philos Assurance — page produit OptiMed (Réseau de soins)](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/Optimed/Optimed-DeltaSante.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Mutuel Assurance Maladie SA (1479) — PrimaCare (Médecin de famille)
 
 review_9784ef25d0800c636bda8488 · 2027 · important · open · responsable non attribué
@@ -4496,65 +3904,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Groupe Mutuel – CP PrimaCare 2025](https://www.groupemutuel.ch/fr/doc/jcr%3A80aa1941-3c36-4ffe-8292-7197bb3de981/lang%3Afr/RFGM02-F5.pdfRFGM02-F5.pdf) · p. 1 : Paraphrase : Médecin suisse choisi; délégations coordonnées.
 
-## Mutuel Assurance Maladie SA (1479) — Assurance de base, OptiMed (Réseau de soins), PrimaCare (Médecin de famille), PrimaFlex (Modèle flexible), SanaTel (Télémédecine)
-
-review_99d3d0811f6dbc9aae73fab5 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Rabais partenaires sans inscription supplémentaire.
-
-**À confirmer** : Confirmer conditions 2027, accès base seule et éventuelles offres réservées à une complémentaire.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer conditions 2027, accès base seule et éventuelles offres réservées à une complémentaire.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Groupe Mutuel – LeClub FAQ](https://www.groupemutuel.ch/fr/clients-prives/nos-services/Questions-reponses-les-plus-frequentes/LeClub.html) : Paraphrase : Offres partenaires accessibles avec justificatif.
-
-## Mutuel Assurance Maladie SA (1479) — PrimaFlex (Modèle flexible)
-
-review_c11219a588d76d993fca6ad3 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Mammographie, IRM, ultrasons admissibles.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [PrimaFlex – services](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/PrimaFlex/services-exclusifs-PrimaFlex.html) : Paraphrase : Liste actuelle, non datée 2027.
-
-## Mutuel Assurance Maladie SA (1479) — PrimaFlex (Modèle flexible)
-
-review_d7938c52aee85aaef9cb8ec7 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Conseil approfondi; tests diabète, cardiaque, streptocoque, CRP.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [PrimaFlex – services](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/PrimaFlex/services-exclusifs-PrimaFlex.html) : Paraphrase : Liste actuelle, non datée 2027.
+- [Philos Assurance — page produit PrimaCare (Médecin de famille)](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/Primacare.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Mutuel Assurance Maladie SA (1479) — SanaTel (Télémédecine)
 
@@ -4575,6 +3925,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Groupe Mutuel – CP SanaTel 2025](https://www.groupemutuel.ch/fr/doc/jcr%3A9fec869e-5187-445d-ad23-ee9fb747a169/lang%3Afr/RTGM02-F10.pdfRTGM02-F10.pdf) · p. 1 : Paraphrase : Premier recours télémédical; conseil non contraignant.
+
+- [Philos Assurance — page produit SanaTel (Télémédecine)](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/SanaTel.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Philos Assurance — page produit SanaTel (Télémédecine)](https://www.groupemutuel.ch/fr/clients-prives/nos-services/compassana.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Mutuel Assurance Maladie SA (1479) — PrimaFlex (Modèle flexible)
 
@@ -4640,6 +3994,12 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Sanitas – CGA/CC version 2027](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6009_Sanitas_AVB_KVG_fr.pdf) · p. 11 : Paraphrase : Basic : téléconsultation définitive soumise à participation.
 
+- [Sanitas — page produit TelMed Plus](https://www.sanitas.com/fr/clients-prives/assurances/assurance-de-base/telmed.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Sanitas — page produit TelMed Plus](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6009_Sanitas_AVB_KVG_fr.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Sanitas — page produit TelMed Basic](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/KOBE_Befreiung_TelMed_fr.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Sanitas Grundversicherungen AG (1509) — Assurance de base
 
 review_1ea26179c85e9ff4bd17ff55 · 2027 · important · open · responsable non attribué
@@ -4660,6 +4020,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Sanitas – CGA/CC version 2027](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6009_Sanitas_AVB_KVG_fr.pdf) · p. 2 : Paraphrase : Libre choix.
 
+- [Sanitas — page produit Assurance de base](https://www.sanitas.com/fr/clients-prives/assurances/assurance-de-base/libre-choix-du-medecin.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Sanitas — page produit TelMed Plus](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6009_Sanitas_AVB_KVG_fr.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Sanitas Grundversicherungen AG (1509) — TelMed Plus
 
 review_2bea4a86f047c6612c7322f7 · 2027 · important · open · responsable non attribué
@@ -4679,6 +4043,12 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Sanitas – CGA/CC version 2027](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6009_Sanitas_AVB_KVG_fr.pdf) · p. 11 : Paraphrase : Plus : télémédecine ou pharmacie partenaire.
+
+- [Sanitas — page produit TelMed Plus](https://www.sanitas.com/fr/clients-prives/assurances/assurance-de-base/telmed.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Sanitas — page produit TelMed Plus](https://www.sanitas.com/de/privatkunden/versicherungen/grundversicherung/telmed/vorteile-mit-telmed-plus.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Sanitas — page produit TelMed Plus](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6009_Sanitas_AVB_KVG_fr.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Sanitas Grundversicherungen AG (1509) — TelMed Plus
 
@@ -4739,26 +4109,6 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
 
 - [Sanitas – exonérations 2027](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/KOBE_Befreiung_TelMed_fr.pdf) · p. 1 : Paraphrase : Colonne TelMed Plus cochée; Basic vide.
-
-## Sanitas Grundversicherungen AG (1509) — Assurance de base, Médecin de famille 1, Médecin de famille 2, Médecin de famille 3, Médecin de famille 4, MultiAccess, TelMed Basic, TelMed Plus
-
-review_878a4501186821c703acf950 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Écus convertibles en bons ou dons.
-
-**À confirmer** : Fournir conditions 2027, âge, base/complémentaire, barème, expiration et bons disponibles.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Fournir conditions 2027, âge, base/complémentaire, barème, expiration et bons disponibles.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Sanitas – Health Navigator](https://www.sanitas.com/fr/clients-prives/services/avantages-clients-et-applis/health-navigator.html) : Paraphrase : Active récompense l'activité par des écus.
 
 ## Sanitas Grundversicherungen AG (1509) — TelMed Plus
 
@@ -4839,6 +4189,12 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Sanitas – CGA/CC version 2027](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6009_Sanitas_AVB_KVG_fr.pdf) · p. 14 : Paraphrase : MultiAccess, version 2027.
+
+- [Sanitas — page produit MultiAccess](https://www.sanitas.com/fr/clients-prives/assurances/assurance-de-base/modele-combine.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Sanitas — page produit TelMed Plus](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6009_Sanitas_AVB_KVG_fr.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Sanitas — page produit MultiAccess](https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/KOBE_Befreiung_MultiAccess_fr.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Sanitas Grundversicherungen AG (1509) — TelMed Plus
 
@@ -4944,6 +4300,12 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Groupe Mutuel – CP OptiMed 2025](https://www.groupemutuel.ch/fr/doc/jcr%3A06d446da-2155-43f2-a068-c09e61376bcf/lang%3Afr/RSGM02-F5.pdfRSGM02-F5.pdf) · p. 1 : Paraphrase : Premier recours de la liste reconnue.
 
+- [Philos Assurance — page produit OptiMed (Réseau de soins)](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/Optimed.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Philos Assurance — page produit OptiMed (Réseau de soins)](https://www.groupemutuel.ch/fr/clients-prives/nos-services/contacts-et-services/conseil-medical/Medgate.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Philos Assurance — page produit OptiMed (Réseau de soins)](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/Optimed/Optimed-DeltaSante.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Philos Assurance Maladie SA (1535) — PrimaCare (Médecin de famille)
 
 review_70c57f77ee356068787eeca6 · 2027 · important · open · responsable non attribué
@@ -4964,65 +4326,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Groupe Mutuel – CP PrimaCare 2025](https://www.groupemutuel.ch/fr/doc/jcr%3A80aa1941-3c36-4ffe-8292-7197bb3de981/lang%3Afr/RFGM02-F5.pdfRFGM02-F5.pdf) · p. 1 : Paraphrase : Médecin suisse choisi; délégations coordonnées.
 
-## Philos Assurance Maladie SA (1535) — Assurance de base, OptiMed (Réseau de soins), PrimaCare (Médecin de famille), PrimaFlex (Modèle flexible), SanaTel (Télémédecine)
-
-review_75835524461d9bcc35f3a2c8 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Rabais partenaires sans inscription supplémentaire.
-
-**À confirmer** : Confirmer conditions 2027, accès base seule et éventuelles offres réservées à une complémentaire.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer conditions 2027, accès base seule et éventuelles offres réservées à une complémentaire.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Groupe Mutuel – LeClub FAQ](https://www.groupemutuel.ch/fr/clients-prives/nos-services/Questions-reponses-les-plus-frequentes/LeClub.html) : Paraphrase : Offres partenaires accessibles avec justificatif.
-
-## Philos Assurance Maladie SA (1535) — PrimaFlex (Modèle flexible)
-
-review_778d1d774d33547b39446d8d · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Conseil approfondi; tests diabète, cardiaque, streptocoque, CRP.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [PrimaFlex – services](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/PrimaFlex/services-exclusifs-PrimaFlex.html) : Paraphrase : Liste actuelle, non datée 2027.
-
-## Philos Assurance Maladie SA (1535) — PrimaFlex (Modèle flexible)
-
-review_82de229acacfc11879da17c8 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Franchise supprimée.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [PrimaFlex – services](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/PrimaFlex/services-exclusifs-PrimaFlex.html) : Paraphrase : Liste actuelle, non datée 2027.
+- [Philos Assurance — page produit PrimaCare (Médecin de famille)](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/Primacare.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Philos Assurance Maladie SA (1535) — Assurance de base
 
@@ -5044,6 +4348,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Groupe Mutuel – conditions communes](https://www.groupemutuel.ch/fr/clients-prives/nos-services/Questions-reponses-les-plus-frequentes/adaptation-cga-cp-lamal.html) : Paraphrase : Mutuel et Philos nommés parmi les assureurs concernés.
 
+- [Philos Assurance — page produit Assurance de base](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/Standard.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Philos Assurance — page produit Assurance de base](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Philos Assurance Maladie SA (1535) — PrimaFlex (Modèle flexible)
 
 review_a3b999369cefc1e7058683d5 · 2027 · important · open · responsable non attribué
@@ -5064,25 +4372,9 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Groupe Mutuel – CP PrimaFlex 2025](https://www.groupemutuel.ch/fr/doc/jcr%3A6af9e78c-c08d-4230-baa5-549f90d08368/lang%3Afr/RXGM01-F3.pdfRXGM01-F3.pdf) · p. 1 : Paraphrase : Premier recours flexible; conseil non contraignant.
 
-## Philos Assurance Maladie SA (1535) — PrimaFlex (Modèle flexible)
+- [Philos Assurance — page produit PrimaFlex (Modèle flexible)](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/PrimaFlex.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-review_c71af3631e199dc9f4671025 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Mammographie, IRM, ultrasons admissibles.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [PrimaFlex – services](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/PrimaFlex/services-exclusifs-PrimaFlex.html) : Paraphrase : Liste actuelle, non datée 2027.
+- [Philos Assurance — page produit PrimaFlex (Modèle flexible)](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/PrimaFlex/services-exclusifs-PrimaFlex.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Philos Assurance Maladie SA (1535) — SanaTel (Télémédecine)
 
@@ -5103,6 +4395,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Groupe Mutuel – CP SanaTel 2025](https://www.groupemutuel.ch/fr/doc/jcr%3A9fec869e-5187-445d-ad23-ee9fb747a169/lang%3Afr/RTGM02-F10.pdfRTGM02-F10.pdf) · p. 1 : Paraphrase : Premier recours télémédical; conseil non contraignant.
+
+- [Philos Assurance — page produit SanaTel (Télémédecine)](https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurance-obligatoire-de-soins/SanaTel.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Philos Assurance — page produit SanaTel (Télémédecine)](https://www.groupemutuel.ch/fr/clients-prives/nos-services/compassana.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Assura-Basis SA (1542) — Assurance de base, FeminaVita, Hôpital de confiance, Médecin de famille, MediTel, PreventoMed, QualiMed, PharMed, Réseau de soins
 
@@ -5148,45 +4444,11 @@ Régions : AG-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-
 
 - [Assura – PharMed](https://www.assura.ch/fr/assurances/assurance-de-base/pharmed) : Paraphrase : Médecin coordinateur et pharmacie agréée.
 
-## Assura-Basis SA (1542) — Réseau de soins
+- [Assura — page produit PharMed](https://www.assura.ch/fr/assurances/assurance-de-base/pharmed) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-review_4d22f8aba10f3e7f614e8d9d · 2027 · important · open · responsable non attribué
+- [Assura — page produit PharMed](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2026/08/26/Fiche_Produit_LAMal_PharMed_FR_A5_V7_05.2026_BD_uid_6a8e93ceaafa0.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-Régions : FR-1, FR-2, GE-0, JU-0, VD-1, VD-2, VS-1, VS-2
-
-**Confirmé** : 15 % sur génériques; taxes supprimées ou remise forfaitaire CHF 5 selon partenaire.
-
-**À confirmer** : Confirmer assiette du 15 %, réseau, forfait et exclusions 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer assiette du 15 %, réseau, forfait et exclusions 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Assura – Réseau de soins](https://www.assura.ch/fr/assurances/assurance-de-base/reseau-de-soins) : Paraphrase : Médecin Delta et pharmacie agréée.
-
-## Assura-Basis SA (1542) — PreventoMed
-
-review_5074bba55b0bae4d6e36e5df · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Medgate non facturé.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Assura – PreventoMed fiche 05.2025](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2025/08/25/Fiche_Produit_LAMal_PreventoMed_FR_A5_V3_05.2025_BD_uid_68ac325d58ab0.pdf) · p. 2 : Paraphrase : Téléconsultation et premier conseil pharmacie non facturés.
+- [Assura — page produit PharMed](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2025/12/22/Welcome-Pack_PharMed_FR_V6_11.2025_BD_uid_69491986e1a2a.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Assura-Basis SA (1542) — Réseau de soins
 
@@ -5208,6 +4470,12 @@ Régions : FR-1, FR-2, GE-0, JU-0, VD-1, VD-2, VS-1, VS-2
 
 - [Assura – Réseau de soins](https://www.assura.ch/fr/assurances/assurance-de-base/reseau-de-soins) : Paraphrase : Médecin Delta et pharmacie agréée.
 
+- [Assura — page produit Réseau de soins](https://www.assura.ch/fr/assurances/assurance-de-base/reseau-de-soins) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Assura — page produit Réseau de soins](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2026/08/26/Fiche_Produit_LAMal_RdS_FR_A5_V8_05.2026_BD_uid_6a8e93d886584.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Assura — page produit Réseau de soins](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2025/12/22/Welcome-Pack_Reseau_Soins_FR_V6_10.2025_BD_uid_694919929fa19.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Assura-Basis SA (1542) — MediTel
 
 review_5de1d6f4c391613a91abdf6a · 2027 · important · open · responsable non attribué
@@ -5228,25 +4496,11 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Assura – MediTel](https://www.assura.ch/fr/assurances/assurance-de-base/meditel) : Paraphrase : Télémédecine, pharmacies agréées et gestion numérique imposées.
 
-## Assura-Basis SA (1542) — FeminaVita
+- [Assura — page produit MediTel](https://www.assura.ch/fr/assurances/assurance-de-base/meditel) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-review_60b23928211013656b060c96 · 2027 · important · open · responsable non attribué
+- [Assura — page produit MediTel](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2026/08/26/Assura-Basis_BVB_MediTel_2027.01_F_uid_6a8edd529ffbe.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Téléconsultation partenaire non facturée.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Assura – CSA FeminaVita 2026](https://static.assura.ch/blue/cockpit-assets/2025/10/07/Conditions-spciales-FeminaVita-2026_uid_68e4c1734f5b0.pdf) · p. 2 : Paraphrase : Télémédecine partenaire non facturée.
+- [Assura — page produit MediTel](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2026/09/02/Fiche_Produit_LAMal_MediTel_FR_A5_V1_08.2026_uid_6a98361754240.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Assura-Basis SA (1542) — FeminaVita
 
@@ -5270,105 +4524,11 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Assura – CSA FeminaVita 2026](https://static.assura.ch/blue/cockpit-assets/2025/10/07/Conditions-spciales-FeminaVita-2026_uid_68e4c1734f5b0.pdf) · p. 2 : Paraphrase : Télémédecine partenaire non facturée.
 
-## Assura-Basis SA (1542) — PreventoMed
+- [Assura — page produit FeminaVita](https://www.assura.ch/fr/assurances/assurance-de-base/feminavita) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-review_65a69281bb5db04d252eb7de · 2027 · important · open · responsable non attribué
+- [Assura — page produit FeminaVita](https://static.assura.ch/blue/cockpit-assets/2025/10/07/Conditions-spciales-FeminaVita-2026_uid_68e4c1734f5b0.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Consultation non facturée.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Assura – PreventoMed fiche 05.2025](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2025/08/25/Fiche_Produit_LAMal_PreventoMed_FR_A5_V3_05.2025_BD_uid_68ac325d58ab0.pdf) · p. 2 : Paraphrase : Téléconsultation et premier conseil pharmacie non facturés.
-
-## Assura-Basis SA (1542) — PreventoMed
-
-review_6b3012d8caec47772658182b · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Franchise supprimée; quote-part 10 %.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Assura – PreventoMed](https://www.assura.ch/fr/assurances/assurance-de-base/preventomed) : Paraphrase : Trois premiers recours; exonérations conditionnelles.
-
-## Assura-Basis SA (1542) — FeminaVita
-
-review_715c877d6f6b380b047c1419 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Prévention gynécologique et dépistage mammaire admissible sans franchise.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Assura – FeminaVita](https://www.assura.ch/fr/assurances/assurance-de-base/feminavita) : Paraphrase : Médecin, gynécologue ou Medgate en premier.
-
-## Assura-Basis SA (1542) — Hôpital de confiance
-
-review_7ab6451e2955ee1bdb86ec87 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, NE-0, SO-0, VD-1, VD-2
-
-**Confirmé** : EHC accompagne les soins spécialisés/hospitaliers; médecin du réseau proposé si nécessaire.
-
-**À confirmer** : Confirmer mapping exact code HS / commune / réseau et publier les CSA 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer mapping exact code HS / commune / réseau et publier les CSA 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Assura/EHC – communiqué 16.09.2026](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2026/09/16/16.09.2026-Communiqu-presse_Assura_EHC_Hopital-de-Confiance_WEB_uid_6aaa437a8306f.pdf) · p. 1 : Paraphrase : Hôpital de confiance EHC entre en vigueur au 01.01.2027.
-
-## Assura-Basis SA (1542) — PreventoMed
-
-review_88bd888d96521946d61eadc2 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Sans franchise ni quote-part.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Assura – PreventoMed](https://www.assura.ch/fr/assurances/assurance-de-base/preventomed) : Paraphrase : Trois premiers recours; exonérations conditionnelles.
+- [Assura — page produit FeminaVita](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2026/08/26/Fiche_Produit_LAMal_FeminaVita_FR_A5_V2_05.2026_BD_uid_6a8e93db7520c.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Assura-Basis SA (1542) — MediTel
 
@@ -5390,26 +4550,6 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Assura – MediTel](https://www.assura.ch/fr/assurances/assurance-de-base/meditel) : Paraphrase : Télémédecine, pharmacies agréées et gestion numérique imposées.
 
-## Assura-Basis SA (1542) — PreventoMed
-
-review_975305b398fe0e5004258cc8 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Sein, côlon, prostate; quote-part 10 %.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Assura – PreventoMed](https://www.assura.ch/fr/assurances/assurance-de-base/preventomed) : Paraphrase : Trois premiers recours; exonérations conditionnelles.
-
 ## Assura-Basis SA (1542) — Médecin de famille
 
 review_97ddd1f615aeb2bd0737ea37 · 2027 · important · open · responsable non attribué
@@ -5430,85 +4570,11 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Assura – Médecin de famille](https://www.assura.ch/fr/assurances/assurance-de-base/med-de-famille) : Paraphrase : Médecin choisi en premier.
 
-## Assura-Basis SA (1542) — PharMed
+- [Assura — page produit Médecin de famille](https://www.assura.ch/fr/assurances/assurance-de-base/med-de-famille) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-review_a462aad994647c289205c6fa · 2027 · important · open · responsable non attribué
+- [Assura — page produit Médecin de famille](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2026/08/26/Fiche_Produit_LAMal_Mdf_FR_A5_V6_05.2026_BD_uid_6a8e93cccbbd2.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-Régions : AG-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : 15 % sur génériques; taxes supprimées ou remise forfaitaire CHF 5 selon partenaire.
-
-**À confirmer** : Confirmer assiette du 15 %, réseau, forfait et exclusions 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer assiette du 15 %, réseau, forfait et exclusions 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Assura – PharMed](https://www.assura.ch/fr/assurances/assurance-de-base/pharmed) : Paraphrase : Médecin coordinateur et pharmacie agréée.
-
-## Assura-Basis SA (1542) — Assurance de base, FeminaVita, Hôpital de confiance, Médecin de famille, MediTel, PreventoMed, QualiMed, PharMed, Réseau de soins
-
-review_adf0f4e62bd3a84a666b0409 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : 50 % de réduction sur l'adhésion payante Premium.
-
-**À confirmer** : Tarif de l'adhésion et offre 2027 à confirmer.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Tarif de l'adhésion et offre 2027 à confirmer.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Club Assura – Sun Store](https://www.assura.ch/fr/club/offres-pharmacie/sun-store) : Paraphrase : Adhésion premium à moitié prix jusqu'à fin 2026.
-
-## Assura-Basis SA (1542) — Assurance de base, FeminaVita, Hôpital de confiance, Médecin de famille, MediTel, PreventoMed, QualiMed, PharMed, Réseau de soins
-
-review_b98fa94addb9945df596d405 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Bon Migros CHF 30.
-
-**À confirmer** : Existe-t-il une offre distincte en 2027 ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Existe-t-il une offre distincte en 2027 ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Club Assura – Zur Rose](https://www.assura.ch/fr/club/offres-pharmacie/zur-rose) : Paraphrase : Rabais, exclusions et cadeau temporaire.
-
-## Assura-Basis SA (1542) — Assurance de base, FeminaVita, Hôpital de confiance, Médecin de famille, MediTel, PreventoMed, QualiMed, PharMed, Réseau de soins
-
-review_d3de7780aa944fe08955e8bb · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : 10 % sur génériques et biosimilaires admissibles; livraison sans frais.
-
-**À confirmer** : Conditions 2027 et priorité entre tarif club 10 % et tarif modèle 15 % ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Conditions 2027 et priorité entre tarif club 10 % et tarif modèle 15 % ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Club Assura – Zur Rose](https://www.assura.ch/fr/club/offres-pharmacie/zur-rose) : Paraphrase : Rabais, exclusions et cadeau temporaire.
+- [Assura — page produit Médecin de famille](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2024/10/08/Assura-Basis_CSA_MF_2025.01_F_uid_6704e1e24dd96.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Assura-Basis SA (1542) — QualiMed
 
@@ -5532,45 +4598,11 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Assura – CSA QualiMed 2026](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2025/09/29/Assura-Basis_CSA-QualiMed_FR_PDF_uid_68da81f4a1b73.pdf) · p. 2 : Paraphrase : BetterDoc sans frais; choix parmi recommandations obligatoire.
 
-## Assura-Basis SA (1542) — Assurance de base, FeminaVita, Hôpital de confiance, Médecin de famille, MediTel, PreventoMed, QualiMed, PharMed, Réseau de soins
+- [Assura — page produit QualiMed](https://www.assura.ch/fr/assurances/assurance-de-base/qualimed) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-review_e536bb6832d58926f8cfbc5f · 2027 · important · open · responsable non attribué
+- [Assura — page produit QualiMed](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2025/09/29/Assura-Basis_CSA-QualiMed_FR_PDF_uid_68da81f4a1b73.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : 20 % sur abonnement Energy 12 ou 24 mois.
-
-**À confirmer** : Obtenir l'éventuelle nouvelle offre 2027 et son prix final.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Obtenir l'éventuelle nouvelle offre 2027 et son prix final.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Club Assura – Let's Go Fitness](https://www.assura.ch/fr/club/offres-sport/lets-go-fitness) : Paraphrase : Offre limitée au 31.12.2026.
-
-## Assura-Basis SA (1542) — QualiMed
-
-review_f312b98b6ce6476f2110dee8 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Recherche et recommandation de spécialistes non facturées.
-
-**À confirmer** : Liste 2027 et sanctions : confirmer, notamment cardiologie, orthopédie, gastroentérologie et urologie.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Liste 2027 et sanctions : confirmer, notamment cardiologie, orthopédie, gastroentérologie et urologie.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Assura – CSA QualiMed 2026](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2025/09/29/Assura-Basis_CSA-QualiMed_FR_PDF_uid_68da81f4a1b73.pdf) · p. 2 : Paraphrase : BetterDoc sans frais; choix parmi recommandations obligatoire.
+- [Assura — page produit QualiMed](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2026/08/26/Fiche_Produit_LAMal_QualiMed_FR_A5_V8_05.2026_BD_uid_6a8e93d7492bb.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Assura-Basis SA (1542) — Assurance de base
 
@@ -5591,6 +4623,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Assura – modèles de base](https://www.assura.ch/fr/assurances/assurances-de-base) : Paraphrase : Basis, modèle ordinaire.
+
+- [Assura — page produit Assurance de base](https://www.assura.ch/fr/assurances/assurance-de-base/basis) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Assura — page produit Assurance de base](https://passuraassets01.blob.core.windows.net/blue/cockpit-assets/2026/08/26/Fiche_Produit_LAMal_Basis_FR_A5_V6_05.2026_BD_uid_6a8e93d9e8fa8.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Visana AG (1555) — Assurance de base, Combi Care, HMO plus, Med Call, Managed Care, Med Direct, Tel Care, Tel Doc, Plan de santé VIVA
 
@@ -5656,6 +4692,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Visana/sana24/Galenos – Managed Care 2024](https://www.galenos.ch/wp-content/uploads/2020/09/AVB_Krankenpflegeversicherung_Managed_Care_KVG_de.pdf) · p. 1 : Paraphrase : Médecin du réseau coordinateur.
 
+- [Visana — page produit Managed Care](https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurance-de-base/medecin-de-famille/managed-care) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [sana24 — page produit Managed Care sans capitation](https://www.galenos.ch/wp-content/uploads/2020/09/AVB_Krankenpflegeversicherung_Managed_Care_KVG_de.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Visana AG (1555) — Tel Care
 
 review_17816aed6629c88273edd5e7 · 2027 · important · open · responsable non attribué
@@ -5696,6 +4736,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Visana – modèles, mars 2026](https://www.visana.ch/dam/jcr%3Ad2abc20f-8e0f-465e-a7df-e37818934810/260330_Factsheet_Sparmodelle_OKP_A4_FR_Web.pdf) · p. 2 : Paraphrase : Tableau des parcours.
 
+- [Visana — page produit Med Call](https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurance-de-base/telemedicine/med-call) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [sana24 — page produit Med Call](https://www.visana.ch/dam/jcr:e926f292-c41f-4c82-a507-10a86cff7bd9/CGA_Assurance_des_soins_Med_Call_LAMal_fr.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Visana AG (1555) — Med Direct
 
 review_2b64eea260ebc1c53a6e4245 · 2027 · important · open · responsable non attribué
@@ -5715,6 +4759,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Visana/sana24/Galenos – Med Direct 2024](https://www.galenos.ch/wp-content/uploads/2020/09/AVB_Krankenpflegeversicherung_Med_Direct_KVG_de.pdf) · p. 3 : Paraphrase : Médecin reconnu préalable.
+
+- [Visana — page produit Med Direct](https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurance-de-base/medecin-de-famille/med-direct) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [sana24 — page produit Med Direct](https://www.galenos.ch/wp-content/uploads/2020/09/AVB_Krankenpflegeversicherung_Med_Direct_KVG_de.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Visana AG (1555) — Tel Doc
 
@@ -5736,45 +4784,9 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Visana/sana24/Galenos – Tel Doc 2026](https://www.galenos.ch/wp-content/uploads/2025/08/avb-krankenpflegeversicherung-tel-doc.pdf) · p. 4 : Paraphrase : Medi24 fixe le parcours.
 
-## Visana AG (1555) — Assurance de base, Combi Care, HMO plus, Med Call, Managed Care, Med Direct, Tel Care, Tel Doc, Plan de santé VIVA
+- [Visana — page produit Tel Doc](https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurance-de-base/telemedicine/tel-doc) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-review_523c921d055c7c3ebb3a23c8 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Jusqu'à CHF 120 par personne/an; paiement dès CHF 5.
-
-**À confirmer** : Confirmer LCA admissibles, barème 2027, échéance et paiement par personne.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer LCA admissibles, barème 2027, échéance et paiement par personne.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Visana – myPoints](https://www.visana.ch/fr/clientele-privee/services-et-contact/services/decouvrez-avantages/programme-de-bonus-mypoints) : Paraphrase : Bonus monétaire réservé aux complémentaires.
-
-## Visana AG (1555) — HMO plus
-
-review_62871293bad62eb57c543bcc · 2027 · important · open · responsable non attribué
-
-Régions : BE-1, BE-2, BE-3
-
-**Confirmé** : 20 % de rabais annoncé sur génériques du partenaire.
-
-**À confirmer** : Confirmer assiette du rabais, limites de prix, biosimilaires, cumul et conditions 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer assiette du rabais, limites de prix, biosimilaires, cumul et conditions 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Visana – HMO plus](https://www.visana.ch/en/individuals/insurance/illness-and-accident/basic-insurance/general-practitioner/hmo-plus) : Paraphrase : Réseau, pharmacies et prestations à coordonner.
+- [sana24 — page produit Tel Doc](https://www.galenos.ch/wp-content/uploads/2025/08/avb-krankenpflegeversicherung-tel-doc.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Visana AG (1555) — Assurance de base
 
@@ -5795,6 +4807,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Visana – assurance de base](https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurance-de-base/medecin-de-famille) : Paraphrase : Gammes de base et services.
+
+- [Visana — page produit Assurance de base](https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurance-de-base/modele-traditionnel) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Visana — page produit Assurance de base](https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurance-de-base) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Visana AG (1555) — Plan de santé VIVA
 
@@ -5836,25 +4852,9 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Visana/sana24/Galenos – Combi Care 2026](https://www.galenos.ch/wp-content/uploads/2025/08/avb-krankenpflegeversicherung-combi-care.pdf) · p. 1 : Paraphrase : Premier recours et instructions obligatoires.
 
-## Visana AG (1555) — Tel Doc
+- [Visana — page produit Combi Care](https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurance-de-base/combi-care) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-review_e9ae3d15d0264f6ff3793149 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Conseil Medi24 annoncé gratuit.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Visana/sana24/Galenos – Tel Doc 2026](https://www.galenos.ch/wp-content/uploads/2025/08/avb-krankenpflegeversicherung-tel-doc.pdf) · p. 5 : Paraphrase : Conseil téléphonique gratuit.
+- [sana24 — page produit Combi Care](https://www.galenos.ch/wp-content/uploads/2025/08/avb-krankenpflegeversicherung-combi-care.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Visana AG (1555) — Plan de santé VIVA
 
@@ -5875,6 +4875,12 @@ Régions : BE-1, BE-2, BE-3, JU-0, NE-0, SO-0
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Visana/sana24/Galenos – VIVA valable 2026](https://www.galenos.ch/wp-content/uploads/2025/10/AVB_Krankenpflegeversicherung_VIVA_-_Gesundheitsplan_KVG_2025-01_de.pdf) · p. 4 : Paraphrase : Organisation intégrée et génériques.
+
+- [Visana — page produit Plan de santé VIVA](https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurance-de-base/viva) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [sana24 — page produit Plan de santé VIVA](https://www.galenos.ch/wp-content/uploads/2025/10/CGA_Assurance_obligatoire_des_soins_Plan_de_sante_VIVA_LAMal_2025-01_fr.pdf) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Visana — page produit Plan de santé VIVA](https://viva-health.ch/fr/) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Agrisano Krankenkasse AG (1560) — AGRIcontact, AGRIeco, AGRIsmart, Assurance de base
 
@@ -5920,6 +4926,8 @@ Régions : AG-0, AI-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-0, GR-
 
 - [Agrisano – règlement AGRI-contact 2019](https://www.agrisano.ch/fileadmin/agrisanoch/03_Services/Krankenkasse/Reglement_AGRI-contact_f.pdf) · p. 1 : Paraphrase : Medgate fixe un plan obligatoire.
 
+- [Agrisano — page produit AGRIcontact](https://www.agrisano.ch/fr/produits/caisse-maladie-assurance-de-base/modele-de-telemedecine-agri-contact) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Agrisano Krankenkasse AG (1560) — AGRIeco
 
 review_18992a6644373f283d870efc · 2027 · important · open · responsable non attribué
@@ -5940,25 +4948,7 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-
 
 - [Agrisano – règlement AGRI-eco 2023](https://www.agrisano.ch/fileadmin/agrisanoch/03_Services/Krankenkasse/Reglement_AGRI-eco_f.pdf) · p. 1 : Paraphrase : Médecin agréé et accords préalables.
 
-## Agrisano Krankenkasse AG (1560) — AGRIcontact, AGRIeco, AGRIsmart, Assurance de base
-
-review_2e46fa01e30f70cfd2f1795b · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Aide discrétionnaire sur dossier.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Agrisano – prévention et fonds](https://www.agrisano.ch/fr/produits/prevention-et-couverture-sociale) : Paraphrase : Mesures agricoles selon couverture et situation.
+- [Agrisano — page produit AGRIeco](https://www.agrisano.ch/fr/produits/caisse-maladie-assurance-de-base/assurance-medecin-de-famille-agri-eco) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Agrisano Krankenkasse AG (1560) — AGRIeco
 
@@ -5980,86 +4970,6 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-
 
 - [Agrisano – règlement AGRI-eco 2023](https://www.agrisano.ch/fileadmin/agrisanoch/03_Services/Krankenkasse/Reglement_AGRI-eco_f.pdf) · p. 1 : Paraphrase : Médecin agréé et accords préalables.
 
-## Agrisano Krankenkasse AG (1560) — AGRIcontact, AGRIeco, AGRIsmart, Assurance de base
-
-review_48dedbbea47b957a66ee21d8 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : CHF 50 de rabais cours et bon SPAA CHF 50.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Agrisano – prévention et fonds](https://www.agrisano.ch/fr/produits/prevention-et-couverture-sociale) : Paraphrase : Mesures agricoles selon couverture et situation.
-
-## Agrisano Krankenkasse AG (1560) — AGRIcontact, AGRIeco, AGRIsmart, Assurance de base
-
-review_4ddbd78446949549c4a3f8b9 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Jusqu'à CHF 100/jour, 30 jours/an.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Agrisano – prévention et fonds](https://www.agrisano.ch/fr/produits/prevention-et-couverture-sociale) : Paraphrase : Mesures agricoles selon couverture et situation.
-
-## Agrisano Krankenkasse AG (1560) — AGRIcontact, AGRIeco, Assurance de base
-
-review_5aa5aee89bed8958efdacecf · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Gratuité annoncée par Medgate pour Agrisano hors AGRI-smart.
-
-**À confirmer** : Agrisano confirme-t-il sans franchise ni quote-part en 2027 pour chacun des trois modèles ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Agrisano confirme-t-il sans franchise ni quote-part en 2027 pour chacun des trois modèles ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Medgate – partenaires au 01.01.2026](https://www.medgate.ch/en-us/about-us/our-partners) : Paraphrase : Agrisano gratuit sauf AGRI-smart.
-
-## Agrisano Krankenkasse AG (1560) — AGRIcontact, AGRIeco, AGRIsmart, Assurance de base
-
-review_76a306709b15c930b441f102 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : 10 % dès CHF 100.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Agrisano – prévention et fonds](https://www.agrisano.ch/fr/produits/prevention-et-couverture-sociale) : Paraphrase : Mesures agricoles selon couverture et situation.
-
 ## Agrisano Krankenkasse AG (1560) — Assurance de base
 
 review_7a46c91b1c13e09f32685c22 · 2027 · important · open · responsable non attribué
@@ -6080,6 +4990,8 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Agrisano – modèles de base](https://www.agrisano.ch/fr/modeles-dassurances-de-base-a-chacun-le-sien) : Paraphrase : BASIS et trois alternatives.
 
+- [Agrisano — page produit Assurance de base](https://www.agrisano.ch/fr/produits/caisse-maladie-assurance-de-base/assurance-de-base-basis) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Agrisano Krankenkasse AG (1560) — AGRIsmart
 
 review_9f423d35b96af39c8bea2bf2 · 2027 · important · open · responsable non attribué
@@ -6099,6 +5011,8 @@ Régions : AG-0, AI-0, AR-0, BE-2, BE-3, BL-2, BS-0, FR-2, GL-0, GR-2, GR-3, JU-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Agrisano – règlement AGRI-smart 2024](https://www.agrisano.ch/fileadmin/agrisanoch/03_Services/Krankenkasse/Reglement_AGRI-smart_f.pdf) · p. 1 : Paraphrase : Application préalable et parcours contraignant.
+
+- [Agrisano — page produit AGRIsmart](https://www.agrisano.ch/fr/produits/caisse-maladie-assurance-de-base/agri-smart-modele-dassurance-numerique) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Agrisano Krankenkasse AG (1560) — AGRIsmart
 
@@ -6139,46 +5053,6 @@ Régions : AG-0, AI-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GL-0, GR-
 **Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
 
 - [Agrisano – règlement AGRI-contact 2019](https://www.agrisano.ch/fileadmin/agrisanoch/03_Services/Krankenkasse/Reglement_AGRI-contact_f.pdf) · p. 1 : Paraphrase : Medgate fixe un plan obligatoire.
-
-## Agrisano Krankenkasse AG (1560) — AGRIcontact, AGRIeco, AGRIsmart, Assurance de base
-
-review_c61651efb5ed52aa538de01e · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Remboursement CHF 300.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Agrisano – prévention et fonds](https://www.agrisano.ch/fr/produits/prevention-et-couverture-sociale) : Paraphrase : Mesures agricoles selon couverture et situation.
-
-## Agrisano Krankenkasse AG (1560) — AGRIsmart
-
-review_d6445e6444fcb5a39b3f73f0 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-2, BE-3, BL-2, BS-0, FR-2, GL-0, GR-2, GR-3, JU-0, LU-2, LU-3, NE-0, NW-0, OW-0, SG-2, SG-3, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VS-2, ZG-0, ZH-2, ZH-3
-
-**Confirmé** : Prise de contact obligatoire; avis non contraignant.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Agrisano – règlement AGRI-smart 2024](https://www.agrisano.ch/fileadmin/agrisanoch/03_Services/Krankenkasse/Reglement_AGRI-smart_f.pdf) · p. 1 : Paraphrase : Application préalable et parcours contraignant.
 
 ## Helsana Assurances SA (1562) — Assurance de base, Helsana BeneFit PLUS Médecin de famille R4, Helsana BeneFit PLUS Médecin de famille R3, Helsana BeneFit PLUS Médecin de famille R2, Helsana BeneFit PLUS Médecin de famille R1, Helsana BeneFit PLUS Flexmed, Helsana BeneFit PLUS Telemed, Helsana Premed-24
 
@@ -6224,6 +5098,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Helsana – BeneFit PLUS conditions 2025](https://www.helsana.ch/dam/de/pdf/private/versicherungsbedingungen/benefit-plus.pdf) · p. 6 : Paraphrase : Flexmed : Compassana puis point reconnu.
 
+- [Helsana — page produit Helsana BeneFit PLUS Flexmed](https://www.helsana.ch/fr/prives/assurances/assurance-de-base/benefit-plus-flexmed.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Helsana — page produit Helsana BeneFit PLUS Flexmed](https://www.helsana.ch/de/private/versicherungen/grundversicherung/benefit-plus-flexmed.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
 ## Helsana Assurances SA (1562) — Helsana BeneFit PLUS Telemed
 
 review_83cb165a59583f17daae5c08 · 2027 · important · open · responsable non attribué
@@ -6244,45 +5122,9 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Helsana – BeneFit PLUS télémédecine](https://www.helsana.ch/de/private/versicherungen/grundversicherung/benefit-plus-telmed.html) : Paraphrase : Medi24 en premier; instructions contraignantes.
 
-## Helsana Assurances SA (1562) — Helsana BeneFit PLUS Médecin de famille R4, Helsana BeneFit PLUS Médecin de famille R3, Helsana BeneFit PLUS Médecin de famille R2, Helsana BeneFit PLUS Médecin de famille R1, Helsana BeneFit PLUS Flexmed, Helsana BeneFit PLUS Telemed, Helsana Premed-24
+- [Helsana — page produit Helsana BeneFit PLUS Telemed](https://www.helsana.ch/fr/prives/assurances/assurance-de-base/benefit-plus-telemedecine.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-review_8f66c238202c4b64b693b904 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Jusqu'à trois recommandations après analyse du dossier; service gratuit.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Helsana – BetterDoc](https://www.helsana.ch/de/private/services/beratungsservices/betterdoc.html) : Paraphrase : Service gratuit pour modèles alternatifs; recommandation facultative.
-
-## Helsana Assurances SA (1562) — Assurance de base, Helsana BeneFit PLUS Médecin de famille R4, Helsana BeneFit PLUS Médecin de famille R3, Helsana BeneFit PLUS Médecin de famille R2, Helsana BeneFit PLUS Médecin de famille R1, Helsana BeneFit PLUS Flexmed, Helsana BeneFit PLUS Telemed, Helsana Premed-24
-
-review_961780c1f9263a03e9894c47 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Barème actuel : jusqu'à 7500 points / CHF 75 par an.
-
-**À confirmer** : Fournir nouvelles conditions Helsana+ 2027 avant tout chiffrage dans le comparateur.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Fournir nouvelles conditions Helsana+ 2027 avant tout chiffrage dans le comparateur.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Helsana+ – annonce de modification 2027](https://www.helsana.ch/fr/prives/services/apps/helsana-plus.html) : Paraphrase : Conditions adaptées au 01.01.2027; montants actuels à ne pas reconduire.
+- [Helsana — page produit Helsana BeneFit PLUS Telemed](https://www.helsana.ch/de/private/versicherungen/grundversicherung/benefit-plus-telmed.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Helsana Assurances SA (1562) — Helsana Premed-24
 
@@ -6304,45 +5146,11 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 
 - [Helsana – PREMED-24](https://www.helsana.ch/en/individuals/insurance/basic-insurance/premed-24.html) : Paraphrase : Premier appel; recommandation facultative.
 
-## Helsana Assurances SA (1562) — Helsana BeneFit PLUS Flexmed, Helsana BeneFit PLUS Telemed, Helsana Premed-24
+- [Helsana — page produit Helsana Premed-24](https://www.helsana.ch/fr/prives/assurances/assurance-de-base/premed-24.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-review_9fd52117701ec714cc089d16 · 2027 · important · open · responsable non attribué
+- [Helsana — page produit Helsana Premed-24](https://www.helsana.ch/de/private/versicherungen/grundversicherung/premed-24.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Conseil approfondi sans frais.
-
-**À confirmer** : Confirmer barème/participation et partenaires valides en 2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer barème/participation et partenaires valides en 2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Helsana – pharmacies partenaires](https://www.helsana.ch/de/private/services/partnerrabatte/partnerapotheken.html) : Paraphrase : Conseil approfondi gratuit pour trois modèles.
-
-## Helsana Assurances SA (1562) — Assurance de base, Helsana BeneFit PLUS Médecin de famille R4, Helsana BeneFit PLUS Médecin de famille R3, Helsana BeneFit PLUS Médecin de famille R2, Helsana BeneFit PLUS Médecin de famille R1, Helsana BeneFit PLUS Flexmed, Helsana BeneFit PLUS Telemed, Helsana Premed-24
-
-review_ce3223ef756a83bff7cac742 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Barème actuel : 30000 points; conversion annoncée supérieure à CHF 300.
-
-**À confirmer** : Quels produits, conversion, plafond et conditions de cumul dans le nouveau programme 2027 ?
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Quels produits, conversion, plafond et conditions de cumul dans le nouveau programme 2027 ?
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Helsana+ – annonce de modification 2027](https://www.helsana.ch/fr/prives/services/apps/helsana-plus.html) : Paraphrase : Conditions adaptées au 01.01.2027; montants actuels à ne pas reconduire.
+- [Helsana — page produit Helsana Premed-24](https://www.helsana.ch/en/individuals/insurance/basic-insurance/premed-24.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Helsana Assurances SA (1562) — Assurance de base
 
@@ -6363,6 +5171,10 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Helsana – BASIS](https://www.helsana.ch/de/private/versicherungen/grundversicherung/basis.html) : Paraphrase : Libre choix légal.
+
+- [Helsana — page produit Assurance de base](https://www.helsana.ch/fr/prives/assurances/assurance-de-base/basis.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
+
+- [Helsana — page produit Assurance de base](https://www.helsana.ch/de/private/versicherungen/grundversicherung/basis.html) : Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.
 
 ## Helsana Assurances SA (1562) — Helsana BeneFit PLUS Flexmed
 
@@ -6407,26 +5219,6 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 - [OPAS consolidée — état affiché au 01.01.2027](https://www.fedlex.admin.ch/filestore/fedlex.data.admin.ch/eli/cc/1995/4964_4964_4964/20270101/fr/pdf-a/fedlex-data-admin-ch-eli-cc-1995-4964_4964_4964-20270101-fr-pdf-a.pdf) · p. 33 : Divergence constatée le 01.10.2026, pages 24 et 33 : ancienne clause HPV et liste sans Glaris, malgré le RO publié. Ne pas résoudre par une question personnelle.
 
 - [OFSP — franchise et quote-part des vaccinations](https://www.bag.admin.ch/fr/vaccinations-prophylactiques) : Vaccinations et conseils admissibles OPAS 12a exonérés de franchise depuis 2026 ; quote-part restante. Conditions de prestations à lire avec RO 2026 336.
-
-## sana24 AG (1568) — Assurance de base, Combi Care, Med Call, Managed Care, Managed Care sans capitation, Med Direct, Tel Care, Tel Doc, Plan de santé VIVA
-
-review_2496f37a5d344c36e027ca43 · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Éligibilité liée à la complémentaire et au compte myVisana.
-
-**À confirmer** : Quelles polices LCA associées aux clients de cette marque ouvrent myPoints en 2027 ? Montant non transféré automatiquement.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Quelles polices LCA associées aux clients de cette marque ouvrent myPoints en 2027 ? Montant non transféré automatiquement.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Groupe Visana – conditions myPoints 05.2025](https://www.visana.ch/fr/dam/jcr%3A920c5faf-aaa7-435c-a464-f8e5dcc42f5e/mypoints-teilnahmebedingungen-2025-f.2026-02-06-10-33-33.pdf) · p. 3 : Paraphrase : Accès par LCA active visible à l'inscription.
 
 ## sana24 AG (1568) — Combi Care
 
@@ -6527,26 +5319,6 @@ Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-
 **Action** : Contrôler les documents et annexes cités, puis obtenir une confirmation écrite des éléments manquants auprès de l’assureur. Aucun message envoyé automatiquement.
 
 - [Visana/sana24/Galenos – Combi Care 2026](https://www.galenos.ch/wp-content/uploads/2025/08/avb-krankenpflegeversicherung-combi-care.pdf) · p. 1 : Paraphrase : Premier recours et instructions obligatoires.
-
-## sana24 AG (1568) — Tel Doc
-
-review_79fbfc5c249a40b063ce0efe · 2027 · important · open · responsable non attribué
-
-Régions : AG-0, AI-0, AR-0, BE-1, BE-2, BE-3, BL-1, BL-2, BS-0, FR-1, FR-2, GE-0, GL-0, GR-1, GR-2, GR-3, JU-0, LU-1, LU-2, LU-3, NE-0, NW-0, OW-0, SG-1, SG-2, SG-3, SH-1, SH-2, SO-0, SZ-0, TG-0, TI-1, TI-2, UR-0, VD-1, VD-2, VS-1, VS-2, ZG-0, ZH-1, ZH-2, ZH-3
-
-**Confirmé** : Conseil Medi24 annoncé gratuit.
-
-**À confirmer** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Impact** : Périmètre, accès, gratuité ou utilité du service à confirmer avant valorisation différentielle.
-
-**Traitement provisoire** : Information affichée avec ses réserves. Montant certain nul sauf formule et conditions personnelles explicitement validées pour cette année.
-
-**Question** : Confirmer la validité et les conditions au 01.01.2027.
-
-**Action** : Vérifier le passage et les exclusions ; demander une confirmation précise à l’assureur si le document ne suffit pas.
-
-- [Visana/sana24/Galenos – Tel Doc 2026](https://www.galenos.ch/wp-content/uploads/2025/08/avb-krankenpflegeversicherung-tel-doc.pdf) · p. 5 : Paraphrase : Conseil téléphonique gratuit.
 
 ## sana24 AG (1568) — Assurance de base
 

@@ -8,6 +8,26 @@ type Benefit = EvidenceCatalog["benefits"][number];
 type Icon = ComponentProps<typeof HealthIcon>["name"];
 
 const illustrations: Record<string, Icon> = {
+  // Canonical taxonomy keys.
+  partner_discounts: "bag",
+  health_product_discounts: "bag",
+  pharmacy_purchase_discount: "pharmacy",
+  mail_order_pharmacy: "pharmacy",
+  fitness_discounts: "fitness",
+  prevention_courses: "fitness",
+  activity_rewards_program: "gift",
+  supplementary_premium_discount: "family",
+  referral_reward: "family",
+  assistance_services: "shield",
+  hardship_fund: "heart",
+  occupational_prevention: "shield",
+  health_legal_protection: "shield",
+  premium_payment_discount: "discount",
+  insurance_bundle_discount: "discount",
+  health_coaching: "heart",
+  mental_health_support: "heart",
+  vaccination_cost_share_waiver: "pharmacy",
+  // Keys of catalogues published before the taxonomy.
   member_shop_discounts: "bag",
   member_hotel_discounts: "hotel",
   hotelcard_discount: "hotel",
@@ -60,6 +80,7 @@ export function HealthClubBenefits({
   const [selected, setSelected] = useState<Benefit | null>(null);
   const confirmed =
     selected?.year === year && selected.yearConfirmed && selected.verification === "verified";
+  const labels = new Map(catalog.benefitTypes.map((type) => [type.key, type.label]));
   return (
     <>
       <ul className="hi-club-grid">
@@ -74,6 +95,9 @@ export function HealthClubBenefits({
               <span className="hi-club-art" aria-hidden="true">
                 <HealthIcon name={illustrationFor(benefit)} size={48} />
               </span>
+              {labels.has(benefit.equivalenceGroup) && (
+                <span className="hi-benefit-type">{labels.get(benefit.equivalenceGroup)}</span>
+              )}
               <strong>{benefit.title}</strong>
               <span className="hi-club-advantage">{benefit.effect}</span>
             </button>
@@ -87,6 +111,9 @@ export function HealthClubBenefits({
       >
         {selected && (
           <div className="hi-club-detail">
+            {labels.has(selected.equivalenceGroup) && (
+              <p className="hi-benefit-type">{labels.get(selected.equivalenceGroup)}</p>
+            )}
             <p>{selected.effect}</p>
             <p className="hi-small">
               {copy.evidence.nature[selected.classification]} · {year}

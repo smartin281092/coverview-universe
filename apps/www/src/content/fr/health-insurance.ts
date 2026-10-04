@@ -172,6 +172,19 @@ export const healthCopy = {
   benefitsFilter: "Prestations confirmées pour 2027",
   benefitFilterHint:
     "Seuls les avantages explicitement confirmés pour 2027 et sans complémentaire sont retenus. Aucun résultat ne signifie pas que les autres modèles n’offrent pas cette prestation.",
+  benefitTypesFilter: "Prestations supplémentaires",
+  benefitTypesFilterHint:
+    "Prestations offertes avec l’assurance de base seule, gratuitement, selon les sources officielles des assureurs. Les noms commerciaux sont regroupés sous un libellé commun. Une prestation non documentée n’est pas forcément absente ; un maintien en 2027 non daté reste à confirmer.",
+  benefitTypeModels: (count: number) =>
+    `${count} ${count > 1 ? "modèles concernés" : "modèle concerné"}`,
+  benefitFamilies: {
+    telemedicine: "Télémédecine et conseil médical",
+    pharmacy: "Pharmacie et médicaments",
+    cost_sharing: "Participation aux coûts",
+    prevention: "Prévention et santé",
+    access: "Orientation et coordination des soins",
+    members: "Avantages membres",
+  },
   apply: "Voir les primes",
   close: "Fermer",
   cancel: "Annuler",

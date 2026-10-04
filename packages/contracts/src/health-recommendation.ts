@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { healthCompareInputSchema, healthOfferSchema } from "./health-insurance.js";
+import {
+  benefitFamilySchema,
+  healthCompareInputSchema,
+  healthOfferSchema,
+} from "./health-insurance.js";
 
 const money = z.number().int().min(0).max(100_000_000);
 export const recommendationAnswerSchema = z
@@ -63,6 +67,19 @@ export const evidenceSourceSchema = z
     yearExplicit: z.boolean(),
   })
   .strict();
+// Canonical benefit taxonomy: insurers name the same advantage differently; every fact of a
+// catalogue declaring this taxonomy points to exactly one key. The key is also a compare filter.
+export const benefitTypeSchema = z
+  .object({
+    key: z.string().regex(/^[a-z][a-z_]{1,59}$/),
+    family: benefitFamilySchema,
+    label: z.string().min(2).max(120),
+    description: z.string().max(600),
+    synonyms: z.array(z.string().max(160)).max(80),
+    // service/financial types can be preferred by the visitor; condition/none are informative only.
+    valuation: z.enum(["service", "financial", "condition", "none"]),
+  })
+  .strict();
 export const evidenceBenefitSchema = z
   .object({
     id: z.string().max(100),
@@ -70,6 +87,7 @@ export const evidenceBenefitSchema = z
     modelIds: z.array(z.string()).max(200),
     year: z.number().int(),
     title: z.string().max(300),
+    insurerTerm: z.string().max(200).optional(),
     equivalenceGroup: z.string().max(100),
     questionAudience: z.enum(["all", "female", "male"]).optional(),
     classification: z.enum([
@@ -81,14 +99,7 @@ export const evidenceBenefitSchema = z
       "public_service",
       "unknown",
     ]),
-    category: z.enum([
-      "pharmacy",
-      "telemedicine",
-      "cost_sharing",
-      "prevention",
-      "access",
-      "members",
-    ]),
+    category: benefitFamilySchema,
     effect: z.string().max(4000),
     conditions: z.string().max(5000),
     exclusions: z.string().max(3000),
@@ -231,6 +242,7 @@ export const evidenceCatalogSchema = z
       )
       .max(100),
     models: z.array(researchModelSchema).max(1000),
+    benefitTypes: z.array(benefitTypeSchema).max(200).default([]),
     benefits: z.array(evidenceBenefitSchema).max(5000),
     sources: z.array(evidenceSourceSchema).max(3000),
     cases: z.array(operatorCaseSchema).max(2000),
@@ -250,6 +262,9 @@ export const recommendationRulesSchema = z
       })
       .strict(),
     serviceContributionCap: z.number().int().min(1).max(10),
+    // Evidence needed for a preferred benefit type to add service utility. Amounts always require
+    // verified, year-confirmed contractual evidence, whatever this setting.
+    serviceEvidence: z.enum(["official", "verified"]).default("official"),
     meaningfulAnnualDifferenceMinor: money,
     tieAnnualMinor: money,
     researchReviewDays: z.number().int().min(1).max(365),
@@ -265,9 +280,15 @@ export const recommendationQuestionSchema = z
     multiple: z.boolean(),
     options: z
       .array(
-        z.object({ value: z.string(), label: z.string(), exclusive: z.boolean().default(false) }),
+        z.object({
+          value: z.string(),
+          label: z.string(),
+          exclusive: z.boolean().default(false),
+          group: z.string().max(120).optional(),
+          description: z.string().max(600).optional(),
+        }),
       )
-      .max(20),
+      .max(80),
     amount: z.enum(["none", "care", "reserve", "extra_cost", "spending"]),
     reason: z.enum([
       "tariff",
@@ -326,6 +347,17 @@ export const rankedRecommendationSchema = z
         }),
       )
       .max(300),
+    // One entry per benefit type the visitor said they would use. "Not documented" is not absence.
+    preferredBenefits: z
+      .array(
+        z.object({
+          type: z.string(),
+          status: z.enum(["counted", "counted_unconfirmed", "conditional", "not_documented"]),
+          benefitIds: z.array(z.string()).max(30),
+        }),
+      )
+      .max(60)
+      .default([]),
     peripheralSavingMinor: money,
     tied: z.boolean(),
   })
@@ -434,5 +466,6 @@ export type RecommendationQuestion = z.infer<typeof recommendationQuestionSchema
 export type RecommendationRules = z.infer<typeof recommendationRulesSchema>;
 export type EvidenceCatalog = z.infer<typeof evidenceCatalogSchema>;
 export type EvidenceBenefit = z.infer<typeof evidenceBenefitSchema>;
+export type BenefitType = z.infer<typeof benefitTypeSchema>;
 export type ResearchModel = z.infer<typeof researchModelSchema>;
 export type RankedRecommendation = z.infer<typeof rankedRecommendationSchema>;

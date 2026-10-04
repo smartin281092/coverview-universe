@@ -1,4 +1,7 @@
-import type { RecommendationQuestion } from "@coverview/contracts/health-recommendation";
+import type {
+  BenefitType,
+  RecommendationQuestion,
+} from "@coverview/contracts/health-recommendation";
 type Definition = Omit<RecommendationQuestion, "reason" | "sensitivity" | "subjectId">;
 const options = (...values: [string, string, boolean?][]) =>
   values.map(([value, label, exclusive]) => ({ value, label, exclusive: exclusive ?? false }));
@@ -227,6 +230,14 @@ export const recommendationQuestions: Definition[] = [
     true,
   ),
   question(
+    "benefit_types",
+    "Les prestations utiles",
+    "Parmi les prestations supplémentaires proposées par les modèles comparés, lesquelles utiliseriez-vous réellement ?",
+    "Les libellés sont uniformisés : une même prestation porte souvent un nom différent selon l’assureur. Ne cochez pas un service auquel vous avez déjà accès autrement. Une prestation non documentée n’est pas forcément absente.",
+    [],
+    true,
+  ),
+  question(
     "household",
     "Votre foyer",
     "Pour qui souhaitez-vous comparer ?",
@@ -294,6 +305,40 @@ export function baseQuestion(id: string): RecommendationQuestion {
       changesCompatibility: false,
     },
     subjectId: null,
+  };
+}
+const benefitFamilies: Record<BenefitType["family"], string> = {
+  telemedicine: "Télémédecine et conseil médical",
+  pharmacy: "Pharmacie et médicaments",
+  cost_sharing: "Participation aux coûts",
+  prevention: "Prévention et santé",
+  access: "Orientation et coordination des soins",
+  members: "Avantages membres",
+};
+// Options come from the catalogue taxonomy; the engine keeps only types offered by candidates.
+export function benefitTypesQuestion(types: BenefitType[]): RecommendationQuestion {
+  const order = Object.keys(benefitFamilies);
+  return {
+    ...baseQuestion("benefit_types"),
+    options: [
+      ...[...types]
+        .sort(
+          (a, b) =>
+            order.indexOf(a.family) - order.indexOf(b.family) ||
+            a.label.localeCompare(b.label, "fr"),
+        )
+        .map((type) => ({
+          value: type.key,
+          label: type.label,
+          exclusive: false,
+          group: benefitFamilies[type.family],
+          description: type.description,
+        })),
+      ...options(
+        ["none", "Aucune de ces prestations ne me serait utile.", true],
+        ["unknown", "Je ne sais pas encore.", true],
+      ),
+    ],
   };
 }
 export function usageQuestion(id: string, title: string): RecommendationQuestion {

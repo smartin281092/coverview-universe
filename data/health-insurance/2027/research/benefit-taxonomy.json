@@ -1,0 +1,356 @@
+{
+  "version": "benefit-taxonomy-2027-v1",
+  "families": ["telemedicine", "pharmacy", "cost_sharing", "prevention", "access", "members"],
+  "types": [
+    {
+      "key": "medical_advice_hotline_free",
+      "family": "telemedicine",
+      "label": "Conseil médical gratuit 24h/24",
+      "description": "Conseil ou triage médical par téléphone, chat ou application, sans frais. Ce n’est pas une consultation avec traitement.",
+      "valuation": "service"
+    },
+    {
+      "key": "teleconsultation_cost_share_waiver",
+      "family": "telemedicine",
+      "label": "Téléconsultation sans participation aux coûts",
+      "description": "Consultation médicale à distance (diagnostic, ordonnance) exonérée de franchise et/ou de quote-part selon l’assureur.",
+      "valuation": "financial"
+    },
+    {
+      "key": "teleconsultation_access",
+      "family": "telemedicine",
+      "label": "Téléconsultation médicale disponible",
+      "description": "Médecin par vidéo ou téléphone accessible avec le modèle ; consultation facturée selon les règles ordinaires.",
+      "valuation": "service"
+    },
+    {
+      "key": "digital_health_services",
+      "family": "telemedicine",
+      "label": "Application santé avec services médicaux",
+      "description": "Vérificateur de symptômes, triage numérique, ordonnances ou dossier de santé dans une application.",
+      "valuation": "service"
+    },
+    {
+      "key": "pharmacy_first_consultation_free",
+      "family": "pharmacy",
+      "label": "Premier conseil gratuit en pharmacie",
+      "description": "Consultation ou triage dans une pharmacie partenaire sans frais pour l’assuré.",
+      "valuation": "service"
+    },
+    {
+      "key": "generic_cost_share_waiver",
+      "family": "pharmacy",
+      "label": "Génériques sans franchise ou quote-part",
+      "description": "Médicaments génériques ou biosimilaires exonérés de franchise et/ou de quote-part.",
+      "valuation": "financial"
+    },
+    {
+      "key": "medication_price_discount",
+      "family": "pharmacy",
+      "label": "Rabais sur le prix des médicaments",
+      "description": "Réduction sur le prix de médicaments (souvent génériques) ou des taxes en pharmacie partenaire.",
+      "valuation": "financial"
+    },
+    {
+      "key": "mail_order_pharmacy",
+      "family": "pharmacy",
+      "label": "Pharmacie par correspondance avantageuse",
+      "description": "Livraison de médicaments à domicile avec frais offerts ou rabais.",
+      "valuation": "service"
+    },
+    {
+      "key": "pharmacy_purchase_discount",
+      "family": "pharmacy",
+      "label": "Rabais sur les achats en pharmacie",
+      "description": "Réductions ou bons sur des produits non remboursés en pharmacie ou droguerie.",
+      "valuation": "service"
+    },
+    {
+      "key": "copay_cap_reduced",
+      "family": "cost_sharing",
+      "label": "Quote-part maximale réduite",
+      "description": "Plafond annuel de quote-part inférieur au plafond légal ordinaire.",
+      "valuation": "financial"
+    },
+    {
+      "key": "care_cost_share_waiver",
+      "family": "cost_sharing",
+      "label": "Participation réduite sur certains soins",
+      "description": "Certains soins ou médicaments listés par l’assureur exonérés ou réduits de franchise et/ou de quote-part.",
+      "valuation": "financial"
+    },
+    {
+      "key": "screening_cost_share_waiver",
+      "family": "prevention",
+      "label": "Dépistages sans participation aux coûts",
+      "description": "Examens de dépistage (sein, côlon, gynécologie) exonérés de franchise et/ou de quote-part au-delà du socle légal.",
+      "valuation": "financial"
+    },
+    {
+      "key": "vaccination_cost_share_waiver",
+      "family": "prevention",
+      "label": "Vaccinations sans participation aux coûts",
+      "description": "Vaccinations sans quote-part ou actions de vaccination offertes, au-delà de l’exonération légale de franchise.",
+      "valuation": "financial"
+    },
+    {
+      "key": "preventive_checkup",
+      "family": "prevention",
+      "label": "Bilan de santé préventif",
+      "description": "Check-up offert ou subventionné par l’assureur.",
+      "valuation": "service"
+    },
+    {
+      "key": "pharmacy_health_checks",
+      "family": "prevention",
+      "label": "Tests de santé gratuits en pharmacie",
+      "description": "Mesures de prévention en pharmacie (tension, cholestérol, glycémie, risque cardiovasculaire).",
+      "valuation": "service"
+    },
+    {
+      "key": "skin_check",
+      "family": "prevention",
+      "label": "Contrôle de la peau",
+      "description": "Examen de grain de beauté ou de la peau en ligne ou en pharmacie, gratuit ou sans participation.",
+      "valuation": "service"
+    },
+    {
+      "key": "health_coaching",
+      "family": "prevention",
+      "label": "Coaching et programmes santé",
+      "description": "Accompagnement nutrition, sommeil, stress, dos, arrêt du tabac ou programme de santé offert.",
+      "valuation": "service"
+    },
+    {
+      "key": "mental_health_support",
+      "family": "prevention",
+      "label": "Soutien psychologique",
+      "description": "Application, ligne d’écoute ou programme de santé mentale offert.",
+      "valuation": "service"
+    },
+    {
+      "key": "activity_rewards_program",
+      "family": "prevention",
+      "label": "Récompenses pour l’activité physique",
+      "description": "Points, bons ou montants versés pour l’activité ou la prévention, souvent liés à un programme ou une complémentaire.",
+      "valuation": "service"
+    },
+    {
+      "key": "fitness_contribution",
+      "family": "prevention",
+      "label": "Participation aux frais de fitness",
+      "description": "Remboursement partiel d’abonnements de fitness, de sport ou de cours, en général par une complémentaire.",
+      "valuation": "service"
+    },
+    {
+      "key": "prevention_courses",
+      "family": "prevention",
+      "label": "Cours de prévention subventionnés",
+      "description": "Cours de santé ou de prévention (premiers secours, dos, préparation à la naissance) offerts ou subventionnés.",
+      "valuation": "service"
+    },
+    {
+      "key": "specialist_appointment_service",
+      "family": "access",
+      "label": "Recherche de spécialiste et rendez-vous",
+      "description": "Service qui recommande un spécialiste ou organise le rendez-vous.",
+      "valuation": "service"
+    },
+    {
+      "key": "second_medical_opinion",
+      "family": "access",
+      "label": "Deuxième avis médical",
+      "description": "Organisation d’un second avis avant une intervention ou un traitement important.",
+      "valuation": "service"
+    },
+    {
+      "key": "care_coordination_program",
+      "family": "access",
+      "label": "Coordination des soins et maladies chroniques",
+      "description": "Accompagnement personnalisé, gestion de cas ou programme pour maladies chroniques.",
+      "valuation": "service"
+    },
+    {
+      "key": "flexible_first_contact",
+      "family": "access",
+      "label": "Plusieurs premiers contacts au choix",
+      "description": "Condition du modèle : le premier contact peut être choisi parmi plusieurs points d’entrée.",
+      "valuation": "condition"
+    },
+    {
+      "key": "gatekeeping_gp",
+      "family": "access",
+      "label": "Médecin de famille en premier recours",
+      "description": "Condition du modèle : consulter d’abord le médecin de famille choisi.",
+      "valuation": "condition"
+    },
+    {
+      "key": "gatekeeping_network",
+      "family": "access",
+      "label": "Cabinet ou réseau en premier recours",
+      "description": "Condition du modèle : consulter d’abord un cabinet, un centre ou un réseau désigné.",
+      "valuation": "condition"
+    },
+    {
+      "key": "gatekeeping_telemedicine",
+      "family": "access",
+      "label": "Télémédecine en premier recours",
+      "description": "Condition du modèle : contacter d’abord le service de télémédecine ou l’application.",
+      "valuation": "condition"
+    },
+    {
+      "key": "digital_only_administration",
+      "family": "access",
+      "label": "Gestion exclusivement numérique",
+      "description": "Condition du modèle : correspondance et démarches par voie électronique.",
+      "valuation": "condition"
+    },
+    {
+      "key": "partner_discounts",
+      "family": "members",
+      "label": "Rabais chez des partenaires",
+      "description": "Réductions sur des loisirs, du sport, des voyages, des hôtels ou des achats via un club ou un programme membres.",
+      "valuation": "service"
+    },
+    {
+      "key": "health_product_discounts",
+      "family": "members",
+      "label": "Rabais sur lunettes et produits de santé",
+      "description": "Réductions sur lunettes, lentilles, appareils auditifs, analyses ou produits de santé chez des partenaires.",
+      "valuation": "service"
+    },
+    {
+      "key": "fitness_discounts",
+      "family": "members",
+      "label": "Rabais sur le fitness et le sport",
+      "description": "Réductions sur abonnements de fitness, piscines ou offres sportives partenaires.",
+      "valuation": "service"
+    },
+    {
+      "key": "assistance_services",
+      "family": "members",
+      "label": "Services d’assistance",
+      "description": "Assistance en voyage, à domicile ou en cas d’urgence liée à l’offre.",
+      "valuation": "service"
+    },
+    {
+      "key": "health_legal_protection",
+      "family": "members",
+      "label": "Protection juridique santé",
+      "description": "Aide ou protection juridique pour les litiges liés aux soins (erreur médicale, facturation), incluse ou à prix réduit.",
+      "valuation": "service"
+    },
+    {
+      "key": "occupational_prevention",
+      "family": "members",
+      "label": "Prévention liée à la profession",
+      "description": "Services de prévention ou de sécurité propres à une profession, par exemple l’agriculture.",
+      "valuation": "service"
+    },
+    {
+      "key": "premium_payment_discount",
+      "family": "members",
+      "label": "Escompte pour paiement anticipé des primes",
+      "description": "Réduction accordée pour un paiement annuel ou semestriel des primes ; hors tarif officiel mensuel.",
+      "valuation": "none"
+    },
+    {
+      "key": "insurance_bundle_discount",
+      "family": "members",
+      "label": "Avantages sur d’autres assurances",
+      "description": "Réduction ou gratuité d’assurances non maladie (ménage, responsabilité civile, bâtiment, protection juridique Internet) pour la clientèle.",
+      "valuation": "none"
+    },
+    {
+      "key": "supplementary_premium_discount",
+      "family": "members",
+      "label": "Rabais sur les complémentaires",
+      "description": "Réductions de primes des assurances complémentaires (famille, combinaison, activité).",
+      "valuation": "none"
+    },
+    {
+      "key": "referral_reward",
+      "family": "members",
+      "label": "Prime de parrainage",
+      "description": "Récompense pour la recommandation d’un nouvel assuré.",
+      "valuation": "none"
+    },
+    {
+      "key": "hardship_fund",
+      "family": "members",
+      "label": "Fonds de solidarité",
+      "description": "Aide financière ponctuelle en cas de difficulté, sur demande.",
+      "valuation": "none"
+    }
+  ],
+  "legacyGroups": {
+    "cost_sharing_copay_cap": "copay_cap_reduced",
+    "telemedicine_initial_advice": "medical_advice_hotline_free",
+    "telemedicine_advice_free": "medical_advice_hotline_free",
+    "complementary_medicine_advice": "medical_advice_hotline_free",
+    "telemedicine_consultation_cost_sharing_waiver": "teleconsultation_cost_share_waiver",
+    "telemedicine_consultation_no_cost_share": "teleconsultation_cost_share_waiver",
+    "telemedicine_definitive_consultation_cost_share": "teleconsultation_access",
+    "digital_medication_management": "digital_health_services",
+    "digital_symptom_checker": "digital_health_services",
+    "pharmacy_initial_advice": "pharmacy_first_consultation_free",
+    "pharmacy_first_advice_free": "pharmacy_first_consultation_free",
+    "generic_deductible_waiver": "generic_cost_share_waiver",
+    "generic_price_discount": "medication_price_discount",
+    "mail_order_pharmacy_delivery": "mail_order_pharmacy",
+    "mail_order_pharmacy_discounts": "mail_order_pharmacy",
+    "pharmacy_partner_discount": "pharmacy_purchase_discount",
+    "pharmacy_welcome_voucher": "pharmacy_purchase_discount",
+    "pharmacy_club_membership_discount": "pharmacy_purchase_discount",
+    "menopause_medicines_no_cost_share": "care_cost_share_waiver",
+    "breast_screening_deductible_waiver": "screening_cost_share_waiver",
+    "breast_screening_free": "screening_cost_share_waiver",
+    "colorectal_screening_free": "screening_cost_share_waiver",
+    "gynecology_screening_no_cost_share": "screening_cost_share_waiver",
+    "gynecology_breast_deductible_waiver": "screening_cost_share_waiver",
+    "cancer_screening_deductible_waiver": "screening_cost_share_waiver",
+    "vaccination_no_cost_share": "vaccination_cost_share_waiver",
+    "flu_vaccine_event": "vaccination_cost_share_waiver",
+    "preventive_checkup": "preventive_checkup",
+    "pharmacy_prevention_checks": "pharmacy_health_checks",
+    "pharmacy_prevention_tests_free": "pharmacy_health_checks",
+    "digital_skin_check_cost_sharing_waiver": "skin_check",
+    "activity_rewards": "activity_rewards_program",
+    "activity_reward_eligibility": "activity_rewards_program",
+    "activity_cash_reward": "activity_rewards_program",
+    "activity_cash_reward_supplementary": "activity_rewards_program",
+    "activity_voucher_reward": "activity_rewards_program",
+    "fitness_contribution": "fitness_contribution",
+    "cycling_prevention_contribution": "fitness_contribution",
+    "specialist_navigation": "specialist_appointment_service",
+    "specialist_selection_service": "specialist_appointment_service",
+    "integrated_hospital_network": "care_coordination_program",
+    "first_contact_flexible": "flexible_first_contact",
+    "flexible_first_contact_binding": "flexible_first_contact",
+    "flexible_first_contact_nonbinding": "flexible_first_contact",
+    "telemedicine_first_nonbinding": "flexible_first_contact",
+    "digital_triage_then_flexible_contact": "flexible_first_contact",
+    "gp_first_approved_network": "gatekeeping_gp",
+    "restricted_provider_network": "gatekeeping_network",
+    "integrated_care_network": "gatekeeping_network",
+    "telemedicine_first": "gatekeeping_telemedicine",
+    "telemedicine_first_binding": "gatekeeping_telemedicine",
+    "digital_first_binding": "gatekeeping_telemedicine",
+    "digital_administration_required": "digital_only_administration",
+    "member_partner_discounts": "partner_discounts",
+    "member_shop_discounts": "partner_discounts",
+    "member_hotel_discounts": "partner_discounts",
+    "hotelcard_discount": "partner_discounts",
+    "partner_discounts": "partner_discounts",
+    "member_swimming_access": "fitness_discounts",
+    "fitness_membership_discount": "fitness_discounts",
+    "family_supplementary_discount": "supplementary_premium_discount",
+    "activity_supplementary_premium_discount": "supplementary_premium_discount",
+    "customer_referral_reward": "referral_reward",
+    "agricultural_prevention_discount": "occupational_prevention",
+    "agricultural_safety_check_contribution": "occupational_prevention",
+    "safety_equipment_discount": "occupational_prevention",
+    "agricultural_family_assistance": "assistance_services",
+    "hardship_support_fund": "hardship_fund"
+  }
+}

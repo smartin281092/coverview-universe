@@ -18,12 +18,17 @@ function ResultCard({
   result,
   onOffer,
   difference,
+  typeLabels,
 }: {
   row: RankedRecommendation;
   result: RecommendationResult;
   onOffer: (offer: HealthOffer) => void;
   difference?: Difference | undefined;
+  typeLabels: Map<string, string>;
 }) {
+  const offered = row.preferredBenefits.filter((item) =>
+    ["counted", "counted_unconfirmed"].includes(item.status),
+  ).length;
   return (
     <article className="hi-ranked-offer">
       <button className="hi-result-row" onClick={() => onOffer(row.offer)}>
@@ -41,6 +46,9 @@ function ResultCard({
           />
           {row.tied && <small>{copy.tied}</small>}
           <small>{copy.compatibility[row.compatibility]}</small>
+          {row.preferredBenefits.length > 0 && (
+            <small>{copy.preferredBenefitsCount(offered, row.preferredBenefits.length)}</small>
+          )}
           {result.scope === "optimize_deductible" && (
             <small>
               {copy.deductible} · {money(row.offer.deductible * 100)} CHF
@@ -106,6 +114,29 @@ function ResultCard({
           (result.scope === "optimize_deductible" && row.affordability !== "sufficient")) && (
           <p className="hi-small hi-warning">{copy.reserve[row.affordability]}</p>
         )}
+        {row.preferredBenefits.length > 0 && (
+          <>
+            <h4 className="hi-small">{copy.preferredBenefits}</h4>
+            <ul className="hi-preferred-benefits">
+              {row.preferredBenefits.map((item) => (
+                <li key={item.type} className={`is-${item.status}`}>
+                  <HealthIcon
+                    name={
+                      ["counted", "counted_unconfirmed"].includes(item.status)
+                        ? "check-circle"
+                        : "info"
+                    }
+                    size={15}
+                  />
+                  <span>
+                    {typeLabels.get(item.type) ?? item.type}
+                    <small>{copy.preferredStatus[item.status]}</small>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
         <details className="hi-recommendation-explanation">
           <summary>{copy.explain}</summary>
           <ul className="hi-small">
@@ -159,6 +190,12 @@ export function RecommendationResults({
   differences: Map<string, Difference>;
 }) {
   const [limit, setLimit] = useState(15);
+  // Uniform labels of the canonical benefit types, as proposed by the server question.
+  const typeLabels = new Map(
+    result.questionStates
+      .find((state) => state.id === "benefit_types")
+      ?.question.options.map((option) => [option.value, option.label]) ?? [],
+  );
   return (
     <section className="hi-personal-results" aria-label={copy.result}>
       <p className="hi-small">
@@ -182,6 +219,7 @@ export function RecommendationResults({
             result={result}
             onOffer={onOffer}
             difference={differences.get(row.offer.id)}
+            typeLabels={typeLabels}
           />
         ))}
       </div>

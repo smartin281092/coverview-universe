@@ -22,9 +22,12 @@ import {
   benefitCategory,
   benefitBranchInactive,
   benefitAudienceInactive,
+  legacyBenefitFilterKeys,
+  typeQualification,
 } from "./recommendation.utility.js";
 import {
   baseQuestion,
+  benefitTypesQuestion,
   recommendationQuestions,
   usageQuestion,
 } from "./recommendation.questions.fr.js";
@@ -35,11 +38,12 @@ export const defaultRecommendationRules: RecommendationRules = {
   activation: "opt_in",
   weights: { freedom: 25, practical: 25, simplicity: 15, services: 35 },
   serviceContributionCap: 3,
+  serviceEvidence: "official",
   meaningfulAnnualDifferenceMinor: 1200,
   tieAnnualMinor: 1,
   researchReviewDays: 90,
   rationale:
-    "Hypothèse d’expertise v1 : 25 liberté, 25 parcours préféré, 15 entrées au choix souhaitées, 35 services confirmés à usage prévu (trois groupes au maximum). Aucun point converti en francs ; aucun coefficient commercial. Une différence de 12 CHF/an déclenche une question financière, sans probabilité de réponse.",
+    "Hypothèse d’expertise v1 : 25 liberté, 25 parcours préféré, 15 entrées au choix souhaitées, 35 services à usage prévu (trois types de prestations au maximum, synonymes regroupés). Une prestation annoncée par une source officielle compte comme service ; si ce choix change le meneur sans confirmation 2027, le résultat reste provisoire. Aucun montant sans preuve contractuelle confirmée. Aucun point converti en francs ; aucun coefficient commercial. Une différence de 12 CHF/an déclenche une question financière, sans probabilité de réponse.",
 };
 export type RecommendationContext = {
   offers: HealthOffer[];
@@ -55,6 +59,7 @@ const stable = (a: RankedRecommendation, b: RankedRecommendation) =>
   a.offer.id.localeCompare(b.offer.id);
 const relevantToAnswers = (input: RecommendationInput, benefit: EvidenceBenefit) =>
   answerValues(input, "lifestyle").includes(benefitCategory(benefit)) ||
+  answerValues(input, "benefit_types").includes(benefit.equivalenceGroup) ||
   (benefit.category === "prevention" &&
     answerValues(input, "prevention").some((value) => value !== "none")) ||
   (["pharmacy", "cost_sharing"].includes(benefit.category) &&
@@ -82,6 +87,21 @@ function evaluate(
           fact.equivalenceGroup === key ||
           (key === "telemedicine_free" && fact.telemedicine === "free_consultation"),
       );
+      // A canonical type filter is met by a verified fact; an announced one remains to be verified.
+      if (
+        !legacyBenefitFilterKeys.includes(key) &&
+        context.catalog.benefitTypes.some((type) => type.key === key)
+      ) {
+        const levels = matching.map((fact) => typeQualification(fact, input, context.rules));
+        if (levels.includes("counted")) continue;
+        match.uncertainties.push(
+          levels.includes("counted_unconfirmed")
+            ? "required_benefit_unconfirmed"
+            : "required_benefit_unverified",
+        );
+        if (match.compatibility !== "incompatible") match.compatibility = "verify";
+        continue;
+      }
       if (
         !matching.some(
           (fact) =>
@@ -389,10 +409,20 @@ export function recommend(input: RecommendationInput, context: RecommendationCon
         ? "Conserver votre médecin habituel est-il indispensable ?"
         : "Conserver vos spécialistes est-il indispensable ?",
   }));
+  // A catalogue with a canonical taxonomy asks preferences per benefit type; older catalogues keep
+  // the category question so that their published answers and behaviour remain unchanged.
+  const preferableTypes = context.catalog.benefitTypes.filter((type) =>
+    ["service", "financial"].includes(type.valuation),
+  );
+  const taxonomy = preferableTypes.length > 0;
   const allQuestions = [
     ...recommendationQuestions
-      .filter((definition) => definition.id !== "professional_importance")
+      .filter(
+        (definition) =>
+          definition.id !== "professional_importance" && definition.id !== "benefit_types",
+      )
       .map((definition) => baseQuestion(definition.id)),
+    ...(taxonomy ? [benefitTypesQuestion(preferableTypes)] : []),
     {
       ...baseQuestion("care"),
       id: "care_revised",
@@ -408,9 +438,10 @@ export function recommend(input: RecommendationInput, context: RecommendationCon
       allQuestions
         .filter(
           (question) =>
-            !question.subjectId ||
-            relevantFacts.some((fact) => fact.id === question.subjectId) ||
-            hasAnswer(input, question.id),
+            (!question.subjectId ||
+              relevantFacts.some((fact) => fact.id === question.subjectId) ||
+              hasAnswer(input, question.id)) &&
+            !(taxonomy && question.id === "lifestyle" && !hasAnswer(input, "lifestyle")),
         )
         .map((question) => [question.id, question]),
     ).values(),
@@ -418,10 +449,29 @@ export function recommend(input: RecommendationInput, context: RecommendationCon
   const categories = new Set<string>(
     relevantFacts.filter((fact) => fact.classification !== "legal_common").map(benefitCategory),
   );
-  const lifestyle = questions.find((q) => q.id === "lifestyle")!;
-  lifestyle.options = lifestyle.options.filter(
-    (option) => option.exclusive || categories.has(option.value),
+  const lifestyle = questions.find((q) => q.id === "lifestyle");
+  if (lifestyle)
+    lifestyle.options = lifestyle.options.filter(
+      (option) => option.exclusive || categories.has(option.value),
+    );
+  // Only types that at least one candidate offer can actually honour are proposed; a previous
+  // choice stays visible so that it can be withdrawn.
+  const offerableTypes = new Set(
+    relevantFacts
+      .filter((fact) =>
+        ["counted", "counted_unconfirmed"].includes(typeQualification(fact, input, context.rules)),
+      )
+      .map((fact) => fact.equivalenceGroup),
   );
+  const typeQuestion = questions.find((q) => q.id === "benefit_types");
+  if (typeQuestion)
+    typeQuestion.options = typeQuestion.options.filter(
+      (option) =>
+        option.exclusive ||
+        offerableTypes.has(option.value) ||
+        answerValues(input, "benefit_types").includes(option.value),
+    );
+  const typeChoices = typeQuestion?.options.filter((option) => !option.exclusive) ?? [];
   const evaluated = evaluate(input, context, index);
   const evaluatedById = new Map(evaluated.ranked.map((row) => [row.offer.id, row]));
   let examinedScenarios = 1;
@@ -435,7 +485,8 @@ export function recommend(input: RecommendationInput, context: RecommendationCon
     priority: number,
   ) {
     if (!when || !eligible(id)) return;
-    const question = questions.find((q) => q.id === id)!;
+    const question = questions.find((q) => q.id === id);
+    if (!question) return;
     candidates.push({ question: { ...question, reason }, priority });
   }
   required("priority", true, "constraint", 0);
@@ -468,39 +519,83 @@ export function recommend(input: RecommendationInput, context: RecommendationCon
         !["legal_common", "public_service"].includes(fact.classification) &&
         fact.requiresSameBase !== false,
     );
+    // With a taxonomy, the type question is the single entry point for benefit preferences; the
+    // category questions stay available on request and keep their answers.
     const possibleIds = [
       "access_preference",
       "access_flex",
-      ...(supported.some((f) => f.category === "prevention") ? ["prevention"] : []),
-      ...(supported.some((f) => ["cost_sharing", "pharmacy"].includes(f.category))
+      ...(!taxonomy && supported.some((f) => f.category === "prevention") ? ["prevention"] : []),
+      ...(!taxonomy && supported.some((f) => ["cost_sharing", "pharmacy"].includes(f.category))
         ? ["medication"]
         : []),
-      ...(supported.length ? ["lifestyle"] : []),
+      ...(taxonomy
+        ? typeChoices.length
+          ? ["benefit_types"]
+          : []
+        : supported.length
+          ? ["lifestyle"]
+          : []),
     ];
     for (const id of possibleIds) {
       if (!eligible(id)) continue;
-      const q = questions.find((value) => value.id === id)!;
+      const q = questions.find((value) => value.id === id);
+      if (!q) continue;
       let changesLeader = false,
         changesCost = false,
         changesCompatibility = false,
         alternatives = 0;
-      for (const option of q.options.filter(
-        (value) => !value.exclusive || value.value === "free",
-      )) {
+      const options = q.options
+        .filter((value) => !value.exclusive || value.value === "free")
+        .map((value) => value.value);
+      // A type offered by every current leader raises them as much as any rival: it cannot change
+      // the leader alone. Outside the balance objective, only verified amounts can matter.
+      const leaderFacts = evaluated.preferred
+        .filter((row) => evaluated.leaders.preferred.includes(row.offer.id))
+        .map((row) => index.facts.get(row.offer.modelId) ?? []);
+      const decisive = (type: string) =>
+        supported.some((fact) => fact.equivalenceGroup === type) ||
+        (evaluated.objective === "balance" &&
+          !(
+            leaderFacts.length &&
+            leaderFacts.every((facts) =>
+              facts.some(
+                (fact) =>
+                  fact.equivalenceGroup === type &&
+                  ["counted", "counted_unconfirmed"].includes(
+                    typeQualification(fact, input, context.rules),
+                  ),
+              ),
+            )
+          ));
+      const single = options
+        .filter((value) => id !== "benefit_types" || decisive(value))
+        .map((value) => [value]);
+      // Benefit types are also probed together first: several services may matter only jointly.
+      const choices = id === "benefit_types" && options.length > 1 ? [options, ...single] : single;
+      // Once the leader changes, more benefit probes cannot raise the priority of the question
+      // (compatibility only depends on them through a required benefit filter).
+      const settled = () =>
+        id === "benefit_types" && changesLeader && !input.tariff.benefitKeys.length;
+      for (const values of choices) {
+        if (settled()) break;
         const originalVariant: RecommendationInput = {
           ...input,
           answers: {
             ...input.answers,
-            [id]: { version: 2, status: "answered", values: [option.value] },
+            [id]: { version: 2, status: "answered", values },
           },
         };
         // Probe dependent answers together, explicitly as scenarios, never response probabilities.
         const dependencies = supported.filter(
           (value) =>
             !relevantToAnswers(input, value) &&
-            (benefitCategory(value) === option.value ||
-              (id === "prevention" && value.category === "prevention") ||
-              (id === "medication" && ["pharmacy", "cost_sharing"].includes(value.category))),
+            values.some(
+              (choice) =>
+                (id !== "benefit_types" && benefitCategory(value) === choice) ||
+                (id === "benefit_types" && value.equivalenceGroup === choice) ||
+                (id === "prevention" && value.category === "prevention") ||
+                (id === "medication" && ["pharmacy", "cost_sharing"].includes(value.category)),
+            ),
         );
         const variants = [originalVariant];
         const combined = structuredClone(originalVariant);
@@ -563,16 +658,16 @@ export function recommend(input: RecommendationInput, context: RecommendationCon
               Math.abs(metricCost(row) - metricCost(evaluatedById.get(row.offer.id)!)) >=
               context.rules.meaningfulAnnualDifferenceMinor,
           );
+          if (settled()) break;
         }
       }
       if (changesLeader || changesCost)
         candidates.push({
           question: {
             ...q,
-            reason:
-              id === "lifestyle" || id === "prevention" || id === "medication"
-                ? "dependent_benefit"
-                : "ranking_sensitivity",
+            reason: ["lifestyle", "benefit_types", "prevention", "medication"].includes(id)
+              ? "dependent_benefit"
+              : "ranking_sensitivity",
             sensitivity: {
               examinedAlternatives: alternatives,
               changesLeader,
@@ -584,20 +679,25 @@ export function recommend(input: RecommendationInput, context: RecommendationCon
         });
     }
     for (const benefit of supported) {
+      const typed = answerValues(input, "benefit_types").includes(benefit.equivalenceGroup);
       const relevant =
+        typed ||
         answerValues(input, "lifestyle").includes(benefitCategory(benefit)) ||
         (benefit.category === "prevention" &&
           answerValues(input, "prevention").some((x) => x !== "none")) ||
         (["pharmacy", "cost_sharing"].includes(benefit.category) &&
           answerValues(input, "medication").some((x) => x !== "none"));
       if (!relevant) continue;
-      required(`usage:${benefit.id}`, true, "dependent_benefit", 13);
+      // The type preference already states the planned use; only amounts still need conditions.
+      if (typed && benefit.financial.kind === "none") continue;
+      required(`usage:${benefit.id}`, !typed, "dependent_benefit", 13);
       if (
+        typed ||
         answerValues(input, `usage:${benefit.id}`).some((value) =>
           ["current", "planned"].includes(value),
         )
       ) {
-        required(`existing:${benefit.id}`, true, "dependent_benefit", 14);
+        required(`existing:${benefit.id}`, !typed, "dependent_benefit", 14);
         required(
           `eligible:${benefit.id}`,
           !answerValues(input, `existing:${benefit.id}`).includes("yes"),
@@ -635,7 +735,8 @@ export function recommend(input: RecommendationInput, context: RecommendationCon
     "ranking_sensitivity",
     11,
   );
-  for (const id of input.explore) required(id, true, "requested", 20);
+  for (const id of input.explore)
+    required(id === "lifestyle" && taxonomy ? "benefit_types" : id, true, "requested", 20);
   required(
     "treatment_included",
     answerValues(input, "treatment").some((x) => ["regular", "planned", "other"].includes(x)),
@@ -688,6 +789,24 @@ export function recommend(input: RecommendationInput, context: RecommendationCon
     )
   )
     decisiveMissing.add("documentary_verification");
+  // Announced but not year-confirmed services only make the result provisional when they decide it.
+  if (
+    context.rules.serviceEvidence === "official" &&
+    evaluated.preferred.some(
+      (row) =>
+        evaluated.leaders.preferred.includes(row.offer.id) &&
+        row.preferredBenefits.some((item) => item.status === "counted_unconfirmed"),
+    )
+  ) {
+    const strict = evaluate(
+      input,
+      { ...context, rules: { ...context.rules, serviceEvidence: "verified" } },
+      index,
+    );
+    examinedScenarios++;
+    if (strict.leaders.preferred.join() !== evaluated.leaders.preferred.join())
+      decisiveMissing.add("benefit_evidence_unconfirmed");
+  }
   const rangeAmbiguous = evaluated.scenarioDisagreement;
   const active =
     context.rules.activation === "on" || (context.rules.activation === "opt_in" && input.optIn);
@@ -710,6 +829,8 @@ export function recommend(input: RecommendationInput, context: RecommendationCon
     messages.push("individual_costs_only");
   if (outcome === "established") messages.push("enough_information");
   if (outcome === "tradeoff") messages.push("cost_utility_tradeoff");
+  if (decisiveMissing.has("benefit_evidence_unconfirmed"))
+    messages.push("benefit_evidence_unconfirmed");
   const researched = context.catalog.models.filter(
     (model) => model.status !== "not_researched",
   ).length;
@@ -753,10 +874,20 @@ export function recommend(input: RecommendationInput, context: RecommendationCon
             ["regular", "planned", "other"].includes(value),
           )) ||
         (evaluated.objective === "premium" &&
-          ["prevention", "medication", "lifestyle", "extra_cost", "care", "supplementary"].includes(
-            question.id,
-          ) &&
-          !input.explore.includes(question.id as RecommendationInput["explore"][number]))
+          [
+            "prevention",
+            "medication",
+            "lifestyle",
+            "benefit_types",
+            "extra_cost",
+            "care",
+            "supplementary",
+          ].includes(question.id) &&
+          !input.explore.includes(
+            (question.id === "benefit_types"
+              ? "lifestyle"
+              : question.id) as RecommendationInput["explore"][number],
+          ))
           ? "inactive"
           : candidates.some((candidate) => candidate.question.id === question.id) ||
               hasAnswer(input, question.id)
