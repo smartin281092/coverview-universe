@@ -556,5 +556,59 @@
       "scope_changed": "Périmètre professionnel modifié : nouvelle confirmation nécessaire.",
       "declared": "Modes déclarés pour le partage dans le périmètre actuel"
     }
+  },
+  "appointmentLinks": {
+    "manage": "Relier d’autres demandes",
+    "description": "Un seul rendez-vous pour plusieurs demandes du même client. Chaque demande conserve son propre suivi.",
+    "shared": "Rendez-vous associés",
+    "sharedDescription": "Les modalités enregistrées pour cette demande. Son suivi et ses prochaines actions restent indépendants.",
+    "choose": "Sélectionnez jusqu’à neuf autres demandes personnelles du même sujet. Les préférences, la disponibilité et le temps réservé seront contrôlés.",
+    "noCandidates": "Aucune autre demande personnelle éligible pour ce sujet.",
+    "candidatesTruncated": "Les 50 premières demandes éligibles sont proposées.",
+    "review": "Vérifier les demandes",
+    "confirm": "Confirmer",
+    "unlink": "Délier",
+    "withdrawTitle": "Délier « {{title}} »",
+    "withdrawConfirmed": "Je retire cette liaison. Le rendez-vous et les modalités déjà enregistrées sont conservés.",
+    "clientAgreementConfirmed": "J’ai convenu avec le client de traiter chacune de ces demandes pendant ce rendez-vous, aux modalités affichées.",
+    "sharedTermsConfirmed": "J’ai vérifié que le temps réservé suffit et que le client accepte que ces modalités soient visibles dans chacune des demandes sélectionnées.",
+    "notReady": "La liaison n’est pas prête. Vérifiez les préférences de chaque demande, votre disponibilité et le temps de préparation et de déplacement enregistré sur le rendez-vous. Un groupe contient au plus dix demandes.",
+    "failed": "La consultation ou la confirmation n’a pas abouti. Rechargez les données et vérifiez vos accès et les modalités actuelles.",
+    "uncertain": "Le résultat de l’envoi est incertain. Réessayez le même envoi pour connaître son résultat sans créer de doublon.",
+    "assessment": {
+      "consistent": "conditions cohérentes",
+      "incomplete": "informations à compléter",
+      "attention": "point à examiner"
+    },
+    "status": {
+      "linked": "Liaison courante",
+      "review_required": "À réexaminer",
+      "unlinked": "Liaison retirée",
+      "superseded": "Version passée"
+    },
+    "reviewRequired": "Ces modalités sont celles de l’accord enregistré. Un changement demande une nouvelle confirmation du conseiller ; elles ne constituent plus un rendez-vous convenu pour cette demande.",
+    "current": "Voir les liaisons actuelles",
+    "history": "Voir les 20 dernières versions",
+    "empty": "Aucun rendez-vous associé à cette demande.",
+    "historyTruncated": "Seules les 20 dernières versions sont affichées.",
+    "itemsTruncated": "Seules les 100 premières liaisons sont affichées.",
+    "duration": "Durée : {{count}} min · heure de Zurich",
+    "recorded": "Version {{revision}} · enregistrée le {{date}}",
+    "mode": {
+      "video": "Visioconférence",
+      "phone": "Téléphone",
+      "home": "À domicile",
+      "office": "Au bureau"
+    },
+    "outcome": {
+      "scheduled": "Planifié",
+      "completed": "Réalisé",
+      "cancelled": "Annulé",
+      "client_absent": "Client absent",
+      "advisor_absent": "Conseiller absent"
+    },
+    "terms": "{{date}} · {{mode}} · {{location}}",
+    "target": "{{title}} — {{assessment}}",
+    "place": "{{mode}} · {{location}}"
   }
 }

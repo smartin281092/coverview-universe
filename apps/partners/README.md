@@ -1,5 +1,7 @@
 # CoverView Partner
 
+Fiche Lead → Rendez-vous → « Relier d’autres demandes » : choix de demandes personnelles du même sujet, vérification serveur, confirmation explicite et retrait révisionné. « Rendez-vous associés » consulte les modalités enregistrées et les versions passées de chaque demande. [Règles, limites et activation](../api/src/modules/partner-workspace/docs/appointment-links.md). Une seule occupation, cycles indépendants ;0055 hors catalogue et V3 rempli/clavier/mobile ouvert.
+
 Fiche Lead → Offres → Sources de solution → compagnie choisie → Apprécier ma distribution : sources, position personnelle, périmètre/limites/suite, confirmations et échéance, retrait/historique. [Règles et limites](../api/src/modules/partner-workspace/docs/distribution-review.md). Trois positions en l’état, aucun avis favorable automatique ;0054 hors catalogue, activation et V3 ouverts.
 
 Fiche Lead → Offres → Sources de solution → compagnie choisie → Passages de ma convention : transcription humaine de six aspects avec page/repère, inconnues, original privé, échéance/retrait/historique. [Règles et limites](../api/src/modules/partner-workspace/docs/solution-clauses.md). Révisions exactes contrôlées, fidélité du texte non validée automatiquement ; aucun avis de distribution.0053 hors catalogue, activation et V3 ouverts.

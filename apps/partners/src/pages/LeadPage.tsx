@@ -28,6 +28,8 @@ import { AdvisorAssessmentDialog } from "../features/AdvisorAssessmentDialog";
 import { AdvicePreferencesDialog } from "../features/AdvicePreferencesDialog";
 import { AppointmentAssessmentDialog } from "../features/AppointmentAssessmentDialog";
 import { PersonalAppointmentDialog } from "../features/PersonalAppointmentDialog";
+import { AppointmentLinksDialog } from "../features/AppointmentLinksDialog";
+import { SharedAppointmentsDialog } from "../features/SharedAppointmentsDialog";
 import type { LeadDetail } from "@coverview/contracts/partner";
 import { OfferWithdrawDialog } from "../features/OfferWithdrawDialog";
 import { ContractComparison } from "../features/ContractComparison";
@@ -66,6 +68,8 @@ export function LeadPage() {
     [withdraw, setWithdraw] = useState<LeadOffer | null>(null),
     [collaborating, setCollaborating] = useState(false),
     [appointment, setAppointment] = useState<string>(),
+    [linkingAppointment, setLinkingAppointment] = useState<string>(),
+    [sharedAppointments, setSharedAppointments] = useState(false),
     [assessedAppointment, setAssessedAppointment] = useState<string>(),
     [rescheduling, setRescheduling] = useState<LeadDetail["appointments"][number]>(),
     [offer, setOffer] = useState<LeadOffer | "new" | null>(null);
@@ -87,6 +91,21 @@ export function LeadPage() {
   const allowed = (value: string) => lead.allowedActions?.includes(value) ?? lead.canEdit;
   return (
     <>
+      {linkingAppointment && (
+        <AppointmentLinksDialog
+          key={[...session.queryKey, lead.id, linkingAppointment].join(":")}
+          leadId={lead.id}
+          appointmentId={linkingAppointment}
+          onClose={() => setLinkingAppointment(undefined)}
+        />
+      )}
+      {sharedAppointments && (
+        <SharedAppointmentsDialog
+          key={[...session.queryKey, lead.id].join(":")}
+          leadId={lead.id}
+          onClose={() => setSharedAppointments(false)}
+        />
+      )}
       {rescheduling && (
         <PersonalAppointmentDialog
           key={[...session.queryKey, lead.id, rescheduling.id].join(":")}
@@ -516,6 +535,9 @@ export function LeadPage() {
       )}
       {activeTab === "appointments" && (
         <div className="space-y-3">
+          <Button variant="outline" onClick={() => setSharedAppointments(true)}>
+            {t("appointmentLinks.shared")}
+          </Button>
           {allowed("personal_appointment") && (
             <Button onClick={() => setAction("personal_appointment")}>
               {t("personalAppointment.title")}
@@ -542,6 +564,11 @@ export function LeadPage() {
                 </p>
               </div>
               <Badge variant="outline">{t(`appointment.${appt.state}`)}</Badge>
+              {allowed("personal_appointment") && appt.advisorId === session.identity.user.id && (
+                <Button variant="outline" size="sm" onClick={() => setLinkingAppointment(appt.id)}>
+                  {t("appointmentLinks.manage")}
+                </Button>
+              )}
               {allowed("personal_appointment") &&
                 appt.advisorId === session.identity.user.id &&
                 appt.state === "scheduled" && (

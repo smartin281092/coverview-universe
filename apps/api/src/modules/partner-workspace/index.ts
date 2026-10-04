@@ -3,6 +3,12 @@ import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
 import {
+  appointmentLinksManagementSchema,
+  appointmentLinksPreviewSchema,
+  appointmentLinksSelectionSchema,
+  appointmentLinksConfirmSchema,
+  appointmentUnlinkSchema,
+  sharedAppointmentsSchema,
   needExpertiseInputSchema,
   needExpertiseDossierSchema,
   needConflictInputSchema,
@@ -411,6 +417,87 @@ export function registerPartnerWorkspace(
         await actor(request),
         request.params.id,
         request.query.version === "2",
+      ),
+  );
+  for (const wallet of [false, true]) {
+    app.get(
+      `/${wallet ? "wallet" : "partner"}/leads/:id/shared-appointments`,
+      {
+        config: limited,
+        schema: { params, response: { 200: sharedAppointmentsSchema } },
+      },
+      async (request) =>
+        repository.sharedAppointments(await actor(request, wallet), request.params.id),
+    );
+  }
+  const linkParams = params.extend({ appointmentId: z.string().min(1).max(100) });
+  app.get(
+    "/partner/leads/:id/appointments/:appointmentId/links",
+    {
+      config: limited,
+      schema: { params: linkParams, response: { 200: appointmentLinksManagementSchema } },
+    },
+    async (request) =>
+      repository.appointmentLinks(
+        await actor(request),
+        request.params.id,
+        request.params.appointmentId,
+      ),
+  );
+  app.post(
+    "/partner/leads/:id/appointments/:appointmentId/links/preview",
+    {
+      config: limited,
+      schema: {
+        params: linkParams,
+        body: appointmentLinksSelectionSchema,
+        response: { 200: appointmentLinksPreviewSchema },
+      },
+    },
+    async (request) =>
+      repository.previewAppointmentLinks(
+        await actor(request),
+        request.params.id,
+        request.params.appointmentId,
+        request.body,
+      ),
+  );
+  app.post(
+    "/partner/leads/:id/appointments/:appointmentId/links/confirm",
+    {
+      config: limited,
+      schema: {
+        params: linkParams,
+        body: appointmentLinksConfirmSchema,
+        response: { 200: appointmentLinksManagementSchema },
+      },
+    },
+    async (request) =>
+      repository.confirmAppointmentLinks(
+        await actor(request),
+        request.params.id,
+        request.params.appointmentId,
+        request.body,
+        key(request),
+      ),
+  );
+  app.post(
+    "/partner/leads/:id/appointments/:appointmentId/links/unlink",
+    {
+      config: limited,
+      schema: {
+        params: linkParams,
+        body: appointmentUnlinkSchema,
+        response: { 200: appointmentLinksManagementSchema },
+      },
+    },
+    async (request) =>
+      repository.unlinkAppointment(
+        await actor(request),
+        request.params.id,
+        request.params.appointmentId,
+        request.body,
+        key(request),
       ),
   );
   app.post(

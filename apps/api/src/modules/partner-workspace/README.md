@@ -2,6 +2,7 @@
 
 | Si la tâche porte sur… | Lire aussi |
 | --- | --- |
+| Un rendez-vous personnel relié à plusieurs demandes | [Liaisons et cycles indépendants](docs/appointment-links.md) |
 | Appréciation personnelle de distribution pour une offre exacte | [Distribution en l’état](docs/distribution-review.md) |
 | Passages humains de convention pour une version exacte d’offre | [Transcription personnelle](docs/solution-clauses.md) |
 | Association actuelle et convention relues ensemble pour une offre | [Lecture conjointe v2](docs/bound-solution-evidence.md) |

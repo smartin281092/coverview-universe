@@ -1,5 +1,7 @@
 # Offres Wallet
 
+Chaque demande ouvre « Rendez-vous associés » en remplaçant sa fiche : modalités enregistrées, état courant ou à réexaminer, issue applicable et20dernières versions. Aucun autre Lead ni temps privé. [Audience canonique et limites](../../../../api/src/modules/partner-workspace/docs/appointment-links.md). Relecture10s, cache session et masquage sur erreur ;0055 hors catalogue, activation et V3 remplis ouverts.
+
 Le bilan demande désormais la version2 et compare le mode souhaité aux [seuls modes explicitement partagés](../../../../api/src/modules/partner-workspace/docs/shared-modes.md) par le référent actuel. Retrait, absence ou portée modifiée gardent une inconnue ; historique et disponibilités privés exclus. La réponse v1 reste compatible.
 
 Chaque demande propose « Adéquation du référent au besoin » : critères séparés, sources partageables et inconnues explicites dans un dialogue. L'accès suit le propriétaire courant ; cache session/Lead supprimé à fermeture, relecture10s/manuelle, erreur masquant le résultat. [Règles propriétaires](../../../../api/src/modules/partner-workspace/docs/referent-assessment.md). Aucun dossier de disponibilités privé partagé ; V3 rempli reste ouvert.

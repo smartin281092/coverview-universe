@@ -1069,9 +1069,11 @@ export const partnerAppointments = pgTable(
     state: text("state").notNull().default("scheduled"),
     occupiedBeforeMinutes: integer("occupied_before_minutes").notNull().default(0),
     occupiedAfterMinutes: integer("occupied_after_minutes").notNull().default(0),
+    linkTermsRevision: integer("link_terms_revision").notNull().default(1),
   },
   (t) => [
     index("partner_appointment_lead").on(t.leadId),
+    check("partner_appointment_link_terms_revision", sql`${t.linkTermsRevision}>0`),
     index("partner_appointment_advisor").on(t.advisorId, t.startsAt),
     check("partner_appointment_duration", sql`${t.durationMinutes} between 15 and 240`),
     check(
@@ -1082,6 +1084,49 @@ export const partnerAppointments = pgTable(
       "partner_appointment_state",
       sql`${t.state} in ('scheduled','completed','cancelled','client_absent','advisor_absent')`,
     ),
+  ],
+);
+export const partnerAppointmentLinks = pgTable(
+  "partner_appointment_links",
+  {
+    id: text("id").primaryKey(),
+    appointmentId: text("appointment_id")
+      .notNull()
+      .references(() => partnerAppointments.id),
+    sourceLeadId: text("source_lead_id")
+      .notNull()
+      .references(() => partnerLeads.id),
+    leadId: text("lead_id")
+      .notNull()
+      .references(() => partnerLeads.id),
+    userId: text("user_id")
+      .notNull()
+      .references(() => identityUsers.id),
+    ownerId: text("owner_id")
+      .notNull()
+      .references(() => identityUsers.id),
+    subjectKey: text("subject_key").notNull(),
+    profileRevision: integer("profile_revision").notNull(),
+    revision: integer("revision").notNull(),
+    termsRevision: integer("terms_revision").notNull(),
+    action: text("action").notNull(),
+    terms: jsonb("terms").notNull(),
+    sourceBasis: text("source_basis").notNull(),
+    targetBasis: text("target_basis").notNull(),
+    evidence: jsonb("evidence").notNull(),
+    invalidatedAt: instant("invalidated_at"),
+    recordedAt: instant("recorded_at").notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("partner_appointment_link_revision").on(t.appointmentId, t.leadId, t.revision),
+    index("partner_appointment_link_target").on(t.leadId, t.subjectKey, t.recordedAt),
+    index("partner_appointment_link_source").on(t.sourceLeadId),
+    index("partner_appointment_link_user").on(t.userId),
+    check(
+      "partner_appointment_link_bounds",
+      sql`${t.revision}>0 and ${t.termsRevision}>0 and ${t.profileRevision}>=0 and ${t.sourceLeadId}<>${t.leadId}`,
+    ),
+    check("partner_appointment_link_action", sql`${t.action} in ('linked','unlinked')`),
   ],
 );
 export const partnerAppointmentTimePlans = pgTable(

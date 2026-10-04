@@ -8,6 +8,7 @@ import { PartnerApiError, type LeadOffer } from "@coverview/api-client/partner";
 import type { LeadCommand } from "@coverview/contracts/partner";
 import { PracticeSummaryDialog } from "../features/offers/PracticeSummaryDialog";
 import { AdvicePreferencesDialog } from "../features/offers/AdvicePreferencesDialog";
+import { SharedAppointmentsDialog } from "../features/offers/SharedAppointmentsDialog";
 import { ReferentAssessmentDialog } from "../features/offers/ReferentAssessmentDialog";
 import {
   Badge,
@@ -132,6 +133,7 @@ function Offers({ identity }: { identity: IdentityMe }) {
     [policies, setPolicies] = useState(false),
     [referents, setReferents] = useState<{ profile: string; category?: string } | null>(null),
     [advice, setAdvice] = useState<string | null>(null),
+    [sharedAppointments, setSharedAppointments] = useState<string | null>(null),
     [referentAssessment, setReferentAssessment] = useState<string | null>(null),
     [linkContract, setLinkContract] = useState(false),
     [pending, setPending] = useState(false),
@@ -232,6 +234,14 @@ function Offers({ identity }: { identity: IdentityMe }) {
   }
   return (
     <>
+      {sharedAppointments && (
+        <SharedAppointmentsDialog
+          key={`${identity.user.id}:${identity.session.id}:${sharedAppointments}`}
+          identity={identity}
+          leadId={sharedAppointments}
+          onClose={() => setSharedAppointments(null)}
+        />
+      )}
       {referentAssessment && (
         <ReferentAssessmentDialog
           key={`${identity.user.id}:${identity.session.id}:${referentAssessment}`}
@@ -330,7 +340,7 @@ function Offers({ identity }: { identity: IdentityMe }) {
         )}
       </div>
       <Dialog
-        open={!!search.lead}
+        open={!!search.lead && !sharedAppointments}
         onOpenChange={(open) => {
           if (!open && !pending)
             void navigate({
@@ -368,6 +378,13 @@ function Offers({ identity }: { identity: IdentityMe }) {
               <>
                 <Button variant="outline" disabled={pending} onClick={() => setAdvice(lead.id)}>
                   {t("advice.title")}
+                </Button>
+                <Button
+                  variant="outline"
+                  disabled={pending}
+                  onClick={() => setSharedAppointments(lead.id)}
+                >
+                  {t("appointmentLinks.shared")}
                 </Button>
                 <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border p-4">
                   <div>

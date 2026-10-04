@@ -1,5 +1,14 @@
 import { z } from "zod";
 import {
+  appointmentLinksManagementSchema,
+  appointmentLinksPreviewSchema,
+  appointmentLinksSelectionSchema,
+  appointmentLinksConfirmSchema,
+  appointmentUnlinkSchema,
+  sharedAppointmentsSchema,
+  type AppointmentLinksSelection,
+  type AppointmentLinksConfirm,
+  type AppointmentUnlink,
   leadCommandSchema,
   leadCreateInputSchema,
   leadDetailSchema,
@@ -356,6 +365,57 @@ export function createPartnerClient(baseUrl: string) {
         `/partner/leads/${encodeURIComponent(leadId)}/expertise-evidence`,
         needExpertiseEvidenceSchema,
         signal,
+      ),
+    sharedAppointments: (id: string, signal?: AbortSignal, wallet = false) =>
+      request(
+        `${path(wallet)}/${encodeURIComponent(id)}/shared-appointments`,
+        sharedAppointmentsSchema,
+        signal,
+      ),
+    appointmentLinks: (id: string, appointmentId: string, signal?: AbortSignal) =>
+      request(
+        `/partner/leads/${encodeURIComponent(id)}/appointments/${encodeURIComponent(appointmentId)}/links`,
+        appointmentLinksManagementSchema,
+        signal,
+      ),
+    previewAppointmentLinks: (
+      id: string,
+      appointmentId: string,
+      input: AppointmentLinksSelection,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/leads/${encodeURIComponent(id)}/appointments/${encodeURIComponent(appointmentId)}/links/preview`,
+        appointmentLinksPreviewSchema,
+        options.signal,
+        appointmentLinksSelectionSchema.parse(input),
+        options,
+      ),
+    confirmAppointmentLinks: (
+      id: string,
+      appointmentId: string,
+      input: AppointmentLinksConfirm,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/leads/${encodeURIComponent(id)}/appointments/${encodeURIComponent(appointmentId)}/links/confirm`,
+        appointmentLinksManagementSchema,
+        options.signal,
+        appointmentLinksConfirmSchema.parse(input),
+        options,
+      ),
+    unlinkAppointment: (
+      id: string,
+      appointmentId: string,
+      input: AppointmentUnlink,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/leads/${encodeURIComponent(id)}/appointments/${encodeURIComponent(appointmentId)}/links/unlink`,
+        appointmentLinksManagementSchema,
+        options.signal,
+        appointmentUnlinkSchema.parse(input),
+        options,
       ),
     previewPersonalRescheduling: (
       leadId: string,
