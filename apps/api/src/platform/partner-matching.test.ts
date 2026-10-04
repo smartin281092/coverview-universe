@@ -12,6 +12,8 @@ import {
   conventionDecisionSchema,
   leadCreateInputSchema,
   partnerApplicationInputSchema,
+  professionalLanguageSchema,
+  swissCantonSchema,
   type LeadDetail,
 } from "@coverview/contracts/partner";
 import { createDatabase } from "./db/database.js";
@@ -213,8 +215,8 @@ async function practice(person: PartnerActor, languageCodes: string[], cantons: 
     {
       revision: current.current?.revision ?? 0,
       professionalRevision: current.professionalRevision,
-      languageCodes,
-      cantons,
+      languageCodes: professionalLanguageSchema.array().parse(languageCodes),
+      cantons: swissCantonSchema.array().parse(cantons),
       confirmed: true,
     },
     key(),
