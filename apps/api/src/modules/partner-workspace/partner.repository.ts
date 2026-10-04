@@ -97,6 +97,7 @@ import { readAppointmentAssessment } from "./partner.appointment-assessment.js";
 import { protectAppointmentTime, recordAppointmentTime } from "./partner.appointment-time.js";
 import { previewPersonalAppointment } from "./partner.appointment-creation.js";
 import { createAppointmentLinkOperations } from "./partner.appointment-links.js";
+import { createWalletAppointmentOperations } from "./partner.wallet-appointments.js";
 import { createPracticeOperations } from "./partner.practice.js";
 import { readAdvicePreferences, confirmAdvicePreferences } from "./partner.advice.js";
 import { readNeedConflict, decideNeedConflict } from "./partner.need-conflicts.js";
@@ -667,6 +668,7 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
   }
   return {
     ...createCompetenceOperations(pool, transaction, documentsAvailable),
+    ...createWalletAppointmentOperations(pool, transaction),
     ...createAppointmentLinkOperations(pool, transaction, async (db, actor, id) => {
       const lead = await readLead(db, actor, id);
       if (!actor.wallet && summary(actor, lead).access !== "operational")

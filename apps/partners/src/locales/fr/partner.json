@@ -942,7 +942,8 @@
     "policy.linked": "Police finale partagée",
     "policy.withdrawn": "Partage de police retiré",
     "policy.reviewed": "Contrôle documentaire de police enregistré",
-    "policy.viewed": "Original de police consulté"
+    "policy.viewed": "Original de police consulté",
+    "client.appointment_cancelled.v1": "Rendez-vous annulé par le client"
   },
   "benefit": {
     "deductible": "Franchise",
@@ -1004,7 +1005,8 @@
       "interlocutor_request": "Changement d’interlocuteur demandé",
       "policy_review": "Suivi de police finale à compléter",
       "policy.withdrawn": "Partage de police retiré",
-      "policy.reviewed": "Contrôle documentaire enregistré"
+      "policy.reviewed": "Contrôle documentaire enregistré",
+      "client.appointment_cancelled.v1": "Rendez-vous annulé par le client"
     },
     "action": {
       "open": "Ouvrir le dossier",

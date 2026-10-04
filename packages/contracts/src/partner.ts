@@ -1,6 +1,7 @@
 import { insuranceCompanyIdSchema } from "./companies.js";
 import { z } from "zod";
 export * from "./partner-appointment-links.js";
+export * from "./partner-wallet-appointments.js";
 import {
   professionalPracticeSummarySchema,
   professionalLanguageSchema,

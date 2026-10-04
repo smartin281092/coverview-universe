@@ -610,5 +610,29 @@
     "terms": "{{date}} · {{mode}} · {{location}}",
     "target": "{{title}} — {{assessment}}",
     "place": "{{mode}} · {{location}}"
+  },
+  "appointments": {
+    "title": "Mes rendez-vous",
+    "description": "Consultez les rendez-vous de cette demande et annulez un rendez-vous futur si nécessaire.",
+    "advisor": "Avec {{name}}",
+    "failed": "Les rendez-vous ne sont pas accessibles pour le moment. Rechargez cette vue.",
+    "empty": "Aucun rendez-vous enregistré pour cette demande.",
+    "details": "Consulter le rendez-vous",
+    "limit": "Seuls les 100 rendez-vous les plus récents sont affichés.",
+    "cancel": "Annuler ce rendez-vous",
+    "consequences": "L’annulation concerne ce rendez-vous entier, y compris les demandes qui lui sont associées. Votre conseiller est informé et vous pourrez convenir de la suite. Vos demandes restent ouvertes.",
+    "reason": "Motif de l’annulation",
+    "reasonHelp": "Ce motif sera partagé avec les professionnels autorisés sur cette demande.",
+    "invalidReason": "Saisissez un motif de 2 à 1 000 caractères.",
+    "confirm": "Je confirme l’annulation de ce rendez-vous et de sa tenue pour les demandes associées.",
+    "invalidConfirmation": "Confirmez explicitement l’annulation pour continuer.",
+    "confirmButton": "Confirmer l’annulation",
+    "unavailable": "Ce rendez-vous ne peut plus être annulé ici. Contactez votre conseiller pour convenir de la suite.",
+    "success": "Le rendez-vous est annulé. Le responsable de votre demande a été informé.",
+    "conflict": "Le rendez-vous ou vos droits ont changé. Revenez à la liste et consultez les informations actuelles avant toute nouvelle action.",
+    "uncertain": "Le résultat de l’envoi est incertain. Réessayez le même envoi pour connaître son résultat sans annuler une seconde fois.",
+    "retryExact": "Réessayer le même envoi",
+    "sending": "Envoi en cours…",
+    "back": "Retour aux rendez-vous"
   }
 }

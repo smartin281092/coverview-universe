@@ -1,5 +1,7 @@
 # Offres Wallet
 
+« Mes rendez-vous » remplace la fiche par la liste puis le détail et l’annulation explicite d’un engagement futur. Motif partagé, confirmation vide, état annulé et suivi du responsable ; première commande conservée après réponse incertaine et contenu masqué sur erreur. [Règles canoniques](../../../../api/src/modules/partner-workspace/docs/wallet-appointment-cancellation.md). Dépendance0055 hors catalogue ; activation et V3 rempli/clavier/mobile ouverts.
+
 Chaque demande ouvre « Rendez-vous associés » en remplaçant sa fiche : modalités enregistrées, état courant ou à réexaminer, issue applicable et20dernières versions. Aucun autre Lead ni temps privé. [Audience canonique et limites](../../../../api/src/modules/partner-workspace/docs/appointment-links.md). Relecture10s, cache session et masquage sur erreur ;0055 hors catalogue, activation et V3 remplis ouverts.
 
 Le bilan demande désormais la version2 et compare le mode souhaité aux [seuls modes explicitement partagés](../../../../api/src/modules/partner-workspace/docs/shared-modes.md) par le référent actuel. Retrait, absence ou portée modifiée gardent une inconnue ; historique et disponibilités privés exclus. La réponse v1 reste compatible.

@@ -1,5 +1,8 @@
 import { z } from "zod";
 import {
+  walletAppointmentSchema,
+  walletAppointmentCancellationSchema,
+  type WalletAppointmentCancellation,
   appointmentLinksManagementSchema,
   appointmentLinksPreviewSchema,
   appointmentLinksSelectionSchema,
@@ -415,6 +418,25 @@ export function createPartnerClient(baseUrl: string) {
         appointmentLinksManagementSchema,
         options.signal,
         appointmentUnlinkSchema.parse(input),
+        options,
+      ),
+    walletAppointment: (leadId: string, appointmentId: string, signal?: AbortSignal) =>
+      request(
+        `/wallet/leads/${encodeURIComponent(leadId)}/appointments/${encodeURIComponent(appointmentId)}/cancellation`,
+        walletAppointmentSchema,
+        signal,
+      ),
+    cancelWalletAppointment: (
+      leadId: string,
+      appointmentId: string,
+      input: WalletAppointmentCancellation,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/wallet/leads/${encodeURIComponent(leadId)}/appointments/${encodeURIComponent(appointmentId)}/cancellation`,
+        walletAppointmentSchema,
+        options.signal,
+        walletAppointmentCancellationSchema.parse(input),
         options,
       ),
     previewPersonalRescheduling: (

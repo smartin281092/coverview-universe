@@ -9,6 +9,7 @@ import type { LeadCommand } from "@coverview/contracts/partner";
 import { PracticeSummaryDialog } from "../features/offers/PracticeSummaryDialog";
 import { AdvicePreferencesDialog } from "../features/offers/AdvicePreferencesDialog";
 import { SharedAppointmentsDialog } from "../features/offers/SharedAppointmentsDialog";
+import { WalletAppointmentsDialog } from "../features/offers/WalletAppointmentsDialog";
 import { ReferentAssessmentDialog } from "../features/offers/ReferentAssessmentDialog";
 import {
   Badge,
@@ -134,6 +135,7 @@ function Offers({ identity }: { identity: IdentityMe }) {
     [referents, setReferents] = useState<{ profile: string; category?: string } | null>(null),
     [advice, setAdvice] = useState<string | null>(null),
     [sharedAppointments, setSharedAppointments] = useState<string | null>(null),
+    [appointments, setAppointments] = useState<string | null>(null),
     [referentAssessment, setReferentAssessment] = useState<string | null>(null),
     [linkContract, setLinkContract] = useState(false),
     [pending, setPending] = useState(false),
@@ -234,6 +236,14 @@ function Offers({ identity }: { identity: IdentityMe }) {
   }
   return (
     <>
+      {appointments && (
+        <WalletAppointmentsDialog
+          key={`${identity.user.id}:${identity.session.id}:${appointments}`}
+          identity={identity}
+          leadId={appointments}
+          onClose={() => setAppointments(null)}
+        />
+      )}
       {sharedAppointments && (
         <SharedAppointmentsDialog
           key={`${identity.user.id}:${identity.session.id}:${sharedAppointments}`}
@@ -340,7 +350,7 @@ function Offers({ identity }: { identity: IdentityMe }) {
         )}
       </div>
       <Dialog
-        open={!!search.lead && !sharedAppointments}
+        open={!!search.lead && !sharedAppointments && !appointments}
         onOpenChange={(open) => {
           if (!open && !pending)
             void navigate({
@@ -378,6 +388,13 @@ function Offers({ identity }: { identity: IdentityMe }) {
               <>
                 <Button variant="outline" disabled={pending} onClick={() => setAdvice(lead.id)}>
                   {t("advice.title")}
+                </Button>
+                <Button
+                  variant="outline"
+                  disabled={pending}
+                  onClick={() => setAppointments(lead.id)}
+                >
+                  {t("appointments.title")}
                 </Button>
                 <Button
                   variant="outline"

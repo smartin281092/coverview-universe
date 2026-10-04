@@ -159,6 +159,7 @@ export async function notifyPartnerEvent(
       "client.modification",
       "client.refuse",
       "client.keep_current",
+      "client.appointment_cancelled.v1",
     ].includes(kind)
   ) {
     if (["client.select", "client.refuse", "client.keep_current"].includes(kind))
@@ -176,6 +177,31 @@ export async function notifyPartnerEvent(
       action: "review_response",
       priority: "high",
     });
+  }
+  if (kind === "client.appointment_cancelled.v1" && subjectId) {
+    const advisor = (
+      await db.query<{ advisor_id: string }>(
+        `select a.advisor_id from partner_appointments a
+      join partner_leads l on l.id=a.lead_id
+      join partner_members m on m.user_id=a.advisor_id
+      join partner_organizations o on o.id=m.organization_id
+      where a.id=$1 and l.id=$2 and a.advisor_id is distinct from l.responsible_id
+        and m.state='approved' and o.state='approved' and m.roles ? 'advisor'
+        and (m.review_due_at is null or m.review_due_at>clock_timestamp())
+        and exists(select 1 from partner_contributors c where c.lead_id=l.id and c.user_id=a.advisor_id
+          and c.revoked_at is null and c.access_scope='advice')`,
+        [subjectId, leadId],
+      )
+    ).rows[0];
+    if (advisor)
+      await put(db, {
+        leadId,
+        recipientId: advisor.advisor_id,
+        audience: "partner",
+        kind,
+        key: `${eventId}:advisor`,
+        action: null,
+      });
   }
   if (["offer.withdrawn", "offer.replaced"].includes(kind))
     await db.query(

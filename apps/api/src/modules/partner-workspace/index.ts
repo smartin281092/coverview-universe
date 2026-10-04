@@ -3,6 +3,8 @@ import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
 import {
+  walletAppointmentSchema,
+  walletAppointmentCancellationSchema,
   appointmentLinksManagementSchema,
   appointmentLinksPreviewSchema,
   appointmentLinksSelectionSchema,
@@ -431,6 +433,38 @@ export function registerPartnerWorkspace(
     );
   }
   const linkParams = params.extend({ appointmentId: z.string().min(1).max(100) });
+  app.get(
+    "/wallet/leads/:id/appointments/:appointmentId/cancellation",
+    {
+      config: limited,
+      schema: { params: linkParams, response: { 200: walletAppointmentSchema } },
+    },
+    async (request) =>
+      repository.walletAppointment(
+        await actor(request, true),
+        request.params.id,
+        request.params.appointmentId,
+      ),
+  );
+  app.post(
+    "/wallet/leads/:id/appointments/:appointmentId/cancellation",
+    {
+      config: limited,
+      schema: {
+        params: linkParams,
+        body: walletAppointmentCancellationSchema,
+        response: { 200: walletAppointmentSchema },
+      },
+    },
+    async (request) =>
+      repository.cancelWalletAppointment(
+        await actor(request, true),
+        request.params.id,
+        request.params.appointmentId,
+        request.body,
+        key(request),
+      ),
+  );
   app.get(
     "/partner/leads/:id/appointments/:appointmentId/links",
     {
