@@ -1021,7 +1021,11 @@
       "client.appointment_cancelled.v1": "Rendez-vous annulé par le client",
       "appointment.slots_offered.v1": "Créneaux proposés au client",
       "appointment.slots_withdrawn.v1": "Proposition de créneaux retirée",
-      "client.appointment_reserved.v1": "Rendez-vous réservé par le client"
+      "client.appointment_reserved.v1": "Rendez-vous réservé par le client",
+      "quality.pending": "Dossier qualité à traiter",
+      "quality.survey_dependency": "Enquête non invitée : propriétaire Wallet manquant à la clôture",
+      "quality.updated": "Suivi du dossier qualité",
+      "communication.consent": "Accord préalable attendu"
     },
     "action": {
       "open": "Ouvrir le dossier",
@@ -1031,7 +1035,10 @@
       "assign": "Attribuer le dossier",
       "review_response": "Examiner la réponse",
       "review_offer": "Examiner les offres",
-      "review_policy": "Examiner la police et ses preuves"
+      "review_policy": "Examiner la police et ses preuves",
+      "review_quality": "Traiter le suivi qualité",
+      "survey": "Donner mon avis",
+      "communication": "Consulter les échanges"
     }
   },
   "collaboration": {

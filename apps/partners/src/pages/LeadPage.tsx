@@ -238,6 +238,20 @@ export function LeadPage() {
                 </a>
               </Button>
             )}
+            {lead.access === "operational" && (
+              <>
+                <Button variant="outline" asChild>
+                  <Link to="/quality" search={{ leadId: lead.id, state: "all" }}>
+                    {t("quality:title")}
+                  </Link>
+                </Button>
+                <Button variant="outline" asChild>
+                  <Link to="/leads/$leadId/communications" params={{ leadId: lead.id }}>
+                    {t("communications:title")}
+                  </Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
         <div className="grid gap-4 rounded-xl border border-border bg-card p-5 sm:grid-cols-3">
@@ -489,7 +503,10 @@ export function LeadPage() {
               </Button>
             ) : (
               !lead.clientUserId && (
-                <p className="text-xs text-muted-foreground">{t("detail.pendingClient")}</p>
+                <div className="space-y-2 text-xs text-muted-foreground">
+                  <p>{t("detail.pendingClient")}</p>
+                  {lead.stage === "completed" && <p>{t("quality:missingOwner")}</p>}
+                </div>
               )
             )}
           </aside>

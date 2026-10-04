@@ -40,7 +40,10 @@
     "appointment.slots_withdrawn.v1": "Proposition de créneaux retirée",
     "client.appointment_reserved.v1": "Rendez-vous réservé par le client",
     "market.mandate_requested.v1": "Une mission de conseil attend votre autorisation",
-    "market.mandate_changed.v1": "Votre mandat de conseil a été mis à jour"
+    "market.mandate_changed.v1": "Votre mandat de conseil a été mis à jour",
+    "quality.survey": "Votre avis sur l’accompagnement",
+    "quality.updated": "Une suite de votre retour est disponible",
+    "communication.consent": "Demande d’accord préalable à un enregistrement"
   },
   "back": "Retour aux offres",
   "inspect": "Ouvrir la demande",
@@ -54,5 +57,8 @@
     "high": "Important",
     "urgent": "Prioritaire"
   },
-  "offerTitle": "{{title}} — {{company}} · {{product}} · Version {{version}}"
+  "offerTitle": "{{title}} — {{company}} · {{product}} · Version {{version}}",
+  "reviewQuality": "Consulter mon suivi",
+  "respondSurvey": "Donner mon avis",
+  "reviewCommunication": "Examiner la demande d’accord"
 }

@@ -1105,6 +1105,9 @@ export const partnerNotificationSchema = z.object({
       "review_response",
       "review_offer",
       "review_policy",
+      "review_quality",
+      "communication",
+      "survey",
     ])
     .nullable(),
   dueAt: instant.nullable(),

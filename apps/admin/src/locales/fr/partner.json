@@ -196,6 +196,15 @@
   "economy": {
     "marketplace": "Superviser la marketplace",
     "commercial-conditions": "Examiner les conditions commerciales",
-    "remunerations": "Suivre les accords et règlements"
+    "remunerations": "Suivre les accords et règlements",
+    "quality": "Qualité et réclamations"
+  },
+  "goals": {
+    "title": "Objectifs du réseau",
+    "statistics": "Statistiques globales",
+    "open": "Tous les objectifs",
+    "unavailable": "Non calculable",
+    "empty": "Aucun objectif actif dans cette vue.",
+    "progress": "Progression : {{value}}"
   }
 }

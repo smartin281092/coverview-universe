@@ -104,6 +104,10 @@ import { createCounselOperations } from "./partner.counsel.js";
 import { createCommercialOperations } from "./partner.commercial.js";
 import { createMarketplaceOperations } from "./partner.marketplace.js";
 import { createEconomyOperations } from "./partner.economy.js";
+import { createQualityOperations } from "./partner.quality.js";
+import { createCommunicationOperations } from "./partner.communications.js";
+import { createPilotageOperations } from "./partner.pilotage.js";
+import { createGoalOperations } from "./partner.goals.js";
 import { createPracticeOperations } from "./partner.practice.js";
 import { readAdvicePreferences, confirmAdvicePreferences } from "./partner.advice.js";
 import { readNeedConflict, decideNeedConflict } from "./partner.need-conflicts.js";
@@ -588,7 +592,7 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         typeof error === "object" &&
         "code" in error &&
         error.code === "23514" &&
-        /^(market|commercial|economy)\./u.test(operation)
+        /^(market|commercial|economy|quality|communication|pilotage)\./u.test(operation)
       )
         fail("PARTNER_CONFLICT", 409);
       if (
@@ -688,6 +692,10 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
     return { ...authorized, previous, row };
   }
   return {
+    ...createQualityOperations(pool, transaction, adviceLead),
+    ...createCommunicationOperations(pool, transaction, adviceLead),
+    ...createPilotageOperations(pool),
+    ...createGoalOperations(pool, transaction),
     ...createCommercialOperations(pool, transaction),
     ...createMarketplaceOperations(pool, transaction),
     ...createEconomyOperations(pool, transaction),

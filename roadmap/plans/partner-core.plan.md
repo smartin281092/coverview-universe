@@ -1,5 +1,7 @@
 # Partner — parcours opérationnel, brief du 2 octobre 2026
 
+Lot3/aa64 : [plan QP1–6 et journal](partner-quality-pilotage.plan.md), [propriétaire](../../apps/api/src/modules/partner-workspace/docs/quality-pilotage.md) et [ledger](../evidence/partner-core.md#lot-34--suivi-qualite-et-pilotage-aa64). Qualité/communications/pilotage implémentés, intégration et recette complète restent au lot4 ; brief I–III/S-110/S-042a ouverts.
+
 Lot2/935e réalisé selon le [plan ME1–6 et son journal](partner-marketplace-economy.plan.md). [Propriétaire](../../apps/api/src/modules/partner-workspace/docs/marketplace-economy.md) et [ledger](../evidence/partner-core.md#lot-24--marketplace-et-economie-935e) portent les règles/preuves ; suite lot3 qualité/pilotage, puis lot4 intégration/recette. Mandat I–III inchangé, programme non clos.
 
 Pilotage corrigé pendant le lot1/96ad : prochaines tâches **Astra Très élevé (`xhigh`)**, suite regroupée en **quatre lots** (objectif3–5tâches), selon le [plan de regroupement](partner-remaining-batches.plan.md). Cette instruction remplace Max/Ultra et les relais par petite tranche ; le mandat I–III reste entier.

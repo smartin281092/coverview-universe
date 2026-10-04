@@ -204,3 +204,23 @@ export function calculateEconomy(
       : null,
   };
 }
+
+/** Apply the same contractual allocation and cent rounding to an existing estimate. */
+export function economyEstimateShare(
+  estimate: NonNullable<ReturnType<typeof calculateEconomy>["estimate"]>,
+  terms: CommercialTerms,
+  supplier: string,
+  receiver: string,
+  beneficiary: string,
+) {
+  const share = (base: number) =>
+    allocate(base, terms, supplier, receiver, false).get(beneficiary) ?? null;
+  return {
+    minimumMinor: share(estimate.minimumMinor),
+    maximumMinor: share(estimate.maximumMinor),
+    weightedMinimumMinor:
+      estimate.weightedMinimumMinor === null ? null : share(estimate.weightedMinimumMinor),
+    weightedMaximumMinor:
+      estimate.weightedMaximumMinor === null ? null : share(estimate.weightedMaximumMinor),
+  };
+}

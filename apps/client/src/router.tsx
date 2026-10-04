@@ -62,9 +62,16 @@ const leadNotificationsRoute = createRoute({
 const offersRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/offers",
-  validateSearch: (search: Record<string, unknown>): { lead?: string } =>
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): { lead?: string; section?: "quality" | "communications" } =>
     typeof search.lead === "string" && /^lead_[0-9a-f-]{36}$/.test(search.lead)
-      ? { lead: search.lead }
+      ? {
+          lead: search.lead,
+          ...(search.section === "quality" || search.section === "communications"
+            ? { section: search.section }
+            : {}),
+        }
       : {},
   component: lazyRouteComponent(() => import("./pages/OffersPage"), "OffersPage"),
 });

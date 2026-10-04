@@ -6,6 +6,7 @@ import { createPartnerClient } from "@coverview/api-client/partner";
 import { Button, LoadingState, ErrorState } from "@coverview/ui";
 import { AdminBoundary } from "../features/users/AdminBoundary";
 import { CounselQueue } from "../features/partner/CounselQueue";
+import { GoalSummary } from "../features/partner/GoalSummary";
 
 const client = createPartnerClient(
   import.meta.env.VITE_API_URL ??
@@ -45,11 +46,13 @@ function Overview({ identity, blocked }: { identity: IdentityMe; blocked: boolea
         <Button variant="outline" asChild>
           <a href={`${partnerUrl}/notifications`}>{t("notifications")}</a>
         </Button>
-        {(["marketplace", "commercial-conditions", "remunerations"] as const).map((path) => (
-          <Button key={path} variant="outline" asChild>
-            <a href={`${partnerUrl}/${path}`}>{t(`economy.${path}`)}</a>
-          </Button>
-        ))}
+        {(["marketplace", "commercial-conditions", "remunerations", "quality"] as const).map(
+          (path) => (
+            <Button key={path} variant="outline" asChild>
+              <a href={`${partnerUrl}/${path}`}>{t(`economy.${path}`)}</a>
+            </Button>
+          ),
+        )}
       </div>
       {dashboard.isPending ? (
         <LoadingState label={t("loading")} />
@@ -77,6 +80,7 @@ function Overview({ identity, blocked }: { identity: IdentityMe; blocked: boolea
       )}
       <p className="text-xs text-muted-foreground">{t("scope")}</p>
       <CounselQueue identity={identity} blocked={blocked} />
+      <GoalSummary identity={identity} blocked={blocked} client={client} partnerUrl={partnerUrl} />
     </div>
   );
 }

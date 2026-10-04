@@ -1,5 +1,7 @@
 # CoverView Partner
 
+Lot3 : `/statistics`, `/goals`, `/quality` et `/leads/:id/communications`, synthèse des objectifs au dashboard. Sources, définitions, populations, suivi et transcriptions humaines consenties : [règles propriétaires](../api/src/modules/partner-workspace/docs/quality-pilotage.md). V0–V2 vérifiés,0059 hors catalogue et V3 authentifié ouvert.
+
 Lot2 : `/marketplace`, `/commercial-conditions`, `/remunerations` et leurs détails ; publication depuis Collaboration du Lead. Propositions, termes complets, accord et registre réel persisté. Les parties suspendues conservent une consultation financière personnelle sans droits au dossier. [Règles, migration0058 et limites](../api/src/modules/partner-workspace/docs/marketplace-economy.md). V0–V2 vérifiés ; V3 authentifié rempli/clavier/mobile et activation restent ouverts.
 
 Bilan personnel → « Organiser la suite avec CoverView » transmet un résumé choisi, une action et une échéance vers une file traitable. Le conseiller retrouve ensuite suivi, retrait et résultat de collaboration. [Règles propriétaires](../api/src/modules/partner-workspace/docs/counsel-orchestration.md). Les notes et preuves privées restent privées ;0057 hors catalogue, activation/V3 ouverts.

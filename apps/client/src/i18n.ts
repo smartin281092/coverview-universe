@@ -1,5 +1,7 @@
 import insuranceRequests from "./locales/fr/insurance-requests.json";
 import offers from "./locales/fr/offers.json";
+import quality from "./locales/fr/quality.json";
+import communications from "./locales/fr/communications.json";
 import leadNotifications from "./locales/fr/lead-notifications.json";
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
@@ -16,6 +18,8 @@ void i18next.use(initReactI18next).init({
     fr: {
       leadNotifications,
       offers,
+      quality,
+      communications,
       insuranceRequests,
       common,
       profile,

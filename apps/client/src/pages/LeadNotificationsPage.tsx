@@ -107,8 +107,18 @@ function Notifications({ identity }: { identity: IdentityMe }) {
                 status: t(
                   n.action === null ? "information" : n.resolvedAt ? "resolved" : "unresolved",
                 ),
-                href: `/offers?lead=${encodeURIComponent(n.leadId)}`,
-                openLabel: t(n.resolvedAt || !n.action ? "inspect" : "reviewOffer"),
+                href: `/offers?lead=${encodeURIComponent(n.leadId)}${n.kind.startsWith("quality.") ? "&section=quality" : n.action === "communication" ? "&section=communications" : ""}`,
+                openLabel: t(
+                  n.kind === "quality.survey"
+                    ? "respondSurvey"
+                    : n.kind.startsWith("quality.")
+                      ? "reviewQuality"
+                      : n.action === "communication"
+                        ? "reviewCommunication"
+                        : n.resolvedAt || !n.action
+                          ? "inspect"
+                          : "reviewOffer",
+                ),
                 readLabel: t("read"),
               }))}
             />

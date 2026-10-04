@@ -9,6 +9,7 @@ import { useLeads } from "../features/use-leads";
 import { LeadCard } from "../features/LeadCard";
 import { CreateLeadDialog } from "../features/CreateLeadDialog";
 import { partnerApi } from "../api";
+import { GoalSummary } from "../features/GoalSummary";
 export function DashboardPage() {
   const { t } = useTranslation(),
     session = usePartner(),
@@ -61,6 +62,7 @@ export function DashboardPage() {
           </Button>
         )}
       </header>
+      <GoalSummary />
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-5">
         {(["active", "overdue", "unassigned", "openTasks", "resolved"] as const).map((key) => (
           <div key={key} className="rounded-xl border border-border bg-card p-5">

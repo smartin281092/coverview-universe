@@ -1,5 +1,7 @@
 # Contrats publics
 
+Les sous-chemins `partner-quality`, `partner-communications` et `partner-pilotage` définissent les entrées/DTO exécutables du [lot3 Partner](../../apps/api/src/modules/partner-workspace/docs/quality-pilotage.md). Aucune signature ni zéro financier inférés d’une source absente.
+
 ## Résumé
 
 Schémas Zod exécutables consommés par Fastify et le client HTTP commun.

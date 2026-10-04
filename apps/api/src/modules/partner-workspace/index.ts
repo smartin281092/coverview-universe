@@ -132,6 +132,9 @@ import { createDatabase } from "../../platform/db/database.js";
 import type { registerIdentity } from "../identity/index.js";
 import { createPartnerRepository } from "./partner.repository.js";
 import { PartnerError, type PartnerActor } from "./partner.policy.js";
+import { registerQualityRoutes } from "./partner.quality.routes.js";
+import { registerCommunicationRoutes } from "./partner.communications.routes.js";
+import { registerPilotageRoutes } from "./partner.pilotage.routes.js";
 import { startPartnerJobs } from "./partner.jobs.js";
 export { PartnerError } from "./partner.policy.js";
 
@@ -179,6 +182,9 @@ export function registerPartnerWorkspace(
     return { userId: session.userId, id: session.id, administrator: false, wallet };
   }
   const economyPage = z.object({ cursor: z.string().max(400).optional() }).strict();
+  registerQualityRoutes(server, repository, actor);
+  registerCommunicationRoutes(server, repository, actor);
+  registerPilotageRoutes(server, repository, actor);
   app.get(
     "/partner/economy/agreements",
     {

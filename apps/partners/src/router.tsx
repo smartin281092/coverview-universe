@@ -10,7 +10,55 @@ import {
   type LeadListQuery,
 } from "@coverview/contracts/partner";
 import { AppShell } from "./AppShell";
+import { pilotageQuerySchema, type PilotageQuery } from "@coverview/contracts/partner-pilotage";
+import { defaultPilotageQuery } from "./features/pilotage-display";
 const root = createRootRoute({ component: AppShell });
+const statistics = createRoute({
+  getParentRoute: () => root,
+  path: "/statistics",
+  validateSearch: (search: Record<string, unknown>): PilotageQuery =>
+    pilotageQuerySchema.parse({ ...defaultPilotageQuery(), ...search }),
+  component: lazyRouteComponent(() => import("./pages/StatisticsPage"), "StatisticsPage"),
+});
+const goals = createRoute({
+  getParentRoute: () => root,
+  path: "/goals",
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): {
+    goalId?: string | undefined;
+    cursor?: string | undefined;
+    state: "active" | "archived" | "all";
+  } => ({
+    ...(typeof search.goalId === "string" ? { goalId: search.goalId } : {}),
+    ...(typeof search.cursor === "string" ? { cursor: search.cursor } : {}),
+    state: search.state === "all" || search.state === "archived" ? search.state : "active",
+  }),
+  component: lazyRouteComponent(() => import("./pages/GoalsPage"), "GoalsPage"),
+});
+const communications = createRoute({
+  getParentRoute: () => root,
+  path: "/leads/$leadId/communications",
+  component: lazyRouteComponent(() => import("./pages/CommunicationsPage"), "CommunicationsPage"),
+});
+const quality = createRoute({
+  getParentRoute: () => root,
+  path: "/quality",
+  validateSearch: (
+    s: Record<string, unknown>,
+  ): {
+    leadId?: string | undefined;
+    caseId?: string | undefined;
+    cursor?: string | undefined;
+    state: "open" | "closed" | "all";
+  } => ({
+    ...(typeof s.leadId === "string" ? { leadId: s.leadId } : {}),
+    ...(typeof s.caseId === "string" ? { caseId: s.caseId } : {}),
+    ...(typeof s.cursor === "string" ? { cursor: s.cursor } : {}),
+    state: s.state === "closed" || s.state === "all" ? s.state : "open",
+  }),
+  component: lazyRouteComponent(() => import("./pages/QualityPage"), "QualityPage"),
+});
 const marketplace = createRoute({
   getParentRoute: () => root,
   path: "/marketplace",
@@ -117,6 +165,10 @@ const agenda = createRoute({
 export const router = createRouter({
   routeTree: root.addChildren([
     home,
+    quality,
+    communications,
+    statistics,
+    goals,
     marketplace,
     marketDetail,
     commercial,

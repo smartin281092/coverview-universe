@@ -1,3 +1,4 @@
+import { defaultPilotageQuery } from "./features/pilotage-display";
 import { Link, Outlet, useLocation } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import {
@@ -61,6 +62,42 @@ function Workspace() {
               {t(`nav.${label}`)}
             </Link>
           ))}
+        {context.operational && (
+          <>
+            <Link
+              to="/statistics"
+              search={{
+                ...defaultPilotageQuery(),
+                scope: context.administrator ? "network" : "self",
+              }}
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-muted-foreground hover:bg-muted"
+            >
+              <PanelsTopLeft className="size-4" />
+              {t("pilotage:title")}
+            </Link>
+            <Link
+              to="/goals"
+              search={{ state: "active" }}
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-muted-foreground hover:bg-muted"
+            >
+              <CheckSquare className="size-4" />
+              {t("pilotage:goalsTitle")}
+            </Link>
+          </>
+        )}
+        {context.administrator && (
+          <Link
+            to="/quality"
+            search={{ state: "open" }}
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-muted-foreground hover:bg-muted"
+          >
+            <ShieldCheck className="size-4" />
+            {t("quality:title")}
+          </Link>
+        )}
         {context.administrator && (
           <Link
             to="/applications"

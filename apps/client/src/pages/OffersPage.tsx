@@ -11,6 +11,8 @@ import { AdvicePreferencesDialog } from "../features/offers/AdvicePreferencesDia
 import { SharedAppointmentsDialog } from "../features/offers/SharedAppointmentsDialog";
 import { WalletAppointmentsDialog } from "../features/offers/WalletAppointmentsDialog";
 import { MarketMandatesDialog } from "../features/offers/MarketMandatesDialog";
+import { WalletQualityDialog } from "../features/offers/WalletQualityDialog";
+import { WalletCommunicationsDialog } from "../features/offers/WalletCommunicationsDialog";
 import { CoordinatedBookingsDialog } from "../features/offers/CoordinatedBookingsDialog";
 import { ReferentAssessmentDialog } from "../features/offers/ReferentAssessmentDialog";
 import {
@@ -139,6 +141,8 @@ function Offers({ identity }: { identity: IdentityMe }) {
     [sharedAppointments, setSharedAppointments] = useState<string | null>(null),
     [appointments, setAppointments] = useState<string | null>(null),
     [marketMandates, setMarketMandates] = useState<string | null>(null),
+    [qualitySelection, setQualityLead] = useState<string | null>(null),
+    [communicationsSelection, setCommunicationsLead] = useState<string | null>(null),
     [coordination, setCoordination] = useState(false),
     [referentAssessment, setReferentAssessment] = useState<string | null>(null),
     [linkContract, setLinkContract] = useState(false),
@@ -147,6 +151,13 @@ function Offers({ identity }: { identity: IdentityMe }) {
     [success, setSuccess] = useState<string | null>(null),
     [interlocutorSent, setInterlocutorSent] = useState(false),
     [create, setCreate] = useState(false);
+  const qualityLead =
+    qualitySelection ?? (search.section === "quality" ? (search.lead ?? null) : null);
+  const communicationsLead =
+    communicationsSelection ?? (search.section === "communications" ? (search.lead ?? null) : null);
+  const closeSection = () => {
+    if (search.section) void navigate({ search: search.lead ? { lead: search.lead } : {} });
+  };
   const attempt = useRef<{ payload: string; key: string } | null>(null),
     root = ["private", identity.user.id, identity.session.id, "wallet-leads", scope];
   const list = useQuery({
@@ -264,6 +275,28 @@ function Offers({ identity }: { identity: IdentityMe }) {
           onClose={() => setMarketMandates(null)}
         />
       )}
+      {qualityLead && (
+        <WalletQualityDialog
+          key={`${identity.user.id}:${identity.session.id}:${qualityLead}`}
+          identity={identity}
+          leadId={qualityLead}
+          onClose={() => {
+            setQualityLead(null);
+            closeSection();
+          }}
+        />
+      )}
+      {communicationsLead && (
+        <WalletCommunicationsDialog
+          key={`${identity.user.id}:${identity.session.id}:${communicationsLead}`}
+          identity={identity}
+          leadId={communicationsLead}
+          onClose={() => {
+            setCommunicationsLead(null);
+            closeSection();
+          }}
+        />
+      )}
       {sharedAppointments && (
         <SharedAppointmentsDialog
           key={`${identity.user.id}:${identity.session.id}:${sharedAppointments}`}
@@ -373,7 +406,13 @@ function Offers({ identity }: { identity: IdentityMe }) {
         )}
       </div>
       <Dialog
-        open={!!search.lead && !sharedAppointments && !appointments}
+        open={
+          !!search.lead &&
+          !sharedAppointments &&
+          !appointments &&
+          !qualityLead &&
+          !communicationsLead
+        }
         onOpenChange={(open) => {
           if (!open && !pending)
             void navigate({
@@ -409,6 +448,20 @@ function Offers({ identity }: { identity: IdentityMe }) {
           ) : (
             lead && (
               <>
+                <Button
+                  variant="outline"
+                  disabled={pending}
+                  onClick={() => setQualityLead(lead.id)}
+                >
+                  {t("quality:title")}
+                </Button>
+                <Button
+                  variant="outline"
+                  disabled={pending}
+                  onClick={() => setCommunicationsLead(lead.id)}
+                >
+                  {t("communications:title")}
+                </Button>
                 <Button variant="outline" disabled={pending} onClick={() => setAdvice(lead.id)}>
                   {t("advice.title")}
                 </Button>

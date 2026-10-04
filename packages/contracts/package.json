@@ -9,7 +9,10 @@
     "./insurance-requests": "./src/insurance-requests.ts",
     "./health-recommendation": "./src/health-recommendation.ts",
     "./partner": "./src/partner.ts",
-    "./partner-economy": "./src/partner-economy.ts"
+    "./partner-economy": "./src/partner-economy.ts",
+    "./partner-quality": "./src/partner-quality.ts",
+    "./partner-communications": "./src/partner-communications.ts",
+    "./partner-pilotage": "./src/partner-pilotage.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",

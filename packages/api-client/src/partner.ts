@@ -1,4 +1,7 @@
 import { z } from "zod";
+import { createQualityClient } from "./partner-quality.js";
+import { createCommunicationClient } from "./partner-communications.js";
+import { createPilotageClient } from "./partner-pilotage.js";
 import {
   commercialInputSchema,
   commercialReviewSchema,
@@ -166,7 +169,8 @@ export class PartnerApiError extends Error {
     super(code);
   }
 }
-export type PartnerMutation = { csrfToken: string; idempotencyKey: string; signal?: AbortSignal };
+import type { PartnerMutation } from "./partner-transport.js";
+export type { PartnerMutation } from "./partner-transport.js";
 export function createPartnerClient(baseUrl: string) {
   const base = new URL(baseUrl);
   if (!["http:", "https:"].includes(base.protocol) || base.username || base.password)
@@ -212,6 +216,9 @@ export function createPartnerClient(baseUrl: string) {
   const economyPath = (root: string, id: string) => `${root}/${encodeURIComponent(id)}`;
   const economyPage = (cursor?: string) => (cursor ? `?cursor=${encodeURIComponent(cursor)}` : "");
   return {
+    ...createQualityClient(request),
+    ...createCommunicationClient(request),
+    ...createPilotageClient(request),
     economyAgreements: (cursor?: string, signal?: AbortSignal) =>
       request("/partner/economy/agreements" + economyPage(cursor), economyAgreementsSchema, signal),
     economyCases: (cursor?: string, signal?: AbortSignal) =>

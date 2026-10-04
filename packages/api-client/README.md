@@ -1,5 +1,7 @@
 # Client HTTP CoverView
 
+Les opérations qualité, communications et pilotage/objectifs sont composées dans le client Partner existant, avec validation Zod, annulation et idempotence. Le type de transport commun évite une dépendance circulaire. [Règles lot3](../../apps/api/src/modules/partner-workspace/docs/quality-pilotage.md).
+
 ## Résumé
 
 Frontière HTTP commune des surfaces, dérivée des schémas de `@coverview/contracts`.

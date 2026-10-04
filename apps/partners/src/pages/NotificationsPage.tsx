@@ -99,7 +99,9 @@ export function NotificationsPage() {
                 ),
                 href: n.collaborationId
                   ? "/collaborations"
-                  : `/leads/${encodeURIComponent(n.leadId)}${n.kind === "client_response" ? "?tab=activity" : n.kind === "policy_review" ? "?tab=offers" : ""}`,
+                  : n.kind.startsWith("quality.") && n.kind !== "quality.survey_dependency"
+                    ? `/quality?leadId=${encodeURIComponent(n.leadId)}`
+                    : `/leads/${encodeURIComponent(n.leadId)}${n.kind === "client_response" ? "?tab=activity" : n.kind === "policy_review" ? "?tab=offers" : ""}`,
                 openLabel: t(
                   `notifications.action.${n.resolvedAt ? "open" : (n.action ?? "open")}`,
                 ),
