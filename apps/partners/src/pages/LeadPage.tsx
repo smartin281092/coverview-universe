@@ -36,6 +36,8 @@ import type { LeadDetail } from "@coverview/contracts/partner";
 import { OfferWithdrawDialog } from "../features/OfferWithdrawDialog";
 import { ContractComparison } from "../features/ContractComparison";
 import { OfferMatrix } from "../features/OfferMatrix";
+import { OrientationPanel } from "../features/OrientationPanel";
+import { RecommendationPanel } from "../features/RecommendationPanel";
 import { ContractReviewDialog } from "../features/ContractReviewDialog";
 import { CreateLeadDialog } from "../features/CreateLeadDialog";
 import { CollaborationDialog } from "../features/CollaborationDialog";
@@ -850,6 +852,10 @@ export function LeadPage() {
             ))}
           {!lead.offers.some((item) => item.active) && (
             <EmptyState title={t("offer.noOffers")} description={t("offer.sourceHelp")} />
+          )}
+          {lead.offers.some((item) => item.active) && <RecommendationPanel lead={lead} />}
+          {lead.offerOrientation && (
+            <OrientationPanel orientation={lead.offerOrientation} offers={lead.offers} />
           )}
           {lead.offerComparison && <OfferMatrix comparison={lead.offerComparison} />}
         </div>

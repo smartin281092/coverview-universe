@@ -35,6 +35,8 @@ import { ChoiceDialog, type WalletChoice } from "../features/offers/ChoiceDialog
 import { WalletLeadDialog } from "../features/offers/WalletLeadDialog";
 import { ContractComparison } from "../features/offers/ContractComparison";
 import { OfferMatrix } from "../features/offers/OfferMatrix";
+import { OrientationPanel } from "../features/offers/OrientationPanel";
+import { RecommendationCard } from "../features/offers/RecommendationCard";
 import { ContractLinkDialog } from "../features/offers/ContractLinkDialog";
 import { OfferHistoryDialog } from "../features/offers/OfferHistoryDialog";
 import { FinalPoliciesDialog } from "../features/offers/FinalPoliciesDialog";
@@ -695,6 +697,12 @@ function Offers({ identity }: { identity: IdentityMe }) {
                         </article>
                       ))}
                     </div>
+                    {lead.recommendation && (
+                      <RecommendationCard recommendation={lead.recommendation} />
+                    )}
+                    {lead.offerOrientation && (
+                      <OrientationPanel orientation={lead.offerOrientation} offers={offers} />
+                    )}
                     {lead.offerComparison && <OfferMatrix comparison={lead.offerComparison} />}
                     <div className="flex flex-wrap items-center justify-end gap-3">
                       <Button

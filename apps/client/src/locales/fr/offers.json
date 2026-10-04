@@ -869,5 +869,58 @@
     "detailed": "Voir toutes les prestations",
     "close": "Fermer",
     "notProvided": "Non renseigné"
+  },
+  "orientation": {
+    "title": "Orientation automatique",
+    "notice": "Calculée uniquement à partir des valeurs vérifiées dans les documents. Elle n’est pas validée par votre conseiller et ne vaut pas recommandation.",
+    "kind": {
+      "insufficient": "Les informations vérifiées ne suffisent pas encore pour orienter votre choix.",
+      "offer_advantage": "Sur les éléments vérifiés, au moins une offre paraît avantageuse par rapport à votre contrat actuel.",
+      "keep_current": "Sur les éléments vérifiés, conserver votre contrat actuel paraît préférable.",
+      "tradeoff": "Sur les éléments vérifiés, chaque offre implique un arbitrage entre prix et prestations.",
+      "offers_only": "Aucun contrat actuel n’est relié : les offres sont comparées entre elles, sans conclusion sur un maintien."
+    },
+    "offer": "{{company}} · {{product}}",
+    "status": {
+      "incomplete": "Analyse incomplète : des éléments restent à vérifier.",
+      "advantage": "Pas plus chère, sans perte vérifiée.",
+      "keep_current": "Pas moins chère, sans amélioration vérifiée.",
+      "tradeoff": "Des économies ou des améliorations, avec des contreparties.",
+      "comparable": "Comparable aux autres offres sur les éléments vérifiés."
+    },
+    "saves": "Vous économisez {{amount}} par année.",
+    "costs": "Vous payez {{amount}} de plus par année.",
+    "improves": "Vous améliorez : {{list}}.",
+    "loses": "Vous perdez : {{list}}.",
+    "notes": "À savoir : {{list}} (valeurs, conditions ou exclusions différentes).",
+    "toVerify": "À vérifier : {{list}}.",
+    "missing": "Informations absentes : {{list}}.",
+    "transparency": "Données utilisées et limites",
+    "scope": "Périmètre : {{offers}} de {{companies}} reçues dans ce dossier, pas l’ensemble du marché.",
+    "offers_one": "{{count}} offre",
+    "offers_other": "{{count}} offres",
+    "companies_one": "{{count}} compagnie",
+    "companies_other": "{{count}} compagnies",
+    "reviewed": "{{company}}, version {{version}}, vérifiée le {{date}}.",
+    "unreviewed": "{{company}}, version {{version}}, pas encore vérifiée.",
+    "current": "Contrat actuel : revue n° {{version}}.",
+    "assumption": {
+      "chf_only": "Montants en francs suisses uniquement.",
+      "verified_sources_only": "Seules les valeurs vérifiées et sourcées sont prises en compte.",
+      "structured_amounts_only": "Les limites ne sont comparées que si elles sont chiffrées dans la même unité et pour la même période.",
+      "annualized_current_premium": "Prime actuelle annualisée (×{{factor}})."
+    },
+    "availability": "Une offre reçue existe sur le marché ; l’admission par la compagnie et les droits de distribution ne sont pas encore établis.",
+    "asOf": "Données à jour au {{date}}."
+  },
+  "recommendation": {
+    "title": "Recommandation de votre conseiller",
+    "meta": "{{author}} · {{date}}",
+    "toReview": "Votre conseiller réexamine sa recommandation : les offres ou votre contrat actuel ont changé depuis.",
+    "offer": "Votre conseiller vous recommande l’offre {{company}} · {{product}}.",
+    "keep_current": "Votre conseiller vous recommande de conserver votre contrat actuel.",
+    "none": "Votre conseiller ne formule pas de recommandation à ce stade.",
+    "attention": "Points d’attention : {{value}}",
+    "decision": "La décision vous appartient : choisir, poser une question ou conserver votre contrat restent possibles."
   }
 }

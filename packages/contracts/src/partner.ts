@@ -26,6 +26,8 @@ export * from "./partner-final-policy.js";
 import { finalPolicyReviewSchema } from "./partner-final-policy.js";
 import { benefitCategorySchema, benefitLimitSchema } from "./partner-benefits.js";
 import { offerComparisonSchema } from "./partner-comparison.js";
+import { leadOrientationSchema } from "./partner-orientation.js";
+import { recommendationSchema } from "./partner-recommendations.js";
 import { insuranceItemSchema, insuranceRequestIdSchema } from "./insurance-requests.js";
 import { documentCreateInputSchema, documentStateSchema } from "./documents.js";
 
@@ -1884,6 +1886,9 @@ export const leadDetailSchema = leadSummarySchema.extend({
   currentContract: currentContractSchema.nullable().default(null),
   comparisons: z.array(contractComparisonSchema).default([]),
   offerComparison: offerComparisonSchema.optional(),
+  // Automatic, never validated (orientation-v1); the advisor's recommendation stays separate.
+  offerOrientation: leadOrientationSchema.optional(),
+  recommendation: recommendationSchema.nullable().optional(),
   collaborations: z.array(collaborationSchema).default([]),
   participants: z
     .array(z.object({ id, name: z.string(), canContact: z.boolean(), canWork: z.boolean() }))

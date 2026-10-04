@@ -59,6 +59,6 @@ Dans chaque ligne, la **meilleure limite des offres** est marquée quand au moin
 
 ## Limites
 
-- L'orientation automatique et la recommandation validée relèvent de C4b ; les spécificités prévoyance et la proposition automatique du contrat actuel, de C4c.
+- L'orientation automatique et la recommandation validée sont décrites dans [leur document](orientation-recommendation.md) (C4b). Les spécificités prévoyance et la proposition automatique du contrat actuel relèvent de C4c.
 - Le dictionnaire de suggestion couvre le français et quelques termes allemands et italiens. Une suggestion n'est jamais appliquée sans action de l'intervenant.
 - Aucune migration SQL : catégorie et montant vivent dans les données JSON existantes des offres et des revues, de façon additive. Les anciennes versions restent comparables par leurs clés.

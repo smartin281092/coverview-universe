@@ -55,7 +55,8 @@
     "conclusion.correct.v1": "Constat de conclusion corrigé",
     "correspondence.shared.v1": "Correspondance partagée par le client",
     "correspondence.withdrawn.v1": "Partage de correspondance retiré",
-    "correspondence.viewed.v1": "Correspondance consultée"
+    "correspondence.viewed.v1": "Correspondance consultée",
+    "recommendation.published": "Votre conseiller a formulé sa recommandation"
   },
   "back": "Retour aux offres",
   "inspect": "Ouvrir la demande",

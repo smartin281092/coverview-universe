@@ -978,7 +978,8 @@
     "correspondence.withdrawn.v1": "Partage de correspondance retiré",
     "correspondence.viewed.v1": "Correspondance consultée",
     "lead.relationship_linked.v1": "Lien entre demandes enregistré",
-    "lead.relationship_withdrawn.v1": "Lien entre demandes retiré"
+    "lead.relationship_withdrawn.v1": "Lien entre demandes retiré",
+    "recommendation.published": "Recommandation publiée dans Wallet"
   },
   "notifications": {
     "title": "Notifications",
@@ -1048,7 +1049,8 @@
       "conclusion.correct.v1": "Constat de conclusion corrigé",
       "correspondence.shared.v1": "Correspondance partagée par le client",
       "correspondence.withdrawn.v1": "Partage de correspondance retiré",
-      "correspondence.viewed.v1": "Correspondance consultée"
+      "correspondence.viewed.v1": "Correspondance consultée",
+      "analysis.incomplete": "Analyse comparative à compléter"
     },
     "action": {
       "open": "Ouvrir le dossier",
@@ -2337,5 +2339,48 @@
     },
     "amountHelp": "Seulement si le document l’indique ; la revue exige alors la page et l’extrait exact.",
     "invalid": "Montant non reconnu : chiffres seulement, deux décimales au plus (jours entiers)."
+  },
+  "orientation": {
+    "title": "Orientation automatique",
+    "notice": "Calculée uniquement à partir des valeurs vérifiées et sourcées. Elle n’est validée par personne et ne vaut pas recommandation ; le client la voit ainsi étiquetée.",
+    "kind": {
+      "insufficient": "Les informations vérifiées ne suffisent pas encore pour orienter le choix.",
+      "offer_advantage": "Sur les éléments vérifiés, au moins une offre paraît avantageuse par rapport au contrat actuel.",
+      "keep_current": "Sur les éléments vérifiés, conserver le contrat actuel paraît préférable.",
+      "tradeoff": "Sur les éléments vérifiés, chaque offre implique un arbitrage entre prix et prestations.",
+      "offers_only": "Aucun contrat actuel relié : les offres sont comparées entre elles, sans conclusion sur un maintien."
+    },
+    "offer": "{{company}} · {{product}}",
+    "status": {
+      "incomplete": "Analyse incomplète : des éléments restent à vérifier.",
+      "advantage": "Pas plus chère, sans perte vérifiée.",
+      "keep_current": "Pas moins chère, sans amélioration vérifiée.",
+      "tradeoff": "Des économies ou des améliorations, avec des contreparties.",
+      "comparable": "Comparable aux autres offres sur les éléments vérifiés."
+    },
+    "saves": "Économie : {{amount}} par année.",
+    "costs": "Surcoût : {{amount}} par année.",
+    "improves": "Améliorations : {{list}}.",
+    "loses": "Pertes : {{list}}.",
+    "notes": "À savoir : {{list}} (valeurs, conditions ou exclusions différentes).",
+    "toVerify": "À vérifier : {{list}}.",
+    "missing": "Informations absentes : {{list}}.",
+    "transparency": "Données utilisées et limites",
+    "scope": "Périmètre : {{offers}} de {{companies}} reçues dans ce dossier, pas l’ensemble du marché.",
+    "offers_one": "{{count}} offre",
+    "offers_other": "{{count}} offres",
+    "companies_one": "{{count}} compagnie",
+    "companies_other": "{{count}} compagnies",
+    "reviewed": "{{company}}, version {{version}}, vérifiée le {{date}}.",
+    "unreviewed": "{{company}}, version {{version}}, pas encore vérifiée.",
+    "current": "Contrat actuel : revue n° {{version}}.",
+    "assumption": {
+      "chf_only": "Montants en francs suisses uniquement.",
+      "verified_sources_only": "Seules les valeurs vérifiées et sourcées sont prises en compte.",
+      "structured_amounts_only": "Les limites ne sont comparées que si elles sont chiffrées dans la même unité et pour la même période.",
+      "annualized_current_premium": "Prime actuelle annualisée (×{{factor}})."
+    },
+    "availability": "Une offre reçue existe sur le marché ; l’admission par la compagnie et les droits de distribution ne sont pas encore établis.",
+    "asOf": "Données à jour au {{date}}."
   }
 }

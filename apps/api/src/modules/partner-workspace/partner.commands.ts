@@ -19,6 +19,7 @@ import { conclusionClosureReady } from "./partner.conclusion-evidence.js";
 import { reopenLead } from "./partner.lifecycle.js";
 import { overlappingAppointment } from "./partner.appointment-assessment.js";
 import { computeMatching, recordMatchingDecision } from "./partner.matching.js";
+import { syncAnalysisNotice } from "./partner.recommendations.js";
 type LeadRow = typeof partnerLeads.$inferSelect;
 
 async function changeStage(tx: PoolClient, lead: LeadRow, stage: string) {
@@ -684,4 +685,17 @@ export async function executeLeadCommand(
       break;
     }
   }
+  // The comparative analysis is read again whenever one of its inputs changed.
+  if (
+    [
+      "offer",
+      "offer_review",
+      "offer_publish",
+      "offer_withdraw",
+      "contract_link",
+      "contract_unlink",
+      "contract_review",
+    ].includes(input.action)
+  )
+    await syncAnalysisNotice(tx, lead);
 }

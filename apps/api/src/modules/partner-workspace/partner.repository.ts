@@ -8,6 +8,11 @@ import { createMatchingOperations } from "./partner.matching.js";
 import { createProfileOperations } from "./partner.profiles.js";
 import { createInvitationOperations, type InvitationDelivery } from "./partner.invitations.js";
 import { compareOffers } from "./partner.comparison.js";
+import { orientOffers } from "./partner.orientation.js";
+import {
+  createRecommendationOperations,
+  readCurrentRecommendation,
+} from "./partner.recommendations.js";
 import { readSolutionClauses, recordSolutionClauses } from "./partner.solution-clauses.js";
 import { createHash } from "node:crypto";
 import type { Pool, PoolClient } from "pg";
@@ -417,6 +422,7 @@ async function detail(db: Executor, actor: PartnerActor, id: string): Promise<Le
     base.access !== "progress"
       ? await readCurrentContract(db, { ...row, clientUserId: row.currentClientUserId })
       : null;
+  const offerComparison = compareOffers(currentContract, offers);
   return leadDetailSchema.parse({
     ...base,
     referentContinuity:
@@ -458,7 +464,12 @@ async function detail(db: Executor, actor: PartnerActor, id: string): Promise<Le
     offers,
     currentContract,
     comparisons: compareCurrentContract(currentContract, offers),
-    offerComparison: compareOffers(currentContract, offers),
+    offerComparison,
+    offerOrientation: orientOffers(offerComparison, offers, currentContract),
+    recommendation:
+      base.access !== "progress"
+        ? await readCurrentRecommendation(db, id, offers, currentContract, !!actor.wallet)
+        : null,
     collaborations:
       !actor.wallet && base.access !== "progress" ? await readCollaborations(db, actor, id) : [],
     participants:
@@ -715,6 +726,20 @@ export function createPartnerRepository(
     ...createMatchingOperations(pool),
     ...createProfileOperations(pool, transaction),
     ...createInvitationOperations(pool, transaction, invitationDelivery),
+    // Same authority as conclusion: advising rights and publication on an open request.
+    ...createRecommendationOperations(pool, transaction, async (tx, actor, id) => {
+      const lead = await adviceLead(tx, actor, id);
+      const canManage =
+        !actor.wallet &&
+        (await context(tx, actor, true)).canAdvise &&
+        !!summary(actor, lead).allowedActions?.includes("offer_publish") &&
+        !["draft", "completed"].includes(lead.stage);
+      return {
+        canManage,
+        offers: (await readOffers(tx, id, false)).items,
+        current: await readCurrentContract(tx, lead),
+      };
+    }),
     ...createRelationshipOperations(pool, transaction, async (tx, actor, id) => {
       const lead = await adviceLead(tx, actor, id),
         view = summary(actor, lead);

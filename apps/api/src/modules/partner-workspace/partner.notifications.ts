@@ -49,6 +49,31 @@ async function put(db: Executor, n: Notification) {
   );
 }
 
+// Open while the comparative analysis of reviewed offers cannot conclude (C4b); resolved as soon
+// as it can. One notice per request, reopened if the analysis becomes incomplete again.
+export async function notifyAnalysis(
+  db: Executor,
+  lead: { id: string; responsibleId: string | null },
+  incomplete: boolean,
+) {
+  const key = `${lead.id}:analysis_incomplete`;
+  if (incomplete)
+    await put(db, {
+      leadId: lead.id,
+      recipientId: lead.responsibleId,
+      audience: lead.responsibleId ? "partner" : "coverview",
+      kind: "analysis.incomplete",
+      key,
+      action: "review_offer",
+      reopen: true,
+    });
+  else
+    await db.query(
+      "update partner_notifications set resolved_at=now() where dedupe_key=$1 and resolved_at is null",
+      [key],
+    );
+}
+
 export async function notifyCollaboration(db: Executor, id: string, state: string) {
   const c = (
     await db.query<{
@@ -299,6 +324,7 @@ export async function notifyPartnerEvent(
       "appointment.slots_withdrawn.v1",
       "appointment.cancelled",
       "offer.published",
+      "recommendation.published",
       "offer.withdrawn",
       "offer.replaced",
       "lead.closed",
@@ -313,7 +339,9 @@ export async function notifyPartnerEvent(
       audience: "wallet",
       kind,
       key: `${eventId}:wallet`,
-      action: kind === "offer.published" ? "review_offer" : null,
+      action: ["offer.published", "recommendation.published"].includes(kind)
+        ? "review_offer"
+        : null,
     });
 }
 

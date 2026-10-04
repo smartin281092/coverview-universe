@@ -1,0 +1,38 @@
+{
+  "title": "Recommandation validée",
+  "description": "Votre recommandation, distincte de l’orientation automatique, est publiée dans Wallet avec votre nom et la date. Une nouvelle version d’offre ou une nouvelle revue du contrat actuel la rend « à revoir ».",
+  "create": "Formuler la recommandation",
+  "revise": "Réviser la recommandation",
+  "history": "Versions précédentes",
+  "historyDescription": "Chaque version reste conservée, avec son auteur, sa date et l’orientation du moment.",
+  "none": "Aucune recommandation publiée pour cette demande.",
+  "meta": "Version {{version}} · {{author}} · {{date}}",
+  "toReview": "À revoir : les offres comparées ou la revue du contrat actuel ont changé depuis.",
+  "attentionValue": "Points d’attention : {{value}}",
+  "deviationValue": "Motif d’écart avec l’orientation : {{value}}",
+  "orientationAt": "Orientation automatique au moment de la publication : {{kind}}",
+  "orientationNow": "Orientation automatique actuelle, sur les versions publiées : {{kind}}",
+  "closed": "La demande est terminée.",
+  "choiceLabel": "Votre recommandation",
+  "choice": {
+    "offer": "L’offre {{company}} · {{product}}",
+    "keep_current": "Conserver le contrat actuel",
+    "none": "Pas de recommandation à ce stade"
+  },
+  "deviationHint": "S’écarte de l’orientation automatique : motif requis.",
+  "rationale": "Motif de la recommandation (20 caractères au moins)",
+  "attention": "Points d’attention pour le client (facultatif)",
+  "deviation": "Motif de l’écart avec l’orientation (20 caractères au moins, visible des professionnels seulement)",
+  "publishNotice": "La recommandation est publiée immédiatement dans Wallet. Elle ne vaut ni choix du client, ni signature, ni acceptation de la compagnie.",
+  "publish": "Publier la recommandation",
+  "close": "Fermer",
+  "conflict": "Les offres ou le contrat actuel ont changé. Rechargez la demande et relisez l’orientation.",
+  "error": "La recommandation n’a pas pu être publiée. Réessayez.",
+  "orientationKind": {
+    "insufficient": "informations vérifiées insuffisantes",
+    "offer_advantage": "une offre paraît avantageuse",
+    "keep_current": "maintien du contrat actuel préférable",
+    "tradeoff": "arbitrage à faire",
+    "offers_only": "offres comparées entre elles, sans contrat actuel"
+  }
+}
