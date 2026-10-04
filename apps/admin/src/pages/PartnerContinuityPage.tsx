@@ -9,6 +9,7 @@ import { createPartnerClient, PartnerApiError } from "@coverview/api-client/part
 import {
   partnerContinuityUpdateSchema,
   type PartnerContinuityUpdate,
+  type PartnerContinuityUpdateInput,
   type PartnerContinuitySettings,
 } from "@coverview/contracts/partner";
 import {
@@ -43,7 +44,8 @@ function SettingsForm({
   onSaved: (settings: PartnerContinuitySettings) => void;
 }) {
   const { t, i18n } = useTranslation("partner");
-  const form = useForm<PartnerContinuityUpdate>({
+  // Input and parsed types differ: the policy schema fills defaults for omitted settings.
+  const form = useForm<PartnerContinuityUpdateInput, unknown, PartnerContinuityUpdate>({
     resolver: zodResolver(partnerContinuityUpdateSchema),
     defaultValues: { ...settings.current, reason: "" },
   });
@@ -94,6 +96,20 @@ function SettingsForm({
                 {...form.register("policy.acceptanceHours", { valueAsNumber: true })}
               />
             </label>
+            <label className="grid gap-2 max-w-sm" htmlFor="automatic-reassignments">
+              {t("continuity.automaticReassignments")}
+              <Input
+                id="automatic-reassignments"
+                type="number"
+                min={0}
+                max={3}
+                aria-describedby="automatic-reassignments-help"
+                {...form.register("policy.automaticReassignments", { valueAsNumber: true })}
+              />
+            </label>
+            <p id="automatic-reassignments-help" className="text-sm text-muted-foreground">
+              {t("continuity.automaticReassignmentsHelp")}
+            </p>
           </div>
           <div className="rounded-xl border border-border p-5 space-y-4">
             <label className="flex items-center gap-3" htmlFor="calendar-enabled">
@@ -261,6 +277,10 @@ function SettingsForm({
               <div>
                 <dt className="text-muted-foreground">{t("continuity.acceptanceHours")}</dt>
                 <dd>{history.policy.acceptanceHours}</dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">{t("continuity.automaticReassignments")}</dt>
+                <dd>{history.policy.automaticReassignments}</dd>
               </div>
               <div>
                 <dt className="text-muted-foreground">{t("continuity.calendarEnabled")}</dt>

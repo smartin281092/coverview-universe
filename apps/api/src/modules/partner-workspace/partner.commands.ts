@@ -18,6 +18,7 @@ import { executeFinalPolicyCommand } from "./partner.final-policy.js";
 import { conclusionClosureReady } from "./partner.conclusion-evidence.js";
 import { reopenLead } from "./partner.lifecycle.js";
 import { overlappingAppointment } from "./partner.appointment-assessment.js";
+import { computeMatching, recordMatchingDecision } from "./partner.matching.js";
 type LeadRow = typeof partnerLeads.$inferSelect;
 
 async function changeStage(tx: PoolClient, lead: LeadRow, stage: string) {
@@ -343,10 +344,28 @@ export async function executeLeadCommand(
       if (!details.transmissionAuthorized || !lead.title || !lead.nextAction || !lead.dueAt)
         fail("PARTNER_ACTION_REQUIRED");
       if (input.responsibleId === lead.responsibleId) fail("PARTNER_CONFLICT", 409);
+      // Recomputed on the locked Lead: a decision is never recorded against a stale ranking.
+      const matching = await computeMatching(
+        tx,
+        lead,
+        lead.responsibleId ? [lead.responsibleId] : [],
+      );
+      if (input.matchingBasis && input.matchingBasis !== matching.basis)
+        fail("PARTNER_CONFLICT", 409);
       await tx.query<Record<string, unknown>>(
         "update partner_leads set responsible_id=$2,assignment='proposed',notified_at=null,first_action_due_at=null,acceptance_due_at=null,continuity_policy_revision=null,first_useful_at=null,waiting=null,notification_cycle=notification_cycle+1 where id=$1",
         [id, input.responsibleId],
       );
+      // The mandatory reason documents the choice, and any deviation from the first candidate.
+      await recordMatchingDecision(tx, {
+        leadId: id,
+        cycle: lead.notificationCycle + 1,
+        kind: "manual",
+        actorId: actor.userId,
+        chosenUserId: input.responsibleId,
+        reason: input.reason,
+        matching,
+      });
       await tx.query<Record<string, unknown>>(
         "update partner_contributors set revoked_at=now() where lead_id=$1 and user_id=$2 and revoked_at is null",
         [id, lead.responsibleId],

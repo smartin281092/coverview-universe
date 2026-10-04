@@ -71,6 +71,8 @@ const instant = z.iso.datetime({ offset: true });
 export const partnerContinuityPolicySchema = z
   .object({
     acceptanceHours: z.number().int().min(1).max(24),
+    // Automatic proposals to the next eligible person before a human CoverView takeover.
+    automaticReassignments: z.number().int().min(0).max(3).default(1),
     calendar: z
       .object({
         enabled: z.boolean(),
@@ -117,6 +119,7 @@ export const partnerContinuitySettingsSchema = z.object({
 });
 export type PartnerContinuityPolicy = z.infer<typeof partnerContinuityPolicySchema>;
 export type PartnerContinuityUpdate = z.infer<typeof partnerContinuityUpdateSchema>;
+export type PartnerContinuityUpdateInput = z.input<typeof partnerContinuityUpdateSchema>;
 export type PartnerContinuitySettings = z.infer<typeof partnerContinuitySettingsSchema>;
 export const leadStageSchema = z.enum([
   "draft",
@@ -1953,7 +1956,16 @@ export const leadCommandSchema = z
       state: z.enum(["completed", "cancelled", "client_absent", "advisor_absent"]),
       note: text,
     }),
-    z.object({ action: z.literal("assign"), responsibleId: id, reason: text }),
+    z.object({
+      action: z.literal("assign"),
+      responsibleId: id,
+      reason: text,
+      // Ranking the decision was taken against; a changed ranking requires a new review.
+      matchingBasis: z
+        .string()
+        .regex(/^[a-f0-9]{64}$/u)
+        .optional(),
+    }),
     z.object({ action: z.literal("collaboration_propose"), terms: collaborationTermsSchema }),
     z.object({ action: z.literal("client_interlocutor"), reason: text }),
     z.object({

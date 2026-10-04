@@ -4,6 +4,7 @@ import { createCorrespondenceOperations } from "./partner.correspondence.js";
 import { readLeadReopenings } from "./partner.lifecycle.js";
 import { createRelationshipOperations } from "./partner.relationships.js";
 import { createNavigationOperations } from "./partner.navigation.js";
+import { createMatchingOperations } from "./partner.matching.js";
 import { readSolutionClauses, recordSolutionClauses } from "./partner.solution-clauses.js";
 import { createHash } from "node:crypto";
 import type { Pool, PoolClient } from "pg";
@@ -703,6 +704,7 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
   }
   return {
     ...createNavigationOperations(pool, transaction),
+    ...createMatchingOperations(pool),
     ...createRelationshipOperations(pool, transaction, async (tx, actor, id) => {
       const lead = await adviceLead(tx, actor, id),
         view = summary(actor, lead);

@@ -118,6 +118,25 @@ function summary(
     reviewedAt: reviewed ? row.created_at.toISOString() : null,
   });
 }
+// Matching composition: best current reviewed convention for a category, across companies.
+export async function readConventionCoverage(db: Executor, userId: string, category: string) {
+  const member = await membership(db, userId);
+  const allowed = !!member?.categories.includes(leadCategorySchema.parse(category));
+  const companies = (
+    await db.query<{ company_id: string }>(
+      "select distinct company_id from partner_convention_decisions where user_id=$1 and category=$2 order by company_id limit 50",
+      [userId, category],
+    )
+  ).rows;
+  let coverage: "category" | "limited" | "missing" = "missing";
+  for (const { company_id } of companies) {
+    const row = await latest(db, userId, category, company_id);
+    const status = summary(row, userId, member, allowed).status;
+    if (status === "reviewed") return "category" as const;
+    if (status === "limited") coverage = "limited";
+  }
+  return coverage;
+}
 function project(row: Row, userId: string, member: Awaited<ReturnType<typeof membership>>) {
   return {
     id: row.id,

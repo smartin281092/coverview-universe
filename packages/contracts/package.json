@@ -16,6 +16,7 @@
     "./partner-conclusion": "./src/partner-conclusion.ts",
     "./partner-lifecycle": "./src/partner-lifecycle.ts",
     "./partner-relationships": "./src/partner-relationships.ts",
+    "./partner-matching": "./src/partner-matching.ts",
     "./partner-navigation": "./src/partner-navigation.ts"
   },
   "scripts": {

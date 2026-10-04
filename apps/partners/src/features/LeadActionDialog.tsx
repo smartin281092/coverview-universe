@@ -24,6 +24,7 @@ import { useLeadCommand } from "./use-lead-command";
 import { Field, SelectOptions, readText, readDate, localDateTime } from "./Field";
 import { partnerApi } from "../api";
 import { PersonalAppointmentDialog } from "./PersonalAppointmentDialog";
+import { MatchingAssignment } from "./MatchingAssignment";
 export type LeadAction =
   | "next_action"
   | "contact"
@@ -173,6 +174,9 @@ export function LeadActionDialog({
             action,
             responsibleId: readText(data, "responsibleId"),
             reason: readText(data, "note"),
+            ...(readText(data, "matchingBasis")
+              ? { matchingBasis: readText(data, "matchingBasis") }
+              : {}),
           };
           break;
         case "wait":
@@ -328,17 +332,7 @@ export function LeadActionDialog({
           {action === "assign" && (
             <>
               <p className="text-sm text-muted-foreground">{t("detail.assignNotice")}</p>
-              <Field name="responsibleId" label={t("field.responsible")} required defaultValue="">
-                <option value="">{t("detail.noResponsible")}</option>
-                {directory.data?.items.map((person) => (
-                  <option key={person.id} value={person.id}>
-                    {person.name}
-                    {" · "}
-                    {person.organization}
-                  </option>
-                ))}
-              </Field>
-              {note}
+              <MatchingAssignment lead={lead} directory={directory.data?.items ?? []} />
             </>
           )}
           {action === "wait" && (

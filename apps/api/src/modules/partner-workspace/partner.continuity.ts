@@ -1,14 +1,69 @@
-import type { Pool } from "pg";
+import type { Pool, PoolClient } from "pg";
 import { event, type PartnerAuditActor } from "./partner.audit.js";
 import { handoffWork } from "./partner.participants.js";
 import { reconcileCollaborations } from "./partner.collaboration.js";
 import { syncLeadNotifications } from "./partner.notifications.js";
 import { followUpDeadline } from "./partner.follow-up.js";
 import { authorityCurrent } from "./partner.policy.js";
+import { currentContinuityPolicy } from "./partner.settings.js";
+import {
+  automaticChain,
+  computeMatching,
+  readMatchingLead,
+  recordMatchingDecision,
+} from "./partner.matching.js";
 
 const system: PartnerAuditActor = { userId: null, systemActor: "partner-continuity-v1" };
-// Full matching is not connected yet: zero automatic assignments to another advisor.
-// A single escalation moves the Lead to the human CoverView queue, never around a loop.
+// Bounded automatic proposals to the next eligible person, never to anyone already tried in the
+// chain; the person still has to accept. Beyond the bound, the human CoverView queue takes over.
+async function proposeAutomatically(
+  tx: PoolClient,
+  id: string,
+  previous: string,
+  stillValid: boolean,
+) {
+  const { policy } = await currentContinuityPolicy(tx);
+  const chain = await automaticChain(tx, id);
+  if (chain.count >= policy.automaticReassignments) return false;
+  const lead = await readMatchingLead(tx, id);
+  const matching = await computeMatching(tx, lead, [previous, ...chain.tried]);
+  const next = matching.candidates[0];
+  if (!next) return false;
+  const { cycle } = (
+    await tx.query<{ cycle: number }>(
+      "update partner_leads set responsible_id=$2,assignment='proposed',notified_at=null,first_action_due_at=null,acceptance_due_at=null,continuity_policy_revision=null,first_useful_at=null,waiting=null,notification_cycle=notification_cycle+1,revision=revision+1,updated_at=now() where id=$1 returning notification_cycle cycle",
+      [id, next.userId],
+    )
+  ).rows[0]!;
+  await tx.query(
+    "update partner_contributors set revoked_at=now() where lead_id=$1 and user_id=$2 and revoked_at is null",
+    [id, previous],
+  );
+  await handoffWork(tx, system, id, next.userId);
+  await recordMatchingDecision(tx, {
+    leadId: id,
+    cycle,
+    kind: "automatic",
+    actorId: null,
+    chosenUserId: next.userId,
+    reason: stillValid
+      ? "Délai de prise en charge dépassé sans attente justifiée."
+      : "Habilitation de l'intervenant précédent expirée.",
+    matching,
+  });
+  await event(tx, system, id, "lead.reassigned_automatically", "", "coverview", previous);
+  await event(
+    tx,
+    system,
+    id,
+    "lead.assigned",
+    "Votre demande est proposée à un nouvel intervenant, qui doit encore confirmer sa prise en charge.",
+    "client",
+    next.userId,
+  );
+  await syncLeadNotifications(tx, id);
+  return true;
+}
 const eligible = (
   user: string,
 ) => `exists(select 1 from identity_users u where u.id=${user} and not u.global_revocation_pending and (
@@ -78,6 +133,14 @@ export async function processPartnerContinuity(pool: Pool) {
         }).escalationDueAt;
         if (!row.valid || (!suspended && deadline && row.now.getTime() >= deadline.getTime())) {
           const previous = row.responsible_id;
+          if (await proposeAutomatically(tx, id, previous, row.valid)) {
+            escalated += 1;
+            await reconcileCollaborations(tx, id, system);
+            await tx.query("update partner_leads set continuity_checked_at=now() where id=$1", [
+              id,
+            ]);
+            continue;
+          }
           await tx.query(
             "update partner_leads set responsible_id=null,assignment='coverview',waiting=null,revision=revision+1,updated_at=now() where id=$1",
             [id],

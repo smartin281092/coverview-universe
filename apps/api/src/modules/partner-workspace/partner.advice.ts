@@ -28,7 +28,8 @@ type Row = {
   scope: unknown;
   created_at: Date;
 };
-async function subject(db: Executor, actor: PartnerActor, lead: AdviceTarget) {
+// A null actor is internal composition (matching): no audience, only the canonical subject.
+async function subject(db: Executor, actor: PartnerActor | null, lead: AdviceTarget) {
   if (!lead.clientUserId) return null;
   // Same row as canonical profile transfer. The original Lead owner is not an authority.
   const row = lead.clientProfileId
@@ -44,7 +45,8 @@ async function subject(db: Executor, actor: PartnerActor, lead: AdviceTarget) {
           [lead.clientUserId],
         )
       ).rows[0];
-  if (!row || (actor.wallet && row.user_id !== actor.userId)) return fail("PARTNER_NOT_FOUND", 404);
+  if (!row || (actor?.wallet && row.user_id !== actor.userId))
+    return fail("PARTNER_NOT_FOUND", 404);
   return {
     id: lead.clientProfileId ? `profile:${lead.clientProfileId}` : `self:${row.user_id}`,
     ownerId: row.user_id,
@@ -118,6 +120,21 @@ export async function readAdvicePreferences(
     history: target ? rows.slice(0, 20).map((row) => confirmation(row, target)) : [],
     nextBeforeRevision: rows.length > 20 ? rows[19]!.revision : null,
   });
+}
+// Matching composition: the current confirmed choices of the canonical subject, nothing else.
+export async function readConfirmedAdvice(db: Executor, lead: AdviceTarget) {
+  const target = await subject(db, null, lead);
+  const previous = target ? await latest(db, lead.id) : undefined;
+  const current =
+    target && previous?.subject_id === target.id ? confirmation(previous, target) : null;
+  const status = !target
+    ? ("unlinked" as const)
+    : !current
+      ? ("unset" as const)
+      : current.currentOwnerConfirmation && current.scopeRevision === lead.adviceScopeRevision
+        ? ("confirmed" as const)
+        : ("confirmation_required" as const);
+  return { status, current };
 }
 export async function confirmAdvicePreferences(
   db: Executor,

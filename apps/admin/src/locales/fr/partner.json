@@ -21,6 +21,8 @@
     "reference": "Première action utile : 24 heures calendaires",
     "scope": "Lire, accepter ou annoter un Lead ne redémarre pas le délai. Les nouvelles règles s’appliquent aux prochaines attributions ; les échéances déjà notifiées sont conservées. Une acceptation en retard déclenche une alerte, sans reporter la première action.",
     "acceptanceHours": "Acceptation — délai en heures (1 à 24)",
+    "automaticReassignments": "Propositions automatiques avant reprise par CoverView (0 à 3)",
+    "automaticReassignmentsHelp": "Après le délai de prise en charge sans action utile, le dossier est proposé au premier profil éligible du classement, qui doit l'accepter. Au-delà de ce nombre, ou sans profil éligible, CoverView reprend le dossier.",
     "calendarEnabled": "Reporter les échéances hors des plages de service",
     "calendarHelp": "Fuseau Europe/Zurich. Après les heures écoulées, une échéance hors plage passe à la prochaine ouverture, avec au maximum 7 jours de report. Les jours fériés et absences ne sont pas déduits. Les attentes motivées gardent leur réexamen daté ; la reprise CoverView intervient 4 heures après l’échéance de suivi non justifiée.",
     "serviceDays": "Jours de service",

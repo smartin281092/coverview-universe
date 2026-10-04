@@ -2,6 +2,7 @@ import { z } from "zod";
 import { createQualityClient } from "./partner-quality.js";
 import { createConclusionClient } from "./partner-conclusion.js";
 import { createRelationshipClient } from "./partner-relationships.js";
+import { createMatchingClient } from "./partner-matching.js";
 import { createNavigationClient } from "./partner-navigation.js";
 import { createCommunicationClient } from "./partner-communications.js";
 import { createPilotageClient } from "./partner-pilotage.js";
@@ -222,6 +223,7 @@ export function createPartnerClient(baseUrl: string) {
     ...createQualityClient(request),
     ...createConclusionClient(request, base),
     ...createRelationshipClient(request),
+    ...createMatchingClient(request),
     ...createNavigationClient(request),
     ...createCommunicationClient(request),
     ...createPilotageClient(request),

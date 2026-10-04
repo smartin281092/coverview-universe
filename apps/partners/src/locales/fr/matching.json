@@ -1,0 +1,54 @@
+{
+  "notice": "Classement établi à partir des déclarations validées par CoverView, sans critère de rémunération. La personne choisie doit encore accepter le dossier.",
+  "loading": "Calcul du classement…",
+  "error": "Le classement est indisponible. Vous pouvez choisir une personne en motivant ce choix.",
+  "summary": "Profils évalués : {{evaluated}} · exclus : {{excluded}}",
+  "truncated": "Seuls les 100 premiers profils de la catégorie sont évalués.",
+  "excludedTitle": "Motifs d'exclusion",
+  "excluded": {
+    "previous": "Intervenant actuel ou déjà sollicité",
+    "competence": "Compétence non validée",
+    "convention": "Convention non validée",
+    "language": "Langue différente du souhait du client",
+    "region": "Canton hors zone déclarée",
+    "absence": "Absence déclarée en cours",
+    "capacity": "Capacité déclarée indisponible"
+  },
+  "rank": "Rang {{rank}}",
+  "load_one": "{{count}} dossier actif",
+  "load_other": "{{count}} dossiers actifs",
+  "reasons": {
+    "referent": "Référent choisi par le client",
+    "relationship": "Déjà intervenu pour ce client",
+    "language": "Langue souhaitée",
+    "region": "Canton couvert",
+    "mode": "Mode de rendez-vous proposé",
+    "competence_category": "Compétence validée pour la catégorie",
+    "availability": "Disponible dans les 14 jours",
+    "capacity_open": "Capacité ouverte",
+    "low_load": "Charge la plus faible"
+  },
+  "caveats": {
+    "language_unknown": "Langues non déclarées",
+    "region_unknown": "Cantons non déclarés",
+    "mode_unknown": "Modes non déclarés",
+    "mode_differs": "Mode souhaité non proposé",
+    "competence_limited": "Compétence limitée",
+    "convention_limited": "Convention limitée",
+    "availability_undeclared": "Disponibilités non déclarées",
+    "capacity_unknown": "Capacité non déclarée",
+    "conflicts_unchecked": "Conflits à confirmer à l'acceptation"
+  },
+  "none": "Aucun profil éligible. Ne désignez pas d'intervenant par défaut : confiez le dossier à CoverView ou choisissez une personne en motivant ce choix.",
+  "other": "Autre personne (hors proposition)",
+  "otherPerson": "Personne choisie",
+  "reasonTop": "Motif de l'attribution",
+  "reasonDeviation": "Motif de l'écart avec la proposition",
+  "deviationNotice": "Ce choix s'écarte du classement : le motif est conservé avec la décision.",
+  "lastDecision": "Dernière décision : {{name}} · {{kind}}",
+  "kind": {
+    "manual": "décision humaine",
+    "automatic": "proposition automatique"
+  },
+  "deviation": " · avec écart motivé"
+}

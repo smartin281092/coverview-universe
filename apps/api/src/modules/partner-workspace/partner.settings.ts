@@ -8,6 +8,7 @@ import { date, fail, type Executor, type PartnerActor } from "./partner.policy.j
 
 export const defaultContinuityPolicy: PartnerContinuityPolicy = {
   acceptanceHours: 4,
+  automaticReassignments: 1,
   calendar: {
     enabled: false,
     timezone: "Europe/Zurich",

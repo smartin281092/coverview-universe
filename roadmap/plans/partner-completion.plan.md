@@ -22,9 +22,9 @@ Rendre tout le [brief I–III](../../references/coverview-partner-2026-10-02.md)
 - [x] Commits de plomberie, sans toucher aux fichiers. Snapshot du 2 octobre (`claude/partner-snapshot-20261002`), chaîne des 17 états de relais (`claude/partner-program`), travail source du 2–3 octobre (`claude/partner-integration`, parents snapshot + `97ce34b`). Arbres comparés à leurs sources : 0 écart.
 - [x] Fusion à trois voies sur la base exacte. Seule la métadonnée Drizzle était en conflit : deux migrations 0029.
 - [x] Catalogue unifié 0000–0065. Les migrations `drizzle-pending` 0049–0064 sont intégrées à l'octet près. La migration santé devient `0065_bumpy_mentallo` et conserve son horodatage déjà enregistré en base locale. Les 16 tests qui assemblaient un catalogue temporaire migrent désormais le catalogue normal.
-- [ ] Vérification cumulée : lint complet et suite de tests complète.
-- [ ] Sauvegarde puis migration de la base locale (0046→0064 attendues, 0065 déjà enregistrée).
-- [ ] Avance rapide de `D:\Projects` sur la fusion. Documents propriétaires mis à jour : plus de mention « hors catalogue ».
+- [x] Vérification cumulée. Lint complet vert. Premier passage de la suite complète : 733/744. Huit échecs venaient de deadlocks entre déclencheurs de profil et chemins Partner (corrigés à la source par 0066 et le mappage 409), deux d'attentes figées sur l'état « en attente » (alignées), un d'un bug de configuration préexistant (corrigé, G-07). Second passage : **72/72 fichiers, 744/744 tests**.
+- [x] Sauvegarde `pg_dump` (28,5 Mo, `.planning-local/backups/`, ignoré par Git), puis migration de la base locale : 47 → 67 migrations, 28 → 70 tables Partner. 0065 était déjà enregistrée, aucune entrée sautée.
+- [x] Avance rapide de `D:\Projects` sur la fusion (`f0a3813`). L'API de preview a rechargé, `/health` répond `ready`. Documents propriétaires mis à jour : les mentions « hors catalogue » sont déclarées historiques.
 
 ### C — Fonctions restantes, dans l'ordre
 
@@ -36,6 +36,47 @@ Rendre tout le [brief I–III](../../references/coverview-partner-2026-10-02.md)
 6. **Temps réel et agenda** (III.16, I.12, I.21) : diffusion Partner↔Wallet, rendez-vous conjoint, rentabilité CoverView si ses données existent.
 7. **Droits des personnes** (I.20, S-130/S-131) : export, rectification, conservation et suppression contrôlée, cloisonnement en base. Aucune durée légale inventée.
 8. **Reliquats** : gestion d'équipe du responsable, restrictions fines et réexamens automatiques (I.4), contrat non déclaré signalé par le client (I.17.2), audit incomplet → demande de complément (I.13).
+
+#### C1 — Conception retenue (avant code)
+
+- **Candidats.** Conseillers approuvés de la catégorie : organisation approuvée, rôle conseiller, réexamen non échu, accès non révoqué. Au plus 100 candidats sont évalués. Le responsable courant est exclu, et pour une réattribution automatique, tous les responsables de la chaîne automatique aussi.
+- **Éligibilité (sinon exclu, avec le motif compté).**
+  - compétence examinée et valide (`reviewed` ou `limited`) ;
+  - convention examinée et valide pour la catégorie ;
+  - langue ou canton qui ne diffèrent pas d'un souhait client confirmé ;
+  - pas d'absence déclarée en cours ;
+  - capacité déclarée différente de « indisponible ».
+  - Une donnée manquante reste « à confirmer » : elle n'exclut pas, mais elle classe plus bas et elle est signalée.
+- **Classement lexicographique, explicable et sans aucune donnée économique.**
+  1. référent confirmé du client pour la catégorie ;
+  2. nombre de critères client concordants (langue, zone, mode), puis nombre d'inconnues ;
+  3. compétence de catégorie avant compétence limitée ;
+  4. disponibilité déclarée dans les 14 jours ;
+  5. capacité ouverte, puis au cas par cas ;
+  6. charge observée la plus faible ;
+  7. moins d'attributions sur 30 jours ;
+  8. identifiant, pour un ordre stable.
+- **Restitution.** `GET /partner/leads/:id/matching`, réservé à l'Admin avec MFA : rang, critères, raisons et réserves sous forme de clés i18n, compteurs d'exclusion. Aucune donnée privée en texte libre. Sans candidat éligible, aucun « meilleur conseiller » n'est affiché : la file CoverView est proposée.
+- **Décision humaine.**
+  - La commande `assign` accepte un `matchingBasis` facultatif ; un classement périmé renvoie `409`.
+  - Le motif, déjà obligatoire, devient le motif d'écart quand le choix n'est pas le premier éligible.
+  - Une décision immuable conserve le classement (10 premiers), les exclusions, le choix, le rang et l'indicateur d'écart.
+- **Réattribution automatique bornée.** La politique de continuité ajoute `automaticReassignments` (0–3, défaut 1). À l'échéance non justifiée, ou après perte d'habilitation, le worker propose le dossier au premier éligible si le quota n'est pas atteint depuis la dernière décision humaine. Le candidat doit accepter : c'est la décision humaine de l'intervenant. Sinon, reprise humaine CoverView comme aujourd'hui. Décision de type `automatic` et notifications existantes.
+
+#### C2 — Conception retenue (avant code)
+
+- **Profil publiable par version.**
+  - Présentation libre bornée et photo facultative ; la photo passe par le circuit documentaire des preuves professionnelles (antivirus, finalité `partner_profile_photo`, images seulement).
+  - Le reste vient des sources déjà validées : spécialités (compétences examinées), langues et cantons (pratique déclarée), modes de rendez-vous.
+  - Soumission par le membre, examen Admin avec MFA (publication ou refus motivé), historique immuable. Une modification crée une nouvelle version à examiner ; la version publiée précédente reste affichée jusque-là.
+- **Évaluations calculées à la lecture, en trois dimensions séparées.**
+  - Expérience client : notes 1 à 5 des enquêtes de fin de demande, attribuées au responsable au moment de la clôture par une table d'attribution que remplit un déclencheur.
+  - Qualité opérationnelle : prise en charge dans le délai, réclamations examinées, suivi documenté.
+  - Fiabilité économique : dossiers, contestations, reprises du lot 2.
+  - Période glissante de 12 mois, volume et méthode affichés. La note publique n'apparaît qu'à partir de 5 avis ; sinon « pas encore assez d'avis ». Une conversion n'est jamais comptée comme qualité.
+- **Audiences.** Profil publié et note publique : Wallet (interlocuteur, propositions), membres Partner, Admin. Dimensions internes : la personne elle-même (droit d'accès, R5) et l'Admin ; la fiabilité économique est réservée à cette personne et à l'Admin.
+- **Contestation.** La personne conteste un élément précis (enquête, réclamation) avec un motif. L'Admin accepte ou refuse avec un motif. Un élément accepté sort du calcul, avec trace.
+- **Apporteurs.** Évaluation interne pour l'Admin : demandes transmises, doublons et demandes invalides, autorisation de transmission, écarts entre besoin annoncé et réalité constatée.
 
 ### B — Recette réelle et simplification (après C)
 
@@ -68,7 +109,8 @@ architecture, backend, api, contracts, data, permissions, security, testing, fro
 
 | # | Cible | Oracle | Observé | Décision |
 |---|---|---|---|---|
-|   |       |        |         |          |
+| 1 | Migration locale | `db:migrate` via pnpm | Échec masqué par le CLI ; base inchangée (transaction) | Diagnostic : la maintenance exige `AUTH_ENABLED=false` |
+| 2 | Migration locale | tsx depuis la racine | Module tsx introuvable à la racine | Changement de stratégie : binaire local `apps/api` ; troisième essai réussi |
 
 ## Risques et mitigations
 
