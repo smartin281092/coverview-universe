@@ -1,5 +1,9 @@
 # Partner — Leads et offres partagés avec Wallet
 
+**Activation des migrations, 4 octobre 2026.** Les migrations Partner 0029–0064 font partie du catalogue normal depuis la [fusion sur `claude/partner-integration`](../../../../../roadmap/plans/partner-completion.plan.md). Le dossier `drizzle-pending` est supprimé. Les mentions « hors catalogue » ci-dessous et dans `docs/` décrivent l'état antérieur à cette intégration.
+- 0066 retire le verrou `FOR UPDATE` sur les Leads des déclencheurs de profil 0059/0060. Toute modification de profil continue d'invalider les preuves dépendantes, mais les Leads sont toujours verrouillés avant le profil, ce qui évite les deadlocks avec les lectures et commandes Partner.
+- Un abandon concurrent (sérialisation 40001 ou deadlock 40P01) renvoie `409 PARTNER_CONFLICT` sur tous les chemins.
+
 Lot4 en cours : [signature native, correspondances et conclusion documentée](docs/conclusion.md), [vues privées et filtres](docs/navigation.md), [clôtures et reprises](docs/lifecycle.md).0060–0063 hors catalogue normal ; preuves V2 isolées, activation et V3 ouvertes.
 
 Lot3 : [qualité, communications consenties, statistiques et objectifs](docs/quality-pilotage.md). Ce propriétaire remplace les mentions historiques d’absence de ces capacités ;0059 hors catalogue, activation et V3 ouvertes.

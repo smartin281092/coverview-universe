@@ -1,5 +1,12 @@
 # Couverture du brief Partner — 2 octobre 2026
 
+**Intégration du 4 octobre 2026** ([plan de reprise](plans/partner-completion.plan.md), décisions 1a 2a 3b).
+- Les 17 états de relais encore disponibles sont commités sur `claude/partner-program`, puis fusionnés avec le travail source du 2–3 octobre sur `claude/partner-integration`.
+- Catalogue unifié 0000–0066 ; plus aucune migration hors catalogue.
+- La suite complète a révélé des deadlocks entre déclencheurs de profil et chemins Partner, corrigés par 0066 et le mappage `409`. Elle a aussi révélé des attentes de tests figées sur l'état « en attente », alignées depuis.
+- Le lot 4 interrompu (conclusion, navigation, reprises, regroupement et fusion de demandes) est repris sans relais Codex.
+- Les lignes du tableau ci-dessous restent l'état fonctionnel. Les mentions « hors catalogue » des entrées de relais sont historiques.
+
 Lot3/aa64 : qualité/enquête exacte et suites, préférences/accord/transcriptions humaines sourcées,59indicateurs et objectifs versionnés avec sources courantes implémentés V0–V2. [Règles](../apps/api/src/modules/partner-workspace/docs/quality-pilotage.md) et [ledger](evidence/partner-core.md#lot-34--suivi-qualite-et-pilotage-aa64) remplacent les mentions historiques d’absence pour ce périmètre.0059 hors catalogue ; URL Google réelle, capture/transcription automatique, activation/V3/signature et droits/rétention restent ouverts.
 
 Lot2/935e : Marketplace, Conditions, Mandats et Rémunérations désormais implémentés V0–V2 ; les mentions historiques « absents/à raccorder » ci-dessous sont remplacées pour ce périmètre par le [ledger du lot2](evidence/partner-core.md#lot-24--marketplace-et-economie-935e). V3/activation et preuves externes restent ouverts.

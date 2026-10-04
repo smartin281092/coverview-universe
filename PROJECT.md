@@ -52,7 +52,7 @@ Module implémenté : [platform](apps/api/src/platform/README.md), santé et per
 
 Module public ajouté le 30.09.2026 : [health-insurance](apps/api/src/modules/health-insurance/README.md), propriétaire du catalogue Priminfo 2027, des régions, des prestations sourcées et du calcul de franchises consommés par www. L’enrichissement des avantages est partiel ; état et preuves dans son README.
 
-Extension Partner du 02.10.2026 : [module commun Leads/offres](apps/api/src/modules/partner-workspace/README.md) et [surface Partner](apps/partners/README.md), reliés à Wallet et Admin. Implémentation partielle du [brief intégral](references/coverview-partner-2026-10-02.md), avec [couverture et reste à faire](roadmap/partner-coverage.md). Cette extension ne clôture pas les slices ni les intégrations antérieures.
+Extension Partner du 02.10.2026 : [module commun Leads/offres](apps/api/src/modules/partner-workspace/README.md) et [surface Partner](apps/partners/README.md), reliés à Wallet et Admin. Implémentation partielle du [brief intégral](references/coverview-partner-2026-10-02.md), avec [couverture et reste à faire](roadmap/partner-coverage.md). Cette extension ne clôture pas les slices ni les intégrations antérieures. Depuis le 4 octobre 2026, le programme est intégré et commité sur la branche `claude/partner-integration`, et il continue dans Claude Code selon le [plan de reprise](roadmap/plans/partner-completion.plan.md) (décisions utilisateur 1a 2a 3b).
 
 ## Offre et intégrations
 

@@ -1,5 +1,7 @@
 # CoverView Partner
 
+Depuis le 4 octobre 2026, toutes les migrations Partner sont dans le catalogue normal ([activation](../api/src/modules/partner-workspace/README.md)). Les mentions « hors catalogue » ci-dessous sont historiques. La recette authentifiée reste à faire.
+
 Lot4 : fiche Lead → signature/conclusion, correction motivée des constats, correspondances partagées par Wallet et contrôle des polices ; vues privées et filtres de liste ; reprise d’un dossier terminé avec archive de clôture. [Conclusion](../api/src/modules/partner-workspace/docs/conclusion.md), [navigation](../api/src/modules/partner-workspace/docs/navigation.md), [reprises](../api/src/modules/partner-workspace/docs/lifecycle.md).0060–0063 hors catalogue ; activation et recette authentifiée ouvertes.
 
 Lot3 : `/statistics`, `/goals`, `/quality` et `/leads/:id/communications`, synthèse des objectifs au dashboard. Sources, définitions, populations, suivi et transcriptions humaines consenties : [règles propriétaires](../api/src/modules/partner-workspace/docs/quality-pilotage.md). V0–V2 vérifiés,0059 hors catalogue et V3 authentifié ouvert.
