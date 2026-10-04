@@ -21,6 +21,9 @@ export const healthDatasets = pgTable(
     importedAt: timestamp("imported_at", { withTimezone: true }).notNull().defaultNow(),
     sources: jsonb("sources").notNull(),
     counts: jsonb("counts").notNull(),
+    insurerIdentities: jsonb("insurer_identities")
+      .notNull()
+      .default(sql`'[]'::jsonb`),
   },
   (t) => [
     uniqueIndex("health_one_active_year")

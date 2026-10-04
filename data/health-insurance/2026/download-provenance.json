@@ -1,0 +1,51 @@
+[
+  {
+    "file": "archive-2026.zip",
+    "url": "https://opendata.bagnet.ch/?r=/download&path=L1ByYWVtaWVuL0FyY2hpdl9QcmFlbWllbl8yMDI2LnppcA%3D%3D",
+    "sha256": "01ef32ab0bd8e25ee01ebd3d1d601487ca21f1569b55da3edcf9f9170f99dc78",
+    "bytes": 31923906,
+    "retrievedAt": "2026-10-02T16:47:18.595193+00:00",
+    "httpLastModified": null
+  },
+  {
+    "file": "regions.xlsx",
+    "url": "https://www.priminfo.admin.ch/downloads/praemienregionen_2026.xlsx",
+    "sha256": "a74639530b9ead5da8e38ff7d3cff3896b8ee3dc7de06a9f60a688d2d98b1a21",
+    "bytes": 693312,
+    "retrievedAt": "2026-10-02T16:47:19.170396+00:00",
+    "httpLastModified": "Fri, 02 Oct 2026 11:32:18 GMT"
+  },
+  {
+    "file": "premiums-official.pdf",
+    "url": "https://www.priminfo.admin.ch/downloads/praemien_2026.pdf",
+    "sha256": "6914ccc22c68f83ec7098daf623b5058bfcb29f750dcf357920d6f303f51634b",
+    "bytes": 6550708,
+    "retrievedAt": "2026-10-02T16:47:21.835845+00:00",
+    "httpLastModified": "Fri, 02 Oct 2026 11:32:26 GMT"
+  },
+  {
+    "file": "premiums-eu-official.pdf",
+    "url": "https://www.priminfo.admin.ch/downloads/praemien_eu_2026.pdf",
+    "sha256": "4857b7f66f7263168bc4e33bc24dc358c522ea1d4f8ca8338d9fe03b3ce0e5f4",
+    "bytes": 564305,
+    "retrievedAt": "2026-10-02T16:47:22.467282+00:00",
+    "httpLastModified": "Fri, 02 Oct 2026 11:32:28 GMT"
+  },
+  {
+    "file": "insurers.xlsx",
+    "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+    "resolvedUrl": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+    "sha256": "c0da8ef4e173bb81954ba1f4d3d014184b5972c0a7bbc20dac7c815be901c27f",
+    "bytes": 49567,
+    "retrievedAt": "2026-10-02T16:50:37.248782+00:00",
+    "httpLastModified": "Wed, 20 May 2026 06:48:41 GMT",
+    "effectiveDate": "2026-01-01"
+  },
+  {
+    "file": "opendata-metadata.json",
+    "url": "https://ckan.opendata.swiss/api/3/action/package_show?id=health-insurance-premiums",
+    "retrievedAt": "2026-10-02T16:53:49.734294+00:00",
+    "sha256": "c12d930769b34018054cf4b5d6e5950dbe0bd0bf71f8d9b9f83ef99ace7edecd",
+    "bytes": 53992
+  }
+]

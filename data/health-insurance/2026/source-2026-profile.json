@@ -1,0 +1,1787 @@
+{
+  "checkedAt": "2026-10-02",
+  "year": 2026,
+  "surveyYear": 2025,
+  "counts": {
+    "premiums": 217472,
+    "swissPremiums": 217308,
+    "models": 156,
+    "insurers": 34,
+    "tariffRows": 281,
+    "ageSubgroupDefinitions": 125,
+    "coverage": 3939,
+    "restrictedCoverage": 10,
+    "localities": 5483,
+    "municipalities": 2114,
+    "postcodes": 3178,
+    "regions": 44,
+    "swissRegions": 42,
+    "foreignPremiums": 2230,
+    "foreignInsurers": 14,
+    "foreignCountries": 30
+  },
+  "headers": {
+    "premiums": [
+      "Versicherer",
+      "Kanton",
+      "Hoheitsgebiet",
+      "Geschäftsjahr",
+      "Erhebungsjahr",
+      "Region",
+      "Altersklasse",
+      "Unfalleinschluss",
+      "Tarif",
+      "Tariftyp",
+      "Altersuntergruppe",
+      "Franchisestufe",
+      "Franchise",
+      "Prämie",
+      "isBaseP",
+      "isBaseF",
+      "Tarifbezeichnung"
+    ],
+    "tariffs": [
+      "Versicherer",
+      "Geschäftsjahr",
+      "Erhebungsjahr",
+      "Kategorie",
+      "Tarif",
+      "Tariftyp",
+      "Sort.-Nr.",
+      "Name_DE",
+      "Name_FR",
+      "Name_IT"
+    ],
+    "coverage": [
+      "Versicherer",
+      "Kanton",
+      "Hoheitsgebiet",
+      "Geschäftsjahr",
+      "Erhebungsjahr",
+      "Region",
+      "Tarif",
+      "Tariftyp",
+      "HMO-ID",
+      "Eingeschränkt",
+      "Gemeinden-BFS"
+    ],
+    "foreign": [
+      "Versicherer",
+      "Land",
+      "Hoheitsgebiet",
+      "Geschäftsjahr",
+      "Erhebungsjahr",
+      "Region",
+      "Altersklasse",
+      "Unfalleinschluss",
+      "Tarif",
+      "Tariftyp",
+      "Altersuntergruppe",
+      "Franchisestufe",
+      "Franchise",
+      "Prämie",
+      "isBaseP",
+      "isBaseF",
+      "Tarifbezeichnung"
+    ]
+  },
+  "sourceDelimiters": {
+    "premiums.csv.gz": ",",
+    "tariffs.csv.gz": ";",
+    "coverage.csv.gz": ";",
+    "premiums-eu.csv": ","
+  },
+  "nativeCategories": {
+    "HAM": 53,
+    "DIV": 49,
+    "BASE": 34,
+    "HMO": 20
+  },
+  "coverageStates": {
+    "N": 3929,
+    "Y": 10
+  },
+  "ageSubgroups": {
+    "K1": 56834,
+    "": 118204,
+    "K3": 26390,
+    "K5": 12390,
+    "K4": 3654
+  },
+  "foreignAgeSubgroups": {
+    "K1": 738,
+    "": 1476,
+    "K3": 16
+  },
+  "foreignCountries": [
+    "EU AT",
+    "EU BE",
+    "EU BG",
+    "EU CY",
+    "EU CZ",
+    "EU DE",
+    "EU DK",
+    "EU EE",
+    "EU ES",
+    "EU FI",
+    "EU FR",
+    "EU GB",
+    "EU GR",
+    "EU HR",
+    "EU HU",
+    "EU IE",
+    "EU IS",
+    "EU IT",
+    "EU LT",
+    "EU LU",
+    "EU LV",
+    "EU MT",
+    "EU NL",
+    "EU NO",
+    "EU PL",
+    "EU PT",
+    "EU RO",
+    "EU SE",
+    "EU SI",
+    "EU SK"
+  ],
+  "foreignInsurerIds": [
+    8,
+    32,
+    290,
+    376,
+    455,
+    509,
+    941,
+    1384,
+    1479,
+    1509,
+    1542,
+    1555,
+    1560,
+    1562
+  ],
+  "premiumCountsByCanton": {
+    "AG": 5872,
+    "AI": 4948,
+    "AR": 5032,
+    "BE": 17020,
+    "BL": 10150,
+    "BS": 5134,
+    "FR": 9996,
+    "GE": 4558,
+    "GL": 5098,
+    "GR": 15276,
+    "JU": 4536,
+    "LU": 16146,
+    "NE": 4544,
+    "NW": 5312,
+    "OW": 5076,
+    "SG": 15898,
+    "SH": 9984,
+    "SO": 5584,
+    "SZ": 5526,
+    "TG": 5146,
+    "TI": 8984,
+    "UR": 5326,
+    "VD": 9092,
+    "VS": 10866,
+    "ZG": 5450,
+    "ZH": 16754,
+    "ZE": 146,
+    "ZR": 18
+  },
+  "crossYear": {
+    "insurersOnly2026": [
+      1113,
+      1507
+    ],
+    "sameInsurerTariffKeys": 133,
+    "keysOnly2026": [
+      {
+        "insurerId": 455,
+        "tariffCode": "TelMed",
+        "name": "Télémédecine",
+        "category": "DIV"
+      },
+      {
+        "insurerId": 820,
+        "tariffCode": "casamed",
+        "name": "casamed",
+        "category": "HAM"
+      },
+      {
+        "insurerId": 1113,
+        "tariffCode": "BASE",
+        "name": "Assurance de base",
+        "category": "BASE"
+      },
+      {
+        "insurerId": 1113,
+        "tariffCode": "SanaTel",
+        "name": "SanaTel",
+        "category": "DIV"
+      },
+      {
+        "insurerId": 1322,
+        "tariffCode": "TELMED",
+        "name": "Telmed",
+        "category": "DIV"
+      },
+      {
+        "insurerId": 1384,
+        "tariffCode": "BESTCARE",
+        "name": "FAVORIT BESTCARE",
+        "category": "HMO"
+      },
+      {
+        "insurerId": 1384,
+        "tariffCode": "CASA",
+        "name": "FAVORIT CASA",
+        "category": "HAM"
+      },
+      {
+        "insurerId": 1384,
+        "tariffCode": "HMO",
+        "name": "FAVORIT SANTE",
+        "category": "HMO"
+      },
+      {
+        "insurerId": 1384,
+        "tariffCode": "MEDICA",
+        "name": "FAVORIT MEDICA",
+        "category": "HAM"
+      },
+      {
+        "insurerId": 1384,
+        "tariffCode": "MULTICHOICE",
+        "name": "FAVORIT MULTICHOICE",
+        "category": "HAM"
+      },
+      {
+        "insurerId": 1384,
+        "tariffCode": "PHARMA",
+        "name": "FAVORIT MEDPHARM",
+        "category": "HAM"
+      },
+      {
+        "insurerId": 1384,
+        "tariffCode": "TELMED",
+        "name": "FAVORIT TELMED",
+        "category": "DIV"
+      },
+      {
+        "insurerId": 1507,
+        "tariffCode": "BASE",
+        "name": "Assurance de base",
+        "category": "BASE"
+      },
+      {
+        "insurerId": 1507,
+        "tariffCode": "PrimaCare",
+        "name": "PrimaCare",
+        "category": "HAM"
+      },
+      {
+        "insurerId": 1507,
+        "tariffCode": "SanaTel",
+        "name": "SanaTel",
+        "category": "DIV"
+      },
+      {
+        "insurerId": 1509,
+        "tariffCode": "Hausarztmodell 1",
+        "name": "Médecin de famille 1",
+        "category": "HAM"
+      },
+      {
+        "insurerId": 1509,
+        "tariffCode": "Hausarztmodell 2",
+        "name": "Médecin de famille 2",
+        "category": "HAM"
+      },
+      {
+        "insurerId": 1509,
+        "tariffCode": "Hausarztmodell 3",
+        "name": "Médecin de famille 3",
+        "category": "HAM"
+      },
+      {
+        "insurerId": 1509,
+        "tariffCode": "Hausarztmodell 4",
+        "name": "Médecin de famille 4",
+        "category": "HAM"
+      },
+      {
+        "insurerId": 1509,
+        "tariffCode": "MultiAccess",
+        "name": "MultiAccess",
+        "category": "HMO"
+      },
+      {
+        "insurerId": 1509,
+        "tariffCode": "TelMed (CallMed)",
+        "name": "TelMed (CallMed)",
+        "category": "DIV"
+      },
+      {
+        "insurerId": 1509,
+        "tariffCode": "TelMed (Compact One)",
+        "name": "TelMed (Compact One)",
+        "category": "DIV"
+      },
+      {
+        "insurerId": 1562,
+        "tariffCode": "BFP_CAF",
+        "name": "BeneFit PLUS Flexmed R3",
+        "category": "HAM"
+      }
+    ],
+    "keysOnly2027": 20,
+    "nameChangesForSameKey": 53,
+    "municipalitiesOnly2026": [
+      {
+        "bfs": 2016,
+        "canton": "FR",
+        "name": "Fétigny",
+        "region": 2
+      },
+      {
+        "bfs": 2027,
+        "canton": "FR",
+        "name": "Ménières",
+        "region": 2
+      },
+      {
+        "bfs": 2278,
+        "canton": "FR",
+        "name": "Ulmiz",
+        "region": 2
+      },
+      {
+        "bfs": 2520,
+        "canton": "SO",
+        "name": "Halten",
+        "region": 0
+      },
+      {
+        "bfs": 2529,
+        "canton": "SO",
+        "name": "Oekingen",
+        "region": 0
+      },
+      {
+        "bfs": 5436,
+        "canton": "VD",
+        "name": "Saint-Oyens",
+        "region": 1
+      },
+      {
+        "bfs": 5437,
+        "canton": "VD",
+        "name": "Saubraz",
+        "region": 1
+      },
+      {
+        "bfs": 5669,
+        "canton": "VD",
+        "name": "Curtilles",
+        "region": 2
+      },
+      {
+        "bfs": 5871,
+        "canton": "VD",
+        "name": "L'Abbaye",
+        "region": 2
+      },
+      {
+        "bfs": 5872,
+        "canton": "VD",
+        "name": "Le Chenit",
+        "region": 2
+      },
+      {
+        "bfs": 5873,
+        "canton": "VD",
+        "name": "Le Lieu",
+        "region": 2
+      },
+      {
+        "bfs": 5919,
+        "canton": "VD",
+        "name": "Mathod",
+        "region": 2
+      },
+      {
+        "bfs": 5930,
+        "canton": "VD",
+        "name": "Suscévaz",
+        "region": 2
+      }
+    ],
+    "municipalitiesOnly2027": [
+      {
+        "bfs": 2056,
+        "canton": "FR",
+        "name": "Fétigny-Ménières",
+        "region": 2
+      },
+      {
+        "bfs": 5940,
+        "canton": "VD",
+        "name": "La Vallée de Joux",
+        "region": 2
+      },
+      {
+        "bfs": 5941,
+        "canton": "VD",
+        "name": "Mathod-Suscévaz",
+        "region": 2
+      }
+    ],
+    "changedRegionOnSurvivingBfs": []
+  },
+  "checks": {
+    "allYearsValid": true,
+    "missingModels": 0,
+    "unusedModels": 0,
+    "missingNonBaseCoverage": 0,
+    "coverageWithoutPremium": 0,
+    "duplicateCoverageGrain": 0,
+    "unknownCoverageBfs": [],
+    "wrongCoverageRegion": [],
+    "tariffTypePrefixConsistent": true,
+    "swissDuplicatePremiumGrain": 0,
+    "swissInvalidMinorAmounts": 0,
+    "foreignDuplicatePremiumGrain": 0,
+    "foreignInvalidMinorAmounts": 0,
+    "pdfPriceOracles": [
+      {
+        "insurerId": 1560,
+        "canton": "AG",
+        "region": 0,
+        "accident": true,
+        "deductible": 300,
+        "monthlyMinor": 52770,
+        "pdfPage": 27,
+        "passed": true
+      },
+      {
+        "insurerId": 1560,
+        "canton": "AG",
+        "region": 0,
+        "accident": false,
+        "deductible": 2500,
+        "monthlyMinor": 37940,
+        "pdfPage": 27,
+        "passed": true
+      },
+      {
+        "insurerId": 1507,
+        "canton": "VS",
+        "region": 1,
+        "accident": true,
+        "deductible": 300,
+        "monthlyMinor": 55440,
+        "pdfPage": 531,
+        "passed": true
+      },
+      {
+        "insurerId": 1113,
+        "canton": "VS",
+        "region": 1,
+        "accident": false,
+        "deductible": 2500,
+        "monthlyMinor": 42280,
+        "pdfPage": 531,
+        "passed": true
+      },
+      {
+        "insurerId": 1507,
+        "canton": "VS",
+        "region": 2,
+        "accident": true,
+        "deductible": 300,
+        "monthlyMinor": 55440,
+        "pdfPage": 532,
+        "passed": true
+      },
+      {
+        "insurerId": 1113,
+        "canton": "VS",
+        "region": 2,
+        "accident": false,
+        "deductible": 2500,
+        "monthlyMinor": 42280,
+        "pdfPage": 532,
+        "passed": true
+      }
+    ]
+  },
+  "swissMonthlyMinorRange": [
+    870,
+    91380
+  ],
+  "foreignMonthlyMinorRange": [
+    1840,
+    111290
+  ],
+  "models": [
+    {
+      "insurerId": 8,
+      "tariffCode": "01_016",
+      "category": "HAM",
+      "nameFR": "Gesundheitspraxisversicherung",
+      "nameDE": "Gesundheitspraxisversicherung",
+      "nameIT": "Gesundheitspraxisversicherung"
+    },
+    {
+      "insurerId": 8,
+      "tariffCode": "01_046",
+      "category": "HAM",
+      "nameFR": "Hausarztversicherung Profit",
+      "nameDE": "Hausarztversicherung Profit",
+      "nameIT": "Hausarztversicherung Profit"
+    },
+    {
+      "insurerId": 8,
+      "tariffCode": "01_131",
+      "category": "DIV",
+      "nameFR": "Callmed",
+      "nameDE": "Callmed",
+      "nameIT": "Callmed"
+    },
+    {
+      "insurerId": 8,
+      "tariffCode": "01_170",
+      "category": "HAM",
+      "nameFR": "Multimed",
+      "nameDE": "Multimed",
+      "nameIT": "Multimed"
+    },
+    {
+      "insurerId": 8,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 32,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 32,
+      "tariffCode": "CASAMED",
+      "category": "HAM",
+      "nameFR": "CASAMED",
+      "nameDE": "CASAMED",
+      "nameIT": "CASAMED"
+    },
+    {
+      "insurerId": 32,
+      "tariffCode": "SMARTMED",
+      "category": "DIV",
+      "nameFR": "SMARTMED",
+      "nameDE": "SMARTMED",
+      "nameIT": "SMARTMED"
+    },
+    {
+      "insurerId": 134,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 194,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 194,
+      "tariffCode": "HAM",
+      "category": "HAM",
+      "nameFR": "Hausarzt",
+      "nameDE": "Hausarzt",
+      "nameIT": "Hausarzt"
+    },
+    {
+      "insurerId": 194,
+      "tariffCode": "Telmed",
+      "category": "DIV",
+      "nameFR": "Telmed",
+      "nameDE": "Telmed",
+      "nameIT": "Telmed"
+    },
+    {
+      "insurerId": 246,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 246,
+      "tariffCode": "Casa",
+      "category": "HAM",
+      "nameFR": "casa",
+      "nameDE": "Casa",
+      "nameIT": "casa"
+    },
+    {
+      "insurerId": 246,
+      "tariffCode": "Medcasa",
+      "category": "HAM",
+      "nameFR": "igomed",
+      "nameDE": "Medcasa",
+      "nameIT": "igomed"
+    },
+    {
+      "insurerId": 246,
+      "tariffCode": "Regiomed",
+      "category": "HAM",
+      "nameFR": "Medizentrum Steffisburg",
+      "nameDE": "Regiomed",
+      "nameIT": "Medizentrum Steffisburg"
+    },
+    {
+      "insurerId": 246,
+      "tariffCode": "sanmed24",
+      "category": "DIV",
+      "nameFR": "sanmed24",
+      "nameDE": "Sanmed24",
+      "nameIT": "sanmed24"
+    },
+    {
+      "insurerId": 290,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 290,
+      "tariffCode": "HAM_DOC",
+      "category": "HAM",
+      "nameFR": "MyDoc",
+      "nameDE": "MyDoc",
+      "nameIT": "MyDoc"
+    },
+    {
+      "insurerId": 290,
+      "tariffCode": "HMO_01",
+      "category": "HMO",
+      "nameFR": "HMO",
+      "nameDE": "HMO",
+      "nameIT": "HMO"
+    },
+    {
+      "insurerId": 290,
+      "tariffCode": "smartDoc",
+      "category": "DIV",
+      "nameFR": "smartDoc",
+      "nameDE": "smartDoc",
+      "nameIT": "smartDoc"
+    },
+    {
+      "insurerId": 312,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 312,
+      "tariffCode": "CareMed",
+      "category": "HAM",
+      "nameFR": "CareMed",
+      "nameDE": "CareMed",
+      "nameIT": "CareMed"
+    },
+    {
+      "insurerId": 312,
+      "tariffCode": "FlexCare",
+      "category": "DIV",
+      "nameFR": "FlexCare",
+      "nameDE": "FlexCare",
+      "nameIT": "FlexCare"
+    },
+    {
+      "insurerId": 312,
+      "tariffCode": "HMO",
+      "category": "HMO",
+      "nameFR": "HMO",
+      "nameDE": "HMO",
+      "nameIT": "HMO"
+    },
+    {
+      "insurerId": 312,
+      "tariffCode": "SmartCare",
+      "category": "DIV",
+      "nameFR": "SmartCare",
+      "nameDE": "SmartCare",
+      "nameIT": "SmartCare"
+    },
+    {
+      "insurerId": 312,
+      "tariffCode": "TelFirst",
+      "category": "DIV",
+      "nameFR": "TelFirst",
+      "nameDE": "TelFirst",
+      "nameIT": "TelFirst"
+    },
+    {
+      "insurerId": 343,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 343,
+      "tariffCode": "OptiMed",
+      "category": "HMO",
+      "nameFR": "OptiMed",
+      "nameDE": "OptiMed",
+      "nameIT": "OptiMed"
+    },
+    {
+      "insurerId": 343,
+      "tariffCode": "PrimaCare",
+      "category": "HAM",
+      "nameFR": "PrimaCare",
+      "nameDE": "PrimaCare",
+      "nameIT": "PrimaCare"
+    },
+    {
+      "insurerId": 343,
+      "tariffCode": "PrimaFlex",
+      "category": "DIV",
+      "nameFR": "PrimaFlex",
+      "nameDE": "PrimaFlex",
+      "nameIT": "PrimaFlex"
+    },
+    {
+      "insurerId": 343,
+      "tariffCode": "SanaTel",
+      "category": "DIV",
+      "nameFR": "SanaTel",
+      "nameDE": "SanaTel",
+      "nameIT": "SanaTel"
+    },
+    {
+      "insurerId": 360,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 360,
+      "tariffCode": "HM1",
+      "category": "HAM",
+      "nameFR": "Hausmed",
+      "nameDE": "Hausmed",
+      "nameIT": "Hausmed"
+    },
+    {
+      "insurerId": 360,
+      "tariffCode": "TM1",
+      "category": "DIV",
+      "nameFR": "TelMed",
+      "nameDE": "Telmed",
+      "nameIT": "TelMed"
+    },
+    {
+      "insurerId": 376,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 376,
+      "tariffCode": "HMO_A",
+      "category": "HMO",
+      "nameFR": "CPTwin.plus",
+      "nameDE": "KPTwin.plus",
+      "nameIT": "CPTwin.plus"
+    },
+    {
+      "insurerId": 376,
+      "tariffCode": "KPTwindoc",
+      "category": "HAM",
+      "nameFR": "CPTwin.doc",
+      "nameDE": "KPTwin.doc",
+      "nameIT": "CPTwin.doc"
+    },
+    {
+      "insurerId": 376,
+      "tariffCode": "KPTwineasy",
+      "category": "DIV",
+      "nameFR": "CPTwin.easy",
+      "nameDE": "KPTwin.easy",
+      "nameIT": "CPTwin.easy"
+    },
+    {
+      "insurerId": 376,
+      "tariffCode": "KPTwinsmart",
+      "category": "DIV",
+      "nameFR": "KPTwin.smart",
+      "nameDE": "KPTwin.smart",
+      "nameIT": "KPTwin.smart"
+    },
+    {
+      "insurerId": 376,
+      "tariffCode": "KPTwinwin",
+      "category": "HAM",
+      "nameFR": "CPTwin.win",
+      "nameDE": "KPTwin.win",
+      "nameIT": "CPTwin.win"
+    },
+    {
+      "insurerId": 455,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 455,
+      "tariffCode": "HAM_CBA",
+      "category": "HAM",
+      "nameFR": "Médecin de famille",
+      "nameDE": "Hausarzt",
+      "nameIT": "Medico di famiglia"
+    },
+    {
+      "insurerId": 455,
+      "tariffCode": "HMO_Kt",
+      "category": "HMO",
+      "nameFR": "Centre de santé",
+      "nameDE": "Gesundheitszentrum",
+      "nameIT": "Centro sanitario"
+    },
+    {
+      "insurerId": 455,
+      "tariffCode": "Select",
+      "category": "DIV",
+      "nameFR": "Select",
+      "nameDE": "Select",
+      "nameIT": "Select"
+    },
+    {
+      "insurerId": 455,
+      "tariffCode": "TelMed",
+      "category": "DIV",
+      "nameFR": "Télémédecine",
+      "nameDE": "Telemedizin",
+      "nameIT": "Telemedicina"
+    },
+    {
+      "insurerId": 509,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 509,
+      "tariffCode": "DIV_XBA",
+      "category": "DIV",
+      "nameFR": "FlexHelp 24",
+      "nameDE": "FlexHelp 24",
+      "nameIT": "FlexHelp 24"
+    },
+    {
+      "insurerId": 509,
+      "tariffCode": "HAM_CBA",
+      "category": "HAM",
+      "nameFR": "casamed médecin de famille",
+      "nameDE": "casamed hausarzt",
+      "nameIT": "casamed family doctor"
+    },
+    {
+      "insurerId": 509,
+      "tariffCode": "HAM_GBA",
+      "category": "HAM",
+      "nameFR": "callmed 24",
+      "nameDE": "callmed 24",
+      "nameIT": "callmed 24"
+    },
+    {
+      "insurerId": 509,
+      "tariffCode": "HAM_PBA",
+      "category": "HAM",
+      "nameFR": "casamed pharm",
+      "nameDE": "casamed pharm",
+      "nameIT": "casamed pharm"
+    },
+    {
+      "insurerId": 509,
+      "tariffCode": "HMO",
+      "category": "HMO",
+      "nameFR": "casamed hmo",
+      "nameDE": "casamed hmo",
+      "nameIT": "casamed hmo"
+    },
+    {
+      "insurerId": 780,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 780,
+      "tariffCode": "Telmed-Modell",
+      "category": "DIV",
+      "nameFR": "Glarnermed-24",
+      "nameDE": "Glarnermed-24",
+      "nameIT": "Glarnermed-24"
+    },
+    {
+      "insurerId": 820,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 820,
+      "tariffCode": "casamed",
+      "category": "HAM",
+      "nameFR": "casamed",
+      "nameDE": "casamed",
+      "nameIT": "casamed"
+    },
+    {
+      "insurerId": 881,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 881,
+      "tariffCode": "HAM_MC",
+      "category": "HAM",
+      "nameFR": "EGK-Care",
+      "nameDE": "EGK-Care",
+      "nameIT": "EGK-Care"
+    },
+    {
+      "insurerId": 881,
+      "tariffCode": "Tel_Care",
+      "category": "DIV",
+      "nameFR": "EGK-TelCare",
+      "nameDE": "EGK-TelCare",
+      "nameIT": "EGK-TelCare"
+    },
+    {
+      "insurerId": 923,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 923,
+      "tariffCode": "HOMECARE",
+      "category": "HAM",
+      "nameFR": "SLKK-HomeCare",
+      "nameDE": "SLKK-HomeCare",
+      "nameIT": "SLKK-HomeCare"
+    },
+    {
+      "insurerId": 923,
+      "tariffCode": "SMARTMED",
+      "category": "DIV",
+      "nameFR": "SLKK-SmartMed",
+      "nameDE": "SLKK-SmartMed",
+      "nameIT": "SLKK-SmartMed"
+    },
+    {
+      "insurerId": 923,
+      "tariffCode": "TELCARE",
+      "category": "DIV",
+      "nameFR": "SLKK-TelCare",
+      "nameDE": "SLKK-TelCare",
+      "nameIT": "SLKK-TelCare"
+    },
+    {
+      "insurerId": 941,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 941,
+      "tariffCode": "Digimed",
+      "category": "DIV",
+      "nameFR": "Digimed",
+      "nameDE": "Digimed",
+      "nameIT": "Digimed"
+    },
+    {
+      "insurerId": 941,
+      "tariffCode": "Medicasa",
+      "category": "HAM",
+      "nameFR": "Medicasa",
+      "nameDE": "Medicasa",
+      "nameIT": "Medicasa"
+    },
+    {
+      "insurerId": 941,
+      "tariffCode": "Telmed",
+      "category": "DIV",
+      "nameFR": "Telmed",
+      "nameDE": "Telmed",
+      "nameIT": "Telmed"
+    },
+    {
+      "insurerId": 966,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 966,
+      "tariffCode": "Sparmed",
+      "category": "HAM",
+      "nameFR": "Sparmed",
+      "nameDE": "Sparmed",
+      "nameIT": "Sparmed"
+    },
+    {
+      "insurerId": 1040,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 1040,
+      "tariffCode": "Medicasa",
+      "category": "HAM",
+      "nameFR": "Medicasa",
+      "nameDE": "Medicasa",
+      "nameIT": "Medicasa"
+    },
+    {
+      "insurerId": 1040,
+      "tariffCode": "Telmed",
+      "category": "DIV",
+      "nameFR": "Telmed",
+      "nameDE": "Telmed",
+      "nameIT": "Telmed"
+    },
+    {
+      "insurerId": 1113,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 1113,
+      "tariffCode": "SanaTel",
+      "category": "DIV",
+      "nameFR": "SanaTel",
+      "nameDE": "SanaTel",
+      "nameIT": "SanaTel"
+    },
+    {
+      "insurerId": 1318,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 1318,
+      "tariffCode": "RS",
+      "category": "HAM",
+      "nameFR": "Hausarztmodell",
+      "nameDE": "Hausarztmodell",
+      "nameIT": "Hausarztmodell"
+    },
+    {
+      "insurerId": 1322,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 1322,
+      "tariffCode": "HAS",
+      "category": "HAM",
+      "nameFR": "Hausarztsystem",
+      "nameDE": "Hausarztsystem",
+      "nameIT": "Hausarztsystem"
+    },
+    {
+      "insurerId": 1322,
+      "tariffCode": "TELMED",
+      "category": "DIV",
+      "nameFR": "Telmed",
+      "nameDE": "Telmed",
+      "nameIT": "Telmed"
+    },
+    {
+      "insurerId": 1384,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 1384,
+      "tariffCode": "BESTCARE",
+      "category": "HMO",
+      "nameFR": "FAVORIT BESTCARE",
+      "nameDE": "FAVORIT BESTCARE",
+      "nameIT": "FAVORIT BESTCARE"
+    },
+    {
+      "insurerId": 1384,
+      "tariffCode": "CASA",
+      "category": "HAM",
+      "nameFR": "FAVORIT CASA",
+      "nameDE": "FAVORIT CASA",
+      "nameIT": "FAVORIT CASA"
+    },
+    {
+      "insurerId": 1384,
+      "tariffCode": "HMO",
+      "category": "HMO",
+      "nameFR": "FAVORIT SANTE",
+      "nameDE": "FAVORIT SANTE",
+      "nameIT": "FAVORIT SANTE"
+    },
+    {
+      "insurerId": 1384,
+      "tariffCode": "MEDICA",
+      "category": "HAM",
+      "nameFR": "FAVORIT MEDICA",
+      "nameDE": "FAVORIT MEDICA",
+      "nameIT": "FAVORIT MEDICA"
+    },
+    {
+      "insurerId": 1384,
+      "tariffCode": "MULTICHOICE",
+      "category": "HAM",
+      "nameFR": "FAVORIT MULTICHOICE",
+      "nameDE": "FAVORIT MULTICHOICE",
+      "nameIT": "FAVORIT MULTICHOICE"
+    },
+    {
+      "insurerId": 1384,
+      "tariffCode": "PHARMA",
+      "category": "HAM",
+      "nameFR": "FAVORIT MEDPHARM",
+      "nameDE": "FAVORIT MEDPHARM",
+      "nameIT": "FAVORIT MEDPHARM"
+    },
+    {
+      "insurerId": 1384,
+      "tariffCode": "TELMED",
+      "category": "DIV",
+      "nameFR": "FAVORIT TELMED",
+      "nameDE": "FAVORIT TELMED",
+      "nameIT": "FAVORIT TELMED"
+    },
+    {
+      "insurerId": 1386,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 1386,
+      "tariffCode": "COC",
+      "category": "DIV",
+      "nameFR": "Combi Care",
+      "nameDE": "Combi Care",
+      "nameIT": "Combi Care"
+    },
+    {
+      "insurerId": 1386,
+      "tariffCode": "MCMIT",
+      "category": "HMO",
+      "nameFR": "Managed Care",
+      "nameDE": "Managed Care",
+      "nameIT": "Managed Care"
+    },
+    {
+      "insurerId": 1386,
+      "tariffCode": "MD",
+      "category": "HAM",
+      "nameFR": "Med Direct",
+      "nameDE": "Med Direct",
+      "nameIT": "Med Direct"
+    },
+    {
+      "insurerId": 1386,
+      "tariffCode": "TDO",
+      "category": "DIV",
+      "nameFR": "Tel Doc",
+      "nameDE": "Tel Doc",
+      "nameIT": "Tel Doc"
+    },
+    {
+      "insurerId": 1386,
+      "tariffCode": "VIVA",
+      "category": "HMO",
+      "nameFR": "VIVA – Gesundheitsplan",
+      "nameDE": "VIVA – Gesundheitsplan",
+      "nameIT": "VIVA – Gesundheitsplan"
+    },
+    {
+      "insurerId": 1401,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 1401,
+      "tariffCode": "HAS",
+      "category": "HAM",
+      "nameFR": "Hausarzt-Modell",
+      "nameDE": "Hausarzt-Modell",
+      "nameIT": "Hausarzt-Modell"
+    },
+    {
+      "insurerId": 1401,
+      "tariffCode": "sanmed24",
+      "category": "DIV",
+      "nameFR": "sanmed24",
+      "nameDE": "sanmed24",
+      "nameIT": "sanmed24"
+    },
+    {
+      "insurerId": 1479,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 1479,
+      "tariffCode": "OptiMed",
+      "category": "HMO",
+      "nameFR": "OptiMed",
+      "nameDE": "OptiMed",
+      "nameIT": "OptiMed"
+    },
+    {
+      "insurerId": 1479,
+      "tariffCode": "PrimaCare",
+      "category": "HAM",
+      "nameFR": "PrimaCare",
+      "nameDE": "PrimaCare",
+      "nameIT": "PrimaCare"
+    },
+    {
+      "insurerId": 1479,
+      "tariffCode": "PrimaFlex",
+      "category": "DIV",
+      "nameFR": "PrimaFlex",
+      "nameDE": "PrimaFlex",
+      "nameIT": "PrimaFlex"
+    },
+    {
+      "insurerId": 1479,
+      "tariffCode": "SanaTel",
+      "category": "DIV",
+      "nameFR": "SanaTel",
+      "nameDE": "SanaTel",
+      "nameIT": "SanaTel"
+    },
+    {
+      "insurerId": 1507,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 1507,
+      "tariffCode": "PrimaCare",
+      "category": "HAM",
+      "nameFR": "PrimaCare",
+      "nameDE": "PrimaCare",
+      "nameIT": "PrimaCare"
+    },
+    {
+      "insurerId": 1507,
+      "tariffCode": "SanaTel",
+      "category": "DIV",
+      "nameFR": "SanaTel",
+      "nameDE": "SanaTel",
+      "nameIT": "SanaTel"
+    },
+    {
+      "insurerId": 1509,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 1509,
+      "tariffCode": "Hausarztmodell 1",
+      "category": "HAM",
+      "nameFR": "Médecin de famille 1",
+      "nameDE": "Hausarztmodell 1",
+      "nameIT": "Medico di famiglia 1"
+    },
+    {
+      "insurerId": 1509,
+      "tariffCode": "Hausarztmodell 2",
+      "category": "HAM",
+      "nameFR": "Médecin de famille 2",
+      "nameDE": "Hausarztmodell 2",
+      "nameIT": "Medico di famiglia 2"
+    },
+    {
+      "insurerId": 1509,
+      "tariffCode": "Hausarztmodell 3",
+      "category": "HAM",
+      "nameFR": "Médecin de famille 3",
+      "nameDE": "Hausarztmodell 3",
+      "nameIT": "Medico di famiglia 3"
+    },
+    {
+      "insurerId": 1509,
+      "tariffCode": "Hausarztmodell 4",
+      "category": "HAM",
+      "nameFR": "Médecin de famille 4",
+      "nameDE": "Hausarztmodell 4",
+      "nameIT": "Medico di famiglia 4"
+    },
+    {
+      "insurerId": 1509,
+      "tariffCode": "MultiAccess",
+      "category": "HMO",
+      "nameFR": "MultiAccess",
+      "nameDE": "MultiAccess",
+      "nameIT": "MultiAccess"
+    },
+    {
+      "insurerId": 1509,
+      "tariffCode": "TelMed (CallMed)",
+      "category": "DIV",
+      "nameFR": "TelMed (CallMed)",
+      "nameDE": "TelMed (CallMed)",
+      "nameIT": "TelMed (CallMed)"
+    },
+    {
+      "insurerId": 1509,
+      "tariffCode": "TelMed (Compact One)",
+      "category": "DIV",
+      "nameFR": "TelMed (Compact One)",
+      "nameDE": "TelMed (Compact One)",
+      "nameIT": "TelMed (Compact One)"
+    },
+    {
+      "insurerId": 1535,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 1535,
+      "tariffCode": "OptiMed",
+      "category": "HMO",
+      "nameFR": "OptiMed",
+      "nameDE": "OptiMed",
+      "nameIT": "OptiMed"
+    },
+    {
+      "insurerId": 1535,
+      "tariffCode": "PrimaCare",
+      "category": "HAM",
+      "nameFR": "PrimaCare",
+      "nameDE": "PrimaCare",
+      "nameIT": "PrimaCare"
+    },
+    {
+      "insurerId": 1535,
+      "tariffCode": "PrimaFlex",
+      "category": "DIV",
+      "nameFR": "PrimaFlex",
+      "nameDE": "PrimaFlex",
+      "nameIT": "PrimaFlex"
+    },
+    {
+      "insurerId": 1535,
+      "tariffCode": "SanaTel",
+      "category": "DIV",
+      "nameFR": "SanaTel",
+      "nameDE": "SanaTel",
+      "nameIT": "SanaTel"
+    },
+    {
+      "insurerId": 1542,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 1542,
+      "tariffCode": "FV",
+      "category": "HAM",
+      "nameFR": "FeminaVita",
+      "nameDE": "FeminaVita",
+      "nameIT": "FeminaVita"
+    },
+    {
+      "insurerId": 1542,
+      "tariffCode": "HS",
+      "category": "HAM",
+      "nameFR": "Hausspital",
+      "nameDE": "Hausspital",
+      "nameIT": "Hausspital"
+    },
+    {
+      "insurerId": 1542,
+      "tariffCode": "MF",
+      "category": "HAM",
+      "nameFR": "Médecin de famille",
+      "nameDE": "Hausarzt Modell",
+      "nameIT": "Medico di famiglia"
+    },
+    {
+      "insurerId": 1542,
+      "tariffCode": "PRV",
+      "category": "HAM",
+      "nameFR": "PreventoMed",
+      "nameDE": "PreventoMed",
+      "nameIT": "PreventoMed"
+    },
+    {
+      "insurerId": 1542,
+      "tariffCode": "QM",
+      "category": "HAM",
+      "nameFR": "Qualimed",
+      "nameDE": "Qualimed",
+      "nameIT": "Qualimed"
+    },
+    {
+      "insurerId": 1542,
+      "tariffCode": "RPH",
+      "category": "HAM",
+      "nameFR": "PharMed",
+      "nameDE": "PharMed",
+      "nameIT": "PharMed"
+    },
+    {
+      "insurerId": 1542,
+      "tariffCode": "RS",
+      "category": "DIV",
+      "nameFR": "Réseau de soins",
+      "nameDE": "Gesundheitnetz",
+      "nameIT": "Rete delle cure"
+    },
+    {
+      "insurerId": 1555,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 1555,
+      "tariffCode": "COC",
+      "category": "DIV",
+      "nameFR": "Combi Care",
+      "nameDE": "Combi Care",
+      "nameIT": "Combi Care"
+    },
+    {
+      "insurerId": 1555,
+      "tariffCode": "HMO_PLUS",
+      "category": "HMO",
+      "nameFR": "HMO plus",
+      "nameDE": "HMO plus",
+      "nameIT": "HMO plus"
+    },
+    {
+      "insurerId": 1555,
+      "tariffCode": "MCA",
+      "category": "DIV",
+      "nameFR": "Visana Med Call",
+      "nameDE": "Med Call",
+      "nameIT": "Visana Med Call"
+    },
+    {
+      "insurerId": 1555,
+      "tariffCode": "MCMIT",
+      "category": "HMO",
+      "nameFR": "Managed Care",
+      "nameDE": "Managed Care",
+      "nameIT": "Managed Care"
+    },
+    {
+      "insurerId": 1555,
+      "tariffCode": "MD",
+      "category": "HAM",
+      "nameFR": "Med Direct",
+      "nameDE": "Med Direct",
+      "nameIT": "Med Direct"
+    },
+    {
+      "insurerId": 1555,
+      "tariffCode": "TCA",
+      "category": "DIV",
+      "nameFR": "Tel Care",
+      "nameDE": "Tel Care",
+      "nameIT": "Tel Care"
+    },
+    {
+      "insurerId": 1555,
+      "tariffCode": "TDO",
+      "category": "DIV",
+      "nameFR": "Visana Tel Doc",
+      "nameDE": "Tel Doc",
+      "nameIT": "Visana Tel Doc"
+    },
+    {
+      "insurerId": 1555,
+      "tariffCode": "VIVA",
+      "category": "HMO",
+      "nameFR": "VIVA – plan de santé",
+      "nameDE": "VIVA – Gesundheitsplan",
+      "nameIT": "VIVA – piano sanitario"
+    },
+    {
+      "insurerId": 1560,
+      "tariffCode": "AGRIcontact",
+      "category": "DIV",
+      "nameFR": "AGRIcontact",
+      "nameDE": "AGRIcontact",
+      "nameIT": "AGRIcontact"
+    },
+    {
+      "insurerId": 1560,
+      "tariffCode": "AGRIeco",
+      "category": "HMO",
+      "nameFR": "AGRIeco",
+      "nameDE": "AGRIeco",
+      "nameIT": "AGRIeco"
+    },
+    {
+      "insurerId": 1560,
+      "tariffCode": "AGRIsmart",
+      "category": "DIV",
+      "nameFR": "AGRIsmart",
+      "nameDE": "AGRIsmart",
+      "nameIT": "AGRIsmart"
+    },
+    {
+      "insurerId": 1560,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 1562,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 1562,
+      "tariffCode": "BFP_BF",
+      "category": "HAM",
+      "nameFR": "BeneFit PLUS Médecin de famille R4",
+      "nameDE": "BeneFit PLUS Hausarzt R4",
+      "nameIT": "BeneFit PLUS Medico di famiglia R4"
+    },
+    {
+      "insurerId": 1562,
+      "tariffCode": "BFP_CA",
+      "category": "HAM",
+      "nameFR": "BeneFit PLUS Médecin de famille R3",
+      "nameDE": "BeneFit PLUS Hausarzt R3",
+      "nameIT": "BeneFit PLUS Medico di famiglia  R3"
+    },
+    {
+      "insurerId": 1562,
+      "tariffCode": "BFP_CAF",
+      "category": "HAM",
+      "nameFR": "BeneFit PLUS Flexmed R3",
+      "nameDE": "BeneFit PLUS Flexmed R3",
+      "nameIT": "BeneFit PLUS Flexmed R3"
+    },
+    {
+      "insurerId": 1562,
+      "tariffCode": "BFP_CM",
+      "category": "HAM",
+      "nameFR": "BeneFit PLUS Médecin de famille R2",
+      "nameDE": "BeneFit PLUS Hausarzt R2",
+      "nameIT": "BeneFit PLUS Medico di famiglia R2"
+    },
+    {
+      "insurerId": 1562,
+      "tariffCode": "BFP_CP",
+      "category": "HAM",
+      "nameFR": "BeneFit PLUS Médecin de famille R1",
+      "nameDE": "BeneFit PLUS Hausarzt R1",
+      "nameIT": "BeneFit PLUS Medico di famiglia R1"
+    },
+    {
+      "insurerId": 1562,
+      "tariffCode": "BFP_CPF",
+      "category": "HAM",
+      "nameFR": "BeneFit PLUS Flexmed R1",
+      "nameDE": "BeneFit PLUS Flexmed R1",
+      "nameIT": "BeneFit PLUS Flexmed R1"
+    },
+    {
+      "insurerId": 1562,
+      "tariffCode": "BFP_TEL",
+      "category": "DIV",
+      "nameFR": "BeneFit PLUS Telmed",
+      "nameDE": "BeneFit PLUS Telmed",
+      "nameIT": "BeneFit PLUS Telmed"
+    },
+    {
+      "insurerId": 1562,
+      "tariffCode": "PREMED",
+      "category": "DIV",
+      "nameFR": "Premed-24",
+      "nameDE": "Premed-24",
+      "nameIT": "Premed-24"
+    },
+    {
+      "insurerId": 1568,
+      "tariffCode": "BASE",
+      "category": "BASE",
+      "nameFR": "Assurance de base",
+      "nameDE": "Grundversicherung",
+      "nameIT": "Assicurazione di base"
+    },
+    {
+      "insurerId": 1568,
+      "tariffCode": "COC",
+      "category": "DIV",
+      "nameFR": "Combi Care",
+      "nameDE": "Combi Care",
+      "nameIT": "Combi Care"
+    },
+    {
+      "insurerId": 1568,
+      "tariffCode": "MCA",
+      "category": "DIV",
+      "nameFR": "sana24 Med Call",
+      "nameDE": "Med Call",
+      "nameIT": "sana24 Med Call"
+    },
+    {
+      "insurerId": 1568,
+      "tariffCode": "MCMIT",
+      "category": "HMO",
+      "nameFR": "Managed Care",
+      "nameDE": "Managed Care",
+      "nameIT": "Managed Care"
+    },
+    {
+      "insurerId": 1568,
+      "tariffCode": "MCOHNE",
+      "category": "HMO",
+      "nameFR": "Managed Care sans capitation",
+      "nameDE": "Managed Care ohne Capitation",
+      "nameIT": "Managed Care senza capitation"
+    },
+    {
+      "insurerId": 1568,
+      "tariffCode": "MD",
+      "category": "HAM",
+      "nameFR": "Med Direct",
+      "nameDE": "Med Direct",
+      "nameIT": "Med Direct"
+    },
+    {
+      "insurerId": 1568,
+      "tariffCode": "TCA",
+      "category": "DIV",
+      "nameFR": "sana24 Tel Care",
+      "nameDE": "Tel Care",
+      "nameIT": "sana24 Tel Care"
+    },
+    {
+      "insurerId": 1568,
+      "tariffCode": "TDO",
+      "category": "DIV",
+      "nameFR": "Tel Doc",
+      "nameDE": "Tel Doc",
+      "nameIT": "Tel Doc"
+    },
+    {
+      "insurerId": 1568,
+      "tariffCode": "VIVA",
+      "category": "HMO",
+      "nameFR": "VIVA – plan de santé",
+      "nameDE": "VIVA – Gesundheitsplan",
+      "nameIT": "VIVA – piano sanitario"
+    }
+  ],
+  "childSubgroupsAudit": {
+    "file": "child-subgroups-audit.json",
+    "standardSubgroup": "K1",
+    "insurersVerified": 34,
+    "pdfPriceRowsVerified": 225,
+    "incorrectK1AltLabelInsurers": 22,
+    "specialRowsStrictlyBelowK1": 42434
+  }
+}

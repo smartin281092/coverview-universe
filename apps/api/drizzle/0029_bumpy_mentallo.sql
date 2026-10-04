@@ -1,0 +1,1 @@
+ALTER TABLE "health_datasets" ADD COLUMN "insurer_identities" jsonb DEFAULT '[]'::jsonb NOT NULL;

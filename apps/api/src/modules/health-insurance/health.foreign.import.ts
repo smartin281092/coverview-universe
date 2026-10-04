@@ -3,11 +3,15 @@ import { z } from "zod";
 import { assertLocalDatabase, loadEnvironment } from "../../platform/config.js";
 import { createDatabase } from "../../platform/db/database.js";
 
+const yearArgument = process.argv.indexOf("--year");
+const year = z
+  .union([z.literal(2026), z.literal(2027)])
+  .parse(yearArgument < 0 ? 2027 : Number(process.argv[yearArgument + 1]));
 const data = z
   .object({
     dataset: z.object({
       id: z.string(),
-      year: z.literal(2027),
+      year: z.literal(year),
       source_url: z.url(),
       sha256: z.string().regex(/^[a-f0-9]{64}$/),
     }),
@@ -33,7 +37,7 @@ const data = z
     JSON.parse(
       await readFile(
         new URL(
-          "../../../../../data/health-insurance/2027/foreign-normalized.json",
+          `../../../../../data/health-insurance/${year}/foreign-normalized.json`,
           import.meta.url,
         ),
         "utf8",

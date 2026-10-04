@@ -4,8 +4,8 @@ export function healthAgeGroup(birthYear: number, year = 2027) {
   const age = year - birthYear;
   return age <= 18 ? "child" : age <= 25 ? "young_adult" : "adult";
 }
-export function healthDeductibles(birthYear: number) {
-  return healthAgeGroup(birthYear) === "child"
+export function healthDeductibles(birthYear: number, year = 2027) {
+  return healthAgeGroup(birthYear, year) === "child"
     ? [0, 100, 200, 300, 400, 500, 600]
     : [300, 500, 1000, 1500, 2000, 2500];
 }

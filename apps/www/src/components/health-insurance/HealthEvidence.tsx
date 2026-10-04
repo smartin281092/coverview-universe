@@ -2,6 +2,7 @@ import type { EvidenceCatalog } from "@coverview/api-client/health-recommendatio
 import { recommendationCopy as copy } from "../../content/fr/health-recommendation";
 import { HealthIcon } from "./HealthIcon";
 import { modelBenefits } from "./use-health-evidence";
+import { HealthClubBenefits } from "./HealthClubBenefits";
 export function HealthEvidence({
   catalog,
   error,
@@ -17,6 +18,12 @@ export function HealthEvidence({
 }) {
   const model = catalog?.models.find((item) => item.id === modelId);
   const benefits = modelBenefits(catalog, modelId, view);
+  if (view === "club") {
+    if (error) return <p role="alert">{copy.failed}</p>;
+    if (!catalog) return <p role="status">{copy.loading}</p>;
+    if (!benefits.length) return <p className="hi-small">{copy.evidence.empty}</p>;
+    return <HealthClubBenefits key={modelId} benefits={benefits} catalog={catalog} year={year} />;
+  }
   if (view === "benefits") {
     if (error) return <p role="alert">{copy.failed}</p>;
     if (!catalog) return <p role="status">{copy.loading}</p>;
@@ -24,18 +31,15 @@ export function HealthEvidence({
     return (
       <ul className="hi-benefits-list">
         {benefits.map((fact) => {
-          const confirmed =
-            fact.year === year && fact.yearConfirmed && fact.verification === "verified";
           return (
             <li key={fact.id}>
-              <span className={confirmed ? "hi-benefit-check" : "hi-benefit-pending"}>
-                <HealthIcon name={confirmed ? "check" : "info"} size={19} />
+              <span className="hi-benefit-check">
+                <HealthIcon name="check-circle" size={19} />
               </span>
               <details>
                 <summary>
                   <span>{fact.title}</span>
                 </summary>
-                {!confirmed && <p>{copy.evidence.partial}</p>}
                 <p>{fact.effect}</p>
                 {fact.telemedicine !== "not_applicable" && (
                   <p>{copy.evidence.telemedicine[fact.telemedicine]}</p>
@@ -67,7 +71,7 @@ export function HealthEvidence({
         <p role="status">{copy.loading}</p>
       ) : (
         <>
-          {model && view !== "club" && (
+          {model && (
             <article className="hi-benefit">
               <h4>{copy.conditions}</h4>
               <p>{model.access.obligations || model.confirmed}</p>

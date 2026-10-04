@@ -1,0 +1,58 @@
+{
+  "datasetId": "hi_70e53677da6b7cd5fdeb726d53e7",
+  "normalizerSha256": "fb5113bf49b6246427f0e42f88e4c2ef4970110e541f319656ea1e4a535d887f",
+  "counts": {
+    "premiums": 217472,
+    "models": 156,
+    "insurers": 34,
+    "localities": 5483,
+    "regions": 44,
+    "swissRegions": 42,
+    "eligibility": 4971
+  },
+  "years": [
+    2026
+  ],
+  "duplicates": 0,
+  "missingModels": 0,
+  "missingEligibility": 0,
+  "cantons": {
+    "AG": 5872,
+    "AI": 4948,
+    "AR": 5032,
+    "BE": 17020,
+    "BL": 10150,
+    "BS": 5134,
+    "FR": 9996,
+    "GE": 4558,
+    "GL": 5098,
+    "GR": 15276,
+    "JU": 4536,
+    "LU": 16146,
+    "NE": 4544,
+    "NW": 5312,
+    "OW": 5076,
+    "SG": 15898,
+    "SH": 9984,
+    "SO": 5584,
+    "SZ": 5526,
+    "TG": 5146,
+    "TI": 8984,
+    "UR": 5326,
+    "VD": 9092,
+    "VS": 10866,
+    "ZG": 5450,
+    "ZH": 16754,
+    "ZE": 146,
+    "ZR": 18
+  },
+  "ageSubgroups": {
+    "E1": "Adultes",
+    "J1": "Jeunes adultes",
+    "K1": "dès le 3ème enfant",
+    "K3": "dès le 3ème enfant",
+    "K5": "AUGR3+AUGR4",
+    "K4": "AUGR3+AUGR4"
+  },
+  "note": "ZE/ZR archived, excluded from Swiss map and comparison. K1 used for children; family discounts retained but require insurer eligibility confirmation."
+}

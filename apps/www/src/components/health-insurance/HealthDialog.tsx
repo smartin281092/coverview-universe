@@ -38,6 +38,7 @@ export function HealthDialog({
       aria-label={title}
       onCancel={(event) => {
         event.preventDefault();
+        event.stopPropagation();
         onClose();
       }}
       onClick={(event) => {

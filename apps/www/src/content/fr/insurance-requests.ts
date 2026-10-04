@@ -74,7 +74,7 @@ export const offerCopy = {
   required: "Complétez les coordonnées et la localité avant de poursuivre.",
   full: "Le panier accepte jusqu’à 12 personnes.",
   legalIntro:
-    "CoverView, marque de Bassa Martin Partners Sàrl, est un courtier indépendant non lié soumis à la surveillance de la FINMA, numéro de registre",
+    "CoverView Sàrl est un courtier indépendant non lié soumis à la surveillance de la FINMA, numéro de registre",
   legalContinue:
     "En poursuivant, vous prenez connaissance des informations visées à l’art. 45 de la loi sur la surveillance des assurances et de la déclaration de protection des données, et vous acceptez les CGV.",
   lsa45: "Informations art. 45 LSA",

@@ -1,4 +1,8 @@
 export const healthCopy = {
+  configurationLoading: "Actualisation de la prime…",
+  configurationUnavailable:
+    "Ce modèle n’est pas disponible pour cette configuration. Modifiez vos paramètres pour retrouver un tarif.",
+  configurationFailed: "La prime n’a pas pu être actualisée. Réessayez.",
   productImage: "Illustration du modèle {{model}} · {{brand}}",
   backToList: "Retour à la liste",
   lowestPrice: "Le moins cher",

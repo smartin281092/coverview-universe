@@ -1,0 +1,91 @@
+[
+  {
+    "file": "premiums.csv.gz",
+    "url": "https://opendata.bagnet.ch/?r=/download&path=L1ByYWVtaWVuL0FyY2hpdl9QcmFlbWllbl8yMDI2LnppcA%3D%3D",
+    "archiveMember": "Prämien_CH.csv",
+    "archiveSha256": "01ef32ab0bd8e25ee01ebd3d1d601487ca21f1569b55da3edcf9f9170f99dc78",
+    "sha256": "1c6022adc79cff55e67562840e32754e434edebce419cc7c257cbba77e142ce5",
+    "bytes": 22545492,
+    "retrievedAt": "2026-10-02T16:47:18.595193+00:00",
+    "archiveMemberTimestamp": "2025-09-16T15:01:22"
+  },
+  {
+    "file": "tariffs.csv.gz",
+    "url": "https://opendata.bagnet.ch/?r=/download&path=L1ByYWVtaWVuL0FyY2hpdl9QcmFlbWllbl8yMDI2LnppcA%3D%3D",
+    "archiveMember": "Tarife.csv",
+    "archiveSha256": "01ef32ab0bd8e25ee01ebd3d1d601487ca21f1569b55da3edcf9f9170f99dc78",
+    "sha256": "d1a24efef70e3324aede09f3c809f6357b6bb9d4debf3929227bd5e98a31c1d7",
+    "bytes": 20552,
+    "retrievedAt": "2026-10-02T16:47:18.595193+00:00",
+    "archiveMemberTimestamp": "2025-09-25T09:48:02"
+  },
+  {
+    "file": "coverage.csv.gz",
+    "url": "https://opendata.bagnet.ch/?r=/download&path=L1ByYWVtaWVuL0FyY2hpdl9QcmFlbWllbl8yMDI2LnppcA%3D%3D",
+    "archiveMember": "Einzugsgebiete.csv",
+    "archiveSha256": "01ef32ab0bd8e25ee01ebd3d1d601487ca21f1569b55da3edcf9f9170f99dc78",
+    "sha256": "d8d492f2821d321f380fb92066c17f367090aea139f6ca58a083fb2659488e54",
+    "bytes": 209347,
+    "retrievedAt": "2026-10-02T16:47:18.595193+00:00",
+    "archiveMemberTimestamp": "2025-09-22T09:02:46"
+  },
+  {
+    "file": "premiums-eu.csv",
+    "url": "https://opendata.bagnet.ch/?r=/download&path=L1ByYWVtaWVuL0FyY2hpdl9QcmFlbWllbl8yMDI2LnppcA%3D%3D",
+    "archiveMember": "Prämien_EU.csv",
+    "archiveSha256": "01ef32ab0bd8e25ee01ebd3d1d601487ca21f1569b55da3edcf9f9170f99dc78",
+    "sha256": "7c5439fef6f1c342e2d664457fc855b1891ca16282f0b5ee06497f7ec481c4d9",
+    "bytes": 204515,
+    "retrievedAt": "2026-10-02T16:47:18.595193+00:00",
+    "archiveMemberTimestamp": "2025-09-23T15:05:52"
+  },
+  {
+    "file": "restricted-territories.csv",
+    "url": "https://opendata.bagnet.ch/?r=/download&path=L1ByYWVtaWVuL0FyY2hpdl9QcmFlbWllbl8yMDI2LnppcA%3D%3D",
+    "archiveMember": "Eingeschr.-Tät.gebiete.csv",
+    "archiveSha256": "01ef32ab0bd8e25ee01ebd3d1d601487ca21f1569b55da3edcf9f9170f99dc78",
+    "sha256": "7cd27c305d78776b4a580c572612f27b6780d68fe7de9dcf950d304071a305ce",
+    "bytes": 4504,
+    "retrievedAt": "2026-10-02T16:47:18.595193+00:00",
+    "archiveMemberTimestamp": "2025-09-22T09:02:04"
+  },
+  {
+    "file": "data-dictionary.xlsx",
+    "url": "https://opendata.bagnet.ch/?r=/download&path=L1ByYWVtaWVuL0FyY2hpdl9QcmFlbWllbl8yMDI2LnppcA%3D%3D",
+    "archiveMember": "Erläuterungen zu den Prämiendaten.xlsx",
+    "archiveSha256": "01ef32ab0bd8e25ee01ebd3d1d601487ca21f1569b55da3edcf9f9170f99dc78",
+    "sha256": "06489c476ee24d82e1d71376f99c8934feccf28936e70c528aad21c6566a09e7",
+    "bytes": 21629,
+    "retrievedAt": "2026-10-02T16:47:18.595193+00:00",
+    "archiveMemberTimestamp": "2025-09-22T09:15:18"
+  },
+  {
+    "file": "usage-conditions.pdf",
+    "url": "https://opendata.bagnet.ch/?r=/download&path=L1ByYWVtaWVuL0FyY2hpdl9QcmFlbWllbl8yMDI2LnppcA%3D%3D",
+    "archiveMember": "to whom it may concern.pdf",
+    "archiveSha256": "01ef32ab0bd8e25ee01ebd3d1d601487ca21f1569b55da3edcf9f9170f99dc78",
+    "sha256": "6105652bb0d4f2262178a983c6461c0c458975eceaf8d2b67b6f61b8cb0a5aa4",
+    "bytes": 77830,
+    "retrievedAt": "2026-10-02T16:47:18.595193+00:00",
+    "archiveMemberTimestamp": "2025-09-22T09:09:12"
+  },
+  {
+    "file": "regions.xlsx",
+    "url": "https://www.priminfo.admin.ch/downloads/praemienregionen_2026.xlsx",
+    "sha256": "a74639530b9ead5da8e38ff7d3cff3896b8ee3dc7de06a9f60a688d2d98b1a21",
+    "bytes": 693312,
+    "retrievedAt": "2026-10-02T16:47:19.170396+00:00",
+    "httpLastModified": "Fri, 02 Oct 2026 11:32:18 GMT",
+    "effectiveDate": "2026-01-01"
+  },
+  {
+    "file": "insurers.xlsx",
+    "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+    "resolvedUrl": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+    "sha256": "c0da8ef4e173bb81954ba1f4d3d014184b5972c0a7bbc20dac7c815be901c27f",
+    "bytes": 49567,
+    "retrievedAt": "2026-10-02T16:50:37.248782+00:00",
+    "httpLastModified": "Wed, 20 May 2026 06:48:41 GMT",
+    "effectiveDate": "2026-01-01"
+  }
+]

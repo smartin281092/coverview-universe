@@ -54,3 +54,9 @@ Depuis la racine, Python avec `openpyxl` : `python scripts/health-normalize.py` 
 Carte : `python scripts/health-region-map.py` avec `openpyxl`, `pyshp` et `shapely>=2.1` dans un environnement de génération isolé. Aucun nouveau paquet applicatif. Prestations : éditer `benefits.json` avec preuve officielle, puis importer ; la modification d’un avantage n’exige pas un nouveau fichier de primes.
 
 Vérification : `pnpm --filter api exec vitest run src/modules/health-insurance/health.cost.test.ts`, puis, API locale démarrée sur la base importée, `node scripts/verify-health-live.mjs`. Ce dernier ne crée ni utilisateur ni prime de test et n’écrit pas de dossier privé.
+
+## Contrat actuel 2026
+
+`POST /health-insurance/current/options`, `POST /current/compare` et `GET /current/localities?q=` isolent les prix historiques de la comparaison 2027. Le premier endpoint retourne les compagnies et modèles tarifés pour la configuration 2026 ; le second relit le contrat historique et les identifiants de primes 2027 pour calculer les écarts signés. Marques et identités 2026 proviennent du snapshot, sans héritage de conditions 2027. Franchise/accident du contrat actuel indépendants ; région communale et âge calculés selon chaque année. Aucun rabais familial, subside ou avantage conditionnel déduit des primes.
+
+Import CH et UE : ajouter `--year 2026` aux normaliseurs et importeurs ci-dessus, après migration additive 0029. Le défaut 2027 reste inchangé ; ne pas réimporter 2027 pour ajouter l’historique. [Sources, recette, limites et retour arrière](../../../../../roadmap/evidence/health-current-2026.md). Oracle de lecture sur les CSV : `python scripts/verify-health-current-live.py`. Tests PostgreSQL : `health.current.test.ts`.

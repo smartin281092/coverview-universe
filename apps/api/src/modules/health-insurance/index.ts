@@ -11,12 +11,17 @@ import {
   healthGuideResultSchema,
   healthLocateInputSchema,
   healthLocationSuggestionSchema,
+  healthCurrentOptionsInputSchema,
+  healthCurrentOptionsSchema,
+  healthCurrentComparisonInputSchema,
+  healthCurrentComparisonSchema,
 } from "@coverview/contracts/health-insurance";
 import type { Environment } from "../../platform/config.js";
 import { createDatabase } from "../../platform/db/database.js";
 import { createHealthRepository } from "./health.repository.js";
 import type { registerIdentity } from "../identity/index.js";
 import { registerRecommendations } from "./recommendation.routes.js";
+import { createHealthCurrentRepository } from "./health.current.js";
 
 export function registerHealthInsurance(
   server: FastifyInstance,
@@ -30,8 +35,48 @@ export function registerHealthInsurance(
   );
   app.addHook("onClose", () => database.pool.end());
   const repository = createHealthRepository(database.pool);
+  const current = createHealthCurrentRepository(database.pool);
   registerRecommendations(server, database, identity);
   const limited = { rateLimit: { max: 90, timeWindow: "1 minute" } };
+  app.post(
+    "/health-insurance/current/options",
+    {
+      config: limited,
+      schema: {
+        body: healthCurrentOptionsInputSchema,
+        response: { 200: healthCurrentOptionsSchema },
+      },
+    },
+    async (request, reply) => {
+      reply.header("cache-control", "no-store");
+      return current.options(request.body);
+    },
+  );
+  app.post(
+    "/health-insurance/current/compare",
+    {
+      config: limited,
+      schema: {
+        body: healthCurrentComparisonInputSchema,
+        response: { 200: healthCurrentComparisonSchema },
+      },
+    },
+    async (request, reply) => {
+      reply.header("cache-control", "no-store");
+      return current.compare(request.body);
+    },
+  );
+  app.get(
+    "/health-insurance/current/localities",
+    {
+      config: limited,
+      schema: {
+        querystring: z.object({ q: z.string().trim().min(2).max(80) }).strict(),
+        response: { 200: healthLocalitiesSchema },
+      },
+    },
+    async (request) => current.localities(request.query.q),
+  );
   app.get(
     "/health-insurance/status",
     { config: limited, schema: { response: { 200: healthStatusSchema } } },

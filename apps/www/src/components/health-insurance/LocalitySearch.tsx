@@ -8,7 +8,7 @@ export function LocalitySearch({
   selected,
   onSelect,
 }: {
-  api: ReturnType<typeof createHealthClient>;
+  api: Pick<ReturnType<typeof createHealthClient>, "localities">;
   selected: HealthLocality | null;
   onSelect: (value: HealthLocality | null) => void;
 }) {

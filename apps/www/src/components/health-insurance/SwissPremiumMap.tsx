@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import type { HealthComparison, HealthOffer } from "@coverview/api-client/health-insurance";
+import type {
+  HealthComparison,
+  HealthOffer,
+  HealthPremiumDifference as Difference,
+} from "@coverview/api-client/health-insurance";
+import { HealthPremiumDifference } from "./HealthPremiumDifference";
 import map from "../../../../../data/health-insurance/2027/regions-map.json";
 import neighbors from "../../../../../data/health-insurance/2027/neighbors-map.json";
 import { healthCopy as copy } from "../../content/fr/health-insurance";
@@ -30,6 +35,7 @@ export function SwissPremiumMap({
   onOffer,
   onList,
   loading,
+  differences,
 }: {
   comparison: HealthComparison | null;
   selected: string;
@@ -38,6 +44,7 @@ export function SwissPremiumMap({
   onOffer: (offer: HealthOffer) => void;
   onList: (id: string) => void;
   loading: boolean;
+  differences: Map<string, Difference>;
 }) {
   const [hover, setHover] = useState<string | null>(null);
   const [entry, setEntry] = useState<{ x: number; y: number } | null>(null);
@@ -46,6 +53,14 @@ export function SwissPremiumMap({
   const stage = useRef<HTMLDivElement>(null);
   const wrapper = useRef<HTMLDivElement>(null);
   const popover = useRef<HTMLDivElement>(null);
+  const [popoverHeight, setPopoverHeight] = useState(300);
+  useEffect(() => {
+    const element = popover.current;
+    if (!element) return;
+    const observer = new ResizeObserver(() => setPopoverHeight(element.offsetHeight));
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [hover]);
   useEffect(() => {
     const outside = (event: PointerEvent) => {
       if (event.target instanceof Node && !wrapper.current?.contains(event.target)) setHover(null);
@@ -138,7 +153,10 @@ export function SwissPremiumMap({
   const anchorY =
     (size.height - frame.height * ratio) / 2 +
     ((entry?.y ?? y) * view.scale + view.y - frame.y) * ratio;
-  const below = anchorY < (popover.current?.offsetHeight ?? 300) + 90;
+  const below = anchorY < popoverHeight + 90 && size.height - anchorY > anchorY - 88;
+  const popupTop = below
+    ? Math.max(88, Math.min(size.height - popoverHeight - 24, anchorY + 18))
+    : Math.min(size.height - 24, Math.max(popoverHeight + 88, anchorY - 18));
   const popupX = Math.max(
     Math.min(166, size.width / 2) - size.left,
     Math.min(size.viewport - Math.min(166, size.width / 2) - size.left, anchorX),
@@ -368,7 +386,7 @@ export function SwissPremiumMap({
               {
                 left: `${popupX}px`,
                 "--hi-pointer-offset": `${anchorX - popupX}px`,
-                top: `${Math.max(88, Math.min(size.height - 24, anchorY + (below ? 18 : -18)))}px`,
+                top: `${popupTop}px`,
               } as CSSProperties
             }
           >
@@ -401,6 +419,7 @@ export function SwissPremiumMap({
                     </small>
                   </span>
                   <HealthIcon name="chevron" size={15} />
+                  <HealthPremiumDifference value={differences.get(offer.id)} />
                 </button>
               ))
             ) : (

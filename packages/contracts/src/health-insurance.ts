@@ -152,6 +152,81 @@ export const healthModelDetailsSchema = z.object({
   coverageStatus: z.enum(["partial", "unknown"]),
   premiumSourceUrl: z.url(),
 });
+
+export const healthInsurerIdentitySchema = z.object({
+  id: z.number().int().positive(),
+  name: z.string().min(1),
+  brand: z.string().min(1),
+});
+// Historical taxonomy is kept as published; it cannot establish 2027 first-contact rules.
+export const healthCurrentOfferSchema = healthOfferSchema.omit({ category: true }).extend({
+  category: z.enum(["BASE", "HAM", "HMO", "DIV"]),
+});
+export const healthCurrentContextSchema = z
+  .object({
+    year: z.literal(2026).default(2026),
+    birthYear: z.number().int().min(1900).max(2026),
+    regionId: healthRegionIdSchema,
+    municipalityId: z.number().int().positive().optional(),
+    accident: z.boolean(),
+    deductible: z.number().int().min(0).max(2500),
+  })
+  .strict();
+export const healthCurrentSelectionSchema = healthCurrentContextSchema
+  .omit({ birthYear: true })
+  .extend({
+    modelId: z.string().regex(/^(?:hm_[a-f0-9]{28}|hfm_2026_\d+)$/),
+  })
+  .strict();
+export const healthCurrentOptionsInputSchema = healthCurrentContextSchema
+  .extend({
+    insurerId: z.number().int().positive().optional(),
+  })
+  .strict();
+export const healthCurrentAvailabilitySchema = z.enum([
+  "available",
+  "data_unavailable",
+  "location_required",
+  "invalid_deductible",
+  "model_unavailable",
+]);
+export const healthCurrentOptionsSchema = z.object({
+  year: z.literal(2026),
+  status: healthCurrentAvailabilitySchema,
+  datasetId: z.string().nullable(),
+  regionId: healthRegionIdSchema.nullable(),
+  municipalityId: z.number().int().positive().nullable(),
+  ageGroup: z.enum(["child", "young_adult", "adult"]),
+  deductibles: z.array(z.number().int()).max(7),
+  insurers: z.array(healthInsurerIdentitySchema).max(100),
+  offers: z.array(healthCurrentOfferSchema).max(200),
+});
+export const healthCurrentComparisonInputSchema = z
+  .object({
+    birthYear: z.number().int().min(1900).max(2026),
+    current: healthCurrentSelectionSchema,
+    offerIds: z.array(z.string().regex(/^(?:hp_|hfp_)[a-f0-9]{28}$/)).max(1200),
+  })
+  .strict();
+export const healthPremiumDifferenceSchema = z.object({
+  offerId: z.string(),
+  currentYear: z.literal(2026),
+  targetYear: z.literal(2027),
+  monthlySavingMinor: z.number().int(),
+  annualSavingMinor: z.number().int(),
+  direction: z.enum(["saving", "increase", "equal"]),
+  deductibleChanged: z.boolean(),
+  accidentChanged: z.boolean(),
+  ageGroupChanged: z.boolean(),
+  regionChanged: z.boolean(),
+});
+export const healthCurrentComparisonSchema = z.object({
+  status: healthCurrentAvailabilitySchema,
+  current: healthCurrentOfferSchema.nullable(),
+  currentYear: z.literal(2026),
+  targetYear: z.literal(2027),
+  differences: z.array(healthPremiumDifferenceSchema).max(1200),
+});
 export const healthGuideInputSchema = healthCompareInputSchema.extend({
   regionId: healthRegionIdSchema,
   municipalityId: z.number().int().positive(),
@@ -215,3 +290,11 @@ export type HealthComparison = z.infer<typeof healthComparisonSchema>;
 export type HealthModelDetails = z.infer<typeof healthModelDetailsSchema>;
 export type HealthGuideInput = z.input<typeof healthGuideInputSchema>;
 export type HealthGuideResult = z.infer<typeof healthGuideResultSchema>;
+export type HealthCurrentSelection = z.infer<typeof healthCurrentSelectionSchema>;
+export type HealthCurrentOffer = z.infer<typeof healthCurrentOfferSchema>;
+export type HealthCurrentContext = z.infer<typeof healthCurrentContextSchema>;
+export type HealthCurrentOptionsInput = z.input<typeof healthCurrentOptionsInputSchema>;
+export type HealthCurrentOptions = z.infer<typeof healthCurrentOptionsSchema>;
+export type HealthCurrentComparison = z.infer<typeof healthCurrentComparisonSchema>;
+export type HealthCurrentComparisonInput = z.infer<typeof healthCurrentComparisonInputSchema>;
+export type HealthPremiumDifference = z.infer<typeof healthPremiumDifferenceSchema>;

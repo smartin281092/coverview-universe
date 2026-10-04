@@ -1,0 +1,7 @@
+{
+  "file": "opendata-metadata.json",
+  "url": "https://ckan.opendata.swiss/api/3/action/package_show?id=health-insurance-premiums",
+  "retrievedAt": "2026-10-02T16:53:49.734294+00:00",
+  "sha256": "c12d930769b34018054cf4b5d6e5950dbe0bd0bf71f8d9b9f83ef99ace7edecd",
+  "bytes": 53992
+}

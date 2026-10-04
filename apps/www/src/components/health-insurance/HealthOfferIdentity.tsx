@@ -14,7 +14,7 @@ export function HealthInsurerLogo({
   offer,
   labelled = false,
 }: {
-  offer: HealthOffer;
+  offer: Pick<HealthOffer, "insurerId" | "insurerName" | "insurerBrand">;
   labelled?: boolean;
 }) {
   const logo = logos.get(offer.insurerId);

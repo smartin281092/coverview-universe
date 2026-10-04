@@ -3,20 +3,20 @@ export const insuranceLegal = {
   title: "Informations légales · Demande d’offre",
   description:
     "Informations sur l’intermédiaire, les données personnelles et les conditions de la demande d’offre CoverView.",
-  version: "insurance-request-2026-09-30",
-  updated: "Dernière mise à jour : 30 septembre 2026",
+  version: "insurance-request-2026-10-03",
+  updated: "Dernière mise à jour : 3 octobre 2026",
   information: texts.information.map((section) =>
     section.title === "Identité et inscription au registre"
       ? {
           ...section,
-          text: "CoverView est une marque de Bassa Martin Partners Sàrl, intermédiaire d’assurance non lié inscrit au registre FINMA sous le numéro F01536662. Adresse de contact : Avenue Louis-Casaï 71, 1216 Cointrin.",
+          text: "CoverView Sàrl est un intermédiaire d’assurance non lié inscrit au registre FINMA sous le numéro F01536662. Adresse de contact : Avenue Louis-Casaï 71, 1216 Cointrin.",
         }
       : section,
   ),
   privacy: [
     {
       title: "Responsable et finalités",
-      text: "Bassa Martin Partners Sàrl exploite CoverView. Les coordonnées, la localité et les caractéristiques d’assurance saisies servent à préparer votre demande d’offre, vous contacter et suivre son traitement. Les réponses médicales libres du guide de comparaison ne sont pas ajoutées à cette demande.",
+      text: "CoverView Sàrl est responsable du traitement des données. Les coordonnées, la localité et les caractéristiques d’assurance saisies servent à préparer votre demande d’offre, vous contacter et suivre son traitement. Les réponses médicales libres du guide de comparaison ne sont pas ajoutées à cette demande.",
     },
     {
       title: "Compte et destinataires",
@@ -24,7 +24,7 @@ export const insuranceLegal = {
     },
     {
       title: "Conservation et droits",
-      text: "Les brouillons non envoyés sont supprimés après 24 heures. L’accès invité dans ce navigateur dure au maximum 30 jours. Les demandes envoyées et leur historique sont conservés pour leur traitement et les obligations applicables décrites dans la notice ci-dessous. Pour exercer vos droits d’accès, de rectification ou d’effacement, adressez votre demande à Bassa Martin Partners Sàrl, CoverView, Avenue Louis-Casaï 71, 1216 Cointrin.",
+      text: "Les brouillons non envoyés sont supprimés après 24 heures. L’accès invité dans ce navigateur dure au maximum 30 jours. Les demandes envoyées et leur historique sont conservés pour leur traitement et les obligations applicables décrites dans la notice ci-dessous. Pour exercer vos droits d’accès, de rectification ou d’effacement, adressez votre demande à CoverView Sàrl, Avenue Louis-Casaï 71, 1216 Cointrin.",
     },
     {
       title: "Cookies nécessaires",

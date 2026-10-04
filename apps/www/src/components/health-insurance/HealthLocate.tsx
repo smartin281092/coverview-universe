@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import type { createHealthClient, HealthLocality } from "@coverview/api-client/health-insurance";
 import { healthCopy as copy } from "../../content/fr/health-insurance";
 import { HealthDialog } from "./HealthDialog";
+import { HealthIcon } from "./HealthIcon";
 import { regionName } from "./health-format";
 
 export function HealthLocate({
@@ -73,11 +74,13 @@ export function HealthLocate({
       <button
         type="button"
         className="hi-locate-button"
+        aria-label={busy ? copy.locating : copy.locate}
+        aria-busy={busy}
         disabled={busy}
         onClick={locate}
         title={copy.locationConsent}
       >
-        {busy ? copy.locating : copy.locate}
+        <HealthIcon name="locate" size={22} />
       </button>
       {message && (
         <p className="hi-location-feedback" role="status">

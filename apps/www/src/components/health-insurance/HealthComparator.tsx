@@ -8,6 +8,7 @@ import {
   type HealthCompareInput,
   type HealthLocality,
   type HealthOffer,
+  type HealthCurrentSelection,
 } from "@coverview/api-client/health-insurance";
 import logo from "../../../../../assets/logo-coverview.svg?url";
 import { healthCopy as copy } from "../../content/fr/health-insurance";
@@ -17,13 +18,17 @@ import { LocalitySearch } from "./LocalitySearch";
 import { SwissPremiumMap } from "./SwissPremiumMap";
 import { HealthModelPanel } from "./HealthModelPanel";
 import { AdaptiveHealthGuide, type HealthGuideSnapshot } from "./AdaptiveHealthGuide";
-import { HealthContactTags, HealthInsurerLogo, HealthOfferBadges } from "./HealthOfferIdentity";
+import { HealthContactTags, HealthInsurerLogo } from "./HealthOfferIdentity";
 import { RecommendationResults } from "./RecommendationResults";
 import { HealthSelect } from "./HealthSelect";
 import { HealthLocate } from "./HealthLocate";
 import { HealthCheckout, type CheckoutCandidate } from "./HealthCheckout";
 import { offerCopy } from "../../content/fr/insurance-requests";
 import { interpolate, money, regionName } from "./health-format";
+import { HealthCurrentInsurance } from "./HealthCurrentInsurance";
+import { HealthPremiumDifference } from "./HealthPremiumDifference";
+import { useCurrentInsurance } from "./use-current-insurance";
+import { healthCurrentCopy } from "../../content/fr/health-current";
 
 type Category = NonNullable<HealthCompareInput["categories"]>[number];
 export default function HealthComparator({
@@ -62,6 +67,8 @@ export default function HealthComparator({
   const [checkout, setCheckout] = useState(false);
   const [candidate, setCandidate] = useState<CheckoutCandidate | null>(null);
   const [cartCount, setCartCount] = useState(0);
+  const [currentInsurance, setCurrentInsurance] = useState<HealthCurrentSelection | null>(null);
+  const [profileRevision, setProfileRevision] = useState(0);
   const [recommendation, setRecommendation] = useState<HealthGuideSnapshot>({
     result: null,
     busy: false,
@@ -190,22 +197,51 @@ export default function HealthComparator({
     setBenefitKeys((current) =>
       current.includes(value) ? current.filter((x) => x !== value) : [...current, value],
     );
-  const reset = () => {
+  const filterCount =
+    categories.length + insurerIds.length + benefitKeys.length + Number(optimize && !foreign);
+  const addPerson = () => {
+    setCheckout(false);
+    setCandidate(null);
+    setOffer(null);
+    setShowList(false);
+    setShowFilters(false);
     setBirth("");
     setSex(null);
-    setOptimize(false);
-    setRegionKnown(false);
     setAccident(true);
     setDeductible(2500);
+    setCurrentInsurance(null);
+    setOptimize(false);
     setCategories([]);
     setInsurerIds([]);
     setBenefitKeys([]);
     setLocality(null);
     setRegion("VD-1");
+    setRegionKnown(false);
     setOffset(0);
+    setComparison(null);
+    setLoading(true);
+    setRecommendation({ result: null, busy: false });
+    setProfileRevision((value) => value + 1);
+    setProfileOpen(true);
   };
-  const filterCount =
-    categories.length + insurerIds.length + benefitKeys.length + Number(optimize && !foreign);
+  const currentComparison = useCurrentInsurance(
+    api,
+    birthKnown ? currentInsurance : null,
+    profile.birthYear,
+    [
+      ...(!loading ? (comparison?.offers.map((item) => item.id) ?? []) : []),
+      ...(!loading
+        ? (comparison?.regions.flatMap((item) => item.offers.map((offer) => offer.id)) ?? [])
+        : []),
+      ...(!recommendation.busy
+        ? (recommendation.result?.ranked.map((row) => row.offer.id) ?? [])
+        : []),
+      ...(offer ? [offer.id] : []),
+    ],
+  );
+  const differences = new Map(
+    currentComparison.value?.differences.map((item) => [item.offerId, item]),
+  );
   return (
     <div className="health-comparator">
       <header className="hi-header">
@@ -220,7 +256,10 @@ export default function HealthComparator({
           <button
             className="hi-cart-link"
             aria-label={`${offerCopy.cart} (${cartCount})`}
-            onClick={() => setCheckout(true)}
+            onClick={() => {
+              setCandidate(null);
+              setCheckout(true);
+            }}
           >
             <HealthIcon name="bag" size={19} />
             <span className="hi-cart-label">{offerCopy.cart}</span>{" "}
@@ -254,7 +293,7 @@ export default function HealthComparator({
           </span>
         </div>
       </section>
-      <div className="hi-workspace">
+      <div className="hi-workspace" key={profileRevision}>
         <aside className={`hi-profile ${profileOpen ? "" : "is-collapsed"}`}>
           <div className="hi-profile-title">
             <div>
@@ -283,7 +322,6 @@ export default function HealthComparator({
                 onBlur={(event) => setBirth(event.currentTarget.value)}
               />
             </label>
-            {!birth && <p className="hi-field-help">{copy.defaultAdult}</p>}
             <div className="hi-field hi-sex-field">
               {copy.sex}
               <HealthSelect
@@ -298,7 +336,6 @@ export default function HealthComparator({
                   label,
                 }))}
               />
-              <p className="hi-field-help">{copy.sexHint}</p>
             </div>
             <fieldset className="hi-fieldset">
               <legend>{copy.accident}</legend>
@@ -333,6 +370,15 @@ export default function HealthComparator({
                 ))}
               </div>
             </fieldset>
+            <HealthCurrentInsurance
+              api={api}
+              profile={profile}
+              birthKnown={birthKnown}
+              locality={locality}
+              selection={currentInsurance}
+              onSelect={setCurrentInsurance}
+              comparison={currentComparison}
+            />
             <button className="hi-more" onClick={() => setShowFilters(true)}>
               <HealthIcon name="sliders" size={17} />
               {copy.more}
@@ -342,11 +388,6 @@ export default function HealthComparator({
                 <span>+</span>
               )}
             </button>
-            <div className="hi-profile-footer">
-              <span className="hi-live-dot" />
-              <p>{copy.sourceBadge}</p>
-              <button onClick={reset}>{copy.reset}</button>
-            </div>
           </div>
         </aside>
         <div className="hi-explorer">
@@ -384,6 +425,7 @@ export default function HealthComparator({
             </div>
           )}
           <SwissPremiumMap
+            differences={differences}
             comparison={comparison}
             selected={region}
             localityId={locality?.id}
@@ -517,6 +559,7 @@ export default function HealthComparator({
       </HealthDialog>
       <HealthDialog open={showList} onClose={() => setShowList(false)} title={copy.results} sheet>
         <AdaptiveHealthGuide
+          key={profileRevision}
           apiUrl={apiUrl}
           profile={profile}
           tariffKnown={{ birth: birthKnown, locality: Boolean(locality), region: regionKnown }}
@@ -527,6 +570,13 @@ export default function HealthComparator({
         />
         {foreign && <p className="hi-small">{copy.foreignGuide}</p>}
         <p className="hi-result-region">{regionName(region)}</p>
+        {currentComparison.value?.current && (
+          <p className="hi-current-comparison-note">
+            {healthCurrentCopy.baseline} · {currentComparison.value.current.insurerBrand} ·{" "}
+            {currentComparison.value.current.name} ·{" "}
+            {money(currentComparison.value.current.monthlyPremiumMinor)} CHF {copy.perMonth}
+          </p>
+        )}
         <p className="hi-small" hidden={loading || recommendation.busy}>
           {interpolate(copy.resultsCount, {
             count: recommendation.result?.active
@@ -539,6 +589,7 @@ export default function HealthComparator({
         ) : recommendation.result?.active ? (
           <RecommendationResults
             result={recommendation.result}
+            differences={differences}
             onOffer={(item) => {
               setShowList(false);
               setOffer(item);
@@ -562,18 +613,13 @@ export default function HealthComparator({
                   {item.eligibility === "municipality_required" && <em>{copy.chooseLocality}</em>}
                 </span>
                 <span className="hi-list-price">
-                  <HealthOfferBadges
-                    cheapest={
-                      comparison.regions.find((r) => r.regionId === item.regionId)?.offers[0]
-                        ?.monthlyPremiumMinor === item.monthlyPremiumMinor
-                    }
-                  />
                   <strong>{money(item.monthlyPremiumMinor)}</strong>
                   <small>
                     {copy.currency} {copy.perMonth}
                   </small>
                 </span>
                 <HealthIcon name="chevron" size={16} />
+                <HealthPremiumDifference value={differences.get(item.id)} />
               </button>
             ))}
           </div>
@@ -598,58 +644,73 @@ export default function HealthComparator({
           </div>
         )}
       </HealthDialog>
-      <HealthModelPanel
-        apiUrl={apiUrl}
-        year={profile.year ?? 2027}
-        onBack={() => {
-          if (offer && offer.regionId !== region) selectRegion(offer.regionId);
-          setOffer(null);
-          setShowList(true);
-        }}
-        cheapest={
-          !!offer &&
-          (recommendation.result?.active && offer.regionId === region
-            ? recommendation.result.leaders.premium.includes(offer.id)
-            : comparison?.regions.find((r) => r.regionId === offer.regionId)?.offers[0]
-                ?.monthlyPremiumMinor === offer.monthlyPremiumMinor)
-        }
-        preferred={
-          !!offer &&
-          !!recommendation.result?.questionStates.some(
-            (q) => q.id === "priority" && q.responseStatus === "answered",
-          ) &&
-          !!recommendation.result.leaders.preferred.includes(offer.id)
-        }
-        provisional={recommendation.result?.outcome !== "established"}
-        offer={offer}
-        onClose={() => setOffer(null)}
-        onRequest={(item) => {
-          setOffer(null);
-          setCandidate({
-            key: crypto.randomUUID(),
-            offer: item,
-            profile: {
-              ...profile,
-              deductible: item.deductible,
-              accident: item.accident,
-              regionId: item.regionId,
-              municipalityId:
+      {offer && (
+        <HealthModelPanel
+          key={offer.modelId}
+          api={api}
+          profile={profile}
+          locality={locality}
+          status={status}
+          onConfigured={(value) => {
+            selectRegion(value.regionId);
+            setDeductible(value.deductible);
+            setAccident(value.accident);
+            setOffer(value);
+          }}
+          apiUrl={apiUrl}
+          difference={offer ? differences.get(offer.id) : undefined}
+          year={profile.year ?? 2027}
+          onBack={() => {
+            if (offer && offer.regionId !== region) selectRegion(offer.regionId);
+            setOffer(null);
+            setShowList(true);
+          }}
+          cheapest={
+            !loading &&
+            !!offer &&
+            (recommendation.result?.active && offer.regionId === region
+              ? recommendation.result.leaders.premium.includes(offer.id)
+              : comparison?.regions.find((r) => r.regionId === offer.regionId)?.offers[0]
+                  ?.monthlyPremiumMinor === offer.monthlyPremiumMinor)
+          }
+          preferred={
+            !!offer &&
+            !!recommendation.result?.questionStates.some(
+              (q) => q.id === "priority" && q.responseStatus === "answered",
+            ) &&
+            !!recommendation.result.leaders.preferred.includes(offer.id)
+          }
+          provisional={recommendation.result?.outcome !== "established"}
+          offer={offer}
+          onClose={() => setOffer(null)}
+          onRequest={(item) => {
+            setOffer(null);
+            setCandidate({
+              key: crypto.randomUUID(),
+              offer: item,
+              profile: {
+                ...profile,
+                deductible: item.deductible,
+                accident: item.accident,
+                regionId: item.regionId,
+                municipalityId:
+                  locality?.regionId === item.regionId
+                    ? (locality.municipalityId ?? undefined)
+                    : undefined,
+              },
+              locality:
                 locality?.regionId === item.regionId
-                  ? (locality.municipalityId ?? undefined)
-                  : undefined,
-            },
-            locality:
-              locality?.regionId === item.regionId
-                ? locality
-                : (status?.foreign?.countries.find(
-                    (country) => country.code === item.residenceCountry,
-                  )?.locality ?? null),
-            birth,
-            ...(sex && sex !== "declined" ? { sex } : {}),
-          });
-          setCheckout(true);
-        }}
-      />
+                  ? locality
+                  : (status?.foreign?.countries.find(
+                      (country) => country.code === item.residenceCountry,
+                    )?.locality ?? null),
+              birth,
+              ...(sex && sex !== "declined" ? { sex } : {}),
+            });
+            setCheckout(true);
+          }}
+        />
+      )}
       <HealthCheckout
         apiUrl={apiUrl}
         healthApi={api}
@@ -657,6 +718,7 @@ export default function HealthComparator({
         candidate={candidate}
         open={checkout}
         onClose={() => setCheckout(false)}
+        onAddPerson={addPerson}
         onCount={setCartCount}
       />
       <noscript>

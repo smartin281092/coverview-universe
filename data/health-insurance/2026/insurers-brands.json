@@ -1,0 +1,851 @@
+[
+  {
+    "id": 8,
+    "name": "CSS Assurance-maladie SA",
+    "brand": "CSS",
+    "aliases": [
+      "CSS",
+      "CSS Assurance-maladie SA"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 15,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "name": "Aquilana Versicherungen",
+    "brand": "Aquilana",
+    "aliases": [
+      "Aquilana",
+      "Aquilana Versicherungen"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 8,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 134,
+    "name": "Einsiedler Krankenkasse",
+    "brand": "Einsiedler Krankenkasse",
+    "aliases": [
+      "Einsiedler Krankenkasse"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 17,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 194,
+    "name": "Sumiswalder Krankenkasse",
+    "brand": "Sumiswalder",
+    "aliases": [
+      "Sumiswalder",
+      "Sumiswalder Krankenkasse"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 37,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 246,
+    "name": "Genossenschaft Krankenkasse Steffisburg",
+    "brand": "Steffisburg",
+    "aliases": [
+      "Steffisburg",
+      "Genossenschaft Krankenkasse Steffisburg"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 36,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 290,
+    "name": "CONCORDIA Assurance suisse de maladie et accidents SA",
+    "brand": "CONCORDIA",
+    "aliases": [
+      "CONCORDIA",
+      "CONCORDIA Assurance suisse de maladie et accidents SA"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 14,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 312,
+    "name": "Atupri Assurance de la santé SA",
+    "brand": "Atupri",
+    "aliases": [
+      "Atupri",
+      "Atupri Gesundheitsversicherung AG",
+      "Atupri Assurance de la santé SA"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 10,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      },
+      {
+        "url": "https://www.priminfo.admin.ch/downloads/praemien_2026.pdf",
+        "title": "Aperçu des primes 2026",
+        "page": 27,
+        "evidence": "Nom court de la caisse dans les tableaux de primes 2026."
+      }
+    ]
+  },
+  {
+    "id": 343,
+    "name": "Avenir Assurance Maladie SA",
+    "brand": "Avenir",
+    "aliases": [
+      "Avenir",
+      "Avenir Krankenversicherung AG",
+      "Avenir Assurance Maladie SA"
+    ],
+    "year": 2026,
+    "groupName": "Groupe Mutuel",
+    "groupRelationship": "group",
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 11,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      },
+      {
+        "url": "https://www.priminfo.admin.ch/downloads/praemien_2026.pdf",
+        "title": "Aperçu des primes 2026",
+        "page": 27,
+        "evidence": "Nom court de la caisse dans les tableaux de primes 2026."
+      }
+    ]
+  },
+  {
+    "id": 360,
+    "name": "Krankenkasse Luzerner Hinterland",
+    "brand": "Luzerner Hinterland",
+    "aliases": [
+      "Luzerner Hinterland",
+      "Krankenkasse Luzerner Hinterland"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 25,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 376,
+    "name": "KPT Caisse-maladie SA",
+    "brand": "KPT",
+    "aliases": [
+      "KPT",
+      "KPT Caisse-maladie SA"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 23,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 455,
+    "name": "ÖKK Kranken- und Unfallversicherungen AG",
+    "brand": "ÖKK",
+    "aliases": [
+      "ÖKK",
+      "ÖKK Kranken- und Unfallversicherungen AG"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 29,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 509,
+    "name": "Vivao Sympany SA",
+    "brand": "Vivao Sympany",
+    "aliases": [
+      "Vivao Sympany",
+      "Vivao Sympany SA"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 43,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 780,
+    "name": "Genossenschaft Glarner Krankenversicherung",
+    "brand": "Glarner",
+    "aliases": [
+      "Glarner",
+      "Genossenschaft Glarner Krankenversicherung"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 20,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 820,
+    "name": "curaulta",
+    "brand": "curaulta",
+    "aliases": [
+      "curaulta",
+      "Cassa da malsauns LUMNEZIANA",
+      "LUMNEZIANA"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 24,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      },
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Anpassungen",
+        "row": 3,
+        "evidence": "Ancienne raison sociale LUMNEZIANA conservée comme alias historique, pas nouvel assureur 2026."
+      }
+    ]
+  },
+  {
+    "id": 881,
+    "name": "EGK Grundversicherungen AG",
+    "brand": "EGK",
+    "aliases": [
+      "EGK",
+      "EGK Grundversicherungen AG"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 16,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 923,
+    "name": "Genossenschaft KRANKENKASSE SLKK",
+    "brand": "SLKK",
+    "aliases": [
+      "SLKK",
+      "Genossenschaft KRANKENKASSE SLKK"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 34,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 941,
+    "name": "sodalis gesundheitsgruppe",
+    "brand": "sodalis",
+    "aliases": [
+      "sodalis",
+      "sodalis gesundheitsgruppe"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 35,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 966,
+    "name": "vita surselva",
+    "brand": "vita surselva",
+    "aliases": [
+      "vita surselva"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 42,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 1040,
+    "name": "Verein Krankenkasse Visperterminen",
+    "brand": "Visperterminen",
+    "aliases": [
+      "Visperterminen",
+      "Verein Krankenkasse Visperterminen"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 41,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 1113,
+    "name": "Caisse-maladie de la vallée d’Entremont société coopérative",
+    "brand": "CMVEO",
+    "aliases": [
+      "CMVEO",
+      "Vallée d’Entremont",
+      "Caisse-maladie de la vallée d’Entremont société coopérative",
+      "CM de la Vallée d'Entremont",
+      "Caisse maladie d'Entremont"
+    ],
+    "year": 2026,
+    "groupName": "Groupe Mutuel",
+    "groupRelationship": "cooperation",
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": true,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 39,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      },
+      {
+        "url": "https://www.priminfo.admin.ch/downloads/praemien_2026.pdf",
+        "title": "Aperçu des primes 2026",
+        "page": 531,
+        "evidence": "Nom court de la caisse dans les tableaux de primes 2026."
+      },
+      {
+        "url": "https://www.priminfo.admin.ch/downloads/praemien_2026.pdf",
+        "title": "Aperçu des primes 2026",
+        "page": 881,
+        "evidence": "Numéro 1113 et nom CM de la Vallée d’Entremont."
+      }
+    ]
+  },
+  {
+    "id": 1318,
+    "name": "Stiftung Krankenkasse Wädenswil",
+    "brand": "Wädenswil",
+    "aliases": [
+      "Wädenswil",
+      "Stiftung Krankenkasse Wädenswil"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 44,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 1322,
+    "name": "Krankenkasse Birchmeier",
+    "brand": "Birchmeier",
+    "aliases": [
+      "Birchmeier",
+      "Krankenkasse Birchmeier"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 13,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 1384,
+    "name": "SWICA Assurance-maladie SA",
+    "brand": "SWICA",
+    "aliases": [
+      "SWICA",
+      "SWICA Assurance-maladie SA"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 38,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 1386,
+    "name": "Galenos AG",
+    "brand": "Galenos",
+    "aliases": [
+      "Galenos",
+      "GALENOS AG",
+      "Galenos AG"
+    ],
+    "year": 2026,
+    "groupName": "Visana",
+    "groupRelationship": "group",
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 18,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      },
+      {
+        "url": "https://www.priminfo.admin.ch/downloads/praemien_2026.pdf",
+        "title": "Aperçu des primes 2026",
+        "page": 27,
+        "evidence": "Nom court de la caisse dans les tableaux de primes 2026."
+      }
+    ]
+  },
+  {
+    "id": 1401,
+    "name": "rhenusana",
+    "brand": "rhenusana",
+    "aliases": [
+      "rhenusana"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 31,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 1479,
+    "name": "Mutuel Assurance Maladie SA",
+    "brand": "Mutuel",
+    "aliases": [
+      "Mutuel",
+      "Mutuel Krankenversicherung AG",
+      "Mutuel Assurance Maladie SA"
+    ],
+    "year": 2026,
+    "groupName": "Groupe Mutuel",
+    "groupRelationship": "group",
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 27,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      },
+      {
+        "url": "https://www.priminfo.admin.ch/downloads/praemien_2026.pdf",
+        "title": "Aperçu des primes 2026",
+        "page": 27,
+        "evidence": "Nom court de la caisse dans les tableaux de primes 2026."
+      }
+    ]
+  },
+  {
+    "id": 1507,
+    "name": "AMB Assurances SA",
+    "brand": "AMB",
+    "aliases": [
+      "AMB",
+      "AMB Assurances SA"
+    ],
+    "year": 2026,
+    "groupName": "Groupe Mutuel",
+    "groupRelationship": "group",
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": true,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 7,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      },
+      {
+        "url": "https://www.priminfo.admin.ch/downloads/praemien_2026.pdf",
+        "title": "Aperçu des primes 2026",
+        "page": 531,
+        "evidence": "Nom court de la caisse dans les tableaux de primes 2026."
+      }
+    ]
+  },
+  {
+    "id": 1509,
+    "name": "Sanitas Grundversicherungen AG",
+    "brand": "Sanitas",
+    "aliases": [
+      "Sanitas",
+      "Sanitas Grundversicherungen AG"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 33,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 1535,
+    "name": "Philos Assurance Maladie SA",
+    "brand": "Philos",
+    "aliases": [
+      "Philos",
+      "Philos Krankenversicherung AG",
+      "Philos Assurance Maladie SA"
+    ],
+    "year": 2026,
+    "groupName": "Groupe Mutuel",
+    "groupRelationship": "group",
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 30,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      },
+      {
+        "url": "https://www.priminfo.admin.ch/downloads/praemien_2026.pdf",
+        "title": "Aperçu des primes 2026",
+        "page": 27,
+        "evidence": "Nom court de la caisse dans les tableaux de primes 2026."
+      }
+    ]
+  },
+  {
+    "id": 1542,
+    "name": "Assura-Basis SA",
+    "brand": "Assura",
+    "aliases": [
+      "Assura",
+      "Assura-Basis SA"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 9,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      },
+      {
+        "url": "https://www.priminfo.admin.ch/downloads/praemien_2026.pdf",
+        "title": "Aperçu des primes 2026",
+        "page": 27,
+        "evidence": "Nom court de la caisse dans les tableaux de primes 2026."
+      }
+    ]
+  },
+  {
+    "id": 1555,
+    "name": "Visana AG",
+    "brand": "Visana",
+    "aliases": [
+      "Visana",
+      "Visana AG"
+    ],
+    "year": 2026,
+    "groupName": "Visana",
+    "groupRelationship": "group",
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 40,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 1560,
+    "name": "Agrisano Krankenkasse AG",
+    "brand": "Agrisano",
+    "aliases": [
+      "Agrisano",
+      "Agrisano Krankenkasse AG"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 6,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 1562,
+    "name": "Helsana Assurances SA",
+    "brand": "Helsana",
+    "aliases": [
+      "Helsana",
+      "Helsana Assurances SA"
+    ],
+    "year": 2026,
+    "groupName": null,
+    "groupRelationship": null,
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 21,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  },
+  {
+    "id": 1568,
+    "name": "sana24 AG",
+    "brand": "sana24",
+    "aliases": [
+      "sana24",
+      "sana24 AG"
+    ],
+    "year": 2026,
+    "groupName": "Visana",
+    "groupRelationship": "group",
+    "registryEffectiveDate": "2026-01-01",
+    "absentFrom2027Premiums": false,
+    "sources": [
+      {
+        "url": "https://www.bag.admin.ch/dam/de/sd-web/wKeV97535ICf/Zugelassene%20Krankenversicherer_1.1.2026.xlsx",
+        "title": "Liste des assureurs-maladie admis au 01.01.2026",
+        "sheet": "Index   Indice   Index ",
+        "row": 32,
+        "evidence": "Numéro OFSP et désignation courte dans index ; raison sociale et groupe dans onglet Zugelassene Krankenversicherer."
+      }
+    ]
+  }
+]

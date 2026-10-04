@@ -43,7 +43,7 @@ const dto = (row: Omit<Row, "email"> & { email: string | null }): InsuranceReque
     updatedAt: row.updatedAt.toISOString(),
     submittedAt: row.submittedAt?.toISOString() ?? null,
   });
-const legalVersion = "insurance-request-2026-09-30";
+const legalVersion = "insurance-request-2026-10-03";
 const cursorSchema = z.object({ at: z.iso.datetime(), id: z.string() });
 export function createInsuranceRequestRepository(
   db: Database,

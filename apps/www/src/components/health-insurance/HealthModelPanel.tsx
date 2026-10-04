@@ -1,16 +1,25 @@
 import { HealthGradient } from "./HealthGradient";
 import { useEffect, useState } from "react";
-import type { HealthOffer } from "@coverview/api-client/health-insurance";
+import type {
+  createHealthClient,
+  HealthCompareInput,
+  HealthLocality,
+  HealthStatus,
+  HealthOffer,
+  HealthPremiumDifference as Difference,
+} from "@coverview/api-client/health-insurance";
+import { HealthPremiumDifference } from "./HealthPremiumDifference";
 import { healthCopy as copy } from "../../content/fr/health-insurance";
 import { offerCopy } from "../../content/fr/insurance-requests";
-import { recommendationCopy } from "../../content/fr/health-recommendation";
 import { HealthEvidence } from "./HealthEvidence";
 import { modelBenefits, useHealthEvidence } from "./use-health-evidence";
 import { HealthProductImage } from "./HealthProductImage";
 import { HealthDialog } from "./HealthDialog";
 import { HealthIcon } from "./HealthIcon";
 import { HealthContactTags, HealthInsurerLogo, HealthOfferBadges } from "./HealthOfferIdentity";
-import { francs, interpolate, money, regionName } from "./health-format";
+import { interpolate, money, regionName } from "./health-format";
+import { HealthModelData } from "./HealthModelData";
+import { useModelConfiguration } from "./use-model-configuration";
 export function HealthModelPanel({
   offer,
   onClose,
@@ -21,8 +30,14 @@ export function HealthModelPanel({
   cheapest,
   preferred,
   provisional,
+  difference,
+  api,
+  profile,
+  locality,
+  status,
+  onConfigured,
 }: {
-  offer: HealthOffer | null;
+  offer: HealthOffer;
   onClose: () => void;
   onRequest: (offer: HealthOffer) => void;
   apiUrl: string;
@@ -31,10 +46,30 @@ export function HealthModelPanel({
   cheapest: boolean;
   preferred: boolean;
   provisional: boolean;
+  difference?: Difference | undefined;
+  api: ReturnType<typeof createHealthClient>;
+  profile: HealthCompareInput;
+  locality: HealthLocality | null;
+  status: HealthStatus | null;
+  onConfigured: (offer: HealthOffer) => void;
 }) {
   const [tab, setTab] = useState<"coverage" | "benefits" | "club">("coverage");
   const evidence = useHealthEvidence(apiUrl, year, !!offer && !offer.residenceCountry);
   useEffect(() => setTab("coverage"), [offer?.id]);
+  const configuration = useModelConfiguration(api, offer, profile, locality, onConfigured);
+  const regions = offer.residenceCountry
+    ? (status?.foreign?.countries ?? []).map((country) => ({
+        value: `EU-${country.code}`,
+        label: country.name,
+      }))
+    : (status?.regions ?? []).map((region) => ({ value: region.id, label: regionName(region.id) }));
+  if (!regions.some((item) => item.value === offer.regionId))
+    regions.push({ value: offer.regionId, label: regionName(offer.regionId) });
+  const deductibles = offer.residenceCountry
+    ? [offer.ageGroup === "child" ? 0 : 300]
+    : offer.ageGroup === "child"
+      ? [0, 100, 200, 300, 400, 500, 600]
+      : [300, 500, 1000, 1500, 2000, 2500];
   return (
     <HealthDialog
       open={!!offer}
@@ -62,50 +97,79 @@ export function HealthModelPanel({
           <HealthOfferBadges preferred={preferred} provisional={provisional} />
           {preferred && provisional && <p className="hi-small">* {copy.provisionalBadge}</p>}
           <HealthProductImage offer={offer} />
-          <div className="hi-model-price">
-            <div className="hi-model-price-line">
-              <p>
-                {money(offer.monthlyPremiumMinor)}
-                <span className="hi-price-unit">
-                  <small>{copy.currency}</small>
-                  <em>{copy.perMonth}</em>
-                </span>
-              </p>
-              <HealthOfferBadges cheapest={cheapest} />
+          <div className="hi-model-price-area" aria-busy={configuration.busy}>
+            <div
+              aria-hidden={!configuration.ready}
+              inert={!configuration.ready}
+              style={configuration.ready ? undefined : { visibility: "hidden" }}
+            >
+              <div className="hi-model-price">
+                <div className="hi-model-price-line">
+                  <HealthOfferBadges cheapest={cheapest} />
+                  <p>
+                    {money(offer.monthlyPremiumMinor)}
+                    <span className="hi-price-unit">
+                      <small>{copy.currency}</small>
+                      <em>{copy.perMonth}</em>
+                    </span>
+                  </p>
+                </div>
+                {offer.redistribution?.year === year && (
+                  <div className="hi-redistribution">
+                    <span>
+                      − {money(offer.redistribution.monthlyMinor)} CHF {copy.perMonth} ·{" "}
+                      {copy.redistributionLabel}
+                    </span>
+                    <span className="hi-info-tooltip">
+                      <button
+                        type="button"
+                        aria-label={copy.redistributionHelp}
+                        aria-describedby="health-redistribution-tooltip"
+                      >
+                        <HealthIcon name="info" size={16} />
+                      </button>
+                      <span role="tooltip" id="health-redistribution-tooltip">
+                        {interpolate(copy.redistributionExplanation, {
+                          year,
+                          annual: money(offer.redistribution.annualMinor),
+                          monthly: money(offer.redistribution.monthlyMinor),
+                        })}
+                        <a href={offer.redistribution.sourceUrl} target="_blank" rel="noreferrer">
+                          {copy.redistributionSource} ↗
+                        </a>
+                      </span>
+                    </span>
+                  </div>
+                )}
+              </div>
+              <HealthPremiumDifference value={difference} detail />
+              <button
+                className="hi-primary hi-full hi-request-cta"
+                onClick={() => onRequest(offer)}
+              >
+                <HealthGradient />
+                {offerCopy.request}
+                <HealthIcon name="arrow" size={16} />
+              </button>
             </div>
-            {offer.redistribution?.year === year && (
-              <div className="hi-redistribution">
-                <span>
-                  − {money(offer.redistribution.monthlyMinor)} CHF {copy.perMonth} ·{" "}
-                  {copy.redistributionLabel}
-                </span>
-                <span className="hi-info-tooltip">
-                  <button
-                    type="button"
-                    aria-label={copy.redistributionHelp}
-                    aria-describedby="health-redistribution-tooltip"
-                  >
-                    <HealthIcon name="info" size={16} />
+            {!configuration.ready && (
+              <div
+                className="hi-model-configuration-status"
+                role={configuration.issue ? "alert" : "status"}
+              >
+                {configuration.issue === "unavailable"
+                  ? copy.configurationUnavailable
+                  : configuration.issue === "failed"
+                    ? copy.configurationFailed
+                    : copy.configurationLoading}
+                {configuration.issue === "failed" && (
+                  <button className="hi-text-link" onClick={() => configuration.change({})}>
+                    {copy.retry}
                   </button>
-                  <span role="tooltip" id="health-redistribution-tooltip">
-                    {interpolate(copy.redistributionExplanation, {
-                      year,
-                      annual: money(offer.redistribution.annualMinor),
-                      monthly: money(offer.redistribution.monthlyMinor),
-                    })}
-                    <a href={offer.redistribution.sourceUrl} target="_blank" rel="noreferrer">
-                      {copy.redistributionSource} ↗
-                    </a>
-                  </span>
-                </span>
+                )}
               </div>
             )}
           </div>
-          <button className="hi-primary hi-full hi-request-cta" onClick={() => onRequest(offer)}>
-            <HealthGradient />
-            {offerCopy.request}
-            <HealthIcon name="arrow" size={16} />
-          </button>
           {offer.residenceCountry && <p className="hi-small">{copy.foreignConditions}</p>}
           {!offer.residenceCountry && (
             <div className="hi-tabs" role="tablist">
@@ -154,95 +218,14 @@ export function HealthModelPanel({
             aria-labelledby={offer.residenceCountry ? undefined : `health-tab-${tab}`}
             className="hi-tab-content"
           >
-            {offer.residenceCountry ? (
-              <>
-                <p>{copy.foreignHint}</p>
-                <dl className="hi-specs">
-                  <div>
-                    <dt>{copy.country}</dt>
-                    <dd>
-                      {new Intl.DisplayNames(["fr-CH"], { type: "region" }).of(
-                        offer.residenceCountry,
-                      )}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>{copy.deductible}</dt>
-                    <dd>{francs(offer.deductible)}</dd>
-                  </div>
-                  <div>
-                    <dt>{copy.accident}</dt>
-                    <dd className={offer.accident ? "hi-included" : undefined}>
-                      {offer.accident ? copy.accidentIncluded : copy.accidentExcluded}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>{copy.annual}</dt>
-                    <dd>{francs((offer.monthlyPremiumMinor * 12) / 100)}</dd>
-                  </div>
-                </dl>
-                <a
-                  className="hi-text-link"
-                  href="https://www.priminfo.admin.ch/downloads/gesamtbericht_eu.pdf"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {copy.foreignSource} ↗
-                </a>
-              </>
-            ) : tab === "coverage" ? (
-              <>
-                <p className="hi-detail-intro">{copy.categoryDescriptions[offer.category]}</p>
-                <dl className="hi-specs">
-                  <div>
-                    <dt>{recommendationCopy.year}</dt>
-                    <dd>{year}</dd>
-                  </div>
-                  <div>
-                    <dt>{copy.model}</dt>
-                    <dd>{copy.categoryLabels[offer.category]}</dd>
-                  </div>
-                  <div>
-                    <dt>{copy.selectedRegion}</dt>
-                    <dd>{regionName(offer.regionId)}</dd>
-                  </div>
-                  <div>
-                    <dt>{copy.deductible}</dt>
-                    <dd>{francs(offer.deductible)}</dd>
-                  </div>
-                  <div>
-                    <dt>{copy.accident}</dt>
-                    <dd className={offer.accident ? "hi-included" : undefined}>
-                      {offer.accident ? copy.accidentIncluded : copy.accidentExcluded}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>{copy.annual}</dt>
-                    <dd>{francs((offer.monthlyPremiumMinor * 12) / 100)}</dd>
-                  </div>
-                </dl>
-                <div className="hi-note">
-                  <HealthIcon name="pin" />
-                  <p>
-                    {offer.eligibility === "municipality_required"
-                      ? copy.restricted
-                      : offer.eligibility === "municipality_confirmed"
-                        ? copy.municipalityConfirmed
-                        : copy.noRestriction}
-                  </p>
-                </div>
-                <p className="hi-small">{copy.networkNote}</p>
-                {offer.ageGroup === "child" && <p className="hi-small">{copy.familyNote}</p>}
-                <p className="hi-small">{copy.commonBenefits}</p>
-                <a
-                  className="hi-text-link"
-                  href="https://www.priminfo.admin.ch/fr/praemien"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {copy.source} ↗
-                </a>
-              </>
+            {offer.residenceCountry || tab === "coverage" ? (
+              <HealthModelData
+                configuration={configuration}
+                year={year}
+                regions={regions}
+                deductibles={deductibles}
+                foreign={!!offer.residenceCountry}
+              />
             ) : (
               <HealthEvidence {...evidence} modelId={offer.modelId} year={year} view={tab} />
             )}

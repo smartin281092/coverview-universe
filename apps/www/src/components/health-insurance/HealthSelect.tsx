@@ -8,17 +8,19 @@ export function HealthSelect({
   onChange,
   options,
   placeholder,
+  disabled = false,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   options: { value: string; label: string }[];
   placeholder?: string;
+  disabled?: boolean;
 }) {
   const host = useRef<HTMLDivElement>(null);
   return (
     <div ref={host} className="hi-select-host">
-      <Select value={value} onValueChange={onChange}>
+      <Select value={value} onValueChange={onChange} disabled={disabled}>
         <SelectTrigger aria-label={label} className="hi-select-trigger">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>

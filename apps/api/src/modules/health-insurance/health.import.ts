@@ -5,17 +5,24 @@ import { createInterface } from "node:readline";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { z } from "zod";
-import { healthBenefitSchema } from "@coverview/contracts/health-insurance";
+import {
+  healthBenefitSchema,
+  healthInsurerIdentitySchema,
+} from "@coverview/contracts/health-insurance";
 import { assertLocalDatabase, loadEnvironment } from "../../platform/config.js";
 import { createDatabase } from "../../platform/db/database.js";
 
+const yearArgument = process.argv.indexOf("--year");
+const year = z
+  .union([z.literal(2026), z.literal(2027)])
+  .parse(yearArgument < 0 ? 2027 : Number(process.argv[yearArgument + 1]));
 const str = z.string().min(1);
 const int = z.number().int();
 const reference = z.object({ id: str, dataset_id: str });
 const tables = {
   health_datasets: z.object({
     id: str,
-    year: z.literal(2027),
+    year: z.literal(year),
     active: z.literal(false),
     sources: z.array(
       z.object({
@@ -26,6 +33,7 @@ const tables = {
         retrievedAt: str,
       }),
     ),
+    insurer_identities: z.array(healthInsurerIdentitySchema).max(100).default([]),
     counts: z.object({
       premiums: int.positive(),
       models: int.positive(),
@@ -41,7 +49,10 @@ const tables = {
     insurer_id: int.positive(),
     tariff_code: str,
     name: str,
-    category: z.enum(["BASE", "PRAXIS", "TEL_DIG", "FLEX", "PHARM"]),
+    category:
+      year === 2026
+        ? z.enum(["BASE", "HAM", "HMO", "DIV"])
+        : z.enum(["BASE", "PRAXIS", "TEL_DIG", "FLEX", "PHARM"]),
   }),
   health_regions: reference.extend({
     region_id: z.string().regex(/^[A-Z]{2}-[0-3]$/),
@@ -79,11 +90,14 @@ const envelope = z.object({
   table: z.enum(Object.keys(tables) as [keyof typeof tables, ...(keyof typeof tables)[]]),
   row: z.unknown(),
 });
-const root = new URL("../../../../../data/health-insurance/2027/", import.meta.url);
+const root = new URL(`../../../../../data/health-insurance/${year}/`, import.meta.url);
 async function main() {
   const config = loadEnvironment();
   assertLocalDatabase(config);
-  const benefitsRaw: unknown = JSON.parse(await readFile(new URL("benefits.json", root), "utf8"));
+  const benefitsRaw: unknown =
+    year === 2027
+      ? JSON.parse(await readFile(new URL("benefits.json", root), "utf8"))
+      : { facts: [] };
   const benefits = z
     .object({
       facts: z
@@ -100,7 +114,7 @@ async function main() {
   const client = await database.pool.connect();
   try {
     await client.query("begin");
-    await client.query("select pg_advisory_xact_lock(hashtext('health-2027-import'))");
+    await client.query("select pg_advisory_xact_lock(hashtext($1))", [`health-${year}-import`]);
     let datasetId = "";
     let expected: Record<string, number> = {};
     let table: keyof typeof tables = "health_datasets";
@@ -112,7 +126,7 @@ async function main() {
       // Identifiers only come from the closed Zod table/column registry above.
       const quoted = columns.map((c) => '"' + c + '"').join(",");
       const conflict =
-        table === "health_insurers"
+        table === "health_insurers" && year === 2027
           ? "on conflict(id) do update set name=excluded.name"
           : "on conflict do nothing";
       await client.query(
@@ -216,13 +230,14 @@ async function main() {
         [JSON.stringify(row)],
       );
     }
+    if (year === 2027)
+      await client.query(
+        "update health_benefits set active=false where active and not (id=any($1::text[]))",
+        [activeBenefitIds],
+      );
     await client.query(
-      "update health_benefits set active=false where active and not (id=any($1::text[]))",
-      [activeBenefitIds],
-    );
-    await client.query(
-      "update health_datasets set active=false where year=2027 and active and id<>$1",
-      [datasetId],
+      "update health_datasets set active=false where year=$2 and active and id<>$1",
+      [datasetId, year],
     );
     await client.query("update health_datasets set active=true where id=$1", [datasetId]);
     await client.query("commit");
@@ -237,11 +252,16 @@ async function main() {
     await database.pool.end();
   }
 }
-main().catch((error) => {
+main().catch((error: unknown) => {
   process.stderr.write(
     error instanceof z.ZodError
       ? JSON.stringify(error.issues.map((x) => ({ path: x.path, code: x.code })))
-      : "Health import failed; transaction rolled back. Check normalized sources, model relations and local database.",
+      : JSON.stringify({
+          status: "rolled_back",
+          reason: "Check source integrity, import counts and local migration state",
+          code:
+            typeof error === "object" && error !== null && "code" in error ? error.code : undefined,
+        }),
   );
   process.exitCode = 1;
 });

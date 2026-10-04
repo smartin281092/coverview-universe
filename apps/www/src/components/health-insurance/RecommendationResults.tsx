@@ -3,7 +3,11 @@ import type {
   RecommendationResult,
   RankedRecommendation,
 } from "@coverview/api-client/health-recommendation";
-import type { HealthOffer } from "@coverview/api-client/health-insurance";
+import type {
+  HealthOffer,
+  HealthPremiumDifference as Difference,
+} from "@coverview/api-client/health-insurance";
+import { HealthPremiumDifference } from "./HealthPremiumDifference";
 import { recommendationCopy as copy } from "../../content/fr/health-recommendation";
 import { HealthContactTags, HealthInsurerLogo, HealthOfferBadges } from "./HealthOfferIdentity";
 import { healthCopy } from "../../content/fr/health-insurance";
@@ -13,10 +17,12 @@ function ResultCard({
   row,
   result,
   onOffer,
+  difference,
 }: {
   row: RankedRecommendation;
   result: RecommendationResult;
   onOffer: (offer: HealthOffer) => void;
+  difference?: Difference | undefined;
 }) {
   return (
     <article className="hi-ranked-offer">
@@ -42,13 +48,13 @@ function ResultCard({
           )}
         </span>
         <span className="hi-list-price">
-          <HealthOfferBadges cheapest={result.leaders.premium.includes(row.offer.id)} />
           <strong>{money(row.offer.monthlyPremiumMinor)}</strong>
           <small>
             {healthCopy.currency} {healthCopy.perMonth}
           </small>
         </span>
         <HealthIcon name="chevron" size={16} />
+        <HealthPremiumDifference value={difference} />
       </button>
       <details className="hi-ranked-explanation">
         <summary>
@@ -146,9 +152,11 @@ function ResultCard({
 export function RecommendationResults({
   result,
   onOffer,
+  differences,
 }: {
   result: RecommendationResult;
   onOffer: (offer: HealthOffer) => void;
+  differences: Map<string, Difference>;
 }) {
   const [limit, setLimit] = useState(15);
   return (
@@ -168,7 +176,13 @@ export function RecommendationResults({
       </div>
       <div className="hi-results-list">
         {result.ranked.slice(0, limit).map((row) => (
-          <ResultCard key={row.offer.id} row={row} result={result} onOffer={onOffer} />
+          <ResultCard
+            key={row.offer.id}
+            row={row}
+            result={result}
+            onOffer={onOffer}
+            difference={differences.get(row.offer.id)}
+          />
         ))}
       </div>
       {limit < result.ranked.length && (

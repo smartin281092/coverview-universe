@@ -1,0 +1,113 @@
+{
+  "before": {
+    "snapshots": [
+      {
+        "year": 2027,
+        "id": "hi_3d32b2e2690a305bf60bdb69e6fa",
+        "active": false,
+        "counts": {
+          "models": 153,
+          "regions": 44,
+          "insurers": 32,
+          "premiums": 219916,
+          "localities": 5468,
+          "eligibility": 4992,
+          "swissRegions": 42
+        }
+      },
+      {
+        "year": 2027,
+        "id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+        "active": true,
+        "counts": {
+          "models": 153,
+          "regions": 44,
+          "insurers": 32,
+          "premiums": 219916,
+          "localities": 5468,
+          "eligibility": 4992,
+          "swissRegions": 42
+        }
+      }
+    ],
+    "foreign": [
+      {
+        "year": 2027,
+        "id": "hfe_41dd734f5a752dd61aaf6ff1a6f8",
+        "active": true,
+        "premiums": 2230
+      }
+    ],
+    "preserved": {
+      "benefits": "31c4fb9f9b4c0e961ad174132236de28",
+      "models_2027": "b0380e6af7f7c94a58d2cb2d1c3586e5",
+      "insurers_2027": "391373be567e1b5c46e76aa0ef116b19"
+    }
+  },
+  "afterTwoImports": {
+    "snapshots": [
+      {
+        "year": 2026,
+        "id": "hi_70e53677da6b7cd5fdeb726d53e7",
+        "active": true,
+        "counts": {
+          "models": 156,
+          "regions": 44,
+          "insurers": 34,
+          "premiums": 217472,
+          "localities": 5483,
+          "eligibility": 4971,
+          "swissRegions": 42
+        }
+      },
+      {
+        "year": 2027,
+        "id": "hi_3d32b2e2690a305bf60bdb69e6fa",
+        "active": false,
+        "counts": {
+          "models": 153,
+          "regions": 44,
+          "insurers": 32,
+          "premiums": 219916,
+          "localities": 5468,
+          "eligibility": 4992,
+          "swissRegions": 42
+        }
+      },
+      {
+        "year": 2027,
+        "id": "hi_eb1eceb51a217fd4a4f4cd529e81",
+        "active": true,
+        "counts": {
+          "models": 153,
+          "regions": 44,
+          "insurers": 32,
+          "premiums": 219916,
+          "localities": 5468,
+          "eligibility": 4992,
+          "swissRegions": 42
+        }
+      }
+    ],
+    "foreign": [
+      {
+        "year": 2026,
+        "id": "hfe_7c5439fef6f1c342e2d664457fc8",
+        "active": true,
+        "premiums": 2230
+      },
+      {
+        "year": 2027,
+        "id": "hfe_41dd734f5a752dd61aaf6ff1a6f8",
+        "active": true,
+        "premiums": 2230
+      }
+    ],
+    "preserved": {
+      "benefits": "31c4fb9f9b4c0e961ad174132236de28",
+      "models_2027": "b0380e6af7f7c94a58d2cb2d1c3586e5",
+      "insurers_2027": "391373be567e1b5c46e76aa0ef116b19"
+    }
+  },
+  "preserved2027": true
+}

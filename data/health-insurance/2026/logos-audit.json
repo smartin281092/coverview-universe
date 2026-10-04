@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1113,
+    "url": "https://www.cmveo.ch/Site/Skins/Default/Foundation/logo-desktop.svg",
+    "sourcePage": "https://www.cmveo.ch/fr/accueil/",
+    "sourceStylesheet": "https://www.cmveo.ch/Site/Skins/default/Css/MAIN.css",
+    "checkedAt": "2026-10-02T16:57:48.214157+00:00",
+    "bytes": 3568,
+    "sha256": "ea1b33176df81d4c9b4a49c3ef9a7171a7d5ff70ea9cfc05747c1c7303143412",
+    "httpLastModified": "Fri, 29 Aug 2025 13:52:34 GMT",
+    "status": "verified_current_asset",
+    "year2026Explicit": false,
+    "downloadNote": "HTTP Content-Encoding gzip; clients urllib doivent décompresser avant sauvegarde svg."
+  },
+  {
+    "id": 1507,
+    "url": null,
+    "sourcePage": "https://www.amb-assurance.ch/",
+    "status": "not_found",
+    "note": "Ancien site officiel du PDF 2026 redirige vers une page Global smart Groupe Mutuel ; ne pas remplacer la marque AMB par un logo complémentaire."
+  }
+]

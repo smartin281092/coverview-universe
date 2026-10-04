@@ -38,6 +38,7 @@ export function HealthCheckout({
   candidate,
   open,
   onClose,
+  onAddPerson,
   onCount,
 }: {
   apiUrl: string;
@@ -46,6 +47,7 @@ export function HealthCheckout({
   candidate: CheckoutCandidate | null;
   open: boolean;
   onClose: () => void;
+  onAddPerson: () => void;
   onCount: (count: number) => void;
 }) {
   const api = useMemo(() => createInsuranceClient(apiUrl), [apiUrl]);
@@ -122,6 +124,12 @@ export function HealthCheckout({
     setStep(id && access && (access === "guest" || verified) ? 1 : 0);
     setError("");
   }, [candidate]);
+  useEffect(() => {
+    if (open && !candidate && items.length > 0) {
+      setStep(2);
+      setError("");
+    }
+  }, [open, candidate, items.length]);
   useEffect(() => onCount(items.length), [items, onCount]);
   useEffect(() => {
     if (open) heading.current?.focus();
@@ -695,7 +703,14 @@ export function HealthCheckout({
                 <button
                   className="hi-add-person"
                   disabled={busy || items.length >= 12}
-                  onClick={onClose}
+                  onClick={() => {
+                    setPerson(null);
+                    setSexChosen(false);
+                    setLocality(null);
+                    setSelectedOffer(null);
+                    setError("");
+                    onAddPerson();
+                  }}
                 >
                   + {copy.addPerson}
                 </button>

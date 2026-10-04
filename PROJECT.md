@@ -70,6 +70,8 @@ Les besoins de paiement, signature, email, Gmail/Calendar, document intelligence
 
 **Identité commerciale — instruction utilisateur du 8 septembre 2026** : CoverView est le seul nom à afficher dans les interfaces, documents et contenus produits. Supprimer toute mention de l’ancienne identité, toute formule « marque de » et ses coordonnées commerciales obsolètes. Cette instruction remplace celle du 7 septembre qui demandait de conserver l’ancienne dénomination. Elle ne modifie pas les identités de connexion, les documents originaux ni les preuves historiques, et ne constitue pas une vérification indépendante des registres ou de la couverture RC. Le [plan des autorisations](roadmap/plans/S-042a-library-authorizations.plan.md) conserve la portée du changement ; les règles de remplissage du profil restent dans [le module documentaire](apps/api/src/modules/document-intelligence/README.md#revue-et-profil-compatible).
 
+**Identité légale — confirmation utilisateur du 3 octobre 2026** : la société a changé de nom et s’appelle désormais CoverView Sàrl. CoverView n’est plus à présenter comme une marque de Bassa Martin Partners Sàrl. Cette confirmation remplace celle du 30 septembre concernant la relation de marque ; elle autorise la correction des contenus actuels, sans réécrire les preuves ni les versions de mentions déjà enregistrées.
+
 Adresse CoverView fournie par l’utilisateur le 8 septembre 2026 : **Avenue Louis-Casaï 71, 1216 Cointrin**. Elle remplace l’adresse précédente dans les coordonnées et documents produits. La notice LSA45 dispose d’une nouvelle version ; les dates d’ouverture des versions antérieures restent conservées.
 
 ## Git et livraison
