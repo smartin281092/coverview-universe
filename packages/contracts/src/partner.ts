@@ -1914,12 +1914,35 @@ export const leadListQuerySchema = z
     createdTo: z.iso.datetime({ offset: true }).optional(),
     stage: leadStageSchema.optional(),
     category: leadCategorySchema.optional(),
+    // Predefined views (brief II.10): every view and filter intersects the actor's visibility.
     view: z
-      .enum(["mine", "all", "referred", "urgent", "overdue", "no_action", "closed"])
+      .enum([
+        "mine",
+        "all",
+        "referred",
+        "urgent",
+        "overdue",
+        "no_action",
+        "closed",
+        "team",
+        "received",
+        "marketplace",
+        "waiting",
+        "appointments_week",
+        "signed",
+        "lost",
+      ])
       .default("mine"),
     clientUserId: id.optional(),
     clientProfileId: id.optional(),
     responsibleId: id.optional(),
+    referrerId: id.optional(),
+    organizationId: id.optional(),
+    dueFrom: z.iso.datetime({ offset: true }).optional(),
+    dueTo: z.iso.datetime({ offset: true }).optional(),
+    source: z.string().trim().min(1).max(160).optional(),
+    alert: z.enum(["any", "overdue", "no_next_action", "unassigned", "task_overdue"]).optional(),
+    sort: z.enum(["created", "due", "stage_age"]).default("created"),
     cursor: z.string().max(150).optional(),
     limit: z.coerce.number().int().min(1).max(100).default(60),
   })
@@ -1927,6 +1950,15 @@ export const leadListQuerySchema = z
 export const leadListSchema = z.object({
   items: z.array(leadSummarySchema),
   nextCursor: z.string().nullable(),
+  // The whole filtered set, not only this page: Kanban columns count every visible Lead.
+  counts: z
+    .object({
+      total: z.number().int().nonnegative(),
+      stages: z
+        .array(z.object({ stage: leadStageSchema, count: z.number().int().nonnegative() }))
+        .max(25),
+    })
+    .optional(),
 });
 export const leadCommandSchema = z
   .discriminatedUnion("action", [
@@ -2029,6 +2061,7 @@ export const partnerDirectorySchema = z.object({
       id,
       name: z.string(),
       organization: z.string(),
+      organizationId: id.optional(),
       categories: z.array(leadCategorySchema),
     }),
   ),

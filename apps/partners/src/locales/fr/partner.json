@@ -558,7 +558,7 @@
     "first": "Première page",
     "count_one": "{{count}} Lead affiché",
     "count_other": "{{count}} Leads affichés",
-    "limited": "Les filtres s’appliquent à toutes vos demandes autorisées ; cette page est limitée à 60 cartes."
+    "limited": "Les filtres s’appliquent à toutes vos demandes autorisées et les colonnes comptent tous les Leads correspondants ; cette page affiche au plus 60 cartes."
   },
   "views": {
     "mine": "Mes Leads",
@@ -567,7 +567,14 @@
     "urgent": "Urgents",
     "overdue": "En retard",
     "no_action": "Sans prochaine action",
-    "closed": "Clôturés"
+    "closed": "Clôturés",
+    "team": "Leads de mon équipe",
+    "received": "Leads reçus",
+    "marketplace": "Leads Marketplace",
+    "waiting": "Leads en attente",
+    "appointments_week": "Rendez-vous cette semaine",
+    "signed": "Leads signés",
+    "lost": "Leads perdus"
   },
   "groups": {
     "intake": "À prendre en charge",

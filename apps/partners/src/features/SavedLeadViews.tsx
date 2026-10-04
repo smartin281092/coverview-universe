@@ -23,7 +23,10 @@ import {
 import { partnerApi } from "../api";
 import { usePartner } from "./PartnerSession";
 import type { LeadNavigationSearch } from "./lead-navigation-state";
-const nameSchema = z.object({ name: z.string().trim().min(2).max(60) });
+const nameSchema = z.object({
+  name: z.string().trim().min(2).max(60),
+  scope: z.enum(["private", "team", "global"]),
+});
 export function SavedLeadViews({
   filters,
   onApply,
@@ -46,7 +49,16 @@ export function SavedLeadViews({
   const [editor, setEditor] = useState<LeadView | "new" | null>(null),
     [remove, setRemove] = useState<LeadView | null>(null),
     [status, setStatus] = useState("");
-  const form = useForm({ resolver: zodResolver(nameSchema), defaultValues: { name: "" } });
+  const form = useForm({
+    resolver: zodResolver(nameSchema),
+    defaultValues: { name: "", scope: "private" as const },
+  });
+  // Managers may share a view with their organization; CoverView may publish a global view.
+  const scopes = [
+    "private" as const,
+    ...(session.context.canManage ? (["team"] as const) : []),
+    ...(session.context.administrator ? (["global"] as const) : []),
+  ];
   const attempt = useRef<{ payload: string; key: string } | null>(null),
     abort = useRef(new AbortController());
   useEffect(() => {
@@ -77,9 +89,13 @@ export function SavedLeadViews({
     },
   });
   const data = query.isError ? undefined : query.data;
+  const owned = data?.items.filter((view) => view.owned) ?? [];
   const open = (value: LeadView | "new") => {
     setEditor(value);
-    form.reset({ name: value === "new" ? "" : value.name });
+    form.reset({
+      name: value === "new" ? "" : value.name,
+      scope: value === "new" ? "private" : value.scope,
+    });
     mutation.reset();
     setStatus("");
   };
@@ -97,29 +113,38 @@ export function SavedLeadViews({
               }}
             >
               {view.name}
+              {view.scope !== "private" && (
+                <span className="ml-2 text-xs text-muted-foreground">
+                  {t(`scope.${view.scope}`)}
+                </span>
+              )}
             </Button>
-            <Button
-              variant="ghost"
-              aria-label={t("editNamed", { name: view.name })}
-              onClick={() => open(view)}
-            >
-              {t("edit")}
-            </Button>
-            <Button
-              variant="ghost"
-              aria-label={t("removeNamed", { name: view.name })}
-              onClick={() => {
-                setRemove(view);
-                mutation.reset();
-              }}
-            >
-              {t("remove")}
-            </Button>
+            {view.owned && (
+              <>
+                <Button
+                  variant="ghost"
+                  aria-label={t("editNamed", { name: view.name })}
+                  onClick={() => open(view)}
+                >
+                  {t("edit")}
+                </Button>
+                <Button
+                  variant="ghost"
+                  aria-label={t("removeNamed", { name: view.name })}
+                  onClick={() => {
+                    setRemove(view);
+                    mutation.reset();
+                  }}
+                >
+                  {t("remove")}
+                </Button>
+              </>
+            )}
           </div>
         ))}
         <Button
           variant="outline"
-          disabled={!data || data.items.length >= 20}
+          disabled={!data || owned.length >= 20}
           onClick={() => open("new")}
         >
           {t("saveView")}
@@ -179,6 +204,7 @@ export function SavedLeadViews({
                         id: editor === "new" ? null : editor.id,
                         revision: editor === "new" ? 0 : editor.revision,
                         name: values.name,
+                        scope: values.scope,
                         filters: leadViewFiltersSchema.parse(current),
                       });
                     })(event)
@@ -191,6 +217,23 @@ export function SavedLeadViews({
                     {...form.register("name")}
                     disabled={mutation.isPending}
                   />
+                  {scopes.length > 1 && (
+                    <fieldset className="space-y-2">
+                      <legend className="text-sm font-medium">{t("scopeLabel")}</legend>
+                      {scopes.map((scope) => (
+                        <label key={scope} className="flex items-start gap-2 text-sm">
+                          <input
+                            type="radio"
+                            value={scope}
+                            {...form.register("scope")}
+                            disabled={mutation.isPending}
+                            className="mt-1"
+                          />
+                          <span>{t(`scopeHelp.${scope}`)}</span>
+                        </label>
+                      ))}
+                    </fieldset>
+                  )}
                   {!!Object.keys(form.formState.errors).length && (
                     <p role="alert">{t("invalidName")}</p>
                   )}

@@ -11,14 +11,14 @@
   "removeNamed": "Supprimer la vue {{name}}",
   "confirmRemove": "Supprimer cette vue",
   "removeHelp": "Les dossiers restent intacts. Seule cette vue privée est retirée de votre liste.",
-  "privateHelp": "Cette vue est privée et conserve vos filtres et la disposition. Les droits sur les dossiers sont vérifiés à chaque consultation.",
+  "privateHelp": "La vue conserve vos filtres et la disposition. Partagée, elle ne transmet que des filtres : les droits sur les dossiers sont vérifiés pour chaque personne, à chaque consultation.",
   "currentFilters": "Les filtres actuellement affichés remplaceront ceux de cette vue. La position de pagination n’est pas enregistrée.",
   "name": "Nom de la vue",
   "invalidName": "Saisissez un nom de 2 à 60 caractères.",
   "unavailable": "Les vues enregistrées sont indisponibles pour le moment. Vous pouvez continuer à filtrer les dossiers.",
   "reload": "Réessayer",
   "loading": "Chargement des vues…",
-  "empty": "Aucune vue enregistrée. Vous pouvez conserver jusqu’à 20 vues.",
+  "empty": "Aucune vue enregistrée. Vous pouvez conserver jusqu’à 20 vues personnelles.",
   "error": "La vue a changé, la limite est atteinte ou la sauvegarde n’a pas abouti. Actualisez et réessayez.",
   "close": "Fermer",
   "filters": "Filtres supplémentaires",
@@ -34,5 +34,35 @@
   "createdTo": "Création avant",
   "localTime": "Les dates utilisent le fuseau Europe/Zurich. La borne de fin est exclue.",
   "invalidDate": "Choisissez une date valide et une heure non ambiguë au changement d’heure.",
-  "reset": "Réinitialiser les filtres"
+  "reset": "Réinitialiser les filtres",
+  "sort": "Ordre",
+  "sorts": {
+    "created": "Plus récents",
+    "due": "Échéance la plus proche",
+    "stage_age": "Plus longtemps dans l’étape"
+  },
+  "advisor": "Conseiller responsable",
+  "person": "{{name}} · {{organization}}",
+  "organization": "Organisation",
+  "alert": "Alerte",
+  "alerts": {
+    "any": "Avec une alerte",
+    "overdue": "Suivi en retard",
+    "no_next_action": "Sans prochaine action",
+    "unassigned": "Sans responsable",
+    "task_overdue": "Tâche en retard"
+  },
+  "source": "Origine",
+  "dueFrom": "Échéance à partir de",
+  "dueTo": "Échéance avant",
+  "scope": {
+    "team": "Équipe",
+    "global": "CoverView"
+  },
+  "scopeLabel": "Partage",
+  "scopeHelp": {
+    "private": "Privée : visible par vous seulement.",
+    "team": "Équipe : visible par les membres de votre organisation, qui ne voient toujours que les Leads auxquels ils ont accès.",
+    "global": "CoverView : visible par les administrateurs CoverView."
+  }
 }

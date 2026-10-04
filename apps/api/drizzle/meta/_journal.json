@@ -498,6 +498,13 @@
       "when": 1791136057395,
       "tag": "0070_partner_offer_recommendations",
       "breakpoints": true
+    },
+    {
+      "idx": 71,
+      "version": "7",
+      "when": 1791139944671,
+      "tag": "0071_partner_shared_lead_views",
+      "breakpoints": true
     }
   ]
 }

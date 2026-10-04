@@ -66,6 +66,7 @@ import {
   type PartnerContinuityUpdate,
   type LeadCreateInput,
   type LeadListQuery,
+  type LeadStage,
   type LeadSummary,
   type LeadDetail,
   type PartnerNotificationQuery,
@@ -2352,7 +2353,7 @@ export function createPartnerRepository(
       const ctx = await context(pool, actor);
       if (!ctx.operational) fail("PARTNER_ACCESS_DENIED", 403);
       const result = await pool.query<Record<string, unknown>>(
-        `select m.user_id id,m.application->>'name' name,m.application->>'organization' organization,m.application->'categories' categories from partner_members m join partner_organizations o on o.id=m.organization_id where m.state='approved' and o.state='approved' and m.roles ? 'advisor' and (m.review_due_at is null or m.review_due_at>now()) order by m.application->>'name',m.user_id limit 100`,
+        `select m.user_id id,m.application->>'name' name,m.application->>'organization' organization,m.organization_id "organizationId",m.application->'categories' categories from partner_members m join partner_organizations o on o.id=m.organization_id where m.state='approved' and o.state='approved' and m.roles ? 'advisor' and (m.review_due_at is null or m.review_due_at>now()) order by m.application->>'name',m.user_id limit 100`,
       );
       return partnerDirectorySchema.parse({ items: result.rows });
     },
@@ -2396,15 +2397,81 @@ export function createPartnerRepository(
         );
       if (query.clientProfileId === "self") clauses.push("l.client_profile_id is null");
       else if (query.clientProfileId) add("l.client_profile_id=?", query.clientProfileId);
+      if (query.referrerId) add("l.creator_id=?", query.referrerId);
+      if (query.organizationId)
+        add(
+          "exists(select 1 from partner_members om where om.user_id=l.responsible_id and om.organization_id=?)",
+          query.organizationId,
+        );
+      if (query.dueFrom && query.dueTo && Date.parse(query.dueFrom) >= Date.parse(query.dueTo))
+        fail("PARTNER_ACTION_REQUIRED");
+      if (query.dueFrom) add("l.due_at>=?::timestamptz", query.dueFrom);
+      if (query.dueTo) add("l.due_at<?::timestamptz", query.dueTo);
+      if (query.source) add("l.details->>'source'=?", query.source);
+      // The same conditions as the card alerts, for active Leads only.
+      const active = "l.stage not in ('draft','completed')";
+      const alerts = {
+        overdue: `(${followUpOverdueSql})`,
+        no_next_action: `(${active} and (l.waiting is null or (l.waiting->>'until')::timestamptz<=now()) and (l.next_action='' or l.due_at is null))`,
+        unassigned: `(${active} and l.responsible_id is null)`,
+        task_overdue: `(${active} and exists(select 1 from partner_tasks at where at.lead_id=l.id and at.state='open' and at.due_at<now()))`,
+      };
+      if (query.alert)
+        clauses.push(
+          query.alert === "any" ? `(${Object.values(alerts).join(" or ")})` : alerts[query.alert],
+        );
       if (query.view === "mine" && !actor.wallet && !actor.administrator) clauses.push(assigned);
+      // A team is the manager's organization; an advisor without that role has no team view.
+      if (query.view === "team" && !actor.administrator)
+        clauses.push(!actor.wallet && (await context(pool, actor)).canManage ? managed : "false");
       if (query.view === "referred") clauses.push("l.creator_id=$1");
+      if (query.view === "received") clauses.push("l.responsible_id=$1 and l.creator_id<>$1");
+      if (query.view === "marketplace") clauses.push("l.assignment='marketplace'");
       if (query.view === "urgent") clauses.push("l.priority='urgent'");
       if (query.view === "overdue") clauses.push(`(${followUpOverdueSql})`);
       if (query.view === "no_action")
         clauses.push(
           "(l.next_action='' or l.due_at is null) and l.stage not in ('draft','completed')",
         );
+      if (query.view === "waiting")
+        clauses.push("l.waiting is not null and (l.waiting->>'until')::timestamptz>now()");
+      // Monday to Sunday in Zurich.
+      if (query.view === "appointments_week")
+        clauses.push(`exists(select 1 from partner_appointments wa where wa.lead_id=l.id and wa.state='scheduled'
+          and wa.starts_at>=(date_trunc('week', now() at time zone 'Europe/Zurich') at time zone 'Europe/Zurich')
+          and wa.starts_at<((date_trunc('week', now() at time zone 'Europe/Zurich') + interval '7 days') at time zone 'Europe/Zurich'))`);
+      if (query.view === "signed")
+        clauses.push(
+          "(l.stage in ('signed','awaiting_insurer','contract_issued') or l.result='contract')",
+        );
+      if (query.view === "lost")
+        clauses.push(
+          "l.result in ('lost','refused','client_refusal','no_suitable_solution','abandoned','no_response')",
+        );
       if (query.view === "closed") clauses.push("l.stage='completed'");
+      const where = clauses.join(" and ");
+      const counted = await pool.query<{ stage: LeadStage; count: number }>(
+        `select l.stage,count(*)::int count from partner_leads l where ${where} group by l.stage`,
+        values,
+      );
+      // Keyset pagination on the chosen order; a cursor of another order is refused.
+      const order = {
+        created: {
+          key: "l.created_at",
+          direction: "desc",
+          value: (row: ReadRow) => row.createdAt.toISOString(),
+        },
+        due: {
+          key: "coalesce(l.due_at,'infinity'::timestamptz)",
+          direction: "asc",
+          value: (row: ReadRow) => row.dueAt?.toISOString() ?? "infinity",
+        },
+        stage_age: {
+          key: "l.stage_changed_at",
+          direction: "asc",
+          value: (row: ReadRow) => row.stageChangedAt.toISOString(),
+        },
+      }[query.sort];
       if (query.cursor) {
         let cursor: unknown;
         try {
@@ -2413,15 +2480,21 @@ export function createPartnerRepository(
           fail("PARTNER_NOT_FOUND", 400);
         }
         const parsed = z
-          .object({ at: z.iso.datetime(), id: z.string().max(100) })
+          .object({
+            sort: z.enum(["created", "due", "stage_age"]).default("created"),
+            at: z.union([z.iso.datetime(), z.literal("infinity")]),
+            id: z.string().max(100),
+          })
           .safeParse(cursor);
-        if (!parsed.success) fail("PARTNER_NOT_FOUND", 400);
+        if (!parsed.success || parsed.data.sort !== query.sort) fail("PARTNER_NOT_FOUND", 400);
         values.push(parsed.data.at, parsed.data.id);
-        clauses.push(`(l.created_at,l.id)<($${values.length - 1}::timestamptz,$${values.length})`);
+        clauses.push(
+          `(${order.key},l.id)${order.direction === "desc" ? "<" : ">"}($${values.length - 1}::timestamptz,$${values.length})`,
+        );
       }
       values.push(query.limit + 1);
       const result = await pool.query<Record<string, unknown>>(
-        `${selectLead} where ${clauses.join(" and ")} order by l.created_at desc,l.id desc limit $${values.length}`,
+        `${selectLead} where ${clauses.join(" and ")} order by ${order.key} ${order.direction},l.id ${order.direction} limit $${values.length}`,
         values,
       );
       const rows = result.rows.slice(0, query.limit).map((r) => camel<ReadRow>(r)),
@@ -2431,9 +2504,13 @@ export function createPartnerRepository(
         nextCursor:
           result.rows.length > query.limit && last
             ? Buffer.from(
-                JSON.stringify({ at: last.createdAt.toISOString(), id: last.id }),
+                JSON.stringify({ sort: query.sort, at: order.value(last), id: last.id }),
               ).toString("base64url")
             : null,
+        counts: {
+          total: counted.rows.reduce((sum, row) => sum + row.count, 0),
+          stages: counted.rows.map((row) => ({ stage: row.stage, count: row.count })),
+        },
       };
     },
     detail: (actor: PartnerActor, id: string) => detail(pool, actor, id),

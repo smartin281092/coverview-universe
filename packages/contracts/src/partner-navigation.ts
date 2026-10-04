@@ -12,6 +12,8 @@ export const leadViewInputSchema = z.discriminatedUnion("action", [
       revision: z.number().int().nonnegative(),
       name: z.string().trim().min(2).max(60),
       filters: leadViewFiltersSchema,
+      // private: the owner only; team: the owner's organization (managers); global: Admin.
+      scope: z.enum(["private", "team", "global"]).default("private"),
     })
     .strict(),
   z
@@ -29,8 +31,12 @@ export const leadViewSchema = z.object({
   filters: leadViewFiltersSchema,
   active: z.boolean(),
   updatedAt: z.iso.datetime(),
+  scope: z.enum(["private", "team", "global"]).default("private"),
+  // Shared views of others can be applied, never edited.
+  owned: z.boolean().default(true),
 });
-export const leadViewsSchema = z.object({ items: z.array(leadViewSchema).max(20) });
-export type LeadViewInput = z.infer<typeof leadViewInputSchema>;
+export const leadViewsSchema = z.object({ items: z.array(leadViewSchema).max(60) });
+// Input shape: defaults (scope, layout, view, sort) may be omitted by callers.
+export type LeadViewInput = z.input<typeof leadViewInputSchema>;
 export type LeadView = z.infer<typeof leadViewSchema>;
 export type LeadViewFilters = z.infer<typeof leadViewFiltersSchema>;

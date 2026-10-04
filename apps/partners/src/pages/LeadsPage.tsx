@@ -76,6 +76,43 @@ export function LeadsPage() {
     leads = useLeads({ ...filters, q: queryText, view });
   const remember = () => session.rememberLeadSearch({ ...search, q: queryText, view, layout });
   const localDate = (value: string | undefined) => (value ? formatZurichDateTime(value) : "");
+  const directory = useQuery({
+    queryKey: [...session.queryKey, "directory"],
+    queryFn: ({ signal }) => partnerApi.directory(signal),
+    enabled: session.context.operational,
+    gcTime: 0,
+  });
+  const organizations = [
+    ...new Map(
+      (directory.data?.items ?? [])
+        .filter((item) => item.organizationId)
+        .map((item) => [item.organizationId!, item.organization]),
+    ),
+  ].sort((a, b) => a[1].localeCompare(b[1]));
+  const [sourceText, setSourceText] = useState(search.source ?? "");
+  // A team view exists for managers and CoverView only.
+  const views = [
+    "mine",
+    "all",
+    "referred",
+    "received",
+    ...(session.context.canManage || session.context.administrator ? ["team"] : []),
+    "marketplace",
+    "urgent",
+    "overdue",
+    "no_action",
+    "waiting",
+    "appointments_week",
+    "signed",
+    "lost",
+    "closed",
+  ];
+  const stageCount = (stages: LeadStage[]) =>
+    leads.data?.counts
+      ? leads.data.counts.stages
+          .filter((item) => stages.includes(item.stage))
+          .reduce((sum, item) => sum + item.count, 0)
+      : (leads.data?.items.filter((lead) => stages.includes(lead.stage)).length ?? 0);
   const selected = useQuery({
     queryKey: [...session.queryKey, "lead", moving?.id],
     queryFn: ({ signal }) => partnerApi.lead(moving!.id, signal),
@@ -85,7 +122,7 @@ export function LeadsPage() {
   const change = (next: Partial<typeof search>) => {
     void navigate({ search: publicLeadSearch({ ...search, ...next, cursor: undefined }) });
   };
-  const changeDate = (field: "createdFrom" | "createdTo", value: string) => {
+  const changeDate = (field: "createdFrom" | "createdTo" | "dueFrom" | "dueTo", value: string) => {
     try {
       const instant = value ? parseZurichDateTime(value) : undefined;
       setDateError(false);
@@ -136,10 +173,21 @@ export function LeadsPage() {
             change({ view: event.target.value as NonNullable<typeof search.view> })
           }
         >
-          <SelectOptions
-            values={["mine", "all", "referred", "urgent", "overdue", "no_action", "closed"]}
-            prefix="views"
-          />
+          <SelectOptions values={views} prefix="views" />
+        </select>
+        <select
+          className="h-10 rounded-md border border-input bg-background px-3 text-sm"
+          aria-label={t("navigation:sort")}
+          value={search.sort ?? "created"}
+          onChange={(event) =>
+            change({ sort: event.target.value as NonNullable<typeof search.sort> })
+          }
+        >
+          {(["created", "due", "stage_age"] as const).map((value) => (
+            <option key={value} value={value}>
+              {t(`navigation:sorts.${value}`)}
+            </option>
+          ))}
         </select>
         <select
           className="h-10 rounded-md border border-input bg-background px-3 text-sm"
@@ -280,6 +328,86 @@ export function LeadsPage() {
             </select>
           </label>
           <label className="space-y-2 text-sm">
+            <span>{t("navigation:advisor")}</span>
+            <select
+              className="w-full rounded-md border border-input bg-background p-3"
+              value={search.responsibleId ?? ""}
+              onChange={(event) => change({ responsibleId: event.target.value || undefined })}
+            >
+              <option value="">{t("navigation:all")}</option>
+              {(directory.data?.items ?? []).map((item) => (
+                <option key={item.id} value={item.id}>
+                  {t("navigation:person", { name: item.name, organization: item.organization })}
+                </option>
+              ))}
+            </select>
+          </label>
+          {session.context.administrator && (
+            <label className="space-y-2 text-sm">
+              <span>{t("navigation:organization")}</span>
+              <select
+                className="w-full rounded-md border border-input bg-background p-3"
+                value={search.organizationId ?? ""}
+                onChange={(event) => change({ organizationId: event.target.value || undefined })}
+              >
+                <option value="">{t("navigation:all")}</option>
+                {organizations.map(([id, name]) => (
+                  <option key={id} value={id}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+          <label className="space-y-2 text-sm">
+            <span>{t("navigation:alert")}</span>
+            <select
+              className="w-full rounded-md border border-input bg-background p-3"
+              value={search.alert ?? ""}
+              onChange={(event) =>
+                change({
+                  alert: event.target.value
+                    ? (event.target.value as typeof search.alert)
+                    : undefined,
+                })
+              }
+            >
+              <option value="">{t("navigation:all")}</option>
+              {(["any", "overdue", "no_next_action", "unassigned", "task_overdue"] as const).map(
+                (value) => (
+                  <option key={value} value={value}>
+                    {t(`navigation:alerts.${value}`)}
+                  </option>
+                ),
+              )}
+            </select>
+          </label>
+          <label className="space-y-2 text-sm">
+            <span>{t("navigation:source")}</span>
+            <Input
+              value={sourceText}
+              maxLength={160}
+              onChange={(event) => setSourceText(event.target.value)}
+              onBlur={() => change({ source: sourceText.trim() || undefined })}
+            />
+          </label>
+          <label className="space-y-2 text-sm">
+            <span>{t("navigation:dueFrom")}</span>
+            <Input
+              type="datetime-local"
+              value={localDate(search.dueFrom)}
+              onChange={(event) => changeDate("dueFrom", event.target.value)}
+            />
+          </label>
+          <label className="space-y-2 text-sm">
+            <span>{t("navigation:dueTo")}</span>
+            <Input
+              type="datetime-local"
+              value={localDate(search.dueTo)}
+              onChange={(event) => changeDate("dueTo", event.target.value)}
+            />
+          </label>
+          <label className="space-y-2 text-sm">
             <span>{t("navigation:createdFrom")}</span>
             <Input
               type="datetime-local"
@@ -303,6 +431,7 @@ export function LeadsPage() {
           variant="outline"
           onClick={() => {
             setQueryText("");
+            setSourceText("");
             session.rememberLeadSearch({ layout });
             void navigate({ search: { layout } });
           }}
@@ -351,7 +480,7 @@ export function LeadsPage() {
               <header className="mb-4 flex items-center justify-between px-1 text-sm font-semibold">
                 <h2>{t(`groups.${group.key}`)}</h2>
                 <span className="rounded-md bg-background px-2 py-1 text-xs text-muted-foreground">
-                  {leads.data.items.filter((lead) => group.stages.includes(lead.stage)).length}
+                  {stageCount(group.stages)}
                 </span>
               </header>
               <div className="space-y-3">

@@ -120,12 +120,15 @@ const leads = createRoute({
       ...(parsed.success ? parsed.data : leadListQuerySchema.parse({})),
       layout: layout === "list" ? ("list" as const) : ("kanban" as const),
     };
-    if (search.view === undefined) {
-      const { view: defaultView, ...rest } = result;
-      void defaultView;
-      return rest;
-    }
-    return result;
+    // Default view and order stay out of the URL.
+    const { view: defaultView, sort: defaultSort, ...rest } = result;
+    void defaultView;
+    void defaultSort;
+    return {
+      ...rest,
+      ...(search.view === undefined ? {} : { view: result.view }),
+      ...(search.sort === undefined ? {} : { sort: result.sort }),
+    };
   },
   component: lazyRouteComponent(() => import("./pages/LeadsPage"), "LeadsPage"),
 });

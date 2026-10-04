@@ -1,0 +1,5 @@
+ALTER TABLE "partner_lead_views" ADD COLUMN "scope" text DEFAULT 'private' NOT NULL;--> statement-breakpoint
+ALTER TABLE "partner_lead_views" ADD COLUMN "organization_id" text;--> statement-breakpoint
+ALTER TABLE "partner_lead_views" ADD CONSTRAINT "partner_lead_views_organization_id_partner_organizations_id_fk" FOREIGN KEY ("organization_id") REFERENCES "public"."partner_organizations"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "partner_lead_views_shared" ON "partner_lead_views" USING btree ("organization_id","scope","active");--> statement-breakpoint
+ALTER TABLE "partner_lead_views" ADD CONSTRAINT "partner_lead_views_scope" CHECK (("partner_lead_views"."scope"='private' and "partner_lead_views"."organization_id" is null) or ("partner_lead_views"."scope"='team' and "partner_lead_views"."organization_id" is not null) or ("partner_lead_views"."scope"='global' and "partner_lead_views"."organization_id" is null));
