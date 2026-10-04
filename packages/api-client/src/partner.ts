@@ -33,6 +33,11 @@ import {
   offerImportResultSchema,
   referentProfileSchema,
   referentUpdateSchema,
+  competenceDossierSchema,
+  competenceDeclarationSchema,
+  competenceDecisionSchema,
+  type CompetenceDeclaration,
+  type CompetenceDecision,
   type ReferentUpdate,
   type CollaborationResponse,
   type PartnerContinuityUpdate,
@@ -101,6 +106,72 @@ export function createPartnerClient(baseUrl: string) {
   }
   const path = (wallet = false) => (wallet ? "/wallet/leads" : "/partner/leads");
   return {
+    competence: (userId: string, category: string, beforeRevision?: number, signal?: AbortSignal) =>
+      request(
+        `/partner/competence/${encodeURIComponent(userId)}/${encodeURIComponent(category)}${beforeRevision ? `?beforeRevision=${beforeRevision}` : ""}`,
+        competenceDossierSchema,
+        signal,
+      ),
+    declareCompetence: (
+      userId: string,
+      category: string,
+      input: CompetenceDeclaration,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/competence/${encodeURIComponent(userId)}/${encodeURIComponent(category)}`,
+        competenceDossierSchema,
+        options.signal,
+        competenceDeclarationSchema.parse(input),
+        options,
+      ),
+    decideCompetence: (
+      userId: string,
+      category: string,
+      input: CompetenceDecision,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/competence/${encodeURIComponent(userId)}/${encodeURIComponent(category)}/decisions`,
+        competenceDossierSchema,
+        options.signal,
+        competenceDecisionSchema.parse(input),
+        options,
+      ),
+    uploadCompetence: (
+      userId: string,
+      category: string,
+      id: string,
+      file: File,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/competence/${encodeURIComponent(userId)}/${encodeURIComponent(category)}/${encodeURIComponent(id)}/content`,
+        competenceDossierSchema,
+        options.signal,
+        file,
+        options,
+        true,
+      ),
+    retryCompetence: (
+      userId: string,
+      category: string,
+      id: string,
+      revision: number,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/competence/${encodeURIComponent(userId)}/${encodeURIComponent(category)}/${encodeURIComponent(id)}/retry`,
+        competenceDossierSchema,
+        options.signal,
+        { revision },
+        options,
+      ),
+    competenceSourceUrl: (userId: string, category: string, id: string) =>
+      new URL(
+        `/partner/competence/${encodeURIComponent(userId)}/${encodeURIComponent(category)}/${encodeURIComponent(id)}/source`,
+        base,
+      ).href,
     referentProfile: (
       profileId: string,
       category: string,

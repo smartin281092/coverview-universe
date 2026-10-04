@@ -2,10 +2,29 @@ import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import type { Pool } from "pg";
 import { z } from "zod";
-import { offerImportResultSchema } from "@coverview/contracts/partner";
+import {
+  offerImportResultSchema,
+  competenceDossierSchema,
+  leadCategorySchema,
+} from "@coverview/contracts/partner";
 import { DocumentError } from "./document.repository.js";
 import type { createDocumentService } from "./document.service.js";
 export type LeadSourceAuthorization = {
+  authorizeCompetenceSource(
+    request: FastifyRequest,
+    userId: string,
+    category: string,
+    id: string,
+    write: boolean,
+    record?: boolean,
+  ): Promise<{ userId: string; documentId: string }>;
+  completeCompetenceUpload(
+    request: FastifyRequest,
+    userId: string,
+    category: string,
+    id: string,
+    mime: string,
+  ): Promise<z.infer<typeof competenceDossierSchema>>;
   authorizeFinalPolicySource(
     request: FastifyRequest,
     leadId: string,
@@ -57,6 +76,71 @@ export function registerLeadDocumentRoutes(
   access: LeadSourceAuthorization,
 ) {
   const app = server.withTypeProvider<ZodTypeProvider>();
+  const competenceParams = z
+    .object({
+      userId: z.string().min(1).max(100),
+      category: leadCategorySchema,
+      id: z.string().min(1).max(100),
+    })
+    .strict();
+  const competenceSource = (request: FastifyRequest, write: boolean, record = false) => {
+    const p = competenceParams.parse(request.params);
+    return access.authorizeCompetenceSource(request, p.userId, p.category, p.id, write, record);
+  };
+  app.post(
+    "/partner/competence/:userId/:category/:id/content",
+    {
+      bodyLimit: 20 * 1024 * 1024,
+      config: { rateLimit: { max: 10, timeWindow: "1 minute" } },
+      onRequest: async (request) => {
+        await competenceSource(request, true);
+      },
+      schema: { params: competenceParams, response: { 200: competenceDossierSchema } },
+    },
+    async (request) => {
+      const original = await competenceSource(request, true),
+        p = request.params;
+      return service.uploadShared(
+        original.userId,
+        original.documentId,
+        z.instanceof(Buffer).parse(request.body),
+        async () => {
+          const current = await competenceSource(request, true);
+          if (current.documentId !== original.documentId || current.userId !== original.userId)
+            throw new DocumentError("DOCUMENT_NOT_FOUND", 404);
+        },
+        (mime) => access.completeCompetenceUpload(request, p.userId, p.category, p.id, mime),
+      );
+    },
+  );
+  app.get(
+    "/partner/competence/:userId/:category/:id/source",
+    {
+      config: { rateLimit: { max: 30, timeWindow: "1 minute" } },
+      schema: { params: competenceParams },
+    },
+    async (request, reply) => {
+      const original = await competenceSource(request, false);
+      const result = await service.downloadShared(
+        original.userId,
+        original.documentId,
+        async () => {
+          const current = await competenceSource(request, false);
+          if (current.documentId !== original.documentId || current.userId !== original.userId)
+            throw new DocumentError("DOCUMENT_NOT_FOUND", 404);
+        },
+      );
+      await competenceSource(request, false, true);
+      return reply
+        .header("content-type", "application/octet-stream")
+        .header(
+          "content-disposition",
+          `attachment; filename="document"; filename*=UTF-8''${encodeURIComponent(result.name).replace(/'/gu, "%27")}`,
+        )
+        .header("x-content-type-options", "nosniff")
+        .send(result.bytes);
+    },
+  );
   const importParams = z
     .object({ id: z.string().min(1).max(100), importId: z.string().min(1).max(100) })
     .strict();

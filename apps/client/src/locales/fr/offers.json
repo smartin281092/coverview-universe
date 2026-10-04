@@ -37,7 +37,22 @@
       "closed": "Cette demande est terminée. Changer votre préférence ne la rouvre pas."
     },
     "error": "Impossible de charger ou d’enregistrer vos référents. Vérifiez votre connexion puis réessayez.",
-    "loading": "Chargement des référents…"
+    "loading": "Chargement des référents…",
+    "competence": "Compétence du référent : {{status}}",
+    "competenceStatus": {
+      "missing": "Justificatif manquant",
+      "submitted": "Déclaration à examiner",
+      "needs_information": "Complément demandé",
+      "rejected": "Justificatif non retenu",
+      "reviewed": "Compétence documentée pour la catégorie",
+      "limited": "Portée limitée à examiner",
+      "expired": "Constat expiré",
+      "withdrawn": "Constat retiré",
+      "unavailable": "Constat indisponible ou périmètre modifié"
+    },
+    "competenceScope": "Portée du constat : {{scope}}",
+    "competenceUntil": "Constat valable jusqu’au {{date}}",
+    "competenceLimits": "Constat documentaire interne, sans certification officielle ni droit supplémentaire. Les conventions, langues, zones, disponibilités, conflits et préférences restent à examiner."
   },
   "version": "Version {{version}}",
   "updatedSinceViewed": "Mise à jour depuis votre dernière consultation",

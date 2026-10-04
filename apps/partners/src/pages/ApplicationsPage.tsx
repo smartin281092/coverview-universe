@@ -22,11 +22,13 @@ import {
 import { usePartner } from "../features/PartnerSession";
 import { Field, SelectOptions, readText, readDate } from "../features/Field";
 import { partnerApi } from "../api";
+import { CompetenceDialog } from "../features/CompetenceDialog";
 export function ApplicationsPage() {
   const { t } = useTranslation(),
     session = usePartner(),
     client = useQueryClient(),
     [selected, setSelected] = useState<PartnerApplication | null>(null),
+    [competenceUserId, setCompetenceUserId] = useState<string | null>(null),
     [pending, setPending] = useState(false),
     [error, setError] = useState(""),
     [key, setKey] = useState(() => crypto.randomUUID());
@@ -82,6 +84,13 @@ export function ApplicationsPage() {
                 }}
               >
                 {t("application.review")}
+              </Button>
+              <Button
+                className="mt-3"
+                variant="outline"
+                onClick={() => setCompetenceUserId(person.userId)}
+              >
+                {t("competence.title")}
               </Button>
             </article>
           ))}
@@ -210,6 +219,9 @@ export function ApplicationsPage() {
           )}
         </DialogContent>
       </Dialog>
+      {competenceUserId && (
+        <CompetenceDialog userId={competenceUserId} onClose={() => setCompetenceUserId(null)} />
+      )}
     </>
   );
 }

@@ -132,6 +132,87 @@ export const leadCategorySchema = z.enum([
   "other",
 ]);
 const referentAdvisorSchema = z.object({ id, name: z.string(), organization: z.string() });
+export const competenceStatusSchema = z.enum([
+  "missing",
+  "submitted",
+  "needs_information",
+  "rejected",
+  "reviewed",
+  "limited",
+  "expired",
+  "withdrawn",
+  "unavailable",
+]);
+export const competenceSummarySchema = z.object({
+  status: competenceStatusSchema,
+  scope: z.string(),
+  validUntil: instant.nullable(),
+  reviewedAt: instant.nullable(),
+});
+export const competenceDeclarationSchema = z
+  .object({
+    revision: z.number().int().nonnegative(),
+    declaration: text,
+    file: documentCreateInputSchema.pick({ name: true, mime: true, size: true, checksum: true }),
+    confirmed: z.literal(true),
+  })
+  .strict();
+export const competenceDecisionSchema = z
+  .object({
+    revision: z.number().int().positive(),
+    decision: z.enum(["reviewed", "needs_information", "rejected", "withdrawn"]),
+    reason: text,
+    scope: z.string().trim().max(2000),
+    coverage: z.enum(["category", "limited"]).nullable(),
+    validUntil: instant.nullable(),
+    documentRevision: z.number().int().nonnegative(),
+    originalChecked: z.boolean(),
+  })
+  .strict()
+  .refine((v) =>
+    v.decision === "reviewed"
+      ? !!v.scope && !!v.coverage && !!v.validUntil && v.originalChecked
+      : v.coverage === null && v.validUntil === null && v.scope === "",
+  );
+export const competenceQuerySchema = z
+  .object({
+    beforeRevision: z.coerce.number().int().positive().optional(),
+  })
+  .strict();
+export const competenceRecordSchema = z.object({
+  id,
+  revision: z.number().int().positive(),
+  declaration: text,
+  decision: z.enum(["submitted", "reviewed", "needs_information", "rejected", "withdrawn"]),
+  reason: z.string(),
+  scope: z.string(),
+  coverage: z.enum(["category", "limited"]).nullable(),
+  validUntil: instant.nullable(),
+  createdAt: instant,
+  actorName: z.string(),
+  documentId: id,
+  documentName: z.string(),
+  documentState: documentStateSchema,
+  documentRevision: z.number().int().nonnegative(),
+  canDownload: z.boolean(),
+});
+export const competenceDossierSchema = z.object({
+  documentsAvailable: z.boolean().default(true),
+  userId: id,
+  name: z.string(),
+  organization: z.string(),
+  category: leadCategorySchema,
+  current: competenceRecordSchema.nullable(),
+  summary: competenceSummarySchema,
+  canDeclare: z.boolean(),
+  canReview: z.boolean(),
+  canWithdraw: z.boolean(),
+  history: z.array(competenceRecordSchema).max(20),
+  nextBeforeRevision: z.number().int().positive().nullable(),
+});
+export type CompetenceDeclaration = z.infer<typeof competenceDeclarationSchema>;
+export type CompetenceDecision = z.infer<typeof competenceDecisionSchema>;
+export type CompetenceDossier = z.infer<typeof competenceDossierSchema>;
 export const referentSelectionSchema = z.object({
   revision: z.number().int().nonnegative(),
   advisor: referentAdvisorSchema.nullable(),
@@ -172,6 +253,7 @@ export const referentProfileSchema = z.object({
   nextBeforeRevision: z.number().int().positive().nullable(),
 });
 export const referentContinuitySchema = z.object({
+  competence: competenceSummarySchema.optional(),
   selection: referentSelectionSchema,
   status: z.enum(["human_review", "client_change_requested", "closed"]),
   suggestion: referentAdvisorSchema.nullable(),

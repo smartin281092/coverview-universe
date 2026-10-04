@@ -391,6 +391,32 @@ function Offers({ identity }: { identity: IdentityMe }) {
                     <p className="text-sm text-muted-foreground">
                       {t(`referents.continuity.${lead.referentContinuity.status}`)}
                     </p>
+                    {lead.referentContinuity.competence && (
+                      <div className="space-y-2 text-sm text-muted-foreground">
+                        <p>
+                          {t("referents.competence", {
+                            status: t(
+                              `referents.competenceStatus.${lead.referentContinuity.competence.status}`,
+                            ),
+                          })}
+                        </p>
+                        {lead.referentContinuity.competence.scope && (
+                          <p className="whitespace-pre-wrap">
+                            {t("referents.competenceScope", {
+                              scope: lead.referentContinuity.competence.scope,
+                            })}
+                          </p>
+                        )}
+                        {lead.referentContinuity.competence.validUntil && (
+                          <p>
+                            {t("referents.competenceUntil", {
+                              date: date(lead.referentContinuity.competence.validUntil),
+                            })}
+                          </p>
+                        )}
+                        <p>{t("referents.competenceLimits")}</p>
+                      </div>
+                    )}
                     <Button
                       variant="outline"
                       disabled={pending}

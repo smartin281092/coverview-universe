@@ -101,6 +101,10 @@ const targetCondition = (profileId: string) =>
     : eq(documents.managedProfileId, profileId);
 const condition = (userId: string, id: string) =>
   and(eq(documents.userId, userId), eq(documents.id, id));
+const personalDocument = () =>
+  or(isNull(documents.purpose), ne(documents.purpose, "partner_competence"));
+const personalCondition = (userId: string, id: string) =>
+  and(condition(userId, id), personalDocument());
 function summary(row: Row) {
   return documentSummarySchema.parse({
     ...row,
@@ -175,7 +179,11 @@ async function detail(tx: Tx | Database, row: Row): Promise<DocumentRecord> {
     ...summary(row),
     analysis: row.analysis,
     profileCreation:
-      row.purpose !== "lead_offer" && !hasDocumentProfile(row) && row.state === "ready" && row.scanVersion
+      row.purpose !== "lead_offer" &&
+      row.purpose !== "partner_competence" &&
+      !hasDocumentProfile(row) &&
+      row.state === "ready" &&
+      row.scanVersion
         ? documentProfileCreation(row.analysis?.fields ?? [])
         : null,
     decisions: decisions.map((item) => item.decision),
@@ -259,7 +267,7 @@ export function createDocumentRepository(db: Database) {
               await tx
                 .select()
                 .from(documents)
-                .where(condition(actor.userId, id))
+                .where(personalCondition(actor.userId, id))
                 .limit(1)
                 .for("update")
             )[0],
@@ -284,7 +292,7 @@ export function createDocumentRepository(db: Database) {
             await tx
               .select()
               .from(documents)
-              .where(condition(actor.userId, previous.documentId))
+              .where(personalCondition(actor.userId, previous.documentId))
               .limit(1)
           )[0],
         );
@@ -347,6 +355,7 @@ export function createDocumentRepository(db: Database) {
           and(
             eq(documents.userId, userId),
             isNull(documents.managedProfileId),
+            personalDocument(),
             assignedDocumentCondition(),
             isNull(documents.deletedAt),
             eq(documents.state, "ready"),
@@ -471,6 +480,7 @@ export function createDocumentRepository(db: Database) {
         .where(
           and(
             eq(documents.userId, userId),
+            personalDocument(),
             isNull(documents.managedProfileId),
             isNull(documents.deletedAt),
             ne(documents.state, "deleted"),
@@ -535,6 +545,7 @@ export function createDocumentRepository(db: Database) {
           and(
             eq(documents.userId, userId),
             query.scope === "account" ? undefined : targetCondition(profileId),
+            personalDocument(),
             query.scope === "profile" ? assignedDocumentCondition() : undefined,
             isNull(documents.deletedAt),
             ne(documents.state, "deleted"),
@@ -657,7 +668,7 @@ export function createDocumentRepository(db: Database) {
               .from(documents)
               .where(
                 and(
-                  condition(userId, id),
+                  personalCondition(userId, id),
                   profileId ? targetCondition(profileId) : undefined,
                   profileId ? assignedDocumentCondition() : undefined,
                 ),
@@ -673,7 +684,11 @@ export function createDocumentRepository(db: Database) {
     async authorizeUpload(actor: Actor, id: string) {
       await db.transaction(async (tx) => {
         await lockProfileActor(tx, actor);
-        live((await tx.select().from(documents).where(condition(actor.userId, id)).limit(1))[0]);
+        live(
+          (
+            await tx.select().from(documents).where(personalCondition(actor.userId, id)).limit(1)
+          )[0],
+        );
       });
     },
     create(actor: Actor, input: DocumentCreateInput, key: string) {
@@ -719,7 +734,7 @@ export function createDocumentRepository(db: Database) {
             await tx
               .select()
               .from(documents)
-              .where(condition(actor.userId, id))
+              .where(personalCondition(actor.userId, id))
               .limit(1)
               .for("update")
           )[0],
@@ -736,7 +751,7 @@ export function createDocumentRepository(db: Database) {
             generation: row.generation + 1,
             updatedAt: new Date(),
           })
-          .where(condition(actor.userId, id))
+          .where(personalCondition(actor.userId, id))
           .returning();
         if (!updated) throw new Error("Document update failed");
         await event(tx, updated, "document.uploaded.v1");
@@ -767,7 +782,7 @@ export function createDocumentRepository(db: Database) {
               generation: row.generation + 1,
               updatedAt: new Date(),
             })
-            .where(condition(actor.userId, id))
+            .where(personalCondition(actor.userId, id))
             .returning();
           if (!updated) throw new Error("Document update failed");
           await event(tx, updated, "document.retry_requested.v1");
@@ -802,7 +817,7 @@ export function createDocumentRepository(db: Database) {
               revision: row.revision + 1,
               updatedAt: now,
             })
-            .where(condition(actor.userId, id))
+            .where(personalCondition(actor.userId, id))
             .returning();
           if (!updated) throw new Error("Document update failed");
           const decision = {
@@ -842,7 +857,11 @@ export function createDocumentRepository(db: Database) {
         async (tx, profile, current) => {
           const row = live(current);
           revision(row, input.revision);
-          if (row.purpose === "lead_offer" || hasDocumentProfile(row) || !["ready", "failed"].includes(row.state))
+          if (
+            row.purpose === "lead_offer" ||
+            hasDocumentProfile(row) ||
+            !["ready", "failed"].includes(row.state)
+          )
             throw new DocumentError("DOCUMENT_CONFLICT", 409);
           const creating = "createProfile" in input;
           if (
@@ -869,7 +888,7 @@ export function createDocumentRepository(db: Database) {
               revision: row.revision + 1,
               updatedAt: new Date(),
             })
-            .where(condition(actor.userId, id))
+            .where(personalCondition(actor.userId, id))
             .returning();
           if (!updated) throw new DocumentError("DOCUMENT_CONFLICT", 409);
           return { row: updated, response: await detail(tx, updated) };
@@ -960,7 +979,7 @@ export function createDocumentRepository(db: Database) {
           const [updated] = await tx
             .update(documents)
             .set({ revision: row.revision + 1, updatedAt: new Date() })
-            .where(condition(actor.userId, id))
+            .where(personalCondition(actor.userId, id))
             .returning();
           if (!updated) throw new DocumentError("DOCUMENT_CONFLICT", 409);
           return { row: updated, response: await detail(tx, updated) };
@@ -1073,7 +1092,7 @@ export function createDocumentRepository(db: Database) {
           const [updated] = await tx
             .update(documents)
             .set({ revision: row.revision + 1, updatedAt: now })
-            .where(condition(actor.userId, id))
+            .where(personalCondition(actor.userId, id))
             .returning();
           if (!updated) throw new Error("Document update failed");
           const decision = {
@@ -1127,14 +1146,14 @@ export function createDocumentRepository(db: Database) {
         const [row] = await tx
           .select()
           .from(documents)
-          .where(condition(actor.userId, id))
+          .where(personalCondition(actor.userId, id))
           .limit(1)
           .for("update");
         if (session.expiresAt <= new Date())
           throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);
         if (!row) throw new DocumentError("DOCUMENT_NOT_FOUND", 404);
         if (row.deletedAt) return;
-        if (row.retainedAt) throw new DocumentError("DOCUMENT_IN_USE",409);
+        if (row.retainedAt) throw new DocumentError("DOCUMENT_IN_USE", 409);
         const [updated] = await tx
           .update(documents)
           .set({
@@ -1145,7 +1164,7 @@ export function createDocumentRepository(db: Database) {
             generation: row.generation + 1,
             updatedAt: new Date(),
           })
-          .where(condition(actor.userId, id))
+          .where(personalCondition(actor.userId, id))
           .returning();
         if (!updated) throw new Error("Document update failed");
         // Keep only field names and owner decisions as provenance of surviving profile fields.
@@ -1191,7 +1210,9 @@ export function createDocumentRepository(db: Database) {
       await db.transaction(async (tx) => {
         const { session } = await lockProfileActor(tx, actor);
         const row = live(
-          (await tx.select().from(documents).where(condition(actor.userId, id)).limit(1))[0],
+          (
+            await tx.select().from(documents).where(personalCondition(actor.userId, id)).limit(1)
+          )[0],
         );
         if (session.expiresAt <= new Date())
           throw new IdentityError("IDENTITY_UNAUTHENTICATED", 401);
@@ -1368,11 +1389,21 @@ export function createDocumentRepository(db: Database) {
         const incompleteIdentity = analysis.warnings?.some(
           (warning) => warning === "fields" || warning === "pages",
         );
-        if (row.purpose !== "lead_offer" && !hasDocumentProfile(row) && incompleteIdentity) {
+        if (
+          row.purpose !== "lead_offer" &&
+          row.purpose !== "partner_competence" &&
+          !hasDocumentProfile(row) &&
+          incompleteIdentity
+        ) {
           profileAssignment = "missing_identity";
           managedProfileId = null;
           profileAssignedAt = null;
-        } else if (row.purpose !== "lead_offer" && !hasDocumentProfile(row) && profile) {
+        } else if (
+          row.purpose !== "lead_offer" &&
+          row.purpose !== "partner_competence" &&
+          !hasDocumentProfile(row) &&
+          profile
+        ) {
           const result = await matchDocumentPerson(tx, userId, analysis.fields);
           profileAssignment = result.status;
           managedProfileId = result.profileId === "self" ? null : result.profileId;
@@ -1463,7 +1494,13 @@ export function createDocumentRepository(db: Database) {
               generation: item.generation + 1,
               updatedAt: new Date(),
             })
-            .where(and(condition(item.userId, item.id), eq(documents.state, "pending"), isNull(documents.retainedAt)))
+            .where(
+              and(
+                condition(item.userId, item.id),
+                eq(documents.state, "pending"),
+                isNull(documents.retainedAt),
+              ),
+            )
             .returning();
           if (row) await event(tx, row, "document.deletion_requested.v1");
         });

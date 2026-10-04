@@ -20,6 +20,8 @@ Connexion WorkOS sur la surface `partners`. Aucun accès opérationnel avant app
 
 ## État réel
 
+Profil/candidature donne accès aux justificatifs professionnels après première candidature ; Admin les examine depuis Candidatures. Dialogue par catégorie avec aperçu/historique20, déclaration+original, reprise/réessai, examen motivé et retrait. Formulaires RHF/Zod, clé/contenu figés au retry, conflit impose relecture, cache privé supprimé à fermeture et masque le contenu après erreur ; favorable indisponible sans original sûr. [Règles canoniques](../api/src/modules/partner-workspace/README.md#justificatifs-professionnels-et-examen--relais-8a00). V0–V2 passent ; V3 8a00 limité à connexion absente puis callback WorkOS4136 refusé. Aucun formulaire rempli, clavier/mobile ou fournisseur réel revendiqué.
+
 Build, TypeScript et lint ciblés vérifiés. Candidature mobile et retour WorkOS réels observés. La recette opérationnelle nécessite une session habilitée existante ; aucune permission de test n'a été accordée au compte réel. [Ledger](../../roadmap/evidence/partner-core.md).
 
 ## Développement

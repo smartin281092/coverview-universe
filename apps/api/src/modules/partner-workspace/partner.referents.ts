@@ -7,6 +7,7 @@ import {
 } from "@coverview/contracts/partner";
 import { fail, type Executor, type PartnerActor } from "./partner.policy.js";
 import { newId, event } from "./partner.audit.js";
+import { readCompetenceSummary } from "./partner.competence.js";
 
 type Subject = {
   id: string;
@@ -211,12 +212,14 @@ export async function readReferentContinuity(
       : changeRequested
         ? "client_change_requested"
         : "human_review";
+  const competence = await readCompetenceSummary(db, current.advisor?.id ?? null, lead.category);
   return referentContinuitySchema.parse({
+    competence,
     selection: current,
     status,
     suggestion: status === "human_review" && current.status === "chosen" ? current.advisor : null,
     missingChecks: [
-      "competence",
+      ...(competence.status === "reviewed" ? [] : ["competence"]),
       "conventions",
       "language",
       "region",

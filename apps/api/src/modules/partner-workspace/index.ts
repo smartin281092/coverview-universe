@@ -38,6 +38,10 @@ import {
   referentProfileSchema,
   referentQuerySchema,
   referentUpdateSchema,
+  competenceDossierSchema,
+  competenceDeclarationSchema,
+  competenceDecisionSchema,
+  competenceQuerySchema,
 } from "@coverview/contracts/partner";
 import { insuranceRequestIdSchema } from "@coverview/contracts/insurance-requests";
 import type { Environment } from "../../platform/config.js";
@@ -55,7 +59,7 @@ export function registerPartnerWorkspace(
 ) {
   const app = server.withTypeProvider<ZodTypeProvider>(),
     database = createDatabase(config),
-    repository = createPartnerRepository(database.pool);
+    repository = createPartnerRepository(database.pool, config.DOCUMENTS_ENABLED);
   database.pool.on("error", () =>
     app.log.warn({ dependency: "partner_database" }, "Partner database unavailable"),
   );
@@ -92,6 +96,85 @@ export function registerPartnerWorkspace(
     return { userId: session.userId, id: session.id, administrator: false, wallet };
   }
   const insuranceParams = z.object({ id: insuranceRequestIdSchema }).strict();
+  const competenceParams = z
+    .object({ userId: z.string().min(1).max(100), category: leadCategorySchema })
+    .strict();
+  app.get(
+    "/partner/competence/:userId/:category",
+    {
+      config: limited,
+      schema: {
+        params: competenceParams,
+        querystring: competenceQuerySchema,
+        response: { 200: competenceDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.competence(
+        await actor(request),
+        request.params.userId,
+        request.params.category,
+        request.query.beforeRevision,
+      ),
+  );
+  app.post(
+    "/partner/competence/:userId/:category",
+    {
+      config: limited,
+      schema: {
+        params: competenceParams,
+        body: competenceDeclarationSchema,
+        response: { 200: competenceDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.declareCompetence(
+        await actor(request),
+        request.params.userId,
+        request.params.category,
+        request.body,
+        key(request),
+      ),
+  );
+  app.post(
+    "/partner/competence/:userId/:category/decisions",
+    {
+      config: limited,
+      schema: {
+        params: competenceParams,
+        body: competenceDecisionSchema,
+        response: { 200: competenceDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.decideCompetence(
+        await actor(request),
+        request.params.userId,
+        request.params.category,
+        request.body,
+        key(request),
+      ),
+  );
+  app.post(
+    "/partner/competence/:userId/:category/:id/retry",
+    {
+      config: limited,
+      schema: {
+        params: competenceParams.extend({ id: z.string().min(1).max(100) }),
+        body: z.object({ revision: z.number().int().nonnegative() }).strict(),
+        response: { 200: competenceDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.retryCompetenceUpload(
+        await actor(request),
+        request.params.userId,
+        request.params.category,
+        request.params.id,
+        request.body.revision,
+        key(request),
+      ),
+  );
   const referentParams = z
     .object({ profileId: z.string().min(1).max(100), category: leadCategorySchema })
     .strict();
@@ -440,6 +523,25 @@ export function registerPartnerWorkspace(
     );
   }
   return {
+    async authorizeCompetenceSource(
+      request: FastifyRequest,
+      userId: string,
+      category: string,
+      id: string,
+      write: boolean,
+      record = false,
+    ) {
+      return repository.competenceSource(await actor(request), userId, category, id, write, record);
+    },
+    async completeCompetenceUpload(
+      request: FastifyRequest,
+      userId: string,
+      category: string,
+      id: string,
+      mime: string,
+    ) {
+      return repository.completeCompetenceUpload(await actor(request), userId, category, id, mime);
+    },
     async authorizeFinalPolicySource(
       request: FastifyRequest,
       leadId: string,

@@ -59,6 +59,7 @@ import {
   reconcileCollaborations,
 } from "./partner.collaboration.js";
 import { handoffWork } from "./partner.participants.js";
+import { createCompetenceOperations } from "./partner.competence.js";
 import { followUpDeadline, followUpOverdueSql } from "./partner.follow-up.js";
 import { readContinuitySettings, updateContinuitySettings } from "./partner.settings.js";
 import {
@@ -391,7 +392,7 @@ async function detail(db: Executor, actor: PartnerActor, id: string): Promise<Le
           : ["overview"],
   });
 }
-export function createPartnerRepository(pool: Pool) {
+export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
   async function importLead(tx: PoolClient, actor: PartnerActor, id: string, write = false) {
     if (actor.wallet) fail("PARTNER_ACCESS_DENIED", 403);
     const ctx = await context(tx, actor, true);
@@ -498,6 +499,7 @@ export function createPartnerRepository(pool: Pool) {
     }
   }
   return {
+    ...createCompetenceOperations(pool, transaction, documentsAvailable),
     async referentProfile(
       actor: PartnerActor,
       profileId: string,

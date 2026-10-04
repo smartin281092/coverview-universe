@@ -46,6 +46,19 @@ export function ReferentContinuityDialog({
         {value.status === "human_review" && (
           <div className="space-y-2">
             <p className="text-sm font-medium">{t("referents.checks")}</p>
+            {value.competence && (
+              <div className="space-y-2 text-sm">
+                <p>
+                  {t("competence.criterion", {
+                    status: t(`competence.status.${value.competence.status}`),
+                  })}
+                </p>
+                {value.competence.scope && (
+                  <p>{t("competence.scopeValue", { scope: value.competence.scope })}</p>
+                )}
+                <p className="text-muted-foreground">{t("competence.limits")}</p>
+              </div>
+            )}
             <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
               {value.missingChecks.map((check) => (
                 <li key={check}>{t(`referents.missing.${check}`)}</li>

@@ -6,6 +6,8 @@ Aucune entrée active. Les décisions durables vivent dans leur documentation pr
 
 ## Candidats
 
+Décision déléguée PROG-23 du 3 octobre, relais8a00 : finalité documentaire professionnelle privée, examen distinct de l’habilitation et de toute certification, portée/validité explicites et retrait conservant les preuves. Promue au [README Partner](apps/api/src/modules/partner-workspace/README.md#justificatifs-professionnels-et-examen--relais-8a00). Réexaminer avant conventions/matching et à la recette habilitée ; rayon d’impact limité à dossier/examen/projection de compétence, aucun droit rétroactif. Rétention/export/effacement ouverts, pas de copie active.
+
 Décision déléguée PROG-23 du 3 octobre, relais b920 : préférence de référent par profil/catégorie distincte de tout droit de Lead, confirmation révisionnée, reprise humaine sans preuve d’éligibilité complète. Promue au [README Partner](apps/api/src/modules/partner-workspace/README.md#référents-habituels-et-continuité--relais-b920). Réexaminer la liste limitée aux responsables acceptés connus et l’invalidation conservatrice par révision de profil avant le matching ; rayon d’impact limité aux candidats/confirmations, aucun consentement rétroactif. Pas de copie active ; recette remplie ouverte.
 
 Décision déléguée PROG-23 du 2 octobre, relais b9b3 : refus motivé limité à une version, notifications de réponse résolues par suivi réel, accès Wallet suivant le propriétaire courant. Promue au [README Partner](apps/api/src/modules/partner-workspace/README.md#décisions-wallet-et-suivi-par-version--relais-b9b3). Réexaminer à la recette habilitée et avant le raccordement signature/police finale ; aucune signature ou résiliation déduite, pas de copie active. Confiance haute sur le brief, V3 rempli ouvert.

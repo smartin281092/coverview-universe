@@ -20,6 +20,8 @@ Les informations absentes restent « non renseigné ». La confirmation enregist
 
 ## État réel
 
+La continuité du référent affiche le statut documentaire de compétence, sa portée et sa validité, sans pièce professionnelle, déclaration ou motif privé. Les autres critères restent à examiner, aucun droit/score/attribution automatique. [Règles canoniques](../../../../api/src/modules/partner-workspace/README.md#justificatifs-professionnels-et-examen--relais-8a00). Types/build et PostgreSQL vérifiés, projection remplie non vérifiée dans Wallet.
+
 Build/types et écran vide/formulaire mobiles vérifiés. Publication, décisions et rattachement explicite du contrat actuel vérifiés dans PostgreSQL isolé ; recette remplie non effectuée faute de données réelles et de session Partner habilitée. Signature/acceptation et recette de la police finale restent à compléter dans [le plan](../../../../../roadmap/plans/partner-core.plan.md).
 
 La page /offers/notifications, accessible depuis Offres, présente les notifications de service du profil détenu, leur lecture personnelle et les liens vers les demandes. La lecture ne résout pas une action ; une décision client ou le traitement métier la résout. Cache privé par utilisateur/session/filtre, interrogation 15 s. L'état vide et le filtre ont été observés avec la session réelle à 390 px ; aucune notification ou offre fictive n'a été créée dans la base locale.

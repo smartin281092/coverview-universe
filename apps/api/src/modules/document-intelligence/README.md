@@ -140,6 +140,8 @@ Migration additive `0006` générée par Drizzle ; rollback applicatif N-1 en ga
 
 ## Exploitation
 
+Les justificatifs professionnels Partner emploient files avec purpose=partner_competence et analysis_requested=false. Création/confirmation passent par les fonctions publiques createPartnerProof/queuePartnerProof ; upload et download partagés conservent vérification des octets et contrôles d’accès avant/après stockage. Antivirus via outbox/worker existants, sans OCR, affectation/enrichissement client ou projection de contrat. Cette finalité est exclue de la bibliothèque et des commandes documentaires client, des pièces d’identité et des sources d’offre. Original retenu dès déclaration, réemployé par propriétaire/empreinte et jamais supprimé par retrait d’examen ; API et nettoyage worker compatibles sont requis avant activation. Les [règles Partner](../partner-workspace/README.md#justificatifs-professionnels-et-examen--relais-8a00) portent droits, rétention encore ouverte, migration0039 et rollback. Preview secondaire sans worker ; chaîne fournisseur non vérifiée pour ce parcours.
+
 ### Lecture des cartes par WebSocket
 
 Wallet utilise Socket.IO sur `/action-center/socket.io`, transport WebSocket uniquement. L’événement versionné `action.read.v1` accepte `{ id, profileId? }` et retourne un accusé validé par `actionReadResultSchema`. Il appelle le même repository que la route HTTP de détail : seuls les propriétaires autorisés accèdent aux actions du profil sélectionné. Aucune résolution, signature ou écriture métier ne passe par ce canal.

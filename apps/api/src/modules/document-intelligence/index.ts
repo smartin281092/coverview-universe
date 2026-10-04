@@ -21,6 +21,7 @@ import {
   type LeadSourceAuthorization,
 } from "./document.lead.routes.js";
 export { DocumentError } from "./document.repository.js";
+export { createPartnerProof, queuePartnerProof } from "./document.partner-proof.js";
 export {
   retainLeadSource,
   leadSourceSnapshot,

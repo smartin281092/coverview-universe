@@ -19,7 +19,12 @@ export const leadSourceReviewRevisionSql = `greatest(
 
 // The caller must authorize the Lead or the owned upload before reading this projection.
 export function leadSourceSnapshot(row: Record<string, unknown>) {
-  if (row.deleted_at || !row.scan_version || !["ready", "failed"].includes(String(row.state)))
+  if (
+    row.purpose === "partner_competence" ||
+    row.deleted_at ||
+    !row.scan_version ||
+    !["ready", "failed"].includes(String(row.state))
+  )
     return null;
   const content = {
     checksum: row.checksum,
@@ -45,7 +50,7 @@ export async function retainLeadSource(
   previouslyRetained = false,
 ) {
   const result = await tx.query<Record<string, unknown>>(
-    "select id,user_id,managed_profile_id,retained_at from files where id=$1 and deleted_at is null and state not in ('deleted','deleting','quarantined') for update",
+    "select id,user_id,managed_profile_id,retained_at from files where id=$1 and purpose is distinct from 'partner_competence' and deleted_at is null and state not in ('deleted','deleting','quarantined') for update",
     [documentId],
   );
   const source = result.rows[0];

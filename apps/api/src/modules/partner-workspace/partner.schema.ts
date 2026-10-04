@@ -17,6 +17,73 @@ import { documents } from "../document-intelligence/index.js";
 import { insuranceRequests } from "../insurance-requests/index.js";
 
 const instant = (name: string) => timestamp(name, { withTimezone: true, precision: 3 });
+export const partnerCompetenceDeclarations = pgTable(
+  "partner_competence_declarations",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => identityUsers.id),
+    organizationId: text("organization_id")
+      .notNull()
+      .references(() => partnerOrganizations.id),
+    category: text("category").notNull(),
+    declaration: text("declaration").notNull(),
+    documentId: text("document_id")
+      .notNull()
+      .references(() => documents.id),
+    checksum: text("checksum").notNull(),
+    createdAt: instant("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    index("partner_competence_document").on(t.documentId),
+    uniqueIndex("partner_competence_subject").on(t.id, t.userId, t.category),
+    check(
+      "partner_competence_declaration_bounds",
+      sql`${t.category} in ('health','vehicle','pension','household','legal','business','other') and length(trim(${t.declaration})) between 1 and 2000 and ${t.checksum} ~ '^[a-f0-9]{64}$'`,
+    ),
+  ],
+);
+export const partnerCompetenceDecisions = pgTable(
+  "partner_competence_decisions",
+  {
+    id: text("id").primaryKey(),
+    declarationId: text("declaration_id").notNull(),
+    userId: text("user_id").notNull(),
+    category: text("category").notNull(),
+    revision: integer("revision").notNull(),
+    decision: text("decision").notNull(),
+    reason: text("reason").notNull().default(""),
+    scope: text("scope").notNull().default(""),
+    coverage: text("coverage"),
+    validUntil: instant("valid_until"),
+    documentRevision: integer("document_revision").notNull(),
+    decidedBy: text("decided_by")
+      .notNull()
+      .references(() => identityUsers.id),
+    createdAt: instant("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    foreignKey({
+      name: "partner_competence_decision_subject",
+      columns: [t.declarationId, t.userId, t.category],
+      foreignColumns: [
+        partnerCompetenceDeclarations.id,
+        partnerCompetenceDeclarations.userId,
+        partnerCompetenceDeclarations.category,
+      ],
+    }),
+    uniqueIndex("partner_competence_revision").on(t.userId, t.category, t.revision),
+    check(
+      "partner_competence_decision_bounds",
+      sql`${t.revision}>0 and ${t.documentRevision}>=0 and ${t.decision} in ('submitted','reviewed','needs_information','rejected','withdrawn') and length(${t.reason})<=2000 and length(${t.scope})<=2000 and (${t.decision}='submitted' or length(trim(${t.reason}))>0)`,
+    ),
+    check(
+      "partner_competence_review_scope",
+      sql`case when ${t.decision}='reviewed' then (${t.decidedBy}<>${t.userId} and length(trim(${t.scope}))>0 and ${t.coverage} is not null and ${t.coverage} in ('category','limited') and ${t.validUntil} is not null and ${t.validUntil}>${t.createdAt}) else (${t.coverage} is null and ${t.validUntil} is null and ${t.scope}='') end`,
+    ),
+  ],
+);
 export const partnerReferentSelections = pgTable(
   "partner_referent_selections",
   {

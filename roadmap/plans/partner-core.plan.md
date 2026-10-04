@@ -43,6 +43,24 @@ CLAUDE, PROJECT, MEMORY actives, codex, execution-policy, program, architecture,
 
 ## Journal
 
+### Relais 8a00 — justificatifs professionnels et examen documentaire
+
+Mandat intégral/« Recommence », PROG-23 ; propriétaire unique sans sous-agent. Snapshot b920 vérifié (manifest391c2a54…, restore27cf842c…,512 fichiers/34717747 octets), HEAD4fef49a restauré sans reset ; sources et processus protégés. Astra/ultra demandé, réglage effectif non observable.
+
+Inspection : candidature et habilitations utilisateur/organisation existent ; qualifications/langues/zones sont déclaratives. Le stockage canonique files fournit upload privé, checksum, antivirus, rétention et contrôle des octets avant/après. Les pièces Wallet peuvent enrichir des profils ; une finalité professionnelle séparée est nécessaire, sans OCR ni rattachement au dossier client. Admin supervise déjà les candidatures dans Partner depuis son lien Admin.
+
+Décisions déléguées I.4/10.2–10.4/11/20 : déclaration personnelle par catégorie et original professionnel privé ; examen Admin distinct de toute habilitation. Déclaration et décisions immuables, auteur/date/motif, portée explicite (catégorie entière ou limitée) et fin de validité obligatoire pour un examen favorable. Un remplacement retire l’effet de la version précédente dès sa soumission ; retrait motivé possible par déclarant/Admin, sans effacer les preuves. Pas d’auto-examen favorable. Un constat documentaire favorable ne certifie ni conformité officielle, ni convention, ni disponibilité. Portée limitée, expiration, source indisponible ou organisation changée laissent la compétence à examiner. Aucun droit/Lead/horloge/notification de client modifié ; les autres critères de continuité restent manquants.
+
+DoD : parcours privé depuis Profil/candidature et examen depuis supervision Admin, historique paginé et retry exact, original sûr consultable par déclarant/Admin seulement ; contrats/API et migration additive. V2 PostgreSQL réel pour organisation/catégorie/propriété, MFA, source, absence de projection Wallet/enrichissement/offre, révision/concurrence/rejeu/retrait/expiration et maintien des acquis. V0/V1 quatre apps/frontières/Knip, deux revues du même agent et V3 selon sessions réelles, sans grant ni dossier fabriqué. Satellites routés contracts/API/data/permissions/security/storage/events/architecture/backend/evolution/testing/frontend/design/brand/i18n/program/environment et README propriétaires ; aucun fournisseur, paquet, worker ou canal ajouté. Tous les tracks restent ouverts ; résultat cohérent puis snapshot complet et un seul relais Astra/ultra.
+
+Résultat8a00 :0039 additive appliquée sans reset, dossier/examen privé et résumé minimal dans la continuité.64 tests PostgreSQL/5 fichiers passent (32 Partner,5 compétence,4 document-workflows,16 demandes,7 projection), types/lint/builds quatre apps, frontières540 modules/2321 dépendances sans erreur (3 avertissements hérités) et Knip ciblé verts. Génération suivante sans delta. Deux revues du même agent : isolation hors Wallet/profils/offres, indisponibilité documentaire, revue non auto-attribuée, concurrence et retrait vérifiés. [Ledger](../evidence/partner-core.md#relais-8a00--justificatifs-professionnels-et-examen).
+
+V3 limité : Partner4137 connexion absente puis WorkOS refuse callback4136. Aucun formulaire rempli, clavier/mobile, stockage/scanner réel vérifié ; base0 Lead/offre/déclaration/décision. Aucune preuve professionnelle, candidature, habilitation ou donnée client réelle créée. API4136 sans workers ; anciennes previews/Docker protégés.
+
+Suite bornée Astra/ultra : conventions documentées et périmètre de distribution par compagnie/catégorie, inspecter catalogue/organisations/habilitations/files avant schéma ; preuve privée, validité/retrait et examen explicite, aucune convention/tarif/commission réelle fabriquée. Puis tous les tracks ouverts du registre. S-110/S-042a non clos. [Checkpoint](../handoffs/partner-conventions-suite.md), snapshot complet puis relais unique et gel applicatif/state au dispatch.
+
+Contrôle final8a00 : roadmap251 vues/122 slices/694 critères à jour ; checkpoint11888 caractères valide.520 fichiers WIP/40 différences depuis b920, aucune suppression ; diff ciblé vert et quatre défauts globaux hérités inchangés par SHA. Aucun commit global WIP/push/déploiement.
+
 ### Relais b920 — référents habituels du profil
 
 Autorisation : brief intégral/« Recommence », PROG-23 ; propriétaire unique sans sous-agent. Restauration 1a5a vérifiée : manifest24f34ca5…, restore27cf842c…,506 fichiers/34308137 octets, HEAD4fef49a, installation gelée sans scripts. Sources/préviews précédentes protégées. Astra/ultra demandé, réglage réel non observable.
