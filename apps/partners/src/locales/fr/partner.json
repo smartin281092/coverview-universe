@@ -1982,5 +1982,41 @@
     "unavailablePassages": "Passages masqués : les sources ou le contexte de cette transcription ont changé. Les références historiques restent conservées.",
     "saved": "Transcription enregistrée. Aucun avis de distribution n’a été rendu.",
     "error": "Ce dossier privé est indisponible. Relisez-le après avoir vérifié votre accès."
+  },
+  "distributionReview": {
+    "title": "Mon appréciation de distribution",
+    "open": "Apprécier ma distribution",
+    "privacy": "Dossier personnel pour cette version et cette compagnie. Aucune diffusion au client ou aux collègues.",
+    "current": "Appréciation actuelle",
+    "record": "Enregistrer mon appréciation",
+    "withdraw": "Retirer mon appréciation",
+    "step": "Étape {{step}} sur {{total}}",
+    "positions": {
+      "undetermined": "Je ne peux pas me prononcer",
+      "needs_information": "Un complément est nécessaire",
+      "cannot_proceed": "Je ne peux pas proposer cette solution en l’état"
+    },
+    "position": "Ma position personnelle",
+    "choose": "Choisir une position",
+    "aspects": "Aspects concernés",
+    "examinedScope": "Périmètre exact examiné pour cette offre",
+    "limitations": "Limites et inconnues de mon examen",
+    "nextStep": "Prochaine vérification ou action à effectuer",
+    "reason": "Motif et lien précis entre les sources et cette solution",
+    "sources": "Consulter les sources actuelles",
+    "offerOriginal": "Original de l’offre",
+    "references": "Passages v{{clauses}} · association v{{binding}} · convention v{{convention}} · original r{{document}}",
+    "sourceLimits": "Les passages sont des transcriptions humaines partielles. Leur présence ne prouve ni leur fidélité, ni leur exhaustivité, ni leur applicabilité à cette offre. L’identité juridique et celle du produit restent non vérifiées.",
+    "citationRequired": "Pour déclarer une impossibilité personnelle, chaque aspect sélectionné doit avoir un passage actuel. Expliquez son lien précis à cette offre dans le motif. Un aspect inconnu ne démontre pas une interdiction.",
+    "limits": "Cette appréciation décrit uniquement votre possibilité de poursuivre en l’état. Elle n’accorde aucun droit de distribution et ne conclut ni à une admission, ni à une économie. Aucun autre contrôle n’est levé. La prochaine action reste à réaliser séparément.",
+    "originalsChecked": "J’ai relu les originaux exacts de l’offre et de la convention pour cet examen.",
+    "transcriptionChecked": "J’ai vérifié moi-même la fidélité des passages utilisés dans l’original ; je ne les présente pas comme exhaustifs.",
+    "confirm": "Je confirme cette position personnelle, son périmètre, ses limites et son échéance. Je ne saisis aucune donnée de tiers inutile.",
+    "withdrawEffect": "Le retrait conserve l’historique et n’annule aucun contrat, rendez-vous ou droit externe.",
+    "historicalSources": "Appréciation historique : ses sources ne sont plus actuelles. Cette position n’est pas applicable aujourd’hui.",
+    "unavailable": "Une association et des passages actuels pour cette compagnie sont nécessaires. Complétez ou réexaminez leurs dossiers avant une nouvelle appréciation.",
+    "invalid": "Choisissez une position et au moins un aspect. Renseignez le périmètre (10–500 caractères), le motif, les limites et la suite (10–1 000 chacun), une échéance valide et les confirmations.",
+    "error": "Cette appréciation n’a pas pu être relue. Les anciennes données sont masquées.",
+    "saved": "Appréciation enregistrée. La prochaine action reste à effectuer."
   }
 }

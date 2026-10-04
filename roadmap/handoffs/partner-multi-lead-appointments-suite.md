@@ -1,0 +1,59 @@
+# Relais Partner — rendez-vous commun à plusieurs Leads
+
+## Mission et autorisation
+
+Poursuivre TOUT le [brief Partner du2octobre2026](../../references/coverview-partner-2026-10-02.md), parties I–III, mandat « Recommence » et PROG-23. Autonomie maximale, décisions déléguées, aucun nouveau GO. Une tranche verticale cohérente testée puis exactement un relais gpt-6-astra/ultra en worktree neuf. Aucun sous-agent ni auteur applicatif concurrent ; cette instruction remplace la délégation proactive. Ne réduire le mandat ni à cette piste ni aux exemples. Brief/S-110/S-042a ouverts.
+
+Avant relais : propriétaires/plan+journal+brouillon/ledger/coverage/mémoire, seule S-110.notes et deux vues générées, checkpoint8sections<12000caractères, snapshot cumulatif COMPLET et audit séparé. Puis list_projects/create_thread, gel source au dispatch, résolution clientThreadId sans doublon, premier état réel, lien/directive et arrêt des écritures. Aucun commit global WIP/push/deploy/fork/archive/stash/reset/clean. Réglage effectif/coût/contexte non observables.
+
+## État du dépôt
+
+Source7061 gelée au dispatch : `C:/Users/sebm1/.codex/worktrees/7061/coverview-astra`, HEAD détaché `4fef49a095739260b9ab9d1becc1a2bf3320a928`. Entrant a685 restauré avant code :670WIP/42592457octets/arbre1709/120protections ; tailles/SHA/bytes/porcelain-z/HEAD comparés indépendamment. WIP cumulatif non committé, aucune restauration partielle.
+
+**NE PAS CODER avant restauration complète.** Snapshot7061 `.planning-local/partner-relay-distribution-review-20261003`. Le prompt fournit hashes manifest/restore/status et comptes audités. Vérifier empreintes, lire restore.mjs ENTIER, inspecter le nouveau worktree. Si propre au mauvais HEAD, `git switch --detach 4fef49a095739260b9ab9d1becc1a2bf3320a928` autorisé dans CE nouveau worktree seulement. Exécuter le restaurateur validé avec cible ABSOLUE puis auditer indépendamment chaque fichier/taille/SHA/bytes, arbre complet, statut exact git status --porcelain=v1 -z --untracked-files=all, HEAD et protections. Refuser perte/divergence.
+
+Ne modifier aucun ancien worktree ni D:/Projects.123protections byte-for-byte : apps/admin/src/api.ts, apps/admin/src/locales/fr/service-requests.json, apps/client/src/api.ts, apps/client/src/locales/fr/common.json ; pnpm-lock.yaml ;100fichiers entrants apps/api/drizzle SQL/snapshots/journal ;18artefacts SQL/snapshot/entry des pending0049_partner_need_capacity,0050_partner_need_conflicts,0051_partner_need_expertise,0052_partner_solution_binding,0053_partner_solution_clauses,0054_partner_distribution_review.0046–0048 NON appliquées à la base partagée ; aucune lecture/décompte/migration autorisé.0049–0054 hors catalogue, tests isolés seulement ; db:migrate normal ne les applique pas.
+
+Rapports ignorés à lire en7061 : `.planning-local/restoration-verification.json`, `pre-export-audit.json`, `snapshot-verification.json` ; ils ne remplacent pas SON audit. Sourcea685 entière/HEAD/statut/snapshot inchangés, tous1709fichiers entrants conservés et67tests/specs entrants identiques. Le nouveau test distribution devient entrant :68tests/specs à protéger. Aucun secret/config privée/node_modules/dist/preview inclus dans le snapshot ; ne pas copier dépendances/builds locaux.
+
+## Sources à lire
+
+AGENTS→CLAUDE entier, PROJECT, MEMORY actives, docs/codex, execution-policy et satellites routés. [Brief intégral](../../references/coverview-partner-2026-10-02.md), [coverage](../partner-coverage.md), [plan général](../plans/partner-core.plan.md), [plan7061+journal+brouillon multi-Leads](../plans/partner-distribution-review.plan.md), [plan a685](../plans/partner-convention-clauses.plan.md), [ledger](../evidence/partner-core.md), [index produit](../../docs/product/README.md). Ce checkpoint ne remplace aucune source ; ne pas assimiler une sortie tronquée à une lecture intégrale.
+
+README API/Partner/Wallet Offres/Admin/UI. Propriétaires : [distribution en l’état](../../apps/api/src/modules/partner-workspace/docs/distribution-review.md), clauses/lecture conjointe/association/sources solution/conventions/expertise/preuves/conflits/capacité/bilans/portée professionnelle ; compétence dans README, docs/competence.md absent. Pour la candidate : [création](../../apps/api/src/modules/partner-workspace/docs/appointment-creation.md), [temps](../../apps/api/src/modules/partner-workspace/docs/appointment-time.md), [report](../../apps/api/src/modules/partner-workspace/docs/appointment-rescheduling.md), disponibilités/préférences/commandes historiques/projections Wallet. Création/temps/report c902/7db2/9ff1 acquis à ne pas refaire. Satellites API/contracts/backend/data/auth/permissions/security/frontend/design/brand/i18n/testing/architecture/conventions/evolution/program/environment/documentation/memory/delivery ; stockage/documents/LLM seulement si extraction envisagée.
+
+## Décisions acquises
+
+Client≠Lead ; multi-demandes même personne/catégorie légitimes, profils canoniques. Responsable/contributeur conseil courant ; Admin personnellement affecté avec permission/MFA. Appartenance organisation/candidature/permission seules insuffisantes. Aucun advisorId client ni audience Wallet pour les dossiers personnels.
+
+SOL6–17 : association documentaire personnelle de cinq mentions exactes ou inconnues par coordonnées dans une offre exacte ; rapprochement commercial humain, identités juridique/produit non vérifiées. Lecture conjointe v2 au même instant RR daté, compagnie initialement vide/exploration ou reprise explicite, association recorded seule projetée. Transcription humaine séparée de six aspects (parties/distribution/produit/limitations/exclusions/dates), page/repère/passage ou inconnu ; au moins un passage et original privé sûr consulté. Références contrôlées, PAS fidélité/exhaustivité. Aucun appel IA ni changement analysis_requested. Une convention soumise/à compléter/future peut être transcrite sans applicabilité présente déduite.
+
+SOL18–21 : appréciation personnelle distincte pour offre/compagnie exacte ; positions indéterminée, complément nécessaire, impossibilité personnelle de poursuivre en l’état. Aucun favorable ; impossibilité≠non-couverture universelle/conclusion juridique. Aspects/périmètre/limites/motif/suite obligatoires, chaque aspect cité pour impossibilité, confirmations de lecture des deux originaux et fidélité humaine. Association et clauses actuelles requises ; expiration plafonnée par sources. Position effective seulement recorded ; historiques explicitement passés, extraits obsolètes masqués par leur propriétaire.
+
+Portée monotone besoin/sujet/mandat/profession/sources, retrait/expiration/changement même aller-retour exigent réexamen, aucun rejeu ne ressuscite une ancienne version. Révision optimiste/historique20 par sujet, GET RR daté, commandes verrouillant profil puis offre puis convention avec relecture après dernière attente et réautorisation. Audit privé atomique sans lead_id/texte. Aucun contrôle des bilans/solution levé, aucun effet sur sélection/offre/Wallet/attribution/tâche/RDV/notification/économie/horloge.0054 hors catalogue.
+
+## Livraison et preuves
+
+[Ledger7061](../evidence/partner-core.md#relais-7061--appréciation-personnelle-de-distribution) :222tests DISTINCTS/8fichiers,30nouveaux +192régressions,276,77s ; `.planning-local/distribution-regressions.json`. Premier run30 également vert, non additionné.67anciens tests/specs identiques. Huit attentes réelles : cinq POST fichier convention (session/MFA/habilitation/source/échéance) et trois GET profil (session/MFA/habilitation). Sources synthétiques déclarées, aucune preuve fournisseur.
+
+Types quatre apps/lint9TS/builds API/Partner/Wallet/Admin/frontières608modules/2848dépendances zéro erreur/Knip ciblé verts.3orphelins www, ApplicationPage/chunks Wallet et Node24.13.1/engine24.20 hérités ; Knip global non relancé, non vert au dernier a9ba.0054 générée depuis copie complète et3globs, seconde génération sans delta ; normal+pending0049–0054 migré deux fois dans PostgreSQL18 isolé.
+
+Deux revues statiques même agent, non indépendantes. Courant/sources/formulaire4étapes/retrait/historique/détail, original privé nouvel onglet, cache gcTime0/relecture10s/erreur masquante, première commande/clé conservées pour réessai exact. Correction du focus, résumé sans choix et validation d’étapes (objet Zod strict partiel reçoit seulement ses champs). Smoke local9vérifications sur expression réelle, types/lint/build Partner finaux verts. V3 rempli/clavier/mobile/original réel NON effectué ; activation non livrée, RLS/S-130/S-131 ouverts. Seule S-110.notes et deux vues générées modifiées, aucun statut clos.
+
+## Prochaine action bornée
+
+Après restauration et lectures, auditer et persister SON plan avant code. Candidate I.12/II.5/8 : même rendez-vous convenu lié explicitement à plusieurs Leads du même sujet canonique sans fusionner leurs cycles ni doubler l’occupation. Réutiliser création/temps/report acquis. Trancher droits personnels actuels sur CHAQUE Lead, sélection et accord explicites, liaison/déliaison et invalidations (clôture/relink/révocation), effets précis sur chaque suivi indépendant, audiences et notifications minimales. Auditer anciennes commandes et garde SQL0046 ; ne pas figer une nouvelle sémantique avant cet audit.
+
+V2 : refus d’un seul lien atomique, revalidation après attente/rejeu, sujet différent refusé, multi-demandes légitimes, ordre stable des verrous, concurrence/même occupation/commandes historiques, report/annulation/historique, aucune fuite ou fusion d’offres/tâches/économie/cycles. Pas de simple nouvelle préparation sans parcours utile. Si0055 nécessaire : copie normale+pending0049–0054 et3globs, seconde génération sans delta, double migration isolée,123protections inchangées ; intégration autorisée puis migrations→API→UI. Distribution favorable reste ouverte faute de preuves ; ne pas refaire association/transcription/consultation.
+
+TOUS tracks I–III restent mandatés : adéquation/distribution/matching réel/créneaux/réservation/multi-Leads ; marketplace anonymisée/candidatures/réservation unique/accords immuables/fixe OU succès/économie/encaissements/réserves/reprises/rapprochement/flux CoverView distincts ; statistiques/objectifs/qualité/réclamations ; enquête EXACTEMENT5étoiles→positifs multiples/commentaire facultatif→Google, ≤4→améliorations/rappel sans Google ; canaux/transcriptions sourcées avec accord ; vraie signature/acceptation compagnie. Exemples/montants/commissions jamais activés. Brief/S-110/S-042a non clos.
+
+## Obstacles et tentatives
+
+Docker/API4100/préviews4101–4139/services antérieurs protégés : ne pas les adopter/arrêter. Aucun callback4133/4136/montage invalidé7db2/9ff1/c902 retenté, secret processus lu, session/grant/client réel fabriqué ou auth/MFA contourné. Aucun ancien worktree/D:/Projects écrit ni base partagée inspectée. Ne pas abaisser engine. Si shim pnpm cassé : node C:/Users/sebm1/AppData/Local/pnpm/.tools/@pnpm+exe/12.3.4/node_modules/@pnpm/exe/bin/pnpm.mjs install --frozen-lockfile --ignore-scripts.
+
+Drizzle : sortie/globs relatifs dans copie temporaire. Build Partner depuis apps/partners via node node_modules/vite/bin/vite.js build ; package nommé partners. Mauvais chemin/filtre vide non crédité. Aucun original réel prouvé par les fixtures ; lectures tronquées à reprendre.
+
+## Coordination
+
+Relais unique autorisé, aucun fork/second successeur/sous-agent. Projet3d3d24c3-45c9-4853-9487-9cd0df7317a8 ; list_projects puis create_thread gpt-6-astra/ultra/worktree. Ne jamais employer clientThreadId comme threadId : résoudre par listing sans dupliquer puis attendre premier état réel. Source gelée dès dispatch, aucune écriture ultérieure. Chaque successeur reçoit exactement ce mandat complet et restaure/audite indépendamment avant code. Après sa tranche : checkpoint+snapshot+audit et relais unique puis arrêt ; aucun commit global WIP/push/deploy/archive/stash/reset/clean.

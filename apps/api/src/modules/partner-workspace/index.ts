@@ -60,6 +60,8 @@ import {
   advicePreferencesSchema,
   advisorAssessmentSchema,
   needExpertiseEvidenceSchema,
+  distributionReviewInputSchema,
+  distributionReviewDossierSchema,
   solutionClausesInputSchema,
   solutionClausesDossierSchema,
   solutionBindingInputSchema,
@@ -235,6 +237,49 @@ export function registerPartnerWorkspace(
       repository.decideNeedConflict(
         await actor(request),
         request.params.id,
+        request.body,
+        key(request),
+      ),
+  );
+  app.get(
+    "/partner/leads/:id/offers/:offerId/distribution-review/:companyId",
+    {
+      config: limited,
+      schema: {
+        params: params
+          .extend({ offerId: z.string().min(1).max(100), companyId: insuranceCompanyIdSchema })
+          .strict(),
+        querystring: conventionQuerySchema,
+        response: { 200: distributionReviewDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.distributionReview(
+        await actor(request),
+        request.params.id,
+        request.params.offerId,
+        request.params.companyId,
+        request.query.beforeRevision,
+      ),
+  );
+  app.post(
+    "/partner/leads/:id/offers/:offerId/distribution-review/:companyId",
+    {
+      config: limited,
+      schema: {
+        params: params
+          .extend({ offerId: z.string().min(1).max(100), companyId: insuranceCompanyIdSchema })
+          .strict(),
+        body: distributionReviewInputSchema,
+        response: { 200: distributionReviewDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.recordDistributionReview(
+        await actor(request),
+        request.params.id,
+        request.params.offerId,
+        request.params.companyId,
         request.body,
         key(request),
       ),

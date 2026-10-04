@@ -1409,6 +1409,80 @@ export const solutionClausesDossierSchema = z.object({
 export type SolutionClausesInput = z.infer<typeof solutionClausesInputSchema>;
 export type SolutionClausesDossier = z.infer<typeof solutionClausesDossierSchema>;
 
+export const distributionPositions = [
+  "undetermined",
+  "needs_information",
+  "cannot_proceed",
+] as const;
+export const distributionReviewSchema = z
+  .object({
+    position: z.enum(distributionPositions),
+    aspects: z
+      .array(z.enum(conventionClauseFields))
+      .min(1)
+      .max(6)
+      .refine((values) => new Set(values).size === values.length),
+    examinedScope: z.string().trim().min(10).max(500),
+    limitations: z.string().trim().min(10).max(1000),
+    nextStep: z.string().trim().min(10).max(1000),
+  })
+  .strict();
+export const distributionReviewInputSchema = z
+  .object({
+    revision: z.number().int().nonnegative(),
+    scopeFingerprint: solutionBindingInputSchema.shape.scopeFingerprint,
+    action: z.enum(["record", "withdraw"]),
+    review: distributionReviewSchema.nullable(),
+    reason: z.string().trim().min(10).max(1000),
+    validUntil: instant.nullable(),
+    confirmed: z.literal(true),
+    originalsChecked: z.boolean(),
+    transcriptionChecked: z.boolean(),
+  })
+  .strict()
+  .superRefine((value, context) => {
+    if (
+      value.action === "withdraw"
+        ? value.review !== null ||
+          value.validUntil !== null ||
+          value.originalsChecked ||
+          value.transcriptionChecked
+        : !value.review ||
+          !value.validUntil ||
+          !value.originalsChecked ||
+          !value.transcriptionChecked
+    )
+      context.addIssue({ code: "custom", message: "PARTNER_ACTION_REQUIRED" });
+  });
+const distributionRecordSchema = z.object({
+  revision: z.number().int().positive(),
+  action: z.enum(["record", "withdraw"]),
+  review: distributionReviewSchema.nullable(),
+  reason: z.string(),
+  validUntil: instant.nullable(),
+  recordedAt: instant,
+  scope: solutionEvidenceSchema.shape.scope,
+  clausesRevision: z.number().int().nonnegative(),
+  bindingRevision: z.number().int().nonnegative(),
+  conventionReference: solutionConventionReferenceSchema.nullable(),
+  sourcesCurrent: z.boolean(),
+});
+export const distributionReviewDossierSchema = z.object({
+  source: solutionClausesDossierSchema.omit({ history: true, nextBeforeRevision: true }),
+  scopeFingerprint: solutionBindingInputSchema.shape.scopeFingerprint,
+  revision: z.number().int().nonnegative(),
+  status: solutionBindingDossierSchema.shape.status,
+  position: z.enum(distributionPositions).nullable(),
+  canRecord: z.boolean(),
+  canWithdraw: z.boolean(),
+  maxValidUntil: instant.nullable(),
+  current: distributionRecordSchema.nullable(),
+  history: z.array(distributionRecordSchema).max(20),
+  nextBeforeRevision: z.number().int().positive().nullable(),
+});
+export type DistributionReviewInput = z.infer<typeof distributionReviewInputSchema>;
+export type DistributionReviewDossier = z.infer<typeof distributionReviewDossierSchema>;
+
 export const offerHistoryQuerySchema = z
   .object({ cursor: z.string().max(500).optional() })
   .strict();

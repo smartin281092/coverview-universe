@@ -1,5 +1,7 @@
 # Partner — parcours opérationnel, brief du 2 octobre 2026
 
+Journal du relais7061 : [plan SOL18–21 et brouillon suivant](partner-distribution-review.plan.md), [propriétaire](../../apps/api/src/modules/partner-workspace/docs/distribution-review.md). Appréciation personnelle de distribution en l’état pour une offre exacte, sans avis favorable ni contrôle voisin levé.222tests distincts/8fichiers ;0054 hors catalogue, V3/activation ouverts. Suite candidate : rendez-vous commun à plusieurs Leads sans fusion de leurs cycles, après audit et plan propre ; mandat intégral I–III conservé.
+
 Journal du relais a685 : [plan SOL14–17](partner-convention-clauses.plan.md), [dossier propriétaire](../../apps/api/src/modules/partner-workspace/docs/solution-clauses.md). Transcription humaine personnelle des clauses d’une convention pour une offre exacte, avec références/révisions/échéance/retrait/historique ; aucune appréciation positive de distribution.0053 hors catalogue. Le mandat I–III demeure ouvert ; preuves au ledger et prochain relais dans le plan spécialisé.
 
 Statut : exécution autorisée par la demande utilisateur et PROG-23. La demande « Recommence » reprend ce même brief. Session requise : gpt-6-astra / ultra ; réglage réel non observable. Budget : une tranche verticale avant relais documenté ; aucune clôture fictive du programme existant.

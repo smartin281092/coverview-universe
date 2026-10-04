@@ -2,6 +2,7 @@
 
 | Si la tâche porte sur… | Lire aussi |
 | --- | --- |
+| Appréciation personnelle de distribution pour une offre exacte | [Distribution en l’état](docs/distribution-review.md) |
 | Passages humains de convention pour une version exacte d’offre | [Transcription personnelle](docs/solution-clauses.md) |
 | Association actuelle et convention relues ensemble pour une offre | [Lecture conjointe v2](docs/bound-solution-evidence.md) |
 | Association personnelle des mentions d’une offre précise | [Association documentaire](docs/solution-binding.md) |

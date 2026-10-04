@@ -1,5 +1,7 @@
 # Passages personnels de convention pour une offre
 
+Extension7061 : [appréciation personnelle de distribution en l’état](distribution-review.md), dossier séparé qui référence les transcriptions actuelles sans certifier leur fidélité ni leur exhaustivité. Les mentions d’appréciation restant à traiter ci-dessous décrivent la livraison a685 ; avis favorable et activation demeurent ouverts.
+
 Propriétaire : partner-workspace. Décisions SOL14–17, relais a685 du 3 octobre 2026 ; brief I.10.3/13/15 et III.1–3/15. [Plan et journal](../../../../../../roadmap/plans/partner-convention-clauses.plan.md), [preuves](../../../../../../roadmap/evidence/partner-core.md#relais-a685--passages-personnels-de-convention). Les [conventions](conventions.md), [associations documentaires](solution-binding.md) et [lectures conjointes](bound-solution-evidence.md) gardent leurs règles propres.
 
 ## Sens et limites

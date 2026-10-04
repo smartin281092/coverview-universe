@@ -1,9 +1,12 @@
+import { readDistributionReview, recordDistributionReview } from "./partner.distribution-review.js";
 import { readSolutionClauses, recordSolutionClauses } from "./partner.solution-clauses.js";
 import { createHash } from "node:crypto";
 import type { Pool, PoolClient } from "pg";
 import { z } from "zod";
 import { documentAnalysisSchema } from "@coverview/contracts";
 import {
+  distributionReviewInputSchema,
+  type DistributionReviewInput,
   solutionClausesInputSchema,
   type SolutionClausesInput,
   needExpertiseEvidenceSchema,
@@ -663,6 +666,89 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
   }
   return {
     ...createCompetenceOperations(pool, transaction, documentsAvailable),
+    async distributionReview(
+      actor: PartnerActor,
+      id: string,
+      offerId: string,
+      companyId: string,
+      beforeRevision?: number,
+    ) {
+      referentQuerySchema.parse({ beforeRevision });
+      const tx = await pool.connect();
+      try {
+        await tx.query("begin isolation level repeatable read");
+        const now = (await tx.query<{ at: Date }>("select transaction_timestamp() at")).rows[0]!.at;
+        await lockActor(tx, actor);
+        const { ctx, lead } = await personalAdvisorLead(tx, actor, id);
+        const dossier = await readDistributionReview(
+          tx,
+          actor,
+          lead,
+          ctx.application,
+          offerId,
+          companyId,
+          now.toISOString(),
+          documentsAvailable,
+          beforeRevision,
+          false,
+        );
+        await lockActor(tx, actor);
+        if (!(await context(tx, actor)).canAdvise) fail("PARTNER_ACCESS_DENIED", 403);
+        await tx.query("commit");
+        return dossier;
+      } catch (cause) {
+        await tx.query("rollback");
+        if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+          fail("PARTNER_CONFLICT", 409);
+        throw cause;
+      } finally {
+        tx.release();
+      }
+    },
+    recordDistributionReview(
+      actor: PartnerActor,
+      id: string,
+      offerId: string,
+      companyId: string,
+      raw: DistributionReviewInput,
+      key: string,
+    ) {
+      const input = distributionReviewInputSchema.parse(raw);
+      return transaction(
+        actor,
+        `distribution-review:${id}:${offerId}:${companyId}`,
+        key,
+        input,
+        async (tx) => {
+          const { ctx, lead } = await personalAdvisorLead(tx, actor, id);
+          return recordDistributionReview(
+            tx,
+            actor,
+            lead,
+            ctx.application,
+            offerId,
+            companyId,
+            input,
+            documentsAvailable,
+          );
+        },
+        async (tx) => {
+          const { ctx, lead } = await personalAdvisorLead(tx, actor, id);
+          return await readDistributionReview(
+            tx,
+            actor,
+            lead,
+            ctx.application,
+            offerId,
+            companyId,
+            new Date().toISOString(),
+            documentsAvailable,
+            undefined,
+            true,
+          );
+        },
+      );
+    },
     async solutionClauses(
       actor: PartnerActor,
       id: string,

@@ -49,6 +49,9 @@ import {
   advisorAssessmentSchema,
   needExpertiseEvidenceSchema,
   solutionBindingDossierSchema,
+  distributionReviewInputSchema,
+  distributionReviewDossierSchema,
+  type DistributionReviewInput,
   solutionClausesInputSchema,
   solutionClausesDossierSchema,
   type SolutionClausesInput,
@@ -157,6 +160,32 @@ export function createPartnerClient(baseUrl: string) {
   }
   const path = (wallet = false) => (wallet ? "/wallet/leads" : "/partner/leads");
   return {
+    distributionReview: (
+      leadId: string,
+      offerId: string,
+      companyId: string,
+      beforeRevision?: number,
+      signal?: AbortSignal,
+    ) =>
+      request(
+        `/partner/leads/${encodeURIComponent(leadId)}/offers/${encodeURIComponent(offerId)}/distribution-review/${encodeURIComponent(companyId)}?${new URLSearchParams({ ...(beforeRevision ? { beforeRevision: String(beforeRevision) } : {}) })}`,
+        distributionReviewDossierSchema,
+        signal,
+      ),
+    recordDistributionReview: (
+      leadId: string,
+      offerId: string,
+      companyId: string,
+      input: DistributionReviewInput,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/leads/${encodeURIComponent(leadId)}/offers/${encodeURIComponent(offerId)}/distribution-review/${encodeURIComponent(companyId)}`,
+        distributionReviewDossierSchema,
+        options.signal,
+        distributionReviewInputSchema.parse(input),
+        options,
+      ),
     solutionClauses: (
       leadId: string,
       offerId: string,

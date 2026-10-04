@@ -1,3 +1,4 @@
+import { DistributionReviewDialog } from "./DistributionReviewDialog";
 import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
@@ -40,13 +41,14 @@ export function SolutionEvidenceDialog({
   const [dossier, setDossier] = useState<BoundSolutionEvidence | null>(null);
   const [returning, setReturning] = useState(false);
   const [binding, setBinding] = useState(false);
+  const [distribution, setDistribution] = useState<string | null>(null);
   const [clauses, setClauses] = useState<string | null>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const query = useQuery({
     queryKey: [...session.queryKey, "solution-evidence", 2, leadId, offerId, companyId],
     queryFn: ({ signal }) =>
       partnerApi.boundSolutionEvidence(leadId, offerId, companyId ? { companyId } : {}, signal),
-    enabled: !dossier && !binding && !clauses,
+    enabled: !dossier && !binding && !clauses && !distribution,
     gcTime: 0,
     staleTime: 0,
     refetchInterval: 10000,
@@ -66,6 +68,18 @@ export function SolutionEvidenceDialog({
         offerId={offerId}
         onClose={() => {
           setBinding(false);
+          reload();
+        }}
+      />
+    );
+  if (distribution)
+    return (
+      <DistributionReviewDialog
+        leadId={leadId}
+        offerId={offerId}
+        companyId={distribution}
+        onClose={() => {
+          setDistribution(null);
           reload();
         }}
       />
@@ -361,6 +375,11 @@ export function SolutionEvidenceDialog({
                     {value.companyId && (
                       <Button variant="outline" onClick={() => setClauses(value.companyId)}>
                         {t("solutionClauses.open")}
+                      </Button>
+                    )}
+                    {value.companyId && (
+                      <Button variant="outline" onClick={() => setDistribution(value.companyId)}>
+                        {t("distributionReview.open")}
                       </Button>
                     )}
                     <Badge variant="outline">
