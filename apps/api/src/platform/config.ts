@@ -129,13 +129,16 @@ export const environmentSchema = z
         }
       }
       // Local cookies are host-only: mixing localhost and 127.0.0.1 loses the shared session.
-      if (config.AUTH_PARTNER_ORIGIN) {
+      // Field issues do not stop this refinement: never let new URL() throw an unredacted value.
+      if (config.AUTH_PARTNER_ORIGIN && URL.canParse(config.AUTH_PARTNER_ORIGIN)) {
         const origin = new URL(config.AUTH_PARTNER_ORIGIN);
         if (
           origin.origin !== config.AUTH_PARTNER_ORIGIN ||
           (origin.protocol !== "https:" && !(isLocal && isLoopback(origin.hostname))) ||
           !config.CORS_ORIGINS.includes(config.AUTH_PARTNER_ORIGIN) ||
-          (isLocal && origin.hostname !== new URL(config.AUTH_API_ORIGIN).hostname)
+          (isLocal &&
+            URL.canParse(config.AUTH_API_ORIGIN) &&
+            origin.hostname !== new URL(config.AUTH_API_ORIGIN).hostname)
         ) {
           context.addIssue({
             code: "custom",
