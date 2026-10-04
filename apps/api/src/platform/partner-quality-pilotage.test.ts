@@ -465,10 +465,8 @@ it("computes source-grain activity, denominators and filtered sources without gr
     status: "no_observations",
     canInspect: false,
   });
-  expect(metric("verified_signatures")).toMatchObject({
-    value: null,
-    status: "source_unavailable",
-  });
+  // The conclusion catalogue is active: signatures count native receipts only, here none.
+  expect(metric("verified_signatures")).toMatchObject({ value: 0, status: "available" });
   expect(
     (await repository.pilotageSources(advisor, { ...query, metric: "contacts" })).items.map(
       (s) => s.leadId,
@@ -521,7 +519,8 @@ it("versions goals against the same measures, protects imposed goals and keeps m
     null,
     {
       ...input,
-      metric: "verified_signatures",
+      // No comparable verified premium yet: progress stays unknown instead of zero.
+      metric: "proposed_savings",
       scope: { kind: "individual", organizationId: null, userIds: [advisor.userId] },
     },
     key(),

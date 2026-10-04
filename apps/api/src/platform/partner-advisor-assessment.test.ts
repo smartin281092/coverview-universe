@@ -1997,20 +1997,11 @@ it("joins only personal competence evidence to the exact need without creating a
   );
   expect(disabled.competence.sourceStatus).toBe("disabled");
   expect(disabled.competence.current).not.toHaveProperty("canDownload");
-  expect(
-    (
-      await database.pool.query<{ relation: string | null }>(
-        "select to_regclass('partner_need_conflict_reviews') as relation",
-      )
-    ).rows[0]?.relation,
-  ).toBeNull();
-  expect(
-    (
-      await database.pool.query<{ relation: string | null }>(
-        "select to_regclass('partner_need_capacity_decisions') as relation",
-      )
-    ).rows[0]?.relation,
-  ).toBeNull();
+  // The unified catalogue creates these tables; reading evidence must still write nothing there.
+  for (const table of ["partner_need_conflict_reviews", "partner_need_capacity_decisions"])
+    expect(
+      (await database.pool.query(`select 1 from ${table} where lead_id=$1`, [lead.id])).rowCount,
+    ).toBe(0);
 });
 
 it("keeps limited, expired, withdrawn and replaced evidence distinct from expertise on the need", async () => {

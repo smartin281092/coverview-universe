@@ -232,7 +232,7 @@ async function proof(advisor: PartnerActor, coverage: "category" | "limited" = "
 const read = (advisor: PartnerActor, leadId: string, offerId: string) =>
   repository.solutionEvidence(advisor, leadId, offerId, { companyId: "axa" });
 
-it("leaves name matching unconfirmed and missing sources explicit, without pending migrations or side effects", async () => {
+it("leaves name matching unconfirmed and missing sources explicit, without need decisions or side effects", async () => {
   const owner = { ...(await actor()), wallet: true },
     advisor = await professional();
   const { lead, offerId } = await offered(owner, advisor);
@@ -246,16 +246,15 @@ it("leaves name matching unconfirmed and missing sources explicit, without pendi
       lead.id,
     ])
   ).rows;
-  const tables = (
-    await database.pool.query<{
-      expertise: string | null;
-      capacity: string | null;
-      conflicts: string | null;
-    }>(
-      "select to_regclass('partner_need_expertise_reviews') expertise,to_regclass('partner_need_capacity_decisions') capacity,to_regclass('partner_need_conflict_reviews') conflicts",
-    )
-  ).rows[0];
-  expect(tables).toEqual({ expertise: null, capacity: null, conflicts: null });
+  // The unified catalogue creates the need decision tables; this read path never writes to them.
+  for (const table of [
+    "partner_need_expertise_reviews",
+    "partner_need_capacity_decisions",
+    "partner_need_conflict_reviews",
+  ])
+    expect(
+      (await database.pool.query(`select 1 from ${table} where lead_id=$1`, [lead.id])).rowCount,
+    ).toBe(0);
   const empty = await repository.solutionEvidence(advisor, lead.id, offerId);
   expect(solutionEvidenceSchema.safeParse(empty).success).toBe(true);
   expect(empty).toMatchObject({

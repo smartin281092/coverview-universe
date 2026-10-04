@@ -667,22 +667,13 @@ it.each(["appointment.wallet_cancellation_recorded.v1", "client.appointment_canc
 );
 
 it("blocks closed needs and past or already settled appointments", async () => {
-  const s = await setup(),
-    payload = await input(s);
-  await database.pool.query(
-    "update partner_leads set stage='completed',result='abandoned',reason='other',next_action='',due_at=null where id=$1",
-    [s.source.id],
-  );
-  expect((await repository.walletAppointment(s.owner, s.source.id, s.appt.id)).canCancel).toBe(
-    false,
-  );
-  await expect(
-    repository.cancelWalletAppointment(s.owner, s.source.id, s.appt.id, payload, key()),
-  ).rejects.toMatchObject({ code: "PARTNER_CONFLICT" });
-  await database.pool.query(
-    "update partner_leads set stage='appointment_scheduled',result=null,reason=null where id=$1",
-    [s.source.id],
-  );
+  const s = await setup();
+  const { starts_at: startsAt } = (
+    await database.pool.query<{ starts_at: Date }>(
+      "select starts_at from partner_appointments where id=$1",
+      [s.appt.id],
+    )
+  ).rows[0]!;
   for (const state of ["completed", "cancelled", "client_absent", "advisor_absent"]) {
     await database.pool.query("update partner_appointments set state=$2 where id=$1", [
       s.appt.id,
@@ -695,6 +686,22 @@ it("blocks closed needs and past or already settled appointments", async () => {
   await database.pool.query(
     "update partner_appointments set state='scheduled',starts_at=clock_timestamp()-interval '1 second' where id=$1",
     [s.appt.id],
+  );
+  expect((await repository.walletAppointment(s.owner, s.source.id, s.appt.id)).canCancel).toBe(
+    false,
+  );
+  await expect(cancel(s)).rejects.toMatchObject({ code: "PARTNER_CONFLICT" });
+  // Closing last: leaving the completed stage through SQL is forbidden by the reopening archive.
+  await database.pool.query("update partner_appointments set starts_at=$2 where id=$1", [
+    s.appt.id,
+    startsAt,
+  ]);
+  expect((await repository.walletAppointment(s.owner, s.source.id, s.appt.id)).canCancel).toBe(
+    true,
+  );
+  await database.pool.query(
+    "update partner_leads set stage='completed',result='abandoned',reason='other',next_action='',due_at=null where id=$1",
+    [s.source.id],
   );
   expect((await repository.walletAppointment(s.owner, s.source.id, s.appt.id)).canCancel).toBe(
     false,
