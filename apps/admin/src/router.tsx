@@ -23,6 +23,11 @@ const partnerContinuityRoute = createRoute({
     "PartnerContinuityPage",
   ),
 });
+const partnerProfilesRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/partner/profiles",
+  component: lazyRouteComponent(() => import("./pages/PartnerProfilesPage"), "PartnerProfilesPage"),
+});
 const partnerRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/partner",
@@ -117,6 +122,7 @@ export const router = createRouter({
     homeRoute,
     partnerRoute,
     partnerContinuityRoute,
+    partnerProfilesRoute,
     healthRecommendationRoute,
     insuranceRequestsRoute,
     usersRoute,

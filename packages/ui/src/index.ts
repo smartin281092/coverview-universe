@@ -51,6 +51,7 @@ export { RequestProgress } from "./RequestProgress";
 export { NotificationList } from "./NotificationList";
 export { VersionHistoryDialog } from "./VersionHistoryDialog";
 export { PolicyEvidence } from "./PolicyEvidence";
+export { AdvisorProfileCard } from "./AdvisorProfileCard";
 
 export { swissCantonNamesFr } from "./swiss-cantons";
 export { parseZurichDateTime, formatZurichDateTime } from "./zurich-time";

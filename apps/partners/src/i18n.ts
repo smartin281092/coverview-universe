@@ -10,6 +10,7 @@ import navigation from "./locales/fr/navigation.json";
 import lifecycle from "./locales/fr/lifecycle.json";
 import relationships from "./locales/fr/relationships.json";
 import matching from "./locales/fr/matching.json";
+import profiles from "./locales/fr/profiles.json";
 void i18next.use(initReactI18next).init({
   resources: {
     fr: {
@@ -23,6 +24,7 @@ void i18next.use(initReactI18next).init({
       lifecycle,
       relationships,
       matching,
+      profiles,
     },
   },
   lng: "fr",

@@ -31,6 +31,7 @@ const links = [
   { to: "/remunerations", label: "remunerations", icon: CheckSquare },
   { to: "/agenda", label: "agenda", icon: CalendarDays },
   { to: "/profile", label: "profile", icon: UserRound },
+  { to: "/profile/public", label: "publicProfile", icon: UserRound },
 ] as const;
 function Workspace() {
   const { t } = useTranslation(),

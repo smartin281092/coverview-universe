@@ -1,5 +1,6 @@
 import insuranceRequests from "./locales/fr/insurance-requests.json";
 import partner from "./locales/fr/partner.json";
+import profiles from "./locales/fr/profiles.json";
 import healthRecommendation from "./locales/fr/health-recommendation.json";
 import i18next from "i18next";
 import { initReactI18next } from "react-i18next";
@@ -14,6 +15,7 @@ void i18next.use(initReactI18next).init({
   resources: {
     fr: {
       partner,
+      profiles,
       healthRecommendation,
       insuranceRequests,
       common,

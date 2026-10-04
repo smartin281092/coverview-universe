@@ -3,6 +3,7 @@ import { createQualityClient } from "./partner-quality.js";
 import { createConclusionClient } from "./partner-conclusion.js";
 import { createRelationshipClient } from "./partner-relationships.js";
 import { createMatchingClient } from "./partner-matching.js";
+import { createProfileClient } from "./partner-profiles.js";
 import { createNavigationClient } from "./partner-navigation.js";
 import { createCommunicationClient } from "./partner-communications.js";
 import { createPilotageClient } from "./partner-pilotage.js";
@@ -224,6 +225,7 @@ export function createPartnerClient(baseUrl: string) {
     ...createConclusionClient(request, base),
     ...createRelationshipClient(request),
     ...createMatchingClient(request),
+    ...createProfileClient(request),
     ...createNavigationClient(request),
     ...createCommunicationClient(request),
     ...createPilotageClient(request),

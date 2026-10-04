@@ -137,6 +137,7 @@ import { registerConclusionRoutes } from "./partner.conclusion.routes.js";
 import { registerNavigationRoutes } from "./partner.navigation.routes.js";
 import { registerRelationshipRoutes } from "./partner.relationships.routes.js";
 import { registerMatchingRoutes } from "./partner.matching.routes.js";
+import { registerProfileRoutes } from "./partner.profiles.routes.js";
 import { registerCommunicationRoutes } from "./partner.communications.routes.js";
 import { registerPilotageRoutes } from "./partner.pilotage.routes.js";
 import { startPartnerJobs } from "./partner.jobs.js";
@@ -191,6 +192,7 @@ export function registerPartnerWorkspace(
   registerNavigationRoutes(server, repository, actor);
   registerRelationshipRoutes(server, repository, actor);
   registerMatchingRoutes(server, repository, actor);
+  registerProfileRoutes(server, repository, actor);
   registerCommunicationRoutes(server, repository, actor);
   registerPilotageRoutes(server, repository, actor);
   app.get(

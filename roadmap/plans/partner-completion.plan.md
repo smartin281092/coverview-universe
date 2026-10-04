@@ -28,8 +28,8 @@ Rendre tout le [brief I–III](../../references/coverview-partner-2026-10-02.md)
 
 ### C — Fonctions restantes, dans l'ordre
 
-1. **Matching système et réattribution automatique bornée** (I.10.2–10.4, I.11.3, II.9). Classement expliqué depuis les déclarations validées, exclusion des conflits déclarés, départage par choix client, capacité et répartition, rémunération exclue. Écart manuel motivé. Après 24 h sans action utile : proposition au candidat suivant, nombre maximal configuré, puis reprise humaine CoverView.
-2. **Profils publics et évaluations** (I.18, I.12) : profil publiable, trois dimensions séparées, note avec période, volume et méthode, prudence à faible volume, contestation, évaluation des apporteurs.
+1. **Matching système et réattribution automatique bornée** (I.10.2–10.4, I.11.3, II.9). Classement expliqué depuis les déclarations validées, exclusion des conflits déclarés, départage par choix client, capacité et répartition, rémunération exclue. Écart manuel motivé. Après 24 h sans action utile : proposition au candidat suivant, nombre maximal configuré, puis reprise humaine CoverView. — *Livré le 4 octobre (`c9998c9`, `641d3ef`), V0–V2 : suite complète 748/748.*
+2. **Profils publics et évaluations** (I.18, I.12) : profil publiable, trois dimensions séparées, note avec période, volume et méthode, prudence à faible volume, contestation, évaluation des apporteurs. — *Livré le 4 octobre, V0–V2 : suite complète 74/74 fichiers, 751/751 tests. Photo de profil et profil d’organisation reportés en C8 (C2b).*
 3. **Wallet d'un nouveau client** (I.6.2, scénario 3) : espace préparé, invitation et activation encadrées, sans révélation ni consentement implicite. Traitement des emails erronés et des adresses partagées.
 4. **Comparaison** (I.13, III.7–10) : catégories de prestations normalisées, proposition automatique du contrat actuel quand l'objet est identifiable (confirmation sinon), orientation initiale automatique distincte de la recommandation finale, spécificités prévoyance.
 5. **Pilotage quotidien** (I.7, II.6/10/14) : vues d'équipe et prédéfinies, indicateurs de carte, dashboard Admin complet.
@@ -78,6 +78,18 @@ Rendre tout le [brief I–III](../../references/coverview-partner-2026-10-02.md)
 - **Contestation.** La personne conteste un élément précis (enquête, réclamation) avec un motif. L'Admin accepte ou refuse avec un motif. Un élément accepté sort du calcul, avec trace.
 - **Apporteurs.** Évaluation interne pour l'Admin : demandes transmises, doublons et demandes invalides, autorisation de transmission, écarts entre besoin annoncé et réalité constatée.
 
+#### C3 — Conception retenue (avant code)
+
+- **Invitation.** Une invitation Wallet se prépare sur une demande au contact non rattaché qui porte un email : par l'Admin, ou par le responsable courant s'il a le droit de contact (jamais par un simple apporteur).
+  - Le serveur ne dit jamais si l'adresse correspond déjà à un compte : la même invitation part dans tous les cas.
+  - Jeton aléatoire stocké haché, validité de 14 jours, une seule invitation active par demande.
+  - Annulation et nouvel envoi après correction d'un email erroné.
+- **Envoi.** Adaptateur d'envoi : Mailpit par son API HTTP en mode local (`EXTERNAL_ADAPTER_MODE=local`). Sinon, l'invitation reste « préparée, non envoyée, aucun fournisseur configuré ». Aucun faux envoi, aucun lien transmis par un autre canal.
+- **Information.** Le message et l'écran d'acceptation présentent la notice versionnée `client-invitation-notice-v1` : auteur de la collecte, finalités, destinataires, droits (collecte indirecte, PFPDT).
+- **Activation.** Le client ouvre `/activation` ; le jeton passe du fragment de l'URL au `sessionStorage`. Il s'authentifie avec WorkOS (continuation « activation »). Le serveur vérifie le jeton et l'égalité de l'email vérifié du compte avec celui de l'invitation.
+  - « Cette demande me concerne » rattache la demande au compte (sujet personnel) ; « Elle ne me concerne pas » la laisse non rattachée et prévient le responsable.
+  - Ni mandat, ni consentement marketing, ni fusion de membres d'un ménage n'est déduit.
+
 ### B — Recette réelle et simplification (après C)
 
 Les 33 scénarios I.23 se déroulent avec de vrais comptes WorkOS : candidat, Admin avec MFA, conseiller, apporteur, client Wallet. Revue produit critique, mobile et clavier. Cette phase exige la présence de l'utilisateur.
@@ -111,6 +123,8 @@ architecture, backend, api, contracts, data, permissions, security, testing, fro
 |---|---|---|---|---|
 | 1 | Migration locale | `db:migrate` via pnpm | Échec masqué par le CLI ; base inchangée (transaction) | Diagnostic : la maintenance exige `AUTH_ENABLED=false` |
 | 2 | Migration locale | tsx depuis la racine | Module tsx introuvable à la racine | Changement de stratégie : binaire local `apps/api` ; troisième essai réussi |
+| 3 | C1 matching | tests ciblés puis `tsc` | Tests verts ; `tsc` signale des tableaux non typés dans le test, que Vitest ne vérifie pas | Correction `641d3ef` ; `tsc` désormais lancé avant chaque commit |
+| 4 | C2 profils et évaluations | suite complète Vitest | 74/74 fichiers, 751/751 tests | Commit C2 seul, travail C3 exclu |
 
 ## Risques et mitigations
 

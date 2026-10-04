@@ -37,6 +37,9 @@ function Overview({ identity, blocked }: { identity: IdentityMe; blocked: boolea
         <Button variant="outline" asChild>
           <Link to="/partner/continuity">{t("continuity.title")}</Link>
         </Button>
+        <Button variant="outline" asChild>
+          <Link to="/partner/profiles">{t("profiles:title")}</Link>
+        </Button>
         <Button asChild>
           <a href={partnerUrl}>{t("open")}</a>
         </Button>

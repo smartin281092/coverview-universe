@@ -200,6 +200,17 @@ export async function executeLeadCommand(
         );
       }
       await event(tx, actor, id, "lead.updated", data.title, relink ? "coverview" : "assigned");
+      // Announced need versus observed need: feeds the referrer evaluation for CoverView only.
+      if (lead.stage !== "draft" && data.category !== lead.category)
+        await event(
+          tx,
+          actor,
+          id,
+          "lead.category_changed",
+          `${lead.category} → ${data.category}`,
+          "coverview",
+          lead.creatorId,
+        );
       break;
     }
     case "next_action":

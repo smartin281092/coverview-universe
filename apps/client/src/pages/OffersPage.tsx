@@ -9,6 +9,7 @@ import type { LeadCommand } from "@coverview/contracts/partner";
 import { PracticeSummaryDialog } from "../features/offers/PracticeSummaryDialog";
 import { AdvicePreferencesDialog } from "../features/offers/AdvicePreferencesDialog";
 import { SharedAppointmentsDialog } from "../features/offers/SharedAppointmentsDialog";
+import { AdvisorProfileDialog } from "../features/offers/AdvisorProfileDialog";
 import { WalletAppointmentsDialog } from "../features/offers/WalletAppointmentsDialog";
 import { MarketMandatesDialog } from "../features/offers/MarketMandatesDialog";
 import { WalletQualityDialog } from "../features/offers/WalletQualityDialog";
@@ -145,6 +146,7 @@ function Offers({ identity }: { identity: IdentityMe }) {
     [referents, setReferents] = useState<{ profile: string; category?: string } | null>(null),
     [advice, setAdvice] = useState<string | null>(null),
     [sharedAppointments, setSharedAppointments] = useState<string | null>(null),
+    [advisorProfile, setAdvisorProfile] = useState<string | null>(null),
     [appointments, setAppointments] = useState<string | null>(null),
     [marketMandates, setMarketMandates] = useState<string | null>(null),
     [qualitySelection, setQualityLead] = useState<string | null>(null),
@@ -314,6 +316,13 @@ function Offers({ identity }: { identity: IdentityMe }) {
             setCommunicationsLead(null);
             closeSection();
           }}
+        />
+      )}
+      {advisorProfile && (
+        <AdvisorProfileDialog
+          userId={advisorProfile}
+          queryKey={root}
+          onClose={() => setAdvisorProfile(null)}
         />
       )}
       {sharedAppointments && (
@@ -510,6 +519,15 @@ function Offers({ identity }: { identity: IdentityMe }) {
                     <p className="text-sm font-medium">
                       {t("referent", { name: lead.responsibleName ?? t("coverviewQueue") })}
                     </p>
+                    {lead.responsibleId && (
+                      <button
+                        type="button"
+                        className="mt-1 text-sm underline underline-offset-4"
+                        onClick={() => setAdvisorProfile(lead.responsibleId)}
+                      >
+                        {t("advisorProfile.open")}
+                      </button>
+                    )}
                     {lead.participants
                       .filter((p) => p.id !== lead.responsibleId)
                       .map((p) => (

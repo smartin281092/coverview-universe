@@ -6,6 +6,8 @@
 
 **Matching et réattribution automatique bornée (C1, décision 2a).** Classement expliqué depuis les déclarations validées, décision humaine tracée avec motif d'écart, proposition automatique bornée avant reprise CoverView : [règles, données et limites](docs/matching.md). Ces règles remplacent la mention historique « zéro réattribution automatique » plus bas.
 
+**Profils publics et évaluations (C2).** Profil versionné, publié après examen CoverView, évaluations en trois dimensions et contestations : [règles, audiences et limites](docs/profiles-evaluations.md). Ces règles remplacent la mention « profil public, évaluations et contestations absents » du registre de couverture.
+
 Lot4 en cours : [signature native, correspondances et conclusion documentée](docs/conclusion.md), [vues privées et filtres](docs/navigation.md), [clôtures et reprises](docs/lifecycle.md).0060–0063 hors catalogue normal ; preuves V2 isolées, activation et V3 ouvertes.
 
 Lot3 : [qualité, communications consenties, statistiques et objectifs](docs/quality-pilotage.md). Ce propriétaire remplace les mentions historiques d’absence de ces capacités ;0059 hors catalogue, activation et V3 ouvertes.

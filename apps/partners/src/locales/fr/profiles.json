@@ -1,0 +1,81 @@
+{
+  "title": "Profil public et évaluations",
+  "description": "Votre profil est présenté aux clients que vous accompagnez et aux partenaires CoverView, après examen par CoverView.",
+  "tabs": {
+    "profile": "Profil public",
+    "evaluation": "Mes évaluations"
+  },
+  "status": {
+    "none": "Aucun profil soumis",
+    "submitted": "En attente d'examen par CoverView",
+    "published": "Publié",
+    "rejected": "Refusé",
+    "withdrawn": "Retiré"
+  },
+  "decisionReason": "Motif de CoverView : {{reason}}",
+  "publishedTitle": "Ce que voient les clients",
+  "notPublished": "Aucun profil n'est publié pour le moment.",
+  "presentation": "Présentation",
+  "presentationHelp": "Entre 40 et 1200 caractères. Spécialités, langues, cantons et modes viennent de vos déclarations validées.",
+  "confirm": "Je confirme que cette présentation peut être montrée aux clients et aux partenaires CoverView.",
+  "submit": "Soumettre à CoverView",
+  "pendingNotice": "Une nouvelle version est en attente d'examen. La version publiée reste visible jusque-là.",
+  "withdraw": "Retirer mon profil public",
+  "withdrawReason": "Motif du retrait",
+  "withdrawConfirm": "Retirer",
+  "facts": {
+    "specialties": "Spécialités validées",
+    "languages": "Langues",
+    "cantons": "Cantons",
+    "modes": "Modes de rendez-vous",
+    "none": "Non déclaré"
+  },
+  "rating": {
+    "available": "Note des clients : {{average}} / 5",
+    "insufficient": "Pas encore assez d'avis ({{count}} sur {{minimum}} nécessaires)",
+    "detail": "{{count}} avis du {{from}} au {{to}}. Moyenne des notes données par les clients à la fin de leurs demandes ; non affichée sous {{minimum}} avis."
+  },
+  "evaluation": {
+    "period": "Période : du {{from}} au {{to}}",
+    "clientTitle": "Expérience client",
+    "distribution": "Répartition des notes",
+    "stars": "{{count}} étoile(s)",
+    "positives": "Points appréciés : {{values}}",
+    "improvements": "Points à améliorer : {{values}}",
+    "operationalTitle": "Qualité opérationnelle",
+    "assigned": "Attributions reçues",
+    "onTime": "Sans dépassement du délai de prise en charge",
+    "onTimeRate": "{{rate}} %",
+    "noRate": "Non calculable",
+    "complaints": "Réclamations",
+    "complaintsClosed": "Réclamations closes",
+    "activeLeads": "Dossiers actifs",
+    "followedUp": "Dossiers avec suivi daté",
+    "economicTitle": "Fiabilité économique",
+    "economicNotice": "Indicateurs internes, visibles par vous et par CoverView uniquement.",
+    "cases": "Dossiers économiques",
+    "disputed": "Contestations",
+    "clawbacks": "Reprises",
+    "method": "Une conversion n'est jamais comptée comme une preuve de qualité. Vous pouvez contester un élément qui vous semble mal attribué.",
+    "contestsTitle": "Contestations",
+    "noContests": "Aucune contestation.",
+    "contestStatus": {
+      "pending": "En attente",
+      "accepted": "Acceptée : élément retiré du calcul",
+      "rejected": "Refusée"
+    },
+    "contestableTitle": "Éléments contestables",
+    "noContestable": "Aucun élément sur la période.",
+    "subject": {
+      "survey": "Avis client",
+      "quality_case": "Réclamation"
+    },
+    "ratingValue": "{{rating}} / 5",
+    "contest": "Contester",
+    "contestReason": "Motif de la contestation (10 caractères au moins)",
+    "contestConfirm": "Je confirme cette contestation, qui sera examinée par CoverView.",
+    "contestSend": "Envoyer"
+  },
+  "error": "L'opération n'a pas abouti. Réessayez.",
+  "cancel": "Annuler"
+}

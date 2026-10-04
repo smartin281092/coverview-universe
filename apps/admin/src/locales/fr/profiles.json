@@ -1,0 +1,35 @@
+{
+  "title": "Profils publics et évaluations",
+  "description": "Publiez ou refusez les profils soumis par les conseillers, et tranchez les contestations d'évaluation. Chaque décision est motivée et conservée.",
+  "back": "Retour à Partner",
+  "loading": "Chargement…",
+  "error": "Le chargement a échoué.",
+  "retry": "Réessayer",
+  "profilesTitle": "Profils à examiner",
+  "noProfiles": "Aucun profil en attente.",
+  "submitted": "Version {{revision}} soumise le {{date}}",
+  "review": "Examiner",
+  "reviewTitle": "Examen du profil de {{name}}",
+  "presentation": "Présentation soumise",
+  "derived": "Spécialités, langues, cantons et modes sont repris automatiquement des déclarations validées.",
+  "decision": "Décision",
+  "decisions": {
+    "published": "Publier",
+    "rejected": "Refuser",
+    "accepted": "Accepter : retirer l'élément du calcul",
+    "rejectedContest": "Refuser la contestation"
+  },
+  "reason": "Motif (5 caractères au moins, conservé avec la décision)",
+  "save": "Enregistrer la décision",
+  "cancel": "Annuler",
+  "saveError": "La décision n'a pas été enregistrée. Rechargez et réessayez.",
+  "contestsTitle": "Contestations d'évaluation",
+  "noContests": "Aucune contestation en attente.",
+  "subject": {
+    "survey": "Avis client",
+    "quality_case": "Réclamation"
+  },
+  "contestBy": "{{name}} · {{subject}} · {{date}}",
+  "decide": "Trancher",
+  "contestTitle": "Contestation de {{name}}"
+}
