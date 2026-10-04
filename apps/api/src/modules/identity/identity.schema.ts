@@ -92,7 +92,7 @@ export const identityLogins = pgTable(
     browserHash: text("browser_hash").notNull(),
     encryptedVerifier: text("encrypted_verifier").notNull(),
     surface: text("surface", { enum: ["client", "admin", "www", "partners"] }).notNull(),
-    continuation: text("continuation", { enum: ["profile"] }),
+    continuation: text("continuation", { enum: ["profile", "activation"] }),
     createdAt: instant("created_at").notNull(),
     expiresAt: instant("expires_at").notNull(),
   },

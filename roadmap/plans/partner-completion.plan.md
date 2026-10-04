@@ -30,7 +30,7 @@ Rendre tout le [brief I–III](../../references/coverview-partner-2026-10-02.md)
 
 1. **Matching système et réattribution automatique bornée** (I.10.2–10.4, I.11.3, II.9). Classement expliqué depuis les déclarations validées, exclusion des conflits déclarés, départage par choix client, capacité et répartition, rémunération exclue. Écart manuel motivé. Après 24 h sans action utile : proposition au candidat suivant, nombre maximal configuré, puis reprise humaine CoverView. — *Livré le 4 octobre (`c9998c9`, `641d3ef`), V0–V2 : suite complète 748/748.*
 2. **Profils publics et évaluations** (I.18, I.12) : profil publiable, trois dimensions séparées, note avec période, volume et méthode, prudence à faible volume, contestation, évaluation des apporteurs. — *Livré le 4 octobre, V0–V2 : suite complète 74/74 fichiers, 751/751 tests. Photo de profil et profil d’organisation reportés en C8 (C2b).*
-3. **Wallet d'un nouveau client** (I.6.2, scénario 3) : espace préparé, invitation et activation encadrées, sans révélation ni consentement implicite. Traitement des emails erronés et des adresses partagées.
+3. **Wallet d'un nouveau client** (I.6.2, scénario 3) : espace préparé, invitation et activation encadrées, sans révélation ni consentement implicite. Traitement des emails erronés et des adresses partagées. — *Livré le 4 octobre, V0–V2 et envoi Mailpit réel ; parcours Wallet avec un vrai compte WorkOS en phase B.*
 4. **Comparaison** (I.13, III.7–10) : catégories de prestations normalisées, proposition automatique du contrat actuel quand l'objet est identifiable (confirmation sinon), orientation initiale automatique distincte de la recommandation finale, spécificités prévoyance.
 5. **Pilotage quotidien** (I.7, II.6/10/14) : vues d'équipe et prédéfinies, indicateurs de carte, dashboard Admin complet.
 6. **Temps réel et agenda** (III.16, I.12, I.21) : diffusion Partner↔Wallet, rendez-vous conjoint, rentabilité CoverView si ses données existent.
@@ -90,6 +90,74 @@ Rendre tout le [brief I–III](../../references/coverview-partner-2026-10-02.md)
   - « Cette demande me concerne » rattache la demande au compte (sujet personnel) ; « Elle ne me concerne pas » la laisse non rattachée et prévient le responsable.
   - Ni mandat, ni consentement marketing, ni fusion de membres d'un ménage n'est déduit.
 
+#### C4 — Conception retenue (avant code)
+
+Découpage en trois sous-étapes, chacune commitée avec ses tests : **C4a** prestations normalisées et comparateur, **C4b** orientation automatique et recommandation validée, **C4c** prévoyance et contrat actuel proposé.
+
+**Conflit signalé et arbitré.** Le relais 175f (défaut délégué PROG-23) exclut « toute recommandation automatique et toute déduction numérique de meilleure couverture ». Le brief I.13 et III.6–10, instruction de l'utilisateur, demande une orientation initiale automatique et la mise en évidence des meilleures et moindres limites. Le brief prime. Les garde-fous de 175f sont conservés :
+
+- l'orientation est factuelle et bornée aux éléments vérifiés et sourcés ;
+- la comparaison numérique n'utilise que des montants structurés, vérifiés, sourcés, de même unité et de même période ;
+- une valeur libre différente reste « modifiée », sans promesse d'équivalence ;
+- absence et incertitude restent distinctes de l'exclusion.
+
+**C4a — Prestations normalisées et comparateur.**
+
+- Référentiel versionné `benefit-catalog-v1` dans les contrats. Il définit des catégories normalisées par catégorie de besoin, chacune avec un mode de comparaison :
+  - couverture incluse ou exclue ;
+  - limite, où le montant le plus haut est le meilleur ;
+  - franchise, où le montant le plus bas est le meilleur ;
+  - durée en jours ;
+  - texte, sans comparaison numérique.
+- Une prestation (offre ou revue du contrat actuel) reçoit, de façon additive, une catégorie normalisée et un montant structuré facultatif `{ valeur, unité CHF/jours/%, période événement/année/total }`. Le libellé de la compagnie, la valeur libre, les conditions, les exclusions et la source restent inchangés.
+- La catégorie est suggérée depuis le libellé par un dictionnaire déterministe ; l'intervenant la confirme ou la corrige à la revue. Les anciennes clés sont reprises par une table de correspondance, et « autre » reste regroupé par libellé normalisé.
+- Une seule comparaison, calculée par le serveur :
+  - colonnes : le contrat actuel relié et revu, puis les versions actives comparables ;
+  - lignes : les catégories normalisées ;
+  - états par cellule face à la référence : identique, ajoutée (exclusion vérifiée → inclusion vérifiée), retirée, meilleure limite, limite inférieure, exclusions différentes, modifiée, à vérifier, absente.
+- Synthèse par offre — « je paie, j'obtiens, je gagne, je perds » : différence annuelle vérifiée, gains et pertes toujours affichés ensemble, exclusions différentes, points à vérifier.
+- Wallet : tableau unique, contrat actuel compris, en vue synthétique avec « Voir toutes les prestations ». Partner : le même tableau en lecture. Le regroupement côté client par libellé disparaît.
+
+**C4b — Orientation automatique et recommandation validée.**
+
+- Orientation `orientation-v1`, calculée à la lecture et jamais enregistrée comme une décision.
+  - Par offre :
+    - incomplète : prime ou prestation décisive non vérifiée ;
+    - avantageuse : pas plus chère, aucune perte vérifiée, au moins une économie ou un gain ;
+    - maintien préférable : pas moins chère et sans aucun gain vérifié ;
+    - arbitrage : tous les autres cas.
+  - Synthèse du dossier. Sans contrat actuel relié, la comparaison porte entre offres et ne conclut jamais au maintien.
+- Libellé constant « Orientation automatique, non validée ». Transparence affichée :
+  - données utilisées et date de revue ;
+  - originaux (version, page) ;
+  - hypothèses (annualisation) ;
+  - informations manquantes ;
+  - périmètre de marché (« offres reçues dans ce dossier ») ;
+  - distinction entre marché, accessible et distribuable, reprise des contrôles de `solution-evidence` : admission et droits de distribution non établis par défaut.
+- Recommandation finale de l'intervenant, en version immuable : offre et version précises, maintien du contrat actuel, ou aucune.
+  - Elle porte un motif et des points d'attention ; un écart avec l'orientation exige un motif d'écart.
+  - Elle est publiée explicitement dans Wallet avec son auteur et sa date.
+  - Une nouvelle version d'offre ou une nouvelle revue du contrat actuel la rend « à revoir ».
+- Une analyse incomplète ou contradictoire crée une tâche « Compléter l'analyse » et une notification au responsable. Rien de conditionnel n'est présenté comme certain.
+
+**C4c — Prévoyance et contrat actuel proposé.**
+
+- Bloc prévoyance structuré, chaque valeur sourcée et vérifiée :
+  - horizon ;
+  - versements (montant, fréquence) ;
+  - frais d'entrée, de gestion et de sortie ;
+  - valeurs de rachat par année ;
+  - capital garanti ;
+  - décès et libération du paiement des primes ;
+  - stratégie de placement ;
+  - conséquences d'un remplacement : valeur de rachat actuelle et perte, nouveaux délais, questionnaire de santé.
+- Contrat actuel proposé :
+  - correspondance entre catégorie de besoin et domaines d'assurance ;
+  - la demande peut porter un repère d'objet (numéro de police actuel, plaque, objet assuré) ;
+  - une seule police du profil exact, de domaine compatible et de repère identique, est présélectionnée avec sa raison ;
+  - sinon, rien n'est présélectionné et la liste est triée ;
+  - la confirmation du propriétaire (même objet, partage) reste toujours requise.
+
 ### B — Recette réelle et simplification (après C)
 
 Les 33 scénarios I.23 se déroulent avec de vrais comptes WorkOS : candidat, Admin avec MFA, conseiller, apporteur, client Wallet. Revue produit critique, mobile et clavier. Cette phase exige la présence de l'utilisateur.
@@ -116,6 +184,9 @@ architecture, backend, api, contracts, data, permissions, security, testing, fro
 
 - Les déclarations validées par l'Admin suffisent à l'éligibilité du matching (décision 2a). Rayon d'impact : le module de matching seul, pas les dossiers existants.
 - Pas de fournisseur email ou SMS de production : Mailpit en local. Rayon d'impact : l'adaptateur d'envoi.
+- C3 : validité de 14 jours, 3 invitations par destinataire et par 24 heures, 3 tentatives d'envoi, 5 minutes d'attente par tentative. Défauts réversibles ; rayon d'impact : constantes de `partner.invitations.ts` et document propriétaire.
+- C3 : peuvent inviter l'Admin, le responsable courant habilité et un contributeur avec droit de contact ; jamais un apporteur seul. Rayon d'impact : `access()` du module invitations.
+- C3, dérogation signalée à MAIL-02 (« Mailpit via SMTP ») : la convention locale `EXTERNAL_ADAPTER_MODE` + `MAILPIT_URL` HTTP est suivie (§4), sans nouvelle dépendance. Rayon d'impact : `platform/mailer.ts` ; un fournisseur de production s'ajoutera derrière l'interface `Mailer`.
 
 ## Journal de vérification
 
@@ -125,6 +196,10 @@ architecture, backend, api, contracts, data, permissions, security, testing, fro
 | 2 | Migration locale | tsx depuis la racine | Module tsx introuvable à la racine | Changement de stratégie : binaire local `apps/api` ; troisième essai réussi |
 | 3 | C1 matching | tests ciblés puis `tsc` | Tests verts ; `tsc` signale des tableaux non typés dans le test, que Vitest ne vérifie pas | Correction `641d3ef` ; `tsc` désormais lancé avant chaque commit |
 | 4 | C2 profils et évaluations | suite complète Vitest | 74/74 fichiers, 751/751 tests | Commit C2 seul, travail C3 exclu |
+| 5 | C2 en isolation | `tsc` des 7 espaces, travail C3 remisé | 0 erreur | Sauvegarde, avance rapide, migration 0068 locale ; `/health` prêt |
+| 6 | C3 invitations | tests ciblés | 5/6 : une annulation invalide lève l'erreur Zod de façon synchrone | Assertion corrigée (`toThrow` synchrone) ; 6/6 |
+| 7 | Adaptateur Mailpit | envoi réel vers Mailpit local | Message reçu : texte et HTML, lien, notice, étiquette, référence ; score HTML 94 % | Oracle réel de l'adaptateur |
+| 8 | C3 complet | suite complète Vitest, builds API/Partner/Wallet, depcruise, knip | 75/75 fichiers, 758/758 tests ; builds verts ; depcruise sans erreur ; knip identique au commit précédent (préexistant) | Commit C3, travail C4 exclu |
 
 ## Risques et mitigations
 

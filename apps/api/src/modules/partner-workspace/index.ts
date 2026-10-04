@@ -127,7 +127,8 @@ import {
   personalAppointmentConfirmSchema,
 } from "@coverview/contracts/partner";
 import { insuranceRequestIdSchema } from "@coverview/contracts/insurance-requests";
-import type { Environment } from "../../platform/config.js";
+import { isLoopback, type Environment } from "../../platform/config.js";
+import { createMailer } from "../../platform/mailer.js";
 import { createDatabase } from "../../platform/db/database.js";
 import type { registerIdentity } from "../identity/index.js";
 import { createPartnerRepository } from "./partner.repository.js";
@@ -141,6 +142,8 @@ import { registerProfileRoutes } from "./partner.profiles.routes.js";
 import { registerCommunicationRoutes } from "./partner.communications.routes.js";
 import { registerPilotageRoutes } from "./partner.pilotage.routes.js";
 import { startPartnerJobs } from "./partner.jobs.js";
+import { registerInvitationRoutes } from "./partner.invitations.routes.js";
+import { clientInvitationMessage } from "./partner.invitation-template.js";
 export { PartnerError } from "./partner.policy.js";
 
 export function registerPartnerWorkspace(
@@ -150,14 +153,22 @@ export function registerPartnerWorkspace(
 ) {
   const app = server.withTypeProvider<ZodTypeProvider>(),
     database = createDatabase(config),
-    repository = createPartnerRepository(database.pool, config.DOCUMENTS_ENABLED);
+    mailer = createMailer(config),
+    repository = createPartnerRepository(
+      database.pool,
+      config.DOCUMENTS_ENABLED,
+      mailer ? "configured" : "unconfigured",
+    );
   database.pool.on("error", () =>
     app.log.warn({ dependency: "partner_database" }, "Partner database unavailable"),
   );
   let stopJobs: (() => Promise<void>) | undefined;
   app.addHook("onReady", async () => {
     if (config.AUTH_ENABLED && config.PARTNER_JOBS_ENABLED)
-      stopJobs = await startPartnerJobs(config.REDIS_URL, database.pool, app.log);
+      stopJobs = await startPartnerJobs(config.REDIS_URL, database.pool, app.log, {
+        mailer,
+        walletOrigin: config.AUTH_WALLET_ORIGIN,
+      });
   });
   app.addHook("onClose", async () => {
     await stopJobs?.();
@@ -193,6 +204,33 @@ export function registerPartnerWorkspace(
   registerRelationshipRoutes(server, repository, actor);
   registerMatchingRoutes(server, repository, actor);
   registerProfileRoutes(server, repository, actor);
+  registerInvitationRoutes(server, repository, actor);
+  if (mailer) {
+    // MAIL-03 preview, local adapters only, with fictitious variables. Same loopback guard as the
+    // local personas route: binding alone does not stop DNS rebinding or a proxy.
+    app.get(
+      "/local/emails/client-invitation",
+      {
+        schema: { querystring: z.object({ format: z.enum(["html", "text"]).default("html") }) },
+        onRequest: async (request, reply) => {
+          if (!isLoopback(request.ip) || !isLoopback(request.hostname))
+            return reply.code(404).send();
+        },
+      },
+      async (request, reply) => {
+        const message = clientInvitationMessage({
+          locale: "fr",
+          requester: "Camille Exemple (Cabinet Exemple SA)",
+          category: "health",
+          link: `${config.AUTH_WALLET_ORIGIN}/activation#token=exemple`,
+          expiresAt: new Date(Date.now() + 14 * 86_400_000),
+        });
+        return request.query.format === "text"
+          ? reply.type("text/plain; charset=utf-8").send(message.text)
+          : reply.type("text/html; charset=utf-8").send(message.html);
+      },
+    );
+  }
   registerCommunicationRoutes(server, repository, actor);
   registerPilotageRoutes(server, repository, actor);
   app.get(

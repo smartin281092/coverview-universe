@@ -173,6 +173,11 @@ const devicesRoute = createRoute({
     return redirect({ to: "/account", search: { tab: "devices" }, replace: true });
   },
 });
+const activationRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/activation",
+  component: lazyRouteComponent(() => import("./pages/ActivationPage"), "ActivationPage"),
+});
 const profileRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/profile",
@@ -222,6 +227,7 @@ const diagnosticsRoute = createRoute({
 });
 export const router = createRouter({
   routeTree: rootRoute.addChildren([
+    activationRoute,
     homeRoute,
     insuranceRequestsRoute,
     insuranceRequestRoute,

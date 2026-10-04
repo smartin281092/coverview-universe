@@ -18,6 +18,7 @@
     "./partner-relationships": "./src/partner-relationships.ts",
     "./partner-matching": "./src/partner-matching.ts",
     "./partner-profiles": "./src/partner-profiles.ts",
+    "./partner-invitations": "./src/partner-invitations.ts",
     "./partner-navigation": "./src/partner-navigation.ts"
   },
   "scripts": {

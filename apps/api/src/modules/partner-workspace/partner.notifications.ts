@@ -186,6 +186,22 @@ export async function notifyPartnerEvent(
       priority: "high",
       reopen: true,
     });
+  // The answer to a Wallet invitation goes to whoever follows the request.
+  if (["client.invitation_accepted", "client.invitation_declined"].includes(kind))
+    await put(db, {
+      leadId,
+      recipientId: row.responsible_id,
+      audience: row.responsible_id ? "partner" : "coverview",
+      kind,
+      key: `${eventId}:invitation`,
+      action: kind === "client.invitation_declined" ? "review_response" : null,
+      priority: kind === "client.invitation_declined" ? "high" : "normal",
+    });
+  if (["client.invitation_queued", "client.invitation_accepted", "lead.closed"].includes(kind))
+    await db.query(
+      "update partner_notifications set resolved_at=now() where lead_id=$1 and kind='client.invitation_declined' and resolved_at is null",
+      [leadId],
+    );
   if (["lead.assigned", "lead.transferred"].includes(kind))
     await db.query(
       "update partner_notifications set resolved_at=now() where lead_id=$1 and kind='interlocutor_request' and resolved_at is null",

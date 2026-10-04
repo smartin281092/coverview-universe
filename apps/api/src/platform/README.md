@@ -8,6 +8,8 @@ Socle technique de CoverView Core : configuration, processus HTTP, sondes de san
 
 Fastify utilise les contrats partagés, PostgreSQL via Drizzle et le client Redis officiel. MinIO et Mailpit sont sondés uniquement en mode adaptateur local. Platform enregistre le module identity ; lorsque `AUTH_ENABLED=true`, celui-ci utilise WorkOS. Les sondes et les fixtures platform n’émettent aucun email, fichier ou paiement métier.
 
+**Emails (`mailer.ts`).** Interface `Mailer` unique (MAIL-02). Le seul adaptateur actuel est l’API HTTP de Mailpit, actif avec `EXTERNAL_ADAPTER_MODE=local` ; sinon `createMailer` ne renvoie aucun adaptateur et aucun envoi n’a lieu. Les erreurs ne portent que le statut HTTP, jamais le destinataire ni le contenu. Premier usage : [invitations Wallet](../modules/partner-workspace/docs/client-invitations.md). Dérogation signalée à MAIL-02 (Mailpit via SMTP) : la convention locale `MAILPIT_URL` HTTP est suivie ; un fournisseur de production s’ajoutera derrière la même interface.
+
 ## Règles métier et invariants
 
 Les gardes exécutables de `config.ts` appliquent ENV-08/09 et BACK-07. Les rôles de preview ne définissent ni tenancy ni permissions produit. Les migrations identity ajoutent des tables distinctes sans convertir les personas en utilisateurs. Liveness et readiness sont distincts (OBS-04).

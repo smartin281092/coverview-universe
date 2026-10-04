@@ -1,5 +1,6 @@
 import insuranceRequests from "./locales/fr/insurance-requests.json";
 import offers from "./locales/fr/offers.json";
+import activation from "./locales/fr/activation.json";
 import conclusion from "./locales/fr/conclusion.json";
 import quality from "./locales/fr/quality.json";
 import communications from "./locales/fr/communications.json";
@@ -21,6 +22,7 @@ void i18next.use(initReactI18next).init({
     fr: {
       leadNotifications,
       offers,
+      activation,
       conclusion,
       lifecycle,
       relationships,

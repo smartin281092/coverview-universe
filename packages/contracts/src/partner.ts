@@ -2050,6 +2050,7 @@ export const partnerErrors = [
   "PARTNER_IDEMPOTENCY_REUSED",
   "PARTNER_APPOINTMENT_CONFLICT",
   "PARTNER_UNAVAILABLE",
+  "PARTNER_RATE_LIMITED",
 ] as const;
 export type PartnerApplication = z.infer<typeof partnerApplicationSchema>;
 export type PartnerContext = z.infer<typeof partnerContextSchema>;

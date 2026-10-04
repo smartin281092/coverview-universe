@@ -7,7 +7,16 @@ import { api } from "../../api";
 import { identityOptions } from "./session-state";
 import { IdentityFailure } from "./IdentityFailure";
 
-export function IdentityBoundary({ children }: { children: (identity: IdentityMe) => ReactNode }) {
+// A continuation brings the person back to a precise journey after login (activation).
+export function IdentityBoundary({
+  children,
+  continuation,
+  signedOut,
+}: {
+  children: (identity: IdentityMe) => ReactNode;
+  continuation?: "activation";
+  signedOut?: { title: string; description: string };
+}) {
   const { t } = useTranslation();
   const client = useQueryClient();
   const config = useQuery({
@@ -54,11 +63,13 @@ export function IdentityBoundary({ children }: { children: (identity: IdentityMe
   if (!identity.data) {
     return (
       <SessionExpiredState
-        title={t("identity.signedOutTitle")}
-        description={t("identity.signedOutDescription")}
+        title={signedOut?.title ?? t("identity.signedOutTitle")}
+        description={signedOut?.description ?? t("identity.signedOutDescription")}
         action={
           <Button asChild>
-            <a href={api.loginUrl("wallet")}>{t("identity.login")}</a>
+            <a href={api.loginUrl("wallet", continuation ? { continuation } : {})}>
+              {t("identity.login")}
+            </a>
           </Button>
         }
       />

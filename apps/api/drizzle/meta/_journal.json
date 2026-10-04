@@ -484,6 +484,13 @@
       "when": 1791112443064,
       "tag": "0068_partner_profiles_evaluations",
       "breakpoints": true
+    },
+    {
+      "idx": 69,
+      "version": "7",
+      "when": 1791120622721,
+      "tag": "0069_partner_client_invitations",
+      "breakpoints": true
     }
   ]
 }

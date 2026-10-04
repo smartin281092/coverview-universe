@@ -118,7 +118,7 @@ export async function registerIdentity(
           .object({
             surface: z.enum(["wallet", "admin", "www", "partners"]),
             reauthenticate: z.literal("true").optional(),
-            continuation: z.literal("profile").optional(),
+            continuation: z.enum(["profile", "activation"]).optional(),
           })
           .strict(),
       },

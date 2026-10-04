@@ -1025,7 +1025,7 @@ export function createApiClient({
       ),
     loginUrl: (
       surface: "wallet" | "admin" | "www" | "partners",
-      options: { reauthenticate?: boolean; continuation?: "profile" } = {},
+      options: { reauthenticate?: boolean; continuation?: "profile" | "activation" } = {},
     ) =>
       new URL(
         `/auth/login?${new URLSearchParams({ surface, ...(options.reauthenticate ? { reauthenticate: "true" } : {}), ...(options.continuation ? { continuation: options.continuation } : {}) })}`,

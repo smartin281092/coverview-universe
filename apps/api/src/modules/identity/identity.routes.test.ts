@@ -403,6 +403,30 @@ describe("identity HTTP with real PostgreSQL and an explicit WorkOS double", () 
     expect((await request("/auth/login?surface=evil")).statusCode).toBe(400);
     expect((await request("/auth/login?surface=wallet&surface=admin")).statusCode).toBe(400);
   });
+  it("returns to a fixed Wallet path for a server-recorded continuation only", async () => {
+    for (const [continuation, path] of [
+      ["profile", "/profile?continue=1"],
+      ["activation", "/activation"],
+    ] as const) {
+      const started = await request(`/auth/login?surface=wallet&continuation=${continuation}`);
+      expect(started.statusCode).toBe(303);
+      const state = new URL(String(started.headers.location)).searchParams.get("state") ?? "";
+      const cookie = String(started.headers["set-cookie"]).split(";")[0] ?? "";
+      const callback = await request(
+        `/auth/callback?code=user_${randomUUID()}&state=${state}`,
+        cookie,
+      );
+      expect(callback.statusCode, callback.body).toBe(303);
+      const location = new URL(String(callback.headers.location));
+      expect(location.pathname + location.search).toBe(path);
+    }
+    expect((await request("/auth/login?surface=admin&continuation=activation")).statusCode).toBe(
+      400,
+    );
+    expect((await request("/auth/login?surface=wallet&continuation=elsewhere")).statusCode).toBe(
+      400,
+    );
+  });
   it("rejects expired login transactions", async () => {
     const pending = await startLogin();
     await database.db

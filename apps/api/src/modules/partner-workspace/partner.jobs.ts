@@ -4,8 +4,15 @@ import { z } from "zod";
 import type { FastifyBaseLogger } from "fastify";
 import type { Pool } from "pg";
 import { processPartnerContinuity } from "./partner.continuity.js";
+import { processClientInvitations } from "./partner.invitations.js";
+import type { Mailer } from "../../platform/mailer.js";
 
-export async function startPartnerJobs(redisUrl: string, pool: Pool, logger: FastifyBaseLogger) {
+export async function startPartnerJobs(
+  redisUrl: string,
+  pool: Pool,
+  logger: FastifyBaseLogger,
+  invitations: { mailer: Mailer | null; walletOrigin: string },
+) {
   const connection = () =>
     createNodeRedisClient(
       createClient({
@@ -21,15 +28,33 @@ export async function startPartnerJobs(redisUrl: string, pool: Pool, logger: Fas
     );
   const producer = connection(),
     consumer = connection();
+  // Historical name: the queue also carries the client invitation sending job.
   const name = "coverview-partner-continuity-v1";
   const queue = new Queue(name, { connection: producer });
   const jobSchema = z.object({ version: z.literal(1) }).strict();
   const worker = new Worker(
     name,
     async (job) => {
-      if (job.name !== "continuity" || !jobSchema.safeParse(job.data).success)
+      if (
+        !["continuity", "invitations"].includes(job.name) ||
+        !jobSchema.safeParse(job.data).success
+      )
         throw new UnrecoverableError("PARTNER_JOB_INVALID");
       const started = Date.now();
+      if (job.name === "invitations") {
+        // Counts only: never a recipient, a token or a link in the logs.
+        const result = await processClientInvitations(
+          pool,
+          invitations.mailer,
+          invitations.walletOrigin,
+        );
+        if (result.sent || result.failed)
+          logger.info(
+            { jobId: job.id, ...result, durationMs: Date.now() - started },
+            "Partner client invitations processed",
+          );
+        return result;
+      }
       logger.info({ jobId: job.id }, "Partner continuity started");
       // Ten bounded batches per tick; the oldest unchecked Lead is picked first after a restart.
       let checked = 0,
@@ -57,7 +82,7 @@ export async function startPartnerJobs(redisUrl: string, pool: Pool, logger: Fas
   worker.on("failed", (job) =>
     logger.warn(
       { jobId: job?.id, attemptsMade: job?.attemptsMade },
-      "Partner continuity failed; retained for retry or operator review",
+      "Partner job failed; retained for retry or operator review",
     ),
   );
   async function close() {
@@ -71,19 +96,21 @@ export async function startPartnerJobs(redisUrl: string, pool: Pool, logger: Fas
     await Promise.race([
       (async () => {
         await Promise.all([queue.waitUntilReady(), worker.waitUntilReady()]);
+        const opts = {
+          attempts: 4,
+          backoff: { type: "exponential", delay: 30000 },
+          removeOnComplete: { age: 86400, count: 1000 },
+          removeOnFail: { age: 604800, count: 1000 },
+        };
+        await queue.upsertJobScheduler(
+          "invitations",
+          { every: 60000 },
+          { name: "invitations", data: { version: 1 }, opts },
+        );
         await queue.upsertJobScheduler(
           "continuity",
           { every: 60000 },
-          {
-            name: "continuity",
-            data: { version: 1 },
-            opts: {
-              attempts: 4,
-              backoff: { type: "exponential", delay: 30000 },
-              removeOnComplete: { age: 86400, count: 1000 },
-              removeOnFail: { age: 604800, count: 1000 },
-            },
-          },
+          { name: "continuity", data: { version: 1 }, opts },
         );
       })(),
       new Promise<never>((_, reject) => {

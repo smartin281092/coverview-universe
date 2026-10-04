@@ -1,0 +1,36 @@
+{
+  "title": "Espace Wallet du client",
+  "description": "Le client reçoit par email un lien personnel pour rattacher cette demande à son espace CoverView. L’invitation ne révèle pas s’il possède déjà un compte, et ne vaut ni mandat ni consentement commercial.",
+  "blocker": {
+    "no_email": "Ajoutez l’email du client à la demande pour pouvoir l’inviter.",
+    "draft": "La demande doit d’abord être soumise.",
+    "closed": "La demande est terminée : aucune invitation n’est possible."
+  },
+  "confirm": "J’envoie l’invitation à l’adresse indiquée par le client pour cette demande.",
+  "send": "Inviter le client dans Wallet",
+  "cancel": "Annuler l’invitation",
+  "cancelReason": "Motif de l’annulation (5 caractères au moins)",
+  "cancelConfirm": "Confirmer l’annulation",
+  "back": "Retour",
+  "state": {
+    "queued": "En attente d’envoi",
+    "sending": "Envoi en cours",
+    "sent": "Envoyée, en attente de réponse",
+    "accepted": "Acceptée : demande rattachée à l’espace du client",
+    "declined": "Le client indique que cette demande ne le concerne pas",
+    "expired": "Expirée",
+    "cancelled": "Annulée",
+    "failed": "Échec de l’envoi",
+    "superseded": "Sans objet"
+  },
+  "unconfigured": "Aucun fournisseur d’email n’est configuré : l’invitation reste en attente d’envoi.",
+  "item": "{{email}} · créée le {{date}}",
+  "error": "L’opération n’a pas abouti. Rechargez et réessayez.",
+  "rateLimited": "Trop d’invitations envoyées à cette adresse aujourd’hui. Réessayez demain.",
+  "reason": {
+    "send_failed": "L’envoi a échoué trois fois : vérifiez l’adresse avant de renvoyer.",
+    "delivery_unknown": "Envoi interrompu, réception incertaine : vérifiez auprès du client avant de renvoyer.",
+    "recipient_changed": "L’email du client a été modifié depuis : envoyez une nouvelle invitation.",
+    "request_changed": "La demande a été rattachée ou terminée entre-temps."
+  }
+}

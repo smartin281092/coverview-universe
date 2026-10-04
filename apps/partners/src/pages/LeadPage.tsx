@@ -45,6 +45,7 @@ import { adminUrl, partnerApi } from "../api";
 import { publicLeadSearch } from "../features/lead-navigation-state";
 import { LeadReopeningsDialog } from "../features/LeadReopeningsDialog";
 import { LeadRelationshipsDialog } from "../features/LeadRelationshipsDialog";
+import { ClientInvitationPanel } from "../features/ClientInvitationPanel";
 export function LeadPage() {
   const { leadId } = useParams({ from: "/leads/$leadId" }),
     { tab, section } = useSearch({ from: "/leads/$leadId" }),
@@ -552,6 +553,12 @@ export function LeadPage() {
               )
             )}
           </aside>
+          {!lead.clientUserId && lead.access === "operational" && (
+            <ClientInvitationPanel
+              key={[...session.queryKey, lead.id].join(":")}
+              leadId={lead.id}
+            />
+          )}
         </div>
       )}
       {(activeTab === "activity" || activeTab === "notes") && (

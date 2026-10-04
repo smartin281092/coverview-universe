@@ -528,7 +528,8 @@
     "PARTNER_OFFER_NOT_READY": "Vérifiez les données, le document source et le rattachement au client avant publication.",
     "PARTNER_OFFER_EXPIRED": "Cette offre a expiré.",
     "PARTNER_IDEMPOTENCY_REUSED": "Cette opération a changé. Actualisez puis recommencez.",
-    "PARTNER_APPOINTMENT_CONFLICT": "Le conseiller possède déjà un rendez-vous sur ce créneau."
+    "PARTNER_APPOINTMENT_CONFLICT": "Le conseiller possède déjà un rendez-vous sur ce créneau.",
+    "PARTNER_RATE_LIMITED": "Trop de demandes pour ce destinataire aujourd’hui. Réessayez demain."
   },
   "dashboard": {
     "title": "Aujourd’hui, on fait avancer les choses.",
@@ -915,6 +916,11 @@
     "lead.waiting": "Attente documentée",
     "lead.resumed": "Suivi repris",
     "lead.closed": "Lead clôturé",
+    "lead.category_changed": "Catégorie modifiée",
+    "client.invitation_queued": "Invitation Wallet préparée",
+    "client.invitation_cancelled": "Invitation Wallet annulée",
+    "client.invitation_accepted": "Demande rattachée à l’espace Wallet du client",
+    "client.invitation_declined": "Le client indique que la demande ne le concerne pas",
     "lead.stage_changed": "Étape modifiée",
     "offer.received": "Offre reçue",
     "offer.reviewed": "Offre vérifiée",
@@ -1024,6 +1030,8 @@
       "appointment.rescheduled.v1": "Rendez-vous reporté",
       "appointment.cancelled": "Rendez-vous à replanifier",
       "lead.closed": "Votre demande a été clôturée",
+      "client.invitation_accepted": "Le client a rattaché la demande à son espace Wallet",
+      "client.invitation_declined": "Le client indique que la demande ne le concerne pas",
       "acceptance_overdue": "Attribution non acceptée à l’échéance",
       "collaboration.proposed": "Collaboration · Réponse attendue",
       "collaboration.accepted": "Collaboration · Acceptée",

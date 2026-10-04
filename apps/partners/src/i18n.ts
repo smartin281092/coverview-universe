@@ -11,6 +11,7 @@ import lifecycle from "./locales/fr/lifecycle.json";
 import relationships from "./locales/fr/relationships.json";
 import matching from "./locales/fr/matching.json";
 import profiles from "./locales/fr/profiles.json";
+import invitations from "./locales/fr/invitations.json";
 void i18next.use(initReactI18next).init({
   resources: {
     fr: {
@@ -25,6 +26,7 @@ void i18next.use(initReactI18next).init({
       relationships,
       matching,
       profiles,
+      invitations,
     },
   },
   lng: "fr",

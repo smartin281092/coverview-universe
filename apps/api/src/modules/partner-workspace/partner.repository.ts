@@ -6,6 +6,7 @@ import { createRelationshipOperations } from "./partner.relationships.js";
 import { createNavigationOperations } from "./partner.navigation.js";
 import { createMatchingOperations } from "./partner.matching.js";
 import { createProfileOperations } from "./partner.profiles.js";
+import { createInvitationOperations, type InvitationDelivery } from "./partner.invitations.js";
 import { readSolutionClauses, recordSolutionClauses } from "./partner.solution-clauses.js";
 import { createHash } from "node:crypto";
 import type { Pool, PoolClient } from "pg";
@@ -478,7 +479,11 @@ async function detail(db: Executor, actor: PartnerActor, id: string): Promise<Le
           : ["overview"],
   });
 }
-export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
+export function createPartnerRepository(
+  pool: Pool,
+  documentsAvailable = true,
+  invitationDelivery: InvitationDelivery = "unconfigured",
+) {
   async function adviceLead(tx: PoolClient, actor: PartnerActor, id: string, write = false) {
     if (write && (!actor.wallet || actor.administrator)) fail("PARTNER_ACCESS_DENIED", 403);
     if (!actor.wallet && !(await context(tx, actor, true)).operational)
@@ -707,6 +712,7 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
     ...createNavigationOperations(pool, transaction),
     ...createMatchingOperations(pool),
     ...createProfileOperations(pool, transaction),
+    ...createInvitationOperations(pool, transaction, invitationDelivery),
     ...createRelationshipOperations(pool, transaction, async (tx, actor, id) => {
       const lead = await adviceLead(tx, actor, id),
         view = summary(actor, lead);

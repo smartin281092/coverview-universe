@@ -176,7 +176,7 @@ export function createIdentityService(
     realtimeSession: (token: string | undefined) => localSession(token),
     logoutSession: (token: string | undefined) => localSession(token, true),
     csrf: (token: string) => csrfToken(secret, token),
-    async login(surface: Surface, reauthenticate = false, continuation?: "profile") {
+    async login(surface: Surface, reauthenticate = false, continuation?: "profile" | "activation") {
       if (!destinations[surface]) throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
       if (continuation && surface !== "wallet")
         throw new IdentityError("IDENTITY_ACCESS_DENIED", 400);
@@ -211,10 +211,13 @@ export function createIdentityService(
       if (!transaction) throw new IdentityError("IDENTITY_INVALID_CALLBACK", 400);
       const surface = transaction.surface === "client" ? "wallet" : transaction.surface;
       if (!destinations[surface]) throw new IdentityError("IDENTITY_UNAVAILABLE", 503);
+      // Fixed Wallet paths only: the invitation token stays in the browser tab, never in this flow.
       const destination =
         transaction.continuation === "profile" && surface === "wallet"
           ? `${destinations.wallet}/profile?continue=1`
-          : `${destinations[surface]}/account`;
+          : transaction.continuation === "activation" && surface === "wallet"
+            ? `${destinations.wallet}/activation`
+            : `${destinations[surface]}/account`;
       let stage: IdentityDiagnostic["stage"] = "callback_code";
       try {
         if (!code)

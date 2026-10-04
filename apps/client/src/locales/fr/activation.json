@@ -1,0 +1,39 @@
+{
+  "title": "Une demande à votre nom",
+  "signedOutTitle": "Connectez-vous pour suivre votre demande",
+  "signedOutDescription": "Utilisez l’adresse email qui a reçu l’invitation. Si vous n’avez pas encore d’espace CoverView, vous pourrez le créer à l’étape suivante.",
+  "missing": "Aucune invitation à afficher. Ouvrez le lien reçu par email depuis ce navigateur.",
+  "loading": "Vérification de l’invitation…",
+  "error": "La vérification n’a pas abouti. Réessayez dans quelques instants.",
+  "otherEmail": "Cette invitation a été envoyée à une autre adresse. Déconnectez-vous, puis reconnectez-vous avec l’adresse qui a reçu l’email.",
+  "states": {
+    "unavailable": "Cette invitation n’est plus disponible.",
+    "expired": "Cette invitation a expiré. Demandez à votre interlocuteur de vous en envoyer une nouvelle.",
+    "cancelled": "Cette invitation a été annulée par votre interlocuteur.",
+    "accepted": "Cette demande est rattachée à votre espace.",
+    "declined": "Vous avez indiqué que cette demande ne vous concerne pas."
+  },
+  "summary": "{{requester}} a enregistré via CoverView une demande « {{title}} » ({{category}}) au nom de {{name}}.",
+  "shared": "Si cette adresse email est partagée et que la demande concerne une autre personne, répondez « Elle ne me concerne pas » : votre interlocuteur en sera informé.",
+  "expires": "Invitation valable jusqu’au {{date}}.",
+  "noticeTitle": "Information sur vos données",
+  "notice": [
+    "Vos coordonnées ont été transmises par l’intervenant cité ci-dessus pour le traitement de cette demande.",
+    "Elles sont accessibles aux professionnels chargés de la demande et à CoverView, et ne servent pas à d’autres fins.",
+    "Rattacher cette demande ne vaut ni mandat, ni consentement à recevoir des offres commerciales.",
+    "Vous pouvez consulter et faire rectifier ces informations depuis votre espace."
+  ],
+  "confirm": "J’ai lu l’information sur le traitement de mes données.",
+  "accept": "Cette demande me concerne",
+  "decline": "Elle ne me concerne pas",
+  "done": "Voir mes demandes",
+  "categories": {
+    "health": "assurance maladie",
+    "vehicle": "assurance véhicule",
+    "pension": "prévoyance",
+    "household": "ménage et responsabilité civile",
+    "legal": "protection juridique",
+    "business": "entreprise",
+    "other": "assurance"
+  }
+}
