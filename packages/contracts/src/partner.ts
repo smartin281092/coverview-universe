@@ -1855,6 +1855,22 @@ export const leadSummarySchema = z.object({
   openTasks: z.number().int().nonnegative(),
   overdueTasks: z.number().int().nonnegative(),
   nextAppointmentAt: instant.nullable(),
+  // Card context (brief II.6), for operational access only.
+  referrerName: z.string().nullable().optional(),
+  lastContactAt: instant.nullable().optional(),
+  lastActivityAt: instant.nullable().optional(),
+  indicators: z
+    .array(
+      z.enum([
+        "stale",
+        "urgent",
+        "task_overdue",
+        "appointment_today",
+        "near_deadline",
+        "coverview_needed",
+      ]),
+    )
+    .default([]),
   alerts: z.array(
     z.enum([
       "first_action_due",

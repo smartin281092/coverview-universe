@@ -9,6 +9,7 @@ import { createProfileOperations } from "./partner.profiles.js";
 import { createInvitationOperations, type InvitationDelivery } from "./partner.invitations.js";
 import { compareOffers } from "./partner.comparison.js";
 import { proposeCurrentContract } from "./partner.contract-proposal.js";
+import { createOverviewOperations } from "./partner.overview.js";
 import { orientOffers } from "./partner.orientation.js";
 import {
   createRecommendationOperations,
@@ -162,6 +163,9 @@ const selectLead = `select l.*, coalesce((select application->>'name' from partn
  (select count(*)::int from partner_tasks t where t.lead_id=l.id and t.state='open') open_tasks,
  (select count(*)::int from partner_tasks t where t.lead_id=l.id and t.state='open' and t.due_at<now()) overdue_tasks,
  (select min(starts_at) from partner_appointments a where a.lead_id=l.id and a.state='scheduled' and a.starts_at>=now()) next_appointment_at,
+ (select application->>'name' from partner_members where user_id=l.creator_id) referrer_name,
+ (select max(ce.created_at) from partner_events ce where ce.lead_id=l.id and ce.kind in ('contact.reached','appointment.completed')) last_contact_at,
+ (select max(ae.created_at) from partner_events ae where ae.lead_id=l.id and ae.kind<>'client.view' and ae.kind not like '%.viewed' and ae.kind not like '%.viewed.v1') last_activity_at,
  ${assigned} assigned_access, ${managed} managed_access, ${ownedClient} client_access,
  exists(select 1 from partner_contributors ec where ec.lead_id=l.id and ec.user_id=$1 and ec.revoked_at is null and ${authorityCurrent("ec")} and ec.can_edit and ec.access_scope='advice') contributor_edit,
  exists(select 1 from partner_contributors ec where ec.lead_id=l.id and ec.user_id=$1 and ec.revoked_at is null and ${authorityCurrent("ec")} and ec.can_contact and ec.access_scope='advice') contributor_contact
@@ -169,6 +173,9 @@ const selectLead = `select l.*, coalesce((select application->>'name' from partn
 type ReadRow = LeadRow & {
   currentClientUserId: string | null;
   responsibleName: string | null;
+  referrerName: string | null;
+  lastContactAt: Date | null;
+  lastActivityAt: Date | null;
   openTasks: number;
   overdueTasks: number;
   nextAppointmentAt: Date | null;
@@ -272,6 +279,21 @@ function summary(actor: PartnerActor, row: ReadRow): LeadSummary {
     if (waiting && new Date(waiting.until).getTime() <= now) alerts.push("waiting_expired");
     if (row.overdueTasks) alerts.push("task_overdue");
   }
+  // Visual flags of the card; "stale" means no activity other than consultations for 7 days.
+  const indicators: LeadSummary["indicators"] = [];
+  if (active && operational) {
+    const zurichDay = (value: Date) =>
+      new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Zurich" }).format(value);
+    if (now - (row.lastActivityAt ?? row.createdAt).getTime() > 7 * 86400000)
+      indicators.push("stale");
+    if (row.priority === "urgent") indicators.push("urgent");
+    if (row.overdueTasks) indicators.push("task_overdue");
+    if (row.nextAppointmentAt && zurichDay(row.nextAppointmentAt) === zurichDay(new Date(now)))
+      indicators.push("appointment_today");
+    if (alerts.includes("first_action_due")) indicators.push("near_deadline");
+    if (!row.responsibleId || ["coverview", "reassign"].includes(row.assignment))
+      indicators.push("coverview_needed");
+  }
   return leadSummarySchema.parse({
     id: row.id,
     revision: row.revision,
@@ -315,6 +337,14 @@ function summary(actor: PartnerActor, row: ReadRow): LeadSummary {
     openTasks: operational ? row.openTasks : 0,
     overdueTasks: operational ? row.overdueTasks : 0,
     nextAppointmentAt: operational || actor.wallet ? date(row.nextAppointmentAt) : null,
+    // The referrer is shown when relevant: a professional other than the responsible.
+    referrerName:
+      operational && row.referrerName && row.creatorId !== row.responsibleId
+        ? row.referrerName
+        : null,
+    lastContactAt: operational ? date(row.lastContactAt) : null,
+    lastActivityAt: operational ? date(row.lastActivityAt) : null,
+    indicators,
     alerts,
     access,
     canEdit:
@@ -731,6 +761,7 @@ export function createPartnerRepository(
     ...createMatchingOperations(pool),
     ...createProfileOperations(pool, transaction),
     ...createInvitationOperations(pool, transaction, invitationDelivery),
+    ...createOverviewOperations(pool),
     // Same authority as conclusion: advising rights and publication on an open request.
     ...createRecommendationOperations(pool, transaction, async (tx, actor, id) => {
       const lead = await adviceLead(tx, actor, id);

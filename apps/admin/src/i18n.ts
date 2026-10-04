@@ -10,6 +10,7 @@ import serviceRequests from "./locales/fr/service-requests.json";
 import dossier from "./locales/fr/dossier.json";
 import profileTransfer from "./locales/fr/profile-transfer.json";
 import notifications from "./locales/fr/notifications.json";
+import dashboard from "./locales/fr/dashboard.json";
 
 void i18next.use(initReactI18next).init({
   resources: {
@@ -24,6 +25,7 @@ void i18next.use(initReactI18next).init({
       dossier,
       profileTransfer,
       notifications,
+      dashboard,
     },
   },
   lng: "fr",

@@ -2395,5 +2395,23 @@
     },
     "availability": "Une offre reçue existe sur le marché ; l’admission par la compagnie et les droits de distribution ne sont pas encore établis.",
     "asOf": "Données à jour au {{date}}."
+  },
+  "card": {
+    "indicators": "Indicateurs",
+    "indicator": {
+      "stale": "Sans activité depuis 7 jours",
+      "urgent": "Urgent",
+      "task_overdue": "Tâche en retard",
+      "appointment_today": "Rendez-vous aujourd’hui",
+      "near_deadline": "Limite des 24 heures proche",
+      "coverview_needed": "Intervention CoverView"
+    },
+    "appointment": "Rendez-vous le {{date}}",
+    "lastContact": "Dernier contact utile le {{date}}",
+    "referrer": "Apporté par {{name}}",
+    "daysInStage_one": "{{count}} jour dans l’étape",
+    "daysInStage_other": "{{count}} jours dans l’étape",
+    "tasks_one": "{{count}} tâche",
+    "tasks_other": "{{count}} tâches"
   }
 }

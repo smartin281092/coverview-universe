@@ -143,6 +143,10 @@ import { registerCommunicationRoutes } from "./partner.communications.routes.js"
 import { registerPilotageRoutes } from "./partner.pilotage.routes.js";
 import { startPartnerJobs } from "./partner.jobs.js";
 import { registerInvitationRoutes } from "./partner.invitations.routes.js";
+import {
+  adminOverviewQuerySchema,
+  adminOverviewSchema,
+} from "@coverview/contracts/partner-overview";
 import { registerRecommendationRoutes } from "./partner.recommendations.routes.js";
 import { clientInvitationMessage } from "./partner.invitation-template.js";
 export { PartnerError } from "./partner.policy.js";
@@ -1499,6 +1503,14 @@ export function registerPartnerWorkspace(
         request.body,
         key(request),
       ),
+  );
+  app.get(
+    "/admin/partner/overview",
+    {
+      config: limited,
+      schema: { querystring: adminOverviewQuerySchema, response: { 200: adminOverviewSchema } },
+    },
+    async (request) => repository.adminOverview(await actor(request, false, true), request.query),
   );
   app.get(
     "/admin/partner/continuity",

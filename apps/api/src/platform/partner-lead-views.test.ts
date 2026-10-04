@@ -285,3 +285,43 @@ it("shares a manager's team view and an Admin global view without granting any a
     shared.id,
   );
 });
+
+it("gives each card its context and visual indicators, never to a referrer following progress", async () => {
+  const advisor = await member("Bruno Conseiller", ["advisor"]);
+  const referrer = await member("Rachel Apporteuse", ["referrer"]);
+  const fresh = await lead(referrer, { title: "Frais", responsible: advisor });
+  const old = await lead(referrer, { title: "Ancien", responsible: advisor });
+  await database.pool.query("update partner_leads set priority='urgent' where id=$1", [fresh.id]);
+  await database.pool.query(
+    "insert into partner_events(id,lead_id,actor_id,kind,audience,text) values($1,$2,$3,'contact.reached','assigned','')",
+    [`pev_${key()}`, fresh.id, advisor.userId],
+  );
+  // Nothing happened on the old Lead for eight days.
+  await database.pool.query(
+    "update partner_events set created_at=now()-interval '8 days' where lead_id=$1",
+    [old.id],
+  );
+  await database.pool.query(
+    "update partner_leads set created_at=now()-interval '8 days' where id=$1",
+    [old.id],
+  );
+  const cards = (await repository.list(advisor, { view: "mine", limit: 60, sort: "created" }))
+    .items;
+  const card = (title: string) => cards.find((item) => item.title === title)!;
+  expect(card("Frais")).toMatchObject({
+    referrerName: "Rachel Apporteuse",
+    indicators: ["urgent"],
+  });
+  expect(card("Frais").lastContactAt).not.toBeNull();
+  expect(card("Ancien").indicators).toContain("stale");
+  expect(card("Ancien").lastContactAt).toBeNull();
+  const followed = (
+    await repository.list(referrer, { view: "referred", limit: 60, sort: "created" })
+  ).items.find((item) => item.title === "Frais")!;
+  expect(followed).toMatchObject({
+    referrerName: null,
+    lastContactAt: null,
+    lastActivityAt: null,
+    indicators: [],
+  });
+});

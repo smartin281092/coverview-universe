@@ -208,5 +208,6 @@
     "unavailable": "Non calculable",
     "empty": "Aucun objectif actif dans cette vue.",
     "progress": "Progression : {{value}}"
-  }
+  },
+  "pilotage": "Pilotage du réseau"
 }

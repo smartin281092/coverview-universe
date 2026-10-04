@@ -34,6 +34,9 @@ function Overview({ identity, blocked }: { identity: IdentityMe; blocked: boolea
         <p className="mt-4 max-w-2xl text-muted-foreground">{t("description")}</p>
       </header>
       <div className="flex flex-wrap gap-3">
+        <Button asChild>
+          <Link to="/partner/pilotage">{t("pilotage")}</Link>
+        </Button>
         <Button variant="outline" asChild>
           <Link to="/partner/continuity">{t("continuity.title")}</Link>
         </Button>

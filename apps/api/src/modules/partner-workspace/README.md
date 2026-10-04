@@ -6,6 +6,8 @@
 
 **Matching et réattribution automatique bornée (C1, décision 2a).** Classement expliqué depuis les déclarations validées, décision humaine tracée avec motif d'écart, proposition automatique bornée avant reprise CoverView : [règles, données et limites](docs/matching.md). Ces règles remplacent la mention historique « zéro réattribution automatique » plus bas.
 
+**Vues, cartes et pilotage du réseau (C5).** Vues prédéfinies, d'équipe et globales, filtres et compteurs ([navigation](docs/navigation.md)) ; contexte et indicateurs des cartes, aperçu réseau Admin avec comparaisons et accès aux Leads concernés ([règles](docs/network-dashboard.md)).
+
 **Termes de prévoyance et contrat actuel proposé (C4c).** Catalogue `benefit-catalog-v2` (échéance, versements, valeurs de rachat, stratégie, conséquences d’un remplacement, en texte sourcé). Repère distinctif de l’objet sur la demande : la police compatible qui le porte seule est proposée à son propriétaire, qui confirme toujours ([règles](docs/offer-comparison.md#contrat-actuel-proposé)).
 
 **Orientation automatique et recommandation validée (C4b).** Orientation factuelle `orientation-v1` étiquetée non validée, recommandation de l’intervenant en versions immuables publiée dans Wallet, écart motivé, « à revoir » au changement de base, notification d’analyse incomplète : [règles et limites](docs/orientation-recommendation.md).

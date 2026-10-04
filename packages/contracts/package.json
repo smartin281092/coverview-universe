@@ -23,6 +23,7 @@
     "./partner-comparison": "./src/partner-comparison.ts",
     "./partner-orientation": "./src/partner-orientation.ts",
     "./partner-recommendations": "./src/partner-recommendations.ts",
+    "./partner-overview": "./src/partner-overview.ts",
     "./partner-navigation": "./src/partner-navigation.ts"
   },
   "scripts": {
