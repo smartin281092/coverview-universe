@@ -2,6 +2,7 @@
 
 | Si la tâche porte sur… | Lire aussi |
 | --- | --- |
+| Association personnelle des mentions d’une offre précise | [Association documentaire](docs/solution-binding.md) |
 | Offre exacte et consultation de ses conventions pour un besoin | [Sources de solution](docs/solution-evidence.md) |
 
 Pour consigner son avis précis sourcé, ses limites et sa suite pour un besoin, lire [l’appréciation personnelle d’expertise](docs/need-expertise.md). Versions privées, retrait/historique ;0051 hors catalogue et V3 ouvert. La consultation de sources décrite ci-dessous reste distincte.

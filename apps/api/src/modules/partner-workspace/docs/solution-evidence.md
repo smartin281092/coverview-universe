@@ -2,6 +2,8 @@
 
 Propriétaire : partner-workspace. Décisions déléguées du 3 octobre 2026, relais 6ab2 ; brief I.10.3/13/15, II.1, III.2/15. [Plan et inconnues](../../../../../../roadmap/plans/partner-need-solution-evidence.plan.md), [preuves et limites](../../../../../../roadmap/evidence/partner-core.md#relais-6ab2--sources-de-solution-et-de-convention).
 
+Pour consigner des mentions documentaires exactes et un rapprochement personnel révisable, lire [l’association documentaire](solution-binding.md). Cette nouvelle commande ne modifie pas la lecture exploratoire décrite ici.
+
 ## Identité et portée
 
 **partner.solution-evidence.1** — Le point d’entrée est une version exacte d’offre du Lead, identifiée par son ID immuable. Version, référence, activité, état, date de revue et validité restent distincts. Le besoin est relu dans son périmètre actuel, avec sa révision et la demande de changement d’interlocuteur. Consulter cette offre ne sélectionne pas une solution pour le client.

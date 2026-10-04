@@ -1164,6 +1164,120 @@ export const solutionEvidenceSchema = z.object({
 export type SolutionEvidence = z.infer<typeof solutionEvidenceSchema>;
 export type SolutionEvidenceQuery = z.infer<typeof solutionEvidenceQuerySchema>;
 
+export const solutionBindingFields = [
+  "company",
+  "legalParty",
+  "product",
+  "variant",
+  "productVersion",
+] as const;
+const solutionMentionInputSchema = z
+  .object({
+    page: z.number().int().min(1).max(20),
+    quote: z.string().trim().min(2).max(500),
+  })
+  .strict()
+  .nullable();
+const solutionMentionsInputSchema = z
+  .object({
+    company: solutionMentionInputSchema,
+    legalParty: solutionMentionInputSchema,
+    product: solutionMentionInputSchema,
+    variant: solutionMentionInputSchema,
+    productVersion: solutionMentionInputSchema,
+  })
+  .strict();
+export const solutionBindingInputSchema = z
+  .object({
+    revision: z.number().int().nonnegative(),
+    scopeFingerprint: z.string().regex(/^[a-f0-9]{64}$/u),
+    action: z.enum(["record", "withdraw"]),
+    companyId: insuranceCompanyIdSchema.nullable(),
+    mentions: solutionMentionsInputSchema.nullable(),
+    reason: z.string().trim().min(10).max(1000),
+    validUntil: instant.nullable(),
+    confirmed: z.literal(true),
+  })
+  .strict()
+  .superRefine((value, context) => {
+    if (
+      value.action === "withdraw"
+        ? value.companyId !== null || value.mentions !== null || value.validUntil !== null
+        : !value.mentions ||
+          !value.validUntil ||
+          (value.companyId !== null && !value.mentions.company)
+    )
+      context.addIssue({ code: "custom", message: "PARTNER_ACTION_REQUIRED" });
+  });
+// Coordinates into the immutable canonical offer source, not a second copy of its text.
+const solutionMentionReferenceSchema = z
+  .object({
+    page: z.number().int().min(1).max(20),
+    start: z.number().int().nonnegative().max(30000),
+    end: z.number().int().positive().max(30000),
+  })
+  .strict()
+  .refine((value) => value.end > value.start && value.end - value.start <= 500);
+export const solutionMentionReferencesSchema = z
+  .object({
+    company: solutionMentionReferenceSchema.nullable(),
+    legalParty: solutionMentionReferenceSchema.nullable(),
+    product: solutionMentionReferenceSchema.nullable(),
+    variant: solutionMentionReferenceSchema.nullable(),
+    productVersion: solutionMentionReferenceSchema.nullable(),
+  })
+  .strict();
+const solutionBindingSourceSchema = z.object({
+  documentId: id,
+  generation: z.number().int().nonnegative(),
+  documentRevision: z.number().int().nonnegative(),
+  reviewRevision: z.number().int().nonnegative(),
+  fingerprint: z.string().regex(/^[a-f0-9]{64}$/u),
+});
+const solutionBindingRecordSchema = z.object({
+  revision: z.number().int().positive(),
+  action: z.enum(["record", "withdraw"]),
+  companyId: insuranceCompanyIdSchema.nullable(),
+  mentions: solutionMentionsInputSchema.nullable(),
+  mentionsAvailable: z.boolean(),
+  reason: z.string(),
+  validUntil: instant.nullable(),
+  recordedAt: instant,
+  scope: solutionEvidenceSchema.shape.scope,
+  source: solutionBindingSourceSchema.nullable(),
+});
+export const solutionBindingQuerySchema = referentQuerySchema
+  .extend({
+    sourcePage: z.coerce.number().int().min(1).max(20).optional(),
+  })
+  .strict();
+export const solutionBindingDossierSchema = z.object({
+  leadId: id,
+  advisorId: id,
+  assessedAt: instant,
+  scope: solutionEvidenceSchema.shape.scope,
+  scopeFingerprint: solutionBindingInputSchema.shape.scopeFingerprint,
+  changeRequested: z.boolean(),
+  offer: solutionEvidenceSchema.shape.offer,
+  source: solutionBindingSourceSchema.nullable(),
+  sourcePages: z.array(z.number().int().min(1).max(20)).max(20),
+  sourcePage: z
+    .object({ page: z.number().int().min(1).max(20), text: z.string().max(30000) })
+    .nullable(),
+  revision: z.number().int().nonnegative(),
+  canRecord: z.boolean(),
+  canWithdraw: z.boolean(),
+  status: z.enum(["missing", "recorded", "withdrawn", "expired", "review_required"]),
+  current: solutionBindingRecordSchema.nullable(),
+  history: z.array(solutionBindingRecordSchema).max(20),
+  nextBeforeRevision: z.number().int().positive().nullable(),
+  legalIdentity: z.literal("unverified"),
+  productIdentity: z.literal("unverified"),
+  assessment: z.literal("human_review_required"),
+});
+export type SolutionBindingInput = z.infer<typeof solutionBindingInputSchema>;
+export type SolutionBindingDossier = z.infer<typeof solutionBindingDossierSchema>;
+
 export const offerHistoryQuerySchema = z
   .object({ cursor: z.string().max(500).optional() })
   .strict();

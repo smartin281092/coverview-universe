@@ -1,5 +1,7 @@
 # CoverView Partner
 
+Fiche Lead → Offres → Sources de solution → « Documenter la compagnie et le produit » : mentions exactes ou inconnues, texte page par page, rapprochement commercial personnel facultatif, retrait et historique. [Règles et activation](../api/src/modules/partner-workspace/docs/solution-binding.md).0052 hors catalogue ; identités non vérifiées, V3 ouvert.
+
 Fiche Lead → Offres → « Examiner la solution et mes conventions » : besoin et version exacte, état des sources, puis choix facultatif d’une compagnie pour consulter son dossier personnel. Original et historique via le dossier existant, relecture au retour. [Règles et limites](../api/src/modules/partner-workspace/docs/solution-evidence.md) ; identité non rapprochée, V3 rempli/clavier/mobile ouvert.
 
 Fiche Lead → Mon adéquation → Mes preuves → « Apprécier mon expertise » : périmètre/limites/suite explicites, versions exactes des sources, retrait et historique privés. [Règles et activation](../api/src/modules/partner-workspace/docs/need-expertise.md).0051 hors catalogue, V3 rempli/clavier/mobile ouvert.

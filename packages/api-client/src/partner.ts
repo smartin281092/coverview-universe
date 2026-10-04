@@ -48,6 +48,9 @@ import {
   advicePreferencesSchema,
   advisorAssessmentSchema,
   needExpertiseEvidenceSchema,
+  solutionBindingDossierSchema,
+  solutionBindingInputSchema,
+  type SolutionBindingInput,
   solutionEvidenceSchema,
   solutionEvidenceQuerySchema,
   type SolutionEvidenceQuery,
@@ -150,6 +153,31 @@ export function createPartnerClient(baseUrl: string) {
   }
   const path = (wallet = false) => (wallet ? "/wallet/leads" : "/partner/leads");
   return {
+    solutionBinding: (
+      leadId: string,
+      offerId: string,
+      beforeRevision?: number,
+      signal?: AbortSignal,
+      sourcePage?: number,
+    ) =>
+      request(
+        `/partner/leads/${encodeURIComponent(leadId)}/offers/${encodeURIComponent(offerId)}/solution-binding?${new URLSearchParams({ ...(beforeRevision ? { beforeRevision: String(beforeRevision) } : {}), ...(sourcePage ? { sourcePage: String(sourcePage) } : {}) })}`,
+        solutionBindingDossierSchema,
+        signal,
+      ),
+    recordSolutionBinding: (
+      leadId: string,
+      offerId: string,
+      input: SolutionBindingInput,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/partner/leads/${encodeURIComponent(leadId)}/offers/${encodeURIComponent(offerId)}/solution-binding`,
+        solutionBindingDossierSchema,
+        options.signal,
+        solutionBindingInputSchema.parse(input),
+        options,
+      ),
     referentAssessment: (leadId: string, wallet = false, signal?: AbortSignal) =>
       request(
         `${path(wallet)}/${encodeURIComponent(leadId)}/referent-assessment?version=2`,

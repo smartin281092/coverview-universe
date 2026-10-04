@@ -2,6 +2,8 @@
 
 Propriétaire : partner-workspace. Décisions déléguées du relais cc1c, brief I.4/10.2–10.4/13/15/19–20 ; [preuves et limites](../../../../../../roadmap/evidence/partner-core.md#relais-cc1c--conventions-documentées).
 
+Pour les mentions exactes d’une offre et un rapprochement commercial personnel, lire [l’association documentaire](solution-binding.md). Elle ne confirme aucune convention ni droit de distribution.
+
 ## Périmètre et sens du constat
 
 **partner.conventions.1** — Une déclaration personnelle référence le membre, son organisation courante, une catégorie Partner et une compagnie du répertoire canonique `insuranceCompanyIdSchema`. Ce répertoire commercial ne prouve pas les parties juridiques d'une convention. La déclaration doit préciser ces parties, le rattachement personnel et les activités couvertes. Une compagnie absente doit être référencée correctement avant dépôt ; aucun alias ou rapprochement libre n'est créé. Priminfo conserve ses identifiants distincts, sans correspondance juridique inventée.

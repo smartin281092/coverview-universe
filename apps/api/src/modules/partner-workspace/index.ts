@@ -60,6 +60,9 @@ import {
   advicePreferencesSchema,
   advisorAssessmentSchema,
   needExpertiseEvidenceSchema,
+  solutionBindingInputSchema,
+  solutionBindingQuerySchema,
+  solutionBindingDossierSchema,
   solutionEvidenceQuerySchema,
   solutionEvidenceSchema,
   capacityAdvisorAssessmentSchema,
@@ -229,6 +232,44 @@ export function registerPartnerWorkspace(
       repository.decideNeedConflict(
         await actor(request),
         request.params.id,
+        request.body,
+        key(request),
+      ),
+  );
+  app.get(
+    "/partner/leads/:id/offers/:offerId/solution-binding",
+    {
+      config: limited,
+      schema: {
+        params: params.extend({ offerId: z.string().min(1).max(100) }).strict(),
+        querystring: solutionBindingQuerySchema,
+        response: { 200: solutionBindingDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.solutionBinding(
+        await actor(request),
+        request.params.id,
+        request.params.offerId,
+        request.query.beforeRevision,
+        request.query.sourcePage,
+      ),
+  );
+  app.post(
+    "/partner/leads/:id/offers/:offerId/solution-binding",
+    {
+      config: limited,
+      schema: {
+        params: params.extend({ offerId: z.string().min(1).max(100) }).strict(),
+        body: solutionBindingInputSchema,
+        response: { 200: solutionBindingDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.recordSolutionBinding(
+        await actor(request),
+        request.params.id,
+        request.params.offerId,
         request.body,
         key(request),
       ),

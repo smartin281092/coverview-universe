@@ -19,6 +19,7 @@ import {
 import { partnerApi } from "../api";
 import { usePartner } from "./PartnerSession";
 import { ConventionDialog } from "./ConventionDialog";
+import { SolutionBindingDialog } from "./SolutionBindingDialog";
 import { ProfessionalScopeDetails } from "./ProfessionalScopeDetails";
 import { formatDate } from "./Field";
 
@@ -37,12 +38,13 @@ export function SolutionEvidenceDialog({
   const [view, setView] = useState<"offer" | "convention">("offer");
   const [dossier, setDossier] = useState<SolutionEvidence | null>(null);
   const [returning, setReturning] = useState(false);
+  const [binding, setBinding] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
   const query = useQuery({
     queryKey: [...session.queryKey, "solution-evidence", leadId, offerId, companyId],
     queryFn: ({ signal }) =>
       partnerApi.solutionEvidence(leadId, offerId, companyId ? { companyId } : {}, signal),
-    enabled: !dossier,
+    enabled: !dossier && !binding,
     gcTime: 0,
     staleTime: 0,
     refetchInterval: 10000,
@@ -55,6 +57,17 @@ export function SolutionEvidenceDialog({
     setReturning(true);
     void query.refetch().finally(() => setReturning(false));
   };
+  if (binding)
+    return (
+      <SolutionBindingDialog
+        leadId={leadId}
+        offerId={offerId}
+        onClose={() => {
+          setBinding(false);
+          reload();
+        }}
+      />
+    );
   if (dossier?.companyId)
     return (
       <ConventionDialog
@@ -175,6 +188,9 @@ export function SolutionEvidenceDialog({
                     )}
                   </section>
                   <div className="space-y-2">
+                    <Button variant="outline" onClick={() => setBinding(true)}>
+                      {t("solutionBinding.open")}
+                    </Button>
                     <Label htmlFor="solution-company">{t("solutionEvidence.chooseCompany")}</Label>
                     <select
                       id="solution-company"

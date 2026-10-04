@@ -1877,5 +1877,57 @@
       "economic_agreement": "Accord économique applicable et sa version acceptée."
     },
     "limits": "Un examen documentaire favorable ne suffit pas à confirmer la disponibilité de cette solution. Cette consultation ne sélectionne pas une offre, ne lève aucun autre contrôle et ne crée ni accord ni commission."
+  },
+  "solutionBinding": {
+    "title": "Association documentaire de cette offre",
+    "open": "Documenter la compagnie et le produit",
+    "privacy": "Dossier personnel : seuls vos rapprochements documentaires sont présentés ici.",
+    "current": "Mon association actuelle",
+    "limits": "Une mention dans un document ne vérifie ni l’identité juridique, ni l’identité d’un produit, ni l’admission du client, ni le droit de distribution, ni un accord économique.",
+    "field": {
+      "company": "Compagnie mentionnée",
+      "legalParty": "Partie juridique nommée dans le document",
+      "product": "Produit mentionné",
+      "variant": "Variante mentionnée",
+      "productVersion": "Version du produit mentionnée"
+    },
+    "step": "Mentions documentaires · étape {{step}} sur {{total}}",
+    "quote": "Passage exact",
+    "page": "Page du document",
+    "pageValue": "Source : page {{page}}",
+    "next": "Continuer",
+    "mentionHelp": "Recopiez un passage exact et suffisamment distinctif du texte extrait de l’original (500 caractères maximum), puis indiquez sa page. Laissez vide si l’information est inconnue. Le serveur vérifie le passage ; son sens reste votre appréciation.",
+    "company": "Rapprochement facultatif avec le répertoire commercial",
+    "companyHelp": "Sélectionnez uniquement une compagnie que vous rapprochez explicitement de la mention sourcée. Expliquez ce rapprochement dans le motif. Ce répertoire ne vérifie pas la partie juridique.",
+    "unknown": "Inconnue ou non établie",
+    "confirmEffect": "Relisez chaque mention et ses inconnues. L’enregistrement concerne seulement cette version d’offre, cet original et ce besoin. Une nouvelle confirmation remplace votre enregistrement précédent.",
+    "expiryHelp": "Heure de Zurich. Choisissez une échéance future, au plus tard celle de l’offre lorsqu’elle est connue. Une nouvelle source ou un nouveau périmètre nécessitera un réexamen.",
+    "record": "Enregistrer une association",
+    "withdraw": "Retirer mon association",
+    "withdrawEffect": "Le retrait conserve l’historique et l’original. Il ne retire pas l’offre du client et ne résilie aucune convention.",
+    "reason": "Motif, rapprochement et inconnues à clarifier",
+    "reasonHelp": "Expliquez votre lecture et les vérifications restantes, sans recopier le document ni ajouter de données confidentielles inutiles.",
+    "confirm": "J’ai consulté l’original exact et confirme cette association documentaire personnelle, ses inconnues et ses limites.",
+    "confirmWithdraw": "Je confirme le retrait de mon association documentaire personnelle.",
+    "invalid": "Vérifiez les pages et passages, le motif, l’échéance et la confirmation. Une compagnie sélectionnée exige une mention compagnie sourcée.",
+    "conflict": "La commande est refusée. Vérifiez les passages exacts et les droits, puis revenez au dossier pour relire sa situation avant de recommencer.",
+    "retryExact": "La réponse est incertaine. Réessayez exactement la même commande ou revenez au dossier pour vérifier son état.",
+    "historical": "Enregistrement historique : il ne prouve aucune association actuellement applicable.",
+    "directoryValue": "Compagnie rapprochée personnellement : {{company}}",
+    "noDirectory": "Aucune compagnie rapprochée dans le répertoire.",
+    "mentionsUnavailable": "Les extraits ne sont plus disponibles pour cette révision de source. L’historique reste conservé ; aucune ancienne mention n’est présentée comme actuelle.",
+    "error": "L’association ne peut pas être lue. Les anciennes données sont masquées.",
+    "noHistory": "Aucune association enregistrée dans le périmètre actuel.",
+    "saved": "Association mise à jour. Aucun choix client ni droit de distribution modifié.",
+    "unavailable": "Nouvelle association indisponible : vérifiez la version active, sa validité, la source et son texte extrait, ainsi que la demande du client.",
+    "status": {
+      "missing": "Association non renseignée",
+      "recorded": "Association documentaire enregistrée, portée et échéance actuelles",
+      "withdrawn": "Association retirée",
+      "expired": "Échéance de l’association dépassée",
+      "review_required": "Association à réexaminer : périmètre, source ou offre modifiés"
+    },
+    "readText": "Lire le texte extrait",
+    "textHelp": "Consultez la page de l’original, puis copiez un passage distinctif ci-dessous. Le texte extrait peut comporter des erreurs : comparez-le à l’original avant de confirmer."
   }
 }

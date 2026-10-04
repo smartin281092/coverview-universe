@@ -43,6 +43,10 @@ CLAUDE, PROJECT, MEMORY actives, codex, execution-policy, program, architecture,
 
 ## Journal
 
+### Relais214e — association documentaire personnelle
+
+[Plan avant code et prochain brouillon](partner-solution-binding.plan.md), [propriétaire](../../apps/api/src/modules/partner-workspace/docs/solution-binding.md), [ledger](../evidence/partner-core.md#relais-214e--association-documentaire-personnelle). Cinq mentions exactes ou inconnues, stockage de coordonnées, source page par page, rapprochement humain sans identité vérifiée, retrait/historique privés.156tests distincts/6fichiers dont35nouveaux ; V0/V1 verts, deux revues même agent sans indépendance.0052 hors catalogue, aucun autre contrôle levé ; V3/activation et brief/S-110/S-042a ouverts. Suite : consultation/appréciation précise des conventions pour l’offre exacte après audit des sources, puis TOUS tracks I–III ; [checkpoint](../handoffs/partner-distribution-evidence-suite.md).
+
 ### Relais6ab2 — sources de solution et de convention
 
 [Plan avant code et prochain brouillon](partner-need-solution-evidence.plan.md), [propriétaire](../../apps/api/src/modules/partner-workspace/docs/solution-evidence.md), [ledger](../evidence/partner-core.md#relais-6ab2--sources-de-solution-et-de-convention). Consultation d’une version exacte d’offre et de ses conventions personnelles, compagnie exploratoire non rapprochée, sources datées ensemble et droits revérifiés après attente.101tests distincts/4fichiers dont18nouveaux, V0/V1 verts, deux revues même agent sans indépendance ; aucune migration ou association persistée, aucun autre contrôle levé. Suite bornée : association canonique sourcée après audit/plan, puis tous tracks I–III. V3 rempli/activation et brief/S-110/S-042a ouverts ; [checkpoint](../handoffs/partner-solution-binding-suite.md).

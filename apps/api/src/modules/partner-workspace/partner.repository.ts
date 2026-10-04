@@ -4,6 +4,9 @@ import { z } from "zod";
 import { documentAnalysisSchema } from "@coverview/contracts";
 import {
   needExpertiseEvidenceSchema,
+  solutionBindingInputSchema,
+  solutionBindingQuerySchema,
+  type SolutionBindingInput,
   solutionEvidenceQuerySchema,
   type SolutionEvidenceQuery,
   needExpertiseInputSchema,
@@ -63,6 +66,7 @@ import {
 import type { partnerLeads } from "./partner.schema.js";
 import { executeLeadCommand } from "./partner.commands.js";
 import { readOffers } from "./partner.offers.js";
+import { readSolutionBinding, recordSolutionBinding } from "./partner.solution-binding.js";
 import { readSolutionEvidence } from "./partner.solution-evidence.js";
 import { readFinalPolicies } from "./partner.final-policy.js";
 import { readOfferImports } from "./partner.imports.js";
@@ -655,6 +659,88 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
   }
   return {
     ...createCompetenceOperations(pool, transaction, documentsAvailable),
+    async solutionBinding(
+      actor: PartnerActor,
+      id: string,
+      offerId: string,
+      beforeRevision?: number,
+      sourcePage?: number,
+    ) {
+      solutionBindingQuerySchema.parse({ beforeRevision, sourcePage });
+      const tx = await pool.connect();
+      try {
+        await tx.query("begin isolation level repeatable read");
+        const now = (await tx.query<{ at: Date }>("select transaction_timestamp() at")).rows[0]!.at;
+        await lockActor(tx, actor);
+        const { ctx, lead } = await personalAdvisorLead(tx, actor, id);
+        const { dossier } = await readSolutionBinding(
+          tx,
+          actor,
+          lead,
+          ctx.application,
+          offerId,
+          now.toISOString(),
+          documentsAvailable,
+          beforeRevision,
+          false,
+          sourcePage,
+        );
+        await lockActor(tx, actor);
+        if (!(await context(tx, actor)).canAdvise) fail("PARTNER_ACCESS_DENIED", 403);
+        await tx.query("commit");
+        return dossier;
+      } catch (cause) {
+        await tx.query("rollback");
+        if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+          fail("PARTNER_CONFLICT", 409);
+        throw cause;
+      } finally {
+        tx.release();
+      }
+    },
+    recordSolutionBinding(
+      actor: PartnerActor,
+      id: string,
+      offerId: string,
+      raw: SolutionBindingInput,
+      key: string,
+    ) {
+      const input = solutionBindingInputSchema.parse(raw);
+      return transaction(
+        actor,
+        `solution-binding:${id}:${offerId}`,
+        key,
+        input,
+        async (tx) => {
+          const { ctx, lead } = await personalAdvisorLead(tx, actor, id);
+          return recordSolutionBinding(
+            tx,
+            actor,
+            lead,
+            ctx.application,
+            offerId,
+            input,
+            documentsAvailable,
+          );
+        },
+        async (tx) => {
+          const { ctx, lead } = await personalAdvisorLead(tx, actor, id);
+          return (
+            await readSolutionBinding(
+              tx,
+              actor,
+              lead,
+              ctx.application,
+              offerId,
+              new Date().toISOString(),
+              documentsAvailable,
+              undefined,
+              true,
+            )
+          ).dossier;
+        },
+      );
+    },
     async solutionEvidence(
       actor: PartnerActor,
       id: string,
