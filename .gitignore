@@ -36,3 +36,6 @@ Thumbs.db
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# Dépôt indépendant imbriqué localement (bmpartners) : jamais intégré à ce dépôt
+bmpartners/
