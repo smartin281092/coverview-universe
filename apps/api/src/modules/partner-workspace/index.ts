@@ -4,6 +4,10 @@ import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
 import {
   walletAppointmentSchema,
+  bookingProposalsSchema,
+  bookingProposalInputSchema,
+  bookingChoiceSchema,
+  bookingWithdrawalSchema,
   walletAppointmentCancellationSchema,
   appointmentLinksManagementSchema,
   appointmentLinksPreviewSchema,
@@ -433,6 +437,73 @@ export function registerPartnerWorkspace(
     );
   }
   const linkParams = params.extend({ appointmentId: z.string().min(1).max(100) });
+  const bookingParams = params.extend({ proposalId: z.string().min(1).max(100) });
+  for (const wallet of [false, true])
+    app.get(
+      `/${wallet ? "wallet" : "partner"}/leads/:id/booking-proposals`,
+      {
+        config: limited,
+        schema: { params, response: { 200: bookingProposalsSchema } },
+      },
+      async (request) =>
+        repository.bookingProposals(await actor(request, wallet), request.params.id),
+    );
+  app.post(
+    "/partner/leads/:id/booking-proposals",
+    {
+      config: limited,
+      schema: {
+        params,
+        body: bookingProposalInputSchema,
+        response: { 200: bookingProposalsSchema },
+      },
+    },
+    async (request) =>
+      repository.proposeBooking(
+        await actor(request),
+        request.params.id,
+        request.body,
+        key(request),
+      ),
+  );
+  app.post(
+    "/partner/leads/:id/booking-proposals/:proposalId/withdraw",
+    {
+      config: limited,
+      schema: {
+        params: bookingParams,
+        body: bookingWithdrawalSchema,
+        response: { 200: bookingProposalsSchema },
+      },
+    },
+    async (request) =>
+      repository.withdrawBooking(
+        await actor(request),
+        request.params.id,
+        request.params.proposalId,
+        request.body,
+        key(request),
+      ),
+  );
+  app.post(
+    "/wallet/leads/:id/booking-proposals/:proposalId/reserve",
+    {
+      config: limited,
+      schema: {
+        params: bookingParams,
+        body: bookingChoiceSchema,
+        response: { 200: bookingProposalsSchema },
+      },
+    },
+    async (request) =>
+      repository.reserveBooking(
+        await actor(request, true),
+        request.params.id,
+        request.params.proposalId,
+        request.body,
+        key(request),
+      ),
+  );
   app.get(
     "/wallet/leads/:id/appointments/:appointmentId/cancellation",
     {

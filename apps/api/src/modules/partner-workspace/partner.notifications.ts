@@ -98,7 +98,7 @@ export async function notifyPartnerEvent(
     )
   ).rows[0];
   if (!row) return;
-  if (kind === "appointment.rescheduled.v1")
+  if (["appointment.rescheduled.v1", "client.appointment_reserved.v1"].includes(kind))
     await put(db, {
       leadId,
       recipientId: row.responsible_id,
@@ -178,7 +178,10 @@ export async function notifyPartnerEvent(
       priority: "high",
     });
   }
-  if (kind === "client.appointment_cancelled.v1" && subjectId) {
+  if (
+    ["client.appointment_cancelled.v1", "client.appointment_reserved.v1"].includes(kind) &&
+    subjectId
+  ) {
     const advisor = (
       await db.query<{ advisor_id: string }>(
         `select a.advisor_id from partner_appointments a
@@ -230,6 +233,8 @@ export async function notifyPartnerEvent(
       "lead.continuity_escalated",
       "appointment.scheduled",
       "appointment.rescheduled.v1",
+      "appointment.slots_offered.v1",
+      "appointment.slots_withdrawn.v1",
       "appointment.cancelled",
       "offer.published",
       "offer.withdrawn",

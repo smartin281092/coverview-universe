@@ -22,6 +22,44 @@ import { documents } from "../document-intelligence/index.js";
 import { insuranceRequests } from "../insurance-requests/index.js";
 
 const instant = (name: string) => timestamp(name, { withTimezone: true, precision: 3 });
+export const partnerBookingProposals = pgTable(
+  "partner_booking_proposals",
+  {
+    id: text("id").primaryKey(),
+    leadId: text("lead_id")
+      .notNull()
+      .references(() => partnerLeads.id),
+    advisorId: text("advisor_id")
+      .notNull()
+      .references(() => identityUsers.id),
+    advisorName: text("advisor_name").notNull(),
+    subjectKey: text("subject_key").notNull(),
+    ownerId: text("owner_id")
+      .notNull()
+      .references(() => identityUsers.id),
+    fingerprint: text("fingerprint").notNull(),
+    input: jsonb("input").notNull(),
+    expiresAt: instant("expires_at").notNull(),
+    state: text("state").notNull().default("offered"),
+    invalidatedAt: instant("invalidated_at"),
+    appointmentId: text("appointment_id").references(() => partnerAppointments.id),
+    selectedSlot: integer("selected_slot"),
+    createdAt: instant("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    index("partner_booking_history").on(t.leadId, t.createdAt, t.id),
+    uniqueIndex("partner_booking_active")
+      .on(t.leadId)
+      .where(sql`${t.state}='offered' and ${t.invalidatedAt} is null`),
+    uniqueIndex("partner_booking_appointment").on(t.appointmentId),
+    check("partner_booking_state", sql`${t.state} in ('offered','booked','withdrawn')`),
+    check(
+      "partner_booking_selection",
+      sql`(${t.state}='booked' and ${t.appointmentId} is not null and ${t.selectedSlot} is not null and ${t.selectedSlot} between 0 and 4) or (${t.state}<>'booked' and ${t.appointmentId} is null and ${t.selectedSlot} is null)`,
+    ),
+    check("partner_booking_fingerprint", sql`${t.fingerprint} ~ '^[a-f0-9]{64}$'`),
+  ],
+);
 export const partnerDistributionReviews = pgTable(
   "partner_distribution_reviews",
   {

@@ -78,10 +78,12 @@ export function PersonalAppointmentDialog({
   lead,
   onClose,
   appointment,
+  onSelect,
 }: {
   lead: LeadDetail;
   onClose: () => void;
   appointment?: LeadDetail["appointments"][number];
+  onSelect?: (value: PersonalAppointmentPreview) => void;
 }) {
   const { t } = useTranslation(),
     session = usePartner(),
@@ -116,6 +118,10 @@ export function PersonalAppointmentDialog({
   });
   const pending = form.formState.isSubmitting || confirmation.formState.isSubmitting;
   async function confirm(values: z.infer<typeof confirmationFields>) {
+    if (onSelect && preview) {
+      onSelect(preview);
+      return;
+    }
     if (!attempt.current && preview)
       attempt.current = {
         input: personalAppointmentConfirmSchema.parse({
@@ -164,11 +170,21 @@ export function PersonalAppointmentDialog({
       <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>
-            {t(appointment ? "personalRescheduling.title" : "personalAppointment.title")}
+            {t(
+              onSelect
+                ? "booking.addSlot"
+                : appointment
+                  ? "personalRescheduling.title"
+                  : "personalAppointment.title",
+            )}
           </DialogTitle>
           <DialogDescription>
             {t(
-              appointment ? "personalRescheduling.description" : "personalAppointment.description",
+              onSelect
+                ? "booking.slotDescription"
+                : appointment
+                  ? "personalRescheduling.description"
+                  : "personalAppointment.description",
               { client: lead.clientName, lead: lead.title },
             )}
           </DialogDescription>
@@ -320,7 +336,10 @@ export function PersonalAppointmentDialog({
           <form
             className="space-y-4"
             onSubmit={(event) => {
-              void confirmation.handleSubmit(confirm)(event);
+              if (onSelect) {
+                event.preventDefault();
+                if (preview.canConfirm) onSelect(preview);
+              } else void confirmation.handleSubmit(confirm)(event);
             }}
           >
             <section className="space-y-2 text-sm" aria-live="polite">
@@ -390,15 +409,17 @@ export function PersonalAppointmentDialog({
                 {t(appointment ? "personalRescheduling.notReady" : "personalAppointment.notReady")}
               </p>
             )}
-            <fieldset disabled={pending || !preview.canConfirm} className="space-y-3">
-              <legend className="sr-only">{t("personalAppointment.confirm")}</legend>
-              {attestationNames.map((name) => (
-                <label key={name} className="flex items-start gap-3 text-sm">
-                  <input type="checkbox" required {...confirmation.register(name)} />
-                  {t(`personalAppointment.${name}`)}
-                </label>
-              ))}
-            </fieldset>
+            {!onSelect && (
+              <fieldset disabled={pending || !preview.canConfirm} className="space-y-3">
+                <legend className="sr-only">{t("personalAppointment.confirm")}</legend>
+                {attestationNames.map((name) => (
+                  <label key={name} className="flex items-start gap-3 text-sm">
+                    <input type="checkbox" required {...confirmation.register(name)} />
+                    {t(`personalAppointment.${name}`)}
+                  </label>
+                ))}
+              </fieldset>
+            )}
             {Object.keys(confirmation.formState.errors).length > 0 && (
               <p role="alert" className="text-sm text-destructive">
                 {t("personalAppointment.confirmAll")}
@@ -417,9 +438,11 @@ export function PersonalAppointmentDialog({
                 {t(
                   pending
                     ? "loading"
-                    : appointment
-                      ? "personalRescheduling.confirm"
-                      : "personalAppointment.confirm",
+                    : onSelect
+                      ? "booking.addSlot"
+                      : appointment
+                        ? "personalRescheduling.confirm"
+                        : "personalAppointment.confirm",
                 )}
               </Button>
             </div>

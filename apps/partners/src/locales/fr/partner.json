@@ -943,7 +943,10 @@
     "policy.withdrawn": "Partage de police retiré",
     "policy.reviewed": "Contrôle documentaire de police enregistré",
     "policy.viewed": "Original de police consulté",
-    "client.appointment_cancelled.v1": "Rendez-vous annulé par le client"
+    "client.appointment_cancelled.v1": "Rendez-vous annulé par le client",
+    "appointment.slots_offered.v1": "Créneaux proposés au client",
+    "appointment.slots_withdrawn.v1": "Proposition de créneaux retirée",
+    "client.appointment_reserved.v1": "Rendez-vous réservé par le client"
   },
   "benefit": {
     "deductible": "Franchise",
@@ -1006,7 +1009,10 @@
       "policy_review": "Suivi de police finale à compléter",
       "policy.withdrawn": "Partage de police retiré",
       "policy.reviewed": "Contrôle documentaire enregistré",
-      "client.appointment_cancelled.v1": "Rendez-vous annulé par le client"
+      "client.appointment_cancelled.v1": "Rendez-vous annulé par le client",
+      "appointment.slots_offered.v1": "Créneaux proposés au client",
+      "appointment.slots_withdrawn.v1": "Proposition de créneaux retirée",
+      "client.appointment_reserved.v1": "Rendez-vous réservé par le client"
     },
     "action": {
       "open": "Ouvrir le dossier",
@@ -2074,5 +2080,37 @@
     "terms": "{{date}} · {{mode}} · {{location}}",
     "target": "{{title}} — {{assessment}}",
     "place": "{{mode}} · {{location}}"
+  },
+  "booking": {
+    "terms": "{{date}} · {{duration}} minutes · {{mode}}",
+    "slotDescription": "Vérifiez un horaire à proposer au client pour « {{lead}} ». Aucun rendez-vous ne sera créé avant son choix confirmé dans Wallet.",
+    "title": "Créneaux proposés",
+    "description": "Proposez personnellement de un à cinq horaires au propriétaire Wallet de cette demande. Un seul sera retenu, après son accord et une nouvelle vérification des disponibilités.",
+    "state": {
+      "offered": "Choix proposé",
+      "booked": "Rendez-vous réservé",
+      "withdrawn": "Proposition retirée",
+      "expired": "Proposition expirée",
+      "invalidated": "Proposition à renouveler"
+    },
+    "expires": "Choix possible jusqu’au {{date}}",
+    "selected": "Créneau choisi",
+    "empty": "Aucun créneau proposé pour cette demande.",
+    "limit": "Les 20 dernières propositions sont affichées.",
+    "failed": "Les propositions ne sont pas disponibles. Rechargez pour vérifier votre accès.",
+    "conflict": "Cette proposition ne peut plus être confirmée en l’état. Rechargez les modalités actuelles.",
+    "uncertain": "La réponse est incertaine. Réessayez la même demande pour connaître son résultat.",
+    "retryExact": "Vérifier la même demande",
+    "minutes": "minutes",
+    "addSlot": "Ajouter un créneau",
+    "new": "Nouvelle proposition",
+    "remove": "Retirer ce créneau",
+    "expiry": "Fin de validité (heure suisse)",
+    "expiryHelp": "Choisissez une date future, dans les sept jours et avant le début de la préparation du premier créneau.",
+    "offeredConfirmed": "Je m’engage à honorer l’un des créneaux proposés si le client le confirme avant expiration et que les conditions vérifiées restent valables.",
+    "publish": "Proposer au client",
+    "withdraw": "Retirer la proposition",
+    "withdrawConfirm": "Je retire toutes les options de cette proposition. Le client ne pourra plus les réserver.",
+    "invalid": "Vérifiez la date de validité et les créneaux distincts avant de proposer."
   }
 }

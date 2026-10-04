@@ -1,5 +1,7 @@
 # CoverView Partner
 
+Demande → Rendez-vous → « Créneaux proposés » : un conseiller mandaté propose des options exactes, vérifie chaque période et confirme son engagement ; le propriétaire choisit ensuite dans Wallet. Retrait et expiration sont explicites. [Propriétaire et limites](../api/src/modules/partner-workspace/docs/booking-proposals.md).0056 hors catalogue, activation/V3 ouverts.
+
 Une annulation explicite depuis Wallet retire l’engagement programmé de l’agenda et crée une réponse client à traiter pour le responsable courant, avec motif dans la fiche. Lire la notification ne clôt pas le suivi ; les demandes associées conservent leurs cycles. [Règles et activation](../api/src/modules/partner-workspace/docs/wallet-appointment-cancellation.md). V3 rempli ouvert.
 
 Fiche Lead → Rendez-vous → « Relier d’autres demandes » : choix de demandes personnelles du même sujet, vérification serveur, confirmation explicite et retrait révisionné. « Rendez-vous associés » consulte les modalités enregistrées et les versions passées de chaque demande. [Règles, limites et activation](../api/src/modules/partner-workspace/docs/appointment-links.md). Une seule occupation, cycles indépendants ;0055 hors catalogue et V3 rempli/clavier/mobile ouvert.

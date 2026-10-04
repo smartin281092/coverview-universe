@@ -103,9 +103,10 @@ export async function readAppointmentPeriod(
   ctx: PartnerContext,
   canSchedule: boolean,
   leadRevision: number,
+  advisorId = actor.userId,
 ) {
-  // Same ordering as scheduling (Lead, member, then advisor schedule). No reservation is written.
-  await tx.query("select pg_advisory_xact_lock(hashtextextended($1,1))", [actor.userId]);
+  // The caller authorizes the explicit professional; the actor remains the real authenticated user.
+  await tx.query("select pg_advisory_xact_lock(hashtextextended($1,1))", [advisorId]);
   const current = await readCurrentAvailability(tx, ctx.application);
   const start = appt.starts_at.getTime(),
     end = start + appt.duration_minutes * 60000;
@@ -129,7 +130,7 @@ export async function readAppointmentPeriod(
   // Other commitments may be in a Lead no longer visible here: only expose the collision fact.
   const overlappingCommitment = await overlappingAppointment(
     tx,
-    actor.userId,
+    advisorId,
     appointmentId,
     new Date(occupiedStart),
     new Date(occupiedEnd),
@@ -160,7 +161,7 @@ export async function readAppointmentPeriod(
   const responsibility =
     ctx.canAdvise &&
     canSchedule &&
-    (actor.administrator ||
+    (ctx.administrator ||
       ctx.application?.categories.some((category) => category === lead.category))
       ? "current"
       : "review_required";
@@ -189,7 +190,7 @@ export async function readAppointmentPeriod(
       evidence: { rescheduling?: unknown };
     }>(
       "select * from partner_appointment_time_plans where appointment_id=$1 and advisor_id=$2 order by revision desc limit 20",
-      [appointmentId, actor.userId],
+      [appointmentId, advisorId],
     )
   ).rows.map((row) =>
     appointmentTimeRecordSchema.parse({

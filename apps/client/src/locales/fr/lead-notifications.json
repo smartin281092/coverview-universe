@@ -35,7 +35,10 @@
     "appointment.scheduled": "Rendez-vous confirmé",
     "appointment.rescheduled.v1": "Rendez-vous reporté",
     "appointment.cancelled": "Rendez-vous à replanifier",
-    "lead.closed": "Votre demande a été clôturée"
+    "lead.closed": "Votre demande a été clôturée",
+    "appointment.slots_offered.v1": "Créneaux proposés au client",
+    "appointment.slots_withdrawn.v1": "Proposition de créneaux retirée",
+    "client.appointment_reserved.v1": "Rendez-vous réservé par le client"
   },
   "back": "Retour aux offres",
   "inspect": "Ouvrir la demande",

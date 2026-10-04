@@ -21,6 +21,7 @@ export async function previewPersonalAppointment(
     occupiedBeforeMinutes: number;
     occupiedAfterMinutes: number;
   },
+  advisorId = actor.userId,
 ) {
   const { appointment, time } = proposal;
   const assessment = await readAppointmentPeriod(
@@ -39,12 +40,13 @@ export async function previewPersonalAppointment(
     ctx,
     true,
     lead.revision,
+    advisorId,
   );
   const period = assessment.timeProtection!;
   const basis = createHash("sha256")
     .update(
       JSON.stringify({
-        actor: actor.userId,
+        actor: advisorId,
         proposal,
         previous,
         sources: period.basis,

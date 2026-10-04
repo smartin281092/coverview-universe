@@ -634,5 +634,33 @@
     "retryExact": "Réessayer le même envoi",
     "sending": "Envoi en cours…",
     "back": "Retour aux rendez-vous"
+  },
+  "booking": {
+    "terms": "{{duration}} minutes · {{mode}}",
+    "title": "Créneaux proposés",
+    "description": "Un seul de ces créneaux peut être réservé. Les horaires sont en heure suisse. Ils restent soumis à disponibilité jusqu’à votre confirmation.",
+    "state": {
+      "offered": "Choix proposé",
+      "booked": "Rendez-vous réservé",
+      "withdrawn": "Proposition retirée",
+      "expired": "Proposition expirée",
+      "invalidated": "Proposition à renouveler"
+    },
+    "expires": "Choix possible jusqu’au {{date}}",
+    "selected": "Créneau choisi",
+    "empty": "Aucun créneau proposé pour cette demande.",
+    "limit": "Les 20 dernières propositions sont affichées.",
+    "failed": "Les propositions ne sont pas disponibles. Rechargez pour vérifier votre accès.",
+    "conflict": "Cette proposition ne peut plus être confirmée en l’état. Rechargez les modalités actuelles.",
+    "uncertain": "La réponse est incertaine. Réessayez la même demande pour connaître son résultat.",
+    "retryExact": "Vérifier la même demande",
+    "advisor": "Avec {{name}}",
+    "choose": "Choisir le {{date}}",
+    "confirmHelp": "Ce choix crée un rendez-vous pour cette demande uniquement. Vos autres demandes restent indépendantes. La confirmation ne vaut pas validation globale du conseil ou d’un produit.",
+    "confirm": "Je confirme ce créneau, sa durée, son mode et son lieu avec ce conseiller.",
+    "reserve": "Confirmer ce rendez-vous",
+    "unavailable": "Ce créneau ne peut pas être réservé actuellement.",
+    "success": "Votre rendez-vous est réservé. Vous pouvez consulter ses détails ci-dessous.",
+    "sending": "Confirmation en cours…"
   }
 }

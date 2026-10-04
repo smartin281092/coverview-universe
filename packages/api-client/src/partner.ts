@@ -1,6 +1,12 @@
 import { z } from "zod";
 import {
   walletAppointmentSchema,
+  bookingProposalsSchema,
+  bookingProposalInputSchema,
+  bookingChoiceSchema,
+  bookingWithdrawalSchema,
+  type BookingProposalInput,
+  type BookingChoice,
   walletAppointmentCancellationSchema,
   type WalletAppointmentCancellation,
   appointmentLinksManagementSchema,
@@ -425,6 +431,41 @@ export function createPartnerClient(baseUrl: string) {
         `/wallet/leads/${encodeURIComponent(leadId)}/appointments/${encodeURIComponent(appointmentId)}/cancellation`,
         walletAppointmentSchema,
         signal,
+      ),
+    bookingProposals: (id: string, wallet = false, signal?: AbortSignal) =>
+      request(
+        `/${wallet ? "wallet" : "partner"}/leads/${encodeURIComponent(id)}/booking-proposals`,
+        bookingProposalsSchema,
+        signal,
+      ),
+    proposeBooking: (id: string, input: BookingProposalInput, options: PartnerMutation) =>
+      request(
+        `/partner/leads/${encodeURIComponent(id)}/booking-proposals`,
+        bookingProposalsSchema,
+        options.signal,
+        bookingProposalInputSchema.parse(input),
+        options,
+      ),
+    withdrawBooking: (id: string, proposalId: string, options: PartnerMutation) =>
+      request(
+        `/partner/leads/${encodeURIComponent(id)}/booking-proposals/${encodeURIComponent(proposalId)}/withdraw`,
+        bookingProposalsSchema,
+        options.signal,
+        bookingWithdrawalSchema.parse({ confirmed: true }),
+        options,
+      ),
+    reserveBooking: (
+      id: string,
+      proposalId: string,
+      input: BookingChoice,
+      options: PartnerMutation,
+    ) =>
+      request(
+        `/wallet/leads/${encodeURIComponent(id)}/booking-proposals/${encodeURIComponent(proposalId)}/reserve`,
+        bookingProposalsSchema,
+        options.signal,
+        bookingChoiceSchema.parse(input),
+        options,
       ),
     cancelWalletAppointment: (
       leadId: string,

@@ -28,6 +28,7 @@ import { AdvisorAssessmentDialog } from "../features/AdvisorAssessmentDialog";
 import { AdvicePreferencesDialog } from "../features/AdvicePreferencesDialog";
 import { AppointmentAssessmentDialog } from "../features/AppointmentAssessmentDialog";
 import { PersonalAppointmentDialog } from "../features/PersonalAppointmentDialog";
+import { BookingProposalsDialog } from "../features/BookingProposalsDialog";
 import { AppointmentLinksDialog } from "../features/AppointmentLinksDialog";
 import { SharedAppointmentsDialog } from "../features/SharedAppointmentsDialog";
 import type { LeadDetail } from "@coverview/contracts/partner";
@@ -70,19 +71,37 @@ export function LeadPage() {
     [appointment, setAppointment] = useState<string>(),
     [linkingAppointment, setLinkingAppointment] = useState<string>(),
     [sharedAppointments, setSharedAppointments] = useState(false),
+    [bookingProposals, setBookingProposals] = useState<LeadDetail | null>(null),
     [assessedAppointment, setAssessedAppointment] = useState<string>(),
     [rescheduling, setRescheduling] = useState<LeadDetail["appointments"][number]>(),
     [offer, setOffer] = useState<LeadOffer | "new" | null>(null);
-  if (leadQuery.isPending) return <LoadingState label={t("loading")} />;
+  const bookingDialog = bookingProposals && (
+    <BookingProposalsDialog
+      key={[...session.queryKey, leadId].join(":")}
+      lead={leadQuery.data ?? bookingProposals}
+      unavailable={leadQuery.isError || leadQuery.isPending}
+      onClose={() => setBookingProposals(null)}
+    />
+  );
+  if (leadQuery.isPending)
+    return (
+      <>
+        {bookingDialog}
+        <LoadingState label={t("loading")} />
+      </>
+    );
   if (leadQuery.isError)
     return (
-      <ErrorState
-        title={t("error")}
-        description={t("errors.PARTNER_NOT_FOUND")}
-        retryLabel={t("retry")}
-        pendingLabel={t("loading")}
-        onRetry={() => void leadQuery.refetch()}
-      />
+      <>
+        {bookingDialog}
+        <ErrorState
+          title={t("error")}
+          description={t("errors.PARTNER_NOT_FOUND")}
+          retryLabel={t("retry")}
+          pendingLabel={t("loading")}
+          onRetry={() => void leadQuery.refetch()}
+        />
+      </>
     );
   const lead = leadQuery.data,
     activeTab = lead.availableTabs.includes(tab as (typeof lead.availableTabs)[number])
@@ -91,6 +110,7 @@ export function LeadPage() {
   const allowed = (value: string) => lead.allowedActions?.includes(value) ?? lead.canEdit;
   return (
     <>
+      {bookingDialog}
       {linkingAppointment && (
         <AppointmentLinksDialog
           key={[...session.queryKey, lead.id, linkingAppointment].join(":")}
@@ -535,6 +555,11 @@ export function LeadPage() {
       )}
       {activeTab === "appointments" && (
         <div className="space-y-3">
+          {allowed("personal_appointment") && (
+            <Button variant="outline" onClick={() => setBookingProposals(lead)}>
+              {t("booking.title")}
+            </Button>
+          )}
           <Button variant="outline" onClick={() => setSharedAppointments(true)}>
             {t("appointmentLinks.shared")}
           </Button>

@@ -74,6 +74,7 @@ export async function recordAppointmentTime(
   start: Date,
   end: Date,
   evidence: Record<string, unknown>,
+  advisorId = actor.userId,
 ) {
   const id = newId("aptime");
   await tx.query(
@@ -82,7 +83,7 @@ export async function recordAppointmentTime(
     [
       id,
       appointmentId,
-      actor.userId,
+      advisorId,
       revision,
       input.basis,
       input.preparationMinutes,

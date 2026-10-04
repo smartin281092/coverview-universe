@@ -22,6 +22,7 @@ import {
   Label,
 } from "@coverview/ui";
 import { partnerApi } from "../../partner-api";
+import { WalletBookingChoices } from "./WalletBookingChoices";
 
 const confirmation = walletAppointmentCancellationSchema.omit({ basis: true });
 const formSchema = confirmation.extend({ confirmed: z.boolean() }).pipe(confirmation);
@@ -255,6 +256,14 @@ export function WalletAppointmentsDialog({
           <DialogTitle>{t("appointments.title")}</DialogTitle>
           <DialogDescription>{t("appointments.description")}</DialogDescription>
         </DialogHeader>
+        {!appointmentId && (
+          <WalletBookingChoices
+            identity={identity}
+            leadId={leadId}
+            onBusy={setBusy}
+            unavailable={list.isError}
+          />
+        )}
         {appointmentId ? (
           <AppointmentScreen
             key={appointmentId}
@@ -282,7 +291,11 @@ export function WalletAppointmentsDialog({
                     {t(`appointmentLinks.outcome.${appointment.state}`)}
                   </Badge>
                   <p>{date(appointment.startsAt)}</p>
-                  <Button variant="outline" onClick={() => setAppointmentId(appointment.id)}>
+                  <Button
+                    variant="outline"
+                    disabled={busy}
+                    onClick={() => setAppointmentId(appointment.id)}
+                  >
                     {t("appointments.details")}
                   </Button>
                 </li>

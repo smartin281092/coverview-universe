@@ -992,6 +992,65 @@ export const personalAppointmentConfirmSchema = personalAppointmentProposalSchem
   })
   .strict();
 export type PersonalAppointmentConfirm = z.infer<typeof personalAppointmentConfirmSchema>;
+// Exact appointment terms only: never expose private occupied periods or professional evidence.
+export const bookingProposalInputSchema = z
+  .object({
+    slots: z
+      .array(
+        personalAppointmentProposalSchema
+          .extend({ basis: z.string().regex(/^[a-f0-9]{64}$/u) })
+          .strict(),
+      )
+      .min(1)
+      .max(5),
+    expiresAt: instant,
+    offeredConfirmed: z.literal(true),
+    externalCommitmentsChecked: z.literal(true),
+    capacityConfirmed: z.literal(true),
+    preparationAndTravelChecked: z.literal(true),
+  })
+  .strict()
+  .refine(
+    (value) =>
+      new Set(value.slots.map((slot) => slot.appointment.startsAt)).size === value.slots.length,
+    { path: ["slots"], message: "Distinct starts required" },
+  );
+export type BookingProposalInput = z.infer<typeof bookingProposalInputSchema>;
+export const bookingChoiceSchema = z
+  .object({
+    slot: z.number().int().min(0).max(4),
+    basis: z.string().regex(/^[a-f0-9]{64}$/u),
+    confirmed: z.literal(true),
+  })
+  .strict();
+export type BookingChoice = z.infer<typeof bookingChoiceSchema>;
+export const bookingWithdrawalSchema = z.object({ confirmed: z.literal(true) }).strict();
+export const bookingProposalsSchema = z.object({
+  canPropose: z.boolean(),
+  proposals: z
+    .array(
+      z.object({
+        id,
+        advisorName: z.string(),
+        expiresAt: instant,
+        state: z.enum(["offered", "booked", "withdrawn", "expired", "invalidated"]),
+        appointmentId: id.nullable(),
+        selectedSlot: z.number().int().min(0).max(4).nullable(),
+        canWithdraw: z.boolean(),
+        slots: z
+          .array(
+            z.object({
+              appointment: leadAppointmentInputSchema.omit({ advisorId: true }),
+              canBook: z.boolean(),
+              basis: z.string().regex(/^[a-f0-9]{64}$/u),
+            }),
+          )
+          .max(5),
+      }),
+    )
+    .max(20),
+});
+export type BookingProposals = z.infer<typeof bookingProposalsSchema>;
 export const partnerNotificationQuerySchema = z
   .object({
     status: z.enum(["open", "all"]).default("open"),

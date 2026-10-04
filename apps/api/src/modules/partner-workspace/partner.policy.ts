@@ -83,25 +83,30 @@ export async function context(
   lock = false,
 ): Promise<PartnerContext> {
   const application = await membership(db, actor.userId, lock);
+  return contextForApplication(application, actor.administrator);
+}
+// Internal professional context. This does not authenticate a user or manufacture a session.
+export function contextForApplication(
+  application: PartnerApplication | null,
+  administrator = false,
+): PartnerContext {
   const operational =
-    actor.administrator ||
+    administrator ||
     !!(
       application?.state === "approved" &&
       application.organizationState === "approved" &&
       (!application.reviewDueAt || new Date(application.reviewDueAt).getTime() > Date.now())
     );
   return {
-    administrator: actor.administrator,
+    administrator,
     operational,
     application,
     canCreate:
       operational &&
-      (actor.administrator ||
+      (administrator ||
         !!application?.grantedRoles.some((r) => r === "referrer" || r === "advisor")),
-    canAdvise:
-      operational && (actor.administrator || !!application?.grantedRoles.includes("advisor")),
-    canManage:
-      operational && (actor.administrator || !!application?.grantedRoles.includes("manager")),
+    canAdvise: operational && (administrator || !!application?.grantedRoles.includes("advisor")),
+    canManage: operational && (administrator || !!application?.grantedRoles.includes("manager")),
   };
 }
 export const ownedClient = `(l.client_profile_id is null and l.client_user_id=$1 or exists(select 1 from managed_profiles cp where cp.id=l.client_profile_id and cp.user_id=$1))`;
