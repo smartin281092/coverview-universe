@@ -21,6 +21,7 @@ import {
   membership,
   type Executor,
   type PartnerActor,
+  failOnConcurrentAbort,
 } from "./partner.policy.js";
 import { event, newId } from "./partner.audit.js";
 import { readAppointmentPeriod } from "./partner.appointment-assessment.js";
@@ -187,6 +188,7 @@ export function createAppointmentLinkOperations(pool: Pool, transaction: Mutatio
       return result;
     } catch (error) {
       await tx.query("rollback");
+      failOnConcurrentAbort(error);
       throw error;
     } finally {
       tx.release();

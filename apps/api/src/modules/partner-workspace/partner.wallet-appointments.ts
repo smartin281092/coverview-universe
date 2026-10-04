@@ -5,7 +5,13 @@ import {
   walletAppointmentCancellationSchema,
   type WalletAppointmentCancellation,
 } from "@coverview/contracts/partner";
-import { fail, lockActor, ownedClient, type PartnerActor } from "./partner.policy.js";
+import {
+  fail,
+  lockActor,
+  ownedClient,
+  type PartnerActor,
+  failOnConcurrentAbort,
+} from "./partner.policy.js";
 import { event } from "./partner.audit.js";
 
 type Mutation = <T>(
@@ -130,6 +136,7 @@ export function createWalletAppointmentOperations(pool: Pool, transaction: Mutat
         return value;
       } catch (cause) {
         await tx.query("rollback");
+        failOnConcurrentAbort(cause);
         throw cause;
       } finally {
         tx.release();

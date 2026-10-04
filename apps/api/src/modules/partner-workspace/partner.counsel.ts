@@ -353,7 +353,12 @@ export function createCounselOperations(
       return result;
     } catch (cause) {
       await tx.query("rollback");
-      if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+      if (
+        cause &&
+        typeof cause === "object" &&
+        "code" in cause &&
+        ["40001", "40P01"].includes(String(cause.code))
+      )
         fail("PARTNER_CONFLICT", 409);
       throw cause;
     } finally {

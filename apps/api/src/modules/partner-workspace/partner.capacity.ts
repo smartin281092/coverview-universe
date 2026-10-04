@@ -16,6 +16,7 @@ import {
   professionalScope,
   type Executor,
   type PartnerActor,
+  failOnConcurrentAbort,
 } from "./partner.policy.js";
 import { newId, event } from "./partner.audit.js";
 
@@ -193,6 +194,7 @@ export function createCapacityOperations(pool: Pool, transaction: Mutation) {
         return result;
       } catch (cause) {
         await tx.query("rollback");
+        failOnConcurrentAbort(cause);
         throw cause;
       } finally {
         tx.release();

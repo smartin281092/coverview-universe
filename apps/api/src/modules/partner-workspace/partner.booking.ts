@@ -21,6 +21,7 @@ import {
   membership,
   ownedClient,
   type PartnerActor,
+  failOnConcurrentAbort,
 } from "./partner.policy.js";
 import type { partnerLeads } from "./partner.schema.js";
 import { previewPersonalAppointment } from "./partner.appointment-creation.js";
@@ -416,6 +417,7 @@ export function createBookingOperations(pool: Pool, transaction: Mutation) {
         return result;
       } catch (cause) {
         await tx.query("rollback");
+        failOnConcurrentAbort(cause);
         throw cause;
       } finally {
         tx.release();

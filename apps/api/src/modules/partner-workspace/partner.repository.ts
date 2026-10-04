@@ -74,6 +74,7 @@ import {
   visible,
   type Executor,
   type PartnerActor,
+  failOnConcurrentAbort,
 } from "./partner.policy.js";
 import type { partnerLeads } from "./partner.schema.js";
 import { executeLeadCommand } from "./partner.commands.js";
@@ -542,6 +543,7 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
       return result;
     } catch (cause) {
       await tx.query("rollback");
+      failOnConcurrentAbort(cause);
       throw cause;
     } finally {
       tx.release();
@@ -792,7 +794,12 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         return dossier;
       } catch (cause) {
         await tx.query("rollback");
-        if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+        if (
+          cause &&
+          typeof cause === "object" &&
+          "code" in cause &&
+          ["40001", "40P01"].includes(String(cause.code))
+        )
           fail("PARTNER_CONFLICT", 409);
         throw cause;
       } finally {
@@ -875,7 +882,12 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         return dossier;
       } catch (cause) {
         await tx.query("rollback");
-        if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+        if (
+          cause &&
+          typeof cause === "object" &&
+          "code" in cause &&
+          ["40001", "40P01"].includes(String(cause.code))
+        )
           fail("PARTNER_CONFLICT", 409);
         throw cause;
       } finally {
@@ -958,7 +970,12 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         return dossier;
       } catch (cause) {
         await tx.query("rollback");
-        if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+        if (
+          cause &&
+          typeof cause === "object" &&
+          "code" in cause &&
+          ["40001", "40P01"].includes(String(cause.code))
+        )
           fail("PARTNER_CONFLICT", 409);
         throw cause;
       } finally {
@@ -1038,7 +1055,12 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         return result;
       } catch (cause) {
         await tx.query("rollback");
-        if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+        if (
+          cause &&
+          typeof cause === "object" &&
+          "code" in cause &&
+          ["40001", "40P01"].includes(String(cause.code))
+        )
           fail("PARTNER_CONFLICT", 409);
         throw cause;
       } finally {
@@ -1075,7 +1097,12 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         return result;
       } catch (cause) {
         await tx.query("rollback");
-        if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+        if (
+          cause &&
+          typeof cause === "object" &&
+          "code" in cause &&
+          ["40001", "40P01"].includes(String(cause.code))
+        )
           fail("PARTNER_CONFLICT", 409);
         throw cause;
       } finally {
@@ -1114,7 +1141,12 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         return result;
       } catch (cause) {
         await tx.query("rollback");
-        if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+        if (
+          cause &&
+          typeof cause === "object" &&
+          "code" in cause &&
+          ["40001", "40P01"].includes(String(cause.code))
+        )
           fail("PARTNER_CONFLICT", 409);
         throw cause;
       } finally {
@@ -1140,7 +1172,12 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         return result;
       } catch (cause) {
         await tx.query("rollback");
-        if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+        if (
+          cause &&
+          typeof cause === "object" &&
+          "code" in cause &&
+          ["40001", "40P01"].includes(String(cause.code))
+        )
           fail("PARTNER_CONFLICT", 409);
         throw cause;
       } finally {
@@ -1169,7 +1206,12 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         return result;
       } catch (cause) {
         await tx.query("rollback");
-        if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+        if (
+          cause &&
+          typeof cause === "object" &&
+          "code" in cause &&
+          ["40001", "40P01"].includes(String(cause.code))
+        )
           fail("PARTNER_CONFLICT", 409);
         throw cause;
       } finally {
@@ -1197,7 +1239,12 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         return result;
       } catch (cause) {
         await tx.query("rollback");
-        if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+        if (
+          cause &&
+          typeof cause === "object" &&
+          "code" in cause &&
+          ["40001", "40P01"].includes(String(cause.code))
+        )
           fail("PARTNER_CONFLICT", 409);
         throw cause;
       } finally {
@@ -1252,7 +1299,12 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         return result;
       } catch (cause) {
         await tx.query("rollback");
-        if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+        if (
+          cause &&
+          typeof cause === "object" &&
+          "code" in cause &&
+          ["40001", "40P01"].includes(String(cause.code))
+        )
           fail("PARTNER_CONFLICT", 409);
         throw cause;
       } finally {
@@ -1298,7 +1350,12 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         return result;
       } catch (cause) {
         await tx.query("rollback");
-        if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+        if (
+          cause &&
+          typeof cause === "object" &&
+          "code" in cause &&
+          ["40001", "40P01"].includes(String(cause.code))
+        )
           fail("PARTNER_CONFLICT", 409);
         throw cause;
       } finally {
@@ -1342,6 +1399,7 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         return result;
       } catch (cause) {
         await tx.query("rollback");
+        failOnConcurrentAbort(cause);
         throw cause;
       } finally {
         tx.release();
@@ -1481,6 +1539,7 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         return result;
       } catch (cause) {
         await tx.query("rollback");
+        failOnConcurrentAbort(cause);
         throw cause;
       } finally {
         tx.release();
@@ -1597,6 +1656,7 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         return result;
       } catch (cause) {
         await tx.query("rollback");
+        failOnConcurrentAbort(cause);
         throw cause;
       } finally {
         tx.release();
@@ -1614,6 +1674,7 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         return result;
       } catch (cause) {
         await tx.query("rollback");
+        failOnConcurrentAbort(cause);
         throw cause;
       } finally {
         tx.release();
@@ -1657,6 +1718,7 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         return result;
       } catch (cause) {
         await tx.query("rollback");
+        failOnConcurrentAbort(cause);
         throw cause;
       } finally {
         tx.release();
@@ -1798,6 +1860,7 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         return result;
       } catch (cause) {
         await tx.query("rollback");
+        failOnConcurrentAbort(cause);
         throw cause;
       } finally {
         tx.release();
@@ -1882,6 +1945,7 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         };
       } catch (error) {
         await tx.query("rollback");
+        failOnConcurrentAbort(error);
         throw error;
       } finally {
         tx.release();
@@ -2008,6 +2072,7 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
         await tx.query("commit");
       } catch (cause) {
         await tx.query("rollback");
+        failOnConcurrentAbort(cause);
         throw cause;
       } finally {
         tx.release();

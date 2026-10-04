@@ -20,6 +20,16 @@ export class PartnerError extends Error {
 export function fail(code: (typeof partnerErrors)[number], status = 422): never {
   throw new PartnerError(code, status);
 }
+/** PostgreSQL aborted the transaction to keep data consistent: serialization failure or deadlock. */
+export function failOnConcurrentAbort(cause: unknown) {
+  if (
+    cause &&
+    typeof cause === "object" &&
+    "code" in cause &&
+    ["40001", "40P01"].includes(String(cause.code))
+  )
+    fail("PARTNER_CONFLICT", 409);
+}
 export const date = (value: Date | string | null) => (value ? new Date(value).toISOString() : null);
 export function camel<T>(row: Record<string, unknown>): T {
   return Object.fromEntries(
