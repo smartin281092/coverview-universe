@@ -1,5 +1,7 @@
 # Couverture du brief Partner — 2 octobre 2026
 
+Relais6ab2, I.10.3/13/15, II.1 et III.2/15 : [sources de solution et de convention](../apps/api/src/modules/partner-workspace/docs/solution-evidence.md), version exacte d’offre et besoin actuel, choix exploratoire de compagnie et dernier dossier personnel, aucune identité rapprochée ou solution distribuable déduite.101tests distincts/4fichiers dont18nouveaux, types/lint/builds quatre apps/frontières/Knip ciblé verts. Aucune migration nouvelle, aucune association persistée, six contrôles inchangés ; activation et V3 rempli/clavier/mobile ouverts. Les mentions antérieures de solution absente restent vraies pour son identité canonique et son appréciation précise. Tous tracks I–III restent ouverts.
+
 Relais84e4, I.10.3/18/20 : [appréciation personnelle précise de l’expertise](../apps/api/src/modules/partner-workspace/docs/need-expertise.md), sources exactes, périmètre/limites/suite/échéance, retrait/historique privés.132tests distincts/6fichiers dont20nouveaux, types/lint/builds quatre apps/frontières/Knip ciblé verts.0051 hors catalogue, activation et V3 rempli/clavier/mobile ouverts. Six contrôles des bilans inchangés. Les mentions antérieures d’appréciation non persistée décrivent leurs livraisons historiques ; conventions/solution exacte, matching complet et tous tracks I–III restent ouverts.
 
 

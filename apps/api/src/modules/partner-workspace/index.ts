@@ -60,6 +60,8 @@ import {
   advicePreferencesSchema,
   advisorAssessmentSchema,
   needExpertiseEvidenceSchema,
+  solutionEvidenceQuerySchema,
+  solutionEvidenceSchema,
   capacityAdvisorAssessmentSchema,
   referentAssessmentSchema,
   sharedReferentAssessmentSchema,
@@ -232,6 +234,24 @@ export function registerPartnerWorkspace(
       ),
   );
   const insuranceParams = z.object({ id: insuranceRequestIdSchema }).strict();
+  app.get(
+    "/partner/leads/:id/offers/:offerId/solution-evidence",
+    {
+      config: limited,
+      schema: {
+        params: params.extend({ offerId: z.string().min(1).max(100) }).strict(),
+        querystring: solutionEvidenceQuerySchema,
+        response: { 200: solutionEvidenceSchema },
+      },
+    },
+    async (request) =>
+      repository.solutionEvidence(
+        await actor(request),
+        request.params.id,
+        request.params.offerId,
+        request.query,
+      ),
+  );
   app.get(
     "/partner/leads/:id/expertise-evidence",
     {

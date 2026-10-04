@@ -6,6 +6,7 @@ import {
   conventionDossierSchema,
   conventionSummarySchema,
   conventionQuerySchema,
+  solutionEvidenceSchema,
   leadCategorySchema,
   type ConventionDeclaration,
   type ConventionDecision,
@@ -87,21 +88,22 @@ function sameSubject(row: Row, member: NonNullable<Awaited<ReturnType<typeof mem
 function summary(
   row: Row | undefined,
   userId: string,
-  member: NonNullable<Awaited<ReturnType<typeof membership>>>,
+  member: Awaited<ReturnType<typeof membership>>,
   categoryAllowed = true,
+  assessedAt = Date.now(),
 ) {
   const reviewed = row?.decision === "reviewed";
   const status = !row
     ? "missing"
     : row.decision === "withdrawn"
       ? "withdrawn"
-      : reviewed && row.valid_until && row.valid_until.getTime() <= Date.now()
+      : reviewed && row.valid_until && row.valid_until.getTime() <= assessedAt
         ? "expired"
-        : !sameSubject(row, member) || !categoryAllowed
+        : !member || !sameSubject(row, member) || !categoryAllowed
           ? "unavailable"
           : reviewed && (!safe(row, userId) || row.document_revision !== row.file_revision)
             ? "unavailable"
-            : reviewed && row.valid_from && row.valid_from.getTime() > Date.now()
+            : reviewed && row.valid_from && row.valid_from.getTime() > assessedAt
               ? "scheduled"
               : reviewed && row.coverage === "limited"
                 ? "limited"
@@ -139,6 +141,40 @@ function project(row: Row, userId: string, member: Awaited<ReturnType<typeof mem
     canDownload: safe(row, userId),
   };
 }
+// Caller enforces the personal Lead mandate in one repeatable-read snapshot.
+export async function readSolutionConventionEvidence(
+  db: Executor,
+  userId: string,
+  category: string,
+  companyId: string,
+  member: Awaited<ReturnType<typeof membership>>,
+  assessedAt: string,
+  documentsAvailable: boolean,
+) {
+  const row = await latest(db, userId, category, companyId);
+  return solutionEvidenceSchema.shape.convention.unwrap().parse({
+    summary: summary(
+      row,
+      userId,
+      member,
+      !!member?.categories.includes(leadCategorySchema.parse(category)),
+      Date.parse(assessedAt),
+    ),
+    current: row ? project(row, userId, member) : null,
+    sourceStatus: !row
+      ? "missing"
+      : !documentsAvailable
+        ? "disabled"
+        : !safe(row, userId)
+          ? "unavailable"
+          : row.decision === "reviewed" && row.document_revision !== row.file_revision
+            ? "changed"
+            : "available",
+    reviewedDocumentRevision: row?.decision === "reviewed" ? row.document_revision : null,
+    canOpenDossier: !!member,
+  });
+}
+
 async function target(
   db: Executor,
   actor: PartnerActor,

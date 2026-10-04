@@ -43,6 +43,10 @@ CLAUDE, PROJECT, MEMORY actives, codex, execution-policy, program, architecture,
 
 ## Journal
 
+### Relais6ab2 — sources de solution et de convention
+
+[Plan avant code et prochain brouillon](partner-need-solution-evidence.plan.md), [propriétaire](../../apps/api/src/modules/partner-workspace/docs/solution-evidence.md), [ledger](../evidence/partner-core.md#relais-6ab2--sources-de-solution-et-de-convention). Consultation d’une version exacte d’offre et de ses conventions personnelles, compagnie exploratoire non rapprochée, sources datées ensemble et droits revérifiés après attente.101tests distincts/4fichiers dont18nouveaux, V0/V1 verts, deux revues même agent sans indépendance ; aucune migration ou association persistée, aucun autre contrôle levé. Suite bornée : association canonique sourcée après audit/plan, puis tous tracks I–III. V3 rempli/activation et brief/S-110/S-042a ouverts ; [checkpoint](../handoffs/partner-solution-binding-suite.md).
+
 ### Relais84e4 — appréciation personnelle précise
 
 [Plan avant code](partner-need-expertise-decision.plan.md), [propriétaire](../../apps/api/src/modules/partner-workspace/docs/need-expertise.md), [ledger](../evidence/partner-core.md#relais-84e4--appréciation-personnelle-de-lexpertise).132tests distincts/6fichiers dont20nouveaux, V0/V1 verts ;0051 hors catalogue, aucune activation partagée ni V3 rempli. Deux revues même agent sans indépendance. Suite bornée : audit de la solution exacte envisagée et portée des conventions, puis tous tracks I–III. Brief/S-110/S-042a ouverts.

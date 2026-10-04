@@ -48,6 +48,9 @@ import {
   advicePreferencesSchema,
   advisorAssessmentSchema,
   needExpertiseEvidenceSchema,
+  solutionEvidenceSchema,
+  solutionEvidenceQuerySchema,
+  type SolutionEvidenceQuery,
   capacityAdvisorAssessmentSchema,
   sharedReferentAssessmentSchema,
   needExpertiseInputSchema,
@@ -235,6 +238,19 @@ export function createPartnerClient(baseUrl: string) {
         advisorAssessmentSchema,
         signal,
       ),
+    solutionEvidence: (
+      leadId: string,
+      offerId: string,
+      query: SolutionEvidenceQuery = {},
+      signal?: AbortSignal,
+    ) => {
+      const { companyId } = solutionEvidenceQuerySchema.parse(query);
+      return request(
+        `/partner/leads/${encodeURIComponent(leadId)}/offers/${encodeURIComponent(offerId)}/solution-evidence${companyId ? `?companyId=${encodeURIComponent(companyId)}` : ""}`,
+        solutionEvidenceSchema,
+        signal,
+      );
+    },
     needExpertiseEvidence: (leadId: string, signal?: AbortSignal) =>
       request(
         `/partner/leads/${encodeURIComponent(leadId)}/expertise-evidence`,

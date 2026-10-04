@@ -1837,5 +1837,45 @@
       "expired": "Appréciation expirée ; nouvel examen nécessaire.",
       "review_required": "Besoin ou sources modifiés ; nouvel examen nécessaire."
     }
+  },
+  "solutionEvidence": {
+    "open": "Examiner la solution et mes conventions",
+    "title": "Solution et conventions pour ce besoin",
+    "privacy": "Consultation personnelle réservée au conseiller actuellement affecté. Aucun partage de vos conventions avec le client.",
+    "error": "La source ou vos droits ont changé, ou la lecture est indisponible. Relisez le dossier pour continuer.",
+    "offer": "Offre précise examinée",
+    "convention": "Ma convention à examiner",
+    "version": "{{company}} · {{product}} · Version {{version}}",
+    "unconfirmed": "La compagnie choisie pour consulter une convention n’est pas un rapprochement vérifié avec cette offre. Le produit et son périmètre restent à vérifier.",
+    "inactive": "Cette version est inactive : elle reste une référence historique.",
+    "source": {
+      "current": "Source liée à cette version, inchangée depuis sa préparation.",
+      "changed": "Source modifiée : les données de cette version doivent être revues.",
+      "unavailable": "Source actuellement indisponible.",
+      "unbound": "Ancienne version sans preuve de source liée.",
+      "disabled": "Consultation des originaux indisponible dans cet environnement."
+    },
+    "validity": {
+      "undated": "Échéance de l’offre non renseignée.",
+      "unexpired": "Échéance de l’offre non atteinte à la date de lecture.",
+      "expired": "L’échéance de l’offre est dépassée."
+    },
+    "reviewed": "Revue des données de cette version : {{date}}. Elle ne confirme aucun droit de distribution.",
+    "notReviewed": "Les données de cette version n’ont pas encore été revues.",
+    "reference": "Référence portée par l’offre : {{reference}}",
+    "chooseCompany": "Compagnie dont je souhaite consulter ma convention",
+    "noCompany": "Aucun rapprochement choisi / compagnie inconnue",
+    "companyHelp": "Choix temporaire et personnel, sans enregistrement ni reconnaissance automatique du nom. Si la compagnie manque ou reste incertaine, gardez le choix vide. Le répertoire commercial ne vérifie pas les parties juridiques.",
+    "examine": "Consulter ma convention",
+    "openDossier": "Ouvrir le dossier et son original",
+    "remaining": "Vérifications encore nécessaires",
+    "check": {
+      "company_identity": "Identité exacte de la compagnie et parties concernées.",
+      "product_scope": "Produit, variante et portée couverte par la convention.",
+      "client_admission": "Accès et conditions d’admission du client.",
+      "distribution_rights": "Droit de distribuer cette solution précise dans ce contexte.",
+      "economic_agreement": "Accord économique applicable et sa version acceptée."
+    },
+    "limits": "Un examen documentaire favorable ne suffit pas à confirmer la disponibilité de cette solution. Cette consultation ne sélectionne pas une offre, ne lève aucun autre contrôle et ne crée ni accord ni commission."
   }
 }

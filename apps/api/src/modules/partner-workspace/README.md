@@ -1,5 +1,9 @@
 # Partner — Leads et offres partagés avec Wallet
 
+| Si la tâche porte sur… | Lire aussi |
+| --- | --- |
+| Offre exacte et consultation de ses conventions pour un besoin | [Sources de solution](docs/solution-evidence.md) |
+
 Pour consigner son avis précis sourcé, ses limites et sa suite pour un besoin, lire [l’appréciation personnelle d’expertise](docs/need-expertise.md). Versions privées, retrait/historique ;0051 hors catalogue et V3 ouvert. La consultation de sources décrite ci-dessous reste distincte.
 
 Pour rapprocher ses preuves privées du besoin exact, lire [les sources personnelles d’expertise](docs/need-expertise-evidence.md). Consultation datée et accès au dossier existant ; aucune appréciation précise enregistrée ni nouvelle audience.

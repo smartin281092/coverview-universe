@@ -29,7 +29,7 @@ export async function readOffers(
   db: Executor,
   leadId: string,
   wallet: boolean,
-  options: { offerId?: string; history?: boolean; cursor?: string } = {},
+  options: { offerId?: string; history?: boolean; cursor?: string; assessedAt?: number } = {},
 ) {
   const values: unknown[] = [leadId];
   const clauses = ["o.lead_id=$1"];
@@ -76,7 +76,8 @@ export async function readOffers(
           ? "current"
           : "changed";
     const data = leadOfferInputSchema.parse(row.data);
-    const unexpired = !data.validUntil || new Date(data.validUntil).getTime() > Date.now();
+    const unexpired =
+      !data.validUntil || new Date(data.validUntil).getTime() > (options.assessedAt ?? Date.now());
     const usable =
       sourceStatus === "current" &&
       row.active === true &&

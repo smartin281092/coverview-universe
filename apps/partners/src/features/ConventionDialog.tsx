@@ -22,14 +22,24 @@ import { formatDate } from "./Field";
 import { partnerApi } from "../api";
 import { ProfessionalScopeDetails } from "./ProfessionalScopeDetails";
 
-export function ConventionDialog({ userId, onClose }: { userId: string; onClose: () => void }) {
+export function ConventionDialog({
+  userId,
+  onClose,
+  initialCategory,
+  initialCompanyId,
+}: {
+  userId: string;
+  onClose: () => void;
+  initialCategory?: ConventionDossier["category"];
+  initialCompanyId?: ConventionDossier["companyId"];
+}) {
   const { t } = useTranslation(),
     session = usePartner(),
     client = useQueryClient();
   const [category, setCategory] = useState<string>(
-    session.context.application?.categories[0] ?? "health",
+    initialCategory ?? session.context.application?.categories[0] ?? "health",
   );
-  const [companyId, setCompanyId] = useState<string>("allianz");
+  const [companyId, setCompanyId] = useState<string>(initialCompanyId ?? "allianz");
   const [before, setBefore] = useState<number | undefined>(),
     [history, setHistory] = useState(false),
     [busy, setBusy] = useState(false);

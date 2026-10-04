@@ -4,6 +4,8 @@ import { z } from "zod";
 import { documentAnalysisSchema } from "@coverview/contracts";
 import {
   needExpertiseEvidenceSchema,
+  solutionEvidenceQuerySchema,
+  type SolutionEvidenceQuery,
   needExpertiseInputSchema,
   type NeedExpertiseInput,
   needConflictInputSchema,
@@ -61,6 +63,7 @@ import {
 import type { partnerLeads } from "./partner.schema.js";
 import { executeLeadCommand } from "./partner.commands.js";
 import { readOffers } from "./partner.offers.js";
+import { readSolutionEvidence } from "./partner.solution-evidence.js";
 import { readFinalPolicies } from "./partner.final-policy.js";
 import { readOfferImports } from "./partner.imports.js";
 import {
@@ -652,6 +655,43 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
   }
   return {
     ...createCompetenceOperations(pool, transaction, documentsAvailable),
+    async solutionEvidence(
+      actor: PartnerActor,
+      id: string,
+      offerId: string,
+      raw: SolutionEvidenceQuery = {},
+    ) {
+      const query = solutionEvidenceQuerySchema.parse(raw);
+      const tx = await pool.connect();
+      try {
+        await tx.query("begin isolation level repeatable read");
+        const snapshot = (await tx.query<{ at: Date }>("select transaction_timestamp() as at"))
+          .rows[0]!;
+        await lockActor(tx, actor);
+        const { ctx, lead } = await personalAdvisorLead(tx, actor, id);
+        const result = await readSolutionEvidence(
+          tx,
+          actor,
+          lead,
+          ctx.application,
+          offerId,
+          query,
+          snapshot.at.toISOString(),
+          documentsAvailable,
+        );
+        await lockActor(tx, actor);
+        if (!(await context(tx, actor)).canAdvise) fail("PARTNER_ACCESS_DENIED", 403);
+        await tx.query("commit");
+        return result;
+      } catch (cause) {
+        await tx.query("rollback");
+        if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+          fail("PARTNER_CONFLICT", 409);
+        throw cause;
+      } finally {
+        tx.release();
+      }
+    },
     async needExpertiseEvidence(actor: PartnerActor, id: string) {
       const tx = await pool.connect();
       try {

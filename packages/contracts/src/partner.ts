@@ -1110,6 +1110,60 @@ export const leadOfferSchema = leadOfferInputSchema.extend({
   reviewedBy: id.nullable().optional(),
   publishedBy: id.nullable().optional(),
 });
+export const solutionEvidenceQuerySchema = z
+  .object({ companyId: insuranceCompanyIdSchema.optional() })
+  .strict();
+export const solutionEvidenceSchema = z.object({
+  version: z.literal(1),
+  leadId: id,
+  advisorId: id,
+  assessedAt: instant,
+  scope: advicePreferencesSchema.shape.scope.extend({ category: leadCategorySchema }),
+  scopeRevision: z.number().int().positive(),
+  changeRequested: z.boolean(),
+  assessment: z.literal("human_review_required"),
+  offer: leadOfferSchema
+    .pick({
+      id: true,
+      version: true,
+      company: true,
+      product: true,
+      reference: true,
+      active: true,
+      state: true,
+      reviewedAt: true,
+      createdAt: true,
+      validUntil: true,
+    })
+    .extend({
+      sourceStatus: z.enum(["current", "changed", "unavailable", "unbound", "disabled"]),
+      sourceGeneration: z.number().int().nonnegative().nullable(),
+      validity: z.enum(["undated", "unexpired", "expired"]),
+      canDownload: z.boolean(),
+    }),
+  // An exploratory choice is never a verified identity or a distributable solution.
+  companyId: insuranceCompanyIdSchema.nullable(),
+  companyMatch: z.literal("unconfirmed"),
+  remainingChecks: z.tuple([
+    z.literal("company_identity"),
+    z.literal("product_scope"),
+    z.literal("client_admission"),
+    z.literal("distribution_rights"),
+    z.literal("economic_agreement"),
+  ]),
+  convention: z
+    .object({
+      summary: conventionSummarySchema,
+      current: conventionRecordSchema.omit({ documentId: true, canDownload: true }).nullable(),
+      sourceStatus: z.enum(["missing", "available", "changed", "unavailable", "disabled"]),
+      reviewedDocumentRevision: z.number().int().nonnegative().nullable(),
+      canOpenDossier: z.boolean(),
+    })
+    .nullable(),
+});
+export type SolutionEvidence = z.infer<typeof solutionEvidenceSchema>;
+export type SolutionEvidenceQuery = z.infer<typeof solutionEvidenceQuerySchema>;
+
 export const offerHistoryQuerySchema = z
   .object({ cursor: z.string().max(500).optional() })
   .strict();

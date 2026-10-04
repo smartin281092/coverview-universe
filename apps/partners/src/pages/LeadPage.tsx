@@ -18,6 +18,7 @@ import { usePartner } from "../features/PartnerSession";
 import { useLeadCommand } from "../features/use-lead-command";
 import { LeadActionDialog, type LeadAction } from "../features/LeadActionDialog";
 import { OfferDialog } from "../features/OfferDialog";
+import { SolutionEvidenceDialog } from "../features/SolutionEvidenceDialog";
 import { OfferImportDialog } from "../features/OfferImportDialog";
 import { OfferHistoryDialog } from "../features/OfferHistoryDialog";
 import { FinalPoliciesDialog } from "../features/FinalPoliciesDialog";
@@ -61,6 +62,7 @@ export function LeadPage() {
     [referent, setReferent] = useState(false),
     [advice, setAdvice] = useState(false),
     [advisorAssessment, setAdvisorAssessment] = useState(false),
+    [solutionOfferId, setSolutionOfferId] = useState<string>(),
     [withdraw, setWithdraw] = useState<LeadOffer | null>(null),
     [collaborating, setCollaborating] = useState(false),
     [appointment, setAppointment] = useState<string>(),
@@ -101,6 +103,14 @@ export function LeadPage() {
         />
       )}
       {advice && <AdvicePreferencesDialog leadId={lead.id} onClose={() => setAdvice(false)} />}
+      {solutionOfferId && (
+        <SolutionEvidenceDialog
+          key={[...session.queryKey, lead.id, solutionOfferId].join(":")}
+          leadId={lead.id}
+          offerId={solutionOfferId}
+          onClose={() => setSolutionOfferId(undefined)}
+        />
+      )}
       {advisorAssessment && (
         <AdvisorAssessmentDialog
           key={[...session.queryKey, lead.id].join(":")}
@@ -627,6 +637,11 @@ export function LeadPage() {
                   </p>
                 )}
                 <div className="mt-5 flex flex-wrap gap-2">
+                  {allowed("advisor_assessment") && (
+                    <Button size="sm" variant="outline" onClick={() => setSolutionOfferId(item.id)}>
+                      {t("solutionEvidence.open")}
+                    </Button>
+                  )}
                   {item.canDownload && (
                     <Button asChild size="sm" variant="outline">
                       <a href={partnerApi.sourceUrl(lead.id, item.id)}>{t("offer.source")}</a>

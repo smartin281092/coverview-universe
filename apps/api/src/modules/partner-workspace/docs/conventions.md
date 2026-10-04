@@ -36,6 +36,8 @@ PII privée : identifiants et noms déclarés du membre/organisation, texte, nom
 
 ## État réel
 
+Depuis une offre exacte de Lead, la [consultation contextuelle des sources](solution-evidence.md) permet d’ouvrir son dossier à la catégorie du besoin et à une compagnie choisie explicitement. Ce parcours ne confirme pas le rapprochement de l’identité libre de l’offre ; les règles du dossier ci-dessus restent inchangées.
+
 Parcours implémenté depuis Profil et supervision Candidatures : sélecteurs compagnie/catégorie, dépôt/reprise, examen/retrait, historique et téléchargement privé. Vérifications types/lint/build, frontières et PostgreSQL isolé ; les fixtures ne sont pas des conventions réelles. Recette habilitée, clavier/mobile et chaîne MinIO/antivirus réelle restent non vérifiés. L'environnement cc1c ne dispose plus du fichier WorkOS référencé par la configuration partagée ; aucune session artificielle ni permission de recette créée.
 
 Le relais 5944 corrige également le contrôle de compétence et les aller-retour de parties ; migration, preuves et limites dans [le référentiel commun](professional-scope.md). Le dossier convention ne publie aucune synthèse au client ni dans un annuaire.
