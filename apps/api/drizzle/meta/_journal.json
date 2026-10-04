@@ -463,6 +463,13 @@
       "when": 1790961078681,
       "tag": "0065_bumpy_mentallo",
       "breakpoints": true
+    },
+    {
+      "idx": 66,
+      "version": "7",
+      "when": 1791107609153,
+      "tag": "0066_partner_profile_trigger_locks",
+      "breakpoints": true
     }
   ]
 }
