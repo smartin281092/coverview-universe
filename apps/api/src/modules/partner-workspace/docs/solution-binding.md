@@ -1,5 +1,7 @@
 # Association documentaire personnelle d’une version d’offre
 
+Le relais a685 corrige le lecteur de texte selon FRONT-14 : vue remplaçante dédiée, retour conservant saisie/commande incertaine. Une association courante à une compagnie permet de préparer ses [passages personnels de convention](solution-clauses.md), sans conclure à une identité juridique ou un droit de distribution.
+
 La [lecture conjointe v2](bound-solution-evidence.md) permet de relire cette association courante avec la convention d’une compagnie choisie explicitement, sans persister d’avis de distribution ni transformer le rapprochement humain en identité vérifiée.
 
 Propriétaire : partner-workspace. Décisions déléguées SOL6–9 du 3 octobre 2026, relais214e ; brief I.13 et III.1–3/15. [Plan et audit](../../../../../../roadmap/plans/partner-solution-binding.plan.md), [preuves](../../../../../../roadmap/evidence/partner-core.md#relais-214e--association-documentaire-personnelle). Les [sources de solution](solution-evidence.md) et [conventions](conventions.md) gardent leurs règles propres.

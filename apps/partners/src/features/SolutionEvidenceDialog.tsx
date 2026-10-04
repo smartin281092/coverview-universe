@@ -20,6 +20,7 @@ import { partnerApi } from "../api";
 import { usePartner } from "./PartnerSession";
 import { ConventionDialog } from "./ConventionDialog";
 import { SolutionBindingDialog } from "./SolutionBindingDialog";
+import { SolutionClausesDialog } from "./SolutionClausesDialog";
 import { ProfessionalScopeDetails } from "./ProfessionalScopeDetails";
 import { formatDate } from "./Field";
 
@@ -39,12 +40,13 @@ export function SolutionEvidenceDialog({
   const [dossier, setDossier] = useState<BoundSolutionEvidence | null>(null);
   const [returning, setReturning] = useState(false);
   const [binding, setBinding] = useState(false);
+  const [clauses, setClauses] = useState<string | null>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const query = useQuery({
     queryKey: [...session.queryKey, "solution-evidence", 2, leadId, offerId, companyId],
     queryFn: ({ signal }) =>
       partnerApi.boundSolutionEvidence(leadId, offerId, companyId ? { companyId } : {}, signal),
-    enabled: !dossier && !binding,
+    enabled: !dossier && !binding && !clauses,
     gcTime: 0,
     staleTime: 0,
     refetchInterval: 10000,
@@ -64,6 +66,18 @@ export function SolutionEvidenceDialog({
         offerId={offerId}
         onClose={() => {
           setBinding(false);
+          reload();
+        }}
+      />
+    );
+  if (clauses)
+    return (
+      <SolutionClausesDialog
+        leadId={leadId}
+        offerId={offerId}
+        companyId={clauses}
+        onClose={() => {
+          setClauses(null);
           reload();
         }}
       />
@@ -344,6 +358,11 @@ export function SolutionEvidenceDialog({
                       </>
                     )}
                     <p className="text-muted-foreground">{t("boundSolutionEvidence.clauses")}</p>
+                    {value.companyId && (
+                      <Button variant="outline" onClick={() => setClauses(value.companyId)}>
+                        {t("solutionClauses.open")}
+                      </Button>
+                    )}
                     <Badge variant="outline">
                       {t(`convention.status.${convention.summary.status}`)}
                     </Badge>

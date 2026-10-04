@@ -1,5 +1,7 @@
 # CoverView Partner
 
+Fiche Lead → Offres → Sources de solution → compagnie choisie → Passages de ma convention : transcription humaine de six aspects avec page/repère, inconnues, original privé, échéance/retrait/historique. [Règles et limites](../api/src/modules/partner-workspace/docs/solution-clauses.md). Révisions exactes contrôlées, fidélité du texte non validée automatiquement ; aucun avis de distribution.0053 hors catalogue, activation et V3 ouverts.
+
 Sources de solution utilise désormais la [lecture conjointe v2](../api/src/modules/partner-workspace/docs/bound-solution-evidence.md) : association courante en vue dédiée, reprise explicitement humaine de sa compagnie ou choix exploratoire, puis convention actuelle et inconnues. Retour des dossiers avec relecture masquante.0052 requise, aucune activation ; V3 rempli/clavier/mobile ouvert.
 
 Fiche Lead → Offres → Sources de solution → « Documenter la compagnie et le produit » : mentions exactes ou inconnues, texte page par page, rapprochement commercial personnel facultatif, retrait et historique. [Règles et activation](../api/src/modules/partner-workspace/docs/solution-binding.md).0052 hors catalogue ; identités non vérifiées, V3 ouvert.

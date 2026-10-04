@@ -2,6 +2,7 @@
 
 | Si la tâche porte sur… | Lire aussi |
 | --- | --- |
+| Passages humains de convention pour une version exacte d’offre | [Transcription personnelle](docs/solution-clauses.md) |
 | Association actuelle et convention relues ensemble pour une offre | [Lecture conjointe v2](docs/bound-solution-evidence.md) |
 | Association personnelle des mentions d’une offre précise | [Association documentaire](docs/solution-binding.md) |
 | Offre exacte et consultation de ses conventions pour un besoin | [Sources de solution](docs/solution-evidence.md) |

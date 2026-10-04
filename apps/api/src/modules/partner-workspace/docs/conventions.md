@@ -1,5 +1,7 @@
 # Conventions documentées par compagnie et catégorie
 
+Les [passages personnels de convention pour une offre](solution-clauses.md) permettent une transcription humaine confirmée depuis l’original privé, sans analyse automatique ni modification de ce dossier. Ils ne constituent pas un examen d’applicabilité ou une autorisation de distribution.
+
 La [lecture conjointe v2](bound-solution-evidence.md) replace le dernier dossier personnel auprès de l’association documentaire actuelle d’une offre. Elle conserve les limites de l’examen général et ne déduit aucune applicabilité au produit exact.
 
 Propriétaire : partner-workspace. Décisions déléguées du relais cc1c, brief I.4/10.2–10.4/13/15/19–20 ; [preuves et limites](../../../../../../roadmap/evidence/partner-core.md#relais-cc1c--conventions-documentées).

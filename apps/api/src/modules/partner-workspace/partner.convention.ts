@@ -32,6 +32,7 @@ type Mutation = <T>(
 ) => Promise<T>;
 type Row = {
   id: string;
+  declaration_id: string;
   revision: number;
   declaration: string;
   decision: string;
@@ -173,6 +174,50 @@ export async function readSolutionConventionEvidence(
     reviewedDocumentRevision: row?.decision === "reviewed" ? row.document_revision : null,
     canOpenDossier: !!member,
   });
+}
+
+// Only callers already holding the personal Lead/member/profile guards may use this reader.
+// The decision refers to the immutable declaration, which owns the exact original.
+export async function readSolutionConventionSource(
+  db: Executor,
+  userId: string,
+  category: string,
+  companyId: string,
+  member: Awaited<ReturnType<typeof membership>>,
+  assessedAt: string,
+  documentsAvailable: boolean,
+  lockSource = false,
+) {
+  let row = await latest(db, userId, category, companyId);
+  if (row && lockSource) {
+    await db.query("select id from files where id=$1 for share", [row.document_id]);
+    row = await latest(db, userId, category, companyId);
+  }
+  if (lockSource)
+    assessedAt = (
+      await db.query<{ at: Date }>("select clock_timestamp() at")
+    ).rows[0]!.at.toISOString();
+  return {
+    assessedAt,
+    reference: row
+      ? {
+          declarationId: row.declaration_id,
+          decisionId: row.id,
+          revision: row.revision,
+          documentRevision: row.file_revision,
+          reviewedDocumentRevision: row.decision === "reviewed" ? row.document_revision : null,
+        }
+      : null,
+    evidence: await readSolutionConventionEvidence(
+      db,
+      userId,
+      category,
+      companyId,
+      member,
+      assessedAt,
+      documentsAvailable,
+    ),
+  };
 }
 
 async function target(

@@ -1,5 +1,7 @@
 # Partner — parcours opérationnel, brief du 2 octobre 2026
 
+Journal du relais a685 : [plan SOL14–17](partner-convention-clauses.plan.md), [dossier propriétaire](../../apps/api/src/modules/partner-workspace/docs/solution-clauses.md). Transcription humaine personnelle des clauses d’une convention pour une offre exacte, avec références/révisions/échéance/retrait/historique ; aucune appréciation positive de distribution.0053 hors catalogue. Le mandat I–III demeure ouvert ; preuves au ledger et prochain relais dans le plan spécialisé.
+
 Statut : exécution autorisée par la demande utilisateur et PROG-23. La demande « Recommence » reprend ce même brief. Session requise : gpt-6-astra / ultra ; réglage réel non observable. Budget : une tranche verticale avant relais documenté ; aucune clôture fictive du programme existant.
 
 ## Résultat attendu

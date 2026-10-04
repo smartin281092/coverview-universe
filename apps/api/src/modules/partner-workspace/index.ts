@@ -60,6 +60,8 @@ import {
   advicePreferencesSchema,
   advisorAssessmentSchema,
   needExpertiseEvidenceSchema,
+  solutionClausesInputSchema,
+  solutionClausesDossierSchema,
   solutionBindingInputSchema,
   solutionBindingQuerySchema,
   solutionBindingDossierSchema,
@@ -233,6 +235,49 @@ export function registerPartnerWorkspace(
       repository.decideNeedConflict(
         await actor(request),
         request.params.id,
+        request.body,
+        key(request),
+      ),
+  );
+  app.get(
+    "/partner/leads/:id/offers/:offerId/solution-clauses/:companyId",
+    {
+      config: limited,
+      schema: {
+        params: params
+          .extend({ offerId: z.string().min(1).max(100), companyId: insuranceCompanyIdSchema })
+          .strict(),
+        querystring: conventionQuerySchema,
+        response: { 200: solutionClausesDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.solutionClauses(
+        await actor(request),
+        request.params.id,
+        request.params.offerId,
+        request.params.companyId,
+        request.query.beforeRevision,
+      ),
+  );
+  app.post(
+    "/partner/leads/:id/offers/:offerId/solution-clauses/:companyId",
+    {
+      config: limited,
+      schema: {
+        params: params
+          .extend({ offerId: z.string().min(1).max(100), companyId: insuranceCompanyIdSchema })
+          .strict(),
+        body: solutionClausesInputSchema,
+        response: { 200: solutionClausesDossierSchema },
+      },
+    },
+    async (request) =>
+      repository.recordSolutionClauses(
+        await actor(request),
+        request.params.id,
+        request.params.offerId,
+        request.params.companyId,
         request.body,
         key(request),
       ),

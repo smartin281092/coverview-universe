@@ -1313,6 +1313,102 @@ export const boundSolutionEvidenceSchema = solutionEvidenceSchema
   });
 export type BoundSolutionEvidence = z.infer<typeof boundSolutionEvidenceSchema>;
 
+export const conventionClauseFields = [
+  "parties",
+  "distribution",
+  "product",
+  "limitations",
+  "exclusions",
+  "dates",
+] as const;
+const conventionClauseSchema = z
+  .object({
+    page: z.number().int().min(1).max(9999),
+    locator: z.string().trim().min(2).max(200),
+    quote: z.string().trim().min(2).max(1000),
+  })
+  .strict()
+  .nullable();
+export const conventionClausesSchema = z
+  .object({
+    parties: conventionClauseSchema,
+    distribution: conventionClauseSchema,
+    product: conventionClauseSchema,
+    limitations: conventionClauseSchema,
+    exclusions: conventionClauseSchema,
+    dates: conventionClauseSchema,
+  })
+  .strict();
+export const solutionClausesInputSchema = z
+  .object({
+    revision: z.number().int().nonnegative(),
+    scopeFingerprint: solutionBindingInputSchema.shape.scopeFingerprint,
+    action: z.enum(["record", "withdraw"]),
+    clauses: conventionClausesSchema.nullable(),
+    reason: z.string().trim().min(10).max(1000),
+    validUntil: instant.nullable(),
+    confirmed: z.literal(true),
+    originalChecked: z.boolean(),
+  })
+  .strict()
+  .superRefine((value, context) => {
+    if (
+      value.action === "withdraw"
+        ? value.clauses !== null || value.validUntil !== null || value.originalChecked
+        : !value.originalChecked ||
+          !value.validUntil ||
+          !value.clauses ||
+          !Object.values(value.clauses).some(Boolean)
+    )
+      context.addIssue({ code: "custom", message: "PARTNER_ACTION_REQUIRED" });
+  });
+export const solutionConventionReferenceSchema = z.object({
+  declarationId: id,
+  decisionId: id,
+  revision: z.number().int().positive(),
+  documentRevision: z.number().int().nonnegative(),
+  reviewedDocumentRevision: z.number().int().nonnegative().nullable(),
+});
+const solutionClausesRecordSchema = z.object({
+  revision: z.number().int().positive(),
+  action: z.enum(["record", "withdraw"]),
+  reason: z.string(),
+  validUntil: instant.nullable(),
+  recordedAt: instant,
+  scope: solutionEvidenceSchema.shape.scope,
+  bindingRevision: z.number().int().nonnegative(),
+  conventionReference: solutionConventionReferenceSchema.nullable(),
+  clauses: conventionClausesSchema.nullable(),
+  clausesAvailable: z.boolean(),
+  method: z.literal("human_transcription"),
+});
+export const solutionClausesDossierSchema = z.object({
+  leadId: id,
+  advisorId: id,
+  companyId: insuranceCompanyIdSchema,
+  assessedAt: instant,
+  scope: solutionEvidenceSchema.shape.scope,
+  offer: solutionEvidenceSchema.shape.offer,
+  scopeFingerprint: solutionBindingInputSchema.shape.scopeFingerprint,
+  revision: z.number().int().nonnegative(),
+  status: solutionBindingDossierSchema.shape.status,
+  canRecord: z.boolean(),
+  canWithdraw: z.boolean(),
+  changeRequested: z.boolean(),
+  binding: boundSolutionEvidenceSchema.shape.binding,
+  convention: solutionEvidenceSchema.shape.convention.unwrap(),
+  conventionReference: solutionConventionReferenceSchema.nullable(),
+  maxValidUntil: instant.nullable(),
+  current: solutionClausesRecordSchema.nullable(),
+  history: z.array(solutionClausesRecordSchema).max(20),
+  nextBeforeRevision: z.number().int().positive().nullable(),
+  assessment: z.literal("human_review_required"),
+  legalIdentity: z.literal("unverified"),
+  productIdentity: z.literal("unverified"),
+});
+export type SolutionClausesInput = z.infer<typeof solutionClausesInputSchema>;
+export type SolutionClausesDossier = z.infer<typeof solutionClausesDossierSchema>;
+
 export const offerHistoryQuerySchema = z
   .object({ cursor: z.string().max(500).optional() })
   .strict();

@@ -60,16 +60,16 @@ function expiry(value: string) {
     throw new Error("Ambiguous local time");
   return at;
 }
-function SourceText({ value }: { value: SolutionBindingDossier }) {
+function SourceText({ value, onBack }: { value: SolutionBindingDossier; onBack: () => void }) {
   const { t } = useTranslation(),
     session = usePartner();
-  const [open, setOpen] = useState(false),
-    [page, setPage] = useState(value.sourcePages[0] ?? 1);
+  const [page, setPage] = useState(value.sourcePages[0] ?? 1);
+  const heading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => heading.current?.focus(), []);
   const query = useQuery({
     queryKey: [...session.queryKey, "solution-binding-source", value.leadId, value.offer.id, page],
     queryFn: ({ signal }) =>
       partnerApi.solutionBinding(value.leadId, value.offer.id, undefined, signal, page),
-    enabled: open,
     gcTime: 0,
     staleTime: 0,
     refetchInterval: 10000,
@@ -80,56 +80,53 @@ function SourceText({ value }: { value: SolutionBindingDossier }) {
       ? query.data.sourcePage
       : null;
   return (
-    <details
-      open={open}
-      onToggle={(event) => setOpen(event.currentTarget.open)}
-      className="space-y-3 rounded-md border p-3"
-    >
-      <summary className="min-h-11 cursor-pointer py-2 font-medium">
+    <section className="space-y-3">
+      <h3 ref={heading} tabIndex={-1} className="font-medium">
         {t("solutionBinding.readText")}
-      </summary>
-      {open && (
-        <>
-          <p className="text-sm text-muted-foreground">{t("solutionBinding.textHelp")}</p>
-          <Label htmlFor="solution-source-page">{t("solutionBinding.page")}</Label>
-          <select
-            id="solution-source-page"
-            value={page}
-            onChange={(event) => setPage(Number(event.target.value))}
-            className="min-h-11 w-full rounded-md border border-input bg-background px-3 text-sm"
+      </h3>
+      <Button type="button" variant="outline" onClick={onBack}>
+        {t("capacity.back")}
+      </Button>
+      <>
+        <p className="text-sm text-muted-foreground">{t("solutionBinding.textHelp")}</p>
+        <Label htmlFor="solution-source-page">{t("solutionBinding.page")}</Label>
+        <select
+          id="solution-source-page"
+          value={page}
+          onChange={(event) => setPage(Number(event.target.value))}
+          className="min-h-11 w-full rounded-md border border-input bg-background px-3 text-sm"
+        >
+          {value.sourcePages.map((number) => (
+            <option key={number} value={number}>
+              {t("solutionBinding.pageValue", { page: number })}
+            </option>
+          ))}
+        </select>
+        {query.isPending || query.isFetching ? (
+          <LoadingState label={t("loading")} />
+        ) : query.isError ? (
+          <ErrorState
+            title={t("error")}
+            description={t("solutionBinding.error")}
+            retryLabel={t("retry")}
+            pendingLabel={t("loading")}
+            onRetry={() => {
+              void query.refetch();
+            }}
+          />
+        ) : excerpt ? (
+          <p
+            tabIndex={0}
+            className="max-h-64 overflow-auto whitespace-pre-wrap break-words text-sm"
+            aria-label={t("solutionBinding.pageValue", { page: excerpt.page })}
           >
-            {value.sourcePages.map((number) => (
-              <option key={number} value={number}>
-                {t("solutionBinding.pageValue", { page: number })}
-              </option>
-            ))}
-          </select>
-          {query.isPending || query.isFetching ? (
-            <LoadingState label={t("loading")} />
-          ) : query.isError ? (
-            <ErrorState
-              title={t("error")}
-              description={t("solutionBinding.error")}
-              retryLabel={t("retry")}
-              pendingLabel={t("loading")}
-              onRetry={() => {
-                void query.refetch();
-              }}
-            />
-          ) : excerpt ? (
-            <p
-              tabIndex={0}
-              className="max-h-64 overflow-auto whitespace-pre-wrap break-words text-sm"
-              aria-label={t("solutionBinding.pageValue", { page: excerpt.page })}
-            >
-              {excerpt.text}
-            </p>
-          ) : (
-            <p role="status">{t("solutionBinding.mentionsUnavailable")}</p>
-          )}
-        </>
-      )}
-    </details>
+            {excerpt.text}
+          </p>
+        ) : (
+          <p role="status">{t("solutionBinding.mentionsUnavailable")}</p>
+        )}
+      </>
+    </section>
   );
 }
 function BindingForm({
@@ -156,8 +153,9 @@ function BindingForm({
     attempt.current.blocked ? "conflict" : prior ? "retryExact" : "",
   );
   const [frozen, setFrozen] = useState(!!prior);
+  const [reading, setReading] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
-  useEffect(() => heading.current?.focus(), [step]);
+  useEffect(() => heading.current?.focus(), [step, reading]);
   const mention = (field: (typeof solutionBindingFields)[number]) => ({
     page: prior?.mentions?.[field] ? String(prior.mentions[field].page) : "",
     quote: prior?.mentions?.[field]?.quote ?? "",
@@ -188,6 +186,7 @@ function BindingForm({
     if (step > 0 && !frozen && action === "record") setStep(step - 1);
     else onBack();
   };
+  if (reading) return <SourceText value={initial} onBack={() => setReading(false)} />;
   return (
     <form
       className="space-y-4"
@@ -286,7 +285,9 @@ function BindingForm({
           <div key={field} className="space-y-4">
             <h4 className="font-medium">{t(`solutionBinding.field.${field}`)}</h4>
             <p className="text-sm text-muted-foreground">{t("solutionBinding.mentionHelp")}</p>
-            <SourceText value={current} />
+            <Button type="button" variant="outline" onClick={() => setReading(true)}>
+              {t("solutionBinding.readText")}
+            </Button>
             <Label htmlFor="solution-quote">{t("solutionBinding.quote")}</Label>
             <textarea
               id="solution-quote"
@@ -513,9 +514,11 @@ export function SolutionBindingDialog({
           <DialogTitle>{t("solutionBinding.title")}</DialogTitle>
           <DialogDescription>{t("solutionBinding.privacy")}</DialogDescription>
         </DialogHeader>
-        <Button variant="outline" disabled={busy} onClick={leaveView}>
-          {t("capacity.back")}
-        </Button>
+        {!editing && (
+          <Button variant="outline" disabled={busy} onClick={leaveView}>
+            {t("capacity.back")}
+          </Button>
+        )}
         {query.isPending || returning ? (
           <LoadingState label={t("loading")} />
         ) : query.isError ? (

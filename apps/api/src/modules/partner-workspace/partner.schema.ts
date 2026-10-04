@@ -22,6 +22,69 @@ import { documents } from "../document-intelligence/index.js";
 import { insuranceRequests } from "../insurance-requests/index.js";
 
 const instant = (name: string) => timestamp(name, { withTimezone: true, precision: 3 });
+export const partnerSolutionClauses = pgTable(
+  "partner_solution_clauses",
+  {
+    id: text("id").primaryKey(),
+    leadId: text("lead_id").notNull(),
+    offerId: text("offer_id").notNull(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => identityUsers.id),
+    organizationId: text("organization_id").references(() => partnerOrganizations.id),
+    companyId: text("company_id").notNull(),
+    subjectKey: text("subject_key").notNull(),
+    revision: integer("revision").notNull(),
+    scopeFingerprint: text("scope_fingerprint").notNull(),
+    scope: jsonb("scope").notNull(),
+    bindingRevision: integer("binding_revision").notNull(),
+    conventionReference: jsonb("convention_reference"),
+    action: text("action").notNull(),
+    clauses: jsonb("clauses"),
+    reason: text("reason").notNull(),
+    validUntil: instant("valid_until"),
+    createdAt: instant("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    foreignKey({
+      columns: [t.leadId, t.offerId],
+      foreignColumns: [partnerOffers.leadId, partnerOffers.id],
+    }),
+    uniqueIndex("partner_solution_clauses_revision").on(
+      t.userId,
+      t.offerId,
+      t.companyId,
+      t.revision,
+    ),
+    index("partner_solution_clauses_subject").on(
+      t.userId,
+      t.offerId,
+      t.companyId,
+      t.subjectKey,
+      t.revision,
+    ),
+    check(
+      "partner_solution_clauses_revision_positive",
+      sql`${t.revision}>0 and ${t.bindingRevision}>=0`,
+    ),
+    check("partner_solution_clauses_fingerprint", sql`${t.scopeFingerprint} ~ '^[a-f0-9]{64}$'`),
+    check("partner_solution_clauses_reason", sql`length(trim(${t.reason})) between 10 and 1000`),
+    check("partner_solution_clauses_scope", sql`jsonb_typeof(${t.scope})='object'`),
+    check(
+      "partner_solution_clauses_company",
+      sql`${t.companyId} in ('allianz','assura','automate','axa','baloise','css','generali','groupe-mutuel','helsana','liechtenstein-life','tsm')`,
+    ),
+    check(
+      "partner_solution_clauses_values",
+      sql`coalesce(
+      (${t.action}='record' and ${t.validUntil}>${t.createdAt} and ${t.bindingRevision}>0
+       and jsonb_typeof(${t.conventionReference})='object' and jsonb_typeof(${t.clauses})='object'
+       and ${t.clauses} ?& array['parties','distribution','product','limitations','exclusions','dates']
+       and jsonb_strip_nulls(${t.clauses}) <> '{}'::jsonb)
+      or (${t.action}='withdraw' and ${t.clauses} is null and ${t.validUntil} is null),false)`,
+    ),
+  ],
+);
 export const partnerSolutionBindings = pgTable(
   "partner_solution_bindings",
   {

@@ -1,5 +1,7 @@
 # Lecture conjointe d’une association et d’une convention
 
+Depuis le relais a685, la vue convention ouvre aussi le [dossier séparé de passages transcrits](solution-clauses.md). La projection v2 garde sa compatibilité et ses inconnues ; aucun passage humain ne devient une preuve canonique par ce raccordement.
+
 Propriétaire : partner-workspace. Décisions SOL10–13, relais cc7b du 3 octobre 2026 ; brief I.10.3/13/15 et III.1–3/15. [Plan et audit](../../../../../../roadmap/plans/partner-bound-solution-evidence.plan.md), [preuves](../../../../../../roadmap/evidence/partner-core.md#relais-cc7b--lecture-conjointe-association-et-convention). Les propriétaires [association documentaire](solution-binding.md), [sources v1](solution-evidence.md) et [conventions](conventions.md) conservent leurs règles.
 
 ## Sens du rapprochement
