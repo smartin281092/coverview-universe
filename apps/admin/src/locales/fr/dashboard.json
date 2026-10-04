@@ -143,5 +143,14 @@
     "satisfaction": "Satisfaction"
   },
   "truncated": "Liste limitée aux 100 premiers ; affinez avec les filtres.",
-  "scope": "Les comptages de suivi décrivent l’état actuel ; les clôtures, réattributions et avis portent sur la période. La satisfaction n’apparaît qu’à partir de 5 avis. Les commissions signées restent indisponibles tant qu’aucune preuve de signature n’est raccordée."
+  "scope": "Les comptages de suivi décrivent l’état actuel ; les clôtures, réattributions et avis portent sur la période. La satisfaction n’apparaît qu’à partir de 5 avis. Les commissions signées restent indisponibles tant qu’aucune preuve de signature n’est raccordée.",
+  "coverview": {
+    "title": "Rentabilité CoverView",
+    "definition": "Recettes : variation, sur la période, de la part contractuelle CoverView des encaissements consignés, réseau entier puis par branche. Total opérationnel, qui ne remplace pas un chiffre d’affaires comptable validé.",
+    "revenue": "Recettes CoverView",
+    "branches": "Recettes CoverView par branche",
+    "costs": "Coûts de qualification, de traitement, de contrôle et de suivi",
+    "costsUnrecorded": "Non saisis dans CoverView : la rentabilité n’est pas calculée.",
+    "detail": "Détail par Lead dans les statistiques"
+  }
 }

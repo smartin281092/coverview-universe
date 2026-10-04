@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { leadCategorySchema } from "./partner.js";
+import { pilotageMeasureSchema } from "./partner-pilotage.js";
 
 const instant = z.iso.datetime({ offset: true });
 const id = z.string().min(1).max(100);
@@ -58,6 +59,14 @@ export const adminOverviewSchema = z.object({
   organizations: z
     .array(z.object({ organizationId: id, name: z.string(), advisors: count, ...performance }))
     .max(100),
+  // Brief I.21 (C6c): CoverView's share of recorded receipts, from the same ledger replay as the
+  // statistics, network-wide and per branch. No cost of qualification, handling, control or
+  // follow-up is recorded anywhere: profitability is never computed, never shown as zero.
+  coverview: z.object({
+    revenue: pilotageMeasureSchema,
+    branches: z.array(pilotageMeasureSchema.extend({ category: leadCategorySchema })).max(20),
+    costs: z.literal("unrecorded"),
+  }),
   truncated: z.boolean(),
 });
 export type AdminOverviewQuery = z.infer<typeof adminOverviewQuerySchema>;

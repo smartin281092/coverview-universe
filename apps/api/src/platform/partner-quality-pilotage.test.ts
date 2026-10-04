@@ -873,6 +873,27 @@ it("shows each authorized commission share, precise weighted cents and dated rec
   expect(network.measures.find((m) => m.metric === "coverview_revenue")).toMatchObject({
     value: 1000,
   });
+  // C6c: the network overview shows the same CoverView receipts, per branch too, and never
+  // a profitability without recorded costs.
+  const overview = await repository.adminOverview(admin, { from: query.from, to: query.to });
+  expect(overview.coverview).toMatchObject({
+    revenue: { metric: "coverview_revenue", value: 1000, status: "available" },
+    costs: "unrecorded",
+  });
+  expect(overview.coverview.branches.find((b) => b.category === "vehicle")).toMatchObject({
+    value: 1000,
+    status: "available",
+  });
+  expect(overview.coverview.branches.find((b) => b.category === "health")).toMatchObject({
+    value: null,
+    status: "no_observations",
+  });
+  const branch = await repository.adminOverview(admin, {
+    from: query.from,
+    to: query.to,
+    category: "health",
+  });
+  expect(branch.coverview).toMatchObject({ revenue: { value: null }, branches: [] });
   const member = (await repository.context(supplier)).application!;
   await repository.review(
     admin,

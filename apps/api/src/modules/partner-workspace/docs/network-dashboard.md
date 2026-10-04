@@ -52,3 +52,16 @@ Page Admin `/partner/pilotage`, sous MFA, filtrée par période (30, 90 ou 365 j
 Chaque nombre ouvre la liste Partner des Leads concernés avec les filtres correspondants : vue, alerte, attribution, conseiller, organisation, catégorie. Ces filtres restent bornés par les droits de la personne connectée.
 
 **Limites.** Les commissions signées restent indisponibles tant qu'aucune preuve de signature n'est raccordée. L'économie d'équipe et d'organisation suit les restrictions du pilotage. Les anomalies ne sont pas encore une famille de mesures.
+
+## Rentabilité CoverView (C6c)
+
+Brief I.21 : « recettes et coûts de qualification, traitement, contrôle et suivi, par Lead et par branche lorsque disponibles ».
+
+- **Recettes.** L'aperçu réseau reprend la mesure `coverview_revenue` des statistiques, par le même calcul (`pilotageMeasures`), pour le réseau entier puis pour chaque branche de la période. Les deux écrans donnent donc toujours la même valeur.
+  - La mesure est la variation de la part contractuelle CoverView des encaissements consignés.
+  - C'est un total opérationnel, pas un chiffre d'affaires comptable validé.
+  - Réservée à l'Admin, comme dans les statistiques.
+  - Le détail par Lead s'ouvre dans les statistiques, avec la même période et la même branche.
+- **Coûts.** Aucune donnée de coût n'est saisie dans CoverView : qualification, traitement, contrôle, suivi. La rentabilité n'est donc **pas calculée**, et l'écran le dit (« non saisis »). Aucun coût n'est supposé.
+- **Absence de donnée.** Une branche sans encaissement affiche « pas d'observation comparable », jamais CHF 0.
+- **Preuve.** Le scénario économique de `platform/partner-quality-pilotage.test.ts` vérifie la même recette (statistiques, aperçu, branche concernée), une autre branche sans observation, et des coûts « non saisis ».

@@ -1,10 +1,15 @@
 import type { Pool } from "pg";
+import { leadCategorySchema } from "@coverview/contracts/partner";
 import {
   adminOverviewQuerySchema,
   adminOverviewSchema,
   type AdminOverviewQuery,
 } from "@coverview/contracts/partner-overview";
+import { pilotageQuerySchema } from "@coverview/contracts/partner-pilotage";
+import { economyRead } from "./partner.commercial.js";
 import { followUpOverdueSql } from "./partner.follow-up.js";
+import { pilotageMeasures } from "./partner.pilotage.js";
+import { resolvePilotageScope, scopeFromQuery } from "./partner.pilotage-scope.js";
 import { fail, type PartnerActor } from "./partner.policy.js";
 
 const ratingMinimum = 5;
@@ -129,6 +134,26 @@ export function createOverviewOperations(pool: Pool) {
         entry.overdue += advisor.overdue;
         organizations.set(advisor.organizationId, entry);
       }
+      // The statistics' own measure, so both screens always agree on CoverView's receipts.
+      const coverview = await economyRead(pool, actor, async (tx) => {
+        const measure = async (branch: string | null) => {
+          const pilotage = pilotageQuerySchema.parse({
+            from: query.from,
+            to: query.to,
+            scope: "network",
+            ...(branch ? { category: branch } : {}),
+          });
+          const scope = await resolvePilotageScope(tx, actor, scopeFromQuery(pilotage));
+          return (await pilotageMeasures(tx, actor, pilotage, scope, "coverview_revenue"))
+            .measures[0]!;
+        };
+        const revenue = await measure(category);
+        const branches = [];
+        if (!category)
+          for (const branch of leadCategorySchema.options)
+            branches.push({ ...(await measure(branch)), category: branch });
+        return { revenue, branches, costs: "unrecorded" as const };
+      });
       return adminOverviewSchema.parse({
         from: query.from,
         to: query.to,
@@ -146,6 +171,7 @@ export function createOverviewOperations(pool: Pool) {
           .map((entry) => ({ ...entry, conversionRate: rate(entry.contracts, entry.closed) }))
           .sort((a, b) => b.active - a.active || a.name.localeCompare(b.name))
           .slice(0, 100),
+        coverview,
         truncated: rows.length > 100,
       });
     },

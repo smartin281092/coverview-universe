@@ -96,6 +96,11 @@ function Dashboard({ identity, blocked }: { identity: IdentityMe; blocked: boole
             : number.format(item.value);
   };
   const filtersFor = category ? { category } : {};
+  // An unavailable or empty measure says so; it is never displayed as CHF 0.
+  const valueOf = (item: { status: string; value: number | null }) =>
+    item.status === "available" && item.value !== null
+      ? money.format(item.value / 100)
+      : t(`status.${item.status}`);
   return (
     <div className="space-y-8">
       <header className="space-y-3">
@@ -264,6 +269,63 @@ function Dashboard({ identity, blocked }: { identity: IdentityMe; blocked: boole
               </dl>
             </section>
           ))}
+          <section className="space-y-3" aria-labelledby="coverview-title">
+            <h2 id="coverview-title" className="text-lg font-semibold">
+              {t("coverview.title")}
+            </h2>
+            <p className="max-w-3xl text-sm text-muted-foreground">{t("coverview.definition")}</p>
+            <dl className="grid gap-3 sm:grid-cols-2">
+              <div className="rounded-xl border border-border p-4">
+                <dt className="text-sm text-muted-foreground">{t("coverview.revenue")}</dt>
+                <dd className="mt-2 text-xl font-semibold">
+                  {valueOf(overview.data.coverview.revenue)}
+                </dd>
+              </div>
+              <div className="rounded-xl border border-border p-4">
+                <dt className="text-sm text-muted-foreground">{t("coverview.costs")}</dt>
+                <dd className="mt-2 font-medium">{t("coverview.costsUnrecorded")}</dd>
+              </div>
+            </dl>
+            {!!overview.data.coverview.branches.length && (
+              <div className="overflow-x-auto rounded-xl border border-border">
+                <table className="w-full text-sm">
+                  <caption className="sr-only">{t("coverview.branches")}</caption>
+                  <thead>
+                    <tr className="text-left text-muted-foreground">
+                      <th scope="col" className="p-3 font-medium">
+                        {t("category")}
+                      </th>
+                      <th scope="col" className="p-3 font-medium">
+                        {t("coverview.revenue")}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {overview.data.coverview.branches.map((branch) => (
+                      <tr key={branch.category} className="border-t border-border">
+                        <th scope="row" className="p-3 text-left font-normal">
+                          {t(`categories.${branch.category}`)}
+                        </th>
+                        <td className="p-3">{valueOf(branch)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            <Button variant="outline" asChild>
+              <a
+                href={`${partnerUrl}/statistics?${new URLSearchParams({
+                  from: filters.from,
+                  to: filters.to,
+                  scope: "network",
+                  ...filtersFor,
+                }).toString()}`}
+              >
+                {t("coverview.detail")}
+              </a>
+            </Button>
+          </section>
           <section className="space-y-3">
             <h2 className="text-lg font-semibold">{t("comparison.advisors")}</h2>
             <div className="overflow-x-auto rounded-xl border border-border">
