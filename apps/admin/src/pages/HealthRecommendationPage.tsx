@@ -240,6 +240,26 @@ function Configuration({ identity, blocked }: { identity: IdentityMe; blocked: b
                 </label>
               ),
             )}
+            <label className="grid gap-2 text-sm">
+              {t("serviceEvidence")}
+              <Select
+                value={config.serviceEvidence}
+                onValueChange={(value) =>
+                  setConfig({
+                    ...config,
+                    serviceEvidence: value as RecommendationRules["serviceEvidence"],
+                  })
+                }
+              >
+                <SelectTrigger aria-label={t("serviceEvidence")}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent portalContainer={portal}>
+                  <SelectItem value="official">{t("evidenceOfficial")}</SelectItem>
+                  <SelectItem value="verified">{t("evidenceVerified")}</SelectItem>
+                </SelectContent>
+              </Select>
+            </label>
             {(
               [
                 "serviceContributionCap",
@@ -406,6 +426,14 @@ function Configuration({ identity, blocked }: { identity: IdentityMe; blocked: b
               })}
             </p>
             <p className="text-sm text-muted-foreground">{t("coverageHint")}</p>
+            {catalog.benefitTypes.length > 0 && (
+              <p className="text-sm">
+                {t("taxonomy", {
+                  types: catalog.benefitTypes.length,
+                  benefits: catalog.benefits.length,
+                })}
+              </p>
+            )}
             <div className="flex flex-wrap gap-3">
               <Input
                 aria-label={t("search")}

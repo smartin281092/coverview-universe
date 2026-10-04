@@ -1,6 +1,7 @@
 import {
   evidenceCatalogSchema,
   recommendationInputSchema,
+  type BenefitType,
   type EvidenceBenefit,
 } from "@coverview/contracts/health-recommendation";
 import type { HealthOffer } from "@coverview/contracts/health-insurance";
@@ -105,6 +106,17 @@ export function context(offers = [offer("a"), offer("b", 11000)]): Recommendatio
     catalog,
     rules: structuredClone(defaultRecommendationRules),
     rulesVersion: "fixture-v1",
+  };
+}
+export function benefitType(key: string, overrides: Partial<BenefitType> = {}): BenefitType {
+  return {
+    key,
+    family: "prevention",
+    label: `Type fictif ${key}`,
+    description: "Type synthétique réservé aux tests",
+    synonyms: [],
+    valuation: "service",
+    ...overrides,
   };
 }
 export function benefit(

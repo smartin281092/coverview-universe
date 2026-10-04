@@ -7,7 +7,14 @@ import {
 import { recommend } from "./recommendation.engine.js";
 import { validateCatalog } from "./recommendation.repository.js";
 import { financialScenario } from "./recommendation.cost.js";
-import { answer, profile, offer, context, benefit } from "./recommendation.fixtures.js";
+import {
+  answer,
+  profile,
+  offer,
+  context,
+  benefit,
+  benefitType,
+} from "./recommendation.fixtures.js";
 describe("adaptive recommendation acceptance", () => {
   it("reuses the birth date and region already supplied without a tariff confirmation", () => {
     const input = profile();
@@ -444,6 +451,158 @@ describe("adaptive recommendation acceptance", () => {
     input.answers.extra_cost = { ...answer("exact"), amountMinor: 10000 };
     expect(recommend(input, ctx).outcome).toBe("tradeoff");
     expect(recommend(input, ctx).leaders.preferred).toEqual(expect.arrayContaining(["a", "b"]));
+  });
+  it("counts a preferred benefit type once whatever the insurer's synonyms", () => {
+    const input = profile(),
+      ctx = context();
+    ctx.catalog.benefitTypes = [benefitType("remote_care", { family: "telemedicine" })];
+    ctx.catalog.benefits = ["Téléconsultation A", "Médecin vidéo B"].map((title, index) =>
+      benefit("model_b", {
+        id: `synonym_${index}`,
+        title,
+        equivalenceGroup: "remote_care",
+        category: "telemedicine",
+      }),
+    );
+    input.answers.priority = answer("balance");
+    input.answers.care = answer("0");
+    input.answers.benefit_types = answer("remote_care");
+    const row = recommend(input, ctx).ranked.find((value) => value.offer.id === "b")!;
+    expect(row.utility.services).toBeCloseTo(35 / 3);
+    expect(row.preferredBenefits).toEqual([
+      { type: "remote_care", status: "counted", benefitIds: ["synonym_0", "synonym_1"] },
+    ]);
+  });
+  it("asks the benefit type question with offered types only and lets it change the balance leader", () => {
+    const input = profile(),
+      ctx = context();
+    ctx.catalog.benefitTypes = [benefitType("coaching"), benefitType("unused_type")];
+    ctx.catalog.benefits = [benefit("model_b", { equivalenceGroup: "coaching" })];
+    input.answers.priority = answer("balance");
+    input.answers.care = answer("0");
+    input.answers.extra_cost = { ...answer("exact"), amountMinor: 10000 };
+    let result = recommend(input, ctx);
+    expect(result.leaders.preferred).toEqual(["a"]);
+    expect(result.nextQuestion?.id).toBe("benefit_types");
+    expect(result.nextQuestion?.reason).toBe("dependent_benefit");
+    expect(result.nextQuestion?.options.map((option) => option.value)).toEqual([
+      "coaching",
+      "none",
+      "unknown",
+    ]);
+    expect(result.questionStates.some((state) => state.id === "lifestyle")).toBe(false);
+    input.answers.benefit_types = answer("coaching");
+    result = recommend(input, ctx);
+    expect(result.leaders.preferred).toEqual(["b"]);
+    expect(result.outcome).toBe("established");
+    input.answers.priority = answer("premium");
+    result = recommend(input, ctx);
+    expect(result.ranked.every((row) => row.utility.services === 0)).toBe(true);
+    expect(result.questionStates.find((state) => state.id === "benefit_types")?.display).toBe(
+      "inactive",
+    );
+  });
+  it("does not ask about a benefit type that cannot change the current leader", () => {
+    const input = profile(),
+      ctx = context();
+    ctx.catalog.benefitTypes = [benefitType("coaching")];
+    ctx.catalog.benefits = [benefit("model_a", { equivalenceGroup: "coaching", insurerId: 97 })];
+    input.answers.priority = answer("balance");
+    input.answers.care = answer("0");
+    input.answers.extra_cost = { ...answer("exact"), amountMinor: 10000 };
+    const result = recommend(input, ctx);
+    expect(result.leaders.preferred).toEqual(["a"]);
+    expect(result.nextQuestion?.id).not.toBe("benefit_types");
+    expect(result.questionStates.find((state) => state.id === "benefit_types")?.display).toBe(
+      "available",
+    );
+  });
+  it("keeps announced services provisional only when they decide the leader", () => {
+    const input = profile(),
+      ctx = context();
+    const announced = {
+      equivalenceGroup: "coaching",
+      yearConfirmed: false,
+      verification: "partial" as const,
+      validFrom: null,
+      validUntil: null,
+    };
+    ctx.catalog.benefitTypes = [benefitType("coaching")];
+    ctx.catalog.benefits = [benefit("model_b", announced)];
+    input.answers.priority = answer("balance");
+    input.answers.care = answer("0");
+    input.answers.extra_cost = { ...answer("exact"), amountMinor: 10000 };
+    input.answers.benefit_types = answer("coaching");
+    let result = recommend(input, ctx);
+    expect(result.leaders.preferred).toEqual(["b"]);
+    expect(result.ranked[0]?.preferredBenefits[0]?.status).toBe("counted_unconfirmed");
+    expect(result.outcome).toBe("provisional");
+    expect(result.decisiveMissing).toContain("benefit_evidence_unconfirmed");
+    expect(result.messages).toContain("benefit_evidence_unconfirmed");
+    ctx.catalog.benefits.push(benefit("model_a", { ...announced, id: "same_on_a", insurerId: 97 }));
+    result = recommend(input, ctx);
+    expect(result.leaders.preferred).toEqual(["a"]);
+    expect(result.decisiveMissing).not.toContain("benefit_evidence_unconfirmed");
+    expect(result.outcome).toBe("established");
+    ctx.catalog.benefits.pop();
+    ctx.rules.serviceEvidence = "verified";
+    result = recommend(input, ctx);
+    expect(result.leaders.preferred).toEqual(["a"]);
+    expect(result.ranked.find((row) => row.offer.id === "b")?.preferredBenefits[0]?.status).toBe(
+      "conditional",
+    );
+  });
+  it("never values paid, supplementary, independent or contradictory facts; undocumented is not absent", () => {
+    const input = profile(),
+      ctx = context();
+    ctx.catalog.benefitTypes = [benefitType("coaching")];
+    ctx.catalog.benefits = [
+      benefit("model_b", { id: "paid", equivalenceGroup: "coaching", extraCostMinor: 14900 }),
+      benefit("model_b", {
+        id: "supplementary",
+        equivalenceGroup: "coaching",
+        requiresSupplementary: true,
+      }),
+      benefit("model_b", { id: "anyone", equivalenceGroup: "coaching", requiresSameBase: false }),
+      benefit("model_b", {
+        id: "expired",
+        equivalenceGroup: "coaching",
+        yearConfirmed: false,
+        verification: "partial",
+        validFrom: "2025-01-01",
+        validUntil: "2026-08-31",
+      }),
+      benefit("model_b", {
+        id: "contradictory",
+        equivalenceGroup: "coaching",
+        verification: "contradictory",
+        operatorCaseIds: [],
+      }),
+    ];
+    input.answers.priority = answer("balance");
+    input.answers.care = answer("0");
+    input.answers.benefit_types = answer("coaching");
+    const result = recommend(input, ctx);
+    const b = result.ranked.find((row) => row.offer.id === "b")!;
+    expect(b.utility.services).toBe(0);
+    expect(b.preferredBenefits[0]?.status).toBe("conditional");
+    expect(result.ranked.find((row) => row.offer.id === "a")?.preferredBenefits[0]?.status).toBe(
+      "not_documented",
+    );
+  });
+  it("publishes a taxonomy only when every fact uses a canonical key of the same family", () => {
+    const ctx = context();
+    ctx.catalog.benefitTypes = [benefitType("coaching")];
+    ctx.catalog.benefits = [benefit("model_b", { equivalenceGroup: "coaching" })];
+    expect(() => validateCatalog(ctx.catalog)).not.toThrow();
+    ctx.catalog.benefits[0]!.equivalenceGroup = "free_text_group";
+    expect(() => validateCatalog(ctx.catalog)).toThrow();
+    ctx.catalog.benefits[0]!.equivalenceGroup = "coaching";
+    ctx.catalog.benefits[0]!.category = "members";
+    expect(() => validateCatalog(ctx.catalog)).toThrow();
+    ctx.catalog.benefits[0]!.category = "prevention";
+    ctx.catalog.benefitTypes.push(benefitType("telemedicine_free"));
+    expect(() => validateCatalog(ctx.catalog)).toThrow();
   });
   it("real research covers exactly the full official model inventory and contradictions have cases", () => {
     const catalog = evidenceCatalogSchema.parse(

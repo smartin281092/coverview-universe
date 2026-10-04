@@ -487,20 +487,53 @@ export default function HealthComparator({
             ]}
           />
         </div>
-        <fieldset className="hi-filter-group" disabled={foreign} hidden={foreign}>
-          <legend>{copy.benefitsFilter}</legend>
-          <p className="hi-small">{copy.benefitFilterHint}</p>
-          {copy.filtersList.map((item) => (
-            <label className="hi-check" key={item.key}>
-              <input
-                type="checkbox"
-                checked={benefitKeys.includes(item.key)}
-                onChange={() => toggleBenefit(item.key)}
-              />
-              <span>{item.label}</span>
-            </label>
-          ))}
-        </fieldset>
+        {status?.benefitTypes?.length ? (
+          <fieldset className="hi-filter-group" disabled={foreign} hidden={foreign}>
+            <legend>{copy.benefitTypesFilter}</legend>
+            <p className="hi-small">{copy.benefitTypesFilterHint}</p>
+            {(Object.keys(copy.benefitFamilies) as (keyof typeof copy.benefitFamilies)[]).map(
+              (family) => {
+                const items = status.benefitTypes!.filter((item) => item.family === family);
+                return (
+                  items.length > 0 && (
+                    <div className="hi-filter-family" key={family}>
+                      <p>{copy.benefitFamilies[family]}</p>
+                      {items.map((item) => (
+                        <label className="hi-check" key={item.key}>
+                          <input
+                            type="checkbox"
+                            checked={benefitKeys.includes(item.key)}
+                            disabled={!benefitKeys.includes(item.key) && benefitKeys.length >= 12}
+                            onChange={() => toggleBenefit(item.key)}
+                          />
+                          <span>
+                            <strong>{item.label}</strong>
+                            <small>{copy.benefitTypeModels(item.models)}</small>
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                  )
+                );
+              },
+            )}
+          </fieldset>
+        ) : (
+          <fieldset className="hi-filter-group" disabled={foreign} hidden={foreign}>
+            <legend>{copy.benefitsFilter}</legend>
+            <p className="hi-small">{copy.benefitFilterHint}</p>
+            {copy.filtersList.map((item) => (
+              <label className="hi-check" key={item.key}>
+                <input
+                  type="checkbox"
+                  checked={benefitKeys.includes(item.key)}
+                  onChange={() => toggleBenefit(item.key)}
+                />
+                <span>{item.label}</span>
+              </label>
+            ))}
+          </fieldset>
+        )}
         <button className="hi-primary hi-full" onClick={() => setShowFilters(false)}>
           <HealthGradient />
           {copy.apply}

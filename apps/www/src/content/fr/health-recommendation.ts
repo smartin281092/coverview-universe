@@ -29,6 +29,7 @@ export const recommendationCopy = {
   amount: "Montant en CHF",
   upper: "Estimation haute facultative, en CHF",
   multiple: "Plusieurs réponses possibles · confirmez avec Continuer.",
+  maxChoices: "12 choix au maximum : retirez-en un pour en ajouter un autre.",
   tariff:
     "Renseignez votre date de naissance et votre localité dans les paramètres au-dessus. Le calcul se mettra à jour automatiquement.",
   result: "Votre comparaison personnalisée",
@@ -101,7 +102,16 @@ export const recommendationCopy = {
     freedom: "Liberté du parcours",
     practical: "Parcours préféré accessible",
     simplicity: "Plusieurs portes d’entrée souhaitées",
-    services: "Services confirmés que vous prévoyez d’utiliser",
+    services: "Prestations souhaitées offertes par le modèle",
+  },
+  preferredBenefits: "Prestations souhaitées",
+  preferredBenefitsCount: (found: number, total: number) =>
+    `Prestations souhaitées · ${found} sur ${total}`,
+  preferredStatus: {
+    counted: "Offerte avec l’assurance de base",
+    counted_unconfirmed: "Annoncée par l’assureur · maintien 2027 à confirmer",
+    conditional: "Sous conditions : complémentaire, coût ou preuve insuffisante",
+    not_documented: "Non documentée dans les sources consultées, pas forcément absente",
   },
   rules: {
     care_estimate_incomplete:
@@ -110,6 +120,10 @@ export const recommendationCopy = {
       "Ce résultat concerne la personne renseignée. Comparez séparément chaque membre du foyer ; aucun rabais familial ou avantage unique n’est multiplié automatiquement.",
     required_benefit_unverified:
       "L’un des avantages exigés dans vos filtres reste à confirmer pour cette offre et votre situation.",
+    required_benefit_unconfirmed:
+      "Une prestation exigée dans vos filtres est annoncée par l’assureur ; son maintien en 2027 reste à confirmer.",
+    benefit_evidence_unconfirmed:
+      "Le classement dépend de prestations annoncées par les assureurs dont le maintien en 2027 n’est pas encore daté. Vérifiez-les avant de décider.",
     ordinary_costs_only:
       "Simulation des soins ordinaires : la contribution hospitalière, la quote-part majorée de certains médicaments et les exemptions particulières demandent un calcul distinct. Ce montant n’est pas un plafond universel.",
     before_unverified_subsidy:

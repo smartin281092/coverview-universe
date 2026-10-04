@@ -28,9 +28,18 @@ export function HealthEvidence({
     if (error) return <p role="alert">{copy.failed}</p>;
     if (!catalog) return <p role="status">{copy.loading}</p>;
     if (!benefits.length) return <p className="hi-small">{copy.evidence.empty}</p>;
+    // Uniform label first, the insurer's own wording below: synonyms read the same across models.
+    const types = new Map(catalog.benefitTypes.map((type) => [type.key, type]));
+    const order = catalog.benefitTypes.map((type) => type.key);
+    const sorted = [...benefits].sort(
+      (a, b) =>
+        (order.indexOf(a.equivalenceGroup) + 1 || order.length + 1) -
+        (order.indexOf(b.equivalenceGroup) + 1 || order.length + 1),
+    );
     return (
       <ul className="hi-benefits-list">
-        {benefits.map((fact) => {
+        {sorted.map((fact) => {
+          const type = types.get(fact.equivalenceGroup);
           return (
             <li key={fact.id}>
               <span className="hi-benefit-check">
@@ -38,7 +47,8 @@ export function HealthEvidence({
               </span>
               <details>
                 <summary>
-                  <span>{fact.title}</span>
+                  <span>{type?.label ?? fact.title}</span>
+                  {type && <small>{fact.insurerTerm ?? fact.title}</small>}
                 </summary>
                 <p>{fact.effect}</p>
                 {fact.telemedicine !== "not_applicable" && (

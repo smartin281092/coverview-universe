@@ -13,9 +13,14 @@ import {
 } from "@coverview/contracts/health-insurance";
 import { healthAgeGroup, healthDeductibles, ordinaryAnnualCost } from "./health.cost.js";
 import { loadHealthInsurerBrands } from "./health.brands.js";
+import {
+  benefitTypeSchema,
+  evidenceBenefitSchema,
+} from "@coverview/contracts/health-recommendation";
 import { healthOfferPresentation, loadHealthModelPresentation } from "./health.presentation.js";
 import { createHealthForeignRepository, foreignLocality } from "./health.foreign.js";
 import { locateCoordinates } from "./health.location.js";
+import { legacyBenefitFilterKeys, offeredWithBase } from "./recommendation.utility.js";
 
 type Input = z.infer<typeof healthCompareInputSchema>;
 const normalize = (text: string) => text.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase();
@@ -62,7 +67,9 @@ export function createHealthRepository(pool: pg.Pool) {
       ),
       loadHealthInsurerBrands(pool, id),
       foreign.status(2027),
+      latestTaxonomy(id, 2027),
     ]);
+    const taxonomy = results[5];
     const header = z
       .object({
         imported_at: z.date(),
@@ -92,6 +99,20 @@ export function createHealthRepository(pool: pg.Pool) {
         .sort((a, b) => (a.brand ?? a.name).localeCompare(b.brand ?? b.name, "fr-CH")),
       sources: header.sources,
       foreign: results[4],
+      benefitTypes: taxonomy.types
+        .filter((type) => ["service", "financial"].includes(type.valuation))
+        .map((type) => ({
+          key: type.key,
+          family: type.family,
+          label: type.label,
+          description: type.description,
+          models: new Set(
+            taxonomy.facts
+              .filter((fact) => fact.equivalenceGroup === type.key)
+              .flatMap((fact) => fact.modelIds),
+          ).size,
+        }))
+        .filter((type) => type.models > 0),
     });
   }
   async function localities(query: string) {
@@ -134,11 +155,48 @@ export function createHealthRepository(pool: pg.Pool) {
     );
     if (!result.rowCount) invalid("HEALTH_INVALID_LOCATION");
   }
+  // Taxonomy of the latest evidence catalogue of the dataset, with the facts offered with the basic
+  // insurance alone (same predicate as the recommendation). Optional key filter limits the transfer.
+  async function latestTaxonomy(datasetId: string, year: number, keys: string[] | null = null) {
+    const result = await pool.query<{ types: unknown; facts: unknown }>(
+      `select coalesce(latest.data->'benefitTypes','[]'::jsonb) as types,
+        coalesce((select jsonb_agg(b) from jsonb_array_elements(latest.data->'benefits') b
+          where $3::text[] is null or b->>'equivalenceGroup'=any($3)),'[]'::jsonb) as facts
+      from (select c.data from health_recommendation_catalogs c where c.dataset_id=$1 and c.year=$2
+        order by c.created_at desc,c.id desc limit 1) latest`,
+      [datasetId, year, keys],
+    );
+    return {
+      types: z.array(benefitTypeSchema).parse(result.rows[0]?.types ?? []),
+      facts: z
+        .array(evidenceBenefitSchema)
+        .parse(result.rows[0]?.facts ?? [])
+        .filter((fact) => offeredWithBase(fact, year)),
+    };
+  }
+  // Canonical benefit types filter: a model is kept only when it offers every requested type with
+  // the basic insurance alone. Historical keys keep their stricter `health_benefits` semantics.
+  async function benefitTypeModels(datasetId: string, keys: string[], year: number) {
+    if (!keys.length) return null;
+    const { facts } = await latestTaxonomy(datasetId, year, keys);
+    return keys
+      .map(
+        (key) =>
+          new Set(facts.filter((f) => f.equivalenceGroup === key).flatMap((f) => f.modelIds)),
+      )
+      .reduce((kept, models) => new Set([...kept].filter((model) => models.has(model))));
+  }
   async function compare(input: Input, existingDataset?: string) {
     const id = existingDataset ?? (await requireDataset());
-    const [brands, modelPresentation] = await Promise.all([
+    const legacyKeys = input.benefitKeys.filter((key) => legacyBenefitFilterKeys.includes(key));
+    const [brands, modelPresentation, typedModels] = await Promise.all([
       loadHealthInsurerBrands(pool, id),
       loadHealthModelPresentation(pool, id),
+      benefitTypeModels(
+        id,
+        input.benefitKeys.filter((key) => !legacyKeys.includes(key)),
+        input.year,
+      ),
     ]);
     const foreignComparison = await foreign.compare(input, brands);
     const foreignSelected = input.regionId?.startsWith("EU-") ?? false;
@@ -161,6 +219,7 @@ export function createHealthRepository(pool: pg.Pool) {
         and b.active=true and b.kind='model' and b.value=true and b.year_confirmed=true and b.requires_supplementary=false
         and (b.valid_from is null or b.valid_from<='2027-01-01') and (b.valid_until is null or b.valid_until>='2027-12-31')
       ))
+      and ($11::text[] is null or m.id=any($11))
     ), ranked as (select *,row_number() over(partition by "regionId" order by "monthlyPremiumMinor","insurerId","modelId",id) as ranking,
       count(*) over(partition by "regionId") as total from matching)
     select * from ranked where ranking<=3 or ("regionId"=$5 and ranking>$10 and ranking<=$10+15)
@@ -174,8 +233,9 @@ export function createHealthRepository(pool: pg.Pool) {
         input.municipalityId ?? null,
         input.categories,
         input.insurerIds,
-        input.benefitKeys,
+        legacyKeys,
         input.offset,
+        typedModels ? [...typedModels] : null,
       ],
     );
     const rows = z
