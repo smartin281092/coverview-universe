@@ -6,6 +6,8 @@ Aucune entrée active. Les décisions durables vivent dans leur documentation pr
 
 ## Candidats
 
+Décision déléguée PROG-23 du3octobre2026, relais5ce9 : consulter les sources personnelles existantes avec le besoin exact avant une appréciation précise supplémentaire, datées ensemble et sans étendre l’audience. Consignée au [propriétaire](apps/api/src/modules/partner-workspace/docs/need-expertise-evidence.md), confiance haute sur les invariants V2 ; réexaminer avant persistance de l’appréciation/matching/extension d’audience et avant le2janvier2027. Rayon limité à la consultation ; avis précis et V3 restent ouverts. Aucune entrée active.
+
 Décisions déléguées PROG-23 du3octobre, relais e88b : examen personnel des conflits par besoin, périmètre humain explicite, trois positions privées à échéance, absence inconnue après retrait/expiration/portée modifiée, aucune déduction depuis capacité ou agenda. Promues au [propriétaire](apps/api/src/modules/partner-workspace/docs/need-conflicts.md). Réexaminer avant expertise/matching/extension d’audience et avant le2janvier2027 ; rayon limité à la déclaration personnelle, aucune conformité juridique certifiée.0050 hors catalogue, activation et V3 ouvertes. Aucune entrée active.
 
 

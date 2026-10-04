@@ -661,6 +661,26 @@ export const needConflictDossierSchema = z.object({
 export type NeedConflictInput = z.infer<typeof needConflictInputSchema>;
 export type NeedConflictDossier = z.infer<typeof needConflictDossierSchema>;
 
+// Personal documentary evidence to examine against a need; never a suitability decision.
+export const needExpertiseEvidenceSchema = z.object({
+  version: z.literal(1),
+  leadId: id,
+  advisorId: id,
+  assessedAt: instant,
+  scope: advicePreferencesSchema.shape.scope.extend({ category: leadCategorySchema }),
+  scopeRevision: z.number().int().positive(),
+  changeRequested: z.boolean(),
+  assessment: z.literal("human_review_required"),
+  competence: z.object({
+    summary: competenceSummarySchema,
+    current: competenceRecordSchema.omit({ documentId: true, canDownload: true }).nullable(),
+    sourceStatus: z.enum(["missing", "available", "changed", "unavailable", "disabled"]),
+    reviewedDocumentRevision: z.number().int().nonnegative().nullable(),
+    canOpenDossier: z.boolean(),
+  }),
+});
+export type NeedExpertiseEvidence = z.infer<typeof needExpertiseEvidenceSchema>;
+
 // Separate consent from the private availability dossier; no legacy values are imported.
 export const sharedModesAudienceSchema = z.literal("confirmed-referent-leads-v1");
 export const sharedModesInputSchema = z

@@ -3,6 +3,7 @@ import type { Pool, PoolClient } from "pg";
 import { z } from "zod";
 import { documentAnalysisSchema } from "@coverview/contracts";
 import {
+  needExpertiseEvidenceSchema,
   needConflictInputSchema,
   type NeedConflictInput,
   needCapacityInputSchema,
@@ -72,7 +73,7 @@ import {
 } from "./partner.collaboration.js";
 import { handoffWork } from "./partner.participants.js";
 import { createConventionOperations } from "./partner.convention.js";
-import { createCompetenceOperations } from "./partner.competence.js";
+import { createCompetenceOperations, readNeedCompetenceEvidence } from "./partner.competence.js";
 import { createAvailabilityOperations } from "./partner.availability.js";
 import { createCapacityOperations } from "./partner.capacity.js";
 import { createSharedModesOperations } from "./partner.shared-modes.js";
@@ -82,6 +83,7 @@ import { previewPersonalAppointment } from "./partner.appointment-creation.js";
 import { createPracticeOperations } from "./partner.practice.js";
 import { readAdvicePreferences, confirmAdvicePreferences } from "./partner.advice.js";
 import { readNeedConflict, decideNeedConflict } from "./partner.need-conflicts.js";
+import { readPersonalNeedContext } from "./partner.need-context.js";
 import { readNeedCapacity, decideNeedCapacity } from "./partner.need-capacity.js";
 import { readAdvisorAssessment } from "./partner.advisor-assessment.js";
 import { readReferentAssessment } from "./partner.referent-assessment.js";
@@ -647,6 +649,45 @@ export function createPartnerRepository(pool: Pool, documentsAvailable = true) {
   }
   return {
     ...createCompetenceOperations(pool, transaction, documentsAvailable),
+    async needExpertiseEvidence(actor: PartnerActor, id: string) {
+      const tx = await pool.connect();
+      try {
+        await tx.query("begin isolation level repeatable read");
+        const snapshot = (await tx.query<{ at: Date }>("select transaction_timestamp() as at"))
+          .rows[0]!;
+        await lockActor(tx, actor);
+        const { ctx, lead } = await personalAdvisorLead(tx, actor, id);
+        const context = await readPersonalNeedContext(tx, actor, lead, ctx.application);
+        const assessedAt = snapshot.at.toISOString();
+        const result = needExpertiseEvidenceSchema.parse({
+          version: 1,
+          leadId: id,
+          advisorId: actor.userId,
+          assessedAt,
+          scope: context.preferences.scope,
+          scopeRevision: lead.adviceScopeRevision,
+          changeRequested: context.changeRequested,
+          assessment: "human_review_required",
+          competence: await readNeedCompetenceEvidence(
+            tx,
+            actor.userId,
+            lead.category,
+            ctx.application,
+            assessedAt,
+            documentsAvailable,
+          ),
+        });
+        await tx.query("commit");
+        return result;
+      } catch (cause) {
+        await tx.query("rollback");
+        if (cause && typeof cause === "object" && "code" in cause && cause.code === "40001")
+          fail("PARTNER_CONFLICT", 409);
+        throw cause;
+      } finally {
+        tx.release();
+      }
+    },
     async referentAssessment(actor: PartnerActor, id: string, includeSharedModes = false) {
       const tx = await pool.connect();
       try {

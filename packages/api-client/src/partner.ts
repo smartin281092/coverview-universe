@@ -47,6 +47,7 @@ import {
   professionalPracticeDossierSchema,
   advicePreferencesSchema,
   advisorAssessmentSchema,
+  needExpertiseEvidenceSchema,
   capacityAdvisorAssessmentSchema,
   sharedReferentAssessmentSchema,
   needConflictInputSchema,
@@ -215,6 +216,12 @@ export function createPartnerClient(baseUrl: string) {
       request(
         `/partner/leads/${encodeURIComponent(leadId)}/advisor-assessment`,
         advisorAssessmentSchema,
+        signal,
+      ),
+    needExpertiseEvidence: (leadId: string, signal?: AbortSignal) =>
+      request(
+        `/partner/leads/${encodeURIComponent(leadId)}/expertise-evidence`,
+        needExpertiseEvidenceSchema,
         signal,
       ),
     previewPersonalRescheduling: (

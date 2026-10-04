@@ -43,6 +43,10 @@ CLAUDE, PROJECT, MEMORY actives, codex, execution-policy, program, architecture,
 
 ## Journal
 
+### Relais 5ce9 — sources personnelles d’expertise par besoin
+
+[Plan avant code](partner-need-expertise-evidence.plan.md), [propriétaire](../../apps/api/src/modules/partner-workspace/docs/need-expertise-evidence.md), [ledger](../evidence/partner-core.md#relais-5ce9--sources-personnelles-dexpertise-par-besoin). Lecture privée datée du besoin et du dernier dossier, réutilisation de son original/historique ; aucun nouvel avis persisté.82tests distincts validés en campagnes séparées dont7nouveaux, types/lint/builds quatre apps/frontières/Knip ciblé verts. Deux revues même agent, retour UI masqué pendant relecture ; V3 non effectué. Aucune migration nouvelle ni activation partagée. Suite : appréciation précise personnelle sourcée après audit/plan, puis tous tracks I–III ; [checkpoint](../handoffs/partner-need-expertise-decision-suite.md), snapshot/audit séparés et relais unique Astra/ultra. Brief/S-110/S-042a ouverts, statuts inchangés.
+
 ### Relais e88b — examen personnel des conflits par besoin
 
 [Plan avant code](partner-need-conflicts.plan.md), [propriétaire](../../apps/api/src/modules/partner-workspace/docs/need-conflicts.md) et [ledger](../evidence/partner-core.md#relais-e88b--examen-personnel-des-conflits-par-besoin).99tests distincts/4fichiers en deux campagnes, types/builds quatre apps/lint/frontières/Knip ciblé passent.0050 hors catalogue et0049 préservée : activation non livrée ; V3 rempli/clavier/mobile non effectué. Deux revues même agent ; correction de conservation de la commande incertaine lors d’une erreur de lecture UI. Aucun sous-agent/GO nouveau. Suite proposée : expertise précise par besoin après audit/plan, puis tous tracks I–III ; [checkpoint](../handoffs/partner-need-expertise-suite.md), snapshot complet et unique relais Astra/ultra. S-110/S-042a ouverts, statuts inchangés.

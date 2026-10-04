@@ -21,12 +21,20 @@ import { formatDate } from "./Field";
 import { partnerApi } from "../api";
 import { ProfessionalScopeDetails } from "./ProfessionalScopeDetails";
 
-export function CompetenceDialog({ userId, onClose }: { userId: string; onClose: () => void }) {
+export function CompetenceDialog({
+  userId,
+  initialCategory,
+  onClose,
+}: {
+  userId: string;
+  initialCategory?: CompetenceDossier["category"];
+  onClose: () => void;
+}) {
   const { t } = useTranslation(),
     session = usePartner(),
     client = useQueryClient();
   const [category, setCategory] = useState<string>(
-    session.context.application?.categories[0] ?? "health",
+    initialCategory ?? session.context.application?.categories[0] ?? "health",
   );
   const [before, setBefore] = useState<number | undefined>(),
     [history, setHistory] = useState(false),

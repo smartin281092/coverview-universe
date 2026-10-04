@@ -1,5 +1,7 @@
 # Partner — Leads et offres partagés avec Wallet
 
+Pour rapprocher ses preuves privées du besoin exact, lire [les sources personnelles d’expertise](docs/need-expertise-evidence.md). Consultation datée et accès au dossier existant ; aucune appréciation précise enregistrée ni nouvelle audience.
+
 Pour l’examen privé des conflits bloquants par besoin, lire [les règles et limites](docs/need-conflicts.md). Dossier distinct de la capacité et des bilans ;0050 préparée hors catalogue, activation et V3 ouvertes.
 
 Pour enregistrer, retirer ou réexaminer sa propre appréciation de capacité pour un Lead, lire [la décision personnelle par besoin](docs/need-capacity.md). Nouveau dossier privé distinct des bilans existants ; migration0049 préparée hors catalogue protégé, activation et V3 encore ouverts.

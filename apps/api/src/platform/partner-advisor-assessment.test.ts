@@ -13,6 +13,7 @@ import {
   sharedReferentAssessmentSchema,
   referentAssessmentSchema,
   advisorAssessmentSchema,
+  needExpertiseEvidenceSchema,
   capacityAdvisorAssessmentSchema,
   capacityInputSchema,
   type CapacityInput,
@@ -1930,6 +1931,381 @@ it("serves the legacy personal and shared assessments without reading the capaci
     await database.pool.query(
       "alter table isolated_capacity_unavailable rename to partner_capacity_declarations",
     );
+  }
+});
+
+it("joins only personal competence evidence to the exact need without creating an expertise decision or exposing it in shared assessments", async () => {
+  const owner = { ...(await actor()), wallet: true },
+    advisor = await professional();
+  const lead = await assigned(owner, advisor),
+    second = await assigned(owner, advisor);
+  await database.pool.query(
+    "update partner_leads set title='Second véhicule',object='Autre voiture' where id=$1",
+    [second.id],
+  );
+  const missing = await repository.needExpertiseEvidence(advisor, lead.id);
+  expect(missing.competence).toMatchObject({
+    summary: { status: "missing" },
+    current: null,
+    sourceStatus: "missing",
+  });
+  const documentId = await proof(advisor);
+  const before = await unchanged(lead.id);
+  const result = needExpertiseEvidenceSchema.parse(
+    await repository.needExpertiseEvidence(advisor, lead.id),
+  );
+  expect(result).toMatchObject({
+    version: 1,
+    leadId: lead.id,
+    advisorId: advisor.userId,
+    assessment: "human_review_required",
+    scope: { title: lead.title, category: "vehicle", object: "Voiture", context: "Besoin isolé" },
+    competence: {
+      summary: { status: "reviewed" },
+      sourceStatus: "available",
+      current: {
+        declaration: "Déclaration privée isolée",
+        reason: "Motif privé isolé",
+        documentName: "Preuve-privée.pdf",
+        coverage: "category",
+        professionalScope: "current",
+      },
+    },
+  });
+  expect(result.competence.reviewedDocumentRevision).toBe(
+    result.competence.current!.documentRevision,
+  );
+  expect(JSON.stringify(result)).not.toContain(documentId);
+  for (const field of ["canDownload", "checksum", "storageKey", "history"])
+    expect(result.competence.current).not.toHaveProperty(field);
+  expect((await repository.needExpertiseEvidence(advisor, second.id)).scope).toMatchObject({
+    title: "Second véhicule",
+    object: "Autre voiture",
+  });
+  for (const includeCapacity of [false, true]) {
+    const personal = await repository.advisorAssessment(advisor, lead.id, includeCapacity);
+    expect(personal.remainingChecks).toHaveLength(6);
+    expect(personal.remainingChecks).toContain("need_expertise");
+    const shared = await repository.referentAssessment(owner, lead.id, includeCapacity);
+    for (const value of ["Motif privé isolé", "Preuve-privée.pdf", "Déclaration privée isolée"])
+      expect(JSON.stringify([personal, shared])).not.toContain(value);
+  }
+  expect(await unchanged(lead.id)).toEqual(before);
+  const disabled = await createPartnerRepository(database.pool, false).needExpertiseEvidence(
+    advisor,
+    lead.id,
+  );
+  expect(disabled.competence.sourceStatus).toBe("disabled");
+  expect(disabled.competence.current).not.toHaveProperty("canDownload");
+  expect(
+    (
+      await database.pool.query<{ relation: string | null }>(
+        "select to_regclass('partner_need_conflict_reviews') as relation",
+      )
+    ).rows[0]?.relation,
+  ).toBeNull();
+  expect(
+    (
+      await database.pool.query<{ relation: string | null }>(
+        "select to_regclass('partner_need_capacity_decisions') as relation",
+      )
+    ).rows[0]?.relation,
+  ).toBeNull();
+});
+
+it("keeps limited, expired, withdrawn and replaced evidence distinct from expertise on the need", async () => {
+  const owner = { ...(await actor()), wallet: true },
+    advisor = await professional(),
+    lead = await assigned(owner, advisor);
+  await proof(advisor);
+  let dossier = await repository.competence(advisor, advisor.userId, "vehicle");
+  await repository.decideCompetence(
+    admin,
+    advisor.userId,
+    "vehicle",
+    competenceDecisionSchema.parse({
+      revision: dossier.current!.revision,
+      decision: "reviewed",
+      reason: "Seulement véhicules privés",
+      scope: "Véhicules privés uniquement",
+      coverage: "limited",
+      validUntil: new Date(Date.now() + 86400000).toISOString(),
+      documentRevision: dossier.current!.documentRevision,
+      originalChecked: true,
+    }),
+    key(),
+  );
+  let result = await repository.needExpertiseEvidence(advisor, lead.id);
+  expect(result.competence).toMatchObject({
+    summary: { status: "limited" },
+    current: { coverage: "limited", scope: "Véhicules privés uniquement" },
+  });
+  expect(result.assessment).toBe("human_review_required");
+  await database.pool.query(
+    "update partner_competence_decisions set valid_until=created_at+interval '1 millisecond' where id=$1",
+    [result.competence.current!.id],
+  );
+  result = await repository.needExpertiseEvidence(advisor, lead.id);
+  expect(result.competence.summary.status).toBe("expired");
+  expect(result.assessment).toBe("human_review_required");
+  dossier = await repository.competence(advisor, advisor.userId, "vehicle");
+  await repository.decideCompetence(
+    advisor,
+    advisor.userId,
+    "vehicle",
+    competenceDecisionSchema.parse({
+      revision: dossier.current!.revision,
+      decision: "withdrawn",
+      reason: "Retrait de la déclaration",
+      scope: "",
+      coverage: null,
+      validUntil: null,
+      documentRevision: dossier.current!.documentRevision,
+      originalChecked: false,
+    }),
+    key(),
+  );
+  expect((await repository.needExpertiseEvidence(advisor, lead.id)).competence.summary.status).toBe(
+    "withdrawn",
+  );
+  dossier = await repository.competence(advisor, advisor.userId, "vehicle");
+  await repository.declareCompetence(
+    advisor,
+    advisor.userId,
+    "vehicle",
+    competenceDeclarationSchema.parse({
+      revision: dossier.current!.revision,
+      professionalRevision: dossier.professionalRevision,
+      declaration: "Nouvelle déclaration à examiner",
+      confirmed: true,
+      file: {
+        name: "Nouvel-original.pdf",
+        mime: "application/pdf",
+        size: 20,
+        checksum: createHash("sha256").update(key()).digest("hex"),
+      },
+    }),
+    key(),
+  );
+  result = await repository.needExpertiseEvidence(advisor, lead.id);
+  expect(result.competence).toMatchObject({
+    summary: { status: "submitted" },
+    current: { declaration: "Nouvelle déclaration à examiner", reason: "", coverage: null },
+    reviewedDocumentRevision: null,
+    sourceStatus: "unavailable",
+  });
+  expect(JSON.stringify(result)).not.toContain("Seulement véhicules privés");
+});
+
+it("marks changed and unsafe sources separately and never restores applicability after a professional round trip", async () => {
+  const owner = { ...(await actor()), wallet: true },
+    advisor = await professional(),
+    lead = await assigned(owner, advisor);
+  const documentId = await proof(advisor);
+  await database.pool.query("update files set revision=revision+1 where id=$1", [documentId]);
+  expect((await repository.needExpertiseEvidence(advisor, lead.id)).competence).toMatchObject({
+    summary: { status: "unavailable" },
+    sourceStatus: "changed",
+  });
+  await database.pool.query(
+    "update files set state='quarantined',revision=revision+1 where id=$1",
+    [documentId],
+  );
+  expect((await repository.needExpertiseEvidence(advisor, lead.id)).competence.sourceStatus).toBe(
+    "unavailable",
+  );
+  for (const name of ["Autre nom", "Conseiller isolé"])
+    await database.pool.query(
+      "update partner_members set application=jsonb_set(application,'{name}',to_jsonb($2::text)) where user_id=$1",
+      [advisor.userId, name],
+    );
+  const result = await repository.needExpertiseEvidence(advisor, lead.id);
+  expect(result.competence).toMatchObject({
+    summary: { status: "unavailable" },
+    current: { professionalScope: "changed", declaredName: "Conseiller isolé" },
+  });
+  expect(result.assessment).toBe("human_review_required");
+});
+
+it("requires a current personal mandate and never borrows the responsible advisor's private evidence for a contributor", async () => {
+  const owner = { ...(await actor()), wallet: true },
+    advisor = await professional(),
+    neighbor = await professional(),
+    lead = await assigned(owner, advisor);
+  await proof(advisor);
+  for (const reader of [owner, admin, neighbor])
+    await expect(repository.needExpertiseEvidence(reader, lead.id)).rejects.toMatchObject({
+      code: reader === neighbor ? "PARTNER_NOT_FOUND" : "PARTNER_ACCESS_DENIED",
+    });
+  await database.pool.query(
+    "update partner_members set organization_id=(select organization_id from partner_members where user_id=$2),roles=$3::jsonb where user_id=$1",
+    [neighbor.userId, advisor.userId, JSON.stringify(["advisor", "manager"])],
+  );
+  await expect(repository.needExpertiseEvidence(neighbor, lead.id)).rejects.toMatchObject({
+    code: "PARTNER_ACCESS_DENIED",
+  });
+  await database.pool.query(
+    "insert into partner_contributors(id,lead_id,user_id,access_scope,can_edit,can_contact) values($1,$2,$3,'advice',false,false)",
+    [key(), lead.id, neighbor.userId],
+  );
+  expect(await repository.needExpertiseEvidence(neighbor, lead.id)).toMatchObject({
+    advisorId: neighbor.userId,
+    competence: { current: null, summary: { status: "missing" } },
+  });
+  await database.pool.query(
+    "update partner_contributors set revoked_at=now() where lead_id=$1 and user_id=$2",
+    [lead.id, neighbor.userId],
+  );
+  await expect(repository.needExpertiseEvidence(neighbor, lead.id)).rejects.toMatchObject({
+    code: "PARTNER_ACCESS_DENIED",
+  });
+  await database.pool.query(
+    "update partner_members set application=jsonb_set(application,'{categories}','[\"health\"]') where user_id=$1",
+    [advisor.userId],
+  );
+  await expect(repository.needExpertiseEvidence(advisor, lead.id)).rejects.toMatchObject({
+    code: "PARTNER_ACCESS_DENIED",
+  });
+});
+
+it("rechecks session and administrator MFA for personal evidence even after a prior successful read", async () => {
+  const owner = { ...(await actor()), wallet: true },
+    advisorAdmin = await professional(),
+    lead = await assigned(owner, advisorAdmin);
+  await database.pool.query(
+    "insert into identity_admin_permissions(id,user_id,permission,evidence) values($1,$2,'administration.access','Isolated evidence test')",
+    [key(), advisorAdmin.userId],
+  );
+  const person = { ...advisorAdmin, administrator: true };
+  expect((await repository.needExpertiseEvidence(person, lead.id)).competence.canOpenDossier).toBe(
+    true,
+  );
+  await database.pool.query(
+    "update identity_sessions set mfa_verified_at=now()-interval '2 days' where id=$1",
+    [person.id],
+  );
+  await expect(repository.needExpertiseEvidence(person, lead.id)).rejects.toMatchObject({
+    code: "PARTNER_ACCESS_DENIED",
+  });
+  await database.pool.query(
+    "update identity_sessions set mfa_verified_at=now()-interval '1 second' where id=$1",
+    [person.id],
+  );
+  await database.pool.query(
+    "update identity_admin_permissions set revoked_at=now() where user_id=$1",
+    [person.userId],
+  );
+  await expect(repository.needExpertiseEvidence(person, lead.id)).rejects.toMatchObject({
+    code: "PARTNER_ACCESS_DENIED",
+  });
+  const advisor = await professional(),
+    second = await assigned(owner, advisor);
+  await repository.needExpertiseEvidence(advisor, second.id);
+  await database.pool.query("update identity_sessions set revoked_at=now() where id=$1", [
+    advisor.id,
+  ]);
+  await expect(repository.needExpertiseEvidence(advisor, second.id)).rejects.toMatchObject({
+    code: "PARTNER_ACCESS_DENIED",
+  });
+});
+
+it("rereads the current need and keeps an open client change request visible without changing the competence dossier", async () => {
+  const owner = { ...(await actor()), wallet: true },
+    advisor = await professional(),
+    lead = await assigned(owner, advisor);
+  await proof(advisor);
+  const first = await repository.needExpertiseEvidence(advisor, lead.id);
+  await database.pool.query(
+    "update partner_leads set title='Nouveau besoin',object='Autre objet',details=jsonb_set(details,'{context}','\"Contexte modifié\"') where id=$1",
+    [lead.id],
+  );
+  await repository.command(
+    owner,
+    lead.id,
+    {
+      action: "client_interlocutor",
+      revision: lead.revision,
+      reason: "Autre interlocuteur souhaité",
+    },
+    key(),
+  );
+  const result = await repository.needExpertiseEvidence(advisor, lead.id);
+  expect(result.scope).toMatchObject({
+    title: "Nouveau besoin",
+    object: "Autre objet",
+    context: "Contexte modifié",
+  });
+  expect(result.scopeRevision).toBeGreaterThan(first.scopeRevision);
+  expect(result.changeRequested).toBe(true);
+  expect(result.competence).toEqual(first.competence);
+  expect(result.assessment).toBe("human_review_required");
+});
+
+it("uses one dated snapshot for need and documentary freshness while a real profile lock delays the read", async () => {
+  const owner = { ...(await actor()), wallet: true },
+    advisor = await professional(),
+    lead = await assigned(owner, advisor);
+  const documentId = await proof(advisor);
+  const expiry = (
+    await database.pool.query<{ valid_until: Date }>(
+      "update partner_competence_decisions set valid_until=clock_timestamp()+interval '2 seconds' where user_id=$1 and decision='reviewed' returning valid_until",
+      [advisor.userId],
+    )
+  ).rows[0]!.valid_until;
+  const blocker = await database.pool.connect();
+  let pending: ReturnType<typeof repository.needExpertiseEvidence> | undefined;
+  try {
+    await blocker.query("begin");
+    await blocker.query("select id from identity_profiles where user_id=$1 for update", [
+      owner.userId,
+    ]);
+    pending = repository.needExpertiseEvidence(advisor, lead.id);
+    await expect
+      .poll(
+        async () =>
+          (
+            await database.pool.query(
+              "select pid from pg_stat_activity where datname=current_database() and wait_event_type='Lock' and query like '%identity_profiles%' and pid<>pg_backend_pid() limit 1",
+            )
+          ).rowCount,
+        { timeout: 5000 },
+      )
+      .toBe(1);
+    await database.pool.query(
+      "update files set state='quarantined',revision=revision+1 where id=$1",
+      [documentId],
+    );
+    await expect
+      .poll(
+        async () =>
+          (
+            await database.pool.query<{ expired: boolean }>(
+              "select clock_timestamp()>=$1 as expired",
+              [expiry],
+            )
+          ).rows[0]!.expired,
+        { timeout: 5000 },
+      )
+      .toBe(true);
+    await blocker.query("commit");
+    const snapshot = await pending;
+    expect(new Date(snapshot.assessedAt).getTime()).toBeLessThan(expiry.getTime());
+    expect(snapshot.competence).toMatchObject({
+      summary: { status: "reviewed" },
+      sourceStatus: "available",
+    });
+    const current = await repository.needExpertiseEvidence(advisor, lead.id);
+    expect(current.competence).toMatchObject({
+      summary: { status: "expired" },
+      sourceStatus: "unavailable",
+    });
+    expect(new Date(current.assessedAt).getTime()).toBeGreaterThan(
+      new Date(snapshot.assessedAt).getTime(),
+    );
+  } finally {
+    await blocker.query("rollback");
+    blocker.release();
+    if (pending) await pending;
   }
 });
 

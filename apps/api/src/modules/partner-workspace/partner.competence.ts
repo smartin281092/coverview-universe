@@ -5,6 +5,7 @@ import {
   competenceDossierSchema,
   competenceSummarySchema,
   competenceQuerySchema,
+  needExpertiseEvidenceSchema,
   leadCategorySchema,
   partnerApplicationInputSchema,
   type CompetenceDeclaration,
@@ -89,13 +90,14 @@ function summary(
   userId: string,
   member: Parameters<typeof professionalScope>[1],
   categoryAllowed = true,
+  assessedAt = Date.now(),
 ) {
   const reviewed = row?.decision === "reviewed";
   const status = !row
     ? "missing"
     : row.decision === "withdrawn"
       ? "withdrawn"
-      : reviewed && row.valid_until && row.valid_until.getTime() <= Date.now()
+      : reviewed && row.valid_until && row.valid_until.getTime() <= assessedAt
         ? "expired"
         : professionalScope(row, member) !== "current" || !categoryAllowed
           ? "unavailable"
@@ -151,6 +153,38 @@ function project(row: Row, userId: string, member: Awaited<ReturnType<typeof mem
     documentRevision: row.file_revision,
     canDownload: safe(row, userId),
   };
+}
+// The caller guards the personal Lead mandate and member in one repeatable-read snapshot.
+export async function readNeedCompetenceEvidence(
+  db: Executor,
+  userId: string,
+  category: string,
+  member: Awaited<ReturnType<typeof membership>>,
+  assessedAt: string,
+  documentsAvailable: boolean,
+) {
+  const row = await latest(db, userId, category);
+  return needExpertiseEvidenceSchema.shape.competence.parse({
+    summary: summary(
+      row,
+      userId,
+      member,
+      !!member?.categories.includes(leadCategorySchema.parse(category)),
+      new Date(assessedAt).getTime(),
+    ),
+    current: row ? project(row, userId, member) : null,
+    sourceStatus: !row
+      ? "missing"
+      : !documentsAvailable
+        ? "disabled"
+        : !safe(row, userId)
+          ? "unavailable"
+          : row.decision === "reviewed" && row.document_revision !== row.file_revision
+            ? "changed"
+            : "available",
+    reviewedDocumentRevision: row?.decision === "reviewed" ? row.document_revision : null,
+    canOpenDossier: !!member,
+  });
 }
 async function target(db: Executor, actor: PartnerActor, userId: string, category: string) {
   leadCategorySchema.parse(category);

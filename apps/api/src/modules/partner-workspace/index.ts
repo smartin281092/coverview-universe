@@ -57,6 +57,7 @@ import {
   professionalPracticeDossierSchema,
   advicePreferencesSchema,
   advisorAssessmentSchema,
+  needExpertiseEvidenceSchema,
   capacityAdvisorAssessmentSchema,
   referentAssessmentSchema,
   sharedReferentAssessmentSchema,
@@ -194,6 +195,18 @@ export function registerPartnerWorkspace(
       ),
   );
   const insuranceParams = z.object({ id: insuranceRequestIdSchema }).strict();
+  app.get(
+    "/partner/leads/:id/expertise-evidence",
+    {
+      config: limited,
+      schema: {
+        params,
+        querystring: z.object({}).strict(),
+        response: { 200: needExpertiseEvidenceSchema },
+      },
+    },
+    async (request) => repository.needExpertiseEvidence(await actor(request), request.params.id),
+  );
   app.get(
     "/partner/leads/:id/advisor-assessment",
     {

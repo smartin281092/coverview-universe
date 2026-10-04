@@ -1,5 +1,7 @@
 # CoverView Partner
 
+Fiche Lead → Mon adéquation → Mes preuves pour ce besoin : besoin actuel, déclaration et dernier examen documenté, limites et état de l’original. Ouverture du dossier personnel à la catégorie exacte, puis relecture au retour. [Règles et limites](../api/src/modules/partner-workspace/docs/need-expertise-evidence.md) ; V3 rempli/clavier/mobile ouvert.
+
 Fiche Lead → Mon adéquation → Examiner mes conflits : périmètre examiné, trois positions explicites, motif, échéance et confirmation ; retrait/historique privés. [Règles et activation](../api/src/modules/partner-workspace/docs/need-conflicts.md).0050 hors catalogue, V3 rempli/clavier/mobile ouvert.
 
 Fiche Lead → Mon adéquation → « Décider de ma capacité pour ce besoin » : appréciation personnelle, motif/échéance/confirmation vides, retrait et historique privés, sans attribution ni effet sur le suivi. [Règles et activation](../api/src/modules/partner-workspace/docs/need-capacity.md).0049 préparée hors catalogue ; ne pas activer le parcours avant son intégration/migration. V3 rempli/clavier/mobile ouvert.

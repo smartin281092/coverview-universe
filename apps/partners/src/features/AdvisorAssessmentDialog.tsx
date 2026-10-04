@@ -19,6 +19,7 @@ import { formatDate } from "./Field";
 import { NeedConflictPanel } from "./NeedConflictPanel";
 import { NeedCapacityPanel } from "./NeedCapacityPanel";
 import { AdvisorCapacity } from "./AdvisorCapacity";
+import { NeedExpertiseDialog } from "./NeedExpertiseDialog";
 
 export function AdvisorAssessmentDialog({
   leadId,
@@ -32,12 +33,14 @@ export function AdvisorAssessmentDialog({
   const { t, i18n } = useTranslation(),
     session = usePartner();
   const [view, setView] = useState<
-    "assessment" | "sources" | "capacity" | "decision" | "conflicts"
+    "assessment" | "sources" | "capacity" | "decision" | "conflicts" | "expertise"
   >("assessment");
   const [busy, setBusy] = useState(false);
+  const [returning, setReturning] = useState(false);
   const query = useQuery({
     queryKey: [...session.queryKey, "advisor-assessment", 2, leadId],
     queryFn: ({ signal }) => partnerApi.advisorCapacityAssessment(leadId, signal),
+    enabled: view !== "expertise",
     gcTime: 0,
     staleTime: 0,
     refetchInterval: 10000,
@@ -50,6 +53,17 @@ export function AdvisorAssessmentDialog({
     values.length
       ? new Intl.ListFormat(i18n.language).format(values)
       : t("advisorAssessment.unspecified");
+  if (view === "expertise")
+    return (
+      <NeedExpertiseDialog
+        leadId={leadId}
+        onClose={() => {
+          setReturning(true);
+          setView("assessment");
+          void query.refetch().finally(() => setReturning(false));
+        }}
+      />
+    );
   return (
     <Dialog
       open
@@ -62,7 +76,7 @@ export function AdvisorAssessmentDialog({
           <DialogTitle>{t("advisorAssessment.title")}</DialogTitle>
           <DialogDescription>{title}</DialogDescription>
         </DialogHeader>
-        {query.isPending ? (
+        {query.isPending || returning ? (
           <LoadingState label={t("loading")} />
         ) : query.isError ? (
           <ErrorState
@@ -213,6 +227,9 @@ export function AdvisorAssessmentDialog({
                       })}
                     </p>
                     <p className="text-muted-foreground">{t("competence.limits")}</p>
+                    <Button variant="outline" onClick={() => setView("expertise")}>
+                      {t("needExpertise.open")}
+                    </Button>
                   </div>
                 </section>
               ) : (
@@ -241,6 +258,9 @@ export function AdvisorAssessmentDialog({
                       <p className="font-medium">{t("advisorAssessment.competence")}</p>
                       <p>{t(`competence.status.${value.competence.status}`)}</p>
                       <p className="text-muted-foreground">{t("competence.limits")}</p>
+                      <Button variant="outline" onClick={() => setView("expertise")}>
+                        {t("needExpertise.open")}
+                      </Button>
                     </li>
                   </ul>
                   <h3 className="font-medium">{t("advisorAssessment.remainingTitle")}</h3>

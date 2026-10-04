@@ -1763,5 +1763,34 @@
       "expired": "Examen expiré : nouvel examen nécessaire.",
       "review_required": "Contexte modifié : nouvel examen nécessaire."
     }
+  },
+  "needExpertise": {
+    "open": "Mes preuves pour ce besoin",
+    "title": "Mes preuves et le besoin",
+    "privacy": "Consultation personnelle. Vos justificatifs et les motifs d’examen restent privés.",
+    "error": "Impossible de relire le besoin et vos preuves. Actualisez pour vérifier votre accès.",
+    "need": "Besoin à examiner",
+    "evidence": "Compétence documentée dans cette catégorie",
+    "lastRecord": "Dernier enregistrement du dossier. Une portée modifiée, un retrait ou une expiration empêche de retenir un ancien avis favorable.",
+    "declaration": "Votre déclaration",
+    "source": "Original associé",
+    "sourceVersions": "Version examinée : {{reviewed}} · version actuelle : {{current}}",
+    "coverage": {
+      "category": "Examen portant sur la catégorie entière.",
+      "limited": "Examen limité au périmètre indiqué."
+    },
+    "sourceStatus": {
+      "missing": "Aucun original associé.",
+      "available": "Original consultable dans votre dossier personnel. Sa disponibilité ne démontre pas votre expertise sur ce besoin.",
+      "changed": "L’original a changé depuis l’examen. Un nouvel examen est nécessaire.",
+      "unavailable": "L’original ne peut pas être consulté dans son état actuel.",
+      "disabled": "La consultation des documents est actuellement désactivée."
+    },
+    "missing": "Aucune déclaration documentée dans cette catégorie. Cela ne signifie pas une incapacité ; l’expertise reste à examiner.",
+    "openDossier": "Ouvrir mon dossier de cette catégorie",
+    "dossierHelp": "Le dossier personnel permet de consulter l’original, son historique et de demander un nouvel examen. Aucune information de ce client n’y est ajoutée.",
+    "reviewTitle": "Expertise précise à examiner",
+    "review": "Rapprochez le besoin, sa complexité et ses limites du périmètre réellement examiné. Repérez les compléments ou l’intervention d’un spécialiste nécessaires.",
+    "limits": "Cette consultation n’enregistre aucune appréciation pour le besoin. Une compétence documentée ne suffit pas à établir l’habilitation, une solution distribuable ou l’adéquation complète. Les autres vérifications restent nécessaires."
   }
 }
