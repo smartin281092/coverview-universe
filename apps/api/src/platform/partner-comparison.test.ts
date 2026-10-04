@@ -282,7 +282,7 @@ it("compares reviewed offers by normalized category and only ranks sourced amoun
     limit: { value: 500000, unit: "chf", period: "event" },
   });
   const comparison = detail.offerComparison!;
-  expect(comparison).toMatchObject({ catalog: "benefit-catalog-v1", reference: "none" });
+  expect(comparison).toMatchObject({ catalog: "benefit-catalog-v2", reference: "none" });
   // Columns follow the offer cards (newest first).
   expect(comparison.columns.map((column) => [column.company, column.premiumStatus])).toEqual([
     ["Zurich", "verified"],

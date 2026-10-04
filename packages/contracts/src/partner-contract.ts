@@ -12,6 +12,13 @@ export const contractCandidateSchema = z.object({
 export const contractCandidatesSchema = z.object({
   items: z.array(contractCandidateSchema).max(200),
   truncated: z.boolean(),
+  // Policies whose insurance domain fits the need, listed first.
+  compatible: z.array(z.string()).max(200).default([]),
+  // A single exact match on the request's object reference; the owner still confirms.
+  proposal: z
+    .object({ documentId: z.string(), reason: z.enum(["policy_number", "insured_object"]) })
+    .nullable()
+    .default(null),
 });
 export const contractFeatureSchema = z
   .object({

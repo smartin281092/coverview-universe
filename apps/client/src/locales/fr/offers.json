@@ -264,7 +264,14 @@
     "remove": "Retirer cette ligne",
     "add": "Ajouter une prestation",
     "saveReview": "Enregistrer la revue",
-    "reviewError": "Vérifiez les champs et les citations exactes. En cas de nouvelle version ou de conflit, fermez et actualisez le dossier."
+    "reviewError": "Vérifiez les champs et les citations exactes. En cas de nouvelle version ou de conflit, fermez et actualisez le dossier.",
+    "compatibleGroup": "Contrats de ce type d’assurance",
+    "otherGroup": "Autres contrats",
+    "allGroup": "Vos contrats",
+    "proposal": {
+      "policy_number": "Proposé : ce contrat porte le numéro de police indiqué dans la demande. Vérifiez qu’il s’agit bien du même objet avant de confirmer.",
+      "insured_object": "Proposé : l’objet assuré de ce contrat contient le repère indiqué dans la demande. Vérifiez qu’il s’agit bien du même objet avant de confirmer."
+    }
   },
   "resumeInsurance": "Reprendre une demande du comparateur",
   "originalInsuranceRequest": "Consulter la demande initiale",
@@ -861,7 +868,12 @@
       "cyber": "Risques cyber",
       "fees": "Frais",
       "exclusions": "Exclusions",
-      "other": "Autre prestation"
+      "other": "Autre prestation",
+      "maturity": "Échéance et horizon",
+      "contribution": "Versements",
+      "surrender_value": "Valeurs de rachat",
+      "investment_strategy": "Stratégie de placement",
+      "replacement_consequences": "Conséquences d’un remplacement"
     },
     "current": "Contrat actuel",
     "premium": "Prime annuelle",
@@ -922,5 +934,6 @@
     "none": "Votre conseiller ne formule pas de recommandation à ce stade.",
     "attention": "Points d’attention : {{value}}",
     "decision": "La décision vous appartient : choisir, poser une question ou conserver votre contrat restent possibles."
-  }
+  },
+  "objectReference": "Numéro de police actuel, plaque ou n° de châssis (facultatif)"
 }

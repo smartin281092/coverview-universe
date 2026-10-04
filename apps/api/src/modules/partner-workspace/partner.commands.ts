@@ -100,6 +100,10 @@ export async function executeLeadCommand(
         fail("PARTNER_ACTION_REQUIRED");
       const relink =
         data.clientUserId !== lead.clientUserId || data.clientProfileId !== lead.clientProfileId;
+      const referenceChanged =
+        (data.objectReference ?? "") !==
+        z.object({ objectReference: z.string().default("") }).parse(lead.details ?? {})
+          .objectReference;
       if (
         (relink || data.category !== lead.category || data.object !== lead.object) &&
         (await tx.query("select id from partner_final_policies where lead_id=$1 limit 1", [id]))
@@ -112,8 +116,12 @@ export async function executeLeadCommand(
           .rowCount
       )
         fail("PARTNER_INVALID_TRANSITION");
+      // The object reference identifies the current contract: it is frozen with the reference.
       if (
-        (relink || data.category !== lead.category || data.object !== lead.object) &&
+        (relink ||
+          referenceChanged ||
+          data.category !== lead.category ||
+          data.object !== lead.object) &&
         (
           await tx.query("select id from partner_contract_references where lead_id=$1 limit 1", [
             id,
@@ -182,6 +190,7 @@ export async function executeLeadCommand(
           data.clientProfileId,
           JSON.stringify({
             context: data.context,
+            objectReference: data.objectReference ?? "",
             email: data.email,
             phone: data.phone,
             language: data.language,

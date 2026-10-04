@@ -4,7 +4,7 @@ C4a du [plan de reprise](../../../../../../roadmap/plans/partner-completion.plan
 
 ## Prestations normalisées
 
-Le référentiel versionné `benefit-catalog-v1` (`@coverview/contracts/partner-benefits`) définit des catégories comparables : franchise, responsabilité civile, casco, parking, assistance, hospitalisation, soins dentaires, capital décès, etc. Chaque catégorie déclare les besoins auxquels elle s'applique et son mode de comparaison :
+Le référentiel versionné `benefit-catalog-v2` (`@coverview/contracts/partner-benefits`) définit des catégories comparables : franchise, responsabilité civile, casco, parking, assistance, hospitalisation, soins dentaires, capital décès, etc. Chaque catégorie déclare les besoins auxquels elle s'applique et son mode de comparaison :
 
 | Mode | Lecture |
 |---|---|
@@ -12,6 +12,8 @@ Le référentiel versionné `benefit-catalog-v1` (`@coverview/contracts/partner-
 | `higher` | le montant structuré le plus élevé est le meilleur (limite, somme, jours) |
 | `lower` | le montant structuré le plus bas est le meilleur (franchise, frais, délai d'attente) |
 | `text` | aucune comparaison numérique (hospitalisation, exclusions, autre) |
+
+La v2 (C4c) ajoute les termes de prévoyance : échéance et horizon, versements, valeurs de rachat, stratégie de placement et conséquences d'un remplacement. Ce sont des lignes de texte sourcées : elles ne sont jamais réduites à un montant comparable, et un remplacement ne produit jamais de perte calculée. Capital garanti, décès, incapacité, libération du paiement des primes, frais et délai d'attente gardent leur mode de comparaison.
 
 Une prestation d'offre ou de revue du contrat actuel garde son libellé, sa valeur, ses conditions, ses exclusions et sa source. Elle reçoit, de façon additive :
 
@@ -56,6 +58,24 @@ Dans chaque ligne, la **meilleure limite des offres** est marquée quand au moin
 - Gains et pertes sont toujours affichés ensemble. Choisir de conserver le contrat actuel reste une décision distincte.
 - Le composant `ComparisonMatrix` (`@coverview/ui`) n'affiche que ce que l'API calcule. Le regroupement par libellé côté client a disparu, tout comme l'ancienne comparaison par carte (`SourcedComparison`).
 - Le champ `comparisons` reste servi pour les indicateurs de pilotage et la compatibilité.
+
+## Contrat actuel proposé
+
+La demande peut porter un **repère de l'objet** facultatif (`objectReference`) : numéro de police actuel, plaque ou numéro de châssis. Le client le saisit dans Wallet, l'intervenant dans Partner. Il ne sert qu'à proposer le contrat actuel ; il est gelé dès qu'une référence de contrat existe.
+
+`GET /wallet/leads/:id/contracts` (propriétaire seulement) renvoie en plus :
+
+- **`compatible`** : les polices du profil exact dont le domaine d'assurance correspond au besoin, listées en premier :
+  - véhicule → automobile ;
+  - santé → maladie et accident ;
+  - ménage → ménage, responsabilité civile et bâtiment ;
+  - protection juridique → protection juridique ;
+  - prévoyance → 3a, 3b, prévoyance et vie.
+
+  Entreprise et autre n'ont pas de correspondance fiable : rien n'est jamais proposé pour eux.
+- **`proposal`** : présent seulement si le repère est **distinctif** (au moins cinq lettres ou chiffres, dont un chiffre) et si **une seule** police compatible le porte. La police doit avoir le même numéro de police, ou un objet assuré qui contient le repère. « Voiture », un modèle ou un repère ambigu ne proposent rien.
+
+Wallet présélectionne la police proposée et en affiche la raison. Le propriétaire confirme toujours séparément le même objet et le partage, cases non précochées : une proposition ne vaut jamais confirmation.
 
 ## Limites
 

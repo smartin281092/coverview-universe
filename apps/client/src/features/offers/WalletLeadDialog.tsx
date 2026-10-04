@@ -103,6 +103,7 @@ export function WalletLeadDialog({
                 title: field("subject"),
                 category: field("category"),
                 object: field("object"),
+                objectReference: field("objectReference"),
                 context: field("context"),
                 clientUserId: identity.user.id,
                 clientProfileId: target === "self" ? null : target,
@@ -134,7 +135,7 @@ export function WalletLeadDialog({
                 .finally(() => setPending(false));
             }}
           >
-            {["clientName", "subject", "object", "phone"].map((name) => (
+            {["clientName", "subject", "object", "objectReference", "phone"].map((name) => (
               <div className="space-y-2" key={name}>
                 <Label htmlFor={`request-${name}`}>{t(name)}</Label>
                 <Input

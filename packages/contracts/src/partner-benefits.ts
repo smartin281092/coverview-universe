@@ -8,7 +8,7 @@ type LeadCategory = "health" | "vehicle" | "pension" | "household" | "legal" | "
 // differently; a reviewed benefit keeps its own label, value, conditions and source, and is grouped
 // under one of these categories for comparison. "higher"/"lower" say which structured amount is
 // better; "coverage" compares inclusion only; "text" is never compared numerically.
-export const benefitCatalogVersion = "benefit-catalog-v1";
+export const benefitCatalogVersion = "benefit-catalog-v2";
 export const benefitCategorySchema = z.enum([
   "deductible",
   "liability",
@@ -45,6 +45,11 @@ export const benefitCategorySchema = z.enum([
   "disability",
   "premium_waiver",
   "guaranteed_capital",
+  "maturity",
+  "contribution",
+  "surrender_value",
+  "investment_strategy",
+  "replacement_consequences",
   "business_interruption",
   "cyber",
   "fees",
@@ -100,6 +105,13 @@ export const benefitCatalog: Record<BenefitCategory, { mode: BenefitMode; needs:
     disability: { mode: "higher", needs: ["pension"] },
     premium_waiver: { mode: "coverage", needs: ["pension"] },
     guaranteed_capital: { mode: "higher", needs: ["pension"] },
+    // Pension terms read as stated in the documents: dates, schedules and strategies are not one
+    // comparable amount, and a replacement's consequences are facts, never a computed loss.
+    maturity: { mode: "text", needs: ["pension"] },
+    contribution: { mode: "text", needs: ["pension"] },
+    surrender_value: { mode: "text", needs: ["pension"] },
+    investment_strategy: { mode: "text", needs: ["pension"] },
+    replacement_consequences: { mode: "text", needs: ["pension"] },
     business_interruption: { mode: "coverage", needs: ["business"] },
     cyber: { mode: "coverage", needs: ["business", "household"] },
     fees: { mode: "lower", needs: all },
@@ -181,6 +193,17 @@ const words: [BenefitCategory, RegExp][] = [
   ["disability", /incapacite|invalidite|erwerbsunfahigkeit|invalidita/u],
   ["premium_waiver", /liberation du paiement|pramienbefreiung|esonero dal pagamento/u],
   ["guaranteed_capital", /capital garanti|garantiertes kapital|capitale garantito/u],
+  ["maturity", /echeance|horizon|duree du contrat|ablauf|laufzeit|scadenza/u],
+  ["contribution", /versements?|cotisations?|einzahlung|beitrage?|versamenti/u],
+  ["surrender_value", /valeurs? de rachat|ruckkaufswert|valore di riscatto/u],
+  [
+    "investment_strategy",
+    /strategie de placement|profil de placement|anlagestrategie|strategia d.investimento/u,
+  ],
+  [
+    "replacement_consequences",
+    /remplacement|rachat anticipe|resiliation anticipee|vorzeitige auflosung/u,
+  ],
   ["business_interruption", /perte d.exploitation|betriebsunterbruch|interruzione d.esercizio/u],
   ["cyber", /cyber/u],
   ["fees", /\bfrais\b|kosten|spese/u],

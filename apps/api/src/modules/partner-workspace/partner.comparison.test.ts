@@ -95,7 +95,7 @@ describe("offer comparison", () => {
         feature({ label: "Assistance Europe", category: "assistance", coverage: "included" }),
       ]),
     ]);
-    expect(result).toMatchObject({ catalog: "benefit-catalog-v1", reference: "none" });
+    expect(result).toMatchObject({ catalog: "benefit-catalog-v2", reference: "none" });
     expect(result.rows).toHaveLength(1);
     expect(result.rows[0]).toMatchObject({
       key: "assistance",
@@ -344,6 +344,52 @@ describe("offer comparison", () => {
     expect(theft.primary).toBe(true);
   });
 
+  it("keeps pension terms as sourced text rows, never as computed gains or losses", () => {
+    const result = compareOffers(
+      current([
+        held({
+          label: "Valeurs de rachat",
+          category: "surrender_value",
+          value: "Année 10 : CHF 12'000",
+        }),
+        held({
+          label: "Capital garanti",
+          category: "guaranteed_capital",
+          value: "CHF 50'000",
+          limit: chf(50000, "total"),
+        }),
+      ]),
+      [
+        offer("a", [
+          feature({
+            label: "Valeur de rachat",
+            category: "surrender_value",
+            value: "Année 10 : CHF 14'000",
+          }),
+          feature({
+            label: "Capital garanti",
+            category: "guaranteed_capital",
+            value: "CHF 60'000",
+            limit: chf(60000, "total"),
+          }),
+          feature({
+            label: "Conséquences d'un remplacement",
+            category: "replacement_consequences",
+            value: "Nouveau questionnaire de santé",
+          }),
+        ]),
+      ],
+    );
+    const changes = (key: string) =>
+      result.rows
+        .find((row) => row.key === key)!
+        .cells.map((cell) => (cell ? cell.change : "absent"));
+    expect(changes("surrender_value")).toEqual([null, "changed"]);
+    expect(changes("guaranteed_capital")).toEqual([null, "better"]);
+    expect(changes("replacement_consequences")).toEqual(["absent", "missing"]);
+    expect(result.catalog).toBe("benefit-catalog-v2");
+  });
+
   it("suggests a category from a label only when one category of the need matches", () => {
     expect(suggestBenefitCategory("Véhicule de remplacement 7 jours", "vehicle")).toBe(
       "replacement_vehicle",
@@ -352,5 +398,12 @@ describe("offer comparison", () => {
     expect(suggestBenefitCategory("Franchise annuelle", "health")).toBe("deductible");
     expect(suggestBenefitCategory("Lunettes", "vehicle")).toBeNull();
     expect(suggestBenefitCategory("Franchise vol", "vehicle")).toBeNull();
+    expect(suggestBenefitCategory("Valeurs de rachat garanties", "pension")).toBe(
+      "surrender_value",
+    );
+    expect(suggestBenefitCategory("Stratégie de placement", "pension")).toBe("investment_strategy");
+    expect(suggestBenefitCategory("Échéance du contrat", "pension")).toBe("maturity");
+    expect(suggestBenefitCategory("Versements annuels", "pension")).toBe("contribution");
+    expect(suggestBenefitCategory("Valeurs de rachat", "vehicle")).toBeNull();
   });
 });

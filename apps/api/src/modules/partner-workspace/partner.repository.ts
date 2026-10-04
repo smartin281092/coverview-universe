@@ -8,6 +8,7 @@ import { createMatchingOperations } from "./partner.matching.js";
 import { createProfileOperations } from "./partner.profiles.js";
 import { createInvitationOperations, type InvitationDelivery } from "./partner.invitations.js";
 import { compareOffers } from "./partner.comparison.js";
+import { proposeCurrentContract } from "./partner.contract-proposal.js";
 import { orientOffers } from "./partner.orientation.js";
 import {
   createRecommendationOperations,
@@ -38,6 +39,7 @@ import {
   leadSummarySchema,
   leadCommandSchema,
   leadDetailSchema,
+  leadCategorySchema,
   leadTaskSchema,
   leadAppointmentSchema,
   leadEventSchema,
@@ -346,6 +348,7 @@ async function detail(db: Executor, actor: PartnerActor, id: string): Promise<Le
       language: z.string(),
       source: z.string(),
       transmissionAuthorized: z.boolean(),
+      objectReference: z.string().default(""),
     })
     .parse(row.details);
   const tasks = operational
@@ -465,6 +468,7 @@ async function detail(db: Executor, actor: PartnerActor, id: string): Promise<Le
     currentContract,
     comparisons: compareCurrentContract(currentContract, offers),
     offerComparison,
+    objectReference: operational || actor.wallet ? info.objectReference || null : null,
     offerOrientation: orientOffers(offerComparison, offers, currentContract),
     recommendation:
       base.access !== "progress"
@@ -1976,9 +1980,23 @@ export function createPartnerRepository(
         if (target.clientUserId !== actor.userId) fail("PARTNER_ACCESS_DENIED", 403);
         const result = await readContractCandidates(tx, actor.userId, target.clientProfileId);
         await tx.query("commit");
+        const items = result.entries.map((entry) => entry.candidate);
+        const reference = z
+          .object({ objectReference: z.string().default("") })
+          .parse(lead.details ?? {}).objectReference;
+        const { compatible, proposal } = proposeCurrentContract(
+          leadCategorySchema.parse(lead.category),
+          reference,
+          items,
+        );
         return {
-          items: result.entries.map((entry) => entry.candidate),
+          items: [
+            ...items.filter((item) => compatible.includes(item.documentId)),
+            ...items.filter((item) => !compatible.includes(item.documentId)),
+          ],
           truncated: result.truncated,
+          compatible,
+          proposal,
         };
       } catch (error) {
         await tx.query("rollback");
@@ -2539,6 +2557,7 @@ export function createPartnerRepository(
               name,
               JSON.stringify({
                 context: input.context,
+                objectReference: input.objectReference ?? "",
                 email: input.email,
                 phone: input.phone,
                 language: input.language,

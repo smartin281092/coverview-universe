@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
@@ -60,6 +60,20 @@ export function ContractLinkDialog({
     retry: false,
   });
   const selected = query.data?.items.find((item) => item.documentId === form.watch("documentId"));
+  // A single exact match on the request's reference is proposed, never confirmed for the owner.
+  const proposal = query.data?.proposal ?? null;
+  useEffect(() => {
+    if (proposal && !form.getValues("documentId")) form.setValue("documentId", proposal.documentId);
+  }, [proposal, form]);
+  const option = (item: NonNullable<typeof query.data>["items"][number]) => (
+    <option value={item.documentId} key={item.documentId}>
+      {tr("candidate", {
+        company: item.facts.companyId,
+        policy: item.contract.policyNumber ?? tr("missing"),
+        object: item.contract.insuredSubject ?? item.contract.title,
+      })}
+    </option>
+  );
   const pending = form.formState.isSubmitting;
   return (
     <Dialog
@@ -135,18 +149,24 @@ export function ContractLinkDialog({
               }}
             >
               <option value="">{tr("choose")}</option>
-              {query.data.items.map((item) => (
-                <option value={item.documentId} key={item.documentId}>
-                  {tr("candidate", {
-                    company: item.facts.companyId,
-                    policy: item.contract.policyNumber ?? tr("missing"),
-                    object: item.contract.insuredSubject ?? item.contract.title,
-                  })}
-                </option>
-              ))}
+              {query.data.compatible.length > 0 && (
+                <optgroup label={tr("compatibleGroup")}>
+                  {query.data.items
+                    .filter((item) => query.data.compatible.includes(item.documentId))
+                    .map(option)}
+                </optgroup>
+              )}
+              <optgroup label={tr(query.data.compatible.length ? "otherGroup" : "allGroup")}>
+                {query.data.items
+                  .filter((item) => !query.data.compatible.includes(item.documentId))
+                  .map(option)}
+              </optgroup>
             </select>
             {selected && (
               <div className="space-y-3 text-sm">
+                {proposal?.documentId === selected.documentId && (
+                  <p className="rounded-lg bg-muted p-3">{tr(`proposal.${proposal.reason}`)}</p>
+                )}
                 <p>
                   {tr("documentDates", {
                     start: selected.contract.startsOn ?? tr("missing"),

@@ -48,6 +48,7 @@ export function CreateLeadDialog({
           title: lead.title,
           category: lead.category,
           object: lead.object,
+          objectReference: lead.objectReference ?? "",
           context: lead.context ?? "",
           clientUserId: lead.clientUserId,
           clientProfileId: lead.clientProfileId,
@@ -66,6 +67,7 @@ export function CreateLeadDialog({
           title: "",
           category: "other",
           object: "",
+          objectReference: "",
           context: "",
           clientUserId: null,
           clientProfileId: null,
@@ -85,6 +87,7 @@ export function CreateLeadDialog({
     name:
       | "title"
       | "object"
+      | "objectReference"
       | "clientName"
       | "email"
       | "phone"
@@ -166,6 +169,7 @@ export function CreateLeadDialog({
               </select>
             </div>
             {field("object")}
+            {field("objectReference")}
             {field("clientName")}
             {field("email", "email")}
             {field("phone")}

@@ -675,7 +675,8 @@
     "featureValue": "Valeur / limite",
     "featureSource": "Page / passage source",
     "featureConditions": "Conditions et exclusions",
-    "verification": "Vérification"
+    "verification": "Vérification",
+    "objectReference": "Repère de l’objet : numéro de police actuel, plaque ou n° de châssis (facultatif)"
   },
   "create": {
     "edit": "Modifier le Lead",
@@ -2309,7 +2310,12 @@
       "cyber": "Risques cyber",
       "fees": "Frais",
       "exclusions": "Exclusions",
-      "other": "Autre prestation"
+      "other": "Autre prestation",
+      "maturity": "Échéance et horizon",
+      "contribution": "Versements",
+      "surrender_value": "Valeurs de rachat",
+      "investment_strategy": "Stratégie de placement",
+      "replacement_consequences": "Conséquences d’un remplacement"
     },
     "current": "Contrat actuel",
     "premium": "Prime annuelle",

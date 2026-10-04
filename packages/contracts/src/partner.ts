@@ -924,6 +924,9 @@ export const leadCreateInputSchema = z
     title: z.string().trim().min(3).max(180),
     category: leadCategorySchema,
     object: z.string().trim().max(200),
+    // A distinctive reference of the insured object (current policy, plate or chassis number), used
+    // only to propose the matching current contract to its owner.
+    objectReference: z.string().trim().max(120).optional(),
     context: z.string().trim().max(4000),
     clientUserId: id.nullable(),
     clientProfileId: id.nullable(),
@@ -1886,6 +1889,7 @@ export const leadDetailSchema = leadSummarySchema.extend({
   currentContract: currentContractSchema.nullable().default(null),
   comparisons: z.array(contractComparisonSchema).default([]),
   offerComparison: offerComparisonSchema.optional(),
+  objectReference: z.string().nullable().optional(),
   // Automatic, never validated (orientation-v1); the advisor's recommendation stays separate.
   offerOrientation: leadOrientationSchema.optional(),
   recommendation: recommendationSchema.nullable().optional(),
