@@ -149,6 +149,7 @@ import {
 } from "@coverview/contracts/partner-overview";
 import { registerRecommendationRoutes } from "./partner.recommendations.routes.js";
 import { clientInvitationMessage } from "./partner.invitation-template.js";
+import { createLiveHub } from "./partner.live.js";
 export { PartnerError } from "./partner.policy.js";
 
 export function registerPartnerWorkspace(
@@ -168,12 +169,18 @@ export function registerPartnerWorkspace(
     app.log.warn({ dependency: "partner_database" }, "Partner database unavailable"),
   );
   let stopJobs: (() => Promise<void>) | undefined;
+  const live = createLiveHub(database.pool, app.log);
   app.addHook("onReady", async () => {
+    if (config.AUTH_ENABLED) await live.start();
     if (config.AUTH_ENABLED && config.PARTNER_JOBS_ENABLED)
       stopJobs = await startPartnerJobs(config.REDIS_URL, database.pool, app.log, {
         mailer,
         walletOrigin: config.AUTH_WALLET_ORIGIN,
       });
+  });
+  // Streams never finish on their own: they close before the server waits for open requests.
+  app.addHook("preClose", async () => {
+    await live.stop();
   });
   app.addHook("onClose", async () => {
     await stopJobs?.();
@@ -202,6 +209,26 @@ export function registerPartnerWorkspace(
     }
     return { userId: session.userId, id: session.id, administrator: false, wallet };
   }
+  // Live invalidation streams (C6a). Only the surface's own app may open one; the session is
+  // re-checked every minute without a new administration audit entry.
+  for (const surface of ["partner", "wallet"] as const)
+    app.get(
+      `/${surface}/live`,
+      { config: { rateLimit: { max: 30, timeWindow: "1 minute" } } },
+      async (request, reply) => {
+        const wallet = surface === "wallet",
+          origin = wallet ? config.AUTH_WALLET_ORIGIN : config.AUTH_PARTNER_ORIGIN;
+        if (!origin || request.headers.origin !== origin)
+          throw new PartnerError("PARTNER_ACCESS_DENIED", 403);
+        const current = await actor(request, wallet);
+        return live.open(reply, current, async () => {
+          const session = current.administrator
+            ? await identity.authenticateAdministrator(request)
+            : await identity.authenticate(request);
+          return session.id === current.id && session.userId === current.userId;
+        });
+      },
+    );
   const economyPage = z.object({ cursor: z.string().max(400).optional() }).strict();
   registerQualityRoutes(server, repository, actor);
   registerConclusionRoutes(server, repository, actor);

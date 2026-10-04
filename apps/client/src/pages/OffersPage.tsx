@@ -44,6 +44,7 @@ import { ConclusionsDialog } from "../features/offers/ConclusionsDialog";
 import { LeadReopeningsDialog } from "../features/offers/LeadReopeningsDialog";
 import { LeadRelationshipsDialog } from "../features/offers/LeadRelationshipsDialog";
 import { ReferentsDialog } from "../features/offers/ReferentsDialog";
+import { useWalletLiveUpdates } from "../features/offers/use-live-updates";
 const money = (minor: number) =>
   new Intl.NumberFormat("fr-CH", { style: "currency", currency: "CHF" }).format(minor / 100);
 const date = (value: string) =>
@@ -56,6 +57,7 @@ function Offers({ identity }: { identity: IdentityMe }) {
     search = useSearch({ from: "/offers" }),
     navigate = useNavigate({ from: "/offers" }),
     client = useQueryClient();
+  useWalletLiveUpdates(identity);
   const [cursor, setCursor] = useState<string>(),
     [choice, setChoice] = useState<WalletChoice | null>(null),
     [retryCommand, setRetryCommand] = useState<LeadCommand | null>(null),

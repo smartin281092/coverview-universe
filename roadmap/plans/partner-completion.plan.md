@@ -2,7 +2,7 @@
 
 > Statut : **approuvé** — réponses utilisateur du 4 octobre 2026 : « 1a 2a 3b ». diff_from : [lot 4/4](partner-conclusion-integration.plan.md), interrompu le 4 octobre à 01h30.
 > **Session requise** : Claude Code, Claude Opus 5.5, effort max. La reprise quitte la chaîne de relais Codex (décision 1a).
-> **Session réelle** : Claude Code, Claude Opus 5.5, effort max (C1 à C5, 4 octobre 2026).
+> **Session réelle** : Claude Code, Claude Opus 5.5, effort max (C1 à C6, 4 octobre 2026).
 > **Budget** : plusieurs sessions. Une phase livrée est commitée sur `claude/partner-integration` avant la suivante.
 
 ## Décisions acquises (réponses aux questions bloquantes du bilan du 4 octobre)
@@ -33,7 +33,7 @@ Rendre tout le [brief I–III](../../references/coverview-partner-2026-10-02.md)
 3. **Wallet d'un nouveau client** (I.6.2, scénario 3) : espace préparé, invitation et activation encadrées, sans révélation ni consentement implicite. Traitement des emails erronés et des adresses partagées. — *Livré le 4 octobre, V0–V2 et envoi Mailpit réel ; parcours Wallet avec un vrai compte WorkOS en phase B.*
 4. **Comparaison** (I.13, III.7–10) : catégories de prestations normalisées, proposition automatique du contrat actuel quand l'objet est identifiable (confirmation sinon), orientation initiale automatique distincte de la recommandation finale, spécificités prévoyance. — *C4a livré le 4 octobre (prestations normalisées, montants structurés, matrice serveur), C4b livré le 4 octobre (orientation automatique, recommandation validée, analyse incomplète), C4c livré le 4 octobre (termes de prévoyance sourcés, contrat actuel proposé sur repère exact), V0–V2.*
 5. **Pilotage quotidien** (I.7, II.6/10/14) : vues d'équipe et prédéfinies, indicateurs de carte, dashboard Admin complet. — *C5a livré le 4 octobre (vues, filtres, tri, compteurs, vues partagées), C5b et C5c livrés le 4 octobre (indicateurs de carte, pilotage du réseau Admin), V0–V2.*
-6. **Temps réel et agenda** (III.16, I.12, I.21) : diffusion Partner↔Wallet, rendez-vous conjoint, rentabilité CoverView si ses données existent.
+6. **Temps réel et agenda** (III.16, I.12, I.21) : diffusion Partner↔Wallet, rendez-vous conjoint, rentabilité CoverView si ses données existent. — *C6a livré le 4 octobre (flux SSE Partner et Wallet, audience décidée à chaque envoi, resynchronisation), V0–V2 dont flux HTTP réel.*
 7. **Droits des personnes** (I.20, S-130/S-131) : export, rectification, conservation et suppression contrôlée, cloisonnement en base. Aucune durée légale inventée.
 8. **Reliquats** : gestion d'équipe du responsable, restrictions fines et réexamens automatiques (I.4), contrat non déclaré signalé par le client (I.17.2), audit incomplet → demande de complément (I.13).
 
@@ -158,6 +158,65 @@ Découpage en trois sous-étapes, chacune commitée avec ses tests : **C4a** pre
   - sinon, rien n'est présélectionné et la liste est triée ;
   - la confirmation du propriétaire (même objet, partage) reste toujours requise.
 
+#### C6 — Conception retenue (avant code)
+
+Découpage en trois sous-étapes commitées séparément : **C6a** diffusion immédiate Partner ↔ Wallet, **C6b** rendez-vous conjoint, **C6c** rentabilité CoverView.
+
+**C6a — Diffusion immédiate (brief III.16, I.12 « répercutée dans Wallet et Partner »).**
+
+- **Transport : SSE** (RT-01, invalidation unidirectionnelle) sur `GET /partner/live` et `GET /wallet/live`.
+  - Authentification par la session du surface, contrôle d'hôte, Admin sous MFA comme les autres routes Partner.
+  - Limites : 4 flux par utilisateur, 512 au total (RT-18).
+  - La session est revérifiée chaque minute : un flux révoqué se ferme (RT-11).
+- **Source.** Des déclencheurs `pg_notify` sur `partner_events` (Lead changé) et `partner_notifications` (centre de notifications) suivent la validation de la transaction. Un auditeur `LISTEN` par instance d'API alimente un hub en mémoire. Aucun broker ajouté (ARCH-04).
+- **Audience** (RT-07, RT-10). Le producteur ne choisit rien.
+  - Pour chaque Lead changé, regroupé sur 250 ms, le hub vérifie pour chaque connexion la visibilité réelle (`visible(actor)`) avant d'envoyer quoi que ce soit.
+  - Une notification n'atteint que son destinataire, ou les administrateurs pour l'audience CoverView.
+- **Contrat public minimal** (RT-09, RT-16) :
+  - `lead.changed.v1 { leadId, at }` et `notifications.changed.v1 { at }`, avec un identifiant de séquence par flux ;
+  - jamais le contenu du dossier : le client relit par l'API avec ses propres droits.
+- **Clients.** Partner et Wallet ouvrent un `EventSource`.
+  - À chaque événement, ils invalident les requêtes du Lead, des listes et des notifications.
+  - À la reconnexion, ils resynchronisent tout (RT-14).
+  - Le rafraîchissement périodique existant reste le filet de sécurité.
+
+**C6b — Rendez-vous conjoint (brief I.12).**
+
+La lecture du module montre que deux des trois volets de I.12 existent déjà :
+
+- « plusieurs rendez-vous coordonnés » : la réservation Wallet coordonnée (2 à 5 propositions de conseillers différents, créneaux disjoints, une seule transaction) ;
+- « relié aux Leads concernés » : les liens de rendez-vous (jusqu'à 9 Leads du même client, pour le même conseiller).
+
+Il manque **un même rendez-vous réunissant plusieurs spécialistes**. Conception retenue :
+
+- **Initiative du client, depuis Wallet.** Sur un rendez-vous futur planifié, le client invite le conseiller d'une autre de ses demandes ouvertes, pour le même sujet (lui-même ou le même profil géré).
+  - L'invité est le responsable de cette demande, ou un contributeur avec droits de conseil et de contact, habilité dans sa catégorie.
+  - Aucun professionnel n'apprend l'existence d'une autre demande sans ce geste du client. Chacun ne voit que le nom et l'organisation des autres, jamais le contenu de l'autre demande.
+  - Aucune sollicitation automatique : une invitation par geste du client, au plus 3 spécialistes invités par rendez-vous, aucune nouvelle invitation du même professionnel après un refus pour ce rendez-vous.
+- **Réalisable.** L'invitation n'est possible que si l'invité paraît disponible : disponibilité déclarée couvrant le créneau, aucun engagement protégé en conflit. Le client n'en voit qu'un oui/non ; sinon Wallet l'oriente vers les rendez-vous coordonnés existants.
+- **Consentement du spécialiste.** L'invité confirme en saisissant sa préparation et ses déplacements (zéro pour téléphone et visio), avec les attestations de ses propres rendez-vous. La protection horaire est revérifiée à la confirmation. Il peut refuser.
+- **Effets de la confirmation.**
+  - Le temps de l'invité est protégé par la garde en base des conseillers principaux, étendue aux participations : deux engagements du même professionnel ne peuvent plus se chevaucher, qu'il soit hôte ou participant.
+  - La demande de l'invité passe en « rendez-vous planifié » avec sa propre prochaine action ; son cycle reste indépendant.
+  - L'hôte, le client et l'invité voient le rendez-vous conjoint et l'état de chaque participation.
+- **Changements sans contradiction.**
+  - Annulation du rendez-vous, par le client, l'hôte ou une reprise du dossier : toutes les participations prennent fin, et chaque demande concernée revient à « rendez-vous à planifier » si rien d'autre n'est prévu.
+  - Report par l'hôte : une participation confirmée devient « à reconfirmer ». Sa protection horaire ne vaut plus que pour les termes confirmés (révision des termes du rendez-vous).
+  - Retrait de l'invité avant le début : sa demande revient à « rendez-vous à planifier », l'hôte et le client sont avertis.
+  - Perte d'accès de l'invité à sa demande : sa participation prend fin.
+- **Issue.** Chaque spécialiste consigne l'issue pour sa propre demande : l'hôte par la commande existante, l'invité sur sa participation.
+- **Agenda.** L'agenda Partner de l'invité montre ses participations, à confirmer ou confirmées ; le détail de sa demande les affiche aussi.
+- **Données.** Une table additive `partner_appointment_participants` porte :
+  - le rendez-vous, la demande de l'invité et le professionnel ;
+  - l'état, la révision des termes acceptés, les tampons, les attestations et l'issue.
+  - Unicité : une participation active par rendez-vous et par professionnel, et par demande.
+- **Rendu différé.** L'invitation par l'hôte d'un contributeur de sa propre demande et le report conjoint en une seule opération sont reportés : annuler puis réserver à nouveau reste possible.
+
+**C6c — Rentabilité CoverView (I.21).**
+
+- Le revenu CoverView existe pour les affaires Marketplace (`coverview_revenue`). Il est affiché au pilotage du réseau par période, catégorie et partenaire.
+- Aucune donnée de coûts n'existe : la rentabilité n'est pas calculée et l'interface le dit. Aucun coût n'est supposé.
+
 ### B — Recette réelle et simplification (après C)
 
 Les 33 scénarios I.23 se déroulent avec de vrais comptes WorkOS : candidat, Admin avec MFA, conseiller, apporteur, client Wallet. Revue produit critique, mobile et clavier. Cette phase exige la présence de l'utilisateur.
@@ -213,6 +272,9 @@ architecture, backend, api, contracts, data, permissions, security, testing, fro
 | 18 | C4c proposition | test PostgreSQL | Aucune police candidate : le gabarit de test n'avait ni en-tête de police émise ni textes sources présents sur la page | Gabarit corrigé (« Police automobile », sources sur la page) ; 1/1 |
 | 19 | C4b, C4c, C5a, C5 | suites complètes dans des worktrees figés | `883015b` : 79/79 fichiers, 775/775 tests ; `c3bfd0b` : 81/81, 780/780 ; `3b64bae` : 82/82, 782/782 ; `9a114f8` : 83/83, 784/784 | Branche `claude/partner-integration` avancée sur la pointe vérifiée ; base locale et `D:Projects` inchangés en attendant l'accord |
 | 20 | C5a vues | tests PostgreSQL | Création refusée sans prochaine action, puis conflit en réattribuant un conseiller déjà responsable de sa propre création | Gabarit de test corrigé ; 3/3 |
+| 21 | Alignement local (tâches de la session santé) | suite complète sur la fusion `3f9fbd2` | 83/83 fichiers, 790/790 tests | Sauvegarde `pg_dump` (29,1 Mo), avance rapide de `main`, `pnpm install` (lockfile déjà à jour), migrations 0070–0071 appliquées (72 entrées) ; `/health` prêt, nouvelles routes servies |
+| 22 | C6a flux HTTP | lecture du serveur avant le test réel | Sockets inactives coupées à 10 s (`connectionTimeout`) alors que le battement est à 25 s ; arrêt bloqué par un flux ouvert (`onClose` attend les requêtes en cours) | Délai désactivé pour le flux seul, fermeture en `preClose` ; le test de maintien au-delà de 10 s échoue sans le correctif (oracle contrôlé) |
+| 23 | C6a complet | test PostgreSQL, typecheck des 4 espaces, builds, frontières | 5/5 ; 0 erreur ; builds API, Partner, Wallet verts ; depcruise 0 erreur ; knip sans nouveau signalement | Commit C6a |
 
 ## Risques et mitigations
 

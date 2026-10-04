@@ -5,10 +5,12 @@ import type { IdentityMe } from "@coverview/api-client";
 import { Button, EmptyState, ErrorState, LoadingState, NotificationList } from "@coverview/ui";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { partnerApi } from "../partner-api";
+import { useWalletLiveUpdates } from "../features/offers/use-live-updates";
 
 function Notifications({ identity }: { identity: IdentityMe }) {
   const { t, i18n } = useTranslation("leadNotifications"),
     cache = useQueryClient();
+  useWalletLiveUpdates(identity);
   const search = useSearch({ from: "/offers/notifications" }),
     navigate = useNavigate({ from: "/offers/notifications" });
   const root = ["private", identity.user.id, identity.session.id, "lead-notifications"];

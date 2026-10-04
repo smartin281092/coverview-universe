@@ -505,6 +505,13 @@
       "when": 1791139944671,
       "tag": "0071_partner_shared_lead_views",
       "breakpoints": true
+    },
+    {
+      "idx": 72,
+      "version": "7",
+      "when": 1791145104324,
+      "tag": "0072_partner_live_notify",
+      "breakpoints": true
     }
   ]
 }

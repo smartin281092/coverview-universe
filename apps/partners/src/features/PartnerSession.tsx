@@ -12,6 +12,7 @@ import {
 } from "@coverview/ui";
 import { api, partnerApi, adminUrl } from "../api";
 import type { LeadNavigationSearch } from "./lead-navigation-state";
+import { useLiveUpdates } from "./use-live-updates";
 type Session = {
   identity: IdentityMe;
   context: PartnerContext;
@@ -50,6 +51,10 @@ export function PartnerSession({ children }: { children: ReactNode }) {
   });
   const navigationScope =
     me.data && !me.isError && !ctx.isError ? `${me.data.user.id}:${me.data.session.id}` : null;
+  useLiveUpdates(
+    me.data ? ["private", me.data.user.id, me.data.session.id, "partner"] : [],
+    !!navigationScope && !!ctx.data,
+  );
   useEffect(() => {
     setNavigation((current) => (current?.scope === navigationScope ? current : null));
   }, [navigationScope]);

@@ -24,7 +24,8 @@
     "./partner-orientation": "./src/partner-orientation.ts",
     "./partner-recommendations": "./src/partner-recommendations.ts",
     "./partner-overview": "./src/partner-overview.ts",
-    "./partner-navigation": "./src/partner-navigation.ts"
+    "./partner-navigation": "./src/partner-navigation.ts",
+    "./partner-live": "./src/partner-live.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
