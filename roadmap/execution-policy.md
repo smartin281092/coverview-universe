@@ -1,6 +1,14 @@
 # Exécution séquentielle autorisée
 
-## Pilotage courant — instruction du 3 octobre 2026
+## Pilotage courant — décision du 4 octobre 2026
+
+Réponse utilisateur « 1a 2a 3b » au bilan du lot 4. Le programme Partner continue dans **Claude Code**, sur la branche `claude/partner-integration`. Aucun nouveau relais Codex n'est créé pour ce mandat.
+
+Le travail des relais est désormais commité : [snapshot du 2 octobre, chaîne des relais et fusion](plans/partner-completion.plan.md). Les protocoles de snapshot, de manifeste SHA-256, de fichiers entrants protégés et de catalogue `drizzle-pending` ne s'appliquent donc plus. Ils sont remplacés par des commits sur la branche et une sauvegarde `pg_dump` avant toute migration de la base locale.
+
+Restent valables : un seul auteur actif, aucun commit sur `main`, aucun push ni déploiement sans demande, aucune donnée ou preuve externe inventée. Les sections ci-dessous décrivent le pilotage antérieur et en conservent l'historique.
+
+## Pilotage antérieur — instruction du 3 octobre 2026
 
 Dans le mandat Partner, l’utilisateur demande désormais : « Continue les prochaine tâches en Astra Max (pas ultra) et regroupe les tâches histoire d’avoir d’en avoir plus que plus ou moins 3-5 à lancer idéalement ».
 

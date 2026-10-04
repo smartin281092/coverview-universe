@@ -6,6 +6,14 @@ Aucune entrée active. Les décisions durables vivent dans leur documentation pr
 
 ## Candidats
 
+Décisions utilisateur du 4 octobre 2026, programme Partner. Réponses « 1a 2a 3b » au bilan du lot 4 :
+
+- reprise dans Claude Code sur la branche `claude/partner-integration`, sans nouveau relais Codex ;
+- matching système fondé sur les déclarations validées par l'Admin, expliqué, avec décision humaine motivée ;
+- fonctions manquantes avant la recette réelle et la simplification UX.
+
+Consignées au [plan de reprise](roadmap/plans/partner-completion.plan.md) et dans la [politique d'exécution](roadmap/execution-policy.md#pilotage-courant--décision-du-4-octobre-2026). Confiance haute : instruction explicite. Réexaminer à la fin de la phase C, au plus tard avant le 4 janvier 2027.
+
 Décisions déléguées QP1–6, lot3/aa64 : grains et droits courants avant agrégation, manquant distinct de zéro, cibles imposées distinctes des objectifs personnels, enquête unique à la clôture, réponse/rappel atomiques, suites privées/partagées et accord précis avant transcription humaine. Promues au [propriétaire qualité/pilotage](apps/api/src/modules/partner-workspace/docs/quality-pilotage.md). Confiance haute sur invariants V2 ; fidélité externe, conservation et V3 ouvertes. Réexaminer avant activation/captation/élargissement d’audience/export-purge et avant le2janvier2027. Aucun fait externe ni durée légale inventé ; aucune entrée active.
 
 Décisions déléguées ME1–6, lot2/935e : publication limitée distincte du Lead, mandat client borné et accord B2B immuable, registre entier et droits financiers séparés de l’accès. Promues au [propriétaire marketplace/économie](apps/api/src/modules/partner-workspace/docs/marketplace-economy.md). Confiance haute sur invariants V2 ; validation externe et V3 ouverts. Réexaminer avant activation, nouveaux circuits/archivage ou extension d’audience, et avant le2janvier2027. Aucun taux ni durée légale implicite ; aucune entrée active.
@@ -35,7 +43,6 @@ Décisions déléguées PROG-23 du3octobre2026, relais84e4 : appréciation préc
 Décision déléguée PROG-23 du3octobre2026, relais5ce9 : consulter les sources personnelles existantes avec le besoin exact avant une appréciation précise supplémentaire, datées ensemble et sans étendre l’audience. Consignée au [propriétaire](apps/api/src/modules/partner-workspace/docs/need-expertise-evidence.md), confiance haute sur les invariants V2 ; réexaminer avant persistance de l’appréciation/matching/extension d’audience et avant le2janvier2027. Rayon limité à la consultation ; avis précis et V3 restent ouverts. Aucune entrée active.
 
 Décisions déléguées PROG-23 du3octobre, relais e88b : examen personnel des conflits par besoin, périmètre humain explicite, trois positions privées à échéance, absence inconnue après retrait/expiration/portée modifiée, aucune déduction depuis capacité ou agenda. Promues au [propriétaire](apps/api/src/modules/partner-workspace/docs/need-conflicts.md). Réexaminer avant expertise/matching/extension d’audience et avant le2janvier2027 ; rayon limité à la déclaration personnelle, aucune conformité juridique certifiée.0050 hors catalogue, activation et V3 ouvertes. Aucune entrée active.
-
 
 Décision déléguée PROG-23 du3octobre, relais a9ba : appréciation personnelle de capacité pour un besoin, explicite/privée/à échéance, distincte des sources globales et compteurs, portée serveur et droits actuels au rejeu. Promue au [propriétaire](apps/api/src/modules/partner-workspace/docs/need-capacity.md). Réexaminer avant conflit/matching/extension d'audience et avant le2janvier2027 ; rayon limité à cette décision, aucune adéquation complète inférée. Migration0049 préparée hors catalogue pour protéger intégralement le journal entrant ; activation et V3 restent ouvertes. Aucune nouvelle entrée active.
 
