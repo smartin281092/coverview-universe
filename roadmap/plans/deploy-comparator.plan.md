@@ -59,3 +59,18 @@ Ces décisions lèvent, pour ce serveur seulement, la protection HOST-01 de l'an
 
 | # | Cible | Oracle | Observé | Décision |
 |---|---|---|---|---|
+| 1 | Code de mise en ligne | typecheck, tests ciblés (config, serveur, site), astro check, lint | 0 erreur ; 33/33 et 7/7 ; garde de migration refusant hors runtime déployé et sans compte approuvé | Version `695aacd` |
+| 2 | Images locales | build Docker sur ce poste | Échec : disque C: plein, le disque virtuel de Docker Desktop ne peut plus grandir et le moteur ne répond plus | Images construites sur le serveur depuis `git archive` (empreinte vérifiée) ; aucun fichier de l'utilisateur supprimé |
+| 3 | Anciennes bases | `pg_dump` des deux bases, 100 tables chacune | Production 548 Ko, préproduction 546 Ko, mode 0600 dans `/var/backups/coverview-legacy` ; copies chiffrées `age` sur `D:\CoverViewBackups\legacy` | Déchiffrement non contrôlable sans la clé de l'utilisateur |
+| 4 | Données santé | imports officiels dans une base jetable sans réseau, sur le serveur | Identifiants de jeu identiques à la base locale vérifiée (`hi_70e5…` 2026, `hi_eb1e…` 2027, `catalog_fe98…`) ; 437 388 primes | Tables santé seules extraites (18,7 Mo) ; base jetable détruite |
+| 5 | Base de production | `migrate.js` sans puis avec approbation ; restauration | Refus sans approbation (code 1) ; 74 migrations ; comptes identiques à l'import | — |
+| 6 | Répétition sur le serveur | pile liée à 127.0.0.1, tunnel SSH, navigateur | Tout l'accueil redirigé : le filtre `host` de Caddy compare sans port | `SITE_HOST` et `SITE_ORIGIN` séparés, Caddyfile monté (`875015b`) |
+| 7 | Répétition, navigateur | parcours du comparateur, console | Erreur React 418 : `1'000` au build (Node 24.21, ICU 78.3) contre `1 000` dans les navigateurs | Formatage déterministe des franchises (`dcee63d`) ; console vide ensuite |
+| 8 | Bascule | arrêt des 14 anciens conteneurs, `compose up` | Site déclaré malade (sonde sans en-tête `Host`, redirigée par Caddy) ; middlewares HTTPS et HSTS portés par lui seul ; **503 public de 10 h 09 à environ 10 h 16** | Sonde avec `Host`, middlewares définis aussi sur l'API ; services sains |
+| 9 | Vérification publique | curl et navigateur sur `https://coverview.ch` | `/` → 302 → comparateur 200 ; TLS valide (certificat existant, échéance 14 décembre) ; HSTS et en-têtes ; HTTP → HTTPS 301 ; 10 anciennes adresses → 302 ; CORS limité ; 219 916 primes 2027 ; parcours Neuchâtel, console vide | **En ligne**. Sauvegarde post-lancement 19 Mo |
+
+## État en service
+
+- Images `dcee63d` (API et site). Configuration `compose.yml` du commit de correction de la sonde, copiée dans `/opt/coverview-astra`.
+- Anciens conteneurs arrêtés, listés dans `/opt/coverview-astra/legacy-containers.txt` pour le retour arrière.
+- Laissés en place, à décider avec l'utilisateur : les dossiers de version `695aacd` et `875015b` dans `/opt/coverview-astra/releases`. Leur suppression récursive exige une confirmation (G-05).

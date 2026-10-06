@@ -76,6 +76,12 @@ services:
       traefik.enable: "true"
       traefik.docker.network: coolify
       traefik.http.services.cva-api.loadbalancer.server.port: "4100"
+      # Same definitions as on www: a route never depends on another container's health.
+      traefik.http.middlewares.cva-https.redirectscheme.scheme: https
+      traefik.http.middlewares.cva-https.redirectscheme.permanent: "true"
+      traefik.http.middlewares.cva-hsts.headers.stsSeconds: "63072000"
+      traefik.http.middlewares.cva-hsts.headers.stsIncludeSubdomains: "true"
+      traefik.http.middlewares.cva-hsts.headers.stsPreload: "true"
       traefik.http.routers.cva-api-http.entrypoints: http
       traefik.http.routers.cva-api-http.rule: Host(`api.coverview.ch`)
       traefik.http.routers.cva-api-http.middlewares: cva-https
@@ -98,7 +104,10 @@ services:
       - ./www.Caddyfile:/etc/caddy/Caddyfile:ro
     networks: [coolify]
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/comparateur-assurance-maladie-2027"]
+      # The served host, or Caddy would treat the probe as a closed surface and redirect it.
+      test:
+        - CMD-SHELL
+        - 'wget -q --spider --header "Host: $${SITE_HOST}" http://127.0.0.1:8080/comparateur-assurance-maladie-2027'
       interval: 15s
       timeout: 5s
       retries: 5
