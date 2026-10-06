@@ -131,7 +131,8 @@
       "recommendations": "Recommandations et leurs motifs",
       "professional_reviews": "Analyses des professionnels",
       "matching": "Classements de matching",
-      "source_documents": "Documents de l’espace client utilisés comme sources"
+      "source_documents": "Documents de l’espace client utilisés comme sources",
+      "complements": "Compléments demandés et réponses du client"
     },
     "attestation": "J’atteste qu’aucune autre obligation de conservation ne s’applique aux demandes effaçables.",
     "answerLabel": "Réponse lue par la personne",

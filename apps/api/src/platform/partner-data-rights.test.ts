@@ -970,7 +970,7 @@ it("erases a client's identifying layer after a server preview, keeps what must 
     [erasable.id, "erasable", []],
     [disputed.id, "kept", ["dispute"]],
   ]);
-  expect(plan.retained).toContain("surveys_complaints");
+  expect(plan.retained).toEqual(expect.arrayContaining(["surveys_complaints", "complements"]));
   await expect(
     erasure.executeErasure(
       admin,

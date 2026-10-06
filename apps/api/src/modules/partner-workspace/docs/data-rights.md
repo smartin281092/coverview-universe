@@ -104,6 +104,7 @@ Elle ne fournit ni durée légale, ni conformité, ni avis juridique (S-137).
      - journal des actions, sans ses textes ;
      - propositions de rendez-vous et comptes rendus ;
      - enregistrements, transcriptions, enquêtes et réclamations ;
+     - compléments demandés et réponses du client (C8e) ;
      - recommandations, analyses professionnelles et classements.
    - **Documents de l'espace** utilisés comme sources : toujours marqués liés.
    - **Demande d'offre d'origine et compte** : ils relèvent de S-131. Tant que le compte existe, ses références restent rattachables.

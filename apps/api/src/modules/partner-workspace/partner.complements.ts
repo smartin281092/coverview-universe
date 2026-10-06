@@ -25,6 +25,7 @@ import { lockContractSubject, readCurrentContract } from "./partner.contract.js"
 import { authorityCurrent, fail, managed, type PartnerActor } from "./partner.policy.js";
 import { event, newId } from "./partner.audit.js";
 import { readAnalysis } from "./partner.recommendations.js";
+import { syncLeadNotifications } from "./partner.notifications.js";
 import type { partnerLeads } from "./partner.schema.js";
 import copy from "./partner.complements.fr.json" with { type: "json" };
 
@@ -252,6 +253,7 @@ export function createComplementOperations(
               JSON.stringify({ reason: copy.waitingReason, until: dueAt }),
             ]);
             await event(tx, actor, id, "lead.waiting", copy.waitingReason);
+            await syncLeadNotifications(tx, id);
           }
           await event(tx, actor, id, "complement.requested.v1", "", "client", requestId);
           await touch(tx, id);

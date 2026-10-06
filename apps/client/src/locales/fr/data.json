@@ -173,6 +173,6 @@
       "dispute": "réclamation en cours",
       "contest": "contestation en cours"
     },
-    "erasureRetained": "Les preuves protégées (journal des actions, échanges, enquêtes, réclamations et déclarations, recommandations, analyses des professionnels) restent conservées jusqu’à ce que CoverView valide sa politique de conservation."
+    "erasureRetained": "Les preuves protégées (journal des actions, échanges, enquêtes, réclamations et déclarations, compléments demandés et leurs réponses, recommandations, analyses des professionnels) restent conservées jusqu’à ce que CoverView valide sa politique de conservation."
   }
 }

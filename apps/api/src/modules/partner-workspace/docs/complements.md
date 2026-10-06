@@ -43,7 +43,7 @@ Les vérifications du professionnel restent humaines : le client ne complète qu
 - **Changement de client** de la demande : les demandes ouvertes sont invalidées et leurs avis résolus, comme les autres preuves qualité.
 - **Événements** : `complement.requested.v1`, `complement.answered.v1`, `complement.closed.v1`, `complement.document_viewed.v1`.
 - **API** : `GET|POST /partner/leads/:id/complements`, `POST /partner/leads/:id/complements/:requestId/close`, `GET /wallet/leads/:id/complements`, `GET /wallet/leads/:id/complement-candidates`, `POST /wallet/leads/:id/complements/:requestId/answer`, `GET /{partner|wallet}/leads/:id/complements/:requestId/documents/:documentId/source`.
-- **Données personnelles.** La copie Wallet contient les demandes et leurs réponses, dans la catégorie « demandes » du registre, inchangé.
+- **Données personnelles.** La copie Wallet contient les demandes et leurs réponses, dans la catégorie « demandes » du registre, inchangé. Un effacement les conserve telles quelles, comme preuves protégées déclarées dans l'aperçu.
 
 ## Limites
 

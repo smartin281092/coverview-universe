@@ -26,6 +26,7 @@ const retained = [
   "communications",
   "recordings_transcripts",
   "surveys_complaints",
+  "complements",
   "recommendations",
   "professional_reviews",
   "matching",

@@ -676,7 +676,7 @@ export function createPartnerRepository(
         typeof error === "object" &&
         "code" in error &&
         error.code === "23514" &&
-        /^(market|commercial|economy|quality|communication|pilotage|conclusion|navigation|relationships|joint|access|team)\./u.test(
+        /^(market|commercial|economy|quality|communication|pilotage|conclusion|navigation|relationships|joint|access|team|complement)\./u.test(
           operation,
         )
       )

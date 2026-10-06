@@ -476,6 +476,7 @@ architecture, backend, api, contracts, data, permissions, security, testing, fro
 | 56 | C8e compléments | tests PostgreSQL (avis réévalué par le worker et déplacé à la réattribution ; demande, réponse avec document de l'espace, clôture ; invalidation au changement de client) | 3/3 au premier passage | — |
 | 57 | C8e voisinage | 8 suites (compléments, recommandations, matching, profils, droits, conclusion, diffusion, déclarations) ; requête HTTP Wallet des compléments | 8/8 fichiers, 42/42 tests ; 200 et liste vide | Le banc HTTP désactive les documents : la route de téléchargement n'est vérifiée qu'au niveau du dépôt |
 | 58 | C8e complet | typecheck des 7 espaces, lint, format, builds des 3 apps, depcruise, knip, seconde génération Drizzle | 0 erreur après correction d'un accès non typé dans le test ; knip identique à `main` ; aucun écart | — |
+| 59 | C8e relecture à froid | relecture du module avant la suite complète | Trois écarts : refus d'une garde SQL (23514) non traduit en conflit pour les opérations `complement.*` ; avis de suivi resynchronisés seulement au passage suivant du worker après la mise en attente ; réponses de complément conservées à l'effacement sans être déclarées | Préfixe ajouté, resynchronisation immédiate, catégorie `complements` déclarée (aperçu Admin, Wallet, règles) ; 2/2 fichiers, 9/9 tests |
 
 ## Risques et mitigations
 
