@@ -391,6 +391,7 @@ architecture, backend, api, contracts, data, permissions, security, testing, fro
 | 35 | C7b complet | typecheck des 6 espaces, lint, builds des 4 apps, frontières, knip, suite API complète (`1b63d21`) | 0 erreur ; inchangé ; 74/74, 766/766 | Commit `1b63d21` |
 | 36 | C7c | test PostgreSQL | Clôture refusée (motif « refus du client » exige ce résultat) ; puis lieu vidé refusé par le contrat d'affichage d'un rendez-vous (3 caractères au moins) | Scénario corrigé ; marqueur « Lieu effacé » ; 6/6, puis 15/15 avec invitations et profils |
 | 37 | C7c complet | typecheck, lint, builds, frontières, knip, seconde génération Drizzle | 0 erreur, aucun écart | Commit `e37236f` ; sauvegarde 29,1 Mo, avance rapide de `main`, migrations 0075–0076 locales (77 entrées) |
+| 38 | Suite complète du dépôt | `pnpm test` à la racine sur `e37236f` (worktree figé) | 85/86 fichiers, 806/807 tests ; un échec dans `partner-marketplace-economy.test.ts` (« bounds co-advice access at the mission expiry »), qui ne laisse que 1,2 s entre réservation et expiration | Même fichier seul sur le même commit : 10/10. Test sensible au temps sous charge, antérieur à C7, qui ne touche pas la marketplace : signalé (G-07), tâche de stabilisation proposée, rien de désactivé |
 
 ## Risques et mitigations
 
