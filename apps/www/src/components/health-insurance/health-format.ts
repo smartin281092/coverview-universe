@@ -1,4 +1,8 @@
 import { healthCopy as copy } from "../../content/fr/health-insurance";
+// Text rendered at build time must match every browser on hydration, whatever its ICU data:
+// integers shown before any data loads use the fr-CH narrow no-break space explicitly.
+export const integer = (value: number) =>
+  String(Math.trunc(value)).replace(/\B(?=(\d{3})+(?!\d))/gu, " ");
 export const money = (minor: number) =>
   new Intl.NumberFormat("fr-CH", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(
     minor / 100,

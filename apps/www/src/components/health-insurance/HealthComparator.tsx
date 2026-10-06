@@ -24,7 +24,7 @@ import { HealthSelect } from "./HealthSelect";
 import { HealthLocate } from "./HealthLocate";
 import { HealthCheckout, type CheckoutCandidate } from "./HealthCheckout";
 import { offerCopy } from "../../content/fr/insurance-requests";
-import { interpolate, money, regionName } from "./health-format";
+import { integer, interpolate, money, regionName } from "./health-format";
 import { HealthCurrentInsurance } from "./HealthCurrentInsurance";
 import { HealthPremiumDifference } from "./HealthPremiumDifference";
 import { useCurrentInsurance } from "./use-current-insurance";
@@ -374,7 +374,7 @@ export default function HealthComparator({
                     aria-pressed={deductible === value}
                     onClick={() => setDeductible(value)}
                   >
-                    {new Intl.NumberFormat("fr-CH").format(value)}
+                    {integer(value)}
                   </button>
                 ))}
               </div>
