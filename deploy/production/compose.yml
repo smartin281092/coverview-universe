@@ -1,0 +1,217 @@
+# Pile CoverView de production (comparateur public) sur cv-staging-01, derrière le Traefik de
+# Coolify, qui porte TLS et HSTS. Une paire de routes par adresse garde ses certificats. Runbook : README.md.
+# Les secrets restent dans /opt/coverview-astra/.env (0600) ; .env.example en décrit les clés.
+name: coverview-astra
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    shm_size: 256mb
+    environment:
+      POSTGRES_DB: coverview
+      POSTGRES_USER: coverview
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    networks: [internal]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U coverview -d coverview"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:8-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    networks: [internal]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    image: ghcr.io/smartin281092/coverview-astra-api:${RELEASE:?}
+    restart: unless-stopped
+    environment:
+      APP_ENV: production
+      NODE_ENV: production
+      API_HOST: 0.0.0.0
+      API_PORT: "4100"
+      LOG_LEVEL: info
+      TRUST_PROXY_HOPS: "1"
+      FIXTURE_MODE: "false"
+      EXTERNAL_ADAPTER_MODE: disabled
+      # Comparateur seul : comptes, documents, travaux de fond et emails restent désactivés.
+      AUTH_ENABLED: "false"
+      DOCUMENTS_ENABLED: "false"
+      PARTNER_JOBS_ENABLED: "false"
+      DATABASE_URL: postgres://coverview:${POSTGRES_PASSWORD:?}@postgres:5432/coverview
+      REDIS_URL: redis://redis:6379
+      # Adresses exigées par la configuration ; adaptateurs désactivés, jamais contactées.
+      MINIO_ENDPOINT: http://127.0.0.1:9
+      MAILPIT_URL: http://127.0.0.1:9
+      CORS_ORIGINS: ${SITE_ORIGIN:-https://coverview.ch}
+      AUTH_API_ORIGIN: ${API_ORIGIN:-https://api.coverview.ch}
+      AUTH_WWW_ORIGIN: ${SITE_ORIGIN:-https://coverview.ch}
+      AUTH_WALLET_ORIGIN: https://wallet.coverview.ch
+      AUTH_ADMIN_ORIGIN: https://admin.coverview.ch
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    networks: [internal, coolify]
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:4100/health').then((r) => process.exit(r.ok ? 0 : 1), () => process.exit(1))"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: coolify
+      traefik.http.services.cva-api.loadbalancer.server.port: "4100"
+      traefik.http.routers.cva-api-http.entrypoints: http
+      traefik.http.routers.cva-api-http.rule: Host(`api.coverview.ch`)
+      traefik.http.routers.cva-api-http.middlewares: cva-https
+      traefik.http.routers.cva-api.entrypoints: https
+      traefik.http.routers.cva-api.rule: Host(`api.coverview.ch`)
+      traefik.http.routers.cva-api.tls: "true"
+      traefik.http.routers.cva-api.tls.certresolver: letsencrypt
+      traefik.http.routers.cva-api.middlewares: cva-hsts
+      traefik.http.routers.cva-api.service: cva-api
+
+  www:
+    image: ghcr.io/smartin281092/coverview-astra-www:${RELEASE:?}
+    restart: unless-stopped
+    environment:
+      SITE_HOST: ${SITE_HOST:-coverview.ch}
+    networks: [coolify]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/comparateur-assurance-maladie-2027"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: coolify
+      traefik.http.services.cva-www.loadbalancer.server.port: "8080"
+      traefik.http.middlewares.cva-https.redirectscheme.scheme: https
+      traefik.http.middlewares.cva-https.redirectscheme.permanent: "true"
+      traefik.http.middlewares.cva-hsts.headers.stsSeconds: "63072000"
+      traefik.http.middlewares.cva-hsts.headers.stsIncludeSubdomains: "true"
+      traefik.http.middlewares.cva-hsts.headers.stsPreload: "true"
+      traefik.http.routers.cva-www-http.entrypoints: http
+      traefik.http.routers.cva-www-http.rule: Host(`coverview.ch`)
+      traefik.http.routers.cva-www-http.middlewares: cva-https
+      traefik.http.routers.cva-www.entrypoints: https
+      traefik.http.routers.cva-www.rule: Host(`coverview.ch`)
+      traefik.http.routers.cva-www.tls: "true"
+      traefik.http.routers.cva-www.tls.certresolver: letsencrypt
+      traefik.http.routers.cva-www.middlewares: cva-hsts
+      traefik.http.routers.cva-www.service: cva-www
+      # Surfaces fermées jusqu'à la recette : le site les renvoie vers l'accueil.
+      traefik.http.routers.cva-closed-admin-http.entrypoints: http
+      traefik.http.routers.cva-closed-admin-http.rule: Host(`admin.coverview.ch`)
+      traefik.http.routers.cva-closed-admin-http.middlewares: cva-https
+      traefik.http.routers.cva-closed-admin.entrypoints: https
+      traefik.http.routers.cva-closed-admin.rule: Host(`admin.coverview.ch`)
+      traefik.http.routers.cva-closed-admin.tls: "true"
+      traefik.http.routers.cva-closed-admin.tls.certresolver: letsencrypt
+      traefik.http.routers.cva-closed-admin.middlewares: cva-hsts
+      traefik.http.routers.cva-closed-admin.service: cva-www
+      traefik.http.routers.cva-closed-wallet-http.entrypoints: http
+      traefik.http.routers.cva-closed-wallet-http.rule: Host(`wallet.coverview.ch`)
+      traefik.http.routers.cva-closed-wallet-http.middlewares: cva-https
+      traefik.http.routers.cva-closed-wallet.entrypoints: https
+      traefik.http.routers.cva-closed-wallet.rule: Host(`wallet.coverview.ch`)
+      traefik.http.routers.cva-closed-wallet.tls: "true"
+      traefik.http.routers.cva-closed-wallet.tls.certresolver: letsencrypt
+      traefik.http.routers.cva-closed-wallet.middlewares: cva-hsts
+      traefik.http.routers.cva-closed-wallet.service: cva-www
+      traefik.http.routers.cva-closed-partner-http.entrypoints: http
+      traefik.http.routers.cva-closed-partner-http.rule: Host(`partner.coverview.ch`)
+      traefik.http.routers.cva-closed-partner-http.middlewares: cva-https
+      traefik.http.routers.cva-closed-partner.entrypoints: https
+      traefik.http.routers.cva-closed-partner.rule: Host(`partner.coverview.ch`)
+      traefik.http.routers.cva-closed-partner.tls: "true"
+      traefik.http.routers.cva-closed-partner.tls.certresolver: letsencrypt
+      traefik.http.routers.cva-closed-partner.middlewares: cva-hsts
+      traefik.http.routers.cva-closed-partner.service: cva-www
+      traefik.http.routers.cva-closed-intelligence-http.entrypoints: http
+      traefik.http.routers.cva-closed-intelligence-http.rule: Host(`intelligence.coverview.ch`)
+      traefik.http.routers.cva-closed-intelligence-http.middlewares: cva-https
+      traefik.http.routers.cva-closed-intelligence.entrypoints: https
+      traefik.http.routers.cva-closed-intelligence.rule: Host(`intelligence.coverview.ch`)
+      traefik.http.routers.cva-closed-intelligence.tls: "true"
+      traefik.http.routers.cva-closed-intelligence.tls.certresolver: letsencrypt
+      traefik.http.routers.cva-closed-intelligence.middlewares: cva-hsts
+      traefik.http.routers.cva-closed-intelligence.service: cva-www
+      traefik.http.routers.cva-closed-staging-http.entrypoints: http
+      traefik.http.routers.cva-closed-staging-http.rule: Host(`staging.coverview.ch`)
+      traefik.http.routers.cva-closed-staging-http.middlewares: cva-https
+      traefik.http.routers.cva-closed-staging.entrypoints: https
+      traefik.http.routers.cva-closed-staging.rule: Host(`staging.coverview.ch`)
+      traefik.http.routers.cva-closed-staging.tls: "true"
+      traefik.http.routers.cva-closed-staging.tls.certresolver: letsencrypt
+      traefik.http.routers.cva-closed-staging.middlewares: cva-hsts
+      traefik.http.routers.cva-closed-staging.service: cva-www
+      traefik.http.routers.cva-closed-api-staging-http.entrypoints: http
+      traefik.http.routers.cva-closed-api-staging-http.rule: Host(`api.staging.coverview.ch`)
+      traefik.http.routers.cva-closed-api-staging-http.middlewares: cva-https
+      traefik.http.routers.cva-closed-api-staging.entrypoints: https
+      traefik.http.routers.cva-closed-api-staging.rule: Host(`api.staging.coverview.ch`)
+      traefik.http.routers.cva-closed-api-staging.tls: "true"
+      traefik.http.routers.cva-closed-api-staging.tls.certresolver: letsencrypt
+      traefik.http.routers.cva-closed-api-staging.middlewares: cva-hsts
+      traefik.http.routers.cva-closed-api-staging.service: cva-www
+      traefik.http.routers.cva-closed-admin-staging-http.entrypoints: http
+      traefik.http.routers.cva-closed-admin-staging-http.rule: Host(`admin.staging.coverview.ch`)
+      traefik.http.routers.cva-closed-admin-staging-http.middlewares: cva-https
+      traefik.http.routers.cva-closed-admin-staging.entrypoints: https
+      traefik.http.routers.cva-closed-admin-staging.rule: Host(`admin.staging.coverview.ch`)
+      traefik.http.routers.cva-closed-admin-staging.tls: "true"
+      traefik.http.routers.cva-closed-admin-staging.tls.certresolver: letsencrypt
+      traefik.http.routers.cva-closed-admin-staging.middlewares: cva-hsts
+      traefik.http.routers.cva-closed-admin-staging.service: cva-www
+      traefik.http.routers.cva-closed-wallet-staging-http.entrypoints: http
+      traefik.http.routers.cva-closed-wallet-staging-http.rule: Host(`wallet.staging.coverview.ch`)
+      traefik.http.routers.cva-closed-wallet-staging-http.middlewares: cva-https
+      traefik.http.routers.cva-closed-wallet-staging.entrypoints: https
+      traefik.http.routers.cva-closed-wallet-staging.rule: Host(`wallet.staging.coverview.ch`)
+      traefik.http.routers.cva-closed-wallet-staging.tls: "true"
+      traefik.http.routers.cva-closed-wallet-staging.tls.certresolver: letsencrypt
+      traefik.http.routers.cva-closed-wallet-staging.middlewares: cva-hsts
+      traefik.http.routers.cva-closed-wallet-staging.service: cva-www
+      traefik.http.routers.cva-closed-partner-staging-http.entrypoints: http
+      traefik.http.routers.cva-closed-partner-staging-http.rule: Host(`partner.staging.coverview.ch`)
+      traefik.http.routers.cva-closed-partner-staging-http.middlewares: cva-https
+      traefik.http.routers.cva-closed-partner-staging.entrypoints: https
+      traefik.http.routers.cva-closed-partner-staging.rule: Host(`partner.staging.coverview.ch`)
+      traefik.http.routers.cva-closed-partner-staging.tls: "true"
+      traefik.http.routers.cva-closed-partner-staging.tls.certresolver: letsencrypt
+      traefik.http.routers.cva-closed-partner-staging.middlewares: cva-hsts
+      traefik.http.routers.cva-closed-partner-staging.service: cva-www
+      traefik.http.routers.cva-closed-intelligence-staging-http.entrypoints: http
+      traefik.http.routers.cva-closed-intelligence-staging-http.rule: Host(`intelligence.staging.coverview.ch`)
+      traefik.http.routers.cva-closed-intelligence-staging-http.middlewares: cva-https
+      traefik.http.routers.cva-closed-intelligence-staging.entrypoints: https
+      traefik.http.routers.cva-closed-intelligence-staging.rule: Host(`intelligence.staging.coverview.ch`)
+      traefik.http.routers.cva-closed-intelligence-staging.tls: "true"
+      traefik.http.routers.cva-closed-intelligence-staging.tls.certresolver: letsencrypt
+      traefik.http.routers.cva-closed-intelligence-staging.middlewares: cva-hsts
+      traefik.http.routers.cva-closed-intelligence-staging.service: cva-www
+
+networks:
+  internal:
+    internal: true
+  coolify:
+    external: true
+
+volumes:
+  postgres-data: {}

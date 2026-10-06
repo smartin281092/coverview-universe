@@ -1,0 +1,7 @@
+# Répétition locale de la pile de production, jamais sur le serveur. Ports en boucle locale ;
+# origines fournies par l'environnement (SITE_ORIGIN, API_ORIGIN, SITE_HOST). Runbook : README.md.
+services:
+  api:
+    ports: ["127.0.0.1:14100:4100"]
+  www:
+    ports: ["127.0.0.1:18080:8080"]

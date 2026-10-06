@@ -53,6 +53,15 @@ describe("environment safety boundary", () => {
     expect(() => assertLocalDatabase(config)).toThrow("Database maintenance requires");
   });
 
+  it("trusts no proxy unless a bounded number of hops is configured", () => {
+    expect(parseEnvironment(local).TRUST_PROXY_HOPS).toBe(0);
+    expect(parseEnvironment({ ...local, TRUST_PROXY_HOPS: "1" }).TRUST_PROXY_HOPS).toBe(1);
+    for (const value of ["-1", "4", "true"])
+      expect(() => parseEnvironment({ ...local, TRUST_PROXY_HOPS: value })).toThrow(
+        "TRUST_PROXY_HOPS",
+      );
+  });
+
   it("rejects missing or malformed required configuration without revealing values", () => {
     expect(() => parseEnvironment({ ...local, APP_ENV: undefined })).toThrow("APP_ENV");
     expect(() => parseEnvironment({ ...local, DATABASE_URL: "invalid-secret-credential" })).toThrow(

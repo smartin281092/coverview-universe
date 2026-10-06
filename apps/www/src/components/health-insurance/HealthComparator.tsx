@@ -34,9 +34,13 @@ type Category = NonNullable<HealthCompareInput["categories"]>[number];
 export default function HealthComparator({
   apiUrl,
   walletUrl,
+  requestsEnabled = true,
 }: {
   apiUrl: string;
   walletUrl: string | undefined;
+  // Without accounts and email in the environment, comparing stays available but nothing
+  // invites a sign-in or an offer request that could not be completed.
+  requestsEnabled?: boolean;
 }) {
   const api = useMemo(() => createHealthClient(apiUrl), [apiUrl]);
   const [status, setStatus] = useState<HealthStatus | null>(null);
@@ -252,30 +256,35 @@ export default function HealthComparator({
         <a href="/comparateur-assurance-maladie-2027" className="hi-header-title">
           {copy.toolName}
         </a>
-        <div className="hi-header-right">
-          <button
-            className="hi-cart-link"
-            aria-label={`${offerCopy.cart} (${cartCount})`}
-            onClick={() => {
-              setCandidate(null);
-              setCheckout(true);
-            }}
-          >
-            <HealthIcon name="bag" size={19} />
-            <span className="hi-cart-label">{offerCopy.cart}</span>{" "}
-            <span className="hi-cart-count">{cartCount}</span>
-          </button>
-          <a className="hi-sign-in" href={createApiClient({ baseUrl: apiUrl }).loginUrl("wallet")}>
-            {copy.signIn}
-          </a>
-          <a
-            className="hi-primary hi-create-account"
-            href={walletUrl ? `${walletUrl}/profile` : "/account"}
-          >
-            <HealthGradient />
-            {copy.createAccount}
-          </a>
-        </div>
+        {requestsEnabled && (
+          <div className="hi-header-right">
+            <button
+              className="hi-cart-link"
+              aria-label={`${offerCopy.cart} (${cartCount})`}
+              onClick={() => {
+                setCandidate(null);
+                setCheckout(true);
+              }}
+            >
+              <HealthIcon name="bag" size={19} />
+              <span className="hi-cart-label">{offerCopy.cart}</span>{" "}
+              <span className="hi-cart-count">{cartCount}</span>
+            </button>
+            <a
+              className="hi-sign-in"
+              href={createApiClient({ baseUrl: apiUrl }).loginUrl("wallet")}
+            >
+              {copy.signIn}
+            </a>
+            <a
+              className="hi-primary hi-create-account"
+              href={walletUrl ? `${walletUrl}/profile` : "/account"}
+            >
+              <HealthGradient />
+              {copy.createAccount}
+            </a>
+          </div>
+        )}
       </header>
       <section className="hi-intro">
         <div>
@@ -716,44 +725,50 @@ export default function HealthComparator({
           provisional={recommendation.result?.outcome !== "established"}
           offer={offer}
           onClose={() => setOffer(null)}
-          onRequest={(item) => {
-            setOffer(null);
-            setCandidate({
-              key: crypto.randomUUID(),
-              offer: item,
-              profile: {
-                ...profile,
-                deductible: item.deductible,
-                accident: item.accident,
-                regionId: item.regionId,
-                municipalityId:
-                  locality?.regionId === item.regionId
-                    ? (locality.municipalityId ?? undefined)
-                    : undefined,
-              },
-              locality:
-                locality?.regionId === item.regionId
-                  ? locality
-                  : (status?.foreign?.countries.find(
-                      (country) => country.code === item.residenceCountry,
-                    )?.locality ?? null),
-              birth,
-              ...(sex && sex !== "declined" ? { sex } : {}),
-            });
-            setCheckout(true);
-          }}
+          onRequest={
+            requestsEnabled
+              ? (item) => {
+                  setOffer(null);
+                  setCandidate({
+                    key: crypto.randomUUID(),
+                    offer: item,
+                    profile: {
+                      ...profile,
+                      deductible: item.deductible,
+                      accident: item.accident,
+                      regionId: item.regionId,
+                      municipalityId:
+                        locality?.regionId === item.regionId
+                          ? (locality.municipalityId ?? undefined)
+                          : undefined,
+                    },
+                    locality:
+                      locality?.regionId === item.regionId
+                        ? locality
+                        : (status?.foreign?.countries.find(
+                            (country) => country.code === item.residenceCountry,
+                          )?.locality ?? null),
+                    birth,
+                    ...(sex && sex !== "declined" ? { sex } : {}),
+                  });
+                  setCheckout(true);
+                }
+              : undefined
+          }
         />
       )}
-      <HealthCheckout
-        apiUrl={apiUrl}
-        healthApi={api}
-        status={status}
-        candidate={candidate}
-        open={checkout}
-        onClose={() => setCheckout(false)}
-        onAddPerson={addPerson}
-        onCount={setCartCount}
-      />
+      {requestsEnabled && (
+        <HealthCheckout
+          apiUrl={apiUrl}
+          healthApi={api}
+          status={status}
+          candidate={candidate}
+          open={checkout}
+          onClose={() => setCheckout(false)}
+          onAddPerson={addPerson}
+          onCount={setCartCount}
+        />
+      )}
       <noscript>
         <p className="hi-note">{copy.noScript}</p>
       </noscript>

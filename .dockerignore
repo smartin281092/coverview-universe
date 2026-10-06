@@ -1,0 +1,27 @@
+# Contexte des images de déploiement (deploy/docker) : sources et manifestes seulement.
+**/node_modules
+**/dist
+**/.astro
+**/.turbo
+.git
+.claude
+.github
+.planning-local
+.preview
+.env
+.env.*
+!.env.example
+adr
+docs
+evals
+references
+roadmap
+scripts
+templates
+tests
+**/*.test.ts
+**/*.test.mjs
+# Le site lit seulement ses deux cartes ; les sources d'import restent hors des images.
+data/**
+!data/health-insurance/2027/regions-map.json
+!data/health-insurance/2027/neighbors-map.json

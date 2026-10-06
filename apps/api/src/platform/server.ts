@@ -71,6 +71,10 @@ export async function buildServer(
     connectionTimeout: 10000,
     keepAliveTimeout: 5000,
     forceCloseConnections: "idle",
+    // Only the configured nearest hops (the deployed reverse proxy) may state the client address.
+    trustProxy: config.TRUST_PROXY_HOPS
+      ? (_address: string, hop: number) => hop < config.TRUST_PROXY_HOPS
+      : false,
   }).withTypeProvider<ZodTypeProvider>();
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
@@ -109,7 +113,9 @@ export async function buildServer(
       errorStatus >= 400 &&
       errorStatus < 500;
     const status =
-      error instanceof PartnerError || error instanceof RecommendationError || error instanceof InsuranceRequestError ||
+      error instanceof PartnerError ||
+      error instanceof RecommendationError ||
+      error instanceof InsuranceRequestError ||
       error instanceof IdentityError ||
       error instanceof DocumentError ||
       error instanceof ManagedProfileError ||
@@ -122,7 +128,9 @@ export async function buildServer(
             ? 400
             : 500;
     const code =
-      error instanceof PartnerError || error instanceof RecommendationError || error instanceof InsuranceRequestError ||
+      error instanceof PartnerError ||
+      error instanceof RecommendationError ||
+      error instanceof InsuranceRequestError ||
       error instanceof IdentityError ||
       error instanceof DocumentError ||
       error instanceof ManagedProfileError ||

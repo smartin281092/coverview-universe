@@ -90,6 +90,16 @@ describe("HTTP platform boundary", () => {
     expect(remote.statusCode).toBe(403);
   });
 
+  it("takes the client address from a forwarded chain only for configured proxy hops", async () => {
+    const forwarded = { url: "/local/personas", headers: { "x-forwarded-for": "192.0.2.7" } };
+    // Untrusted, the header is ignored: the loopback peer remains the client.
+    expect((await (await server(true)).inject(forwarded)).statusCode).toBe(200);
+    // Behind one trusted proxy, the forwarded client is remote, as rate limits must see it.
+    expect(
+      (await (await server(true, { TRUST_PROXY_HOPS: "1" })).inject(forwarded)).statusCode,
+    ).toBe(403);
+  });
+
   it("does not register fixture routes in production", async () => {
     const app = await server(true, {
       APP_ENV: "production",

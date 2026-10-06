@@ -39,7 +39,8 @@ export function HealthModelPanel({
 }: {
   offer: HealthOffer;
   onClose: () => void;
-  onRequest: (offer: HealthOffer) => void;
+  // Absent where offer requests cannot be completed: the panel then only informs.
+  onRequest?: ((offer: HealthOffer) => void) | undefined;
   apiUrl: string;
   year: number;
   onBack: () => void;
@@ -143,14 +144,16 @@ export function HealthModelPanel({
                 )}
               </div>
               <HealthPremiumDifference value={difference} detail />
-              <button
-                className="hi-primary hi-full hi-request-cta"
-                onClick={() => onRequest(offer)}
-              >
-                <HealthGradient />
-                {offerCopy.request}
-                <HealthIcon name="arrow" size={16} />
-              </button>
+              {onRequest && (
+                <button
+                  className="hi-primary hi-full hi-request-cta"
+                  onClick={() => onRequest(offer)}
+                >
+                  <HealthGradient />
+                  {offerCopy.request}
+                  <HealthIcon name="arrow" size={16} />
+                </button>
+              )}
             </div>
             {!configuration.ready && (
               <div

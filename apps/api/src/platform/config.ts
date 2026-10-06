@@ -78,6 +78,9 @@ export const environmentSchema = z
     AUTH_SESSION_TTL_SECONDS: z.coerce.number().int().min(60).max(86400).default(28800),
     AUTH_ADMIN_SESSION_TTL_SECONDS: z.coerce.number().int().min(60).max(86400).default(86400),
     WORKOS_TIMEOUT_MS: z.coerce.number().int().min(100).max(5000).default(3000),
+    // Reverse proxies in front of the API (1 behind the deployed Traefik). Client addresses,
+    // and so rate limits, come from the forwarded chain only for that many trusted hops.
+    TRUST_PROXY_HOPS: z.coerce.number().int().min(0).max(3).default(0),
   })
   .superRefine((config, context) => {
     const isLocal =

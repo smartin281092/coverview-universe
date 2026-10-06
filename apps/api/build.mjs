@@ -5,6 +5,7 @@ const manifest = JSON.parse(await readFile(new URL("./package.json", import.meta
 await build({
   entryPoints: {
     main: "src/main.ts",
+    migrate: "src/platform/db/release-migrate.ts",
     "document.pdf-annotations-worker":
       "src/modules/document-intelligence/document.pdf-annotations-worker.ts",
   },
