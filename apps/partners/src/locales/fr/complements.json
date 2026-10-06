@@ -1,0 +1,68 @@
+{
+  "title": "Analyse et compléments du client",
+  "description": "Ce qui manque à l’analyse comparative, par origine, et les compléments demandés au client.",
+  "incomplete": "L’analyse comparative ne peut pas encore conclure.",
+  "complete": "L’analyse comparative peut conclure avec les éléments actuels.",
+  "origin": {
+    "client": "Côté client",
+    "professional": "Côté professionnel",
+    "company": "Côté compagnie"
+  },
+  "reference": {
+    "absent": "Aucun contrat de référence confirmé par le client.",
+    "to_confirm": "Contrat de référence à reconfirmer : sa source a changé ou n’est plus disponible.",
+    "confirmed": "Contrat de référence confirmé par le client."
+  },
+  "offersToVerify_one": "{{count}} offre avec une prime ou des valeurs à vérifier.",
+  "offersToVerify_other": "{{count}} offres avec une prime ou des valeurs à vérifier.",
+  "valuesToVerify_one": "{{count}} valeur à vérifier.",
+  "valuesToVerify_other": "{{count}} valeurs à vérifier.",
+  "contractReviewPending": "Revue du contrat actuel à faire.",
+  "nothingProfessional": "Aucune vérification en attente.",
+  "missingBenefits_one": "{{count}} prestation absente d’une offre : une information à obtenir, jamais une exclusion.",
+  "missingBenefits_other": "{{count}} prestations absentes des offres : des informations à obtenir, jamais des exclusions.",
+  "nothingCompany": "Aucune prestation absente.",
+  "humanNote": "Vos vérifications restent humaines : le client ne complète que ce qui le concerne.",
+  "request": "Demander un complément au client",
+  "requestDescription": "Le client reçoit une notification dans Wallet. Il répond par un texte, par des documents de son espace ou en confirmant son contrat de référence.",
+  "itemsLabel": "Éléments demandés",
+  "items": {
+    "reference_contract": "Confirmer ou transmettre le contrat de référence",
+    "documents": "Transmettre des documents",
+    "information": "Préciser une information"
+  },
+  "message": "Message au client (10 caractères au moins)",
+  "dueAt": "Échéance (heure de Zurich, dans 30 jours au plus)",
+  "pause": "Mettre le suivi en attente jusqu’à l’échéance",
+  "confirm": "Je confirme cette demande au client.",
+  "send": "Envoyer la demande",
+  "states": {
+    "open": "En attente du client",
+    "answered": "Réponse reçue",
+    "closed": "Clôturée"
+  },
+  "requestedBy": "Demandé par {{name}} le {{date}}",
+  "due": "Échéance : {{date}}",
+  "overdue": "Échéance dépassée : {{date}}",
+  "paused": "Suivi mis en attente jusqu’à l’échéance.",
+  "answer": "Réponse du client le {{date}}",
+  "documents": "Documents partagés par le client",
+  "changedDocument": "Ce document a changé dans l’espace du client : il n’est plus servi.",
+  "referenceConfirmed": "Contrat de référence confirmé par le client le {{date}}.",
+  "close": "Clôturer la demande",
+  "closeDescription": "Le client voit l’issue, jamais la note.",
+  "outcome": "Issue",
+  "outcomes": {
+    "completed": "Complément traité",
+    "unanswered": "Sans réponse à l’échéance",
+    "withdrawn": "Demande retirée"
+  },
+  "note": "Note interne (facultatif)",
+  "closeConfirm": "Je confirme la clôture de cette demande.",
+  "closeSubmit": "Clôturer",
+  "closure": "{{outcome}}, le {{date}}",
+  "dismiss": "Fermer",
+  "invalid": "Vérifiez les champs et la confirmation.",
+  "conflict": "La demande a changé. Rechargez avant de poursuivre.",
+  "error": "L’envoi n’a pas abouti. Réessayez : les informations sont conservées."
+}

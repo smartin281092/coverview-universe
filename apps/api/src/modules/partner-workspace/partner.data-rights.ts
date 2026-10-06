@@ -321,6 +321,10 @@ export function createDataRightsOperations(pool: Pool, repository: Repository) {
         repository.walletConfirmations(actor, id),
       );
       cut(collected, `${name}.confirmations`, confirmations?.truncated);
+      const complements = await section(collected, `${name}.complements`, () =>
+        repository.walletComplements(actor, id),
+      );
+      cut(collected, `${name}.complements`, complements?.truncated);
       requests.push({
         lead,
         contact,
@@ -342,6 +346,7 @@ export function createDataRightsOperations(pool: Pool, repository: Repository) {
         quality,
         surveys,
         confirmations,
+        complements,
         conclusions,
         marketMandates,
         relationships,

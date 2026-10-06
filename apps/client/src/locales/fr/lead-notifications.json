@@ -62,7 +62,8 @@
     "appointment.joint_declined.v1": "Un spécialiste ne peut pas rejoindre votre rendez-vous",
     "appointment.joint_withdrawn.v1": "Un spécialiste ne participera plus à votre rendez-vous",
     "appointment.joint_ended.v1": "Rendez-vous conjoint annulé",
-    "appointment.joint_reconfirm.v1": "Rendez-vous conjoint déplacé : participation à reconfirmer"
+    "appointment.joint_reconfirm.v1": "Rendez-vous conjoint déplacé : participation à reconfirmer",
+    "complement.requested": "Votre conseiller vous demande un complément"
   },
   "back": "Retour aux offres",
   "inspect": "Ouvrir la demande",
@@ -80,5 +81,6 @@
   "reviewQuality": "Consulter mon suivi",
   "respondSurvey": "Donner mon avis",
   "reviewCommunication": "Examiner la demande d’accord",
-  "reviewConclusion": "Examiner la signature et les suites"
+  "reviewConclusion": "Examiner la signature et les suites",
+  "answerComplement": "Compléter ma demande"
 }

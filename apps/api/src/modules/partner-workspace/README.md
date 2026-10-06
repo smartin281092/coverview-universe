@@ -35,6 +35,8 @@ Ces règles remplacent les mentions « gestion d'équipe ouverte » et l'organis
 
 **Contrat signalé par le client (C8d).** Le client dit ce qui s'est passé (enquête, Wallet, ou contact consigné par l'Admin) ; le serveur compare à l'état déclaré de la demande. Un écart ouvre une vérification interne à CoverView, jamais une réclamation ni une écriture financière ; l'Admin peut demander un rapprochement au responsable de la demande et clôt avec une issue. File « contrats potentiellement non déclarés ». [Règles et bornes](docs/quality-pilotage.md#déclarations-du-client-et-vérification-c8d).
 
+**Analyse incomplète et complément du client (C8e).** Ce qui manque à l'analyse comparative, par origine ; demande de complément au client (éléments, message, échéance, attente facultative), réponse Wallet par un texte ou des documents de son espace, clôture par le professionnel. L'avis « analyse à compléter » suit le responsable courant et se réévalue dans le temps. [Règles, garanties et limites](docs/complements.md).
+
 **Rendez-vous conjoint (C6b).** Le client invite depuis Wallet le conseiller d'une autre de ses demandes ; le spécialiste confirme avec ses propres tampons, son temps devient protégé (garde en base étendue aux participations), chaque demande garde son étape et son issue ; report, annulation, retrait et perte d'accès sans rendez-vous contradictoire. [Parcours, règles et preuves](docs/joint-appointments.md).
 
 **Diffusion immédiate Partner ↔ Wallet (C6a).** Flux SSE `/partner/live` et `/wallet/live` : avis `pg_notify` après validation, audience décidée par le hub à chaque envoi selon la visibilité courante, invalidation puis relecture par l'API, resynchronisation à la reconnexion. [Politique d'exposition, limites et preuves](docs/live-updates.md).

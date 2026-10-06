@@ -1,0 +1,49 @@
+{
+  "title": "Compléments demandés",
+  "description": "Votre conseiller vous demande des éléments pour terminer la comparaison de vos offres.",
+  "banner": "Votre conseiller vous demande un complément pour cette demande.",
+  "open": "Compléter ma demande",
+  "history": "Compléments demandés",
+  "items": {
+    "reference_contract": "Confirmer ou transmettre votre contrat actuel",
+    "documents": "Transmettre des documents",
+    "information": "Préciser une information"
+  },
+  "requestedBy": "Demandé par {{name}} le {{date}}",
+  "due": "À compléter avant le {{date}}",
+  "overdue": "Échéance dépassée le {{date}} : vous pouvez encore répondre.",
+  "states": {
+    "open": "En attente de votre réponse",
+    "answered": "Réponse envoyée",
+    "closed": "Clôturée"
+  },
+  "outcomes": {
+    "completed": "Complément traité par votre conseiller",
+    "unanswered": "Clôturée sans réponse",
+    "withdrawn": "Demande retirée par votre conseiller"
+  },
+  "closure": "{{outcome}}, le {{date}}",
+  "answerTitle": "Votre réponse",
+  "text": "Votre message (10 caractères au moins sans document)",
+  "documents": "Documents de votre espace à partager (5 au plus)",
+  "documentsHelp": "Le document est partagé tel quel ; l’original reste dans votre espace et ne peut plus être supprimé.",
+  "noDocuments": "Aucun document disponible dans votre espace pour cette demande.",
+  "more": "Afficher plus de documents",
+  "contract": "Confirmer mon contrat actuel",
+  "contractHelp": "La confirmation du contrat actuel passe par le parcours habituel ; revenez ensuite envoyer votre réponse.",
+  "referenceConfirmed": "Contrat actuel confirmé le {{date}}.",
+  "confirm": "Je confirme transmettre ces informations et ces documents à mon conseiller.",
+  "send": "Envoyer ma réponse",
+  "sent": "Votre réponse a été envoyée à votre conseiller.",
+  "answered": "Votre réponse du {{date}}",
+  "shared": "Documents partagés",
+  "changedDocument": "Ce document a changé dans votre espace depuis le partage.",
+  "invalid": "Écrivez un message de 10 caractères au moins ou choisissez un document, puis cochez la confirmation.",
+  "changed": "La demande a changé. Rechargez avant de poursuivre.",
+  "uncertain": "La réception reste à confirmer. Réessayez le même envoi ; les informations sont conservées.",
+  "retryExact": "Réessayer le même envoi",
+  "reload": "Recharger",
+  "loading": "Chargement…",
+  "empty": "Aucun complément demandé pour cette demande.",
+  "close": "Fermer"
+}

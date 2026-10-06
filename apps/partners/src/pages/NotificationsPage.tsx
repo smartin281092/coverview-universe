@@ -101,7 +101,7 @@ export function NotificationsPage() {
                   ? "/collaborations"
                   : n.kind.startsWith("quality.") && n.kind !== "quality.survey_dependency"
                     ? `/quality?leadId=${encodeURIComponent(n.leadId)}`
-                    : `/leads/${encodeURIComponent(n.leadId)}${n.kind === "client_response" ? "?tab=activity" : n.kind.startsWith("conclusion.") ? "?tab=offers&section=conclusion" : n.kind === "policy_review" ? "?tab=offers" : ""}`,
+                    : `/leads/${encodeURIComponent(n.leadId)}${n.kind === "client_response" ? "?tab=activity" : n.kind.startsWith("conclusion.") ? "?tab=offers&section=conclusion" : ["policy_review", "analysis.incomplete", "complement.answered"].includes(n.kind) ? "?tab=offers" : ""}`,
                 openLabel: t(
                   `notifications.action.${n.resolvedAt ? "open" : (n.action ?? "open")}`,
                 ),

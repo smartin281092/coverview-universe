@@ -109,19 +109,21 @@ function Notifications({ identity }: { identity: IdentityMe }) {
                 status: t(
                   n.action === null ? "information" : n.resolvedAt ? "resolved" : "unresolved",
                 ),
-                href: `/offers?lead=${encodeURIComponent(n.leadId)}${n.kind.startsWith("conclusion.") ? "&section=conclusion" : n.kind.startsWith("quality.") ? "&section=quality" : n.action === "communication" ? "&section=communications" : ""}`,
+                href: `/offers?lead=${encodeURIComponent(n.leadId)}${n.kind.startsWith("conclusion.") ? "&section=conclusion" : n.kind.startsWith("quality.") ? "&section=quality" : n.kind.startsWith("complement.") ? "&section=complement" : n.action === "communication" ? "&section=communications" : ""}`,
                 openLabel: t(
                   n.kind.startsWith("conclusion.")
                     ? "reviewConclusion"
-                    : n.kind === "quality.survey"
-                      ? "respondSurvey"
-                      : n.kind.startsWith("quality.")
-                        ? "reviewQuality"
-                        : n.action === "communication"
-                          ? "reviewCommunication"
-                          : n.resolvedAt || !n.action
-                            ? "inspect"
-                            : "reviewOffer",
+                    : n.kind.startsWith("complement.")
+                      ? "answerComplement"
+                      : n.kind === "quality.survey"
+                        ? "respondSurvey"
+                        : n.kind.startsWith("quality.")
+                          ? "reviewQuality"
+                          : n.action === "communication"
+                            ? "reviewCommunication"
+                            : n.resolvedAt || !n.action
+                              ? "inspect"
+                              : "reviewOffer",
                 ),
                 readLabel: t("read"),
               }))}

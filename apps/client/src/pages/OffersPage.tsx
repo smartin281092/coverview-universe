@@ -38,6 +38,7 @@ import { OfferMatrix } from "../features/offers/OfferMatrix";
 import { OrientationPanel } from "../features/offers/OrientationPanel";
 import { RecommendationCard } from "../features/offers/RecommendationCard";
 import { ContractLinkDialog } from "../features/offers/ContractLinkDialog";
+import { ComplementBanner, WalletComplementsDialog } from "../features/offers/WalletComplements";
 import { OfferHistoryDialog } from "../features/offers/OfferHistoryDialog";
 import { FinalPoliciesDialog } from "../features/offers/FinalPoliciesDialog";
 import { ConclusionsDialog } from "../features/offers/ConclusionsDialog";
@@ -74,6 +75,7 @@ function Offers({ identity }: { identity: IdentityMe }) {
     [marketMandates, setMarketMandates] = useState<string | null>(null),
     [qualitySelection, setQualityLead] = useState<string | null>(null),
     [communicationsSelection, setCommunicationsLead] = useState<string | null>(null),
+    [complementSelection, setComplementLead] = useState<string | null>(null),
     [coordination, setCoordination] = useState(false),
     [referentAssessment, setReferentAssessment] = useState<string | null>(null),
     [linkContract, setLinkContract] = useState(false),
@@ -88,6 +90,8 @@ function Offers({ identity }: { identity: IdentityMe }) {
     communicationsSelection ?? (search.section === "communications" ? (search.lead ?? null) : null);
   const conclusionLead =
     conclusionSelection ?? (search.section === "conclusion" ? (search.lead ?? null) : null);
+  const complementLead =
+    complementSelection ?? (search.section === "complement" ? (search.lead ?? null) : null);
   const closeSection = () => {
     if (search.section) void navigate({ search: search.lead ? { lead: search.lead } : {} });
   };
@@ -206,6 +210,23 @@ function Offers({ identity }: { identity: IdentityMe }) {
           identity={identity}
           leadId={marketMandates}
           onClose={() => setMarketMandates(null)}
+        />
+      )}
+      {complementLead && (
+        <WalletComplementsDialog
+          key={`${identity.user.id}:${identity.session.id}:${complementLead}`}
+          identity={identity}
+          leadId={complementLead}
+          onClose={() => {
+            setComplementLead(null);
+            closeSection();
+          }}
+          // The reference contract is confirmed through the usual path, from the request.
+          onLinkContract={() => {
+            setComplementLead(null);
+            closeSection();
+            setLinkContract(true);
+          }}
         />
       )}
       {qualityLead && (
@@ -362,7 +383,8 @@ function Offers({ identity }: { identity: IdentityMe }) {
           !sharedAppointments &&
           !appointments &&
           !qualityLead &&
-          !communicationsLead
+          !communicationsLead &&
+          !complementLead
         }
         onOpenChange={(open) => {
           if (!open && !pending)
@@ -399,6 +421,11 @@ function Offers({ identity }: { identity: IdentityMe }) {
           ) : (
             lead && (
               <>
+                <ComplementBanner
+                  identity={identity}
+                  leadId={lead.id}
+                  onOpen={() => setComplementLead(lead.id)}
+                />
                 <Button
                   variant="outline"
                   disabled={pending}

@@ -6,6 +6,7 @@ import { syncLeadNotifications } from "./partner.notifications.js";
 import { followUpDeadline } from "./partner.follow-up.js";
 import { authorityCurrent } from "./partner.policy.js";
 import { currentContinuityPolicy } from "./partner.settings.js";
+import { syncAnalysisNotice } from "./partner.recommendations.js";
 import {
   automaticChain,
   computeMatching,
@@ -14,6 +15,29 @@ import {
 } from "./partner.matching.js";
 
 const system: PartnerAuditActor = { userId: null, systemActor: "partner-continuity-v1" };
+// An offer lapses and a source changes without any command: the analysis notice is read again on
+// each tick for a request with reviewed offers or an open notice (C8e).
+async function reassessAnalysis(tx: PoolClient, id: string) {
+  const lead = (
+    await tx.query<{
+      responsible_id: string | null;
+      client_user_id: string | null;
+      client_profile_id: string | null;
+    }>(
+      `select responsible_id,client_user_id,client_profile_id from partner_leads l where id=$1
+       and (exists(select 1 from partner_offers o where o.lead_id=l.id and o.reviewed_at is not null)
+         or exists(select 1 from partner_notifications n where n.dedupe_key=l.id||':analysis_incomplete' and n.resolved_at is null))`,
+      [id],
+    )
+  ).rows[0];
+  if (lead)
+    await syncAnalysisNotice(tx, {
+      id,
+      responsibleId: lead.responsible_id,
+      clientUserId: lead.client_user_id,
+      clientProfileId: lead.client_profile_id,
+    });
+}
 // Bounded automatic proposals to the next eligible person, never to anyone already tried in the
 // chain; the person still has to accept. Beyond the bound, the human CoverView queue takes over.
 async function proposeAutomatically(
@@ -103,6 +127,7 @@ export async function processPartnerContinuity(pool: Pool) {
         );
       }
       await syncLeadNotifications(tx, id);
+      await reassessAnalysis(tx, id);
       const row = (
         await tx.query<{
           responsible_id: string | null;

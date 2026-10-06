@@ -44,8 +44,8 @@ Rendre tout le [brief I–III](../../references/coverview-partner-2026-10-02.md)
    - *C8a, livré le 6 octobre (`4e0616c`)* : habilitations (journal des décisions, organisation validée à part, restrictions, réexamens automatiques, file Admin).
    - *C8b, livré le 6 octobre (`c67b06f`)* : équipe du responsable (invitation, page Équipe, fin d'adhésion, réattribution dans l'équipe).
    - *C8c, livré le 6 octobre (`a78ff26`)* : photo de profil et profil d'organisation.
-   - *C8d, livré le 6 octobre* : contrat non déclaré signalé par le client (déclarations, vérification interne, rapprochement, issue, file dédiée).
-   - *C8e* : analyse incomplète → demande de complément au client.
+   - *C8d, livré le 6 octobre (`562070d`)* : contrat non déclaré signalé par le client (déclarations, vérification interne, rapprochement, issue, file dédiée).
+   - *C8e, livré le 6 octobre* : analyse incomplète → demande de complément au client (manques par origine, demande, réponse Wallet, clôture ; avis qui suit le responsable et se réévalue).
    - Correctif préalable, G-07 : l'action de notification `review_participation` (C6b) manquait au contrat.
 
 #### C1 — Conception retenue (avant code)
@@ -149,7 +149,7 @@ Découpage en trois sous-étapes, chacune commitée avec ses tests : **C4a** pre
   - Elle porte un motif et des points d'attention ; un écart avec l'orientation exige un motif d'écart.
   - Elle est publiée explicitement dans Wallet avec son auteur et sa date.
   - Une nouvelle version d'offre ou une nouvelle revue du contrat actuel la rend « à revoir ».
-- Une analyse incomplète ou contradictoire crée une tâche « Compléter l'analyse » et une notification au responsable. Rien de conditionnel n'est présenté comme certain.
+- Une analyse incomplète ou contradictoire crée une tâche « Compléter l'analyse » et une notification au responsable. Rien de conditionnel n'est présenté comme certain. *Correction C8e : seule la notification d'action a été créée ; elle tient lieu de tâche.*
 
 **C4c — Prévoyance et contrat actuel proposé.**
 
@@ -472,6 +472,10 @@ architecture, backend, api, contracts, data, permissions, security, testing, fro
 | 52 | C8d formulaire d'enquête | typecheck Wallet | Le `pipe` du formulaire refuse les valeurs par défaut du contrat (`insurer`, `signedOn`) | Première étape typée `z.custom<ClientFacts>()`, le contrat valide toujours en seconde étape |
 | 53 | Méthode | Prettier passé sur tous les fichiers modifiés | Quatre Markdown non formatés au départ (mémoire, README, couverture, qualité) recevaient des changements sans rapport | Textes repris depuis `HEAD` avec les seuls ajouts C8d (G-13) ; Prettier réservé aux fichiers déjà propres |
 | 54 | C8d complet | 7 suites touchées (confirmations, qualité, contrats qualité, droits, diffusion, profils, rendez-vous conjoints) ; typecheck des 7 espaces, lint, builds des 3 apps, depcruise, knip, seconde génération Drizzle | 7/7 fichiers, 39/39 tests ; 0 erreur ; knip : `declaredFacts` et `compareFacts` exportés sans usage, rendus locaux, puis identique à `main` ; aucun écart | — |
+| 55 | C8d suite complète | suite API complète du commit `562070d` dans `coverview-astra-suite3` | 78/78 fichiers, 780/780 tests | Sauvegarde 29,2 Mo, avance rapide de `main`, migration 0080 locale (81 entrées) |
+| 56 | C8e compléments | tests PostgreSQL (avis réévalué par le worker et déplacé à la réattribution ; demande, réponse avec document de l'espace, clôture ; invalidation au changement de client) | 3/3 au premier passage | — |
+| 57 | C8e voisinage | 8 suites (compléments, recommandations, matching, profils, droits, conclusion, diffusion, déclarations) ; requête HTTP Wallet des compléments | 8/8 fichiers, 42/42 tests ; 200 et liste vide | Le banc HTTP désactive les documents : la route de téléchargement n'est vérifiée qu'au niveau du dépôt |
+| 58 | C8e complet | typecheck des 7 espaces, lint, format, builds des 3 apps, depcruise, knip, seconde génération Drizzle | 0 erreur après correction d'un accès non typé dans le test ; knip identique à `main` ; aucun écart | — |
 
 ## Risques et mitigations
 

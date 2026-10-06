@@ -16,6 +16,7 @@ import recommendations from "./locales/fr/recommendations.json";
 import data from "./locales/fr/data.json";
 import team from "./locales/fr/team.json";
 import access from "./locales/fr/access.json";
+import complements from "./locales/fr/complements.json";
 void i18next.use(initReactI18next).init({
   resources: {
     fr: {
@@ -35,6 +36,7 @@ void i18next.use(initReactI18next).init({
       data,
       access,
       team,
+      complements,
     },
   },
   lng: "fr",

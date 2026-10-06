@@ -50,14 +50,15 @@ async function put(db: Executor, n: Notification) {
 }
 
 // Open while the comparative analysis of reviewed offers cannot conclude (C4b); resolved as soon
-// as it can. One notice per request, reopened if the analysis becomes incomplete again.
+// as it can. One notice per request, reopened if the analysis becomes incomplete again, and
+// addressed to the current responsible (C8e).
 export async function notifyAnalysis(
   db: Executor,
   lead: { id: string; responsibleId: string | null },
   incomplete: boolean,
 ) {
   const key = `${lead.id}:analysis_incomplete`;
-  if (incomplete)
+  if (incomplete) {
     await put(db, {
       leadId: lead.id,
       recipientId: lead.responsibleId,
@@ -67,7 +68,11 @@ export async function notifyAnalysis(
       action: "review_offer",
       reopen: true,
     });
-  else
+    await db.query(
+      "update partner_notifications set recipient_id=$2,audience=case when $2::text is null then 'coverview' else 'partner' end where dedupe_key=$1 and resolved_at is null",
+      [key, lead.responsibleId],
+    );
+  } else
     await db.query(
       "update partner_notifications set resolved_at=now() where dedupe_key=$1 and resolved_at is null",
       [key],
@@ -439,7 +444,7 @@ export async function syncLeadNotifications(db: Executor, leadId: string) {
   ).rows[0];
   if (!row) return;
   await db.query(
-    "update partner_notifications set recipient_id=$2,audience=case when $2::text is null then 'coverview' else 'partner' end where lead_id=$1 and (kind in ('client_response','policy_review') or action='conclusion' and audience<>'wallet') and resolved_at is null",
+    "update partner_notifications set recipient_id=$2,audience=case when $2::text is null then 'coverview' else 'partner' end where lead_id=$1 and (kind in ('client_response','policy_review','analysis.incomplete','complement.answered') or action='conclusion' and audience<>'wallet') and resolved_at is null",
     [leadId, row.responsible_id],
   );
   if (["draft", "completed"].includes(row.stage)) {

@@ -1155,6 +1155,8 @@ export const partnerNotificationSchema = z.object({
       "communication",
       "survey",
       "review_participation",
+      "complement",
+      "review_complement",
     ])
     .nullable(),
   dueAt: instant.nullable(),

@@ -134,6 +134,7 @@ import type { registerIdentity } from "../identity/index.js";
 import { createPartnerRepository } from "./partner.repository.js";
 import { PartnerError, type PartnerActor } from "./partner.policy.js";
 import { registerQualityRoutes } from "./partner.quality.routes.js";
+import { registerComplementRoutes } from "./partner.complements.routes.js";
 import { registerConclusionRoutes } from "./partner.conclusion.routes.js";
 import { registerNavigationRoutes } from "./partner.navigation.routes.js";
 import { registerRelationshipRoutes } from "./partner.relationships.routes.js";
@@ -238,6 +239,7 @@ export function registerPartnerWorkspace(
     );
   const economyPage = z.object({ cursor: z.string().max(400).optional() }).strict();
   registerQualityRoutes(server, repository, actor);
+  registerComplementRoutes(server, repository, actor);
   registerConclusionRoutes(server, repository, actor);
   registerNavigationRoutes(server, repository, actor);
   registerRelationshipRoutes(server, repository, actor);
@@ -1899,6 +1901,22 @@ export function registerPartnerWorkspace(
         await actor(request, wallet),
         leadId,
         sourceId,
+        record,
+      );
+    },
+    async complementSource(
+      request: FastifyRequest,
+      leadId: string,
+      requestId: string,
+      documentId: string,
+      wallet: boolean,
+      record = false,
+    ) {
+      return repository.complementSource(
+        await actor(request, wallet),
+        leadId,
+        requestId,
+        documentId,
         record,
       );
     },

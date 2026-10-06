@@ -997,7 +997,11 @@
     "appointment.joint_withdrawn.v1": "Participation au rendez-vous conjoint retirée",
     "appointment.joint_ended.v1": "Rendez-vous conjoint annulé",
     "appointment.joint_reconfirm.v1": "Rendez-vous conjoint déplacé : participation à reconfirmer",
-    "appointment.joint_outcome.v1": "Issue du rendez-vous conjoint consignée"
+    "appointment.joint_outcome.v1": "Issue du rendez-vous conjoint consignée",
+    "complement.requested.v1": "Complément demandé au client",
+    "complement.answered.v1": "Complément reçu du client",
+    "complement.closed.v1": "Demande de complément clôturée",
+    "complement.document_viewed.v1": "Document de complément consulté"
   },
   "notifications": {
     "title": "Notifications",
@@ -1074,7 +1078,8 @@
       "appointment.joint_declined.v1": "Participation au rendez-vous conjoint déclinée",
       "appointment.joint_withdrawn.v1": "Participation au rendez-vous conjoint retirée",
       "appointment.joint_ended.v1": "Rendez-vous conjoint annulé",
-      "appointment.joint_reconfirm.v1": "Rendez-vous conjoint déplacé : participation à reconfirmer"
+      "appointment.joint_reconfirm.v1": "Rendez-vous conjoint déplacé : participation à reconfirmer",
+      "complement.answered": "Complément reçu du client"
     },
     "action": {
       "open": "Ouvrir le dossier",
@@ -1089,7 +1094,9 @@
       "review_quality": "Traiter le suivi qualité",
       "survey": "Donner mon avis",
       "communication": "Consulter les échanges",
-      "review_participation": "Répondre à l’invitation"
+      "review_participation": "Répondre à l’invitation",
+      "review_complement": "Examiner le complément",
+      "complement": "Compléter la demande"
     }
   },
   "collaboration": {

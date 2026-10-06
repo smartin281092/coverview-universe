@@ -496,6 +496,13 @@ it("serves the copy over HTTP to the signed-in person only, as a protected, rate
       requests: [],
     });
     expect((await app.inject({ url: "/wallet/data", headers: { host } })).statusCode).toBe(401);
+    // The complements of a request are served over HTTP to its owner (C8e).
+    const complements = await app.inject({
+      url: `/wallet/leads/${lead.id}/complements`,
+      headers: { host, cookie },
+    });
+    expect(complements.statusCode).toBe(200);
+    expect(complements.json()).toEqual({ items: [], truncated: false });
 
     const mutation = (headers: Record<string, string>, session = cookie) =>
       app.inject({

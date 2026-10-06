@@ -24,6 +24,14 @@ export type LeadSourceAuthorization = {
     wallet: boolean,
     record?: boolean,
   ): Promise<string>;
+  complementSource(
+    request: FastifyRequest,
+    leadId: string,
+    requestId: string,
+    documentId: string,
+    wallet: boolean,
+    record?: boolean,
+  ): Promise<string>;
   authorizeCompetenceSource(
     request: FastifyRequest,
     userId: string,
@@ -347,15 +355,17 @@ export function registerLeadDocumentRoutes(
     },
   );
   for (const surface of ["partner", "wallet"])
-    for (const kind of ["offer", "contract", "policy", "correspondence"] as const)
+    for (const kind of ["offer", "contract", "policy", "correspondence", "complement"] as const)
       app.get(
-        kind === "correspondence"
-          ? `/${surface}/leads/:id/conclusion-correspondences/:correspondenceId/source`
-          : kind === "policy"
-            ? `/${surface}/leads/:id/final-policies/:policyId/source`
-            : kind === "contract"
-              ? `/${surface}/leads/:id/current-contract/source`
-              : `/${surface}/leads/:id/offers/:offerId/source`,
+        kind === "complement"
+          ? `/${surface}/leads/:id/complements/:requestId/documents/:documentId/source`
+          : kind === "correspondence"
+            ? `/${surface}/leads/:id/conclusion-correspondences/:correspondenceId/source`
+            : kind === "policy"
+              ? `/${surface}/leads/:id/final-policies/:policyId/source`
+              : kind === "contract"
+                ? `/${surface}/leads/:id/current-contract/source`
+                : `/${surface}/leads/:id/offers/:offerId/source`,
         {
           config: { rateLimit: { max: 30, timeWindow: "1 minute" } },
           schema: {
@@ -365,25 +375,36 @@ export function registerLeadDocumentRoutes(
                 offerId: z.string().max(100).optional(),
                 policyId: z.string().max(100).optional(),
                 correspondenceId: z.string().max(100).optional(),
+                requestId: z.string().max(100).optional(),
+                documentId: z.string().max(100).optional(),
               })
               .strict(),
           },
         },
         async (request, reply) => {
-          const { id, offerId, policyId, correspondenceId } = request.params;
+          const {
+            id,
+            offerId,
+            policyId,
+            correspondenceId,
+            requestId,
+            documentId: shared,
+          } = request.params;
           const authorize = () =>
-            kind === "correspondence"
-              ? access.conclusionCorrespondenceSource(
-                  request,
-                  id,
-                  correspondenceId!,
-                  surface === "wallet",
-                )
-              : kind === "policy"
-                ? access.authorizeFinalPolicySource(request, id, policyId!, surface === "wallet")
-                : kind === "contract"
-                  ? access.authorizeContractSource(request, id, surface === "wallet")
-                  : access.authorizeSource(request, id, offerId!, surface === "wallet");
+            kind === "complement"
+              ? access.complementSource(request, id, requestId!, shared!, surface === "wallet")
+              : kind === "correspondence"
+                ? access.conclusionCorrespondenceSource(
+                    request,
+                    id,
+                    correspondenceId!,
+                    surface === "wallet",
+                  )
+                : kind === "policy"
+                  ? access.authorizeFinalPolicySource(request, id, policyId!, surface === "wallet")
+                  : kind === "contract"
+                    ? access.authorizeContractSource(request, id, surface === "wallet")
+                    : access.authorizeSource(request, id, offerId!, surface === "wallet");
           const documentId = await authorize();
           const source = (
             await pool.query<{ user_id: string }>(
@@ -396,7 +417,16 @@ export function registerLeadDocumentRoutes(
             if ((await authorize()) !== documentId)
               throw new DocumentError("DOCUMENT_NOT_FOUND", 404);
           });
-          if (kind === "correspondence")
+          if (kind === "complement")
+            await access.complementSource(
+              request,
+              id,
+              requestId!,
+              shared!,
+              surface === "wallet",
+              true,
+            );
+          else if (kind === "correspondence")
             await access.conclusionCorrespondenceSource(
               request,
               id,

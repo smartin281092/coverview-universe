@@ -15,6 +15,7 @@ import { createOverviewClient } from "./partner-overview.js";
 import { createNavigationClient } from "./partner-navigation.js";
 import { createCommunicationClient } from "./partner-communications.js";
 import { createPilotageClient } from "./partner-pilotage.js";
+import { createComplementClient } from "./partner-complements.js";
 import {
   commercialInputSchema,
   commercialReviewSchema,
@@ -265,6 +266,7 @@ export function createPartnerClient(baseUrl: string) {
     ...createNavigationClient(request),
     ...createCommunicationClient(request),
     ...createPilotageClient(request),
+    ...createComplementClient(request, base),
     economyAgreements: (cursor?: string, signal?: AbortSignal) =>
       request("/partner/economy/agreements" + economyPage(cursor), economyAgreementsSchema, signal),
     economyCases: (cursor?: string, signal?: AbortSignal) =>

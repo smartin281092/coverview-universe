@@ -53,6 +53,8 @@ Après chaque commande qui modifie les entrées de la comparaison (ajout, revue,
 
 Tant qu'elle reste insuffisante, une notification « Analyse comparative à compléter » est ouverte. Elle va au responsable, ou à CoverView sans responsable, avec l'action « Examiner les offres ». Elle se résout dès que l'analyse peut conclure et se rouvre si elle redevient incomplète. Rien de conditionnel n'est présenté au client comme certain.
 
+Depuis C8e, l'avis suit le responsable courant, se réévalue au passage du worker de continuité (offre échue, original modifié) et ouvre l'onglet des offres. Il tient lieu de tâche : aucune tâche « Compléter l'analyse » n'est créée. Le professionnel voit ce qui manque par origine et peut demander un complément au client ([règles](complements.md)).
+
 ## Limites
 
 - Les spécificités prévoyance et la proposition automatique du contrat actuel relèvent de C4c.

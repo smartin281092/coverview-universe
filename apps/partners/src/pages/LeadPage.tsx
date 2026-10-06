@@ -39,6 +39,7 @@ import { ContractComparison } from "../features/ContractComparison";
 import { OfferMatrix } from "../features/OfferMatrix";
 import { OrientationPanel } from "../features/OrientationPanel";
 import { RecommendationPanel } from "../features/RecommendationPanel";
+import { ComplementPanel } from "../features/ComplementPanel";
 import { ContractReviewDialog } from "../features/ContractReviewDialog";
 import { CreateLeadDialog } from "../features/CreateLeadDialog";
 import { CollaborationDialog } from "../features/CollaborationDialog";
@@ -879,6 +880,7 @@ export function LeadPage() {
           {lead.offerOrientation && (
             <OrientationPanel orientation={lead.offerOrientation} offers={lead.offers} />
           )}
+          <ComplementPanel lead={lead} />
           {lead.offerComparison && <OfferMatrix comparison={lead.offerComparison} />}
         </div>
       )}

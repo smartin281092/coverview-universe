@@ -19,6 +19,7 @@ import {
   surveysSchema,
 } from "./partner-quality.js";
 import { leadRelationshipsSchema } from "./partner-relationships.js";
+import { walletComplementsSchema } from "./partner-complements.js";
 import {
   advicePreferencesSchema,
   bookingProposalsSchema,
@@ -150,6 +151,8 @@ export const walletDataRequestSchema = z.object({
   surveys: surveysSchema.nullable(),
   // The client's own statements about the request (C8d).
   confirmations: clientConfirmationsSchema.nullable(),
+  // Complements asked of the client and their answers (C8e).
+  complements: walletComplementsSchema.nullable(),
   conclusions: conclusionsSchema.nullable(),
   marketMandates: marketMandatesSchema.nullable(),
   relationships: leadRelationshipsSchema.nullable(),

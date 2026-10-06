@@ -23,6 +23,7 @@ import { event, newId } from "./partner.audit.js";
 import { readOffers } from "./partner.offers.js";
 import { readCurrentContract } from "./partner.contract.js";
 import { notifyAnalysis } from "./partner.notifications.js";
+import { analysisGapsSchema, type AnalysisGaps } from "@coverview/contracts/partner-complements";
 
 type Mutation = <T>(
   actor: PartnerActor,
@@ -161,17 +162,16 @@ export async function readCurrentRecommendation(
   return (await project(db, rows, visible, recommendationBasis(visible, current), wallet))[0]!;
 }
 
-// After a change of the analysis inputs: reviewed offers whose orientation stays insufficient ask
-// the person following the request to complete the analysis (brief I.13).
-export async function syncAnalysisNotice(
-  tx: PoolClient,
-  lead: {
-    id: string;
-    responsibleId: string | null;
-    clientUserId: string | null;
-    clientProfileId: string | null;
-  },
-) {
+type AnalysisLead = {
+  id: string;
+  responsibleId: string | null;
+  clientUserId: string | null;
+  clientProfileId: string | null;
+};
+// The analysis of the reviewed offers, and what it lacks by origin (C8e, brief I.13): the client
+// for the reference contract, the professional for the values to verify, the company for the
+// benefits absent from an offer.
+export async function readAnalysis(tx: PoolClient, lead: AnalysisLead): Promise<AnalysisGaps> {
   // An offer still awaiting its review is work in progress, not an incomplete analysis.
   const offers = (await readOffers(tx, lead.id, false)).items.filter((offer) => !!offer.reviewedAt);
   const current = await readCurrentContract(tx, lead);
@@ -179,7 +179,25 @@ export async function syncAnalysisNotice(
     (offer) => offer.active && !["cancelled", "replaced", "expired"].includes(offer.state),
   );
   const orientation = orientOffers(compareOffers(current, offers), offers, current);
-  await notifyAnalysis(tx, lead, reviewed && orientation.kind === "insufficient");
+  return analysisGapsSchema.parse({
+    incomplete: reviewed && orientation.kind === "insufficient",
+    referenceContract: !current
+      ? "absent"
+      : current.status === "available"
+        ? "confirmed"
+        : "to_confirm",
+    offersToVerify: orientation.offers.filter((item) => item.status === "incomplete").length,
+    valuesToVerify: orientation.offers.reduce((sum, item) => sum + item.toVerify.length, 0),
+    contractReviewPending:
+      current?.status === "available" && (current.reviewVersion === 0 || !current.premiumVerified),
+    missingBenefits: orientation.offers.reduce((sum, item) => sum + item.missing.length, 0),
+  });
+}
+// After a change of the analysis inputs, and in the continuity worker since an offer can lapse
+// or a source change: an insufficient orientation asks the person following the request to
+// complete the analysis (brief I.13).
+export async function syncAnalysisNotice(tx: PoolClient, lead: AnalysisLead) {
+  await notifyAnalysis(tx, lead, (await readAnalysis(tx, lead)).incomplete);
 }
 
 export function createRecommendationOperations(
