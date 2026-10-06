@@ -6,6 +6,14 @@ Aucune entrée active. Les décisions durables vivent dans leur documentation pr
 
 ## Candidats
 
+Décisions utilisateur du 6 octobre 2026, mise en ligne.
+- Le nouveau projet remplace l'ancien CoverView sur le serveur qui héberge `coverview.ch` : anciens conteneurs arrêtés, bases sauvegardées et conservées.
+- Seul le comparateur maladie est public : `/` y mène en attendant le site complet ; Wallet, Partner et Admin restent fermés jusqu'à la recette.
+- Déploiement par SSH derrière le Traefik de Coolify.
+- Bascule malgré l'alerte attendue de l'ancienne surveillance.
+
+Consignées dans [hosting.md, HOST-04](docs/hosting.md#host-04--mise-en-ligne-du-6-octobre-2026-décision-utilisateur) et le [plan de mise en ligne](roadmap/plans/deploy-comparator.plan.md). Confiance haute : instruction explicite. Réexaminer à l'ouverture de Wallet, Partner et Admin, au plus tard avant le 4 janvier 2027.
+
 Décisions utilisateur du 4 octobre 2026, programme Partner. Réponses « 1a 2a 3b » au bilan du lot 4 :
 
 - reprise dans Claude Code sur la branche `claude/partner-integration`, sans nouveau relais Codex ;
