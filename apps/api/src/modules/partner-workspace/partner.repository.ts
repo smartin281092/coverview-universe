@@ -12,6 +12,7 @@ import {
   logAccessDecision,
   withdrawOperationalAccess,
 } from "./partner.access.js";
+import { acceptTeamInvitation, createTeamOperations } from "./partner.team.js";
 import { createInvitationOperations, type InvitationDelivery } from "./partner.invitations.js";
 import { compareOffers } from "./partner.comparison.js";
 import { proposeCurrentContract } from "./partner.contract-proposal.js";
@@ -252,7 +253,9 @@ function summary(actor: PartnerActor, row: ReadRow): LeadSummary {
   if (!actor.wallet && row.responsibleId === actor.userId && row.assignment === "proposed")
     actions.push("accept");
   if (controls && row.stage === "completed") actions.push("reopen");
-  if (!actor.wallet && actor.administrator) actions.push("assign");
+  // The manager reassigns within their own team (C8b); the server checks the people again.
+  if (!actor.wallet && (actor.administrator || (controls && row.managedAccess)))
+    actions.push("assign");
   if (
     active &&
     !actor.wallet &&
@@ -365,7 +368,7 @@ function summary(actor: PartnerActor, row: ReadRow): LeadSummary {
         row.contributorEdit ||
         (row.creatorId === actor.userId && row.stage === "draft" && !row.responsibleId) ||
         row.managedAccess),
-    canAssign: !actor.wallet && actor.administrator,
+    canAssign: !actor.wallet && (actor.administrator || (controls && !!row.managedAccess)),
     canCollaborate,
     allowedActions: actions,
   });
@@ -670,7 +673,7 @@ export function createPartnerRepository(
         typeof error === "object" &&
         "code" in error &&
         error.code === "23514" &&
-        /^(market|commercial|economy|quality|communication|pilotage|conclusion|navigation|relationships|joint|access)\./u.test(
+        /^(market|commercial|economy|quality|communication|pilotage|conclusion|navigation|relationships|joint|access|team)\./u.test(
           operation,
         )
       )
@@ -776,6 +779,7 @@ export function createPartnerRepository(
     ...createMatchingOperations(pool),
     ...createProfileOperations(pool, transaction),
     ...createAccessOperations(pool, transaction),
+    ...createTeamOperations(pool, transaction),
     ...createInvitationOperations(pool, transaction, invitationDelivery),
     ...createOverviewOperations(pool),
     // Same authority as conclusion: advising rights and publication on an open request.
@@ -2275,13 +2279,38 @@ export function createPartnerRepository(
       }
       return { items };
     },
-    apply(actor: PartnerActor, input: z.infer<typeof partnerApplicationInputSchema>, key: string) {
+    apply(
+      actor: PartnerActor,
+      input: z.infer<typeof partnerApplicationInputSchema>,
+      key: string,
+      invitationId?: string,
+    ) {
       return transaction(
         actor,
         "apply",
         key,
-        input,
+        invitationId ? { ...input, invitationId } : input,
         async (tx) => {
+          // Joining through a manager's invitation (C8b): the organisation and its name are those
+          // of the invitation; CoverView then validates the person apart.
+          if (invitationId) {
+            const joined = await acceptTeamInvitation(tx, actor, invitationId);
+            const application = { ...input, organization: joined.organizationName };
+            await tx.query(
+              `insert into partner_members(user_id,organization_id,application) values($1,$2,$3) on conflict(user_id) do update set organization_id=excluded.organization_id,application=excluded.application,state='submitted',roles='[]',revision=partner_members.revision+1`,
+              [actor.userId, joined.organizationId, JSON.stringify(application)],
+            );
+            await event(
+              tx,
+              actor,
+              null,
+              "application.submitted",
+              joined.organizationName,
+              "coverview",
+              actor.userId,
+            );
+            return actor.userId;
+          }
           const existing = await membership(tx, actor.userId, true);
           if (existing && !["draft", "needs_information", "rejected"].includes(existing.state))
             fail("PARTNER_CONFLICT", 409);

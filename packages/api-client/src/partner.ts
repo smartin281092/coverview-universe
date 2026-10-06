@@ -9,6 +9,7 @@ import { createRecommendationClient } from "./partner-recommendations.js";
 import { createJointAppointmentClient } from "./partner-joint.js";
 import { createDataRightsClient } from "./partner-data.js";
 import { createAccessClient } from "./partner-access.js";
+import { createTeamClient } from "./partner-team.js";
 import { createOverviewClient } from "./partner-overview.js";
 import { createNavigationClient } from "./partner-navigation.js";
 import { createCommunicationClient } from "./partner-communications.js";
@@ -237,6 +238,7 @@ export function createPartnerClient(baseUrl: string) {
     ...createJointAppointmentClient(request),
     ...createDataRightsClient(request),
     ...createAccessClient(request),
+    ...createTeamClient(request),
     ...createOverviewClient(request),
     ...createNavigationClient(request),
     ...createCommunicationClient(request),
@@ -1164,12 +1166,20 @@ export function createPartnerClient(baseUrl: string) {
       request("/partner/dashboard", partnerDashboardSchema, signal),
     work: (signal?: AbortSignal) => request("/partner/work", partnerWorkSchema, signal),
     context: (signal?: AbortSignal) => request("/partner/context", partnerContextSchema, signal),
-    application: (input: z.infer<typeof partnerApplicationInputSchema>, options: PartnerMutation) =>
+    // An invitation from a manager (C8b) attaches the application to that organisation.
+    application: (
+      input: z.infer<typeof partnerApplicationInputSchema>,
+      options: PartnerMutation,
+      invitationId?: string,
+    ) =>
       request(
         "/partner/application",
         partnerContextSchema,
         options.signal,
-        partnerApplicationInputSchema.parse(input),
+        {
+          ...partnerApplicationInputSchema.parse(input),
+          ...(invitationId ? { invitationId } : {}),
+        },
         options,
       ),
     applications: (signal?: AbortSignal) =>

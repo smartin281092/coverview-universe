@@ -5,7 +5,8 @@ import { ConventionDialog } from "../features/ConventionDialog";
 import { PracticeDialog } from "../features/PracticeDialog";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { ReceivedInvitation } from "@coverview/contracts/partner-team";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -23,6 +24,7 @@ import { AccessNotice, HistoryDialog } from "../features/AccessDialogs";
 export function ApplicationPage() {
   const { t } = useTranslation(),
     access = useTranslation("access").t,
+    team = useTranslation("team").t,
     { identity, context } = usePartner(),
     client = useQueryClient();
   const [error, setError] = useState("");
@@ -59,8 +61,27 @@ export function ApplicationPage() {
         },
   });
   const [key, setKey] = useState(() => crypto.randomUUID());
+  // An invitation from a manager, bound to this account's verified address (C8b).
+  const [joining, setJoining] = useState<ReceivedInvitation | null>(null);
+  const received = useQuery({
+    queryKey: ["private", identity.user.id, identity.session.id, "team-invitations"],
+    queryFn: ({ signal }) => partnerApi.receivedTeamInvitations(signal),
+    gcTime: 0,
+  });
+  const decline = useMutation({
+    gcTime: 0,
+    retry: false,
+    mutationFn: (invitationId: string) =>
+      partnerApi.declineTeamInvitation(invitationId, {
+        csrfToken: identity.csrfToken,
+        idempotencyKey: crypto.randomUUID(),
+      }),
+    onSuccess: () => void received.refetch(),
+  });
   const editable =
-    !application || ["draft", "needs_information", "rejected"].includes(application.state);
+    !!joining ||
+    !application ||
+    ["draft", "needs_information", "rejected"].includes(application.state);
   return (
     <div className="mx-auto max-w-3xl space-y-8">
       <header>
@@ -70,6 +91,59 @@ export function ApplicationPage() {
         </h1>
         <p className="mt-3 max-w-2xl text-muted-foreground">{t("application.description")}</p>
       </header>
+      {!joining &&
+        received.data?.items.map((invitation) => (
+          <section
+            key={invitation.id}
+            className="space-y-3 rounded-xl border border-primary/40 bg-primary/5 p-6 text-sm"
+          >
+            <h2 className="font-semibold">{team("received.title")}</h2>
+            <p>
+              {team("received.body", {
+                organization: invitation.organizationName,
+                name: invitation.invitedBy,
+                date: formatDate(invitation.expiresAt),
+              })}
+            </p>
+            {invitation.blocker ? (
+              <p className="text-muted-foreground">{team(`received.${invitation.blocker}`)}</p>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                <Button
+                  onClick={() => {
+                    setJoining(invitation);
+                    form.setValue("organization", invitation.organizationName);
+                    setKey(crypto.randomUUID());
+                  }}
+                >
+                  {team("received.accept")}
+                </Button>
+                <Button
+                  variant="outline"
+                  disabled={decline.isPending}
+                  onClick={() => decline.mutate(invitation.id)}
+                >
+                  {team("received.decline")}
+                </Button>
+              </div>
+            )}
+          </section>
+        ))}
+      {joining && (
+        <section className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-primary/40 bg-primary/5 p-5 text-sm">
+          <p>{team("received.joining", { organization: joining.organizationName })}</p>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              setJoining(null);
+              form.setValue("organization", application?.organization ?? "");
+            }}
+          >
+            {team("received.cancelJoin")}
+          </Button>
+        </section>
+      )}
       {application && <AccessNotice application={application} />}
       {application && (
         <section className="rounded-xl border border-border p-6">
@@ -165,10 +239,12 @@ export function ApplicationPage() {
             void form.handleSubmit(async (values) => {
               setError("");
               try {
-                await partnerApi.application(values, {
-                  csrfToken: identity.csrfToken,
-                  idempotencyKey: key,
-                });
+                await partnerApi.application(
+                  values,
+                  { csrfToken: identity.csrfToken, idempotencyKey: key },
+                  joining?.id,
+                );
+                setJoining(null);
                 await client.invalidateQueries({ queryKey: ["private", identity.user.id] });
               } catch {
                 setError(t("error"));
@@ -185,6 +261,7 @@ export function ApplicationPage() {
                 <Input
                   id={field}
                   {...form.register(field)}
+                  readOnly={field === "organization" && !!joining}
                   aria-invalid={!!form.formState.errors[field]}
                 />
               </div>

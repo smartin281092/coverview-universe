@@ -889,6 +889,10 @@ export const partnerApplicationInputSchema = z
     qualifications: z.string().trim().max(2000),
   })
   .strict();
+// Submitted with the invitation of an organisation's manager to join that organisation (C8b).
+export const partnerApplicationSubmitSchema = partnerApplicationInputSchema.extend({
+  invitationId: id.optional(),
+});
 // Activities CoverView may restrict (C8a). A restriction stops new engagements only: the requests
 // already held continue, and a suspension remains the decision that withdraws them.
 export const memberRestrictionsSchema = z.object({

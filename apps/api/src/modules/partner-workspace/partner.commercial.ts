@@ -57,6 +57,23 @@ export async function economyRead<T>(
     tx.release();
   }
 }
+// The operational manager of the organisation the terms were declared in, while their author is
+// still a member of it, reads them (C8b, brief I.3); they never withdraw or review them.
+const teamManagerSql = (user: string, organization: string, owner: string) =>
+  `select 1 from partner_members me join partner_organizations o on o.id=me.organization_id
+  join partner_members author on author.organization_id=me.organization_id
+  where me.user_id=${user} and me.organization_id=${organization} and author.user_id=${owner}
+  and me.roles ? 'manager' and me.state='approved' and o.state='approved'
+  and (me.review_due_at is null or me.review_due_at>now())`;
+async function teamManager(
+  tx: PoolClient,
+  userId: string,
+  organizationId: string,
+  ownerId: string,
+) {
+  return !!(await tx.query(teamManagerSql("$1", "$2", "$3"), [userId, organizationId, ownerId]))
+    .rowCount;
+}
 export async function commercialCondition(
   tx: PoolClient,
   actor: PartnerActor,
@@ -75,7 +92,14 @@ export async function commercialCondition(
       created_at: Date;
     }>("select * from partner_commercial_conditions where id=$1 for share", [id])
   ).rows[0];
-  if (!row || (restricted && !actor.administrator && row.owner_id !== actor.userId) || actor.wallet)
+  if (
+    !row ||
+    actor.wallet ||
+    (restricted &&
+      !actor.administrator &&
+      row.owner_id !== actor.userId &&
+      !(await teamManager(tx, actor.userId, row.organization_id, row.owner_id)))
+  )
     fail("PARTNER_NOT_FOUND", 404);
   const member = await membership(tx, row.owner_id, true);
   const terms = commercialTermsSchema.parse(row.terms);
@@ -168,7 +192,9 @@ export function createCommercialOperations(pool: Pool, mutate: EconomyMutation) 
         const [at, id] = economyCursor(cursor);
         const rows = (
           await tx.query<{ id: string; created_at: Date }>(
-            `select id,created_at from partner_commercial_conditions where (owner_id=$1 or $2) and ($3::timestamptz is null or (created_at,id)<($3,$4)) order by created_at desc,id desc limit 21`,
+            `select c.id,c.created_at from partner_commercial_conditions c where (c.owner_id=$1 or $2
+              or exists(${teamManagerSql("$1", "c.organization_id", "c.owner_id")}))
+              and ($3::timestamptz is null or (c.created_at,c.id)<($3,$4)) order by c.created_at desc,c.id desc limit 21`,
             [actor.userId, actor.administrator, at, id],
           )
         ).rows;

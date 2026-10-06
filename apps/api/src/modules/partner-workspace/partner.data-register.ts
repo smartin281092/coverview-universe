@@ -83,7 +83,8 @@ const professional: Record<
   membership: {
     purpose:
       "Examiner votre candidature, gérer votre habilitation, ses restrictions et ses réexamens, et tracer chaque décision.",
-    recipients: "CoverView.",
+    recipients:
+      "CoverView ; le responsable de votre organisation : état, habilitations, réexamen, types de restriction et charge, sans motif.",
     origin: "Vous et les décisions de CoverView.",
   },
   declarations: {
@@ -116,7 +117,8 @@ const professional: Record<
   },
   remunerations: {
     purpose: "Établir et suivre vos droits économiques.",
-    recipients: "Vous, CoverView.",
+    recipients:
+      "Vous, CoverView ; le responsable de votre organisation lit vos conditions commerciales, jamais vos rémunérations.",
     origin: "Dossiers et accords économiques.",
   },
 };

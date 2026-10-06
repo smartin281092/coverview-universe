@@ -547,6 +547,13 @@
       "when": 1791313388526,
       "tag": "0077_partner_access",
       "breakpoints": true
+    },
+    {
+      "idx": 78,
+      "version": "7",
+      "when": 1791316295501,
+      "tag": "0078_partner_team",
+      "breakpoints": true
     }
   ]
 }

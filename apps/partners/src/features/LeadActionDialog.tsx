@@ -25,6 +25,7 @@ import { Field, SelectOptions, readText, readDate, localDateTime } from "./Field
 import { partnerApi } from "../api";
 import { PersonalAppointmentDialog } from "./PersonalAppointmentDialog";
 import { MatchingAssignment } from "./MatchingAssignment";
+import { TeamAssignment } from "./TeamAssignment";
 export type LeadAction =
   | "next_action"
   | "contact"
@@ -72,7 +73,7 @@ export function LeadActionDialog({
   const directory = useQuery({
     queryKey: [...session.queryKey, "directory"],
     queryFn: ({ signal }) => partnerApi.directory(signal),
-    enabled: action === "assign",
+    enabled: action === "assign" && session.context.administrator,
     gcTime: 0,
   });
   if (!action) return null;
@@ -332,7 +333,11 @@ export function LeadActionDialog({
           {action === "assign" && (
             <>
               <p className="text-sm text-muted-foreground">{t("detail.assignNotice")}</p>
-              <MatchingAssignment lead={lead} directory={directory.data?.items ?? []} />
+              {session.context.administrator ? (
+                <MatchingAssignment lead={lead} directory={directory.data?.items ?? []} />
+              ) : (
+                <TeamAssignment lead={lead} />
+              )}
             </>
           )}
           {action === "wait" && (

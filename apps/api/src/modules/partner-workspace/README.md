@@ -23,6 +23,14 @@
 
 Ces règles remplacent les mentions « restrictions fines et réexamens ouverts ». [Règles, effets et preuves](docs/access.md).
 
+**Équipe du responsable (C8b).**
+- **Invitation** : le responsable invite un collègue par son adresse ; seul le compte vérifié avec cette adresse la voit, et l'accepte en candidatant. CoverView valide la personne à part.
+- **Page Équipe** : membres, demandes en cours et en retard, invitations, conditions commerciales de l'équipe en lecture.
+- **Fin d'adhésion** d'un collègue, avec motif et demandes rendues à CoverView ; jamais soi-même ni un autre responsable.
+- **Réattribution** d'une demande de l'équipe à un collègue éligible et non restreint.
+
+Ces règles remplacent les mentions « gestion d'équipe ouverte » et l'organisation à un seul membre. [Règles, limites et preuves](docs/team.md).
+
 **Rendez-vous conjoint (C6b).** Le client invite depuis Wallet le conseiller d'une autre de ses demandes ; le spécialiste confirme avec ses propres tampons, son temps devient protégé (garde en base étendue aux participations), chaque demande garde son étape et son issue ; report, annulation, retrait et perte d'accès sans rendez-vous contradictoire. [Parcours, règles et preuves](docs/joint-appointments.md).
 
 **Diffusion immédiate Partner ↔ Wallet (C6a).** Flux SSE `/partner/live` et `/wallet/live` : avis `pg_notify` après validation, audience décidée par le hub à chaque envoi selon la visibilité courante, invalidation puis relecture par l'API, resynchronisation à la reconnexion. [Politique d'exposition, limites et preuves](docs/live-updates.md).

@@ -56,7 +56,7 @@ import {
   leadDetailSchema,
   leadListQuerySchema,
   leadListSchema,
-  partnerApplicationInputSchema,
+  partnerApplicationSubmitSchema,
   partnerReviewInputSchema,
   partnerApplicationSchema,
   partnerContextSchema,
@@ -140,6 +140,7 @@ import { registerRelationshipRoutes } from "./partner.relationships.routes.js";
 import { registerMatchingRoutes } from "./partner.matching.routes.js";
 import { registerProfileRoutes } from "./partner.profiles.routes.js";
 import { registerAccessRoutes } from "./partner.access.routes.js";
+import { registerTeamRoutes } from "./partner.team.routes.js";
 import { registerCommunicationRoutes } from "./partner.communications.routes.js";
 import { registerPilotageRoutes } from "./partner.pilotage.routes.js";
 import { startPartnerJobs } from "./partner.jobs.js";
@@ -243,6 +244,7 @@ export function registerPartnerWorkspace(
   registerMatchingRoutes(server, repository, actor);
   registerProfileRoutes(server, repository, actor);
   registerAccessRoutes(server, repository, actor);
+  registerTeamRoutes(server, repository, actor);
   registerInvitationRoutes(server, repository, actor);
   registerRecommendationRoutes(server, repository, actor);
   registerJointAppointmentRoutes(server, repository, actor);
@@ -1621,9 +1623,12 @@ export function registerPartnerWorkspace(
     "/partner/application",
     {
       config: limited,
-      schema: { body: partnerApplicationInputSchema, response: { 200: partnerContextSchema } },
+      schema: { body: partnerApplicationSubmitSchema, response: { 200: partnerContextSchema } },
     },
-    async (request) => repository.apply(await actor(request), request.body, key(request)),
+    async (request) => {
+      const { invitationId, ...input } = request.body;
+      return repository.apply(await actor(request), input, key(request), invitationId);
+    },
   );
   app.get(
     "/partner/directory",

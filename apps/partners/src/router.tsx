@@ -156,6 +156,11 @@ const data = createRoute({
   path: "/data",
   component: lazyRouteComponent(() => import("./pages/DataPage"), "DataPage"),
 });
+const team = createRoute({
+  getParentRoute: () => root,
+  path: "/team",
+  component: lazyRouteComponent(() => import("./pages/TeamPage"), "TeamPage"),
+});
 const applications = createRoute({
   getParentRoute: () => root,
   path: "/applications",
@@ -197,6 +202,7 @@ export const router = createRouter({
     publicProfile,
     data,
     applications,
+    team,
     clients,
     tasks,
     agenda,

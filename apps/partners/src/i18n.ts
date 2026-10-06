@@ -14,6 +14,7 @@ import profiles from "./locales/fr/profiles.json";
 import invitations from "./locales/fr/invitations.json";
 import recommendations from "./locales/fr/recommendations.json";
 import data from "./locales/fr/data.json";
+import team from "./locales/fr/team.json";
 import access from "./locales/fr/access.json";
 void i18next.use(initReactI18next).init({
   resources: {
@@ -33,6 +34,7 @@ void i18next.use(initReactI18next).init({
       recommendations,
       data,
       access,
+      team,
     },
   },
   lng: "fr",

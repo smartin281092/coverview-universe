@@ -94,6 +94,16 @@ function Workspace() {
             </Link>
           </>
         )}
+        {context.operational && context.application?.grantedRoles.includes("manager") && (
+          <Link
+            to="/team"
+            onClick={() => setOpen(false)}
+            className={`flex items-center gap-3 rounded-lg px-3 py-3 text-sm ${pathname === "/team" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}
+          >
+            <Users className="size-4" />
+            {t("nav.team")}
+          </Link>
+        )}
         {context.administrator && (
           <Link
             to="/quality"

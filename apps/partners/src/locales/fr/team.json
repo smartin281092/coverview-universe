@@ -1,0 +1,67 @@
+{
+  "title": "Équipe",
+  "subtitle": "Les membres de votre organisation, leurs demandes en cours et les invitations. CoverView valide chaque personne à part.",
+  "members": "Membres",
+  "you": "Vous",
+  "reviewDue": "Réexamen le {{date}}",
+  "load": "{{active}} en cours · {{overdue}} en retard",
+  "leads": "Voir ses demandes",
+  "restricted": "Restreint par CoverView",
+  "restrictions": {
+    "newLeads": "Nouvelles demandes",
+    "leadCreation": "Transmission",
+    "marketplace": "Marketplace",
+    "categories": "Catégories : {{list}}"
+  },
+  "invite": {
+    "action": "Inviter un collègue",
+    "title": "Inviter un collègue",
+    "description": "L’invitation est liée à l’adresse : seule la personne connectée à Partner avec cette adresse vérifiée la voit, pendant 14 jours. Aucun email n’est envoyé : prévenez-la. CoverView examine ensuite sa candidature.",
+    "email": "Adresse email professionnelle",
+    "submit": "Inviter",
+    "limit": "Limite atteinte : 20 invitations ouvertes et 10 nouvelles par jour au plus."
+  },
+  "invitations": {
+    "title": "Invitations",
+    "empty": "Aucune invitation.",
+    "meta": "Invitée par {{name}} le {{date}}",
+    "expires": "Valable jusqu’au {{date}}",
+    "cancel": "Annuler l’invitation",
+    "state": {
+      "pending": "En attente",
+      "expired": "Échue",
+      "accepted": "Acceptée",
+      "declined": "Refusée",
+      "cancelled": "Annulée"
+    }
+  },
+  "removal": {
+    "action": "Mettre fin à l’adhésion",
+    "title": "Mettre fin à l’adhésion de {{name}}",
+    "description": "La personne perd l’accès opérationnel de votre organisation. Sa candidature passe à l’état « fermé » ; CoverView en est informé.",
+    "consequences_one": "{{count}} demande en cours revient à CoverView pour réattribution. Réattribuez-la d’abord dans l’équipe si vous le souhaitez.",
+    "consequences_other": "{{count}} demandes en cours reviennent à CoverView pour réattribution. Réattribuez-les d’abord dans l’équipe si vous le souhaitez.",
+    "none": "Aucune demande en cours.",
+    "kept": "Les preuves, l’historique et les droits économiques sont conservés.",
+    "reason": "Motif",
+    "submit": "Mettre fin à l’adhésion"
+  },
+  "terms": "Conditions commerciales de l’équipe",
+  "termsDescription": "Vous lisez les conditions déclarées par les membres de votre organisation ; seul leur auteur ou CoverView les modifie.",
+  "received": {
+    "title": "Invitation à rejoindre une organisation",
+    "body": "{{organization}} vous invite à rejoindre son équipe ({{name}}), jusqu’au {{date}}.",
+    "accept": "Rejoindre et compléter ma candidature",
+    "decline": "Refuser",
+    "membership_active": "Votre adhésion actuelle est validée : elle doit d’abord prendre fin, auprès de votre responsable ou de CoverView.",
+    "membership_suspended": "Votre adhésion est suspendue : CoverView doit d’abord statuer.",
+    "joining": "Vous rejoignez {{organization}}. Le nom de l’organisation est fixé par l’invitation.",
+    "cancelJoin": "Ne pas utiliser cette invitation"
+  },
+  "assignment": {
+    "notice": "Réattribution dans votre équipe : la personne choisie doit encore accepter la demande. Le client est informé du changement.",
+    "colleague": "Collègue",
+    "none": "Aucun collègue éligible : validé, conseiller dans cette catégorie et sans restriction.",
+    "reason": "Motif de la réattribution"
+  }
+}

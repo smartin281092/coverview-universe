@@ -4,6 +4,7 @@ import {
   requireParticipant,
   handoffWork,
 } from "./partner.participants.js";
+import { requireTeamAssignment } from "./partner.team.js";
 import { proposeCollaboration } from "./partner.collaboration.js";
 import type { PoolClient } from "pg";
 import { z } from "zod";
@@ -372,7 +373,8 @@ export async function executeLeadCommand(
       break;
     }
     case "assign": {
-      if (!actor.administrator) fail("PARTNER_ACCESS_DENIED", 403);
+      // CoverView anywhere; a manager only between members of their own organisation (C8b).
+      if (!actor.administrator) await requireTeamAssignment(tx, actor, lead, input.responsibleId);
       await requireNewEngagement(tx, lead, input.responsibleId, actor);
       const details = z.object({ transmissionAuthorized: z.boolean() }).parse(lead.details);
       if (!details.transmissionAuthorized || !lead.title || !lead.nextAction || !lead.dueAt)

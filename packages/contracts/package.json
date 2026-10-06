@@ -28,7 +28,8 @@
     "./partner-live": "./src/partner-live.ts",
     "./partner-joint": "./src/partner-joint.ts",
     "./partner-data": "./src/partner-data.ts",
-    "./partner-access": "./src/partner-access.ts"
+    "./partner-access": "./src/partner-access.ts",
+    "./partner-team": "./src/partner-team.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
