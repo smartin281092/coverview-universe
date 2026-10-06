@@ -511,3 +511,40 @@ it("closes an unanswered request only after its date, refuses a foreign answer a
   ]);
   expect((await repository.partnerComplements(advisor, lead.id)).items).toEqual([]);
 });
+
+it("replays a repeated request and keeps a single open request under concurrency", async () => {
+  const owner = { ...(await actor()), wallet: true };
+  const advisor = await professional("Fanny Conseillère");
+  const input = {
+    items: ["documents" as const],
+    message,
+    dueAt: later(48),
+    pauseFollowUp: false,
+    confirmed: true as const,
+  };
+  // The same key replays the first answer without writing a second request.
+  const first = await request(owner, advisor);
+  const replayed = key();
+  const once = await repository.requestComplement(advisor, first.id, input, replayed);
+  const again = await repository.requestComplement(advisor, first.id, input, replayed);
+  expect(again.items.map((item) => item.id)).toEqual(once.items.map((item) => item.id));
+  const count = async (leadId: string) =>
+    (
+      await database.pool.query<{ count: number }>(
+        "select count(*)::int count from partner_complement_requests where lead_id=$1",
+        [leadId],
+      )
+    ).rows[0]!.count;
+  expect(await count(first.id)).toBe(1);
+  // Two requests at the same time: the request lock lets one through, the other conflicts.
+  const second = await request(owner, advisor);
+  const results = await Promise.allSettled([
+    repository.requestComplement(advisor, second.id, input, key()),
+    repository.requestComplement(advisor, second.id, input, key()),
+  ]);
+  expect(results.filter((result) => result.status === "fulfilled")).toHaveLength(1);
+  expect(results.find((result) => result.status === "rejected")).toMatchObject({
+    reason: { code: "PARTNER_CONFLICT" },
+  });
+  expect(await count(second.id)).toBe(1);
+});

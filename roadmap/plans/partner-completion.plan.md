@@ -45,7 +45,7 @@ Rendre tout le [brief I–III](../../references/coverview-partner-2026-10-02.md)
    - *C8b, livré le 6 octobre (`c67b06f`)* : équipe du responsable (invitation, page Équipe, fin d'adhésion, réattribution dans l'équipe).
    - *C8c, livré le 6 octobre (`a78ff26`)* : photo de profil et profil d'organisation.
    - *C8d, livré le 6 octobre (`562070d`)* : contrat non déclaré signalé par le client (déclarations, vérification interne, rapprochement, issue, file dédiée).
-   - *C8e, livré le 6 octobre* : analyse incomplète → demande de complément au client (manques par origine, demande, réponse Wallet, clôture ; avis qui suit le responsable et se réévalue).
+   - *C8e, livré le 6 octobre (`7bf857f`, correctif `27d7fe3`)* : analyse incomplète → demande de complément au client (manques par origine, demande, réponse Wallet, clôture ; avis qui suit le responsable et se réévalue).
    - Correctif préalable, G-07 : l'action de notification `review_participation` (C6b) manquait au contrat.
 
 #### C1 — Conception retenue (avant code)
@@ -390,6 +390,7 @@ Les 33 scénarios I.23 se déroulent avec de vrais comptes WorkOS : candidat, Ad
 
 - [ ] A : typecheck des 8 espaces, `drizzle-kit generate` sans écart, lint et tests complets verts, base locale migrée, `D:\Projects` sur la branche intégrée. V0–V2 et V1 migration.
 - [ ] Chaque item C : contrats Zod, API avec autorisation serveur, SDK et UI Partner/Wallet/Admin concernées. Tests PostgreSQL des invariants de droits, d'isolation, de concurrence et d'idempotence. Document propriétaire et couverture mis à jour. V0–V2.
+  - *6 octobre : les items C1 à C8 sont livrés, avec une suite API complète verte (79/79 fichiers, 783/783 tests). La case reste ouverte jusqu'à une revue des preuves item par item : le rejeu et la concurrence sont testés explicitement pour C8d et C8e, ils restent à confirmer pour les items antérieurs.*
 - [ ] B : scénarios I.23 observés en réel. V3, puis revue humaine V5.
 - [ ] Ledger sans élément critique « supposé » ; brief, S-110 et S-042a fermés seulement sur preuve réelle.
 
@@ -477,6 +478,8 @@ architecture, backend, api, contracts, data, permissions, security, testing, fro
 | 57 | C8e voisinage | 8 suites (compléments, recommandations, matching, profils, droits, conclusion, diffusion, déclarations) ; requête HTTP Wallet des compléments | 8/8 fichiers, 42/42 tests ; 200 et liste vide | Le banc HTTP désactive les documents : la route de téléchargement n'est vérifiée qu'au niveau du dépôt |
 | 58 | C8e complet | typecheck des 7 espaces, lint, format, builds des 3 apps, depcruise, knip, seconde génération Drizzle | 0 erreur après correction d'un accès non typé dans le test ; knip identique à `main` ; aucun écart | — |
 | 59 | C8e relecture à froid | relecture du module avant la suite complète | Trois écarts : refus d'une garde SQL (23514) non traduit en conflit pour les opérations `complement.*` ; avis de suivi resynchronisés seulement au passage suivant du worker après la mise en attente ; réponses de complément conservées à l'effacement sans être déclarées | Préfixe ajouté, resynchronisation immédiate, catégorie `complements` déclarée (aperçu Admin, Wallet, règles) ; 2/2 fichiers, 9/9 tests |
+| 60 | C8e suite complète | suite API complète du commit `27d7fe3` dans `coverview-astra-suite3` (un premier passage sur `7bf857f` arrêté pour intégrer la relecture) | 79/79 fichiers, 783/783 tests | Sauvegarde 29,2 Mo, avance rapide de `main`, migration 0081 locale (82 entrées, 3 tables) |
+| 61 | Rejeu et concurrence C8d, C8e | tests PostgreSQL : même clé rejouée, deux demandes ou déclarations simultanées | 2/2 fichiers, 8/8 tests : une seule écriture au rejeu ; une demande de complément passe, l'autre est en conflit ; deux déclarations simultanées rejoignent une seule vérification | Tests seuls, sans changement de code |
 
 ## Risques et mitigations
 

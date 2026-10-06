@@ -419,3 +419,34 @@ it("records a CoverView quality call and verifies a contact the client does not 
     ),
   ).rejects.toMatchObject({ code: "23514" });
 });
+
+it("replays a repeated statement and joins simultaneous statements into one verification", async () => {
+  const owner = { ...(await actor()), wallet: true };
+  const advisor = await professional("Gil Conseiller");
+  const lead = await request(owner, advisor);
+  await closeWithoutContract(advisor, lead.id);
+  const statement = {
+    facts: { ...unknown, contract: "yes" as const },
+    comment: "",
+    confirmed: true as const,
+  };
+  const statements = async () =>
+    (
+      await database.pool.query<{ count: number }>(
+        "select count(*)::int count from partner_client_confirmations where lead_id=$1",
+        [lead.id],
+      )
+    ).rows[0]!.count;
+  // The same key replays the first statement without recording it twice.
+  const replayed = key();
+  await repository.confirmFromWallet(owner, lead.id, statement, replayed);
+  await repository.confirmFromWallet(owner, lead.id, statement, replayed);
+  expect(await statements()).toBe(1);
+  // Two statements at the same time: both are kept, one verification follows them.
+  await Promise.all([
+    repository.confirmFromWallet(owner, lead.id, statement, key()),
+    repository.confirmFromWallet(owner, lead.id, statement, key()),
+  ]);
+  expect(await statements()).toBe(3);
+  expect(await verifications(lead.id)).toHaveLength(1);
+});
