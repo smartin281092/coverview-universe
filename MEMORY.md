@@ -22,6 +22,22 @@ Décisions utilisateur du 4 octobre 2026, programme Partner. Réponses « 1a 2a 
 
 Consignées au [plan de reprise](roadmap/plans/partner-completion.plan.md) et dans la [politique d'exécution](roadmap/execution-policy.md#pilotage-courant--décision-du-4-octobre-2026). Confiance haute : instruction explicite. Réexaminer à la fin de la phase C, au plus tard avant le 4 janvier 2027.
 
+Décisions déléguées PROG-23 du 6 octobre 2026, C7 Partner (`bible.question.006`, périmètre Partner).
+- **Copie** : matrice v1, la copie reprend ce que l'espace montre déjà, avec en plus les coordonnées, le contexte et la provenance de ses propres demandes.
+  - Elle est générée à la demande, sans copie stockée, et chaque copie laisse une preuve immuable.
+  - Limite : 6 par heure et par session.
+- **Scores internes** : un professionnel voit sa ligne de matching et son évaluation d'apporteur (R5), mais ni les autres candidats ni le motif de la décision.
+- **Demandes** : 5 ouvertes au plus par personne.
+  - Les notes internes s'obtiennent par un accès complet accordé par l'Admin, ouvert 14 jours.
+  - Un effacement n'est déclaré fait que par son exécution, et l'effacement d'un professionnel est seulement répondu.
+- **Effacement** : il porte sur la couche d'identification, est décidé sous MFA après un aperçu du serveur et avec une attestation, et des marqueurs neutres remplacent les champs obligatoires.
+  - Une demande en cours bloque l'effacement. Contrat, droits économiques, réclamation ouverte ou contestation en cours font conserver la demande, motif à l'appui.
+  - Les preuves protégées restent, références au compte comprises.
+- **Conservation** : aucune durée définie, aucune purge.
+- **RLS** : non activé, écart assumé comme dans tout le projet.
+
+Promues au [propriétaire droits des personnes](apps/api/src/modules/partner-workspace/docs/data-rights.md). Ces défauts ne valent ni conformité ni avis juridique (S-131, S-137). Confiance haute sur les invariants V2, dont HTTP réel ; V3 navigateur ouvert (WorkOS local à rétablir). Réexaminer à la validation d'une politique de conservation, à la recette (phase B) et avant le 4 janvier 2027. Aucune entrée active.
+
 Décisions déléguées PROG-23 du 4 octobre 2026, C6 Partner.
 - Diffusion immédiate en SSE, invalidation seule : le Wallet n'apprend que les changements d'audience client, et n'ouvre son flux que sur les pages de demandes ; 4 flux par personne, 256 par surface.
 - Rendez-vous conjoint à l'initiative du client depuis Wallet : au plus 3 spécialistes ; plus de sollicitation après un refus ou un retrait ; un report demande une reconfirmation ; chaque spécialiste consigne l'issue de sa propre demande ; noms montrés aux seuls professionnels du rendez-vous, au propriétaire et à l'Admin.

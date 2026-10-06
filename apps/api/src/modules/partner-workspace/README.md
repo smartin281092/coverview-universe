@@ -6,6 +6,14 @@
 
 **Matching et réattribution automatique bornée (C1, décision 2a).** Classement expliqué depuis les déclarations validées, décision humaine tracée avec motif d'écart, proposition automatique bornée avant reprise CoverView : [règles, données et limites](docs/matching.md). Ces règles remplacent la mention historique « zéro réattribution automatique » plus bas.
 
+**Droits des personnes (C7).**
+- **Copie et registre** : copie JSON et registre des traitements dans Wallet et Partner, scores internes ouverts à la personne concernée (R5), preuve immuable de chaque copie.
+- **Demandes** : rectification, effacement, accès complet ou autre, auxquelles CoverView répond depuis Admin.
+- **Effacement contrôlé** : effacement de la couche d'identification d'un client, décidé sous MFA après un aperçu du serveur, avec les preuves conservées et déclarées.
+- **Conservation** : aucune durée n'est définie et aucune purge n'est automatique.
+
+[Matrice, règles, effacement et preuves](docs/data-rights.md).
+
 **Rendez-vous conjoint (C6b).** Le client invite depuis Wallet le conseiller d'une autre de ses demandes ; le spécialiste confirme avec ses propres tampons, son temps devient protégé (garde en base étendue aux participations), chaque demande garde son étape et son issue ; report, annulation, retrait et perte d'accès sans rendez-vous contradictoire. [Parcours, règles et preuves](docs/joint-appointments.md).
 
 **Diffusion immédiate Partner ↔ Wallet (C6a).** Flux SSE `/partner/live` et `/wallet/live` : avis `pg_notify` après validation, audience décidée par le hub à chaque envoi selon la visibilité courante, invalidation puis relecture par l'API, resynchronisation à la reconnexion. [Politique d'exposition, limites et preuves](docs/live-updates.md).

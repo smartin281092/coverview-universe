@@ -2,7 +2,7 @@
 
 > Statut : **approuvé** — réponses utilisateur du 4 octobre 2026 : « 1a 2a 3b ». diff_from : [lot 4/4](partner-conclusion-integration.plan.md), interrompu le 4 octobre à 01h30.
 > **Session requise** : Claude Code, Claude Opus 5.5, effort max. La reprise quitte la chaîne de relais Codex (décision 1a).
-> **Session réelle** : Claude Code, Claude Opus 5.5, effort max (C1 à C6, 4 octobre 2026).
+> **Session réelle** : Claude Code, Claude Opus 5.5, effort max (C1 à C6 le 4 octobre 2026, C7 le 6 octobre 2026).
 > **Budget** : plusieurs sessions. Une phase livrée est commitée sur `claude/partner-integration` avant la suivante.
 
 ## Décisions acquises (réponses aux questions bloquantes du bilan du 4 octobre)
@@ -35,6 +35,11 @@ Rendre tout le [brief I–III](../../references/coverview-partner-2026-10-02.md)
 5. **Pilotage quotidien** (I.7, II.6/10/14) : vues d'équipe et prédéfinies, indicateurs de carte, dashboard Admin complet. — *C5a livré le 4 octobre (vues, filtres, tri, compteurs, vues partagées), C5b et C5c livrés le 4 octobre (indicateurs de carte, pilotage du réseau Admin), V0–V2.*
 6. **Temps réel et agenda** (III.16, I.12, I.21) : diffusion Partner↔Wallet, rendez-vous conjoint, rentabilité CoverView si ses données existent. — *C6a livré le 4 octobre (flux SSE Partner et Wallet, audience décidée à chaque envoi, resynchronisation), V0–V2 dont flux HTTP réel. C6b livré le 4 octobre (rendez-vous conjoint : invitation Wallet, confirmation par le spécialiste, temps protégé en base), V0–V2. C6c livré le 4 octobre (recettes CoverView au pilotage du réseau, réseau et branches, même calcul que les statistiques ; coûts non saisis, rentabilité non calculée), V0–V2.*
 7. **Droits des personnes** (I.20, S-130/S-131) : export, rectification, conservation et suppression contrôlée, cloisonnement en base. Aucune durée légale inventée.
+   - *C7a, livré le 6 octobre* : « Mes données » Wallet et Partner, scores internes R5, preuve de copie.
+   - *C7b* : demandes de rectification, d'effacement, d'accès complet ou autres, répondues par l'Admin.
+   - *C7c* : effacement contrôlé de la couche d'identification, preuves conservées et déclarées.
+   - Vérification V0–V2, dont un HTTP réel.
+   - Pas de RLS : écart assumé, comme dans tout le projet. Aucune durée et aucune purge (S-131).
 8. **Reliquats** : gestion d'équipe du responsable, restrictions fines et réexamens automatiques (I.4), contrat non déclaré signalé par le client (I.17.2), audit incomplet → demande de complément (I.13).
 
 #### C1 — Conception retenue (avant code)
@@ -378,6 +383,14 @@ architecture, backend, api, contracts, data, permissions, security, testing, fro
 | 27 | C6b complet | typecheck des 6 espaces, 6 fichiers de tests existants touchés, builds, frontières | 0 erreur ; 119/119 ; builds API, Partner, Wallet verts ; depcruise 0 erreur ; knip sans nouveau signalement | Commit C6b |
 | 28 | C6c lecture préalable | lecture du pilotage existant | La recette CoverView existait déjà dans les statistiques (Admin, période, périmètre, branche, détail par Lead) ; aucune donnée de coût n'existe | Réemploi du calcul dans l'aperçu réseau, sans duplication ; coûts déclarés non saisis |
 | 29 | C6c | scénario économique existant + test d'aperçu, typecheck, build Admin | 12/12 ; même recette (1000 centimes) dans les deux écrans et dans la branche concernée ; autre branche « pas d'observation » | Commit C6c |
+| 30 | C7a scores internes | test PostgreSQL | Délai d'instruction dépassé : la lecture de l'évaluation d'apporteur ouvrait sa propre transaction pendant que la lecture englobante tenait le verrou de session | Lecture sortie de la transaction ; 3/3 |
+| 31 | C7a HTTP réel | serveur réel, double du fournisseur d'identité | Quota de copies compté par adresse IP, tentative refusée comprise : des personnes derrière un même réseau l'auraient partagé | Clé par condensé de la session ; un voisin garde son quota ; 4/4 (`1d56714`) |
+| 32 | C7a complet | typecheck des 5 espaces, lint, builds API/Wallet/Partner, frontières, knip, suite API complète (`9eacde1`) | 0 erreur ; depcruise 0 erreur ; knip identique à `main` ; 74/74 fichiers, 764/764 tests | Sauvegarde 29,1 Mo, avance rapide de `main`, migration 0074 locale (75 entrées) |
+| 33 | Parcours navigateur (V3) | préversion locale | `scripts/preview.mjs` ne démarre pas : le `.env` pointe `WORKOS_ENV_FILE` vers le dossier Codex `9b02`, absent avant le nettoyage du 6 octobre ; sans WorkOS, aucune session réelle | Oracle HTTP réel (ligne 31) ; V3 avec un vrai compte WorkOS en phase B, après correction du `.env` par l'utilisateur |
+| 34 | C7b | tests PostgreSQL | 2 échecs : attente HTTP sans la liste `requests` ; scénario sans note interne à révéler | Attentes et scénario corrigés ; 5/5 |
+| 35 | C7b complet | typecheck des 6 espaces, lint, builds des 4 apps, frontières, knip, suite API complète (`1b63d21`) | 0 erreur ; inchangé ; 74/74, 766/766 | Commit `1b63d21` |
+| 36 | C7c | test PostgreSQL | Clôture refusée (motif « refus du client » exige ce résultat) ; puis lieu vidé refusé par le contrat d'affichage d'un rendez-vous (3 caractères au moins) | Scénario corrigé ; marqueur « Lieu effacé » ; 6/6, puis 15/15 avec invitations et profils |
+| 37 | C7c complet | typecheck, lint, builds, frontières, knip, seconde génération Drizzle | 0 erreur, aucun écart | Commit `e37236f` ; sauvegarde 29,1 Mo, avance rapide de `main`, migrations 0075–0076 locales (77 entrées) |
 
 ## Risques et mitigations
 
