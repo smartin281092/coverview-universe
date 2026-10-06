@@ -316,6 +316,12 @@ it("lets the owner invite an advisor of another of their requests who appears fr
   expect(await open(s.invited.userId, "appointment.joint_invited.v1")).toEqual([
     { action: "review_participation" },
   ]);
+  // The notification centre of the invited professional serves that question.
+  const centre = await repository.notifications(s.invited, { status: "open" });
+  expect(centre.items.find((item) => item.kind === "appointment.joint_invited.v1")).toMatchObject({
+    action: "review_participation",
+    leadId: s.joining.id,
+  });
   expect(await sent(s.hostAdvisor.userId, "appointment.joint_invited.v1")).toHaveLength(1);
   expect(await open(s.hostAdvisor.userId, "appointment.joint_invited.v1")).toEqual([]);
   // Nothing is planned for the invited request before its professional confirms.
