@@ -3,7 +3,8 @@
   "description": "Votre profil est présenté aux clients que vous accompagnez et aux partenaires CoverView, après examen par CoverView.",
   "tabs": {
     "profile": "Profil public",
-    "evaluation": "Mes évaluations"
+    "evaluation": "Mes évaluations",
+    "organization": "Organisation"
   },
   "status": {
     "none": "Aucun profil soumis",
@@ -77,5 +78,47 @@
     "contestSend": "Envoyer"
   },
   "error": "L'opération n'a pas abouti. Réessayez.",
-  "cancel": "Annuler"
+  "cancel": "Annuler",
+  "photoAlt": "Photo de {{name}}",
+  "logoAlt": "Logo de {{name}}",
+  "organizationHeading": "{{name}}",
+  "pictures": {
+    "photo": {
+      "label": "Photo (facultative)",
+      "help": "JPEG, PNG ou WebP. L’image est redessinée sur votre appareil : aucune donnée de l’appareil photo ni de localisation n’est envoyée. Elle est publiée seulement après une analyse de sécurité et l’examen de CoverView.",
+      "preview": "Aperçu de la photo"
+    },
+    "logo": {
+      "label": "Logo (facultatif)",
+      "help": "JPEG, PNG ou WebP. Le logo est redessiné sur votre appareil, transparence conservée, puis publié seulement après une analyse de sécurité et l’examen de CoverView.",
+      "preview": "Aperçu du logo"
+    },
+    "none": "Aucune image",
+    "keep": "Conserver l’image actuelle",
+    "remove": "Retirer l’image",
+    "choose": "Choisir une nouvelle image",
+    "discard": "Annuler ce choix",
+    "send": "Envoyer l’image",
+    "retry": "Relancer l’analyse",
+    "errors": {
+      "type": "Choisissez une image JPEG, PNG ou WebP.",
+      "image": "Cette image ne peut pas être lue.",
+      "size": "L’image dépasse 5 Mo, même réduite."
+    },
+    "state": {
+      "awaiting_upload": "Image non reçue : choisissez-la à nouveau et soumettez une nouvelle version.",
+      "processing": "Analyse de sécurité de l’image en cours.",
+      "ready": "Image analysée.",
+      "failed": "L’analyse de l’image n’a pas abouti.",
+      "rejected": "Image refusée par l’analyse : choisissez-en une autre."
+    }
+  },
+  "organization": {
+    "publishedTitle": "Profil publié de l’organisation",
+    "notPublished": "Aucun profil d’organisation n’est publié pour le moment.",
+    "presentation": "Présentation de l’organisation",
+    "presentationHelp": "Entre 40 et 1200 caractères. Elle accompagne le profil publié de chaque membre.",
+    "confirm": "Je confirme que cette présentation et ce logo peuvent être montrés aux clients et aux partenaires CoverView.",
+    "withdraw": "Retirer le profil de l’organisation"
+  }
 }

@@ -1800,6 +1800,50 @@ export function registerPartnerWorkspace(
     ) {
       return repository.completeCompetenceUpload(await actor(request), userId, category, id, mime);
     },
+    // Profile photo and organisation logo (C8c).
+    async authorizeProfilePhoto(
+      request: FastifyRequest,
+      userId: string,
+      revision: number | null,
+      write: boolean,
+    ) {
+      const result = await repository.profilePhotoSource(
+        await actor(request),
+        userId,
+        revision,
+        write,
+      );
+      return { userId: result.userId, documentId: result.documentId };
+    },
+    async completeProfilePhotoUpload(request: FastifyRequest, userId: string, mime: string) {
+      return repository.completeProfilePhotoUpload(await actor(request), userId, mime);
+    },
+    async authorizePublishedPhoto(request: FastifyRequest, userId: string, wallet: boolean) {
+      return repository.publishedPhotoSource(await actor(request, wallet), userId);
+    },
+    async authorizeOrganizationLogo(
+      request: FastifyRequest,
+      organizationId: string,
+      revision: number | null,
+      write: boolean,
+    ) {
+      return repository.organizationLogoSource(
+        await actor(request),
+        organizationId,
+        revision,
+        write,
+      );
+    },
+    async completeOrganizationLogoUpload(
+      request: FastifyRequest,
+      organizationId: string,
+      mime: string,
+    ) {
+      return repository.completeOrganizationLogoUpload(await actor(request), organizationId, mime);
+    },
+    async authorizePublishedLogo(request: FastifyRequest, userId: string, wallet: boolean) {
+      return repository.publishedLogoSource(await actor(request, wallet), userId);
+    },
     async authorizeConventionSource(
       request: FastifyRequest,
       userId: string,

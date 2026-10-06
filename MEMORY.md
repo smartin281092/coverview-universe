@@ -27,8 +27,9 @@ Décisions déléguées PROG-23 du 6 octobre 2026, C8 Partner (C8-1 à C8-7 du [
 - **Réexamens (C8a)** : rappel à 30 jours ; à la date, l'accès cesse et le dossier repasse en « complément demandé ». Une organisation se décide à part, avec sa propre date.
 - **Journal (C8a)** : chaque décision sur un membre ou une organisation, immuable, sans reprise de l'historique antérieur.
 - **Équipe (C8b)** : on rejoint une organisation seulement sur invitation du responsable, liée à l'adresse vérifiée (14 jours, sans email), puis validation CoverView. Le responsable voit son équipe sans les motifs, met fin à l'adhésion d'un collègue (jamais soi-même ni un autre responsable), réattribue dans l'équipe et lit les conditions de l'équipe ; il ne valide, ne restreint ni ne voit les rémunérations de personne.
+- **Images (C8c)** : photo et logo facultatifs, redessinés par le navigateur (écart STOR-04 déclaré), circuit des preuves professionnelles, publiés seulement une fois analysés et sains, servis par l'API à l'audience du profil. Profil d'organisation rédigé par le responsable, examiné par quelqu'un d'extérieur à l'organisation.
 
-Promues aux propriétaires [habilitations](apps/api/src/modules/partner-workspace/docs/access.md) et [équipe](apps/api/src/modules/partner-workspace/docs/team.md). Confiance haute sur les invariants V2 ; V3 ouvert. Réexaminer à la recette (phase B), au choix d'un fournisseur d'email et avant le 4 janvier 2027. Aucune entrée active.
+Promues aux propriétaires [habilitations](apps/api/src/modules/partner-workspace/docs/access.md), [équipe](apps/api/src/modules/partner-workspace/docs/team.md) et [profils](apps/api/src/modules/partner-workspace/docs/profiles-evaluations.md). Confiance haute sur les invariants V2 ; V3 ouvert. Réexaminer à la recette (phase B), au choix d'un fournisseur d'email et avant le 4 janvier 2027. Aucune entrée active.
 
 Décisions déléguées PROG-23 du 6 octobre 2026, C7 Partner (`bible.question.006`, périmètre Partner).
 - **Copie** : matrice v1, la copie reprend ce que l'espace montre déjà, avec en plus les coordonnées, le contexte et la provenance de ses propres demandes.

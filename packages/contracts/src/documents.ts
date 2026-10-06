@@ -157,7 +157,14 @@ export const documentAssignProfileInputSchema = z.union([
 ]);
 export const documentSummarySchema = z.object({
   purpose: z
-    .enum(["identity_card", "lead_offer", "partner_competence", "partner_convention"])
+    .enum([
+      "identity_card",
+      "lead_offer",
+      "partner_competence",
+      "partner_convention",
+      "partner_profile_photo",
+      "partner_organization_logo",
+    ])
     .nullable()
     .optional(),
   profileId: managedProfileIdSchema.optional(),

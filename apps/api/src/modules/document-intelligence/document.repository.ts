@@ -11,6 +11,7 @@ import {
   lt,
   lte,
   ne,
+  notInArray,
   or,
   sql,
 } from "drizzle-orm";
@@ -83,6 +84,7 @@ import {
 } from "./document.field-review.js";
 import { documentFieldCorrections } from "./document.field-review.schema.js";
 import { assignedDocumentCondition, hasDocumentProfile } from "./document.profile-assignment.js";
+import { isProfessionalPurpose, professionalPurposes } from "./document.purposes.js";
 import {
   createIdentityAttachmentRepository,
   cleanupIdentityAttachmentCommands,
@@ -102,10 +104,7 @@ const targetCondition = (profileId: string) =>
 const condition = (userId: string, id: string) =>
   and(eq(documents.userId, userId), eq(documents.id, id));
 const personalDocument = () =>
-  or(
-    isNull(documents.purpose),
-    and(ne(documents.purpose, "partner_competence"), ne(documents.purpose, "partner_convention")),
-  );
+  or(isNull(documents.purpose), notInArray(documents.purpose, [...professionalPurposes]));
 const personalCondition = (userId: string, id: string) =>
   and(condition(userId, id), personalDocument());
 function summary(row: Row) {
@@ -183,8 +182,7 @@ async function detail(tx: Tx | Database, row: Row): Promise<DocumentRecord> {
     analysis: row.analysis,
     profileCreation:
       row.purpose !== "lead_offer" &&
-      row.purpose !== "partner_competence" &&
-      row.purpose !== "partner_convention" &&
+      !isProfessionalPurpose(row.purpose) &&
       !hasDocumentProfile(row) &&
       row.state === "ready" &&
       row.scanVersion
@@ -1395,8 +1393,7 @@ export function createDocumentRepository(db: Database) {
         );
         if (
           row.purpose !== "lead_offer" &&
-          row.purpose !== "partner_competence" &&
-          row.purpose !== "partner_convention" &&
+          !isProfessionalPurpose(row.purpose) &&
           !hasDocumentProfile(row) &&
           incompleteIdentity
         ) {
@@ -1405,8 +1402,7 @@ export function createDocumentRepository(db: Database) {
           profileAssignedAt = null;
         } else if (
           row.purpose !== "lead_offer" &&
-          row.purpose !== "partner_competence" &&
-          row.purpose !== "partner_convention" &&
+          !isProfessionalPurpose(row.purpose) &&
           !hasDocumentProfile(row) &&
           profile
         ) {

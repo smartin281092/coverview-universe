@@ -29,6 +29,16 @@ import { readCompetenceSummary } from "./partner.competence.js";
 import { readPracticeSummary } from "./partner.practice.js";
 import { readCurrentAvailability } from "./partner.availability.js";
 import { event, newId } from "./partner.audit.js";
+import { queuePartnerProof } from "../document-intelligence/index.js";
+import {
+  chooseImage,
+  imageMime,
+  imageReady,
+  imageView,
+  readImage,
+  requireImageMime,
+} from "./partner.profile-images.js";
+import { publishedLogoFile, publishedOrganization } from "./partner.organization-profiles.js";
 
 type Mutation = <T>(
   actor: PartnerActor,
@@ -46,6 +56,8 @@ type VersionRow = {
   decision: "published" | "rejected" | "withdrawn" | null;
   reason: string | null;
   decided_at: Date | null;
+  photo_document_id: string | null;
+  photo_checksum: string | null;
 };
 
 // Public client ratings need enough observations; below this, no average is shown.
@@ -59,7 +71,8 @@ function period(now: Date) {
 async function versions(db: Executor, userId: string, limit = 21) {
   return (
     await db.query<VersionRow>(
-      `select v.id,v.revision,v.presentation,v.created_at,r.decision,r.reason,r.created_at decided_at
+      `select v.id,v.revision,v.presentation,v.created_at,v.photo_document_id,v.photo_checksum,
+      r.decision,r.reason,r.created_at decided_at
       from partner_profile_versions v
       left join lateral (select decision,reason,created_at from partner_profile_reviews where version_id=v.id order by created_at desc limit 1) r on true
       where v.user_id=$1 order by v.revision desc limit $2`,
@@ -67,14 +80,18 @@ async function versions(db: Executor, userId: string, limit = 21) {
     )
   ).rows;
 }
-const project = (row: VersionRow) => ({
-  revision: row.revision,
-  presentation: row.presentation,
-  status: row.decision ?? ("submitted" as const),
-  submittedAt: row.created_at.toISOString(),
-  decidedAt: row.decided_at?.toISOString() ?? null,
-  decisionReason: row.reason,
-});
+// The photo of a version is uploaded and retried by the person while the version awaits review.
+async function project(db: Executor, row: VersionRow, writable = false) {
+  return {
+    revision: row.revision,
+    presentation: row.presentation,
+    status: row.decision ?? ("submitted" as const),
+    submittedAt: row.created_at.toISOString(),
+    decidedAt: row.decided_at?.toISOString() ?? null,
+    decisionReason: row.reason,
+    photo: imageView(await readImage(db, row.photo_document_id), writable && row.decision === null),
+  };
+}
 
 // Client experience over a rolling year, from surveys attributed when they were created.
 async function ratings(db: Executor, userId: string, from: Date, to: Date) {
@@ -111,14 +128,22 @@ function publicRating(rows: { rating: number }[], from: Date, to: Date) {
 async function published(db: Executor, userId: string, now: Date) {
   // The latest publication decision wins; a withdrawal hides the profile entirely.
   const row = (
-    await db.query<{ presentation: string; created_at: Date; decision: string }>(
-      `select v.presentation,r.created_at,r.decision from partner_profile_reviews r
+    await db.query<{
+      presentation: string;
+      created_at: Date;
+      decision: string;
+      photo_document_id: string | null;
+      photo_checksum: string | null;
+    }>(
+      `select v.presentation,v.photo_document_id,v.photo_checksum,r.created_at,r.decision from partner_profile_reviews r
       join partner_profile_versions v on v.id=r.version_id
       where v.user_id=$1 and r.decision in ('published','withdrawn') order by r.created_at desc limit 1`,
       [userId],
     )
   ).rows[0];
   if (!row || row.decision !== "published") return null;
+  // A photo appears only while its file stays the exact, scanned image that was published.
+  const photo = await readImage(db, row.photo_document_id);
   const member = await membership(db, userId);
   if (!member) return null;
   const specialties = [];
@@ -141,7 +166,30 @@ async function published(db: Executor, userId: string, now: Date) {
     modes: availability?.professionalScope === "current" ? availability.modes : [],
     publishedAt: row.created_at.toISOString(),
     rating: publicRating(await ratings(db, userId, from, to), from, to),
+    photo:
+      imageReady(photo, "partner_profile_photo", row.photo_checksum) && imageMime(photo)
+        ? { mime: imageMime(photo) }
+        : null,
+    organizationProfile: await publishedOrganization(db, member.organizationId),
   });
+}
+/** The file of the published photo, for an audience allowed to see the profile (C8c). */
+async function publishedPhoto(db: Executor, userId: string) {
+  const row = (
+    await db.query<{
+      photo_document_id: string | null;
+      photo_checksum: string | null;
+      decision: string;
+    }>(
+      `select v.photo_document_id,v.photo_checksum,r.decision from partner_profile_reviews r
+      join partner_profile_versions v on v.id=r.version_id
+      where v.user_id=$1 and r.decision in ('published','withdrawn') order by r.created_at desc limit 1`,
+      [userId],
+    )
+  ).rows[0];
+  if (row?.decision !== "published") return null;
+  const file = await readImage(db, row.photo_document_id);
+  return imageReady(file, "partner_profile_photo", row.photo_checksum) ? file : null;
 }
 
 async function self(db: Executor, actor: PartnerActor, userId: string, lock = false) {
@@ -305,7 +353,11 @@ async function evaluationFor(db: Executor, actor: PartnerActor, userId: string, 
   });
 }
 
-export function createProfileOperations(pool: Pool, transaction: Mutation) {
+export function createProfileOperations(
+  pool: Pool,
+  transaction: Mutation,
+  documentsAvailable = true,
+) {
   async function read<T>(actor: PartnerActor, action: (tx: PoolClient, now: Date) => Promise<T>) {
     const tx = await pool.connect();
     try {
@@ -327,6 +379,8 @@ export function createProfileOperations(pool: Pool, transaction: Mutation) {
   async function dossier(db: Executor, actor: PartnerActor, userId: string, now: Date) {
     const member = await self(db, actor, userId);
     const rows = await versions(db, userId);
+    const history = [];
+    for (const row of rows.slice(0, 20)) history.push(await project(db, row));
     return profileDossierSchema.parse({
       userId,
       name: member.name,
@@ -334,10 +388,36 @@ export function createProfileOperations(pool: Pool, transaction: Mutation) {
       canEdit: actor.userId === userId && member.state === "approved",
       canReview:
         actor.administrator && actor.userId !== userId && !!rows[0] && rows[0].decision === null,
-      current: rows[0] ? project(rows[0]) : null,
+      current: rows[0]
+        ? await project(db, rows[0], actor.userId === userId && documentsAvailable)
+        : null,
       published: await published(db, userId, now),
-      history: rows.slice(0, 20).map(project),
+      history,
     });
+  }
+  // The photo file of the latest version: written by the person while it awaits review, read by
+  // the person or CoverView (C8c).
+  async function versionPhoto(
+    tx: PoolClient,
+    actor: PartnerActor,
+    userId: string,
+    revision: number | null,
+    write: boolean,
+  ) {
+    if (!documentsAvailable) fail("PARTNER_UNAVAILABLE", 503);
+    await self(tx, actor, userId, write);
+    const rows = await versions(tx, userId);
+    const row = revision === null ? rows[0] : rows.find((r) => r.revision === revision);
+    if (!row?.photo_document_id) fail("PARTNER_NOT_FOUND", 404);
+    const file = await readImage(tx, row.photo_document_id, true);
+    if (!file) return fail("PARTNER_NOT_FOUND", 404);
+    if (write) {
+      if (actor.userId !== userId || row !== rows[0] || row.decision !== null)
+        fail("PARTNER_ACCESS_DENIED", 403);
+      if (file.user_id !== userId) fail("PARTNER_ACCESS_DENIED", 403);
+    } else if (!file.scan_version || !["ready", "failed"].includes(file.state))
+      fail("PARTNER_INVALID_DOCUMENT");
+    return { userId: file.user_id, documentId: file.id, revision: file.revision };
   }
   return {
     profileDossier: (actor: PartnerActor, userId: string) =>
@@ -364,10 +444,20 @@ export function createProfileOperations(pool: Pool, transaction: Mutation) {
             fail("PARTNER_ACCESS_DENIED", 403);
           const current = (await versions(tx, userId, 1))[0];
           if ((current?.revision ?? 0) !== input.revision) fail("PARTNER_CONFLICT", 409);
+          const photo = await chooseImage(
+            tx,
+            userId,
+            input.photo,
+            current
+              ? { documentId: current.photo_document_id, checksum: current.photo_checksum }
+              : null,
+            "partner_profile_photo",
+            documentsAvailable,
+          );
           const id = newId("pprof");
           await tx.query(
-            `insert into partner_profile_versions(id,user_id,organization_id,revision,professional_revision,declared_name,declared_organization,presentation)
-            values($1,$2,$3,$4,$5,$6,$7,$8)`,
+            `insert into partner_profile_versions(id,user_id,organization_id,revision,professional_revision,declared_name,declared_organization,presentation,photo_document_id,photo_checksum)
+            values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
             [
               id,
               userId,
@@ -377,6 +467,8 @@ export function createProfileOperations(pool: Pool, transaction: Mutation) {
               member.name,
               member.organization,
               input.presentation,
+              photo.documentId,
+              photo.checksum,
             ],
           );
           await event(tx, actor, null, "profile.submitted.v1", "", "coverview", userId);
@@ -399,6 +491,17 @@ export function createProfileOperations(pool: Pool, transaction: Mutation) {
           const current = (await versions(tx, userId, 1))[0];
           if (!current || current.revision !== input.revision || current.decision !== null)
             fail("PARTNER_CONFLICT", 409);
+          // A photo is published only once scanned and found clean (C8c).
+          if (
+            input.decision === "published" &&
+            current.photo_document_id &&
+            !imageReady(
+              await readImage(tx, current.photo_document_id, true),
+              "partner_profile_photo",
+              current.photo_checksum,
+            )
+          )
+            fail("PARTNER_ACTION_REQUIRED");
           await tx.query(
             "insert into partner_profile_reviews(id,version_id,decision,reason,decided_by) values($1,$2,$3,$4,$5)",
             [newId("pprev"), current.id, input.decision, input.reason, actor.userId],
@@ -437,6 +540,62 @@ export function createProfileOperations(pool: Pool, transaction: Mutation) {
         async (tx) => dossier(tx, actor, userId, new Date()),
       );
     },
+    // Photo files (C8c): upload and retry by the person, reading by the person or CoverView,
+    // and the published photo for the audience of the profile.
+    profilePhotoSource: (
+      actor: PartnerActor,
+      userId: string,
+      revision: number | null,
+      write = false,
+    ) => read(actor, (tx) => versionPhoto(tx, actor, userId, revision, write)),
+    completeProfilePhotoUpload: (actor: PartnerActor, userId: string, mime: string) =>
+      read(actor, async (tx, now) => {
+        requireImageMime(mime);
+        const photo = await versionPhoto(tx, actor, userId, null, true);
+        await queuePartnerProof(tx, userId, photo.documentId, { mime }, "partner_profile_photo");
+        return dossier(tx, actor, userId, now);
+      }),
+    retryProfilePhoto(actor: PartnerActor, userId: string, revision: number, key: string) {
+      return transaction(
+        actor,
+        `profile:${userId}:photo_retry`,
+        key,
+        { revision },
+        async (tx) => {
+          const photo = await versionPhoto(tx, actor, userId, null, true);
+          await queuePartnerProof(
+            tx,
+            userId,
+            photo.documentId,
+            { revision },
+            "partner_profile_photo",
+          );
+          return userId;
+        },
+        async (tx) => dossier(tx, actor, userId, new Date()),
+      );
+    },
+    publishedPhotoSource: (actor: PartnerActor, userId: string) =>
+      read(actor, async (tx) => {
+        if (!documentsAvailable) fail("PARTNER_UNAVAILABLE", 503);
+        // Absence and refusal look the same, as for the profile itself.
+        if (!(await audience(tx, actor, userId))) fail("PARTNER_NOT_FOUND", 404);
+        const file = await publishedPhoto(tx, userId);
+        if (!file) return fail("PARTNER_NOT_FOUND", 404);
+        return { userId: file.user_id, documentId: file.id };
+      }),
+    // The logo of the organisation shown with a published profile, for the same audience.
+    publishedLogoSource: (actor: PartnerActor, userId: string) =>
+      read(actor, async (tx, now) => {
+        if (!documentsAvailable) fail("PARTNER_UNAVAILABLE", 503);
+        if (!(await audience(tx, actor, userId))) fail("PARTNER_NOT_FOUND", 404);
+        const profile = await published(tx, userId, now);
+        const file = profile?.organizationProfile?.logo
+          ? await publishedLogoFile(tx, profile.organizationProfile.organizationId)
+          : null;
+        if (!file) return fail("PARTNER_NOT_FOUND", 404);
+        return { userId: file.user_id, documentId: file.id };
+      }),
     profileQueue: (actor: PartnerActor) =>
       read(actor, async (tx) => {
         if (!actor.administrator || actor.wallet) fail("PARTNER_ACCESS_DENIED", 403);

@@ -1,9 +1,13 @@
 import { sql } from "drizzle-orm";
 import { pgTable, text, integer, timestamp, index, uniqueIndex, check } from "drizzle-orm/pg-core";
 import { identityUsers } from "../identity/index.js";
+import { documents } from "../document-intelligence/index.js";
 import { partnerMembers, partnerOrganizations } from "./partner.schema.js";
 import { partnerSurveys } from "./partner.quality.schema.js";
 const instant = (name: string) => timestamp(name, { withTimezone: true, precision: 3 });
+// A picture through the professional proof circuit (C8c): both columns set, or neither.
+const picture = (document: string, checksum: string) =>
+  sql`(${sql.identifier(document)} is null)=(${sql.identifier(checksum)} is null) and (${sql.identifier(checksum)} is null or ${sql.identifier(checksum)} ~ '^[a-f0-9]{64}$')`;
 
 // Versions submitted by the person; published only after a CoverView review. Append-only.
 export const partnerProfileVersions = pgTable(
@@ -22,12 +26,66 @@ export const partnerProfileVersions = pgTable(
     declaredOrganization: text("declared_organization").notNull(),
     presentation: text("presentation").notNull(),
     createdAt: instant("created_at").notNull().defaultNow(),
+    // Optional photo (C8c), kept from the previous version unless replaced or removed.
+    photoDocumentId: text("photo_document_id").references(() => documents.id),
+    photoChecksum: text("photo_checksum"),
   },
   (t) => [
     uniqueIndex("partner_profile_revision").on(t.userId, t.revision),
     check(
       "partner_profile_shape",
       sql`${t.revision}>0 and ${t.professionalRevision}>0 and length(trim(${t.presentation})) between 40 and 1200 and length(trim(${t.declaredName})) between 2 and 160 and length(trim(${t.declaredOrganization})) between 2 and 160`,
+    ),
+    check("partner_profile_photo", picture("photo_document_id", "photo_checksum")),
+  ],
+);
+// Organisation profile (C8c): presentation and optional logo, submitted by a manager of the
+// organisation and published only after a CoverView review by someone outside it. Append-only.
+export const partnerOrganizationProfileVersions = pgTable(
+  "partner_organization_profile_versions",
+  {
+    id: text("id").primaryKey(),
+    organizationId: text("organization_id")
+      .notNull()
+      .references(() => partnerOrganizations.id),
+    revision: integer("revision").notNull(),
+    declaredName: text("declared_name").notNull(),
+    presentation: text("presentation").notNull(),
+    logoDocumentId: text("logo_document_id").references(() => documents.id),
+    logoChecksum: text("logo_checksum"),
+    submittedBy: text("submitted_by")
+      .notNull()
+      .references(() => identityUsers.id),
+    createdAt: instant("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("partner_organization_profile_revision").on(t.organizationId, t.revision),
+    check(
+      "partner_organization_profile_shape",
+      sql`${t.revision}>0 and length(trim(${t.presentation})) between 40 and 1200 and length(trim(${t.declaredName})) between 2 and 160`,
+    ),
+    check("partner_organization_profile_logo", picture("logo_document_id", "logo_checksum")),
+  ],
+);
+export const partnerOrganizationProfileReviews = pgTable(
+  "partner_organization_profile_reviews",
+  {
+    id: text("id").primaryKey(),
+    versionId: text("version_id")
+      .notNull()
+      .references(() => partnerOrganizationProfileVersions.id),
+    decision: text("decision").notNull(),
+    reason: text("reason").notNull(),
+    decidedBy: text("decided_by")
+      .notNull()
+      .references(() => identityUsers.id),
+    createdAt: instant("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    index("partner_organization_profile_review_version").on(t.versionId, t.createdAt),
+    check(
+      "partner_organization_profile_review_shape",
+      sql`${t.decision} in ('published','rejected','withdrawn') and length(trim(${t.reason})) between 5 and 2000`,
     ),
   ],
 );

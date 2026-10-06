@@ -94,7 +94,7 @@ const professional: Record<
     origin: "Vous et vos justificatifs.",
   },
   profile: {
-    purpose: "Publier votre profil après examen.",
+    purpose: "Publier votre profil et sa photo facultative après examen.",
     recipients: "Les clients que vous servez, les membres Partner, CoverView.",
     origin: "Vous.",
   },

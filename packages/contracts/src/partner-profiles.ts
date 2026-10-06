@@ -8,6 +8,40 @@ const id = z.string().min(1).max(100),
   instant = z.iso.datetime({ offset: true }),
   reason = z.string().trim().min(5).max(2000);
 
+// Profile photo and organisation logo (C8c): small images, re-encoded by the browser so that no
+// camera metadata leaves the device, then scanned before any publication.
+export const profileImageMimeSchema = z.enum(["image/jpeg", "image/png", "image/webp"]);
+export const profileImageMaxBytes = 5 * 1024 * 1024;
+export const profileImageFileSchema = z
+  .object({
+    name: z.string().trim().min(1).max(240),
+    mime: profileImageMimeSchema,
+    size: z.number().int().min(1).max(profileImageMaxBytes),
+    checksum: z.string().regex(/^[0-9a-f]{64}$/),
+  })
+  .strict();
+// Keep the picture of the previous version, remove it, or send a new file.
+export const profileImageChoiceSchema = z.union([
+  z.enum(["keep", "remove"]),
+  profileImageFileSchema,
+]);
+export const profileImageSchema = z.object({
+  state: z.enum(["awaiting_upload", "processing", "ready", "failed", "rejected"]),
+  mime: profileImageMimeSchema.nullable(),
+  documentRevision: count,
+  canUpload: z.boolean(),
+  canRetry: z.boolean(),
+});
+// What an audience learns of a published picture: its type, to display the bytes it fetches.
+export const publishedImageSchema = z.object({ mime: profileImageMimeSchema });
+export const publicOrganizationSchema = z.object({
+  organizationId: id,
+  name: z.string(),
+  presentation: z.string(),
+  logo: publishedImageSchema.nullable(),
+  publishedAt: instant,
+});
+
 // Public client-experience note: shown only with enough observations, with period and method.
 export const publicRatingSchema = z.object({
   status: z.enum(["available", "insufficient"]),
@@ -30,6 +64,9 @@ export const publicProfileSchema = z.object({
   modes: z.array(leadAppointmentModeSchema),
   publishedAt: instant,
   rating: publicRatingSchema,
+  photo: publishedImageSchema.nullable().default(null),
+  // The published profile of the person's current organisation, if any (C8c).
+  organizationProfile: publicOrganizationSchema.nullable().default(null),
 });
 export const profileVersionSchema = z.object({
   revision: z.number().int().positive(),
@@ -38,6 +75,7 @@ export const profileVersionSchema = z.object({
   submittedAt: instant,
   decidedAt: instant.nullable(),
   decisionReason: z.string().nullable(),
+  photo: profileImageSchema.nullable().default(null),
 });
 export const profileDossierSchema = z.object({
   userId: id,
@@ -53,6 +91,7 @@ export const profileInputSchema = z
   .object({
     revision: z.number().int().nonnegative(),
     presentation: z.string().trim().min(40).max(1200),
+    photo: profileImageChoiceSchema.default("keep"),
     confirmed: z.literal(true),
   })
   .strict();
@@ -70,6 +109,47 @@ export const profileQueueSchema = z.object({
         userId: id,
         name: z.string(),
         organization: z.string(),
+        revision: z.number().int().positive(),
+        submittedAt: instant,
+      }),
+    )
+    .max(50),
+});
+
+// Organisation profile (C8c, brief I.18): written by a manager of the organisation, published
+// after a CoverView review by someone outside it, shown with the profiles of its members.
+export const organizationProfileVersionSchema = z.object({
+  revision: z.number().int().positive(),
+  presentation: z.string(),
+  logo: profileImageSchema.nullable(),
+  status: z.enum(["submitted", "published", "rejected", "withdrawn"]),
+  submittedAt: instant,
+  decidedAt: instant.nullable(),
+  decisionReason: z.string().nullable(),
+});
+export const organizationProfileDossierSchema = z.object({
+  organizationId: id,
+  name: z.string(),
+  canEdit: z.boolean(),
+  canReview: z.boolean(),
+  current: organizationProfileVersionSchema.nullable(),
+  published: publicOrganizationSchema.nullable(),
+  history: z.array(organizationProfileVersionSchema).max(20),
+});
+export const organizationProfileInputSchema = z
+  .object({
+    revision: z.number().int().nonnegative(),
+    presentation: z.string().trim().min(40).max(1200),
+    logo: profileImageChoiceSchema.default("keep"),
+    confirmed: z.literal(true),
+  })
+  .strict();
+export const organizationProfileQueueSchema = z.object({
+  items: z
+    .array(
+      z.object({
+        organizationId: id,
+        name: z.string(),
         revision: z.number().int().positive(),
         submittedAt: instant,
       }),
@@ -162,8 +242,13 @@ export const referrerEvaluationSchema = z.object({
 });
 export type PublicProfile = z.infer<typeof publicProfileSchema>;
 export type ProfileDossier = z.infer<typeof profileDossierSchema>;
-export type ProfileInput = z.infer<typeof profileInputSchema>;
+export type ProfileInput = z.input<typeof profileInputSchema>;
 export type ProfileReview = z.infer<typeof profileReviewSchema>;
+export type ProfileImage = z.infer<typeof profileImageSchema>;
+export type ProfileImageChoice = z.infer<typeof profileImageChoiceSchema>;
+export type PublicOrganization = z.infer<typeof publicOrganizationSchema>;
+export type OrganizationProfileDossier = z.infer<typeof organizationProfileDossierSchema>;
+export type OrganizationProfileInput = z.input<typeof organizationProfileInputSchema>;
 export type Evaluation = z.infer<typeof evaluationSchema>;
 export type EvaluationContestInput = z.infer<typeof evaluationContestInputSchema>;
 export type EvaluationContestDecision = z.infer<typeof evaluationContestDecisionSchema>;

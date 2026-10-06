@@ -6,6 +6,9 @@ export function AdvisorProfileCard({
   facts,
   rating,
   ratingDetail,
+  photoUrl = null,
+  photoAlt = "",
+  organizationProfile = null,
 }: {
   name: string;
   organization: string;
@@ -13,6 +16,16 @@ export function AdvisorProfileCard({
   facts: { label: string; value: string }[];
   rating: string;
   ratingDetail: string;
+  /** Object URL of the published photo, already fetched by the consumer. */
+  photoUrl?: string | null;
+  photoAlt?: string;
+  /** The published profile of the organisation, with its logo and a translated heading. */
+  organizationProfile?: {
+    heading: string;
+    presentation: string;
+    logoUrl: string | null;
+    logoAlt: string;
+  } | null;
 }) {
   const initials = name
     .split(/\s+/u)
@@ -23,12 +36,20 @@ export function AdvisorProfileCard({
   return (
     <article className="space-y-4">
       <header className="flex items-center gap-4">
-        <span
-          aria-hidden="true"
-          className="grid size-12 shrink-0 place-items-center rounded-full bg-muted text-sm font-semibold"
-        >
-          {initials}
-        </span>
+        {photoUrl ? (
+          <img
+            src={photoUrl}
+            alt={photoAlt}
+            className="size-16 shrink-0 rounded-full object-cover"
+          />
+        ) : (
+          <span
+            aria-hidden="true"
+            className="grid size-12 shrink-0 place-items-center rounded-full bg-muted text-sm font-semibold"
+          >
+            {initials}
+          </span>
+        )}
         <div className="min-w-0">
           <p className="truncate font-medium">{name}</p>
           <p className="truncate text-sm text-muted-foreground">{organization}</p>
@@ -47,6 +68,23 @@ export function AdvisorProfileCard({
         <p className="font-medium">{rating}</p>
         <p className="mt-1 text-muted-foreground">{ratingDetail}</p>
       </div>
+      {organizationProfile && (
+        <section className="space-y-2 rounded-lg border border-border p-3 text-sm">
+          <div className="flex items-center gap-3">
+            {organizationProfile.logoUrl && (
+              <img
+                src={organizationProfile.logoUrl}
+                alt={organizationProfile.logoAlt}
+                className="h-8 w-auto max-w-24 object-contain"
+              />
+            )}
+            <p className="font-medium">{organizationProfile.heading}</p>
+          </div>
+          <p className="whitespace-pre-wrap break-words text-muted-foreground">
+            {organizationProfile.presentation}
+          </p>
+        </section>
+      )}
     </article>
   );
 }

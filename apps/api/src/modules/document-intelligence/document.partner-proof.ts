@@ -3,7 +3,7 @@ import type { PoolClient } from "pg";
 import { documentCreateInputSchema } from "@coverview/contracts";
 import { DocumentError } from "./document.errors.js";
 
-type ProfessionalPurpose = "partner_competence" | "partner_convention";
+import type { ProfessionalPurpose } from "./document.purposes.js";
 
 // Caller holds the declarant's membership lock; no client profile or AI processing is involved.
 export async function createPartnerProof(

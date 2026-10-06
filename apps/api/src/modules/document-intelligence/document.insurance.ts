@@ -10,6 +10,7 @@ import {
   type InsuranceContract,
 } from "@coverview/contracts";
 import { referencedCompanyIds } from "./document.companies.js";
+import { isProfessionalPurpose } from "./document.purposes.js";
 import { normalizeDocumentSearch } from "./document.search.js";
 
 export const insuranceDomainLabels: Record<InsuranceDomain, string> = {
@@ -193,8 +194,7 @@ export function companyOverview(companyId: InsuranceCompanyId, entries: Entry[],
   for (const entry of related) {
     if (
       entry.document.purpose === "lead_offer" ||
-      entry.document.purpose === "partner_competence" ||
-      entry.document.purpose === "partner_convention" ||
+      isProfessionalPurpose(entry.document.purpose) ||
       entry.document.classification !== "insurance_policy"
     )
       continue;

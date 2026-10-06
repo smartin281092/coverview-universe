@@ -10,6 +10,7 @@ import { createJointAppointmentClient } from "./partner-joint.js";
 import { createDataRightsClient } from "./partner-data.js";
 import { createAccessClient } from "./partner-access.js";
 import { createTeamClient } from "./partner-team.js";
+import { createPictureClient } from "./partner-pictures.js";
 import { createOverviewClient } from "./partner-overview.js";
 import { createNavigationClient } from "./partner-navigation.js";
 import { createCommunicationClient } from "./partner-communications.js";
@@ -224,10 +225,31 @@ export function createPartnerClient(baseUrl: string) {
     }
     return schema.parse(payload);
   }
+  // Bytes of a picture (C8c), never interpreted by the browser before the caller types them.
+  async function picture(path: string, signal?: AbortSignal) {
+    const response = await fetch(new URL(path, base), {
+      credentials: "include",
+      cache: "no-store",
+      signal: signal
+        ? AbortSignal.any([AbortSignal.timeout(30000), signal])
+        : AbortSignal.timeout(30000),
+    });
+    if (!response.ok) {
+      const parsed = z
+        .object({ error: z.object({ code: z.string() }) })
+        .safeParse(await response.json().catch(() => null));
+      throw new PartnerApiError(
+        parsed.success ? parsed.data.error.code : "PARTNER_UNAVAILABLE",
+        response.status,
+      );
+    }
+    return response.blob();
+  }
   const path = (wallet = false) => (wallet ? "/wallet/leads" : "/partner/leads");
   const economyPath = (root: string, id: string) => `${root}/${encodeURIComponent(id)}`;
   const economyPage = (cursor?: string) => (cursor ? `?cursor=${encodeURIComponent(cursor)}` : "");
   return {
+    ...createPictureClient(request, picture),
     ...createQualityClient(request),
     ...createConclusionClient(request, base),
     ...createRelationshipClient(request),

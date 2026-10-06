@@ -31,5 +31,20 @@
   },
   "contestBy": "{{name}} · {{subject}} · {{date}}",
   "decide": "Trancher",
-  "contestTitle": "Contestation de {{name}}"
+  "contestTitle": "Contestation de {{name}}",
+  "photoTitle": "Photo soumise",
+  "logoTitle": "Logo soumis",
+  "noPicture": "Aucune image avec cette version.",
+  "pictureAlt": "Image soumise par {{name}}",
+  "pictureState": {
+    "awaiting_upload": "Image pas encore reçue : la publication sera refusée.",
+    "processing": "Analyse de sécurité en cours : la publication sera refusée tant qu’elle n’est pas terminée.",
+    "ready": "Image analysée.",
+    "failed": "L’analyse n’a pas abouti : la publication sera refusée.",
+    "rejected": "Image refusée par l’analyse : la publication sera refusée."
+  },
+  "organizationsTitle": "Profils d’organisation à examiner",
+  "noOrganizations": "Aucun profil d’organisation en attente.",
+  "organizationReviewTitle": "Examen du profil de l’organisation {{name}}",
+  "organizationDerived": "Le nom vient de l’organisation validée. Personne ne peut examiner le profil de sa propre organisation."
 }

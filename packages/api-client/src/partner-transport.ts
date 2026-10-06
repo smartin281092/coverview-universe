@@ -7,4 +7,7 @@ export type PartnerRequest = <T>(
   signal?: AbortSignal,
   body?: unknown,
   options?: PartnerMutation,
+  binary?: boolean,
 ) => Promise<T>;
+// Bytes served by the API as an attachment, such as a profile photo (C8c).
+export type PartnerPicture = (path: string, signal?: AbortSignal) => Promise<Blob>;

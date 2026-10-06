@@ -1,5 +1,5 @@
 import { insuranceCompanyIdSchema } from "@coverview/contracts";
-import type { FastifyInstance, FastifyRequest } from "fastify";
+import type { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import type { Pool } from "pg";
 import { z } from "zod";
@@ -9,6 +9,11 @@ import {
   conventionDossierSchema,
   leadCategorySchema,
 } from "@coverview/contracts/partner";
+import {
+  organizationProfileDossierSchema,
+  profileDossierSchema,
+  profileImageMaxBytes,
+} from "@coverview/contracts/partner-profiles";
 import { DocumentError } from "./document.repository.js";
 import type { createDocumentService } from "./document.service.js";
 export type LeadSourceAuthorization = {
@@ -94,6 +99,39 @@ export type LeadSourceAuthorization = {
     offerId: string,
     wallet: boolean,
   ): Promise<string>;
+  // Profile photo and organisation logo (C8c).
+  authorizeProfilePhoto(
+    request: FastifyRequest,
+    userId: string,
+    revision: number | null,
+    write: boolean,
+  ): Promise<{ userId: string; documentId: string }>;
+  completeProfilePhotoUpload(
+    request: FastifyRequest,
+    userId: string,
+    mime: string,
+  ): Promise<z.infer<typeof profileDossierSchema>>;
+  authorizePublishedPhoto(
+    request: FastifyRequest,
+    userId: string,
+    wallet: boolean,
+  ): Promise<{ userId: string; documentId: string }>;
+  authorizeOrganizationLogo(
+    request: FastifyRequest,
+    organizationId: string,
+    revision: number | null,
+    write: boolean,
+  ): Promise<{ userId: string; documentId: string }>;
+  completeOrganizationLogoUpload(
+    request: FastifyRequest,
+    organizationId: string,
+    mime: string,
+  ): Promise<z.infer<typeof organizationProfileDossierSchema>>;
+  authorizePublishedLogo(
+    request: FastifyRequest,
+    userId: string,
+    wallet: boolean,
+  ): Promise<{ userId: string; documentId: string }>;
 };
 export function registerLeadDocumentRoutes(
   server: FastifyInstance,
@@ -381,4 +419,151 @@ export function registerLeadDocumentRoutes(
             .send(result.bytes);
         },
       );
+  // Profile photo and organisation logo (C8c): bytes checked against the authorised file before
+  // and after storage, served only as an attachment that the browser never interprets.
+  const sendPicture = (reply: FastifyReply, bytes: Buffer) =>
+    reply
+      .header("content-type", "application/octet-stream")
+      .header("content-disposition", 'attachment; filename="image"')
+      .header("x-content-type-options", "nosniff")
+      .header("cache-control", "private, no-store")
+      .send(bytes);
+  type Picture = () => Promise<{ userId: string; documentId: string }>;
+  const upload = async <T>(
+    request: FastifyRequest,
+    authorize: Picture,
+    complete: (mime: string) => Promise<T>,
+  ) => {
+    const original = await authorize();
+    return service.uploadShared(
+      original.userId,
+      original.documentId,
+      z.instanceof(Buffer).parse(request.body),
+      async () => {
+        const current = await authorize();
+        if (current.documentId !== original.documentId || current.userId !== original.userId)
+          throw new DocumentError("DOCUMENT_NOT_FOUND", 404);
+      },
+      complete,
+    );
+  };
+  const download = async (authorize: Picture) => {
+    const original = await authorize();
+    return service.downloadShared(original.userId, original.documentId, async () => {
+      const current = await authorize();
+      if (current.documentId !== original.documentId || current.userId !== original.userId)
+        throw new DocumentError("DOCUMENT_NOT_FOUND", 404);
+    });
+  };
+  const userParams = z.object({ userId: z.string().min(1).max(100) }).strict();
+  const organizationParams = z.object({ organizationId: z.string().min(1).max(100) }).strict();
+  const userRevisionParams = userParams
+    .extend({ revision: z.coerce.number().int().positive() })
+    .strict();
+  const organizationRevisionParams = organizationParams
+    .extend({ revision: z.coerce.number().int().positive() })
+    .strict();
+  const pictureUpload = {
+    bodyLimit: profileImageMaxBytes,
+    config: { rateLimit: { max: 10, timeWindow: "1 minute" } },
+  };
+  app.post(
+    "/partner/profiles/:userId/photo/content",
+    {
+      ...pictureUpload,
+      onRequest: async (request) => {
+        const { userId } = userParams.parse(request.params);
+        await access.authorizeProfilePhoto(request, userId, null, true);
+      },
+      schema: { params: userParams, response: { 200: profileDossierSchema } },
+    },
+    async (request) =>
+      upload(
+        request,
+        () => access.authorizeProfilePhoto(request, request.params.userId, null, true),
+        (mime) => access.completeProfilePhotoUpload(request, request.params.userId, mime),
+      ),
+  );
+  app.get(
+    "/partner/profiles/:userId/versions/:revision/photo",
+    {
+      config: { rateLimit: { max: 30, timeWindow: "1 minute" } },
+      schema: { params: userRevisionParams },
+    },
+    async (request, reply) => {
+      const result = await download(() =>
+        access.authorizeProfilePhoto(
+          request,
+          request.params.userId,
+          request.params.revision,
+          false,
+        ),
+      );
+      return sendPicture(reply, result.bytes);
+    },
+  );
+  app.post(
+    "/partner/organizations/:organizationId/logo/content",
+    {
+      ...pictureUpload,
+      onRequest: async (request) => {
+        const { organizationId } = organizationParams.parse(request.params);
+        await access.authorizeOrganizationLogo(request, organizationId, null, true);
+      },
+      schema: { params: organizationParams, response: { 200: organizationProfileDossierSchema } },
+    },
+    async (request) =>
+      upload(
+        request,
+        () => access.authorizeOrganizationLogo(request, request.params.organizationId, null, true),
+        (mime) =>
+          access.completeOrganizationLogoUpload(request, request.params.organizationId, mime),
+      ),
+  );
+  app.get(
+    "/partner/organizations/:organizationId/versions/:revision/logo",
+    {
+      config: { rateLimit: { max: 30, timeWindow: "1 minute" } },
+      schema: { params: organizationRevisionParams },
+    },
+    async (request, reply) => {
+      const result = await download(() =>
+        access.authorizeOrganizationLogo(
+          request,
+          request.params.organizationId,
+          request.params.revision,
+          false,
+        ),
+      );
+      return sendPicture(reply, result.bytes);
+    },
+  );
+  for (const surface of ["partner", "wallet"] as const) {
+    app.get(
+      `/${surface}/advisors/:userId/photo`,
+      {
+        config: { rateLimit: { max: 60, timeWindow: "1 minute" } },
+        schema: { params: userParams },
+      },
+      async (request, reply) => {
+        const result = await download(() =>
+          access.authorizePublishedPhoto(request, request.params.userId, surface === "wallet"),
+        );
+        return sendPicture(reply, result.bytes);
+      },
+    );
+    app.get(
+      `/${surface}/advisors/:userId/organization-logo`,
+      {
+        config: { rateLimit: { max: 60, timeWindow: "1 minute" } },
+        schema: { params: userParams },
+      },
+      async (request, reply) => {
+        const result = await download(() =>
+          access.authorizePublishedLogo(request, request.params.userId, surface === "wallet"),
+        );
+        return sendPicture(reply, result.bytes);
+      },
+    );
+  }
 }

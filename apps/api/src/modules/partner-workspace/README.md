@@ -31,6 +31,8 @@ Ces règles remplacent les mentions « restrictions fines et réexamens ouverts 
 
 Ces règles remplacent les mentions « gestion d'équipe ouverte » et l'organisation à un seul membre. [Règles, limites et preuves](docs/team.md).
 
+**Photo et profil d'organisation (C8c).** Photo facultative de chaque version de profil et profil d'organisation rédigé par le responsable, avec logo. Les images sont redessinées par le navigateur, passent par le circuit des preuves professionnelles (antivirus, type détecté) et ne sont publiées qu'une fois saines, après examen CoverView. [Règles et limites](docs/profiles-evaluations.md).
+
 **Rendez-vous conjoint (C6b).** Le client invite depuis Wallet le conseiller d'une autre de ses demandes ; le spécialiste confirme avec ses propres tampons, son temps devient protégé (garde en base étendue aux participations), chaque demande garde son étape et son issue ; report, annulation, retrait et perte d'accès sans rendez-vous contradictoire. [Parcours, règles et preuves](docs/joint-appointments.md).
 
 **Diffusion immédiate Partner ↔ Wallet (C6a).** Flux SSE `/partner/live` et `/wallet/live` : avis `pg_notify` après validation, audience décidée par le hub à chaque envoi selon la visibilité courante, invalidation puis relecture par l'API, resynchronisation à la reconnexion. [Politique d'exposition, limites et preuves](docs/live-updates.md).

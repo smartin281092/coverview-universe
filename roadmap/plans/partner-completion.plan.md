@@ -42,8 +42,8 @@ Rendre tout le [brief I–III](../../references/coverview-partner-2026-10-02.md)
    - Pas de RLS : écart assumé, comme dans tout le projet. Aucune durée et aucune purge (S-131).
 8. **Reliquats** (entrée le 6 octobre) : gestion d'équipe du responsable, restrictions fines et réexamens automatiques (I.4), contrat non déclaré signalé par le client (I.17.2), audit incomplet → demande de complément (I.13), plus la photo et le profil d'organisation reportés de C2.
    - *C8a, livré le 6 octobre (`4e0616c`)* : habilitations (journal des décisions, organisation validée à part, restrictions, réexamens automatiques, file Admin).
-   - *C8b, livré le 6 octobre* : équipe du responsable (invitation, page Équipe, fin d'adhésion, réattribution dans l'équipe).
-   - *C8c* : photo de profil et profil d'organisation.
+   - *C8b, livré le 6 octobre (`c67b06f`)* : équipe du responsable (invitation, page Équipe, fin d'adhésion, réattribution dans l'équipe).
+   - *C8c, livré le 6 octobre* : photo de profil et profil d'organisation.
    - *C8d* : contrat non déclaré signalé par le client.
    - *C8e* : analyse incomplète → demande de complément au client.
    - Correctif préalable, G-07 : l'action de notification `review_participation` (C6b) manquait au contrat.
@@ -463,6 +463,9 @@ architecture, backend, api, contracts, data, permissions, security, testing, fro
 | 43 | Méthode | comparaison knip avec `main` par remise des fichiers suivis | La suite API complète tournait en arrière-plan sur le même arbre : passage potentiellement contaminé | Passage arrêté et relancé ; les comparaisons avec `main` se feront dans un worktree séparé |
 | 44 | C8a complet | suite API complète relancée, puis le commit seul dans le worktree figé `coverview-astra-suite3` (typecheck des 6 espaces, lint et format des fichiers mixtes) | 75/75 fichiers, 771/771 tests ; 0 erreur | Commit `4e0616c` sans le travail C8b en cours (index composé) ; sauvegarde 29,1 Mo, avance rapide de `main`, migration 0077 locale (78 entrées) |
 | 45 | C8b équipe | tests PostgreSQL | 4/4 au premier passage | — |
+| 46 | C8b complet | 11 suites touchées, puis suite API complète du commit dans `coverview-astra-suite3` ; typecheck, lint, depcruise, knip, seconde génération Drizzle | 11/11 fichiers, 85/85 tests ; 76/76 fichiers, 775/775 tests ; 0 erreur, knip identique à `main`, aucun écart | Commit `c67b06f` ; sauvegarde 29,1 Mo, avance rapide de `main`, migration 0078 locale (79 entrées) |
+| 47 | C8c garde des images | test PostgreSQL | Le déclencheur commun aux deux tables lisait `NEW.logo_document_id` sur une version de profil : PL/pgSQL résout tous les champs de l'expression | Branches imbriquées par table (migration 0079 jamais appliquée, corrigée en place) ; 2/2 |
+| 48 | C8c complet | 11 suites touchées (profils, justificatifs, conventions, documents, droits, images) ; typecheck des 7 espaces | 11/11 fichiers, 60/60 tests ; 0 erreur | — |
 
 ## Risques et mitigations
 

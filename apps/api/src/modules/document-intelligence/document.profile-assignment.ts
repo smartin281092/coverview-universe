@@ -1,6 +1,7 @@
-import { and, inArray, isNull, ne, or } from "drizzle-orm";
+import { and, inArray, isNull, ne, notInArray, or } from "drizzle-orm";
 import type { DocumentSummary } from "@coverview/contracts";
 import { documents } from "./document.schema.js";
+import { isProfessionalPurpose, professionalPurposes } from "./document.purposes.js";
 
 export const assignedDocumentCondition = () =>
   and(
@@ -8,10 +9,7 @@ export const assignedDocumentCondition = () =>
       isNull(documents.purpose),
       and(
         ne(documents.purpose, "lead_offer"),
-        and(
-          ne(documents.purpose, "partner_competence"),
-          ne(documents.purpose, "partner_convention"),
-        ),
+        notInArray(documents.purpose, [...professionalPurposes]),
       ),
     ),
     or(
@@ -23,8 +21,7 @@ export const assignedDocumentCondition = () =>
 export function hasDocumentProfile(row: Pick<DocumentSummary, "profileAssignment" | "purpose">) {
   return (
     row.purpose !== "lead_offer" &&
-    row.purpose !== "partner_competence" &&
-    row.purpose !== "partner_convention" &&
+    !isProfessionalPurpose(row.purpose) &&
     (row.profileAssignment == null ||
       ["matched", "created", "manual"].includes(row.profileAssignment))
   );

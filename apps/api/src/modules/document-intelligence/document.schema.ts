@@ -41,7 +41,12 @@ export const documents = pgTable(
     category: text("category").$type<DocumentSummary["category"]>().notNull().default("unknown"),
     categoryCorrected: boolean("category_corrected").notNull().default(false),
     purpose: text("purpose").$type<
-      "identity_card" | "lead_offer" | "partner_competence" | "partner_convention"
+      | "identity_card"
+      | "lead_offer"
+      | "partner_competence"
+      | "partner_convention"
+      | "partner_profile_photo"
+      | "partner_organization_logo"
     >(),
     retainedAt: instant("retained_at"),
     analysisRequested: boolean("analysis_requested").notNull().default(false),
@@ -65,7 +70,7 @@ export const documents = pgTable(
     ),
     check(
       "files_purpose",
-      sql`${table.purpose} is null or ${table.purpose} in ('identity_card','lead_offer','partner_competence','partner_convention')`,
+      sql`${table.purpose} is null or ${table.purpose} in ('identity_card','lead_offer','partner_competence','partner_convention','partner_profile_photo','partner_organization_logo')`,
     ),
     check(
       "files_profile_assignment",

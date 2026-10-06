@@ -7,8 +7,10 @@ import { createPartnerClient } from "@coverview/api-client/partner";
 import type { z } from "zod";
 import {
   contestQueueSchema,
+  organizationProfileQueueSchema,
   profileQueueSchema,
   type EvaluationContestDecision,
+  type ProfileImage,
   type ProfileReview,
 } from "@coverview/contracts/partner-profiles";
 import {
@@ -23,6 +25,7 @@ import {
   SheetTitle,
 } from "@coverview/ui";
 import { AdminBoundary } from "../features/users/AdminBoundary";
+import { usePictureUrl } from "../features/use-picture";
 
 const client = createPartnerClient(
   import.meta.env.VITE_API_URL ??
@@ -31,6 +34,45 @@ const client = createPartnerClient(
 const day = new Intl.DateTimeFormat("fr-CH", { dateStyle: "medium", timeZone: "Europe/Zurich" });
 type Pending = z.infer<typeof profileQueueSchema>["items"][number];
 type Contest = z.infer<typeof contestQueueSchema>["items"][number];
+type PendingOrganization = z.infer<typeof organizationProfileQueueSchema>["items"][number];
+
+// The picture of the version under review (C8c), shown once scanned; otherwise its state, which
+// tells why a publication would be refused.
+function SubmittedPicture({
+  title,
+  image,
+  name,
+  queryKey,
+  load,
+}: {
+  title: string;
+  image: ProfileImage | null;
+  name: string;
+  queryKey: readonly unknown[];
+  load: (signal: AbortSignal) => Promise<Blob>;
+}) {
+  const { t } = useTranslation("profiles");
+  const url = usePictureUrl(queryKey, load, image?.state === "ready" ? image.mime : null);
+  return (
+    <div className="space-y-2">
+      <p className="text-sm font-medium">{title}</p>
+      {!image ? (
+        <p className="text-sm text-muted-foreground">{t("noPicture")}</p>
+      ) : (
+        <>
+          {url && (
+            <img
+              src={url}
+              alt={t("pictureAlt", { name })}
+              className="max-h-32 w-auto rounded-lg border border-border object-contain"
+            />
+          )}
+          <p className="text-sm text-muted-foreground">{t(`pictureState.${image.state}`)}</p>
+        </>
+      )}
+    </div>
+  );
+}
 
 function useAttempt() {
   const attempt = useRef<{ payload: string; key: string } | null>(null);
@@ -134,6 +176,7 @@ function Workspace({ identity, blocked }: { identity: IdentityMe; blocked: boole
     key = ["private", identity.user.id, identity.session.id, "partner-profiles"],
     attemptFor = useAttempt(),
     [profile, setProfile] = useState<Pending | null>(null),
+    [organization, setOrganization] = useState<PendingOrganization | null>(null),
     [contest, setContest] = useState<Contest | null>(null),
     [failed, setFailed] = useState(false);
   const profiles = useQuery({
@@ -142,6 +185,35 @@ function Workspace({ identity, blocked }: { identity: IdentityMe; blocked: boole
     enabled: !blocked,
     gcTime: 0,
     retry: false,
+  });
+  const organizations = useQuery({
+    queryKey: [...key, "organizations"],
+    queryFn: ({ signal }) => client.organizationProfileQueue(signal),
+    enabled: !blocked,
+    gcTime: 0,
+    retry: false,
+  });
+  const organizationDossier = useQuery({
+    queryKey: [...key, "organization", organization?.organizationId],
+    queryFn: ({ signal }) => client.organizationProfile(organization!.organizationId, signal),
+    enabled: !!organization && !blocked,
+    gcTime: 0,
+    retry: false,
+  });
+  const reviewOrganization = useMutation({
+    gcTime: 0,
+    retry: false,
+    mutationFn: ({ organizationId, input }: { organizationId: string; input: ProfileReview }) =>
+      client.reviewOrganizationProfile(organizationId, input, {
+        csrfToken: identity.csrfToken,
+        idempotencyKey: attemptFor({ organizationId, input }),
+      }),
+    onSuccess: () => {
+      setOrganization(null);
+      setFailed(false);
+      void cache.invalidateQueries({ queryKey: key });
+    },
+    onError: () => setFailed(true),
   });
   const contests = useQuery({
     queryKey: [...key, "contests"],
@@ -240,6 +312,38 @@ function Workspace({ identity, blocked }: { identity: IdentityMe; blocked: boole
         )}
       </section>
       <section className="space-y-4">
+        <h2 className="text-lg font-medium">{t("organizationsTitle")}</h2>
+        {organizations.isPending ? (
+          <LoadingState label={t("loading")} />
+        ) : organizations.isError ? (
+          failure(() => void organizations.refetch())
+        ) : organizations.data.items.length === 0 ? (
+          <p className="text-sm text-muted-foreground">{t("noOrganizations")}</p>
+        ) : (
+          <ul className="divide-y divide-border rounded-xl border border-border">
+            {organizations.data.items.map((item) => (
+              <li
+                key={item.organizationId}
+                className="flex flex-wrap items-center justify-between gap-3 p-4"
+              >
+                <div>
+                  <p className="font-medium">{item.name}</p>
+                  <p className="text-sm text-muted-foreground">
+                    {t("submitted", {
+                      revision: item.revision,
+                      date: day.format(new Date(item.submittedAt)),
+                    })}
+                  </p>
+                </div>
+                <Button variant="outline" onClick={() => setOrganization(item)}>
+                  {t("review")}
+                </Button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+      <section className="space-y-4">
         <h2 className="text-lg font-medium">{t("contestsTitle")}</h2>
         {contests.isPending ? (
           <LoadingState label={t("loading")} />
@@ -305,6 +409,68 @@ function Workspace({ identity, blocked }: { identity: IdentityMe; blocked: boole
               </p>
             )}
           </div>
+          {dossier.data && (
+            <SubmittedPicture
+              title={t("photoTitle")}
+              image={dossier.data.current?.photo ?? null}
+              name={profile.name}
+              queryKey={[...key, "photo", profile.userId, profile.revision]}
+              load={(signal) =>
+                client.profileVersionPhoto(profile.userId, profile.revision, signal)
+              }
+            />
+          )}
+        </Decision>
+      )}
+      {organization && (
+        <Decision
+          title={t("organizationReviewTitle", { name: organization.name })}
+          description={t("organizationDerived")}
+          options={[
+            { value: "published", label: t("decisions.published") },
+            { value: "rejected", label: t("decisions.rejected") },
+          ]}
+          pending={reviewOrganization.isPending}
+          failed={failed}
+          onClose={() => setOrganization(null)}
+          onSubmit={(decision, reason) =>
+            reviewOrganization.mutate({
+              organizationId: organization.organizationId,
+              input: {
+                revision: organization.revision,
+                decision: decision === "rejected" ? "rejected" : "published",
+                reason,
+              },
+            })
+          }
+        >
+          <div className="space-y-2">
+            <p className="text-sm font-medium">{t("presentation")}</p>
+            {organizationDossier.isPending ? (
+              <LoadingState label={t("loading")} />
+            ) : organizationDossier.isError ? (
+              failure(() => void organizationDossier.refetch())
+            ) : (
+              <p className="whitespace-pre-wrap break-words rounded-lg bg-muted p-3 text-sm">
+                {organizationDossier.data.current?.presentation}
+              </p>
+            )}
+          </div>
+          {organizationDossier.data && (
+            <SubmittedPicture
+              title={t("logoTitle")}
+              image={organizationDossier.data.current?.logo ?? null}
+              name={organization.name}
+              queryKey={[...key, "logo", organization.organizationId, organization.revision]}
+              load={(signal) =>
+                client.organizationVersionLogo(
+                  organization.organizationId,
+                  organization.revision,
+                  signal,
+                )
+              }
+            />
+          )}
         </Decision>
       )}
       {contest && (

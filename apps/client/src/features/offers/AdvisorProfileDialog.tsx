@@ -12,6 +12,7 @@ import {
   swissCantonNamesFr,
 } from "@coverview/ui";
 import { partnerApi } from "../../partner-api";
+import { usePictureUrl } from "./use-picture";
 
 const day = new Intl.DateTimeFormat("fr-CH", { dateStyle: "medium", timeZone: "Europe/Zurich" });
 const languages = new Intl.DisplayNames(["fr"], { type: "language" });
@@ -33,6 +34,18 @@ export function AdvisorProfileDialog({
     gcTime: 0,
     retry: false,
   });
+  // Photo and organisation logo (C8c), fetched only when the published profile states them.
+  const organization = profile.data?.organizationProfile ?? null;
+  const photoUrl = usePictureUrl(
+    [...queryKey, "advisor-photo", userId, profile.data?.publishedAt ?? null],
+    (signal) => partnerApi.advisorPhoto(userId, true, signal),
+    profile.data?.photo?.mime ?? null,
+  );
+  const logoUrl = usePictureUrl(
+    [...queryKey, "advisor-logo", userId, organization?.publishedAt ?? null],
+    (signal) => partnerApi.advisorOrganizationLogo(userId, true, signal),
+    organization?.logo?.mime ?? null,
+  );
   const unpublished =
     profile.error instanceof PartnerApiError && profile.error.code === "PARTNER_NOT_FOUND";
   const list = (values: string[]) =>
@@ -57,6 +70,18 @@ export function AdvisorProfileDialog({
             name={profile.data.name}
             organization={profile.data.organization}
             presentation={profile.data.presentation}
+            photoUrl={photoUrl}
+            photoAlt={t("advisorProfile.photoAlt", { name: profile.data.name })}
+            organizationProfile={
+              organization
+                ? {
+                    heading: t("advisorProfile.organization", { name: organization.name }),
+                    presentation: organization.presentation,
+                    logoUrl,
+                    logoAlt: t("advisorProfile.logoAlt", { name: organization.name }),
+                  }
+                : null
+            }
             facts={[
               {
                 label: t("advisorProfile.facts.specialties"),

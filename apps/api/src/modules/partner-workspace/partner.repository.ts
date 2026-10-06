@@ -6,6 +6,7 @@ import { createRelationshipOperations } from "./partner.relationships.js";
 import { createNavigationOperations } from "./partner.navigation.js";
 import { createMatchingOperations } from "./partner.matching.js";
 import { createProfileOperations } from "./partner.profiles.js";
+import { createOrganizationProfileOperations } from "./partner.organization-profiles.js";
 import {
   applyOrganizationDecision,
   createAccessOperations,
@@ -777,7 +778,8 @@ export function createPartnerRepository(
   return {
     ...createNavigationOperations(pool, transaction),
     ...createMatchingOperations(pool),
-    ...createProfileOperations(pool, transaction),
+    ...createProfileOperations(pool, transaction, documentsAvailable),
+    ...createOrganizationProfileOperations(pool, transaction, documentsAvailable),
     ...createAccessOperations(pool, transaction),
     ...createTeamOperations(pool, transaction),
     ...createInvitationOperations(pool, transaction, invitationDelivery),

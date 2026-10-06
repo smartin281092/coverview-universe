@@ -777,7 +777,10 @@
       "available": "Note des clients : {{average}} / 5",
       "insufficient": "Pas encore assez d'avis pour afficher une note ({{count}} sur {{minimum}}).",
       "detail": "{{count}} avis du {{from}} au {{to}}. Moyenne des notes données par les clients à la fin de leurs demandes ; non affichée sous {{minimum}} avis."
-    }
+    },
+    "photoAlt": "Photo de {{name}}",
+    "logoAlt": "Logo de {{name}}",
+    "organization": "{{name}}"
   },
   "comparison": {
     "title": "Comparer prestation par prestation",

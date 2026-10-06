@@ -6,6 +6,9 @@ import {
   evaluationContestDecisionSchema,
   evaluationContestInputSchema,
   evaluationSchema,
+  organizationProfileDossierSchema,
+  organizationProfileInputSchema,
+  organizationProfileQueueSchema,
   profileDossierSchema,
   profileInputSchema,
   profileQueueSchema,
@@ -105,5 +108,99 @@ export function registerProfileRoutes(
     "/admin/partner/referrers/:userId/evaluation",
     { config, schema: { params: user, response: { 200: referrerEvaluationSchema } } },
     async (r) => repository.referrerEvaluation(await actor(r, false, true), r.params.userId),
+  );
+  // Photo analysis retry and the organisation profile (C8c).
+  const retry = z.object({ documentRevision: z.number().int().nonnegative() }).strict();
+  app.post(
+    "/partner/profiles/:userId/photo/retry",
+    { config, schema: { params: user, body: retry, response: { 200: profileDossierSchema } } },
+    async (r) =>
+      repository.retryProfilePhoto(
+        await actor(r),
+        r.params.userId,
+        r.body.documentRevision,
+        key(r),
+      ),
+  );
+  const organization = z.object({ organizationId: z.string().min(1).max(100) }).strict();
+  app.get(
+    "/partner/organizations/:organizationId/profile",
+    {
+      config,
+      schema: { params: organization, response: { 200: organizationProfileDossierSchema } },
+    },
+    async (r) => repository.organizationProfile(await actor(r), r.params.organizationId),
+  );
+  app.post(
+    "/partner/organizations/:organizationId/profile",
+    {
+      config,
+      schema: {
+        params: organization,
+        body: organizationProfileInputSchema,
+        response: { 200: organizationProfileDossierSchema },
+      },
+    },
+    async (r) =>
+      repository.submitOrganizationProfile(await actor(r), r.params.organizationId, r.body, key(r)),
+  );
+  app.post(
+    "/partner/organizations/:organizationId/profile/withdraw",
+    {
+      config,
+      schema: {
+        params: organization,
+        body: withdrawal,
+        response: { 200: organizationProfileDossierSchema },
+      },
+    },
+    async (r) =>
+      repository.withdrawOrganizationProfile(
+        await actor(r),
+        r.params.organizationId,
+        r.body.reason,
+        key(r),
+      ),
+  );
+  app.post(
+    "/partner/organizations/:organizationId/logo/retry",
+    {
+      config,
+      schema: {
+        params: organization,
+        body: retry,
+        response: { 200: organizationProfileDossierSchema },
+      },
+    },
+    async (r) =>
+      repository.retryOrganizationLogo(
+        await actor(r),
+        r.params.organizationId,
+        r.body.documentRevision,
+        key(r),
+      ),
+  );
+  app.get(
+    "/admin/partner/organization-profiles",
+    { config, schema: { response: { 200: organizationProfileQueueSchema } } },
+    async (r) => repository.organizationProfileQueue(await actor(r, false, true)),
+  );
+  app.post(
+    "/admin/partner/organizations/:organizationId/profile/review",
+    {
+      config,
+      schema: {
+        params: organization,
+        body: profileReviewSchema,
+        response: { 200: organizationProfileDossierSchema },
+      },
+    },
+    async (r) =>
+      repository.reviewOrganizationProfile(
+        await actor(r, false, true),
+        r.params.organizationId,
+        r.body,
+        key(r),
+      ),
   );
 }
