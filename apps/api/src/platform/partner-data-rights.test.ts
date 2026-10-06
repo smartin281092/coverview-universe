@@ -491,7 +491,7 @@ it("serves the copy over HTTP to the signed-in person only, as a protected, rate
     const summary = await app.inject({ url: "/wallet/data", headers: { host, cookie } });
     expect(summary.statusCode).toBe(200);
     expect(summary.json()).toEqual({
-      registerVersion: "partner-data-register-v2",
+      registerVersion: "partner-data-register-v3",
       exports: [],
       requests: [],
     });

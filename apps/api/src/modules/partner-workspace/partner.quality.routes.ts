@@ -2,6 +2,10 @@ import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
 import {
+  caseConfirmationSchema,
+  clientConfirmationsSchema,
+  qualityContactInputSchema,
+  walletConfirmationInputSchema,
   qualityActionInputSchema,
   qualityCaseSchema,
   qualityClientReplySchema,
@@ -119,5 +123,44 @@ export function registerQualityRoutes(
       schema: { params, body: surveyResponseInputSchema, response: { 200: surveySchema } },
     },
     async (r) => repository.respondSurvey(await actor(r, true), r.params.id, r.body, key(r)),
+  );
+  // Client statements about a request (C8d, brief I.17.2).
+  app.get(
+    "/wallet/leads/:id/confirmations",
+    { config, schema: { params, response: { 200: clientConfirmationsSchema } } },
+    async (r) => repository.walletConfirmations(await actor(r, true), r.params.id),
+  );
+  app.post(
+    "/wallet/leads/:id/confirmations",
+    {
+      config: { rateLimit: { max: 20, timeWindow: "1 minute" } },
+      schema: {
+        params,
+        body: walletConfirmationInputSchema,
+        response: { 200: clientConfirmationsSchema },
+      },
+    },
+    async (r) => repository.confirmFromWallet(await actor(r, true), r.params.id, r.body, key(r)),
+  );
+  app.get(
+    "/partner/leads/:id/confirmations",
+    {
+      config,
+      schema: { params, response: { 200: z.object({ items: z.array(caseConfirmationSchema) }) } },
+    },
+    async (r) => repository.leadConfirmations(await actor(r, false, true), r.params.id),
+  );
+  app.post(
+    "/partner/leads/:id/quality-contacts",
+    {
+      config,
+      schema: {
+        params,
+        body: qualityContactInputSchema,
+        response: { 200: caseConfirmationSchema },
+      },
+    },
+    async (r) =>
+      repository.recordQualityContact(await actor(r, false, true), r.params.id, r.body, key(r)),
   );
 }

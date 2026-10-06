@@ -99,7 +99,8 @@
     "verify": "Consigner une vérification",
     "close": "Clôturer avec motif",
     "reopen": "Rouvrir avec une suite",
-    "reply": "Complément reçu"
+    "reply": "Complément reçu",
+    "request_reconciliation": "Demander un rapprochement au professionnel"
   },
   "verified": "J’ai vérifié le résultat et consigné le motif de clôture.",
   "shared": "Partager ce contenu avec le client",
@@ -119,10 +120,75 @@
   "filter": {
     "open": "À traiter",
     "closed": "Clôturés",
-    "all": "Tous"
+    "all": "Tous",
+    "undeclared": "Contrats potentiellement non déclarés ({{count}})",
+    "allReasons": "Toutes les raisons"
   },
   "closed": "Clôturé",
   "open": "Ouvrir",
   "sharedAuthor": "Partager cette suite avec le professionnel déclarant",
-  "authorShared": "Partagé avec le déclarant"
+  "authorShared": "Partagé avec le déclarant",
+  "professionalShared": "Partagé avec le professionnel concerné",
+  "reconciliationTo": "Demande adressée à {{name}}, responsable de la demande. Formulez-la sans reproche : il s’agit de rapprocher l’état déclaré.",
+  "reconciliation": "Rapprochement demandé à {{name}} le {{date}}",
+  "outcomeLabel": "Issue de la vérification",
+  "outcomes": {
+    "confirmed": "Confirmée : l’écart existait",
+    "unfounded": "Infondée : l’état déclaré était juste",
+    "inconclusive": "Non concluante"
+  },
+  "outcomeValue": "Issue : {{outcome}}",
+  "confirmations": {
+    "title": "Déclarations du client",
+    "notProof": "Une déclaration du client ouvre une vérification, jamais une réclamation ni une sanction. Elle ne vaut pas preuve d’encaissement d’une commission.",
+    "channel": {
+      "survey": "Enquête de fin de demande",
+      "wallet": "Signalement depuis Wallet",
+      "call": "Appel qualité CoverView",
+      "email": "Email qualité CoverView"
+    },
+    "fact": {
+      "contact": "Prise de contact",
+      "appointment": "Rendez-vous tenu",
+      "documents": "Documents reçus",
+      "contract": "Contrat conclu"
+    },
+    "client": "Client : {{answer}}",
+    "declared": "Déclaré : {{answer}}",
+    "answers": {
+      "yes": "oui",
+      "no": "non",
+      "unknown": "ne sait pas"
+    },
+    "declaredAnswers": {
+      "true": "oui",
+      "false": "non"
+    },
+    "insurer": "Compagnie citée : {{name}}",
+    "signedOn": "Signé le {{date}}",
+    "discrepancy": {
+      "contract_undeclared": "Contrat signalé, non déclaré dans la demande",
+      "contract_unconfirmed": "Contrat déclaré, non confirmé par le client",
+      "contact_unconfirmed": "Contact déclaré, non confirmé par le client",
+      "appointment_unconfirmed": "Rendez-vous déclaré, non confirmé par le client",
+      "documents_unconfirmed": "Documents publiés, non confirmés par le client"
+    }
+  },
+  "contact": {
+    "action": "Consigner un contact qualité",
+    "title": "Consigner un contact qualité",
+    "description": "Ce que le client a dit lors d’un appel ou d’un email de CoverView. Un écart avec l’état déclaré ouvre une vérification.",
+    "channel": "Canal",
+    "channels": {
+      "call": "Appel",
+      "email": "Email"
+    },
+    "occurredAt": "Date de l’échange",
+    "note": "Résumé de l’échange (10 caractères au moins)",
+    "insurer": "Compagnie citée (facultatif)",
+    "signedOn": "Date de signature citée (facultatif)",
+    "confirm": "Je confirme que ce résumé rapporte fidèlement les propos du client.",
+    "submit": "Enregistrer",
+    "saved": "Contact enregistré."
+  }
 }

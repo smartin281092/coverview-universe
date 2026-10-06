@@ -137,6 +137,7 @@ import { createCommercialOperations, economyRead } from "./partner.commercial.js
 import { createMarketplaceOperations } from "./partner.marketplace.js";
 import { createEconomyOperations } from "./partner.economy.js";
 import { createQualityOperations } from "./partner.quality.js";
+import { createConfirmationOperations } from "./partner.confirmations.js";
 import { createCommunicationOperations } from "./partner.communications.js";
 import { createPilotageOperations } from "./partner.pilotage.js";
 import { createGoalOperations } from "./partner.goals.js";
@@ -828,6 +829,7 @@ export function createPartnerRepository(
       return { lead, canManage };
     }),
     ...createQualityOperations(pool, transaction, adviceLead),
+    ...createConfirmationOperations(pool, transaction, adviceLead),
     ...createCommunicationOperations(pool, transaction, adviceLead),
     ...createPilotageOperations(pool),
     ...createGoalOperations(pool, transaction),

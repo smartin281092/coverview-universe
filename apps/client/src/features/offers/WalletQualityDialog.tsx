@@ -21,6 +21,7 @@ import {
 } from "@coverview/ui";
 import { partnerApi } from "../../partner-api";
 import { SurveyForm } from "./SurveyForm";
+import { WalletConfirmations } from "./WalletConfirmations";
 const schema = z.object({
   note: z.string().trim().min(10).max(2000),
   kind: z.enum(["complaint", "callback"]),
@@ -334,6 +335,7 @@ export function WalletQualityDialog({
                     </Button>
                   )}
                 </div>
+                <WalletConfirmations identity={identity} leadId={leadId} />
               </>
             )}
           </>

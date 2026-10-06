@@ -123,5 +123,43 @@
   "closed": "Clôturé",
   "open": "Ouvrir",
   "sharedAuthor": "Partager cette suite avec le professionnel déclarant",
-  "authorShared": "Partagé avec le déclarant"
+  "authorShared": "Partagé avec le déclarant",
+  "facts": {
+    "title": "Ce qui s’est passé (facultatif)",
+    "description": "Ces réponses aident CoverView à vérifier le suivi de votre demande. Vous pouvez toujours répondre « Je ne sais pas ».",
+    "question": {
+      "contact": "Le professionnel vous a-t-il contacté ?",
+      "appointment": "Un rendez-vous a-t-il eu lieu ?",
+      "documents": "Avez-vous reçu des offres ou des documents ?",
+      "contract": "Avez-vous conclu un contrat ?"
+    },
+    "answers": {
+      "yes": "Oui",
+      "no": "Non",
+      "unknown": "Je ne sais pas"
+    },
+    "insurer": "Compagnie d’assurance (facultatif)",
+    "signedOn": "Date de signature (facultatif)"
+  },
+  "report": {
+    "action": "Signaler ce qui s’est passé",
+    "title": "Signaler ce qui s’est passé",
+    "description": "Par exemple un contrat conclu avec ce professionnel. CoverView compare vos réponses au suivi de la demande et vérifie si nécessaire, sans reproche envers quiconque.",
+    "comment": "Précisions (facultatif)",
+    "confirm": "Je confirme transmettre ces informations à CoverView pour le suivi de cette demande.",
+    "invalid": "Répondez par oui ou par non à au moins une question et cochez la confirmation.",
+    "send": "Envoyer",
+    "saved": "Merci, CoverView a bien reçu votre déclaration.",
+    "limit": "Vous avez déjà envoyé plusieurs déclarations aujourd’hui pour cette demande. Réessayez demain.",
+    "mine": "Mes déclarations",
+    "empty": "Aucune déclaration envoyée pour cette demande.",
+    "channel": {
+      "survey": "Enquête de fin de demande",
+      "wallet": "Déclaration depuis Wallet",
+      "call": "Appel de CoverView",
+      "email": "Email de CoverView"
+    },
+    "insurer": "Compagnie : {{name}}",
+    "signedOn": "Signé le {{date}}"
+  }
 }

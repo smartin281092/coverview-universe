@@ -12,7 +12,12 @@ import {
   profileDossierSchema,
   referrerEvaluationSchema,
 } from "./partner-profiles.js";
-import { qualityQueueSchema, surveysSchema } from "./partner-quality.js";
+import {
+  clientConfirmationSchema,
+  clientConfirmationsSchema,
+  qualityQueueSchema,
+  surveysSchema,
+} from "./partner-quality.js";
 import { leadRelationshipsSchema } from "./partner-relationships.js";
 import {
   advicePreferencesSchema,
@@ -42,7 +47,7 @@ const id = z.string().min(1).max(100),
 // Rights of the people whose data the Partner programme holds (brief I.20, C7). The register and
 // the export manifest are versioned facts of the product, never legal text or a validated policy.
 // v2 (C8): habilitation decisions, restrictions and re-reviews in the membership category.
-export const partnerDataRegisterVersion = "partner-data-register-v2";
+export const partnerDataRegisterVersion = "partner-data-register-v3";
 // v2 (C8): the professional copy carries the access decisions.
 export const partnerDataExportVersion = "partner-data-export-v2";
 
@@ -143,6 +148,8 @@ export const walletDataRequestSchema = z.object({
   communications: communicationsSchema.nullable(),
   quality: qualityQueueSchema.nullable(),
   surveys: surveysSchema.nullable(),
+  // The client's own statements about the request (C8d).
+  confirmations: clientConfirmationsSchema.nullable(),
   conclusions: conclusionsSchema.nullable(),
   marketMandates: marketMandatesSchema.nullable(),
   relationships: leadRelationshipsSchema.nullable(),
@@ -152,6 +159,8 @@ export const walletDataRequestSchema = z.object({
     .object({
       tasks: z.array(leadTaskSchema).max(100),
       events: z.array(leadEventSchema).max(500),
+      // What CoverView recorded of a call or email with the client (C8d).
+      qualityContacts: z.array(clientConfirmationSchema).max(100),
     })
     .nullable(),
 });

@@ -28,7 +28,16 @@ const schema = z.object({
   note: z.string().trim().min(10).max(2000),
   kind: z.enum(["complaint", "callback", "verification", "corrective_action"]),
   priority: z.enum(["normal", "high", "urgent"]),
-  action: z.enum(["take_charge", "follow_up", "request_explanation", "verify", "close", "reopen"]),
+  action: z.enum([
+    "take_charge",
+    "follow_up",
+    "request_explanation",
+    "request_reconciliation",
+    "verify",
+    "close",
+    "reopen",
+  ]),
+  outcome: z.enum(["", "confirmed", "unfounded", "inconclusive"]),
   nextAction: z.string().max(500),
   dueAt: z.string(),
   shared: z.boolean(),
@@ -65,6 +74,7 @@ export function QualityEditor({
       kind: "complaint",
       priority: "normal",
       action: item?.state === "closed" ? "reopen" : "take_charge",
+      outcome: "",
       nextAction: "",
       dueAt: "",
       shared: false,
@@ -157,6 +167,12 @@ export function QualityEditor({
                             sharedWithClient: v.shared,
                             sharedWithAuthor: v.sharedAuthor,
                             verified: v.verified,
+                            // C8d: the request's current responsible; an outcome closes a
+                            // verification of a client statement.
+                            ...(v.action === "request_reconciliation" && item.reconciliationTarget
+                              ? { professionalId: item.reconciliationTarget.userId }
+                              : {}),
+                            ...(v.action === "close" && v.outcome ? { outcome: v.outcome } : {}),
                           })
                         : qualityClientReplySchema.parse({
                             expectedRevision: item.revision,
@@ -218,7 +234,16 @@ export function QualityEditor({
                   >
                     {(item.state === "closed"
                       ? ["reopen"]
-                      : ["take_charge", "follow_up", "request_explanation", "verify", "close"]
+                      : [
+                          "take_charge",
+                          "follow_up",
+                          "request_explanation",
+                          ...(item.canRequestReconciliation && item.reconciliationTarget
+                            ? ["request_reconciliation"]
+                            : []),
+                          "verify",
+                          "close",
+                        ]
                     ).map((v) => (
                       <option key={v} value={v}>
                         {t(`actions.${v}`)}
@@ -231,6 +256,29 @@ export function QualityEditor({
                       <Input id="quality-next" {...form.register("nextAction")} />
                       <Label htmlFor="quality-due">{t("dueLabel")}</Label>
                       <Input id="quality-due" type="datetime-local" {...form.register("dueAt")} />
+                    </>
+                  )}
+                  {action === "request_reconciliation" && item.reconciliationTarget && (
+                    <p className="text-sm text-muted-foreground">
+                      {t("reconciliationTo", { name: item.reconciliationTarget.name })}
+                    </p>
+                  )}
+                  {action === "close" && item.confirmations.length > 0 && (
+                    <>
+                      <Label htmlFor="quality-outcome">{t("outcomeLabel")}</Label>
+                      <select
+                        id="quality-outcome"
+                        {...form.register("outcome")}
+                        required
+                        className="min-h-11 w-full rounded-md border border-input bg-background px-3"
+                      >
+                        <option value="" />
+                        {(["confirmed", "unfounded", "inconclusive"] as const).map((v) => (
+                          <option key={v} value={v}>
+                            {t(`outcomes.${v}`)}
+                          </option>
+                        ))}
+                      </select>
                     </>
                   )}
                   {action === "close" && (

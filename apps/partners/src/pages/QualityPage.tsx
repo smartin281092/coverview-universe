@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 import { Button, Badge, EmptyState, ErrorState, LoadingState } from "@coverview/ui";
 import { usePartner } from "../features/PartnerSession";
 import { QualityEditor } from "../features/QualityEditor";
+import { QualityConfirmations } from "../features/QualityConfirmations";
+import { QualityContactDialog } from "../features/QualityContactDialog";
 import { partnerApi } from "../api";
 import { formatDate } from "../features/Field";
 import type { QualityCase } from "@coverview/contracts/partner-quality";
@@ -16,13 +18,18 @@ export function QualityPage() {
   const [editor, setEditor] = useState<{ item?: QualityCase; settingsRevision?: number } | null>(
       null,
     ),
-    [before, setBefore] = useState<number>();
+    [before, setBefore] = useState<number>(),
+    [contact, setContact] = useState(false);
   const policy = { gcTime: 0, staleTime: 0, retry: false, refetchInterval: 10000 };
   const list = useQuery({
     queryKey: [...session.queryKey, "quality", search],
     queryFn: ({ signal }) =>
       partnerApi.qualityQueue(
-        { state: search.state, ...(search.cursor ? { cursor: search.cursor } : {}) },
+        {
+          state: search.state,
+          reason: search.reason ?? "all",
+          ...(search.cursor ? { cursor: search.cursor } : {}),
+        },
         search.leadId,
         false,
         signal,
@@ -69,6 +76,13 @@ export function QualityPage() {
           onSaved={reload}
         />
       )}
+      {contact && search.leadId && (
+        <QualityContactDialog
+          leadId={search.leadId}
+          onClose={() => setContact(false)}
+          onSaved={reload}
+        />
+      )}
       <div className="flex flex-wrap gap-3">
         {search.leadId && (
           <Button variant="outline" asChild>
@@ -89,6 +103,11 @@ export function QualityPage() {
           </Button>
         ) : (
           search.leadId && <Button onClick={() => setEditor({})}>{t("create")}</Button>
+        )}
+        {session.context.administrator && search.leadId && !search.caseId && (
+          <Button variant="outline" onClick={() => setContact(true)}>
+            {t("contact.action")}
+          </Button>
         )}
         {session.context.administrator && settings.data && !settings.isError && (
           <Button
@@ -125,12 +144,24 @@ export function QualityPage() {
                 </p>
               )}
               {data.nextAction && <p>{data.nextAction}</p>}
+              {data.reconciliation && (
+                <p>
+                  {t("reconciliation", {
+                    name: data.reconciliation.name,
+                    date: formatDate(data.reconciliation.requestedAt),
+                  })}
+                </p>
+              )}
+              {data.outcome && (
+                <p>{t("outcomeValue", { outcome: t(`outcomes.${data.outcome}`) })}</p>
+              )}
               {(data.canManage || data.canReply) && (
                 <Button onClick={() => setEditor({ item: data })}>
                   {t(data.canManage ? "process" : "reply")}
                 </Button>
               )}
             </section>
+            {data.confirmations.length > 0 && <QualityConfirmations items={data.confirmations} />}
             {data.survey && (
               <section className="space-y-3">
                 <h3 className="font-semibold">{t("surveyResponse")}</h3>
@@ -154,13 +185,16 @@ export function QualityPage() {
                   <p className="whitespace-pre-wrap">{h.note}</p>
                   {h.nextAction && <p>{h.nextAction}</p>}
                   {h.dueAt && <p>{t("due", { date: formatDate(h.dueAt) })}</p>}
+                  {h.outcome && <p>{t("outcomeValue", { outcome: t(`outcomes.${h.outcome}`) })}</p>}
                   <Badge variant="outline">
                     {t(
                       h.sharedWithClient
                         ? "clientShared"
                         : h.sharedWithAuthor
                           ? "authorShared"
-                          : "internal",
+                          : h.sharedWithProfessional
+                            ? "professionalShared"
+                            : "internal",
                     )}
                   </Badge>
                 </article>
@@ -195,6 +229,30 @@ export function QualityPage() {
               </Button>
             ))}
           </div>
+          {session.context.administrator && !search.leadId && (
+            <div className="flex flex-wrap gap-3">
+              <Button
+                variant={search.reason ? "outline" : "default"}
+                onClick={() =>
+                  void navigate({ search: { ...search, reason: undefined, cursor: undefined } })
+                }
+              >
+                {t("filter.allReasons")}
+              </Button>
+              <Button
+                variant={search.reason === "undeclared_contract" ? "default" : "outline"}
+                onClick={() =>
+                  void navigate({
+                    search: { ...search, reason: "undeclared_contract", cursor: undefined },
+                  })
+                }
+              >
+                {t("filter.undeclared", {
+                  count: list.isError ? 0 : (list.data?.undeclaredContracts ?? 0),
+                })}
+              </Button>
+            </div>
+          )}
           {list.isPending ? (
             <LoadingState label={t("loading")} />
           ) : list.isError ? (

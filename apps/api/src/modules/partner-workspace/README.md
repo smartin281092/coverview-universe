@@ -33,6 +33,8 @@ Ces règles remplacent les mentions « gestion d'équipe ouverte » et l'organis
 
 **Photo et profil d'organisation (C8c).** Photo facultative de chaque version de profil et profil d'organisation rédigé par le responsable, avec logo. Les images sont redessinées par le navigateur, passent par le circuit des preuves professionnelles (antivirus, type détecté) et ne sont publiées qu'une fois saines, après examen CoverView. [Règles et limites](docs/profiles-evaluations.md).
 
+**Contrat signalé par le client (C8d).** Le client dit ce qui s'est passé (enquête, Wallet, ou contact consigné par l'Admin) ; le serveur compare à l'état déclaré de la demande. Un écart ouvre une vérification interne à CoverView, jamais une réclamation ni une écriture financière ; l'Admin peut demander un rapprochement au responsable de la demande et clôt avec une issue. File « contrats potentiellement non déclarés ». [Règles et bornes](docs/quality-pilotage.md#déclarations-du-client-et-vérification-c8d).
+
 **Rendez-vous conjoint (C6b).** Le client invite depuis Wallet le conseiller d'une autre de ses demandes ; le spécialiste confirme avec ses propres tampons, son temps devient protégé (garde en base étendue aux participations), chaque demande garde son étape et son issue ; report, annulation, retrait et perte d'accès sans rendez-vous contradictoire. [Parcours, règles et preuves](docs/joint-appointments.md).
 
 **Diffusion immédiate Partner ↔ Wallet (C6a).** Flux SSE `/partner/live` et `/wallet/live` : avis `pg_notify` après validation, audience décidée par le hub à chaque envoi selon la visibilité courante, invalidation puis relecture par l'API, resynchronisation à la reconnexion. [Politique d'exposition, limites et preuves](docs/live-updates.md).

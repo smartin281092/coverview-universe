@@ -7,7 +7,10 @@ import {
   leadTaskSchema,
   partnerNotificationQuerySchema,
 } from "@coverview/contracts/partner";
-import { qualityPageQuerySchema } from "@coverview/contracts/partner-quality";
+import {
+  clientConfirmationSchema,
+  qualityPageQuerySchema,
+} from "@coverview/contracts/partner-quality";
 import {
   dataExportProofSchema,
   matchingAppearancesSchema,
@@ -187,8 +190,23 @@ export function createDataRightsOperations(pool: Pool, repository: Repository) {
         [actor.userId, leadId],
       )
     ).rows;
+    const contacts = (
+      await tx.query<Record<string, unknown>>(
+        `select * from partner_client_confirmations c where c.lead_id=$2 and c.owner_id=$1 and c.channel in ('call','email') and c.invalidated_at is null and ${seen} order by c.created_at desc,c.id desc limit 101`,
+        [actor.userId, leadId],
+      )
+    ).rows;
     return {
-      truncated: tasks.length > 100 || events.length > 500,
+      truncated: tasks.length > 100 || events.length > 500 || contacts.length > 100,
+      qualityContacts: contacts.slice(0, 100).map((row) =>
+        clientConfirmationSchema.parse({
+          id: row.id,
+          channel: row.channel,
+          facts: row.facts,
+          comment: row.comment,
+          createdAt: date(row.created_at as Date),
+        }),
+      ),
       tasks: tasks.slice(0, 100).map((row) =>
         leadTaskSchema.parse({
           ...camel<Record<string, unknown>>(row),
@@ -299,6 +317,10 @@ export function createDataRightsOperations(pool: Pool, repository: Repository) {
         repository.surveys(actor, id),
       );
       cut(collected, `${name}.surveys`, surveys?.nextCursor);
+      const confirmations = await section(collected, `${name}.confirmations`, () =>
+        repository.walletConfirmations(actor, id),
+      );
+      cut(collected, `${name}.confirmations`, confirmations?.truncated);
       requests.push({
         lead,
         contact,
@@ -319,11 +341,16 @@ export function createDataRightsOperations(pool: Pool, repository: Repository) {
         communications,
         quality,
         surveys,
+        confirmations,
         conclusions,
         marketMandates,
         relationships,
         reopenings,
-        internal: internal && { tasks: internal.tasks, events: internal.events },
+        internal: internal && {
+          tasks: internal.tasks,
+          events: internal.events,
+          qualityContacts: internal.qualityContacts,
+        },
       });
     }
     return requests;
@@ -400,12 +427,22 @@ export function createDataRightsOperations(pool: Pool, repository: Repository) {
           0,
         ),
         quality: requests.reduce(
-          (sum, r) => sum + (r.quality?.items.length ?? 0) + (r.surveys?.items.length ?? 0),
+          (sum, r) =>
+            sum +
+            (r.quality?.items.length ?? 0) +
+            (r.surveys?.items.length ?? 0) +
+            (r.confirmations?.items.length ?? 0),
           0,
         ),
         notifications: notifications?.items.length ?? 0,
         internal: requests.reduce(
-          (sum, r) => sum + (r.internal ? r.internal.tasks.length + r.internal.events.length : 0),
+          (sum, r) =>
+            sum +
+            (r.internal
+              ? r.internal.tasks.length +
+                r.internal.events.length +
+                r.internal.qualityContacts.length
+              : 0),
           0,
         ),
       };

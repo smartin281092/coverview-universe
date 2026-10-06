@@ -43,8 +43,8 @@ Rendre tout le [brief I–III](../../references/coverview-partner-2026-10-02.md)
 8. **Reliquats** (entrée le 6 octobre) : gestion d'équipe du responsable, restrictions fines et réexamens automatiques (I.4), contrat non déclaré signalé par le client (I.17.2), audit incomplet → demande de complément (I.13), plus la photo et le profil d'organisation reportés de C2.
    - *C8a, livré le 6 octobre (`4e0616c`)* : habilitations (journal des décisions, organisation validée à part, restrictions, réexamens automatiques, file Admin).
    - *C8b, livré le 6 octobre (`c67b06f`)* : équipe du responsable (invitation, page Équipe, fin d'adhésion, réattribution dans l'équipe).
-   - *C8c, livré le 6 octobre* : photo de profil et profil d'organisation.
-   - *C8d* : contrat non déclaré signalé par le client.
+   - *C8c, livré le 6 octobre (`a78ff26`)* : photo de profil et profil d'organisation.
+   - *C8d, livré le 6 octobre* : contrat non déclaré signalé par le client (déclarations, vérification interne, rapprochement, issue, file dédiée).
    - *C8e* : analyse incomplète → demande de complément au client.
    - Correctif préalable, G-07 : l'action de notification `review_participation` (C6b) manquait au contrat.
 
@@ -466,6 +466,12 @@ architecture, backend, api, contracts, data, permissions, security, testing, fro
 | 46 | C8b complet | 11 suites touchées, puis suite API complète du commit dans `coverview-astra-suite3` ; typecheck, lint, depcruise, knip, seconde génération Drizzle | 11/11 fichiers, 85/85 tests ; 76/76 fichiers, 775/775 tests ; 0 erreur, knip identique à `main`, aucun écart | Commit `c67b06f` ; sauvegarde 29,1 Mo, avance rapide de `main`, migration 0078 locale (79 entrées) |
 | 47 | C8c garde des images | test PostgreSQL | Le déclencheur commun aux deux tables lisait `NEW.logo_document_id` sur une version de profil : PL/pgSQL résout tous les champs de l'expression | Branches imbriquées par table (migration 0079 jamais appliquée, corrigée en place) ; 2/2 |
 | 48 | C8c complet | 11 suites touchées (profils, justificatifs, conventions, documents, droits, images) ; typecheck des 7 espaces | 11/11 fichiers, 60/60 tests ; 0 erreur | — |
+| 49 | C8c suite complète | suite API complète du commit dans `coverview-astra-suite3` | 77/77 fichiers, 777/777 tests | Commit `a78ff26` ; sauvegarde 29,1 Mo, avance rapide de `main`, migration 0079 locale (80 entrées) |
+| 50 | C8d déclarations | tests PostgreSQL | Quatre échecs : contact déclaré attendu à tort, réponse du professionnel refusée par le schéma de réponse, date d'échange antérieure à la demande dans le test, `declared.contract` nul sur une demande ouverte | Attente corrigée ; schéma de réponse élargi ; date courante ; `coalesce` en SQL ; 3/3 |
+| 51 | C8d visibilité | relecture du plan en construisant l'écran Wallet | La vérification ouverte depuis Wallet était visible du client, alors que le plan la veut interne : son résumé et l'indicateur `verificationOpened` révélaient l'écart | Vérification interne quel que soit le canal ; la file Wallet ne retient plus l'auteur ; tests : 404 pour le client, liste Wallet intacte, aucun indicateur ; 3/3 |
+| 52 | C8d formulaire d'enquête | typecheck Wallet | Le `pipe` du formulaire refuse les valeurs par défaut du contrat (`insurer`, `signedOn`) | Première étape typée `z.custom<ClientFacts>()`, le contrat valide toujours en seconde étape |
+| 53 | Méthode | Prettier passé sur tous les fichiers modifiés | Quatre Markdown non formatés au départ (mémoire, README, couverture, qualité) recevaient des changements sans rapport | Textes repris depuis `HEAD` avec les seuls ajouts C8d (G-13) ; Prettier réservé aux fichiers déjà propres |
+| 54 | C8d complet | 7 suites touchées (confirmations, qualité, contrats qualité, droits, diffusion, profils, rendez-vous conjoints) ; typecheck des 7 espaces, lint, builds des 3 apps, depcruise, knip, seconde génération Drizzle | 7/7 fichiers, 39/39 tests ; 0 erreur ; knip : `declaredFacts` et `compareFacts` exportés sans usage, rendus locaux, puis identique à `main` ; aucun écart | — |
 
 ## Risques et mitigations
 

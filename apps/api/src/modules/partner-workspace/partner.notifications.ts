@@ -444,7 +444,7 @@ export async function syncLeadNotifications(db: Executor, leadId: string) {
   );
   if (["draft", "completed"].includes(row.stage)) {
     await db.query(
-      "update partner_notifications set resolved_at=now() where lead_id=$1 and resolved_at is null and action is distinct from 'conclusion' and kind not in ('policy_review','quality.pending','quality.survey','quality.survey_dependency','communication.consent')",
+      "update partner_notifications set resolved_at=now() where lead_id=$1 and resolved_at is null and action is distinct from 'conclusion' and kind not in ('policy_review','quality.pending','quality.survey','quality.survey_dependency','quality.reconciliation','communication.consent')",
       [leadId],
     );
     return;

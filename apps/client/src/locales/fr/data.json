@@ -81,10 +81,10 @@
         "origin": "Vos conseillers et vous."
       },
       "quality": {
-        "name": "Enquêtes et réclamations",
-        "purpose": "Mesurer la qualité du service et traiter vos réclamations.",
-        "recipients": "Les conseillers concernés et CoverView ; vos notes d’enquête entrent dans leur évaluation.",
-        "origin": "Vous."
+        "name": "Enquêtes, réclamations et déclarations",
+        "purpose": "Mesurer la qualité du service, traiter vos réclamations et vérifier le suivi de vos demandes à partir de ce que vous en déclarez.",
+        "recipients": "Les conseillers concernés et CoverView ; vos notes d’enquête entrent dans leur évaluation. Vos déclarations sur le déroulement d’une demande ne sont lues que par CoverView et, lors d’une vérification, par le professionnel concerné.",
+        "origin": "Vous, et CoverView lorsqu’il consigne un échange avec vous."
       },
       "notifications": {
         "name": "Notifications",
@@ -173,6 +173,6 @@
       "dispute": "réclamation en cours",
       "contest": "contestation en cours"
     },
-    "erasureRetained": "Les preuves protégées (journal des actions, échanges, enquêtes et réclamations, recommandations, analyses des professionnels) restent conservées jusqu’à ce que CoverView valide sa politique de conservation."
+    "erasureRetained": "Les preuves protégées (journal des actions, échanges, enquêtes, réclamations et déclarations, recommandations, analyses des professionnels) restent conservées jusqu’à ce que CoverView valide sa politique de conservation."
   }
 }

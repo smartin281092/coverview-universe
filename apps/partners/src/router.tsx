@@ -51,11 +51,13 @@ const quality = createRoute({
     caseId?: string | undefined;
     cursor?: string | undefined;
     state: "open" | "closed" | "all";
+    reason?: "undeclared_contract" | undefined;
   } => ({
     ...(typeof s.leadId === "string" ? { leadId: s.leadId } : {}),
     ...(typeof s.caseId === "string" ? { caseId: s.caseId } : {}),
     ...(typeof s.cursor === "string" ? { cursor: s.cursor } : {}),
     state: s.state === "closed" || s.state === "all" ? s.state : "open",
+    ...(s.reason === "undeclared_contract" ? { reason: s.reason } : {}),
   }),
   component: lazyRouteComponent(() => import("./pages/QualityPage"), "QualityPage"),
 });

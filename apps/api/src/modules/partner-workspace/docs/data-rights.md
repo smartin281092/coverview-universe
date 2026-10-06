@@ -17,10 +17,10 @@ Elle ne fournit ni durée légale, ni conformité, ni avis juridique (S-137).
 
 ## Consulter et exporter (C7a)
 
-| Surface                                                  | Copie                                                                                                                                                                                                                                                                                     | En plus de ce que l'espace montre                                                                                        |
-| -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| Wallet, compte → « Mes données »                         | Pour soi et ses profils gérés : demandes, rendez-vous, offres, polices finales, propositions de rendez-vous, rendez-vous conjoints, préférences, référents (sans la liste des candidats), communications, qualité, enquêtes, conclusions, mandats, relations, réouvertures, notifications | Coordonnées, contexte, repère d'objet, **provenance** et autorisation de transmission de ses propres demandes            |
-| Partner, « Mes données » (aussi pour un membre suspendu) | Adhésion, déclarations et leurs décisions, profil, évaluation et contestations, objectifs, rémunérations                                                                                                                                                                                  | Sa ligne dans chaque **classement de matching** conservé et son **évaluation d'apporteur**, jusqu'ici réservés à l'Admin |
+| Surface                                                  | Copie                                                                                                                                                                                                                                                                                                             | En plus de ce que l'espace montre                                                                                        |
+| -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Wallet, compte → « Mes données »                         | Pour soi et ses profils gérés : demandes, rendez-vous, offres, polices finales, propositions de rendez-vous, rendez-vous conjoints, préférences, référents (sans la liste des candidats), communications, qualité, enquêtes, déclarations du client, conclusions, mandats, relations, réouvertures, notifications | Coordonnées, contexte, repère d'objet, **provenance** et autorisation de transmission de ses propres demandes            |
+| Partner, « Mes données » (aussi pour un membre suspendu) | Adhésion, déclarations et leurs décisions, profil, évaluation et contestations, objectifs, rémunérations                                                                                                                                                                                                          | Sa ligne dans chaque **classement de matching** conservé et son **évaluation d'apporteur**, jusqu'ici réservés à l'Admin |
 
 - **Mêmes droits que l'écran.** La copie additionne les lectures que l'espace fait déjà, au même instant : rien n'est réimplémenté.
   - Une section refusée avec les droits courants est déclarée dans le manifeste (`unavailable`). Une borne atteinte l'est aussi (`truncated`, 100 demandes au plus).
@@ -34,7 +34,7 @@ Elle ne fournit ni durée légale, ni conformité, ni avis juridique (S-137).
   - contenu : auteur, session, surface, version du manifeste, compteurs, accès complet ou non ;
   - jamais le contenu de la copie ;
   - la ligne est immuable.
-- **Registre des traitements** `partner-data-register-v2` (v2 depuis C8 : décisions d'habilitation dans la catégorie adhésion).
+- **Registre des traitements** `partner-data-register-v3` (v2 depuis C8a : décisions d'habilitation dans la catégorie adhésion ; v3 depuis C8d : déclarations du client dans la catégorie qualité).
   - Pour chaque catégorie : finalité, destinataires, provenance et durée. La durée est toujours « non définie, à valider ».
   - Il nomme les traitements automatisés (orientation non validée, matching expliqué, réattribution bornée) et le responsable.
   - Il est affiché dans un panneau latéral et écrit dans chaque copie : en français dans le fichier (INTL-06), par les catalogues dans les écrans.
@@ -57,7 +57,7 @@ Elle ne fournit ni durée légale, ni conformité, ni avis juridique (S-137).
 | Accès complet            | accordé (14 jours), refusé                                                                     |
 | Autre                    | répondue, refusée                                                                              |
 
-- **Accès complet accordé.** Pendant 14 jours, la copie Wallet du demandeur inclut, pour ce sujet seulement, les notes internes, les tâches et le journal complet de ses demandes. Le manifeste indique `complete`.
+- **Accès complet accordé.** Pendant 14 jours, la copie Wallet du demandeur inclut, pour ce sujet seulement, les notes internes, les tâches, le journal complet de ses demandes et ce que CoverView a consigné de ses appels ou emails qualité (C8d). Le manifeste indique `complete`.
 - **Données.** `partner_data_requests` (migration 0075) :
   - transitions en avant, une révision par changement, figée après réponse ou retrait, jamais supprimée ;
   - des contraintes lient les issues aux types.

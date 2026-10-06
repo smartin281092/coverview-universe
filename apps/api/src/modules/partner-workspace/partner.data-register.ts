@@ -58,10 +58,11 @@ const wallet: Record<WalletDataCategory, { purpose: string; recipients: string; 
       origin: "Vos conseillers et vous.",
     },
     quality: {
-      purpose: "Mesurer la qualité du service et traiter vos réclamations.",
+      purpose:
+        "Mesurer la qualité du service, traiter vos réclamations et vérifier le suivi de vos demandes à partir de ce que vous en déclarez.",
       recipients:
-        "Les conseillers concernés et CoverView ; vos notes d'enquête entrent dans leur évaluation.",
-      origin: "Vous.",
+        "Les conseillers concernés et CoverView ; vos notes d'enquête entrent dans leur évaluation. Vos déclarations sur le déroulement d'une demande ne sont lues que par CoverView et, lors d'une vérification, par le professionnel concerné.",
+      origin: "Vous, et CoverView lorsqu'il consigne un échange avec vous.",
     },
     notifications: {
       purpose: "Vous informer des actions qui vous concernent.",

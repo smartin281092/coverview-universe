@@ -11,10 +11,17 @@ import {
   surveyPositiveSchema,
   surveyImprovementSchema,
   surveyResponseInputSchema,
+  type ClientFacts,
 } from "@coverview/contracts/partner-quality";
 import { partnerApi } from "../../partner-api";
+import { FactsFields, statesFacts, unknownFacts } from "./FactsFields";
 const schema = z
-  .object({ ...surveyResponseInputSchema.shape, confirmed: z.boolean() })
+  .object({
+    ...surveyResponseInputSchema.shape,
+    // Held as the form types it; the contract below validates it and applies its defaults.
+    facts: z.custom<ClientFacts>().optional(),
+    confirmed: z.boolean(),
+  })
   .pipe(surveyResponseInputSchema);
 export function SurveyForm({
   identity,
@@ -41,6 +48,7 @@ export function SurveyForm({
       improvements: [],
       comment: "",
       callbackRequested: false,
+      facts: unknownFacts,
       confirmed: false,
     },
   });
@@ -98,7 +106,12 @@ export function SurveyForm({
       className="space-y-5"
       onSubmit={(event) => {
         void form.handleSubmit((input) => {
-          attempt.current ??= { input, key: crypto.randomUUID() };
+          // The factual answers travel only when the client states something (C8d).
+          const { facts, ...rest } = input;
+          attempt.current ??= {
+            input: facts && statesFacts(facts) ? input : rest,
+            key: crypto.randomUUID(),
+          };
           void send();
         })(event);
       }}
@@ -172,6 +185,10 @@ export function SurveyForm({
               maxLength={2000}
               rows={4}
               className="w-full rounded-md border border-input bg-background p-3"
+            />
+            <FactsFields
+              value={form.watch("facts") ?? unknownFacts}
+              onChange={(facts) => form.setValue("facts", facts)}
             />
             {rating < 5 && (
               <label className="flex min-h-11 items-center gap-3">

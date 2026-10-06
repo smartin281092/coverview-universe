@@ -14,6 +14,31 @@ Prise en charge, suivi, demande d’explication, vérification, clôture ou réo
 
 Admin consulte le dossier et ses notes internes. Wallet ne lit que les dossiers partagés avec lui et les actions explicitement partagées. Le professionnel ne lit que ses propres signalements encore autorisés et leurs actions partagées au déclarant. Un dossier interne ne devient pas public par une case cochée sur une action. Les métadonnées privées de suite/échéance/intervenant sont masquées. Après transfert du sujet, les dossiers invalidés restent traitables par Admin, sans partage vers le nouveau propriétaire.
 
+## Déclarations du client et vérification (C8d)
+
+Décision C8-6 du [plan d'achèvement](../../../../../../roadmap/plans/partner-completion.plan.md), brief I.17.2 et I.19.2.
+
+- **Déclarations du client** `partner_client_confirmations` (migration 0080).
+  - Canaux : questions factuelles de l'enquête unique, sans sollicitation de plus ; déclaration depuis Wallet ; appel ou email consigné par CoverView (Admin).
+  - Faits : contact, rendez-vous, documents, contrat ; oui, non ou ne sait pas. Compagnie et date de signature facultatives, seulement pour un contrat déclaré conclu.
+  - Le serveur relève l'état déclaré de la demande au même instant. La ligne est immuable ; seule une invalidation de contexte la masque (transfert du sujet, effacement).
+  - Bornes : un formulaire Wallet resté à « ne sait pas » n'envoie rien ; trois déclarations Wallet par demande et par 24 h (`PARTNER_RATE_LIMITED`). Un contact qualité porte une date entre la création de la demande et maintenant, un résumé et une confirmation de fidélité.
+  - L'enquête stocke la note et les motifs à part ; les faits deviennent une déclaration.
+- **État déclaré** comparé : premier contact utile ou échange « atteint » ; rendez-vous tenu ; offre publiée ; résultat contrat, étape de signature à contrat émis, ou police finale active.
+- **Écarts** calculés par le serveur : contrat signalé non déclaré (priorité haute), contrat déclaré non confirmé, contact, rendez-vous ou documents non confirmés. « Ne sait pas » n'en crée aucun.
+- **Vérification.** Un écart ouvre un cas `verification` interne à CoverView, quel que soit le canal. Une seule est ouverte par demande ; les déclarations suivantes la rejoignent.
+  - Jamais une réclamation : aucun effet sur les évaluations, aucune écriture financière.
+  - Une déclaration ne vaut pas preuve d'encaissement d'une commission.
+- **Qui lit quoi.**
+  - Le client relit ses propres déclarations (enquête, Wallet) dans « Qualité et suivi ». Jamais l'état déclaré, les écarts, ni l'existence d'une vérification.
+  - CoverView lit les déclarations, l'état déclaré et les écarts dans le cas. La file filtre les « contrats potentiellement non déclarés » et compte les vérifications ouvertes.
+  - Le professionnel à qui un rapprochement est demandé lit le cas, les faits et l'état déclaré, jamais le commentaire libre du client.
+- **Rapprochement.** L'action Admin `request_reconciliation` s'adresse au responsable courant de la demande, et à lui seul (`PARTNER_INVALID_ASSIGNEE`), avec l'avis `quality.reconciliation`.
+  - Sa réponse reste entre lui et CoverView, jamais partagée au client. Elle résout l'avis.
+- **Clôture.** Une vérification liée à une déclaration se clôt avec une issue : confirmée, infondée ou non concluante (garde SQL). La clôture résout les avis de rapprochement ; aucune suite automatique.
+- **API.** `GET|POST /wallet/leads/:id/confirmations` ; `GET /partner/leads/:id/confirmations` et `POST /partner/leads/:id/quality-contacts` (Admin) ; filtre `reason=undeclared_contract` de la file Admin. Événement `quality.confirmation_recorded.v1`.
+- **Données.** L'export Wallet contient les déclarations du client (`confirmations`). Les contacts consignés par CoverView n'y figurent qu'avec un accès complet accordé (`internal.qualityContacts`). Registre v3. Conservation : catégorie retenue « enquêtes, réclamations et déclarations » jusqu'à une politique validée.
+
 ## Communications et accord préalable
 
 Les préférences de service sont confirmées et versionnées par le propriétaire Wallet ; aucune assimilation au marketing. Absence de choix = inconnu. Wallet demeure le canal de stockage interne. Le compte rendu d’un échange manuel exige canal, date réelle, résultat, résumé, source consultée, prochaine action et échéance. Contact atteint/reçu peut faire avancer une étape initiale vers `contacted` ; aucun contrat ni signature n’en est déduit.

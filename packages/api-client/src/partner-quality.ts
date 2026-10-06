@@ -1,5 +1,11 @@
 import { z } from "zod";
 import {
+  caseConfirmationSchema,
+  clientConfirmationsSchema,
+  qualityContactInputSchema,
+  walletConfirmationInputSchema,
+  type QualityContactInput,
+  type WalletConfirmationInput,
   qualityActionInputSchema,
   qualityCaseSchema,
   qualityClientReplySchema,
@@ -16,6 +22,31 @@ export function createQualityClient(request: PartnerRequest) {
   const root = (wallet: boolean) => (wallet ? "/wallet" : "/partner"),
     id = (value: string) => encodeURIComponent(value);
   return {
+    // Client statements about a request (C8d).
+    walletConfirmations: (leadId: string, signal?: AbortSignal) =>
+      request(`/wallet/leads/${id(leadId)}/confirmations`, clientConfirmationsSchema, signal),
+    confirmFromWallet: (leadId: string, input: WalletConfirmationInput, options: PartnerMutation) =>
+      request(
+        `/wallet/leads/${id(leadId)}/confirmations`,
+        clientConfirmationsSchema,
+        options.signal,
+        walletConfirmationInputSchema.parse(input),
+        options,
+      ),
+    leadConfirmations: (leadId: string, signal?: AbortSignal) =>
+      request(
+        `/partner/leads/${id(leadId)}/confirmations`,
+        z.object({ items: z.array(caseConfirmationSchema) }),
+        signal,
+      ),
+    recordQualityContact: (leadId: string, input: QualityContactInput, options: PartnerMutation) =>
+      request(
+        `/partner/leads/${id(leadId)}/quality-contacts`,
+        caseConfirmationSchema,
+        options.signal,
+        qualityContactInputSchema.parse(input),
+        options,
+      ),
     qualitySettings: (signal?: AbortSignal) =>
       request("/admin/partner/quality/settings", qualitySettingsSchema, signal),
     updateQualitySettings: (
@@ -30,7 +61,11 @@ export function createQualityClient(request: PartnerRequest) {
         options,
       ),
     qualityQueue: (
-      query: { state?: "open" | "closed" | "all"; cursor?: string },
+      query: {
+        state?: "open" | "closed" | "all";
+        cursor?: string;
+        reason?: "all" | "undeclared_contract";
+      },
       leadId?: string,
       wallet = false,
       signal?: AbortSignal,
