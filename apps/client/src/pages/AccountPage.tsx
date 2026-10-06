@@ -5,8 +5,13 @@ import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { AccountLayout } from "../features/identity/AccountLayout";
 import { AccountDevices } from "../features/identity/AccountDevices";
 import { AccountAuthorizations } from "../features/identity/AccountAuthorizations";
+import { AccountData } from "../features/identity/AccountData";
 import { LogoutActions } from "../features/identity/LogoutActions";
 import { api } from "../api";
+
+const tabs = ["devices", "authorizations", "data"] as const;
+const isTab = (value: string | null): value is (typeof tabs)[number] =>
+  tabs.some((tab) => tab === value);
 
 export function AccountPage() {
   const { t } = useTranslation();
@@ -14,8 +19,7 @@ export function AccountPage() {
   const navigate = useNavigate();
   const params = new URLSearchParams(searchStr);
   const requestedTab = params.get("tab");
-  const tab =
-    requestedTab === "devices" || requestedTab === "authorizations" ? requestedTab : "preferences";
+  const tab = isTab(requestedTab) ? requestedTab : "preferences";
   const authenticatorUrl = import.meta.env.DEV
     ? "http://127.0.0.1:4102/authenticator"
     : api.loginUrl("admin");
@@ -33,7 +37,7 @@ export function AccountPage() {
             onValueChange={(value) => {
               void navigate({
                 to: "/account",
-                search: value === "devices" || value === "authorizations" ? { tab: value } : {},
+                search: isTab(value) ? { tab: value } : {},
                 resetScroll: false,
               });
             }}
@@ -51,6 +55,9 @@ export function AccountPage() {
                 className="min-h-11 whitespace-normal px-2 text-xs sm:px-3 sm:text-sm"
               >
                 {t("accountTabs.authorizations")}
+              </TabsTrigger>
+              <TabsTrigger value="data" className="min-h-11 px-2 text-xs sm:px-4 sm:text-sm">
+                {t("accountTabs.data")}
               </TabsTrigger>
             </TabsList>
             <TabsContent value="preferences" className="space-y-7 text-base">
@@ -74,6 +81,9 @@ export function AccountPage() {
             </TabsContent>
             <TabsContent value="authorizations" className="text-base">
               <AccountAuthorizations key={identity.session.id} identity={identity} />
+            </TabsContent>
+            <TabsContent value="data" className="text-base">
+              <AccountData key={identity.session.id} identity={identity} />
             </TabsContent>
           </Tabs>
         )}

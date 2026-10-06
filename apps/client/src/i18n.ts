@@ -16,6 +16,7 @@ import identityPreview from "./locales/fr/identity-preview.json";
 import actions from "./locales/fr/actions.json";
 import lifecycle from "./locales/fr/lifecycle.json";
 import relationships from "./locales/fr/relationships.json";
+import data from "./locales/fr/data.json";
 
 void i18next.use(initReactI18next).init({
   resources: {
@@ -36,6 +37,7 @@ void i18next.use(initReactI18next).init({
       insurance,
       identityPreview,
       actions,
+      data,
     },
   },
   lng: "fr",

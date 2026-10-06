@@ -1,0 +1,103 @@
+{
+  "loading": "Chargement de vos données…",
+  "error": {
+    "title": "Vos données ne sont pas disponibles",
+    "description": "La lecture n’a pas abouti. Réessayez dans quelques instants.",
+    "retry": "Réessayer",
+    "retrying": "Nouvelle tentative…"
+  },
+  "copy": {
+    "title": "Votre copie",
+    "description": "Vos demandes de conseil, rendez-vous, offres, préférences, échanges, enquêtes et notifications, avec les coordonnées et la provenance de vos demandes, dans un fichier lisible par machine (JSON). Il est préparé à la demande et CoverView n’en garde pas de copie.",
+    "download": "Télécharger mes données",
+    "preparing": "Préparation de votre copie…",
+    "done_one": "Votre copie est téléchargée : {{count}} demande.",
+    "done_other": "Votre copie est téléchargée : {{count}} demandes.",
+    "partial": "Certaines parties n’ont pas pu être lues avec vos droits actuels : le fichier les signale.",
+    "last": "Dernière copie : {{date}}",
+    "never": "Aucune copie téléchargée pour l’instant.",
+    "tooMany": "Vous avez demandé plusieurs copies en peu de temps. Réessayez dans une heure.",
+    "failed": "Votre copie n’a pas pu être préparée. Réessayez dans quelques instants."
+  },
+  "register": {
+    "open": "Comprendre les traitements",
+    "close": "Fermer",
+    "title": "Ce que CoverView traite pour vos demandes de conseil",
+    "description": "Pour chaque catégorie : pourquoi, qui y accède et d’où viennent les données.",
+    "access": {
+      "self_service": "Dans votre copie",
+      "on_request": "Sur demande d’accès complet"
+    },
+    "labels": {
+      "purpose": "Pourquoi",
+      "recipients": "Qui y accède",
+      "origin": "D’où elles viennent"
+    },
+    "retentionTitle": "Durée de conservation",
+    "retention": "Non définie pour l’instant : CoverView doit encore valider sa politique de conservation, et aucune suppression automatique n’est active.",
+    "automatedTitle": "Traitements automatisés",
+    "automated": {
+      "orientation": "Orientation automatique des offres : un repère factuel, toujours signalé comme non validé et distinct de la recommandation de votre conseiller.",
+      "matching": "Proposition d’un conseiller par un classement expliqué, sans aucune donnée économique ; une personne décide et motive tout écart.",
+      "reassignment": "Réattribution automatique bornée si un conseiller ne donne pas suite dans le délai : le nouveau conseiller doit accepter, sinon CoverView reprend la demande."
+    },
+    "controllerTitle": "Responsable",
+    "controller": "CoverView Sàrl, Avenue Louis-Casaï 71, 1216 Cointrin",
+    "categories": {
+      "requests": {
+        "name": "Demandes de conseil",
+        "purpose": "Traiter vos demandes de conseil et en suivre l’avancement.",
+        "recipients": "Le conseiller responsable, les intervenants associés à la demande, CoverView.",
+        "origin": "Vous, votre conseiller, ou l’apporteur qui a transmis la demande."
+      },
+      "contact": {
+        "name": "Coordonnées et provenance",
+        "purpose": "Vous joindre au sujet de vos demandes et connaître leur provenance.",
+        "recipients": "Le conseiller responsable et les intervenants autorisés à vous contacter, CoverView.",
+        "origin": "Vous, ou l’apporteur de la demande : la source est indiquée pour chaque demande."
+      },
+      "appointments": {
+        "name": "Rendez-vous",
+        "purpose": "Organiser vos rendez-vous et réserver le temps convenu.",
+        "recipients": "Les conseillers concernés, CoverView.",
+        "origin": "Vous et vos conseillers."
+      },
+      "offers": {
+        "name": "Offres, choix et signatures",
+        "purpose": "Présenter et comparer des offres, consigner vos choix, vos questions et vos signatures.",
+        "recipients": "Les conseillers concernés, CoverView.",
+        "origin": "Vos conseillers, les documents des compagnies d’assurance et vous."
+      },
+      "preferences": {
+        "name": "Préférences et référents",
+        "purpose": "Respecter vos préférences de langue, de mode de rendez-vous, de région et de conseiller référent.",
+        "recipients": "Les conseillers concernés, CoverView.",
+        "origin": "Vous."
+      },
+      "communications": {
+        "name": "Échanges et enregistrements",
+        "purpose": "Consigner les échanges et, uniquement avec votre accord, les enregistrements et leurs transcriptions.",
+        "recipients": "Les conseillers concernés, CoverView.",
+        "origin": "Vos conseillers et vous."
+      },
+      "quality": {
+        "name": "Enquêtes et réclamations",
+        "purpose": "Mesurer la qualité du service et traiter vos réclamations.",
+        "recipients": "Les conseillers concernés et CoverView ; vos notes d’enquête entrent dans leur évaluation.",
+        "origin": "Vous."
+      },
+      "notifications": {
+        "name": "Notifications",
+        "purpose": "Vous informer des actions qui vous concernent.",
+        "recipients": "Vous.",
+        "origin": "CoverView."
+      },
+      "internal": {
+        "name": "Notes internes et tâches",
+        "purpose": "Organiser le travail des intervenants : notes internes, tâches et journal de la demande.",
+        "recipients": "Les intervenants de la demande, CoverView.",
+        "origin": "Vos conseillers et CoverView."
+      }
+    }
+  }
+}

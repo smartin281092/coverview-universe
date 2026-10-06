@@ -151,6 +151,8 @@ import { registerRecommendationRoutes } from "./partner.recommendations.routes.j
 import { registerJointAppointmentRoutes } from "./partner.joint-appointments.routes.js";
 import { clientInvitationMessage } from "./partner.invitation-template.js";
 import { createLiveHub } from "./partner.live.js";
+import { createDataRightsOperations } from "./partner.data-rights.js";
+import { registerDataRightsRoutes } from "./partner.data-rights.routes.js";
 export { PartnerError } from "./partner.policy.js";
 
 export function registerPartnerWorkspace(
@@ -240,6 +242,7 @@ export function registerPartnerWorkspace(
   registerInvitationRoutes(server, repository, actor);
   registerRecommendationRoutes(server, repository, actor);
   registerJointAppointmentRoutes(server, repository, actor);
+  registerDataRightsRoutes(server, createDataRightsOperations(database.pool, repository), actor);
   if (mailer) {
     // MAIL-03 preview, local adapters only, with fictitious variables. Same loopback guard as the
     // local personas route: binding alone does not stop DNS rebinding or a proxy.

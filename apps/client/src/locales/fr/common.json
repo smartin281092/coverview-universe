@@ -4,7 +4,8 @@
     "label": "Rubriques du compte",
     "preferences": "Préférences",
     "devices": "Appareils",
-    "authorizations": "Autorisations"
+    "authorizations": "Autorisations",
+    "data": "Mes données"
   },
   "identity": {
     "logoutCheckingTitle": "Votre déconnexion",

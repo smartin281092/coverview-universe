@@ -495,7 +495,8 @@
     "marketplace": "Marketplace",
     "commercial": "Conditions commerciales",
     "remunerations": "Accords et rémunérations",
-    "publicProfile": "Profil public"
+    "publicProfile": "Profil public",
+    "data": "Mes données"
   },
   "login": "Se connecter",
   "loginTitle": "Votre réseau. Vos affaires.",

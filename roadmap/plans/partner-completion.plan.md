@@ -217,16 +217,90 @@ Il manque **un même rendez-vous réunissant plusieurs spécialistes**. Concepti
 - Le revenu CoverView existe pour les affaires Marketplace (`coverview_revenue`). Il est affiché au pilotage du réseau par période, pour le réseau et par branche. Le détail par Lead et par partenaire reste dans les statistiques (périmètre organisation), ouvertes depuis l'aperçu avec la même période.
 - Aucune donnée de coûts n'existe : la rentabilité n'est pas calculée et l'interface le dit. Aucun coût n'est supposé.
 
-#### C7 — Brouillon (non exécuté, à fixer à l'entrée de la tranche)
+#### C7 — Conception retenue (avant code)
 
-- **Périmètre (I.20, S-130/S-131).**
-  - Consultation et export par le client de ses données Partner : demandes, rendez-vous, offres, préférences, interlocuteurs.
-  - Droit d'accès des professionnels à leurs évaluations et scores internes [R5].
-  - Rectification suivie par CoverView.
-  - Conservation et suppression contrôlée : aucune durée légale inventée, purge inactive tant qu'une politique validée n'existe pas.
-  - Cloisonnement en base des lectures Partner.
-- **Question bloquante** `bible.question.006` : matrice d'export et de conservation. Défaut proposé sous PROG-23 : matrice par catégorie, téléchargement authentifié temporaire, purges désactivées jusqu'à validation.
-- **Session recommandée** : Claude Code, Claude Opus 5.5, effort max.
+Entrée de tranche le 6 octobre 2026, instruction « Continue avec C7 ». Session réelle : Claude Code, Claude Opus 5.5, effort max.
+
+Découpage en trois sous-étapes commitées séparément :
+- **C7a** consulter et exporter ses données, scores internes (R5) ;
+- **C7b** demandes relatives aux données ;
+- **C7c** effacement contrôlé.
+
+Périmètre : le programme Partner seul. S-130 et S-131 restent ouverts pour le reste de la plateforme (identité, documents, demandes d'offre, conversations hors Partner, sauvegardes).
+
+**Décision déléguée (PROG-23)**
+- **ref** : `bible.question.006`, périmètre Partner.
+- **question** : matrice d'export et de conservation des données Partner.
+- **answer** : matrice v1 par catégorie.
+  - Libre-service : ce que l'espace montre déjà, plus, pour ses propres demandes, les coordonnées, le contexte transmis et la provenance.
+  - Notes et tâches internes des intervenants : par une demande d'accès complet examinée par CoverView.
+  - Téléchargement authentifié, généré à la demande, sans copie stockée.
+  - Conservation : aucune durée définie, purge automatique non activée.
+  - Effacement : sur demande, décidé par l'Admin sous MFA après aperçu, preuves et droits économiques conservés et déclarés.
+- **evidence** :
+  - brief I.20 et [R5] ;
+  - défauts de S-130 et S-131 ;
+  - LAUNCH-03 et DATA-14 ;
+  - l'existant :
+    - aucun export, aucune demande suivie, aucun effacement Partner ;
+    - stockage objet chiffré par l'application, donc aucune URL présignée possible ;
+    - un téléchargement de document déjà servi par l'API et audité.
+
+Cette décision ne fournit ni durée légale, ni conformité, ni avis juridique : la politique de conservation reste à faire valider avant toute purge (S-131, S-137).
+
+**Écart assumé : pas de cloisonnement en base (RLS) dans C7.**
+- Le projet entier écarte RLS (DEVRAIT DATA-09, justifié à S-000b et dans le module identité). La visibilité Partner est une seule politique SQL (`partner.policy.ts`), injectée dans toutes les lectures.
+- Un RLS utile exigerait un rôle d'exécution distinct et un contexte par requête sur 78 tables et environ 31 000 lignes. Un RLS partiel donnerait une fausse assurance.
+- C7 ajoute à la place des tests d'isolation sur chaque nouvelle lecture : autre client, profil transféré, autre professionnel, session révoquée.
+- RLS reste une tranche transverse à part.
+
+**C7a — Consulter et exporter ses données.**
+- **Registre des traitements v1** dans les contrats. Il est affiché dans Wallet et Partner et repris dans chaque export. Par catégorie : finalité, destinataires, provenance, durée.
+  - La durée est toujours « non définie, politique à valider ».
+  - Il liste aussi les traitements automatisés existants (`orientation-v1`, matching expliqué, réattribution automatique bornée), le responsable (CoverView Sàrl) et le moyen d'exercer ses droits.
+  - Faits du produit, pas un texte juridique.
+- **Wallet, « Mes données »** (onglet du compte), pour soi et ses profils gérés :
+  - les compteurs par catégorie et le registre ;
+  - l'export JSON lisible par machine.
+- **Contenu de l'export Wallet** : la composition des lectures Wallet existantes, avec exactement les mêmes droits.
+  - Par demande : le détail Wallet, l'historique des offres, les polices finales, les propositions de rendez-vous, les communications, la qualité et les enquêtes.
+  - En plus : le bloc « coordonnées et provenance » de ses propres demandes (email, téléphone, langue, contexte, repère d'objet, source, autorisation de transmission). Ce bloc est aujourd'hui masqué au client.
+  - Puis les préférences, les référents et les notifications.
+  - Bornes : 100 demandes au plus, chaque liste à sa borne existante. Une troncature est déclarée dans le manifeste, jamais silencieuse.
+- **Partner, « Mes données »** du professionnel, et export :
+  - candidature et adhésion, déclarations et décisions les concernant, profil public, évaluations et contestations ;
+  - **les scores internes jusqu'ici réservés à l'Admin** (R5) : leur ligne dans chaque classement de matching (rang, critères, réserves, exclusion et motif, choisi ou non, sans les autres candidats ni le contenu du dossier), et leur évaluation d'apporteur.
+- **Téléchargement** :
+  - session authentifiée de la surface et contrôle de l'hôte ;
+  - généré à la demande, sans copie stockée, en pièce jointe sans cache ;
+  - limité à 6 par heure ;
+  - chaque export laisse une **preuve de traitement** immuable `partner_data_exports` : auteur, session, surface, version du manifeste, sujets, compteurs, accès complet ou non. Aucun contenu.
+
+**C7b — Demandes relatives aux données.**
+- **Types et dépôt** : rectification, effacement, accès complet ou autre (opposition, limitation, question), déposés depuis Wallet (pour soi ou un profil géré) ou depuis Partner (pour soi).
+  - Le dépôt porte : catégorie de la matrice, demande concernée facultative (visible par le demandeur et du même sujet), message de 2000 caractères au plus.
+  - 5 demandes ouvertes au plus par personne ; retrait possible tant qu'aucune réponse n'est donnée.
+- **Traitement par l'Admin sous MFA** : file filtrable, prise en charge, réponse motivée.
+  - Rectification et « autre » : faite, partiellement faite ou refusée. Une correction elle-même passe par les parcours existants, déclarations et contestations comprises.
+  - Accès complet : accordé ou refusé. S'il est accordé, l'export du demandeur inclut pendant 14 jours les notes, tâches et journal interne de ses demandes.
+- **Données** : table `partner_data_requests`. Les transitions vont en avant seulement ; tout est immuable après réponse ou retrait. La réponse est visible du demandeur dans « Mes données ».
+- Aucun email ni centre de notifications : `partner_notifications` exige un Lead.
+
+**C7c — Effacement contrôlé (client Wallet).**
+- **Aperçu calculé par le serveur**, pour le sujet de la demande, demande par demande :
+  - **en cours** : bloque, à clôturer d'abord par les parcours existants ;
+  - **conservée entière**, encore reliée au compte, avec son motif : conclusion ou signature, droits économiques ou mandat, litige ou réclamation ouverte, contestation en cours ;
+  - **effaçable**.
+- **Exécution** : par l'Admin sous MFA, avec une clé d'idempotence, l'empreinte de l'aperçu et une attestation qu'aucune autre obligation de conservation ne s'applique. Une transaction unique traite chaque demande effaçable :
+  - nom, titre, objet, contexte, coordonnées, repère d'objet, source, attente, résultat, motif et prochaine action effacés ;
+  - textes du journal, tâches et lieux de rendez-vous effacés ;
+  - données importées de la demande d'offre et email d'invitation effacés ; la garde de l'invitation n'admet cette seule modification que dans la transaction d'effacement ;
+  - préférences et notifications Wallet supprimées ;
+  - lien avec le compte et le profil rompu, `client_erased_at` daté.
+  - Les référents du sujet sont supprimés quand plus aucune demande conservée ne le concerne.
+- **Ce qui reste, déclaré dans la réponse et le registre** : les preuves protégées par les gardes existantes (propositions de rendez-vous, comptes rendus, enregistrements et transcriptions, enquêtes et réclamations, motifs de recommandation, analyses professionnelles, classements). Elles restent conservées, sans lien avec le compte, jusqu'à une politique validée (S-131).
+  - La demande d'offre d'origine, les documents et le compte relèvent d'autres modules (S-131).
+- **Purge automatique : non implémentée.** Aucune durée n'est définie, et le registre l'affiche.
 
 ### B — Recette réelle et simplification (après C)
 

@@ -582,7 +582,9 @@ export function createProfileOperations(pool: Pool, transaction: Mutation) {
       }),
     referrerEvaluation: (actor: PartnerActor, userId: string) =>
       read(actor, async (tx, now) => {
-        if (!actor.administrator || actor.wallet) fail("PARTNER_ACCESS_DENIED", 403);
+        // An internal score stays open to the person it describes (R5, C7a).
+        if (actor.wallet || (!actor.administrator && actor.userId !== userId))
+          fail("PARTNER_ACCESS_DENIED", 403);
         const member = await membership(tx, userId);
         if (!member) fail("PARTNER_NOT_FOUND", 404);
         const { from, to } = period(now);

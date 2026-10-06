@@ -151,6 +151,11 @@ const publicProfile = createRoute({
   path: "/profile/public",
   component: lazyRouteComponent(() => import("./pages/PublicProfilePage"), "PublicProfilePage"),
 });
+const data = createRoute({
+  getParentRoute: () => root,
+  path: "/data",
+  component: lazyRouteComponent(() => import("./pages/DataPage"), "DataPage"),
+});
 const applications = createRoute({
   getParentRoute: () => root,
   path: "/applications",
@@ -190,6 +195,7 @@ export const router = createRouter({
     lead,
     profile,
     publicProfile,
+    data,
     applications,
     clients,
     tasks,

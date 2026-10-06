@@ -1,0 +1,158 @@
+{
+  "title": "Mes données",
+  "description": "Ce que CoverView traite à votre sujet dans le programme Partner, vos scores internes et votre copie.",
+  "loading": "Chargement de vos données…",
+  "error": {
+    "title": "Vos données ne sont pas disponibles",
+    "description": "La lecture n’a pas abouti. Réessayez dans quelques instants.",
+    "retry": "Réessayer",
+    "retrying": "Nouvelle tentative…"
+  },
+  "copy": {
+    "title": "Votre copie",
+    "description": "Votre candidature, vos déclarations et leurs décisions, votre profil, vos évaluations, vos scores internes, vos objectifs et vos dossiers de rémunération, dans un fichier lisible par machine (JSON). Il est préparé à la demande et CoverView n’en garde pas de copie.",
+    "download": "Télécharger mes données",
+    "preparing": "Préparation de votre copie…",
+    "done": "Votre copie est téléchargée.",
+    "partial": "Certaines parties n’ont pas pu être lues avec vos droits actuels : le fichier les signale.",
+    "last": "Dernière copie : {{date}}",
+    "never": "Aucune copie téléchargée pour l’instant.",
+    "tooMany": "Vous avez demandé plusieurs copies en peu de temps. Réessayez dans une heure.",
+    "failed": "Votre copie n’a pas pu être préparée. Réessayez dans quelques instants."
+  },
+  "scores": {
+    "title": "Vos scores internes",
+    "description": "Ils ne sont pas publics, mais ils vous concernent : vous pouvez les consulter.",
+    "evaluationLink": "Voir mon évaluation",
+    "matchingTitle": "Classements de matching",
+    "matchingDescription": "Votre ligne dans chaque classement conservé avec une décision d’attribution, sans les autres personnes ni le contenu du dossier.",
+    "empty": "Vous n’apparaissez dans aucun classement conservé.",
+    "truncated": "Seuls vos 100 classements les plus récents sont conservés dans cette vue.",
+    "columns": {
+      "date": "Date",
+      "category": "Catégorie",
+      "rank": "Rang",
+      "decision": "Décision",
+      "criteria": "Critères"
+    },
+    "heading": "{{category}} · {{rank}}",
+    "meta": "{{date}} · {{kind}} · {{decision}}",
+    "metaFirst": "{{date}} · {{kind}} · {{decision}} · premier proposé",
+    "rank": "rang {{rank}}",
+    "outside": "hors liste",
+    "chosen": "choisi",
+    "notChosen": "non choisi",
+    "kind": {
+      "manual": "décision humaine",
+      "automatic": "réattribution automatique"
+    },
+    "criteriaOpen": "Voir les critères",
+    "criteriaTitle": "Vos critères dans ce classement",
+    "criteriaNone": "Vous avez été choisi hors de la liste proposée : aucun critère n’a été conservé pour vous.",
+    "page": "Page {{page}} sur {{pages}}",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "criteria": {
+      "competence": "Compétence",
+      "convention": "Convention",
+      "language": "Langue",
+      "region": "Canton",
+      "mode": "Mode de rendez-vous",
+      "availability": "Disponibilité",
+      "capacity": "Capacité",
+      "referent": "Référent du client",
+      "relationship": "Déjà intervenu pour ce client",
+      "activeLeads": "Dossiers actifs",
+      "recentAssignments": "Attributions sur 30 jours"
+    },
+    "values": {
+      "category": "Validée pour la catégorie",
+      "limited": "Limitée",
+      "matches": "Correspond au souhait",
+      "unknown": "Non déclarée",
+      "not_requested": "Pas de souhait du client",
+      "not_applicable": "Sans objet",
+      "differs": "Différent du souhait",
+      "upcoming": "Disponible dans les 14 jours",
+      "none_upcoming": "Aucune disponibilité dans les 14 jours",
+      "undeclared": "Non déclarée",
+      "open": "Ouverte",
+      "case_by_case": "Au cas par cas",
+      "yes": "Oui",
+      "no": "Non"
+    },
+    "referrerTitle": "Évaluation de vos demandes transmises",
+    "referrerPeriod": "Période du {{from}} au {{to}}",
+    "referrer": {
+      "created": "Demandes transmises",
+      "authorized": "Avec autorisation de transmission",
+      "duplicates": "Doublons",
+      "invalid": "Demandes invalides",
+      "categoryChanged": "Catégorie corrigée par un autre intervenant"
+    }
+  },
+  "register": {
+    "open": "Comprendre les traitements",
+    "close": "Fermer",
+    "title": "Ce que CoverView traite à votre sujet",
+    "description": "Pour chaque catégorie : pourquoi, qui y accède et d’où viennent les données. Toutes figurent dans votre copie.",
+    "labels": {
+      "purpose": "Pourquoi",
+      "recipients": "Qui y accède",
+      "origin": "D’où elles viennent"
+    },
+    "retentionTitle": "Durée de conservation",
+    "retention": "Non définie pour l’instant : CoverView doit encore valider sa politique de conservation, et aucune suppression automatique n’est active.",
+    "automatedTitle": "Traitements automatisés",
+    "automated": {
+      "matching": "Proposition d’un conseiller par un classement expliqué, sans aucune donnée économique ; une personne décide et motive tout écart.",
+      "reassignment": "Réattribution automatique bornée si un conseiller ne donne pas suite dans le délai : le nouveau conseiller doit accepter, sinon CoverView reprend la demande."
+    },
+    "controllerTitle": "Responsable",
+    "controller": "CoverView Sàrl, Avenue Louis-Casaï 71, 1216 Cointrin",
+    "categories": {
+      "membership": {
+        "name": "Candidature et habilitation",
+        "purpose": "Examiner votre candidature et gérer votre habilitation.",
+        "recipients": "CoverView.",
+        "origin": "Vous."
+      },
+      "declarations": {
+        "name": "Déclarations et décisions",
+        "purpose": "Vérifier vos compétences, conventions, disponibilités, capacité et pratique avant toute attribution.",
+        "recipients": "CoverView ; un résumé autorisé aux clients concernés.",
+        "origin": "Vous et vos justificatifs."
+      },
+      "profile": {
+        "name": "Profil public",
+        "purpose": "Publier votre profil après examen.",
+        "recipients": "Les clients que vous servez, les membres Partner, CoverView.",
+        "origin": "Vous."
+      },
+      "evaluations": {
+        "name": "Évaluations",
+        "purpose": "Mesurer l’expérience client, la qualité opérationnelle et la fiabilité économique.",
+        "recipients": "Vous et CoverView ; la note publique à partir de 5 avis.",
+        "origin": "Enquêtes des clients, suivi des demandes, réclamations et dossiers économiques."
+      },
+      "internal_scores": {
+        "name": "Scores internes",
+        "purpose": "Proposer un conseiller par un classement expliqué, et évaluer les demandes transmises par les apporteurs.",
+        "recipients": "CoverView et vous.",
+        "origin": "Vos déclarations validées, votre charge observée et les demandes que vous avez transmises."
+      },
+      "goals": {
+        "name": "Objectifs",
+        "purpose": "Suivre les objectifs qui vous sont fixés.",
+        "recipients": "Vous, votre responsable, CoverView.",
+        "origin": "CoverView et votre responsable."
+      },
+      "remunerations": {
+        "name": "Rémunérations",
+        "purpose": "Établir et suivre vos droits économiques.",
+        "recipients": "Vous, CoverView.",
+        "origin": "Dossiers et accords économiques."
+      }
+    }
+  }
+}

@@ -140,8 +140,10 @@ const accountRoute = createRoute({
   path: "/account",
   validateSearch: (
     search: Record<string, unknown>,
-  ): { tab?: "devices" | "authorizations"; authError?: "callback" } => ({
-    ...(search.tab === "devices" || search.tab === "authorizations" ? { tab: search.tab } : {}),
+  ): { tab?: "devices" | "authorizations" | "data"; authError?: "callback" } => ({
+    ...(search.tab === "devices" || search.tab === "authorizations" || search.tab === "data"
+      ? { tab: search.tab }
+      : {}),
     ...(search.authError === "callback" ? { authError: "callback" as const } : {}),
   }),
   component: AccountPage,

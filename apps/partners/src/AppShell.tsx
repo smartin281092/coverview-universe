@@ -12,6 +12,7 @@ import {
   ArrowUpRight,
   Menu,
   Bell,
+  FileDown,
 } from "lucide-react";
 import { Button, Sheet, SheetContent, SheetHeader, SheetTitle } from "@coverview/ui";
 import { useState } from "react";
@@ -32,6 +33,7 @@ const links = [
   { to: "/agenda", label: "agenda", icon: CalendarDays },
   { to: "/profile", label: "profile", icon: UserRound },
   { to: "/profile/public", label: "publicProfile", icon: UserRound },
+  { to: "/data", label: "data", icon: FileDown },
 ] as const;
 function Workspace() {
   const { t } = useTranslation(),
@@ -49,8 +51,12 @@ function Workspace() {
       <nav aria-label={t("navigation")} className="space-y-1">
         {links
           .filter(
+            // The right of access does not depend on being operational (C7).
             (link) =>
-              context.operational || link.label === "profile" || link.label === "remunerations",
+              context.operational ||
+              link.label === "profile" ||
+              link.label === "remunerations" ||
+              link.label === "data",
           )
           .map(({ to, label, icon: Icon }) => (
             <Link
