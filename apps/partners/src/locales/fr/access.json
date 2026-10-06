@@ -1,0 +1,110 @@
+{
+  "filters": {
+    "label": "Filtrer les candidatures",
+    "all": "Toutes",
+    "pending": "À examiner ({{count}})",
+    "reviews": "Réexamens à 30 jours ({{count}})",
+    "restricted": "Restrictions ({{count}})",
+    "proofs": "Justificatifs à échéance ({{count}})"
+  },
+  "empty": {
+    "all": "Aucune candidature",
+    "pending": "Aucune candidature à examiner",
+    "reviews": "Aucun réexamen dans les 30 prochains jours",
+    "restricted": "Aucune restriction en vigueur",
+    "proofs": "Aucun justificatif à échéance dans les 30 prochains jours"
+  },
+  "flags": {
+    "review_lapsed": "Réexamen échu le {{date}}",
+    "review_soon": "Réexamen le {{date}}",
+    "organizationReview_lapsed": "Organisation : réexamen échu le {{date}}",
+    "organizationReview_soon": "Organisation : réexamen le {{date}}",
+    "restricted": "Activités restreintes",
+    "restrictionReview_lapsed": "Restriction à réexaminer depuis le {{date}}",
+    "restrictionReview_soon": "Restriction à réexaminer le {{date}}",
+    "proof_expired": "{{kind}} {{category}} : échu le {{date}}",
+    "proof_soon": "{{kind}} {{category}} : valable jusqu’au {{date}}",
+    "proofCompany": "{{category}} ({{company}})",
+    "organizationState": "Organisation : {{state}}",
+    "activeLeads_one": "{{count}} demande en cours",
+    "activeLeads_other": "{{count}} demandes en cours"
+  },
+  "proofKind": {
+    "competence": "Compétence",
+    "convention": "Convention"
+  },
+  "actions": {
+    "restrictions": "Restrictions",
+    "organization": "Organisation",
+    "history": "Historique",
+    "dossiers": "Déclarations et justificatifs"
+  },
+  "restrictions": {
+    "title": "Restreindre des activités",
+    "description": "Une restriction arrête les nouveaux engagements. Les demandes en cours continuent avec cette personne ; pour les lui retirer, suspendez-la.",
+    "newLeads": "Ne plus lui confier de nouvelle demande : matching, attribution, transfert, co-conseil et réservation",
+    "leadCreation": "Ne plus transmettre de nouvelle demande",
+    "marketplace": "Ni publication, ni candidature, ni réservation sur la marketplace",
+    "categories": "Catégories exclues des nouvelles demandes",
+    "reviewAt": "Date de réexamen de la restriction (facultative)",
+    "reason": "Motif, communiqué à la personne",
+    "consequences_one": "{{count}} demande en cours continue avec cette personne.",
+    "consequences_other": "{{count}} demandes en cours continuent avec cette personne.",
+    "lift": "Tout décocher lève la restriction ; le motif reste obligatoire.",
+    "submit": "Enregistrer la restriction",
+    "current": "Restrictions en vigueur",
+    "none": "Aucune restriction",
+    "kinds": {
+      "newLeads": "Nouvelles demandes",
+      "leadCreation": "Transmission de demandes",
+      "marketplace": "Marketplace",
+      "categories": "Catégories exclues : {{list}}"
+    },
+    "reviewAtValue": "À réexaminer le {{date}}"
+  },
+  "organization": {
+    "title": "Organisation {{name}}",
+    "description": "Une décision propre à l’organisation. La bloquer retire l’accès opérationnel à tous ses membres ; leurs propres décisions ne changent pas.",
+    "current": "Décision actuelle",
+    "members": "Membres",
+    "state": "Décision",
+    "reason": "Motif, communiqué aux membres",
+    "reviewDueAt": "Date de réexamen de l’organisation (facultative)",
+    "reviewDue": "Réexamen le {{date}}",
+    "consequences_one": "Si l’organisation n’est pas validée, {{count}} demande en cours revient à CoverView pour réattribution.",
+    "consequences_other": "Si l’organisation n’est pas validée, {{count}} demandes en cours reviennent à CoverView pour réattribution.",
+    "submit": "Enregistrer la décision",
+    "decisions": "Décisions sur l’organisation"
+  },
+  "history": {
+    "title": "Historique des décisions",
+    "empty": "Aucune décision enregistrée depuis la mise en place du journal, le 6 octobre 2026.",
+    "kind": {
+      "member_review": "Examen de la candidature",
+      "organization_review": "Décision sur l’organisation",
+      "restriction": "Restriction",
+      "automatic_review": "Réexamen automatique",
+      "team_removal": "Fin d’adhésion décidée par le responsable"
+    },
+    "author": {
+      "coverview": "CoverView",
+      "manager": "Responsable de l’organisation",
+      "system": "Automatique"
+    },
+    "meta": "{{author}}, le {{date}}",
+    "automatic": "La date de réexamen du {{date}} est atteinte : le dossier est à mettre à jour et à confirmer.",
+    "reviewDue": "Réexamen le {{date}}",
+    "roles": "Habilitations : {{list}}"
+  },
+  "member": {
+    "reviewSoon": "Votre habilitation sera réexaminée le {{date}}. À cette date, l’accès opérationnel cesse tant que CoverView ne l’a pas renouvelée.",
+    "organizationReviewSoon": "L’habilitation de votre organisation sera réexaminée le {{date}}.",
+    "reopened": "Votre habilitation est arrivée à échéance. Mettez à jour et confirmez votre candidature : CoverView la réexaminera.",
+    "restricted": "CoverView a restreint certaines de vos activités. Vos demandes en cours continuent.",
+    "history": "Historique de mes décisions"
+  },
+  "review": {
+    "validateOrganization": "Valider aussi l’organisation {{name}}, encore à examiner",
+    "organizationElsewhere": "L’organisation se décide à part, depuis le bouton « Organisation »."
+  }
+}

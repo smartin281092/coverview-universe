@@ -490,8 +490,15 @@ export function createDataRightsOperations(pool: Pool, repository: Repository) {
         repository.economyCases(actor),
       );
       cut(collected, "remunerations", remunerations?.nextCursor);
+      const decisions =
+        (
+          await section(collected, "membership.decisions", () =>
+            repository.accessDecisions(actor, me),
+          )
+        )?.items ?? [];
       const result = {
         context,
+        decisions,
         profile: await section(collected, "profile", () => repository.profileDossier(actor, me)),
         evaluation: await section(collected, "evaluation", () => repository.evaluation(actor, me)),
         referrer: await section(collected, "referrer", () =>
@@ -518,7 +525,7 @@ export function createDataRightsOperations(pool: Pool, repository: Repository) {
         remunerations,
       };
       const counts = {
-        membership: context.application ? 1 : 0,
+        membership: (context.application ? 1 : 0) + decisions.length,
         declarations:
           competence.length +
           convention.length +

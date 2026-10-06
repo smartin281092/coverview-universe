@@ -45,9 +45,10 @@ export function CommercialConditionsPage() {
       <header className="space-y-3">
         <h1 className="cv-app-heading">{t("termsTitle")}</h1>
         <p className="max-w-3xl text-muted-foreground">{t("termsIntro")}</p>
-        {session.context.canCreate && session.context.application && (
-          <Button onClick={() => setCreate(true)}>{t("newTerms")}</Button>
-        )}
+        {session.context.operational &&
+          session.context.application?.grantedRoles.some(
+            (r) => r === "referrer" || r === "advisor",
+          ) && <Button onClick={() => setCreate(true)}>{t("newTerms")}</Button>}
       </header>
       {create && <CommercialEditor onClose={() => setCreate(false)} />}
       {condition && (

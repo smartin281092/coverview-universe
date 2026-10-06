@@ -8,7 +8,7 @@ import {
 import type { partnerLeads } from "./partner.schema.js";
 import { camel, date, fail, visible, type Executor, type PartnerActor } from "./partner.policy.js";
 import { event, newId, type PartnerAuditActor } from "./partner.audit.js";
-import { handoffWork, requireAssignee } from "./partner.participants.js";
+import { handoffWork, requireAssignee, requireNewEngagement } from "./partner.participants.js";
 import { notifyCollaboration, syncLeadNotifications } from "./partner.notifications.js";
 type LeadRow = typeof partnerLeads.$inferSelect;
 
@@ -65,7 +65,7 @@ export async function proposeCollaboration(
     actor.userId === terms.targetId
   )
     fail("PARTNER_INVALID_ASSIGNEE");
-  await requireAssignee(tx, lead, terms.targetId, actor);
+  await requireNewEngagement(tx, lead, terms.targetId, actor);
   if (!(lead.details as { transmissionAuthorized: boolean }).transmissionAuthorized)
     fail("PARTNER_ACTION_REQUIRED");
   const exists = await tx.query(
@@ -177,7 +177,7 @@ export async function respondCollaboration(
       lead.category !== proposal.category
     )
       fail("PARTNER_INVALID_TRANSITION");
-    await requireAssignee(tx, lead, terms.targetId, actor);
+    await requireNewEngagement(tx, lead, terms.targetId, actor);
     // The proposer must still control the Lead or hold the actual admin permission.
     const permitted = await tx.query(
       "select id from identity_users where id=$1 and not global_revocation_pending for share",

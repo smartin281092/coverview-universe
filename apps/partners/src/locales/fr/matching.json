@@ -7,6 +7,7 @@
   "excludedTitle": "Motifs d'exclusion",
   "excluded": {
     "previous": "Intervenant actuel ou déjà sollicité",
+    "restricted": "Nouvelles demandes restreintes par CoverView",
     "competence": "Compétence non validée",
     "convention": "Convention non validée",
     "language": "Langue différente du souhait du client",

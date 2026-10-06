@@ -8,6 +8,7 @@ import { createInvitationClient } from "./partner-invitations.js";
 import { createRecommendationClient } from "./partner-recommendations.js";
 import { createJointAppointmentClient } from "./partner-joint.js";
 import { createDataRightsClient } from "./partner-data.js";
+import { createAccessClient } from "./partner-access.js";
 import { createOverviewClient } from "./partner-overview.js";
 import { createNavigationClient } from "./partner-navigation.js";
 import { createCommunicationClient } from "./partner-communications.js";
@@ -235,6 +236,7 @@ export function createPartnerClient(baseUrl: string) {
     ...createRecommendationClient(request),
     ...createJointAppointmentClient(request),
     ...createDataRightsClient(request),
+    ...createAccessClient(request),
     ...createOverviewClient(request),
     ...createNavigationClient(request),
     ...createCommunicationClient(request),

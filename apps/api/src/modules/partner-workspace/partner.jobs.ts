@@ -4,6 +4,7 @@ import { z } from "zod";
 import type { FastifyBaseLogger } from "fastify";
 import type { Pool } from "pg";
 import { processPartnerContinuity } from "./partner.continuity.js";
+import { processAccessReviews } from "./partner.access.js";
 import { processClientInvitations } from "./partner.invitations.js";
 import type { Mailer } from "../../platform/mailer.js";
 
@@ -56,6 +57,11 @@ export async function startPartnerJobs(
         return result;
       }
       logger.info({ jobId: job.id }, "Partner continuity started");
+      // Reviews that fell due open their re-review first (C8a); the continuity pass below then
+      // treats the requests of the people who lost access. Counts only in the logs.
+      const reviews = await processAccessReviews(pool);
+      if (reviews.members || reviews.organizations)
+        logger.info({ jobId: job.id, ...reviews }, "Partner access reviews opened");
       // Ten bounded batches per tick; the oldest unchecked Lead is picked first after a restart.
       let checked = 0,
         escalated = 0;

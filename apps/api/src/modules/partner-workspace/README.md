@@ -14,6 +14,15 @@
 
 [Matrice, règles, effacement et preuves](docs/data-rights.md).
 
+**Habilitations (C8a).**
+- **Journal** : chaque décision sur un membre ou une organisation, avec auteur, date, motif et date de réexamen.
+- **Organisation** : validée à part ; la bloquer retire l'accès de tous ses membres.
+- **Restrictions** : nouvelles demandes, transmission, marketplace ou catégories. Elles arrêtent les nouveaux engagements, jamais les demandes en cours.
+- **Réexamens** : rappel à 30 jours, puis réouverture automatique du dossier à la date.
+- **File Admin** : candidatures à examiner, réexamens, restrictions, justificatifs à échéance.
+
+Ces règles remplacent les mentions « restrictions fines et réexamens ouverts ». [Règles, effets et preuves](docs/access.md).
+
 **Rendez-vous conjoint (C6b).** Le client invite depuis Wallet le conseiller d'une autre de ses demandes ; le spécialiste confirme avec ses propres tampons, son temps devient protégé (garde en base étendue aux participations), chaque demande garde son étape et son issue ; report, annulation, retrait et perte d'accès sans rendez-vous contradictoire. [Parcours, règles et preuves](docs/joint-appointments.md).
 
 **Diffusion immédiate Partner ↔ Wallet (C6a).** Flux SSE `/partner/live` et `/wallet/live` : avis `pg_notify` après validation, audience décidée par le hub à chaque envoi selon la visibilité courante, invalidation puis relecture par l'API, resynchronisation à la reconnexion. [Politique d'exposition, limites et preuves](docs/live-updates.md).

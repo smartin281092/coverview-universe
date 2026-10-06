@@ -81,9 +81,10 @@ const professional: Record<
   { purpose: string; recipients: string; origin: string }
 > = {
   membership: {
-    purpose: "Examiner votre candidature et gérer votre habilitation.",
+    purpose:
+      "Examiner votre candidature, gérer votre habilitation, ses restrictions et ses réexamens, et tracer chaque décision.",
     recipients: "CoverView.",
-    origin: "Vous.",
+    origin: "Vous et les décisions de CoverView.",
   },
   declarations: {
     purpose:

@@ -889,6 +889,15 @@ export const partnerApplicationInputSchema = z
     qualifications: z.string().trim().max(2000),
   })
   .strict();
+// Activities CoverView may restrict (C8a). A restriction stops new engagements only: the requests
+// already held continue, and a suspension remains the decision that withdraws them.
+export const memberRestrictionsSchema = z.object({
+  newLeads: z.boolean().default(false),
+  leadCreation: z.boolean().default(false),
+  marketplace: z.boolean().default(false),
+  categories: z.array(leadCategorySchema).max(7).default([]),
+  reviewAt: instant.nullable().default(null),
+});
 export const partnerApplicationSchema = partnerApplicationInputSchema.extend({
   userId: id,
   organizationId: id,
@@ -900,6 +909,10 @@ export const partnerApplicationSchema = partnerApplicationInputSchema.extend({
   reviewReason: z.string().nullable(),
   reviewedAt: instant.nullable(),
   reviewDueAt: instant.nullable(),
+  restrictions: memberRestrictionsSchema.prefault({}),
+  restrictionRevision: z.number().int().nonnegative().default(0),
+  organizationRevision: z.number().int().nonnegative().default(0),
+  organizationReviewDueAt: instant.nullable().default(null),
 });
 export const partnerReviewInputSchema = z
   .object({
@@ -2149,6 +2162,7 @@ export const partnerErrors = [
   "PARTNER_RATE_LIMITED",
 ] as const;
 export type PartnerApplication = z.infer<typeof partnerApplicationSchema>;
+export type MemberRestrictions = z.infer<typeof memberRestrictionsSchema>;
 export type PartnerContext = z.infer<typeof partnerContextSchema>;
 export type LeadCreateInput = z.infer<typeof leadCreateInputSchema>;
 export type LeadListQuery = z.infer<typeof leadListQuerySchema>;

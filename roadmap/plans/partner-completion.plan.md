@@ -2,7 +2,7 @@
 
 > Statut : **approuvé** — réponses utilisateur du 4 octobre 2026 : « 1a 2a 3b ». diff_from : [lot 4/4](partner-conclusion-integration.plan.md), interrompu le 4 octobre à 01h30.
 > **Session requise** : Claude Code, Claude Opus 5.5, effort max. La reprise quitte la chaîne de relais Codex (décision 1a).
-> **Session réelle** : Claude Code, Claude Opus 5.5, effort max (C1 à C6 le 4 octobre 2026, C7 le 6 octobre 2026).
+> **Session réelle** : Claude Code, Claude Opus 5.5, effort max (C1 à C6 le 4 octobre 2026, C7 et C8 le 6 octobre 2026).
 > **Budget** : plusieurs sessions. Une phase livrée est commitée sur `claude/partner-integration` avant la suivante.
 
 ## Décisions acquises (réponses aux questions bloquantes du bilan du 4 octobre)
@@ -40,7 +40,13 @@ Rendre tout le [brief I–III](../../references/coverview-partner-2026-10-02.md)
    - *C7c* : effacement contrôlé de la couche d'identification, preuves conservées et déclarées.
    - Vérification V0–V2, dont un HTTP réel.
    - Pas de RLS : écart assumé, comme dans tout le projet. Aucune durée et aucune purge (S-131).
-8. **Reliquats** : gestion d'équipe du responsable, restrictions fines et réexamens automatiques (I.4), contrat non déclaré signalé par le client (I.17.2), audit incomplet → demande de complément (I.13).
+8. **Reliquats** (entrée le 6 octobre) : gestion d'équipe du responsable, restrictions fines et réexamens automatiques (I.4), contrat non déclaré signalé par le client (I.17.2), audit incomplet → demande de complément (I.13), plus la photo et le profil d'organisation reportés de C2.
+   - *C8a* : habilitations (journal des décisions, organisation validée à part, restrictions, réexamens automatiques, file Admin).
+   - *C8b* : équipe du responsable (invitation, page Équipe, fin d'adhésion, réattribution dans l'équipe).
+   - *C8c* : photo de profil et profil d'organisation.
+   - *C8d* : contrat non déclaré signalé par le client.
+   - *C8e* : analyse incomplète → demande de complément au client.
+   - Correctif préalable, G-07 : l'action de notification `review_participation` (C6b) manquait au contrat.
 
 #### C1 — Conception retenue (avant code)
 
@@ -318,6 +324,64 @@ Cette décision ne fournit ni durée légale, ni conformité, ni avis juridique 
   - La demande d'offre d'origine, les documents et le compte relèvent d'autres modules (S-131) : tant que le compte existe, ses références restent rattachables.
 - **Purge automatique : non implémentée.** Aucune durée n'est définie, et le registre l'affiche.
 
+#### C8 — Conception retenue (avant code)
+
+Entrée de tranche le 6 octobre 2026, instruction « Continue avec C8 ». Session réelle : Claude Code, Claude Opus 5.5, effort max. Cinq sous-étapes commitées séparément, dans l'ordre de leurs dépendances : l'équipe s'appuie sur le journal et les restrictions, le profil d'organisation sur l'équipe.
+
+**Décisions déléguées (PROG-23)**, réponses par défaut du 6 octobre 2026 :
+
+| ref | question | answer | evidence |
+|---|---|---|---|
+| C8-1 | Que peut restreindre CoverView, et avec quel effet ? | Liste fermée : nouvelles demandes confiées, transmission de demandes, marketplace, catégories exclues. Une restriction arrête les nouveaux engagements ; les dossiers en cours continuent, la suspension reste l'outil qui les retire. Une date de réexamen de restriction alimente la file Admin ; rien n'est levé automatiquement. | I.4 « restreindre certaines activités », I.19.2 conséquences affichées ; G-01 : jamais élargir un accès sans décision humaine |
+| C8-2 | Que fait un réexamen arrivé à échéance ? | L'accès cesse comme aujourd'hui (dossiers traités par le worker). Le système ouvre en plus le réexamen : état « complément demandé », décision automatique au journal, rappel 30 jours avant dans Partner et dans la file Admin. Même règle pour une organisation qui porte une date. | I.4 « fixer une date de réexamen », existant `review_due_at` coupure sèche sans suite |
+| C8-3 | Comment un collègue rejoint-il une organisation ? | Invitation du responsable, liée à l'adresse vérifiée du compte invité, valable 14 jours ; elle s'accepte en déposant sa candidature, que CoverView valide à part. Pas d'email en C8 : l'invitation apparaît dans Partner à la connexion. | I.3, I.4 « valider une organisation et ses utilisateurs séparément » ; aucun parcours existant, organisations à un seul membre |
+| C8-4 | Quels pouvoirs pour le responsable ? | Voir son équipe (état, rôles, réexamen, types de restriction sans motif, charge), inviter, mettre fin à l'adhésion d'un collègue (ni soi-même ni un autre responsable) avec traitement de ses dossiers, réattribuer dans l'équipe avec motif, lire les conditions commerciales de l'équipe. Jamais : valider, attribuer un rôle, restreindre, voir les flux financiers d'un collègue. | I.3 « superviser les utilisateurs, demandes, affectations et conditions commerciales » ; I.20 aucun accès collectif implicite |
+| C8-5 | Photo et logo ? | Images JPEG, PNG ou WebP de 5 Mo au plus, réencodées dans le navigateur (métadonnées retirées), antivirus, servies par l'API seulement à l'audience du profil publié. Profil d'organisation rédigé par le responsable, publié après examen CoverView. | I.18 ; conception C2 ; STOR-04, écart déclaré : pas de retraitement serveur |
+| C8-6 | Comment traiter un contrat signalé par le client ? | Confirmations du client (questions factuelles de l'enquête, signalement Wallet, contact qualité consigné par CoverView), comparées par le serveur à l'état déclaré. Un écart ouvre une vérification, jamais une réclamation ; CoverView peut demander un rapprochement au professionnel et clôt avec une issue. Aucune écriture financière, aucun effet sur les évaluations. | I.17.2, I.23 « vérification ouverte et rapprochement demandé, sans sanction automatique » |
+| C8-7 | Que déclenche une analyse incomplète ? | Le professionnel demande un complément au client (éléments, message, échéance), le client répond dans Wallet (texte, documents, contrat de référence). L'avis « analyse à compléter » suit le responsable courant et se réévalue dans le temps. Les manques côté professionnel restent sa vérification humaine. | I.13 « demande de complément ou vérification humaine », I.23 « résultat limité ou suspendu » |
+
+Ces défauts sont des choix de produit. Ils ne valent ni conformité, ni avis juridique, ni validation des durées.
+
+**C8a — Habilitations (I.4).**
+- **Journal des décisions** `partner_access_decisions`, immuable : examen d'un membre, examen d'une organisation, restriction, réexamen automatique, fin d'adhésion par le responsable (C8b). Chaque décision porte auteur (ou acteur système), date, motif et, s'il y a lieu, état, rôles, restrictions et date de réexamen. Aucune reprise de l'historique antérieur : il commence à la migration.
+- **Organisation validée à part.** `POST /admin/partner/organizations/:id/review` : état, motif, date de réexamen, révision. Bloquer une organisation traite les dossiers de tous ses membres (fonction commune avec l'examen d'un membre). L'examen d'un membre peut encore valider l'organisation pour une première candidature, mais la décision est journalisée à part.
+- **Restrictions** (`partner_members.restrictions`, révision propre pour ne pas invalider rendez-vous ni propositions) :
+  - nouvelles demandes confiées : exclu du matching (motif « restreint »), des propositions automatiques, des attributions de l'Admin ou du responsable, des transferts et co-conseils, des réservations marketplace, de l'auto-attribution à la création ;
+  - transmission de demandes : plus de création ;
+  - marketplace : ni publication, ni candidature, ni réservation ;
+  - catégories exclues : les mêmes effets, limités à ces catégories.
+  - Décision Admin sous MFA, motif, date de réexamen facultative, aperçu des dossiers en cours qui continuent.
+- **Réexamens automatiques.** Dans le tick du worker de continuité : membre ou organisation approuvé dont la date est échue → « complément demandé », décision automatique (`partner-continuity-v1`), événement. Le membre met à jour et resoumet sa candidature, CoverView réexamine. Rappel à 30 jours dans l'accueil et la candidature Partner.
+- **File Admin** dans l'écran des candidatures (Partner, mode Admin) : à examiner, réexamens à 30 jours ou échus, restrictions à réexaminer, justificatifs échus ou à 30 jours (compétences et conventions). Dialogues restrictions, organisation (membres, conséquences, décision) et historique.
+- **Partner** : restrictions en vigueur avec motif et historique de ses propres décisions dans « Profil et organisation » ; copie de données complétée (R5).
+
+**C8b — Équipe du responsable (I.3, I.4).**
+- **Invitation** `partner_team_invitations` : adresse normalisée, 14 jours, au plus 20 ouvertes et 10 nouvelles par jour et par organisation, annulable. Le serveur refuse seulement l'adresse d'un membre actuel de la même organisation ; il ne révèle rien d'autre.
+- **Acceptation** : l'invité voit l'invitation si l'adresse vérifiée de son compte correspond. Il l'accepte en déposant sa candidature : rattachement à l'organisation, nom d'organisation imposé, validation CoverView à part. Impossible depuis une adhésion approuvée ou suspendue.
+- **Page Équipe** (`/team`, responsable) : membres avec état, rôles, réexamen, types de restriction (sans motif), dossiers en cours et en retard ; invitations ; conditions commerciales de l'équipe en lecture.
+- **Fin d'adhésion** d'un collègue par le responsable : motif, aperçu des conséquences, état « fermé », traitement des dossiers comme une suspension, décision journalisée. Ni soi-même, ni un autre responsable : CoverView s'en charge.
+- **Réattribution dans l'équipe** : la commande `assign` est ouverte au responsable pour un dossier de son équipe, vers un collègue éligible et non restreint, avec motif ; même décision tracée que l'Admin, sans accès au classement.
+- **Registre** : le responsable devient destinataire des données opérationnelles de l'équipe.
+
+**C8c — Photo et profil d'organisation (I.18, report de C2).**
+- Finalités documentaires `partner_profile_photo` et `partner_organization_logo`, masquées de la bibliothèque Wallet comme les autres preuves professionnelles.
+- Photo facultative jointe à une version de profil ; logo et présentation de l'organisation en versions immuables, soumises par le responsable, examinées par l'Admin sous MFA (jamais par un membre de l'organisation).
+- Publication seulement si l'image est analysée et saine. Lecture par l'API, audience du profil publié, type MIME détecté parmi JPEG, PNG et WebP.
+- Wallet, Partner et Admin affichent la photo et le bloc organisation.
+
+**C8d — Contrat non déclaré signalé par le client (I.17.2).**
+- **Confirmations du client** `partner_client_confirmations` : canal (enquête, Wallet, appel, email), faits (contact, rendez-vous, documents, contrat ; oui, non, ne sait pas), compagnie et date facultatives, état déclaré comparé au même instant.
+- **Écarts** calculés par le serveur : contrat signalé mais non déclaré, contrat déclaré mais non confirmé, contact, rendez-vous ou documents non confirmés. « Ne sait pas » n'en crée aucun.
+- **Vérification** : cas qualité `verification`, interne, une seule ouverte par demande. Action Admin « demander un rapprochement » au professionnel concerné, qui lit les faits et répond. Clôture avec issue (confirmé, infondé, non concluant).
+- **Bornes** : jamais une réclamation, aucun effet sur les évaluations, aucune écriture financière ; la confirmation du client ne vaut pas preuve d'encaissement. Les questions factuelles rejoignent l'enquête unique, sans sollicitation supplémentaire.
+- **File** : filtre « contrats potentiellement non déclarés » et compteur (I.19.2).
+
+**C8e — Analyse incomplète → demande de complément (I.13).**
+- **Diagnostic** des manques par origine : client (contrat de référence à confirmer ou absent), professionnel (valeurs à vérifier), compagnie (prestations absentes de l'offre).
+- **Demande de complément** au client par le responsable, le responsable d'équipe ou un contributeur avec droit de contact : éléments, message, échéance ; notification Wallet ; suspension du suivi jusqu'à l'échéance sur option explicite.
+- **Réponse Wallet** : texte, documents de l'espace partagés (original conservé), confirmation du contrat de référence par le parcours existant. Le professionnel est notifié et clôt la demande.
+- **Avis existant corrigé** : il suit le responsable courant après une réattribution, il est réévalué par le worker (offre échue, source modifiée), et le lien ouvre l'onglet des offres. La notification d'action tient lieu de tâche : le plan C4b annonçait aussi une tâche, jamais créée, ce qui est corrigé ici dans la documentation.
+
 ### B — Recette réelle et simplification (après C)
 
 Les 33 scénarios I.23 se déroulent avec de vrais comptes WorkOS : candidat, Admin avec MFA, conseiller, apporteur, client Wallet. Revue produit critique, mobile et clavier. Cette phase exige la présence de l'utilisateur.
@@ -392,6 +456,11 @@ architecture, backend, api, contracts, data, permissions, security, testing, fro
 | 36 | C7c | test PostgreSQL | Clôture refusée (motif « refus du client » exige ce résultat) ; puis lieu vidé refusé par le contrat d'affichage d'un rendez-vous (3 caractères au moins) | Scénario corrigé ; marqueur « Lieu effacé » ; 6/6, puis 15/15 avec invitations et profils |
 | 37 | C7c complet | typecheck, lint, builds, frontières, knip, seconde génération Drizzle | 0 erreur, aucun écart | Commit `e37236f` ; sauvegarde 29,1 Mo, avance rapide de `main`, migrations 0075–0076 locales (77 entrées) |
 | 38 | Suite complète du dépôt | `pnpm test` à la racine sur `e37236f` (worktree figé) | 85/86 fichiers, 806/807 tests ; un échec dans `partner-marketplace-economy.test.ts` (« bounds co-advice access at the mission expiry »), qui ne laisse que 1,2 s entre réservation et expiration | Même fichier seul sur le même commit : 10/10. Test sensible au temps sous charge, antérieur à C7, qui ne touche pas la marketplace : signalé (G-07), tâche de stabilisation proposée, rien de désactivé |
+| 39 | Centre de notifications (C6b) | test contrôlé : contrat sans puis avec l'action `review_participation` | Sans la correction, la lecture du centre du spécialiste invité échoue (ZodError) ; avec, 4/4 | Commit `a00a3de`, défaut repéré pendant l'exploration de C8 (G-07) |
+| 40 | C8a habilitations | tests PostgreSQL | 4/4 ; ajout du référent retiré pour couvrir le filtre SQL commun, 4/4 | — |
+| 41 | C8a non-régression | 10 suites touchées par l'examen refactoré (dépôt, matching, marketplace, vues, navigation, qualité, réservations, rendez-vous conjoints, droits, profils) | 10/10 fichiers, 95/95 tests | — |
+| 42 | C8a frontières | typecheck des 7 espaces, seconde génération Drizzle, depcruise, knip | 0 erreur ; aucun écart ; 0 erreur ; deux exports inutilisés (`accessItem`, `DecisionHistory`) | Exports retirés, knip identique à `main` |
+| 43 | Méthode | comparaison knip avec `main` par remise des fichiers suivis | La suite API complète tournait en arrière-plan sur le même arbre : passage potentiellement contaminé | Passage arrêté et relancé ; les comparaisons avec `main` se feront dans un worktree séparé |
 
 ## Risques et mitigations
 

@@ -10,6 +10,7 @@ import { LeadCard } from "../features/LeadCard";
 import { CreateLeadDialog } from "../features/CreateLeadDialog";
 import { partnerApi } from "../api";
 import { GoalSummary } from "../features/GoalSummary";
+import { AccessNotice } from "../features/AccessDialogs";
 export function DashboardPage() {
   const { t } = useTranslation(),
     session = usePartner(),
@@ -62,6 +63,7 @@ export function DashboardPage() {
           </Button>
         )}
       </header>
+      {session.context.application && <AccessNotice application={session.context.application} />}
       <GoalSummary />
       <div className="grid grid-cols-2 gap-3 xl:grid-cols-5">
         {(["active", "overdue", "unassigned", "openTasks", "resolved"] as const).map((key) => (

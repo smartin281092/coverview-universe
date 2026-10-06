@@ -22,6 +22,13 @@ Décisions utilisateur du 4 octobre 2026, programme Partner. Réponses « 1a 2a 
 
 Consignées au [plan de reprise](roadmap/plans/partner-completion.plan.md) et dans la [politique d'exécution](roadmap/execution-policy.md#pilotage-courant--décision-du-4-octobre-2026). Confiance haute : instruction explicite. Réexaminer à la fin de la phase C, au plus tard avant le 4 janvier 2027.
 
+Décisions déléguées PROG-23 du 6 octobre 2026, C8 Partner (C8-1 à C8-7 du [plan de reprise](roadmap/plans/partner-completion.plan.md#c8--conception-retenue-avant-code)).
+- **Restrictions (C8a)** : liste fermée (nouvelles demandes, transmission, marketplace, catégories). Elles arrêtent les nouveaux engagements, jamais les demandes en cours ; rien n'est levé automatiquement.
+- **Réexamens (C8a)** : rappel à 30 jours ; à la date, l'accès cesse et le dossier repasse en « complément demandé ». Une organisation se décide à part, avec sa propre date.
+- **Journal (C8a)** : chaque décision sur un membre ou une organisation, immuable, sans reprise de l'historique antérieur.
+
+Promues au [propriétaire habilitations](apps/api/src/modules/partner-workspace/docs/access.md). Confiance haute sur les invariants V2 ; V3 ouvert. Réexaminer à la recette (phase B) et avant le 4 janvier 2027. Aucune entrée active.
+
 Décisions déléguées PROG-23 du 6 octobre 2026, C7 Partner (`bible.question.006`, périmètre Partner).
 - **Copie** : matrice v1, la copie reprend ce que l'espace montre déjà, avec en plus les coordonnées, le contexte et la provenance de ses propres demandes.
   - Elle est générée à la demande, sans copie stockée, et chaque copie laisse une preuve immuable.

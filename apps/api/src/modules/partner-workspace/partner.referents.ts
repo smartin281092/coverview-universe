@@ -5,7 +5,7 @@ import {
   referentSelectionSchema,
   type ReferentUpdate,
 } from "@coverview/contracts/partner";
-import { fail, type Executor, type PartnerActor } from "./partner.policy.js";
+import { engageableSql, fail, type Executor, type PartnerActor } from "./partner.policy.js";
 import { newId, event } from "./partner.audit.js";
 import { readCompetenceSummary } from "./partner.competence.js";
 import { readPracticeSummary } from "./partner.practice.js";
@@ -27,8 +27,11 @@ type SelectionRow = {
   organization: string | null;
   eligible: boolean;
 };
+// A referent is proposed for the next requests: a CoverView restriction on new requests in this
+// category makes them unavailable as such (C8a), without saying why.
 const eligibility = `m.state='approved' and o.state='approved' and m.roles ? 'advisor'
-  and (m.review_due_at is null or m.review_due_at>now()) and m.application->'categories' ? $2`;
+  and (m.review_due_at is null or m.review_due_at>now()) and m.application->'categories' ? $2
+  and ${engageableSql("m", "$2")}`;
 const selectionSql = `select s.*,m.application->>'name' name,m.application->>'organization' organization,
   coalesce(${eligibility},false) eligible from partner_referent_selections s
   left join partner_members m on m.user_id=s.advisor_id left join partner_organizations o on o.id=m.organization_id`;

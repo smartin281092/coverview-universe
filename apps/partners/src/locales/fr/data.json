@@ -113,9 +113,9 @@
     "categories": {
       "membership": {
         "name": "Candidature et habilitation",
-        "purpose": "Examiner votre candidature et gérer votre habilitation.",
+        "purpose": "Examiner votre candidature, gérer votre habilitation, ses restrictions et ses réexamens, et tracer chaque décision.",
         "recipients": "CoverView.",
-        "origin": "Vous."
+        "origin": "Vous et les décisions de CoverView."
       },
       "declarations": {
         "name": "Déclarations et décisions",

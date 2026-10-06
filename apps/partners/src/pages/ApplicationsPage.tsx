@@ -12,6 +12,11 @@ import {
   type PartnerApplication,
 } from "@coverview/contracts/partner";
 import {
+  accessFilterSchema,
+  type AccessFilter,
+  type AccessItem,
+} from "@coverview/contracts/partner-access";
+import {
   Badge,
   Button,
   Dialog,
@@ -25,13 +30,80 @@ import {
   AccessDeniedState,
 } from "@coverview/ui";
 import { usePartner } from "../features/PartnerSession";
-import { Field, SelectOptions, readText, readDate } from "../features/Field";
+import { Field, SelectOptions, readText, readDate, formatDate } from "../features/Field";
 import { partnerApi } from "../api";
 import { CompetenceDialog } from "../features/CompetenceDialog";
+import {
+  HistoryDialog,
+  OrganizationDialog,
+  RestrictionBadges,
+  RestrictionsDialog,
+} from "../features/AccessDialogs";
+
+// What CoverView should look at for one member (C8a): dates, restrictions and proofs.
+function AccessFlags({ item }: { item: AccessItem }) {
+  const { t } = useTranslation(["access", "partner"]);
+  const { application, flags } = item;
+  const lines = [
+    flags.review &&
+      t(`flags.review_${flags.review}`, { date: formatDate(application.reviewDueAt) }),
+    flags.organizationReview &&
+      t(`flags.organizationReview_${flags.organizationReview}`, {
+        date: formatDate(application.organizationReviewDueAt),
+      }),
+    flags.restrictionReview &&
+      t(`flags.restrictionReview_${flags.restrictionReview}`, {
+        date: formatDate(application.restrictions.reviewAt),
+      }),
+    ...item.proofs.map((proof) =>
+      t(`flags.proof_${proof.state}`, {
+        kind: t(`proofKind.${proof.kind}`),
+        category: proof.companyId
+          ? t("flags.proofCompany", {
+              category: t(`partner:category.${proof.category}`),
+              company: proof.companyId,
+            })
+          : t(`partner:category.${proof.category}`),
+        date: formatDate(proof.validUntil),
+      }),
+    ),
+  ].filter((line): line is string => !!line);
+  return (
+    <div className="mt-3 space-y-2 text-sm">
+      {application.organizationState !== "approved" && (
+        <p className="text-muted-foreground">
+          {t("flags.organizationState", {
+            state: t(`partner:applicationState.${application.organizationState}`),
+          })}
+        </p>
+      )}
+      <RestrictionBadges restrictions={application.restrictions} />
+      {lines.length > 0 && (
+        <ul className="space-y-1">
+          {lines.map((line) => (
+            <li key={line} className="text-amber-800 dark:text-amber-300">
+              {line}
+            </li>
+          ))}
+        </ul>
+      )}
+      {item.activeLeads > 0 && (
+        <p className="text-muted-foreground">
+          {t("flags.activeLeads", { count: item.activeLeads })}
+        </p>
+      )}
+    </div>
+  );
+}
 export function ApplicationsPage() {
   const { t } = useTranslation(),
+    access = useTranslation("access").t,
     session = usePartner(),
     client = useQueryClient(),
+    [filter, setFilter] = useState<AccessFilter>("all"),
+    [restricting, setRestricting] = useState<AccessItem | null>(null),
+    [organizationId, setOrganizationId] = useState<string | null>(null),
+    [historyUserId, setHistoryUserId] = useState<string | null>(null),
     [selected, setSelected] = useState<PartnerApplication | null>(null),
     [availabilityUserId, setAvailabilityUserId] = useState<string | null>(null),
     [capacityUserId, setCapacityUserId] = useState<string | null>(null),
@@ -43,8 +115,8 @@ export function ApplicationsPage() {
     [error, setError] = useState(""),
     [key, setKey] = useState(() => crypto.randomUUID());
   const query = useQuery({
-    queryKey: [...session.queryKey, "applications"],
-    queryFn: ({ signal }) => partnerApi.applications(signal),
+    queryKey: [...session.queryKey, "applications", filter],
+    queryFn: ({ signal }) => partnerApi.accessQueue(filter, signal),
     enabled: session.context.administrator,
     gcTime: 0,
     refetchInterval: 15000,
@@ -56,12 +128,28 @@ export function ApplicationsPage() {
         description={t("errors.PARTNER_ACCESS_DENIED")}
       />
     );
+  const counts = query.data?.counts;
   return (
     <>
       <header>
         <h1 className="text-3xl font-semibold tracking-tight">{t("nav.applications")}</h1>
         <p className="mt-2 text-muted-foreground">{t("application.description")}</p>
       </header>
+      <div role="group" aria-label={access("filters.label")} className="flex flex-wrap gap-2">
+        {accessFilterSchema.options.map((value) => (
+          <Button
+            key={value}
+            size="sm"
+            variant={filter === value ? "default" : "outline"}
+            aria-pressed={filter === value}
+            onClick={() => setFilter(value)}
+          >
+            {access(`filters.${value}`, {
+              count: value === "all" || !counts ? 0 : counts[value],
+            })}
+          </Button>
+        ))}
+      </div>
       {query.isPending ? (
         <LoadingState label={t("loading")} />
       ) : query.isError ? (
@@ -74,74 +162,73 @@ export function ApplicationsPage() {
         />
       ) : query.data.items.length ? (
         <div className="grid gap-4 md:grid-cols-2">
-          {query.data.items.map((person) => (
-            <article key={person.userId} className="rounded-xl border border-border p-6">
-              <div className="flex items-center justify-between gap-3">
-                <h2 className="text-lg font-semibold">{person.name}</h2>
-                <Badge variant="outline">{t(`applicationState.${person.state}`)}</Badge>
-              </div>
-              <p className="mt-2 text-sm text-muted-foreground">{person.organization}</p>
-              <p className="mt-3 text-sm">
-                {person.categories.map((category) => t(`category.${category}`)).join(" · ")}
-              </p>
-              <Button
-                className="mt-5"
-                variant="outline"
-                onClick={() => {
-                  setSelected(person);
-                  setError("");
-                  setKey(crypto.randomUUID());
-                }}
-              >
-                {t("application.review")}
-              </Button>
-              <Button
-                className="mt-3"
-                variant="outline"
-                onClick={() => setCompetenceUserId(person.userId)}
-              >
-                {t("competence.title")}
-              </Button>
-              <Button
-                className="mt-3"
-                variant="outline"
-                onClick={() => setAvailabilityUserId(person.userId)}
-              >
-                {t("availability.title")}
-              </Button>
-              <Button
-                className="mt-3"
-                variant="outline"
-                onClick={() => setCapacityUserId(person.userId)}
-              >
-                {t("capacity.title")}
-              </Button>
-              <Button
-                className="mt-3"
-                variant="outline"
-                onClick={() => setSharedModesUserId(person.userId)}
-              >
-                {t("sharedModes.title")}
-              </Button>
-              <Button
-                className="mt-3"
-                variant="outline"
-                onClick={() => setPracticeUserId(person.userId)}
-              >
-                {t("practice.title")}
-              </Button>
-              <Button
-                className="mt-3"
-                variant="outline"
-                onClick={() => setConventionUserId(person.userId)}
-              >
-                {t("convention.title")}
-              </Button>
-            </article>
-          ))}
+          {query.data.items.map((item) => {
+            const person = item.application;
+            return (
+              <article key={person.userId} className="rounded-xl border border-border p-6">
+                <div className="flex items-center justify-between gap-3">
+                  <h2 className="text-lg font-semibold">{person.name}</h2>
+                  <Badge variant="outline">{t(`applicationState.${person.state}`)}</Badge>
+                </div>
+                <p className="mt-2 text-sm text-muted-foreground">{item.organizationName}</p>
+                <p className="mt-3 text-sm">
+                  {person.categories.map((category) => t(`category.${category}`)).join(" · ")}
+                </p>
+                <AccessFlags item={item} />
+                <div className="mt-5 flex flex-wrap gap-2">
+                  <Button
+                    onClick={() => {
+                      setSelected(person);
+                      setError("");
+                      setKey(crypto.randomUUID());
+                    }}
+                  >
+                    {t("application.review")}
+                  </Button>
+                  <Button variant="outline" onClick={() => setRestricting(item)}>
+                    {access("actions.restrictions")}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setOrganizationId(person.organizationId)}
+                  >
+                    {access("actions.organization")}
+                  </Button>
+                  <Button variant="outline" onClick={() => setHistoryUserId(person.userId)}>
+                    {access("actions.history")}
+                  </Button>
+                </div>
+                <details className="mt-4">
+                  <summary className="cursor-pointer text-sm font-medium">
+                    {access("actions.dossiers")}
+                  </summary>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <Button variant="outline" onClick={() => setCompetenceUserId(person.userId)}>
+                      {t("competence.title")}
+                    </Button>
+                    <Button variant="outline" onClick={() => setAvailabilityUserId(person.userId)}>
+                      {t("availability.title")}
+                    </Button>
+                    <Button variant="outline" onClick={() => setCapacityUserId(person.userId)}>
+                      {t("capacity.title")}
+                    </Button>
+                    <Button variant="outline" onClick={() => setSharedModesUserId(person.userId)}>
+                      {t("sharedModes.title")}
+                    </Button>
+                    <Button variant="outline" onClick={() => setPracticeUserId(person.userId)}>
+                      {t("practice.title")}
+                    </Button>
+                    <Button variant="outline" onClick={() => setConventionUserId(person.userId)}>
+                      {t("convention.title")}
+                    </Button>
+                  </div>
+                </details>
+              </article>
+            );
+          })}
         </div>
       ) : (
-        <EmptyState title={t("application.empty")} description={t("application.description")} />
+        <EmptyState title={access(`empty.${filter}`)} description={t("application.description")} />
       )}
       <Dialog
         open={!!selected}
@@ -173,10 +260,14 @@ export function ApplicationsPage() {
                   setError(t("errors.PARTNER_ACTION_REQUIRED"));
                   return;
                 }
+                // The organisation is decided on its own (C8a); a first application may approve
+                // it here explicitly.
                 const parsed = partnerReviewInputSchema.safeParse({
                   revision: selected.revision,
                   state: readText(data, "state"),
-                  organizationState: readText(data, "organizationState"),
+                  ...(data.get("organizationApproved") === "on"
+                    ? { organizationState: "approved" }
+                    : {}),
                   roles: data.getAll("roles"),
                   reason: readText(data, "reason"),
                   reviewDueAt,
@@ -219,20 +310,16 @@ export function ApplicationsPage() {
                   prefix="applicationState"
                 />
               </Field>
-              <Field
-                name="organizationState"
-                label={t("application.organizationState")}
-                defaultValue={
-                  selected.organizationState === "submitted"
-                    ? "needs_information"
-                    : selected.organizationState
-                }
-              >
-                <SelectOptions
-                  values={["needs_information", "approved", "rejected", "suspended", "closed"]}
-                  prefix="applicationState"
-                />
-              </Field>
+              {selected.organizationState === "approved" ? (
+                <p className="text-sm text-muted-foreground">
+                  {access("review.organizationElsewhere")}
+                </p>
+              ) : (
+                <label className="flex items-start gap-3 text-sm">
+                  <input type="checkbox" name="organizationApproved" className="mt-1" />
+                  {access("review.validateOrganization", { name: selected.organization })}
+                </label>
+              )}
               <fieldset>
                 <legend className="mb-3 text-sm font-medium">{t("application.grant")}</legend>
                 <div className="space-y-2">
@@ -264,6 +351,18 @@ export function ApplicationsPage() {
           )}
         </DialogContent>
       </Dialog>
+      {restricting && (
+        <RestrictionsDialog item={restricting} onClose={() => setRestricting(null)} />
+      )}
+      {organizationId && (
+        <OrganizationDialog
+          organizationId={organizationId}
+          onClose={() => setOrganizationId(null)}
+        />
+      )}
+      {historyUserId && (
+        <HistoryDialog userId={historyUserId} onClose={() => setHistoryUserId(null)} />
+      )}
       {conventionUserId && (
         <ConventionDialog userId={conventionUserId} onClose={() => setConventionUserId(null)} />
       )}

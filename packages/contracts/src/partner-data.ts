@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { accessDecisionSchema } from "./partner-access.js";
 import { communicationsSchema } from "./partner-communications.js";
 import { conclusionsSchema } from "./partner-conclusion.js";
 import { economyCasesSchema, marketMandatesSchema } from "./partner-economy.js";
@@ -40,8 +41,10 @@ const id = z.string().min(1).max(100),
 
 // Rights of the people whose data the Partner programme holds (brief I.20, C7). The register and
 // the export manifest are versioned facts of the product, never legal text or a validated policy.
-export const partnerDataRegisterVersion = "partner-data-register-v1";
-export const partnerDataExportVersion = "partner-data-export-v1";
+// v2 (C8): habilitation decisions, restrictions and re-reviews in the membership category.
+export const partnerDataRegisterVersion = "partner-data-register-v2";
+// v2 (C8): the professional copy carries the access decisions.
+export const partnerDataExportVersion = "partner-data-export-v2";
 
 // Matrix v1 (bible.question.006, Partner scope, delegated default of 6 October 2026): a person
 // consults and exports alone what their space already shows, plus the contact details, context and
@@ -372,6 +375,8 @@ export const professionalDataExportSchema = z.object({
   manifest: manifestSchema,
   register: dataRegisterSchema,
   context: partnerContextSchema,
+  // The person's own access decisions and those of their organisation (C8a, R5).
+  decisions: z.array(accessDecisionSchema).max(50),
   profile: profileDossierSchema.nullable(),
   evaluation: evaluationSchema.nullable(),
   referrer: referrerEvaluationSchema.nullable(),

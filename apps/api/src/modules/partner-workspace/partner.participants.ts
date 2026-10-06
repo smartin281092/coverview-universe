@@ -1,6 +1,12 @@
 import type { PoolClient } from "pg";
 import type { partnerLeads } from "./partner.schema.js";
-import { fail, membership, authorityCurrent, type PartnerActor } from "./partner.policy.js";
+import {
+  authorityCurrent,
+  engageable,
+  fail,
+  membership,
+  type PartnerActor,
+} from "./partner.policy.js";
 import { event, type PartnerAuditActor } from "./partner.audit.js";
 import { leaveJointAppointments, settleJointAppointments } from "./partner.joint-appointments.js";
 type LeadRow = typeof partnerLeads.$inferSelect;
@@ -20,6 +26,18 @@ export async function requireAssignee(
     !person.categories.includes(lead.category as (typeof person.categories)[number]) ||
     (person.reviewDueAt && new Date(person.reviewDueAt).getTime() <= Date.now())
   )
+    fail("PARTNER_INVALID_ASSIGNEE");
+}
+/** A new responsibility or contribution also respects the CoverView restrictions (C8a). */
+export async function requireNewEngagement(
+  tx: PoolClient,
+  lead: LeadRow,
+  userId: string,
+  actor: PartnerActor,
+) {
+  await requireAssignee(tx, lead, userId, actor);
+  if (actor.administrator && userId === actor.userId) return;
+  if (!engageable(await membership(tx, userId, true), lead.category))
     fail("PARTNER_INVALID_ASSIGNEE");
 }
 export async function requireParticipant(

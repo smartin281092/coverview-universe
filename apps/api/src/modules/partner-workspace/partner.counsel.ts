@@ -18,6 +18,8 @@ import {
   lockActor,
   membership,
   contextForApplication,
+  engageable,
+  engageableSql,
   type PartnerActor,
 } from "./partner.policy.js";
 import { readAdvicePreferences } from "./partner.advice.js";
@@ -265,6 +267,7 @@ export function createCounselOperations(
       !member ||
       !contextForApplication(member).canAdvise ||
       !member.categories.some((c) => c === lead.category) ||
+      !engageable(member, lead.category) ||
       userId === lead.responsibleId ||
       userId === actor.userId
     )
@@ -462,7 +465,7 @@ export function createCounselOperations(
             `select m.user_id from partner_members m join partner_organizations o on o.id=m.organization_id
         where m.state='approved' and o.state='approved' and m.roles ? 'advisor' and m.application->'categories' ? $1
         and (m.review_due_at is null or m.review_due_at>clock_timestamp()) and m.user_id<>$2 and m.user_id is distinct from $3
-        and ($4::text is null or m.user_id>$4) order by m.user_id limit 21`,
+        and ${engageableSql("m", "$1")} and ($4::text is null or m.user_id>$4) order by m.user_id limit 21`,
             [lead.category, actor.userId, lead.responsibleId, cursor ?? null],
           )
         ).rows;

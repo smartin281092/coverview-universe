@@ -6,6 +6,12 @@ import { createRelationshipOperations } from "./partner.relationships.js";
 import { createNavigationOperations } from "./partner.navigation.js";
 import { createMatchingOperations } from "./partner.matching.js";
 import { createProfileOperations } from "./partner.profiles.js";
+import {
+  applyOrganizationDecision,
+  createAccessOperations,
+  logAccessDecision,
+  withdrawOperationalAccess,
+} from "./partner.access.js";
 import { createInvitationOperations, type InvitationDelivery } from "./partner.invitations.js";
 import { compareOffers } from "./partner.comparison.js";
 import { proposeCurrentContract } from "./partner.contract-proposal.js";
@@ -78,6 +84,7 @@ import {
   camel,
   context,
   date,
+  engageable,
   fail,
   lockActor,
   authorityCurrent,
@@ -107,7 +114,6 @@ import {
   respondCollaboration,
   reconcileCollaborations,
 } from "./partner.collaboration.js";
-import { handoffWork } from "./partner.participants.js";
 import { createConventionOperations } from "./partner.convention.js";
 import { createCompetenceOperations, readNeedCompetenceEvidence } from "./partner.competence.js";
 import { createAvailabilityOperations } from "./partner.availability.js";
@@ -664,7 +670,7 @@ export function createPartnerRepository(
         typeof error === "object" &&
         "code" in error &&
         error.code === "23514" &&
-        /^(market|commercial|economy|quality|communication|pilotage|conclusion|navigation|relationships|joint)\./u.test(
+        /^(market|commercial|economy|quality|communication|pilotage|conclusion|navigation|relationships|joint|access)\./u.test(
           operation,
         )
       )
@@ -769,6 +775,7 @@ export function createPartnerRepository(
     ...createNavigationOperations(pool, transaction),
     ...createMatchingOperations(pool),
     ...createProfileOperations(pool, transaction),
+    ...createAccessOperations(pool, transaction),
     ...createInvitationOperations(pool, transaction, invitationDelivery),
     ...createOverviewOperations(pool),
     // Same authority as conclusion: advising rights and publication on an open request.
@@ -2331,73 +2338,26 @@ export function createPartnerRepository(
             ],
           );
           if (!reviewed.rowCount) fail("PARTNER_CONFLICT", 409);
-          if (input.organizationState)
-            await tx.query<Record<string, unknown>>(
-              "update partner_organizations set state=$2,reviewed_by=$3,review_reason=$4,reviewed_at=now() where id=$1",
-              [member.organizationId, input.organizationState, actor.userId, input.reason],
-            );
-          if (
-            input.state !== "approved" ||
-            !input.roles.includes("advisor") ||
-            (input.organizationState && input.organizationState !== "approved")
-          ) {
-            const revoked =
-              input.organizationState && input.organizationState !== "approved"
-                ? (
-                    await tx.query<Record<string, unknown>>(
-                      "select user_id from partner_members where organization_id=$1",
-                      [member.organizationId],
-                    )
-                  ).rows.map((r) => String(r.user_id))
-                : [userId];
-            const affected = (
-              await tx.query<{ id: string }>(
-                `select l.id from partner_leads l where
-              l.responsible_id=any($1::text[]) or exists(select 1 from partner_contributors c where c.lead_id=l.id and c.user_id=any($1::text[]) and c.revoked_at is null)
-              or exists(select 1 from partner_collaborations c where c.lead_id=l.id and c.target_id=any($1::text[]) and c.state='proposed') order by l.id for update of l`,
-                [revoked],
-              )
-            ).rows;
-            const leads = (
-              await tx.query<Record<string, unknown>>(
-                "update partner_leads set responsible_id=null,assignment='reassign',updated_at=now(),revision=revision+1 where responsible_id=any($1::text[]) and stage<>'completed' returning id",
-                [revoked],
-              )
-            ).rows;
-            await tx.query<Record<string, unknown>>(
-              "update partner_contributors set revoked_at=now() where user_id=any($1::text[]) and revoked_at is null",
-              [revoked],
-            );
-            for (const lead of leads) {
-              await handoffWork(tx, actor, String(lead.id), null);
-              await event(
-                tx,
-                actor,
-                String(lead.id),
-                "lead.reassignment_required",
-                "CoverView recherche un nouvel interlocuteur pour votre demande.",
-                "client",
-              );
-              await syncLeadNotifications(tx, String(lead.id));
-            }
-            for (const lead of affected) {
-              if (!leads.some((value) => value.id === lead.id)) {
-                const current = (
-                  await tx.query<{ responsible_id: string | null }>(
-                    "select responsible_id from partner_leads where id=$1",
-                    [lead.id],
-                  )
-                ).rows[0]!;
-                await handoffWork(tx, actor, lead.id, current.responsible_id);
-                await tx.query(
-                  "update partner_leads set revision=revision+1,updated_at=now() where id=$1",
-                  [lead.id],
-                );
-                await event(tx, actor, lead.id, "lead.contributor_access_expired", "", "assigned");
-              }
-              await reconcileCollaborations(tx, lead.id, actor);
-            }
-          }
+          await logAccessDecision(tx, {
+            kind: "member_review",
+            organizationId: member.organizationId,
+            userId,
+            state: input.state,
+            roles: input.roles,
+            reason: input.reason,
+            reviewDueAt: input.reviewDueAt,
+            actorId: actor.userId,
+          });
+          if (input.state !== "approved" || !input.roles.includes("advisor"))
+            await withdrawOperationalAccess(tx, actor, [userId]);
+          // The organisation is decided on its own (C8a): a first application may approve it here,
+          // with its own journal entry, and an unchanged state records nothing.
+          if (input.organizationState && input.organizationState !== member.organizationState)
+            await applyOrganizationDecision(tx, actor, member.organizationId, {
+              state: input.organizationState,
+              reason: input.reason,
+              reviewDueAt: member.organizationReviewDueAt,
+            });
           await event(
             tx,
             actor,
@@ -2681,10 +2641,13 @@ export function createPartnerRepository(
           } else if (input.clientProfileId || actor.wallet) fail("PARTNER_INVALID_CLIENT");
           if (actor.wallet && input.clientUserId !== actor.userId) fail("PARTNER_INVALID_CLIENT");
           const id = newId("lead"),
+            // A restricted advisor still transmits the request; CoverView then assigns it (C8a).
             responsibleId =
               !actor.wallet &&
               ctx.canAdvise &&
-              (actor.administrator || ctx.application?.categories.includes(input.category))
+              (actor.administrator ||
+                (!!ctx.application?.categories.includes(input.category) &&
+                  engageable(ctx.application, input.category)))
                 ? actor.userId
                 : null;
           await tx.query<Record<string, unknown>>(

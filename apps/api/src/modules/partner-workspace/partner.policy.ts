@@ -46,7 +46,7 @@ export async function membership(
 ): Promise<PartnerApplication | null> {
   const row = (
     await db.query<Record<string, unknown>>(
-      `select m.*, o.state organization_state from partner_members m join partner_organizations o on o.id=m.organization_id where m.user_id=$1 ${lock ? "for share of m,o" : ""}`,
+      `select m.*, o.state organization_state, o.revision organization_revision, o.review_due_at organization_review_due_at from partner_members m join partner_organizations o on o.id=m.organization_id where m.user_id=$1 ${lock ? "for share of m,o" : ""}`,
       [userId],
     )
   ).rows[0];
@@ -63,8 +63,20 @@ export async function membership(
     reviewReason: row.review_reason,
     reviewedAt: date(row.reviewed_at as Date | null),
     reviewDueAt: date(row.review_due_at as Date | null),
+    restrictions: row.restrictions ?? {},
+    restrictionRevision: row.restriction_revision ?? 0,
+    organizationRevision: row.organization_revision ?? 0,
+    organizationReviewDueAt: date((row.organization_review_due_at ?? null) as Date | null),
   });
 }
+/** CoverView restrictions stop new engagements of a person, everywhere or in some categories. */
+export const engageable = (application: PartnerApplication | null, category: string) =>
+  !!application &&
+  !application.restrictions.newLeads &&
+  !application.restrictions.categories.some((c) => c === category);
+/** The same rule for member rows read in SQL; `category` is a parameter or a column. */
+export const engageableSql = (member: string, category: string) =>
+  `(not coalesce((${member}.restrictions->>'newLeads')::boolean,false) and not coalesce(${member}.restrictions->'categories','[]'::jsonb) ? ${category})`;
 export function professionalScope(
   row: {
     organization_id: string;
@@ -114,7 +126,8 @@ export function contextForApplication(
     canCreate:
       operational &&
       (administrator ||
-        !!application?.grantedRoles.some((r) => r === "referrer" || r === "advisor")),
+        (!!application?.grantedRoles.some((r) => r === "referrer" || r === "advisor") &&
+          !application.restrictions.leadCreation)),
     canAdvise: operational && (administrator || !!application?.grantedRoles.includes("advisor")),
     canManage: operational && (administrator || !!application?.grantedRoles.includes("manager")),
   };

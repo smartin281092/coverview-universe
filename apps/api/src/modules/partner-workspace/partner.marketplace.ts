@@ -19,6 +19,7 @@ import {
   camel,
   context,
   contextForApplication,
+  engageable,
   fail,
   lockActor,
   membership,
@@ -36,7 +37,7 @@ import {
   type EconomyMutation,
 } from "./partner.commercial.js";
 import { newId, event } from "./partner.audit.js";
-import { requireAssignee, handoffWork } from "./partner.participants.js";
+import { requireNewEngagement, handoffWork } from "./partner.participants.js";
 import { respondCollaboration, reconcileCollaborations } from "./partner.collaboration.js";
 import { syncLeadNotifications } from "./partner.notifications.js";
 type Lead = typeof partnerLeads.$inferSelect;
@@ -68,6 +69,10 @@ async function marketAccess(tx: PoolClient, actor: PartnerActor) {
   if (!ctx.operational) fail("PARTNER_ACCESS_DENIED", 403);
   return ctx;
 }
+// A marketplace restriction (C8a) stops new publications, applications and reservations; what is
+// already published or reserved follows its own course.
+const marketRestricted = (ctx: Awaited<ReturnType<typeof context>>) =>
+  !ctx.administrator && !!ctx.application?.restrictions.marketplace;
 async function load(tx: PoolClient, actor: PartnerActor, id: string, targetId?: string) {
   const raw = (
     await tx.query<Record<string, unknown>>("select * from partner_market_listings where id=$1", [
@@ -177,7 +182,10 @@ async function reservationProjection(
     member.organizationId === reservation.targetOrganizationId &&
     member.professionalRevision === reservation.targetRevision &&
     contextForApplication(member).canAdvise &&
-    member.categories.some((c) => c === current.lead.category);
+    member.categories.some((c) => c === current.lead.category) &&
+    // A restriction decided before acceptance stops the pending reservation (C8a).
+    (reservation.state !== "reserved" ||
+      (engageable(member, current.lead.category) && !member.restrictions.marketplace));
   const mission = marketMissionSchema.parse(reservation.mission);
   const state =
     reservation.state !== "reserved"
@@ -267,6 +275,8 @@ async function card(tx: PoolClient, actor: PartnerActor, current: Loaded) {
       !actor.wallet &&
       !!ctx?.canAdvise &&
       !!ctx.application?.categories.some((c) => c === listing.category) &&
+      !marketRestricted(ctx) &&
+      (ctx.administrator || engageable(ctx.application, listing.category)) &&
       state === "available",
     canManage: manages,
     leadId: manages ? lead.id : null,
@@ -385,7 +395,7 @@ export function createMarketplaceOperations(pool: Pool, mutate: EconomyMutation)
         key,
         { leadId, input },
         async (tx) => {
-          await marketAccess(tx, actor);
+          if (marketRestricted(await marketAccess(tx, actor))) fail("PARTNER_ACCESS_DENIED", 403);
           const row = (
             await tx.query<Record<string, unknown>>(
               `select * from partner_leads l where id=$1 and ((responsible_id=$2 and ${authorityCurrent("l")}) or $3) for update`,
@@ -456,7 +466,10 @@ export function createMarketplaceOperations(pool: Pool, mutate: EconomyMutation)
           const current = await load(tx, actor, id);
           await requireOpen(tx, actor, current);
           if (!(await card(tx, actor, current)).canApply) fail("PARTNER_ACCESS_DENIED", 403);
-          await requireAssignee(tx, current.lead, actor.userId, { ...actor, administrator: false });
+          await requireNewEngagement(tx, current.lead, actor.userId, {
+            ...actor,
+            administrator: false,
+          });
           await tx.query(
             "insert into partner_market_applications(id,listing_id,user_id,reason) values($1,$2,$3,$4)",
             [newId("pmap"), id, actor.userId, input.reason],
@@ -517,11 +530,13 @@ export function createMarketplaceOperations(pool: Pool, mutate: EconomyMutation)
             input.conditionId !== current.listing.conditionId
           )
             fail("PARTNER_ACCESS_DENIED", 403);
-          await requireAssignee(tx, current.lead, input.targetId, {
+          if (marketRestricted(await context(tx, actor, true))) fail("PARTNER_ACCESS_DENIED", 403);
+          await requireNewEngagement(tx, current.lead, input.targetId, {
             ...actor,
             administrator: false,
           });
           const target = (await membership(tx, input.targetId, true))!;
+          if (target.restrictions.marketplace) fail("PARTNER_INVALID_ASSIGNEE");
           const condition = await requireCommercial(
             tx,
             actor,
@@ -699,7 +714,7 @@ export function createMarketplaceOperations(pool: Pool, mutate: EconomyMutation)
               reservation.publisherId,
               current.lead.category,
             );
-            await requireAssignee(tx, current.lead, reservation.targetId, {
+            await requireNewEngagement(tx, current.lead, reservation.targetId, {
               ...actor,
               administrator: false,
             });

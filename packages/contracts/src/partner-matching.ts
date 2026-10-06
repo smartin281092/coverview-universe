@@ -31,6 +31,7 @@ export const matchingCaveatSchema = z.enum([
 ]);
 export const matchingExclusionSchema = z.enum([
   "previous",
+  "restricted",
   "competence",
   "convention",
   "language",

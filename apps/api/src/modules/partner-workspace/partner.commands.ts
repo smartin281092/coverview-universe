@@ -1,4 +1,9 @@
-import { requireAssignee, requireParticipant, handoffWork } from "./partner.participants.js";
+import {
+  requireAssignee,
+  requireNewEngagement,
+  requireParticipant,
+  handoffWork,
+} from "./partner.participants.js";
 import { proposeCollaboration } from "./partner.collaboration.js";
 import type { PoolClient } from "pg";
 import { z } from "zod";
@@ -142,7 +147,12 @@ export async function executeLeadCommand(
       )
         fail("PARTNER_INVALID_TRANSITION");
       if (data.category !== lead.category && lead.responsibleId)
-        await requireAssignee(tx, { ...lead, category: data.category }, lead.responsibleId, actor);
+        await requireNewEngagement(
+          tx,
+          { ...lead, category: data.category },
+          lead.responsibleId,
+          actor,
+        );
       if (
         (relink || data.category !== lead.category || data.object !== lead.object) &&
         (
@@ -363,7 +373,7 @@ export async function executeLeadCommand(
     }
     case "assign": {
       if (!actor.administrator) fail("PARTNER_ACCESS_DENIED", 403);
-      await requireAssignee(tx, lead, input.responsibleId, actor);
+      await requireNewEngagement(tx, lead, input.responsibleId, actor);
       const details = z.object({ transmissionAuthorized: z.boolean() }).parse(lead.details);
       if (!details.transmissionAuthorized || !lead.title || !lead.nextAction || !lead.dueAt)
         fail("PARTNER_ACTION_REQUIRED");

@@ -195,9 +195,14 @@ export function createCommercialOperations(pool: Pool, mutate: EconomyMutation) 
           if (actor.wallet) fail("PARTNER_ACCESS_DENIED", 403);
           const ctx = await context(tx, actor, true),
             member = ctx.application;
+          // Terms stay declarable when CoverView restricts the transmission of requests (C8a).
           if (
-            !ctx.canCreate ||
+            !ctx.operational ||
             !member ||
+            !(
+              ctx.administrator ||
+              member.grantedRoles.some((r) => r === "referrer" || r === "advisor")
+            ) ||
             member.state !== "approved" ||
             member.organizationState !== "approved" ||
             !input.terms.categories.every((c) => member.categories.includes(c))

@@ -912,12 +912,16 @@ export const partnerOrganizations = pgTable(
     reviewedBy: text("reviewed_by").references(() => identityUsers.id),
     reviewReason: text("review_reason"),
     reviewedAt: instant("reviewed_at"),
+    // C8a: an organisation is reviewed on its own, with a revision and an optional review date.
+    revision: integer("revision").notNull().default(0),
+    reviewDueAt: instant("review_due_at"),
   },
   (t) => [
     check(
       "partner_org_state",
       sql`${t.state} in ('draft','submitted','needs_information','approved','rejected','suspended','closed')`,
     ),
+    check("partner_org_revision", sql`${t.revision} >= 0`),
   ],
 );
 export const partnerMembers = pgTable(
@@ -939,6 +943,10 @@ export const partnerMembers = pgTable(
     reviewedAt: instant("reviewed_at"),
     reviewDueAt: instant("review_due_at"),
     createdAt: instant("created_at").notNull().defaultNow(),
+    // C8a: restrictions have their own revision, so that restricting new engagements never
+    // invalidates the appointments, links or proposals keyed on the membership revision.
+    restrictions: jsonb("restrictions").notNull().default({}),
+    restrictionRevision: integer("restriction_revision").notNull().default(0),
   },
   (t) => [
     index("partner_members_org").on(t.organizationId, t.state),
@@ -948,6 +956,10 @@ export const partnerMembers = pgTable(
       sql`${t.state} in ('draft','submitted','needs_information','approved','rejected','suspended','closed')`,
     ),
     check("partner_member_revision", sql`${t.revision} >= 0`),
+    check(
+      "partner_member_restrictions",
+      sql`jsonb_typeof(${t.restrictions})='object' and ${t.restrictionRevision} >= 0`,
+    ),
   ],
 );
 export const partnerLeads = pgTable(

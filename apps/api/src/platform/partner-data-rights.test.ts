@@ -223,7 +223,7 @@ it("exports a client's own requests with their contact details, profiles include
 
   const result = await rights.walletExport(client);
   expect(result.manifest).toMatchObject({
-    version: "partner-data-export-v1",
+    version: "partner-data-export-v2",
     surface: "wallet",
     complete: false,
     truncated: [],
@@ -261,7 +261,7 @@ it("exports a client's own requests with their contact details, profiles include
     user_id: client.userId,
     session_id: client.id,
     surface: "wallet",
-    manifest_version: "partner-data-export-v1",
+    manifest_version: "partner-data-export-v2",
     complete: false,
   });
   expect(JSON.stringify(proof)).not.toContain("alpha@client.test");
@@ -366,6 +366,12 @@ it("opens each professional's own internal scores to them, and nobody else's", a
   expect(exported.matching.items[0]?.rank).toBe(1);
   expect(exported.referrer?.userId).toBe(first.userId);
   expect(exported.manifest.counts.internal_scores).toBe(2);
+  // Their access decisions travel with the membership (C8a): the review and its organisation.
+  expect(exported.decisions.map((d) => d.kind).sort()).toEqual([
+    "member_review",
+    "organization_review",
+  ]);
+  expect(exported.manifest.counts.membership).toBe(3);
   const text = JSON.stringify(exported);
   for (const hidden of [second.userId, outsider.userId, lead.id])
     expect(text).not.toContain(hidden);
@@ -485,7 +491,7 @@ it("serves the copy over HTTP to the signed-in person only, as a protected, rate
     const summary = await app.inject({ url: "/wallet/data", headers: { host, cookie } });
     expect(summary.statusCode).toBe(200);
     expect(summary.json()).toEqual({
-      registerVersion: "partner-data-register-v1",
+      registerVersion: "partner-data-register-v2",
       exports: [],
       requests: [],
     });

@@ -34,7 +34,7 @@ Elle ne fournit ni durée légale, ni conformité, ni avis juridique (S-137).
   - contenu : auteur, session, surface, version du manifeste, compteurs, accès complet ou non ;
   - jamais le contenu de la copie ;
   - la ligne est immuable.
-- **Registre des traitements** `partner-data-register-v1`.
+- **Registre des traitements** `partner-data-register-v2` (v2 depuis C8 : décisions d'habilitation dans la catégorie adhésion).
   - Pour chaque catégorie : finalité, destinataires, provenance et durée. La durée est toujours « non définie, à valider ».
   - Il nomme les traitements automatisés (orientation non validée, matching expliqué, réattribution bornée) et le responsable.
   - Il est affiché dans un panneau latéral et écrit dans chaque copie : en français dans le fichier (INTL-06), par les catalogues dans les écrans.

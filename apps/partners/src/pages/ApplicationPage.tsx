@@ -19,11 +19,14 @@ import { partnerApi } from "../api";
 import { usePartner } from "../features/PartnerSession";
 import { formatDate } from "../features/Field";
 import { CompetenceDialog } from "../features/CompetenceDialog";
+import { AccessNotice, HistoryDialog } from "../features/AccessDialogs";
 export function ApplicationPage() {
   const { t } = useTranslation(),
+    access = useTranslation("access").t,
     { identity, context } = usePartner(),
     client = useQueryClient();
   const [error, setError] = useState("");
+  const [historyOpen, setHistoryOpen] = useState(false);
   const [conventionOpen, setConventionOpen] = useState(false);
   const [availabilityOpen, setAvailabilityOpen] = useState(false);
   const [capacityOpen, setCapacityOpen] = useState(false);
@@ -67,11 +70,19 @@ export function ApplicationPage() {
         </h1>
         <p className="mt-3 max-w-2xl text-muted-foreground">{t("application.description")}</p>
       </header>
+      {application && <AccessNotice application={application} />}
       {application && (
         <section className="rounded-xl border border-border p-6">
           <div className="flex flex-wrap items-center gap-3">
             <Badge variant="outline">{t(`applicationState.${application.state}`)}</Badge>
             <p>{application.organization}</p>
+            {application.organizationState !== "approved" && (
+              <Badge variant="outline">
+                {access("flags.organizationState", {
+                  state: t(`applicationState.${application.organizationState}`),
+                })}
+              </Badge>
+            )}
           </div>
           {application.reviewReason && <p className="mt-4 text-sm">{application.reviewReason}</p>}
           {application.reviewDueAt && (
@@ -104,6 +115,9 @@ export function ApplicationPage() {
           </Button>
           <Button className="mt-4" variant="outline" onClick={() => setConventionOpen(true)}>
             {t("convention.title")}
+          </Button>
+          <Button className="mt-4" variant="outline" onClick={() => setHistoryOpen(true)}>
+            {access("member.history")}
           </Button>
           {context.operational && (
             <div className="mt-4 flex gap-2">
@@ -142,6 +156,7 @@ export function ApplicationPage() {
       {competenceOpen && (
         <CompetenceDialog userId={identity.user.id} onClose={() => setCompetenceOpen(false)} />
       )}
+      {historyOpen && <HistoryDialog userId={null} onClose={() => setHistoryOpen(false)} />}
       {editable && (
         <form
           className="space-y-6"

@@ -9,6 +9,7 @@ import {
   fail,
   failOnConcurrentAbort,
   lockActor,
+  engageable,
   membership,
   type Executor,
   type PartnerActor,
@@ -44,6 +45,7 @@ const evaluationLimit = 100;
 const upcomingWindowMs = 14 * 86_400_000;
 const exclusionOrder: MatchingExclusion[] = [
   "previous",
+  "restricted",
   "competence",
   "convention",
   "language",
@@ -106,6 +108,8 @@ async function evaluate(
 ): Promise<{ excluded: MatchingExclusion } | { candidate: Ranked }> {
   const member = await membership(db, userId);
   if (!member) return { excluded: "competence" };
+  // A CoverView restriction stops new requests for this person or category (C8a).
+  if (!engageable(member, lead.category)) return { excluded: "restricted" };
   const competence = (await readCompetenceSummary(db, userId, lead.category)).status;
   if (competence !== "reviewed" && competence !== "limited") return { excluded: "competence" };
   const convention = await readConventionCoverage(db, userId, lead.category);
