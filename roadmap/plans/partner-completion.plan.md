@@ -292,14 +292,25 @@ Cette décision ne fournit ni durée légale, ni conformité, ni avis juridique 
   - **conservée entière**, encore reliée au compte, avec son motif : conclusion ou signature, droits économiques ou mandat, litige ou réclamation ouverte, contestation en cours ;
   - **effaçable**.
 - **Exécution** : par l'Admin sous MFA, avec une clé d'idempotence, l'empreinte de l'aperçu et une attestation qu'aucune autre obligation de conservation ne s'applique. Une transaction unique traite chaque demande effaçable :
-  - nom, titre, objet, contexte, coordonnées, repère d'objet, source, attente, résultat, motif et prochaine action effacés ;
-  - textes du journal, tâches et lieux de rendez-vous effacés ;
-  - données importées de la demande d'offre et email d'invitation effacés ; la garde de l'invitation n'admet cette seule modification que dans la transaction d'effacement ;
+  - nom, objet, contexte, coordonnées, repère d'objet, source et prochaine action effacés ;
+  - titre, nom du client, tâches et lieux de rendez-vous remplacés par un marqueur neutre (« Demande effacée », « Client effacé », « Tâche effacée », « Lieu effacé ») ;
+    - ce sont des champs de contenu libre, et le produit n'a qu'une langue ; c'est `client_erased_at` qui dit l'effacement ;
+    - le résultat et le motif de clôture sont des codes sans contenu personnel, et ils restent ;
+  - textes du journal effacés ;
+  - données importées de la demande d'offre réduites aux deux identifiants techniques qu'exige leur contrainte ;
+  - email d'invitation remplacé par l'adresse réservée `erased@coverview.invalid` : la garde de l'invitation n'admet cette seule modification que dans la transaction d'effacement (variable de transaction, migration 0076) ;
   - préférences et notifications Wallet supprimées ;
-  - lien avec le compte et le profil rompu, `client_erased_at` daté.
+  - lien avec le compte et le profil rompu, `client_erased_at` daté, la demande d'effacement référencée.
+  - Les déclencheurs existants de changement de client invalident ensuite les enquêtes, réclamations, préférences de communication et enregistrements de ces demandes : ils cessent de compter dans les évaluations.
   - Les référents du sujet sont supprimés quand plus aucune demande conservée ne le concerne.
-- **Ce qui reste, déclaré dans la réponse et le registre** : les preuves protégées par les gardes existantes (propositions de rendez-vous, comptes rendus, enregistrements et transcriptions, enquêtes et réclamations, motifs de recommandation, analyses professionnelles, classements). Elles restent conservées, sans lien avec le compte, jusqu'à une politique validée (S-131).
-  - La demande d'offre d'origine, les documents et le compte relèvent d'autres modules (S-131).
+- **Ce qui reste, déclaré dans l'aperçu, la réponse et le registre.**
+  - Les preuves protégées par les gardes existantes restent telles quelles, y compris leurs références au compte (auteur, propriétaire), jusqu'à une politique validée (S-131) :
+    - journal des actions, sans ses textes ;
+    - propositions de rendez-vous et comptes rendus d'échanges ;
+    - enregistrements, transcriptions, enquêtes et réclamations ;
+    - recommandations et leurs motifs, analyses professionnelles, classements de matching.
+  - Les documents de l'espace client utilisés comme sources restent marqués comme liés.
+  - La demande d'offre d'origine, les documents et le compte relèvent d'autres modules (S-131) : tant que le compte existe, ses références restent rattachables.
 - **Purge automatique : non implémentée.** Aucune durée n'est définie, et le registre l'affiche.
 
 ### B — Recette réelle et simplification (après C)

@@ -162,6 +162,17 @@
       "notFound": "Ce profil ou cette demande de conseil n’est plus accessible.",
       "conflict": "Cette demande a changé entre-temps. Actualisez la page.",
       "failed": "L’envoi n’a pas abouti. Réessayez dans quelques instants."
-    }
+    },
+    "erasureDone_one": "{{count}} demande de conseil effacée.",
+    "erasureDone_other": "{{count}} demandes de conseil effacées.",
+    "erasureKept_one": "{{count}} demande conservée, motif : {{holds}}.",
+    "erasureKept_other": "{{count}} demandes conservées, motifs : {{holds}}.",
+    "holds": {
+      "conclusion": "contrat ou signature",
+      "economy": "droits économiques",
+      "dispute": "réclamation en cours",
+      "contest": "contestation en cours"
+    },
+    "erasureRetained": "Les preuves protégées (journal des actions, échanges, enquêtes et réclamations, recommandations, analyses des professionnels) restent conservées jusqu’à ce que CoverView valide sa politique de conservation."
   }
 }

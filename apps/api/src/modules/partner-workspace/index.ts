@@ -154,6 +154,7 @@ import { createLiveHub } from "./partner.live.js";
 import { createDataRightsOperations } from "./partner.data-rights.js";
 import { registerDataRightsRoutes } from "./partner.data-rights.routes.js";
 import { createDataRequestOperations } from "./partner.data-requests.js";
+import { createDataErasureOperations } from "./partner.data-erasure.js";
 export { PartnerError } from "./partner.policy.js";
 
 export function registerPartnerWorkspace(
@@ -247,6 +248,7 @@ export function registerPartnerWorkspace(
     server,
     createDataRightsOperations(database.pool, repository),
     createDataRequestOperations(database.pool),
+    createDataErasureOperations(database.pool),
     actor,
   );
   if (mailer) {

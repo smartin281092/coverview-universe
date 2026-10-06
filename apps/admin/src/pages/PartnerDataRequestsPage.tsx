@@ -3,15 +3,21 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import type { IdentityMe } from "@coverview/api-client";
-import { createPartnerClient } from "@coverview/api-client/partner";
+import { createPartnerClient, PartnerApiError } from "@coverview/api-client/partner";
 import type {
   AdminDataRequest,
   AdminDataRequestsQuery,
+  DataErasureSummary,
   DataRequestOutcome,
 } from "@coverview/contracts/partner-data";
 import {
   Badge,
   Button,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
   ErrorState,
   Label,
   LoadingState,
@@ -130,6 +136,222 @@ function Answer({
         {t("send")}
       </Button>
     </form>
+  );
+}
+
+function ErasureSummary({ summary }: { summary: DataErasureSummary }) {
+  const { t } = useTranslation("dataRequests");
+  const holds = (values: string[]) =>
+    new Intl.ListFormat("fr-CH", { type: "conjunction" }).format(
+      values.map((hold) => t(`erasure.holds.${hold}`)),
+    );
+  return (
+    <section className="space-y-3">
+      <h3 className="font-medium">
+        {t("erasure.summaryTitle", { date: day.format(new Date(summary.executedAt)) })}
+      </h3>
+      <dl className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-4 gap-y-1">
+        {Object.entries(summary.erased).map(([key, count]) => (
+          <div key={key} className="contents">
+            <dt className="text-muted-foreground">{t(`erasure.erased.${key}`)}</dt>
+            <dd className="text-right font-medium">{count}</dd>
+          </div>
+        ))}
+      </dl>
+      {summary.kept.length > 0 && (
+        <div className="space-y-1">
+          <p className="font-medium">{t("erasure.keptTitle")}</p>
+          <ul className="space-y-1">
+            {summary.kept.map((lead) => (
+              <li key={lead.leadId}>{t("erasure.kept", { holds: holds(lead.holds) })}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </section>
+  );
+}
+
+// The server's preview of a Wallet erasure, then its execution under an explicit attestation.
+function ErasurePanel({
+  item,
+  identity,
+  queryKey,
+  onDone,
+}: {
+  item: AdminDataRequest;
+  identity: IdentityMe;
+  queryKey: unknown[];
+  onDone: () => void;
+}) {
+  const { t } = useTranslation("dataRequests"),
+    attemptFor = useAttempt(),
+    answerId = useId(),
+    [attested, setAttested] = useState(false),
+    [answer, setAnswer] = useState(""),
+    [confirming, setConfirming] = useState(false);
+  const plan = useQuery({
+    queryKey: [...queryKey, "erasure", item.id, item.revision],
+    queryFn: ({ signal }) => client.erasurePlan(item.id, signal),
+    gcTime: 0,
+    retry: false,
+  });
+  const execute = useMutation({
+    gcTime: 0,
+    retry: false,
+    mutationFn: (input: { revision: number; basis: string; answer: string }) =>
+      client.executeErasure(
+        item.id,
+        { ...input, attestation: true },
+        {
+          csrfToken: identity.csrfToken,
+          idempotencyKey: attemptFor({ action: "erasure", id: item.id, ...input }),
+        },
+      ),
+    onSuccess: () => {
+      setConfirming(false);
+      onDone();
+    },
+    onError: () => setConfirming(false),
+  });
+  if (plan.isPending) return <LoadingState label={t("erasure.loading")} />;
+  if (plan.isError)
+    return (
+      <ErrorState
+        title={t("error")}
+        description={t("error")}
+        retryLabel={t("retry")}
+        pendingLabel={t("loading")}
+        onRetry={() => void plan.refetch()}
+      />
+    );
+  const erasable = plan.data.leads.filter((lead) => lead.status === "erasable").length;
+  const holds = (values: string[]) =>
+    new Intl.ListFormat("fr-CH", { type: "conjunction" }).format(
+      values.map((hold) => t(`erasure.holds.${hold}`)),
+    );
+  const ready = !plan.data.blocked && erasable > 0 && attested && answer.trim().length >= 10;
+  return (
+    <section className="space-y-4">
+      <div className="space-y-1">
+        <h3 className="font-medium">{t("erasure.title")}</h3>
+        <p className="text-muted-foreground">{t("erasure.description")}</p>
+      </div>
+      {plan.data.leads.length === 0 ? (
+        <p>{t("erasure.none")}</p>
+      ) : (
+        <ul className="divide-y divide-border rounded-lg border border-border">
+          {plan.data.leads.map((lead) => (
+            <li key={lead.id} className="space-y-1 p-3">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="min-w-0 break-words font-medium">{lead.title}</span>
+                <Badge variant={lead.status === "erasable" ? "default" : "secondary"}>
+                  {t(`erasure.status.${lead.status}`)}
+                </Badge>
+              </div>
+              <p className="text-muted-foreground">
+                {lead.holds.length > 0
+                  ? t("erasure.leadKept", {
+                      date: day.format(new Date(lead.createdAt)),
+                      holds: holds(lead.holds),
+                    })
+                  : day.format(new Date(lead.createdAt))}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
+      {plan.data.blocked ? (
+        <p role="alert" className="text-destructive">
+          {t(`erasure.blocked.${plan.data.blocked}`)}
+        </p>
+      ) : (
+        <p className="text-muted-foreground">{t("erasure.erases")}</p>
+      )}
+      <div className="space-y-1">
+        <p className="font-medium">{t("erasure.retainedTitle")}</p>
+        <ul className="list-disc space-y-1 pl-5 text-muted-foreground">
+          {plan.data.retained.map((key) => (
+            <li key={key}>{t(`erasure.retained.${key}`)}</li>
+          ))}
+        </ul>
+      </div>
+      <Button variant="outline" size="sm" onClick={() => void plan.refetch()}>
+        {t("erasure.refresh")}
+      </Button>
+      {!plan.data.blocked && erasable > 0 && (
+        <div className="space-y-4">
+          <label className="flex items-start gap-3">
+            <input
+              type="checkbox"
+              checked={attested}
+              onChange={(event) => setAttested(event.target.checked)}
+              className="mt-1"
+            />
+            <span>{t("erasure.attestation")}</span>
+          </label>
+          <div className="space-y-2">
+            <Label htmlFor={answerId}>{t("erasure.answerLabel")}</Label>
+            <textarea
+              id={answerId}
+              value={answer}
+              onChange={(event) => setAnswer(event.target.value)}
+              minLength={10}
+              maxLength={2000}
+              rows={4}
+              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+            />
+          </div>
+          {execute.isError && (
+            <p role="alert" className="text-destructive">
+              {t(
+                execute.error instanceof PartnerApiError &&
+                  execute.error.code === "PARTNER_CONFLICT"
+                  ? "erasure.stale"
+                  : "erasure.failed",
+              )}
+            </p>
+          )}
+          <Button
+            variant="destructive"
+            disabled={!ready || execute.isPending}
+            onClick={() => setConfirming(true)}
+          >
+            {t("erasure.execute")}
+          </Button>
+        </div>
+      )}
+      <Dialog open={confirming} onOpenChange={(open) => !execute.isPending && setConfirming(open)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t("erasure.confirmTitle")}</DialogTitle>
+            <DialogDescription>{t("erasure.confirm", { count: erasable })}</DialogDescription>
+          </DialogHeader>
+          <div className="flex flex-wrap justify-end gap-3">
+            <Button
+              variant="outline"
+              disabled={execute.isPending}
+              onClick={() => setConfirming(false)}
+            >
+              {t("erasure.cancel")}
+            </Button>
+            <Button
+              variant="destructive"
+              disabled={execute.isPending}
+              onClick={() =>
+                execute.mutate({
+                  revision: item.revision,
+                  basis: plan.data.basis,
+                  answer: answer.trim(),
+                })
+              }
+            >
+              {t("erasure.confirmAction")}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </section>
   );
 }
 
@@ -272,6 +494,17 @@ function RequestSheet({
                   <p className="whitespace-pre-wrap break-words">{item.answer}</p>
                 </section>
               )}
+              {item.erasure && <ErasureSummary summary={item.erasure} />}
+              {item.kind === "erasure" &&
+                item.surface === "wallet" &&
+                (item.state === "received" || item.state === "in_progress") && (
+                  <ErasurePanel
+                    item={item}
+                    identity={identity}
+                    queryKey={queryKey}
+                    onDone={refresh}
+                  />
+                )}
               {item.state === "received" && (
                 <Button
                   variant="outline"

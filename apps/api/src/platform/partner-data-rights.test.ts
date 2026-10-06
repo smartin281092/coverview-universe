@@ -22,6 +22,7 @@ import type { IdentityProvider, RemoteSession } from "../modules/identity/identi
 import { createPartnerRepository } from "../modules/partner-workspace/partner.repository.js";
 import { createDataRightsOperations } from "../modules/partner-workspace/partner.data-rights.js";
 import { createDataRequestOperations } from "../modules/partner-workspace/partner.data-requests.js";
+import { createDataErasureOperations } from "../modules/partner-workspace/partner.data-erasure.js";
 import {
   recordMatchingDecision,
   type Matching,
@@ -33,6 +34,7 @@ let database: ReturnType<typeof createDatabase>;
 let repository: ReturnType<typeof createPartnerRepository>;
 let rights: ReturnType<typeof createDataRightsOperations>;
 let requests: ReturnType<typeof createDataRequestOperations>;
+let erasure: ReturnType<typeof createDataErasureOperations>;
 let admin: PartnerActor;
 type LeadCategory = z.infer<typeof leadCategorySchema>;
 const key = () => randomUUID();
@@ -53,6 +55,7 @@ beforeAll(async () => {
   repository = createPartnerRepository(database.pool);
   rights = createDataRightsOperations(database.pool, repository);
   requests = createDataRequestOperations(database.pool);
+  erasure = createDataErasureOperations(database.pool);
   admin = await actor(true);
 });
 afterAll(async () => {
@@ -808,4 +811,276 @@ it("files requests about one's data within bounds, and lets CoverView answer the
       key(),
     ),
   ).rejects.toMatchObject({ code: "PARTNER_ACCESS_DENIED" });
+});
+
+it("erases a client's identifying layer after a server preview, keeps what must be kept and says so", async () => {
+  const client = await owner(),
+    advisor = await professional("Inès Effacement", "household");
+  const child = await managedProfile(client, "Enfant effacement");
+  // Erasable: a closed request with an appointment, a note, a task, preferences and an invitation.
+  const erasable = await request(client, advisor, "household", "Kilo");
+  let step = await repository.command(
+    advisor,
+    erasable.id,
+    {
+      action: "appointment",
+      revision: erasable.revision,
+      appointment: {
+        advisorId: advisor.userId,
+        startsAt: later(72),
+        durationMinutes: 60,
+        mode: "home",
+        location: "Rue de la Personne 12, 1200 Genève",
+        timezone: "Europe/Zurich",
+      },
+    },
+    key(),
+  );
+  step = await repository.command(
+    advisor,
+    erasable.id,
+    {
+      action: "note",
+      revision: step.revision,
+      text: "Allergie déclarée par le client.",
+      audience: "assigned",
+    },
+    key(),
+  );
+  step = await repository.command(
+    advisor,
+    erasable.id,
+    {
+      action: "task",
+      revision: step.revision,
+      task: {
+        title: "Appeler Mme Kilo",
+        description: "Numéro privé",
+        responsibleId: advisor.userId,
+        dueAt: later(48),
+        priority: "normal",
+        reminderAt: null,
+      },
+    },
+    key(),
+  );
+  await database.pool.query(
+    "insert into partner_client_invitations(id,lead_id,email,created_by,expires_at) values($1,$2,'kilo@client.test',$3,now()+interval '14 days')",
+    [`pci_${key()}`, erasable.id, advisor.userId],
+  );
+  await repository.command(
+    advisor,
+    erasable.id,
+    {
+      action: "close",
+      revision: step.revision,
+      result: "client_refusal",
+      reason: "client_refusal",
+      comment: "Le client renonce.",
+    },
+    key(),
+  );
+  // Kept: a closed request with an open complaint.
+  const disputed = await request(client, advisor, "household", "Lima");
+  await repository.createQualityCase(
+    advisor,
+    disputed.id,
+    {
+      kind: "complaint",
+      summary: "Réclamation en cours d’examen.",
+      priority: "high",
+      sharedWithClient: true,
+      confirmed: true,
+    },
+    key(),
+  );
+  const closedDispute = await repository.detail(advisor, disputed.id);
+  await repository.command(
+    advisor,
+    disputed.id,
+    {
+      action: "close",
+      revision: closedDispute.revision,
+      result: "client_refusal",
+      reason: "client_refusal",
+      comment: "Clôture malgré la réclamation.",
+    },
+    key(),
+  );
+  // Open: the managed profile's request is still in progress.
+  await request(client, advisor, "household", "Mike", child);
+
+  const self = await requests.fileWalletDataRequest(
+    client,
+    {
+      kind: "erasure",
+      profileId: null,
+      category: null,
+      leadId: null,
+      message: "Merci d’effacer mes données de conseil.",
+    },
+    key(),
+  );
+  const forChild = await requests.fileWalletDataRequest(
+    client,
+    {
+      kind: "erasure",
+      profileId: child,
+      category: null,
+      leadId: null,
+      message: "Merci d’effacer les données de mon enfant.",
+    },
+    key(),
+  );
+  await expect(erasure.erasurePlan(client, self.id)).rejects.toMatchObject({
+    code: "PARTNER_ACCESS_DENIED",
+  });
+  const childPlan = await erasure.erasurePlan(admin, forChild.id);
+  expect(childPlan.blocked).toBe("open_requests");
+  await expect(
+    erasure.executeErasure(
+      admin,
+      forChild.id,
+      {
+        revision: 0,
+        basis: childPlan.basis,
+        attestation: true,
+        answer: "Effacement impossible pour l’instant.",
+      },
+      key(),
+    ),
+  ).rejects.toMatchObject({ code: "PARTNER_ACTION_REQUIRED" });
+
+  const plan = await erasure.erasurePlan(admin, self.id);
+  expect(plan.blocked).toBeNull();
+  expect(plan.leads.map((lead) => [lead.id, lead.status, lead.holds])).toEqual([
+    [erasable.id, "erasable", []],
+    [disputed.id, "kept", ["dispute"]],
+  ]);
+  expect(plan.retained).toContain("surveys_complaints");
+  await expect(
+    erasure.executeErasure(
+      admin,
+      self.id,
+      { revision: 0, basis: "0".repeat(64), attestation: true, answer: "Effacement effectué." },
+      key(),
+    ),
+  ).rejects.toMatchObject({ code: "PARTNER_CONFLICT" });
+  const executeKey = key();
+  const execution = {
+    revision: 0,
+    basis: plan.basis,
+    attestation: true as const,
+    answer: "Effacement effectué ; une demande est conservée pour sa réclamation.",
+  };
+  const answered = await erasure.executeErasure(admin, self.id, execution, executeKey);
+  expect(answered).toMatchObject({ state: "answered", outcome: "partially_done" });
+  expect(answered.erasure?.kept).toEqual([
+    { leadId: disputed.id, category: "household", holds: ["dispute"] },
+  ]);
+  expect(answered.erasure?.erased).toMatchObject({
+    requests: 1,
+    tasks: 1,
+    appointments: 1,
+    invitations: 1,
+  });
+  expect(answered.erasure?.erased.events).toBeGreaterThan(0);
+  // A replay returns the same answer without erasing twice.
+  expect((await erasure.executeErasure(admin, self.id, execution, executeKey)).revision).toBe(
+    answered.revision,
+  );
+
+  const lead = (
+    await database.pool.query<Record<string, unknown>>(
+      "select title,client_name,object,next_action,details,client_user_id,client_profile_id,client_erased_at,client_erasure_request_id from partner_leads where id=$1",
+      [erasable.id],
+    )
+  ).rows[0]!;
+  expect(lead).toMatchObject({
+    title: "Demande effacée",
+    client_name: "Client effacé",
+    object: "",
+    next_action: "",
+    client_user_id: null,
+    client_profile_id: null,
+    client_erasure_request_id: self.id,
+  });
+  expect(lead.client_erased_at).toBeInstanceOf(Date);
+  expect(lead.details).toEqual({
+    context: "",
+    email: "",
+    phone: "",
+    language: "",
+    source: "",
+    objectReference: "",
+    transmissionAuthorized: true,
+  });
+  const leftovers = (
+    await database.pool.query<{ text: string }>(
+      `select string_agg(x,' | ') text from (
+        select text x from partner_events where lead_id=$1
+        union all select title||' '||description from partner_tasks where lead_id=$1
+        union all select location from partner_appointments where lead_id=$1
+        union all select email from partner_client_invitations where lead_id=$1) t`,
+      [erasable.id],
+    )
+  ).rows[0]!.text;
+  for (const gone of [
+    "Allergie",
+    "Mme Kilo",
+    "Numéro privé",
+    "Rue de la Personne",
+    "kilo@client.test",
+  ])
+    expect(leftovers).not.toContain(gone);
+  expect(leftovers).toContain("erased@coverview.invalid");
+  expect(
+    (
+      await database.pool.query(
+        "select 1 from partner_advice_preferences where lead_id=$1 union all select 1 from partner_notifications where lead_id=$1 and audience='wallet'",
+        [erasable.id],
+      )
+    ).rowCount,
+  ).toBe(0);
+  // The client no longer sees the erased request; the kept one stays theirs. The advisor keeps a
+  // closed request without the client's words.
+  expect(
+    (await repository.list(client, { view: "all", sort: "created", limit: 60 })).items.map(
+      (i) => i.id,
+    ),
+  ).toEqual(expect.not.arrayContaining([erasable.id]));
+  expect((await repository.detail(client, disputed.id)).id).toBe(disputed.id);
+  await expect(repository.detail(client, erasable.id)).rejects.toMatchObject({
+    code: "PARTNER_NOT_FOUND",
+  });
+  expect(await repository.detail(advisor, erasable.id)).toMatchObject({
+    title: "Demande effacée",
+    clientName: "Client effacé",
+    clientUserId: null,
+  });
+  // Outside an erasure, an invitation's recipient still cannot change.
+  for (const email of ["autre@client.test", "erased@coverview.invalid"])
+    await expect(
+      database.pool.query("update partner_client_invitations set email=$2 where lead_id=$1", [
+        disputed.id,
+        email,
+      ]),
+    ).resolves.toMatchObject({ rowCount: 0 });
+  await database.pool.query(
+    "insert into partner_client_invitations(id,lead_id,email,created_by,expires_at) values($1,$2,'lima@client.test',$3,now()+interval '14 days')",
+    [`pci_${key()}`, disputed.id, advisor.userId],
+  );
+  for (const email of ["autre@client.test", "erased@coverview.invalid"])
+    await expect(
+      database.pool.query("update partner_client_invitations set email=$2 where lead_id=$1", [
+        disputed.id,
+        email,
+      ]),
+    ).rejects.toMatchObject({ code: "23514" });
+  // The person reads what was erased and what was kept, and why.
+  const summary = (await rights.walletData(client)).requests.find((item) => item.id === self.id);
+  expect(summary).toMatchObject({
+    outcome: "partially_done",
+    erasure: { kept: [{ holds: ["dispute"] }] },
+  });
 });

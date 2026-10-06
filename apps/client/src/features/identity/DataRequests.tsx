@@ -345,6 +345,24 @@ export function DataRequests({
                   {t("requests.accessUntil", { date: format.format(new Date(item.accessUntil)) })}
                 </p>
               )}
+              {item.erasure && (
+                <div className="space-y-1 text-muted-foreground">
+                  <p>{t("requests.erasureDone", { count: item.erasure.erased.requests ?? 0 })}</p>
+                  {item.erasure.kept.length > 0 && (
+                    <p>
+                      {t("requests.erasureKept", {
+                        count: item.erasure.kept.length,
+                        holds: new Intl.ListFormat(i18n.language, { type: "conjunction" }).format(
+                          [...new Set(item.erasure.kept.flatMap((lead) => lead.holds))].map(
+                            (hold) => t(`requests.holds.${hold}`),
+                          ),
+                        ),
+                      })}
+                    </p>
+                  )}
+                  <p>{t("requests.erasureRetained")}</p>
+                </div>
+              )}
             </li>
           ))}
         </ul>

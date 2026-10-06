@@ -6,6 +6,8 @@ import {
   adminDataRequestSchema,
   adminDataRequestsQuerySchema,
   adminDataRequestsSchema,
+  dataErasureExecutionSchema,
+  dataErasurePlanSchema,
   dataRequestAnswerSchema,
   dataRequestRevisionSchema,
   dataRequestSchema,
@@ -18,14 +20,16 @@ import {
 } from "@coverview/contracts/partner-data";
 import type { createDataRightsOperations } from "./partner.data-rights.js";
 import type { createDataRequestOperations } from "./partner.data-requests.js";
+import type { createDataErasureOperations } from "./partner.data-erasure.js";
 import type { PartnerActor } from "./partner.policy.js";
 
 // Rights of the people concerned (C7): each surface reads, exports and files requests only for its
-// own person; CoverView answers them from Admin.
+// own person; CoverView answers them, and executes a controlled erasure, from Admin.
 export function registerDataRightsRoutes(
   server: FastifyInstance,
   dataRights: ReturnType<typeof createDataRightsOperations>,
   requests: ReturnType<typeof createDataRequestOperations>,
+  erasure: ReturnType<typeof createDataErasureOperations>,
   actor: (r: FastifyRequest, wallet?: boolean, adminOnly?: boolean) => Promise<PartnerActor>,
 ) {
   const app = server.withTypeProvider<ZodTypeProvider>(),
@@ -136,5 +140,22 @@ export function registerDataRightsRoutes(
     },
     async (r) =>
       requests.answerDataRequest(await actor(r, false, true), r.params.id, r.body, key(r)),
+  );
+  app.get(
+    "/admin/partner/data-requests/:id/erasure",
+    { config, schema: { params, response: { 200: dataErasurePlanSchema } } },
+    async (r) => erasure.erasurePlan(await actor(r, false, true), r.params.id),
+  );
+  app.post(
+    "/admin/partner/data-requests/:id/erasure",
+    {
+      config,
+      schema: {
+        params,
+        body: dataErasureExecutionSchema,
+        response: { 200: adminDataRequestSchema },
+      },
+    },
+    async (r) => erasure.executeErasure(await actor(r, false, true), r.params.id, r.body, key(r)),
   );
 }

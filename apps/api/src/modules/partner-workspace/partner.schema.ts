@@ -990,6 +990,9 @@ export const partnerLeads = pgTable(
     createdAt: instant("created_at").notNull().defaultNow(),
     stageChangedAt: instant("stage_changed_at").notNull().defaultNow(),
     updatedAt: instant("updated_at").notNull().defaultNow(),
+    // Controlled erasure (C7c): when the client's identifying layer was erased, and by which request.
+    clientErasedAt: instant("client_erased_at"),
+    clientErasureRequestId: text("client_erasure_request_id"),
   },
   (t) => [
     index("partner_leads_assignee").on(t.responsibleId, t.createdAt, t.id),
@@ -1024,6 +1027,11 @@ export const partnerLeads = pgTable(
     check(
       "partner_lead_profile",
       sql`${t.clientProfileId} is null or ${t.clientUserId} is not null`,
+    ),
+    // An erased request belongs to nobody any more, and an erasure always names its request.
+    check(
+      "partner_lead_erasure",
+      sql`(${t.clientErasedAt} is null) = (${t.clientErasureRequestId} is null) and (${t.clientErasedAt} is null or (${t.clientUserId} is null and ${t.clientProfileId} is null))`,
     ),
   ],
 );

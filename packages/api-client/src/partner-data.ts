@@ -2,6 +2,8 @@ import {
   adminDataRequestSchema,
   adminDataRequestsQuerySchema,
   adminDataRequestsSchema,
+  dataErasureExecutionSchema,
+  dataErasurePlanSchema,
   dataRequestAnswerSchema,
   dataRequestSchema,
   professionalDataExportSchema,
@@ -11,6 +13,7 @@ import {
   walletDataRequestInputSchema,
   walletDataSchema,
   type AdminDataRequestsQuery,
+  type DataErasureExecution,
   type DataRequestAnswer,
   type ProfessionalDataRequestInput,
   type WalletDataRequestInput,
@@ -81,6 +84,20 @@ export function createDataRightsClient(request: PartnerRequest) {
         adminDataRequestSchema,
         options.signal,
         dataRequestAnswerSchema.parse(input),
+        options,
+      ),
+    erasurePlan: (requestId: string, signal?: AbortSignal) =>
+      request(
+        `/admin/partner/data-requests/${id(requestId)}/erasure`,
+        dataErasurePlanSchema,
+        signal,
+      ),
+    executeErasure: (requestId: string, input: DataErasureExecution, options: PartnerMutation) =>
+      request(
+        `/admin/partner/data-requests/${id(requestId)}/erasure`,
+        adminDataRequestSchema,
+        options.signal,
+        dataErasureExecutionSchema.parse(input),
         options,
       ),
   };

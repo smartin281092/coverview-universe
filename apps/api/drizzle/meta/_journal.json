@@ -533,6 +533,13 @@
       "when": 1791307836645,
       "tag": "0075_partner_data_requests",
       "breakpoints": true
+    },
+    {
+      "idx": 76,
+      "version": "7",
+      "when": 1791309088785,
+      "tag": "0076_partner_data_erasure",
+      "breakpoints": true
     }
   ]
 }

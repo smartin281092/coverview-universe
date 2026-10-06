@@ -102,8 +102,8 @@ export async function completeAccessSubjects(db: Executor, actor: PartnerActor) 
   return new Set(rows.map((row) => row.subject_key));
 }
 
-// Requests about one's data (brief I.20, C7b): filed by the person, answered by CoverView.
-export function createDataRequestOperations(pool: Pool) {
+// Short transactions on a locked, live session; a command is replayed by its idempotency key.
+export function requestTransactions(pool: Pool) {
   async function command<T>(
     actor: PartnerActor,
     operation: string,
@@ -163,6 +163,21 @@ export function createDataRequestOperations(pool: Pool) {
       tx.release();
     }
   }
+  return { command, read };
+}
+// One request as Admin sees it, optionally locked for a decision.
+export async function administeredRequest(db: Executor, id: string, lock = false) {
+  const row = (
+    await db.query<Row>(`${administered} where r.id=$1 ${lock ? "for update of r" : ""}`, [id])
+  ).rows[0];
+  if (!row) return fail("PARTNER_NOT_FOUND", 404);
+  return row;
+}
+export { administer };
+
+// Requests about one's data (brief I.20, C7b): filed by the person, answered by CoverView.
+export function createDataRequestOperations(pool: Pool) {
+  const { command, read } = requestTransactions(pool);
   const mine = async (tx: PoolClient, actor: PartnerActor, id: string) => {
     const row = (
       await tx.query<Row>(`${own} where r.id=$1 and r.requester_id=$2`, [id, actor.userId])
@@ -170,13 +185,7 @@ export function createDataRequestOperations(pool: Pool) {
     if (!row) return fail("PARTNER_NOT_FOUND", 404);
     return dataRequestSchema.parse(project(row));
   };
-  const administered$ = async (tx: PoolClient, id: string, lock = false) => {
-    const row = (
-      await tx.query<Row>(`${administered} where r.id=$1 ${lock ? "for update of r" : ""}`, [id])
-    ).rows[0];
-    if (!row) return fail("PARTNER_NOT_FOUND", 404);
-    return row;
-  };
+  const administered$ = administeredRequest;
   // One person's open requests are bounded; an identical open request is not filed twice. The
   // actor row lock taken first serialises two concurrent filings by the same person.
   async function file(

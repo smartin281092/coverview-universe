@@ -277,6 +277,35 @@ export const dataErasureSummarySchema = z.object({
     .max(100),
 });
 export type DataErasureSummary = z.infer<typeof dataErasureSummarySchema>;
+// What an erasure would do, computed by the server for the request's subject (C7c). An open request
+// blocks it; a request with a contract, economic rights, a dispute or a pending contest is kept.
+export const dataErasureLeadSchema = z.object({
+  id,
+  title: z.string(),
+  category: leadCategorySchema,
+  createdAt: instant,
+  status: z.enum(["erasable", "open", "kept"]),
+  holds: z.array(erasureHoldSchema),
+});
+export const dataErasurePlanSchema = z.object({
+  requestId: id,
+  requestRevision: count,
+  basis: z.string().regex(/^[a-f0-9]{64}$/u),
+  blocked: z.enum(["subject_transferred", "open_requests", "too_many"]).nullable(),
+  leads: z.array(dataErasureLeadSchema).max(100),
+  // Protected evidence kept as it is until a validated retention policy (S-131).
+  retained: z.array(z.string()).max(20),
+});
+export const dataErasureExecutionSchema = z
+  .object({
+    revision: count,
+    basis: z.string().regex(/^[a-f0-9]{64}$/u),
+    attestation: z.literal(true),
+    answer: requestText,
+  })
+  .strict();
+export type DataErasurePlan = z.infer<typeof dataErasurePlanSchema>;
+export type DataErasureExecution = z.infer<typeof dataErasureExecutionSchema>;
 
 export const dataRequestSchema = z.object({
   id,

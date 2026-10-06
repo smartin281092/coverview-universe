@@ -96,5 +96,66 @@
     "internal_scores": "Scores internes",
     "goals": "Objectifs",
     "remunerations": "Rémunérations"
+  },
+  "erasure": {
+    "title": "Aperçu de l’effacement",
+    "description": "Calculé par le serveur pour le sujet de la demande, au moment de l’ouverture. Une demande en cours bloque l’exécution ; une demande conservée l’est avec son motif.",
+    "loading": "Calcul de l’aperçu…",
+    "refresh": "Actualiser l’aperçu",
+    "none": "Aucune demande Partner pour ce sujet.",
+    "status": {
+      "erasable": "Effaçable",
+      "open": "En cours : à clôturer d’abord",
+      "kept": "Conservée"
+    },
+    "holds": {
+      "conclusion": "contrat ou signature",
+      "economy": "droits économiques ou mandat",
+      "dispute": "réclamation ouverte",
+      "contest": "contestation en cours"
+    },
+    "kept": "Motif : {{holds}}",
+    "blocked": {
+      "subject_transferred": "Le profil géré a changé de titulaire : l’effacement ne peut pas être exécuté pour ce demandeur. Refusez en l’expliquant.",
+      "open_requests": "Des demandes sont encore en cours : clôturez-les d’abord par les parcours existants, puis actualisez l’aperçu.",
+      "too_many": "Plus de 100 demandes pour ce sujet : l’effacement ne peut pas être exécuté en une fois. Refusez en l’expliquant."
+    },
+    "erases": "Pour chaque demande effaçable, l’exécution efface le nom, le titre, l’objet, le contexte, les coordonnées, la provenance et la prochaine action, les textes du journal, les tâches, les lieux de rendez-vous, les données importées de la demande d’offre et l’email d’invitation. Elle supprime les préférences et les notifications Wallet, puis rompt le lien avec le compte. Les enquêtes et réclamations de ces demandes cessent de compter dans les évaluations.",
+    "retainedTitle": "Conservé tel quel jusqu’à une politique de conservation validée",
+    "retained": {
+      "journal_actions": "Journal des actions, références au compte comprises (sans leurs textes)",
+      "booking_proposals": "Propositions de rendez-vous",
+      "communications": "Comptes rendus d’échanges",
+      "recordings_transcripts": "Enregistrements et transcriptions",
+      "surveys_complaints": "Enquêtes et réclamations",
+      "recommendations": "Recommandations et leurs motifs",
+      "professional_reviews": "Analyses des professionnels",
+      "matching": "Classements de matching",
+      "source_documents": "Documents de l’espace client utilisés comme sources"
+    },
+    "attestation": "J’atteste qu’aucune autre obligation de conservation ne s’applique aux demandes effaçables.",
+    "answerLabel": "Réponse lue par la personne",
+    "execute": "Exécuter l’effacement",
+    "confirmTitle": "Exécuter l’effacement ?",
+    "confirm_one": "{{count}} demande sera effacée. Cette action est irréversible.",
+    "confirm_other": "{{count}} demandes seront effacées. Cette action est irréversible.",
+    "confirmAction": "Effacer définitivement",
+    "cancel": "Annuler",
+    "stale": "L’aperçu a changé entre-temps : actualisez-le avant d’exécuter.",
+    "failed": "L’effacement n’a pas abouti. Actualisez l’aperçu puis réessayez.",
+    "summaryTitle": "Effacement exécuté le {{date}}",
+    "erased": {
+      "requests": "Demandes effacées",
+      "events": "Textes du journal",
+      "tasks": "Tâches",
+      "appointments": "Lieux de rendez-vous",
+      "insuranceSources": "Données de demande d’offre",
+      "invitations": "Emails d’invitation",
+      "preferences": "Préférences",
+      "notifications": "Notifications Wallet",
+      "referents": "Choix de référents"
+    },
+    "keptTitle": "Demandes conservées",
+    "leadKept": "{{date}} · motif : {{holds}}"
   }
 }
