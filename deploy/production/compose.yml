@@ -90,7 +90,12 @@ services:
     image: ghcr.io/smartin281092/coverview-astra-www:${RELEASE:?}
     restart: unless-stopped
     environment:
+      # Nom servi (sans port) et adresse de retour des surfaces fermées.
       SITE_HOST: ${SITE_HOST:-coverview.ch}
+      SITE_ORIGIN: ${SITE_ORIGIN:-https://coverview.ch}
+    # Configuration de service, modifiable sans reconstruire l'image (redirection temporaire de /).
+    volumes:
+      - ./www.Caddyfile:/etc/caddy/Caddyfile:ro
     networks: [coolify]
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/comparateur-assurance-maladie-2027"]

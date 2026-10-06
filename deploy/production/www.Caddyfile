@@ -7,7 +7,7 @@
 :8080 {
 	# Surfaces encore fermées (Wallet, Partner, Admin, ancienne préproduction) : retour à l'accueil.
 	@closed not host {$SITE_HOST:coverview.ch}
-	redir @closed https://{$SITE_HOST:coverview.ch}/ 302
+	redir @closed {$SITE_ORIGIN:https://coverview.ch}/ 302
 
 	# En attendant le site complet, l'accueil donne sur le comparateur maladie (temporaire, 302).
 	@home path /

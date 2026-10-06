@@ -5,7 +5,9 @@ Comparateur public sur `coverview.ch`, plan et décisions : [deploy-comparator](
 ## Cible
 
 - Serveur `cv-staging-01` (`179.237.74.21`), accès `ssh -i ~/.ssh/cv-workload-admin-2026-07.pem ubuntu@179.237.74.21`, commandes Docker en `sudo`.
-- Pile Compose `coverview-astra` dans `/opt/coverview-astra` : `compose.yml` de ce dossier, plus `.env` (mode 0600, clés de [.env.example](.env.example)).
+- Pile Compose `coverview-astra` dans `/opt/coverview-astra`.
+  - `compose.yml` et `www.Caddyfile` de ce dossier, copiés depuis la version déployée. Le Caddyfile est monté : retirer la redirection temporaire de `/` ne demande pas de nouvelle image.
+  - `.env` en mode 0600, avec les clés de [.env.example](.env.example).
 - Routage par le Traefik de Coolify (`coolify-proxy`, réseau `coolify`, résolveur `letsencrypt`). Coolify ne gère pas cette pile.
 - Images `ghcr.io/smartin281092/coverview-astra-api` et `-www`, étiquetées par le commit (`RELEASE`), construites sur le serveur depuis `git archive` du commit.
 
