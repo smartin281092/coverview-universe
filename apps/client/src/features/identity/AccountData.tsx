@@ -16,6 +16,7 @@ import {
   SheetTrigger,
 } from "@coverview/ui";
 import { partnerApi } from "../../partner-api";
+import { DataRequests } from "./DataRequests";
 
 // The file is built from the response and handed to the browser: CoverView keeps no copy of it.
 function save(content: unknown, name: string) {
@@ -166,6 +167,11 @@ export function AccountData({ identity }: { identity: IdentityMe }) {
             : t("copy.never")}
         </p>
       </section>
+      <DataRequests
+        identity={identity}
+        items={summary.data.requests}
+        onChanged={() => void client.invalidateQueries({ queryKey })}
+      />
     </div>
   );
 }

@@ -189,15 +189,151 @@ export const matchingAppearancesSchema = z.object({
   truncated: z.boolean(),
 });
 
+// Requests about one's data (C7b), answered by CoverView. A professional's copy is already complete
+// under matrix v1, so complete access is a Wallet request only.
+export const dataRequestKindSchema = z.enum([
+  "rectification",
+  "erasure",
+  "complete_access",
+  "other",
+]);
+export const professionalDataRequestKindSchema = z.enum(["rectification", "erasure", "other"]);
+export const dataRequestStateSchema = z.enum(["received", "in_progress", "answered", "withdrawn"]);
+export const dataRequestOutcomeSchema = z.enum([
+  "done",
+  "partially_done",
+  "refused",
+  "granted",
+  "answered",
+]);
+export type DataRequestKind = z.infer<typeof dataRequestKindSchema>;
+export type DataRequestOutcome = z.infer<typeof dataRequestOutcomeSchema>;
+// Outcomes an Admin may give by hand. An erasure is only "done" through its execution (C7c), and a
+// professional's erasure, which no tool executes, is answered rather than declared done.
+export const manualOutcomes: Record<
+  "wallet" | "partner",
+  Partial<Record<DataRequestKind, readonly DataRequestOutcome[]>>
+> = {
+  wallet: {
+    rectification: ["done", "partially_done", "refused"],
+    erasure: ["refused"],
+    complete_access: ["granted", "refused"],
+    other: ["answered", "refused"],
+  },
+  partner: {
+    rectification: ["done", "partially_done", "refused"],
+    erasure: ["answered", "refused"],
+    other: ["answered", "refused"],
+  },
+};
+const requestText = z.string().trim().min(10).max(2000);
+export const openDataRequestLimit = 5;
+// Days a granted complete access opens the internal notes and tasks in the person's copy.
+export const completeAccessDays = 14;
+export const walletDataRequestInputSchema = z
+  .object({
+    kind: dataRequestKindSchema,
+    profileId: id.nullable(),
+    category: walletDataCategorySchema.nullable(),
+    leadId: id.nullable(),
+    message: requestText,
+  })
+  .strict();
+export const professionalDataRequestInputSchema = z
+  .object({
+    kind: professionalDataRequestKindSchema,
+    category: professionalDataCategorySchema.nullable(),
+    message: requestText,
+  })
+  .strict();
+export const dataRequestRevisionSchema = z
+  .object({ revision: z.number().int().nonnegative() })
+  .strict();
+export const dataRequestAnswerSchema = z
+  .object({
+    revision: z.number().int().nonnegative(),
+    outcome: dataRequestOutcomeSchema,
+    answer: requestText,
+  })
+  .strict();
+export type WalletDataRequestInput = z.infer<typeof walletDataRequestInputSchema>;
+export type ProfessionalDataRequestInput = z.infer<typeof professionalDataRequestInputSchema>;
+export type DataRequestAnswer = z.infer<typeof dataRequestAnswerSchema>;
+
+// What an executed erasure did (C7c): counts and the requests kept with their reasons, no content.
+export const erasureHoldSchema = z.enum(["conclusion", "economy", "dispute", "contest"]);
+export const dataErasureSummarySchema = z.object({
+  version: z.literal("partner-erasure-v1"),
+  executedAt: instant,
+  erased: z.record(z.string(), count),
+  kept: z
+    .array(
+      z.object({
+        leadId: id,
+        category: leadCategorySchema,
+        holds: z.array(erasureHoldSchema).min(1),
+      }),
+    )
+    .max(100),
+});
+export type DataErasureSummary = z.infer<typeof dataErasureSummarySchema>;
+
+export const dataRequestSchema = z.object({
+  id,
+  surface: z.enum(["wallet", "partner"]),
+  kind: dataRequestKindSchema,
+  state: dataRequestStateSchema,
+  outcome: dataRequestOutcomeSchema.nullable(),
+  subject: z.object({
+    kind: z.enum(["self", "profile", "member"]),
+    profileId: id.nullable(),
+    name: z.string().nullable(),
+  }),
+  category: z.string().nullable(),
+  lead: z.object({ id, title: z.string(), category: leadCategorySchema }).nullable(),
+  message: z.string(),
+  answer: z.string().nullable(),
+  accessUntil: instant.nullable(),
+  erasure: dataErasureSummarySchema.nullable(),
+  createdAt: instant,
+  takenAt: instant.nullable(),
+  answeredAt: instant.nullable(),
+  withdrawnAt: instant.nullable(),
+  revision: count,
+});
+export type DataRequest = z.infer<typeof dataRequestSchema>;
+const person = z.object({ id, email: z.string(), name: z.string().nullable() });
+export const adminDataRequestSchema = dataRequestSchema.extend({
+  requester: person,
+  takenBy: person.nullable(),
+  answeredBy: person.nullable(),
+  allowedOutcomes: z.array(dataRequestOutcomeSchema),
+});
+export const adminDataRequestsQuerySchema = z
+  .object({
+    state: z.enum(["open", "closed", "all"]).default("open"),
+    cursor: z.string().max(300).optional(),
+  })
+  .strict();
+export const adminDataRequestsSchema = z.object({
+  items: z.array(adminDataRequestSchema).max(50),
+  nextCursor: z.string().nullable(),
+  open: count,
+});
+export type AdminDataRequest = z.infer<typeof adminDataRequestSchema>;
+export type AdminDataRequestsQuery = z.infer<typeof adminDataRequestsQuerySchema>;
+
 export const walletDataSchema = z.object({
   registerVersion: z.literal(partnerDataRegisterVersion),
   exports: z.array(dataExportProofSchema).max(10),
+  requests: z.array(dataRequestSchema).max(20),
 });
 export const professionalDataSchema = z.object({
   registerVersion: z.literal(partnerDataRegisterVersion),
   matching: matchingAppearancesSchema,
   referrer: referrerEvaluationSchema.nullable(),
   exports: z.array(dataExportProofSchema).max(10),
+  requests: z.array(dataRequestSchema).max(20),
 });
 export type WalletData = z.infer<typeof walletDataSchema>;
 export type ProfessionalData = z.infer<typeof professionalDataSchema>;

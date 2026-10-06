@@ -2,7 +2,9 @@ import type { Pool, PoolClient } from "pg";
 import { z } from "zod";
 import {
   leadCategorySchema,
+  leadEventSchema,
   leadListQuerySchema,
+  leadTaskSchema,
   partnerNotificationQuerySchema,
 } from "@coverview/contracts/partner";
 import { qualityPageQuerySchema } from "@coverview/contracts/partner-quality";
@@ -21,6 +23,8 @@ import {
 } from "@coverview/contracts/partner-data";
 import {
   PartnerError,
+  camel,
+  date,
   fail,
   failOnConcurrentAbort,
   lockActor,
@@ -28,6 +32,7 @@ import {
   type PartnerActor,
 } from "./partner.policy.js";
 import { newId } from "./partner.audit.js";
+import { completeAccessSubjects, ownRequests } from "./partner.data-requests.js";
 import { professionalRegister, walletRegister } from "./partner.data-register.js";
 import type { createPartnerRepository } from "./partner.repository.js";
 
@@ -166,6 +171,49 @@ export function createDataRightsOperations(pool: Pool, repository: Repository) {
     });
   }
 
+  // Internal notes, tasks and every audience of the journal, opened only by a granted complete
+  // access; read under the same visibility as the request itself.
+  async function internalOf(tx: PoolClient, actor: PartnerActor, leadId: string) {
+    const seen = `exists(select 1 from partner_leads l where l.id=$2 and (${visible(actor)}))`;
+    const tasks = (
+      await tx.query<Record<string, unknown>>(
+        `select * from partner_tasks t where t.lead_id=$2 and ${seen} order by t.state,t.due_at,t.id limit 101`,
+        [actor.userId, leadId],
+      )
+    ).rows;
+    const events = (
+      await tx.query<Record<string, unknown>>(
+        `select * from partner_events e where e.lead_id=$2 and ${seen} order by e.created_at desc,e.id desc limit 501`,
+        [actor.userId, leadId],
+      )
+    ).rows;
+    return {
+      truncated: tasks.length > 100 || events.length > 500,
+      tasks: tasks.slice(0, 100).map((row) =>
+        leadTaskSchema.parse({
+          ...camel<Record<string, unknown>>(row),
+          dueAt: date(row.due_at as Date),
+          reminderAt: date(row.reminder_at as Date | null),
+          completedAt: date(row.completed_at as Date | null),
+        }),
+      ),
+      events: events.slice(0, 500).map((row) =>
+        leadEventSchema.parse({
+          id: row.id,
+          subjectId: row.subject_id,
+          offer: null,
+          responsePending: false,
+          kind: row.kind,
+          authorId: row.actor_id ?? "system_partner_continuity",
+          systemActor: row.system_actor,
+          audience: row.audience,
+          text: row.text,
+          createdAt: date(row.created_at as Date),
+        }),
+      ),
+    };
+  }
+
   async function walletRequests(actor: PartnerActor, collected: Collected) {
     const leads: string[] = [];
     let cursor: string | undefined;
@@ -178,11 +226,20 @@ export function createDataRightsOperations(pool: Pool, repository: Repository) {
       cursor = page.nextCursor ?? undefined;
     } while (cursor && leads.length < LEADS);
     cut(collected, "requests", cursor || leads.length > LEADS);
+    // Subjects whose complete access CoverView granted to this person and is still open (C7b).
+    const granted = await read(actor, (tx) => completeAccessSubjects(tx, actor));
     const requests: WalletDataExport["requests"] = [];
     for (const id of leads.slice(0, LEADS)) {
       const name = `requests.${id}`;
       const lead = await section(collected, name, () => repository.detail(actor, id));
       if (!lead) continue;
+      const subject = lead.clientProfileId
+        ? `profile:${lead.clientProfileId}`
+        : `self:${actor.userId}`;
+      const internal = granted.has(subject)
+        ? await read(actor, (tx) => internalOf(tx, actor, id))
+        : null;
+      cut(collected, `${name}.internal`, internal?.truncated);
       // The client's own contact details and origin, read under the same visibility as the lead.
       const details = await read(
         actor,
@@ -266,7 +323,7 @@ export function createDataRightsOperations(pool: Pool, repository: Repository) {
         marketMandates,
         relationships,
         reopenings,
-        internal: null,
+        internal: internal && { tasks: internal.tasks, events: internal.events },
       });
     }
     return requests;
@@ -315,6 +372,7 @@ export function createDataRightsOperations(pool: Pool, repository: Repository) {
         return walletDataSchema.parse({
           registerVersion: partnerDataRegisterVersion,
           exports: await proofs(tx, actor, "wallet"),
+          requests: await ownRequests(tx, actor),
         });
       }),
     async walletExport(actor: PartnerActor): Promise<WalletDataExport> {
@@ -346,16 +404,20 @@ export function createDataRightsOperations(pool: Pool, repository: Repository) {
           0,
         ),
         notifications: notifications?.items.length ?? 0,
-        internal: 0,
+        internal: requests.reduce(
+          (sum, r) => sum + (r.internal ? r.internal.tasks.length + r.internal.events.length : 0),
+          0,
+        ),
       };
-      const proof = await prove(actor, "wallet", false, counts);
+      const complete = requests.some((r) => r.internal);
+      const proof = await prove(actor, "wallet", complete, counts);
       return walletDataExportSchema.parse({
         manifest: {
           version: partnerDataExportVersion,
           exportId: proof.id,
           generatedAt: proof.generatedAt,
           surface: "wallet",
-          complete: false,
+          complete,
           counts,
           ...collected,
         },
@@ -377,6 +439,7 @@ export function createDataRightsOperations(pool: Pool, repository: Repository) {
           matching: await appearances(tx, actor.userId),
           referrer,
           exports: await proofs(tx, actor, "partner"),
+          requests: await ownRequests(tx, actor),
         }),
       );
     },

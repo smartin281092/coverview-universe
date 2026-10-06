@@ -154,5 +154,59 @@
         "origin": "Dossiers et accords économiques."
       }
     }
+  },
+  "requests": {
+    "title": "Vos demandes sur vos données",
+    "description": "Demandez une rectification ou un effacement, ou posez une question : CoverView vous répond ici.",
+    "file": "Faire une demande",
+    "empty": "Aucune demande pour l’instant.",
+    "item": "{{kind}} · {{date}}",
+    "kind": {
+      "rectification": "Rectification",
+      "erasure": "Effacement",
+      "complete_access": "Accès complet",
+      "other": "Autre demande"
+    },
+    "kindHelp": {
+      "rectification": "Une donnée vous concernant est inexacte ou incomplète.",
+      "erasure": "Vous souhaitez que vos données soient effacées. Celles qu’une obligation, un droit économique ou un litige impose de garder vous seront indiquées.",
+      "other": "Opposition, limitation d’un traitement ou toute autre question."
+    },
+    "state": {
+      "received": "Reçue",
+      "in_progress": "En cours",
+      "answered": "Répondue",
+      "withdrawn": "Retirée"
+    },
+    "outcome": {
+      "done": "Faite",
+      "partially_done": "Partiellement faite",
+      "refused": "Refusée",
+      "granted": "Accordée",
+      "answered": "Répondue"
+    },
+    "answerTitle": "Réponse de CoverView",
+    "withdraw": "Retirer",
+    "withdrawTitle": "Retirer cette demande ?",
+    "withdrawDescription": "CoverView ne la traitera pas. Vous pourrez en déposer une nouvelle.",
+    "withdrawConfirm": "Retirer la demande",
+    "cancel": "Annuler",
+    "form": {
+      "title": "Faire une demande sur vos données",
+      "description": "Précisez ce qui vous concerne : CoverView examine chaque demande et vous répond dans cette page.",
+      "kind": "Votre demande",
+      "category": "Catégorie concernée",
+      "anyCategory": "Toutes ou non précisée",
+      "message": "Votre message",
+      "messageHint": "Entre 10 et 2000 caractères.",
+      "submit": "Envoyer la demande",
+      "sending": "Envoi…"
+    },
+    "errors": {
+      "limit": "Vous avez déjà 5 demandes en cours : attendez une réponse ou retirez-en une.",
+      "duplicate": "Une demande identique est déjà en cours.",
+      "conflict": "Cette demande a changé entre-temps. Actualisez la page.",
+      "failed": "L’envoi n’a pas abouti. Réessayez dans quelques instants."
+    }
   }
 }

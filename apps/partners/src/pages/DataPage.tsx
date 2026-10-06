@@ -27,6 +27,7 @@ import {
 } from "@coverview/ui";
 import { partnerApi } from "../api";
 import { usePartner } from "../features/PartnerSession";
+import { DataRequests } from "../features/DataRequests";
 
 const PAGE = 10;
 
@@ -322,6 +323,10 @@ export function DataPage() {
             </p>
           </section>
           <Scores data={summary.data} />
+          <DataRequests
+            items={summary.data.requests}
+            onChanged={() => void client.invalidateQueries({ queryKey })}
+          />
         </>
       )}
     </section>

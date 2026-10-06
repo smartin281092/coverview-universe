@@ -1,0 +1,100 @@
+{
+  "back": "Retour à Partner",
+  "title": "Droits des personnes",
+  "description": "Demandes de rectification, d’effacement, d’accès complet et autres questions sur les données Partner. La personne lit chaque réponse dans « Mes données ».",
+  "open_one": "{{count}} demande à traiter",
+  "open_other": "{{count}} demandes à traiter",
+  "filters": {
+    "label": "Afficher",
+    "open": "À traiter",
+    "closed": "Traitées",
+    "all": "Toutes"
+  },
+  "loading": "Chargement des demandes…",
+  "error": "Les demandes ne sont pas disponibles.",
+  "retry": "Réessayer",
+  "empty": {
+    "open": "Aucune demande à traiter.",
+    "closed": "Aucune demande traitée.",
+    "all": "Aucune demande."
+  },
+  "next": "Demandes suivantes",
+  "first": "Revenir au début",
+  "item": "{{kind}} · {{surface}} · {{date}}",
+  "requester": "{{name}} · {{email}}",
+  "unnamed": "Sans nom déclaré",
+  "kind": {
+    "rectification": "Rectification",
+    "erasure": "Effacement",
+    "complete_access": "Accès complet",
+    "other": "Autre demande"
+  },
+  "surface": {
+    "wallet": "Client Wallet",
+    "partner": "Professionnel Partner"
+  },
+  "subject": {
+    "self": "Pour lui-même",
+    "member": "Pour lui-même",
+    "profile": "Pour le profil géré « {{name}} »"
+  },
+  "state": {
+    "received": "Reçue",
+    "in_progress": "En cours",
+    "answered": "Répondue",
+    "withdrawn": "Retirée"
+  },
+  "outcome": {
+    "done": "Faite",
+    "partially_done": "Partiellement faite",
+    "refused": "Refusée",
+    "granted": "Accordée",
+    "answered": "Répondue"
+  },
+  "open": "Traiter",
+  "view": "Consulter",
+  "sheet": {
+    "message": "Message de la personne",
+    "category": "Catégorie",
+    "noCategory": "Non précisée",
+    "lead": "Demande concernée",
+    "received": "Reçue le {{date}}",
+    "taken": "Prise en charge par {{name}} le {{date}}",
+    "answered": "Réponse de {{name}} le {{date}}",
+    "withdrawn": "Retirée par la personne le {{date}}",
+    "accessUntil": "Accès complet ouvert jusqu’au {{date}}",
+    "answer": "Réponse donnée"
+  },
+  "take": "Prendre en charge",
+  "answerTitle": "Répondre",
+  "outcomeLabel": "Issue",
+  "answerLabel": "Réponse lue par la personne",
+  "answerHint": "10 caractères au moins.",
+  "notes": {
+    "erasure": "Un effacement n’est déclaré fait que par son exécution, depuis l’aperçu d’effacement. Ici, vous pouvez seulement le refuser en motivant.",
+    "partnerErasure": "Aucun outil n’efface encore les données d’un professionnel : répondez en expliquant ce qui a été fait, ou refusez en motivant.",
+    "access": "Accorder ouvre pendant 14 jours, dans la copie de la personne, les notes internes, les tâches et le journal complet de ses demandes pour ce sujet.",
+    "rectification": "Faites d’abord la correction par les parcours existants, puis décrivez-la dans la réponse."
+  },
+  "send": "Envoyer la réponse",
+  "close": "Fermer",
+  "saveError": "L’opération n’a pas abouti. Actualisez la demande puis réessayez.",
+  "categories": {
+    "requests": "Demandes de conseil",
+    "contact": "Coordonnées et provenance",
+    "appointments": "Rendez-vous",
+    "offers": "Offres, choix et signatures",
+    "preferences": "Préférences et référents",
+    "communications": "Échanges et enregistrements",
+    "quality": "Enquêtes et réclamations",
+    "notifications": "Notifications",
+    "internal": "Notes internes et tâches",
+    "membership": "Candidature et habilitation",
+    "declarations": "Déclarations et décisions",
+    "profile": "Profil public",
+    "evaluations": "Évaluations",
+    "internal_scores": "Scores internes",
+    "goals": "Objectifs",
+    "remunerations": "Rémunérations"
+  }
+}

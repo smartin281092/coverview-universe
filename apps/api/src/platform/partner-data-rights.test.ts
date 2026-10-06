@@ -21,6 +21,7 @@ import { randomSecret } from "../modules/identity/identity.security.js";
 import type { IdentityProvider, RemoteSession } from "../modules/identity/identity.workos.js";
 import { createPartnerRepository } from "../modules/partner-workspace/partner.repository.js";
 import { createDataRightsOperations } from "../modules/partner-workspace/partner.data-rights.js";
+import { createDataRequestOperations } from "../modules/partner-workspace/partner.data-requests.js";
 import {
   recordMatchingDecision,
   type Matching,
@@ -31,6 +32,7 @@ let container: StartedPostgreSqlContainer;
 let database: ReturnType<typeof createDatabase>;
 let repository: ReturnType<typeof createPartnerRepository>;
 let rights: ReturnType<typeof createDataRightsOperations>;
+let requests: ReturnType<typeof createDataRequestOperations>;
 let admin: PartnerActor;
 type LeadCategory = z.infer<typeof leadCategorySchema>;
 const key = () => randomUUID();
@@ -50,6 +52,7 @@ beforeAll(async () => {
   });
   repository = createPartnerRepository(database.pool);
   rights = createDataRightsOperations(database.pool, repository);
+  requests = createDataRequestOperations(database.pool);
   admin = await actor(true);
 });
 afterAll(async () => {
@@ -478,7 +481,11 @@ it("serves the copy over HTTP to the signed-in person only, as a protected, rate
 
     const summary = await app.inject({ url: "/wallet/data", headers: { host, cookie } });
     expect(summary.statusCode).toBe(200);
-    expect(summary.json()).toEqual({ registerVersion: "partner-data-register-v1", exports: [] });
+    expect(summary.json()).toEqual({
+      registerVersion: "partner-data-register-v1",
+      exports: [],
+      requests: [],
+    });
     expect((await app.inject({ url: "/wallet/data", headers: { host } })).statusCode).toBe(401);
 
     const mutation = (headers: Record<string, string>, session = cookie) =>
@@ -552,3 +559,253 @@ it("serves the copy over HTTP to the signed-in person only, as a protected, rate
     await app.close();
   }
 }, 60000);
+
+it("files requests about one's data within bounds, and lets CoverView answer them as allowed", async () => {
+  const client = await owner(),
+    stranger = await owner(),
+    advisor = await professional("Hugo Requête", "health");
+  const child = await managedProfile(client, "Enfant requête");
+  const own = await request(client, advisor, "health", "Hotel");
+  // The advisor's own working notes, which only a complete access opens to the client.
+  const noted = await repository.command(
+    advisor,
+    own.id,
+    {
+      action: "note",
+      revision: own.revision,
+      text: "Note interne sur le client.",
+      audience: "assigned",
+    },
+    key(),
+  );
+  await repository.command(
+    advisor,
+    own.id,
+    {
+      action: "task",
+      revision: noted.revision,
+      task: {
+        title: "Rappeler le client",
+        description: "Avant la fin de la semaine",
+        responsibleId: advisor.userId,
+        dueAt: later(48),
+        priority: "normal",
+        reminderAt: null,
+      },
+    },
+    key(),
+  );
+  const childLead = await request(client, advisor, "health", "India", child);
+  const foreign = await request(stranger, advisor, "health", "Juliett");
+  const file = (input: Record<string, unknown>, k = key()) =>
+    requests.fileWalletDataRequest(
+      client,
+      {
+        kind: "other",
+        profileId: null,
+        category: null,
+        leadId: null,
+        message: "Une question sur mes données.",
+        ...input,
+      },
+      k,
+    );
+
+  const replayKey = key();
+  const rectification = await file(
+    {
+      kind: "rectification",
+      category: "contact",
+      leadId: own.id,
+      message: "Mon numéro de téléphone a changé.",
+    },
+    replayKey,
+  );
+  expect(rectification).toMatchObject({
+    surface: "wallet",
+    kind: "rectification",
+    state: "received",
+    subject: { kind: "self", profileId: null },
+    category: "contact",
+    lead: { id: own.id, title: "Demande Hotel", category: "health" },
+    revision: 0,
+  });
+  // A replay returns the same request; the same key for something else is refused.
+  expect(
+    (
+      await file(
+        {
+          kind: "rectification",
+          category: "contact",
+          leadId: own.id,
+          message: "Mon numéro de téléphone a changé.",
+        },
+        replayKey,
+      )
+    ).id,
+  ).toBe(rectification.id);
+  await expect(file({ kind: "erasure" }, replayKey)).rejects.toMatchObject({
+    code: "PARTNER_IDEMPOTENCY_REUSED",
+  });
+  // The same request is not filed twice while open.
+  await expect(
+    file({
+      kind: "rectification",
+      category: "contact",
+      leadId: own.id,
+      message: "Encore mon numéro de téléphone.",
+    }),
+  ).rejects.toMatchObject({ code: "PARTNER_CONFLICT" });
+  // Only one's own subjects and the requests one sees, of the same subject.
+  for (const input of [
+    { leadId: foreign.id },
+    { profileId: child, leadId: own.id },
+    { profileId: null, leadId: childLead.id },
+    { profileId: await managedProfile(stranger, "Profil étranger") },
+  ])
+    await expect(file(input)).rejects.toMatchObject({ code: "PARTNER_NOT_FOUND" });
+
+  const erasure = await file({ kind: "erasure", message: "Merci d’effacer mes données Partner." });
+  const access = await file({
+    kind: "complete_access",
+    category: "internal",
+    message: "Je souhaite un accès complet.",
+  });
+  const other = await file({ message: "Comment sont choisis mes conseillers ?" });
+  await file({
+    kind: "rectification",
+    profileId: child,
+    leadId: childLead.id,
+    message: "Le nom de mon enfant est mal écrit.",
+  });
+  // Five open requests per person: the sixth waits for an answer or a withdrawal.
+  await expect(
+    file({ profileId: child, message: "Une autre question sur mon enfant." }),
+  ).rejects.toMatchObject({ code: "PARTNER_RATE_LIMITED" });
+  const withdrawn = await requests.withdrawDataRequest(client, other.id, { revision: 0 }, key());
+  expect(withdrawn).toMatchObject({ state: "withdrawn", revision: 1 });
+  await expect(
+    requests.withdrawDataRequest(client, other.id, { revision: 1 }, key()),
+  ).rejects.toMatchObject({ code: "PARTNER_INVALID_TRANSITION" });
+  await expect(
+    requests.withdrawDataRequest(stranger, erasure.id, { revision: 0 }, key()),
+  ).rejects.toMatchObject({ code: "PARTNER_NOT_FOUND" });
+
+  // The queue is Admin-only, oldest open request first.
+  for (const someone of [client, advisor])
+    await expect(requests.adminDataRequests(someone, { state: "open" })).rejects.toMatchObject({
+      code: "PARTNER_ACCESS_DENIED",
+    });
+  const queue = await requests.adminDataRequests(admin, { state: "open" });
+  const mine = queue.items.filter((item) => item.requester.id === client.userId);
+  expect(mine.map((item) => item.id).slice(0, 3)).toEqual([
+    rectification.id,
+    erasure.id,
+    access.id,
+  ]);
+  expect(mine.find((item) => item.id === erasure.id)?.allowedOutcomes).toEqual(["refused"]);
+
+  const taken = await requests.takeDataRequest(admin, rectification.id, { revision: 0 }, key());
+  expect(taken).toMatchObject({ state: "in_progress", takenBy: { id: admin.userId } });
+  await expect(
+    requests.takeDataRequest(admin, rectification.id, { revision: 1 }, key()),
+  ).rejects.toMatchObject({ code: "PARTNER_INVALID_TRANSITION" });
+  const answer = (outcome: string, id: string, revision: number) =>
+    requests.answerDataRequest(
+      admin,
+      id,
+      { revision, outcome, answer: "Réponse documentée de CoverView." },
+      key(),
+    );
+  // An erasure is declared done only by its execution, never by hand.
+  await expect(answer("done", erasure.id, 0)).rejects.toMatchObject({
+    code: "PARTNER_INVALID_TRANSITION",
+  });
+  await expect(answer("granted", rectification.id, 1)).rejects.toMatchObject({
+    code: "PARTNER_INVALID_TRANSITION",
+  });
+  expect(await answer("done", rectification.id, 1)).toMatchObject({
+    state: "answered",
+    outcome: "done",
+    answeredBy: { id: admin.userId },
+    allowedOutcomes: [],
+  });
+  const before = Date.now();
+  const granted = await answer("granted", access.id, 0);
+  const until = Date.parse(granted.accessUntil ?? "");
+  expect(until - before).toBeGreaterThan(13.9 * 86400000);
+  expect(until - before).toBeLessThan(14.1 * 86400000);
+
+  // A granted complete access opens internal notes and every journal audience, for that subject
+  // only.
+  const copy = await rights.walletExport(client);
+  const self = copy.requests.find((item) => item.lead.id === own.id);
+  const managed = copy.requests.find((item) => item.lead.id === childLead.id);
+  const internal = self?.internal;
+  expect(internal?.events.map((item) => item.text)).toContain("Note interne sur le client.");
+  expect(self?.lead.events.map((item) => item.text)).not.toContain("Note interne sur le client.");
+  expect(internal?.tasks.map((item) => item.title)).toEqual(["Rappeler le client"]);
+  expect(managed?.internal).toBeNull();
+  expect(copy.manifest.complete).toBe(true);
+  expect(copy.manifest.counts.internal).toBe(
+    (internal?.events.length ?? 0) + (internal?.tasks.length ?? 0),
+  );
+  expect((await rights.walletExport(stranger)).manifest.complete).toBe(false);
+
+  // The answer is the person's to read; the request stays frozen.
+  const summary = await rights.walletData(client);
+  expect(summary.requests.find((item) => item.id === rectification.id)).toMatchObject({
+    outcome: "done",
+    answer: "Réponse documentée de CoverView.",
+  });
+  await expect(
+    database.pool.query(
+      "update partner_data_requests set answer='Autre réponse documentée',revision=revision+1 where id=$1",
+      [rectification.id],
+    ),
+  ).rejects.toMatchObject({ code: "23514" });
+  await expect(
+    database.pool.query("delete from partner_data_requests where id=$1", [erasure.id]),
+  ).rejects.toMatchObject({ code: "23514" });
+
+  // A professional files for themselves; their erasure is answered, never declared done by hand.
+  const professionalRequest = await requests.fileProfessionalDataRequest(
+    advisor,
+    {
+      kind: "erasure",
+      category: "membership",
+      message: "Je quitte le réseau, merci d’effacer mes données.",
+    },
+    key(),
+  );
+  expect(professionalRequest).toMatchObject({ surface: "partner", subject: { kind: "member" } });
+  expect(() =>
+    requests.fileProfessionalDataRequest(
+      advisor,
+      { kind: "complete_access", category: null, message: "Accès complet à mes données." },
+      key(),
+    ),
+  ).toThrow();
+  await expect(answer("done", professionalRequest.id, 0)).rejects.toMatchObject({
+    code: "PARTNER_INVALID_TRANSITION",
+  });
+  expect(await answer("answered", professionalRequest.id, 0)).toMatchObject({
+    outcome: "answered",
+  });
+  expect((await rights.professionalData(advisor)).requests.map((item) => item.id)).toEqual([
+    professionalRequest.id,
+  ]);
+  await expect(
+    requests.fileWalletDataRequest(
+      advisor,
+      {
+        kind: "other",
+        profileId: null,
+        category: null,
+        leadId: null,
+        message: "Question depuis Partner.",
+      },
+      key(),
+    ),
+  ).rejects.toMatchObject({ code: "PARTNER_ACCESS_DENIED" });
+});
