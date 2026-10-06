@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import type { FastifyInstance, FastifyRequest } from "fastify";
 import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
@@ -18,8 +19,18 @@ export function registerDataRightsRoutes(
 ) {
   const app = server.withTypeProvider<ZodTypeProvider>(),
     config = { rateLimit: { max: 60, timeWindow: "1 minute" } },
-    // An export reads every section: a few per hour cover any real need.
-    exporting = { rateLimit: { max: 6, timeWindow: "1 hour" } },
+    // An export reads every section: a few per hour cover any real need. Counted per session, not
+    // per address, so people sharing one network do not share a quota; only a digest is kept.
+    exporting = {
+      rateLimit: {
+        max: 6,
+        timeWindow: "1 hour",
+        keyGenerator: (r: FastifyRequest) => {
+          const session = r.cookies["__Host-cv_session"] ?? r.cookies.cv_session;
+          return session ? createHash("sha256").update(session).digest("hex") : r.ip;
+        },
+      },
+    },
     empty = z.object({}).strict();
   app.get("/wallet/data", { config, schema: { response: { 200: walletDataSchema } } }, async (r) =>
     dataRights.walletData(await actor(r, true)),

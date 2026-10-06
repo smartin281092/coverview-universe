@@ -1,4 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
+import { readFileSync } from "node:fs";
+import { parseEnv } from "node:util";
 import { fileURLToPath } from "node:url";
 import { PostgreSqlContainer, type StartedPostgreSqlContainer } from "@testcontainers/postgresql";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
@@ -10,7 +12,13 @@ import {
 } from "@coverview/contracts/partner";
 import type { MatchingCandidate } from "@coverview/contracts/partner-matching";
 import type { z } from "zod";
+import { parseEnvironment } from "./config.js";
 import { createDatabase } from "./db/database.js";
+import { buildServer } from "./server.js";
+import { createIdentityRepository } from "../modules/identity/identity.repository.js";
+import { createIdentityService } from "../modules/identity/identity.service.js";
+import { randomSecret } from "../modules/identity/identity.security.js";
+import type { IdentityProvider, RemoteSession } from "../modules/identity/identity.workos.js";
 import { createPartnerRepository } from "../modules/partner-workspace/partner.repository.js";
 import { createDataRightsOperations } from "../modules/partner-workspace/partner.data-rights.js";
 import {
@@ -362,3 +370,185 @@ it("opens each professional's own internal scores to them, and nobody else's", a
     code: "PARTNER_ACCESS_DENIED",
   });
 });
+
+// The HTTP case uses an explicit identity provider double, never a real WorkOS login.
+const example = parseEnv(
+  readFileSync(new URL("../../../../.env.example", import.meta.url), "utf8"),
+);
+async function server() {
+  const remotes: RemoteSession[] = [];
+  const outside = () => Promise.reject(new Error("Outside this case"));
+  const provider: IdentityProvider = {
+    factors: outside,
+    enroll: outside,
+    challengeEnrollment: outside,
+    cancelEnrollment: outside,
+    challenge: outside,
+    verify: outside,
+    authorization: () => {
+      const state = randomSecret();
+      return Promise.resolve({
+        url: `https://auth.example.test/authorize?state=${state}`,
+        state,
+        codeVerifier: randomSecret(),
+      });
+    },
+    exchange: (code) => {
+      const remote: RemoteSession = {
+        id: `session_${key()}`,
+        userId: code,
+        status: "active",
+        authMethod: "magic_code",
+        createdAt: new Date().toISOString(),
+        expiresAt: new Date(Date.now() + 3600000).toISOString(),
+      };
+      remotes.push(remote);
+      return Promise.resolve({
+        workosUserId: code,
+        workosSessionId: remote.id,
+        email: `${code}@rights.test`,
+        authenticatedAt: null,
+      });
+    },
+    sessions: (id) =>
+      Promise.resolve(remotes.filter((item) => item.userId === id && item.status === "active")),
+    revoke: (id) => {
+      const item = remotes.find((remote) => remote.id === id);
+      if (item) item.status = "revoked";
+      return Promise.resolve();
+    },
+  };
+  const config = parseEnvironment({
+    ...example,
+    DATABASE_URL: container.getConnectionUri(),
+    LOG_LEVEL: "silent",
+    AUTH_ENABLED: "true",
+    DOCUMENTS_ENABLED: "false",
+    PARTNER_JOBS_ENABLED: "false",
+    WORKOS_API_KEY: "fixture_not_real",
+    WORKOS_CLIENT_ID: "client_fixture",
+    AUTH_SESSION_SECRET: Buffer.alloc(32, 7).toString("base64"),
+  });
+  const service = createIdentityService(
+    config,
+    createIdentityRepository(database.db),
+    provider,
+    () => undefined,
+  );
+  const app = await buildServer(
+    config,
+    {
+      checkReadiness: () => Promise.resolve(true),
+      readPersonas: () => Promise.resolve([]),
+      close: () => Promise.resolve(),
+    },
+    service,
+  );
+  return { app, config, host: new URL(config.AUTH_API_ORIGIN).host };
+}
+
+it("serves the copy over HTTP to the signed-in person only, as a protected, rate-limited mutation", async () => {
+  const { app, config, host } = await server();
+  async function signIn() {
+    const login = await app.inject({ url: "/auth/login?surface=wallet", headers: { host } });
+    const state = new URL(String(login.headers.location)).searchParams.get("state") ?? "";
+    const callback = await app.inject({
+      url: `/auth/callback?code=user_${key()}&state=${state}`,
+      headers: { host, cookie: String(login.headers["set-cookie"]).split(";")[0]! },
+    });
+    const cookies = ([] as string[]).concat(callback.headers["set-cookie"] ?? []);
+    const cookie = (cookies.find((value) => value.startsWith("cv_session=")) ?? "").split(";")[0]!;
+    const me = (await app.inject({ url: "/identity/me", headers: { host, cookie } })).json<{
+      user: { id: string };
+      session: { id: string };
+      csrfToken: string;
+    }>();
+    return {
+      cookie,
+      csrf: me.csrfToken,
+      actor: { userId: me.user.id, id: me.session.id, administrator: false, wallet: true },
+    };
+  }
+  try {
+    const signed = await signIn(),
+      cookie = signed.cookie,
+      client = signed.actor;
+    const advisor = await professional("Gaël Conseil", "pension");
+    const lead = await request(client, advisor, "pension", "Golf");
+
+    const summary = await app.inject({ url: "/wallet/data", headers: { host, cookie } });
+    expect(summary.statusCode).toBe(200);
+    expect(summary.json()).toEqual({ registerVersion: "partner-data-register-v1", exports: [] });
+    expect((await app.inject({ url: "/wallet/data", headers: { host } })).statusCode).toBe(401);
+
+    const mutation = (headers: Record<string, string>, session = cookie) =>
+      app.inject({
+        method: "POST",
+        url: "/wallet/data/exports",
+        headers: { host, cookie: session, "content-type": "application/json", ...headers },
+        payload: {},
+      });
+    const protectedHeaders = {
+      origin: config.AUTH_WALLET_ORIGIN,
+      "x-csrf-token": signed.csrf,
+      "idempotency-key": key(),
+    };
+    // Without the session's CSRF token, nothing is produced or recorded.
+    const forged = await mutation({ origin: config.AUTH_WALLET_ORIGIN, "idempotency-key": key() });
+    expect(forged.statusCode).toBe(403);
+    expect(
+      (
+        await database.pool.query("select 1 from partner_data_exports where user_id=$1", [
+          client.userId,
+        ])
+      ).rowCount,
+    ).toBe(0);
+
+    const exported = await mutation(protectedHeaders);
+    expect(exported.statusCode).toBe(200);
+    expect(exported.headers["cache-control"]).toBe("no-store");
+    const copy = exported.json<{
+      manifest: { exportId: string; counts: Record<string, number> };
+      requests: { lead: { id: string }; contact: { email: string } }[];
+    }>();
+    expect(copy.requests.map((item) => item.lead.id)).toEqual([lead.id]);
+    expect(copy.requests[0]?.contact.email).toBe("golf@client.test");
+    expect(
+      (await app.inject({ url: "/wallet/data", headers: { host, cookie } })).json<{
+        exports: { id: string }[];
+      }>().exports[0]?.id,
+    ).toBe(copy.manifest.exportId);
+
+    // Six attempts an hour per session, the refused one included: the seventh is refused before
+    // any read. Someone else on the same address keeps their own quota.
+    for (let index = 0; index < 4; index += 1)
+      expect((await mutation({ ...protectedHeaders, "idempotency-key": key() })).statusCode).toBe(
+        200,
+      );
+    expect((await mutation({ ...protectedHeaders, "idempotency-key": key() })).statusCode).toBe(
+      429,
+    );
+    expect(
+      (
+        await database.pool.query("select 1 from partner_data_exports where user_id=$1", [
+          client.userId,
+        ])
+      ).rowCount,
+    ).toBe(5);
+    const neighbour = await signIn();
+    expect(
+      (
+        await mutation(
+          {
+            origin: config.AUTH_WALLET_ORIGIN,
+            "x-csrf-token": neighbour.csrf,
+            "idempotency-key": key(),
+          },
+          neighbour.cookie,
+        )
+      ).statusCode,
+    ).toBe(200);
+  } finally {
+    await app.close();
+  }
+}, 60000);
