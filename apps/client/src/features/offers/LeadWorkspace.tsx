@@ -354,6 +354,13 @@ export function LeadWorkspace({
                         {t("advisorProfile.open")}
                       </button>
                     )}
+                    {lead.participants
+                      .filter((item) => item.id !== lead.responsibleId)
+                      .map((item) => (
+                        <p className="mt-1 text-muted-foreground" key={item.id}>
+                          {t("coAdvisor", { name: item.name })}
+                        </p>
+                      ))}
                   </div>
                   <DropdownMenu modal={false}>
                     <DropdownMenuTrigger asChild>
@@ -470,8 +477,8 @@ export function LeadWorkspace({
                               <p className="text-sm text-muted-foreground">{offer.company}</p>
                               <h4 className="font-semibold">{offer.product}</h4>
                             </div>
-                            {offer.state === "selected" && (
-                              <Badge variant="outline">{t("state.selected")}</Badge>
+                            {!["published", "viewed"].includes(offer.state) && (
+                              <Badge variant="outline">{t(`state.${offer.state}`)}</Badge>
                             )}
                           </div>
                           <div>

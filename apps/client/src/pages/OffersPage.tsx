@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { FileText } from "lucide-react";
 import type { IdentityMe } from "@coverview/api-client";
 import type { WalletOffers } from "@coverview/contracts/partner-wallet-offers";
-import { Button, EmptyState, ErrorState, LoadingState } from "@coverview/ui";
+import { Badge, Button, EmptyState, ErrorState, LoadingState } from "@coverview/ui";
 import { partnerApi } from "../partner-api";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { useWalletProfileScope } from "../features/profile/use-wallet-profile-scope";
@@ -93,7 +93,12 @@ function Offers({ identity }: { identity: IdentityMe }) {
                       >
                         <div className="min-w-0">
                           <p className="text-sm text-muted-foreground">{offer.company}</p>
-                          <p className="font-medium">{offer.product}</p>
+                          <p className="flex flex-wrap items-center gap-2 font-medium">
+                            {offer.product}
+                            {!["published", "viewed"].includes(offer.state) && (
+                              <Badge variant="outline">{t(`state.${offer.state}`)}</Badge>
+                            )}
+                          </p>
                           <p className="text-sm">
                             {offer.annualPremiumMinor === null
                               ? t("missing")

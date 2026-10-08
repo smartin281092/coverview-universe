@@ -45,18 +45,6 @@
     "retry": "Réessayer le même envoi",
     "afterCreate": "Après la création, ouvrez « Préférences de conseil » dans cette demande pour confirmer la langue, le mode et le canton souhaités."
   },
-  "practice": {
-    "title": "Langues et zones du référent",
-    "limits": "Informations déclarées par le référent. La langue et le lieu de votre demande restent à examiner avec CoverView, ainsi que la disponibilité et les autres critères. Aucune attribution n’est automatique.",
-    "languages": "Langues de conseil déclarées",
-    "cantons": "Cantons entiers d’intervention déclarés",
-    "unspecified": "Non renseigné",
-    "status": {
-      "unset": "Aucune déclaration structurée enregistrée.",
-      "declared": "Déclaration pour le périmètre professionnel actuel, sans validation d’adéquation à votre demande.",
-      "scope_changed": "Le référent doit reconfirmer sa déclaration après modification de son périmètre professionnel."
-    }
-  },
   "referents": {
     "title": "Mes référents habituels",
     "help": "Votre préférence par profil et catégorie aide CoverView à organiser les prochaines demandes. Chaque demande garde son propre responsable.",
@@ -81,7 +69,6 @@
     "emptyHistory": "Aucun choix enregistré pour cette catégorie.",
     "byCurrentOwner": "Confirmation du propriétaire actuel, pour ce profil inchangé.",
     "byPreviousState": "Confirmation historique, avant un changement de propriétaire ou de profil.",
-    "categorySelection": "Référent habituel · {{category}} : {{name}}",
     "status": {
       "unset": "Aucun référent choisi pour cette catégorie.",
       "chosen": "Votre choix est enregistré. CoverView doit encore vérifier son adéquation, les conventions et les disponibilités avant toute attribution.",
@@ -89,14 +76,8 @@
       "unavailable": "Le conseiller choisi ne dispose plus de l’habilitation requise pour cette catégorie. Votre historique est conservé ; vous pouvez changer ce choix.",
       "confirmation_required": "Le profil a été modifié ou transféré. Le choix historique reste conservé et doit être confirmé à nouveau par son propriétaire actuel."
     },
-    "continuity": {
-      "human_review": "L’orientation reste à examiner humainement. Ce choix ne change pas le responsable de cette demande et ne garantit pas sa disponibilité.",
-      "client_change_requested": "Votre demande de changement d’interlocuteur reste prioritaire et attend le traitement de CoverView.",
-      "closed": "Cette demande est terminée. Changer votre préférence ne la rouvre pas."
-    },
     "error": "Impossible de charger ou d’enregistrer vos référents. Vérifiez votre connexion puis réessayez.",
     "loading": "Chargement des référents…",
-    "competence": "Compétence du référent : {{status}}",
     "competenceStatus": {
       "missing": "Justificatif manquant",
       "submitted": "Déclaration à examiner",
@@ -107,12 +88,8 @@
       "expired": "Constat expiré",
       "withdrawn": "Constat retiré",
       "unavailable": "Constat indisponible ou périmètre modifié"
-    },
-    "competenceScope": "Portée du constat : {{scope}}",
-    "competenceUntil": "Constat valable jusqu’au {{date}}",
-    "competenceLimits": "Constat documentaire interne, sans certification officielle ni droit supplémentaire. Les conventions, langues, zones, disponibilités, conflits et préférences restent à examiner."
+    }
   },
-  "version": "Version {{version}}",
   "updatedSinceViewed": "Mise à jour depuis votre dernière consultation",
   "history": {
     "title": "Historique des versions",
@@ -273,16 +250,12 @@
       "insured_object": "Proposé : l’objet assuré de ce contrat contient le repère indiqué dans la demande. Vérifiez qu’il s’agit bien du même objet avant de confirmer."
     }
   },
-  "resumeInsurance": "Reprendre une demande du comparateur",
   "originalInsuranceRequest": "Consulter la demande initiale",
   "title": "Mes offres",
-  "referent": "Responsable de cette demande : {{name}}",
   "coverviewQueue": "CoverView — prise en charge en cours",
-  "coAdvisor": "Co-conseil : {{name}}",
   "interlocutor": "Demander un autre interlocuteur",
   "interlocutorHelp": "Expliquez votre préférence à CoverView. Le suivi reste assuré par l’interlocuteur actuel jusqu’à une reprise effective ; cette demande ne choisit pas automatiquement un remplaçant.",
   "interlocutorSent": "Votre demande a été transmise à CoverView. Votre dossier et vos documents restent conservés.",
-  "subtitle": "Vos propositions, regroupées par demande et par objet assuré.",
   "loading": "Chargement de vos offres…",
   "error": "Impossible de charger les offres. Réessayez.",
   "retry": "Réessayer",
@@ -316,8 +289,6 @@
   "message": "Votre message",
   "validity": "Valable jusqu’au {{date}}",
   "effect": "Date d’effet : {{date}}",
-  "noOffers": "Votre conseiller prépare les propositions",
-  "noOffersDescription": "Les offres apparaîtront après leur vérification et leur publication pour ce besoin.",
   "conflict": "Le dossier a changé. Actualisez les offres avant de poursuivre.",
   "expired": "Cette offre n’est plus sélectionnable. Votre conseiller peut préparer une nouvelle version.",
   "next": "Page suivante",
@@ -337,15 +308,10 @@
     "cancelled": "Annulée"
   },
   "newRequest": "Nouvelle demande",
-  "requestTitle": "Quel besoin souhaitez-vous traiter ?",
-  "requestDescription": "Chaque demande possède son propre suivi. Plusieurs demandes peuvent concerner le même client ou la même catégorie.",
-  "subject": "Votre besoin",
   "object": "Objet ou contrat concerné",
   "category": "Catégorie",
   "context": "Informations utiles",
-  "clientName": "Nom du client",
   "phone": "Téléphone (facultatif)",
-  "consent": "J’autorise la transmission de cette demande à l’équipe CoverView pour sa prise en charge.",
   "create": "Envoyer ma demande",
   "nextAction": "Qualifier la demande du client",
   "sourceWallet": "Wallet",
@@ -938,7 +904,6 @@
     "attention": "Points d’attention : {{value}}",
     "decision": "La décision vous appartient : choisir, poser une question ou conserver votre contrat restent possibles."
   },
-  "objectReference": "Numéro de police actuel, plaque ou n° de châssis (facultatif)",
   "joint": {
     "title": "Rendez-vous conjoint",
     "description": "Vous pouvez inviter le conseiller d’une autre de vos demandes à rejoindre ce rendez-vous. Il confirme lui-même ; chaque demande garde son propre suivi.",
@@ -1022,5 +987,6 @@
       "cancellation": "Résilier un contrat",
       "claim": "Déclarer un dommage ou un accident"
     }
-  }
+  },
+  "coAdvisor": "Co-conseil : {{name}}"
 }
