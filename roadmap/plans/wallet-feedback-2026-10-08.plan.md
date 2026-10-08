@@ -25,6 +25,8 @@ Entrée : retours utilisateur du 8 octobre 2026 (captures et console). Mandat PR
 | W-6 | Quels CTA ? | Ceux du comparateur : principal en dégradé bleu nuit, secondaire blanc bordé, rayon 10 px. Sans le calque WebGL décoratif, trop coûteux répété sur chaque bouton. | « Les CTA doivent être identiques » |
 | W-7 | Quelles listes déroulantes ? | Le `Select` partagé du menu partout dans les fenêtres Wallet. | Règle générale demandée |
 | W-8 | Autorisation de transmission ? | Implicite à l'envoi ; la case disparaît. | « Ça coule de source » |
+| W-9 | Que voit-on après l’envoi d’une demande ? | Un écran de confirmation seul : badge vert animé avec confettis (Lottie `SuccessCheck` dans `@coverview/ui`, lecteur déjà présent, chargé à la demande), le message en grand et « Fermer ». La fenêtre de la demande ne s’ouvre plus. Mouvement réduit : image finale, sans confettis. « délais » au pluriel. | Retour du 8 octobre, capture de la fenêtre ouverte après l’envoi |
+| W-10 | Comment présenter Demandes ? | Une seule liste, de la plus récente à la plus ancienne, sans séparer Wallet et comparateur. Les deux sources restent paginées : un élément attend la page suivante quand une demande plus récente peut encore y figurer ; « Afficher plus » charge la suite. | « Ne pas faire de séparation » |
 
 ## Definition of Done — oracles
 
@@ -51,6 +53,8 @@ Entrée : retours utilisateur du 8 octobre 2026 (captures et console). Mandat PR
 | 11 | Suite API complète | `vitest run` sur `7d9e30f`, worktree figé `coverview-astra-suite3` | 80 fichiers, 787 tests passent (17 min 37 s) | `daf2f49` ne touche que Wallet et la documentation |
 | 12 | Écrans Wallet connectés | recette utilisateur : Offres, fenêtre de demande, « Nouvelle demande », styles | non effectuée : connexion WorkOS requise, réservée à l’utilisateur | Liste de contrôle dans le compte rendu |
 | 13 | Erreur Vite « partner-wallet-offers is not exported » | requête du module aux 3 serveurs Vite, puis Wallet et Partner dans le navigateur intégré | serveurs lancés avant le nouvel export, cache des `exports` ; Wallet, Partner et Admin relancés : module servi en 200, pages chargées sans erreur | Recharger l’onglet ouvert avant la relance |
+| 14 | Écran de confirmation | vrai composant monté sur une page temporaire avec les styles Wallet, images pilotées par l’API Lottie, bureau et mobile 375 px | une animation de 150 images jouée une fois, repli statique masqué, focus sur « Fermer », message dans la région annoncée, pas de défilement horizontal ; lecture continue non observée : volet masqué, animations suspendues par le navigateur | Lecture réelle à voir lors de la recette connectée |
+| 15 | Liste unique et contrôles | `request-timeline.test.ts`, `tsc` Wallet/UI/Partner/Admin, ESLint, `vitest` Wallet, build, knip, dependency-cruiser | 2/2 ; 0 erreur ; 15/15 ; build OK, animation à part (61 Ko, 4,8 Ko compressés) ; knip identique à `main` ; 0 erreur de frontières | Liste mélangée à vérifier connecté |
 
 ## Suite
 

@@ -65,6 +65,7 @@ export {
   SessionExpiredState,
 } from "./States";
 export { RequestProgress } from "./RequestProgress";
+export { SuccessCheck } from "./SuccessCheck";
 export { NotificationList } from "./NotificationList";
 export { VersionHistoryDialog } from "./VersionHistoryDialog";
 export { PolicyEvidence } from "./PolicyEvidence";

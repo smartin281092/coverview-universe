@@ -20,11 +20,7 @@
   "loading": "Chargement des demandes…",
   "error": "Impossible de charger cette demande. Vérifiez votre accès puis réessayez.",
   "retry": "Réessayer",
-  "empty": "Aucune demande du comparateur.",
-  "details": "Voir la demande",
   "back": "Toutes les demandes",
-  "previous": "Première page",
-  "next": "Page suivante",
   "all": "Tous les statuts",
   "filter": "Filtrer par statut",
   "email": "Adresse email",
@@ -83,12 +79,12 @@
   "notifications": "Notifications",
   "referents": "Mes référents habituels",
   "coordination": "Coordonner mes rendez-vous",
-  "myRequests": "Mes demandes",
-  "comparatorRequests": "Demandes du comparateur",
   "noRequests": "Aucune demande pour l’instant.",
   "noRequestsDescription": "Une nouvelle demande est transmise à CoverView, qui vous attribue un conseiller.",
   "followedBy": "Suivie par {{name}}",
   "assigning": "Attribution d’un conseiller en cours",
   "closed": "Clôturée",
-  "openRequest": "Ouvrir"
+  "openRequest": "Ouvrir",
+  "comparatorTitle": "Assurance maladie",
+  "loadMore": "Afficher plus"
 }

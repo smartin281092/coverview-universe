@@ -986,7 +986,8 @@
       "question": "Poser une question sur votre couverture",
       "cancellation": "Résilier un contrat",
       "claim": "Déclarer un dommage ou un accident"
-    }
+    },
+    "sent": "Votre demande a bien été transmise et sera traitée dans les plus brefs délais."
   },
   "coAdvisor": "Co-conseil : {{name}}"
 }

@@ -31,6 +31,7 @@ import {
   DialogTitle,
   Label,
   SelectField,
+  SuccessCheck,
 } from "@coverview/ui";
 import { api } from "../../api";
 import { partnerApi } from "../../partner-api";
@@ -61,6 +62,7 @@ const card =
 /**
  * A new request in three steps (8 October 2026): its subject, the category of a new insurance,
  * then an optional message. Sending it is the transmission to CoverView; no extra consent box.
+ * Once sent, the window only confirms the transmission, then closes.
  */
 export function NewRequestDialog({
   identity,
@@ -82,6 +84,7 @@ export function NewRequestDialog({
     [message, setMessage] = useState(""),
     [profile, setProfile] = useState(scope === "all" ? "" : scope),
     [pending, setPending] = useState(false),
+    [sent, setSent] = useState(false),
     [error, setError] = useState(""),
     attempt = useRef<{ payload: string; key: string } | null>(null);
   const profiles = useQuery({
@@ -103,7 +106,12 @@ export function NewRequestDialog({
     setStep(1);
     setMessage("");
     setError("");
+    setSent(false);
     attempt.current = null;
+  }
+  function close() {
+    reset();
+    onClose();
   }
   async function send() {
     if (!kind || !chosen || pending) return;
@@ -143,8 +151,8 @@ export function NewRequestDialog({
         { csrfToken: identity.csrfToken, idempotencyKey: attempt.current.key },
         true,
       );
-      reset();
-      onClose();
+      attempt.current = null;
+      setSent(true);
       onCreated(lead.id);
     } catch {
       setError(t("newRequestFlow.error"));
@@ -156,24 +164,37 @@ export function NewRequestDialog({
     <Dialog
       open={open}
       onOpenChange={(value) => {
-        if (!value && !pending) {
-          reset();
-          onClose();
-        }
+        if (!value && !pending) close();
       }}
     >
       <DialogContent
         className="max-h-[90svh] overflow-y-auto sm:max-w-2xl"
-        showCloseButton={!pending}
+        showCloseButton={!pending && !sent}
         closeLabel={t("close")}
+        {...(sent ? { "aria-describedby": undefined } : {})}
       >
-        <DialogHeader>
-          <DialogTitle>{t("newRequestFlow.title")}</DialogTitle>
-          <DialogDescription>
-            {t("newRequestFlow.step", { current, total: kind ? total : 3 })}
-          </DialogDescription>
-        </DialogHeader>
-        {step === 1 && (
+        <p role="status" className="sr-only">
+          {sent ? t("newRequestFlow.sent") : ""}
+        </p>
+        {sent ? (
+          <div className="flex flex-col items-center gap-6 pb-2 text-center">
+            <SuccessCheck />
+            <DialogTitle className="cv-success-rise max-w-lg text-2xl leading-tight text-balance sm:text-3xl">
+              {t("newRequestFlow.sent")}
+            </DialogTitle>
+            <Button autoFocus className="cv-success-rise min-w-40" onClick={close}>
+              {t("close")}
+            </Button>
+          </div>
+        ) : (
+          <DialogHeader>
+            <DialogTitle>{t("newRequestFlow.title")}</DialogTitle>
+            <DialogDescription>
+              {t("newRequestFlow.step", { current, total: kind ? total : 3 })}
+            </DialogDescription>
+          </DialogHeader>
+        )}
+        {!sent && step === 1 && (
           <fieldset className="space-y-4">
             <legend className="mb-4 text-lg font-medium">{t("newRequestFlow.subject")}</legend>
             <div className="grid gap-3 sm:grid-cols-2">
@@ -201,7 +222,7 @@ export function NewRequestDialog({
             </div>
           </fieldset>
         )}
-        {step === 2 && (
+        {!sent && step === 2 && (
           <fieldset className="space-y-4">
             <legend className="mb-4 text-lg font-medium">{t("newRequestFlow.category")}</legend>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -228,7 +249,7 @@ export function NewRequestDialog({
             </Button>
           </fieldset>
         )}
-        {step === 3 && kind && (
+        {!sent && step === 3 && kind && (
           <form
             className="space-y-4"
             onSubmit={(event) => {
