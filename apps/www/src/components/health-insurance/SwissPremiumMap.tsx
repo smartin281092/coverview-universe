@@ -70,6 +70,24 @@ export function SwissPremiumMap({
   }, []);
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const moved = useRef(false);
+  // Two fingers: distance, midpoint and view when the second finger lands. Each move is
+  // computed from this start, so a pan at the minimum scale cannot creep into a zoom.
+  const gesture = useRef<{
+    distance: number;
+    midpoint: { x: number; y: number };
+    view: { x: number; y: number; scale: number };
+  } | null>(null);
+  const restart = () => {
+    const [first, second] = [...pointers.current.values()];
+    gesture.current =
+      pointers.current.size === 2 && first && second
+        ? {
+            distance: Math.hypot(first.x - second.x, first.y - second.y),
+            midpoint: { x: (first.x + second.x) / 2, y: (first.y + second.y) / 2 },
+            view,
+          }
+        : null;
+  };
   const [size, setSize] = useState({ width: 1000, height: 650, left: 0, viewport: 1000 });
   useEffect(() => {
     if (!stage.current) return;
@@ -121,18 +139,23 @@ export function SwissPremiumMap({
       );
     });
   };
-  // Two fingers: the map point under their midpoint follows the midpoint while the distance
-  // between them sets the scale, so a pinch zooms and moves the map in the same gesture.
-  const pinch = (from: { x: number; y: number }, to: { x: number; y: number }, factor: number) => {
+  // The map point under the fingers' midpoint at the start follows the midpoint, and the
+  // distance between the fingers sets the scale: a pinch zooms and pans in the same gesture.
+  const pinch = (first: { x: number; y: number }, second: { x: number; y: number }) => {
+    const start = gesture.current;
+    if (!start) return;
+    const distance = Math.hypot(first.x - second.x, first.y - second.y);
+    const midpoint = { x: (first.x + second.x) / 2, y: (first.y + second.y) / 2 };
+    const scale = Math.max(
+      1,
+      Math.min(6, start.view.scale * (start.distance > 0 ? distance / start.distance : 1)),
+    );
+    const content = {
+      x: (start.midpoint.x - start.view.x) / start.view.scale,
+      y: (start.midpoint.y - start.view.y) / start.view.scale,
+    };
     setHover(null);
-    setView((previous) => {
-      const scale = Math.max(1, Math.min(6, previous.scale * factor));
-      const content = {
-        x: (from.x - previous.x) / previous.scale,
-        y: (from.y - previous.y) / previous.scale,
-      };
-      return bounded(to.x - content.x * scale, to.y - content.y * scale, scale);
-    });
+    setView(bounded(midpoint.x - content.x * scale, midpoint.y - content.y * scale, scale));
   };
   const point = (clientX: number, clientY: number) => {
     const matrix = svg.current?.getScreenCTM()?.inverse();
@@ -211,6 +234,7 @@ export function SwissPremiumMap({
           onPointerDown={(event) => {
             pointers.current.set(event.pointerId, point(event.clientX, event.clientY));
             moved.current = false;
+            restart();
             event.currentTarget.setPointerCapture(event.pointerId);
           }}
           onPointerMove={(event) => {
@@ -223,15 +247,8 @@ export function SwissPremiumMap({
             if (Math.hypot(next.x - previous.x, next.y - previous.y) < 3 && !moved.current) return;
             moved.current = true;
             setHover(null);
-            if (other) {
-              const before = Math.hypot(previous.x - other.x, previous.y - other.y);
-              const after = Math.hypot(next.x - other.x, next.y - other.y);
-              pinch(
-                { x: (previous.x + other.x) / 2, y: (previous.y + other.y) / 2 },
-                { x: (next.x + other.x) / 2, y: (next.y + other.y) / 2 },
-                before > 0 ? after / before : 1,
-              );
-            } else
+            if (other) pinch(next, other);
+            else
               setView((current) =>
                 bounded(
                   current.x + next.x - previous.x,
@@ -243,6 +260,7 @@ export function SwissPremiumMap({
           }}
           onPointerUp={(event) => {
             pointers.current.delete(event.pointerId);
+            restart();
             event.currentTarget.releasePointerCapture(event.pointerId);
             if (!moved.current) {
               const target = document
@@ -258,6 +276,7 @@ export function SwissPremiumMap({
           }}
           onPointerCancel={(event) => {
             pointers.current.delete(event.pointerId);
+            restart();
             moved.current = true;
           }}
         >
