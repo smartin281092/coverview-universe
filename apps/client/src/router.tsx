@@ -150,6 +150,15 @@ const accountRoute = createRoute({
       : {}),
     ...(search.authError === "callback" ? { authError: "callback" as const } : {}),
   }),
+  // Authorizations moved to the profile on 8 October 2026; earlier links still arrive.
+  beforeLoad: ({ search }) =>
+    search.tab === "authorizations"
+      ? redirect({
+          to: "/profile",
+          search: { person: "self", tab: "authorizations" },
+          replace: true,
+        })
+      : undefined,
   component: AccountPage,
 });
 const workspaceRoute = createRoute({
@@ -194,7 +203,7 @@ const profileRoute = createRoute({
     continue?: "1";
     authError?: "callback";
     person?: string;
-    tab?: "general" | "finances" | "health";
+    tab?: "general" | "finances" | "health" | "authorizations";
     step?: "information" | "contact" | "details" | "review";
   } => ({
     ...(search.view === "choices" ? { view: "choices" as const } : {}),
@@ -204,7 +213,10 @@ const profileRoute = createRoute({
     (search.person === "self" || /^prf_[0-9a-f-]{36}$/.test(search.person))
       ? { person: search.person }
       : {}),
-    ...(search.tab === "general" || search.tab === "finances" || search.tab === "health"
+    ...(search.tab === "general" ||
+    search.tab === "finances" ||
+    search.tab === "health" ||
+    search.tab === "authorizations"
       ? { tab: search.tab }
       : {}),
     ...(search.step === "information" ||

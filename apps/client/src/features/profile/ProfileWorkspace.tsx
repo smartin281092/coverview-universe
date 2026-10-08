@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
 import { useBlocker, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { HeartPulse, UserRound, Wallet } from "lucide-react";
+import { HeartPulse, ShieldCheck, UserRound, Wallet } from "lucide-react";
 import { ApiError, type IdentityMe } from "@coverview/api-client";
 import {
   profileSectionNameSchema,
@@ -29,8 +29,11 @@ import { api } from "../../api";
 import { forgetIdentity } from "../identity/session-state";
 import { ProfileSectionEditor } from "./ProfileSectionEditor";
 import { IdentityAttachment } from "../authorizations/IdentityAttachment";
+import { ProfileAuthorizations } from "../authorizations/ProfileAuthorizations";
 import { type ProfileEditorBridge, type ProfileViewStep } from "./ProfileSteps";
 
+// The person's sections, then their authorizations (moved from the account on 8 October 2026).
+type WorkspaceTab = ProfileSectionName | "authorizations";
 type SelfProps = {
   requestedStep?: ProfileViewStep | undefined;
   onStepChange: (step: ProfileViewStep) => void;
@@ -51,7 +54,10 @@ export function ProfileWorkspace({
   const navigate = useNavigate();
   const params = new URLSearchParams(location.searchStr);
   const { scope: person } = useWalletProfileScope();
-  const requestedTab = profileSectionNameSchema.safeParse(params.get("tab")).data ?? "general";
+  const requestedTab: WorkspaceTab =
+    params.get("tab") === "authorizations"
+      ? "authorizations"
+      : (profileSectionNameSchema.safeParse(params.get("tab")).data ?? "general");
   const queryKey = ["private", identity.user.id, identity.session.id, "managed-profiles"];
   const profiles = useQuery({
     queryKey,
@@ -160,7 +166,7 @@ export function ProfileWorkspace({
   }, [profiles.error, client]);
   const change = (
     nextPerson: typeof person,
-    nextTab: ProfileSectionName = "general",
+    nextTab: WorkspaceTab = "general",
     step?: ProfileViewStep,
     ignoreBlocker = false,
   ) => {
@@ -214,6 +220,7 @@ export function ProfileWorkspace({
       { id: "general", icon: UserRound },
       { id: "finances", icon: Wallet },
       { id: "health", icon: HeartPulse },
+      { id: "authorizations", icon: ShieldCheck },
     ] as const
   ).filter(({ id }) => id !== "health" || selected?.kind !== "legal_entity");
   return (
@@ -254,8 +261,11 @@ export function ProfileWorkspace({
             <Tabs
               value={tab}
               onValueChange={(value) => {
-                const next = profileSectionNameSchema.safeParse(value);
-                if (next.success) change(person, next.data);
+                const next =
+                  value === "authorizations"
+                    ? value
+                    : profileSectionNameSchema.safeParse(value).data;
+                if (next) change(person, next);
               }}
               className="gap-7"
             >
@@ -275,15 +285,17 @@ export function ProfileWorkspace({
                         <Icon className="hidden size-4 sm:block" aria-hidden="true" />
                         {t(`workspace.tabs.${id}`)}
                       </span>
-                      <span className="text-xs font-normal opacity-75">
-                        {percent(
-                          id === tab &&
-                            editing.scopeKey === editorScope &&
-                            editing.completion !== null
-                            ? editing.completion
-                            : selected.completion[id],
-                        )}
-                      </span>
+                      {id !== "authorizations" && (
+                        <span className="text-xs font-normal opacity-75">
+                          {percent(
+                            id === tab &&
+                              editing.scopeKey === editorScope &&
+                              editing.completion !== null
+                              ? editing.completion
+                              : selected.completion[id],
+                          )}
+                        </span>
+                      )}
                     </span>
                   </TabsTrigger>
                 ))}
@@ -294,7 +306,13 @@ export function ProfileWorkspace({
                     {t("errors.save")}
                   </p>
                 )}
-                {selected.isSelf && tab === "general" ? (
+                {tab === "authorizations" ? (
+                  <ProfileAuthorizations
+                    key={`${identity.session.id}:${selected.id}`}
+                    identity={identity}
+                    profileId={selected.id}
+                  />
+                ) : selected.isSelf && tab === "general" ? (
                   renderSelf({ requestedStep, onStepChange, onBridge })
                 ) : (
                   <ProfileSectionEditor

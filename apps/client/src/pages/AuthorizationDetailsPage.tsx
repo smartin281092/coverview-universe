@@ -1,7 +1,6 @@
-import { AccountAuthorizations } from "../features/identity/AccountAuthorizations";
 import { useWalletProfileScope } from "../features/profile/use-wallet-profile-scope";
 import { useState } from "react";
-import { Link, useNavigate, useParams, useSearch } from "@tanstack/react-router";
+import { Link, Navigate, useNavigate, useParams, useSearch } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft, CircleCheck } from "lucide-react";
@@ -67,8 +66,8 @@ function Authorization({
         </Link>
       ) : (
         <Link
-          to="/account"
-          search={{ tab: "authorizations" }}
+          to="/profile"
+          search={{ person: profileId === "all" ? "self" : profileId, tab: "authorizations" }}
           className="wallet-back-link inline-flex min-h-11 items-center gap-2 text-sm font-medium text-indigo-600"
         >
           <ArrowLeft className="size-4" aria-hidden="true" />
@@ -221,15 +220,12 @@ export function AuthorizationDetailsPage() {
       </IdentityBoundary>
     );
   if (kind !== "mandate" && kind !== "procuration") return <MissingPage />;
+  // Without a person, the authorizations are chosen in the profile (8 October 2026).
+  if (scope === "all")
+    return <Navigate to="/profile" search={{ person: "self", tab: "authorizations" }} replace />;
   return (
     <IdentityBoundary>
-      {(identity) =>
-        scope === "all" ? (
-          <AccountAuthorizations identity={identity} />
-        ) : (
-          <Authorization key={`${kind}:${scope}`} identity={identity} kind={kind} />
-        )
-      }
+      {(identity) => <Authorization key={`${kind}:${scope}`} identity={identity} kind={kind} />}
     </IdentityBoundary>
   );
 }

@@ -4,12 +4,11 @@ import { Button, Tabs, TabsList, TabsTrigger, TabsContent } from "@coverview/ui"
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { AccountLayout } from "../features/identity/AccountLayout";
 import { AccountDevices } from "../features/identity/AccountDevices";
-import { AccountAuthorizations } from "../features/identity/AccountAuthorizations";
 import { AccountData } from "../features/identity/AccountData";
 import { LogoutActions } from "../features/identity/LogoutActions";
 import { api } from "../api";
 
-const tabs = ["devices", "authorizations", "data"] as const;
+const tabs = ["devices", "data"] as const;
 const isTab = (value: string | null): value is (typeof tabs)[number] =>
   tabs.some((tab) => tab === value);
 
@@ -50,12 +49,6 @@ export function AccountPage() {
               <TabsTrigger value="devices" className="min-h-11 px-2 text-xs sm:px-4 sm:text-sm">
                 {t("accountTabs.devices")}
               </TabsTrigger>
-              <TabsTrigger
-                value="authorizations"
-                className="min-h-11 whitespace-normal px-2 text-xs sm:px-3 sm:text-sm"
-              >
-                {t("accountTabs.authorizations")}
-              </TabsTrigger>
               <TabsTrigger value="data" className="min-h-11 px-2 text-xs sm:px-4 sm:text-sm">
                 {t("accountTabs.data")}
               </TabsTrigger>
@@ -78,9 +71,6 @@ export function AccountPage() {
               <p className="max-w-xl text-muted-foreground">{t("identity.devicesDescription")}</p>
               <AccountDevices key={identity.session.id} identity={identity} />
               <LogoutActions identity={identity} scope="all" />
-            </TabsContent>
-            <TabsContent value="authorizations" className="text-base">
-              <AccountAuthorizations key={identity.session.id} identity={identity} />
             </TabsContent>
             <TabsContent value="data" className="text-base">
               <AccountData key={identity.session.id} identity={identity} />

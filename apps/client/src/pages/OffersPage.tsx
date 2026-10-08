@@ -1,22 +1,20 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { FileText } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import type { IdentityMe } from "@coverview/api-client";
+import type { LeadOffer } from "@coverview/api-client/partner";
 import type { WalletOffers } from "@coverview/contracts/partner-wallet-offers";
-import { Badge, Button, EmptyState, ErrorState, LoadingState } from "@coverview/ui";
+import { EmptyState, ErrorState, LoadingState } from "@coverview/ui";
 import { partnerApi } from "../partner-api";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { useWalletProfileScope } from "../features/profile/use-wallet-profile-scope";
 import { LeadWorkspace, requestSearch, walletLeadsKey } from "../features/offers/LeadWorkspace";
+import { OfferCard, type OfferAction } from "../features/offers/OfferCard";
+import { OfferSourcePreview } from "../features/offers/OfferSourcePreview";
 import { useWalletLiveUpdates } from "../features/offers/use-live-updates";
 
-const money = (minor: number) =>
-  new Intl.NumberFormat("fr-CH", { style: "currency", currency: "CHF" }).format(minor / 100);
-const day = (value: string) =>
-  new Intl.DateTimeFormat("fr-CH", { dateStyle: "medium", timeZone: "Europe/Zurich" }).format(
-    new Date(value),
-  );
 type Item = WalletOffers["items"][number];
 // Requests about the same object (same category and object, case aside) share one block.
 function grouped(items: Item[]) {
@@ -29,12 +27,15 @@ function grouped(items: Item[]) {
   return [...groups.values()];
 }
 
-// The offers the advisor transmitted, with their documents, grouped by object.
+// The offers the advisor transmitted, as cards grouped by object (8 October 2026). Choosing
+// opens the request window on the choice; the original opens in the in-app preview.
 function Offers({ identity }: { identity: IdentityMe }) {
   const { t } = useTranslation("offers"),
     { scope } = useWalletProfileScope(),
     search = useSearch({ from: "/offers" }),
     navigate = useNavigate({ from: "/offers" });
+  const [intent, setIntent] = useState<{ offerId: string; type: OfferAction } | null>(null);
+  const [preview, setPreview] = useState<{ leadId: string; offer: LeadOffer } | null>(null);
   useWalletLiveUpdates(identity);
   const list = useQuery({
     queryKey: [...walletLeadsKey(identity, scope), "offers"],
@@ -69,61 +70,51 @@ function Offers({ identity }: { identity: IdentityMe }) {
           description={t("workspace.pageEmptyDescription")}
         />
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-10">
           {grouped(list.data.items).map((group) => {
             const first = group[0]!.lead;
             return (
               <section
                 key={first.id}
-                className="space-y-4 rounded-xl border border-border p-5"
+                className="space-y-4"
                 aria-label={first.object || first.title}
               >
-                <div>
-                  <h2 className="font-semibold">{first.object || first.title}</h2>
-                  <p className="text-sm text-muted-foreground">
-                    {t(`categories.${first.category}`)}
-                  </p>
+                <div className="flex flex-wrap items-end justify-between gap-3">
+                  <div>
+                    <h2 className="text-lg font-semibold">{first.object || first.title}</h2>
+                    <p className="text-sm text-muted-foreground">
+                      {t(`categories.${first.category}`)}
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-4">
+                    {group.map(({ lead }) => (
+                      <button
+                        key={lead.id}
+                        type="button"
+                        className="inline-flex min-h-11 items-center gap-1 text-sm underline underline-offset-4"
+                        onClick={() => open(lead.id)}
+                      >
+                        {group.length > 1 ? lead.title : t("workspace.viewRequest")}
+                        <ArrowUpRight className="size-4" aria-hidden="true" />
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <ul className="divide-y divide-border">
+                <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                   {group.flatMap(({ lead, offers }) =>
                     offers.map((offer) => (
-                      <li
+                      <OfferCard
                         key={offer.id}
-                        className="flex flex-wrap items-center justify-between gap-4 py-4"
-                      >
-                        <div className="min-w-0">
-                          <p className="text-sm text-muted-foreground">{offer.company}</p>
-                          <p className="flex flex-wrap items-center gap-2 font-medium">
-                            {offer.product}
-                            {!["published", "viewed"].includes(offer.state) && (
-                              <Badge variant="outline">{t(`state.${offer.state}`)}</Badge>
-                            )}
-                          </p>
-                          <p className="text-sm">
-                            {offer.annualPremiumMinor === null
-                              ? t("missing")
-                              : `${money(offer.annualPremiumMinor)} ${t("workspace.perYear")}`}
-                            {offer.validUntil &&
-                              ` · ${t("workspace.validUntil", { date: day(offer.validUntil) })}`}
-                          </p>
-                        </div>
-                        <div className="flex flex-wrap gap-2">
-                          {offer.canDownload && (
-                            <Button variant="outline" asChild>
-                              <a href={partnerApi.sourceUrl(lead.id, offer.id, true)}>
-                                <FileText className="size-4" aria-hidden="true" />
-                                {t("source")}
-                              </a>
-                            </Button>
-                          )}
-                          <Button onClick={() => open(lead.id)}>
-                            {t("workspace.openRequest")}
-                          </Button>
-                        </div>
-                      </li>
+                        offer={offer}
+                        onAction={(type) => {
+                          setIntent({ offerId: offer.id, type });
+                          open(lead.id);
+                        }}
+                        onPreview={() => setPreview({ leadId: lead.id, offer })}
+                      />
                     )),
                   )}
-                </ul>
+                </div>
               </section>
             );
           })}
@@ -132,11 +123,25 @@ function Offers({ identity }: { identity: IdentityMe }) {
           )}
         </div>
       )}
+      {preview && (
+        <OfferSourcePreview
+          key={`${identity.user.id}:${identity.session.id}:${preview.offer.id}`}
+          identity={identity}
+          leadId={preview.leadId}
+          offer={preview.offer}
+          onClose={() => setPreview(null)}
+        />
+      )}
       <LeadWorkspace
         identity={identity}
         leadId={search.lead ?? null}
         section={search.section}
-        onClose={() => void navigate({ search: (previous) => requestSearch(previous) })}
+        intent={intent}
+        onIntentDone={() => setIntent(null)}
+        onClose={() => {
+          setIntent(null);
+          void navigate({ search: (previous) => requestSearch(previous) });
+        }}
         onSectionDone={() =>
           void navigate({ search: (previous) => requestSearch(previous, previous.lead) })
         }

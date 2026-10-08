@@ -87,8 +87,8 @@ export function AuthorizationNoticePage({ identity }: { identity: IdentityMe }) 
         </Button>
       ) : (
         <Link
-          to="/account"
-          search={{ tab: "authorizations" }}
+          to="/profile"
+          search={{ person: "self", tab: "authorizations" }}
           className="wallet-back-link inline-flex min-h-11 items-center gap-2 text-sm font-medium text-indigo-600"
         >
           <ArrowLeft className="size-4" aria-hidden="true" />

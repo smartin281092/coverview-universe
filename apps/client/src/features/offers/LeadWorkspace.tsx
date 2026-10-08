@@ -1,13 +1,12 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { ChevronDown, FileText } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import type { IdentityMe } from "@coverview/api-client";
 import { PartnerApiError, type LeadOffer } from "@coverview/api-client/partner";
 import type { LeadCommand } from "@coverview/contracts/partner";
 import {
-  Badge,
   Button,
   Dialog,
   DialogContent,
@@ -34,8 +33,10 @@ import { FinalPoliciesDialog } from "./FinalPoliciesDialog";
 import { LeadRelationshipsDialog } from "./LeadRelationshipsDialog";
 import { LeadReopeningsDialog } from "./LeadReopeningsDialog";
 import { MarketMandatesDialog } from "./MarketMandatesDialog";
+import { OfferCard, type OfferAction } from "./OfferCard";
 import { OfferHistoryDialog } from "./OfferHistoryDialog";
 import { OfferMatrix } from "./OfferMatrix";
+import { OfferSourcePreview } from "./OfferSourcePreview";
 import { OrientationPanel } from "./OrientationPanel";
 import { RecommendationCard } from "./RecommendationCard";
 import { ReferentAssessmentDialog } from "./ReferentAssessmentDialog";
@@ -47,12 +48,6 @@ import { ComplementBanner, WalletComplementsDialog } from "./WalletComplements";
 import { WalletQualityDialog } from "./WalletQualityDialog";
 
 export type LeadSection = "quality" | "communications" | "conclusion" | "complement";
-const money = (minor: number) =>
-  new Intl.NumberFormat("fr-CH", { style: "currency", currency: "CHF" }).format(minor / 100);
-const day = (value: string) =>
-  new Intl.DateTimeFormat("fr-CH", { dateStyle: "medium", timeZone: "Europe/Zurich" }).format(
-    new Date(value),
-  );
 /** The address of a page with a request (and one of its sections) open, or none. */
 export function requestSearch<T extends { lead?: string; section?: LeadSection }>(
   previous: T,
@@ -81,14 +76,19 @@ export function LeadWorkspace({
   identity,
   leadId,
   section,
+  intent,
   onClose,
   onSectionDone,
+  onIntentDone,
 }: {
   identity: IdentityMe;
   leadId: string | null;
   section?: LeadSection | undefined;
+  // An action started from an offer card outside the window, run once the request is read.
+  intent?: { offerId: string; type: OfferAction } | null | undefined;
   onClose: () => void;
   onSectionDone: () => void;
+  onIntentDone?: (() => void) | undefined;
 }) {
   const { t } = useTranslation("offers"),
     { scope } = useWalletProfileScope(),
@@ -112,6 +112,7 @@ export function LeadWorkspace({
     [complementSelection, setComplementLead] = useState<string | null>(null),
     [referentAssessment, setReferentAssessment] = useState<string | null>(null),
     [linkContract, setLinkContract] = useState(false),
+    [preview, setPreview] = useState<LeadOffer | null>(null),
     [compare, setCompare] = useState(false),
     [pending, setPending] = useState(false),
     [error, setError] = useState(""),
@@ -196,6 +197,20 @@ export function LeadWorkspace({
     }
     setChoice({ type, lead: presented, scope, ...(offer ? { offer } : {}) });
   }
+  const started = useRef<string | null>(null);
+  useEffect(() => {
+    if (!intent) {
+      started.current = null;
+      return;
+    }
+    if (!lead || lead.id !== leadId) return;
+    const key = `${lead.id}:${intent.offerId}:${intent.type}`;
+    if (started.current === key) return;
+    started.current = key;
+    onIntentDone?.();
+    const offer = offers.find((item) => item.id === intent.offerId);
+    if (offer && !closed) void openChoice(intent.type, offer);
+  });
   const sectionClosed = (close: (value: null) => void) => () => {
     close(null);
     onSectionDone();
@@ -284,6 +299,15 @@ export function LeadWorkspace({
           identity={identity}
           leadId={advice}
           onClose={() => setAdvice(null)}
+        />
+      )}
+      {preview && lead && (
+        <OfferSourcePreview
+          key={`${identity.user.id}:${identity.session.id}:${preview.id}`}
+          identity={identity}
+          leadId={lead.id}
+          offer={preview}
+          onClose={() => setPreview(null)}
         />
       )}
       {referents && (
@@ -468,87 +492,14 @@ export function LeadWorkspace({
                   {offers.length ? (
                     <div className="grid gap-4 md:grid-cols-2">
                       {offers.map((offer) => (
-                        <article
+                        <OfferCard
                           key={offer.id}
-                          className="flex flex-col gap-3 rounded-xl border border-border p-5"
-                        >
-                          <div className="flex items-start justify-between gap-2">
-                            <div>
-                              <p className="text-sm text-muted-foreground">{offer.company}</p>
-                              <h4 className="font-semibold">{offer.product}</h4>
-                            </div>
-                            {!["published", "viewed"].includes(offer.state) && (
-                              <Badge variant="outline">{t(`state.${offer.state}`)}</Badge>
-                            )}
-                          </div>
-                          <div>
-                            <p className="text-2xl font-medium">
-                              {offer.annualPremiumMinor === null
-                                ? t("missing")
-                                : money(offer.annualPremiumMinor)}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              {offer.annualPremiumMinor === null ? "" : t("workspace.perYear")}
-                              {offer.validUntil &&
-                                ` · ${t("workspace.validUntil", { date: day(offer.validUntil) })}`}
-                            </p>
-                          </div>
-                          {offer.updatedSinceViewed && (
-                            <p className="text-sm">{t("updatedSinceViewed")}</p>
-                          )}
-                          {offer.sourceStatus && offer.sourceStatus !== "current" && (
-                            <p role="status" className="text-sm">
-                              {t(`history.sourceStatus.${offer.sourceStatus}`)}
-                            </p>
-                          )}
-                          {offer.summary && (
-                            <p className="whitespace-pre-wrap text-sm">{offer.summary}</p>
-                          )}
-                          {offer.limitations && (
-                            <details className="text-sm">
-                              <summary className="cursor-pointer">{t("limitations")}</summary>
-                              <p className="mt-2 whitespace-pre-wrap text-xs">
-                                {offer.limitations}
-                              </p>
-                            </details>
-                          )}
-                          <div className="mt-auto flex flex-wrap gap-2">
-                            <Button
-                              disabled={
-                                pending ||
-                                !offer.canChoose ||
-                                !["published", "viewed", "selected"].includes(offer.state) ||
-                                (!!offer.validUntil &&
-                                  new Date(offer.validUntil).getTime() < Date.now()) ||
-                                closed
-                              }
-                              onClick={() => void openChoice("select", offer)}
-                            >
-                              {t(offer.state === "selected" ? "selected" : "choose")}
-                            </Button>
-                            {offer.canDownload && (
-                              <Button variant="outline" asChild>
-                                <a href={partnerApi.sourceUrl(lead.id, offer.id, true)}>
-                                  <FileText className="size-4" aria-hidden="true" />
-                                  {t("source")}
-                                </a>
-                              </Button>
-                            )}
-                          </div>
-                          <div className="flex flex-wrap gap-3 text-xs">
-                            {(["question", "modification", "refuse"] as const).map((type) => (
-                              <button
-                                key={type}
-                                type="button"
-                                disabled={pending || !offer.canChoose || closed}
-                                className="underline underline-offset-4 disabled:opacity-50"
-                                onClick={() => void openChoice(type, offer)}
-                              >
-                                {t(type)}
-                              </button>
-                            ))}
-                          </div>
-                        </article>
+                          offer={offer}
+                          busy={pending}
+                          closed={closed}
+                          onAction={(type) => void openChoice(type, offer)}
+                          onPreview={() => setPreview(offer)}
+                        />
                       ))}
                     </div>
                   ) : (

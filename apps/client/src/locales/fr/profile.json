@@ -156,7 +156,8 @@
     "tabs": {
       "general": "Générales",
       "finances": "Finances",
-      "health": "Santé"
+      "health": "Santé",
+      "authorizations": "Autorisations"
     },
     "notApplicable": "Non concerné",
     "entityHealth": "Les informations de santé concernent uniquement les profils de personnes.",

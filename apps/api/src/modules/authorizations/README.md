@@ -4,6 +4,8 @@
 
 Demande utilisateur du 9 septembre 2026 : signature tracée dans Wallet, acceptation explicite et document horodaté conservé. `GET /authorizations/:kind` prépare la procuration ou le mandat du profil demandé ; `POST /authorizations/:kind/sign` conserve la preuve dans PostgreSQL. `GET /authorizations/status` et `/authorizations/receipts/:id` exposent le statut courant et l’archive privée. La page de signature revient à l’action via un identifiant validé, jamais une redirection arbitraire.
 
+Dans Wallet, depuis le 8 octobre 2026, les autorisations d’une personne forment un onglet de son profil (`/profile?tab=authorizations`) ; l’ancien onglet du compte (`/account?tab=authorizations`) y redirige.
+
 Le texte canonique versionné réside dans `packages/contracts/src/authorization-texts.json`, partagé avec l’affichage LSA45. Une signature contient le document exact, les données d’identification/contact affichées, le tracé normalisé et borné, le signataire, le lieu, l’acceptation explicite, la date serveur et l’empreinte de l’ensemble. AVS, Finances et Santé ne sont pas inclus. Le document signé est ensuite affiché depuis cette archive, sans substitution par les coordonnées futures du profil. Le PDF téléchargeable dérive de cette archive et joint aussi son JSON exact. Les pages sont rendues en images pour conserver les caractères disponibles dans les polices du navigateur ; le texte du PDF n’est donc pas sélectionnable, son contenu structuré reste dans la pièce jointe JSON.
 
 ## Autorité et conservation

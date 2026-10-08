@@ -2,21 +2,11 @@ import { useState } from "react";
 import { Link, useNavigate, useParams, useSearch } from "@tanstack/react-router";
 import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { ArrowUpRight, Ellipsis, Plus } from "lucide-react";
+import { ArrowUpRight, Plus } from "lucide-react";
 import type { IdentityMe } from "@coverview/api-client";
 import type { InsuranceRequest } from "@coverview/contracts/insurance-requests";
 import type { LeadSummary } from "@coverview/contracts/partner";
-import {
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  EmptyState,
-  ErrorState,
-  LoadingState,
-  RequestProgress,
-} from "@coverview/ui";
+import { Button, EmptyState, ErrorState, LoadingState, RequestProgress } from "@coverview/ui";
 import { insuranceApi } from "../insurance-api";
 import { partnerApi } from "../partner-api";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
@@ -29,8 +19,6 @@ import {
   type LeadSection,
 } from "../features/offers/LeadWorkspace";
 import { NewRequestDialog } from "../features/offers/NewRequestDialog";
-import { ReferentsDialog } from "../features/offers/ReferentsDialog";
-import { CoordinatedBookingsDialog } from "../features/offers/CoordinatedBookingsDialog";
 import { useWalletLiveUpdates } from "../features/offers/use-live-updates";
 import { timeline } from "../features/offers/request-timeline";
 const stages = ["submitted", "reviewing", "insurer_contacted", "offer_ready", "completed"] as const;
@@ -53,8 +41,6 @@ function Requests({ identity }: { identity: IdentityMe }) {
   const navigate = useNavigate();
   const client = useQueryClient();
   const [create, setCreate] = useState(false);
-  const [referents, setReferents] = useState(false);
-  const [coordination, setCoordination] = useState(false);
   useWalletLiveUpdates(identity);
   const leadsKey = walletLeadsKey(identity, scope);
   const requestsKey = ["private", identity.user.id, identity.session.id, "insurance-requests"];
@@ -152,38 +138,10 @@ function Requests({ identity }: { identity: IdentityMe }) {
           <p className="text-muted-foreground">{t("description")}</p>
         </div>
         {!requestId && (
-          <div className="flex items-center gap-2">
-            <Button onClick={() => setCreate(true)}>
-              <Plus className="size-4" aria-hidden="true" />
-              {t("newRequest")}
-            </Button>
-            <DropdownMenu modal={false}>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" aria-label={t("more")}>
-                  <Ellipsis className="size-4" aria-hidden="true" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem asChild>
-                  <Link
-                    to="/offers/notifications"
-                    search={{
-                      status: "all",
-                      ...(scope === "all" ? {} : { clientProfileId: scope }),
-                    }}
-                  >
-                    {t("notifications")}
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setReferents(true)}>
-                  {t("referents")}
-                </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => setCoordination(true)}>
-                  {t("coordination")}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          <Button onClick={() => setCreate(true)}>
+            <Plus className="size-4" aria-hidden="true" />
+            {t("newRequest")}
+          </Button>
         )}
       </header>
       {requestId ? (
@@ -368,21 +326,6 @@ function Requests({ identity }: { identity: IdentityMe }) {
         onClose={() => setCreate(false)}
         onCreated={() => void client.invalidateQueries({ queryKey: leadsKey })}
       />
-      {referents && (
-        <ReferentsDialog
-          identity={identity}
-          initialProfile={scope}
-          onClose={() => setReferents(false)}
-        />
-      )}
-      {coordination && (
-        <CoordinatedBookingsDialog
-          key={`${identity.user.id}:${identity.session.id}:${scope}`}
-          identity={identity}
-          scope={scope}
-          onClose={() => setCoordination(false)}
-        />
-      )}
     </div>
   );
 }
