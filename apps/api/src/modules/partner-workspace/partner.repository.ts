@@ -139,6 +139,7 @@ import { createEconomyOperations } from "./partner.economy.js";
 import { createQualityOperations } from "./partner.quality.js";
 import { createConfirmationOperations } from "./partner.confirmations.js";
 import { createComplementOperations } from "./partner.complements.js";
+import { createWalletOfferOperations } from "./partner.wallet-offers.js";
 import { createCommunicationOperations } from "./partner.communications.js";
 import { createPilotageOperations } from "./partner.pilotage.js";
 import { createGoalOperations } from "./partner.goals.js";
@@ -315,6 +316,7 @@ function summary(actor: PartnerActor, row: ReadRow): LeadSummary {
     id: row.id,
     revision: row.revision,
     title: row.title,
+    requestKind: row.requestKind,
     category: row.category,
     object: row.object,
     clientName: row.clientName,
@@ -832,6 +834,7 @@ export function createPartnerRepository(
     ...createQualityOperations(pool, transaction, adviceLead),
     ...createConfirmationOperations(pool, transaction, adviceLead),
     ...createComplementOperations(pool, transaction, adviceLead),
+    ...createWalletOfferOperations(pool),
     ...createCommunicationOperations(pool, transaction, adviceLead),
     ...createPilotageOperations(pool),
     ...createGoalOperations(pool, transaction),
@@ -2686,7 +2689,7 @@ export function createPartnerRepository(
                 ? actor.userId
                 : null;
           await tx.query<Record<string, unknown>>(
-            `insert into partner_leads(id,creator_id,responsible_id,client_user_id,client_profile_id,title,category,object,client_name,details,stage,assignment,priority,next_action,due_at) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)`,
+            `insert into partner_leads(id,creator_id,responsible_id,client_user_id,client_profile_id,title,category,object,client_name,details,stage,assignment,priority,next_action,due_at,request_kind) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)`,
             [
               id,
               actor.userId,
@@ -2711,6 +2714,7 @@ export function createPartnerRepository(
               input.priority,
               actor.wallet ? "Qualifier la demande du client" : input.nextAction,
               actor.wallet ? new Date(Date.now() + 86400000).toISOString() : input.dueAt,
+              input.requestKind ?? "new_insurance",
             ],
           );
           await event(tx, actor, id, "lead.created", input.title, "client");

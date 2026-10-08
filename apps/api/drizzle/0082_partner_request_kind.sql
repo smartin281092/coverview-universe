@@ -1,0 +1,2 @@
+ALTER TABLE "partner_leads" ADD COLUMN "request_kind" text DEFAULT 'new_insurance' NOT NULL;--> statement-breakpoint
+ALTER TABLE "partner_leads" ADD CONSTRAINT "partner_lead_request_kind" CHECK ("partner_leads"."request_kind" in ('new_insurance','modification','question','cancellation','claim'));

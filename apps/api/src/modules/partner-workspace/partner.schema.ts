@@ -975,6 +975,7 @@ export const partnerLeads = pgTable(
     clientUserId: text("client_user_id").references(() => identityUsers.id),
     clientProfileId: text("client_profile_id").references(() => managedProfiles.id),
     title: text("title").notNull(),
+    requestKind: text("request_kind").notNull().default("new_insurance"),
     category: text("category").notNull(),
     object: text("object").notNull(),
     clientName: text("client_name").notNull(),
@@ -1012,6 +1013,10 @@ export const partnerLeads = pgTable(
     index("partner_leads_client").on(t.clientUserId, t.clientProfileId),
     index("partner_leads_profile").on(t.clientProfileId),
     check("partner_lead_advice_scope", sql`${t.adviceScopeRevision}>0`),
+    check(
+      "partner_lead_request_kind",
+      sql`${t.requestKind} in ('new_insurance','modification','question','cancellation','claim')`,
+    ),
     index("partner_leads_continuity")
       .on(t.continuityCheckedAt, t.id)
       .where(sql`${t.stage} not in ('draft','completed')`),

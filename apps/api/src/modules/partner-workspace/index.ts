@@ -135,6 +135,7 @@ import { createPartnerRepository } from "./partner.repository.js";
 import { PartnerError, type PartnerActor } from "./partner.policy.js";
 import { registerQualityRoutes } from "./partner.quality.routes.js";
 import { registerComplementRoutes } from "./partner.complements.routes.js";
+import { registerWalletOfferRoutes } from "./partner.wallet-offers.routes.js";
 import { registerConclusionRoutes } from "./partner.conclusion.routes.js";
 import { registerNavigationRoutes } from "./partner.navigation.routes.js";
 import { registerRelationshipRoutes } from "./partner.relationships.routes.js";
@@ -240,6 +241,7 @@ export function registerPartnerWorkspace(
   const economyPage = z.object({ cursor: z.string().max(400).optional() }).strict();
   registerQualityRoutes(server, repository, actor);
   registerComplementRoutes(server, repository, actor);
+  registerWalletOfferRoutes(server, repository, actor);
   registerConclusionRoutes(server, repository, actor);
   registerNavigationRoutes(server, repository, actor);
   registerRelationshipRoutes(server, repository, actor);

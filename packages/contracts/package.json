@@ -30,7 +30,8 @@
     "./partner-data": "./src/partner-data.ts",
     "./partner-access": "./src/partner-access.ts",
     "./partner-team": "./src/partner-team.ts",
-    "./partner-complements": "./src/partner-complements.ts"
+    "./partner-complements": "./src/partner-complements.ts",
+    "./partner-wallet-offers": "./src/partner-wallet-offers.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",

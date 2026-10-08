@@ -936,9 +936,20 @@ export const partnerContextSchema = z.object({
   canAdvise: z.boolean(),
   canManage: z.boolean(),
 });
+// What the client asks (8 October 2026): a new insurance, or a change, a question, a
+// cancellation or a claim about an existing one. Only a new insurance names its category.
+export const leadRequestKindSchema = z.enum([
+  "new_insurance",
+  "modification",
+  "question",
+  "cancellation",
+  "claim",
+]);
 export const leadCreateInputSchema = z
   .object({
     title: z.string().trim().min(3).max(180),
+    // Absent means a new insurance (the Partner form and older clients).
+    requestKind: leadRequestKindSchema.optional(),
     category: leadCategorySchema,
     object: z.string().trim().max(200),
     // A distinctive reference of the insured object (current policy, plate or chassis number), used
@@ -1856,6 +1867,7 @@ export const leadSummarySchema = z.object({
   id,
   revision: z.number().int().nonnegative(),
   title: z.string(),
+  requestKind: leadRequestKindSchema.default("new_insurance"),
   category: leadCategorySchema,
   object: z.string(),
   clientName: z.string(),
