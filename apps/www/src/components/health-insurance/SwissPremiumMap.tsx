@@ -121,6 +121,19 @@ export function SwissPremiumMap({
       );
     });
   };
+  // Two fingers: the map point under their midpoint follows the midpoint while the distance
+  // between them sets the scale, so a pinch zooms and moves the map in the same gesture.
+  const pinch = (from: { x: number; y: number }, to: { x: number; y: number }, factor: number) => {
+    setHover(null);
+    setView((previous) => {
+      const scale = Math.max(1, Math.min(6, previous.scale * factor));
+      const content = {
+        x: (from.x - previous.x) / previous.scale,
+        y: (from.y - previous.y) / previous.scale,
+      };
+      return bounded(to.x - content.x * scale, to.y - content.y * scale, scale);
+    });
+  };
   const point = (clientX: number, clientY: number) => {
     const matrix = svg.current?.getScreenCTM()?.inverse();
     return matrix ? new DOMPoint(clientX, clientY).matrixTransform(matrix) : { x: 500, y: 325 };
@@ -213,8 +226,11 @@ export function SwissPremiumMap({
             if (other) {
               const before = Math.hypot(previous.x - other.x, previous.y - other.y);
               const after = Math.hypot(next.x - other.x, next.y - other.y);
-              if (before > 0)
-                zoom(after / before, { x: (next.x + other.x) / 2, y: (next.y + other.y) / 2 });
+              pinch(
+                { x: (previous.x + other.x) / 2, y: (previous.y + other.y) / 2 },
+                { x: (next.x + other.x) / 2, y: (next.y + other.y) / 2 },
+                before > 0 ? after / before : 1,
+              );
             } else
               setView((current) =>
                 bounded(
