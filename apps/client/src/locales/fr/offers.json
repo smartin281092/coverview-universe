@@ -970,5 +970,57 @@
     "failed": "Le rendez-vous conjoint n’a pas pu être chargé.",
     "joined": "Rendez-vous conjoints de cette demande",
     "joinedItem": "{{date}} · organisé par {{name}} · {{state}}"
+  },
+  "requestKinds": {
+    "new_insurance": "Nouvelle assurance",
+    "modification": "Modification",
+    "question": "Question",
+    "cancellation": "Annulation",
+    "claim": "Sinistre"
+  },
+  "workspace": {
+    "advisor": "Votre conseiller : {{name}}",
+    "coverview": "CoverView prend votre demande en charge et vous attribue un conseiller.",
+    "more": "Autres actions",
+    "follow": "Suivi",
+    "records": "Historique et documents",
+    "offers": "Offres reçues",
+    "noOffers": "Votre conseiller n’a pas encore transmis d’offre pour cette demande.",
+    "compare": "Comparer en détail",
+    "hideComparison": "Masquer la comparaison",
+    "contract": "Contrat actuel : {{name}}",
+    "noContract": "Aucun contrat actuel choisi pour cette demande.",
+    "chooseContract": "Choisir mon contrat actuel",
+    "changeContract": "Changer de contrat",
+    "contractDocument": "Document du contrat",
+    "referentChange": "Référent habituel",
+    "validUntil": "Valable jusqu’au {{date}}",
+    "perYear": "par an",
+    "openRequest": "Voir et choisir",
+    "pageEmpty": "Aucune offre pour l’instant",
+    "pageEmptyDescription": "Les offres que votre conseiller vous transmet apparaîtront ici, avec leurs documents.",
+    "pageDescription": "Les offres reçues de votre conseiller, avec leurs documents, regroupées par objet.",
+    "truncated": "Seules les 50 demandes les plus récentes sont affichées."
+  },
+  "newRequestFlow": {
+    "title": "Nouvelle demande",
+    "step": "Étape {{current}} sur {{total}}",
+    "subject": "Quel est le sujet de votre demande ?",
+    "category": "Quel type d’assurance ?",
+    "details": "Précisez votre demande",
+    "detailsHelp": "Facultatif : tout ce qui aide votre conseiller à vous répondre.",
+    "message": "Votre message (facultatif)",
+    "profile": "Pour qui ?",
+    "back": "Retour",
+    "send": "Envoyer ma demande",
+    "sending": "Envoi…",
+    "error": "La demande n’a pas pu être envoyée. Réessayez.",
+    "help": {
+      "new_insurance": "Recevoir des offres pour un nouveau besoin",
+      "modification": "Changer un contrat existant",
+      "question": "Poser une question sur votre couverture",
+      "cancellation": "Résilier un contrat",
+      "claim": "Déclarer un dommage ou un accident"
+    }
   }
 }

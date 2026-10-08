@@ -1,333 +1,57 @@
-import { useRef, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useNavigate, useSearch, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate, useSearch } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { ArrowUpRight, FileText, Plus } from "lucide-react";
+import { FileText } from "lucide-react";
 import type { IdentityMe } from "@coverview/api-client";
-import { PartnerApiError, type LeadOffer } from "@coverview/api-client/partner";
-import type { LeadCommand } from "@coverview/contracts/partner";
-import { PracticeSummaryDialog } from "../features/offers/PracticeSummaryDialog";
-import { AdvicePreferencesDialog } from "../features/offers/AdvicePreferencesDialog";
-import { SharedAppointmentsDialog } from "../features/offers/SharedAppointmentsDialog";
-import { AdvisorProfileDialog } from "../features/offers/AdvisorProfileDialog";
-import { WalletAppointmentsDialog } from "../features/offers/WalletAppointmentsDialog";
-import { MarketMandatesDialog } from "../features/offers/MarketMandatesDialog";
-import { WalletQualityDialog } from "../features/offers/WalletQualityDialog";
-import { WalletCommunicationsDialog } from "../features/offers/WalletCommunicationsDialog";
-import { CoordinatedBookingsDialog } from "../features/offers/CoordinatedBookingsDialog";
-import { ReferentAssessmentDialog } from "../features/offers/ReferentAssessmentDialog";
-import {
-  Badge,
-  Button,
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  EmptyState,
-  ErrorState,
-  LoadingState,
-} from "@coverview/ui";
+import type { WalletOffers } from "@coverview/contracts/partner-wallet-offers";
+import { Button, EmptyState, ErrorState, LoadingState } from "@coverview/ui";
 import { partnerApi } from "../partner-api";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { useWalletProfileScope } from "../features/profile/use-wallet-profile-scope";
-import { ChoiceDialog, type WalletChoice } from "../features/offers/ChoiceDialog";
-import { WalletLeadDialog } from "../features/offers/WalletLeadDialog";
-import { ContractComparison } from "../features/offers/ContractComparison";
-import { OfferMatrix } from "../features/offers/OfferMatrix";
-import { OrientationPanel } from "../features/offers/OrientationPanel";
-import { RecommendationCard } from "../features/offers/RecommendationCard";
-import { ContractLinkDialog } from "../features/offers/ContractLinkDialog";
-import { ComplementBanner, WalletComplementsDialog } from "../features/offers/WalletComplements";
-import { OfferHistoryDialog } from "../features/offers/OfferHistoryDialog";
-import { FinalPoliciesDialog } from "../features/offers/FinalPoliciesDialog";
-import { ConclusionsDialog } from "../features/offers/ConclusionsDialog";
-import { LeadReopeningsDialog } from "../features/offers/LeadReopeningsDialog";
-import { LeadRelationshipsDialog } from "../features/offers/LeadRelationshipsDialog";
-import { ReferentsDialog } from "../features/offers/ReferentsDialog";
+import { LeadWorkspace, requestSearch, walletLeadsKey } from "../features/offers/LeadWorkspace";
 import { useWalletLiveUpdates } from "../features/offers/use-live-updates";
+
 const money = (minor: number) =>
   new Intl.NumberFormat("fr-CH", { style: "currency", currency: "CHF" }).format(minor / 100);
-const date = (value: string) =>
+const day = (value: string) =>
   new Intl.DateTimeFormat("fr-CH", { dateStyle: "medium", timeZone: "Europe/Zurich" }).format(
     new Date(value),
   );
+type Item = WalletOffers["items"][number];
+// Requests about the same object (same category and object, case aside) share one block.
+function grouped(items: Item[]) {
+  const groups = new Map<string, Item[]>();
+  for (const item of items) {
+    const object = item.lead.object.trim().toLowerCase();
+    const key = object ? `${item.lead.category}:${object}` : item.lead.id;
+    groups.set(key, [...(groups.get(key) ?? []), item]);
+  }
+  return [...groups.values()];
+}
+
+// The offers the advisor transmitted, with their documents, grouped by object.
 function Offers({ identity }: { identity: IdentityMe }) {
   const { t } = useTranslation("offers"),
     { scope } = useWalletProfileScope(),
     search = useSearch({ from: "/offers" }),
-    navigate = useNavigate({ from: "/offers" }),
-    client = useQueryClient();
+    navigate = useNavigate({ from: "/offers" });
   useWalletLiveUpdates(identity);
-  const [cursor, setCursor] = useState<string>(),
-    [choice, setChoice] = useState<WalletChoice | null>(null),
-    [retryCommand, setRetryCommand] = useState<LeadCommand | null>(null),
-    [history, setHistory] = useState(false),
-    [reopenings, setReopenings] = useState(false),
-    [relationships, setRelationships] = useState(false),
-    [policies, setPolicies] = useState(false),
-    [conclusionSelection, setConclusionLead] = useState<string | null>(null),
-    [referents, setReferents] = useState<{ profile: string; category?: string } | null>(null),
-    [advice, setAdvice] = useState<string | null>(null),
-    [sharedAppointments, setSharedAppointments] = useState<string | null>(null),
-    [advisorProfile, setAdvisorProfile] = useState<string | null>(null),
-    [appointments, setAppointments] = useState<string | null>(null),
-    [marketMandates, setMarketMandates] = useState<string | null>(null),
-    [qualitySelection, setQualityLead] = useState<string | null>(null),
-    [communicationsSelection, setCommunicationsLead] = useState<string | null>(null),
-    [complementSelection, setComplementLead] = useState<string | null>(null),
-    [coordination, setCoordination] = useState(false),
-    [referentAssessment, setReferentAssessment] = useState<string | null>(null),
-    [linkContract, setLinkContract] = useState(false),
-    [pending, setPending] = useState(false),
-    [error, setError] = useState(""),
-    [success, setSuccess] = useState<string | null>(null),
-    [interlocutorSent, setInterlocutorSent] = useState(false),
-    [create, setCreate] = useState(false);
-  const qualityLead =
-    qualitySelection ?? (search.section === "quality" ? (search.lead ?? null) : null);
-  const communicationsLead =
-    communicationsSelection ?? (search.section === "communications" ? (search.lead ?? null) : null);
-  const conclusionLead =
-    conclusionSelection ?? (search.section === "conclusion" ? (search.lead ?? null) : null);
-  const complementLead =
-    complementSelection ?? (search.section === "complement" ? (search.lead ?? null) : null);
-  const closeSection = () => {
-    if (search.section) void navigate({ search: search.lead ? { lead: search.lead } : {} });
-  };
-  const attempt = useRef<{ payload: string; key: string } | null>(null),
-    root = ["private", identity.user.id, identity.session.id, "wallet-leads", scope];
   const list = useQuery({
-    queryKey: [...root, cursor],
+    queryKey: [...walletLeadsKey(identity, scope), "offers"],
     queryFn: ({ signal }) =>
-      partnerApi.list(
-        {
-          view: "all",
-          ...(scope === "all" ? {} : { clientProfileId: scope }),
-          ...(cursor ? { cursor } : {}),
-        },
-        signal,
-        true,
-      ),
+      partnerApi.walletOffers(scope === "all" ? {} : { clientProfileId: scope }, signal),
     gcTime: 0,
     staleTime: 0,
     refetchInterval: 15000,
     retry: false,
   });
-  const detail = useQuery({
-    queryKey: [...root, "lead", search.lead],
-    queryFn: ({ signal }) => partnerApi.lead(search.lead!, signal, true),
-    enabled: !!search.lead,
-    gcTime: 0,
-    staleTime: 0,
-    refetchInterval: pending ? false : 10000,
-    retry: false,
-  });
-  const lead = detail.data,
-    offers =
-      lead?.offers.filter(
-        (offer) => offer.active && !["cancelled", "replaced"].includes(offer.state),
-      ) ?? [];
-  async function send(command: LeadCommand) {
-    if (!lead || pending) return;
-    setError("");
-    setPending(true);
-    const payload = JSON.stringify({ leadId: lead.id, command });
-    if (attempt.current?.payload !== payload)
-      attempt.current = { payload, key: crypto.randomUUID() };
-    try {
-      const result = await partnerApi.command(
-        lead.id,
-        command,
-        { csrfToken: identity.csrfToken, idempotencyKey: attempt.current.key },
-        true,
-      );
-      client.setQueryData([...root, "lead", lead.id], result);
-      await client.invalidateQueries({ queryKey: root });
-      if (command.action !== "client_choice" || command.choice !== "view") setChoice(null);
-      setSuccess(
-        command.action === "client_choice" && command.choice !== "view" ? command.choice : null,
-      );
-      setInterlocutorSent(command.action === "client_interlocutor");
-      attempt.current = null;
-      setRetryCommand(null);
-      return result;
-    } catch (cause) {
-      setRetryCommand(!(cause instanceof PartnerApiError) || cause.status >= 500 ? command : null);
-      setError(
-        cause instanceof PartnerApiError && cause.status === 409
-          ? t("conflict")
-          : cause instanceof PartnerApiError && cause.code === "PARTNER_OFFER_EXPIRED"
-            ? t("expired")
-            : t("error"),
-      );
-    } finally {
-      setPending(false);
-    }
-  }
-  async function openChoice(type: WalletChoice["type"], offer?: LeadOffer) {
-    if (!lead || pending || detail.isError) return;
-    setError("");
-    setSuccess(null);
-    setInterlocutorSent(false);
-    setRetryCommand(null);
-    attempt.current = null;
-    let presented = lead;
-    if (type === "select" && offer?.state === "published") {
-      const result = await send({
-        action: "client_choice",
-        revision: lead.revision,
-        choice: "view",
-        offerId: offer.id,
-        text: "",
-      });
-      if (!result) return;
-      presented = result;
-    }
-    setChoice({ type, lead: presented, scope, ...(offer ? { offer } : {}) });
-  }
+  const open = (lead: string) =>
+    void navigate({ search: (previous) => requestSearch(previous, lead) });
   return (
     <>
-      {coordination && (
-        <CoordinatedBookingsDialog
-          key={`${identity.user.id}:${identity.session.id}:${scope}`}
-          identity={identity}
-          scope={scope}
-          onClose={() => setCoordination(false)}
-        />
-      )}
-      {appointments && (
-        <WalletAppointmentsDialog
-          key={`${identity.user.id}:${identity.session.id}:${appointments}`}
-          identity={identity}
-          leadId={appointments}
-          onClose={() => setAppointments(null)}
-        />
-      )}
-      {marketMandates && (
-        <MarketMandatesDialog
-          key={`${identity.user.id}:${identity.session.id}:${marketMandates}`}
-          identity={identity}
-          leadId={marketMandates}
-          onClose={() => setMarketMandates(null)}
-        />
-      )}
-      {complementLead && (
-        <WalletComplementsDialog
-          key={`${identity.user.id}:${identity.session.id}:${complementLead}`}
-          identity={identity}
-          leadId={complementLead}
-          onClose={() => {
-            setComplementLead(null);
-            closeSection();
-          }}
-          // The reference contract is confirmed through the usual path, from the request.
-          onLinkContract={() => {
-            setComplementLead(null);
-            closeSection();
-            setLinkContract(true);
-          }}
-        />
-      )}
-      {qualityLead && (
-        <WalletQualityDialog
-          key={`${identity.user.id}:${identity.session.id}:${qualityLead}`}
-          identity={identity}
-          leadId={qualityLead}
-          onClose={() => {
-            setQualityLead(null);
-            closeSection();
-          }}
-        />
-      )}
-      {conclusionLead && (
-        <ConclusionsDialog
-          key={`${identity.user.id}:${identity.session.id}:${conclusionLead}`}
-          identity={identity}
-          leadId={conclusionLead}
-          onClose={() => {
-            setConclusionLead(null);
-            closeSection();
-          }}
-        />
-      )}
-      {communicationsLead && (
-        <WalletCommunicationsDialog
-          key={`${identity.user.id}:${identity.session.id}:${communicationsLead}`}
-          identity={identity}
-          leadId={communicationsLead}
-          onClose={() => {
-            setCommunicationsLead(null);
-            closeSection();
-          }}
-        />
-      )}
-      {advisorProfile && (
-        <AdvisorProfileDialog
-          userId={advisorProfile}
-          queryKey={root}
-          onClose={() => setAdvisorProfile(null)}
-        />
-      )}
-      {sharedAppointments && (
-        <SharedAppointmentsDialog
-          key={`${identity.user.id}:${identity.session.id}:${sharedAppointments}`}
-          identity={identity}
-          leadId={sharedAppointments}
-          onClose={() => setSharedAppointments(null)}
-        />
-      )}
-      {referentAssessment && (
-        <ReferentAssessmentDialog
-          key={`${identity.user.id}:${identity.session.id}:${referentAssessment}`}
-          identity={identity}
-          leadId={referentAssessment}
-          onClose={() => setReferentAssessment(null)}
-        />
-      )}
-      {advice && (
-        <AdvicePreferencesDialog
-          identity={identity}
-          leadId={advice}
-          onClose={() => setAdvice(null)}
-        />
-      )}
-      {referents && (
-        <ReferentsDialog
-          identity={identity}
-          initialProfile={referents.profile}
-          {...(referents.category ? { initialCategory: referents.category } : {})}
-          onClose={() => setReferents(null)}
-        />
-      )}
-      <header className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="cv-app-heading">{t("title")}</h1>
-          <p className="mt-3 text-muted-foreground">{t("subtitle")}</p>
-        </div>
-        <Button variant="outline" asChild>
-          <Link
-            to="/offers/notifications"
-            search={{ status: "all", ...(scope === "all" ? {} : { clientProfileId: scope }) }}
-          >
-            {t("notifications")}
-          </Link>
-        </Button>
-        <Button variant="outline" asChild>
-          <Link to="/insurance-requests" search={{ profile: scope }}>
-            {t("resumeInsurance")}
-          </Link>
-        </Button>
-        <Button variant="outline" onClick={() => setCreate(true)}>
-          <Plus className="mr-2 size-4" />
-          {t("newRequest")}
-        </Button>
-        <Button variant="outline" onClick={() => setReferents({ profile: scope })}>
-          {t("referents.title")}
-        </Button>
-        <Button variant="outline" onClick={() => setCoordination(true)}>
-          {t("coordination.title")}
-        </Button>
+      <header>
+        <h1 className="cv-app-heading">{t("title")}</h1>
+        <p className="mt-3 text-muted-foreground">{t("workspace.pageDescription")}</p>
       </header>
       {list.isPending ? (
         <LoadingState label={t("loading")} />
@@ -340,485 +64,77 @@ function Offers({ identity }: { identity: IdentityMe }) {
           onRetry={() => void list.refetch()}
         />
       ) : !list.data.items.length ? (
-        <EmptyState title={t("empty")} description={t("emptyDescription")} />
+        <EmptyState
+          title={t("workspace.pageEmpty")}
+          description={t("workspace.pageEmptyDescription")}
+        />
       ) : (
-        <div className="grid gap-4 md:grid-cols-2">
-          {list.data.items.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              className={`rounded-xl border p-6 text-left ${search.lead === item.id ? "border-primary bg-primary/5" : "border-border"}`}
-              onClick={() => {
-                setSuccess(null);
-                setError("");
-                void navigate({ search: (previous) => ({ ...previous, lead: item.id }) });
-              }}
-            >
-              <p className="text-xs text-muted-foreground">{item.clientName}</p>
-              <h2 className="mt-2 font-semibold">{item.title}</h2>
-              {item.object && <p className="mt-2 text-sm text-muted-foreground">{item.object}</p>}
-              <span className="mt-5 inline-flex items-center gap-2 text-sm">
-                {t("open")}
-                <ArrowUpRight className="size-4" />
-              </span>
-            </button>
-          ))}
-        </div>
-      )}
-      <div className="flex gap-3">
-        {cursor && (
-          <Button variant="outline" onClick={() => setCursor(undefined)}>
-            {t("back")}
-          </Button>
-        )}
-        {list.data?.nextCursor && (
-          <Button variant="outline" onClick={() => setCursor(list.data.nextCursor!)}>
-            {t("next")}
-          </Button>
-        )}
-      </div>
-      <Dialog
-        open={
-          !!search.lead &&
-          !sharedAppointments &&
-          !appointments &&
-          !qualityLead &&
-          !communicationsLead &&
-          !complementLead
-        }
-        onOpenChange={(open) => {
-          if (!open && !pending)
-            void navigate({
-              search: (previous) => {
-                const rest = { ...previous };
-                delete rest.lead;
-                return rest;
-              },
-            });
-        }}
-      >
-        <DialogContent
-          className="max-h-[90svh] overflow-y-auto sm:max-w-6xl"
-          showCloseButton={!pending}
-          closeLabel={t("close")}
-        >
-          <DialogHeader>
-            <DialogTitle>{lead?.title ?? t("title")}</DialogTitle>
-            <DialogDescription>
-              {lead ? `${lead.clientName} · ${lead.object}` : t("subtitle")}
-            </DialogDescription>
-          </DialogHeader>
-          {detail.isPending ? (
-            <LoadingState label={t("loading")} />
-          ) : detail.isError ? (
-            <ErrorState
-              title={t("error")}
-              description={t("error")}
-              retryLabel={t("retry")}
-              pendingLabel={t("loading")}
-              onRetry={() => void detail.refetch()}
-            />
-          ) : (
-            lead && (
-              <>
-                <ComplementBanner
-                  identity={identity}
-                  leadId={lead.id}
-                  onOpen={() => setComplementLead(lead.id)}
-                />
-                <Button
-                  variant="outline"
-                  disabled={pending}
-                  onClick={() => setQualityLead(lead.id)}
-                >
-                  {t("quality:title")}
-                </Button>
-                <Button
-                  variant="outline"
-                  disabled={pending}
-                  onClick={() => setCommunicationsLead(lead.id)}
-                >
-                  {t("communications:title")}
-                </Button>
-                <Button variant="outline" disabled={pending} onClick={() => setAdvice(lead.id)}>
-                  {t("advice.title")}
-                </Button>
-                <Button
-                  variant="outline"
-                  disabled={pending}
-                  onClick={() => setMarketMandates(lead.id)}
-                >
-                  {t("marketMandates.title")}
-                </Button>
-                <Button
-                  variant="outline"
-                  disabled={pending}
-                  onClick={() => setAppointments(lead.id)}
-                >
-                  {t("appointments.title")}
-                </Button>
-                <Button
-                  variant="outline"
-                  disabled={pending}
-                  onClick={() => setSharedAppointments(lead.id)}
-                >
-                  {t("appointmentLinks.shared")}
-                </Button>
-                <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border p-4">
-                  <div>
-                    <p className="text-sm font-medium">
-                      {t("referent", { name: lead.responsibleName ?? t("coverviewQueue") })}
-                    </p>
-                    {lead.responsibleId && (
-                      <button
-                        type="button"
-                        className="mt-1 text-sm underline underline-offset-4"
-                        onClick={() => setAdvisorProfile(lead.responsibleId)}
-                      >
-                        {t("advisorProfile.open")}
-                      </button>
-                    )}
-                    {lead.participants
-                      .filter((p) => p.id !== lead.responsibleId)
-                      .map((p) => (
-                        <p className="mt-1 text-sm text-muted-foreground" key={p.id}>
-                          {t("coAdvisor", { name: p.name })}
-                        </p>
-                      ))}
-                  </div>
-                  <Button
-                    variant="outline"
-                    disabled={pending || lead.stage === "completed"}
-                    onClick={() => {
-                      setInterlocutorSent(false);
-                      void openChoice("interlocutor");
-                    }}
-                  >
-                    {t("interlocutor")}
-                  </Button>
-                </div>
-                {interlocutorSent && (
-                  <p role="status" className="text-sm">
-                    {t("interlocutorSent")}
+        <div className="space-y-6">
+          {grouped(list.data.items).map((group) => {
+            const first = group[0]!.lead;
+            return (
+              <section
+                key={first.id}
+                className="space-y-4 rounded-xl border border-border p-5"
+                aria-label={first.object || first.title}
+              >
+                <div>
+                  <h2 className="font-semibold">{first.object || first.title}</h2>
+                  <p className="text-sm text-muted-foreground">
+                    {t(`categories.${first.category}`)}
                   </p>
-                )}
-                {lead.referentContinuity && (
-                  <div className="space-y-3 rounded-xl border border-border p-4">
-                    <p className="text-sm font-medium">
-                      {t("referents.categorySelection", {
-                        category: t(`categories.${lead.category}`),
-                        name:
-                          lead.referentContinuity.selection.advisor?.name ??
-                          t("referents.noReferent"),
-                      })}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {t(`referents.status.${lead.referentContinuity.selection.status}`)}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {t(`referents.continuity.${lead.referentContinuity.status}`)}
-                    </p>
-                    {lead.referentContinuity.competence && (
-                      <div className="space-y-2 text-sm text-muted-foreground">
-                        <p>
-                          {t("referents.competence", {
-                            status: t(
-                              `referents.competenceStatus.${lead.referentContinuity.competence.status}`,
-                            ),
-                          })}
-                        </p>
-                        {lead.referentContinuity.competence.scope && (
-                          <p className="whitespace-pre-wrap">
-                            {t("referents.competenceScope", {
-                              scope: lead.referentContinuity.competence.scope,
-                            })}
-                          </p>
-                        )}
-                        {lead.referentContinuity.competence.validUntil && (
-                          <p>
-                            {t("referents.competenceUntil", {
-                              date: date(lead.referentContinuity.competence.validUntil),
-                            })}
-                          </p>
-                        )}
-                        <p>{t("referents.competenceLimits")}</p>
-                      </div>
-                    )}
-                    {lead.referentContinuity.practice && (
-                      <PracticeSummaryDialog value={lead.referentContinuity.practice} />
-                    )}
-                    <Button variant="outline" onClick={() => setReferentAssessment(lead.id)}>
-                      {t("referentAssessment.title")}
-                    </Button>
-                    <Button
-                      variant="outline"
-                      disabled={pending}
-                      onClick={() =>
-                        setReferents({
-                          profile: lead.clientProfileId ?? "self",
-                          category: lead.category,
-                        })
-                      }
-                    >
-                      {t("referents.change")}
-                    </Button>
-                  </div>
-                )}
-                {lead.insuranceRequestId && (
-                  <Button variant="outline" asChild>
-                    <Link
-                      to="/insurance-requests/$requestId"
-                      params={{ requestId: lead.insuranceRequestId }}
-                      search={{ profile: lead.clientProfileId ?? "self" }}
-                    >
-                      {t("originalInsuranceRequest")}
-                    </Link>
-                  </Button>
-                )}
-                <ContractComparison lead={lead} />
-                <Button variant="outline" onClick={() => setHistory(true)}>
-                  {t("history.title")}
-                </Button>
-                <Button variant="outline" onClick={() => setReopenings(true)}>
-                  {t("lifecycle:title")}
-                </Button>
-                {reopenings && (
-                  <LeadReopeningsDialog
-                    identity={identity}
-                    leadId={lead.id}
-                    onClose={() => setReopenings(false)}
-                  />
-                )}
-                <Button variant="outline" onClick={() => setRelationships(true)}>
-                  {t("relationships:title")}
-                </Button>
-                {relationships && (
-                  <LeadRelationshipsDialog
-                    key={`${identity.user.id}:${identity.session.id}:${lead.id}`}
-                    identity={identity}
-                    leadId={lead.id}
-                    onClose={() => setRelationships(false)}
-                  />
-                )}
-                <Button variant="outline" onClick={() => setPolicies(true)}>
-                  {t("policy.title")}
-                </Button>
-                <Button variant="outline" onClick={() => setConclusionLead(lead.id)}>
-                  {t("conclusion:title")}
-                </Button>
-                <div className="flex flex-wrap gap-3">
-                  <Button
-                    variant="outline"
-                    disabled={pending || lead.stage === "completed"}
-                    onClick={() => setLinkContract(true)}
-                  >
-                    {t("contract.link")}
-                  </Button>
-                  {lead.currentContract && (
-                    <Button
-                      variant="ghost"
-                      disabled={pending}
-                      onClick={() =>
-                        void send({
-                          action: "contract_unlink",
-                          referenceId: lead.currentContract!.referenceId,
-                          revision: lead.revision,
-                        })
-                      }
-                    >
-                      {t("contract.unlink")}
-                    </Button>
-                  )}
                 </div>
-                {offers.length ? (
-                  <>
-                    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                      {offers.map((offer) => (
-                        <article key={offer.id} className="rounded-xl border border-border p-5">
-                          <div className="flex items-center justify-between gap-2">
-                            <p className="text-sm text-muted-foreground">{offer.company}</p>
-                            <Badge variant="outline">{t(`state.${offer.state}`)}</Badge>
-                          </div>
-                          <h3 className="mt-2 font-semibold">{offer.product}</h3>
-                          <p className="mt-1 text-xs text-muted-foreground">
-                            {t("version", { version: offer.version })}
-                          </p>
-                          {offer.updatedSinceViewed && (
-                            <p className="mt-2 text-sm">{t("updatedSinceViewed")}</p>
-                          )}
-                          {offer.sourceStatus !== "current" && (
-                            <p role="status" className="mt-3 text-sm">
-                              {t(`history.sourceStatus.${offer.sourceStatus ?? "unbound"}`)}
-                            </p>
-                          )}
-                          <p className="mt-4 text-2xl font-medium">
+                <ul className="divide-y divide-border">
+                  {group.flatMap(({ lead, offers }) =>
+                    offers.map((offer) => (
+                      <li
+                        key={offer.id}
+                        className="flex flex-wrap items-center justify-between gap-4 py-4"
+                      >
+                        <div className="min-w-0">
+                          <p className="text-sm text-muted-foreground">{offer.company}</p>
+                          <p className="font-medium">{offer.product}</p>
+                          <p className="text-sm">
                             {offer.annualPremiumMinor === null
                               ? t("missing")
-                              : money(offer.annualPremiumMinor)}
+                              : `${money(offer.annualPremiumMinor)} ${t("workspace.perYear")}`}
+                            {offer.validUntil &&
+                              ` · ${t("workspace.validUntil", { date: day(offer.validUntil) })}`}
                           </p>
-                          <p className="mt-1 text-xs text-muted-foreground">{t("premium")}</p>
-                          {offer.validUntil && (
-                            <p className="mt-3 text-xs text-muted-foreground">
-                              {t("validity", { date: date(offer.validUntil) })}
-                            </p>
-                          )}
-                          {offer.summary && (
-                            <p className="mt-4 whitespace-pre-wrap text-sm">{offer.summary}</p>
-                          )}
-                          {offer.limitations && (
-                            <div className="mt-4 rounded-md bg-muted p-3">
-                              <h4 className="text-xs font-semibold">{t("limitations")}</h4>
-                              <p className="mt-2 whitespace-pre-wrap text-xs">
-                                {offer.limitations}
-                              </p>
-                            </div>
-                          )}
-                          <div className="mt-5 flex flex-wrap gap-2">
-                            <Button
-                              size="sm"
-                              disabled={
-                                pending ||
-                                !offer.canChoose ||
-                                !["published", "viewed", "selected"].includes(offer.state) ||
-                                (!!offer.validUntil &&
-                                  new Date(offer.validUntil).getTime() < Date.now()) ||
-                                lead.stage === "completed"
-                              }
-                              onClick={() => void openChoice("select", offer)}
-                            >
-                              {t(offer.state === "selected" ? "selected" : "choose")}
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {offer.canDownload && (
+                            <Button variant="outline" asChild>
+                              <a href={partnerApi.sourceUrl(lead.id, offer.id, true)}>
+                                <FileText className="size-4" aria-hidden="true" />
+                                {t("source")}
+                              </a>
                             </Button>
-                            {offer.canDownload && (
-                              <Button size="sm" asChild variant="outline">
-                                <a href={partnerApi.sourceUrl(lead.id, offer.id, true)}>
-                                  <FileText className="mr-1 size-3.5" />
-                                  {t("source")}
-                                </a>
-                              </Button>
-                            )}
-                          </div>
-                          <div className="mt-3 flex flex-wrap gap-3 text-xs">
-                            <button
-                              type="button"
-                              disabled={pending || !offer.canChoose || lead.stage === "completed"}
-                              className="underline underline-offset-4"
-                              onClick={() => void openChoice("question", offer)}
-                            >
-                              {t("question")}
-                            </button>
-                            <button
-                              type="button"
-                              disabled={pending || !offer.canChoose || lead.stage === "completed"}
-                              className="underline underline-offset-4"
-                              onClick={() => void openChoice("modification", offer)}
-                            >
-                              {t("modification")}
-                            </button>
-                            <button
-                              type="button"
-                              disabled={pending || !offer.canChoose || lead.stage === "completed"}
-                              className="underline underline-offset-4 disabled:opacity-50"
-                              onClick={() => void openChoice("refuse", offer)}
-                            >
-                              {t("refuse")}
-                            </button>
-                          </div>
-                        </article>
-                      ))}
-                    </div>
-                    {lead.recommendation && (
-                      <RecommendationCard recommendation={lead.recommendation} />
-                    )}
-                    {lead.offerOrientation && (
-                      <OrientationPanel orientation={lead.offerOrientation} offers={offers} />
-                    )}
-                    {lead.offerComparison && <OfferMatrix comparison={lead.offerComparison} />}
-                    <div className="flex flex-wrap items-center justify-end gap-3">
-                      <Button
-                        variant="ghost"
-                        disabled={pending || lead.stage === "completed"}
-                        onClick={() => void openChoice("keep_current")}
-                      >
-                        {t("keep")}
-                      </Button>
-                    </div>
-                  </>
-                ) : (
-                  <EmptyState title={t("noOffers")} description={t("noOffersDescription")} />
-                )}{" "}
-                {success && (
-                  <div role="status" className="rounded-lg bg-muted p-4 text-sm">
-                    <p className="font-semibold">{t("decision.saved")}</p>
-                    <p className="mt-2">{t(`decision.success.${success}`)}</p>
-                  </div>
-                )}
-                {error && (
-                  <p role="alert" className="text-sm text-destructive">
-                    {error}
-                  </p>
-                )}
-              </>
-            )
+                          )}
+                          <Button onClick={() => open(lead.id)}>
+                            {t("workspace.openRequest")}
+                          </Button>
+                        </div>
+                      </li>
+                    )),
+                  )}
+                </ul>
+              </section>
+            );
+          })}
+          {list.data.truncated && (
+            <p className="text-sm text-muted-foreground">{t("workspace.truncated")}</p>
           )}
-        </DialogContent>
-      </Dialog>
-      {linkContract && lead && (
-        <ContractLinkDialog
-          key={lead.id}
-          lead={lead}
-          identity={identity}
-          onClose={() => setLinkContract(false)}
-          onSaved={(value) => {
-            client.setQueryData([...root, "lead", lead.id], value);
-            void client.invalidateQueries({ queryKey: root });
-          }}
-        />
+        </div>
       )}
-      {history && lead && (
-        <OfferHistoryDialog
-          key={lead.id}
-          leadId={lead.id}
-          identity={identity}
-          onClose={() => setHistory(false)}
-        />
-      )}
-      {policies && lead && !detail.isError && (
-        <FinalPoliciesDialog
-          key={lead.id}
-          lead={lead}
-          identity={identity}
-          onClose={() => setPolicies(false)}
-          onSaved={() => {
-            void client.invalidateQueries({ queryKey: root });
-          }}
-        />
-      )}
-      <ChoiceDialog
-        key={
-          choice
-            ? `${choice.lead.id}:${choice.lead.revision}:${choice.type}:${choice.offer?.id ?? ""}`
-            : "none"
-        }
-        choice={
-          choice?.scope === scope && choice.lead.id === search.lead && !detail.isError
-            ? choice
-            : null
-        }
-        lead={lead}
-        pending={pending}
-        error={error}
-        retryCommand={retryCommand}
-        onClose={() => setChoice(null)}
-        onSend={send}
-      />
-      <WalletLeadDialog
+      <LeadWorkspace
         identity={identity}
-        open={create}
-        onClose={() => setCreate(false)}
-        onCreated={(id) => {
-          void client.invalidateQueries({ queryKey: root });
-          void navigate({ search: (previous) => ({ ...previous, lead: id }) });
-        }}
+        leadId={search.lead ?? null}
+        section={search.section}
+        onClose={() => void navigate({ search: (previous) => requestSearch(previous) })}
+        onSectionDone={() =>
+          void navigate({ search: (previous) => requestSearch(previous, previous.lead) })
+        }
       />
     </>
   );

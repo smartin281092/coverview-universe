@@ -24,6 +24,14 @@ export {
   SelectLabel,
 } from "./Select";
 export { SelectField, type SelectFieldOption, type SelectFieldGroup } from "./SelectField";
+export {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./DropdownMenu";
 export { Tabs, TabsList, TabsTrigger, TabsContent } from "./Tabs";
 export {
   Sheet,

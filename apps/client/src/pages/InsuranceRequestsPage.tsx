@@ -1,24 +1,76 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { Link, useNavigate, useParams, useSearch } from "@tanstack/react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { ArrowUpRight, Ellipsis, Plus } from "lucide-react";
 import type { IdentityMe } from "@coverview/api-client";
-import { Button, EmptyState, ErrorState, LoadingState, RequestProgress } from "@coverview/ui";
+import {
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  EmptyState,
+  ErrorState,
+  LoadingState,
+  RequestProgress,
+} from "@coverview/ui";
 import { insuranceApi } from "../insurance-api";
+import { partnerApi } from "../partner-api";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { useWalletProfileScope } from "../features/profile/use-wallet-profile-scope";
 import { InsuranceLeadAction } from "../features/offers/InsuranceLeadAction";
+import {
+  LeadWorkspace,
+  requestSearch,
+  walletLeadsKey,
+  type LeadSection,
+} from "../features/offers/LeadWorkspace";
+import { NewRequestDialog } from "../features/offers/NewRequestDialog";
+import { ReferentsDialog } from "../features/offers/ReferentsDialog";
+import { CoordinatedBookingsDialog } from "../features/offers/CoordinatedBookingsDialog";
+import { useWalletLiveUpdates } from "../features/offers/use-live-updates";
 const stages = ["submitted", "reviewing", "insurer_contacted", "offer_ready", "completed"] as const;
 const amount = (minor: number) =>
   new Intl.NumberFormat("fr-CH", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(
     minor / 100,
   );
+// The client's requests (8 October 2026): those sent to CoverView from Wallet, followed in the
+// same request window as the offers, and those made from the health comparator.
 function Requests({ identity }: { identity: IdentityMe }) {
   const { t } = useTranslation("insuranceRequests");
   const { requestId } = useParams({ strict: false });
   const { filter, scope } = useWalletProfileScope();
+  const search = useSearch({ strict: false });
+  const navigate = useNavigate();
+  const client = useQueryClient();
   const [cursor, setCursor] = useState<string | undefined>();
+  const [create, setCreate] = useState(false);
+  const [referents, setReferents] = useState(false);
+  const [coordination, setCoordination] = useState(false);
   useEffect(() => setCursor(undefined), [scope]);
+  useWalletLiveUpdates(identity);
+  const leadsKey = walletLeadsKey(identity, scope);
+  const leads = useQuery({
+    queryKey: [...leadsKey, "requests"],
+    queryFn: ({ signal }) =>
+      partnerApi.list(
+        { view: "all", ...(scope === "all" ? {} : { clientProfileId: scope }) },
+        signal,
+        true,
+      ),
+    enabled: !requestId,
+    gcTime: 0,
+    staleTime: 0,
+    refetchInterval: 15000,
+    retry: false,
+  });
+  // The request window is driven by the address, as on the offers page.
+  const show = (lead?: string, section?: LeadSection) =>
+    void navigate({
+      to: "/insurance-requests",
+      search: (previous) => requestSearch(previous, lead, section),
+    });
   const query = useQuery({
     queryKey: [
       "private",
@@ -44,10 +96,92 @@ function Requests({ identity }: { identity: IdentityMe }) {
   const selected = requestId ? query.data?.requests[0] : null;
   return (
     <div className="space-y-8">
-      <header>
-        <h1 className="cv-app-heading">{t("title")}</h1>
-        <p className="text-muted-foreground">{t("description")}</p>
+      <header className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="cv-app-heading">{t("title")}</h1>
+          <p className="text-muted-foreground">{t("description")}</p>
+        </div>
+        {!requestId && (
+          <div className="flex items-center gap-2">
+            <Button onClick={() => setCreate(true)}>
+              <Plus className="size-4" aria-hidden="true" />
+              {t("newRequest")}
+            </Button>
+            <DropdownMenu modal={false}>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" aria-label={t("more")}>
+                  <Ellipsis className="size-4" aria-hidden="true" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem asChild>
+                  <Link
+                    to="/offers/notifications"
+                    search={{
+                      status: "all",
+                      ...(scope === "all" ? {} : { clientProfileId: scope }),
+                    }}
+                  >
+                    {t("notifications")}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setReferents(true)}>
+                  {t("referents")}
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setCoordination(true)}>
+                  {t("coordination")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        )}
       </header>
+      {!requestId && (
+        <section className="space-y-4" aria-labelledby="wallet-requests">
+          <h2 id="wallet-requests" className="text-lg font-medium">
+            {t("myRequests")}
+          </h2>
+          {leads.isPending ? (
+            <LoadingState label={t("loading")} />
+          ) : leads.isError ? (
+            <ErrorState
+              title={t("error")}
+              description=""
+              retryLabel={t("retry")}
+              pendingLabel={t("loading")}
+              onRetry={() => void leads.refetch()}
+            />
+          ) : leads.data.items.length ? (
+            <ul className="grid gap-3 md:grid-cols-2">
+              {leads.data.items.map((lead) => (
+                <li key={lead.id}>
+                  <button
+                    type="button"
+                    className="flex w-full flex-col gap-2 rounded-xl border border-border p-5 text-left hover:bg-muted"
+                    onClick={() => show(lead.id)}
+                  >
+                    <span className="font-medium">{lead.title}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {lead.stage === "completed"
+                        ? t("closed")
+                        : lead.responsibleName
+                          ? t("followedBy", { name: lead.responsibleName })
+                          : t("assigning")}
+                    </span>
+                    <span className="inline-flex items-center gap-2 text-sm">
+                      {t("openRequest")}
+                      <ArrowUpRight className="size-4" aria-hidden="true" />
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <EmptyState title={t("noRequests")} description={t("noRequestsDescription")} />
+          )}
+          <h2 className="pt-4 text-lg font-medium">{t("comparatorRequests")}</h2>
+        </section>
+      )}
       {requestId && (
         <Link className="text-sm underline" to="/insurance-requests">
           {t("backLink")}
@@ -184,6 +318,37 @@ function Requests({ identity }: { identity: IdentityMe }) {
             {t("next")}
           </Button>
         </nav>
+      )}
+      <LeadWorkspace
+        identity={identity}
+        leadId={search.lead ?? null}
+        section={search.section}
+        onClose={() => show(undefined, undefined)}
+        onSectionDone={() => show(search.lead, undefined)}
+      />
+      <NewRequestDialog
+        identity={identity}
+        open={create}
+        onClose={() => setCreate(false)}
+        onCreated={(id) => {
+          void client.invalidateQueries({ queryKey: leadsKey });
+          show(id);
+        }}
+      />
+      {referents && (
+        <ReferentsDialog
+          identity={identity}
+          initialProfile={scope}
+          onClose={() => setReferents(false)}
+        />
+      )}
+      {coordination && (
+        <CoordinatedBookingsDialog
+          key={`${identity.user.id}:${identity.session.id}:${scope}`}
+          identity={identity}
+          scope={scope}
+          onClose={() => setCoordination(false)}
+        />
       )}
     </div>
   );

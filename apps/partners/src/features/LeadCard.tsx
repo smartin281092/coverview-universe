@@ -48,7 +48,9 @@ export function LeadCard({
     >
       <div className="mb-3 flex items-center justify-between gap-2">
         <span className="text-xs font-medium text-muted-foreground">
-          {t(`category.${lead.category}`)}
+          {lead.requestKind === "new_insurance"
+            ? t(`category.${lead.category}`)
+            : t(`requestKind.${lead.requestKind}`)}
         </span>
         {lead.priority !== "normal" && (
           <Badge variant="outline">

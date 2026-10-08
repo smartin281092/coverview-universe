@@ -59,28 +59,31 @@ const leadNotificationsRoute = createRoute({
     "LeadNotificationsPage",
   ),
 });
+// An open request and one of its sections, shared by the offers and requests pages.
+const leadSearch = (
+  search: Record<string, unknown>,
+): { lead?: string; section?: "quality" | "communications" | "conclusion" | "complement" } =>
+  typeof search.lead === "string" && /^lead_[0-9a-f-]{36}$/.test(search.lead)
+    ? {
+        lead: search.lead,
+        ...(search.section === "quality" ||
+        search.section === "communications" ||
+        search.section === "conclusion" ||
+        search.section === "complement"
+          ? { section: search.section }
+          : {}),
+      }
+    : {};
 const offersRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/offers",
-  validateSearch: (
-    search: Record<string, unknown>,
-  ): { lead?: string; section?: "quality" | "communications" | "conclusion" | "complement" } =>
-    typeof search.lead === "string" && /^lead_[0-9a-f-]{36}$/.test(search.lead)
-      ? {
-          lead: search.lead,
-          ...(search.section === "quality" ||
-          search.section === "communications" ||
-          search.section === "conclusion" ||
-          search.section === "complement"
-            ? { section: search.section }
-            : {}),
-        }
-      : {},
+  validateSearch: leadSearch,
   component: lazyRouteComponent(() => import("./pages/OffersPage"), "OffersPage"),
 });
 const insuranceRequestsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/insurance-requests",
+  validateSearch: leadSearch,
   component: lazyRouteComponent(
     () => import("./pages/InsuranceRequestsPage"),
     "InsuranceRequestsPage",

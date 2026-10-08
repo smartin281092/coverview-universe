@@ -227,6 +227,9 @@ export function LeadPage() {
         <div className="flex flex-wrap items-start justify-between gap-5">
           <div>
             <div className="mb-3 flex flex-wrap gap-2">
+              {lead.requestKind !== "new_insurance" && (
+                <Badge variant="outline">{t(`requestKind.${lead.requestKind}`)}</Badge>
+              )}
               <Badge variant="outline">{t(`category.${lead.category}`)}</Badge>
               <Badge>{t(`stage.${lead.stage}`)}</Badge>
               {lead.priority !== "normal" && (

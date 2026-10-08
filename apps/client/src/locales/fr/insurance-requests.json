@@ -1,5 +1,5 @@
 {
-  "title": "Demandes d’assurance",
+  "title": "Mes demandes",
   "lead": {
     "start": "Demander un accompagnement",
     "open": "Ouvrir le suivi et les offres",
@@ -15,12 +15,12 @@
     "error": "La transmission n’a pas pu être confirmée. Réessayez ou actualisez la demande pour vérifier vos droits actuels.",
     "loadError": "Le lien de suivi est indisponible. Actualisez avant de créer un autre dossier."
   },
-  "description": "Vos offres, les personnes assurées et chaque étape de la démarche.",
+  "description": "Vos demandes à CoverView et celles faites depuis le comparateur, avec leur suivi.",
   "adminDescription": "Traitez les demandes d’offre reçues depuis le comparateur et actualisez leur progression.",
   "loading": "Chargement des demandes…",
   "error": "Impossible de charger cette demande. Vérifiez votre accès puis réessayez.",
   "retry": "Réessayer",
-  "empty": "Aucune demande d’assurance pour le moment.",
+  "empty": "Aucune demande du comparateur.",
   "details": "Voir la demande",
   "back": "Toutes les demandes",
   "previous": "Première page",
@@ -77,5 +77,18 @@
     "other": "Autre"
   },
   "notProvided": "Non renseignée",
-  "separator": " · "
+  "separator": " · ",
+  "newRequest": "Nouvelle demande",
+  "more": "Plus",
+  "notifications": "Notifications",
+  "referents": "Mes référents habituels",
+  "coordination": "Coordonner mes rendez-vous",
+  "myRequests": "Mes demandes",
+  "comparatorRequests": "Demandes du comparateur",
+  "noRequests": "Aucune demande pour l’instant.",
+  "noRequestsDescription": "Une nouvelle demande est transmise à CoverView, qui vous attribue un conseiller.",
+  "followedBy": "Suivie par {{name}}",
+  "assigning": "Attribution d’un conseiller en cours",
+  "closed": "Clôturée",
+  "openRequest": "Ouvrir"
 }

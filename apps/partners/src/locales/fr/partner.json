@@ -2483,5 +2483,12 @@
     "changed": "La situation a changé : la liste a été mise à jour.",
     "failed": "Les rendez-vous conjoints n’ont pas pu être chargés.",
     "retry": "Réessayer"
+  },
+  "requestKind": {
+    "new_insurance": "Nouvelle assurance",
+    "modification": "Modification d’un contrat",
+    "question": "Question du client",
+    "cancellation": "Annulation d’un contrat",
+    "claim": "Sinistre"
   }
 }

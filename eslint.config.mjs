@@ -4,6 +4,18 @@ import tseslint from "typescript-eslint";
 import unicorn from "eslint-plugin-unicorn";
 import prettier from "eslint-config-prettier";
 import globals from "globals";
+// INTL-08: readable text comes from the i18n catalogues.
+const readableText = [
+  {
+    selector: "JSXText[value=/[^\\s]/]",
+    message: "INTL-08 — texte utilisateur dans les catalogues i18n.",
+  },
+  {
+    selector:
+      "JSXAttribute[name.name=/^(title|placeholder|aria-label|alt)$/] > Literal[value=/[^\\s]/]",
+    message: "INTL-08 — attribut lisible traduit par i18n.",
+  },
+];
 export default tseslint.config(
   {
     ignores: [
@@ -62,17 +74,18 @@ export default tseslint.config(
   },
   {
     files: ["apps/{client,admin,partners}/**/*.tsx", "packages/ui/**/*.tsx"],
+    rules: { "no-restricted-syntax": ["error", ...readableText] },
+  },
+  {
+    // Wallet (8 October 2026): every dropdown is the menus' select, never a native one.
+    files: ["apps/client/**/*.tsx"],
     rules: {
       "no-restricted-syntax": [
         "error",
+        ...readableText,
         {
-          selector: "JSXText[value=/[^\\s]/]",
-          message: "INTL-08 — texte utilisateur dans les catalogues i18n.",
-        },
-        {
-          selector:
-            "JSXAttribute[name.name=/^(title|placeholder|aria-label|alt)$/] > Literal[value=/[^\\s]/]",
-          message: "INTL-08 — attribut lisible traduit par i18n.",
+          selector: "JSXOpeningElement[name.name='select']",
+          message: "Liste déroulante : SelectField de @coverview/ui, le même élément que le menu.",
         },
       ],
     },
