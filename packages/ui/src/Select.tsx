@@ -104,6 +104,20 @@ function SelectItem({
   );
 }
 
+function SelectGroup({ ...props }: React.ComponentProps<typeof SelectPrimitive.Group>) {
+  return <SelectPrimitive.Group data-slot="select-group" {...props} />;
+}
+
+function SelectLabel({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.Label>) {
+  return (
+    <SelectPrimitive.Label
+      data-slot="select-label"
+      className={cn("px-2 pt-2 pb-1 text-xs text-muted-foreground", className)}
+      {...props}
+    />
+  );
+}
+
 function SelectScrollUpButton({
   className,
   ...props
@@ -140,4 +154,4 @@ function SelectScrollDownButton({
   );
 }
 
-export { Select, SelectContent, SelectItem, SelectTrigger, SelectValue };
+export { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue };

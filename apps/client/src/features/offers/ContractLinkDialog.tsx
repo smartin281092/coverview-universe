@@ -18,6 +18,7 @@ import {
   LoadingState,
   EmptyState,
   ErrorState,
+  SelectField,
 } from "@coverview/ui";
 import { partnerApi } from "../../partner-api";
 const schema = z.object({
@@ -65,15 +66,14 @@ export function ContractLinkDialog({
   useEffect(() => {
     if (proposal && !form.getValues("documentId")) form.setValue("documentId", proposal.documentId);
   }, [proposal, form]);
-  const option = (item: NonNullable<typeof query.data>["items"][number]) => (
-    <option value={item.documentId} key={item.documentId}>
-      {tr("candidate", {
-        company: item.facts.companyId,
-        policy: item.contract.policyNumber ?? tr("missing"),
-        object: item.contract.insuredSubject ?? item.contract.title,
-      })}
-    </option>
-  );
+  const option = (item: NonNullable<typeof query.data>["items"][number]) => ({
+    value: item.documentId,
+    label: tr("candidate", {
+      company: item.facts.companyId,
+      policy: item.contract.policyNumber ?? tr("missing"),
+      object: item.contract.insuredSubject ?? item.contract.title,
+    }),
+  });
   const pending = form.formState.isSubmitting;
   return (
     <Dialog
@@ -138,30 +138,34 @@ export function ContractLinkDialog({
             }}
           >
             <Label htmlFor="current-contract">{tr("choose")}</Label>
-            <select
+            <SelectField
               id="current-contract"
-              className="w-full rounded-md border border-input bg-background p-3 text-sm"
-              {...form.register("documentId")}
-              onChange={(event) => {
-                form.setValue("documentId", event.target.value);
+              value={form.watch("documentId")}
+              placeholder={tr("choose")}
+              onValueChange={(value) => {
+                form.setValue("documentId", value);
                 form.setValue("sameObjectConfirmed", false);
                 form.setValue("sharingConfirmed", false);
               }}
-            >
-              <option value="">{tr("choose")}</option>
-              {query.data.compatible.length > 0 && (
-                <optgroup label={tr("compatibleGroup")}>
-                  {query.data.items
-                    .filter((item) => query.data.compatible.includes(item.documentId))
-                    .map(option)}
-                </optgroup>
-              )}
-              <optgroup label={tr(query.data.compatible.length ? "otherGroup" : "allGroup")}>
-                {query.data.items
-                  .filter((item) => !query.data.compatible.includes(item.documentId))
-                  .map(option)}
-              </optgroup>
-            </select>
+              options={[
+                ...(query.data.compatible.length > 0
+                  ? [
+                      {
+                        label: tr("compatibleGroup"),
+                        options: query.data.items
+                          .filter((item) => query.data.compatible.includes(item.documentId))
+                          .map(option),
+                      },
+                    ]
+                  : []),
+                {
+                  label: tr(query.data.compatible.length ? "otherGroup" : "allGroup"),
+                  options: query.data.items
+                    .filter((item) => !query.data.compatible.includes(item.documentId))
+                    .map(option),
+                },
+              ]}
+            />
             {selected && (
               <div className="space-y-3 text-sm">
                 {proposal?.documentId === selected.documentId && (

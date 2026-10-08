@@ -18,6 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
+  SelectField,
 } from "@coverview/ui";
 import { partnerApi } from "../../partner-api";
 import { SurveyForm } from "./SurveyForm";
@@ -198,17 +199,17 @@ export function WalletQualityDialog({
               {!selected && (
                 <>
                   <Label htmlFor="quality-kind">{t("kind")}</Label>
-                  <select
+                  <SelectField
                     id="quality-kind"
-                    {...form.register("kind")}
-                    className="min-h-11 w-full rounded-md border border-input bg-background px-3"
-                  >
-                    {["complaint", "callback"].map((v) => (
-                      <option key={v} value={v}>
-                        {t(`kinds.${v}`)}
-                      </option>
-                    ))}
-                  </select>
+                    value={form.watch("kind")}
+                    onValueChange={(value) =>
+                      form.setValue("kind", value as "complaint" | "callback")
+                    }
+                    options={["complaint", "callback"].map((v) => ({
+                      value: v,
+                      label: t(`kinds.${v}`),
+                    }))}
+                  />
                 </>
               )}
               <Label htmlFor="quality-note">{t("message")}</Label>

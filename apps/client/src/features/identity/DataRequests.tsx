@@ -18,6 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
   Label,
+  SelectField,
 } from "@coverview/ui";
 import { api } from "../../api";
 import { partnerApi } from "../../partner-api";
@@ -132,54 +133,43 @@ function RequestForm({
           </fieldset>
           <div className="space-y-2">
             <Label htmlFor={ids.subject}>{t("requests.form.subject")}</Label>
-            <select
+            <SelectField
               id={ids.subject}
               value={subject}
-              onChange={(event) => setSubject(event.target.value)}
-              className="h-10 w-full rounded-md border border-input bg-background px-3"
-            >
-              <option value="self">{t("requests.form.self")}</option>
-              {(profiles.data?.profiles ?? [])
-                .filter((profile) => !profile.isSelf)
-                .map((profile) => (
-                  <option key={profile.id} value={profile.id}>
-                    {profile.displayName}
-                  </option>
-                ))}
-            </select>
+              onValueChange={setSubject}
+              options={[
+                { value: "self", label: t("requests.form.self") },
+                ...(profiles.data?.profiles ?? [])
+                  .filter((profile) => !profile.isSelf)
+                  .map((profile) => ({ value: profile.id, label: profile.displayName })),
+              ]}
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor={ids.category}>{t("requests.form.category")}</Label>
-            <select
+            <SelectField
               id={ids.category}
               name="category"
-              defaultValue=""
-              className="h-10 w-full rounded-md border border-input bg-background px-3"
-            >
-              <option value="">{t("requests.form.anyCategory")}</option>
-              {walletDataCategorySchema.options.map((category) => (
-                <option key={category} value={category}>
-                  {t(`register.categories.${category}.name`)}
-                </option>
-              ))}
-            </select>
+              options={[
+                { value: "", label: t("requests.form.anyCategory") },
+                ...walletDataCategorySchema.options.map((category) => ({
+                  value: category,
+                  label: t(`register.categories.${category}.name`),
+                })),
+              ]}
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor={ids.lead}>{t("requests.form.lead")}</Label>
-            <select
+            <SelectField
+              key={subject}
               id={ids.lead}
               name="lead"
-              key={subject}
-              defaultValue=""
-              className="h-10 w-full rounded-md border border-input bg-background px-3"
-            >
-              <option value="">{t("requests.form.anyLead")}</option>
-              {choices.map((lead) => (
-                <option key={lead.id} value={lead.id}>
-                  {lead.title}
-                </option>
-              ))}
-            </select>
+              options={[
+                { value: "", label: t("requests.form.anyLead") },
+                ...choices.map((lead) => ({ value: lead.id, label: lead.title })),
+              ]}
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor={ids.message}>{t("requests.form.message")}</Label>

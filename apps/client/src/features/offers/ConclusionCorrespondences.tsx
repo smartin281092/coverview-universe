@@ -6,7 +6,7 @@ import {
   conclusionCorrespondenceInputSchema,
   type ConclusionCorrespondenceInput,
 } from "@coverview/contracts/partner-conclusion";
-import { Button, Label, Input } from "@coverview/ui";
+import { Button, Label, Input, SelectField } from "@coverview/ui";
 import { partnerApi } from "../../partner-api";
 
 export function ConclusionCorrespondences({
@@ -122,23 +122,20 @@ export function ConclusionCorrespondences({
               }}
             >
               <Label htmlFor="correspondence-document">{t("selectCorrespondence")}</Label>
-              <select
+              <SelectField
                 id="correspondence-document"
-                className="w-full rounded-md border border-input bg-background p-3"
                 value={selected}
                 disabled={disabled || !documents}
-                onChange={(event) => {
-                  setSelected(event.target.value);
+                placeholder={t("choose")}
+                onValueChange={(value) => {
+                  setSelected(value);
                   setConsent(false);
                 }}
-              >
-                <option value="">{t("choose")}</option>
-                {documents?.items.map((d) => (
-                  <option key={d.documentId} value={d.documentId}>
-                    {d.name}
-                  </option>
-                ))}
-              </select>
+                options={(documents?.items ?? []).map((d) => ({
+                  value: d.documentId,
+                  label: d.name,
+                }))}
+              />
               {documents && !documents.items.length && (
                 <p className="text-sm">{t("noCandidates")}</p>
               )}

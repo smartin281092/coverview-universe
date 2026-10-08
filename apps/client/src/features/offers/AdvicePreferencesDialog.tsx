@@ -25,6 +25,7 @@ import {
   LoadingState,
   ErrorState,
   swissCantonNamesFr,
+  SelectField,
 } from "@coverview/ui";
 import { partnerApi } from "../../partner-api";
 
@@ -164,22 +165,16 @@ function PreferenceForm({
             control={form.control}
             name="languageCode"
             render={({ field }) => (
-              <select
+              <SelectField
                 id="advice-language"
                 autoFocus
-                className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm"
                 value={field.value ?? ""}
-                onBlur={field.onBlur}
-                ref={field.ref}
-                onChange={(e) => field.onChange(e.target.value || null)}
-              >
-                <option value="">{t("advice.unknown")}</option>
-                {languages.map(({ code, name }) => (
-                  <option key={code} value={code}>
-                    {name}
-                  </option>
-                ))}
-              </select>
+                onValueChange={(value) => field.onChange(value || null)}
+                options={[
+                  { value: "", label: t("advice.unknown") },
+                  ...languages.map(({ code, name }) => ({ value: code, label: name })),
+                ]}
+              />
             )}
           />
         </div>
@@ -189,24 +184,21 @@ function PreferenceForm({
             control={form.control}
             name="mode"
             render={({ field }) => (
-              <select
+              <SelectField
                 id="advice-mode"
-                className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm"
                 value={field.value ?? ""}
-                onBlur={field.onBlur}
-                ref={field.ref}
-                onChange={(e) => {
-                  field.onChange(e.target.value || null);
-                  if (!["office", "home"].includes(e.target.value)) form.setValue("canton", null);
+                onValueChange={(value) => {
+                  field.onChange(value || null);
+                  if (!["office", "home"].includes(value)) form.setValue("canton", null);
                 }}
-              >
-                <option value="">{t("advice.unknown")}</option>
-                {leadAppointmentModeSchema.options.map((value) => (
-                  <option key={value} value={value}>
-                    {t(`advice.modes.${value}`)}
-                  </option>
-                ))}
-              </select>
+                options={[
+                  { value: "", label: t("advice.unknown") },
+                  ...leadAppointmentModeSchema.options.map((value) => ({
+                    value,
+                    label: t(`advice.modes.${value}`),
+                  })),
+                ]}
+              />
             )}
           />
         </div>
@@ -217,21 +209,18 @@ function PreferenceForm({
               control={form.control}
               name="canton"
               render={({ field }) => (
-                <select
+                <SelectField
                   id="advice-canton"
-                  className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm"
                   value={field.value ?? ""}
-                  onBlur={field.onBlur}
-                  ref={field.ref}
-                  onChange={(e) => field.onChange(e.target.value || null)}
-                >
-                  <option value="">{t("advice.unknown")}</option>
-                  {swissCantonSchema.options.map((value) => (
-                    <option key={value} value={value}>
-                      {swissCantonNamesFr[value]}
-                    </option>
-                  ))}
-                </select>
+                  onValueChange={(value) => field.onChange(value || null)}
+                  options={[
+                    { value: "", label: t("advice.unknown") },
+                    ...swissCantonSchema.options.map((value) => ({
+                      value,
+                      label: swissCantonNamesFr[value],
+                    })),
+                  ]}
+                />
               )}
             />
             <p className="text-xs text-muted-foreground">{t("advice.placeHelp")}</p>

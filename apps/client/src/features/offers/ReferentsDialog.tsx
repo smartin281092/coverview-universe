@@ -23,6 +23,7 @@ import {
   LoadingState,
   ErrorState,
   EmptyState,
+  SelectField,
 } from "@coverview/ui";
 import { api } from "../../api";
 import { partnerApi } from "../../partner-api";
@@ -105,19 +106,19 @@ function SelectionForm({
       <fieldset disabled={pending || uncertain} className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="referent-advisor">{t("referents.choose")}</Label>
-          <select
+          <SelectField
             id="referent-advisor"
-            className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm"
-            {...form.register("advisor")}
-          >
-            <option value="">{t("referents.choose")}</option>
-            <option value="coverview">{t("referents.noReferent")}</option>
-            {presented.candidates.map((item) => (
-              <option key={item.id} value={item.id}>
-                {t("referents.advisor", { name: item.name, organization: item.organization })}
-              </option>
-            ))}
-          </select>
+            value={form.watch("advisor")}
+            placeholder={t("referents.choose")}
+            onValueChange={(value) => form.setValue("advisor", value)}
+            options={[
+              { value: "coverview", label: t("referents.noReferent") },
+              ...presented.candidates.map((item) => ({
+                value: item.id,
+                label: t("referents.advisor", { name: item.name, organization: item.organization }),
+              })),
+            ]}
+          />
         </div>
         {!presented.candidates.length && (
           <p className="text-sm text-muted-foreground">{t("referents.noCandidates")}</p>
@@ -253,41 +254,35 @@ export function ReferentsDialog({
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="referent-profile">{t("referents.profile")}</Label>
-                <select
+                <SelectField
                   id="referent-profile"
                   value={profileId}
                   disabled={profiles.isPending || profiles.isError}
-                  onChange={(event) => {
-                    setProfileId(event.target.value);
+                  placeholder={t("referents.profile")}
+                  onValueChange={(value) => {
+                    setProfileId(value);
                     reset();
                   }}
-                  className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm"
-                >
-                  <option value="">{t("referents.profile")}</option>
-                  {profiles.data?.profiles.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.displayName}
-                    </option>
-                  ))}
-                </select>
+                  options={(profiles.data?.profiles ?? []).map((item) => ({
+                    value: item.id,
+                    label: item.displayName,
+                  }))}
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="referent-category">{t("referents.category")}</Label>
-                <select
+                <SelectField
                   id="referent-category"
                   value={category}
-                  onChange={(event) => {
-                    setCategory(event.target.value);
+                  onValueChange={(value) => {
+                    setCategory(value);
                     reset();
                   }}
-                  className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm"
-                >
-                  {leadCategorySchema.options.map((item) => (
-                    <option key={item} value={item}>
-                      {t(`categories.${item}`)}
-                    </option>
-                  ))}
-                </select>
+                  options={leadCategorySchema.options.map((item) => ({
+                    value: item,
+                    label: t(`categories.${item}`),
+                  }))}
+                />
               </div>
             </div>
             {saved && (

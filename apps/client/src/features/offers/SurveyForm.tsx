@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useTranslation } from "react-i18next";
-import { Button, Label } from "@coverview/ui";
+import { Button, Label, SelectField } from "@coverview/ui";
 import type { IdentityMe } from "@coverview/api-client";
 import { PartnerApiError } from "@coverview/api-client/partner";
 import {
@@ -150,17 +150,20 @@ export function SurveyForm({
           <>
             <p>{t("stars", { count: rating })}</p>
             <Label htmlFor="survey-experience">{t("experience")}</Label>
-            <select
+            <SelectField
               id="survey-experience"
-              {...form.register("experience")}
-              className="min-h-11 w-full rounded-md border border-input bg-background px-3"
-            >
-              {["overall", "coverview", "advisor", "insurer"].map((v) => (
-                <option key={v} value={v}>
-                  {t(`experienceTypes.${v}`)}
-                </option>
-              ))}
-            </select>
+              value={form.watch("experience")}
+              onValueChange={(value) =>
+                form.setValue(
+                  "experience",
+                  value as "overall" | "coverview" | "advisor" | "insurer",
+                )
+              }
+              options={["overall", "coverview", "advisor", "insurer"].map((v) => ({
+                value: v,
+                label: t(`experienceTypes.${v}`),
+              }))}
+            />
             <fieldset className="space-y-2">
               <legend className="mb-3 font-medium">
                 {t(rating === 5 ? "positiveQuestion" : "improvementQuestion")}

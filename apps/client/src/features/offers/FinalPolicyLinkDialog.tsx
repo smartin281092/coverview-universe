@@ -19,6 +19,7 @@ import {
   LoadingState,
   ErrorState,
   EmptyState,
+  SelectField,
 } from "@coverview/ui";
 import { partnerApi } from "../../partner-api";
 
@@ -160,26 +161,21 @@ export function FinalPolicyLinkDialog({
             <fieldset disabled={pending || frozen} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="policy-offer">{tr("chooseOffer")}</Label>
-                <select
+                <SelectField
                   id="policy-offer"
-                  className="w-full rounded-md border border-input bg-background p-3 text-sm"
-                  {...form.register("offerId")}
-                >
-                  <option value="">{tr("chooseOffer")}</option>
-                  {offers.data.items.map((item) => (
-                    <option
-                      value={item.id}
-                      key={item.id}
-                      disabled={item.sourceStatus !== "current"}
-                    >
-                      {tr("offer", {
-                        company: item.company,
-                        product: item.product,
-                        version: item.version,
-                      })}
-                    </option>
-                  ))}
-                </select>
+                  value={form.watch("offerId")}
+                  placeholder={tr("chooseOffer")}
+                  onValueChange={(value) => form.setValue("offerId", value)}
+                  options={offers.data.items.map((item) => ({
+                    value: item.id,
+                    disabled: item.sourceStatus !== "current",
+                    label: tr("offer", {
+                      company: item.company,
+                      product: item.product,
+                      version: item.version,
+                    }),
+                  }))}
+                />
               </div>
               <div className="flex justify-between gap-3">
                 <Button
@@ -217,22 +213,20 @@ export function FinalPolicyLinkDialog({
               )}
               <div className="space-y-2">
                 <Label htmlFor="policy-document">{tr("chooseDocument")}</Label>
-                <select
+                <SelectField
                   id="policy-document"
-                  className="w-full rounded-md border border-input bg-background p-3 text-sm"
-                  {...form.register("documentId")}
-                >
-                  <option value="">{tr("chooseDocument")}</option>
-                  {documents.data.items.map((item) => (
-                    <option value={item.documentId} key={item.documentId}>
-                      {tr("document", {
-                        company: item.facts.companyId,
-                        number: item.contract.policyNumber ?? tr("missing"),
-                        object: item.contract.insuredSubject ?? item.contract.title,
-                      })}
-                    </option>
-                  ))}
-                </select>
+                  value={form.watch("documentId")}
+                  placeholder={tr("chooseDocument")}
+                  onValueChange={(value) => form.setValue("documentId", value)}
+                  options={documents.data.items.map((item) => ({
+                    value: item.documentId,
+                    label: tr("document", {
+                      company: item.facts.companyId,
+                      number: item.contract.policyNumber ?? tr("missing"),
+                      object: item.contract.insuredSubject ?? item.contract.title,
+                    }),
+                  }))}
+                />
               </div>
               {selected && (
                 <Button asChild variant="outline">
