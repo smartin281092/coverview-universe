@@ -982,8 +982,8 @@
     "dot": "Offre {{index}} sur {{total}} : {{name}}",
     "chf": "CHF",
     "per": {
-      "month": "CHF / mois",
-      "year": "CHF / an"
+      "month": "/ mois",
+      "year": "/ an"
     },
     "metrics": {
       "capital": "Capital potentiel à la retraite",
@@ -995,7 +995,6 @@
     },
     "tabsLabel": "Rubriques de l’offre",
     "tabs": {
-      "ai": "IA",
       "details": "Détails",
       "comments": "Commentaires",
       "documents": "Documents"
@@ -1020,10 +1019,6 @@
       "limitations": "Limites",
       "included": "Incluse",
       "excluded": "Exclue"
-    },
-    "ai": {
-      "emptyTitle": "Pas encore d’analyse automatique",
-      "emptyDescription": "Une orientation automatique apparaît ici quand plusieurs offres comparables ont été vérifiées par votre conseiller."
     },
     "comments": {
       "ask": "Poser une question",

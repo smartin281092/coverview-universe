@@ -6,8 +6,6 @@ import { Badge, Button } from "@coverview/ui";
 import { CompanyLogo } from "../insurance/CompanyLogo";
 
 export type OfferAction = "select" | "question" | "modification" | "refuse";
-const money = (minor: number) =>
-  new Intl.NumberFormat("fr-CH", { style: "currency", currency: "CHF" }).format(minor / 100);
 const day = (value: string) =>
   new Intl.DateTimeFormat("fr-CH", { dateStyle: "medium", timeZone: "Europe/Zurich" }).format(
     new Date(value),
@@ -33,7 +31,7 @@ export function OfferCard({
   onAction: (type: OfferAction) => void;
   onPreview: () => void;
 }) {
-  const { t } = useTranslation("offers");
+  const { t, i18n } = useTranslation("offers");
   const selected = offer.state === "selected";
   const expired = !!offer.validUntil && new Date(offer.validUntil).getTime() < Date.now();
   return (
@@ -53,7 +51,7 @@ export function OfferCard({
           ) : (
             <p className="text-sm text-muted-foreground">{offer.company}</p>
           )}
-          <h4 className="font-semibold">
+          <h4 className="font-normal text-muted-foreground">
             {/* The whole card opens the offer; its buttons stay above this link. */}
             <Link
               to="/offers/$leadId/$offerId"
@@ -77,14 +75,29 @@ export function OfferCard({
           )
         )}
       </div>
-      <div>
-        <p className="text-2xl font-medium">
-          {offer.annualPremiumMinor === null ? t("missing") : money(offer.annualPremiumMinor)}
-        </p>
-        <p className="text-xs text-muted-foreground">
-          {offer.annualPremiumMinor === null ? "" : t("workspace.perYear")}
-          {offer.validUntil && ` · ${t("workspace.validUntil", { date: day(offer.validUntil) })}`}
-        </p>
+      <div className="space-y-1">
+        {offer.annualPremiumMinor === null ? (
+          <p className="text-2xl font-medium">{t("missing")}</p>
+        ) : (
+          // The monthly share of the yearly premium (8 October 2026), however it is paid.
+          <p className="flex items-center gap-2">
+            <span className="text-4xl leading-none font-medium tracking-tight">
+              {new Intl.NumberFormat(i18n.language, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }).format(Math.round(offer.annualPremiumMinor / 12) / 100)}
+            </span>
+            <span className="flex flex-col text-xs leading-tight text-muted-foreground">
+              <span>{t("offerPage.chf")}</span>
+              <span>{t("offerPage.per.month")}</span>
+            </span>
+          </p>
+        )}
+        {offer.validUntil && (
+          <p className="text-xs text-muted-foreground">
+            {t("workspace.validUntil", { date: day(offer.validUntil) })}
+          </p>
+        )}
       </div>
       {offer.updatedSinceViewed && <p className="text-sm">{t("updatedSinceViewed")}</p>}
       {offer.sourceStatus && offer.sourceStatus !== "current" && (

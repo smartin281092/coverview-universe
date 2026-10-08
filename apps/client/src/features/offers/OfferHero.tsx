@@ -52,8 +52,8 @@ export function OfferHero({
     };
   }, []);
   const figure = (value: MetricValue) => {
-    if (value.kind === "missing") return { main: t("missing"), unit: "" };
-    if (value.kind === "text") return { main: value.text, unit: "" };
+    if (value.kind === "missing") return { main: t("missing"), unit: "", period: "" };
+    if (value.kind === "text") return { main: value.text, unit: "", period: "" };
     if (value.kind === "date")
       return {
         main: new Intl.DateTimeFormat(i18n.language, {
@@ -61,13 +61,15 @@ export function OfferHero({
           timeZone: "Europe/Zurich",
         }).format(new Date(value.at)),
         unit: "",
+        period: "",
       };
     return {
       main: new Intl.NumberFormat(i18n.language, {
         minimumFractionDigits: value.minor % 100 ? 2 : 0,
         maximumFractionDigits: 2,
       }).format(value.minor / 100),
-      unit: t(value.per ? `offerPage.per.${value.per}` : "offerPage.chf"),
+      unit: t("offerPage.chf"),
+      period: value.per ? t(`offerPage.per.${value.per}`) : "",
     };
   };
   const initials = offer.company
@@ -113,7 +115,11 @@ export function OfferHero({
         aria-hidden="true"
         className="absolute inset-0 -z-10 bg-gradient-to-t from-black/60 via-black/15 to-transparent"
       />
-      <div className="flex min-h-72 flex-col justify-end gap-6 p-6 sm:min-h-80 sm:p-8">
+      <div
+        className={`flex min-h-72 flex-col justify-end gap-6 p-6 sm:min-h-80 sm:p-8 ${
+          siblings.length > 1 ? "pb-2 sm:pb-3" : ""
+        }`}
+      >
         <div className="flex items-center gap-4">
           <div className="grid size-16 shrink-0 place-items-center rounded-2xl bg-white p-2 shadow-sm">
             {offer.companyId ? (
@@ -131,14 +137,18 @@ export function OfferHero({
         </div>
         <dl className="grid grid-cols-2 gap-6">
           {offerMetrics(offer, category).map(({ label, value }) => {
-            const { main, unit } = figure(value);
+            const { main, unit, period } = figure(value);
             return (
               <div key={label} className="min-w-0">
                 <dt className="text-sm text-white/75">{t(`offerPage.metrics.${label}`)}</dt>
-                <dd className="mt-1 text-2xl font-semibold break-words sm:text-3xl">
-                  {main}
+                <dd className="mt-1 flex items-center gap-2 text-2xl font-semibold sm:text-3xl">
+                  <span className="min-w-0 break-words">{main}</span>
+                  {/* The currency over the period, as on the offer cards. */}
                   {unit && (
-                    <span className="ml-1.5 text-base font-medium text-white/70">{unit}</span>
+                    <span className="flex flex-col text-xs leading-tight font-medium text-white/70">
+                      <span>{unit}</span>
+                      {period && <span>{period}</span>}
+                    </span>
                   )}
                 </dd>
               </div>
@@ -146,7 +156,11 @@ export function OfferHero({
           })}
         </dl>
         {siblings.length > 1 && (
-          <div className="flex justify-center gap-1" role="group" aria-label={t("offerPage.dots")}>
+          <div
+            className="-mt-4 flex justify-center gap-1"
+            role="group"
+            aria-label={t("offerPage.dots")}
+          >
             {siblings.map((item, position) => (
               <button
                 key={item.id}

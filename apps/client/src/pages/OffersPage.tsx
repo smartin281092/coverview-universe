@@ -44,7 +44,7 @@ function Offers({ identity }: { identity: IdentityMe }) {
       </header>
       {list.isPending ? (
         <LoadingState label={t("loading")} />
-      ) : list.isError ? (
+      ) : !list.data ? (
         <ErrorState
           title={t("error")}
           description={t("error")}
