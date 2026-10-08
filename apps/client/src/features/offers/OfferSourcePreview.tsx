@@ -19,6 +19,17 @@ import { partnerApi } from "../../partner-api";
 import { DocumentPdfPreview } from "../documents/DocumentPdfPreview";
 import { IdentityPreviewCanvas } from "../documents/IdentityPreviewCanvas";
 
+/** The original's bytes, shared by the preview and the document card's cover. */
+export const offerSourceKey = (identity: IdentityMe, leadId: string, offer: LeadOffer) => [
+  "private",
+  identity.user.id,
+  identity.session.id,
+  "offer-source",
+  leadId,
+  offer.id,
+  offer.version,
+];
+
 /**
  * The original of an offer, read in the app (8 October 2026) rather than downloaded. Only the
  * type the server detected picks a renderer; downloading stays available below.
@@ -37,15 +48,7 @@ export function OfferSourcePreview({
   const { t } = useTranslation("offers");
   const mime = offer.sourceMime;
   const source = useQuery({
-    queryKey: [
-      "private",
-      identity.user.id,
-      identity.session.id,
-      "offer-source",
-      leadId,
-      offer.id,
-      offer.version,
-    ],
+    queryKey: offerSourceKey(identity, leadId, offer),
     queryFn: ({ signal }) => partnerApi.offerSource(leadId, offer.id, signal, true),
     enabled: !!mime,
     gcTime: 0,

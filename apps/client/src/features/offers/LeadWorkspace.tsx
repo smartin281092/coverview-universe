@@ -494,6 +494,7 @@ export function LeadWorkspace({
                       {offers.map((offer) => (
                         <OfferCard
                           key={offer.id}
+                          leadId={lead.id}
                           offer={offer}
                           busy={pending}
                           closed={closed}

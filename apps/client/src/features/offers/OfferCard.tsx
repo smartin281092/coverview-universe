@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Check, FileText } from "lucide-react";
 import type { LeadOffer } from "@coverview/api-client/partner";
@@ -14,15 +15,18 @@ const day = (value: string) =>
 
 /**
  * One offer as the client sees it, in the offers list and in the request window
- * (8 October 2026): the company's logo when it is recognised, the selected offer outlined in green.
+ * (8 October 2026): the company's logo when it is recognised, the whole card opening the offer's
+ * page, the selected offer framed by the call-to-action colours turning around it.
  */
 export function OfferCard({
+  leadId,
   offer,
   busy = false,
   closed = false,
   onAction,
   onPreview,
 }: {
+  leadId: string;
   offer: LeadOffer;
   busy?: boolean;
   closed?: boolean;
@@ -34,8 +38,8 @@ export function OfferCard({
   const expired = !!offer.validUntil && new Date(offer.validUntil).getTime() < Date.now();
   return (
     <article
-      className={`flex flex-col gap-3 rounded-xl border bg-background p-5 ${
-        selected ? "border-green-600 ring-2 ring-green-600" : "border-border"
+      className={`relative flex flex-col gap-3 rounded-xl border bg-background p-5 ${
+        selected ? "cv-offer-selected" : "border-border"
       }`}
     >
       <div className="flex items-start justify-between gap-2">
@@ -49,10 +53,19 @@ export function OfferCard({
           ) : (
             <p className="text-sm text-muted-foreground">{offer.company}</p>
           )}
-          <h4 className="font-semibold">{offer.product}</h4>
+          <h4 className="font-semibold">
+            {/* The whole card opens the offer; its buttons stay above this link. */}
+            <Link
+              to="/offers/$leadId/$offerId"
+              params={{ leadId, offerId: offer.id }}
+              className="after:absolute after:inset-0 after:rounded-xl after:content-[''] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-[#6366f1]"
+            >
+              {offer.product}
+            </Link>
+          </h4>
         </div>
         {selected ? (
-          <Badge className="h-6 shrink-0 border-transparent bg-green-700 px-2.5 text-xs text-white [&>svg]:size-3.5!">
+          <Badge className="cv-offer-tag h-6 shrink-0 px-2.5 text-xs [&>svg]:size-3.5!">
             <Check aria-hidden="true" />
             {t("state.selected")}
           </Badge>
@@ -81,12 +94,12 @@ export function OfferCard({
       )}
       {offer.summary && <p className="whitespace-pre-wrap text-sm">{offer.summary}</p>}
       {offer.limitations && (
-        <details className="text-sm">
+        <details className="relative z-10 text-sm">
           <summary className="cursor-pointer">{t("limitations")}</summary>
           <p className="mt-2 whitespace-pre-wrap text-xs">{offer.limitations}</p>
         </details>
       )}
-      <div className="mt-auto flex flex-wrap gap-2">
+      <div className="relative z-10 mt-auto flex flex-wrap gap-2">
         <Button
           disabled={
             busy ||
@@ -106,19 +119,6 @@ export function OfferCard({
             {t("source")}
           </Button>
         )}
-      </div>
-      <div className="flex flex-wrap gap-3 text-xs">
-        {(["question", "modification", "refuse"] as const).map((type) => (
-          <button
-            key={type}
-            type="button"
-            disabled={busy || !offer.canChoose || closed}
-            className="underline underline-offset-4 disabled:opacity-50"
-            onClick={() => onAction(type)}
-          >
-            {t(type)}
-          </button>
-        ))}
       </div>
     </article>
   );

@@ -173,3 +173,37 @@
     min-height: 42px;
   }
 }
+
+/* The selected offer (8 October 2026): the call-to-action colours turn around its border, and its
+   tag wears the same gradient as the buttons. */
+@property --cv-offer-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+.cv-offer-selected {
+  border: 3px solid transparent;
+  padding: calc(1.25rem - 2px);
+  background:
+    linear-gradient(var(--background), var(--background)) padding-box,
+    conic-gradient(from var(--cv-offer-angle), #111e38, #3567b2, #6366f1, #5955a3, #111e38)
+      border-box;
+  animation: cv-offer-turn 4s linear infinite;
+}
+@keyframes cv-offer-turn {
+  to {
+    --cv-offer-angle: 360deg;
+  }
+}
+.cv-offer-tag {
+  border-color: transparent;
+  background:
+    radial-gradient(ellipse at 82% 10%, #3567b2, transparent 55%),
+    radial-gradient(ellipse at 77% 110%, #5955a3, transparent 53%), #111e38;
+  color: #fff;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cv-offer-selected {
+    animation: none;
+  }
+}

@@ -974,5 +974,76 @@
     "error": "Le document n’a pas pu être affiché.",
     "unsupported": "Ce type de document ne peut pas être affiché ici. Téléchargez-le pour l’ouvrir.",
     "download": "Télécharger"
+  },
+  "offerPage": {
+    "back": "Retour",
+    "heroLabel": "{{company}} · {{product}}",
+    "dots": "Offres de cette demande",
+    "dot": "Offre {{index}} sur {{total}} : {{name}}",
+    "chf": "CHF",
+    "per": {
+      "month": "CHF / mois",
+      "year": "CHF / an"
+    },
+    "metrics": {
+      "capital": "Capital potentiel à la retraite",
+      "premium": "Prime",
+      "monthly": "Prime mensuelle",
+      "deductible": "Franchise",
+      "annual": "Prime annuelle",
+      "validUntil": "Valable jusqu’au"
+    },
+    "tabsLabel": "Rubriques de l’offre",
+    "tabs": {
+      "ai": "IA",
+      "details": "Détails",
+      "comments": "Commentaires",
+      "documents": "Documents"
+    },
+    "loading": "Chargement de l’offre…",
+    "error": "L’offre n’a pas pu être chargée. Réessayez.",
+    "notFound": "Offre introuvable",
+    "notFoundDescription": "Cette offre n’est plus proposée ou n’est plus accessible depuis ce profil.",
+    "details": {
+      "offer": "Offre",
+      "company": "Compagnie",
+      "product": "Produit",
+      "premium": "Prime annuelle",
+      "validUntil": "Valable jusqu’au",
+      "effectiveDate": "Date d’effet",
+      "reference": "Référence",
+      "status": "Statut",
+      "available": "Disponible",
+      "benefits": "Prestations",
+      "noBenefits": "Aucune prestation détaillée pour cette offre.",
+      "summary": "Résumé",
+      "limitations": "Limites",
+      "included": "Incluse",
+      "excluded": "Exclue"
+    },
+    "ai": {
+      "emptyTitle": "Pas encore d’analyse automatique",
+      "emptyDescription": "Une orientation automatique apparaît ici quand plusieurs offres comparables ont été vérifiées par votre conseiller."
+    },
+    "comments": {
+      "ask": "Poser une question",
+      "emptyTitle": "Aucun échange sur cette offre",
+      "emptyDescription": "Votre question est transmise à votre conseiller, qui vous recontacte.",
+      "you": "Vous",
+      "pending": "Réponse attendue de votre conseiller",
+      "kinds": {
+        "question": "Question",
+        "modification": "Demande de modification",
+        "refuse": "Refus",
+        "select": "Choix de cette offre",
+        "keep_current": "Contrat actuel conservé"
+      }
+    },
+    "documents": {
+      "empty": "Aucun document",
+      "emptyDescription": "Le document original de cette offre n’est pas disponible.",
+      "sign": "Signer",
+      "signatureSoon": "La signature dans CoverView arrive bientôt."
+    }
   }
 }

@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 import { ArrowUpRight } from "lucide-react";
 import type { IdentityMe } from "@coverview/api-client";
 import type { LeadOffer } from "@coverview/api-client/partner";
-import type { WalletOffers } from "@coverview/contracts/partner-wallet-offers";
 import { EmptyState, ErrorState, LoadingState } from "@coverview/ui";
 import { partnerApi } from "../partner-api";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
@@ -13,19 +12,8 @@ import { useWalletProfileScope } from "../features/profile/use-wallet-profile-sc
 import { LeadWorkspace, requestSearch, walletLeadsKey } from "../features/offers/LeadWorkspace";
 import { OfferCard, type OfferAction } from "../features/offers/OfferCard";
 import { OfferSourcePreview } from "../features/offers/OfferSourcePreview";
+import { offerGroups } from "../features/offers/offer-groups";
 import { useWalletLiveUpdates } from "../features/offers/use-live-updates";
-
-type Item = WalletOffers["items"][number];
-// Requests about the same object (same category and object, case aside) share one block.
-function grouped(items: Item[]) {
-  const groups = new Map<string, Item[]>();
-  for (const item of items) {
-    const object = item.lead.object.trim().toLowerCase();
-    const key = object ? `${item.lead.category}:${object}` : item.lead.id;
-    groups.set(key, [...(groups.get(key) ?? []), item]);
-  }
-  return [...groups.values()];
-}
 
 // The offers the advisor transmitted, as cards grouped by object (8 October 2026). Choosing
 // opens the request window on the choice; the original opens in the in-app preview.
@@ -71,7 +59,7 @@ function Offers({ identity }: { identity: IdentityMe }) {
         />
       ) : (
         <div className="space-y-10">
-          {grouped(list.data.items).map((group) => {
+          {offerGroups(list.data.items).map((group) => {
             const first = group[0]!.lead;
             return (
               <section
@@ -105,6 +93,7 @@ function Offers({ identity }: { identity: IdentityMe }) {
                     offers.map((offer) => (
                       <OfferCard
                         key={offer.id}
+                        leadId={lead.id}
                         offer={offer}
                         onAction={(type) => {
                           setIntent({ offerId: offer.id, type });

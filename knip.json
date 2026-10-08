@@ -28,6 +28,7 @@
       "project": ["src/**/*.ts", "*.ts", "*.mjs"]
     },
     "apps/client": {
+      "ignoreDependencies": ["@react-three/fiber", "three", "@types/three"],
       "project": ["src/**/*.{ts,tsx,css}"]
     },
     "apps/admin": {

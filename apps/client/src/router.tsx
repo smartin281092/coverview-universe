@@ -80,6 +80,12 @@ const offersRoute = createRoute({
   validateSearch: leadSearch,
   component: lazyRouteComponent(() => import("./pages/OffersPage"), "OffersPage"),
 });
+// One offer's page (8 October 2026), reached from its card.
+const offerRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/offers/$leadId/$offerId",
+  component: lazyRouteComponent(() => import("./pages/OfferPage"), "OfferPage"),
+});
 const insuranceRequestsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/insurance-requests",
@@ -261,6 +267,7 @@ export const router = createRouter({
     requestsRoute,
     offersRoute,
     leadNotificationsRoute,
+    offerRoute,
     actionsRoute,
     actionRoute,
     documentRoute,
