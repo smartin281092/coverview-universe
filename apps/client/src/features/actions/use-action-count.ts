@@ -1,17 +1,12 @@
 import { useWalletProfileScope } from "../profile/use-wallet-profile-scope";
 import { useQuery } from "@tanstack/react-query";
-import type { IdentityMe } from "@coverview/api-client";
 import { api } from "../../api";
-import { identityKey } from "../identity/session-state";
+import { usePassiveIdentity } from "../identity/session-state";
 
 export function useActionCount() {
   const { scope, filter } = useWalletProfileScope();
   // Subscribe to the page's identity boundary; the navigation never starts authentication.
-  const identity = useQuery<IdentityMe | null>({
-    queryKey: identityKey,
-    enabled: false,
-    gcTime: 0,
-  });
+  const identity = usePassiveIdentity();
   const current = identity.data;
   const visible = !!current && !identity.isFetching && !identity.isError;
   const summary = useQuery({

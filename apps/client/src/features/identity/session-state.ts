@@ -1,4 +1,4 @@
-import { QueryClient, queryOptions } from "@tanstack/react-query";
+import { QueryClient, queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiError, type IdentityMe } from "@coverview/api-client";
 import { api } from "../../api";
 
@@ -17,6 +17,12 @@ export async function forgetIdentity(client: QueryClient) {
   await client.cancelQueries({ queryKey: identityKey });
   await clearPrivateState(client);
   client.setQueryData(identityKey, null);
+}
+
+/** Follows the identity the page's boundary loads; never starts authentication itself. */
+export function usePassiveIdentity() {
+  const client = useQueryClient();
+  return useQuery({ ...identityOptions(client), enabled: false });
 }
 
 export function identityOptions(client: QueryClient) {

@@ -5,6 +5,7 @@ import { ApiError, type IdentityMe } from "@coverview/api-client";
 import { PartnerApiError, type PartnerContext } from "@coverview/api-client/partner";
 import {
   Button,
+  Container,
   LoadingState,
   ErrorState,
   SessionExpiredState,
@@ -13,6 +14,7 @@ import {
 import { api, partnerApi, adminUrl } from "../api";
 import type { LeadNavigationSearch } from "./lead-navigation-state";
 import { useLiveUpdates } from "./use-live-updates";
+import logo from "../../../../assets/logo-coverview.svg";
 type Session = {
   identity: IdentityMe;
   context: PartnerContext;
@@ -25,6 +27,20 @@ export function usePartner() {
   const value = useContext(Context);
   if (!value) throw new Error("Missing Partner session");
   return value;
+}
+// Before a session exists, a plain page: the logo and the state, never the menus.
+function Frame({ children }: { children: ReactNode }) {
+  const { t } = useTranslation();
+  return (
+    <div className="flex min-h-svh flex-col">
+      <header className="border-b border-border">
+        <Container className="flex min-h-16 items-center">
+          <img src={logo} alt={t("brand")} className="h-5 w-auto" />
+        </Container>
+      </header>
+      <Container className="flex-1 py-12">{children}</Container>
+    </div>
+  );
 }
 export function PartnerSession({ children }: { children: ReactNode }) {
   const { t } = useTranslation();
@@ -60,49 +76,59 @@ export function PartnerSession({ children }: { children: ReactNode }) {
   }, [navigationScope]);
   const error = me.error ?? ctx.error;
   if (me.isPending || (!error && me.data && ctx.isPending))
-    return <LoadingState label={t("loading")} />;
+    return (
+      <Frame>
+        <LoadingState label={t("loading")} />
+      </Frame>
+    );
   if (error || !me.data || !ctx.data) {
     if (
       (error instanceof ApiError || error instanceof PartnerApiError) &&
       error.code === "IDENTITY_UNAUTHENTICATED"
     )
       return (
-        <SessionExpiredState
-          title={t("loginTitle")}
-          description={t("loginDescription")}
-          action={
-            <Button asChild>
-              <a href={api.loginUrl("partners")}>{t("login")}</a>
-            </Button>
-          }
-        />
+        <Frame>
+          <SessionExpiredState
+            title={t("loginTitle")}
+            description={t("loginDescription")}
+            action={
+              <Button asChild>
+                <a href={api.loginUrl("partners")}>{t("login")}</a>
+              </Button>
+            }
+          />
+        </Frame>
       );
     const mfa =
       (error instanceof PartnerApiError || error instanceof ApiError) &&
       error.code === "IDENTITY_MFA_REQUIRED";
     if (mfa)
       return (
-        <AccessDeniedState
-          title={t("mfa")}
-          description={t("mfaDescription")}
-          action={
-            <Button asChild>
-              <a href={`${adminUrl}/mfa`}>{t("mfa")}</a>
-            </Button>
-          }
-        />
+        <Frame>
+          <AccessDeniedState
+            title={t("mfa")}
+            description={t("mfaDescription")}
+            action={
+              <Button asChild>
+                <a href={`${adminUrl}/mfa`}>{t("mfa")}</a>
+              </Button>
+            }
+          />
+        </Frame>
       );
     return (
-      <ErrorState
-        title={t("error")}
-        description={t("error")}
-        retryLabel={t("retry")}
-        pendingLabel={t("loading")}
-        onRetry={() => {
-          void me.refetch();
-          void ctx.refetch();
-        }}
-      />
+      <Frame>
+        <ErrorState
+          title={t("error")}
+          description={t("error")}
+          retryLabel={t("retry")}
+          pendingLabel={t("loading")}
+          onRetry={() => {
+            void me.refetch();
+            void ctx.refetch();
+          }}
+        />
+      </Frame>
     );
   }
   const identity = me.data,

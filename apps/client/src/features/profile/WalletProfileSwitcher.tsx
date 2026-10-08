@@ -13,7 +13,7 @@ import {
   Button,
 } from "@coverview/ui";
 import { api } from "../../api";
-import { identityKey } from "../identity/session-state";
+import { usePassiveIdentity } from "../identity/session-state";
 import { ProfileCreateDialog } from "./ProfileCreateDialog";
 import { useWalletProfileScope } from "./use-wallet-profile-scope";
 
@@ -124,11 +124,7 @@ function ProfileSwitcher({ identity }: { identity: IdentityMe }) {
 }
 
 export function WalletProfileSwitcher() {
-  const identity = useQuery<IdentityMe | null>({
-    queryKey: identityKey,
-    enabled: false,
-    gcTime: 0,
-  });
+  const identity = usePassiveIdentity();
   if (!identity.data || identity.isFetching || identity.isError) return null;
   return (
     <ProfileSwitcher

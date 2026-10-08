@@ -74,7 +74,7 @@
   .wallet-shell [data-slot="button"][data-size="xs"] {
     padding-inline: var(--spacing-16);
   }
-  .wallet-shell {
+  .wallet-shell[data-navigation="visible"] {
     padding-bottom: calc(var(--wallet-bottom-nav-height) + env(safe-area-inset-bottom, 0px));
   }
   .wallet-shell > .cv-container,
@@ -99,5 +99,77 @@
   [data-slot="sheet-content"] {
     animation: none;
     transition: none;
+  }
+}
+
+/* CTA as on the health comparator (8 October 2026): navy gradient primary, white bordered
+   secondary, 10px radius. The comparator's decorative WebGL layer is left out: repeated on
+   every button it would exhaust the browser's graphics contexts. Dialogs render outside the
+   shell, so these rules target the Wallet buttons wherever they appear. */
+[data-slot="button"]:is(
+  [data-variant="default"],
+  [data-variant="outline"],
+  [data-variant="secondary"]
+) {
+  border-radius: 10px;
+  font-weight: 400;
+}
+[data-slot="button"][data-variant="default"] {
+  border: 0;
+  color: #ffffff;
+  background:
+    radial-gradient(ellipse at 82% 10%, #3567b2, transparent 55%),
+    radial-gradient(ellipse at 77% 110%, #5955a3, transparent 53%), #111e38;
+  box-shadow: 0 2px 5px #111e3814;
+  text-shadow: 0 1px 2px #07112160;
+}
+[data-slot="button"][data-variant="default"]:hover {
+  filter: brightness(1.12);
+}
+[data-slot="button"][data-variant="default"]:active {
+  filter: brightness(0.94);
+}
+[data-slot="button"][data-variant="default"]:is(:disabled, [aria-disabled="true"]) {
+  filter: grayscale(1);
+}
+[data-slot="button"]:is([data-variant="outline"], [data-variant="secondary"]) {
+  border: 1px solid #e1e1e1;
+  background: #ffffff;
+  color: #595959;
+}
+[data-slot="button"]:is([data-variant="outline"], [data-variant="secondary"]):hover {
+  background: #f5f5f5;
+  color: #595959;
+}
+[data-slot="button"]:is(
+    [data-variant="default"],
+    [data-variant="outline"],
+    [data-variant="secondary"]
+  ):focus-visible {
+  outline: 2px solid #6366f1;
+  outline-offset: 3px;
+}
+/* Every dropdown is the header's select, at the CTA's height, styled as the comparator's fields. */
+[data-slot="select-trigger"] {
+  border-color: transparent;
+  border-radius: 10px;
+  background: #f3f3f3;
+  box-shadow: none;
+}
+[data-slot="select-trigger"]:focus-visible {
+  border-color: #b5bef1;
+}
+@media (min-width: 48rem) {
+  [data-slot="button"][data-size="default"]:is(
+      [data-variant="default"],
+      [data-variant="outline"],
+      [data-variant="secondary"]
+    ) {
+    min-height: 42px;
+    gap: 12px;
+    padding: 10px 16px;
+  }
+  [data-slot="select-trigger"] {
+    min-height: 42px;
   }
 }
