@@ -31,7 +31,21 @@ type Contract = {
   premiumMinor: number;
 };
 
-const advisorEmail = "demo-conseiller@coverview.test";
+// An approved advisor keeps the categories of their application: health has its own advisor.
+const advisors = {
+  general: {
+    email: "demo-conseiller@coverview.test",
+    name: "Camille Exemple",
+    categories: ["vehicle", "pension", "household"],
+  },
+  health: {
+    email: "demo-conseiller-sante@coverview.test",
+    name: "Alex Exemple",
+    categories: ["health"],
+  },
+} as const;
+const advisorOf = (request: Request) =>
+  request.category === "health" ? advisors.health : advisors.general;
 const marker = "Données fictives de démonstration locale CoverView.";
 const requests: Request[] = [
   {
@@ -236,8 +250,8 @@ async function main() {
     const present = new Set(
       (
         await database.pool.query<{ title: string }>(
-          "select l.title from partner_leads l join identity_users u on u.id=l.responsible_id where l.client_user_id=$1 and u.email=$2",
-          [client.id, advisorEmail],
+          "select l.title from partner_leads l join identity_users u on u.id=l.responsible_id where l.client_user_id=$1 and u.email=any($2)",
+          [client.id, Object.values(advisors).map((advisor) => advisor.email)],
         )
       ).rows.map((row) => row.title),
     );
@@ -285,41 +299,50 @@ async function main() {
       id: await session(adminId, true),
       administrator: true,
     };
-    const advisorId = await account(advisorEmail);
-    const advisor: PartnerActor = {
-      userId: advisorId,
-      id: await session(advisorId, false),
-      administrator: false,
-    };
-    if (!(await repository.context(advisor)).application) {
-      await repository.apply(
-        advisor,
-        partnerApplicationInputSchema.parse({
-          name: "Camille Exemple",
-          organization: "Cabinet Exemple (fictif)",
-          phone: "",
-          roles: ["advisor"],
-          categories: ["vehicle", "pension", "household", "health"],
-          languages: "fr",
-          regions: "VD, GE",
-          qualifications: "Conseillère fictive pour la démonstration locale",
-        }),
-        key(),
-      );
-      const member = (await repository.context(advisor)).application!;
-      await repository.review(
-        admin,
-        advisorId,
-        {
-          revision: member.revision,
-          state: "approved",
-          roles: ["advisor"],
-          reason: "Conseillère fictive de démonstration locale",
-          reviewDueAt: null,
-          organizationState: "approved",
-        },
-        key(),
-      );
+    // Each demonstration advisor is created and approved once, with a session for this run only.
+    const ready = new Map<string, { advisorId: string; advisor: PartnerActor }>();
+    async function advisorFor(spec: (typeof advisors)[keyof typeof advisors]) {
+      const known = ready.get(spec.email);
+      if (known) return known;
+      const advisorId = await account(spec.email);
+      const advisor: PartnerActor = {
+        userId: advisorId,
+        id: await session(advisorId, false),
+        administrator: false,
+      };
+      if (!(await repository.context(advisor)).application) {
+        await repository.apply(
+          advisor,
+          partnerApplicationInputSchema.parse({
+            name: spec.name,
+            organization: "Cabinet Exemple (fictif)",
+            phone: "",
+            roles: ["advisor"],
+            categories: spec.categories,
+            languages: "fr",
+            regions: "VD, GE",
+            qualifications: "Conseiller fictif pour la démonstration locale",
+          }),
+          key(),
+        );
+        const member = (await repository.context(advisor)).application!;
+        await repository.review(
+          admin,
+          advisorId,
+          {
+            revision: member.revision,
+            state: "approved",
+            roles: ["advisor"],
+            reason: "Conseiller fictif de démonstration locale",
+            reviewDueAt: null,
+            organizationState: "approved",
+          },
+          key(),
+        );
+      }
+      const entry = { advisorId, advisor };
+      ready.set(spec.email, entry);
+      return entry;
     }
     const owner: PartnerActor = {
       userId: client.id,
@@ -353,28 +376,38 @@ async function main() {
       );
     }
     for (const request of missing) {
-      const created = await repository.create(
-        owner,
-        leadCreateInputSchema.parse({
-          title: request.title,
-          category: request.category,
-          object: request.object,
-          context: marker,
-          clientUserId: client.id,
-          clientProfileId: null,
-          clientName: "Client Wallet",
-          email,
-          phone: "",
-          language: "fr",
-          source: "Démonstration locale",
-          transmissionAuthorized: true,
-          priority: "normal",
-          draft: false,
-          nextAction: "Comparer les offres",
-          dueAt: later(30),
-        }),
-        key(),
-      );
+      const { advisorId, advisor } = await advisorFor(advisorOf(request));
+      // A request an interrupted run left without advisor is resumed, not created twice.
+      const leftover = (
+        await database.pool.query<{ id: string }>(
+          "select id from partner_leads where client_user_id=$1 and creator_id=$1 and title=$2 and responsible_id is null order by created_at limit 1",
+          [client.id, request.title],
+        )
+      ).rows[0];
+      const created = leftover
+        ? await repository.detail(admin, leftover.id)
+        : await repository.create(
+            owner,
+            leadCreateInputSchema.parse({
+              title: request.title,
+              category: request.category,
+              object: request.object,
+              context: marker,
+              clientUserId: client.id,
+              clientProfileId: null,
+              clientName: "Client Wallet",
+              email,
+              phone: "",
+              language: "fr",
+              source: "Démonstration locale",
+              transmissionAuthorized: true,
+              priority: "normal",
+              draft: false,
+              nextAction: "Comparer les offres",
+              dueAt: later(30),
+            }),
+            key(),
+          );
       const routed = await repository.command(
         admin,
         created.id,
