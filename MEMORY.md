@@ -9,6 +9,7 @@ Aucune entrée active. Les décisions durables vivent dans leur documentation pr
 Décisions du 8 octobre 2026, retours Wallet et comparateur (W-1 à W-8 du [plan](roadmap/plans/wallet-feedback-2026-10-08.plan.md)).
 - **Instruction utilisateur** : envoyer une demande depuis Wallet vaut autorisation de transmission à CoverView, sans case à cocher (« ça coule de source ») ; la reprise d'une demande du comparateur garde sa confirmation par personne.
 - **Instruction utilisateur** : toute liste déroulante d'une fenêtre utilise le `SelectField` de `@coverview/ui`, le même élément que le menu. ESLint l'impose dans Wallet ; Partner et Admin restent à convertir.
+- **Instruction utilisateur** : après l'envoi d'une demande Wallet, seul un écran de confirmation animé (check vert, confettis, message, « Fermer ») ; Demandes présente Wallet et comparateur en une seule liste.
 - **Défauts PROG-23** : sujet de la demande en colonne `request_kind` (« nouvelle assurance » par défaut, catégorie « autre » sinon) ; Offres ne liste que les offres publiées avec leur document, groupées par objet ; la fenêtre d'une demande garde conseiller, complément, offres et contrat actuel, le reste passe dans « Autres actions », sans la continuité du référent.
 - **Piège** : un serveur Vite déjà lancé ne relit pas le champ `exports` d'un package du monorepo. Après l'ajout d'un sous-chemin (`@coverview/contracts/...`), relancer les serveurs Vite de Wallet, Partner et Admin, sinon « is not exported under the conditions ».
 
