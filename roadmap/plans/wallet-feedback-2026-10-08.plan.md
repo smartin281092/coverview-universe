@@ -72,6 +72,7 @@ Entrée : retours utilisateur du 8 octobre 2026 (captures et console). Mandat PR
 | 21 | Chiffres du bandeau | `offer-metrics.test.ts` | 4/4 (3a, maladie, autres, lecture des montants) | — |
 | 22 | Page d’offre (parties) | page temporaire avec le vrai bandeau, les onglets et les cartes, valeurs d’exemple, bureau et mobile 375 px | shader WebGL rendu aux couleurs Bâloise et AXA ; balayage et points vérifiés par événements simulés ; quatre onglets tenant en 343 px ; bordure animée active | Page complète connectée à voir en recette |
 | 23 | Contrôles | `tsc` Wallet et API, ESLint, `vitest` Wallet 19/19, build, knip identique à `main`, dependency-cruiser 0 erreur | verts ; shader dans son propre fichier (1,15 Mo, 288 Ko compressés), chargé seulement sur la page d’offre | Dépendances : mêmes versions que le site, lockfile réparé par `pnpm install --fix-lockfile` |
+| 24 | Démonstration santé et aperçu | script relancé après fusion ; base relue ; Wallet relancé (dépendance optimisée périmée, 504) ; page d’offre ouverte hors connexion | 1re exécution arrêtée à l’attribution (conseillère sans catégorie santé) : script corrigé (`dcbfe9e`), demande reprise sans doublon, 3 offres publiées par une conseillère santé ; shader servi en 200 ; page de connexion sans erreur | Les deux demandes sans conseiller de la liste viennent des essais dans Wallet |
 
 ## Suite
 
