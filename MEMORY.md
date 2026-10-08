@@ -6,6 +6,14 @@ Aucune entrée active. Les décisions durables vivent dans leur documentation pr
 
 ## Candidats
 
+Décisions du 8 octobre 2026, retours Wallet et comparateur (W-1 à W-8 du [plan](roadmap/plans/wallet-feedback-2026-10-08.plan.md)).
+- **Instruction utilisateur** : envoyer une demande depuis Wallet vaut autorisation de transmission à CoverView, sans case à cocher (« ça coule de source ») ; la reprise d'une demande du comparateur garde sa confirmation par personne.
+- **Instruction utilisateur** : toute liste déroulante d'une fenêtre utilise le `SelectField` de `@coverview/ui`, le même élément que le menu. ESLint l'impose dans Wallet ; Partner et Admin restent à convertir.
+- **Défauts PROG-23** : sujet de la demande en colonne `request_kind` (« nouvelle assurance » par défaut, catégorie « autre » sinon) ; Offres ne liste que les offres publiées avec leur document, groupées par objet ; la fenêtre d'une demande garde conseiller, complément, offres et contrat actuel, le reste passe dans « Autres actions », sans la continuité du référent.
+- **Piège** : un serveur Vite déjà lancé ne relit pas le champ `exports` d'un package du monorepo. Après l'ajout d'un sous-chemin (`@coverview/contracts/...`), relancer les serveurs Vite de Wallet, Partner et Admin, sinon « is not exported under the conditions ».
+
+Consignées dans le plan et les README [Offres Wallet](apps/client/src/features/offers/README.md) et [Partner](apps/api/src/modules/partner-workspace/README.md#api-persistance-et-exploitation). Confiance haute sur les instructions ; recette connectée ouverte. Réexaminer à la recette Wallet et avant le 6 janvier 2027. Aucune entrée active.
+
 Décisions utilisateur du 6 octobre 2026, mise en ligne.
 - Le nouveau projet remplace l'ancien CoverView sur le serveur qui héberge `coverview.ch` : anciens conteneurs arrêtés, bases sauvegardées et conservées.
 - Seul le comparateur maladie est public : `/` y mène en attendant le site complet ; Wallet, Partner et Admin restent fermés jusqu'à la recette.
