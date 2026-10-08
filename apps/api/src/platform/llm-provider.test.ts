@@ -70,3 +70,32 @@ it.each(["not-json", "x".repeat(16385)])(
     ).rejects.toMatchObject({ code: "ai_rate_limited", retryable: true });
   },
 );
+
+it("names an output cut short by the token limit, without retrying", async () => {
+  vi.stubGlobal(
+    "fetch",
+    vi.fn().mockResolvedValue(
+      Response.json({
+        status: "incomplete",
+        incomplete_details: { reason: "max_output_tokens" },
+        model: "gpt-5.4-mini",
+        output: [],
+        usage: { input_tokens: 10, output_tokens: 1000 },
+      }),
+    ),
+  );
+  const provider = createOpenAiProvider({
+    OPENAI_API_KEY: "unit-test-placeholder",
+    OPENAI_DOCUMENT_MODEL: "gpt-5.4-mini",
+    OPENAI_DOCUMENT_MAX_OUTPUT_TOKENS: 1000,
+  });
+  await expect(
+    provider.structured({
+      instructions: "Adapter error handling only",
+      mime: "application/pdf",
+      bytes: Buffer.alloc(0),
+      schema: {},
+      signal: new AbortController().signal,
+    }),
+  ).rejects.toMatchObject({ code: "ai_incomplete", retryable: false, diagnostic: "output_limit" });
+});

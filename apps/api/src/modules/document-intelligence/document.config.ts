@@ -23,7 +23,8 @@ const schema = z.object({
   OPENAI_DOCUMENT_DAILY_CALLS: z.coerce.number().int().min(1).max(20).optional(),
   OPENAI_DOCUMENT_INPUT_USD_PER_MILLION: z.coerce.number().min(0).max(1000).default(0.75),
   OPENAI_DOCUMENT_OUTPUT_USD_PER_MILLION: z.coerce.number().min(0).max(1000).default(4.5),
-  OPENAI_DOCUMENT_MAX_OUTPUT_TOKENS: z.coerce.number().int().min(1000).max(12000).default(6000),
+  // A multi-page contract transcribed page by page, reasoning included, exceeds 6000 tokens.
+  OPENAI_DOCUMENT_MAX_OUTPUT_TOKENS: z.coerce.number().int().min(1000).max(32000).default(16000),
 });
 export async function documentConfig(config: Environment) {
   const parsed = schema.safeParse(process.env);

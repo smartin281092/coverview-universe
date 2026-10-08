@@ -11,7 +11,9 @@ export type LlmDiagnostic =
   | "field_date"
   | "duplicate_fields"
   | "category_evidence"
-  | "title_evidence";
+  | "title_evidence"
+  | "output_limit"
+  | "content_filter";
 
 export class LlmError extends Error {
   readonly diagnostic: LlmDiagnostic | undefined;
@@ -44,6 +46,11 @@ export interface LlmProvider {
 }
 const responseSchema = z.object({
   status: z.string(),
+  // Why a response stopped early; only these two reasons are kept as diagnostics.
+  incomplete_details: z
+    .object({ reason: z.string().max(100) })
+    .nullable()
+    .optional(),
   model: z.string().max(100),
   output: z.array(
     z.object({
@@ -190,7 +197,16 @@ export function createOpenAiProvider(config: {
       } catch (cause) {
         throw new LlmError("ai_invalid_result", false, { cause, diagnostic: "response_schema" });
       }
-      if (parsed.status !== "completed") throw new LlmError("ai_incomplete", false);
+      if (parsed.status !== "completed") {
+        const reason = parsed.incomplete_details?.reason;
+        throw new LlmError("ai_incomplete", false, {
+          ...(reason === "max_output_tokens"
+            ? { diagnostic: "output_limit" as const }
+            : reason === "content_filter"
+              ? { diagnostic: "content_filter" as const }
+              : {}),
+        });
+      }
       const texts = parsed.output.flatMap((item) =>
         item.type === "message"
           ? (item.content ?? [])
