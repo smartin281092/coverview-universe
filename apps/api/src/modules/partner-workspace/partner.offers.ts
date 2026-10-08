@@ -4,6 +4,7 @@ import {
   leadSourceSnapshot,
   leadSourceSnapshotSchema,
   leadSourceReviewRevisionSql,
+  referencedCompanyIds,
 } from "../document-intelligence/index.js";
 import { date, fail, type Executor } from "./partner.policy.js";
 
@@ -24,6 +25,9 @@ export async function requireOfferSource(db: Executor, documentId: string, snaps
     return fail("PARTNER_CONFLICT", 409);
   return stored.data;
 }
+
+// Originals a browser may preview; any other type is only downloaded.
+const previewable = new Set(["application/pdf", "image/jpeg", "image/png", "image/webp"]);
 
 export async function readOffers(
   db: Executor,
@@ -76,6 +80,9 @@ export async function readOffers(
           ? "current"
           : "changed";
     const data = leadOfferInputSchema.parse(row.data);
+    // The logo needs one recognised company; an ambiguous or unknown name keeps the text.
+    const companies = referencedCompanyIds([data.company]);
+    const mime = typeof original?.mime === "string" ? original.mime : null;
     const unexpired =
       !data.validUntil || new Date(data.validUntil).getTime() > (options.assessedAt ?? Date.now());
     const usable =
@@ -104,6 +111,8 @@ export async function readOffers(
         !!row.published_at &&
         ["published", "viewed", "selected"].includes(String(row.state)),
       updatedSinceViewed: row.updated_since_viewed === true,
+      ...(companies.length === 1 ? { companyId: companies[0] } : {}),
+      ...(mime && previewable.has(mime) ? { sourceMime: mime } : {}),
     });
   });
   const last = result.rows[Math.min(result.rows.length, limit) - 1];

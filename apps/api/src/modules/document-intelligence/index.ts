@@ -36,6 +36,7 @@ export {
 } from "./document.lead-import.js";
 export { readContractCandidates, retainContractReference } from "./document.contract-reference.js";
 export { readCorrespondenceDocuments } from "./document.correspondence.js";
+export { referencedCompanyIds } from "./document.companies.js";
 
 export async function registerDocuments(
   app: FastifyInstance,

@@ -227,14 +227,15 @@ export function createPartnerClient(baseUrl: string) {
     }
     return schema.parse(payload);
   }
-  // Bytes of a picture (C8c), never interpreted by the browser before the caller types them.
-  async function picture(path: string, signal?: AbortSignal) {
+  // Bytes of a picture (C8c) or of an original, never interpreted by the browser before the
+  // caller types them.
+  async function picture(path: string, signal?: AbortSignal, timeoutMs = 30000) {
     const response = await fetch(new URL(path, base), {
       credentials: "include",
       cache: "no-store",
       signal: signal
-        ? AbortSignal.any([AbortSignal.timeout(30000), signal])
-        : AbortSignal.timeout(30000),
+        ? AbortSignal.any([AbortSignal.timeout(timeoutMs), signal])
+        : AbortSignal.timeout(timeoutMs),
     });
     if (!response.ok) {
       const parsed = z
@@ -1263,5 +1264,12 @@ export function createPartnerClient(baseUrl: string) {
         `${path(wallet)}/${encodeURIComponent(leadId)}/offers/${encodeURIComponent(offerId)}/source`,
         base,
       ).href,
+    // The original for the in-app preview; its type comes from the offer (`sourceMime`).
+    offerSource: (leadId: string, offerId: string, signal?: AbortSignal, wallet = false) =>
+      picture(
+        `${path(wallet)}/${encodeURIComponent(leadId)}/offers/${encodeURIComponent(offerId)}/source`,
+        signal,
+        60000,
+      ),
   };
 }

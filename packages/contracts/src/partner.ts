@@ -1256,6 +1256,10 @@ export const leadOfferSchema = leadOfferInputSchema.extend({
   canCompare: z.boolean().optional(),
   canChoose: z.boolean().optional(),
   updatedSinceViewed: z.boolean().optional(),
+  // Display only (8 October 2026): the company recognised in the offer's name, for its logo, and
+  // the server-detected type of the original, which alone picks a preview renderer.
+  companyId: insuranceCompanyIdSchema.optional(),
+  sourceMime: z.enum(["application/pdf", "image/jpeg", "image/png", "image/webp"]).optional(),
   reviewedBy: id.nullable().optional(),
   publishedBy: id.nullable().optional(),
 });

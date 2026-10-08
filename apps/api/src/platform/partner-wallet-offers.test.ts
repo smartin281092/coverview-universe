@@ -264,7 +264,18 @@ it("lists the offers published to the client, request by request, and keeps the 
   });
   // The withdrawn version is gone; the published one carries its document.
   expect(offers.items[0]!.offers.map((offer) => offer.id)).toEqual([axa]);
-  expect(offers.items[0]!.offers[0]).toMatchObject({ company: "AXA", canDownload: true });
+  expect(offers.items[0]!.offers[0]).toMatchObject({
+    company: "AXA",
+    canDownload: true,
+    companyId: "axa",
+    sourceMime: "application/pdf",
+  });
+  // A logo needs a recognised company: an unknown name keeps its text only.
+  const withdrawn = (await repository.detail(advisor, lead.id)).offers.find(
+    (offer) => offer.id === zurich,
+  );
+  expect(withdrawn?.company).toBe("Zurich");
+  expect(withdrawn?.companyId).toBeUndefined();
   expect((await repository.walletOffers(owner, { clientProfileId: "self" })).items).toHaveLength(1);
   expect((await repository.walletOffers(stranger, {})).items).toEqual([]);
   await expect(repository.walletOffers(advisor, {})).rejects.toMatchObject({ statusCode: 403 });
