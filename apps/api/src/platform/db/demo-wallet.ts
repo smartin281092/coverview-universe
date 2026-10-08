@@ -1,6 +1,7 @@
 // Local demonstration data for one Wallet account (requested on 8 October 2026): a fictitious
-// advisor publishes fictitious offers with their PDF, and fictitious contracts sit in the account's
-// documents. Everything is labelled "fictif"; it runs only against the local database, once.
+// advisor publishes offers with their PDF, and contracts sit in the account's documents. The
+// offers themselves carry no "fictive" mention (asked the same day); the context of each request
+// and the advisor still say so. It runs only against the local database; each request once.
 import { createHash, randomUUID } from "node:crypto";
 import {
   leadCreateInputSchema,
@@ -40,7 +41,7 @@ const requests: Request[] = [
     offers: [
       {
         company: "AXA",
-        product: "Auto Confort (offre fictive)",
+        product: "Auto Confort",
         premium: 128000,
         features: [
           { label: "Parking", value: "CHF 2000", category: "parking", chf: 2000 },
@@ -50,7 +51,7 @@ const requests: Request[] = [
       },
       {
         company: "Allianz",
-        product: "Auto Plus (offre fictive)",
+        product: "Auto Plus",
         premium: 119000,
         features: [
           { label: "Parking", value: "CHF 1000", category: "parking", chf: 1000 },
@@ -60,7 +61,7 @@ const requests: Request[] = [
       },
       {
         company: "Generali",
-        product: "Auto Essentiel (offre fictive)",
+        product: "Auto Essentiel",
         premium: 98000,
         features: [
           { label: "Parking", value: "CHF 500", category: "parking", chf: 500 },
@@ -76,9 +77,11 @@ const requests: Request[] = [
     offers: [
       {
         company: "Bâloise",
-        product: "Plan 3a Horizon (offre fictive)",
+        product: "Plan 3a Horizon",
         premium: 705600,
         features: [
+          { label: "Capital projeté à la retraite", value: "CHF 185000", category: "maturity" },
+          { label: "Prime", value: "CHF 588 par mois", category: "contribution" },
           { label: "Capital décès", value: "CHF 100000", category: "death", chf: 100000 },
           {
             label: "Libération du paiement des primes",
@@ -89,9 +92,13 @@ const requests: Request[] = [
       },
       {
         company: "AXA",
-        product: "Prévoyance 3a Flex (offre fictive)",
+        product: "Prévoyance 3a Flex",
         premium: 600000,
-        features: [{ label: "Capital décès", value: "CHF 50000", category: "death", chf: 50000 }],
+        features: [
+          { label: "Capital projeté à la retraite", value: "CHF 162000", category: "maturity" },
+          { label: "Prime", value: "CHF 6000 par an", category: "contribution" },
+          { label: "Capital décès", value: "CHF 50000", category: "death", chf: 50000 },
+        ],
       },
     ],
   },
@@ -102,7 +109,7 @@ const requests: Request[] = [
     offers: [
       {
         company: "Generali",
-        product: "Ménage Duo (offre fictive)",
+        product: "Ménage Duo",
         premium: 42000,
         features: [
           { label: "Inventaire du ménage", value: "CHF 60000", category: "contents", chf: 60000 },
@@ -117,6 +124,40 @@ const requests: Request[] = [
     ],
   },
 ];
+requests.push({
+  title: "Assurance maladie de base",
+  category: "health",
+  object: "Assurance obligatoire des soins",
+  offers: [
+    {
+      company: "Helsana",
+      product: "Modèle médecin de famille",
+      premium: 487800,
+      features: [
+        { label: "Franchise", value: "CHF 2500", category: "deductible", chf: 2500 },
+        { label: "Couverture accident", value: "Exclue", category: "other" },
+      ],
+    },
+    {
+      company: "CSS",
+      product: "Modèle Telmed",
+      premium: 472320,
+      features: [
+        { label: "Franchise", value: "CHF 2500", category: "deductible", chf: 2500 },
+        { label: "Couverture accident", value: "Exclue", category: "other" },
+      ],
+    },
+    {
+      company: "Groupe Mutuel",
+      product: "Modèle standard",
+      premium: 559200,
+      features: [
+        { label: "Franchise", value: "CHF 300", category: "deductible", chf: 300 },
+        { label: "Couverture accident", value: "Incluse", category: "other" },
+      ],
+    },
+  ],
+});
 const contracts: Contract[] = [
   {
     name: "Police auto actuelle (fictive).pdf",
@@ -191,11 +232,17 @@ async function main() {
     ).rows[0];
     if (!client)
       throw new Error("Sign in once to Wallet with this address before the demonstration");
-    const existing = await database.pool.query(
-      "select 1 from partner_leads l join identity_users u on u.id=l.responsible_id where l.client_user_id=$1 and u.email=$2 limit 1",
-      [client.id, advisorEmail],
+    // Each request is added once; contracts only on the first run.
+    const present = new Set(
+      (
+        await database.pool.query<{ title: string }>(
+          "select l.title from partner_leads l join identity_users u on u.id=l.responsible_id where l.client_user_id=$1 and u.email=$2",
+          [client.id, advisorEmail],
+        )
+      ).rows.map((row) => row.title),
     );
-    if (existing.rowCount) {
+    const missing = requests.filter((request) => !present.has(request.title));
+    if (!missing.length) {
       process.stdout.write("Demonstration data already present for this account; nothing added.\n");
       return;
     }
@@ -252,7 +299,7 @@ async function main() {
           organization: "Cabinet Exemple (fictif)",
           phone: "",
           roles: ["advisor"],
-          categories: ["vehicle", "pension", "household"],
+          categories: ["vehicle", "pension", "household", "health"],
           languages: "fr",
           regions: "VD, GE",
           qualifications: "Conseillère fictive pour la démonstration locale",
@@ -305,7 +352,7 @@ async function main() {
         ],
       );
     }
-    for (const request of requests) {
+    for (const request of missing) {
       const created = await repository.create(
         owner,
         leadCreateInputSchema.parse({
@@ -363,7 +410,6 @@ async function main() {
         const documentId = `doc_${key()}`;
         const lines = [
           `${offer.company} - ${offer.product}`,
-          "Offre fictive de démonstration, sans valeur contractuelle.",
           `Objet : ${request.object}`,
           `Prime annuelle : CHF ${(offer.premium / 100).toFixed(2)}`,
           ...offer.features.map((feature) => `${feature.label} : ${feature.value}`),
@@ -371,7 +417,7 @@ async function main() {
         await store(
           documentId,
           advisorId,
-          `Offre ${offer.company} (fictive).pdf`,
+          `Offre ${offer.company} - ${offer.product}.pdf`,
           pdf(lines),
           "lead_offer",
           {
@@ -414,7 +460,7 @@ async function main() {
                   ? { limit: { value: feature.chf * 100, unit: "chf", period: "event" } }
                   : {}),
               })),
-              summary: "Offre fictive de démonstration.",
+              summary: "",
               limitations: "",
               replacesId: null,
             }),
@@ -437,7 +483,7 @@ async function main() {
       );
     }
     // The client's current contracts, in their own documents, ready to be chosen as reference.
-    for (const contract of contracts) {
+    for (const contract of present.size ? [] : contracts) {
       const documentId = `doc_${key()}`;
       const text = [
         contract.name.replace(/\.pdf$/u, ""),
@@ -473,7 +519,10 @@ async function main() {
         },
       });
     }
-    process.stdout.write(`${contracts.length} contrats fictifs ajoutés aux documents du compte.\n`);
+    if (!present.size)
+      process.stdout.write(
+        `${contracts.length} contrats fictifs ajoutés aux documents du compte.\n`,
+      );
   } finally {
     // Nothing usable remains: demonstration sessions and the temporary administrator end here.
     if (sessions.length)
