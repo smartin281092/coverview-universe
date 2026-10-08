@@ -13,6 +13,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx src/platform/db/maintenance.ts migrate",
     "db:seed": "tsx src/platform/db/maintenance.ts seed",
+    "db:demo-wallet": "tsx src/platform/db/demo-wallet.ts",
     "db:reset": "tsx src/platform/db/maintenance.ts reset"
   },
   "dependencies": {

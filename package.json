@@ -12,6 +12,7 @@
     "db:generate": "pnpm --filter api run db:generate",
     "db:migrate": "pnpm --filter api run db:migrate",
     "db:seed": "pnpm --filter api run db:seed",
+    "db:demo-wallet": "pnpm --filter api run db:demo-wallet",
     "db:reset": "pnpm --filter api run db:reset",
     "boundaries": "depcruise --config .dependency-cruiser.cjs apps packages && knip",
     "preview": "node scripts/preview.mjs start",
