@@ -9,6 +9,8 @@ import {
   operatorCaseUpdateSchema,
   operatorCaseSchema,
   evidenceCatalogSchema,
+  evidenceModelListSchema,
+  modelEvidenceSchema,
   type RecommendationInput,
   type RecommendationRules,
 } from "@coverview/contracts/health-recommendation";
@@ -60,6 +62,21 @@ export function createRecommendationClient(baseUrl: string) {
       request(
         `/health-insurance/recommendation-catalog?year=${year}`,
         evidenceCatalogSchema.nullable(),
+        undefined,
+        { signal },
+      ),
+    // Offers linked to a comparator model (9 October 2026): the models, then one model's facts.
+    models: (year: number, signal?: AbortSignal) =>
+      request(
+        `/health-insurance/recommendation-catalog/models?year=${year}`,
+        evidenceModelListSchema,
+        undefined,
+        { signal },
+      ),
+    modelEvidence: (modelId: string, year: number, signal?: AbortSignal) =>
+      request(
+        `/health-insurance/recommendation-catalog/models/${encodeURIComponent(modelId)}?year=${year}`,
+        modelEvidenceSchema.nullable(),
         undefined,
         { signal },
       ),

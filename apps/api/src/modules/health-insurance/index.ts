@@ -137,4 +137,4 @@ export function registerHealthInsurance(
   );
 }
 export { createHealthRepository } from "./health.repository.js";
-export { RecommendationError } from "./recommendation.repository.js";
+export { RecommendationError, isCatalogModel } from "./recommendation.repository.js";

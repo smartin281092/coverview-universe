@@ -37,6 +37,19 @@ const fail = (code: string, status: number): never => {
   throw new RecommendationError(code, status);
 };
 type Database = ReturnType<typeof createDatabase>;
+type Queryable = {
+  query: (text: string, values: unknown[]) => Promise<{ rowCount: number | null }>;
+};
+/** Whether a model is in the year's latest evidence catalogue, so that an offer can name it. */
+export async function isCatalogModel(queryable: Queryable, modelId: string, year = 2027) {
+  const result = await queryable.query(
+    `select 1 from health_recommendation_catalogs where id=(
+       select id from health_recommendation_catalogs where year=$1 order by created_at desc, id desc limit 1
+     ) and data->'models' @> $2::jsonb`,
+    [year, JSON.stringify([{ id: modelId }])],
+  );
+  return !!result.rowCount;
+}
 export function validateCatalog(catalog: EvidenceCatalog) {
   const models = new Map(catalog.models.map((model) => [model.id, model]));
   const sources = new Map(catalog.sources.map((source) => [source.id, source]));
@@ -261,10 +274,76 @@ export function createRecommendationRepository(database: Database) {
       return result;
     });
   }
+  // The latest catalogue of a year, parsed once per publication: a new one has a new id.
+  const published = new Map<number, { id: string; catalog: EvidenceCatalog }>();
+  async function latestCatalog(year: number) {
+    const [row] = await db
+      .select({ id: catalogs.id })
+      .from(catalogs)
+      .where(eq(catalogs.year, year))
+      .orderBy(desc(catalogs.createdAt), desc(catalogs.id))
+      .limit(1);
+    if (!row) return null;
+    const cached = published.get(year);
+    if (cached?.id === row.id) return cached.catalog;
+    const [stored] = await db
+      .select({ data: catalogs.data })
+      .from(catalogs)
+      .where(eq(catalogs.id, row.id))
+      .limit(1);
+    if (!stored) return null;
+    const catalog = evidenceCatalogSchema.parse(stored.data);
+    published.set(year, { id: row.id, catalog });
+    return catalog;
+  }
+  function evidenceModel(catalog: EvidenceCatalog, model: EvidenceCatalog["models"][number]) {
+    const brand = catalog.insurers.find((insurer) => insurer.id === model.insurerId)?.brand;
+    return {
+      id: model.id,
+      insurerId: model.insurerId,
+      insurerName: model.insurerName,
+      insurerBrand: brand ?? model.insurerName,
+      name: model.name,
+      category: model.category,
+    };
+  }
   return {
     state,
     run,
     catalogVersion,
+    /** The models an offer can be linked to, by brand then name (public, no personal data). */
+    async catalogModels(year: number) {
+      const catalog = await latestCatalog(year);
+      const models = (catalog?.models ?? []).map((model) => evidenceModel(catalog!, model));
+      models.sort(
+        (a, b) =>
+          a.insurerBrand.localeCompare(b.insurerBrand, "fr") || a.name.localeCompare(b.name, "fr"),
+      );
+      return { year, models };
+    },
+    /**
+     * One model's facts, as the comparator selects them: the model's own, then its insurer's
+     * facts that name no model, with only the types and sources they cite.
+     */
+    async modelEvidence(year: number, modelId: string) {
+      const catalog = await latestCatalog(year);
+      const model = catalog?.models.find((item) => item.id === modelId);
+      if (!catalog || !model) return null;
+      const benefits = catalog.benefits.filter(
+        (fact) =>
+          fact.modelIds.includes(modelId) ||
+          (!fact.modelIds.length && fact.insurerId === model.insurerId),
+      );
+      const keys = new Set(benefits.map((fact) => fact.equivalenceGroup));
+      const sourceIds = new Set(benefits.flatMap((fact) => fact.sourceIds));
+      return {
+        year,
+        model: evidenceModel(catalog, model),
+        benefits,
+        benefitTypes: catalog.benefitTypes.filter((type) => keys.has(type.key)),
+        sources: catalog.sources.filter((source) => sourceIds.has(source.id)),
+      };
+    },
     async publish(
       input: z.infer<typeof recommendationPublishSchema>,
       actor: ProfileActor,

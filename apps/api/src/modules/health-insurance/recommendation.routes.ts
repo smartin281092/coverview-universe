@@ -9,6 +9,9 @@ import {
   operatorCaseUpdateSchema,
   operatorCaseSchema,
   evidenceCatalogSchema,
+  evidenceModelListSchema,
+  healthModelIdSchema,
+  modelEvidenceSchema,
   recommendationRulesSchema,
   recommendationCatalogPublishSchema,
 } from "@coverview/contracts/health-recommendation";
@@ -52,6 +55,27 @@ export function registerRecommendations(
           }
         : null;
     },
+  );
+  // Offers linked to a model (9 October 2026): Partner lists the models, Wallet reads one.
+  app.get(
+    "/health-insurance/recommendation-catalog/models",
+    {
+      config: limited,
+      schema: { querystring: yearQuery, response: { 200: evidenceModelListSchema } },
+    },
+    async (request) => repository.catalogModels(request.query.year),
+  );
+  app.get(
+    "/health-insurance/recommendation-catalog/models/:id",
+    {
+      config: limited,
+      schema: {
+        params: z.object({ id: healthModelIdSchema }).strict(),
+        querystring: yearQuery,
+        response: { 200: modelEvidenceSchema.nullable() },
+      },
+    },
+    async (request) => repository.modelEvidence(request.query.year, request.params.id),
   );
   app.get(
     "/admin/health-recommendation",

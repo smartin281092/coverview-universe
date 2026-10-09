@@ -248,6 +248,23 @@ export const evidenceCatalogSchema = z
     cases: z.array(operatorCaseSchema).max(2000),
   })
   .strict();
+// A model of the latest catalogue, by its insurer's brand: what an offer can be linked to.
+export const evidenceModelSchema = researchModelSchema
+  .pick({ id: true, insurerId: true, insurerName: true, name: true, category: true })
+  .extend({ insurerBrand: z.string() });
+export const evidenceModelListSchema = z.object({
+  year: z.number().int(),
+  models: z.array(evidenceModelSchema).max(1000),
+});
+// One model's facts as the comparator shows them, with only the types and sources they cite.
+export const modelEvidenceSchema = z.object({
+  year: z.number().int(),
+  model: evidenceModelSchema,
+  benefits: z.array(evidenceBenefitSchema).max(500),
+  benefitTypes: z.array(benefitTypeSchema).max(200),
+  sources: z.array(evidenceSourceSchema).max(1000),
+});
+export const healthModelIdSchema = z.string().regex(/^hm_[a-f0-9]{28}$/u);
 export const recommendationRulesSchema = z
   .object({
     schemaVersion: z.literal(1),
@@ -468,4 +485,6 @@ export type EvidenceCatalog = z.infer<typeof evidenceCatalogSchema>;
 export type EvidenceBenefit = z.infer<typeof evidenceBenefitSchema>;
 export type BenefitType = z.infer<typeof benefitTypeSchema>;
 export type ResearchModel = z.infer<typeof researchModelSchema>;
+export type EvidenceModel = z.infer<typeof evidenceModelSchema>;
+export type ModelEvidence = z.infer<typeof modelEvidenceSchema>;
 export type RankedRecommendation = z.infer<typeof rankedRecommendationSchema>;

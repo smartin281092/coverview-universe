@@ -26,6 +26,7 @@ import { reopenLead } from "./partner.lifecycle.js";
 import { overlappingAppointment } from "./partner.appointment-assessment.js";
 import { computeMatching, recordMatchingDecision } from "./partner.matching.js";
 import { syncAnalysisNotice } from "./partner.recommendations.js";
+import { isCatalogModel } from "../health-insurance/index.js";
 import { leaveJointAppointments, settleJointAppointments } from "./partner.joint-appointments.js";
 type LeadRow = typeof partnerLeads.$inferSelect;
 
@@ -507,6 +508,12 @@ export async function executeLeadCommand(
         )
       ).rows[0];
       if (imported?.offer_id && !previous) fail("PARTNER_CONFLICT", 409);
+      // A comparator model only for a health need, and only one of the latest 2027 catalogue.
+      if (
+        offer.healthModelId &&
+        (lead.category !== "health" || !(await isCatalogModel(tx, offer.healthModelId)))
+      )
+        fail("PARTNER_INVALID_HEALTH_MODEL");
       if (
         !(await retainLeadSource(
           tx,

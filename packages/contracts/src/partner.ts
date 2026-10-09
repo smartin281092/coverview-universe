@@ -1,4 +1,5 @@
 import { insuranceCompanyIdSchema } from "./companies.js";
+import { healthModelIdSchema } from "./health-recommendation.js";
 import { z } from "zod";
 export * from "./partner-appointment-links.js";
 export * from "./partner-wallet-appointments.js";
@@ -1227,6 +1228,9 @@ export const leadOfferInputSchema = z
     features: z.array(offerFeatureSchema).max(80),
     summary: z.string().trim().max(3000),
     limitations: z.string().trim().max(3000),
+    // Health only (9 October 2026): the comparator model this offer is for, whose facts the
+    // client then reads with the offer.
+    healthModelId: healthModelIdSchema.nullable().optional(),
   })
   .strict();
 export const leadOfferSchema = leadOfferInputSchema.extend({
@@ -2176,6 +2180,7 @@ export const partnerErrors = [
   "PARTNER_INVALID_CLIENT",
   "PARTNER_INVALID_ASSIGNEE",
   "PARTNER_INVALID_DOCUMENT",
+  "PARTNER_INVALID_HEALTH_MODEL",
   "PARTNER_OFFER_NOT_READY",
   "PARTNER_OFFER_EXPIRED",
   "PARTNER_IDEMPOTENCY_REUSED",
