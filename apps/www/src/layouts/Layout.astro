@@ -61,9 +61,9 @@ const nav = [copy.nav.services, copy.nav.method, copy.nav.resources];
         <div class="footer-bottom"><p>© {new Date().getFullYear()} {copy.footer.copyright}</p><p>{copy.footer.availability}</p><button type="button" class="footer-consent" data-consent-open>{content.consent.settings}</button></div>
       </Container>
     </footer>}
-    {/* MKT-09: PostHog only after an explicit yes; the banner loads when the page is idle. */}
+    {/* MKT-09: PostHog only after an explicit yes; the banner loads when the page is idle, at most 2 s later. */}
     <ConsentBanner
-      client:idle
+      client:idle={{ timeout: 2000 }}
       config={{ key: import.meta.env.PUBLIC_POSTHOG_KEY, host: import.meta.env.PUBLIC_POSTHOG_HOST, replay: false, singlePage: false }}
       texts={{ title: content.consent.title, message: content.consent.message, accept: content.consent.accept, refuse: content.consent.refuse }}
     />
