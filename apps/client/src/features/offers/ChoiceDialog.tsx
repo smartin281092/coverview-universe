@@ -15,7 +15,7 @@ import {
   DialogDescription,
 } from "@coverview/ui";
 import { partnerApi } from "../../partner-api";
-import { amountsInText, numberFormat } from "../../number-format";
+import { amountsInText, numberFormat } from "@coverview/ui/number-format";
 
 export type WalletChoice = {
   type: "select" | "refuse" | "question" | "modification" | "keep_current" | "interlocutor";

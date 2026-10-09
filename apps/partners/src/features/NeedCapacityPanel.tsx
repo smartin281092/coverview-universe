@@ -16,6 +16,7 @@ import { partnerApi } from "../api";
 import { usePartner } from "./PartnerSession";
 import { formatDate, localDateTime, zurichInstant } from "./Field";
 import { AdvisorCapacity } from "./AdvisorCapacity";
+import { numberFormat } from "@coverview/ui/number-format";
 
 function expiry(value: string) {
   const instant = zurichInstant(value),
@@ -348,9 +349,7 @@ export function NeedCapacityPanel({
                 {(["accepted", "proposed", "contributing"] as const).map((bucket) => (
                   <div key={bucket} className="flex justify-between gap-4">
                     <dt>{t(`capacity.workload.${bucket}`)}</dt>
-                    <dd>
-                      {new Intl.NumberFormat(i18n.language).format(record.basis.workload[bucket])}
-                    </dd>
+                    <dd>{numberFormat(i18n.language).format(record.basis.workload[bucket])}</dd>
                   </div>
                 ))}
               </dl>

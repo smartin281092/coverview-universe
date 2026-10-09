@@ -14,6 +14,7 @@ import { PartnerApiError } from "@coverview/api-client/partner";
 import type { InsuranceLeadSource } from "@coverview/contracts/partner";
 import { partnerApi } from "../api";
 import { usePartner } from "./PartnerSession";
+import { numberFormat } from "@coverview/ui/number-format";
 
 export function InsuranceRequestDialog({
   leadId,
@@ -79,9 +80,7 @@ function InsuranceRequestContent({ source }: { source: InsuranceLeadSource }) {
   const { t, i18n } = useTranslation();
   const missing = t("insuranceSource.missing");
   const money = (minor: number) =>
-    new Intl.NumberFormat(i18n.language, { style: "currency", currency: "CHF" }).format(
-      minor / 100,
-    );
+    numberFormat(i18n.language, { style: "currency", currency: "CHF" }).format(minor / 100);
   const calendarDate = (value: string) =>
     new Intl.DateTimeFormat(i18n.language, { dateStyle: "long", timeZone: "UTC" }).format(
       new Date(`${value}T12:00:00Z`),

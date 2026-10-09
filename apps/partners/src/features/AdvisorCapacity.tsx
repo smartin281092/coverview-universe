@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import type { CapacityAdvisorAssessment } from "@coverview/contracts/partner";
 import { formatDate } from "./Field";
+import { numberFormat } from "@coverview/ui/number-format";
 
 export function AdvisorCapacity({ value }: { value: CapacityAdvisorAssessment }) {
   const { t, i18n } = useTranslation();
@@ -52,7 +53,7 @@ export function AdvisorCapacity({ value }: { value: CapacityAdvisorAssessment })
             <div key={key} className="flex justify-between gap-4">
               <dt>{t(`capacity.workload.${key}`)}</dt>
               <dd className="font-medium tabular-nums">
-                {new Intl.NumberFormat(i18n.language).format(workload[key])}
+                {numberFormat(i18n.language).format(workload[key])}
               </dd>
             </div>
           ))}

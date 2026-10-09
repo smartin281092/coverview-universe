@@ -1,5 +1,6 @@
 import type { PilotageMeasure, PilotageQuery } from "@coverview/contracts/partner-pilotage";
 import { parseZurichDateTime } from "@coverview/ui";
+import { numberFormat } from "@coverview/ui/number-format";
 export function pilotagePeriod(preset: "month" | "previous" | "quarter" | "year" = "month") {
   const parts = new Intl.DateTimeFormat("en-CA", {
     timeZone: "Europe/Zurich",
@@ -30,7 +31,7 @@ export function formatMeasure(
   locale = "fr-CH",
 ) {
   if (value === null) return "—";
-  return new Intl.NumberFormat(
+  return numberFormat(
     locale,
     unit === "chf_minor"
       ? { style: "currency", currency: "CHF", maximumFractionDigits: 2 }

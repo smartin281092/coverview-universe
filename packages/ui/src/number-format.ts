@@ -1,5 +1,5 @@
 /**
- * Numbers in the Wallet (9 October 2026): Intl formats them in the active locale (INTL-04), the
+ * Numbers in Wallet and Partner (9 October 2026): Intl formats them in the active locale (INTL-04), the
  * Swiss apostrophe separates the thousands and, in French, a comma marks the decimals, as in
  * 1'234,50 (fr-CH alone writes CHF amounts with a point).
  */

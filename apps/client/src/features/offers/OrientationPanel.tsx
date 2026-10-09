@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import type { LeadOffer } from "@coverview/contracts/partner";
 import type { LeadOrientation } from "@coverview/contracts/partner-orientation";
-import { numberFormat } from "../../number-format";
+import { numberFormat } from "@coverview/ui/number-format";
 
 const money = (minor: number) =>
   numberFormat("fr-CH", { style: "currency", currency: "CHF" }).format(minor / 100);

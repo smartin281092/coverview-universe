@@ -22,7 +22,7 @@ import { CompanyLogo } from "../features/insurance/CompanyLogo";
 import { InsuranceContractCard } from "../features/insurance/InsuranceContractCard";
 import { api } from "../api";
 import { MissingPage } from "./StatesPage";
-import { numberFormat } from "../number-format";
+import { numberFormat } from "@coverview/ui/number-format";
 
 const pageSize = 12;
 function Company({ identity, companyId }: { identity: IdentityMe; companyId: InsuranceCompanyId }) {

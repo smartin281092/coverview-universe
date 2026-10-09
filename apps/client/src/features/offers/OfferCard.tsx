@@ -4,7 +4,7 @@ import { Check, FileText } from "lucide-react";
 import type { LeadOffer } from "@coverview/api-client/partner";
 import { Badge, Button } from "@coverview/ui";
 import { CompanyLogo } from "../insurance/CompanyLogo";
-import { amountsInText, numberFormat } from "../../number-format";
+import { amountsInText, numberFormat } from "@coverview/ui/number-format";
 
 export type OfferAction = "select" | "question" | "modification" | "refuse";
 const day = (value: string) =>

@@ -15,7 +15,7 @@ import {
 import { partnerApi } from "../../partner-api";
 import { ConclusionSignatureForm } from "./ConclusionSignatureForm";
 import { ConclusionCorrespondences } from "./ConclusionCorrespondences";
-import { amountsInText, numberFormat } from "../../number-format";
+import { amountsInText, numberFormat } from "@coverview/ui/number-format";
 export function ConclusionsDialog({
   identity,
   leadId,

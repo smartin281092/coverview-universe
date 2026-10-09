@@ -6,7 +6,7 @@ import { CompanyLogo } from "../insurance/CompanyLogo";
 import { companyPalette } from "./company-colors";
 import { offerMetrics, type MetricValue } from "./offer-metrics";
 import { PixelField } from "./PixelField";
-import { amountsInText, numberFormat } from "../../number-format";
+import { amountsInText, numberFormat } from "@coverview/ui/number-format";
 
 const Shader = lazy(() => import("./OfferShader"));
 

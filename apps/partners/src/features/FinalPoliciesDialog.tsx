@@ -6,6 +6,7 @@ import { Button, VersionHistoryDialog, PolicyEvidence } from "@coverview/ui";
 import { partnerApi } from "../api";
 import { usePartner } from "./PartnerSession";
 import { FinalPolicyReviewDialog } from "./FinalPolicyReviewDialog";
+import { numberFormat } from "@coverview/ui/number-format";
 
 export function FinalPoliciesDialog({ leadId, onClose }: { leadId: string; onClose: () => void }) {
   const { t, i18n } = useTranslation(),
@@ -26,9 +27,7 @@ export function FinalPoliciesDialog({ leadId, onClose }: { leadId: string; onClo
   const money = (value: number | null) =>
     value === null
       ? tr("missing")
-      : new Intl.NumberFormat(i18n.language, { style: "currency", currency: "CHF" }).format(
-          value / 100,
-        );
+      : numberFormat(i18n.language, { style: "currency", currency: "CHF" }).format(value / 100);
   const date = (value: string) =>
     new Intl.DateTimeFormat(i18n.language, {
       dateStyle: "medium",

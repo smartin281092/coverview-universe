@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { amountsInText, numberFormat } from "./number-format";
+import { amountsInText, numberFormat } from "@coverview/ui/number-format";
 
 it("separates the thousands with an apostrophe and keeps the rest of the locale", () => {
   expect(numberFormat("fr").format(2500)).toBe("2'500");

@@ -10,6 +10,7 @@ import { Badge, Button, Input, Label } from "@coverview/ui";
 import { partnerApi } from "../api";
 import { usePartner } from "./PartnerSession";
 import { formatDate } from "./Field";
+import { numberFormat } from "@coverview/ui/number-format";
 
 type Action = JointParticipationAction["action"];
 const virtual = (mode: string) => mode === "phone" || mode === "video";
@@ -67,7 +68,7 @@ export function JointParticipationsPanel({ leadId }: { leadId: string }) {
               {" · "}
               {item.appointment.location}
               {" · "}
-              {new Intl.NumberFormat("fr-CH", { style: "unit", unit: "minute" }).format(
+              {numberFormat("fr-CH", { style: "unit", unit: "minute" }).format(
                 item.appointment.durationMinutes,
               )}
             </p>

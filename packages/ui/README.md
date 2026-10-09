@@ -42,6 +42,10 @@ Pour toute nouvelle page à onglets, utiliser la composition `cv-tabbed-page` av
 
 Les usages de `--cv-font-mono`, y compris l’utilitaire `font-mono` et les sur-titres de `SectionHeading`, utilisent l’espacement commun `--cv-mono-letter-spacing`. Les H1 applicatifs ont une marge basse de 6 px ; la description de `SectionHeading` n’ajoute plus de marge haute. [Correction et vérifications](../../roadmap/evidence/identity-tabs-heading-spacing.md).
 
+## Nombres de Wallet et Partner
+
+`@coverview/ui/number-format` (9 octobre 2026) : `numberFormat` garde `Intl` et la locale active (INTL-04), avec l'apostrophe entre les milliers et, en français, la virgule des décimales ; `amountsInText` met dans ce format les montants écrits à côté de « CHF » dans un texte, sans toucher aux autres nombres. Sans React, ce module se teste hors navigateur. Admin et le site ne l'utilisent pas.
+
 ## Consentement et mesure d'audience
 
 `@coverview/ui/consent` fournit `ConsentBanner` et `@coverview/ui/analytics` le cycle de vie PostHog (9 octobre 2026, [ADR-0011](../../adr/0011-posthog-consent.md)). Le site, Wallet et Partner les montent ; Admin ne les importe jamais. Rien de PostHog n'est chargé avant l'accord, qui est conservé par surface et versionné. Les clics sont capturés sans texte ni attributs, les adresses sans chaîne de requête, les personnes par identifiant opaque, et l'enregistrement des sessions masque tous les textes et toutes les saisies. PostHog reste éteint par défaut, même après une réinitialisation : un refus ou un retrait arrête la capture et efface ses cookies et son stockage, une déconnexion repart d'un visiteur anonyme. Sans clé, ni bandeau ni SDK.

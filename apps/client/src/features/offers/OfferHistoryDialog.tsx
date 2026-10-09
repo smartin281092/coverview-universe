@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { VersionHistoryDialog, Button } from "@coverview/ui";
 import type { IdentityMe } from "@coverview/api-client";
 import { partnerApi } from "../../partner-api";
-import { amountsInText, numberFormat } from "../../number-format";
+import { amountsInText, numberFormat } from "@coverview/ui/number-format";
 export function OfferHistoryDialog({
   leadId,
   identity,

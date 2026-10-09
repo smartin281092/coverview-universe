@@ -22,6 +22,7 @@ import {
 import { partnerApi } from "../api";
 import { usePartner } from "./PartnerSession";
 import { readText } from "./Field";
+import { numberFormat } from "@coverview/ui/number-format";
 
 const day = new Intl.DateTimeFormat("fr-CH", { dateStyle: "medium", timeZone: "Europe/Zurich" });
 type Subject = Evaluation["contestable"][number];
@@ -161,7 +162,12 @@ export function ProfileEvaluation({ evaluation }: { evaluation: Evaluation }) {
         <h2 className="font-medium">{t("evaluation.clientTitle")}</h2>
         <p>
           {client.rating.status === "available"
-            ? t("rating.available", { average: client.rating.average?.toLocaleString("fr-CH") })
+            ? t("rating.available", {
+                average:
+                  typeof client.rating.average === "number"
+                    ? numberFormat("fr-CH").format(client.rating.average)
+                    : undefined,
+              })
             : t("rating.insufficient", {
                 count: client.rating.count,
                 minimum: client.rating.minimum,

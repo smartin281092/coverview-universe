@@ -4,6 +4,7 @@ import type { PublicProfile } from "@coverview/contracts/partner-profiles";
 import { partnerApi } from "../api";
 import { usePartner } from "./PartnerSession";
 import { usePictureUrl } from "./use-picture";
+import { numberFormat } from "@coverview/ui/number-format";
 
 const day = new Intl.DateTimeFormat("fr-CH", { dateStyle: "medium", timeZone: "Europe/Zurich" });
 const languages = new Intl.DisplayNames(["fr"], { type: "language" });
@@ -66,7 +67,12 @@ export function PublicProfileView({ profile }: { profile: PublicProfile }) {
       ]}
       rating={
         rating.status === "available"
-          ? t("rating.available", { average: rating.average?.toLocaleString("fr-CH") })
+          ? t("rating.available", {
+              average:
+                typeof rating.average === "number"
+                  ? numberFormat("fr-CH").format(rating.average)
+                  : undefined,
+            })
           : t("rating.insufficient", { count: rating.count, minimum: rating.minimum })
       }
       ratingDetail={t("rating.detail", {

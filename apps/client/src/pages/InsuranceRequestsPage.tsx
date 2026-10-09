@@ -21,7 +21,7 @@ import {
 import { NewRequestDialog } from "../features/offers/NewRequestDialog";
 import { useWalletLiveUpdates } from "../features/offers/use-live-updates";
 import { timeline } from "../features/offers/request-timeline";
-import { numberFormat } from "../number-format";
+import { numberFormat } from "@coverview/ui/number-format";
 const stages = ["submitted", "reviewing", "insurer_contacted", "offer_ready", "completed"] as const;
 const amount = (minor: number) =>
   numberFormat("fr-CH", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(minor / 100);

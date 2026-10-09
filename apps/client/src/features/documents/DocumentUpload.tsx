@@ -29,7 +29,7 @@ import {
   photoTypes,
   prepareDocumentFile,
 } from "./document-upload-file";
-import { numberFormat } from "../../number-format";
+import { numberFormat } from "@coverview/ui/number-format";
 
 export function DocumentUpload({
   identity,

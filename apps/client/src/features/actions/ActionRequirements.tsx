@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { ArrowUpRight, CheckCircle2 } from "lucide-react";
 import type { ActionCenterItem } from "@coverview/contracts";
 import { Button } from "@coverview/ui";
-import { numberFormat } from "../../number-format";
+import { numberFormat } from "@coverview/ui/number-format";
 
 export function ActionRequirements({
   action,

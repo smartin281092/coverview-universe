@@ -34,7 +34,7 @@ import { InsuranceCompanyLink } from "../features/insurance/InsuranceCompanyLink
 import { DocumentLabels } from "../features/documents/DocumentLabels";
 import { DocumentThumbnails } from "../features/documents/DocumentThumbnails";
 import { DocumentProfileAssignment } from "../features/documents/DocumentProfileAssignment";
-import { numberFormat } from "../number-format";
+import { numberFormat } from "@coverview/ui/number-format";
 
 type Panel =
   "category" | "delete" | "history" | "source" | "resume" | "analysis" | { fieldId: string } | null;

@@ -25,7 +25,7 @@ import { OfferDocuments } from "../features/offers/OfferDocuments";
 import { OfferHero } from "../features/offers/OfferHero";
 import { offerGroups } from "../features/offers/offer-groups";
 import { useWalletLiveUpdates } from "../features/offers/use-live-updates";
-import { amountsInText, numberFormat } from "../number-format";
+import { amountsInText, numberFormat } from "@coverview/ui/number-format";
 
 // Each tab's icon colour; the moving underline takes the colour of the open tab.
 const tabs = [

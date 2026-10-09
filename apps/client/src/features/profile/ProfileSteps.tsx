@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { numberFormat } from "../../number-format";
+import { numberFormat } from "@coverview/ui/number-format";
 
 export type ProfileViewStep = "information" | "contact" | "details";
 export const profileViewSteps: ProfileViewStep[] = ["information", "contact", "details"];

@@ -13,7 +13,7 @@ import {
 } from "@coverview/ui";
 import { partnerApi } from "../../partner-api";
 import { usePictureUrl } from "./use-picture";
-import { numberFormat } from "../../number-format";
+import { numberFormat } from "@coverview/ui/number-format";
 
 const day = new Intl.DateTimeFormat("fr-CH", { dateStyle: "medium", timeZone: "Europe/Zurich" });
 const languages = new Intl.DisplayNames(["fr"], { type: "language" });

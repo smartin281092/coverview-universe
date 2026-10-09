@@ -1,5 +1,7 @@
 # CoverView Partner
 
+Nombres (9 octobre 2026) : comme dans Wallet, `numberFormat` (`@coverview/ui/number-format`) sépare les milliers par une apostrophe et les décimales par une virgule (1'234,50 CHF) ; les montants écrits à côté de « CHF » dans les offres (valeurs, conditions, exclusions, résumé, limites) s'affichent de même avec `amountsInText`, les citations des documents restant exactes. ESLint refuse `Intl.NumberFormat` et `toLocaleString` ailleurs dans Partner.
+
 Depuis le 4 octobre 2026, toutes les migrations Partner sont dans le catalogue normal ([activation](../api/src/modules/partner-workspace/README.md)). Les mentions « hors catalogue » ci-dessous sont historiques. La recette authentifiée reste à faire.
 
 Lot4 : fiche Lead → signature/conclusion, correction motivée des constats, correspondances partagées par Wallet et contrôle des polices ; vues privées et filtres de liste ; reprise d’un dossier terminé avec archive de clôture. [Conclusion](../api/src/modules/partner-workspace/docs/conclusion.md), [navigation](../api/src/modules/partner-workspace/docs/navigation.md), [reprises](../api/src/modules/partner-workspace/docs/lifecycle.md).0060–0063 hors catalogue ; activation et recette authentifiée ouvertes.

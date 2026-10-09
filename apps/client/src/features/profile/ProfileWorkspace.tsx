@@ -31,7 +31,7 @@ import { ProfileSectionEditor } from "./ProfileSectionEditor";
 import { IdentityAttachment } from "../authorizations/IdentityAttachment";
 import { ProfileAuthorizations } from "../authorizations/ProfileAuthorizations";
 import { type ProfileEditorBridge, type ProfileViewStep } from "./ProfileSteps";
-import { numberFormat } from "../../number-format";
+import { numberFormat } from "@coverview/ui/number-format";
 
 // The person's sections, then their authorizations (moved from the account on 8 October 2026).
 type WorkspaceTab = ProfileSectionName | "authorizations";

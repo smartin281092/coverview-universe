@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Button, Badge } from "@coverview/ui";
 import type { CommercialTerms, MarketReservation } from "@coverview/contracts/partner-economy";
+import { numberFormat } from "@coverview/ui/number-format";
 export const economyQueryPolicy = {
   gcTime: 0,
   staleTime: 0,
@@ -47,13 +48,9 @@ export function useEconomyFormat() {
     money: (n: number | null) =>
       n === null
         ? "—"
-        : new Intl.NumberFormat(i18n.language, { style: "currency", currency: "CHF" }).format(
-            n / 100,
-          ),
+        : numberFormat(i18n.language, { style: "currency", currency: "CHF" }).format(n / 100),
     percent: (n: number) =>
-      new Intl.NumberFormat(i18n.language, { style: "percent", maximumFractionDigits: 2 }).format(
-        n / 10000,
-      ),
+      numberFormat(i18n.language, { style: "percent", maximumFractionDigits: 2 }).format(n / 10000),
     date: (s: string) =>
       new Intl.DateTimeFormat(i18n.language, {
         dateStyle: "medium",

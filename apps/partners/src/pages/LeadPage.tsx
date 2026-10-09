@@ -51,11 +51,12 @@ import { publicLeadSearch } from "../features/lead-navigation-state";
 import { LeadReopeningsDialog } from "../features/LeadReopeningsDialog";
 import { LeadRelationshipsDialog } from "../features/LeadRelationshipsDialog";
 import { ClientInvitationPanel } from "../features/ClientInvitationPanel";
+import { amountsInText, numberFormat } from "@coverview/ui/number-format";
 export function LeadPage() {
   const { leadId } = useParams({ from: "/leads/$leadId" }),
     { tab, section } = useSearch({ from: "/leads/$leadId" }),
     navigate = useNavigate({ from: "/leads/$leadId" }),
-    { t } = useTranslation(),
+    { t, i18n } = useTranslation(),
     session = usePartner();
   const leadQuery = useQuery({
     queryKey: [...session.queryKey, "lead", leadId],
@@ -679,7 +680,7 @@ export function LeadPage() {
                 </p>
                 <p className="mt-2 flex items-center gap-1 text-xs text-muted-foreground">
                   <Clock3 className="size-3" />
-                  {new Intl.NumberFormat("fr-CH", { style: "unit", unit: "minute" }).format(
+                  {numberFormat("fr-CH", { style: "unit", unit: "minute" }).format(
                     appt.durationMinutes,
                   )}
                 </p>
@@ -793,7 +794,11 @@ export function LeadPage() {
                   </div>
                   <Badge variant="outline">{t(`offer.${item.state}`)}</Badge>
                 </div>
-                {item.summary && <p className="mt-4 whitespace-pre-wrap text-sm">{item.summary}</p>}
+                {item.summary && (
+                  <p className="mt-4 whitespace-pre-wrap text-sm">
+                    {amountsInText(item.summary, i18n.language)}
+                  </p>
+                )}
                 {item.sourceStatus !== "current" && (
                   <p role="status" className="mt-3 text-sm">
                     {t(`history.sourceStatus.${item.sourceStatus ?? "unbound"}`)}
@@ -804,7 +809,7 @@ export function LeadPage() {
                 )}
                 {item.limitations && (
                   <p className="mt-3 whitespace-pre-wrap text-sm text-muted-foreground">
-                    {item.limitations}
+                    {amountsInText(item.limitations, i18n.language)}
                   </p>
                 )}
                 <div className="mt-5 flex flex-wrap gap-2">

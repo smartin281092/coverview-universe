@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Badge, ComparisonMatrix } from "@coverview/ui";
 import type { BenefitLimit } from "@coverview/contracts/partner-benefits";
 import type { OfferComparison } from "@coverview/contracts/partner-comparison";
-import { amountsInText, numberFormat } from "../../number-format";
+import { amountsInText, numberFormat } from "@coverview/ui/number-format";
 
 type Cell = NonNullable<OfferComparison["rows"][number]["cells"][number]>;
 const money = (minor: number) =>

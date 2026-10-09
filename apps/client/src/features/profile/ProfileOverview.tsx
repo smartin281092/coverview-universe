@@ -6,7 +6,7 @@ import type { IdentityMe } from "@coverview/api-client";
 import type { ManagedProfile } from "@coverview/contracts";
 import { Button, Card } from "@coverview/ui";
 import { ProfileCreateDialog } from "./ProfileCreateDialog";
-import { numberFormat } from "../../number-format";
+import { numberFormat } from "@coverview/ui/number-format";
 
 export function ProfileOverview({
   identity,

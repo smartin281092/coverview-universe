@@ -6,7 +6,7 @@ import type { IdentityMe } from "@coverview/api-client";
 import { api } from "../../api";
 import { IdentityFailure } from "./IdentityFailure";
 import { forgetIdentity } from "./session-state";
-import { numberFormat } from "../../number-format";
+import { numberFormat } from "@coverview/ui/number-format";
 
 export function AccountDevices({ identity }: { identity: IdentityMe }) {
   const { t, i18n } = useTranslation();

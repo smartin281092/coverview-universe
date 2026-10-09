@@ -1,6 +1,7 @@
 import { useId, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { Input, Label } from "@coverview/ui";
+import { numberFormat } from "@coverview/ui/number-format";
 export function Field({
   name,
   label,
@@ -104,4 +105,4 @@ export const formatDate = (value: string | null) =>
       }).format(new Date(value))
     : "—";
 export const formatMoney = (minor: number) =>
-  new Intl.NumberFormat("fr-CH", { style: "currency", currency: "CHF" }).format(minor / 100);
+  numberFormat("fr-CH", { style: "currency", currency: "CHF" }).format(minor / 100);

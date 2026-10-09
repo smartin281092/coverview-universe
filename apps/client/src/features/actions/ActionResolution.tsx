@@ -18,7 +18,7 @@ import { api } from "../../api";
 import { ActionFailure } from "./ActionFailure";
 import { ActionRequirements } from "./ActionRequirements";
 import { useActionLabel } from "./use-action-label";
-import { numberFormat } from "../../number-format";
+import { numberFormat } from "@coverview/ui/number-format";
 
 const formSchema = actionCenterResolveInputSchema
   .omit({ values: true })

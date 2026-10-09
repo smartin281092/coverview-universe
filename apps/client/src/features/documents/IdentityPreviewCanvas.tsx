@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState, type PointerEvent as ReactPointerEv
 import { useTranslation } from "react-i18next";
 import { Maximize, ZoomIn, ZoomOut } from "lucide-react";
 import { Button } from "@coverview/ui";
-import { numberFormat } from "../../number-format";
+import { numberFormat } from "@coverview/ui/number-format";
 
 type ImageAsset = { document: { id: string; name: string }; url: string };
 type Point = { x: number; y: number };

@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import type { InsuranceContract, InsuranceDomain } from "@coverview/contracts";
 import { Card } from "@coverview/ui";
-import { numberFormat } from "../../number-format";
+import { numberFormat } from "@coverview/ui/number-format";
 
 const domainIcons: Record<InsuranceDomain, typeof Shield> = {
   motor: CarFront,

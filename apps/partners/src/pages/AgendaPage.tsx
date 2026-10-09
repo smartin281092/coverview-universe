@@ -8,6 +8,7 @@ import { CalendarDays } from "lucide-react";
 import { Button, Badge, EmptyState, ErrorState, LoadingState } from "@coverview/ui";
 import { useWork } from "../features/use-work";
 import { formatDate } from "../features/Field";
+import { numberFormat } from "@coverview/ui/number-format";
 export function AgendaPage() {
   const [availabilityOpen, setAvailabilityOpen] = useState(false);
   const [assessment, setAssessment] = useState<{ leadId: string; appointmentId: string }>();
@@ -77,7 +78,7 @@ export function AgendaPage() {
             )}
             <Badge variant="outline">{t(`appointment.${appt.mode}`)}</Badge>
             <span className="text-sm text-muted-foreground">
-              {new Intl.NumberFormat("fr-CH", { style: "unit", unit: "minute" }).format(
+              {numberFormat("fr-CH", { style: "unit", unit: "minute" }).format(
                 appt.durationMinutes,
               )}
             </span>
