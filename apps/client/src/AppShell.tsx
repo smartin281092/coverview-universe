@@ -28,7 +28,6 @@ const destinations = [
   { to: "/offers", key: "offers", icon: Files },
   { to: "/actions", key: "actions", icon: ListChecks },
   { to: "/insurance-requests", key: "insuranceRequests", icon: FileText },
-  { to: "/account", key: "account", icon: Settings2 },
 ] as const;
 
 function isEditingControl(target: EventTarget | null) {
@@ -80,13 +79,6 @@ export function AppShell() {
   const isCurrent = (destination: (typeof destinations)[number]["to"]) => {
     if (destination === "/actions" && pathname === "/requests") return true;
     if (destination === "/documents" && pathname.startsWith("/insurance-companies/")) return true;
-    if (destination === "/account")
-      return (
-        pathname === "/" ||
-        pathname === "/account" ||
-        pathname.startsWith("/workspace/") ||
-        pathname.startsWith("/authorizations/")
-      );
     return pathname === destination || pathname.startsWith(destination + "/");
   };
 
@@ -147,7 +139,7 @@ export function AppShell() {
                   {t("mobileNav." + destination.key)}
                   {destination.key === "actions" && actionCount !== undefined && actionCount > 0 && (
                     <span
-                      className="ml-2 inline-flex min-w-5 items-center justify-center rounded-full bg-chart-3 px-1.5 py-0.5 text-xs text-white"
+                      className="ml-2 inline-flex h-4 min-w-4 items-center justify-center rounded-sm bg-chart-3 px-1 text-2xs font-medium tabular-nums text-white"
                       aria-label={t("actions:badge", { count: actionCount })}
                     >
                       {actionCount}
@@ -160,6 +152,22 @@ export function AppShell() {
           {signedIn && (
             <div className="ml-auto flex min-w-0 items-center gap-2 sm:gap-3 md:ml-0 md:max-w-full md:justify-self-end">
               <WalletProfileSwitcher />
+              <Link
+                to="/account"
+                search={{}}
+                aria-label={t("mobileNav.account")}
+                aria-current={
+                  pathname === "/" ||
+                  pathname === "/account" ||
+                  pathname.startsWith("/workspace/") ||
+                  pathname.startsWith("/authorizations/")
+                    ? "page"
+                    : undefined
+                }
+                className="grid size-11 shrink-0 place-items-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground aria-[current=page]:bg-muted aria-[current=page]:text-foreground"
+              >
+                <Settings2 className="size-5" strokeWidth={1.5} aria-hidden="true" />
+              </Link>
               <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
                 <SheetTrigger asChild>
                   <Button
@@ -296,7 +304,7 @@ export function AppShell() {
           className="wallet-bottom-nav fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur-xl md:hidden"
         >
           <ul className="grid grid-cols-4">
-            {destinations.filter(({key})=>key!=="account"&&key!=="insuranceRequests").map(({ to, key, icon: Icon }) => {
+            {destinations.filter(({key})=>key!=="insuranceRequests").map(({ to, key, icon: Icon }) => {
               const current = isCurrent(to);
               return (
                 <li key={to}>
@@ -321,7 +329,7 @@ export function AppShell() {
                       {t("mobileNav." + key)}
                       {key === "actions" && actionCount !== undefined && actionCount > 0 && (
                         <span
-                          className="inline-flex min-w-4 items-center justify-center rounded-full bg-chart-3 px-1 text-xs text-white"
+                          className="inline-flex h-4 min-w-4 items-center justify-center rounded-sm bg-chart-3 px-1 text-2xs font-medium tabular-nums text-white"
                           aria-label={t("actions:badge", { count: actionCount })}
                         >
                           {actionCount}
