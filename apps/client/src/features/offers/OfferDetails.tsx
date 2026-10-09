@@ -1,4 +1,4 @@
-import { useId, useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import {
@@ -7,7 +7,6 @@ import {
   CalendarCheck,
   CalendarClock,
   Check,
-  ChevronUp,
   ExternalLink,
   Hash,
   type LucideIcon,
@@ -19,30 +18,17 @@ import { amountsInText, numberFormat } from "@coverview/ui/number-format";
 import { recommendationApi } from "../../api";
 import { benefitIcon, factIcon } from "./offer-icons";
 
-/** A details panel (9 October 2026): framed, with a gray header that folds it, then a white body. */
+/**
+ * A details panel (9 October 2026): framed, a gray header, a white body. It never folds: no
+ * foldable block outside the FAQ (FRONT-14).
+ */
 function Panel({ title, children }: { title: string; children: ReactNode }) {
-  const [open, setOpen] = useState(true);
-  const body = useId();
   return (
     <section className="overflow-hidden rounded-xl border border-panel-border bg-background">
-      <h2>
-        <button
-          type="button"
-          aria-expanded={open}
-          aria-controls={body}
-          onClick={() => setOpen((value) => !value)}
-          className={`flex min-h-14 w-full items-center justify-between gap-4 bg-panel-head px-5 py-4 text-left text-base font-semibold text-panel-title ${open ? "border-b border-panel-border" : ""}`}
-        >
-          {title}
-          <ChevronUp
-            aria-hidden="true"
-            className={`size-5 shrink-0 text-panel-text transition-transform duration-200 motion-reduce:transition-none ${open ? "" : "rotate-180"}`}
-          />
-        </button>
+      <h2 className="flex min-h-14 items-center border-b border-panel-border bg-panel-head px-5 py-4 text-base font-semibold text-panel-title">
+        {title}
       </h2>
-      <div id={body} hidden={!open} className="space-y-3 p-5 text-panel-text">
-        {children}
-      </div>
+      <div className="space-y-3 p-5 text-panel-text">{children}</div>
     </section>
   );
 }
