@@ -21,7 +21,14 @@ import type { PartnerActor } from "../../modules/partner-workspace/partner.polic
 import { createDatabase } from "./database.js";
 
 type Feature = { label: string; value: string; category?: BenefitCategory; chf?: number };
-type Offer = { company: string; product: string; premium: number; features: Feature[] };
+type Offer = {
+  company: string;
+  product: string;
+  premium: number;
+  features: Feature[];
+  // The 2027 comparator model whose facts the client reads with the offer (health only).
+  healthModelId?: string;
+};
 type Request = { title: string; category: LeadCategory; object: string; offers: Offer[] };
 type Contract = {
   name: string;
@@ -147,6 +154,7 @@ requests.push({
       company: "Helsana",
       product: "Modèle médecin de famille",
       premium: 487800,
+      healthModelId: "hm_5c98985a5a50ef98063296193008",
       features: [
         { label: "Franchise", value: "CHF 2500", category: "deductible", chf: 2500 },
         { label: "Couverture accident", value: "Exclue", category: "other" },
@@ -156,6 +164,7 @@ requests.push({
       company: "CSS",
       product: "Modèle Telmed",
       premium: 472320,
+      healthModelId: "hm_367fe664e913ca628ec200aa5c93",
       features: [
         { label: "Franchise", value: "CHF 2500", category: "deductible", chf: 2500 },
         { label: "Couverture accident", value: "Exclue", category: "other" },
@@ -165,6 +174,7 @@ requests.push({
       company: "Groupe Mutuel",
       product: "Modèle standard",
       premium: 559200,
+      healthModelId: "hm_b97d799899bd9126a92178cb7a0d",
       features: [
         { label: "Franchise", value: "CHF 300", category: "deductible", chf: 300 },
         { label: "Couverture accident", value: "Incluse", category: "other" },
@@ -238,6 +248,22 @@ async function main() {
   const sessions: string[] = [];
   let administrator: string | null = null;
   try {
+    // Offers published before an offer could name its model (9 October 2026) get it, once.
+    for (const request of requests)
+      for (const offer of request.offers)
+        if (offer.healthModelId) {
+          const linked = await database.pool.query(
+            `update partner_offers o set data=o.data || jsonb_build_object('healthModelId', $1::text)
+             from partner_leads l
+             where o.lead_id=l.id and l.title=$2 and l.details->>'context'=$3
+               and o.data->>'company'=$4 and o.data->>'product'=$5 and not (o.data ? 'healthModelId')`,
+            [offer.healthModelId, request.title, marker, offer.company, offer.product],
+          );
+          if (linked.rowCount)
+            process.stdout.write(
+              `${offer.company} · ${offer.product} : modèle du comparateur relié (${linked.rowCount}).\n`,
+            );
+        }
     const client = (
       await database.pool.query<{ id: string }>(
         "select id from identity_users where lower(email)=$1",
@@ -496,6 +522,7 @@ async function main() {
               summary: "",
               limitations: "",
               replacesId: null,
+              ...(offer.healthModelId ? { healthModelId: offer.healthModelId } : {}),
             }),
           },
           key(),
