@@ -2,6 +2,7 @@ packages:
   - "apps/*"
   - "packages/*"
 allowBuilds:
+  core-js: false # Postinstall affiche seulement un appel au financement ; polyfills utilisables sans lui.
   cpu-features: false # Accélérateur SSH optionnel, sans besoin pour Docker local.
   esbuild: true # Installe et vérifie le binaire de compilation officiel.
   msgpackr-extract: false # Accélérateur natif optionnel BullMQ ; implémentation JS suffisante.

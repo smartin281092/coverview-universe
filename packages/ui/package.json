@@ -4,6 +4,8 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./analytics": "./src/analytics.ts",
+    "./consent": "./src/consent.ts",
     "./styles.css": "./src/styles.css",
     "./theme.css": "./src/theme.css"
   },
@@ -15,6 +17,7 @@
     "cn": "^0.2.5",
     "lottie-web": "^5.13.0",
     "lucide-react": "^1.41.0",
+    "posthog-js": "^1.438.2",
     "radix-ui": "^1.6.7",
     "shadcn": "^4.21.0",
     "tailwindcss": "^4.3.3",

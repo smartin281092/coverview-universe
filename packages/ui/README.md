@@ -42,6 +42,10 @@ Pour toute nouvelle page à onglets, utiliser la composition `cv-tabbed-page` av
 
 Les usages de `--cv-font-mono`, y compris l’utilitaire `font-mono` et les sur-titres de `SectionHeading`, utilisent l’espacement commun `--cv-mono-letter-spacing`. Les H1 applicatifs ont une marge basse de 6 px ; la description de `SectionHeading` n’ajoute plus de marge haute. [Correction et vérifications](../../roadmap/evidence/identity-tabs-heading-spacing.md).
 
+## Consentement et mesure d'audience
+
+`@coverview/ui/consent` fournit `ConsentBanner` et `@coverview/ui/analytics` le cycle de vie PostHog (9 octobre 2026, [ADR-0011](../../adr/0011-posthog-consent.md)). Le site, Wallet et Partner les montent ; Admin ne les importe jamais. Rien de PostHog n'est chargé avant l'accord, qui est conservé par surface et versionné. Les clics sont capturés sans texte ni attributs, les adresses sans chaîne de requête, les personnes par identifiant opaque, et l'enregistrement des sessions masque tous les textes et toutes les saisies. PostHog reste éteint par défaut, même après une réinitialisation : un refus ou un retrait arrête la capture et efface ses cookies et son stockage, une déconnexion repart d'un visiteur anonyme. Sans clé, ni bandeau ni SDK.
+
 ## Règles de présentation et invariants
 
 Les boutons de taille par défaut utilisent une hauteur minimale de 44 px et 16 px de padding horizontal ; la taille large garde davantage d’espace horizontal. Le preset compact initial avait 8 px de padding horizontal, insuffisants lorsqu’une classe tactile augmentait uniquement la hauteur. La hauteur reste extensible pour un texte sur plusieurs lignes. Sur mobile, les tailles compactes conservent ces proportions et les boutons icônes restent carrés.
