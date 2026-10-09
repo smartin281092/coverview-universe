@@ -20,8 +20,9 @@ import {
   DialogDescription,
   Input,
   Label,
+  SelectField,
 } from "@coverview/ui";
-import { api, partnerApi } from "../api";
+import { api, partnerApi, recommendationApi } from "../api";
 import { usePartner } from "./PartnerSession";
 import { useLeadCommand } from "./use-lead-command";
 import { localDateTime, formatMoney, zurichInstant } from "./Field";
@@ -69,11 +70,28 @@ export function OfferDialog({
       features: previous?.features ?? [],
       summary: previous?.summary ?? "",
       limitations: previous?.limitations ?? "",
+      healthModelId: previous?.healthModelId ?? null,
     },
   });
   const features = useFieldArray({ control: form.control, name: "features" }),
     documentId = form.watch("documentId");
   const [sourceFingerprint, setSourceFingerprint] = useState<string | null>(null);
+  // Health (9 October 2026): the comparator model the offer is for, whose facts the client reads.
+  const health = lead.category === "health";
+  const models = useQuery({
+    queryKey: ["health-models", 2027],
+    queryFn: ({ signal }) => recommendationApi.models(2027, signal),
+    enabled: health,
+    staleTime: 3_600_000,
+    retry: false,
+  });
+  const byBrand = new Map<string, { value: string; label: string }[]>();
+  for (const model of models.data?.models ?? [])
+    byBrand.set(model.insurerBrand, [
+      ...(byBrand.get(model.insurerBrand) ?? []),
+      { value: model.id, label: model.name },
+    ]);
+  const modelGroups = [...byBrand].map(([label, options]) => ({ label, options }));
   const extraction = useQuery({
     queryKey: [...session.queryKey, "extraction", lead.id, documentId],
     queryFn: ({ signal }) => partnerApi.extraction(lead.id, documentId, signal),
@@ -313,6 +331,24 @@ export function OfferDialog({
             {input("validUntil", "datetime-local")}
             {input("effectiveDate", "date")}
           </div>
+          {health && (
+            <div className="space-y-2">
+              <Label htmlFor="offer-health-model">{t("field.healthModel")}</Label>
+              <SelectField
+                id="offer-health-model"
+                value={form.watch("healthModelId") ?? ""}
+                onValueChange={(value) =>
+                  form.setValue("healthModelId", value || null, { shouldDirty: true })
+                }
+                disabled={!models.data}
+                options={[{ value: "", label: t("offer.noHealthModel") }, ...modelGroups]}
+                aria-describedby="offer-health-model-help"
+              />
+              <p id="offer-health-model-help" className="text-xs text-muted-foreground">
+                {models.isError ? t("offer.healthModelsUnavailable") : t("offer.healthModelHelp")}
+              </p>
+            </div>
+          )}
           <div className="space-y-3">
             <h3 className="font-medium">{t("field.features")}</h3>
             {features.fields.map((field, index) => (

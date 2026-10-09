@@ -531,7 +531,8 @@
     "PARTNER_OFFER_EXPIRED": "Cette offre a expiré.",
     "PARTNER_IDEMPOTENCY_REUSED": "Cette opération a changé. Actualisez puis recommencez.",
     "PARTNER_APPOINTMENT_CONFLICT": "Le conseiller possède déjà un rendez-vous sur ce créneau.",
-    "PARTNER_RATE_LIMITED": "Trop de demandes pour ce destinataire aujourd’hui. Réessayez demain."
+    "PARTNER_RATE_LIMITED": "Trop de demandes pour ce destinataire aujourd’hui. Réessayez demain.",
+    "PARTNER_INVALID_HEALTH_MODEL": "Ce modèle n’existe pas dans le comparateur 2027, ou ce besoin n’est pas une assurance maladie."
   },
   "dashboard": {
     "title": "Aujourd’hui, on fait avancer les choses.",
@@ -685,7 +686,8 @@
     "featureSource": "Page / passage source",
     "featureConditions": "Conditions et exclusions",
     "verification": "Vérification",
-    "objectReference": "Repère de l’objet : numéro de police actuel, plaque ou n° de châssis (facultatif)"
+    "objectReference": "Repère de l’objet : numéro de police actuel, plaque ou n° de châssis (facultatif)",
+    "healthModel": "Modèle du comparateur 2027"
   },
   "create": {
     "edit": "Modifier le Lead",
@@ -846,7 +848,10 @@
     "removeFeature": "Retirer cette prestation",
     "sourceHelp": "L’original est conservé dans votre bibliothèque privée et partagé uniquement dans le périmètre de cette offre.",
     "publishHelp": "Les informations et le document original seront visibles par le client dans Wallet.",
-    "replaceHelp": "Une nouvelle version conserve l’historique et remplace la version active. Elle doit être vérifiée et publiée à nouveau."
+    "replaceHelp": "Une nouvelle version conserve l’historique et remplace la version active. Elle doit être vérifiée et publiée à nouveau.",
+    "noHealthModel": "Aucun modèle",
+    "healthModelHelp": "Le client verra avec l’offre les prestations de ce modèle telles que le comparateur 2027 les publie.",
+    "healthModelsUnavailable": "Les modèles du comparateur ne sont pas disponibles pour le moment : l’offre peut être ajoutée sans modèle."
   },
   "application": {
     "title": "Rejoindre CoverView Partner",
