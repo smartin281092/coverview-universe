@@ -15,7 +15,8 @@ import {
   FileDown,
 } from "lucide-react";
 import { Button, Sheet, SheetContent, SheetHeader, SheetTitle } from "@coverview/ui";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ConsentBanner, identifyAnalytics, openConsentSettings } from "@coverview/ui/consent";
 import logo from "../../../assets/logo-coverview.svg";
 import { PartnerSession, usePartner } from "./features/PartnerSession";
 import { ApplicationPage } from "./pages/ApplicationPage";
@@ -39,7 +40,13 @@ function Workspace() {
   const { t } = useTranslation(),
     { pathname } = useLocation(),
     { identity, context } = usePartner();
+  const { t: tc } = useTranslation("consent");
   const [open, setOpen] = useState(false);
+  // PostHog after consent only (9 October 2026): the person by their opaque identifier, never more.
+  useEffect(() => {
+    identifyAnalytics(identity.user.id);
+    return () => identifyAnalytics(null);
+  }, [identity.user.id]);
   const navigation = (
     <>
       <div className="mb-8 px-3">
@@ -137,6 +144,13 @@ function Workspace() {
             <ArrowUpRight className="size-3.5" />
           </a>
         )}
+        <button
+          type="button"
+          className="flex min-h-8 items-center hover:text-foreground"
+          onClick={openConsentSettings}
+        >
+          {tc("settings")}
+        </button>
         <p className="truncate pt-3">{identity.user.email}</p>
       </div>
     </>
@@ -199,10 +213,28 @@ function Workspace() {
     </div>
   );
 }
+// The consent banner stands beside the session, so signed-out pages ask it too.
+function Consent() {
+  const { t } = useTranslation("consent");
+  return (
+    <ConsentBanner
+      config={{
+        key: import.meta.env.VITE_POSTHOG_KEY,
+        host: import.meta.env.VITE_POSTHOG_HOST,
+        replay: true,
+        singlePage: true,
+      }}
+      texts={{ title: t("title"), message: t("message"), accept: t("accept"), refuse: t("refuse") }}
+    />
+  );
+}
 export function AppShell() {
   return (
-    <PartnerSession>
-      <Workspace />
-    </PartnerSession>
+    <>
+      <PartnerSession>
+        <Workspace />
+      </PartnerSession>
+      <Consent />
+    </>
   );
 }

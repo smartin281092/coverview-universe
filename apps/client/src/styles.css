@@ -76,6 +76,9 @@
   }
   .wallet-shell[data-navigation="visible"] {
     padding-bottom: calc(var(--wallet-bottom-nav-height) + env(safe-area-inset-bottom, 0px));
+    --cv-consent-offset: calc(
+      var(--wallet-bottom-nav-height) + env(safe-area-inset-bottom, 0px) + var(--spacing-16)
+    );
   }
   .wallet-shell > .cv-container,
   .wallet-shell > header > .cv-container,

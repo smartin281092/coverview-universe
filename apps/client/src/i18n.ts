@@ -18,11 +18,13 @@ import lifecycle from "./locales/fr/lifecycle.json";
 import relationships from "./locales/fr/relationships.json";
 import data from "./locales/fr/data.json";
 import complements from "./locales/fr/complements.json";
+import consent from "./locales/fr/consent.json";
 
 void i18next.use(initReactI18next).init({
   resources: {
     fr: {
       leadNotifications,
+      consent,
       offers,
       activation,
       conclusion,

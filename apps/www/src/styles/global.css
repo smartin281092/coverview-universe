@@ -521,6 +521,17 @@
   font-size: 11px;
   line-height: 1.5;
 }
+.footer-consent {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
 .interior-hero {
   padding-block: 96px 80px;
 }

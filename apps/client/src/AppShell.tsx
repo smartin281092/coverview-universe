@@ -20,6 +20,7 @@ import { WalletProfileSwitcher } from "./features/profile/WalletProfileSwitcher"
 import { useWalletProfileScope } from "./features/profile/use-wallet-profile-scope";
 import { useActionCount } from "./features/actions/use-action-count";
 import { usePassiveIdentity } from "./features/identity/session-state";
+import { ConsentBanner, identifyAnalytics, openConsentSettings } from "@coverview/ui/consent";
 
 const destinations = [
   { to: "/profile", key: "profile", icon: UserRound },
@@ -57,7 +58,11 @@ export function AppShell() {
   const { t } = useTranslation();
   const actionCount = useActionCount();
   // Menus only for a signed-in person; before that the shell is a plain sign-in page.
-  const signedIn = !!usePassiveIdentity().data;
+  const passive = usePassiveIdentity().data;
+  const signedIn = !!passive;
+  const { t: tc } = useTranslation("consent");
+  // PostHog after consent only (9 October 2026): the person by their opaque identifier, never more.
+  useEffect(() => identifyAnalytics(passive?.user.id ?? null), [passive?.user.id]);
   const { scope } = useWalletProfileScope();
   const { pathname, searchStr } = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -260,8 +265,29 @@ export function AppShell() {
             {t("website")}
           </TextLink>
           {import.meta.env.DEV && <p className="cv-meta">{t("identity.local")}</p>}
+          <button
+            type="button"
+            className="inline-flex min-h-11 items-center underline-offset-4 hover:underline"
+            onClick={openConsentSettings}
+          >
+            {tc("settings")}
+          </button>
         </Container>
       </footer>
+      <ConsentBanner
+        config={{
+          key: import.meta.env.VITE_POSTHOG_KEY,
+          host: import.meta.env.VITE_POSTHOG_HOST,
+          replay: true,
+          singlePage: true,
+        }}
+        texts={{
+          title: tc("title"),
+          message: tc("message"),
+          accept: tc("accept"),
+          refuse: tc("refuse"),
+        }}
+      />
       {signedIn && !editing && !menuOpen && (
         <nav
           aria-label={t("navigation")}

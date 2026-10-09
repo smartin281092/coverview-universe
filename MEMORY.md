@@ -6,6 +6,13 @@ Aucune entrée active. Les décisions durables vivent dans leur documentation pr
 
 ## Candidats
 
+Décisions utilisateur du 9 octobre 2026, PostHog ([plan](roadmap/plans/posthog-analytics.plan.md), [ADR-0011](adr/0011-posthog-consent.md)).
+- PostHog sur le site, Wallet et Partner, jamais Admin ; **après bandeau de consentement** (PostHog complet seulement après accord).
+- Enregistrement des sessions dans Wallet et Partner, tous textes et saisies masqués ; région **UE**.
+- L'assistant `npx @posthog/wizard` n'est pas utilisé : intégration manuelle conforme à MKT-09 et LAUNCH-04.
+
+Confiance haute : réponses explicites. Réexaminer à la publication des pages légales (LAUNCH-02) et avant le 9 janvier 2027. Aucune entrée active.
+
 Décisions du 8 octobre 2026, retours Wallet et comparateur (W-1 à W-8 du [plan](roadmap/plans/wallet-feedback-2026-10-08.plan.md)).
 - **Instruction utilisateur** : envoyer une demande depuis Wallet vaut autorisation de transmission à CoverView, sans case à cocher (« ça coule de source ») ; la reprise d'une demande du comparateur garde sa confirmation par personne.
 - **Instruction utilisateur** : toute liste déroulante d'une fenêtre utilise le `SelectField` de `@coverview/ui`, le même élément que le menu. ESLint l'impose dans Wallet ; Partner et Admin restent à convertir.

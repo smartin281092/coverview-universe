@@ -5,6 +5,7 @@ import logo from '../../../../assets/logo-coverview.svg?url';
 import icon from '../../../../assets/icon-coverview.svg?url';
 import { content } from '../content/fr/interface';
 import { marketing as copy } from '../content/fr/marketing';
+import { ConsentBanner } from '@coverview/ui/consent';
 interface Props { title: string; description: string; markdown?: string; structuredData?: Record<string, unknown>; minimal?: boolean; }
 const { title, description, markdown, structuredData, minimal = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
@@ -57,8 +58,18 @@ const nav = [copy.nav.services, copy.nav.method, copy.nav.resources];
           <div><h2>{copy.footer.company}</h2><ul><li><a href={copy.footer.links.vision.href}>{copy.footer.links.vision.label}</a></li><li><a href={copy.footer.links.questions.href}>{copy.footer.links.questions.label}</a></li><li><a href={copy.footer.links.sources.href}>{copy.footer.links.sources.label}</a></li><li><a href={copy.nav.all.href}>{copy.nav.all.label}</a></li></ul></div>
           <div><h2>{copy.footer.account}</h2><ul><li><a href="/account">{copy.nav.account.label}</a></li><li><a href={copy.footer.links.overview.href}>{copy.footer.links.overview.label}</a></li><li><a href={copy.footer.links.contact.href}>{copy.footer.links.contact.label}</a></li></ul></div>
         </div>
-        <div class="footer-bottom"><p>© {new Date().getFullYear()} {copy.footer.copyright}</p><p>{copy.footer.availability}</p></div>
+        <div class="footer-bottom"><p>© {new Date().getFullYear()} {copy.footer.copyright}</p><p>{copy.footer.availability}</p><button type="button" class="footer-consent" data-consent-open>{content.consent.settings}</button></div>
       </Container>
     </footer>}
+    {/* MKT-09: PostHog only after an explicit yes; the banner loads when the page is idle. */}
+    <ConsentBanner
+      client:idle
+      config={{ key: import.meta.env.PUBLIC_POSTHOG_KEY, host: import.meta.env.PUBLIC_POSTHOG_HOST, replay: false, singlePage: false }}
+      texts={{ title: content.consent.title, message: content.consent.message, accept: content.consent.accept, refuse: content.consent.refuse }}
+    />
+    <script>
+      import { openConsentSettings } from '@coverview/ui/analytics';
+      for (const button of document.querySelectorAll('[data-consent-open]')) button.addEventListener('click', openConsentSettings);
+    </script>
   </body>
 </html>

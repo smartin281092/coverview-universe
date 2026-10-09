@@ -17,10 +17,12 @@ import data from "./locales/fr/data.json";
 import team from "./locales/fr/team.json";
 import access from "./locales/fr/access.json";
 import complements from "./locales/fr/complements.json";
+import consent from "./locales/fr/consent.json";
 void i18next.use(initReactI18next).init({
   resources: {
     fr: {
       partner,
+      consent,
       economy,
       quality,
       communications,

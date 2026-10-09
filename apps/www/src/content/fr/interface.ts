@@ -3,6 +3,14 @@ export const content = {
   skip: "Aller au contenu",
   navigation: "Navigation principale",
   home: "Accueil",
+  consent: {
+    title: "Mesure d’audience",
+    message:
+      "Avec votre accord, CoverView mesure la fréquentation de ce site avec PostHog, hébergé dans l’Union européenne : pages vues et clics, sans le texte affiché ni vos saisies. Rien n’est envoyé sans votre accord, et vous pouvez changer d’avis à tout moment depuis « Cookies ».",
+    accept: "Accepter",
+    refuse: "Refuser",
+    settings: "Cookies",
+  },
   accountLink: "Mon compte",
   account: {
     local: "CoverView",
