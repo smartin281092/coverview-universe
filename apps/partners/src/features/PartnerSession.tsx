@@ -11,7 +11,9 @@ import {
   SessionExpiredState,
   AccessDeniedState,
 } from "@coverview/ui";
+import { openConsentSettings } from "@coverview/ui/consent";
 import { api, partnerApi, adminUrl } from "../api";
+import { analytics } from "./analytics";
 import type { LeadNavigationSearch } from "./lead-navigation-state";
 import { useLiveUpdates } from "./use-live-updates";
 import logo from "../../../../assets/logo-coverview.svg";
@@ -28,9 +30,11 @@ export function usePartner() {
   if (!value) throw new Error("Missing Partner session");
   return value;
 }
-// Before a session exists, a plain page: the logo and the state, never the menus.
+// Before a session exists, a plain page: the logo and the state, never the menus. "Cookies"
+// changes the audience measurement choice here too.
 function Frame({ children }: { children: ReactNode }) {
   const { t } = useTranslation();
+  const { t: tc } = useTranslation("consent");
   return (
     <div className="flex min-h-svh flex-col">
       <header className="border-b border-border">
@@ -39,6 +43,19 @@ function Frame({ children }: { children: ReactNode }) {
         </Container>
       </header>
       <Container className="flex-1 py-12">{children}</Container>
+      {analytics.key && (
+        <footer className="border-t border-border">
+          <Container className="flex items-center text-xs text-muted-foreground">
+            <button
+              type="button"
+              className="inline-flex min-h-11 items-center hover:text-foreground"
+              onClick={openConsentSettings}
+            >
+              {tc("settings")}
+            </button>
+          </Container>
+        </footer>
+      )}
     </div>
   );
 }

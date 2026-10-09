@@ -265,13 +265,15 @@ export function AppShell() {
             {t("website")}
           </TextLink>
           {import.meta.env.DEV && <p className="cv-meta">{t("identity.local")}</p>}
-          <button
-            type="button"
-            className="inline-flex min-h-11 items-center underline-offset-4 hover:underline"
-            onClick={openConsentSettings}
-          >
-            {tc("settings")}
-          </button>
+          {import.meta.env.VITE_POSTHOG_KEY && (
+            <button
+              type="button"
+              className="inline-flex min-h-11 items-center underline-offset-4 hover:underline"
+              onClick={openConsentSettings}
+            >
+              {tc("settings")}
+            </button>
+          )}
         </Container>
       </footer>
       <ConsentBanner
