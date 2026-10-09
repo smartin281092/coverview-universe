@@ -17,7 +17,7 @@ export type NavigationIcon =
   | "route"
   | "signature";
 export type NavigationLink = { href: string; icon: NavigationIcon; label: string };
-export type NavigationHighlight = NavigationLink & { description: string };
+type NavigationHighlight = NavigationLink & { description: string };
 export type NavigationMenu = {
   id: "comparateur" | "audit";
   label: string;
