@@ -34,6 +34,7 @@ import { InsuranceCompanyLink } from "../features/insurance/InsuranceCompanyLink
 import { DocumentLabels } from "../features/documents/DocumentLabels";
 import { DocumentThumbnails } from "../features/documents/DocumentThumbnails";
 import { DocumentProfileAssignment } from "../features/documents/DocumentProfileAssignment";
+import { numberFormat } from "../number-format";
 
 type Panel =
   "category" | "delete" | "history" | "source" | "resume" | "analysis" | { fieldId: string } | null;
@@ -371,7 +372,7 @@ function DocumentDetails({ identity, id }: { identity: IdentityMe; id: string })
           <p className="break-words text-xs text-muted-foreground">
             {t("filenameMeta", {
               name: item.name,
-              size: new Intl.NumberFormat(i18n.language, { maximumFractionDigits: 1 }).format(
+              size: numberFormat(i18n.language, { maximumFractionDigits: 1 }).format(
                 item.size / 1024,
               ),
               date: date.format(new Date(item.createdAt)),

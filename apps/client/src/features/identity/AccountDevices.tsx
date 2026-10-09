@@ -6,6 +6,7 @@ import type { IdentityMe } from "@coverview/api-client";
 import { api } from "../../api";
 import { IdentityFailure } from "./IdentityFailure";
 import { forgetIdentity } from "./session-state";
+import { numberFormat } from "../../number-format";
 
 export function AccountDevices({ identity }: { identity: IdentityMe }) {
   const { t, i18n } = useTranslation();
@@ -122,7 +123,7 @@ export function AccountDevices({ identity }: { identity: IdentityMe }) {
           </Button>
           <p className="text-sm text-muted-foreground">
             {t("identity.page", {
-              page: new Intl.NumberFormat(i18n.language).format(cursors.length + 1),
+              page: numberFormat(i18n.language).format(cursors.length + 1),
             })}
           </p>
           <Button

@@ -1,11 +1,12 @@
 import { useWalletProfileScope } from "../profile/use-wallet-profile-scope";
 import { useTranslation } from "react-i18next";
 import type { ActionCenterSummary } from "@coverview/contracts";
+import { numberFormat } from "../../number-format";
 
 export function ActionProgress({ summary }: { summary: ActionCenterSummary }) {
   const { t, i18n } = useTranslation("actions");
   const { scope } = useWalletProfileScope();
-  const percent = new Intl.NumberFormat(i18n.language, {
+  const percent = numberFormat(i18n.language, {
     style: "percent",
     maximumFractionDigits: 0,
   });

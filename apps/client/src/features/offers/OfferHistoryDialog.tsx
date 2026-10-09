@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { VersionHistoryDialog, Button } from "@coverview/ui";
 import type { IdentityMe } from "@coverview/api-client";
 import { partnerApi } from "../../partner-api";
+import { numberFormat } from "../../number-format";
 export function OfferHistoryDialog({
   leadId,
   identity,
@@ -76,7 +77,7 @@ export function OfferHistoryDialog({
                 <dd>
                   {offer.annualPremiumMinor === null
                     ? t("history.missing")
-                    : new Intl.NumberFormat(i18n.language, {
+                    : numberFormat(i18n.language, {
                         style: "currency",
                         currency: offer.currency,
                       }).format(offer.annualPremiumMinor / 100)}

@@ -1,9 +1,10 @@
 import { useTranslation } from "react-i18next";
 import type { LeadOffer } from "@coverview/contracts/partner";
 import type { LeadOrientation } from "@coverview/contracts/partner-orientation";
+import { numberFormat } from "../../number-format";
 
 const money = (minor: number) =>
-  new Intl.NumberFormat("fr-CH", { style: "currency", currency: "CHF" }).format(minor / 100);
+  numberFormat("fr-CH", { style: "currency", currency: "CHF" }).format(minor / 100);
 const date = (value: string) =>
   new Intl.DateTimeFormat("fr-CH", { dateStyle: "medium", timeZone: "Europe/Zurich" }).format(
     new Date(value),

@@ -15,6 +15,7 @@ import {
   DialogDescription,
 } from "@coverview/ui";
 import { partnerApi } from "../../partner-api";
+import { numberFormat } from "../../number-format";
 
 export type WalletChoice = {
   type: "select" | "refuse" | "question" | "modification" | "keep_current" | "interlocutor";
@@ -47,9 +48,7 @@ export function ChoiceDialog({
   const currentOffer = lead?.offers.find((offer) => offer.id === choice?.offer?.id);
   const unavailable = lead?.stage === "completed" || (!!choice?.offer && !currentOffer?.canChoose);
   const money = (value: number) =>
-    new Intl.NumberFormat(i18n.language, { style: "currency", currency: "CHF" }).format(
-      value / 100,
-    );
+    numberFormat(i18n.language, { style: "currency", currency: "CHF" }).format(value / 100);
   const date = (value: string) =>
     new Intl.DateTimeFormat(i18n.language, {
       dateStyle: "medium",

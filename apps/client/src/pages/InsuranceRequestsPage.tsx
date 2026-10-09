@@ -21,11 +21,10 @@ import {
 import { NewRequestDialog } from "../features/offers/NewRequestDialog";
 import { useWalletLiveUpdates } from "../features/offers/use-live-updates";
 import { timeline } from "../features/offers/request-timeline";
+import { numberFormat } from "../number-format";
 const stages = ["submitted", "reviewing", "insurer_contacted", "offer_ready", "completed"] as const;
 const amount = (minor: number) =>
-  new Intl.NumberFormat("fr-CH", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(
-    minor / 100,
-  );
+  numberFormat("fr-CH", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(minor / 100);
 const card =
   "flex h-full w-full flex-col gap-2 rounded-xl border border-border p-5 text-left hover:bg-muted";
 type Entry =
@@ -201,7 +200,7 @@ function Requests({ identity }: { identity: IdentityMe }) {
                           year: item.birthYear,
                           postalCode: item.locality.postalCode,
                           locality: item.locality.locality,
-                          deductible: item.deductible,
+                          deductible: numberFormat("fr-CH").format(item.deductible),
                           accident: t(item.accident ? "included" : "excluded"),
                         })}
                       </p>

@@ -6,6 +6,7 @@ import { CompanyLogo } from "../insurance/CompanyLogo";
 import { companyPalette } from "./company-colors";
 import { offerMetrics, type MetricValue } from "./offer-metrics";
 import { PixelField } from "./PixelField";
+import { numberFormat } from "../../number-format";
 
 const Shader = lazy(() => import("./OfferShader"));
 
@@ -69,7 +70,7 @@ export function OfferHero({
         period: "",
       };
     return {
-      main: new Intl.NumberFormat(i18n.language, {
+      main: numberFormat(i18n.language, {
         minimumFractionDigits: value.minor % 100 ? 2 : 0,
         maximumFractionDigits: 2,
       }).format(value.minor / 100),

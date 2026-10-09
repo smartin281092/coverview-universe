@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState, type PointerEvent as ReactPointerEv
 import { useTranslation } from "react-i18next";
 import { Maximize, ZoomIn, ZoomOut } from "lucide-react";
 import { Button } from "@coverview/ui";
+import { numberFormat } from "../../number-format";
 
 type ImageAsset = { document: { id: string; name: string }; url: string };
 type Point = { x: number; y: number };
@@ -189,14 +190,14 @@ export function IdentityPreviewCanvas({
         </Button>
         <output
           aria-label={t("zoom", {
-            value: new Intl.NumberFormat(i18n.language, {
+            value: numberFormat(i18n.language, {
               style: "percent",
               maximumFractionDigits: 0,
             }).format(view.scale),
           })}
           className="min-w-14 text-center text-sm tabular-nums"
         >
-          {new Intl.NumberFormat(i18n.language, {
+          {numberFormat(i18n.language, {
             style: "percent",
             maximumFractionDigits: 0,
           }).format(view.scale)}

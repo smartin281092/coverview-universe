@@ -4,6 +4,7 @@ import { Check, FileText } from "lucide-react";
 import type { LeadOffer } from "@coverview/api-client/partner";
 import { Badge, Button } from "@coverview/ui";
 import { CompanyLogo } from "../insurance/CompanyLogo";
+import { numberFormat } from "../../number-format";
 
 export type OfferAction = "select" | "question" | "modification" | "refuse";
 const day = (value: string) =>
@@ -82,7 +83,7 @@ export function OfferCard({
           // The monthly share of the yearly premium (8 October 2026), however it is paid.
           <p className="flex items-center gap-2">
             <span className="text-4xl leading-none font-medium tracking-tight">
-              {new Intl.NumberFormat(i18n.language, {
+              {numberFormat(i18n.language, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
               }).format(Math.round(offer.annualPremiumMinor / 12) / 100)}

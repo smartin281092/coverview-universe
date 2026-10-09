@@ -22,6 +22,7 @@ import { CompanyLogo } from "../features/insurance/CompanyLogo";
 import { InsuranceContractCard } from "../features/insurance/InsuranceContractCard";
 import { api } from "../api";
 import { MissingPage } from "./StatesPage";
+import { numberFormat } from "../number-format";
 
 const pageSize = 12;
 function Company({ identity, companyId }: { identity: IdentityMe; companyId: InsuranceCompanyId }) {
@@ -73,8 +74,8 @@ function Company({ identity, companyId }: { identity: IdentityMe; companyId: Ins
       search: { tab: nextTab, page: nextPage },
     });
   const money = (amountMinor: number, currency: string) =>
-    new Intl.NumberFormat(i18n.language, { style: "currency", currency }).format(amountMinor / 100);
-  const number = (value: number) => new Intl.NumberFormat(i18n.language).format(value);
+    numberFormat(i18n.language, { style: "currency", currency }).format(amountMinor / 100);
+  const number = (value: number) => numberFormat(i18n.language).format(value);
   const addDocument = (
     <Button asChild className="min-h-11">
       <Link to="/documents">

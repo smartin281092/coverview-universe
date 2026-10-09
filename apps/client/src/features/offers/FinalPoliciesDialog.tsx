@@ -17,6 +17,7 @@ import {
 } from "@coverview/ui";
 import { partnerApi } from "../../partner-api";
 import { FinalPolicyLinkDialog } from "./FinalPolicyLinkDialog";
+import { numberFormat } from "../../number-format";
 
 export function FinalPoliciesDialog({
   lead,
@@ -50,9 +51,7 @@ export function FinalPoliciesDialog({
   const money = (value: number | null) =>
     value === null
       ? tr("missing")
-      : new Intl.NumberFormat(i18n.language, { style: "currency", currency: "CHF" }).format(
-          value / 100,
-        );
+      : numberFormat(i18n.language, { style: "currency", currency: "CHF" }).format(value / 100);
   const date = (value: string) =>
     new Intl.DateTimeFormat(i18n.language, {
       dateStyle: "medium",

@@ -3,11 +3,12 @@ import { useTranslation } from "react-i18next";
 import { Badge, ComparisonMatrix } from "@coverview/ui";
 import type { BenefitLimit } from "@coverview/contracts/partner-benefits";
 import type { OfferComparison } from "@coverview/contracts/partner-comparison";
+import { numberFormat } from "../../number-format";
 
 type Cell = NonNullable<OfferComparison["rows"][number]["cells"][number]>;
 const money = (minor: number) =>
-  new Intl.NumberFormat("fr-CH", { style: "currency", currency: "CHF" }).format(minor / 100);
-const number = new Intl.NumberFormat("fr-CH", { maximumFractionDigits: 2 });
+  numberFormat("fr-CH", { style: "currency", currency: "CHF" }).format(minor / 100);
+const number = numberFormat("fr-CH", { maximumFractionDigits: 2 });
 
 function amount(limit: BenefitLimit, t: TFunction<"offers">) {
   const value =

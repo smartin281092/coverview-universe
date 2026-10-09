@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { ArrowUpRight, CheckCircle2 } from "lucide-react";
 import type { ActionCenterItem } from "@coverview/contracts";
 import { Button } from "@coverview/ui";
+import { numberFormat } from "../../number-format";
 
 export function ActionRequirements({
   action,
@@ -47,7 +48,7 @@ export function ActionRequirements({
                 className="flex size-7 shrink-0 items-center justify-center rounded-full border border-border bg-muted text-xs text-muted-foreground"
                 aria-hidden="true"
               >
-                {new Intl.NumberFormat(i18n.language).format(index + 1)}
+                {numberFormat(i18n.language).format(index + 1)}
               </span>
               <span className="min-w-0 flex-1 font-medium">
                 {t(`requirements.${requirement.kind}`)}

@@ -6,6 +6,7 @@ import type { IdentityMe } from "@coverview/api-client";
 import type { ManagedProfile } from "@coverview/contracts";
 import { Button, Card } from "@coverview/ui";
 import { ProfileCreateDialog } from "./ProfileCreateDialog";
+import { numberFormat } from "../../number-format";
 
 export function ProfileOverview({
   identity,
@@ -19,9 +20,7 @@ export function ProfileOverview({
   const [creating, setCreating] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
   const percent = (value: number) =>
-    new Intl.NumberFormat(i18n.language, { style: "percent", maximumFractionDigits: 0 }).format(
-      value / 100,
-    );
+    numberFormat(i18n.language, { style: "percent", maximumFractionDigits: 0 }).format(value / 100);
   return (
     <div className="space-y-8">
       <header className="space-y-3">

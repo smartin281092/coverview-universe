@@ -25,6 +25,7 @@ import { OfferDocuments } from "../features/offers/OfferDocuments";
 import { OfferHero } from "../features/offers/OfferHero";
 import { offerGroups } from "../features/offers/offer-groups";
 import { useWalletLiveUpdates } from "../features/offers/use-live-updates";
+import { numberFormat } from "../number-format";
 
 // Each tab's icon colour; the moving underline takes the colour of the open tab.
 const tabs = [
@@ -109,9 +110,7 @@ function OfferView({ identity }: { identity: IdentityMe }) {
     return () => observer.disconnect();
   }, [tab, shown, offerId]);
   const money = (minor: number) =>
-    new Intl.NumberFormat(i18n.language, { style: "currency", currency: "CHF" }).format(
-      minor / 100,
-    );
+    numberFormat(i18n.language, { style: "currency", currency: "CHF" }).format(minor / 100);
   const day = (value: string) =>
     new Intl.DateTimeFormat(i18n.language, {
       dateStyle: "medium",

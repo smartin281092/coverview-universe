@@ -13,6 +13,7 @@ import {
 } from "@coverview/ui";
 import { partnerApi } from "../../partner-api";
 import { usePictureUrl } from "./use-picture";
+import { numberFormat } from "../../number-format";
 
 const day = new Intl.DateTimeFormat("fr-CH", { dateStyle: "medium", timeZone: "Europe/Zurich" });
 const languages = new Intl.DisplayNames(["fr"], { type: "language" });
@@ -107,7 +108,10 @@ export function AdvisorProfileDialog({
             rating={
               profile.data.rating.status === "available"
                 ? t("advisorProfile.rating.available", {
-                    average: profile.data.rating.average?.toLocaleString("fr-CH"),
+                    average:
+                      profile.data.rating.average === null
+                        ? undefined
+                        : numberFormat("fr-CH").format(profile.data.rating.average),
                   })
                 : t("advisorProfile.rating.insufficient", {
                     count: profile.data.rating.count,

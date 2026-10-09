@@ -16,6 +16,14 @@ const readableText = [
     message: "INTL-08 — attribut lisible traduit par i18n.",
   },
 ];
+// Wallet (9 October 2026): numbers go through numberFormat, for the apostrophe between thousands.
+const walletNumbers = [
+  "NewExpression[callee.object.name='Intl'][callee.property.name='NumberFormat']",
+  "CallExpression[callee.property.name='toLocaleString']",
+].map((selector) => ({
+  selector,
+  message: "Nombres du Wallet : numberFormat de src/number-format.ts (1'234,50).",
+}));
 export default tseslint.config(
   {
     ignores: [
@@ -64,6 +72,12 @@ export default tseslint.config(
     },
   },
   {
+    // Before ARCH-09 below, which keeps the last word on files named after nothing.
+    files: ["apps/client/**/*.ts"],
+    ignores: ["apps/client/src/number-format.ts"],
+    rules: { "no-restricted-syntax": ["error", ...walletNumbers] },
+  },
+  {
     files: ["**/{utils,helpers,common,misc,manager,shared}.{ts,tsx}"],
     rules: {
       "no-restricted-syntax": [
@@ -87,6 +101,7 @@ export default tseslint.config(
           selector: "JSXOpeningElement[name.name='select']",
           message: "Liste déroulante : SelectField de @coverview/ui, le même élément que le menu.",
         },
+        ...walletNumbers,
       ],
     },
   },

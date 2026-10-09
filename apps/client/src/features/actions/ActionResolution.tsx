@@ -18,6 +18,7 @@ import { api } from "../../api";
 import { ActionFailure } from "./ActionFailure";
 import { ActionRequirements } from "./ActionRequirements";
 import { useActionLabel } from "./use-action-label";
+import { numberFormat } from "../../number-format";
 
 const formSchema = actionCenterResolveInputSchema
   .omit({ values: true })
@@ -176,7 +177,7 @@ export function ActionResolution({
                   className="flex size-7 shrink-0 items-center justify-center rounded-full border border-border bg-muted text-xs text-muted-foreground"
                   aria-hidden="true"
                 >
-                  {new Intl.NumberFormat(i18n.language).format(index + 1)}
+                  {numberFormat(i18n.language).format(index + 1)}
                 </span>
                 <span className="min-w-0 flex-1 space-y-1">
                   <span className="block font-medium">

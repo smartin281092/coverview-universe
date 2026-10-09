@@ -6,7 +6,7 @@ Wallet Offres : « Mandats et transmissions » présente la mission exacte, ses 
 
 ## Résumé
 
-Wallet propose les profils privés, les documents, les autorisations, le compte et les appareils connectés. Français dès le départ, textes externalisés dans `src/locales/fr/`.
+Wallet propose les profils privés, les documents, les autorisations, le compte et les appareils connectés. Français dès le départ, textes externalisés dans `src/locales/fr/`. Les nombres passent par `numberFormat` (`src/number-format.ts`) : une apostrophe sépare les milliers, comme dans 1'234,50 (décision du 9 octobre 2026) ; ESLint refuse `Intl.NumberFormat` et `toLocaleString` ailleurs dans le Wallet.
 
 Extension du 2 octobre : [Offres](src/features/offers/README.md), demandes et propositions issues des mêmes Leads que Partner. État partiel et recette : [ledger Partner](../../roadmap/evidence/partner-core.md).
 

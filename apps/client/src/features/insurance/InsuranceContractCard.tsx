@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import type { InsuranceContract, InsuranceDomain } from "@coverview/contracts";
 import { Card } from "@coverview/ui";
+import { numberFormat } from "../../number-format";
 
 const domainIcons: Record<InsuranceDomain, typeof Shield> = {
   motor: CarFront,
@@ -100,7 +101,7 @@ export function InsuranceContractCard({
           <p className="text-lg font-medium">
             {contract.premium ? (
               t("premium", {
-                amount: new Intl.NumberFormat(i18n.language, {
+                amount: numberFormat(i18n.language, {
                   style: "currency",
                   currency: contract.premium.currency,
                 }).format(contract.premium.amountMinor / 100),

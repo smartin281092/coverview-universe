@@ -29,6 +29,7 @@ import {
   photoTypes,
   prepareDocumentFile,
 } from "./document-upload-file";
+import { numberFormat } from "../../number-format";
 
 export function DocumentUpload({
   identity,
@@ -317,7 +318,7 @@ export function DocumentUpload({
                   <p className="mt-1 text-xs text-muted-foreground">
                     {t("capture.fileMeta", {
                       index: index + 1,
-                      size: new Intl.NumberFormat(i18n.language, {
+                      size: numberFormat(i18n.language, {
                         maximumFractionDigits: 1,
                       }).format(item.file.size / 1024),
                     })}

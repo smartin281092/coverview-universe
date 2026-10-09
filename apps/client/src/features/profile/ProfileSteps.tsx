@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { numberFormat } from "../../number-format";
 
 export type ProfileViewStep = "information" | "contact" | "details";
 export const profileViewSteps: ProfileViewStep[] = ["information", "contact", "details"];
@@ -28,7 +29,7 @@ export function ProfileSteps({
   const steps = profileViewSteps.filter(
     (value) => value !== "contact" || completion.contact !== undefined,
   );
-  const percent = new Intl.NumberFormat(i18n.language, {
+  const percent = numberFormat(i18n.language, {
     style: "percent",
     maximumFractionDigits: 0,
   });

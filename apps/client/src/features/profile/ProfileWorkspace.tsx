@@ -31,6 +31,7 @@ import { ProfileSectionEditor } from "./ProfileSectionEditor";
 import { IdentityAttachment } from "../authorizations/IdentityAttachment";
 import { ProfileAuthorizations } from "../authorizations/ProfileAuthorizations";
 import { type ProfileEditorBridge, type ProfileViewStep } from "./ProfileSteps";
+import { numberFormat } from "../../number-format";
 
 // The person's sections, then their authorizations (moved from the account on 8 October 2026).
 type WorkspaceTab = ProfileSectionName | "authorizations";
@@ -212,7 +213,7 @@ export function ProfileWorkspace({
   const percent = (value: number | null) =>
     value === null
       ? t("workspace.notApplicable")
-      : new Intl.NumberFormat(i18n.language, { style: "percent", maximumFractionDigits: 0 }).format(
+      : numberFormat(i18n.language, { style: "percent", maximumFractionDigits: 0 }).format(
           value / 100,
         );
   const tabs = (

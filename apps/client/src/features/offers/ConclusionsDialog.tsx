@@ -15,6 +15,7 @@ import {
 import { partnerApi } from "../../partner-api";
 import { ConclusionSignatureForm } from "./ConclusionSignatureForm";
 import { ConclusionCorrespondences } from "./ConclusionCorrespondences";
+import { numberFormat } from "../../number-format";
 export function ConclusionsDialog({
   identity,
   leadId,
@@ -98,7 +99,7 @@ export function ConclusionsDialog({
                           value:
                             item.archive.offer.annualPremiumMinor === null
                               ? t("missing")
-                              : new Intl.NumberFormat(i18n.language, {
+                              : numberFormat(i18n.language, {
                                   style: "currency",
                                   currency: "CHF",
                                 }).format(item.archive.offer.annualPremiumMinor / 100),
