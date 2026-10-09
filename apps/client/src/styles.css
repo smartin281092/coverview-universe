@@ -207,3 +207,18 @@
     animation: none;
   }
 }
+
+/* An offer's header spans the screen (8 October 2026): out of the page column and up against the
+   app's header. 100vw counts the scrollbar, so the page clips that sliver instead of scrolling. */
+.wallet-shell:has(.cv-full-bleed) {
+  overflow-x: clip;
+}
+.cv-full-bleed {
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
+  margin-top: calc(-1 * var(--spacing-24));
+}
+.cv-offer-hero-inner {
+  width: min(100% - var(--cv-page-gutter) * 2, 48rem);
+  margin-inline: auto;
+}

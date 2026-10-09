@@ -117,14 +117,15 @@ function OfferView({ identity }: { identity: IdentityMe }) {
       dateStyle: "medium",
       timeZone: "Europe/Zurich",
     }).format(new Date(value));
+  const goBack = () => {
+    if (canGoBack) router.history.back();
+    else void navigate({ to: "/offers" });
+  };
   const back = (
     <button
       type="button"
       className="wallet-back-link inline-flex min-h-11 items-center gap-2 text-sm font-medium"
-      onClick={() => {
-        if (canGoBack) router.history.back();
-        else void navigate({ to: "/offers" });
-      }}
+      onClick={goBack}
     >
       <ArrowLeft className="size-4" aria-hidden="true" />
       {t("offerPage.back")}
@@ -192,13 +193,13 @@ function OfferView({ identity }: { identity: IdentityMe }) {
     ) ?? [];
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      {back}
       <OfferHero
         offer={offer}
         category={lead.category}
         siblings={siblings.map((item) => item.offer)}
         index={index}
         onMove={move}
+        onBack={goBack}
       />
       <Tabs value={tab} onValueChange={(value) => setTab(value as Tab)} className="-mt-3 gap-6">
         <TabsList

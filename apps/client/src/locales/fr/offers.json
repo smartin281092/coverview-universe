@@ -988,7 +988,7 @@
     "metrics": {
       "capital": "Capital potentiel à la retraite",
       "premium": "Prime",
-      "monthly": "Prime mensuelle",
+      "monthly": "Prime",
       "deductible": "Franchise",
       "annual": "Prime annuelle",
       "validUntil": "Valable jusqu’au"

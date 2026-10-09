@@ -1,9 +1,11 @@
 import { Component, lazy, Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
+import { ArrowLeft } from "lucide-react";
 import type { LeadOffer } from "@coverview/api-client/partner";
 import { CompanyLogo } from "../insurance/CompanyLogo";
 import { companyPalette } from "./company-colors";
 import { offerMetrics, type MetricValue } from "./offer-metrics";
+import { PixelField } from "./PixelField";
 
 const Shader = lazy(() => import("./OfferShader"));
 
@@ -19,9 +21,10 @@ class ShaderBoundary extends Component<{ children: ReactNode }, { failed: boolea
 }
 
 /**
- * The top of an offer page (8 October 2026): an animated gradient in the company's colours, the
- * product and company, two figures that depend on the need, and dots to move between the offers
- * of the same request, by tapping or by swiping.
+ * The top of an offer page (8 October 2026), across the whole screen: the company's colours as an
+ * animated gradient blurred behind flickering pixels, the way back, the product and company, two
+ * figures that depend on the need, and dots to move between the offers of the same request, by
+ * tapping or by swiping.
  */
 export function OfferHero({
   offer,
@@ -29,12 +32,14 @@ export function OfferHero({
   siblings,
   index,
   onMove,
+  onBack,
 }: {
   offer: LeadOffer;
   category: string;
   siblings: LeadOffer[];
   index: number;
   onMove: (index: number) => void;
+  onBack: () => void;
 }) {
   const { t, i18n } = useTranslation("offers");
   const palette = companyPalette(offer.companyId);
@@ -81,7 +86,7 @@ export function OfferHero({
   return (
     <section
       aria-label={t("offerPage.heroLabel", { company: offer.company, product: offer.product })}
-      className="relative isolate touch-pan-y select-none overflow-hidden rounded-2xl text-white"
+      className="cv-full-bleed relative isolate touch-pan-y select-none overflow-hidden text-white"
       style={{
         background: `radial-gradient(ellipse at 85% 0%, ${palette[2]}, transparent 55%), radial-gradient(ellipse at 10% 100%, ${palette[1]}, transparent 60%), ${palette[0]}`,
       }}
@@ -115,74 +120,90 @@ export function OfferHero({
         aria-hidden="true"
         className="absolute inset-0 -z-10 bg-gradient-to-t from-black/60 via-black/15 to-transparent"
       />
+      {/* The gradient is blurred behind the content; the pixels stay sharp above it. */}
       <div
-        className={`flex min-h-72 flex-col justify-end gap-6 p-6 sm:min-h-80 sm:p-8 ${
+        className={`relative flex min-h-72 flex-col justify-end gap-6 py-6 backdrop-blur-[60px] sm:min-h-80 sm:py-8 ${
           siblings.length > 1 ? "pb-2 sm:pb-3" : ""
         }`}
       >
-        <div className="flex items-center gap-4">
-          <div className="grid size-16 shrink-0 place-items-center rounded-2xl bg-white p-2 shadow-sm">
-            {offer.companyId ? (
-              <CompanyLogo companyId={offer.companyId} className="max-h-10 max-w-12" />
-            ) : (
-              <span aria-hidden="true" className="text-lg font-semibold text-[#111e38]">
-                {initials}
-              </span>
+        <PixelField className="pointer-events-none absolute inset-0 size-full" />
+        <div className="cv-offer-hero-inner relative flex flex-1 flex-col justify-between gap-6">
+          <button
+            type="button"
+            className="inline-flex min-h-11 w-fit items-center gap-2 text-sm font-medium text-white/70 transition-colors hover:text-white"
+            onClick={onBack}
+          >
+            <ArrowLeft className="size-4" aria-hidden="true" />
+            {t("offerPage.back")}
+          </button>
+          <div className="flex flex-col gap-6">
+            <div className="flex items-center gap-4">
+              <div className="grid size-16 shrink-0 place-items-center rounded-2xl bg-white p-2 shadow-sm">
+                {offer.companyId ? (
+                  <CompanyLogo companyId={offer.companyId} className="max-h-10 max-w-12" />
+                ) : (
+                  <span aria-hidden="true" className="text-lg font-semibold text-[#111e38]">
+                    {initials}
+                  </span>
+                )}
+              </div>
+              <div className="min-w-0">
+                <h1 className="text-2xl font-semibold leading-tight text-balance">
+                  {offer.product}
+                </h1>
+                <p className="text-white/75">{offer.company}</p>
+              </div>
+            </div>
+            <dl className="grid grid-cols-2 gap-6">
+              {offerMetrics(offer, category).map(({ label, value }) => {
+                const { main, unit, period } = figure(value);
+                return (
+                  <div key={label} className="min-w-0">
+                    <dt className="text-sm text-white/75">{t(`offerPage.metrics.${label}`)}</dt>
+                    <dd className="mt-1 flex items-center gap-2 text-2xl font-semibold sm:text-3xl">
+                      <span className="min-w-0 break-words">{main}</span>
+                      {/* The currency over the period, as on the offer cards. */}
+                      {unit && (
+                        <span className="flex flex-col text-xs leading-tight font-medium text-white/70">
+                          <span>{unit}</span>
+                          {period && <span>{period}</span>}
+                        </span>
+                      )}
+                    </dd>
+                  </div>
+                );
+              })}
+            </dl>
+            {siblings.length > 1 && (
+              <div
+                className="-mt-4 flex justify-center gap-1"
+                role="group"
+                aria-label={t("offerPage.dots")}
+              >
+                {siblings.map((item, position) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className="grid h-6 min-w-6 place-items-center"
+                    aria-label={t("offerPage.dot", {
+                      index: position + 1,
+                      total: siblings.length,
+                      name: `${item.company} · ${item.product}`,
+                    })}
+                    aria-current={position === index ? "true" : undefined}
+                    onClick={() => onMove(position)}
+                  >
+                    <span
+                      className={`h-2 rounded-full transition-all ${
+                        position === index ? "w-6 bg-white" : "w-2 bg-white/45"
+                      }`}
+                    />
+                  </button>
+                ))}
+              </div>
             )}
           </div>
-          <div className="min-w-0">
-            <h1 className="text-2xl font-semibold leading-tight text-balance">{offer.product}</h1>
-            <p className="text-white/75">{offer.company}</p>
-          </div>
         </div>
-        <dl className="grid grid-cols-2 gap-6">
-          {offerMetrics(offer, category).map(({ label, value }) => {
-            const { main, unit, period } = figure(value);
-            return (
-              <div key={label} className="min-w-0">
-                <dt className="text-sm text-white/75">{t(`offerPage.metrics.${label}`)}</dt>
-                <dd className="mt-1 flex items-center gap-2 text-2xl font-semibold sm:text-3xl">
-                  <span className="min-w-0 break-words">{main}</span>
-                  {/* The currency over the period, as on the offer cards. */}
-                  {unit && (
-                    <span className="flex flex-col text-xs leading-tight font-medium text-white/70">
-                      <span>{unit}</span>
-                      {period && <span>{period}</span>}
-                    </span>
-                  )}
-                </dd>
-              </div>
-            );
-          })}
-        </dl>
-        {siblings.length > 1 && (
-          <div
-            className="-mt-4 flex justify-center gap-1"
-            role="group"
-            aria-label={t("offerPage.dots")}
-          >
-            {siblings.map((item, position) => (
-              <button
-                key={item.id}
-                type="button"
-                className="grid h-6 min-w-6 place-items-center"
-                aria-label={t("offerPage.dot", {
-                  index: position + 1,
-                  total: siblings.length,
-                  name: `${item.company} · ${item.product}`,
-                })}
-                aria-current={position === index ? "true" : undefined}
-                onClick={() => onMove(position)}
-              >
-                <span
-                  className={`h-2 rounded-full transition-all ${
-                    position === index ? "w-6 bg-white" : "w-2 bg-white/45"
-                  }`}
-                />
-              </button>
-            ))}
-          </div>
-        )}
       </div>
     </section>
   );
