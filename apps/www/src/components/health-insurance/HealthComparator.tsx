@@ -1,6 +1,7 @@
 import { HealthGradient } from "./HealthGradient";
 import { useEffect, useMemo, useState } from "react";
 import { createApiClient } from "@coverview/api-client";
+import { openConsentSettings } from "@coverview/ui/analytics";
 import {
   createHealthClient,
   type HealthStatus,
@@ -449,6 +450,11 @@ export default function HealthComparator({
         <span>© CoverView</span>
         <p>{copy.gross}</p>
         <button onClick={() => setShowSources(true)}>{copy.sources} ↗</button>
+        {import.meta.env.PUBLIC_POSTHOG_KEY && (
+          <button type="button" onClick={openConsentSettings}>
+            {copy.cookies}
+          </button>
+        )}
       </footer>
       <HealthDialog open={showFilters} onClose={() => setShowFilters(false)} title={copy.filters}>
         {foreign && <p className="hi-small">{copy.foreignNoFilters}</p>}

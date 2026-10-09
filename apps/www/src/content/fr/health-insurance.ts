@@ -142,6 +142,7 @@ export const healthCopy = {
   toolName: "Comparateur maladie",
   sourceBadge: "Primes officielles 2027",
   sources: "Sources & méthode",
+  cookies: "Cookies",
   sourcesTitle: "Une comparaison que vous pouvez vérifier",
   sourceIntro:
     "Les primes proviennent de l’OFSP / Priminfo. La commune de domicile détermine la région de primes : un même NPA peut correspondre à plusieurs communes.",

@@ -74,7 +74,7 @@ Parcours de lecture locaux S-010/S-011 et simulations pédagogiques de la landin
 
 ## Consentement et traceurs (MKT-09)
 
-Inventaire au 9 octobre 2026 ([ADR-0011](../../adr/0011-posthog-consent.md)). Rien n'est chargé avant « Accepter » ; « Cookies », en pied de page, rouvre le choix. Un refus ou un retrait arrête PostHog et efface ses identifiants.
+Inventaire au 9 octobre 2026 ([ADR-0011](../../adr/0011-posthog-consent.md)). Rien n'est chargé avant « Accepter » ; « Cookies », en pied de page (y compris l'accueil et le comparateur), rouvre le choix ; la page de suivi d'une demande, sans pied de page, n'en a pas. Un refus ou un retrait arrête PostHog et efface ses identifiants.
 
 | Élément                  | Finalité                             | Chargé                                                          | Données                                                                                                        | Stockage                                                                                                                                                        |
 | ------------------------ | ------------------------------------ | --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |

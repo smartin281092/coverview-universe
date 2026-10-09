@@ -994,6 +994,9 @@
   margin-left: auto;
   font-size: 10px;
 }
+.hi-footer > button + button {
+  margin-left: 0;
+}
 .hi-sr-only {
   position: absolute;
   width: 1px;

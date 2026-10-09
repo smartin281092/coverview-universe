@@ -2,6 +2,7 @@
 import TitleText from './TitleText.astro';
 import { ButtonLink } from '@coverview/ui';
 import { landing as c } from '../../content/fr/landing';
+import { content } from '../../content/fr/interface';
 import logo from '../../../../../assets/logo-coverview.svg?url';
 import icon from '../../../../../assets/icon-coverview.svg?url';
 import WalletCard from './WalletCard.astro';
@@ -77,7 +78,7 @@ const walletDocuments = walletOrigin ? new URL('/documents', walletOrigin).href 
 
   <section class="closing-section"><div class="closing-aurora" aria-hidden="true"></div><div class="lp-container center-heading" data-reveal><p class="lp-eyebrow">{c.closing.eyebrow}</p><h2><TitleText text={c.closing.title}/></h2><p class="lp-description">{c.closing.description}</p><button class="lp-button" data-open-dialog="start-analysis">{c.cta}<Arrow/></button><a class="hero-alternative" href="#simuler">{c.alternative}<span aria-hidden="true">↗</span></a><p class="closing-note">{c.closing.note}</p></div></section>
 
-  <footer class="lp-footer"><div class="lp-container"><div class="lp-footer-top"><div><a href="/" class="lp-logo"><img src={logo} alt="CoverView" width="444" height="73"/></a><p>{c.footer.tagline}</p></div><nav aria-label={c.footerLabel}>{c.footer.links.map(link=><a href={link.href}>{link.label}<span aria-hidden="true">↗</span></a>)}</nav></div><div class="lp-footer-bottom"><p>© {new Date().getFullYear()} {c.footer.copyright}</p><p>{c.footer.address}</p><span>{c.footer.status}</span></div></div></footer>
+  <footer class="lp-footer"><div class="lp-container"><div class="lp-footer-top"><div><a href="/" class="lp-logo"><img src={logo} alt="CoverView" width="444" height="73"/></a><p>{c.footer.tagline}</p></div><nav aria-label={c.footerLabel}>{c.footer.links.map(link=><a href={link.href}>{link.label}<span aria-hidden="true">↗</span></a>)}</nav></div><div class="lp-footer-bottom"><p>© {new Date().getFullYear()} {c.footer.copyright}</p><p>{c.footer.address}</p><span>{c.footer.status}</span>{import.meta.env.PUBLIC_POSTHOG_KEY && <button type="button" class="footer-consent" data-consent-open>{content.consent.settings}</button>}</div></div></footer>
 
   <dialog class="lp-dialog entry-dialog" id="start-analysis" aria-labelledby="entry-title" aria-describedby="entry-description"><div class="dialog-top"><img src={icon} width="30" height="28" alt=""/><button class="dialog-close" data-close-dialog aria-label={c.entry.close}>×</button></div><h2 id="entry-title"><TitleText text={c.entry.title}/></h2><p id="entry-description">{c.entry.description}</p><div class="entry-options"><div><span class="entry-icon" aria-hidden="true">▤</span><h3><TitleText text={c.entry.with}/></h3><p>{c.entry.withText}</p><small>{c.entry.withNote}</small><a href={walletDocuments} class="lp-button">{c.entry.withCta}<Arrow/></a></div><div><span class="entry-icon" aria-hidden="true">↗</span><h3><TitleText text={c.entry.without}/></h3><p>{c.entry.withoutText}</p><small>{c.entry.withoutNote}</small><a href="#simuler" class="lp-button lp-button-secondary" data-close-dialog>{c.entry.withoutCta}<Arrow/></a></div></div></dialog>
   <noscript><style>.motion-toggle{display:none!important}</style><div class="lp-container"><a class="lp-text-link" href={walletDocuments}>{c.entry.withCta} ↗</a></div></noscript>
