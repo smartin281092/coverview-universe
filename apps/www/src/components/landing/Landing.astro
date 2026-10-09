@@ -13,18 +13,15 @@ import BrandWheel from './BrandWheel.astro';
 import RetirementPreview from './RetirementPreview.astro';
 import PerformanceProof from './PerformanceProof.astro';
 import '../../styles/landing.css';
+import { SiteHeader } from '../site/SiteHeader';
+import { siteLinks } from '../site/site-links';
 const walletOrigin = import.meta.env.PUBLIC_WALLET_URL ?? (import.meta.env.DEV ? 'http://127.0.0.1:4101' : undefined);
 const walletAccount = walletOrigin ? new URL('/account', walletOrigin).href : '/account';
 const walletDocuments = walletOrigin ? new URL('/documents', walletOrigin).href : '/account';
+const links = siteLinks(Astro.site?.origin ?? Astro.url.origin);
 ---
 <div class="lp" data-landing>
-  <header class="lp-header">
-    <div class="lp-container lp-header-inner">
-      <a class="lp-logo" href="/" aria-label="CoverView"><img src={logo} alt="CoverView" width="444" height="73" /></a>
-      <nav aria-label={c.navLabel}>{c.nav.map(item=><a href={item.href}>{item.label}</a>)}</nav>
-      <div class="lp-header-actions"><a class="lp-account" href={walletAccount}>{c.account}<span aria-hidden="true">↗</span></a><button class="lp-button lp-button-small" data-open-dialog="start-analysis">{c.cta}<Arrow /></button><button class="motion-toggle" data-motion-toggle data-play-label={c.motion.play} aria-label={c.motion.pause} aria-pressed="false"><span class="pause-icon" aria-hidden="true">Ⅱ</span><span class="play-icon" aria-hidden="true">▷</span></button></div>
-    </div>
-  </header>
+  <SiteHeader client:load pathname="/" {...links}><button class="motion-toggle" data-motion-toggle data-play-label={c.motion.play} aria-label={c.motion.pause} aria-pressed="false"><span class="pause-icon" aria-hidden="true">Ⅱ</span><span class="play-icon" aria-hidden="true">▷</span></button></SiteHeader>
 
   <section class="lp-hero" aria-labelledby="hero-title">
     <div class="hero-aurora" aria-hidden="true"><i></i><i></i><i></i></div>

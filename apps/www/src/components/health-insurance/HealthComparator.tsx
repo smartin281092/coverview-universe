@@ -11,9 +11,9 @@ import {
   type HealthOffer,
   type HealthCurrentSelection,
 } from "@coverview/api-client/health-insurance";
-import logo from "../../../../../assets/logo-coverview.svg?url";
 import { healthCopy as copy } from "../../content/fr/health-insurance";
 import { HealthIcon } from "./HealthIcon";
+import { SiteHeader } from "../site/SiteHeader";
 import { HealthDialog } from "./HealthDialog";
 import { LocalitySearch } from "./LocalitySearch";
 import { SwissPremiumMap } from "./SwissPremiumMap";
@@ -24,7 +24,6 @@ import { RecommendationResults } from "./RecommendationResults";
 import { HealthSelect } from "./HealthSelect";
 import { HealthLocate } from "./HealthLocate";
 import { HealthCheckout, type CheckoutCandidate } from "./HealthCheckout";
-import { offerCopy } from "../../content/fr/insurance-requests";
 import { integer, interpolate, money, regionName } from "./health-format";
 import { HealthCurrentInsurance } from "./HealthCurrentInsurance";
 import { HealthPremiumDifference } from "./HealthPremiumDifference";
@@ -72,6 +71,13 @@ export default function HealthComparator({
   const [checkout, setCheckout] = useState(false);
   const [candidate, setCandidate] = useState<CheckoutCandidate | null>(null);
   const [cartCount, setCartCount] = useState(0);
+  useEffect(() => {
+    const address = new URL(window.location.href);
+    if (address.searchParams.get("panier") !== "1") return;
+    address.searchParams.delete("panier");
+    window.history.replaceState(window.history.state, "", address);
+    if (requestsEnabled) setCheckout(true);
+  }, [requestsEnabled]);
   const [currentInsurance, setCurrentInsurance] = useState<HealthCurrentSelection | null>(null);
   const [profileRevision, setProfileRevision] = useState(0);
   const [recommendation, setRecommendation] = useState<HealthGuideSnapshot>({
@@ -249,44 +255,19 @@ export default function HealthComparator({
   );
   return (
     <div className="health-comparator">
-      <header className="hi-header">
-        <a href="/" aria-label={copy.back} className="hi-logo">
-          <img src={logo} width="118" height="20" alt="CoverView" />
-        </a>
-        <span className="hi-header-divider" />
-        <a href="/comparateur-assurance-maladie-2027" className="hi-header-title">
-          {copy.toolName}
-        </a>
-        {requestsEnabled && (
-          <div className="hi-header-right">
-            <button
-              className="hi-cart-link"
-              aria-label={`${offerCopy.cart} (${cartCount})`}
-              onClick={() => {
-                setCandidate(null);
-                setCheckout(true);
-              }}
-            >
-              <HealthIcon name="bag" size={19} />
-              <span className="hi-cart-label">{offerCopy.cart}</span>{" "}
-              <span className="hi-cart-count">{cartCount}</span>
-            </button>
-            <a
-              className="hi-sign-in"
-              href={createApiClient({ baseUrl: apiUrl }).loginUrl("wallet")}
-            >
-              {copy.signIn}
-            </a>
-            <a
-              className="hi-primary hi-create-account"
-              href={walletUrl ? `${walletUrl}/profile` : "/account"}
-            >
-              <HealthGradient />
-              {copy.createAccount}
-            </a>
-          </div>
-        )}
-      </header>
+      <SiteHeader
+        pathname="/comparateur-assurance-maladie-2027"
+        requestsEnabled={requestsEnabled}
+        loginUrl={createApiClient({ baseUrl: apiUrl }).loginUrl("wallet")}
+        accountUrl={walletUrl ? `${walletUrl}/profile` : "/account"}
+        cart={{
+          count: cartCount,
+          onOpen: () => {
+            setCandidate(null);
+            setCheckout(true);
+          },
+        }}
+      />
       <section className="hi-intro">
         <div>
           <p className="hi-eyebrow">{copy.eyebrow}</p>

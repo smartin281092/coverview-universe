@@ -7,6 +7,6 @@ const apiUrl = import.meta.env.PUBLIC_API_URL ?? (import.meta.env.DEV ? 'http://
 const walletUrl = import.meta.env.PUBLIC_WALLET_URL ?? (import.meta.env.DEV ? 'http://127.0.0.1:4101' : undefined);
 const requestsEnabled = import.meta.env.PUBLIC_REQUESTS_ENABLED !== 'false';
 ---
-<Layout title={healthCopy.title} description={healthCopy.description} minimal structuredData={{'@context':'https://schema.org','@type':'WebPage',name:healthCopy.title,description:healthCopy.description,url:'https://coverview.ch/comparateur-assurance-maladie-2027',inLanguage:'fr-CH'}}>
+<Layout title={healthCopy.title} description={healthCopy.description} minimal ownHeader structuredData={{'@context':'https://schema.org','@type':'WebPage',name:healthCopy.title,description:healthCopy.description,url:'https://coverview.ch/comparateur-assurance-maladie-2027',inLanguage:'fr-CH'}}>
   <HealthComparator apiUrl={apiUrl} walletUrl={walletUrl} requestsEnabled={requestsEnabled} client:load />
 </Layout>
