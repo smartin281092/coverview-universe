@@ -1,5 +1,7 @@
 # CoverView Partner
 
+Offre maladie (9 octobre 2026) : le formulaire d’offre propose « Modèle du comparateur 2027 », modèles groupés par assureur ; le client lit avec l’offre les prestations de ce modèle. Sans catalogue disponible, l’offre s’ajoute sans modèle.
+
 Nombres (9 octobre 2026) : comme dans Wallet, `numberFormat` (`@coverview/ui/number-format`) sépare les milliers par une apostrophe et les décimales par une virgule (1'234,50 CHF) ; les montants écrits à côté de « CHF » dans les offres (valeurs, conditions, exclusions, résumé, limites) s'affichent de même avec `amountsInText`, les citations des documents restant exactes. ESLint refuse `Intl.NumberFormat` et `toLocaleString` ailleurs dans Partner.
 
 Depuis le 4 octobre 2026, toutes les migrations Partner sont dans le catalogue normal ([activation](../api/src/modules/partner-workspace/README.md)). Les mentions « hors catalogue » ci-dessous sont historiques. La recette authentifiée reste à faire.
