@@ -1,11 +1,10 @@
-import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useCanGoBack, useNavigate, useParams, useRouter } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft, Check, FileText, Info, MessageSquare } from "lucide-react";
 import type { IdentityMe } from "@coverview/api-client";
 import {
-  Badge,
   Button,
   EmptyState,
   ErrorState,
@@ -21,11 +20,11 @@ import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { useWalletProfileScope } from "../features/profile/use-wallet-profile-scope";
 import { LeadWorkspace, walletLeadsKey } from "../features/offers/LeadWorkspace";
 import type { OfferAction } from "../features/offers/OfferCard";
+import { OfferDetails } from "../features/offers/OfferDetails";
 import { OfferDocuments } from "../features/offers/OfferDocuments";
 import { OfferHero } from "../features/offers/OfferHero";
 import { offerGroups } from "../features/offers/offer-groups";
 import { useWalletLiveUpdates } from "../features/offers/use-live-updates";
-import { amountsInText, numberFormat } from "@coverview/ui/number-format";
 
 // Each tab's icon colour; the moving underline takes the colour of the open tab.
 const tabs = [
@@ -42,25 +41,6 @@ const commentKinds = [
   "client.select",
   "client.keep_current",
 ];
-
-function Section({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <section className="space-y-3 border-t border-border pt-6 first:border-t-0 first:pt-0">
-      <h2 className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
-        {title}
-      </h2>
-      {children}
-    </section>
-  );
-}
-function Row({ label, children }: { label: string; children: ReactNode }) {
-  return (
-    <div className="grid grid-cols-[minmax(0,11rem)_minmax(0,1fr)] gap-4 py-1.5">
-      <dt className="text-muted-foreground">{label}</dt>
-      <dd className="min-w-0 break-words">{children}</dd>
-    </div>
-  );
-}
 
 // One offer (8 October 2026): its figures over the company's gradient, then its details, the
 // client's messages and its documents.
@@ -109,8 +89,6 @@ function OfferView({ identity }: { identity: IdentityMe }) {
     observer.observe(node);
     return () => observer.disconnect();
   }, [tab, shown, offerId]);
-  const money = (minor: number) =>
-    numberFormat(i18n.language, { style: "currency", currency: "CHF" }).format(minor / 100);
   const day = (value: string) =>
     new Intl.DateTimeFormat(i18n.language, {
       dateStyle: "medium",
@@ -205,18 +183,25 @@ function OfferView({ identity }: { identity: IdentityMe }) {
           ref={tabList}
           variant="line"
           aria-label={t("offerPage.tabsLabel")}
-          className="relative w-full justify-start gap-0.5 overflow-x-auto border-b border-border p-0 [scrollbar-width:none] group-data-horizontal/tabs:h-12 sm:gap-6 [&::-webkit-scrollbar]:hidden"
+          className="relative w-full justify-start gap-0.5 overflow-x-auto p-0 [scrollbar-width:none] group-data-horizontal/tabs:h-12 sm:gap-6 [&::-webkit-scrollbar]:hidden"
         >
           {tabs.map(({ id, icon: Icon, tone }) => (
             <TabsTrigger
               key={id}
               value={id}
-              className="h-full flex-none gap-1.5 px-1 text-[13px] font-normal text-muted-foreground after:hidden data-active:text-foreground sm:px-1.5 sm:text-sm"
+              className="h-full flex-none gap-1.5 px-1 text-[13px] font-normal text-tab-idle after:hidden data-active:text-foreground sm:px-1.5 sm:text-sm"
             >
-              <Icon className={`size-4 ${tone}`} aria-hidden="true" />
+              <Icon
+                className={`size-4 ${tab === id ? tone : "text-tab-idle"}`}
+                aria-hidden="true"
+              />
               {t(`offerPage.tabs.${id}`)}
             </TabsTrigger>
           ))}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-[3px] bg-tab-track"
+          />
           {underline && (
             <span
               aria-hidden="true"
@@ -230,76 +215,7 @@ function OfferView({ identity }: { identity: IdentityMe }) {
           )}
         </TabsList>
         <TabsContent value="details" className="space-y-6 text-sm">
-          <Section title={t("offerPage.details.offer")}>
-            <dl>
-              <Row label={t("offerPage.details.company")}>{offer.company}</Row>
-              <Row label={t("offerPage.details.product")}>{offer.product}</Row>
-              <Row label={t("offerPage.details.premium")}>
-                {offer.annualPremiumMinor === null
-                  ? t("missing")
-                  : `${money(offer.annualPremiumMinor)} ${t("workspace.perYear")}`}
-              </Row>
-              <Row label={t("offerPage.details.validUntil")}>
-                {offer.validUntil ? day(offer.validUntil) : t("missing")}
-              </Row>
-              <Row label={t("offerPage.details.effectiveDate")}>
-                {offer.effectiveDate ? day(offer.effectiveDate) : t("missing")}
-              </Row>
-              {offer.reference && (
-                <Row label={t("offerPage.details.reference")}>{offer.reference}</Row>
-              )}
-              <Row label={t("offerPage.details.status")}>
-                {selected ? (
-                  <Badge className="cv-offer-tag h-6 px-2.5 text-xs [&>svg]:size-3.5!">
-                    <Check aria-hidden="true" />
-                    {t("state.selected")}
-                  </Badge>
-                ) : ["published", "viewed"].includes(offer.state) ? (
-                  t("offerPage.details.available")
-                ) : (
-                  t(`state.${offer.state}`)
-                )}
-              </Row>
-            </dl>
-          </Section>
-          <Section title={t("offerPage.details.benefits")}>
-            {offer.features.length ? (
-              <dl>
-                {offer.features.map((feature) => (
-                  <Row key={feature.key} label={feature.label}>
-                    <span className="inline-flex flex-wrap items-center gap-2">
-                      {feature.value ? amountsInText(feature.value, i18n.language) : t("missing")}
-                      {feature.coverage === "included" && (
-                        <Badge variant="outline">{t("offerPage.details.included")}</Badge>
-                      )}
-                      {feature.coverage === "excluded" && (
-                        <Badge variant="outline">{t("offerPage.details.excluded")}</Badge>
-                      )}
-                    </span>
-                    {feature.conditions && (
-                      <span className="mt-1 block text-xs text-muted-foreground">
-                        {amountsInText(feature.conditions, i18n.language)}
-                      </span>
-                    )}
-                  </Row>
-                ))}
-              </dl>
-            ) : (
-              <p className="text-muted-foreground">{t("offerPage.details.noBenefits")}</p>
-            )}
-          </Section>
-          {offer.summary && (
-            <Section title={t("offerPage.details.summary")}>
-              <p className="whitespace-pre-wrap">{amountsInText(offer.summary, i18n.language)}</p>
-            </Section>
-          )}
-          {offer.limitations && (
-            <Section title={t("offerPage.details.limitations")}>
-              <p className="whitespace-pre-wrap">
-                {amountsInText(offer.limitations, i18n.language)}
-              </p>
-            </Section>
-          )}
+          <OfferDetails offer={offer} />
           <Button
             disabled={
               !offer.canChoose ||

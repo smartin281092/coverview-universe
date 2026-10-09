@@ -1005,8 +1005,6 @@
     "notFoundDescription": "Cette offre n’est plus proposée ou n’est plus accessible depuis ce profil.",
     "details": {
       "offer": "Offre",
-      "company": "Compagnie",
-      "product": "Produit",
       "premium": "Prime annuelle",
       "validUntil": "Valable jusqu’au",
       "effectiveDate": "Date d’effet",
@@ -1039,6 +1037,17 @@
       "emptyDescription": "Le document original de cette offre n’est pas disponible.",
       "sign": "Signer",
       "signatureSoon": "La signature dans CoverView arrive bientôt."
+    },
+    "model": {
+      "loading": "Chargement des prestations du modèle…",
+      "unavailable": "Les prestations du modèle ne sont pas disponibles pour le moment.",
+      "intro": "Prestations publiées par le comparateur 2027 pour le modèle {{insurer}} {{name}}.",
+      "model": "Prestations du modèle",
+      "club": "Avantages membres",
+      "conditions": "Conditions : {{text}}",
+      "exclusions": "Exclusions : {{text}}",
+      "source": "Source",
+      "partial": "Repères tirés des documents publics de l’assureur et vérifiés par CoverView ; les conditions générales et le contrat font foi."
     }
   }
 }

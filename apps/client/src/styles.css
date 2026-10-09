@@ -1,6 +1,20 @@
 @import "@coverview/ui/styles.css";
 @source "../../../packages/ui/src";
 
+/* Offer details (9 October 2026): the grays and lines of the user's examples (summary card,
+   idle tab), and a smaller size for counters. */
+@theme {
+  --color-panel-border: #e5e7eb;
+  --color-panel-head: #fafafa;
+  --color-panel-inset: #f9fafb;
+  --color-panel-text: #4b5563;
+  --color-panel-title: #030712;
+  --color-tab-idle: #4b5563;
+  --color-tab-track: #f5f5f5;
+  --text-2xs: 0.625rem;
+  --text-2xs--line-height: 1;
+}
+
 @layer base {
   a,
   button,
