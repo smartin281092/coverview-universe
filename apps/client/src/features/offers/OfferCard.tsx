@@ -4,7 +4,7 @@ import { Check, FileText } from "lucide-react";
 import type { LeadOffer } from "@coverview/api-client/partner";
 import { Badge, Button } from "@coverview/ui";
 import { CompanyLogo } from "../insurance/CompanyLogo";
-import { numberFormat } from "../../number-format";
+import { amountsInText, numberFormat } from "../../number-format";
 
 export type OfferAction = "select" | "question" | "modification" | "refuse";
 const day = (value: string) =>
@@ -106,11 +106,15 @@ export function OfferCard({
           {t(`history.sourceStatus.${offer.sourceStatus}`)}
         </p>
       )}
-      {offer.summary && <p className="whitespace-pre-wrap text-sm">{offer.summary}</p>}
+      {offer.summary && (
+        <p className="whitespace-pre-wrap text-sm">{amountsInText(offer.summary, i18n.language)}</p>
+      )}
       {offer.limitations && (
         <details className="relative z-10 text-sm">
           <summary className="cursor-pointer">{t("limitations")}</summary>
-          <p className="mt-2 whitespace-pre-wrap text-xs">{offer.limitations}</p>
+          <p className="mt-2 whitespace-pre-wrap text-xs">
+            {amountsInText(offer.limitations, i18n.language)}
+          </p>
         </details>
       )}
       <div className="relative z-10 mt-auto flex flex-wrap gap-2">

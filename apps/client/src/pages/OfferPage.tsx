@@ -25,7 +25,7 @@ import { OfferDocuments } from "../features/offers/OfferDocuments";
 import { OfferHero } from "../features/offers/OfferHero";
 import { offerGroups } from "../features/offers/offer-groups";
 import { useWalletLiveUpdates } from "../features/offers/use-live-updates";
-import { numberFormat } from "../number-format";
+import { amountsInText, numberFormat } from "../number-format";
 
 // Each tab's icon colour; the moving underline takes the colour of the open tab.
 const tabs = [
@@ -268,7 +268,7 @@ function OfferView({ identity }: { identity: IdentityMe }) {
                 {offer.features.map((feature) => (
                   <Row key={feature.key} label={feature.label}>
                     <span className="inline-flex flex-wrap items-center gap-2">
-                      {feature.value || t("missing")}
+                      {feature.value ? amountsInText(feature.value, i18n.language) : t("missing")}
                       {feature.coverage === "included" && (
                         <Badge variant="outline">{t("offerPage.details.included")}</Badge>
                       )}
@@ -278,7 +278,7 @@ function OfferView({ identity }: { identity: IdentityMe }) {
                     </span>
                     {feature.conditions && (
                       <span className="mt-1 block text-xs text-muted-foreground">
-                        {feature.conditions}
+                        {amountsInText(feature.conditions, i18n.language)}
                       </span>
                     )}
                   </Row>
@@ -290,12 +290,14 @@ function OfferView({ identity }: { identity: IdentityMe }) {
           </Section>
           {offer.summary && (
             <Section title={t("offerPage.details.summary")}>
-              <p className="whitespace-pre-wrap">{offer.summary}</p>
+              <p className="whitespace-pre-wrap">{amountsInText(offer.summary, i18n.language)}</p>
             </Section>
           )}
           {offer.limitations && (
             <Section title={t("offerPage.details.limitations")}>
-              <p className="whitespace-pre-wrap">{offer.limitations}</p>
+              <p className="whitespace-pre-wrap">
+                {amountsInText(offer.limitations, i18n.language)}
+              </p>
             </Section>
           )}
           <Button

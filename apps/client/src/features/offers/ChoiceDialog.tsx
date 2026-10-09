@@ -15,7 +15,7 @@ import {
   DialogDescription,
 } from "@coverview/ui";
 import { partnerApi } from "../../partner-api";
-import { numberFormat } from "../../number-format";
+import { amountsInText, numberFormat } from "../../number-format";
 
 export type WalletChoice = {
   type: "select" | "refuse" | "question" | "modification" | "keep_current" | "interlocutor";
@@ -155,12 +155,16 @@ export function ChoiceDialog({
               )}
             </div>
             {choice.offer?.summary && (
-              <p className="whitespace-pre-wrap text-sm">{choice.offer.summary}</p>
+              <p className="whitespace-pre-wrap text-sm">
+                {amountsInText(choice.offer.summary, i18n.language)}
+              </p>
             )}
             {choice.offer?.limitations && (
               <div className="space-y-2 text-sm">
                 <p className="font-medium">{t("limitations")}</p>
-                <p className="whitespace-pre-wrap">{choice.offer.limitations}</p>
+                <p className="whitespace-pre-wrap">
+                  {amountsInText(choice.offer.limitations, i18n.language)}
+                </p>
               </div>
             )}
             {choice.type !== "select" && (

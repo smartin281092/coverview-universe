@@ -70,8 +70,10 @@ function formValues(fields: Field[], record: ProfileSection | null): Values {
         value === undefined
           ? ""
           : moneyFields.has(field) && typeof value === "number"
-            ? `${Math.trunc(value / 100)}.${String(value % 100).padStart(2, "0")}`
-            : String(value),
+            ? `${Math.trunc(value / 100)},${String(value % 100).padStart(2, "0")}`
+            : numberFields.has(field) && typeof value === "number"
+              ? String(value).replace(".", ",")
+              : String(value),
       ];
     }),
   );

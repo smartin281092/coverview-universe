@@ -15,7 +15,7 @@ import {
 import { partnerApi } from "../../partner-api";
 import { ConclusionSignatureForm } from "./ConclusionSignatureForm";
 import { ConclusionCorrespondences } from "./ConclusionCorrespondences";
-import { numberFormat } from "../../number-format";
+import { amountsInText, numberFormat } from "../../number-format";
 export function ConclusionsDialog({
   identity,
   leadId,
@@ -104,10 +104,17 @@ export function ConclusionsDialog({
                                   currency: "CHF",
                                 }).format(item.archive.offer.annualPremiumMinor / 100),
                         },
-                        { label: t("summary"), value: item.archive.offer.summary || t("missing") },
+                        {
+                          label: t("summary"),
+                          value: item.archive.offer.summary
+                            ? amountsInText(item.archive.offer.summary, i18n.language)
+                            : t("missing"),
+                        },
                         {
                           label: t("limitations"),
-                          value: item.archive.offer.limitations || t("missing"),
+                          value: item.archive.offer.limitations
+                            ? amountsInText(item.archive.offer.limitations, i18n.language)
+                            : t("missing"),
                         },
                       ]
                     : []),

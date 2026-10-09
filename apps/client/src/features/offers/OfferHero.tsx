@@ -6,7 +6,7 @@ import { CompanyLogo } from "../insurance/CompanyLogo";
 import { companyPalette } from "./company-colors";
 import { offerMetrics, type MetricValue } from "./offer-metrics";
 import { PixelField } from "./PixelField";
-import { numberFormat } from "../../number-format";
+import { amountsInText, numberFormat } from "../../number-format";
 
 const Shader = lazy(() => import("./OfferShader"));
 
@@ -59,7 +59,8 @@ export function OfferHero({
   }, []);
   const figure = (value: MetricValue) => {
     if (value.kind === "missing") return { main: t("missing"), unit: "", period: "" };
-    if (value.kind === "text") return { main: value.text, unit: "", period: "" };
+    if (value.kind === "text")
+      return { main: amountsInText(value.text, i18n.language), unit: "", period: "" };
     if (value.kind === "date")
       return {
         main: new Intl.DateTimeFormat(i18n.language, {

@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Badge, ComparisonMatrix } from "@coverview/ui";
 import type { BenefitLimit } from "@coverview/contracts/partner-benefits";
 import type { OfferComparison } from "@coverview/contracts/partner-comparison";
-import { numberFormat } from "../../number-format";
+import { amountsInText, numberFormat } from "../../number-format";
 
 type Cell = NonNullable<OfferComparison["rows"][number]["cells"][number]>;
 const money = (minor: number) =>
@@ -21,7 +21,7 @@ function amount(limit: BenefitLimit, t: TFunction<"offers">) {
 }
 
 function Value({ cell, detailed }: { cell: Cell; detailed: boolean }) {
-  const { t } = useTranslation("offers");
+  const { t, i18n } = useTranslation("offers");
   const negative = cell.change === "removed" || cell.change === "worse";
   return (
     <div className="space-y-2">
@@ -30,7 +30,9 @@ function Value({ cell, detailed }: { cell: Cell; detailed: boolean }) {
           ? t("comparison.notProvided")
           : cell.limit
             ? amount(cell.limit, t)
-            : cell.value || t(`comparison.coverage.${cell.coverage}`)}
+            : cell.value
+              ? amountsInText(cell.value, i18n.language)
+              : t(`comparison.coverage.${cell.coverage}`)}
       </p>
       <p className="text-xs text-muted-foreground">{cell.label}</p>
       <div className="flex flex-wrap gap-1">
@@ -45,11 +47,13 @@ function Value({ cell, detailed }: { cell: Cell; detailed: boolean }) {
         )}
       </div>
       {cell.conditions && (
-        <p className="whitespace-pre-wrap text-xs text-muted-foreground">{cell.conditions}</p>
+        <p className="whitespace-pre-wrap text-xs text-muted-foreground">
+          {amountsInText(cell.conditions, i18n.language)}
+        </p>
       )}
       {cell.exclusions && (
         <p className="whitespace-pre-wrap text-xs text-muted-foreground">
-          {t("comparison.exclusions", { value: cell.exclusions })}
+          {t("comparison.exclusions", { value: amountsInText(cell.exclusions, i18n.language) })}
         </p>
       )}
       {detailed && cell.source && (

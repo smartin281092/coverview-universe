@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { VersionHistoryDialog, Button } from "@coverview/ui";
 import type { IdentityMe } from "@coverview/api-client";
 import { partnerApi } from "../../partner-api";
-import { numberFormat } from "../../number-format";
+import { amountsInText, numberFormat } from "../../number-format";
 export function OfferHistoryDialog({
   leadId,
   identity,
@@ -112,17 +112,27 @@ export function OfferHistoryDialog({
                 </div>
               )}
             </dl>
-            {offer.summary && <p className="whitespace-pre-wrap text-sm">{offer.summary}</p>}
+            {offer.summary && (
+              <p className="whitespace-pre-wrap text-sm">
+                {amountsInText(offer.summary, i18n.language)}
+              </p>
+            )}
             {offer.limitations && (
               <p className="whitespace-pre-wrap text-sm">
-                {t("history.limitations", { text: offer.limitations })}
+                {t("history.limitations", {
+                  text: amountsInText(offer.limitations, i18n.language),
+                })}
               </p>
             )}
             <ul className="space-y-3">
               {offer.features.map((feature, index) => (
                 <li key={index} className="space-y-2 rounded-lg border border-border p-3 text-sm">
                   <p className="font-medium">{feature.label}</p>
-                  <p>{feature.value || t("history.missing")}</p>
+                  <p>
+                    {feature.value
+                      ? amountsInText(feature.value, i18n.language)
+                      : t("history.missing")}
+                  </p>
                   <p className="text-xs text-muted-foreground">
                     {t("history.verification." + feature.verification)}
                   </p>
@@ -130,10 +140,18 @@ export function OfferHistoryDialog({
                     {t("history.origin." + feature.origin)}
                   </p>
                   {feature.conditions && (
-                    <p>{t("history.conditions", { text: feature.conditions })}</p>
+                    <p>
+                      {t("history.conditions", {
+                        text: amountsInText(feature.conditions, i18n.language),
+                      })}
+                    </p>
                   )}
                   {feature.exclusions && (
-                    <p>{t("history.exclusions", { text: feature.exclusions })}</p>
+                    <p>
+                      {t("history.exclusions", {
+                        text: amountsInText(feature.exclusions, i18n.language),
+                      })}
+                    </p>
                   )}
                   {feature.source && (
                     <blockquote className="border-l-2 border-border pl-3">
