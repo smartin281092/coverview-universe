@@ -15,7 +15,7 @@ import { HealthIcon } from "./HealthIcon";
 import { HealthInsurerLogo } from "./HealthOfferIdentity";
 import { HealthSelect } from "./HealthSelect";
 import { LocalitySearch } from "./LocalitySearch";
-import { money, regionName } from "./health-format";
+import { interpolate, money, regionName } from "./health-format";
 
 type Props = {
   api: ReturnType<typeof createHealthClient>;
@@ -135,19 +135,7 @@ function CurrentPicker({
               {copy.back}
             </button>
           )}
-          <details
-            className="hi-current-configuration"
-            open={
-              data?.status === "invalid_deductible" ||
-              data?.status === "location_required" ||
-              undefined
-            }
-          >
-            <summary>
-              {copy.configuration} · {money(deductible * 100)} CHF ·{" "}
-              {accident ? healthCopy.accidentIncluded : healthCopy.accidentExcluded}
-            </summary>
-            <p className="hi-field-help">{copy.configurationHint}</p>
+          <div className="hi-current-configuration">
             <div className="hi-current-settings">
               <div className="hi-field">
                 {healthCopy.deductible}
@@ -188,7 +176,7 @@ function CurrentPicker({
                 />
               </div>
             )}
-          </details>
+          </div>
           <p className="hi-field-help">
             {regionName(data?.regionId ?? region)}
             {!region.startsWith("EU-") && !municipality ? ` · ${copy.regionHint}` : ""}
@@ -297,6 +285,7 @@ export function HealthCurrentInsurance(props: Props) {
   const [open, setOpen] = useState(false);
   const [selectedModel, setSelectedModel] = useState<HealthCurrentOffer | null>(null);
   const current = props.comparison.value?.current;
+  const baseline = props.comparison.value?.baseline;
   const identity =
     current ?? (selectedModel?.modelId === props.selection?.modelId ? selectedModel : null);
   return (
@@ -313,7 +302,12 @@ export function HealthCurrentInsurance(props: Props) {
               <strong>{identity.name}</strong>
               {current && (
                 <span>
-                  {money(current.monthlyPremiumMinor)} CHF {healthCopy.perMonth}
+                  {interpolate(copy.price2026, { amount: money(current.monthlyPremiumMinor) })}
+                </span>
+              )}
+              {baseline?.year === 2027 && (
+                <span className="hi-current-next">
+                  {interpolate(copy.price2027, { amount: money(baseline.monthlyPremiumMinor) })}
                 </span>
               )}
               <small>
@@ -322,6 +316,15 @@ export function HealthCurrentInsurance(props: Props) {
                   ? healthCopy.accidentIncluded
                   : healthCopy.accidentExcluded}
               </small>
+              {baseline?.year === 2027 && current && baseline.ageGroup !== current.ageGroup && (
+                <small>{copy.ageGroupNext}</small>
+              )}
+              {baseline?.year === 2027 && baseline.deductible !== props.selection.deductible && (
+                <small>
+                  {interpolate(copy.deductibleNext, { amount: money(baseline.deductible * 100) })}
+                </small>
+              )}
+              {baseline?.year === 2026 && <small>{copy.noTariff2027}</small>}
             </div>
           )}
           {props.comparison.busy && (

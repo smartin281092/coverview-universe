@@ -3390,6 +3390,17 @@
 .health-comparator .hi-select-trigger:focus-visible {
   border-color: #b5bef1;
 }
+/* iOS keeps a native date field wider than its column, hence a sideways scroll on phones
+   (12 October 2026): without the native appearance it takes the column's width. */
+.health-comparator input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-width: 0;
+  max-width: 100%;
+}
+.health-comparator input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+}
 .health-comparator .hi-region-select .hi-select-trigger {
   background: #ffffff;
 }
@@ -3465,11 +3476,11 @@
     transition: none;
   }
 }
-/* The historical contract is a separate, optional reference below the 2027 profile. */
+/* The current contract opens the profile (12 October 2026), apart from the 2027 settings. */
 .hi-current-insurance {
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid #ececef;
+  margin-bottom: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #ececef;
 }
 .hi-current-heading {
   display: flex;
@@ -3517,6 +3528,10 @@
   color: #73737c;
   font-size: 11px;
 }
+.hi-current-selected > .hi-current-next {
+  color: #222222;
+  font-weight: 600;
+}
 .hi-current-controls {
   display: flex;
   align-items: center;
@@ -3540,16 +3555,10 @@
   border-radius: 12px;
   background: #f7f7f8;
 }
-.hi-current-configuration > summary {
-  cursor: pointer;
-  font-size: 12px;
-  line-height: 1.65;
-}
 .hi-current-settings {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
-  margin-top: 14px;
 }
 .hi-current-settings .hi-field {
   margin: 0;

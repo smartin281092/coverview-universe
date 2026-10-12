@@ -10,9 +10,13 @@ export function HealthPremiumDifference({
   detail?: boolean;
 }) {
   if (!value) return null;
+  // Measured from the current model's 2027 tariff, or from 2026 when it has none (12 October 2026).
+  const next = value.baselineYear === 2027;
   const label =
     value.direction === "equal"
-      ? copy.equal
+      ? next
+        ? copy.equal2027
+        : copy.equal
       : interpolate(copy[value.direction], { amount: money(Math.abs(value.annualSavingMinor)) });
   return (
     <span className={`hi-premium-difference is-${value.direction}${detail ? " is-detail" : ""}`}>
@@ -42,7 +46,7 @@ export function HealthPremiumDifference({
           {interpolate(value.direction === "saving" ? copy.monthlySaving : copy.monthlyIncrease, {
             amount: money(Math.abs(value.monthlySavingMinor)),
           })}{" "}
-          · {copy.comparedWith}
+          · {next ? copy.comparedWith2027 : copy.comparedWith}
         </span>
       )}
     </span>

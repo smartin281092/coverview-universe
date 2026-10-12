@@ -301,6 +301,32 @@ export default function HealthComparator({
             </button>
           </div>
           <div id="hi-profile-fields" hidden={!profileOpen}>
+            <HealthCurrentInsurance
+              api={api}
+              profile={profile}
+              birthKnown={birthKnown}
+              locality={locality}
+              selection={currentInsurance}
+              onSelect={setCurrentInsurance}
+              comparison={currentComparison}
+            />
+            <fieldset className="hi-fieldset">
+              <legend>
+                {copy.deductible}
+                <span>{copy.currency}</span>
+              </legend>
+              <div className="hi-franchises">
+                {franchises.map((value) => (
+                  <button
+                    key={value}
+                    aria-pressed={deductible === value}
+                    onClick={() => setDeductible(value)}
+                  >
+                    {integer(value)}
+                  </button>
+                ))}
+              </div>
+            </fieldset>
             <label className="hi-field">
               {copy.birthDate}
               <input
@@ -344,32 +370,6 @@ export default function HealthComparator({
               </div>
               {!accident && <p className="hi-field-help">{copy.accidentHint}</p>}
             </fieldset>
-            <fieldset className="hi-fieldset">
-              <legend>
-                {copy.deductible}
-                <span>{copy.currency}</span>
-              </legend>
-              <div className="hi-franchises">
-                {franchises.map((value) => (
-                  <button
-                    key={value}
-                    aria-pressed={deductible === value}
-                    onClick={() => setDeductible(value)}
-                  >
-                    {integer(value)}
-                  </button>
-                ))}
-              </div>
-            </fieldset>
-            <HealthCurrentInsurance
-              api={api}
-              profile={profile}
-              birthKnown={birthKnown}
-              locality={locality}
-              selection={currentInsurance}
-              onSelect={setCurrentInsurance}
-              comparison={currentComparison}
-            />
             <button className="hi-more" onClick={() => setShowFilters(true)}>
               <HealthIcon name="sliders" size={17} />
               {copy.more}
@@ -601,9 +601,16 @@ export default function HealthComparator({
         <p className="hi-result-region">{regionName(region)}</p>
         {currentComparison.value?.current && (
           <p className="hi-current-comparison-note">
-            {healthCurrentCopy.baseline} · {currentComparison.value.current.insurerBrand} ·{" "}
+            {currentComparison.value.baseline?.year === 2027
+              ? healthCurrentCopy.baseline2027
+              : healthCurrentCopy.baseline}{" "}
+            · {currentComparison.value.current.insurerBrand} ·{" "}
             {currentComparison.value.current.name} ·{" "}
-            {money(currentComparison.value.current.monthlyPremiumMinor)} CHF {copy.perMonth}
+            {money(
+              currentComparison.value.baseline?.monthlyPremiumMinor ??
+                currentComparison.value.current.monthlyPremiumMinor,
+            )}{" "}
+            CHF {copy.perMonth}
           </p>
         )}
         <p className="hi-small" hidden={loading || recommendation.busy}>

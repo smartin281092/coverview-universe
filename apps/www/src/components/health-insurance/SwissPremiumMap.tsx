@@ -13,19 +13,39 @@ import { HealthContactTags, HealthInsurerLogo } from "./HealthOfferIdentity";
 import { money, regionName } from "./health-format";
 const frame = { x: -160, y: -100, width: 1320, height: 850 };
 const vaudRegions = map.regions.filter((region) => region.canton === "VD");
-const initialView = {
+const vaud = {
   x:
-    frame.x +
-    frame.width / 2 -
     vaudRegions.reduce((sum, region) => sum + (region.labelPoint[0] ?? 500), 0) /
-      vaudRegions.length,
+    vaudRegions.length,
   y:
-    frame.y +
-    frame.height / 2 -
     vaudRegions.reduce((sum, region) => sum + (region.labelPoint[1] ?? 325), 0) /
-      vaudRegions.length,
-  scale: 1,
+    vaudRegions.length,
 };
+// A view never pans the map out of its frame.
+const bounded = (x: number, y: number, scale: number) => ({
+  x: Math.max(
+    (frame.x + frame.width) * (1 - scale) - 500 * scale,
+    Math.min(frame.x * (1 - scale) + 500 * scale, x),
+  ),
+  y: Math.max(
+    (frame.y + frame.height) * (1 - scale) - 350 * scale,
+    Math.min(frame.y * (1 - scale) + 350 * scale, y),
+  ),
+  scale,
+});
+// Small screens start much closer (12 October 2026): the whole country is unreadable there.
+const startScale = (width: number) => (width < 520 ? 2.5 : width < 900 ? 1.6 : 1);
+// The starting view: the chosen locality's region, or Vaud, in the middle of the frame.
+const startView = (regionId: string | null, scale: number) => {
+  const target = regionId ? map.regions.find((region) => region.id === regionId) : null;
+  const point = target ? { x: target.labelPoint[0] ?? 500, y: target.labelPoint[1] ?? 325 } : vaud;
+  return bounded(
+    frame.x + frame.width / 2 - point.x * scale,
+    frame.y + frame.height / 2 - point.y * scale,
+    scale,
+  );
+};
+const initialView = startView(null, 1);
 
 export function SwissPremiumMap({
   comparison,
@@ -70,6 +90,8 @@ export function SwissPremiumMap({
   }, []);
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const moved = useRef(false);
+  // Once the person zooms or pans, a change of width no longer resets their view.
+  const touched = useRef(false);
   // Two fingers: distance, midpoint and view when the second finger lands. Each move is
   // computed from this start, so a pan at the minimum scale cannot creep into a zoom.
   const gesture = useRef<{
@@ -103,31 +125,17 @@ export function SwissPremiumMap({
     observer.observe(stage.current);
     return () => observer.disconnect();
   }, []);
+  const scale = startScale(size.width);
   useEffect(() => {
     setHover((current) => (current === selected ? current : null));
-    const target = localityId ? map.regions.find((region) => region.id === selected) : null;
-    setView(
-      target
-        ? {
-            x: frame.x + frame.width / 2 - (target.labelPoint[0] ?? 500),
-            y: frame.y + frame.height / 2 - (target.labelPoint[1] ?? 325),
-            scale: 1,
-          }
-        : initialView,
-    );
+    touched.current = false;
+    setView(startView(localityId ? selected : null, scale));
   }, [localityId]);
-  const bounded = (x: number, y: number, scale: number) => ({
-    x: Math.max(
-      (frame.x + frame.width) * (1 - scale) - 500 * scale,
-      Math.min(frame.x * (1 - scale) + 500 * scale, x),
-    ),
-    y: Math.max(
-      (frame.y + frame.height) * (1 - scale) - 350 * scale,
-      Math.min(frame.y * (1 - scale) + 350 * scale, y),
-    ),
-    scale,
-  });
+  useEffect(() => {
+    if (!touched.current) setView(startView(localityId ? selected : null, scale));
+  }, [scale]);
   const zoom = (factor: number, point = { x: 500, y: 325 }) => {
+    touched.current = true;
     setHover(null);
     setView((previous) => {
       const scale = Math.max(1, Math.min(6, previous.scale * factor));
@@ -146,16 +154,17 @@ export function SwissPremiumMap({
     if (!start) return;
     const distance = Math.hypot(first.x - second.x, first.y - second.y);
     const midpoint = { x: (first.x + second.x) / 2, y: (first.y + second.y) / 2 };
-    const scale = Math.max(
+    const next = Math.max(
       1,
       Math.min(6, start.view.scale * (start.distance > 0 ? distance / start.distance : 1)),
     );
+    touched.current = true;
     const content = {
       x: (start.midpoint.x - start.view.x) / start.view.scale,
       y: (start.midpoint.y - start.view.y) / start.view.scale,
     };
     setHover(null);
-    setView(bounded(midpoint.x - content.x * scale, midpoint.y - content.y * scale, scale));
+    setView(bounded(midpoint.x - content.x * next, midpoint.y - content.y * next, next));
   };
   const point = (clientX: number, clientY: number) => {
     const matrix = svg.current?.getScreenCTM()?.inverse();
@@ -246,6 +255,7 @@ export function SwissPremiumMap({
             )?.[1];
             if (Math.hypot(next.x - previous.x, next.y - previous.y) < 3 && !moved.current) return;
             moved.current = true;
+            touched.current = true;
             setHover(null);
             if (other) pinch(next, other);
             else
@@ -405,7 +415,8 @@ export function SwissPremiumMap({
           </button>
           <button
             onClick={() => {
-              setView(initialView);
+              touched.current = false;
+              setView(startView(null, scale));
               setHover(null);
             }}
             aria-label={copy.mapReset}
