@@ -231,10 +231,24 @@ export const healthCurrentComparisonInputSchema = z
     offerIds: z.array(z.string().regex(/^(?:hp_|hfp_)[a-f0-9]{28}$/)).max(1200),
   })
   .strict();
+// The price the differences are measured from (12 October 2026): the current model at its 2027
+// tariff for the person's age in 2027, or its 2026 price when the model has no 2027 tariff.
+export const healthCurrentBaselineSchema = z.object({
+  year: z.union([z.literal(2026), z.literal(2027)]),
+  modelId: z.string(),
+  name: z.string(),
+  monthlyPremiumMinor: z.number().int().nonnegative(),
+  deductible: z.number().int(),
+  accident: z.boolean(),
+  ageGroup: z.enum(["child", "young_adult", "adult"]),
+  regionId: healthRegionIdSchema,
+});
 export const healthPremiumDifferenceSchema = z.object({
   offerId: z.string(),
   currentYear: z.literal(2026),
   targetYear: z.literal(2027),
+  // Absent from answers older than the 2027 reference: the difference was then from 2026.
+  baselineYear: z.union([z.literal(2026), z.literal(2027)]).optional(),
   monthlySavingMinor: z.number().int(),
   annualSavingMinor: z.number().int(),
   direction: z.enum(["saving", "increase", "equal"]),
@@ -248,6 +262,7 @@ export const healthCurrentComparisonSchema = z.object({
   current: healthCurrentOfferSchema.nullable(),
   currentYear: z.literal(2026),
   targetYear: z.literal(2027),
+  baseline: healthCurrentBaselineSchema.nullable().optional(),
   differences: z.array(healthPremiumDifferenceSchema).max(1200),
 });
 export const healthGuideInputSchema = healthCompareInputSchema.extend({
@@ -321,3 +336,4 @@ export type HealthCurrentOptions = z.infer<typeof healthCurrentOptionsSchema>;
 export type HealthCurrentComparison = z.infer<typeof healthCurrentComparisonSchema>;
 export type HealthCurrentComparisonInput = z.infer<typeof healthCurrentComparisonInputSchema>;
 export type HealthPremiumDifference = z.infer<typeof healthPremiumDifferenceSchema>;
+export type HealthCurrentBaseline = z.infer<typeof healthCurrentBaselineSchema>;

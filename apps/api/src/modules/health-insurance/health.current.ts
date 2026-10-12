@@ -6,6 +6,8 @@ import {
   healthCurrentOfferSchema,
   healthInsurerIdentitySchema,
   healthLocalitiesSchema,
+  type HealthCurrentBaseline,
+  type HealthCurrentOffer,
   type HealthCurrentOptionsInput,
   type HealthCurrentComparisonInput,
 } from "@coverview/contracts/health-insurance";
@@ -139,6 +141,93 @@ export function createHealthCurrentRepository(pool: pg.Pool) {
     result.status = result.offers.length ? "available" : "model_unavailable";
     return healthCurrentOptionsSchema.parse(result);
   }
+  // The current model in 2027 (12 October 2026): model ids change every year, the insurer and its
+  // tariff code do not. Its price is read for the person's age in 2027, in the contract's region
+  // (its commune resolved in the 2027 regions), with the contract's accident cover and deductible;
+  // a child deductible that no longer exists at the new age becomes the ordinary 300 CHF.
+  async function baseline2027(
+    current: HealthCurrentOffer,
+    municipalityId: number | undefined,
+    birthYear: number,
+  ): Promise<HealthCurrentBaseline | null> {
+    const ageGroup = healthAgeGroup(birthYear, 2027);
+    const subgroup = ageGroup === "child" ? "K1" : ageGroup === "young_adult" ? "J1" : "E1";
+    const foreign = current.regionId.startsWith("EU-");
+    const deductibles = foreign
+      ? [ageGroup === "child" ? 0 : 300]
+      : healthDeductibles(birthYear, 2027);
+    const deductible = deductibles.includes(current.deductible)
+      ? current.deductible
+      : deductibles.includes(300)
+        ? 300
+        : deductibles[0]!;
+    const fields: Pick<HealthCurrentBaseline, "year" | "deductible" | "accident" | "ageGroup"> = {
+      year: 2027,
+      deductible,
+      accident: current.accident,
+      ageGroup,
+    };
+    if (foreign) {
+      const row = (
+        await pool.query<{ monthly_premium_minor: number }>(
+          `select p.monthly_premium_minor from health_foreign_premiums p
+           join health_foreign_datasets d on d.id=p.dataset_id and d.year=2027 and d.active
+           where p.insurer_id=$1 and p.country=$2 and p.age_group=$3 and p.age_subgroup=$4
+             and p.accident=$5 and p.deductible=$6 order by p.id limit 1`,
+          [
+            current.insurerId,
+            current.regionId.slice(3),
+            ageGroup,
+            subgroup,
+            current.accident,
+            deductible,
+          ],
+        )
+      ).rows[0];
+      return row
+        ? {
+            ...fields,
+            modelId: `hfm_2027_${current.insurerId}`,
+            name: current.name,
+            monthlyPremiumMinor: row.monthly_premium_minor,
+            regionId: current.regionId,
+          }
+        : null;
+    }
+    const row = (
+      await pool.query<{
+        modelId: string;
+        name: string;
+        monthlyPremiumMinor: number;
+        regionId: string;
+      }>(
+        `select m27.id as "modelId",m27.name,p.monthly_premium_minor as "monthlyPremiumMinor",
+           r.region_id as "regionId"
+         from health_models m26
+         join health_models m27 on m27.insurer_id=m26.insurer_id and m27.tariff_code=m26.tariff_code
+         join health_datasets d on d.id=m27.dataset_id and d.year=2027 and d.active
+         join health_premiums p on p.model_id=m27.id and p.dataset_id=d.id
+         join health_regions r on r.id=p.region_key and r.canton not in ('ZE','ZR')
+         join health_eligibility e on e.model_id=m27.id and e.region_key=p.region_key
+         where m26.id=$1 and p.age_group=$2 and p.age_subgroup=$3 and p.accident=$4 and p.deductible=$5
+           and (($6::integer is null and r.region_id=$7) or ($6::integer is not null and exists(
+             select 1 from health_localities l
+             where l.region_key=r.id and l.dataset_id=d.id and l.municipality_id=$6)))
+           and ($6::integer is null or not e.restricted or $6=any(e.municipality_ids))
+         order by p.id limit 1`,
+        [
+          current.modelId,
+          ageGroup,
+          subgroup,
+          current.accident,
+          deductible,
+          municipalityId ?? null,
+          current.regionId,
+        ],
+      )
+    ).rows[0];
+    return row ? { ...fields, ...row } : null;
+  }
   async function compare(input: HealthCurrentComparisonInput) {
     const available = await options({ ...input.current, birthYear: input.birthYear });
     const current =
@@ -155,6 +244,22 @@ export function createHealthCurrentRepository(pool: pg.Pool) {
     if (current.eligibility === "municipality_required")
       return { ...result, status: "location_required" as const };
     result.current = current;
+    // Without a 2027 tariff for the model, its 2026 price stays the reference, said as such.
+    const baseline: HealthCurrentBaseline = (await baseline2027(
+      current,
+      input.current.municipalityId,
+      input.birthYear,
+    )) ?? {
+      year: 2026,
+      modelId: current.modelId,
+      name: current.name,
+      monthlyPremiumMinor: current.monthlyPremiumMinor,
+      deductible: current.deductible,
+      accident: current.accident,
+      ageGroup: current.ageGroup,
+      regionId: current.regionId,
+    };
+    result.baseline = baseline;
     const targetAge = healthAgeGroup(input.birthYear, 2027);
     const subgroup = targetAge === "child" ? "K1" : targetAge === "young_adult" ? "J1" : "E1";
     const targets = await pool.query<{
@@ -175,11 +280,12 @@ export function createHealthCurrentRepository(pool: pg.Pool) {
       [input.offerIds, targetAge, subgroup],
     );
     result.differences = targets.rows.map((target) => {
-      const saving = current.monthlyPremiumMinor - target.monthly_premium_minor;
+      const saving = baseline.monthlyPremiumMinor - target.monthly_premium_minor;
       return {
         offerId: target.id,
         currentYear: 2026 as const,
         targetYear: 2027 as const,
+        baselineYear: baseline.year,
         monthlySavingMinor: saving,
         annualSavingMinor: saving * 12,
         direction:
@@ -188,10 +294,10 @@ export function createHealthCurrentRepository(pool: pg.Pool) {
             : saving < 0
               ? ("increase" as const)
               : ("equal" as const),
-        deductibleChanged: current.deductible !== target.deductible,
-        accidentChanged: current.accident !== target.accident,
-        ageGroupChanged: current.ageGroup !== targetAge,
-        regionChanged: current.regionId !== target.region_id,
+        deductibleChanged: baseline.deductible !== target.deductible,
+        accidentChanged: baseline.accident !== target.accident,
+        ageGroupChanged: baseline.ageGroup !== targetAge,
+        regionChanged: baseline.regionId !== target.region_id,
       };
     });
     return healthCurrentComparisonSchema.parse(result);

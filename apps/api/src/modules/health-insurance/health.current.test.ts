@@ -65,14 +65,16 @@ beforeAll(async () => {
       [`foreign_${year}`, year, "a".repeat(64)],
     );
   }
-  for (const [n, year, restricted] of [
-    [1, 2026, false],
-    [2, 2026, true],
-    [3, 2027, false],
+  for (const [n, year, restricted, tariff] of [
+    [1, 2026, false, "1"],
+    [2, 2026, true, "2"],
+    [3, 2027, false, "3"],
+    [5, 2026, false, "5"],
+    [6, 2027, false, "5"],
   ] as const) {
     await database.pool.query(
       "insert into health_models(id,dataset_id,insurer_id,tariff_code,name,category) values($1,$2,98001,$3,'Modèle fictif',$4)",
-      [mid(n), String(year), String(n), restricted ? "DIV" : "BASE"],
+      [mid(n), String(year), tariff, restricted ? "DIV" : "BASE"],
     );
     for (const region of ["VD-1", "VD-2"])
       await database.pool.query(
@@ -116,6 +118,13 @@ beforeAll(async () => {
   await premium(9, 3, 2027, "adult", 500, 50000);
   await premium(10, 3, 2027, "adult", 2500, 45000, "VD-1", false);
   await premium(11, 3, 2027, "young_adult", 300, 20000);
+  await premium(20, 5, 2026, "adult", 2500, 50000);
+  await premium(21, 5, 2026, "young_adult", 2500, 30000);
+  await premium(22, 5, 2026, "child", 0, 10000);
+  await premium(23, 5, 2026, "adult", 2500, 60000, "VD-2");
+  await premium(24, 6, 2027, "adult", 2500, 52000);
+  await premium(25, 6, 2027, "young_adult", 300, 21000);
+  await premium(26, 6, 2027, "adult", 2500, 58000, "VD-2");
   for (const [n, year, amount] of [
     [1, 2026, 25000],
     [2, 2027, 24000],
@@ -160,6 +169,8 @@ it("calculates signed monthly and annual differences from server prices only", a
     offerIds: [pid(7), pid(8), pid(9), pid(10), pid(1)],
   });
   expect(result.current?.monthlyPremiumMinor).toBe(50000);
+  expect(result.baseline).toMatchObject({ year: 2026, monthlyPremiumMinor: 50000 });
+  expect(result.differences.every((row) => row.baselineYear === 2026)).toBe(true);
   expect(result.differences).toHaveLength(4);
   expect(result.differences.find((r) => r.offerId === pid(7))).toMatchObject({
     monthlySavingMinor: 2000,
@@ -203,6 +214,67 @@ it("applies the age and deductible independently in each year at the 18/19 and 2
     "invalid_deductible",
   );
 });
+it("measures the differences from the same model's 2027 tariff, for the age in 2027", async () => {
+  const adult = await repository.compare({
+    birthYear: 1990,
+    current: { ...current, modelId: mid(5) },
+    offerIds: [pid(7), pid(8)],
+  });
+  expect(adult.current?.monthlyPremiumMinor).toBe(50000);
+  expect(adult.baseline).toMatchObject({
+    year: 2027,
+    modelId: mid(6),
+    monthlyPremiumMinor: 52000,
+    ageGroup: "adult",
+    deductible: 2500,
+    regionId: "VD-1",
+  });
+  expect(adult.differences.find((row) => row.offerId === pid(7))).toMatchObject({
+    baselineYear: 2027,
+    monthlySavingMinor: 4000,
+    annualSavingMinor: 48000,
+    direction: "saving",
+    deductibleChanged: false,
+  });
+  expect(adult.differences.find((row) => row.offerId === pid(8))).toMatchObject({
+    monthlySavingMinor: -3000,
+    deductibleChanged: true,
+  });
+  // 25 in 2026, 26 in 2027: the reference is the adult tariff, not the young adult one paid now.
+  const older = await repository.compare({
+    birthYear: 2001,
+    current: { ...current, modelId: mid(5) },
+    offerIds: [pid(7)],
+  });
+  expect(older.current).toMatchObject({ ageGroup: "young_adult", monthlyPremiumMinor: 30000 });
+  expect(older.baseline).toMatchObject({ ageGroup: "adult", monthlyPremiumMinor: 52000 });
+  expect(older.differences[0]).toMatchObject({ monthlySavingMinor: 4000, ageGroupChanged: false });
+  // 18 in 2026, 19 in 2027: the child deductible of 0 becomes the ordinary 300 CHF.
+  const grown = await repository.compare({
+    birthYear: 2008,
+    current: { ...current, modelId: mid(5), deductible: 0 },
+    offerIds: [pid(11)],
+  });
+  expect(grown.baseline).toMatchObject({
+    ageGroup: "young_adult",
+    deductible: 300,
+    monthlyPremiumMinor: 21000,
+  });
+  expect(grown.differences[0]).toMatchObject({
+    monthlySavingMinor: 1000,
+    deductibleChanged: false,
+    ageGroupChanged: false,
+  });
+  // The contract's commune is in VD-2 in 2026 and in VD-1 in 2027: the 2027 region prices it.
+  const moved = await repository.compare({
+    birthYear: 1990,
+    current: { ...current, modelId: mid(5), regionId: "VD-2", municipalityId: 901 },
+    offerIds: [pid(7)],
+  });
+  expect(moved.current?.monthlyPremiumMinor).toBe(60000);
+  expect(moved.baseline).toMatchObject({ regionId: "VD-1", monthlyPremiumMinor: 52000 });
+  expect(moved.differences[0]).toMatchObject({ monthlySavingMinor: 4000, regionChanged: false });
+});
 it("does not compute a certain saving when the historical network or model cannot be verified", async () => {
   expect(
     await repository.compare({
@@ -230,7 +302,13 @@ it("keeps foreign historical prices separate from Switzerland", async () => {
     monthlyPremiumMinor: 25000,
     category: "BASE",
   });
-  expect(result.differences[0]).toMatchObject({ annualSavingMinor: 12000, regionChanged: false });
+  expect(result.baseline).toMatchObject({ year: 2027, monthlyPremiumMinor: 24000 });
+  expect(result.differences[0]).toMatchObject({
+    annualSavingMinor: 0,
+    direction: "equal",
+    baselineYear: 2027,
+    regionChanged: false,
+  });
   expect((await repository.options({ ...context, regionId: "EU-FR" })).status).toBe(
     "invalid_deductible",
   );
