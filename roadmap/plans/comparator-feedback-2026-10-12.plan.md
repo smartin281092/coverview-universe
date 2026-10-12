@@ -17,12 +17,17 @@ Entrée : demande de l’utilisateur du 12 octobre 2026 (sept points). Mandat PR
 
 ## Definition of Done — oracles
 
-- [ ] Écarts calculés contre le tarif 2027 du modèle actuel, tranche d’âge 2027, repli 2026 explicite — V2 (test de l’API sur la vraie base) et V3 (navigateur).
-- [ ] Profil réordonné, réglages du contrat visibles, mentions retirées — V3.
-- [ ] Aucun défilement horizontal à 375 px, carte zoomée sur téléphone — V3 (largeur mobile du navigateur intégré ; iPhone réel en V5).
-- [ ] Types, lint, build, tests touchés.
+- [x] Écarts calculés contre le tarif 2027 du modèle actuel, tranche d’âge 2027, repli 2026 explicite — V2 (test de l’API sur la vraie base) et V3 (navigateur) (journal 1–3).
+- [x] Profil réordonné, réglages du contrat visibles, mentions retirées — V3 (journal 2).
+- [ ] Aucun défilement horizontal à 375 px, carte zoomée sur téléphone — V3 fait (journal 4) ; iPhone réel (V5) à confirmer par l’utilisateur.
+- [x] Types, lint, build, tests touchés (journal 1, 5).
 
 ## Journal de vérification
 
 | # | cible | oracle | résultat | suite |
 |---|---|---|---|---|
+| 1 | Calcul de référence | `health.current.test.ts` sur PostgreSQL réel (Testcontainers) | 9/9 : référence 2027 du même modèle, passage de 25 à 26 ans, enfant devenu jeune adulte (franchise 300), commune qui change de région en 2027, repli 2026 sans tarif 2027, étranger au tarif 2027 du même assureur | — |
+| 2 | Comparateur, bureau | navigateur intégré sur la preview | profil : assurance actuelle, franchise, date de naissance, sexe, accident ; fenêtre de choix : franchise, accident et localité visibles, les deux mentions absentes ; CSS Callmed : 2026 514,40, 2027 560,10 CHF / mois | — |
+| 3 | Écarts affichés | liste de la région VD-1 et page d’un modèle | référence « Votre modèle actuel au tarif 2027 · CSS · Callmed · 560,10 » ; HMO 456,00 → 1 249,20 CHF économisés / an (contre 700,80 avec la prime 2026) ; page du modèle « par rapport au tarif 2027 de votre modèle actuel » ; née en 2001 : 2026 353,70 (jeune adulte), référence 2027 560,10 (adulte), note de nouvelle catégorie | — |
+| 4 | Téléphone (375 px) | largeur mobile du navigateur intégré | largeur de défilement 375 = largeur ; champ date 315 px = sa colonne, apparence native retirée ; carte : 1er essai à l’échelle 1 (largeur mesurée seulement par ResizeObserver, muet dans un onglet caché), mesurée aussi au montage, puis échelle 2,5 centrée sur la Romandie | iPhone réel à confirmer (WebKit) |
+| 5 | Contrôles | `tsc` API et contrats, `astro check`, ESLint, build du site (45 pages) | verts | — |
