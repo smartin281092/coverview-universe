@@ -111,18 +111,23 @@ export function SwissPremiumMap({
         : null;
   };
   const [size, setSize] = useState({ width: 1000, height: 650, left: 0, viewport: 1000 });
+  // Measured at once on mount (the starting zoom needs the width before the first resize), then
+  // on every resize.
   useEffect(() => {
-    if (!stage.current) return;
-    const observer = new ResizeObserver(([entry]) => {
-      if (entry)
-        setSize({
-          width: entry.contentRect.width,
-          height: entry.contentRect.height,
-          left: entry.target.getBoundingClientRect().left,
-          viewport: document.documentElement.clientWidth,
-        });
-    });
-    observer.observe(stage.current);
+    const element = stage.current;
+    if (!element) return;
+    const measure = () => {
+      const box = element.getBoundingClientRect();
+      setSize({
+        width: box.width,
+        height: box.height,
+        left: box.left,
+        viewport: document.documentElement.clientWidth,
+      });
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
     return () => observer.disconnect();
   }, []);
   const scale = startScale(size.width);
