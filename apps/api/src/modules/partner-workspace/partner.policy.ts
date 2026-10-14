@@ -140,10 +140,12 @@ export const authorityCurrent = (alias: string) =>
 export const assigned = `(exists(select 1 from partner_members am where am.user_id=$1 and am.roles ? 'advisor') and ((l.responsible_id=$1 and ${authorityCurrent("l")}) or exists(select 1 from partner_contributors pc where pc.lead_id=l.id and pc.user_id=$1 and pc.revoked_at is null and ${authorityCurrent("pc")} and pc.access_scope='advice')))`;
 const contribution = `exists(select 1 from partner_contributors pc where pc.lead_id=l.id and pc.user_id=$1 and pc.revoked_at is null and ${authorityCurrent("pc")})`;
 export const managed = `(${authorityCurrent("l")} and exists(select 1 from partner_members me join partner_members colleague on colleague.organization_id=me.organization_id where me.user_id=$1 and me.roles ? 'manager' and colleague.user_id=l.responsible_id))`;
+// A restricted Lead (orders from horizon3.finance, 14 October 2026) is seen by its account only.
+export const unrestricted = "(l.restricted_to is null or l.restricted_to=$1)";
 export function visible(actor: PartnerActor) {
   if (actor.wallet) return ownedClient;
-  if (actor.administrator) return "($1::text is not null)";
-  return `exists(select 1 from partner_members vm join partner_organizations vo on vo.id=vm.organization_id where vm.user_id=$1 and vm.state='approved' and vo.state='approved' and (vm.review_due_at is null or vm.review_due_at>now())) and (${assigned} or ${contribution} or (l.creator_id=$1 and not exists(select 1 from partner_insurance_sources s where s.lead_id=l.id)) or ${managed})`;
+  if (actor.administrator) return `($1::text is not null) and ${unrestricted}`;
+  return `${unrestricted} and exists(select 1 from partner_members vm join partner_organizations vo on vo.id=vm.organization_id where vm.user_id=$1 and vm.state='approved' and vo.state='approved' and (vm.review_due_at is null or vm.review_due_at>now())) and (${assigned} or ${contribution} or (l.creator_id=$1 and not exists(select 1 from partner_insurance_sources s where s.lead_id=l.id)) or ${managed})`;
 }
 export async function lockActor(db: Executor, actor: PartnerActor) {
   const user = await db.query<Record<string, unknown>>(

@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import type { Executor, PartnerActor } from "./partner.policy.js";
 import { notifyPartnerEvent } from "./partner.notifications.js";
 export type PartnerAuditActor =
-  PartnerActor | { userId: null; systemActor: "partner-continuity-v1" };
+  PartnerActor | { userId: null; systemActor: "partner-continuity-v1" | "partner-intake-v1" };
 export const newId = (prefix: string) => `${prefix}_${randomUUID()}`;
 export async function event(
   db: Executor,

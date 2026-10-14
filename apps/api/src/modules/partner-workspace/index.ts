@@ -127,6 +127,10 @@ import {
   personalAppointmentConfirmSchema,
 } from "@coverview/contracts/partner";
 import { insuranceRequestIdSchema } from "@coverview/contracts/insurance-requests";
+import {
+  horizon3ContactReceiptSchema,
+  horizon3ContactSchema,
+} from "@coverview/contracts/partner-intake";
 import { isLoopback, type Environment } from "../../platform/config.js";
 import { createMailer } from "../../platform/mailer.js";
 import { createDatabase } from "../../platform/db/database.js";
@@ -159,6 +163,11 @@ import { createDataRightsOperations } from "./partner.data-rights.js";
 import { registerDataRightsRoutes } from "./partner.data-rights.routes.js";
 import { createDataRequestOperations } from "./partner.data-requests.js";
 import { createDataErasureOperations } from "./partner.data-erasure.js";
+import {
+  horizon3RequestPreview,
+  linkExternalRequest,
+  receiveExternalRequest,
+} from "./partner.intake.js";
 export { PartnerError } from "./partner.policy.js";
 
 export function registerPartnerWorkspace(
@@ -182,10 +191,17 @@ export function registerPartnerWorkspace(
   app.addHook("onReady", async () => {
     if (config.AUTH_ENABLED) await live.start();
     if (config.AUTH_ENABLED && config.PARTNER_JOBS_ENABLED)
-      stopJobs = await startPartnerJobs(config.REDIS_URL, database.pool, app.log, {
-        mailer,
-        walletOrigin: config.AUTH_WALLET_ORIGIN,
-      });
+      stopJobs = await startPartnerJobs(
+        config.REDIS_URL,
+        database.pool,
+        app.log,
+        { mailer, walletOrigin: config.AUTH_WALLET_ORIGIN },
+        {
+          ownerEmail: config.H3_OWNER_EMAIL,
+          notifyEmail: config.H3_NOTIFY_EMAIL,
+          partnerOrigin: config.AUTH_PARTNER_ORIGIN,
+        },
+      );
   });
   // Streams never finish on their own: they close before the server waits for open requests.
   app.addHook("preClose", async () => {
@@ -238,6 +254,40 @@ export function registerPartnerWorkspace(
         });
       },
     );
+  // Orders from horizon3.finance (14 October 2026), sent from the visitor's browser: no secret can
+  // authenticate them (SEC-05 exception, plan S-042a), hence exact origins, a small body, strict
+  // validation and a per-address limit. @fastify/cors reads these route options, preflight included.
+  const h3 = {
+    cors: {
+      origin: config.H3_ORIGINS,
+      methods: ["POST", "OPTIONS"],
+      allowedHeaders: ["Content-Type"],
+      credentials: false,
+      maxAge: 600,
+    },
+    rateLimit: { max: 10, timeWindow: "1 minute" },
+  };
+  app.options("/api/public/h3/contact", { config: h3 }, (_, reply) => reply.code(204).send());
+  app.post(
+    "/api/public/h3/contact",
+    {
+      bodyLimit: 4096,
+      config: h3,
+      schema: { body: horizon3ContactSchema, response: { 200: horizon3ContactReceiptSchema } },
+    },
+    async (request) => {
+      const received = await receiveExternalRequest(database.pool, request.body);
+      // Stored before the answer; a Lead that cannot be opened now is opened by the job.
+      if (received.created)
+        await linkExternalRequest(database.pool, received.id, config.H3_OWNER_EMAIL).catch(() =>
+          request.log.warn(
+            { dependency: "partner_intake" },
+            "External request kept without its Lead",
+          ),
+        );
+      return { success: true as const, requestId: request.body.requestId };
+    },
+  );
   const economyPage = z.object({ cursor: z.string().max(400).optional() }).strict();
   registerQualityRoutes(server, repository, actor);
   registerComplementRoutes(server, repository, actor);
@@ -279,6 +329,22 @@ export function registerPartnerWorkspace(
           link: `${config.AUTH_WALLET_ORIGIN}/activation#token=exemple`,
           expiresAt: new Date(Date.now() + 14 * 86_400_000),
         });
+        return request.query.format === "text"
+          ? reply.type("text/plain; charset=utf-8").send(message.text)
+          : reply.type("text/html; charset=utf-8").send(message.html);
+      },
+    );
+    app.get(
+      "/local/emails/horizon3-request",
+      {
+        schema: { querystring: z.object({ format: z.enum(["html", "text"]).default("html") }) },
+        onRequest: async (request, reply) => {
+          if (!isLoopback(request.ip) || !isLoopback(request.hostname))
+            return reply.code(404).send();
+        },
+      },
+      async (request, reply) => {
+        const message = horizon3RequestPreview(config.AUTH_PARTNER_ORIGIN);
         return request.query.format === "text"
           ? reply.type("text/plain; charset=utf-8").send(message.text)
           : reply.type("text/html; charset=utf-8").send(message.html);

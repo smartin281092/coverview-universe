@@ -6,6 +6,7 @@ import type { Pool } from "pg";
 import { processPartnerContinuity } from "./partner.continuity.js";
 import { processAccessReviews } from "./partner.access.js";
 import { processClientInvitations } from "./partner.invitations.js";
+import { processExternalRequests, type IntakeSettings } from "./partner.intake.js";
 import type { Mailer } from "../../platform/mailer.js";
 
 export async function startPartnerJobs(
@@ -13,6 +14,7 @@ export async function startPartnerJobs(
   pool: Pool,
   logger: FastifyBaseLogger,
   invitations: { mailer: Mailer | null; walletOrigin: string },
+  intake: IntakeSettings,
 ) {
   const connection = () =>
     createNodeRedisClient(
@@ -29,7 +31,7 @@ export async function startPartnerJobs(
     );
   const producer = connection(),
     consumer = connection();
-  // Historical name: the queue also carries the client invitation sending job.
+  // Historical name: the queue also carries the client invitations and the external requests.
   const name = "coverview-partner-continuity-v1";
   const queue = new Queue(name, { connection: producer });
   const jobSchema = z.object({ version: z.literal(1) }).strict();
@@ -37,11 +39,21 @@ export async function startPartnerJobs(
     name,
     async (job) => {
       if (
-        !["continuity", "invitations"].includes(job.name) ||
+        !["continuity", "invitations", "external-requests"].includes(job.name) ||
         !jobSchema.safeParse(job.data).success
       )
         throw new UnrecoverableError("PARTNER_JOB_INVALID");
       const started = Date.now();
+      if (job.name === "external-requests") {
+        // Counts only: never a name, an address or a request id in the logs.
+        const result = await processExternalRequests(pool, invitations.mailer, intake);
+        if (result.linked || result.unlinked || result.sent || result.failed)
+          logger.info(
+            { jobId: job.id, ...result, durationMs: Date.now() - started },
+            "Partner external requests processed",
+          );
+        return result;
+      }
       if (job.name === "invitations") {
         // Counts only: never a recipient, a token or a link in the logs.
         const result = await processClientInvitations(
@@ -112,6 +124,11 @@ export async function startPartnerJobs(
           "invitations",
           { every: 60000 },
           { name: "invitations", data: { version: 1 }, opts },
+        );
+        await queue.upsertJobScheduler(
+          "external-requests",
+          { every: 60000 },
+          { name: "external-requests", data: { version: 1 }, opts },
         );
         await queue.upsertJobScheduler(
           "continuity",

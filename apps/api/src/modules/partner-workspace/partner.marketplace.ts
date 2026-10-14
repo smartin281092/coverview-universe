@@ -403,6 +403,7 @@ export function createMarketplaceOperations(pool: Pool, mutate: EconomyMutation)
             )
           ).rows[0];
           if (!row) fail("PARTNER_NOT_FOUND", 404);
+          if (row.restricted_to) fail("PARTNER_ACCESS_DENIED", 403);
           const lead = camel<Lead>(row);
           if (
             !lead.responsibleId ||

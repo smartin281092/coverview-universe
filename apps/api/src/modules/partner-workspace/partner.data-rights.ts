@@ -222,7 +222,11 @@ export function createDataRightsOperations(pool: Pool, repository: Repository) {
           offer: null,
           responsePending: false,
           kind: row.kind,
-          authorId: row.actor_id ?? "system_partner_continuity",
+          authorId:
+            row.actor_id ??
+            (row.system_actor === "partner-intake-v1"
+              ? "system_partner_intake"
+              : "system_partner_continuity"),
           systemActor: row.system_actor,
           audience: row.audience,
           text: row.text,

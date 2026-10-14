@@ -15,6 +15,7 @@ import {
   fail,
   type Executor,
   type PartnerActor,
+  unrestricted,
 } from "./partner.policy.js";
 
 type Notification = {
@@ -426,6 +427,7 @@ type ContinuityRow = {
   due_at: Date | null;
   waiting: { reason: string; until: string } | null;
   notification_cycle: number;
+  restricted_to: string | null;
   now: Date;
 };
 const conditionKinds = [
@@ -499,6 +501,8 @@ export async function syncLeadNotifications(db: Executor, leadId: string) {
   );
   const keys: string[] = [];
   const condition = async (kind: string, action: string, at: Date | null, admin = false) => {
+    // A restricted Lead's reminders go to its account only, never to the CoverView queue.
+    if (admin && row.restricted_to) return;
     const recipientId = admin ? null : row.responsible_id;
     const audience = recipientId ? "partner" : "coverview";
     const key = `${cycle}:${kind}:${at?.toISOString() ?? "none"}:${audience}:${recipientId ?? "coverview"}`;
@@ -562,7 +566,7 @@ function notificationScope(actor: PartnerActor) {
   const permitted = `(${visible(actor)}) and (${assigned} or ${managed})`;
   const collaboration = `n.collaboration_id is not null and exists(select 1 from partner_members m join partner_organizations o on o.id=m.organization_id where m.user_id=$1 and m.state='approved' and o.state='approved' and (m.review_due_at is null or m.review_due_at>now())) and exists(select 1 from partner_collaborations c where c.id=n.collaboration_id and (c.proposer_id=$1 or c.target_id=$1 or c.previous_responsible_id=$1))`;
   return actor.administrator
-    ? "(n.audience='coverview' or (n.audience='partner' and n.recipient_id=$1))"
+    ? `(n.audience='coverview' or (n.audience='partner' and n.recipient_id=$1)) and ${unrestricted}`
     : `n.audience='partner' and n.recipient_id=$1 and ((${collaboration}) or (n.collaboration_id is null and (${permitted})))`;
 }
 export async function readPartnerNotifications(

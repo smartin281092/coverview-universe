@@ -270,6 +270,7 @@ function summary(actor: PartnerActor, row: ReadRow): LeadSummary {
     actions.push("personal_appointment");
   const canCollaborate =
     active &&
+    !row.restrictedTo &&
     !!row.responsibleId &&
     operational &&
     (actor.administrator || row.responsibleId === actor.userId);
@@ -349,7 +350,9 @@ function summary(actor: PartnerActor, row: ReadRow): LeadSummary {
     continuityDueAt:
       active && operational && row.responsibleId ? date(deadlines.reviewDueAt) : null,
     escalationDueAt:
-      active && operational && row.responsibleId ? date(deadlines.escalationDueAt) : null,
+      active && operational && row.responsibleId && !row.restrictedTo
+        ? date(deadlines.escalationDueAt)
+        : null,
     createdAt: date(row.createdAt),
     stageChangedAt: date(row.stageChangedAt),
     updatedAt: date(row.updatedAt),
@@ -373,7 +376,10 @@ function summary(actor: PartnerActor, row: ReadRow): LeadSummary {
         row.contributorEdit ||
         (row.creatorId === actor.userId && row.stage === "draft" && !row.responsibleId) ||
         row.managedAccess),
-    canAssign: !actor.wallet && (actor.administrator || (controls && !!row.managedAccess)),
+    canAssign:
+      !actor.wallet &&
+      !row.restrictedTo &&
+      (actor.administrator || (controls && !!row.managedAccess)),
     canCollaborate,
     allowedActions: actions,
   });
@@ -466,7 +472,11 @@ async function detail(db: Executor, actor: PartnerActor, id: string): Promise<Le
             offer: r.offer,
             responsePending: r.response_pending,
             kind: r.kind,
-            authorId: r.actor_id ?? "system_partner_continuity",
+            authorId:
+              r.actor_id ??
+              (r.system_actor === "partner-intake-v1"
+                ? "system_partner_intake"
+                : "system_partner_continuity"),
             systemActor: r.system_actor,
             audience: r.audience,
             text: r.text,

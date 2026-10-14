@@ -19,6 +19,21 @@ const httpUrl = serviceUrl(["http:", "https:"]).refine((value) => {
   const url = new URL(value);
   return !url.username && !url.password && !url.search && !url.hash;
 }, "HTTP service URLs cannot contain credentials, query strings or fragments");
+const exactOrigins = z
+  .string()
+  .min(1)
+  .transform((value) => value.split(",").map((origin) => origin.trim()))
+  .pipe(
+    z
+      .array(
+        httpUrl.refine(
+          (value) => URL.canParse(value) && new URL(value).origin === value,
+          "An exact origin is required",
+        ),
+      )
+      .min(1)
+      .max(10),
+  );
 
 export const environmentSchema = z
   .object({
@@ -38,21 +53,7 @@ export const environmentSchema = z
     REDIS_URL: serviceUrl(["redis:", "rediss:"]),
     MINIO_ENDPOINT: httpUrl,
     MAILPIT_URL: httpUrl,
-    CORS_ORIGINS: z
-      .string()
-      .min(1)
-      .transform((value) => value.split(",").map((origin) => origin.trim()))
-      .pipe(
-        z
-          .array(
-            httpUrl.refine(
-              (value) => URL.canParse(value) && new URL(value).origin === value,
-              "An exact origin is required",
-            ),
-          )
-          .min(1)
-          .max(10),
-      ),
+    CORS_ORIGINS: exactOrigins,
     DEPENDENCY_TIMEOUT_MS: z.coerce.number().int().min(100).max(10000).default(2000),
     AUTH_ENABLED: z
       .enum(["true", "false"])
@@ -81,6 +82,16 @@ export const environmentSchema = z
     // Reverse proxies in front of the API (1 behind the deployed Traefik). Client addresses,
     // and so rate limits, come from the forwarded chain only for that many trusted hops.
     TRUST_PROXY_HOPS: z.coerce.number().int().min(0).max(3).default(0),
+    // Orders from horizon3.finance (14 October 2026): the browser origins allowed to send them, the
+    // address told of each one and the account that follows them up. Server side only.
+    H3_ORIGINS: exactOrigins.default([
+      "https://horizon3.finance",
+      "https://www.horizon3.finance",
+      "http://127.0.0.1:5187",
+      "http://localhost:5187",
+    ]),
+    H3_NOTIFY_EMAIL: z.email().default("sebastien@coverview.ch"),
+    H3_OWNER_EMAIL: z.email().default("sebastien@coverview.ch"),
   })
   .superRefine((config, context) => {
     const isLocal =

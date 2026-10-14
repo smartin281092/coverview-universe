@@ -33,8 +33,8 @@ export function createOverviewOperations(pool: Pool) {
             count(*) filter (where ${followUpOverdueSql})::int overdue,
             count(*) filter (where ${active} and l.responsible_id is null)::int unassigned,
             count(*) filter (where ${active} and l.assignment in ('coverview','reassign'))::int coverview_queue
-          from partner_leads l where ($1::text is null or l.category=$1)`,
-          [category],
+          from partner_leads l where ($1::text is null or l.category=$1) and (l.restricted_to is null or l.restricted_to=$2)`,
+          [category, actor.userId],
         )
       ).rows[0]!;
       // A manual decision after an earlier one, or any automatic proposal, is a reassignment.

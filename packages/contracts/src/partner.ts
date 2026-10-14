@@ -1188,7 +1188,7 @@ export const leadEventSchema = z.object({
   responsePending: z.boolean().optional(),
   kind: z.string(),
   authorId: id,
-  systemActor: z.literal("partner-continuity-v1").nullable().optional(),
+  systemActor: z.enum(["partner-continuity-v1", "partner-intake-v1"]).nullable().optional(),
   audience: audienceSchema,
   text: z.string(),
   createdAt: instant,

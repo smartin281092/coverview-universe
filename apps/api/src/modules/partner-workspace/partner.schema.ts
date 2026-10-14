@@ -1006,6 +1006,9 @@ export const partnerLeads = pgTable(
     // Controlled erasure (C7c): when the client's identifying layer was erased, and by which request.
     clientErasedAt: instant("client_erased_at"),
     clientErasureRequestId: text("client_erasure_request_id"),
+    // A Lead only this account sees (14 October 2026, orders from horizon3.finance): every other
+    // actor, administrators included, is refused, and it is never handed to anyone else.
+    restrictedTo: text("restricted_to").references(() => identityUsers.id),
   },
   (t) => [
     index("partner_leads_assignee").on(t.responsibleId, t.createdAt, t.id),
@@ -1049,6 +1052,11 @@ export const partnerLeads = pgTable(
     check(
       "partner_lead_erasure",
       sql`(${t.clientErasedAt} is null) = (${t.clientErasureRequestId} is null) and (${t.clientErasedAt} is null or (${t.clientUserId} is null and ${t.clientProfileId} is null))`,
+    ),
+    // A restricted Lead is followed by its account or by nobody, never by someone who cannot see it.
+    check(
+      "partner_lead_restricted",
+      sql`${t.restrictedTo} is null or ${t.responsibleId} is null or ${t.responsibleId} = ${t.restrictedTo}`,
     ),
   ],
 );
@@ -1357,7 +1365,7 @@ export const partnerEvents = pgTable(
     index("partner_event_lead").on(t.leadId, t.createdAt, t.id),
     check(
       "partner_event_actor",
-      sql`(${t.actorId} is not null and ${t.systemActor} is null) or (${t.actorId} is null and ${t.systemActor} is not null and ${t.systemActor} = 'partner-continuity-v1')`,
+      sql`(${t.actorId} is not null and ${t.systemActor} is null) or (${t.actorId} is null and ${t.systemActor} is not null and ${t.systemActor} in ('partner-continuity-v1','partner-intake-v1'))`,
     ),
     check(
       "partner_event_audience",
@@ -1521,4 +1529,38 @@ export const partnerNotificationReads = pgTable(
     readAt: instant("read_at").notNull().defaultNow(),
   },
   (t) => [uniqueIndex("partner_notification_read_once").on(t.notificationId, t.userId)],
+);
+
+// Orders received from a partner site (14 October 2026, horizon3.finance): one row per external
+// request id, its validated content, the Lead it opened and the internal notification's delivery.
+// Personal data (DATA-14): names, email, phone and birth year in `data`, never in logs or emails.
+export const partnerExternalRequests = pgTable(
+  "partner_external_requests",
+  {
+    id: text("id").primaryKey(),
+    source: text("source").notNull(),
+    requestId: text("request_id").notNull(),
+    fingerprint: text("fingerprint").notNull(),
+    data: jsonb("data").notNull(),
+    leadId: text("lead_id").references(() => partnerLeads.id),
+    notification: text("notification").notNull().default("queued"),
+    attempts: integer("attempts").notNull().default(0),
+    claimedAt: instant("claimed_at"),
+    notifiedAt: instant("notified_at"),
+    createdAt: instant("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    uniqueIndex("partner_external_request_once").on(t.source, t.requestId),
+    index("partner_external_request_queue")
+      .on(t.createdAt, t.id)
+      .where(sql`${t.notification} in ('queued','sending')`),
+    index("partner_external_request_unlinked")
+      .on(t.createdAt, t.id)
+      .where(sql`${t.leadId} is null`),
+    index("partner_external_request_sent").on(t.notifiedAt),
+    check(
+      "partner_external_request_state",
+      sql`${t.notification} in ('queued','sending','sent','failed') and ${t.attempts} >= 0 and (${t.notification} = 'sent') = (${t.notifiedAt} is not null)`,
+    ),
+  ],
 );

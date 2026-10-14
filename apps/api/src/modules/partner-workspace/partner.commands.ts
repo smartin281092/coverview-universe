@@ -374,6 +374,7 @@ export async function executeLeadCommand(
       break;
     }
     case "assign": {
+      if (lead.restrictedTo) fail("PARTNER_ACCESS_DENIED", 403);
       // CoverView anywhere; a manager only between members of their own organisation (C8b).
       if (!actor.administrator) await requireTeamAssignment(tx, actor, lead, input.responsibleId);
       await requireNewEngagement(tx, lead, input.responsibleId, actor);

@@ -57,7 +57,7 @@ export async function proposeCollaboration(
   lead: LeadRow,
   terms: CollaborationTerms,
 ) {
-  if (!actor.administrator && lead.responsibleId !== actor.userId)
+  if ((!actor.administrator && lead.responsibleId !== actor.userId) || lead.restrictedTo)
     fail("PARTNER_ACCESS_DENIED", 403);
   if (
     !lead.responsibleId ||

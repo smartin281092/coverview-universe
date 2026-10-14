@@ -138,14 +138,17 @@ export async function processPartnerContinuity(pool: Pool) {
           first_useful_at: Date | null;
           due_at: Date | null;
           waiting: { until: string } | null;
+          restricted: boolean;
           now: Date;
         }>(
-          `select responsible_id,(${eligible("l.responsible_id")} and ${authorityCurrent("l")}) valid,waiting,now() as now,notified_at,first_useful_at,due_at,first_action_due_at,acceptance_due_at
+          `select responsible_id,(${eligible("l.responsible_id")} and ${authorityCurrent("l")}) valid,waiting,now() as now,notified_at,first_useful_at,due_at,first_action_due_at,acceptance_due_at,
+           restricted_to is not null restricted
          from partner_leads l where id=$1`,
           [id],
         )
       ).rows[0];
-      if (row?.responsible_id) {
+      // A restricted Lead stays with its account (14 October 2026): no proposal, no escalation.
+      if (row?.responsible_id && !row.restricted) {
         const waitingUntil = row.waiting ? new Date(row.waiting.until).getTime() : 0;
         const suspended = waitingUntil > row.now.getTime();
         const deadline = followUpDeadline({

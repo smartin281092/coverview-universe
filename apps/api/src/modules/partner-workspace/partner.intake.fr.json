@@ -1,0 +1,17 @@
+{
+  "title": "3e pilier · {name}",
+  "context": "Commande reçue de horizon3.finance le {date} : {product} de {company}, stratégie {strategy}. Versement : {investment}. Capital initial : {capital}. Année de naissance : {year}. Référence horizon3 : {reference}. Coordonnées saisies par le client sur horizon3.finance ; transmission à un autre intervenant non autorisée.",
+  "none": "aucun",
+  "nextAction": "Contacter le client au sujet de sa commande 3e pilier",
+  "event": "Commande 3e pilier reçue de horizon3.finance, attribuée automatiquement et visible de son seul responsable.",
+  "frequencies": {
+    "monthly": "par mois",
+    "quarterly": "par trimestre",
+    "semiannual": "par semestre",
+    "yearly": "par an",
+    "annual": "par an",
+    "once": "en versement unique",
+    "single": "en versement unique"
+  },
+  "otherFrequency": "selon la fréquence « {frequency} »"
+}

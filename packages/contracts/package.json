@@ -19,6 +19,7 @@
     "./partner-matching": "./src/partner-matching.ts",
     "./partner-profiles": "./src/partner-profiles.ts",
     "./partner-invitations": "./src/partner-invitations.ts",
+    "./partner-intake": "./src/partner-intake.ts",
     "./partner-benefits": "./src/partner-benefits.ts",
     "./partner-comparison": "./src/partner-comparison.ts",
     "./partner-orientation": "./src/partner-orientation.ts",
