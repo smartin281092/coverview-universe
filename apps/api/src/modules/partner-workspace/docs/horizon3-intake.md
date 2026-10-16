@@ -56,9 +56,9 @@ Une erreur a la forme `{ "error": { "code", "message", "requestId" } }` ; ce `re
 - La continuité garde ses rappels, mais ne propose ni ne remonte jamais ce Lead. Ses rappels ne vont jamais dans la file CoverView.
 - Le client lui-même, s’il est un jour invité et relié dans Wallet, voit sa demande comme toute autre.
 
-**Avis interne.** Destinataire `H3_NOTIFY_EMAIL` (par défaut `sebastien@coverview.ch`), gabarit `horizon3-request-v1` en texte et HTML ; aperçu local : `/local/emails/horizon3-request`.
+**Avis interne.** Destinataire `H3_NOTIFY_EMAIL` (par défaut `sebastien@coverview.ch`), gabarit `horizon3-request-v2` en texte et HTML ; aperçu local : `/local/emails/horizon3-request`.
 
-- Contenu : produit, compagnie, stratégie, versement, capital, référence et lien vers le Lead. Jamais le nom, l’email ni le téléphone du client (MAIL-06).
+- Contenu : nom, email et téléphone du client, produit, compagnie, stratégie, versement, capital, référence et lien vers le Lead. Les coordonnées y figurent par choix explicite de l’utilisateur du 16 octobre 2026 (réponse Q-3 b), au-delà du minimum de MAIL-06 : l’avis ne part qu’à l’adresse interne configurée.
 - Envoi par la tâche Partner, chaque minute (MAIL-01).
 - Un refus est retenté après 5 minutes par tentative faite, 10 tentatives au plus.
 - Un envoi interrompu depuis plus de 10 minutes repart : un avis peut arriver deux fois, jamais pas du tout.
@@ -73,11 +73,11 @@ Une erreur a la forme `{ "error": { "code", "message", "requestId" } }` ; ce `re
 | année de naissance                                           | identifiante indirecte | idem, contexte du Lead                                              |
 | versement, fréquence, capital, produit, compagnie, stratégie | financières            | idem                                                                |
 
-Jamais dans les logs, qui ne portent que des compteurs, ni dans l’avis. Aucune durée de conservation n’est définie, comme pour les Leads. L’effacement et l’export de ces commandes restent à traiter (hors périmètre S-042a).
+Jamais dans les logs, qui ne portent que des compteurs. Prénom, nom, email et téléphone figurent dans l’avis interne (Q-3 b). Aucune durée de conservation n’est définie, comme pour les Leads. L’effacement et l’export de ces commandes restent à traiter (hors périmètre S-042a).
 
 ## Exploitation
 
 - Variables : `H3_ORIGINS`, `H3_NOTIFY_EMAIL`, `H3_OWNER_EMAIL`, côté serveur seulement. En local, désigner le compte avec lequel Partner est ouvert.
-- La tâche tourne avec les autres tâches Partner (`AUTH_ENABLED` et `PARTNER_JOBS_ENABLED`). En production aujourd’hui, comptes, emails et tâches sont coupés : les commandes y seraient enregistrées et dédupliquées, sans Lead ni avis avant ces activations (questions Q-1 et Q-2 du plan).
+- Les avis partent avec les tâches Partner (`PARTNER_JOBS_ENABLED`) dès qu’un fournisseur d’email existe (Mailpit en local, Resend en production), comptes ouverts ou non ; l’ouverture des Leads attend que le compte désigné existe. Mise en production du 16 octobre 2026 : [plan](../../../../../../roadmap/plans/deploy-full-2026-10-16.plan.md).
 - Migration 0083, additive : table, colonne nullable, contraintes, acteur système `partner-intake-v1` admis dans le journal. En cas de retour arrière, garder table et colonne : les supprimer effacerait des commandes reçues.
 - Un retour arrière du code seul rendrait ces Leads visibles des autres administrateurs. Avant un tel retour, retirer les commandes du suivi partagé ou garder ce prédicat.

@@ -190,7 +190,8 @@ export function registerPartnerWorkspace(
   const live = createLiveHub(database.pool, app.log);
   app.addHook("onReady", async () => {
     if (config.AUTH_ENABLED) await live.start();
-    if (config.AUTH_ENABLED && config.PARTNER_JOBS_ENABLED)
+    // Notices of external orders leave as soon as email works, before accounts open (16 October 2026).
+    if (config.PARTNER_JOBS_ENABLED && (config.AUTH_ENABLED || mailer))
       stopJobs = await startPartnerJobs(
         config.REDIS_URL,
         database.pool,
@@ -201,6 +202,7 @@ export function registerPartnerWorkspace(
           notifyEmail: config.H3_NOTIFY_EMAIL,
           partnerOrigin: config.AUTH_PARTNER_ORIGIN,
         },
+        config.AUTH_ENABLED,
       );
   });
   // Streams never finish on their own: they close before the server waits for open requests.

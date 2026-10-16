@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import type { Environment } from "./config.js";
 
 // Single sending interface (MAIL-02): callers never know which adapter is behind it.
@@ -40,11 +41,57 @@ export function createMailpitMailer(baseUrl: string, timeoutMs: number): Mailer 
   };
 }
 
-// No production provider is configured yet: without an adapter nothing is sent or shown as sent.
+// Production adapter (16 October 2026): the Resend HTTP API, its key in the server environment
+// only. The idempotency key is the message reference and its content: a retry of the same message
+// is sent once, a renewed message (a new invitation link) is a new send. Errors carry the HTTP
+// status only, never the recipient or the content.
+export function createResendMailer(
+  apiKey: string,
+  from: string,
+  endpoint = "https://api.resend.com/emails",
+  timeoutMs = 10000,
+): Mailer {
+  return {
+    async send(message) {
+      const body = JSON.stringify({
+        from,
+        to: [message.to],
+        subject: message.subject,
+        text: message.text,
+        html: message.html,
+        headers: { "X-CoverView-Reference": message.reference },
+        tags: [{ name: "template", value: message.tag }],
+      });
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          authorization: `Bearer ${apiKey}`,
+          "content-type": "application/json",
+          "idempotency-key": `${message.reference}:${createHash("sha256").update(body).digest("hex")}`,
+        },
+        body,
+        redirect: "error",
+        signal: AbortSignal.timeout(timeoutMs),
+      });
+      await response.body?.cancel();
+      if (!response.ok) throw new Error(`MAIL_REJECTED_${response.status}`);
+    },
+  };
+}
+
+// Mailpit in a local runtime, Resend once its key is configured, otherwise nothing: without an
+// adapter nothing is sent or shown as sent.
 export function createMailer(
-  config: Pick<Environment, "EXTERNAL_ADAPTER_MODE" | "MAILPIT_URL" | "DEPENDENCY_TIMEOUT_MS">,
+  config: Pick<
+    Environment,
+    | "EXTERNAL_ADAPTER_MODE"
+    | "MAILPIT_URL"
+    | "DEPENDENCY_TIMEOUT_MS"
+    | "RESEND_API_KEY"
+    | "MAIL_FROM"
+  >,
 ): Mailer | null {
-  return config.EXTERNAL_ADAPTER_MODE === "local"
-    ? createMailpitMailer(config.MAILPIT_URL, config.DEPENDENCY_TIMEOUT_MS)
-    : null;
+  if (config.EXTERNAL_ADAPTER_MODE === "local")
+    return createMailpitMailer(config.MAILPIT_URL, config.DEPENDENCY_TIMEOUT_MS);
+  return config.RESEND_API_KEY ? createResendMailer(config.RESEND_API_KEY, config.MAIL_FROM) : null;
 }

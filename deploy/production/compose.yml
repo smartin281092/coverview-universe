@@ -1,6 +1,7 @@
-# Pile CoverView de production (comparateur public) sur cv-staging-01, derrière le Traefik de
-# Coolify, qui porte TLS et HSTS. Une paire de routes par adresse garde ses certificats. Runbook : README.md.
-# Les secrets restent dans /opt/coverview-astra/.env (0600) ; .env.example en décrit les clés.
+# Pile CoverView de production sur cv-staging-01, derrière le Traefik de Coolify, qui porte TLS et
+# HSTS. Une paire de routes par adresse garde ses certificats. Runbook : README.md.
+# Réglages dans /opt/coverview-astra/.env, secrets de l'API dans api.env (0600 tous deux) ;
+# .env.example et api.env.example en décrivent les clés.
 name: coverview-astra
 
 services:
@@ -44,20 +45,28 @@ services:
       TRUST_PROXY_HOPS: "1"
       FIXTURE_MODE: "false"
       EXTERNAL_ADAPTER_MODE: disabled
-      # Comparateur seul : comptes, documents, travaux de fond et emails restent désactivés.
-      AUTH_ENABLED: "false"
+      # Comptes ouverts une fois WorkOS configuré (secrets dans api.env) ; documents à décider.
+      AUTH_ENABLED: ${AUTH_ENABLED:-false}
       DOCUMENTS_ENABLED: "false"
-      PARTNER_JOBS_ENABLED: "false"
+      # Travaux de fond : avis des commandes externes dès que l'email fonctionne, le reste avec les comptes.
+      PARTNER_JOBS_ENABLED: "true"
       DATABASE_URL: postgres://coverview:${POSTGRES_PASSWORD:?}@postgres:5432/coverview
       REDIS_URL: redis://redis:6379
-      # Adresses exigées par la configuration ; adaptateurs désactivés, jamais contactées.
+      # Adresses exigées par la configuration ; adaptateurs locaux désactivés, jamais contactées.
       MINIO_ENDPOINT: http://127.0.0.1:9
       MAILPIT_URL: http://127.0.0.1:9
-      CORS_ORIGINS: ${SITE_ORIGIN:-https://coverview.ch}
+      # Email : Resend dès que RESEND_API_KEY est dans api.env, depuis le sous-domaine d'envoi.
+      MAIL_FROM: ${MAIL_FROM:-CoverView <notifications@mail.coverview.ch>}
+      CORS_ORIGINS: ${SITE_ORIGIN:-https://coverview.ch},https://wallet.coverview.ch,https://admin.coverview.ch,https://partner.coverview.ch
       AUTH_API_ORIGIN: ${API_ORIGIN:-https://api.coverview.ch}
       AUTH_WWW_ORIGIN: ${SITE_ORIGIN:-https://coverview.ch}
       AUTH_WALLET_ORIGIN: https://wallet.coverview.ch
       AUTH_ADMIN_ORIGIN: https://admin.coverview.ch
+      AUTH_PARTNER_ORIGIN: https://partner.coverview.ch
+    # Secrets (WorkOS, session, Resend), absents tant qu'ils ne sont pas saisis sur le serveur.
+    env_file:
+      - path: api.env
+        required: false
     depends_on:
       postgres: { condition: service_healthy }
       redis: { condition: service_healthy }
@@ -220,6 +229,43 @@ services:
       traefik.http.routers.cva-closed-intelligence-staging.tls.certresolver: letsencrypt
       traefik.http.routers.cva-closed-intelligence-staging.middlewares: cva-hsts
       traefik.http.routers.cva-closed-intelligence-staging.service: cva-www
+
+  # Wallet, Partner et Admin, ouverts avec les comptes (COMPOSE_PROFILES=apps dans .env). Leurs
+  # routes passent avant les redirections des surfaces fermées portées par www.
+  apps:
+    image: ghcr.io/smartin281092/coverview-astra-apps:${RELEASE:?}
+    profiles: [apps]
+    restart: unless-stopped
+    environment:
+      SITE_ORIGIN: ${SITE_ORIGIN:-https://coverview.ch}
+    networks: [coolify]
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'wget -q --spider --header "Host: partner.coverview.ch" http://127.0.0.1:8080/'
+      interval: 15s
+      timeout: 5s
+      retries: 5
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: coolify
+      traefik.http.services.cva-apps.loadbalancer.server.port: "8080"
+      traefik.http.middlewares.cva-https.redirectscheme.scheme: https
+      traefik.http.middlewares.cva-https.redirectscheme.permanent: "true"
+      traefik.http.middlewares.cva-hsts.headers.stsSeconds: "63072000"
+      traefik.http.middlewares.cva-hsts.headers.stsIncludeSubdomains: "true"
+      traefik.http.middlewares.cva-hsts.headers.stsPreload: "true"
+      traefik.http.routers.cva-apps-http.entrypoints: http
+      traefik.http.routers.cva-apps-http.rule: Host(`wallet.coverview.ch`) || Host(`partner.coverview.ch`) || Host(`admin.coverview.ch`)
+      traefik.http.routers.cva-apps-http.priority: "1000"
+      traefik.http.routers.cva-apps-http.middlewares: cva-https
+      traefik.http.routers.cva-apps.entrypoints: https
+      traefik.http.routers.cva-apps.rule: Host(`wallet.coverview.ch`) || Host(`partner.coverview.ch`) || Host(`admin.coverview.ch`)
+      traefik.http.routers.cva-apps.priority: "1000"
+      traefik.http.routers.cva-apps.tls: "true"
+      traefik.http.routers.cva-apps.tls.certresolver: letsencrypt
+      traefik.http.routers.cva-apps.middlewares: cva-hsts
+      traefik.http.routers.cva-apps.service: cva-apps
 
 networks:
   internal:

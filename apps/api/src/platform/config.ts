@@ -92,6 +92,13 @@ export const environmentSchema = z
     ]),
     H3_NOTIFY_EMAIL: z.email().default("sebastien@coverview.ch"),
     H3_OWNER_EMAIL: z.email().default("sebastien@coverview.ch"),
+    // Production email (16 October 2026): Resend, from a dedicated sending subdomain (MAIL-05).
+    // The key is a secret of the server environment; local runtimes keep Mailpit.
+    RESEND_API_KEY: z.string().startsWith("re_").min(10).max(300).optional(),
+    MAIL_FROM: z
+      .string()
+      .regex(/^[^\r\n<>]{1,80} <[^\s<>@]+@[^\s<>@]+\.[a-z]{2,}>$/u)
+      .default("CoverView <notifications@mail.coverview.ch>"),
   })
   .superRefine((config, context) => {
     const isLocal =

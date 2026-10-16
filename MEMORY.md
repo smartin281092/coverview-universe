@@ -6,6 +6,13 @@ Aucune entrée active. Les décisions durables vivent dans leur documentation pr
 
 ## Candidats
 
+Décisions utilisateur du 16 octobre 2026, mise en production complète ([plan](roadmap/plans/deploy-full-2026-10-16.plan.md)).
+- **Instruction utilisateur** : « tout déployer maintenant » : commandes horizon3, comptes, emails, travaux de fond, Wallet, Partner et Admin en production (Q-1 c).
+- **Instruction utilisateur** : emails par Resend (Q-2 a) ; l’avis horizon3 contient nom, email et téléphone du client (Q-3 b).
+- **Défauts PROG-23** : sous-domaine d’envoi `mail.coverview.ch` en région UE ; surfaces ouvertes seulement quand les comptes fonctionnent ; documents non déployés ; premier administrateur `sebastien@coverview.ch` par attribution tracée.
+
+Confiance haute sur les instructions. Réexaminer à la publication des pages légales et avant le 16 janvier 2027.
+
 Décisions utilisateur du 14 octobre 2026, commandes horizon3.finance ([plan](roadmap/plans/S-042a-horizon3-intake.plan.md), [règles](apps/api/src/modules/partner-workspace/docs/horizon3-intake.md)).
 - **Instruction utilisateur** : une commande 3e pilier de horizon3.finance arrive sur `POST /api/public/h3/contact` ; un même `requestId` ne recrée ni la demande ni l’email ; avis à `sebastien@coverview.ch`, configuré côté serveur ; CORS des quatre origines convenues ; aucune clé secrète dans le navigateur, validation et limitation des abus.
 - **Instruction utilisateur** : chaque commande est attribuée automatiquement à Sébastien Martin (`sebastien@coverview.ch`) et visible de lui seul dans les kanbans de Partner et Admin.

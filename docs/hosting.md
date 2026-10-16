@@ -31,3 +31,14 @@ L'utilisateur fait publier ce projet sur le serveur qui héberge `coverview.ch`,
 - Revenir à un serveur dédié reste la cible de HOST-02, quand le projet sortira du mode comparateur.
 
 Runbook, pile et retour arrière : [deploy/production](../deploy/production/README.md). Plan et preuves : [deploy-comparator](../roadmap/plans/deploy-comparator.plan.md).
+
+## HOST-05 — Mise en production complète du 16 octobre 2026 (décision utilisateur)
+
+Réponse « tout déployer maintenant », sur le même serveur et derrière le même Traefik que HOST-04.
+
+- **API** : commandes horizon3 en ligne ; emails par Resend depuis le sous-domaine `mail.coverview.ch` (MAIL-05), sans toucher au MX Google ni aux enregistrements de `coverview.ch` ; comptes WorkOS production dès que leurs clés sont saisies sur le serveur.
+- **Wallet, Partner et Admin** : image `apps` (Caddy derrière Traefik), servie quand les comptes fonctionnent ; jusque-là, leurs adresses restent redirigées vers l’accueil.
+- **Secrets** : `api.env` en 0600, saisis sur le serveur par le titulaire des comptes ou générés sur place, jamais affichés.
+- **Documents** non déployés : stockage objet, chiffrement, antivirus et clé OpenAI de production restent à décider.
+
+Plan et preuves : [deploy-full](../roadmap/plans/deploy-full-2026-10-16.plan.md).

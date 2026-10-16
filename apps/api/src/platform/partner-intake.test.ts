@@ -243,7 +243,7 @@ it("stores an order once, answers a retry alike and refuses another content or a
     // MAIL-03 preview, fictitious values, local adapter only.
     const preview = await app.inject({ url: "/local/emails/horizon3-request?format=text" });
     expect(preview.statusCode).toBe(200);
-    expect(preview.body).toContain("horizon3-request-v1");
+    expect(preview.body).toContain("horizon3-request-v2");
   } finally {
     await app.close();
   }
@@ -493,7 +493,7 @@ it("notifies each order once, with minimal data, retries refused sends and caps 
   expect(notice).toMatchObject({
     to: "notices@intake.test",
     subject: "Nouvelle commande 3e pilier reçue de horizon3.finance",
-    tag: "horizon3-request-v1",
+    tag: "horizon3-request-v2",
   });
   expect(notice.text).toContain("Produit : Hyperion (Liechtenstein Life)");
   expect(notice.text).toContain("Versement : 300 CHF par mois");
@@ -501,10 +501,11 @@ it("notifies each order once, with minimal data, retries refused sends and caps 
   expect(notice.text).toContain(linked.requestId);
   expect(notice.text).toContain(`${config.AUTH_PARTNER_ORIGIN}/leads/${linkedRow!.lead_id}`);
   expect(notice.html).toContain(`href="${config.AUTH_PARTNER_ORIGIN}/leads/${linkedRow!.lead_id}"`);
-  // MAIL-06: the client's name, address and phone stay in Partner.
-  for (const message of sent)
-    for (const personal of ["Jean", "Dupont", "jean@example.test", "+41 79"])
-      expect(message.text + message.html).not.toContain(personal);
+  // Q-3 b (16 October 2026): the client's name, email and phone, escaped in the HTML.
+  expect(notice.text).toContain(
+    "Client : Jean Dupont\nEmail : jean@example.test\nTéléphone : +41 79 123 45 67",
+  );
+  expect(notice.html).toContain("Client : Jean Dupont<br>Email : jean@example.test");
   const pending = sent.find((message) => message.reference === waitingRow!.id)!;
   expect(pending.text).toContain("dès que le compte qui suit ces commandes y sera disponible");
   expect(pending.text).toContain("Capital initial : aucun");

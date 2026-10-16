@@ -15,6 +15,8 @@ export async function startPartnerJobs(
   logger: FastifyBaseLogger,
   invitations: { mailer: Mailer | null; walletOrigin: string },
   intake: IntakeSettings,
+  // Without accounts only the external requests run: continuity and invitations need people.
+  accounts = true,
 ) {
   const connection = () =>
     createNodeRedisClient(
@@ -121,20 +123,18 @@ export async function startPartnerJobs(
           removeOnFail: { age: 604800, count: 1000 },
         };
         await queue.upsertJobScheduler(
-          "invitations",
-          { every: 60000 },
-          { name: "invitations", data: { version: 1 }, opts },
-        );
-        await queue.upsertJobScheduler(
           "external-requests",
           { every: 60000 },
           { name: "external-requests", data: { version: 1 }, opts },
         );
-        await queue.upsertJobScheduler(
-          "continuity",
-          { every: 60000 },
-          { name: "continuity", data: { version: 1 }, opts },
-        );
+        for (const name of ["invitations", "continuity"])
+          if (accounts)
+            await queue.upsertJobScheduler(
+              name,
+              { every: 60000 },
+              { name, data: { version: 1 }, opts },
+            );
+          else await queue.removeJobScheduler(name);
       })(),
       new Promise<never>((_, reject) => {
         timeout = setTimeout(() => reject(new Error("Partner scheduler unavailable")), 20000);

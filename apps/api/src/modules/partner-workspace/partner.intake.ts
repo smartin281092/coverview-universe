@@ -232,6 +232,9 @@ export async function processExternalRequests(
       const data = storedSchema.parse(claimed.data);
       const message = horizon3RequestMessage({
         locale: "fr",
+        name: `${data.firstName} ${data.lastName}`,
+        email: data.email,
+        phone: data.phone,
         product: data.productName,
         company: data.company,
         strategy: data.strategyId,
@@ -272,6 +275,9 @@ export async function processExternalRequests(
 export function horizon3RequestPreview(partnerOrigin: string | undefined) {
   return horizon3RequestMessage({
     locale: "fr",
+    name: "Camille Exemple",
+    email: "camille@example.test",
+    phone: "+41 79 000 00 00",
     product: "Produit exemple",
     company: "Compagnie exemple",
     strategy: "exemple",
