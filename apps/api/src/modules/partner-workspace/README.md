@@ -23,6 +23,13 @@
 
 Ces règles remplacent les mentions « restrictions fines et réexamens ouverts ». [Règles, effets et preuves](docs/access.md).
 
+**Commandes horizon3.finance (S-042a, 14 octobre 2026).**
+- **Endpoint public** `POST /api/public/h3/contact` : chaque commande est gardée une fois par `requestId`. Une reprise identique ne change rien, un autre contenu est refusé. CORS des quatre origines convenues, 4 Ko, validation stricte, 10 requêtes par minute et par adresse.
+- **Lead réservé** à un compte (`restricted_to`) : invisible des autres administrateurs et professionnels, jamais réattribué ni remonté.
+- **Avis interne** sans données du client, retenté, 60 par heure au plus.
+
+[Contrat, règles, données et exploitation](docs/horizon3-intake.md).
+
 **Équipe du responsable (C8b).**
 - **Invitation** : le responsable invite un collègue par son adresse ; seul le compte vérifié avec cette adresse la voit, et l'accepte en candidatant. CoverView valide la personne à part.
 - **Page Équipe** : membres, demandes en cours et en retard, invitations, conditions commerciales de l'équipe en lecture.

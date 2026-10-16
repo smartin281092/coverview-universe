@@ -6,6 +6,14 @@ Aucune entrée active. Les décisions durables vivent dans leur documentation pr
 
 ## Candidats
 
+Décisions utilisateur du 14 octobre 2026, commandes horizon3.finance ([plan](roadmap/plans/S-042a-horizon3-intake.plan.md), [règles](apps/api/src/modules/partner-workspace/docs/horizon3-intake.md)).
+- **Instruction utilisateur** : une commande 3e pilier de horizon3.finance arrive sur `POST /api/public/h3/contact` ; un même `requestId` ne recrée ni la demande ni l’email ; avis à `sebastien@coverview.ch`, configuré côté serveur ; CORS des quatre origines convenues ; aucune clé secrète dans le navigateur, validation et limitation des abus.
+- **Instruction utilisateur** : chaque commande est attribuée automatiquement à Sébastien Martin (`sebastien@coverview.ch`) et visible de lui seul dans les kanbans de Partner et Admin.
+- **Défauts PROG-23** : lead réservé (`restricted_to`), jamais réattribué ni remonté ; transmission à un autre intervenant non autorisée ; avis sans nom, email ni téléphone ; 10 requêtes par minute et par adresse, 60 avis par heure.
+- **Questions ouvertes** : Q-1 mise en production, Q-2 fournisseur d’email, Q-3 contenu de l’avis.
+
+Confiance haute sur les instructions. Réexaminer à la mise en production de l’endpoint et avant le 14 janvier 2027.
+
 Décisions utilisateur du 9 octobre 2026, PostHog ([plan](roadmap/plans/posthog-analytics.plan.md), [ADR-0011](adr/0011-posthog-consent.md)).
 - PostHog sur le site, Wallet et Partner, jamais Admin ; **après bandeau de consentement** (PostHog complet seulement après accord).
 - Enregistrement des sessions dans Wallet et Partner, tous textes et saisies masqués ; région **UE**.
