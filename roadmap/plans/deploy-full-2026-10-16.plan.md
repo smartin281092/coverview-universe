@@ -59,3 +59,12 @@ Documents en production (D-7) ; changements DNS par l’agent ; nouveau serveur 
 
 | # | cible | oracle | résultat | suite |
 |---|---|---|---|---|
+| 1 | Code | `tsc` API, ESLint, tests touchés (adaptateur Resend contre un faux serveur, avis v2, configuration, invitations, serveur) | 47/47 ; clé d’idempotence stable pour un même message, nouvelle pour un contenu renouvelé ; refus rendu sans contenu | — |
+| 2 | Configuration de production | analyse des environnements des phases A, A avec Resend et C (secrets fictifs) | acceptés tous trois ; origines horizon3 et compte désigné par défaut | — |
+| 3 | Apps | builds Vite des trois apps avec les adresses de production | aucun renvoi vers une adresse locale ; `api.coverview.ch` intégré | — |
+| 4 | Images | `docker build` sur le serveur depuis `git archive` (empreinte vérifiée) | API, apps et site construits en 4 min 30 | — |
+| 5 | Sauvegarde | `pg_dump` sur le serveur (138 tables de données listées), copie chiffrée `age` sur `D:\CoverViewBackups\production` | 19,3 Mo | déchiffrement contrôlable par l’utilisateur seul |
+| 6 | Répétition | copie de la base de production, pile sur ports locaux du serveur, tunnel SSH | garde de migration : 83 refusé, 84 appliquées (74 → 84) ; API prête ; comparateur dans le navigateur (Lausanne, primes, aucune erreur console) ; commande horizon3 : pré-vol 204, 200, reprise 200, 422 ; Partner servi (l’API de production lui refuse l’origine de répétition, attendu) | répétition démontée, volume jetable supprimé ; volumes de l’ancien produit intacts |
+| 7 | Suite API complète | worktree figé, commit e259c17 | 83/83 fichiers, 797/797 tests | — |
+| 8 | Bascule phase A | `compose.yml` et `apps.Caddyfile` de la version, `RELEASE=e259c17`, `AUTH_ENABLED=false` ; anciens `compose.yml` et `.env` gardés à côté | 84 migrations appliquées ; API et site sains | — |
+| 9 | Contrôles publics | curl et navigateur sur la production | `/` → 302 → comparateur 200 ; API prête ; pré-vol horizon3 204 avec l’origine `https://horizon3.finance`, HSTS ; corps invalide 400 sans écriture ; Wallet, Partner, Admin et ancien sous-domaine → 302 vers l’accueil ; comparateur Neuchâtel avec le nouveau profil, aucune erreur console | phase B : clés Resend et WorkOS |
