@@ -24,6 +24,12 @@ Un compte reçoit seulement les personnes dont il possède actuellement le dossi
 
 Sauvegardes avec révision optimiste et clés idempotentes ; soumissions rejouées avant recalcul du catalogue ; transitions ordonnées avec révision et verrou de session/permission. Challenge OTP de 10 minutes, cinq tentatives, réservation par boîte indépendante des changements d’adresse. Les erreurs ne révèlent pas l’existence d’un compte WorkOS.
 
+## Pièces de la demande
+
+Depuis le 20 octobre 2026, `year` enregistre l’année des primes à la soumission et nomme la demande (« Assurance maladie 2027 »). Le défaut 2027 de la migration additive 0084 décrit exactement l’existant : c’était la seule année du comparateur.
+
+`previous_contracts` porte, pour chaque personne, le contrat de l’année précédente : un document du dossier de la personne, ou la déclaration de n’en avoir aucun. `POST /insurance-requests/:id/previous-contract` (`document | none | unset`) exige les contrôles de mutation habituels, la session du propriétaire actuel du dossier de la personne et une demande en traitement (`submitted` à `offer_ready`). Le document est vérifié au serveur via `profileDocumentExists` de document-intelligence : même compte, même dossier, ni supprimé ni en quarantaine. Une réponse identique ne change rien ; les réponses suivent la projection des personnes visibles. La pièce d’identité reste la pièce jointe d’identité du dossier (documents), sans copie dans la demande.
+
 ## Données, maintenance et identité légale
 
 Migrations additives 0021–0023 : demandes, challenges, commandes et réservations email. Une passe bornée à 100 lignes par table, coordonnée par `SKIP LOCKED`, supprime les brouillons après 24 heures et les challenges/réservations expirés. Les commandes d’un brouillon supprimé suivent une cascade. Les demandes soumises ne sont pas effacées par cette maintenance. Une future procédure d’effacement devra traiter les snapshots par personne et révoquer la capacité navigateur ; mettre seulement `user_id` à NULL serait incorrect.

@@ -1,0 +1,2 @@
+ALTER TABLE "insurance_requests" ADD COLUMN "year" integer DEFAULT 2027 NOT NULL;--> statement-breakpoint
+ALTER TABLE "insurance_requests" ADD COLUMN "previous_contracts" jsonb DEFAULT '[]'::jsonb NOT NULL;

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { healthOfferSchema, healthLocalitySchema } from "./health-insurance.js";
+import { healthOfferSchema, healthLocalitySchema, healthYear } from "./health-insurance.js";
 
 export const insuranceRequestIdSchema = z.string().regex(/^inq_[0-9a-f-]{36}$/);
 export const insuranceRequestStateSchema = z.enum([
@@ -59,6 +59,31 @@ export const insuranceItemSchema = insurancePersonSchema.extend({
   currentInsurerName: z.string().nullable().default(null),
   currentInsurerBrand: z.string().trim().min(1).optional(),
 });
+// Each person's 2026 health contract (20 October 2026): one of the person's own documents, or the
+// person's statement of having none. Same document identifier as documents.ts, kept local so the
+// public comparator does not load the document contracts.
+const contractDocumentIdSchema = z.string().regex(/^doc_[0-9a-f-]{36}$/);
+export const insurancePreviousContractSchema = z.discriminatedUnion("kind", [
+  z.object({
+    personId: z.uuid(),
+    kind: z.literal("document"),
+    documentId: contractDocumentIdSchema,
+    at: z.iso.datetime(),
+  }),
+  z.object({ personId: z.uuid(), kind: z.literal("none"), at: z.iso.datetime() }),
+]);
+export const insurancePreviousContractInputSchema = z.discriminatedUnion("kind", [
+  z
+    .object({
+      personId: z.uuid(),
+      kind: z.literal("document"),
+      documentId: contractDocumentIdSchema,
+    })
+    .strict(),
+  z.object({ personId: z.uuid(), kind: z.literal("none") }).strict(),
+  // Withdraws the answer, for example a "none" given by mistake.
+  z.object({ personId: z.uuid(), kind: z.literal("unset") }).strict(),
+]);
 export const insuranceRequestSchema = z.object({
   id: insuranceRequestIdSchema,
   email: z.email().nullable(),
@@ -73,6 +98,9 @@ export const insuranceRequestSchema = z.object({
   updatedAt: z.iso.datetime(),
   legalVersion: z.string().nullable(),
   history: z.array(z.object({ state: insuranceRequestStateSchema, at: z.iso.datetime() })).max(100),
+  previousContracts: z.array(insurancePreviousContractSchema).max(12).default([]),
+  // The premium year the request was quoted on: its name, "Assurance maladie 2027".
+  year: z.number().int().min(2027).max(2100).default(healthYear),
 });
 export const insuranceRequestListSchema = z.object({
   requests: z.array(insuranceRequestSchema).max(25),
@@ -98,3 +126,5 @@ export type InsuranceRequest = z.infer<typeof insuranceRequestSchema>;
 export type InsuranceRequestState = z.infer<typeof insuranceRequestStateSchema>;
 export type InsuranceRequestListQuery = z.infer<typeof insuranceRequestListQuerySchema>;
 export type InsuranceTransitionInput = z.infer<typeof insuranceTransitionInputSchema>;
+export type InsurancePreviousContract = z.infer<typeof insurancePreviousContractSchema>;
+export type InsurancePreviousContractInput = z.infer<typeof insurancePreviousContractInputSchema>;

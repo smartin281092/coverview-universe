@@ -29,6 +29,13 @@ export const insuranceRequests = pgTable(
     submitHash: text("submit_hash"),
     submitKey: text("submit_key"),
     history: jsonb("history").$type<InsuranceRequest["history"]>().notNull().default([]),
+    // Premium year quoted at submission (20 October 2026). Every earlier request was quoted on 2027
+    // premiums, the comparator's only year until then; the default records exactly that.
+    year: integer("year").notNull().default(2027),
+    previousContracts: jsonb("previous_contracts")
+      .$type<InsuranceRequest["previousContracts"]>()
+      .notNull()
+      .default([]),
     draft: jsonb("draft").$type<InsuranceCart>(),
     createdAt: instant("created_at").notNull().defaultNow(),
     updatedAt: instant("updated_at").notNull().defaultNow(),

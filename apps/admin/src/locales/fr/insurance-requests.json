@@ -61,6 +61,11 @@
   "emailStatus": "{{email}} · {{state}}",
   "totalAmount": "Total mensuel : {{amount}} CHF",
   "currentInsurerValue": "Caisse actuelle : {{name}}",
+  "previousContract": {
+    "missing": "Contrat {{year}} : pas encore transmis",
+    "none": "Contrat {{year}} : aucun, déclaré le {{at}}",
+    "document": "Contrat {{year}} : document {{id}} transmis le {{at}}"
+  },
   "configuration": "{{year}} · {{postalCode}} {{locality}} · Franchise : {{deductible}} CHF · Accident : {{accident}}",
   "sexValue": "Sexe : {{value}}",
   "separator": " · "

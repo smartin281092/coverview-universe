@@ -37,20 +37,23 @@ export function DocumentUpload({
   onDone,
   portalContainer,
   onBusyChange,
+  targetProfileId,
 }: {
   identity: IdentityMe;
   pending?: DocumentRecord;
   onDone: (document: DocumentRecord) => void;
   portalContainer: HTMLDivElement | null;
   onBusyChange?: (busy: boolean) => void;
+  // A fixed destination, for example the person of a comparator request (20 October 2026).
+  targetProfileId?: string;
 }) {
   const { t, i18n } = useTranslation("documents");
   const { scope, profileId } = useWalletProfileScope();
-  const [targetProfile, setTargetProfile] = useState(profileId ?? "detect");
+  const [targetProfile, setTargetProfile] = useState(targetProfileId ?? profileId ?? "detect");
   const profiles = useQuery({
     queryKey: ["private", identity.user.id, identity.session.id, "managed-profiles"],
     queryFn: ({ signal }) => api.profiles({ signal }),
-    enabled: !pending && scope === "all",
+    enabled: !pending && scope === "all" && !targetProfileId,
     gcTime: 0,
     staleTime: 0,
     retry: false,
@@ -370,7 +373,7 @@ export function DocumentUpload({
         {files.length > 1 && (
           <p className="text-sm text-muted-foreground">{t("capture.combineHelp")}</p>
         )}
-        {!pending && scope === "all" && (
+        {!pending && scope === "all" && !targetProfileId && (
           <div className="space-y-2">
             <Label htmlFor="upload-profile">{t("uploadProfile.label")}</Label>
             <Select

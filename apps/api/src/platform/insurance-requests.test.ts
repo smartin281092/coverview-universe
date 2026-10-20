@@ -7,6 +7,8 @@ import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { eq } from "drizzle-orm";
 import { afterAll, beforeAll, expect, it } from "vitest";
 import type { InsuranceCart, InsurancePerson } from "@coverview/contracts/insurance-requests";
+import { healthYear } from "@coverview/contracts/health-insurance";
+import { documents } from "../modules/document-intelligence/document.schema.js";
 import { createDatabase } from "./db/database.js";
 import { parseEnvironment } from "./config.js";
 import { buildServer } from "./server.js";
@@ -102,6 +104,28 @@ it("protects HTTP mutations by host, origin, CSRF, command key and browser owner
     expect(
       (await app.inject({ url: `/insurance-requests/${id}`, headers: { host } })).statusCode,
     ).toBe(403);
+    const answer = { personId: randomUUID(), kind: "none" };
+    expect(
+      (
+        await app.inject({
+          method: "POST",
+          url: `/insurance-requests/${id}/previous-contract`,
+          headers: { ...headers, "x-csrf-token": "bad" },
+          payload: answer,
+        })
+      ).statusCode,
+    ).toBe(403);
+    // Answering for a person always takes an account session.
+    expect(
+      (
+        await app.inject({
+          method: "POST",
+          url: `/insurance-requests/${id}/previous-contract`,
+          headers,
+          payload: answer,
+        })
+      ).statusCode,
+    ).toBe(503);
     expect(
       (await app.inject({ url: "/admin/insurance-requests", headers: { host, cookie } }))
         .statusCode,
@@ -915,6 +939,96 @@ it("requires email proof, creates family profiles atomically, and refuses a revo
   await expect(
     repository.submit(browser, draft.id, input, items, key, owner),
   ).rejects.toMatchObject({ statusCode: 401 });
+});
+it("records each person's previous contract for its profile owner only, while the request is handled", async () => {
+  const browser = fingerprint(randomUUID()),
+    email = `${randomUUID()}@fixture.test`,
+    input = cart(true),
+    draft = await repository.email(browser, email, randomUUID());
+  const owner = await session(email),
+    stranger = await session(`${randomUUID()}@fixture.test`),
+    items = await repository.price(input);
+  await repository.save(browser, draft.id, input, items, randomUUID());
+  await expect(
+    repository.previousContract(draft.id, { personId: items[0]!.id, kind: "none" }, owner),
+  ).rejects.toMatchObject({ statusCode: 404 });
+  await repository.verifyOwner(browser, draft.id, owner);
+  const submitted = await repository.submit(browser, draft.id, input, items, randomUUID(), owner);
+  expect(submitted).toMatchObject({ year: healthYear, previousContracts: [] });
+  const [parent, relative] = submitted.items;
+  if (!parent?.profileId || !relative?.profileId) throw new Error("Profiles fixture missing");
+  for (const [personId, actor] of [
+    [parent.id, stranger],
+    [randomUUID(), owner],
+  ] as const)
+    await expect(
+      repository.previousContract(draft.id, { personId, kind: "none" }, actor),
+    ).rejects.toMatchObject({ statusCode: 404 });
+  const none = await repository.previousContract(
+    draft.id,
+    { personId: parent.id, kind: "none" },
+    owner,
+  );
+  expect(none.previousContracts).toMatchObject([{ personId: parent.id, kind: "none" }]);
+  // The same answer again keeps its date.
+  expect(
+    (await repository.previousContract(draft.id, { personId: parent.id, kind: "none" }, owner))
+      .previousContracts,
+  ).toEqual(none.previousContracts);
+  const file = async (profileId: string, state: "ready" | "quarantined" = "ready") => {
+    const id = `doc_${randomUUID()}`;
+    await database.db.insert(documents).values({
+      id,
+      userId: owner.userId,
+      managedProfileId: profileId,
+      name: "police-2026.pdf",
+      mime: "application/pdf",
+      declaredMime: "application/pdf",
+      size: 1024,
+      checksum: fingerprint(id),
+      objectKey: `fixtures/${id}`,
+      state,
+    });
+    return id;
+  };
+  // Only a usable document of that person's own profile.
+  for (const documentId of [
+    await file(relative.profileId),
+    await file(parent.profileId, "quarantined"),
+  ])
+    await expect(
+      repository.previousContract(
+        draft.id,
+        { personId: parent.id, kind: "document", documentId },
+        owner,
+      ),
+    ).rejects.toMatchObject({ code: "INSURANCE_REQUEST_INVALID" });
+  const policy = await file(parent.profileId);
+  expect(
+    (
+      await repository.previousContract(
+        draft.id,
+        { personId: parent.id, kind: "document", documentId: policy },
+        owner,
+      )
+    ).previousContracts,
+  ).toMatchObject([{ personId: parent.id, kind: "document", documentId: policy }]);
+  // Concurrent answers for both persons keep each other.
+  await Promise.all([
+    repository.previousContract(draft.id, { personId: relative.id, kind: "none" }, owner),
+    repository.previousContract(draft.id, { personId: parent.id, kind: "unset" }, owner),
+  ]);
+  expect((await repository.get(draft.id, "", owner.userId)).previousContracts).toMatchObject([
+    { personId: relative.id, kind: "none" },
+  ]);
+  expect((await repository.get(draft.id, "", undefined, true)).previousContracts).toHaveLength(1);
+  await database.db
+    .update(insuranceRequests)
+    .set({ state: "completed" })
+    .where(eq(insuranceRequests.id, draft.id));
+  await expect(
+    repository.previousContract(draft.id, { personId: parent.id, kind: "none" }, owner),
+  ).rejects.toMatchObject({ statusCode: 409 });
 });
 it("reserves an OTP once, bounds attempts, expires challenges and rate limits by mailbox", async () => {
   const browser = fingerprint(randomUUID()),

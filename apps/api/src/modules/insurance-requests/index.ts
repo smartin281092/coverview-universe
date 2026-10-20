@@ -13,6 +13,7 @@ import {
   insuranceRequestListQuerySchema,
   insuranceRequestListSchema,
   insuranceTransitionInputSchema,
+  insurancePreviousContractInputSchema,
 } from "@coverview/contracts/insurance-requests";
 import type { Environment } from "../../platform/config.js";
 import { createDatabase } from "../../platform/db/database.js";
@@ -292,6 +293,27 @@ export function registerInsuranceRequests(
             );
       },
     );
+  app.post(
+    "/insurance-requests/:id/previous-contract",
+    {
+      config: limit,
+      onRequest: (request) => {
+        mutation(request);
+        return Promise.resolve();
+      },
+      schema: {
+        params,
+        body: insurancePreviousContractInputSchema,
+        response: { 200: insuranceRequestSchema },
+      },
+    },
+    async (request) =>
+      repository.previousContract(
+        request.params.id,
+        request.body,
+        await identity.authenticate(request),
+      ),
+  );
   app.get(
     "/insurance-requests/:id",
     {

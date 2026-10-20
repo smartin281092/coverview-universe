@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { ArrowLeft, ArrowUpRight, Plus } from "lucide-react";
 import type { IdentityMe } from "@coverview/api-client";
 import type { InsuranceRequest } from "@coverview/contracts/insurance-requests";
+import { healthYear } from "@coverview/contracts/health-insurance";
 import type { LeadSummary } from "@coverview/contracts/partner";
 import { Button, EmptyState, ErrorState, LoadingState, RequestProgress } from "@coverview/ui";
 import { healthProductImage } from "@coverview/ui/health-product-images";
@@ -19,6 +20,7 @@ import {
   type LeadSection,
 } from "../features/offers/LeadWorkspace";
 import { NewRequestDialog } from "../features/offers/NewRequestDialog";
+import { RequestChecklist } from "../features/offers/RequestChecklist";
 import { useWalletLiveUpdates } from "../features/offers/use-live-updates";
 import { timeline } from "../features/offers/request-timeline";
 import { numberFormat } from "@coverview/ui/number-format";
@@ -141,10 +143,17 @@ function Requests({ identity }: { identity: IdentityMe }) {
         </Link>
       )}
       <header className="flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="cv-app-heading">{t("title")}</h1>
-          <p className="text-muted-foreground">{t("description")}</p>
-        </div>
+        {requestId ? (
+          // A request is named after its premium year (20 October 2026), without subtitle.
+          <h1 className="cv-app-heading">
+            {t("requestName", { year: selected?.year ?? healthYear })}
+          </h1>
+        ) : (
+          <div>
+            <h1 className="cv-app-heading">{t("title")}</h1>
+            <p className="text-muted-foreground">{t("description")}</p>
+          </div>
+        )}
         {!requestId && (
           <Button onClick={() => setCreate(true)}>
             <Plus className="size-4" aria-hidden="true" />
@@ -167,6 +176,13 @@ function Requests({ identity }: { identity: IdentityMe }) {
           ) : (
             selected && (
               <>
+                <RequestChecklist
+                  identity={identity}
+                  request={selected}
+                  onChange={(request) =>
+                    client.setQueryData([...requestsKey, "detail", requestId], request)
+                  }
+                />
                 {selected.state === "cancelled" && <p>{t("states.cancelled")}</p>}
                 <RequestProgress
                   current={Math.max(
@@ -274,7 +290,9 @@ function Requests({ identity }: { identity: IdentityMe }) {
                           <ProductImage key={modelId} modelId={modelId} />
                         ))}
                     </span>
-                    <span className="font-medium">{t("comparatorTitle")}</span>
+                    <span className="font-medium">
+                      {t("requestName", { year: entry.request.year })}
+                    </span>
                     <span className="text-sm text-muted-foreground">
                       {entry.request.items
                         .map((person) => `${person.firstName} ${person.lastName}`)

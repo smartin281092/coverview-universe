@@ -5,13 +5,16 @@ import {
   insuranceRequestSchema,
   type InsuranceCart,
   type InsurancePerson,
+  type InsurancePreviousContractInput,
   type InsuranceRequest,
   type InsuranceRequestListQuery,
   type InsuranceTransitionInput,
 } from "@coverview/contracts/insurance-requests";
+import { healthYear } from "@coverview/contracts/health-insurance";
 import type { createDatabase } from "../../platform/db/database.js";
 import { lockProfileActor, IdentityError, type ProfileActor } from "../identity/index.js";
 import { createInsuranceProfiles, managedProfiles } from "../profiles/index.js";
+import { profileDocumentExists } from "../document-intelligence/index.js";
 import {
   insuranceRequests as requests,
   insuranceEmailChallenges as challenges,
@@ -38,6 +41,10 @@ export const fingerprint = (value: unknown) =>
 const dto = (row: Omit<Row, "email"> & { email: string | null }): InsuranceRequest =>
   insuranceRequestSchema.parse({
     ...row,
+    // Answers follow the persons the reader may see.
+    previousContracts: row.previousContracts.filter((entry) =>
+      row.items.some((item) => item.id === entry.personId),
+    ),
     totalMonthlyMinor: row.items.reduce((sum, item) => sum + item.offer.monthlyPremiumMinor, 0),
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
@@ -441,6 +448,7 @@ export function createInsuranceRequestRepository(
             items: finalItems,
             userId: input.saveInWallet ? session!.userId : null,
             state: "submitted",
+            year: healthYear,
             revision: row.revision + 1,
             saveInWallet: input.saveInWallet,
             legalVersion,
@@ -508,6 +516,68 @@ export function createInsuranceRequestRepository(
               ).toString("base64url")
             : null,
       };
+    },
+    // The person's 2026 contract (20 October 2026), answered only by the current owner of that
+    // person's profile while CoverView handles the request. The same answer again changes nothing.
+    async previousContract(id: string, input: InsurancePreviousContractInput, session: Session) {
+      await db.transaction(async (tx) => {
+        await lockProfileActor(tx, session);
+        const [row] = await tx
+          .select()
+          .from(requests)
+          .where(eq(requests.id, id))
+          .for("update")
+          .limit(1);
+        const item = row?.items.find((candidate) => candidate.id === input.personId);
+        const [profile] = item?.profileId
+          ? await tx
+              .select({ id: managedProfiles.id })
+              .from(managedProfiles)
+              .where(
+                and(
+                  eq(managedProfiles.id, item.profileId),
+                  eq(managedProfiles.userId, session.userId),
+                ),
+              )
+              .for("share")
+              .limit(1)
+          : [];
+        if (!row || !item?.profileId || !profile || row.state === "draft") fail();
+        if (!["submitted", "reviewing", "insurer_contacted", "offer_ready"].includes(row.state))
+          fail("INSURANCE_REQUEST_CONFLICT", 409);
+        const current = row.previousContracts.find((entry) => entry.personId === input.personId);
+        if (
+          input.kind === "unset"
+            ? !current
+            : current?.kind === input.kind &&
+              (current.kind === "none" ||
+                (input.kind === "document" && current.documentId === input.documentId))
+        )
+          return;
+        if (
+          input.kind === "document" &&
+          !(await profileDocumentExists(tx, session.userId, item.profileId, input.documentId))
+        )
+          fail("INSURANCE_REQUEST_INVALID", 422);
+        const now = new Date();
+        const others = row.previousContracts.filter((entry) => entry.personId !== input.personId);
+        await tx
+          .update(requests)
+          .set({
+            previousContracts:
+              input.kind === "unset"
+                ? others
+                : [
+                    ...others,
+                    input.kind === "document"
+                      ? { ...input, at: now.toISOString() }
+                      : { personId: input.personId, kind: "none", at: now.toISOString() },
+                  ],
+            updatedAt: now,
+          })
+          .where(eq(requests.id, id));
+      });
+      return this.get(id, "", session.userId);
     },
     async transition(
       id: string,

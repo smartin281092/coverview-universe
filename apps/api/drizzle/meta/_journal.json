@@ -589,6 +589,13 @@
       "when": 1792005727990,
       "tag": "0083_partner_external_requests",
       "breakpoints": true
+    },
+    {
+      "idx": 84,
+      "version": "7",
+      "when": 1792516664828,
+      "tag": "0084_insurance_request_year_contracts",
+      "breakpoints": true
     }
   ]
 }

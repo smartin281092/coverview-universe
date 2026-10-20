@@ -65,6 +65,30 @@
   "assigning": "Attribution d’un conseiller en cours",
   "closed": "Clôturée",
   "openRequest": "Ouvrir",
-  "comparatorTitle": "Assurance maladie",
+  "requestName": "Assurance maladie {{year}}",
+  "checklist": {
+    "label": "Pièces à transmettre",
+    "close": "Fermer",
+    "documentsClosed": "Le dépôt de documents n’est pas encore ouvert : vous pourrez ajouter ces pièces ici dès son ouverture.",
+    "identity": {
+      "missing": "Ajouter une pièce d’identité",
+      "ready": "Pièce d’identité",
+      "processing": "Pièce d’identité en vérification",
+      "incomplete": "Compléter la pièce d’identité",
+      "needs_attention": "Vérifier la pièce d’identité",
+      "error": "Impossible de vérifier la pièce d’identité."
+    },
+    "contract": {
+      "add": "Ajouter le contrat {{year}}",
+      "none": "Je n’ai pas de contrat {{year}}",
+      "provided": "Contrat {{year}}",
+      "declaredNone": "Pas de contrat {{year}}",
+      "change": "Modifier",
+      "uploadTitle": "Contrat d’assurance maladie {{year}}",
+      "uploadDescription": "Ajoutez la police {{year}} de {{name}} : CoverView s’en sert pour préparer le changement de caisse.",
+      "saving": "Enregistrement de la réponse…",
+      "error": "La réponse n’a pas été enregistrée."
+    }
+  },
   "loadMore": "Afficher plus"
 }

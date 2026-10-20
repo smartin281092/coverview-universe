@@ -11,13 +11,16 @@ import {
   insuranceRequestListQuerySchema,
   insuranceTransitionInputSchema,
   insuranceRequestIdSchema,
+  insurancePreviousContractInputSchema,
   type InsuranceCart,
+  type InsurancePreviousContractInput,
   type InsuranceRequestListQuery,
   type InsuranceTransitionInput,
 } from "@coverview/contracts/insurance-requests";
 export type {
   InsuranceCart,
   InsurancePerson,
+  InsurancePreviousContract,
   InsuranceRequest,
   InsuranceRequestState,
 } from "@coverview/contracts/insurance-requests";
@@ -122,6 +125,13 @@ export function createInsuranceClient(baseUrl: string) {
         { signal },
       );
     },
+    previousContract: (id: string, input: InsurancePreviousContractInput, options: Mutation) =>
+      request(
+        `${path(id)}/previous-contract`,
+        insuranceRequestSchema,
+        insurancePreviousContractInputSchema.parse(input),
+        options,
+      ),
     transition: (id: string, input: InsuranceTransitionInput, options: Mutation) =>
       request(
         `/admin${path(id)}/transition`,

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import type { IdentityMe } from "@coverview/api-client";
 import {
   InsuranceApiError,
+  type InsurancePreviousContract,
   type InsuranceRequest,
   type InsuranceRequestState,
 } from "@coverview/api-client/insurance-requests";
@@ -31,6 +32,27 @@ const amount = (minor: number) =>
   new Intl.NumberFormat("fr-CH", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(
     minor / 100,
   );
+// The 2026 contract given from Wallet (20 October 2026), as the client answered it.
+function PreviousContract({
+  year,
+  answer,
+}: {
+  year: number;
+  answer: InsurancePreviousContract | undefined;
+}) {
+  const { t } = useTranslation("insuranceRequests");
+  const at =
+    answer && new Intl.DateTimeFormat("fr-CH", { dateStyle: "medium" }).format(new Date(answer.at));
+  return (
+    <p className="text-xs text-muted-foreground">
+      {!answer
+        ? t("previousContract.missing", { year })
+        : answer.kind === "none"
+          ? t("previousContract.none", { year, at })
+          : t("previousContract.document", { year, at, id: answer.documentId })}
+    </p>
+  );
+}
 function Requests({ identity, blocked }: { identity: IdentityMe; blocked: boolean }) {
   const { t } = useTranslation("insuranceRequests");
   const client = useQueryClient();
@@ -271,6 +293,12 @@ function Requests({ identity, blocked }: { identity: IdentityMe; blocked: boolea
                               t("notProvided"),
                           })}
                         </p>
+                        <PreviousContract
+                          year={request.year - 1}
+                          answer={request.previousContracts.find(
+                            (entry) => entry.personId === item.id,
+                          )}
+                        />
                       </li>
                     ))}
                   </ul>
