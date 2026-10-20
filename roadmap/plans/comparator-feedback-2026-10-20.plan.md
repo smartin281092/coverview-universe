@@ -19,11 +19,15 @@ Entrée : demande de l’utilisateur du 20 octobre 2026 (neuf points, capture d�
 
 ## Definition of Done — oracles
 
-- [ ] API : modèle 2027 et groupe renvoyés — V2 (test sur PostgreSQL réel).
-- [ ] Profil, date, fenêtre de choix sur ordinateur et à 375 px — V3 (navigateur intégré).
-- [ ] Types, lint, build du site.
+- [x] API : modèle 2027 et groupe renvoyés — V2 (test sur PostgreSQL réel) (journal 1).
+- [x] Profil, date, fenêtre de choix sur ordinateur et à 375 px — V3 (navigateur intégré) (journal 3, 4).
+- [x] Types, lint, build du site (journal 2).
 
 ## Journal de vérification
 
 | # | cible | oracle | résultat | suite |
 |---|---|---|---|---|
+| 1 | API | `health.current.test.ts` sur PostgreSQL réel | 10/10 : modèle 2026 relié à son modèle 2027 de même code de tarif, aucun sans équivalent, `hfm_2027_…` à l’étranger ; groupe porté par une compagnie du Groupe Mutuel seulement | — |
+| 2 | Contrôles | `tsc` du site, de l’API, des contrats, de Wallet, Admin, Partner et des paquets partagés ; ESLint ; `astro check` ; build du site ; contrôle de `.env.example` | verts ; 45 pages ; le contrôle exigeait aussi `RESEND_API_KEY` et `MAIL_FROM` (ajoutés le 16 octobre sans exemple), documentés | — |
+| 3 | Ordinateur | navigateur intégré, preview locale | profil à 24 px du bas comme du côté, titre fixe, contenu défilant ; marge de la date 18 px ; 01.01.1990, invite jj.mm.aaaa ; 31.02.1990 refusé avec message ; 15/08/1985 devient 15.08.1985 ; fenêtre : accident « Exclue » ; une seule entrée Groupe Mutuel ; ses 12 modèles de 443,80 à 516,80 CHF, chacun avec sa compagnie et l’image du produit | — |
+| 4 | Téléphone | 375 × 812 puis 375 × 600 | profil à 14 px du bas et des côtés, sans défilement horizontal ; contenu défilé de 121 px sous le titre immobile ; fenêtre : franchise et couverture accident côte à côte, plus de superposition | iPhone réel à confirmer |
