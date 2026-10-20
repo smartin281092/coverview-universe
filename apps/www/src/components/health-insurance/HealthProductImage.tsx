@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { HealthOffer } from "@coverview/api-client/health-insurance";
 import { healthCopy as copy } from "../../content/fr/health-insurance";
 import { interpolate } from "./health-format";
@@ -20,12 +21,15 @@ const images = new Map(
 export function HealthProductImage({
   offer,
   thumbnail = false,
+  fallback = null,
 }: {
   offer: Pick<HealthOffer, "modelId" | "name" | "insurerBrand" | "insurerName">;
   thumbnail?: boolean;
+  // Shown when the model has no illustration (the insurer's logo, for instance).
+  fallback?: ReactNode;
 }) {
   const src = images.get(offer.modelId);
-  if (!src) return null;
+  if (!src) return fallback;
   return (
     <img
       className={thumbnail ? "hi-product-image is-thumbnail" : "hi-product-image"}

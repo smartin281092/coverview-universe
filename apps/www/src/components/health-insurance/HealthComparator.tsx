@@ -26,6 +26,7 @@ import { HealthLocate } from "./HealthLocate";
 import { HealthCheckout, type CheckoutCandidate } from "./HealthCheckout";
 import { integer, interpolate, money, regionName } from "./health-format";
 import { HealthCurrentInsurance } from "./HealthCurrentInsurance";
+import { HealthBirthDate } from "./HealthBirthDate";
 import { HealthPremiumDifference } from "./HealthPremiumDifference";
 import { useCurrentInsurance } from "./use-current-insurance";
 import { healthCurrentCopy } from "../../content/fr/health-current";
@@ -46,7 +47,10 @@ export default function HealthComparator({
   const [status, setStatus] = useState<HealthStatus | null>(null);
   const [failed, setFailed] = useState(false);
   const [retry, setRetry] = useState(0);
-  const [birth, setBirth] = useState("");
+  // A default birth date (20 October 2026) shows prices at once; only a date the person entered
+  // goes into an offer request.
+  const [birth, setBirth] = useState("1990-01-01");
+  const [birthEntered, setBirthEntered] = useState(false);
   const [sex, setSex] = useState<"female" | "male" | "other" | "declined" | null>(null);
   const [profileOpen, setProfileOpen] = useState(true);
   const [optimize, setOptimize] = useState(false);
@@ -300,7 +304,7 @@ export default function HealthComparator({
               <HealthIcon name={profileOpen ? "minus" : "plus"} size={18} />
             </button>
           </div>
-          <div id="hi-profile-fields" hidden={!profileOpen}>
+          <div id="hi-profile-fields" className="hi-profile-fields" hidden={!profileOpen}>
             <HealthCurrentInsurance
               api={api}
               profile={profile}
@@ -327,16 +331,14 @@ export default function HealthComparator({
                 ))}
               </div>
             </fieldset>
-            <label className="hi-field">
+            <label className="hi-field hi-birth-field">
               {copy.birthDate}
-              <input
-                type="date"
-                min="1900-01-01"
-                max={new Date().toISOString().slice(0, 10)}
+              <HealthBirthDate
                 value={birth}
-                onChange={(event) => setBirth(event.target.value)}
-                onInput={(event) => setBirth(event.currentTarget.value)}
-                onBlur={(event) => setBirth(event.currentTarget.value)}
+                onChange={(value) => {
+                  setBirth(value);
+                  setBirthEntered(true);
+                }}
               />
             </label>
             <div className="hi-field hi-sex-field">
@@ -742,7 +744,7 @@ export default function HealthComparator({
                         : (status?.foreign?.countries.find(
                             (country) => country.code === item.residenceCountry,
                           )?.locality ?? null),
-                    birth,
+                    birth: birthEntered ? birth : "",
                     ...(sex && sex !== "declined" ? { sex } : {}),
                   });
                   setCheckout(true);

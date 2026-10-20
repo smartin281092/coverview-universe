@@ -7,8 +7,12 @@ import { parseEnvironment } from "./config.js";
 import { createMailer, createResendMailer, type MailMessage } from "./mailer.js";
 
 // Resend adapter (16 October 2026, answer 2a), against a local stand-in of its HTTP API.
-const received: { method?: string; url?: string; headers: IncomingHttpHeaders; body: string }[] =
-  [];
+const received: {
+  method: string | undefined;
+  url: string | undefined;
+  headers: IncomingHttpHeaders;
+  body: string;
+}[] = [];
 let status = 200;
 const server = createServer((request, response) => {
   let body = "";

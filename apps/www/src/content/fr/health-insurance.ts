@@ -157,6 +157,8 @@ export const healthCopy = {
   profile: "Votre profil",
   profileHint: "Une prime adaptée à votre situation.",
   birthDate: "Date de naissance",
+  birthPlaceholder: "jj.mm.aaaa",
+  birthInvalid: "Date invalide : jour, mois puis année, entre 1900 et aujourd’hui.",
   defaultAdult: "Sans date : tarifs adultes (26 ans et plus).",
   accident: "Couverture accident",
   accidentIncluded: "Incluse",

@@ -3816,3 +3816,56 @@
     font-size: 10px;
   }
 }
+/* Profile and current-model picker (20 October 2026). */
+.health-comparator .hi-birth-field {
+  margin-top: 18px;
+}
+/* The expanded profile keeps its title in view; its content scrolls beneath it, and it stops at
+   the screen's bottom with the same gap as on its side. */
+.health-comparator .hi-profile:not(.is-collapsed) {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  max-height: calc(100dvh - 199px);
+}
+.health-comparator .hi-profile:not(.is-collapsed) .hi-profile-title {
+  flex: none;
+}
+.health-comparator .hi-profile-fields {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  margin: 0 -18px -16px;
+  padding: 0 18px 16px;
+}
+.hi-current-card .hi-product-image.is-thumbnail {
+  width: 72px;
+  height: 72px;
+  margin: 0 0 4px;
+}
+.hi-current-card-company {
+  font-size: 11px;
+  color: #6c6c77;
+}
+@media (max-width: 760px) {
+  .health-comparator .hi-profile:not(.is-collapsed) {
+    bottom: 14px;
+    max-height: none;
+  }
+  .health-comparator .hi-profile-fields {
+    margin: 0 -15px -15px;
+    padding: 0 15px 15px;
+  }
+  /* The picker is a dialog rendered inside the profile: the profile's grid placement on phones
+     never applies to its fields, which otherwise stacked on one another. */
+  .hi-profile dialog .hi-field,
+  .hi-profile dialog .hi-field-help {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .hi-profile dialog .hi-field-help {
+    margin-top: 7px;
+  }
+}

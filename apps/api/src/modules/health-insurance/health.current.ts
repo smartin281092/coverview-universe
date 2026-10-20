@@ -13,6 +13,9 @@ import {
 } from "@coverview/contracts/health-insurance";
 import { healthAgeGroup, healthDeductibles } from "./health.cost.js";
 
+// Companies of one group that share regions (20 October 2026): Avenir, Mutuel and Philos carry the
+// same official Groupe Mutuel logo in our sources, and the picker lists them as one entry.
+const insurerGroups = new Map([343, 1479, 1535].map((id) => [id, "Groupe Mutuel"]));
 // Historical prices never borrow model conditions, brands or tariff codes from the new year.
 export function createHealthCurrentRepository(pool: pg.Pool) {
   async function dataset() {
@@ -75,7 +78,8 @@ export function createHealthCurrentRepository(pool: pg.Pool) {
         `select p.id,'hfm_2026_'||p.insurer_id as "modelId",p.insurer_id as "insurerId",
           'Assurance de base UE/AELE/UK' as name,'BASE' as category,'EU-'||p.country as "regionId",
           p.country as "residenceCountry",p.monthly_premium_minor as "monthlyPremiumMinor",
-          p.deductible,p.accident,p.age_group as "ageGroup",false as restricted,'region' as eligibility
+          p.deductible,p.accident,p.age_group as "ageGroup",false as restricted,'region' as eligibility,
+          'hfm_2027_'||p.insurer_id as "nextModelId"
          from health_foreign_premiums p where p.dataset_id=$1 and p.country=$2 and p.age_group=$3
            and p.age_subgroup=$4 and p.accident=$5 and p.deductible=$6
          order by p.insurer_id,p.id limit 200`,
@@ -101,7 +105,11 @@ export function createHealthCurrentRepository(pool: pg.Pool) {
           $7::text as "regionId",p.monthly_premium_minor as "monthlyPremiumMinor",
           p.deductible,p.accident,p.age_group as "ageGroup",e.restricted,
           case when not e.restricted then 'region' when $6::integer is null then 'municipality_required'
-            else 'municipality_confirmed' end as eligibility
+            else 'municipality_confirmed' end as eligibility,
+          (select m27.id from health_models m27
+            join health_datasets d27 on d27.id=m27.dataset_id and d27.year=2027 and d27.active
+            where m27.insurer_id=m.insurer_id and m27.tariff_code=m.tariff_code
+            order by m27.id limit 1) as "nextModelId"
          from health_premiums p join health_models m on m.id=p.model_id and m.dataset_id=p.dataset_id
          join health_eligibility e on e.model_id=m.id and e.region_key=p.region_key
          where p.dataset_id=$1 and p.region_key=$2 and p.age_group=$3 and p.age_subgroup=$4
@@ -134,6 +142,10 @@ export function createHealthCurrentRepository(pool: pg.Pool) {
     const insurerIds = new Set(offers.map((offer) => offer.insurerId));
     result.insurers = identities
       .filter((identity) => insurerIds.has(identity.id))
+      .map((identity) => {
+        const group = insurerGroups.get(identity.id);
+        return group ? { ...identity, group } : identity;
+      })
       .sort((a, b) => a.brand.localeCompare(b.brand, "fr-CH"));
     result.offers = offers.filter(
       (offer) => input.insurerId === undefined || offer.insurerId === input.insurerId,

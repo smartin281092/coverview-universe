@@ -342,3 +342,34 @@ it("keeps data absence explicit without a fallback to the next year", async () =
     await database.pool.query("update health_datasets set active=true where year=2026");
   }
 });
+it("names the same model in 2027 and lists a group's companies as one group (20 October 2026)", async () => {
+  const domestic = await repository.options(context);
+  // Same insurer and tariff code in 2027 for model 5; none for model 1.
+  expect(domestic.offers.find((offer) => offer.modelId === mid(5))?.nextModelId).toBe(mid(6));
+  expect(domestic.offers.find((offer) => offer.modelId === mid(1))?.nextModelId).toBeNull();
+  expect(
+    (await repository.options({ ...context, regionId: "EU-FR", deductible: 300 })).offers[0],
+  ).toMatchObject({ nextModelId: "hfm_2027_98001" });
+  // A Groupe Mutuel company carries its group; any other company none.
+  await database.pool.query("insert into health_insurers(id,name) values(1479,'Mutuel 2027')");
+  await database.pool.query(
+    "update health_datasets set insurer_identities=insurer_identities||$1::jsonb where year=2026",
+    [JSON.stringify([{ id: 1479, name: "Mutuel Assurance Maladie SA", brand: "Mutuel" }])],
+  );
+  await database.pool.query(
+    "insert into health_models(id,dataset_id,insurer_id,tariff_code,name,category) values($1,'2026',1479,'M1','Modèle du groupe','BASE')",
+    [mid(9)],
+  );
+  await database.pool.query(
+    "insert into health_eligibility(id,model_id,region_key,restricted,municipality_ids) values('elig_9_VD-1',$1,'2026_VD-1',false,'{}')",
+    [mid(9)],
+  );
+  await database.pool.query(
+    "insert into health_premiums(id,dataset_id,model_id,region_key,age_group,age_subgroup,accident,deductible,monthly_premium_minor,raw) values($1,'2026',$2,'2026_VD-1','adult','E1',true,2500,47000,'{}')",
+    [pid(30), mid(9)],
+  );
+  expect((await repository.options(context)).insurers).toEqual([
+    { id: 98001, name: "Legal name 2026", brand: "Marque 2026" },
+    { id: 1479, name: "Mutuel Assurance Maladie SA", brand: "Mutuel", group: "Groupe Mutuel" },
+  ]);
+});

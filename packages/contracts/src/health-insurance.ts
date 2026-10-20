@@ -184,6 +184,8 @@ export const healthInsurerIdentitySchema = z.object({
 // Historical taxonomy is kept as published; it cannot establish 2027 first-contact rules.
 export const healthCurrentOfferSchema = healthOfferSchema.omit({ category: true }).extend({
   category: z.enum(["BASE", "HAM", "HMO", "DIV"]),
+  // The same model in 2027 (same insurer, same tariff code), for its illustration (20 October 2026).
+  nextModelId: z.string().nullable().optional(),
 });
 export const healthCurrentContextSchema = z
   .object({
@@ -221,7 +223,10 @@ export const healthCurrentOptionsSchema = z.object({
   municipalityId: z.number().int().positive().nullable(),
   ageGroup: z.enum(["child", "young_adult", "adult"]),
   deductibles: z.array(z.number().int()).max(7),
-  insurers: z.array(healthInsurerIdentitySchema).max(100),
+  // A group of companies sharing regions is listed as one entry (20 October 2026).
+  insurers: z
+    .array(healthInsurerIdentitySchema.extend({ group: z.string().min(1).optional() }))
+    .max(100),
   offers: z.array(healthCurrentOfferSchema).max(200),
 });
 export const healthCurrentComparisonInputSchema = z

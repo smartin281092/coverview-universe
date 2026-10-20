@@ -13,6 +13,7 @@ import { healthCopy } from "../../content/fr/health-insurance";
 import { HealthDialog } from "./HealthDialog";
 import { HealthIcon } from "./HealthIcon";
 import { HealthInsurerLogo } from "./HealthOfferIdentity";
+import { HealthProductImage } from "./HealthProductImage";
 import { HealthSelect } from "./HealthSelect";
 import { LocalitySearch } from "./LocalitySearch";
 import { interpolate, money, regionName } from "./health-format";
@@ -31,6 +32,15 @@ type Props = {
     retry: () => void;
   };
 };
+// One entry per company, or per group of companies sharing regions (Groupe Mutuel).
+type Entry = {
+  key: string;
+  label: string;
+  ids: number[];
+  logo: { insurerId: number; insurerName: string; insurerBrand: string };
+  terms: string;
+  group: boolean;
+};
 function CurrentPicker({
   api,
   profile,
@@ -43,13 +53,14 @@ function CurrentPicker({
   onClose: () => void;
   onSelect: (selection: HealthCurrentSelection, model: HealthCurrentOffer) => void;
 }) {
-  const [insurer, setInsurer] = useState<{ id: number; name: string; brand: string } | null>(null);
+  const [insurer, setInsurer] = useState<Entry | null>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     heading.current?.focus();
-  }, [insurer?.id]);
+  }, [insurer?.key]);
   const [deductible, setDeductible] = useState(selection?.deductible ?? profile.deductible);
-  const [accident, setAccident] = useState(selection?.accident ?? profile.accident);
+  // Most contracts leave accidents to the employer's insurance (20 October 2026): excluded first.
+  const [accident, setAccident] = useState(selection?.accident ?? false);
   const [location, setLocation] = useState(
     locality?.municipalityId === selection?.municipalityId || !selection ? locality : null,
   );
@@ -74,9 +85,8 @@ function CurrentPicker({
       municipalityId: municipality,
       deductible,
       accident,
-      insurerId: insurer?.id,
     }),
-    [birthYear, region, municipality, deductible, accident, insurer?.id],
+    [birthYear, region, municipality, deductible, accident],
   );
   const key = JSON.stringify(input);
   const eligibleBirth = birthYear <= 2026;
@@ -102,8 +112,40 @@ function CurrentPicker({
       .replace(/\p{M}/gu, "")
       .toLowerCase()
       .includes(search.normalize("NFD").replace(/\p{M}/gu, "").toLowerCase());
-  const companies = data?.insurers.filter((company) => filter(company.brand)) ?? [];
-  const models = data?.offers.filter((model) => filter(model.name)) ?? [];
+  // The companies of a group are one entry; its models are listed together, cheapest first.
+  const entries = useMemo(() => {
+    const byKey = new Map<string, Entry>();
+    for (const company of data?.insurers ?? []) {
+      const key = company.group ?? `insurer:${company.id}`;
+      const entry = byKey.get(key) ?? {
+        key,
+        label: company.group ?? company.brand,
+        ids: [],
+        logo: {
+          insurerId: company.id,
+          insurerName: company.name,
+          insurerBrand: company.group ?? company.brand,
+        },
+        terms: company.group ?? company.brand,
+        group: Boolean(company.group),
+      };
+      entry.ids.push(company.id);
+      if (company.group) entry.terms += ` ${company.brand}`;
+      byKey.set(key, entry);
+    }
+    return [...byKey.values()].sort((a, b) => a.label.localeCompare(b.label, "fr-CH"));
+  }, [data]);
+  const companies = entries.filter((entry) => filter(entry.terms));
+  const models = (data?.offers ?? [])
+    .filter(
+      (model) =>
+        insurer?.ids.includes(model.insurerId) &&
+        (filter(model.name) || filter(model.insurerBrand ?? model.insurerName)),
+    )
+    .sort(
+      (a, b) =>
+        a.monthlyPremiumMinor - b.monthlyPremiumMinor || a.name.localeCompare(b.name, "fr-CH"),
+    );
   return (
     <HealthDialog
       open
@@ -214,21 +256,15 @@ function CurrentPicker({
                 {!insurer
                   ? companies.map((company) => (
                       <button
-                        key={company.id}
+                        key={company.key}
                         className="hi-current-card"
                         onClick={() => {
                           setInsurer(company);
                           setSearch("");
                         }}
                       >
-                        <HealthInsurerLogo
-                          offer={{
-                            insurerId: company.id,
-                            insurerName: company.name,
-                            insurerBrand: company.brand,
-                          }}
-                        />
-                        <strong>{company.brand}</strong>
+                        <HealthInsurerLogo offer={company.logo} />
+                        <strong>{company.label}</strong>
                       </button>
                     ))
                   : models.map((model) => (
@@ -253,8 +289,17 @@ function CurrentPicker({
                           onClose();
                         }}
                       >
-                        <HealthInsurerLogo offer={model} />
+                        <HealthProductImage
+                          offer={{ ...model, modelId: model.nextModelId ?? model.modelId }}
+                          thumbnail
+                          fallback={<HealthInsurerLogo offer={model} />}
+                        />
                         <strong>{model.name}</strong>
+                        {insurer.group && (
+                          <span className="hi-current-card-company">
+                            {model.insurerBrand ?? model.insurerName}
+                          </span>
+                        )}
                         {birthKnown && (
                           <span className="hi-current-card-price">
                             {money(model.monthlyPremiumMinor)}{" "}
