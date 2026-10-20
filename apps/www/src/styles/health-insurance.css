@@ -3549,11 +3549,9 @@
   color: #34343b;
   font-weight: 650;
 }
+/* Settings of the current contract sit on the dialog itself, without a box (20 October 2026). */
 .hi-current-configuration {
   margin: 16px 0;
-  padding: 12px 14px;
-  border-radius: 12px;
-  background: #f7f7f8;
 }
 .hi-current-settings {
   display: grid;
@@ -3606,7 +3604,7 @@
   min-width: 0;
   min-height: 132px;
   padding: 20px 16px 16px;
-  background: #fafafa;
+  background: white;
   border: 1px solid #ececef;
   border-radius: 14px;
   text-align: left;

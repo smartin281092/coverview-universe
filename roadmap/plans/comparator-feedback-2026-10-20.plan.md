@@ -16,6 +16,8 @@ Entrée : demande de l’utilisateur du 20 octobre 2026 (neuf points, capture d�
 | D-8 | Groupe Mutuel ? | Avenir, Mutuel et Philos forment une seule entrée « Groupe Mutuel » (même logo officiel dans nos sources) ; ses modèles sont listés ensemble, les moins chers de la région d’abord, chacun avec sa compagnie. AMB reste à part : rien dans nos sources ne la rattache au groupe. | « Avenir, Mutuel ou Philos se partagent des régions » |
 | D-9 | Prix des modèles ? | Affichés dans la liste (date par défaut) et triés du moins cher au plus cher, pour toutes les compagnies. | Demande explicite |
 | D-10 | Images des modèles ? | Image du même modèle en 2027 (même compagnie, même code de tarif), comme pour la référence 2027 ; sans image, le logo reste. Contrat d’API : ajouts `nextModelId` et `group`, champs existants inchangés. | Demande explicite ; G-12 |
+| D-11 | Bloc des réglages du contrat dans la fenêtre (suite du même jour) ? | Sans encadré ni fond : franchise, couverture accident et localité posées sur la fenêtre, marges conservées. | Demande explicite |
+| D-12 | Cartes des compagnies et des modèles ? | Fond blanc, bordure conservée ; le survol reste marqué. | Demande explicite |
 
 ## Definition of Done — oracles
 
