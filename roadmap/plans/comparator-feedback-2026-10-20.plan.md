@@ -19,6 +19,7 @@ Entrée : demande de l’utilisateur du 20 octobre 2026 (neuf points, capture d�
 | D-11 | Bloc des réglages du contrat dans la fenêtre (suite du même jour) ? | Sans encadré ni fond : franchise, couverture accident et localité posées sur la fenêtre, marges conservées. | Demande explicite |
 | D-12 | Cartes des compagnies et des modèles ? | Fond blanc, bordure conservée ; le survol reste marqué. | Demande explicite |
 | D-13 | En-tête des fenêtres en défilement ? | Titre et croix de fermeture toujours visibles, le contenu passant dessous, pour toutes les fenêtres du comparateur (même composant ; aucune n’a d’autre élément collant). | « Votre compagnie en 2026 et la croix toujours visibles » |
+| D-14 | Bouton « Terminer » du profil ? | Sur téléphone seulement, en bas du profil déplié et toujours visible sous le contenu qui défile, au style du bouton « Voir les primes » ; il replie le profil et rend le focus au bouton d’ouverture. | Demande explicite |
 
 ## Definition of Done — oracles
 

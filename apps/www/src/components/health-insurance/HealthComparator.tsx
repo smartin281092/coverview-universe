@@ -1,5 +1,5 @@
 import { HealthGradient } from "./HealthGradient";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createApiClient } from "@coverview/api-client";
 import { openConsentSettings } from "@coverview/ui/analytics";
 import {
@@ -53,6 +53,7 @@ export default function HealthComparator({
   const [birthEntered, setBirthEntered] = useState(false);
   const [sex, setSex] = useState<"female" | "male" | "other" | "declined" | null>(null);
   const [profileOpen, setProfileOpen] = useState(true);
+  const profileToggle = useRef<HTMLButtonElement>(null);
   const [optimize, setOptimize] = useState(false);
   const [regionKnown, setRegionKnown] = useState(false);
   useEffect(() => {
@@ -295,6 +296,7 @@ export default function HealthComparator({
               <h2>{copy.profile}</h2>
             </div>
             <button
+              ref={profileToggle}
               className="hi-icon-button hi-profile-toggle"
               aria-label={profileOpen ? copy.profileCollapse : copy.profileExpand}
               aria-expanded={profileOpen}
@@ -382,6 +384,20 @@ export default function HealthComparator({
               )}
             </button>
           </div>
+          {/* Phones only (20 October 2026): the profile covers the map, this closes it. */}
+          {profileOpen && (
+            <button
+              className="hi-primary hi-full hi-profile-done"
+              aria-controls="hi-profile-fields"
+              onClick={() => {
+                setProfileOpen(false);
+                profileToggle.current?.focus();
+              }}
+            >
+              <HealthGradient />
+              {copy.profileDone}
+            </button>
+          )}
         </aside>
         <div className="hi-explorer">
           <div className="hi-map-toolbar">

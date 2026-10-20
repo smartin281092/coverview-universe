@@ -54,6 +54,7 @@ export const healthCopy = {
   sexHint: "Pour adapter les questions, sans effet sur votre prime.",
   profileExpand: "Agrandir le profil",
   profileCollapse: "Réduire le profil",
+  profileDone: "Terminer",
   signIn: "Se connecter",
   createAccount: "Créer un compte",
   optimize: "Comparer aussi les autres franchises",
