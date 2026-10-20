@@ -1,6 +1,7 @@
 {
   "eyebrow": "Votre suivi",
   "tabs": {
+    "label": "Actions par état",
     "todo": "À faire",
     "inProgress": "En cours",
     "activity": "Activité"

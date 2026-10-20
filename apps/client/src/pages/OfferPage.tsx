@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useCanGoBack, useNavigate, useParams, useRouter } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
@@ -12,8 +12,6 @@ import {
   NotFoundState,
   Tabs,
   TabsContent,
-  TabsList,
-  TabsTrigger,
 } from "@coverview/ui";
 import { partnerApi } from "../partner-api";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
@@ -25,6 +23,7 @@ import { OfferDocuments } from "../features/offers/OfferDocuments";
 import { OfferHero } from "../features/offers/OfferHero";
 import { offerGroups } from "../features/offers/offer-groups";
 import { useWalletLiveUpdates } from "../features/offers/use-live-updates";
+import { LineTabsList } from "../features/offers/LineTabsList";
 
 // Each tab's icon colour; the moving underline takes the colour of the open tab.
 const tabs = [
@@ -54,8 +53,6 @@ function OfferView({ identity }: { identity: IdentityMe }) {
   const [tab, setTab] = useState<Tab>("details");
   const [intent, setIntent] = useState<{ offerId: string; type: OfferAction } | null>(null);
   const [workspace, setWorkspace] = useState(false);
-  const tabList = useRef<HTMLDivElement>(null);
-  const [underline, setUnderline] = useState<{ left: number; width: number } | null>(null);
   useWalletLiveUpdates(identity);
   const root = walletLeadsKey(identity, scope);
   const list = useQuery({
@@ -75,20 +72,6 @@ function OfferView({ identity }: { identity: IdentityMe }) {
     staleTime: 0,
     retry: false,
   });
-  // The underline follows the open tab: measured here, it then glides to its place.
-  const shown = !!list.data;
-  useLayoutEffect(() => {
-    const node = tabList.current;
-    if (!node) return;
-    const measure = () => {
-      const open = node.querySelector<HTMLElement>('[role="tab"][aria-selected="true"]');
-      if (open) setUnderline({ left: open.offsetLeft, width: open.offsetWidth });
-    };
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [tab, shown, offerId]);
   const day = (value: string) =>
     new Intl.DateTimeFormat(i18n.language, {
       dateStyle: "medium",
@@ -179,41 +162,11 @@ function OfferView({ identity }: { identity: IdentityMe }) {
         onBack={goBack}
       />
       <Tabs value={tab} onValueChange={(value) => setTab(value as Tab)} className="-mt-3 gap-6">
-        <TabsList
-          ref={tabList}
-          variant="line"
-          aria-label={t("offerPage.tabsLabel")}
-          className="relative w-full justify-start gap-0.5 overflow-x-auto p-0 [scrollbar-width:none] group-data-horizontal/tabs:h-12 sm:gap-6 [&::-webkit-scrollbar]:hidden"
-        >
-          {tabs.map(({ id, icon: Icon, tone }) => (
-            <TabsTrigger
-              key={id}
-              value={id}
-              className="h-full flex-none gap-1.5 px-1 text-[13px] font-normal text-tab-idle after:hidden data-active:text-foreground sm:px-1.5 sm:text-sm"
-            >
-              <Icon
-                className={`size-4 ${tab === id ? tone : "text-tab-idle"}`}
-                aria-hidden="true"
-              />
-              {t(`offerPage.tabs.${id}`)}
-            </TabsTrigger>
-          ))}
-          <span
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-[3px] bg-tab-track"
-          />
-          {underline && (
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute bottom-0 left-0 h-[3px] rounded-full transition-[transform,width,background-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
-              style={{
-                width: underline.width,
-                transform: `translateX(${underline.left}px)`,
-                backgroundColor: tabs.find((item) => item.id === tab)?.color,
-              }}
-            />
-          )}
-        </TabsList>
+        <LineTabsList
+          tabs={tabs.map((item) => ({ ...item, label: t(`offerPage.tabs.${item.id}`) }))}
+          value={tab}
+          label={t("offerPage.tabsLabel")}
+        />
         <TabsContent value="details" className="space-y-6 text-sm">
           <OfferDetails offer={offer} />
           <Button

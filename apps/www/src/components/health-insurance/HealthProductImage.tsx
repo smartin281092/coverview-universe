@@ -1,22 +1,8 @@
 import type { ReactNode } from "react";
 import type { HealthOffer } from "@coverview/api-client/health-insurance";
+import { healthProductImage } from "@coverview/ui/health-product-images";
 import { healthCopy as copy } from "../../content/fr/health-insurance";
 import { interpolate } from "./health-format";
-
-const assets = import.meta.glob<string>("../../assets/health-products/*.webp", {
-  eager: true,
-  query: "?url",
-  import: "default",
-});
-const images = new Map(
-  Object.entries(assets).map(([path, url]) => [
-    path
-      .split("/")
-      .pop()
-      ?.replace(/\.webp$/, ""),
-    url,
-  ]),
-);
 
 export function HealthProductImage({
   offer,
@@ -28,7 +14,7 @@ export function HealthProductImage({
   // Shown when the model has no illustration (the insurer's logo, for instance).
   fallback?: ReactNode;
 }) {
-  const src = images.get(offer.modelId);
+  const src = healthProductImage(offer.modelId);
   if (!src) return fallback;
   return (
     <img

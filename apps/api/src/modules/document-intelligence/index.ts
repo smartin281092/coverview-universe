@@ -45,7 +45,12 @@ export async function registerDocuments(
   leadSources?: LeadSourceAuthorization,
 ) {
   const config = await documentConfig(environment);
-  if (!config.enabled) return;
+  if (!config.enabled) {
+    // Documents off (production, 20 October 2026): the action center reads profiles,
+    // authorizations and company requests from the database only, so Wallet keeps its Actions.
+    if (environment.AUTH_ENABLED) registerActionCenter(app, environment, identity);
+    return;
+  }
   const database = createDatabase(environment);
   database.pool.on("error", () =>
     app.log.warn({ dependency: "document_database" }, "Document database unavailable"),
@@ -88,6 +93,41 @@ export async function registerDocuments(
     await actionMaintenance;
     await stop();
     storage.close();
+    await database.pool.end();
+  });
+}
+
+function registerActionCenter(
+  app: FastifyInstance,
+  environment: Environment,
+  identity: Parameters<typeof registerDocumentRoutes>[3] & AdminDocumentIdentity & RealtimeIdentity,
+) {
+  const database = createDatabase(environment);
+  database.pool.on("error", () =>
+    app.log.warn({ dependency: "action_database" }, "Action database unavailable"),
+  );
+  const actionCenter = createActionCenterRepository(database.db);
+  registerActionCenterRoutes(app, actionCenter, identity);
+  registerActionRealtime(app, actionCenter, identity, {
+    wallet: environment.AUTH_WALLET_ORIGIN,
+    api: environment.AUTH_API_ORIGIN,
+  });
+  let maintenance: Promise<void> | null = null;
+  const timer = setInterval(() => {
+    if (maintenance) return;
+    maintenance = actionCenter
+      .purgeExpiredCommands()
+      .catch(() =>
+        app.log.warn({ dependency: "action_cleanup" }, "Expired action receipts will be retried"),
+      )
+      .finally(() => {
+        maintenance = null;
+      });
+  }, 60000);
+  timer.unref();
+  app.addHook("onClose", async () => {
+    clearInterval(timer);
+    await maintenance;
     await database.pool.end();
   });
 }

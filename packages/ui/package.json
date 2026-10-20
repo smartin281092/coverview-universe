@@ -6,6 +6,7 @@
     ".": "./src/index.ts",
     "./analytics": "./src/analytics.ts",
     "./consent": "./src/consent.ts",
+    "./health-product-images": "./src/health-product-images.ts",
     "./number-format": "./src/number-format.ts",
     "./styles.css": "./src/styles.css",
     "./theme.css": "./src/theme.css"

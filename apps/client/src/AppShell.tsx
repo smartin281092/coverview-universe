@@ -1,7 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, Outlet, useLocation } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { ArrowUpRight, FileText, Menu, Settings2, UserRound, X, ListChecks, Files } from "lucide-react";
+import {
+  ArrowUpRight,
+  ClipboardList,
+  FileText,
+  Menu,
+  UserRound,
+  X,
+  ListChecks,
+  Files,
+} from "lucide-react";
 import {
   Button,
   Container,
@@ -27,8 +36,13 @@ const destinations = [
   { to: "/documents", key: "documents", icon: FileText },
   { to: "/offers", key: "offers", icon: Files },
   { to: "/actions", key: "actions", icon: ListChecks },
-  { to: "/insurance-requests", key: "insuranceRequests", icon: FileText },
+  { to: "/insurance-requests", key: "insuranceRequests", icon: ClipboardList },
 ] as const;
+// Phones (20 October 2026): Demandes takes the place of Offres in the bottom bar.
+const bottomOrder: string[] = ["profile", "documents", "insuranceRequests", "actions"];
+const bottomDestinations = destinations
+  .filter(({ key }) => bottomOrder.includes(key))
+  .sort((a, b) => bottomOrder.indexOf(a.key) - bottomOrder.indexOf(b.key));
 
 function isEditingControl(target: EventTarget | null) {
   if (!(target instanceof HTMLElement)) return false;
@@ -152,22 +166,6 @@ export function AppShell() {
           {signedIn && (
             <div className="ml-auto flex min-w-0 items-center gap-2 sm:gap-3 md:ml-0 md:max-w-full md:justify-self-end">
               <WalletProfileSwitcher />
-              <Link
-                to="/account"
-                search={{}}
-                aria-label={t("mobileNav.account")}
-                aria-current={
-                  pathname === "/" ||
-                  pathname === "/account" ||
-                  pathname.startsWith("/workspace/") ||
-                  pathname.startsWith("/authorizations/")
-                    ? "page"
-                    : undefined
-                }
-                className="grid size-11 shrink-0 place-items-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground aria-[current=page]:bg-muted aria-[current=page]:text-foreground"
-              >
-                <Settings2 className="size-5" strokeWidth={1.5} aria-hidden="true" />
-              </Link>
               <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
                 <SheetTrigger asChild>
                   <Button
@@ -304,7 +302,7 @@ export function AppShell() {
           className="wallet-bottom-nav fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/95 backdrop-blur-xl md:hidden"
         >
           <ul className="grid grid-cols-4">
-            {destinations.filter(({key})=>key!=="insuranceRequests").map(({ to, key, icon: Icon }) => {
+            {bottomDestinations.map(({ to, key, icon: Icon }) => {
               const current = isCurrent(to);
               return (
                 <li key={to}>

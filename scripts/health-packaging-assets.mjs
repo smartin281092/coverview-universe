@@ -6,7 +6,7 @@ const sharp = require("sharp");
 const [id, source] = process.argv.slice(2);
 if (!/^(hm_[a-f0-9]+|hfm_2027_\d+)$/.test(id ?? "") || !source)
   throw new Error("Expected known model id and image path");
-const destination = path.resolve("apps/www/src/assets/health-products");
+const destination = path.resolve("packages/ui/src/health-products");
 await mkdir(destination, { recursive: true });
 const bytes = await readFile(source);
 const info = await sharp(bytes).metadata();

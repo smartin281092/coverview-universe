@@ -2,16 +2,16 @@ import { useState } from "react";
 import { Link, useNavigate, useParams, useSearch } from "@tanstack/react-router";
 import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { ArrowUpRight, Plus } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Plus } from "lucide-react";
 import type { IdentityMe } from "@coverview/api-client";
 import type { InsuranceRequest } from "@coverview/contracts/insurance-requests";
 import type { LeadSummary } from "@coverview/contracts/partner";
 import { Button, EmptyState, ErrorState, LoadingState, RequestProgress } from "@coverview/ui";
+import { healthProductImage } from "@coverview/ui/health-product-images";
 import { insuranceApi } from "../insurance-api";
 import { partnerApi } from "../partner-api";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { useWalletProfileScope } from "../features/profile/use-wallet-profile-scope";
-import { InsuranceLeadAction } from "../features/offers/InsuranceLeadAction";
 import {
   LeadWorkspace,
   requestSearch,
@@ -131,6 +131,15 @@ function Requests({ identity }: { identity: IdentityMe }) {
   const selected = detail.data;
   return (
     <div className="space-y-8">
+      {requestId && (
+        <Link
+          to="/insurance-requests"
+          className="wallet-back-link inline-flex min-h-11 items-center gap-2 text-sm font-medium text-indigo-600"
+        >
+          <ArrowLeft className="size-4" aria-hidden="true" />
+          {t("backLink")}
+        </Link>
+      )}
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="cv-app-heading">{t("title")}</h1>
@@ -145,9 +154,6 @@ function Requests({ identity }: { identity: IdentityMe }) {
       </header>
       {requestId ? (
         <>
-          <Link className="text-sm underline" to="/insurance-requests">
-            {t("backLink")}
-          </Link>
           {detail.isPending ? (
             <LoadingState label={t("loading")} />
           ) : detail.isError ? (
@@ -161,7 +167,6 @@ function Requests({ identity }: { identity: IdentityMe }) {
           ) : (
             selected && (
               <>
-                <p className="break-all text-xs text-muted-foreground">{selected.id}</p>
                 {selected.state === "cancelled" && <p>{t("states.cancelled")}</p>}
                 <RequestProgress
                   current={Math.max(
@@ -189,12 +194,15 @@ function Requests({ identity }: { identity: IdentityMe }) {
                           {amount(item.offer.monthlyPremiumMinor)} {t("amount")}
                         </span>
                       </div>
-                      <p className="text-sm">
-                        {t("product", {
-                          insurer: item.offer.insurerBrand ?? item.offer.insurerName,
-                          model: item.offer.name,
-                        })}
-                      </p>
+                      <div className="flex items-center gap-3">
+                        <ProductImage modelId={item.offer.modelId} />
+                        <p className="text-sm">
+                          {t("product", {
+                            insurer: item.offer.insurerBrand ?? item.offer.insurerName,
+                            model: item.offer.name,
+                          })}
+                        </p>
+                      </div>
                       <p className="text-xs text-muted-foreground">
                         {t("configuration", {
                           year: item.birthYear,
@@ -212,25 +220,6 @@ function Requests({ identity }: { identity: IdentityMe }) {
                             item.currentInsurerBrand ?? item.currentInsurerName ?? t("notProvided"),
                         })}
                       </p>
-                      {item.profileId && (
-                        <Link
-                          className="text-sm underline"
-                          to="/profile"
-                          search={{ person: item.profileId, profile: item.profileId }}
-                        >
-                          {t("profile")}
-                        </Link>
-                      )}
-                      <div>
-                        <InsuranceLeadAction
-                          key={`${selected.id}:${item.id}:${identity.session.id}`}
-                          identity={identity}
-                          requestId={selected.id}
-                          personId={item.id}
-                          profileId={item.profileId}
-                          name={`${item.firstName} ${item.lastName}`}
-                        />
-                      </div>
                     </li>
                   ))}
                 </ul>
@@ -278,6 +267,13 @@ function Requests({ identity }: { identity: IdentityMe }) {
                     to="/insurance-requests/$requestId"
                     params={{ requestId: entry.request.id }}
                   >
+                    <span className="flex gap-2">
+                      {[...new Set(entry.request.items.map((item) => item.offer.modelId))]
+                        .slice(0, 3)
+                        .map((modelId) => (
+                          <ProductImage key={modelId} modelId={modelId} />
+                        ))}
+                    </span>
                     <span className="font-medium">{t("comparatorTitle")}</span>
                     <span className="text-sm text-muted-foreground">
                       {entry.request.items
@@ -327,6 +323,20 @@ function Requests({ identity }: { identity: IdentityMe }) {
       />
     </div>
   );
+}
+// The model's illustration, shared with the public comparator (20 October 2026); nothing without one.
+function ProductImage({ modelId }: { modelId: string }) {
+  const src = healthProductImage(modelId);
+  return src ? (
+    <img
+      src={src}
+      alt=""
+      width={56}
+      height={56}
+      loading="lazy"
+      className="size-14 shrink-0 rounded-md bg-white object-contain"
+    />
+  ) : null;
 }
 export function InsuranceRequestsPage() {
   return <IdentityBoundary>{(identity) => <Requests identity={identity} />}</IdentityBoundary>;

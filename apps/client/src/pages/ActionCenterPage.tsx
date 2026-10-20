@@ -3,21 +3,27 @@ import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import type { IdentityMe } from "@coverview/api-client";
-import {
-  Button,
-  EmptyState,
-  LoadingState,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@coverview/ui";
+import { CircleDashed, History, ListChecks } from "lucide-react";
+import { Button, EmptyState, LoadingState, Tabs, TabsContent } from "@coverview/ui";
 import { api } from "../api";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { ActionFailure } from "../features/actions/ActionFailure";
 import { ActionProgress } from "../features/actions/ActionProgress";
 import { ActionActivity } from "../features/actions/ActionActivity";
 import { useActionLabel } from "../features/actions/use-action-label";
+import { LineTabsList } from "../features/offers/LineTabsList";
+
+// The offer page's tab bar (20 October 2026): each tab's icon and underline in its own colour.
+const tabs = [
+  { id: "todo", icon: ListChecks, tone: "text-blue-600", color: "#2563eb" },
+  { id: "in_progress", icon: CircleDashed, tone: "text-orange-400", color: "#fb923c" },
+  { id: "activity", icon: History, tone: "text-teal-500", color: "#14b8a6" },
+] as const;
+const tabKeys = {
+  todo: "tabs.todo",
+  in_progress: "tabs.inProgress",
+  activity: "tabs.activity",
+} as const;
 
 function ActionCenter({ identity }: { identity: IdentityMe }) {
   const { scope, filter } = useWalletProfileScope();
@@ -70,11 +76,11 @@ function ActionCenter({ identity }: { identity: IdentityMe }) {
           })
         }
       >
-        <TabsList>
-          <TabsTrigger value="todo">{t("tabs.todo")}</TabsTrigger>
-          <TabsTrigger value="in_progress">{t("tabs.inProgress")}</TabsTrigger>
-          <TabsTrigger value="activity">{t("tabs.activity")}</TabsTrigger>
-        </TabsList>
+        <LineTabsList
+          tabs={tabs.map((item) => ({ ...item, label: t(tabKeys[item.id]) }))}
+          value={search.tab ?? "todo"}
+          label={t("tabs.label")}
+        />
         <TabsContent value={inProgress ? "in_progress" : "todo"} className="space-y-6">
           {query.isPending ? (
             <LoadingState label={t("loading")} />
