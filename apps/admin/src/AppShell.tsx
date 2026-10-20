@@ -1,8 +1,9 @@
-import { Link, Outlet, useLocation } from "@tanstack/react-router";
+import { Link, Navigate, Outlet, useLocation } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
-import { Container, TextLink } from "@coverview/ui";
+import { Container, LoadingState, TextLink } from "@coverview/ui";
 import logo from "../../../assets/logo-coverview.svg";
 import { LogoutFeedback } from "./features/identity/LogoutFeedback";
+import { adminPageDecision, isSignedIn, useAdminAccess } from "./features/identity/admin-access";
 
 export function AppShell() {
   const { t } = useTranslation();
@@ -16,6 +17,10 @@ export function AppShell() {
   const websiteUrl =
     import.meta.env.VITE_WEBSITE_URL ??
     (import.meta.env.DEV ? "http://127.0.0.1:4103" : "https://coverview.ch");
+  // Signed out: only the public site. Signed in: their own access; Admin once it is verified.
+  const access = useAdminAccess();
+  const granted = access === "granted";
+  const page = adminPageDecision(access, pathname);
   return (
     <div className="flex min-h-screen flex-col">
       <a
@@ -36,54 +41,70 @@ export function AppShell() {
             />
             <span className="text-xs text-muted-foreground sm:text-sm">{t("app")}</span>
           </Link>
-          <nav
-            aria-label={t("navigation")}
-            className="order-3 flex basis-full flex-wrap gap-x-7 sm:order-none sm:basis-auto"
-          >
-            <Link to="/partner" aria-current={pathname === "/partner" ? "page" : undefined} className="cv-app-nav-link">{t("partner:title")}</Link>
-            <Link
-              to="/users"
-              aria-current={pathname.startsWith("/users") ? "page" : undefined}
-              className="cv-app-nav-link"
+          {isSignedIn(access) && (
+            <nav
+              aria-label={t("navigation")}
+              className="order-3 flex basis-full flex-wrap gap-x-7 sm:order-none sm:basis-auto"
             >
-              {t("users:nav")}
-            </Link>
-            <Link
-              to="/service-requests"
-              aria-current={pathname === "/service-requests" ? "page" : undefined}
-              className="cv-app-nav-link"
-            >
-              {t("serviceRequests:nav")}
-            </Link>
-            <Link
-              to="/insurance-requests"
-              aria-current={pathname === "/insurance-requests" ? "page" : undefined}
-              className="cv-app-nav-link"
-            >
-              {t("insuranceRequests:title")}
-            </Link>
-            <Link
-              to="/configuration/comparateur-maladie"
-              aria-current={pathname === "/configuration/comparateur-maladie" ? "page" : undefined}
-              className="cv-app-nav-link"
-            >
-              {t("healthRecommendation:title")}
-            </Link>
-            <Link
-              to="/account"
-              aria-current={accountPage ? "page" : undefined}
-              className="cv-app-nav-link"
-            >
-              {t("identity.accountTitle")}
-            </Link>
-            <Link
-              to="/notifications"
-              aria-current={pathname === "/notifications" ? "page" : undefined}
-              className="cv-app-nav-link"
-            >
-              {t("notifications:title")}
-            </Link>
-          </nav>
+              {granted && (
+                <>
+                  <Link
+                    to="/partner"
+                    aria-current={pathname === "/partner" ? "page" : undefined}
+                    className="cv-app-nav-link"
+                  >
+                    {t("partner:title")}
+                  </Link>
+                  <Link
+                    to="/users"
+                    aria-current={pathname.startsWith("/users") ? "page" : undefined}
+                    className="cv-app-nav-link"
+                  >
+                    {t("users:nav")}
+                  </Link>
+                  <Link
+                    to="/service-requests"
+                    aria-current={pathname === "/service-requests" ? "page" : undefined}
+                    className="cv-app-nav-link"
+                  >
+                    {t("serviceRequests:nav")}
+                  </Link>
+                  <Link
+                    to="/insurance-requests"
+                    aria-current={pathname === "/insurance-requests" ? "page" : undefined}
+                    className="cv-app-nav-link"
+                  >
+                    {t("insuranceRequests:title")}
+                  </Link>
+                  <Link
+                    to="/configuration/comparateur-maladie"
+                    aria-current={
+                      pathname === "/configuration/comparateur-maladie" ? "page" : undefined
+                    }
+                    className="cv-app-nav-link"
+                  >
+                    {t("healthRecommendation:title")}
+                  </Link>
+                </>
+              )}
+              <Link
+                to="/account"
+                aria-current={accountPage ? "page" : undefined}
+                className="cv-app-nav-link"
+              >
+                {t("identity.accountTitle")}
+              </Link>
+              {granted && (
+                <Link
+                  to="/notifications"
+                  aria-current={pathname === "/notifications" ? "page" : undefined}
+                  className="cv-app-nav-link"
+                >
+                  {t("notifications:title")}
+                </Link>
+              )}
+            </nav>
+          )}
           <TextLink href={websiteUrl} arrow="up" className="text-sm">
             {t("website")}
           </TextLink>
@@ -96,7 +117,13 @@ export function AppShell() {
           className="app-content cv-section cv-section--compact space-y-10"
         >
           <LogoutFeedback>
-            <Outlet />
+            {page === "show" ? (
+              <Outlet />
+            ) : page === "wait" ? (
+              <LoadingState label={t("identity.accessLoading")} />
+            ) : (
+              <Navigate to={page} replace />
+            )}
           </LogoutFeedback>
         </main>
       </Container>
