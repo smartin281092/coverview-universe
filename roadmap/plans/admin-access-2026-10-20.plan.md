@@ -27,3 +27,4 @@ Entrée : demande de l’utilisateur du 20 octobre 2026 : « Dans Admin quand je
 | 1 | Attribution | lecture de la base de production, puis transaction contrôlée | compte, identité WorkOS, email, session active et Authenticator confirmés ; `iap_ba8a4930-1382-470a-ad65-0331008ec83a` à 16:09:49 UTC | challenge MFA par le titulaire |
 | 2 | Règle d’accès | `admin-access.test.ts`, `tsc`, ESLint | 7/7 tests Admin ; types et lint verts | — |
 | 3 | Admin non connecté | navigateur intégré, preview locale | `/users` ramené à `/` ; en-tête : logo et « Site public » seulement, aucun lien de navigation ; page de connexion affichée | états connectés en V5 après mise en production |
+| 4 | Production | version 260396c, navigateur intégré | `https://admin.coverview.ch/users` sans connexion ramené à `/`, en-tête : « Site public » seul | états connectés : V5 du titulaire |
