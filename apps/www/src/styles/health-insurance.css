@@ -1029,12 +1029,19 @@
   --hi-panel-inset: 27px;
   padding: var(--hi-panel-inset);
 }
+/* The title and the close button stay in view while the dialog scrolls (20 October 2026): the
+   header covers the panel’s inset, so the content passes beneath it. */
 .hi-dialog-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding-bottom: 24px;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  margin: calc(-1 * var(--hi-panel-inset)) calc(-1 * var(--hi-panel-inset)) 0;
+  padding: var(--hi-panel-inset) var(--hi-panel-inset) 24px;
+  background: white;
 }
 .hi-dialog-header h2 {
   font-size: 19px;

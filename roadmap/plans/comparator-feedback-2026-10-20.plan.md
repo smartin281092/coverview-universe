@@ -18,6 +18,7 @@ Entrée : demande de l’utilisateur du 20 octobre 2026 (neuf points, capture d�
 | D-10 | Images des modèles ? | Image du même modèle en 2027 (même compagnie, même code de tarif), comme pour la référence 2027 ; sans image, le logo reste. Contrat d’API : ajouts `nextModelId` et `group`, champs existants inchangés. | Demande explicite ; G-12 |
 | D-11 | Bloc des réglages du contrat dans la fenêtre (suite du même jour) ? | Sans encadré ni fond : franchise, couverture accident et localité posées sur la fenêtre, marges conservées. | Demande explicite |
 | D-12 | Cartes des compagnies et des modèles ? | Fond blanc, bordure conservée ; le survol reste marqué. | Demande explicite |
+| D-13 | En-tête des fenêtres en défilement ? | Titre et croix de fermeture toujours visibles, le contenu passant dessous, pour toutes les fenêtres du comparateur (même composant ; aucune n’a d’autre élément collant). | « Votre compagnie en 2026 et la croix toujours visibles » |
 
 ## Definition of Done — oracles
 
