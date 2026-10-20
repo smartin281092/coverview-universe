@@ -16,8 +16,8 @@ Entrée : demande de l’utilisateur du 20 octobre 2026 : « Dans Admin quand je
 ## Definition of Done — oracles
 
 - [x] Attribution en production : une ligne, préconditions contrôlées — trace.
-- [ ] Règle d’accès des pages — V2 (tests unitaires).
-- [ ] Admin non connecté : menu réduit, page d’Admin redirigée — V3 (navigateur intégré).
+- [x] Règle d’accès des pages — V2 (tests unitaires) (journal 2).
+- [x] Admin non connecté : menu réduit, page d’Admin redirigée — V3 (navigateur intégré) (journal 3).
 - [ ] Admin connecté avec et sans vérification — V5 (titulaire, après mise en production).
 
 ## Journal de vérification
@@ -26,3 +26,4 @@ Entrée : demande de l’utilisateur du 20 octobre 2026 : « Dans Admin quand je
 |---|---|---|---|---|
 | 1 | Attribution | lecture de la base de production, puis transaction contrôlée | compte, identité WorkOS, email, session active et Authenticator confirmés ; `iap_ba8a4930-1382-470a-ad65-0331008ec83a` à 16:09:49 UTC | challenge MFA par le titulaire |
 | 2 | Règle d’accès | `admin-access.test.ts`, `tsc`, ESLint | 7/7 tests Admin ; types et lint verts | — |
+| 3 | Admin non connecté | navigateur intégré, preview locale | `/users` ramené à `/` ; en-tête : logo et « Site public » seulement, aucun lien de navigation ; page de connexion affichée | états connectés en V5 après mise en production |
