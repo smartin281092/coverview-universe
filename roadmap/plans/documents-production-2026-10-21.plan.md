@@ -25,8 +25,8 @@ La clé peut être copiée sur le serveur avant la réponse : rien ne part chez 
 
 ## Definition of Done — oracles
 
-- [ ] Décision ACL testée — V2.
-- [ ] Pile valide (`docker compose config`), services sains, bucket privé sans versioning, utilisateur API limité — V3 serveur.
+- [x] Décision ACL testée — V2 (journal 1).
+- [x] Pile valide (`docker compose config`), services sains, bucket privé sans versioning, utilisateur API limité — V3 serveur (journal 4–7).
 - [ ] API démarrée avec les documents ; routes documentaires présentes (401 sans session) — V3.
 - [ ] Dépôt d’une pièce et d’un contrat depuis Wallet — V5 du titulaire.
 
@@ -37,3 +37,7 @@ La clé peut être copiée sur le serveur avant la réponse : rien ne part chez 
 | 1 | Décision ACL | `file-storage.test.ts`, `tsc`, ESLint, knip | 3 nouveaux tests verts (28 avec la configuration) ; knip inchangé (7 fichiers et un doublon préexistants) | — |
 | 2 | Serveur, premier essai (a9a2436) | `docker compose up -d` | sauvegarde faite (19 355 218 octets), secrets générés sans affichage ; `minio/minio` refusé au téléchargement, aucun conteneur modifié ; `.env` et `compose.yml` restaurés, production saine | image Chainguard |
 | 3 | MinIO Chainguard | conteneur local jetable, `mc` de l’image, adaptateur réel de l’API | volume neuf accepté en non-root ; bucket privé non versionné, utilisateur limité ; mode strict refusé, MinIO déclaré accepté ; relecture chiffrée exacte ; écrasement refusé ; suppression effective ; `mc ready local` vert | serveur |
+| 4 | Serveur (edd24c8) | sauvegarde de la base, secrets existants conservés, `docker compose up -d` | 7 services sains ; API, apps et site sur `edd24c8` ; documents toujours fermés | — |
+| 5 | Bucket et droits | `mc` de l’image MinIO, puis S3 avec les identifiants de l’API depuis un conteneur API jetable | bucket privé, sans politique, non versionné ; ACL = stub MinIO ; écriture, relecture et suppression permises ; écrasement refusé (`PreconditionFailed`) ; création de bucket refusée ; liste réduite au seul bucket autorisé | — |
+| 6 | Clé de chiffrement | copie `age` hors serveur, empreintes comparées | `document-storage-key-20261021.age` (245 octets), empreinte identique à celle du serveur | — |
+| 7 | ClamAV et production | journaux, `/health`, Wallet, site | clamd démarré, signatures du jour (daily 28160) ; API sans erreur ; 200 partout | activation après Q-1 |
