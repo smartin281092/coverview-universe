@@ -6,6 +6,10 @@ Aucune entrée active. Les décisions durables vivent dans leur documentation pr
 
 ## Candidats
 
+Décisions du 20 octobre 2026, suivi Wallet des demandes du comparateur ([plan](roadmap/plans/wallet-requests-2026-10-20.plan.md), [règles](apps/api/src/modules/insurance-requests/README.md#pièces-de-la-demande)).
+- **Instruction utilisateur** : la demande s’appelle « Assurance maladie 2027 », sans sous-titre ; sous le titre, la pièce d’identité (coche verte une fois enregistrée) et le contrat d’assurance maladie 2026, ou « je n’en ai pas ».
+- **Défauts PROG-23** : année des primes enregistrée à la soumission ; boutons par personne dont le compte possède le dossier, seulement pendant le traitement ; pièce d’identité = pièce jointe d’identité du dossier ; contrat 2026 = document du dossier cité par la demande ou déclaration « aucun », retirable ; dépôt désactivé tant que les documents sont fermés en production. Revue : à la prochaine revue mémoire.
+
 Décisions utilisateur du 16 octobre 2026, mise en production complète ([plan](roadmap/plans/deploy-full-2026-10-16.plan.md)).
 - **Instruction utilisateur** : « tout déployer maintenant » : commandes horizon3, comptes, emails, travaux de fond, Wallet, Partner et Admin en production (Q-1 c).
 - **Instruction utilisateur** : emails par Resend (Q-2 a) ; l’avis horizon3 contient nom, email et téléphone du client (Q-3 b).
