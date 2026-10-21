@@ -25,8 +25,11 @@ services:
       interval: 3s
       timeout: 3s
       retries: 20
+  # MinIO ne publie plus d'image (Docker Hub, quay.io) : même build Chainguard que la production,
+  # avec mc et la console. Il tourne en 65532 : un volume créé par l'ancienne image (root) se
+  # reprend une fois par chown, voir README.
   minio:
-    image: minio/minio:latest@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e
+    image: cgr.dev/chainguard/minio@sha256:32c504bea4574d8f29d719b37bc0dad920ecf3e22b81dc5cea0bb105af2ce10f
     restart: unless-stopped
     command: server /data --console-address ":9001"
     environment:

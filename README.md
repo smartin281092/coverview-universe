@@ -21,6 +21,14 @@ Le panneau affiche les trois interfaces et les personas provenant des seeds. `pn
 
 Les services Docker sont liés à `127.0.0.1`, avec des ports dédiés dans le compose. Pour un autre checkout concurrent, choisir un `COMPOSE_PROJECT_NAME` et des ports distincts avant démarrage. Ne pas reprendre les volumes d'un autre projet.
 
+MinIO ne publiant plus d'image, le compose utilise depuis le 21 octobre 2026 le build Chainguard de la production, qui tourne en utilisateur 65532. Un volume `miniodata` créé par l'ancienne image appartient à root, et MinIO s'arrête alors sur « Unable to write to the backend ». Le reprendre une fois, sans rien supprimer :
+
+```powershell
+docker compose stop minio
+docker compose run --rm --no-deps --user 0 --entrypoint chown minio -R 65532:65532 /data
+docker compose up -d --wait minio
+```
+
 ```powershell
 pnpm lint
 pnpm typecheck
