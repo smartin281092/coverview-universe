@@ -1,7 +1,7 @@
 # Pile CoverView de production sur cv-staging-01, derrière le Traefik de Coolify, qui porte TLS et
 # HSTS. Une paire de routes par adresse garde ses certificats. Runbook : README.md.
-# Réglages dans /opt/coverview-astra/.env, secrets de l'API dans api.env (0600 tous deux) ;
-# .env.example et api.env.example en décrivent les clés.
+# Réglages dans /opt/coverview-astra/.env, secrets de l'API dans api.env et de MinIO dans
+# minio.env (0600 tous) ; les fichiers .example de ce dossier en décrivent les clés.
 name: coverview-astra
 
 services:
@@ -45,15 +45,20 @@ services:
       TRUST_PROXY_HOPS: "1"
       FIXTURE_MODE: "false"
       EXTERNAL_ADAPTER_MODE: disabled
-      # Comptes ouverts une fois WorkOS configuré (secrets dans api.env) ; documents à décider.
+      # Comptes ouverts une fois WorkOS configuré (secrets dans api.env).
       AUTH_ENABLED: ${AUTH_ENABLED:-false}
-      DOCUMENTS_ENABLED: "false"
+      # Documents avec le profil « documents » (MinIO, ClamAV) et leurs secrets dans api.env.
+      DOCUMENTS_ENABLED: ${DOCUMENTS_ENABLED:-false}
       # Travaux de fond : avis des commandes externes dès que l'email fonctionne, le reste avec les comptes.
       PARTNER_JOBS_ENABLED: "true"
       DATABASE_URL: postgres://coverview:${POSTGRES_PASSWORD:?}@postgres:5432/coverview
       REDIS_URL: redis://redis:6379
-      # Adresses exigées par la configuration ; adaptateurs locaux désactivés, jamais contactées.
-      MINIO_ENDPOINT: http://127.0.0.1:9
+      # Stockage des documents : MinIO de cette pile, réseau privé ; sa réponse ACL est un stub.
+      MINIO_ENDPOINT: http://minio:9000
+      DOCUMENT_S3_MINIO: "true"
+      CLAMAV_HOST: clamav
+      CLAMAV_PORT: "3310"
+      # Adresse exigée par la configuration ; adaptateur local désactivé, jamais contactée.
       MAILPIT_URL: http://127.0.0.1:9
       # Email : Resend dès que RESEND_API_KEY est dans api.env, depuis le sous-domaine d'envoi.
       MAIL_FROM: ${MAIL_FROM:-CoverView <notifications@mail.coverview.ch>}
@@ -267,11 +272,53 @@ services:
       traefik.http.routers.cva-apps.middlewares: cva-hsts
       traefik.http.routers.cva-apps.service: cva-apps
 
+  # Documents (21 octobre 2026), avec COMPOSE_PROFILES=apps,documents. Originaux chiffrés par
+  # l'API avant stockage ; ni console ni port publié.
+  minio:
+    image: minio/minio:latest@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e
+    profiles: [documents]
+    restart: unless-stopped
+    command: ["server", "/data"]
+    # Identifiants racine générés sur le serveur (minio.env, 0600) ; l'API a son propre utilisateur.
+    env_file:
+      - path: minio.env
+        required: false
+    volumes:
+      - minio-data:/data
+    networks: [internal]
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  clamav:
+    image: clamav/clamav@sha256:f0954d679017eb6d48221e2b2be3ac5457bf278a844f39b672376f55a085f591
+    profiles: [documents]
+    restart: unless-stopped
+    volumes:
+      - clamav-data:/var/lib/clamav
+    # Signatures mises à jour par internet ; les analyses arrivent de l'API par le réseau privé.
+    networks: [internal, egress]
+    mem_limit: 2g
+    cpus: 1.0
+    pids_limit: 100
+    security_opt: ["no-new-privileges:true"]
+    healthcheck:
+      test: ["CMD", "clamdscan", "--ping", "3"]
+      interval: 20s
+      timeout: 10s
+      start_period: 180s
+      retries: 15
+
 networks:
   internal:
     internal: true
+  egress: {}
   coolify:
     external: true
 
 volumes:
   postgres-data: {}
+  minio-data: {}
+  clamav-data: {}

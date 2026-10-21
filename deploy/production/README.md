@@ -14,7 +14,7 @@ Mise en ligne du comparateur : [deploy-comparator](../../roadmap/plans/deploy-co
 | Adresse | Service |
 |---|---|
 | `coverview.ch` | `www` : `/` → 302 vers `/comparateur-assurance-maladie-2027` (temporaire) |
-| `api.coverview.ch` | `api` : routes publiques santé et commandes horizon3 ; comptes si `AUTH_ENABLED=true` ; emails dès que `RESEND_API_KEY` est dans `api.env` ; documents désactivés |
+| `api.coverview.ch` | `api` : routes publiques santé et commandes horizon3 ; comptes si `AUTH_ENABLED=true` ; emails dès que `RESEND_API_KEY` est dans `api.env` ; documents si `DOCUMENTS_ENABLED=true` |
 | `wallet.`, `partner.`, `admin.coverview.ch` | `apps` si `COMPOSE_PROFILES=apps`, sinon `www` → 302 vers `https://coverview.ch/` |
 | anciens sous-domaines (`intelligence.`, préproduction) | `www` → 302 vers `https://coverview.ch/` |
 
@@ -89,6 +89,21 @@ Quand `WORKOS_API_KEY`, `WORKOS_CLIENT_ID` et `AUTH_SESSION_SECRET` sont dans `a
 2. `.env` : `AUTH_ENABLED=true` et `COMPOSE_PROFILES=apps` ; site reconstruit avec les demandes ; `sudo docker compose up -d`.
 3. Contrôles : connexion depuis Wallet, Partner et Admin ; retour sur chaque surface ; `https://api.coverview.ch/health` prêt.
 4. Premier administrateur : après sa première connexion, attribution explicite et tracée de `administration.access` ([procédure](../../apps/api/src/modules/identity/README.md#procédure-opérateur-dhabilitation-administrative)), puis Authenticator inscrit par le titulaire depuis `/authenticator`.
+
+## Documents
+
+Depuis le 21 octobre 2026 ([plan](../../roadmap/plans/documents-production-2026-10-21.plan.md)), le profil `documents` ajoute `minio` (réseau interne seul, ni console ni port publié) et `clamav` (réseau interne et `egress` pour ses signatures). L’API chiffre chaque original (AES-256-GCM) avant de l’écrire dans MinIO.
+
+1. **Secrets**, générés sur le serveur et jamais affichés : `minio.env` (racine MinIO, [exemple](minio.env.example)), puis dans `api.env` `DOCUMENT_S3_ACCESS_KEY`, `DOCUMENT_S3_SECRET_KEY` et `DOCUMENT_STORAGE_KEY` (`openssl rand -base64 32`), en 0600.
+2. **Copie de secours de `DOCUMENT_STORAGE_KEY`**, chiffrée `age` pour le titulaire, hors serveur. Sans elle, les originaux sont illisibles.
+3. `.env` : `COMPOSE_PROFILES=apps,documents`, puis `sudo docker compose up -d`. `clamav` devient sain une fois ses signatures téléchargées (quelques minutes).
+4. **Bucket et utilisateur** dans MinIO, avec `mc` dans le conteneur : `mc mb root/coverview-documents`, politique `coverview-api` limitée à ce bucket (`ListBucket`, `GetBucketLocation`, `GetBucketPolicy`, `GetBucketVersioning`, puis `GetObject`, `PutObject` et `DeleteObject` sur ses objets), utilisateur de l’API rattaché. Contrôles : aucun accès anonyme, aucun versioning ; écriture, lecture et suppression permises dans le bucket ; liste des buckets et création refusées.
+5. **Clé OpenAI** : saisie par le titulaire ; la lecture automatique exige le DPA d’OpenAI (LLM-06).
+6. `.env` : `DOCUMENTS_ENABLED=true`, puis `sudo docker compose up -d`. Contrôles : `GET /documents/identity-attachment` répond 401 sans session ; dépôt réel depuis Wallet.
+
+**Sauvegarde des originaux**, avec celle de la base : archive du volume (`sudo docker run --rm -v coverview-astra_minio-data:/data:ro -v /var/backups/coverview-astra:/backup alpine tar czf /backup/<horodatage>-minio.tgz -C /data .`), puis copie chiffrée `age` hors fournisseur. La clé de chiffrement n’est jamais dans cette archive.
+
+**Retour arrière** : `DOCUMENTS_ENABLED=false`, puis `sudo docker compose up -d`. Les originaux restent dans `minio-data`.
 
 ## Retour arrière
 

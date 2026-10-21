@@ -13,6 +13,8 @@ const schema = z.object({
     .string()
     .regex(/^[A-Za-z0-9+/]{43}=$/)
     .optional(),
+  // MinIO on the production stack's private network (21 October 2026): see ownerOnlyAcl.
+  DOCUMENT_S3_MINIO: z.enum(["true", "false"]).default("false"),
   CLAMAV_HOST: z.string().min(1).default("127.0.0.1"),
   CLAMAV_PORT: z.coerce.number().int().min(1).max(65535).default(53310),
   OPENAI_API_KEY: z.string().min(20).optional(),
@@ -60,6 +62,7 @@ export async function documentConfig(config: Environment) {
     OPENAI_DOCUMENT_DAILY_CALLS: values.OPENAI_DOCUMENT_DAILY_CALLS ?? (local ? 20 : 3),
     enabled,
     local,
+    minio: values.DOCUMENT_S3_MINIO === "true",
     encryptionKey,
     endpoint: config.MINIO_ENDPOINT,
     redisUrl: config.REDIS_URL,

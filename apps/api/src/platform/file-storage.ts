@@ -11,6 +11,7 @@ import {
   GetBucketPolicyCommand,
   GetBucketVersioningCommand,
   GetBucketAclCommand,
+  type GetBucketAclCommandOutput,
 } from "@aws-sdk/client-s3";
 
 export interface FileStorage {
@@ -19,6 +20,30 @@ export interface FileStorage {
   remove(key: string): Promise<void>;
   close(): void;
 }
+// The document bucket grants access to its owner only. MinIO implements no ACLs: its answer is a
+// private-only stub with empty IDs, and its privacy rests on the absent bucket policy checked
+// before, on dedicated credentials and on its network. That stub is accepted for a loopback MinIO
+// in local development, or for the MinIO declared on the production stack's private network
+// (DOCUMENT_S3_MINIO, 21 October 2026). A real S3 provider names its owner and never matches it.
+export function ownerOnlyAcl(
+  acl: Pick<GetBucketAclCommandOutput, "Owner" | "Grants">,
+  minio: boolean,
+) {
+  const minioStub =
+    minio &&
+    acl.Owner?.ID === "" &&
+    acl.Grants?.length === 1 &&
+    acl.Grants[0]?.Permission === "FULL_CONTROL" &&
+    acl.Grants[0].Grantee?.Type === "CanonicalUser" &&
+    !acl.Grants[0].Grantee.ID;
+  return (
+    minioStub ||
+    (!!acl.Owner?.ID &&
+      !acl.Grants?.some(
+        (grant) => grant.Grantee?.Type !== "CanonicalUser" || grant.Grantee.ID !== acl.Owner?.ID,
+      ))
+  );
+}
 export function createS3Storage(config: {
   endpoint: string;
   accessKey: string;
@@ -26,6 +51,7 @@ export function createS3Storage(config: {
   encryptionKey: Buffer;
   DOCUMENT_BUCKET: string;
   local: boolean;
+  minio?: boolean;
 }): FileStorage {
   const client = new S3Client({
     region: "us-east-1",
@@ -83,22 +109,10 @@ export function createS3Storage(config: {
     const acl = await client.send(new GetBucketAclCommand({ Bucket }), {
       abortSignal: AbortSignal.timeout(5000),
     });
-    // MinIO's private-only ACL compatibility response has empty owner and grantee IDs.
-    const localMinioAcl =
-      config.local &&
-      ["localhost", "127.0.0.1", "[::1]"].includes(new URL(config.endpoint).hostname) &&
-      acl.Owner?.ID === "" &&
-      acl.Grants?.length === 1 &&
-      acl.Grants[0]?.Permission === "FULL_CONTROL" &&
-      acl.Grants[0].Grantee?.Type === "CanonicalUser" &&
-      !acl.Grants[0].Grantee.ID;
-    if (
-      !localMinioAcl &&
-      (!acl.Owner?.ID ||
-        acl.Grants?.some(
-          (grant) => grant.Grantee?.Type !== "CanonicalUser" || grant.Grantee.ID !== acl.Owner?.ID,
-        ))
-    )
+    const loopback = ["localhost", "127.0.0.1", "[::1]"].includes(
+      new URL(config.endpoint).hostname,
+    );
+    if (!ownerOnlyAcl(acl, (config.local && loopback) || config.minio === true))
       throw new Error("Document bucket ACL must grant access to its owner only");
   }
   async function ready() {

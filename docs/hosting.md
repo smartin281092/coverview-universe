@@ -42,3 +42,14 @@ Réponse « tout déployer maintenant », sur le même serveur et derrière le m
 - **Documents** non déployés : stockage objet, chiffrement, antivirus et clé OpenAI de production restent à décider.
 
 Plan et preuves : [deploy-full](../roadmap/plans/deploy-full-2026-10-16.plan.md).
+
+## HOST-06 — Documents en production du 21 octobre 2026 (décision utilisateur)
+
+Réponse « a) ouvre les documents en production », stockage et antivirus **sur le serveur**, sans ressource cloud facturée (HOST-02).
+
+- **MinIO** dans la pile, réseau interne seul. Bucket privé `coverview-documents`, utilisateur dédié de l’API, originaux chiffrés par l’API. `DOCUMENT_S3_MINIO=true` accepte le stub ACL de MinIO ; un fournisseur S3 réel reste soumis au contrôle strict.
+- **ClamAV** dans la pile, avec une sortie réseau pour ses signatures seulement.
+- **Clé de chiffrement** générée sur le serveur, copie de secours chiffrée `age` hors serveur. **Clé OpenAI** saisie par le titulaire ; lecture automatique soumise au DPA (LLM-06).
+- Un stockage objet managé (par exemple chez Infomaniak) reste possible plus tard, avec migration des originaux.
+
+Runbook : [deploy/production](../deploy/production/README.md#documents). Plan : [documents-production](../roadmap/plans/documents-production-2026-10-21.plan.md).
