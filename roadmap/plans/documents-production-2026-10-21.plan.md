@@ -14,7 +14,7 @@ La clé peut être copiée sur le serveur avant la réponse : rien ne part chez 
 
 | ref | question | answer | evidence |
 |---|---|---|---|
-| D-1 | Stockage ? | MinIO sur `cv-staging-01` (« sur le serveur »), réseau interne de la pile, ni console ni port publié, image et digest du compose local. Bucket `coverview-documents` créé une fois ; utilisateur API dédié limité à ce bucket. Les originaux sont chiffrés AES-256-GCM par l’API avant stockage. | HOST-02 : aucune ressource cloud facturée sans décision |
+| D-1 | Stockage ? | MinIO sur `cv-staging-01` (« sur le serveur »), réseau interne de la pile, ni console ni port publié. MinIO ne publie plus d’image (Docker Hub et quay.io refusés, journal 2) : build Chainguard depuis les sources, maintenu, épinglé par digest (MinIO AGPLv3, service séparé non modifié, signalé DEP-01). Bucket `coverview-documents` créé une fois ; utilisateur API dédié limité à ce bucket. Les originaux sont chiffrés AES-256-GCM par l’API avant stockage. | HOST-02 : aucune ressource cloud facturée sans décision |
 | D-2 | Contrôle ACL ? | MinIO n’implémente pas les ACL : sa réponse est un stub privé. Il est accepté quand l’opérateur déclare `DOCUMENT_S3_MINIO=true`. La confidentialité repose sur l’absence de politique de bucket (contrôlée), sur des identifiants dédiés et sur le réseau privé. Un vrai fournisseur S3 reste soumis au contrôle strict, sa réponse n’ayant pas la forme du stub. | `file-storage.ts`, tests unitaires |
 | D-3 | Antivirus ? | ClamAV, même digest qu’en local. Réseau interne, plus une sortie pour les signatures (freshclam). 2 Go de mémoire et 1 CPU au plus. | 7,8 Go de RAM, 6,3 Go disponibles |
 | D-4 | Clé de chiffrement ? | Générée sur le serveur, jamais affichée. Copie de secours chiffrée age pour le titulaire, hors serveur : sans elle, les originaux sont illisibles. | README document-intelligence |
@@ -34,3 +34,6 @@ La clé peut être copiée sur le serveur avant la réponse : rien ne part chez 
 
 | # | cible | oracle | résultat | suite |
 |---|---|---|---|---|
+| 1 | Décision ACL | `file-storage.test.ts`, `tsc`, ESLint, knip | 3 nouveaux tests verts (28 avec la configuration) ; knip inchangé (7 fichiers et un doublon préexistants) | — |
+| 2 | Serveur, premier essai (a9a2436) | `docker compose up -d` | sauvegarde faite (19 355 218 octets), secrets générés sans affichage ; `minio/minio` refusé au téléchargement, aucun conteneur modifié ; `.env` et `compose.yml` restaurés, production saine | image Chainguard |
+| 3 | MinIO Chainguard | conteneur local jetable, `mc` de l’image, adaptateur réel de l’API | volume neuf accepté en non-root ; bucket privé non versionné, utilisateur limité ; mode strict refusé, MinIO déclaré accepté ; relecture chiffrée exacte ; écrasement refusé ; suppression effective ; `mc ready local` vert | serveur |

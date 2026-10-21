@@ -274,8 +274,10 @@ services:
 
   # Documents (21 octobre 2026), avec COMPOSE_PROFILES=apps,documents. Originaux chiffrés par
   # l'API avant stockage ; ni console ni port publié.
+  # MinIO ne publie plus d'image (Docker Hub, quay.io) : build Chainguard depuis les sources,
+  # maintenu, épinglé par digest ; il contient mc pour la sonde et l'administration.
   minio:
-    image: minio/minio:latest@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e
+    image: cgr.dev/chainguard/minio@sha256:32c504bea4574d8f29d719b37bc0dad920ecf3e22b81dc5cea0bb105af2ce10f
     profiles: [documents]
     restart: unless-stopped
     command: ["server", "/data"]
