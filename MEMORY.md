@@ -6,6 +6,10 @@ Aucune entrée active. Les décisions durables vivent dans leur documentation pr
 
 ## Candidats
 
+Décisions du 21 octobre 2026, documents en production ([plan](roadmap/plans/documents-production-2026-10-21.plan.md), [HOST-06](docs/hosting.md)).
+- **Instruction utilisateur** : ouvrir les documents en production, stockage et antivirus sur le serveur ; lecture automatique par OpenAI, le titulaire déclarant le DPA accepté (Q-1 a, LLM-06) ; clé OpenAI copiée par le titulaire.
+- **Défauts PROG-23** : MinIO Chainguard épinglé par digest (MinIO ne publie plus d’image) ; stub ACL de MinIO accepté sur déclaration `DOCUMENT_S3_MINIO` ; copie de secours `age` de la clé de chiffrement hors serveur. Revue : à la prochaine revue mémoire.
+
 Décisions du 20 octobre 2026, suivi Wallet des demandes du comparateur ([plan](roadmap/plans/wallet-requests-2026-10-20.plan.md), [règles](apps/api/src/modules/insurance-requests/README.md#pièces-de-la-demande)).
 - **Instruction utilisateur** : la demande s’appelle « Assurance maladie 2027 », sans sous-titre ; sous le titre, la pièce d’identité (coche verte une fois enregistrée) et le contrat d’assurance maladie 2026, ou « je n’en ai pas ».
 - **Défauts PROG-23** : année des primes enregistrée à la soumission ; boutons par personne dont le compte possède le dossier, seulement pendant le traitement ; pièce d’identité = pièce jointe d’identité du dossier ; contrat 2026 = document du dossier cité par la demande ou déclaration « aucun », retirable ; dépôt désactivé tant que les documents sont fermés en production. Revue : à la prochaine revue mémoire.

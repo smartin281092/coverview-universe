@@ -6,7 +6,7 @@ Entrée : réponse de l’utilisateur du 21 octobre 2026 à la question bloquant
 
 | ref | question | réponse |
 |---|---|---|
-| Q-1 | LLM-06 : le DPA (accord de traitement des données) d’OpenAI couvre-t-il l’organisation de la clé ? a) oui, la lecture automatique s’active avec les documents ; b) pas encore, documents ouverts sans lecture automatique : l’option de lecture doit alors disparaître de Wallet (G-06), changement à faire | en attente |
+| Q-1 | LLM-06 : le DPA (accord de traitement des données) d’OpenAI couvre-t-il l’organisation de la clé ? a) oui, la lecture automatique s’active avec les documents ; b) pas encore, documents ouverts sans lecture automatique : l’option de lecture doit alors disparaître de Wallet (G-06), changement à faire | **a)** — « a) le DPA est accepté, ouvre les documents », réponse de l’utilisateur du 21 octobre 2026 ; acceptation déclarée par le titulaire, non vérifiée par l’agent |
 
 La clé peut être copiée sur le serveur avant la réponse : rien ne part chez OpenAI tant que les documents restent fermés.
 
