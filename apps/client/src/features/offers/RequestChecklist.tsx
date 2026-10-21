@@ -149,44 +149,45 @@ function Person({
   return (
     <div className="space-y-2">
       {named && <p className="text-sm font-medium">{name}</p>}
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-wrap items-center gap-2">
         <Button
           type="button"
           variant="outline"
-          className="min-h-11"
+          size="sm"
           disabled={!attachment.data || !portalContainer}
           onClick={() => setPicker(true)}
         >
           {status === "ready" ? (
-            <CircleCheck className="size-4 text-green-600" aria-hidden="true" />
+            <CircleCheck className="text-green-600" aria-hidden="true" />
           ) : status === "processing" ? (
-            <LoaderCircle className="size-4 motion-safe:animate-spin" aria-hidden="true" />
+            <LoaderCircle className="motion-safe:animate-spin" aria-hidden="true" />
           ) : status === "missing" ? (
-            <Plus className="size-4" aria-hidden="true" />
+            <Plus aria-hidden="true" />
           ) : (
-            <TriangleAlert className="size-4 text-amber-600" aria-hidden="true" />
+            <TriangleAlert className="text-amber-600" aria-hidden="true" />
           )}
           {t(`checklist.identity.${status}`)}
         </Button>
         {answer ? (
           <>
             {answer.kind === "document" ? (
-              <Button asChild variant="outline" className="min-h-11">
+              <Button asChild variant="outline" size="sm">
                 <Link to="/documents/$documentId" params={{ documentId: answer.documentId }}>
-                  <CircleCheck className="size-4 text-green-600" aria-hidden="true" />
+                  <CircleCheck className="text-green-600" aria-hidden="true" />
                   {t("checklist.contract.provided", { year })}
                 </Link>
               </Button>
             ) : (
-              <span className="inline-flex min-h-11 items-center gap-2 text-sm">
-                <CircleCheck className="size-4 text-green-600" aria-hidden="true" />
+              <span className="inline-flex min-h-8 items-center gap-2 px-3 text-xs/relaxed font-medium">
+                <CircleCheck className="size-3 text-green-600" aria-hidden="true" />
                 {t("checklist.contract.declaredNone", { year })}
               </span>
             )}
             <Button
               type="button"
               variant="ghost"
-              className="min-h-11 font-semibold text-indigo-600"
+              size="sm"
+              className="font-semibold text-indigo-600"
               disabled={save.isPending}
               onClick={() => save.mutate({ personId: item.id, kind: "unset" })}
             >
@@ -198,17 +199,18 @@ function Person({
             <Button
               type="button"
               variant="outline"
-              className="min-h-11"
+              size="sm"
               disabled={closed || attachment.isPending || !portalContainer || save.isPending}
               onClick={() => setUpload(true)}
             >
-              <Plus className="size-4" aria-hidden="true" />
+              <Plus aria-hidden="true" />
               {t("checklist.contract.add", { year })}
             </Button>
             <Button
               type="button"
               variant="ghost"
-              className="min-h-11 font-semibold text-indigo-600"
+              size="sm"
+              className="font-semibold text-indigo-600"
               disabled={save.isPending}
               onClick={() => save.mutate({ personId: item.id, kind: "none" })}
             >
