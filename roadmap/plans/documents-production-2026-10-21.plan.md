@@ -27,7 +27,7 @@ La clé peut être copiée sur le serveur avant la réponse : rien ne part chez 
 
 - [x] Décision ACL testée — V2 (journal 1).
 - [x] Pile valide (`docker compose config`), services sains, bucket privé sans versioning, utilisateur API limité — V3 serveur (journal 4–7).
-- [x] API démarrée avec les documents ; routes documentaires présentes (401 sans session) — V3 (journal 8).
+- [x] API démarrée avec les documents ; routes documentaires présentes (401 sans session) — V3 (journal 13).
 - [ ] Dépôt d’une pièce et d’un contrat depuis Wallet — V5 du titulaire.
 
 ## Journal de vérification
@@ -46,4 +46,4 @@ La clé peut être copiée sur le serveur avant la réponse : rien ne part chez 
 | 10 | Bascule locale | archive du volume arrêté (123 entrées), commande `chown` du README, `docker compose up -d --wait minio` | conteneur sain sur l’image Chainguard, même volume, mêmes ports (surcharge locale 19000/19001) ; 16 objets identiques avant et après ; bucket privé non versionné ; console 200 ; API `ready`, aucun avertissement | — |
 | 11 | Bucket sur volume neuf | adaptateur réel de l’API contre un MinIO Chainguard vierge | `coverview-documents` créé au premier dépôt, privé, non versionné ; relecture chiffrée exacte ; écrasement refusé ; suppression effective | — |
 | 12 | Wallet après bascule | dépôt d’un PDF de test (648 octets) sans lecture IA, profil « Mon profil », navigateur intégré | création et envoi 200 ; document `ready`, aucune analyse ; original relu par l’API (téléchargement 200) avec un SHA-256 identique au fichier ; objet chiffré de 680 octets écrit par MinIO en 65532 ; aucune erreur de stockage dans le journal de l’API | — |
-| 8 | Ouverture | clé OpenAI copiée par le titulaire (une ligne), `DOCUMENTS_ENABLED=true`, `docker compose up -d` | activation à 19:23:36 UTC ; API saine en 30 s ; `/documents` et `/documents/identity-attachment` 401 sans session (404 avant) ; aucune erreur ni alerte de dépendance dans les journaux | V5 : dépôts réels depuis Wallet et Partner |
+| 13 | Ouverture | clé OpenAI copiée par le titulaire (une ligne), `DOCUMENTS_ENABLED=true`, `docker compose up -d` | activation à 19:23:36 UTC ; API saine en 30 s ; `/documents` et `/documents/identity-attachment` 401 sans session (404 avant) ; aucune erreur ni alerte de dépendance dans les journaux | V5 : dépôts réels depuis Wallet et Partner |
