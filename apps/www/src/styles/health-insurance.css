@@ -1429,14 +1429,16 @@
    text in the list and alone in the map's region card. */
 .hi-recommended-tag,
 .hi-recommended-mark {
+  /* One pink: the icon, and the same pink with less opacity for the border and background. */
+  --hi-recommended: 254 74 119;
   display: inline-flex;
   flex: none;
   align-items: center;
   gap: 4px;
-  border: 1px solid #facad7;
+  border: 1px solid rgb(var(--hi-recommended) / 27%);
   border-radius: 999px;
-  background: #f9f0f3;
-  color: #fe4a77;
+  background: rgb(var(--hi-recommended) / 6%);
+  color: rgb(var(--hi-recommended));
   font-size: 10px;
   line-height: 1.5;
   font-weight: 400;
