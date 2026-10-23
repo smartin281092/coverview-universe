@@ -92,6 +92,16 @@ export function SwissPremiumMap({
   const moved = useRef(false);
   // Once the person zooms or pans, a change of width no longer resets their view.
   const touched = useRef(false);
+  // The drop shadow is recomputed on every frame of a pan or zoom (frames of 20 to 48 ms measured
+  // on 23 October 2026): it leaves while the map moves and comes back once it rests.
+  const [moving, setMoving] = useState(false);
+  const rest = useRef<number | undefined>(undefined);
+  const move = () => {
+    setMoving(true);
+    window.clearTimeout(rest.current);
+    rest.current = window.setTimeout(() => setMoving(false), 180);
+  };
+  useEffect(() => () => window.clearTimeout(rest.current), []);
   // Two fingers: distance, midpoint and view when the second finger lands. Each move is
   // computed from this start, so a pan at the minimum scale cannot creep into a zoom.
   const gesture = useRef<{
@@ -141,6 +151,7 @@ export function SwissPremiumMap({
   }, [scale]);
   const zoom = (factor: number, point = { x: 500, y: 325 }) => {
     touched.current = true;
+    move();
     setHover(null);
     setView((previous) => {
       const scale = Math.max(1, Math.min(6, previous.scale * factor));
@@ -261,6 +272,7 @@ export function SwissPremiumMap({
             if (Math.hypot(next.x - previous.x, next.y - previous.y) < 3 && !moved.current) return;
             moved.current = true;
             touched.current = true;
+            move();
             setHover(null);
             if (other) pinch(next, other);
             else
@@ -346,7 +358,7 @@ export function SwissPremiumMap({
                 <path key={item.id} d={item.borderPath} />
               ))}
             </g>
-            <g filter="url(#hi-map-shadow)">
+            <g filter={moving ? undefined : "url(#hi-map-shadow)"}>
               {map.regions.map((item, index) => (
                 <path
                   key={item.id}
