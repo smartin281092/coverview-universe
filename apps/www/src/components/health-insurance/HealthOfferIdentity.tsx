@@ -70,6 +70,46 @@ export function HealthContactTags({ offer }: { offer: HealthOffer }) {
     </span>
   );
 }
+// The model page's first contacts (23 October 2026): each verified way in, with a plain sentence;
+// without a verified list for the year, the model type and the pending check.
+export function HealthFirstContacts({ offer }: { offer: HealthOffer }) {
+  const contacts = offer.firstContacts ?? [];
+  return (
+    <section className="hi-first-contacts" aria-labelledby="hi-first-contacts-title">
+      <h4 id="hi-first-contacts-title">{copy.firstContactTitle}</h4>
+      {contacts.length > 1 && <p className="hi-first-contacts-choice">{copy.firstContactChoice}</p>}
+      {contacts.length ? (
+        <ul>
+          {contacts.map((contact) => (
+            <li key={contact}>
+              <span className="hi-first-contact-icon">
+                <HealthIcon name={icons[contact]} size={18} />
+              </span>
+              <span>
+                <strong>{copy.contactLabels[contact]}</strong>
+                <small>{copy.contactDetails[contact]}</small>
+              </span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <ul>
+          <li>
+            <span className="hi-first-contact-icon">
+              <HealthIcon name={categoryIcons[offer.category]} size={18} />
+            </span>
+            <span>
+              <strong>
+                {offer.residenceCountry ? copy.foreignModelType : copy.typeLabels[offer.category]}
+              </strong>
+              {offer.category !== "BASE" && <small>{copy.contactVerification}</small>}
+            </span>
+          </li>
+        </ul>
+      )}
+    </section>
+  );
+}
 export function HealthOfferBadges({
   cheapest = false,
   preferred = false,

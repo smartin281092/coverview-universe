@@ -1,6 +1,7 @@
 import { healthCopy as copy } from "../../content/fr/health-insurance";
 import { recommendationCopy } from "../../content/fr/health-recommendation";
 import { HealthSelect } from "./HealthSelect";
+import { HealthIcon } from "./HealthIcon";
 import { francs } from "./health-format";
 import type { useModelConfiguration } from "./use-model-configuration";
 
@@ -66,6 +67,25 @@ export function HealthModelData({
             ]}
             onChange={(value) => change({ accident: value === "true" })}
           />
+        </dd>
+      </div>
+      {/* Every model pays providers directly (user statement, 23 October 2026), said plainly. */}
+      <div>
+        <dt>{copy.paymentLabel}</dt>
+        <dd className="hi-payment">
+          {copy.paymentValue}
+          <span className="hi-info-tooltip">
+            <button
+              type="button"
+              aria-label={copy.paymentHelp}
+              aria-describedby="health-payment-tooltip"
+            >
+              <HealthIcon name="info" size={16} />
+            </button>
+            <span role="tooltip" id="health-payment-tooltip">
+              {copy.paymentExplanation}
+            </span>
+          </span>
         </dd>
       </div>
     </dl>

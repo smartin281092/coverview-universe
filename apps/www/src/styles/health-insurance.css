@@ -326,6 +326,94 @@
   min-width: 0;
   position: relative;
 }
+/* Phones (23 October 2026): asks for a region, a blue bubble pointing to the map. */
+.hi-map-hint {
+  position: absolute;
+  z-index: 5;
+  top: 34%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: min(260px, calc(100% - 32px));
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.35;
+  text-align: center;
+  box-shadow: 0 8px 24px rgb(37 99 235 / 28%);
+  pointer-events: none;
+}
+.hi-map-hint::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: inherit;
+  transform: translateX(-50%) rotate(45deg);
+}
+/* The model page's first contacts (23 October 2026), set apart from the rest. */
+.hi-first-contacts {
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #eef4ff;
+}
+.hi-first-contacts h4 {
+  margin: 0 0 8px;
+  color: #1e3a8a;
+  font-size: 14px;
+  font-weight: 600;
+}
+.hi-first-contacts-choice {
+  margin: 0 0 8px;
+  color: #475569;
+  font-size: 12px;
+}
+.hi-first-contacts ul {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hi-first-contacts li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hi-first-contact-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #fff;
+  color: #2563eb;
+}
+.hi-first-contacts strong {
+  display: block;
+  color: #1f2937;
+  font-size: 14px;
+  font-weight: 600;
+}
+.hi-first-contacts small {
+  display: block;
+  color: #475569;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.hi-payment {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 .hi-map-toolbar {
   display: flex;
   align-items: center;
@@ -1283,13 +1371,13 @@
   display: flex;
   border-bottom: 1px solid #e5e5e5;
   margin-top: 26px;
-  gap: clamp(8px, 1.5vw, 20px);
+  gap: clamp(12px, 2vw, 24px);
 }
 .hi-tabs > button {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 12px 2px;
+  padding: 12px 8px;
   background: none;
   border: 0;
   border-bottom: 2px solid transparent;

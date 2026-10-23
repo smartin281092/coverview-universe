@@ -59,6 +59,13 @@ export default function HealthComparator({
   const profileToggle = useRef<HTMLButtonElement>(null);
   const [optimize, setOptimize] = useState(false);
   const [regionKnown, setRegionKnown] = useState(false);
+  // Phones (23 October 2026): a finished profile shows the region's models, or asks for a region.
+  const [mapHint, setMapHint] = useState(false);
+  const afterProfile = () => {
+    if (!window.matchMedia("(max-width:760px)").matches) return;
+    if (regionKnown) setShowList(true);
+    else setMapHint(true);
+  };
   useEffect(() => {
     if (window.matchMedia("(max-width:760px)").matches) setProfileOpen(false);
   }, []);
@@ -308,7 +315,10 @@ export default function HealthComparator({
               aria-label={profileOpen ? copy.profileCollapse : copy.profileExpand}
               aria-expanded={profileOpen}
               aria-controls="hi-profile-fields"
-              onClick={() => setProfileOpen(!profileOpen)}
+              onClick={() => {
+                if (profileOpen) afterProfile();
+                setProfileOpen(!profileOpen);
+              }}
             >
               <HealthIcon name={profileOpen ? "minus" : "plus"} size={18} />
             </button>
@@ -320,7 +330,10 @@ export default function HealthComparator({
               birthKnown={birthKnown}
               locality={locality}
               selection={currentInsurance}
-              onSelect={setCurrentInsurance}
+              onSelect={(value) => {
+                setCurrentInsurance(value);
+                if (value) afterProfile();
+              }}
               comparison={currentComparison}
             />
             <fieldset className="hi-fieldset">
@@ -399,6 +412,7 @@ export default function HealthComparator({
               onClick={() => {
                 setProfileOpen(false);
                 profileToggle.current?.focus();
+                afterProfile();
               }}
             >
               <HealthGradient />
@@ -407,6 +421,11 @@ export default function HealthComparator({
           )}
         </aside>
         <div className="hi-explorer">
+          {mapHint && !regionKnown && !profileOpen && (
+            <p className="hi-map-hint" role="status">
+              {copy.mapTapHint}
+            </p>
+          )}
           <div className="hi-map-toolbar">
             <LocalitySearch api={api} selected={locality} onSelect={selectLocality} />
             <HealthLocate api={api} onSelect={selectLocality} />

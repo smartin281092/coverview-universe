@@ -16,6 +16,22 @@ export const healthCopy = {
   firstContact: "Premier contact",
   foreignModelType: "LAMal frontaliers",
   contactVerification: "Parcours précis à confirmer pour 2027",
+  firstContactTitle: "Votre premier contact",
+  firstContactChoice: "Au choix, selon le modèle :",
+  contactDetails: {
+    free: "Vous consultez directement le médecin de votre choix.",
+    gp: "Vous commencez par votre médecin de famille.",
+    network: "Vous commencez par un cabinet ou un centre du réseau.",
+    phone: "Vous commencez par un appel au centre de conseil médical.",
+    video: "Vous commencez par l’application ou une consultation vidéo.",
+    pharmacy: "Vous commencez par une pharmacie.",
+  },
+  paymentLabel: "Paiement des frais",
+  paymentValue: "Avancés par la caisse",
+  paymentHelp: "Comment sont payés les frais",
+  paymentExplanation:
+    "Tiers payant : la caisse paie directement le médecin, la pharmacie ou l’hôpital, vous n’avancez pas l’argent. Elle vous facture ensuite votre part (franchise et quote-part).",
+  mapTapHint: "Touchez la carte pour choisir votre région",
   contactLabels: {
     free: "Libre choix",
     gp: "Médecin de famille",

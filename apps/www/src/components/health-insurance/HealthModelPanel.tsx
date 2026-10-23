@@ -16,7 +16,7 @@ import { modelBenefits, useHealthEvidence } from "./use-health-evidence";
 import { HealthProductImage } from "./HealthProductImage";
 import { HealthDialog } from "./HealthDialog";
 import { HealthIcon } from "./HealthIcon";
-import { HealthContactTags, HealthInsurerLogo, HealthOfferBadges } from "./HealthOfferIdentity";
+import { HealthFirstContacts, HealthInsurerLogo, HealthOfferBadges } from "./HealthOfferIdentity";
 import { interpolate, money, regionName } from "./health-format";
 import { HealthModelData } from "./HealthModelData";
 import { useModelConfiguration } from "./use-model-configuration";
@@ -91,10 +91,10 @@ export function HealthModelPanel({
             <div>
               <div className="hi-model-title">
                 <h3>{offer.name}</h3>
-                <HealthContactTags offer={offer} />
               </div>
             </div>
           </div>
+          <HealthFirstContacts offer={offer} />
           <HealthOfferBadges preferred={preferred} provisional={provisional} />
           {preferred && provisional && <p className="hi-small">* {copy.provisionalBadge}</p>}
           <HealthProductImage offer={offer} />
