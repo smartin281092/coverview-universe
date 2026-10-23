@@ -17,7 +17,7 @@ export const healthCopy = {
   foreignModelType: "LAMal frontaliers",
   contactVerification: "Parcours précis à confirmer pour 2027",
   firstContactTitle: "Votre premier contact",
-  firstContactChoice: "Au choix, selon le modèle :",
+  firstContactChoice: "Au choix :",
   contactDetails: {
     free: "Vous consultez directement le médecin de votre choix.",
     gp: "Vous commencez par votre médecin de famille.",
