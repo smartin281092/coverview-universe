@@ -1425,15 +1425,16 @@
   align-items: center;
   gap: 4px 6px;
 }
-/* First model of a partner insurer (23 October 2026): pink pill with a laurel wreath. */
-.hi-recommended-tag {
+/* First model of a partner insurer (23 October 2026): pink pill with a laurel wreath, with its
+   text in the list and alone in the map's region card. */
+.hi-recommended-tag,
+.hi-recommended-mark {
   display: inline-flex;
   flex: none;
   align-items: center;
   gap: 4px;
   border: 1px solid #facad7;
   border-radius: 999px;
-  padding: 1px 8px 1px 5px;
   background: #f9f0f3;
   color: #fe4a77;
   font-size: 10px;
@@ -1441,13 +1442,16 @@
   font-weight: 400;
   white-space: nowrap;
 }
-.hi-recommended-tag svg {
-  flex: none;
+.hi-recommended-tag {
+  padding: 1px 8px 1px 5px;
 }
+/* Icon alone, at the tag's height. */
 .hi-recommended-mark {
-  display: inline-flex;
+  padding: 2.5px 5px;
+}
+.hi-recommended-tag svg,
+.hi-recommended-mark svg {
   flex: none;
-  color: #fe4a77;
 }
 .hi-map-offer .hi-contact-tag {
   font-size: 9px;
