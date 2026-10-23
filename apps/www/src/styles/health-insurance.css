@@ -1431,14 +1431,14 @@
   flex: none;
   align-items: center;
   gap: 4px;
-  border: 1px solid #f9a8d4;
+  border: 1px solid #facad7;
   border-radius: 999px;
   padding: 1px 8px 1px 5px;
-  background: #fdf2f8;
-  color: #db2777;
+  background: #f9f0f3;
+  color: #fe4a77;
   font-size: 10px;
   line-height: 1.5;
-  font-weight: 600;
+  font-weight: 400;
   white-space: nowrap;
 }
 .hi-recommended-tag svg {
@@ -1447,7 +1447,7 @@
 .hi-recommended-mark {
   display: inline-flex;
   flex: none;
-  color: #db2777;
+  color: #fe4a77;
 }
 .hi-map-offer .hi-contact-tag {
   font-size: 9px;
