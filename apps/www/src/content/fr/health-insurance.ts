@@ -10,7 +10,7 @@ export const healthCopy = {
   lowestPriceHint:
     "Prime la plus basse parmi les offres retenues pour vos paramètres et contraintes.",
   mostSuitable: "Le plus adapté",
-  recommended: "Recommandation",
+  recommended: "Conseillé",
   recommendedHint: "Premier modèle de cette liste chez une compagnie partenaire de CoverView.",
   provisionalBadge: "Selon les réponses actuelles · conditions à vérifier",
   firstContact: "Premier contact",

@@ -9,7 +9,7 @@ import map from "../../../../../data/health-insurance/2027/regions-map.json";
 import neighbors from "../../../../../data/health-insurance/2027/neighbors-map.json";
 import { healthCopy as copy } from "../../content/fr/health-insurance";
 import { HealthIcon } from "./HealthIcon";
-import { HealthContactTags, HealthInsurerLogo } from "./HealthOfferIdentity";
+import { HealthContactTags, HealthInsurerLogo, HealthRecommendedMark } from "./HealthOfferIdentity";
 import { money, regionName } from "./health-format";
 const frame = { x: -160, y: -100, width: 1320, height: 850 };
 const vaudRegions = map.regions.filter((region) => region.canton === "VD");
@@ -457,7 +457,10 @@ export function SwissPremiumMap({
                 <button className="hi-map-offer" key={offer.id} onClick={() => onOffer(offer)}>
                   <HealthInsurerLogo offer={offer} labelled />
                   <span className="hi-offer-description">
-                    <strong>{offer.name}</strong>
+                    <span className="hi-result-name">
+                      <strong>{offer.name}</strong>
+                      {offer.recommended && <HealthRecommendedMark />}
+                    </span>
                     <HealthContactTags offer={offer} />
                     {offer.eligibility === "municipality_required" && (
                       <em>{copy.chooseLocality}</em>

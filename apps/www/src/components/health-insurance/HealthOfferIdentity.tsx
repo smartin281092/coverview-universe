@@ -101,46 +101,68 @@ export function HealthOfferBadges({
     </span>
   );
 }
-// The first model of a partner insurer in its list (23 October 2026): pink tag with a laurel wreath.
+// The first model of a partner insurer in its list (23 October 2026): a pink laurel wreath, as a tag
+// in the list and as a mark in the map's region card.
+// Left branch leaves along its stem, outer and inner, as [cx, cy, rx, ry, angle]; mirrored on the right.
 const laurelLeaves = [
-  [4.9, 7.3, -8],
-  [3, 11.2, -46],
-  [3.6, 15.3, -76],
-  [6, 18.7, -108],
+  [7.84, 18.92, 0.95, 1.9, -33],
+  [5.26, 19.47, 1.15, 2.3, -86],
+  [5.89, 15.77, 0.95, 1.9, -2],
+  [3.26, 14.68, 1.15, 2.3, -56],
+  [5.25, 10.99, 0.95, 1.9, 23],
+  [3.05, 8.71, 1.15, 2.3, -36],
+  [4.86, 5.31, 1.1, 2.3, 6],
 ] as const;
+function LaurelIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        d="M11.2 21.3C6.6 20.4 3.6 16.4 4.6 7.6M12.8 21.3c4.6-.9 7.6-4.9 6.6-13.7"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+      />
+      {laurelLeaves.flatMap(([x, y, rx, ry, angle]) => [
+        <ellipse
+          key={`l${x}`}
+          cx={x}
+          cy={y}
+          rx={rx}
+          ry={ry}
+          transform={`rotate(${angle} ${x} ${y})`}
+          fill="currentColor"
+        />,
+        <ellipse
+          key={`r${x}`}
+          cx={24 - x}
+          cy={y}
+          rx={rx}
+          ry={ry}
+          transform={`rotate(${-angle} ${24 - x} ${y})`}
+          fill="currentColor"
+        />,
+      ])}
+    </svg>
+  );
+}
 export function HealthRecommendedTag() {
   return (
     <span className="hi-recommended-tag" title={copy.recommendedHint}>
-      <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
-        <path
-          d="M11.2 21.4C6.9 20.5 4.1 16.6 4.5 10.2M12.8 21.4c4.3-.9 7.1-4.8 6.7-11.2"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.4"
-          strokeLinecap="round"
-        />
-        {laurelLeaves.flatMap(([x, y, angle]) => [
-          <ellipse
-            key={`l${x}`}
-            cx={x}
-            cy={y}
-            rx="1.25"
-            ry="2.5"
-            transform={`rotate(${angle} ${x} ${y})`}
-            fill="currentColor"
-          />,
-          <ellipse
-            key={`r${x}`}
-            cx={24 - x}
-            cy={y}
-            rx="1.25"
-            ry="2.5"
-            transform={`rotate(${-angle} ${24 - x} ${y})`}
-            fill="currentColor"
-          />,
-        ])}
-      </svg>
+      <LaurelIcon />
       {copy.recommended}
+    </span>
+  );
+}
+export function HealthRecommendedMark() {
+  return (
+    <span
+      className="hi-recommended-mark"
+      role="img"
+      aria-label={copy.recommended}
+      title={copy.recommendedHint}
+    >
+      <LaurelIcon />
     </span>
   );
 }
