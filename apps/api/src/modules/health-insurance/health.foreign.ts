@@ -8,6 +8,7 @@ import {
   type HealthCompareInput,
 } from "@coverview/contracts/health-insurance";
 import { healthAgeGroup } from "./health.cost.js";
+import { recommendedInsurerIds } from "./health.insurer-groups.js";
 
 const countryName = (code: string) =>
   new Intl.DisplayNames(["fr-CH"], { type: "region" }).of(code) ?? code;
@@ -78,6 +79,12 @@ export function createHealthForeignRepository(pool: pg.Pool) {
     const countries = new Map<string, typeof rows>();
     for (const row of rows) {
       const country = countries.get(row.regionId) ?? [];
+      // The first partner model of each country's list (23 October 2026).
+      if (
+        recommendedInsurerIds.includes(row.insurerId) &&
+        !country.some((offer) => offer.recommended)
+      )
+        row.recommended = true;
       country.push(row);
       countries.set(row.regionId, country);
     }

@@ -101,3 +101,46 @@ export function HealthOfferBadges({
     </span>
   );
 }
+// The first model of a partner insurer in its list (23 October 2026): pink tag with a laurel wreath.
+const laurelLeaves = [
+  [4.9, 7.3, -8],
+  [3, 11.2, -46],
+  [3.6, 15.3, -76],
+  [6, 18.7, -108],
+] as const;
+export function HealthRecommendedTag() {
+  return (
+    <span className="hi-recommended-tag" title={copy.recommendedHint}>
+      <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M11.2 21.4C6.9 20.5 4.1 16.6 4.5 10.2M12.8 21.4c4.3-.9 7.1-4.8 6.7-11.2"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+        />
+        {laurelLeaves.flatMap(([x, y, angle]) => [
+          <ellipse
+            key={`l${x}`}
+            cx={x}
+            cy={y}
+            rx="1.25"
+            ry="2.5"
+            transform={`rotate(${angle} ${x} ${y})`}
+            fill="currentColor"
+          />,
+          <ellipse
+            key={`r${x}`}
+            cx={24 - x}
+            cy={y}
+            rx="1.25"
+            ry="2.5"
+            transform={`rotate(${-angle} ${24 - x} ${y})`}
+            fill="currentColor"
+          />,
+        ])}
+      </svg>
+      {copy.recommended}
+    </span>
+  );
+}

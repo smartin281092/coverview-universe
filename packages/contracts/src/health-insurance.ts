@@ -59,6 +59,8 @@ export const healthOfferSchema = z.object({
   ageGroup: z.enum(["child", "young_adult", "adult"]),
   restricted: z.boolean(),
   eligibility: z.enum(["region", "municipality_required", "municipality_confirmed"]),
+  // First model of a partner insurer in its comparison list (23 October 2026).
+  recommended: z.boolean().optional(),
 });
 export const healthLocalitySchema = z.object({
   id: z.string(),

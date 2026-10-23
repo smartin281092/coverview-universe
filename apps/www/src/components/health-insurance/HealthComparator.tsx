@@ -19,7 +19,7 @@ import { LocalitySearch } from "./LocalitySearch";
 import { SwissPremiumMap } from "./SwissPremiumMap";
 import { HealthModelPanel } from "./HealthModelPanel";
 import { AdaptiveHealthGuide, type HealthGuideSnapshot } from "./AdaptiveHealthGuide";
-import { HealthContactTags, HealthInsurerLogo } from "./HealthOfferIdentity";
+import { HealthContactTags, HealthInsurerLogo, HealthRecommendedTag } from "./HealthOfferIdentity";
 import { RecommendationResults } from "./RecommendationResults";
 import { HealthSelect } from "./HealthSelect";
 import { HealthLocate } from "./HealthLocate";
@@ -32,6 +32,9 @@ import { useCurrentInsurance } from "./use-current-insurance";
 import { healthCurrentCopy } from "../../content/fr/health-current";
 
 type Category = NonNullable<HealthCompareInput["categories"]>[number];
+// The model questionnaire is hidden for now (23 October 2026): no questions, ranking or option of
+// its own; the list keeps the API's order.
+const guideEnabled: boolean = false;
 export default function HealthComparator({
   apiUrl,
   walletUrl,
@@ -59,7 +62,8 @@ export default function HealthComparator({
   useEffect(() => {
     if (window.matchMedia("(max-width:760px)").matches) setProfileOpen(false);
   }, []);
-  const [accident, setAccident] = useState(true);
+  // Accident coverage excluded from the base profile (23 October 2026).
+  const [accident, setAccident] = useState(false);
   const [deductible, setDeductible] = useState(2500);
   const [region, setRegion] = useState("VD-1");
   const [locality, setLocality] = useState<HealthLocality | null>(null);
@@ -214,7 +218,10 @@ export default function HealthComparator({
       current.includes(value) ? current.filter((x) => x !== value) : [...current, value],
     );
   const filterCount =
-    categories.length + insurerIds.length + benefitKeys.length + Number(optimize && !foreign);
+    categories.length +
+    insurerIds.length +
+    benefitKeys.length +
+    Number(guideEnabled && optimize && !foreign);
   const addPerson = () => {
     setCheckout(false);
     setCandidate(null);
@@ -223,7 +230,7 @@ export default function HealthComparator({
     setShowFilters(false);
     setBirth("");
     setSex(null);
-    setAccident(true);
+    setAccident(false);
     setDeductible(2500);
     setCurrentInsurance(null);
     setOptimize(false);
@@ -457,7 +464,7 @@ export default function HealthComparator({
       </footer>
       <HealthDialog open={showFilters} onClose={() => setShowFilters(false)} title={copy.filters}>
         {foreign && <p className="hi-small">{copy.foreignNoFilters}</p>}
-        {!foreign && (
+        {guideEnabled && !foreign && (
           <label className="hi-check">
             <input
               type="checkbox"
@@ -612,10 +619,10 @@ export default function HealthComparator({
           tariffKnown={{ birth: birthKnown, locality: Boolean(locality), region: regionKnown }}
           sex={sex}
           scope={optimize ? "optimize_deductible" : "same_deductible"}
-          enabled={!foreign}
+          enabled={guideEnabled && !foreign}
           onUpdate={setRecommendation}
         />
-        {foreign && <p className="hi-small">{copy.foreignGuide}</p>}
+        {guideEnabled && foreign && <p className="hi-small">{copy.foreignGuide}</p>}
         <p className="hi-result-region">{regionName(region)}</p>
         {currentComparison.value?.current && (
           <p className="hi-current-comparison-note">
@@ -662,7 +669,10 @@ export default function HealthComparator({
               >
                 <HealthInsurerLogo offer={item} labelled />
                 <span>
-                  <strong>{item.name}</strong>
+                  <span className="hi-result-name">
+                    <strong>{item.name}</strong>
+                    {item.recommended && <HealthRecommendedTag />}
+                  </span>
                   <HealthContactTags offer={item} />
                   {item.eligibility === "municipality_required" && <em>{copy.chooseLocality}</em>}
                 </span>

@@ -20,6 +20,7 @@ import {
 import { healthOfferPresentation, loadHealthModelPresentation } from "./health.presentation.js";
 import { createHealthForeignRepository, foreignLocality } from "./health.foreign.js";
 import { locateCoordinates } from "./health.location.js";
+import { recommendedInsurerIds } from "./health.insurer-groups.js";
 import { legacyBenefitFilterKeys, offeredWithBase } from "./recommendation.utility.js";
 
 type Input = z.infer<typeof healthCompareInputSchema>;
@@ -221,8 +222,10 @@ export function createHealthRepository(pool: pg.Pool) {
       ))
       and ($11::text[] is null or m.id=any($11))
     ), ranked as (select *,row_number() over(partition by "regionId" order by "monthlyPremiumMinor","insurerId","modelId",id) as ranking,
-      count(*) over(partition by "regionId") as total from matching)
-    select * from ranked where ranking<=3 or ("regionId"=$5 and ranking>$10 and ranking<=$10+15)
+      count(*) over(partition by "regionId") as total from matching),
+    -- The first partner model of each region's whole list, whatever page is shown (23 October 2026).
+    flagged as (select *,min(ranking) filter (where "insurerId"=any($12::integer[])) over(partition by "regionId") as "recommendedRanking" from ranked)
+    select * from flagged where ranking<=3 or ("regionId"=$5 and ranking>$10 and ranking<=$10+15)
     order by "regionId",ranking limit 165`,
       [
         id,
@@ -236,12 +239,20 @@ export function createHealthRepository(pool: pg.Pool) {
         legacyKeys,
         input.offset,
         typedModels ? [...typedModels] : null,
+        recommendedInsurerIds,
       ],
     );
     const rows = z
-      .array(healthOfferSchema.extend({ ranking: z.coerce.number(), total: z.coerce.number() }))
+      .array(
+        healthOfferSchema.extend({
+          ranking: z.coerce.number(),
+          total: z.coerce.number(),
+          recommendedRanking: z.coerce.number().nullable(),
+        }),
+      )
       .parse(result.rows);
     for (const row of rows) {
+      if (row.ranking === row.recommendedRanking) row.recommended = true;
       row.insurerBrand = brands.get(row.insurerId);
       Object.assign(
         row,

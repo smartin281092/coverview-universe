@@ -12,10 +12,11 @@ import {
   type HealthCurrentComparisonInput,
 } from "@coverview/contracts/health-insurance";
 import { healthAgeGroup, healthDeductibles } from "./health.cost.js";
+import { groupeMutuelInsurerIds } from "./health.insurer-groups.js";
 
-// Companies of one group that share regions (20 October 2026): Avenir, Mutuel and Philos carry the
-// same official Groupe Mutuel logo in our sources, and the picker lists them as one entry.
-const insurerGroups = new Map([343, 1479, 1535].map((id) => [id, "Groupe Mutuel"]));
+// Companies of one group that share regions (20 October 2026): the picker lists Groupe Mutuel's
+// insurers as one entry.
+const insurerGroups = new Map(groupeMutuelInsurerIds.map((id) => [id, "Groupe Mutuel"]));
 // Historical prices never borrow model conditions, brands or tariff codes from the new year.
 export function createHealthCurrentRepository(pool: pg.Pool) {
   async function dataset() {
