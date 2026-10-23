@@ -6,6 +6,10 @@ Aucune entrée active. Les décisions durables vivent dans leur documentation pr
 
 ## Candidats
 
+Décisions du 23 octobre 2026, comparateur maladie ([plan](roadmap/plans/comparator-partners-2026-10-23.plan.md), [règle health.partner.1](apps/api/src/modules/health-insurance/README.md#règles-métier-et-invariants)).
+- **Instruction utilisateur** : questionnaire d’aide au modèle masqué (temporairement) ; accident exclu du profil de base ; tag rose à couronne de laurier sur le premier modèle Groupe Mutuel ou Assura de chaque région, faute de conventions avec les autres compagnies ; laurier aussi dans la carte de survol d’une zone.
+- **Défauts PROG-23** : texte « Conseillé » (demande de raccourcir « Recommandation ») ; calcul par l’API sur toute la liste filtrée, régions et pays de résidence ; Groupe Mutuel = Avenir, Mutuel, Philos ; icône originale, celle fournie relevant d’une bibliothèque sous licence. Revue : à la prochaine revue mémoire.
+
 Décisions du 21 octobre 2026, documents en production ([plan](roadmap/plans/documents-production-2026-10-21.plan.md), [HOST-06](docs/hosting.md)).
 - **Instruction utilisateur** : ouvrir les documents en production, stockage et antivirus sur le serveur ; lecture automatique par OpenAI, le titulaire déclarant le DPA accepté (Q-1 a, LLM-06) ; clé OpenAI copiée par le titulaire.
 - **Défauts PROG-23** : MinIO Chainguard épinglé par digest (MinIO ne publie plus d’image) ; stub ACL de MinIO accepté sur déclaration `DOCUMENT_S3_MINIO` ; copie de secours `age` de la clé de chiffrement hors serveur. Revue : à la prochaine revue mémoire.
