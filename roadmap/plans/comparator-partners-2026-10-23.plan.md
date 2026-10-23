@@ -30,3 +30,21 @@ Entrée : demande de l’utilisateur du 23 octobre 2026 sur le comparateur malad
 | 3 | Données 2027 locales | `POST /health-insurance/compare`, adulte 1990, franchise 2500, accident exclu | Vaud 1 : Assura MediTel, 1er ; Vaud 2 : Philos SanaTel (Groupe Mutuel), 1er ; Genève : Assura QualiMed, 1er | — |
 | 4 | Comparateur local | navigateur intégré, `127.0.0.1:4103` | « Exclue » sélectionné par défaut ; liste de Genève sans questionnaire, QualiMed tagué « Conseillé » avec laurier ; carte de Genève : laurier sur QualiMed seul (PharMed, second Assura, sans) ; filtres sans l’option de franchises | déploiement sur demande |
 | 5 | Couronne dessinée | dessin agrandi et version vectorielle côte à côte ; comparateur local | tracé conforme au dessin ; tag « Conseillé » en graisse 400, #FE4A77, icône 12 px ; laurier sur MediTel en Vaud 1 (liste et carte), pas sur PharMed | déploiement sur demande |
+
+## Suite du 23 octobre 2026 — fiche modèle, mobile et carte
+
+Entrée : « Ajoute un peu de padding dans les tabs […] ; Dans données rajoute l’info : Tiers payant Oui (ils sont tous en tiers payant […]) ; Ajouter sur la page d’un modèle la liste des premiers point de contact exact […] ; Quand on est sur mobile et qu’on a choisi notre assurance de base actuelle et/ou qu’on rapetisse la petite fenêtre de sélection de profil : ouvrir la fenêtre avec la liste des modèles […] ; La carte est trop lente […] Que proposes-tu ? »
+
+| ref | question | answer |
+|---|---|---|
+| C-7 | Tiers payant ? | Affirmation de l’utilisateur : tous les modèles. Ligne « Paiement des frais : Avancés par la caisse » avec info-bulle (tiers payant expliqué simplement). À confirmer : la LAMal (art. 42) prévoit le tiers garant sauf convention ; si un modèle ou un canton fait exception, la ligne devra dépendre des données. |
+| C-8 | Premiers contacts ? | Carte en tête de fiche : contacts vérifiés pour 2027 avec une phrase par contact ; sans liste vérifiée, le type de modèle et « Parcours précis à confirmer pour 2027 » (24 modèles sur 105 vérifiés en Vaud 1). |
+| C-9 | Mobile ? | Profil replié (− ou Terminer) ou assurance actuelle choisie : liste de la région si elle est connue (localité, carte, géolocalisation), sinon bulle bleue « Touchez la carte pour choisir votre région ». |
+| C-10 | Lenteur de la carte ? | Cause mesurée : le filtre d’ombre SVG recalculé à chaque image. Il quitte la carte pendant le mouvement. La carte 3D est une proposition soumise à l’utilisateur. |
+
+| # | cible | oracle | résultat |
+|---|---|---|---|
+| 6 | Fiche modèle | navigateur intégré | onglets aérés ; « Avancés par la caisse » et son info-bulle ; Favorit Medpharm : Pharmacie, Télémédecine, Application / vidéo ; MediTel : Télémédecine, à confirmer |
+| 7 | Téléphone (375 px) | navigateur intégré | sans région : bulle affichée, liste fermée ; après la localité 1003 : liste ouverte au repli, bulle absente. Choix de l’assurance actuelle : même fonction, non exercé |
+| 8 | Carte | 80 images de zoom à la molette | avant : médiane 19,9 ms, p90 27,2, max 47,6 ; après : 16,7, 17,5, 24,8 ; aucune image en mouvement avec ombre, ombre revenue au repos |
+

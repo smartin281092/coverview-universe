@@ -7,7 +7,7 @@ Aucune entrée active. Les décisions durables vivent dans leur documentation pr
 ## Candidats
 
 Décisions du 23 octobre 2026, comparateur maladie ([plan](roadmap/plans/comparator-partners-2026-10-23.plan.md), [règle health.partner.1](apps/api/src/modules/health-insurance/README.md#règles-métier-et-invariants)).
-- **Instruction utilisateur** : questionnaire d’aide au modèle masqué (temporairement) ; accident exclu du profil de base ; tag rose à couronne de laurier sur le premier modèle Groupe Mutuel ou Assura de chaque région, faute de conventions avec les autres compagnies ; laurier aussi dans la carte de survol d’une zone.
+- **Instruction utilisateur** : tous les modèles sont en tiers payant, affiché « Avancés par la caisse » (LAMal art. 42 : à confirmer modèle par modèle). Questionnaire d’aide au modèle masqué (temporairement) ; accident exclu du profil de base ; tag rose à couronne de laurier sur le premier modèle Groupe Mutuel ou Assura de chaque région, faute de conventions avec les autres compagnies ; laurier aussi dans la carte de survol d’une zone.
 - **Défauts PROG-23** : texte « Conseillé » (demande de raccourcir « Recommandation ») ; calcul par l’API sur toute la liste filtrée, régions et pays de résidence ; Groupe Mutuel = Avenir, Mutuel, Philos ; icône originale, celle fournie relevant d’une bibliothèque sous licence. Revue : à la prochaine revue mémoire.
 
 Décisions du 21 octobre 2026, documents en production ([plan](roadmap/plans/documents-production-2026-10-21.plan.md), [HOST-06](docs/hosting.md)).
