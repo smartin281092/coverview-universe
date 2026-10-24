@@ -106,15 +106,22 @@ export function HealthModelPanel({
               style={configuration.ready ? undefined : { visibility: "hidden" }}
             >
               <div className="hi-model-price">
-                <div className="hi-model-price-line">
-                  <HealthOfferBadges cheapest={cheapest} />
-                  <p>
-                    {money(offer.monthlyPremiumMinor)}
-                    <span className="hi-price-unit">
-                      <small>{copy.currency}</small>
-                      <em>{copy.perMonth}</em>
-                    </span>
-                  </p>
+                <div className="hi-model-price-row">
+                  <div className="hi-model-price-line">
+                    <HealthOfferBadges cheapest={cheapest} />
+                    <p>
+                      {money(offer.monthlyPremiumMinor)}
+                      <span className="hi-price-unit">
+                        <small>{copy.currency}</small>
+                        <em>{copy.perMonth}</em>
+                      </span>
+                    </p>
+                  </div>
+                  {/* Beside the price once the Coverview score has real ratings; until then
+                      in the local preview only. */}
+                  {import.meta.env.DEV && (
+                    <HealthCoverScore score={coverviewScorePreview(offer.modelId)} />
+                  )}
                 </div>
                 {offer.redistribution?.year === year && (
                   <div className="hi-redistribution">
@@ -145,11 +152,6 @@ export function HealthModelPanel({
                 )}
               </div>
               <HealthPremiumDifference value={difference} detail />
-              {/* Shown once the Coverview score has real ratings; until then in the local
-                  preview only. */}
-              {import.meta.env.DEV && (
-                <HealthCoverScore score={coverviewScorePreview(offer.modelId)} />
-              )}
               {onRequest && (
                 <button
                   className="hi-primary hi-full hi-request-cta"
