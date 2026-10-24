@@ -117,7 +117,7 @@ export function HealthModelPanel({
                       </span>
                     </p>
                   </div>
-                  {offer.partner && <HealthPartnerBadge offer={offer} />}
+                  {offer.partner && <HealthPartnerBadge />}
                 </div>
                 {offer.redistribution?.year === year && (
                   <div className="hi-redistribution">

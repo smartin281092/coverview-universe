@@ -20,8 +20,9 @@ export const healthCopy = {
     title: "Recommandation CoverView",
     level: "Gold",
     details: "Pourquoi cette recommandation",
+    // To change with the partner list of the API (health.insurer-groups.ts).
     disclosure:
-      "{{insurer}} est partenaire de CoverView : ses modèles portent cette recommandation.",
+      "Assura et Groupe Mutuel sont partenaires de CoverView : leurs modèles portent cette recommandation.",
   },
   contactDetails: {
     free: "Vous consultez directement le médecin de votre choix.",
