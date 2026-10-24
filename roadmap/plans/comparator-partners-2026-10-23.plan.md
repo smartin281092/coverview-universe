@@ -63,6 +63,7 @@ Entrée : « Dans le panneau (qu'on va appeler page) d'un module : Le bloc Votre
 | C-17 | CoverScore plus serré ? (« Réduit les espaces entre les lignes […] Met le titre Service client, Avis et Qualité en gris […] Réduit la width des rectangles à 3px ») | Lignes espacées de 4 px au lieu de 8, libellés en gris #6b7280, barres de 3 px de large au lieu de 7, toujours en aperçu local seulement (C-15). |
 | C-18 | Onglets ? (« enlève le margin-top au hi-tabs ») | Marge haute de 26 px retirée. |
 | C-19 | Paiement des frais ? (« Monte Paiement des frais au-dessus de Année et mets une coche verte sur la gauche de Avancés par la caisse ») | Première ligne de l’onglet Données, coche verte #16a34a avant « Avancés par la caisse ». |
+| C-20 | Alignement du CoverScore ? (« ne pas mettre de space-between entre les service client, qualité, avis et les bars mais quand même aligner les barres entre elles et avoir bien 20px d'espace avec les titres ») | Deux colonnes partagées par les lignes (grille et sous-grille) : libellés à leur largeur, barres alignées 20 px après le plus long ; plus de répartition jusqu’au bord. |
 
 | # | cible | oracle | résultat |
 |---|---|---|---|
@@ -70,5 +71,6 @@ Entrée : « Dans le panneau (qu'on va appeler page) d'un module : Le bloc Votre
 | 10 | Données et API | constructeur du catalogue, `recommendation.import.ts --validate`, vitest, base locale | constructeur reproductible (synonymes triés, CSV en LF) ; seuls `access.contacts` et `multipleEntry` de 115 modèles changent (`catalog_a802437ba0a8b7a152904c98`) ; contrat strict et `validateCatalog` OK ; présentation 6/6, recommandation 45/45 ; import local après sauvegarde `.preview/backups/coverview_local-2026-10-24-before-catalog-contacts.dump` ; `POST /compare` : PrimaFlex pharmacie, télémédecine, médecin de famille, `contactsVerified` faux |
 | 11 | Build et outillage | `astro build`, tsc (www, api), ESLint, Prettier, knip | build OK ; `uSpeed:.2` dans le JS livré ; aucun CoverScore dans le JS de production ; knip : constats déjà présents sur main |
 | 12 | Retouches | script Playwright, 1440 px | plus de « Au choix » ; CoverScore : lignes à 4 px, libellés #6b7280, barres de 3 px ; onglets sans marge haute ; Données : « Paiement des frais » en premier, coche #16a34a |
+| 13 | Alignement du CoverScore | script Playwright, 1440 px | barres des trois lignes au même x, 20 px après « Service client », fin des barres loin du bord du panneau |
 
 Production : après le déploiement, publier `data/health-insurance/2027/recommendation-catalog.json` (`catalog_a802437ba0a8b7a152904c98`) depuis l’Admin (Configuration › Comparateur maladie). Sans cette publication, les modèles FLEX montrent « Plusieurs premiers contacts au choix ».
