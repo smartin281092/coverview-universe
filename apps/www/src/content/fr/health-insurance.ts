@@ -16,7 +16,6 @@ export const healthCopy = {
   firstContact: "Premier contact",
   foreignModelType: "LAMal frontaliers",
   firstContactTitle: "Premier contact",
-  firstContactChoice: "Au choix :",
   coverScore: {
     title: "CoverScore",
     labels: { service: "Service client", reviews: "Avis", quality: "Qualité" },
@@ -98,7 +97,7 @@ export const healthCopy = {
   mapReset: "Recentrer sur Vaud",
   mapRelief: "Relief",
   mapView: "Style de la carte",
-  mapViews: { plan: "Plan", satellite: "Satellite", pixel: "Pixel art", lowpoly: "Low poly" },
+  mapViews: { plan: "Plan", satellite: "Satellite", lowpoly: "Low poly" },
   mapCanvas: "Carte en relief : flèches pour la déplacer, + et − pour zoomer",
   premiumCountLabel: "primes",
   modelCountLabel: "modèles",

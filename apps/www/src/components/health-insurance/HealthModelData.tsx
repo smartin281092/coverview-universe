@@ -21,6 +21,29 @@ export function HealthModelData({
   const { draft, change } = configuration;
   return (
     <dl className="hi-specs hi-editable-specs">
+      {/* Every model pays providers directly (user statement, 23 October 2026), said plainly,
+          first and with a green check (24 October 2026). */}
+      <div>
+        <dt>{copy.paymentLabel}</dt>
+        <dd className="hi-payment">
+          <span className="hi-payment-check">
+            <HealthIcon name="check" size={16} />
+          </span>
+          {copy.paymentValue}
+          <span className="hi-info-tooltip">
+            <button
+              type="button"
+              aria-label={copy.paymentHelp}
+              aria-describedby="health-payment-tooltip"
+            >
+              <HealthIcon name="info" size={16} />
+            </button>
+            <span role="tooltip" id="health-payment-tooltip">
+              {copy.paymentExplanation}
+            </span>
+          </span>
+        </dd>
+      </div>
       <div>
         <dt>{recommendationCopy.year}</dt>
         <dd>
@@ -67,25 +90,6 @@ export function HealthModelData({
             ]}
             onChange={(value) => change({ accident: value === "true" })}
           />
-        </dd>
-      </div>
-      {/* Every model pays providers directly (user statement, 23 October 2026), said plainly. */}
-      <div>
-        <dt>{copy.paymentLabel}</dt>
-        <dd className="hi-payment">
-          {copy.paymentValue}
-          <span className="hi-info-tooltip">
-            <button
-              type="button"
-              aria-label={copy.paymentHelp}
-              aria-describedby="health-payment-tooltip"
-            >
-              <HealthIcon name="info" size={16} />
-            </button>
-            <span role="tooltip" id="health-payment-tooltip">
-              {copy.paymentExplanation}
-            </span>
-          </span>
         </dd>
       </div>
     </dl>

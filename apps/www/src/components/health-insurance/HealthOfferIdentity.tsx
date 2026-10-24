@@ -75,7 +75,6 @@ export function HealthFirstContacts({ offer }: { offer: HealthOffer }) {
   return (
     <section className="hi-first-contacts" aria-labelledby="hi-first-contacts-title">
       <h4 id="hi-first-contacts-title">{copy.firstContactTitle}</h4>
-      {contacts.length > 1 && <p className="hi-first-contacts-choice">{copy.firstContactChoice}</p>}
       {contacts.length ? (
         <ul>
           {contacts.map((contact) => (

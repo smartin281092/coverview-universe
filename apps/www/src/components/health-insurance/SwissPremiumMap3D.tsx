@@ -11,15 +11,13 @@ import geo from "../../../../../data/health-insurance/2027/regions-geo.json";
 import { healthCopy as copy } from "../../content/fr/health-insurance";
 import { HealthRegionPopover } from "./HealthRegionPopover";
 import { HealthSelect } from "./HealthSelect";
+import { HealthIcon } from "./HealthIcon";
 import {
   exaggeration,
   healthMapStyle,
-  lineWidthLayers,
   mapViews,
   objectsLayerId,
-  textLayers,
   viewLayers,
-  viewLineWidths,
   viewTerrain,
   type MapView,
 } from "./health-map-style";
@@ -67,9 +65,9 @@ const storedView = (): MapView => {
     return "plan";
   }
 };
-// Pixel art: the map drawn with one pixel for four on each side, enlarged without smoothing.
-const pixelRatio = (view: MapView) =>
-  view === "pixel" ? 0.25 : Math.min(window.devicePixelRatio || 1, 2);
+// Each view as an icon (user request, 24 October 2026: « Remplace les termes Satellite,
+// Lowpoly et Plan par des icones »), its name kept for screen readers.
+const viewIcons = { plan: "map", satellite: "satellite", lowpoly: "lowpoly" } as const;
 // Country names for the neighbours' labels, in French.
 const countries = new Intl.DisplayNames(["fr-CH"], { type: "region" });
 const labels = {
@@ -184,7 +182,7 @@ export function SwissPremiumMap3D({
         // A click chooses a region; a double click would also zoom behind the opened list.
         doubleClickZoom: false,
         trackResize: false,
-        pixelRatio: pixelRatio(view),
+        pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
         locale: { "Map.Title": copy.mapCanvas },
       });
     } catch {
@@ -289,9 +287,9 @@ export function SwissPremiumMap3D({
     if (canvas) canvas.style.cursor = hover ? "pointer" : "";
   }, [hover]);
 
-  // Plan, aerial photographs, pixel art or low poly (user requests, 24 October 2026), the
-  // relief kept: the ground's layers change through their visibility, the low poly view
-  // follows its own faceted relief, pixel art draws a quarter of the pixels.
+  // Plan, aerial photographs or low poly (user requests, 24 October 2026), the relief kept:
+  // the ground's layers change through their visibility, the low poly view follows its own
+  // faceted relief.
   const switchView = (value: string) => {
     const next = mapViews.find((own) => own === value);
     if (!next || next === view) return;
@@ -307,13 +305,7 @@ export function SwissPremiumMap3D({
     for (const [own, ids] of Object.entries(viewLayers))
       for (const id of ids)
         instance.setLayoutProperty(id, "visibility", own === next ? "visible" : "none");
-    for (const id of textLayers)
-      instance.setLayoutProperty(id, "visibility", next === "pixel" ? "none" : "visible");
     instance.setTerrain({ source: viewTerrain(next), exaggeration });
-    const widths = viewLineWidths(next);
-    for (const [key, id] of Object.entries(lineWidthLayers))
-      instance.setPaintProperty(id, "line-width", widths[key as keyof typeof widths]);
-    instance.setPixelRatio(pixelRatio(next));
     void showObjects(instance, next);
   };
 
@@ -361,7 +353,7 @@ export function SwissPremiumMap3D({
         if (!event.currentTarget.contains(event.relatedTarget)) setHover(null);
       }}
     >
-      <div ref={stage} className={`hi-map-stage${view === "pixel" ? " is-pixel" : ""}`}>
+      <div ref={stage} className="hi-map-stage">
         <div ref={container} className="hi-map hi-map-3d" />
         <div className="hi-map-keys" role="group" aria-label={copy.mapLabel}>
           {areaIds.map((id) => (
@@ -412,7 +404,11 @@ export function SwissPremiumMap3D({
             value={view}
             onChange={switchView}
             disabled={!ready}
-            options={mapViews.map((value) => ({ value, label: copy.mapViews[value] }))}
+            options={mapViews.map((value) => ({
+              value,
+              label: copy.mapViews[value],
+              icon: <HealthIcon name={viewIcons[value]} size={20} />,
+            }))}
           />
         </div>
         {hover && (

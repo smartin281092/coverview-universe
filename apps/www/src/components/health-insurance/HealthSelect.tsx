@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@coverview/ui";
 
 /**
@@ -17,7 +17,9 @@ export function HealthSelect({
   label: string;
   value: string;
   onChange: (value: string) => void;
-  options: { value: string; label: string }[];
+  // An option with an icon shows the icon alone; its label stays for screen readers and as a
+  // tooltip.
+  options: { value: string; label: string; icon?: ReactNode }[];
   placeholder?: string;
   disabled?: boolean;
 }) {
@@ -29,11 +31,23 @@ export function HealthSelect({
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent portalContainer={host} position="popper">
-          {options.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.label}
-            </SelectItem>
-          ))}
+          {options.map((option) =>
+            option.icon ? (
+              <SelectItem
+                key={option.value}
+                value={option.value}
+                title={option.label}
+                className="hi-select-icon-item"
+              >
+                {option.icon}
+                <span className="hi-sr-only">{option.label}</span>
+              </SelectItem>
+            ) : (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ),
+          )}
         </SelectContent>
       </Select>
     </div>

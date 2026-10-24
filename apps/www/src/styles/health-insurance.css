@@ -375,11 +375,6 @@
 .hi-first-contacts h4 {
   text-transform: uppercase;
 }
-.hi-first-contacts-choice {
-  margin: 0 0 8px;
-  color: #475569;
-  font-size: 12px;
-}
 .hi-first-contacts ul {
   display: grid;
   gap: 10px;
@@ -421,7 +416,7 @@
 }
 .hi-cover-score dl {
   display: grid;
-  gap: 8px;
+  gap: 4px;
   margin: 0;
 }
 .hi-cover-score dl > div {
@@ -431,7 +426,7 @@
   gap: 16px;
 }
 .hi-cover-score dt {
-  color: #3f3f3f;
+  color: #6b7280;
   font-size: 12px;
 }
 .hi-cover-score dd {
@@ -440,7 +435,7 @@
   margin: 0;
 }
 .hi-cover-score dd span {
-  width: 7px;
+  width: 3px;
   height: 16px;
   border-radius: 2px;
   background: #eef0f3;
@@ -453,6 +448,10 @@
   display: flex;
   align-items: center;
   gap: 6px;
+}
+.hi-payment-check {
+  display: inline-flex;
+  color: #16a34a;
 }
 .hi-map-toolbar {
   display: flex;
@@ -886,7 +885,7 @@
 /* The map's view (24 October 2026), under the zoom buttons, as tall and round as they are. */
 .hi-map-view {
   position: absolute;
-  width: 140px;
+  width: 72px;
 }
 .health-comparator .hi-map-view {
   right: 24px;
@@ -899,9 +898,15 @@
   background: #ffffff;
   font-size: 13px;
 }
-/* Pixel art: the map's quarter-size drawing enlarged without smoothing. */
-.hi-map-stage.is-pixel .maplibregl-canvas {
-  image-rendering: pixelated;
+/* The views as icons (24 October 2026), in the trigger and in the list, which keeps the
+   trigger's width. */
+.hi-map-view [data-slot="select-value"] > svg,
+.hi-select-icon-item > span:last-child > svg {
+  width: 20px;
+  height: 20px;
+}
+.hi-map-view [data-slot="select-content"] {
+  min-width: var(--radix-select-trigger-width);
 }
 .hi-map-caption a {
   color: inherit;
@@ -1448,7 +1453,6 @@
 .hi-tabs {
   display: flex;
   border-bottom: 1px solid #e5e5e5;
-  margin-top: 26px;
   gap: clamp(12px, 2vw, 24px);
 }
 .hi-tabs > button {
@@ -3412,7 +3416,6 @@
   .health-comparator .hi-map-view {
     top: 470px;
     right: 14px;
-    width: 116px;
   }
   /* Absolute again (24 October 2026): the phone rule above left it in the flow, below the
      full-screen map, so the attribution was out of sight. */

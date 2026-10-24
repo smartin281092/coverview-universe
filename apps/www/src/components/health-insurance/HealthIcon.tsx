@@ -35,7 +35,10 @@ export function HealthIcon({
     | "family"
     | "swimming"
     | "bike"
-    | "chevron";
+    | "chevron"
+    | "map"
+    | "satellite"
+    | "lowpoly";
   size?: number;
 }) {
   const paths = {
@@ -79,6 +82,11 @@ export function HealthIcon({
       "M2 16c2-3 4 3 6 0s4 3 6 0 4 3 8 0M2 21c2-3 4 3 6 0s4 3 6 0 4 3 8 0M7 12V5a2 2 0 0 1 4 0m3 7V5a2 2 0 0 1 4 0M7 8h7",
     bike: "M9 16a4 4 0 1 1-8 0 4 4 0 0 1 8 0Zm14 0a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM5 16l5-8 5 8H5Zm10 0 3-10h-3M8 5h4m-2 0v3",
     chevron: "m9 5 7 7-7 7",
+    // The map's views (24 October 2026): a folded map, a satellite, a faceted mountain.
+    map: "M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5L3 20V6.5Zm6-2.5v13.5m6-11V20",
+    satellite:
+      "M12 9l3 3-3 3-3-3 3-3ZM5 8l3-3 2.5 2.5-3 3L5 8Zm4 1 1.5 1.5M19 16l-3 3-2.5-2.5 3-3L19 16Zm-4-1-1.5-1.5M4 15a5 5 0 0 0 5 5",
+    lowpoly: "M2 19 8.5 7l4 6 3-3L22 19H2Zm6.5-12L10 19l2.5-6 4 6m-1-9 1 9",
   };
   return (
     <svg
