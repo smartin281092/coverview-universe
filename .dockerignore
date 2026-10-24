@@ -21,7 +21,8 @@ templates
 tests
 **/*.test.ts
 **/*.test.mjs
-# Le site lit seulement ses deux cartes ; les sources d'import restent hors des images.
+# Le site lit seulement ses fichiers de carte (plan et 3D) ; les sources d'import restent hors des images.
 data/**
 !data/health-insurance/2027/regions-map.json
 !data/health-insurance/2027/neighbors-map.json
+!data/health-insurance/2027/regions-geo.json
