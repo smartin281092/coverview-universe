@@ -88,7 +88,10 @@ export function HealthModelPanel({
       {offer && (
         <>
           <div className="hi-model-brand">
-            <HealthInsurerLogo offer={offer} labelled />
+            <div className="hi-model-brand-head">
+              <HealthInsurerLogo offer={offer} labelled />
+              {offer.partner && <HealthPartnerBadge />}
+            </div>
             <div>
               <div className="hi-model-title">
                 <h3>{offer.name}</h3>
@@ -106,18 +109,15 @@ export function HealthModelPanel({
               style={configuration.ready ? undefined : { visibility: "hidden" }}
             >
               <div className="hi-model-price">
-                <div className="hi-model-price-row">
-                  <div className="hi-model-price-line">
-                    <HealthOfferBadges cheapest={cheapest} />
-                    <p>
-                      {money(offer.monthlyPremiumMinor)}
-                      <span className="hi-price-unit">
-                        <small>{copy.currency}</small>
-                        <em>{copy.perMonth}</em>
-                      </span>
-                    </p>
-                  </div>
-                  {offer.partner && <HealthPartnerBadge />}
+                <div className="hi-model-price-line">
+                  <HealthOfferBadges cheapest={cheapest} />
+                  <p>
+                    {money(offer.monthlyPremiumMinor)}
+                    <span className="hi-price-unit">
+                      <small>{copy.currency}</small>
+                      <em>{copy.perMonth}</em>
+                    </span>
+                  </p>
                 </div>
                 {offer.redistribution?.year === year && (
                   <div className="hi-redistribution">

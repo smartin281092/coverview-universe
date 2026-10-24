@@ -1,9 +1,9 @@
 import { healthCopy as copy } from "../../content/fr/health-insurance";
 import { HealthIcon } from "./HealthIcon";
 
-// The model page's partner badge, beside the price (user decision, 24 October 2026): CoverView's
-// recommendation of every model of its partner insurers, in Gold, the « i » saying why. The other
-// models carry nothing: no rating is invented.
+// The model page's partner badge, beside the insurer's logo (user decision, 24 October 2026): on
+// every model of CoverView's partner insurers, in Gold, the « i » saying why. The other models
+// carry nothing: no rating is invented.
 export function HealthPartnerBadge() {
   return (
     <section className="hi-partner-badge" aria-labelledby="hi-partner-badge-title">
