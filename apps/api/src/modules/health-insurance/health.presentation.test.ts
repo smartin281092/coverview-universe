@@ -46,6 +46,11 @@ describe("offer presentation keeps year and eligibility explicit", () => {
       healthOfferPresentation({ ...offer, regionId: "EU-FR" }, 2027).redistribution,
     ).toBeNull();
   });
+  it("marks every model of a partner insurer, and only those", () => {
+    expect(healthOfferPresentation({ ...offer, insurerId: 1542 }, 2027).partner).toBe(true);
+    expect(healthOfferPresentation({ ...offer, insurerId: 343 }, 2027).partner).toBe(true);
+    expect(healthOfferPresentation(offer, 2027).partner).toBe(false);
+  });
   it("returns all documented first contacts, without interpreting multiple accepted contacts as obligations", () => {
     expect(healthOfferPresentation(offer, 2027, model)).toMatchObject({
       firstContacts: ["gp", "phone"],

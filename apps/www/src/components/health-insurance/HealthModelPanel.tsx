@@ -17,7 +17,7 @@ import { HealthProductImage } from "./HealthProductImage";
 import { HealthDialog } from "./HealthDialog";
 import { HealthIcon } from "./HealthIcon";
 import { HealthFirstContacts, HealthInsurerLogo, HealthOfferBadges } from "./HealthOfferIdentity";
-import { coverviewScorePreview, HealthCoverScore } from "./HealthCoverScore";
+import { HealthPartnerBadge } from "./HealthPartnerBadge";
 import { interpolate, money, regionName } from "./health-format";
 import { HealthModelData } from "./HealthModelData";
 import { useModelConfiguration } from "./use-model-configuration";
@@ -117,11 +117,7 @@ export function HealthModelPanel({
                       </span>
                     </p>
                   </div>
-                  {/* Beside the price once the Coverview score has real ratings; until then
-                      in the local preview only. */}
-                  {import.meta.env.DEV && (
-                    <HealthCoverScore score={coverviewScorePreview(offer.modelId)} />
-                  )}
+                  {offer.partner && <HealthPartnerBadge offer={offer} />}
                 </div>
                 {offer.redistribution?.year === year && (
                   <div className="hi-redistribution">

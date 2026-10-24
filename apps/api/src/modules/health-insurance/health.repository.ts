@@ -459,6 +459,7 @@ export function createHealthRepository(pool: pg.Pool) {
     if (!offer.success) invalid("HEALTH_MODEL_UNAVAILABLE", 422);
     const brands = await loadHealthInsurerBrands(pool, id);
     offer.data.insurerBrand = brands.get(offer.data.insurerId);
+    offer.data.partner = recommendedInsurerIds.includes(offer.data.insurerId);
     let currentInsurerName: string | null = null;
     if (input.currentInsurerId) {
       const insurer = await pool.query<{ name: string }>(

@@ -16,12 +16,12 @@ export const healthCopy = {
   firstContact: "Premier contact",
   foreignModelType: "LAMal frontaliers",
   firstContactTitle: "Premier contact",
-  coverviewScore: {
-    title: "Coverview score",
-    tiers: { gold: "Gold", silver: "Silver", bronze: "Bronze" },
-    details: "Détail du Coverview score",
-    labels: { service: "Service client", reviews: "Avis", recommendation: "Recommandation" },
-    rating: "{{value}} sur 10",
+  partnerBadge: {
+    title: "Recommandation CoverView",
+    level: "Gold",
+    details: "Pourquoi cette recommandation",
+    disclosure:
+      "{{insurer}} est partenaire de CoverView : ses modèles portent cette recommandation.",
   },
   contactDetails: {
     free: "Vous consultez directement le médecin de votre choix.",

@@ -61,6 +61,8 @@ export const healthOfferSchema = z.object({
   eligibility: z.enum(["region", "municipality_required", "municipality_confirmed"]),
   // First model of a partner insurer in its comparison list (23 October 2026).
   recommended: z.boolean().optional(),
+  // Any model of a CoverView partner insurer (24 October 2026): the model page's badge.
+  partner: z.boolean().optional(),
 });
 export const healthLocalitySchema = z.object({
   id: z.string(),

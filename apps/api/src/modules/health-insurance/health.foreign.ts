@@ -74,7 +74,11 @@ export function createHealthForeignRepository(pool: pg.Pool) {
       ? z
           .array(healthOfferSchema)
           .parse(result.rows)
-          .map((offer) => ({ ...offer, insurerBrand: brands.get(offer.insurerId) }))
+          .map((offer) => ({
+            ...offer,
+            insurerBrand: brands.get(offer.insurerId),
+            partner: recommendedInsurerIds.includes(offer.insurerId),
+          }))
       : [];
     const countries = new Map<string, typeof rows>();
     for (const row of rows) {

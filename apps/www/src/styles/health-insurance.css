@@ -363,7 +363,7 @@
   margin: 0 0 18px;
 }
 .hi-first-contacts h4,
-.hi-cover-score h4 {
+.hi-partner-badge h4 {
   margin: 0 0 10px;
   color: #6b7280;
   font-family: var(--cv-font-mono);
@@ -407,8 +407,8 @@
   font-size: 12px;
   line-height: 1.4;
 }
-/* Martius Italic (SIL OFL 1.1, © 2025 GGBotNet), served as provided: the Coverview score's
-   levels only. */
+/* Martius Italic (SIL OFL 1.1, © 2025 GGBotNet), served as provided: the partner badge's level
+   only. */
 @font-face {
   font-family: "Martius";
   src: url("../assets/fonts/martius/Martius-Italic.ttf") format("truetype");
@@ -416,7 +416,7 @@
   font-weight: 400;
   font-display: swap;
 }
-/* The price, with the Coverview score on its right; below it where the panel is narrow (phones),
+/* The price, with the partner badge on its right; below it where the panel is narrow (phones),
    as decided by the price area's own width. */
 .hi-model-price {
   container-type: inline-size;
@@ -427,30 +427,30 @@
   justify-content: space-between;
   gap: 12px 16px;
 }
-/* The Coverview score (24 October 2026), in a very light grey card fitted to its content: its
-   title, right above its level in a slanted metallic gradient crossed now and then by a gleam,
-   with the « i » on the same line, whose floating detail gives the ratings. */
-.hi-cover-score {
+/* The partner badge (24 October 2026), in a very light grey card fitted to its content: its
+   title, right above « Gold » in a slanted metallic gradient crossed now and then by a gleam,
+   with the « i » on the same line, whose floating note says the partnership. */
+.hi-partner-badge {
   position: relative;
   padding: 8px 12px 9px;
   border: 1px solid #e8eaed;
   border-radius: 12px;
   background: #fafbfc;
 }
-.hi-cover-score h4 {
+.hi-partner-badge h4 {
   margin-bottom: 4px;
   line-height: 1;
 }
-.hi-cover-score-grade {
+.hi-partner-badge-level {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 /* The « i » keeps its hit area without making the level's line taller. */
-.hi-cover-score .hi-cover-score-info button {
+.hi-partner-badge .hi-partner-badge-info button {
   margin-block: -6px;
 }
-.hi-cover-score-tier {
+.hi-partner-badge-gold {
   display: inline-block;
   /* The line fits Martius' capitals (16 px of its 26 px), so that no space is left above them;
      the padding keeps the italic's overhang inside the painted gradient. */
@@ -464,7 +464,7 @@
   color: transparent;
   background-image:
     linear-gradient(105deg, transparent 38%, rgb(255 255 255 / 90%) 48%, transparent 58%),
-    var(--hi-metal);
+    linear-gradient(115deg, #fff3b5, #e2bd52 30%, #a87a22 48%, #f0cf72 66%, #8c6119);
   background-size:
     300% 100%,
     100% 100%;
@@ -475,15 +475,6 @@
   -webkit-background-clip: text;
   background-clip: text;
   animation: hi-metal-gleam 6s ease-in-out infinite;
-}
-.hi-cover-score-tier.is-gold {
-  --hi-metal: linear-gradient(115deg, #fff3b5, #e2bd52 30%, #a87a22 48%, #f0cf72 66%, #8c6119);
-}
-.hi-cover-score-tier.is-silver {
-  --hi-metal: linear-gradient(115deg, #eef0f3, #b4bac2 30%, #6f7782 48%, #c3c8cf 66%, #545b65);
-}
-.hi-cover-score-tier.is-bronze {
-  --hi-metal: linear-gradient(115deg, #ffdcb5, #d8985c 30%, #94552a 48%, #e3a974 66%, #723f1d);
 }
 /* The gleam crosses the word in the last quarter of each cycle, then waits off to the left. */
 @keyframes hi-metal-gleam {
@@ -500,63 +491,28 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hi-cover-score-tier {
+  .hi-partner-badge-gold {
     animation: none;
   }
 }
 /* Under the card, its right edge on the card's, towards the inside of the panel; on narrow
    panels, where the card sits under the price on the left, its left edge on the card's (more
    specific than the shared tooltip rule, which comes later). */
-.hi-cover-score .hi-cover-score-info [role="tooltip"] {
+.hi-partner-badge .hi-partner-badge-info [role="tooltip"] {
   top: calc(100% + 6px);
   left: auto;
   right: -1px;
-  width: max-content;
-  padding: 14px 16px;
+  width: 240px;
 }
 @container (max-width: 399px) {
   .hi-model-price-row {
     flex-direction: column;
     align-items: flex-start;
   }
-  .hi-cover-score .hi-cover-score-info [role="tooltip"] {
+  .hi-partner-badge .hi-partner-badge-info [role="tooltip"] {
     left: -1px;
     right: auto;
   }
-}
-/* Each rating as ten small spaced bars, filled ones in a pink to red gradient with a white inner
-   edge; the bars start together, 20 px after the longest label. */
-.hi-cover-score dl {
-  display: grid;
-  grid-template-columns: max-content max-content;
-  column-gap: 20px;
-  row-gap: 4px;
-  margin: 0;
-}
-.hi-cover-score dl > div {
-  display: grid;
-  grid-column: 1 / -1;
-  grid-template-columns: subgrid;
-  align-items: center;
-}
-.hi-cover-score dt {
-  color: #6b7280;
-  font-size: 12px;
-}
-.hi-cover-score dd {
-  display: flex;
-  gap: 3px;
-  margin: 0;
-}
-.hi-cover-score dd span {
-  width: 3px;
-  height: 16px;
-  border-radius: 2px;
-  background: #eef0f3;
-}
-.hi-cover-score dd span.is-full {
-  background: linear-gradient(180deg, #ff6f9c, #e11d48);
-  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 45%);
 }
 .hi-payment {
   display: flex;

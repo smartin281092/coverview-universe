@@ -1,6 +1,7 @@
 import type pg from "pg";
 import { z } from "zod";
 import { healthOfferSchema } from "@coverview/contracts/health-insurance";
+import { recommendedInsurerIds } from "./health.insurer-groups.js";
 
 const modelPresentationSchema = z.object({
   id: z.string(),
@@ -29,6 +30,8 @@ export function healthOfferPresentation(offer: Offer, year: number, model?: Mode
   return {
     firstContacts: documented?.access.contacts ?? [],
     contactsVerified: Boolean(documented?.access.verifiedYear),
+    // Every model of a partner insurer carries CoverView's recommendation, said as such.
+    partner: recommendedInsurerIds.includes(offer.insurerId),
     redistribution:
       swiss && year === 2027
         ? {
