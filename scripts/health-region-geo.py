@@ -18,8 +18,14 @@ import tempfile
 
 sys.path.insert(0, str(pathlib.Path(tempfile.gettempdir()) / "coverview-health-geo-python"))
 from pyproj import Transformer  # noqa: E402
-from shapely import line_merge, make_valid, symmetric_difference_all, union_all  # noqa: E402
-from shapely.geometry import Point, Polygon, box  # noqa: E402
+from shapely import (  # noqa: E402
+    line_merge,
+    make_valid,
+    symmetric_difference_all,
+    union_all,
+    voronoi_polygons,
+)
+from shapely.geometry import MultiPoint, Point, Polygon, box  # noqa: E402
 from shapely.geometry.polygon import orient  # noqa: E402
 from shapely.ops import transform  # noqa: E402
 
@@ -144,23 +150,62 @@ borders = [
 
 # Neighbours as plain shapes (user request, 24 October 2026: « juste une forme géométrique
 # basique de couleur uniforme légèrement espacé de la suisse »): the 1:3 million outline
-# simplified and rounded over 3 km, kept 4 km from Switzerland and 2 km from each other,
-# within 150 km of it. Liechtenstein, not selectable, only keeps Austria away; it is not
-# drawn.
-near = box(minx - 150_000, miny - 150_000, maxx + 150_000, maxy + 150_000)
+# simplified and rounded over 3 km, kept 4 km from Switzerland and 2 km from each other.
+# Liechtenstein, not selectable, only keeps Austria away; it is not drawn.
 claimed = switzerland.buffer(4000)
-countries = []
+shapes = []
 for item in sorted(neighbors_map["regions"], key=lambda x: x["country"] != "LI"):
     shape = area(item["path"]).simplify(1500).buffer(3000, quad_segs=4)
     shape = shape.buffer(-6000, quad_segs=4).buffer(3000, quad_segs=4)
-    geometry = make_valid(shape.intersection(near).difference(claimed))
+    geometry = make_valid(shape.difference(claimed))
     claimed = union_all([claimed, geometry.buffer(2000)])
-    if item["country"] != "LI":
-        countries.append((item, geometry))
+    shapes.append((item, geometry))
 
-# What the map hides around Switzerland, in degrees: the ground of every map tile that
-# reaches it, the foreign enclaves included.
-outside = box(-10, 35, 30, 60).difference(transform(to_wgs84, switzerland))
+# The world the map can show, in degrees: the ground of every map tile that reaches it.
+world = box(-10, 35, 30, 60)
+# Then each neighbour grows to the world's edge, so that no background shows at the canvas'
+# ends (user request, 24 October 2026: « Agrandit les zones limitrophes pour qu'elle couvre
+# tout le canvas »): every place beyond the outlines, sea and other countries, goes to the
+# nearest neighbour. The Voronoi cells of points every 500 m along each outline give the
+# places nearest to it; their union reaches the middle of each gap, 1 km back restores the
+# 2 km between neighbours.
+sites: dict[tuple[float, float], int] = {}
+for index, (_, geometry) in enumerate(shapes):
+    for polygon in polygons(geometry):
+        for ring in [polygon.exterior, *polygon.interiors]:
+            for point in ring.segmentize(500).coords[:-1]:
+                sites.setdefault(point, index)
+reach = transform(to_lv95, world.segmentize(0.25))
+cells = voronoi_polygons(MultiPoint(list(sites)), extend_to=reach, ordered=True).geoms
+if len(cells) != len(sites):
+    raise ValueError(f"Expected {len(sites)} Voronoi cells, found {len(cells)}")
+apart = switzerland.buffer(4000)
+countries = []
+for index, (item, _) in enumerate(shapes):
+    if item["country"] == "LI":
+        continue
+    # Points in a straight line give thin cells, hundreds of kilometres long, that may cross
+    # themselves: repaired, then merged on a 1 m grid.
+    owned = [
+        make_valid(cell, method="structure", keep_collapsed=False)
+        for cell, owner in zip(cells, sites.values())
+        if owner == index
+    ]
+    nearest = union_all(owned, grid_size=1)
+    # The merge leaves specks between cells, which the retreat would widen into holes.
+    nearest = union_all(
+        [
+            Polygon(part.exterior, [ring for ring in part.interiors if Polygon(ring).area > 1e6])
+            for part in polygons(nearest)
+        ]
+    )
+    grown = nearest.intersection(reach).buffer(-1000, quad_segs=4).difference(apart)
+    # Slivers the retreat cuts off along the gaps are dropped.
+    parts = [part for part in polygons(grown.simplify(200)) if part.area > 5e6]
+    countries.append((item, make_valid(union_all(parts))))
+
+# What the map hides around Switzerland, the foreign enclaves included.
+outside = world.difference(transform(to_wgs84, switzerland))
 
 
 def degrees(geometry) -> dict:
@@ -213,7 +258,7 @@ west, south, east, north = swiss.bounds
 output = {
     "year": regions_map["year"],
     "attribution": f"{regions_map['attribution']} · {neighbors_map['source']['attribution']}",
-    "method": "Contours de regions-map.json et neighbors-map.json reprojetés de LV95 en WGS84 (pyproj), arrondis à 4 décimales ; simplification de 150 m conservée ; pays voisins simplifiés et arrondis sur 3 km, à 4 km de la Suisse et 2 km les uns des autres, limités à 150 km autour ; frontières nationale, cantonales et régionales tracées une seule fois chacune ; lacs hors communes inclus dans le contour suisse, hors enclaves étrangères.",
+    "method": "Contours de regions-map.json et neighbors-map.json reprojetés de LV95 en WGS84 (pyproj), arrondis à 4 décimales ; simplification de 150 m conservée ; pays voisins simplifiés et arrondis sur 3 km, à 4 km de la Suisse et 2 km les uns des autres, étendus jusqu’aux bords de la carte (chaque lieu au voisin le plus proche) ; frontières nationale, cantonales et régionales tracées une seule fois chacune ; lacs hors communes inclus dans le contour suisse, hors enclaves étrangères.",
     "sources": [
         {"file": "regions-map.json", "sha256": hashlib.sha256(regions_bytes).hexdigest()},
         {"file": "neighbors-map.json", "sha256": hashlib.sha256(neighbors_bytes).hexdigest()},
@@ -237,5 +282,10 @@ output = {
         ],
     },
 }
-OUTPUT.write_text(json.dumps(output, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
+# Line feeds on every system: the bytes hashed by the relief's provenance are the versioned ones.
+OUTPUT.write_text(
+    json.dumps(output, ensure_ascii=False, separators=(",", ":")) + "\n",
+    encoding="utf-8",
+    newline="\n",
+)
 print(json.dumps({"output": str(OUTPUT), "bytes": OUTPUT.stat().st_size, "areas": len(features), "labels": len(labels)}))

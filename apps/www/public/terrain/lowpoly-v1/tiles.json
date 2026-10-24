@@ -17,7 +17,7 @@
   "raise": {
     "metres": 2500,
     "inside": "regions-geo.json",
-    "sha256": "51a20806496403f7ff833cfcdf6fb242246510e07a68dd05d457e737935c70c7"
+    "sha256": "6d32a6b0112622a1c03d0a8d461e89d94642716e3d50dffba56436c1abb3a8f6"
   },
   "facet": {
     "metres": 3500,

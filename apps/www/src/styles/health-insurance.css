@@ -1181,7 +1181,8 @@
   top: 0;
   bottom: 0;
   margin: 0;
-  border-radius: 22px 0 0 22px;
+  /* Square (user request, 24 October 2026: « Enlève les bords arrondi du panneau latérale »). */
+  border-radius: 0;
   border-width: 0 0 0 1px;
   width: min(510px, 100vw);
   height: 100svh;
@@ -2419,9 +2420,6 @@
   .hi-footer button {
     font-size: 9px;
   }
-  .hi-sheet {
-    border-radius: 18px 0 0 18px;
-  }
   .hi-dialog-inner {
     --hi-panel-inset: 22px;
   }
@@ -3306,8 +3304,10 @@
   .health-comparator .hi-header-right {
     margin-left: auto;
   }
+  /* A little more room under the header (user request, 24 October 2026: « Ajoute un peu
+     d'espace entre l'ilot Votre profil et le menu »): what follows moves down with it. */
   .health-comparator .hi-profile {
-    top: 80px;
+    top: 90px;
     left: 14px;
     right: 14px;
     width: auto;
@@ -3339,7 +3339,7 @@
     min-height: 44px;
   }
   .health-comparator .hi-map-toolbar {
-    top: 154px;
+    top: 164px;
     left: 14px;
     right: 14px;
     max-width: none;
@@ -3352,7 +3352,7 @@
     grid-column: 1 / -1;
   }
   .health-comparator .hi-location-hint {
-    top: 250px;
+    top: 260px;
     left: 24px;
     right: 24px;
     line-height: 1.4;
@@ -3365,12 +3365,12 @@
     max-height: 47dvh;
   }
   .health-comparator .hi-map-controls {
-    top: 312px;
+    top: 322px;
     right: 14px;
     flex-direction: column;
   }
   .health-comparator .hi-map-view {
-    top: 460px;
+    top: 470px;
     right: 14px;
     width: 116px;
   }

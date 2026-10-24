@@ -84,6 +84,10 @@ export default function HealthComparator({
   const [showFilters, setShowFilters] = useState(false);
   const [showSources, setShowSources] = useState(false);
   const [showList, setShowList] = useState(false);
+  // Phones (24 October 2026): the list covers the screen, the profile closes beneath it.
+  useEffect(() => {
+    if (showList && window.matchMedia("(max-width:760px)").matches) setProfileOpen(false);
+  }, [showList]);
   const [checkout, setCheckout] = useState(false);
   const [candidate, setCandidate] = useState<CheckoutCandidate | null>(null);
   const [cartCount, setCartCount] = useState(0);
@@ -213,6 +217,8 @@ export default function HealthComparator({
         setCategories([]);
         setBenefitKeys([]);
       }
+      // A chosen locality shows its region's models (24 October 2026).
+      setShowList(true);
     }
     setOffset(0);
   };
