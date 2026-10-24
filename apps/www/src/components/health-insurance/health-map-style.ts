@@ -6,7 +6,7 @@ import type { MapOptions } from "maplibre-gl";
 // finalement basique de couleur uniforme légèrement espacé de la suisse) »). Four views of
 // the ground, chosen under the zoom buttons: a plan in the manner of Google Maps
 // (OpenStreetMap, OpenFreeMap tiles) by default, the swisstopo SWISSIMAGE aerial
-// photographs, pixel art, and low poly with its trees.
+// photographs, pixel art, and low poly with its 3D firs, houses, buildings and towers.
 type MapStyle = Exclude<MapOptions["style"], string | null | undefined>;
 type Layer = MapStyle["layers"][number];
 export type MapView = "plan" | "satellite" | "pixel" | "lowpoly";
@@ -287,38 +287,16 @@ const views: Record<MapView, Layer[]> = {
     },
   ],
 };
-// The trees stand above the regions' veil: listed apart, shown with the low poly view.
-// Fewer from afar: a 6 km grid below zoom 8, 3 km below zoom 9, then 1.5 km.
-const trees: Layer = {
-  id: "lowpoly-trees",
-  type: "symbol",
-  source: "trees",
-  filter: ["<=", ["get", "level"], ["step", ["zoom"], 0, 8, 1, 9, 2]],
-  layout: {
-    "icon-image": "tree",
-    "icon-size": [
-      "interpolate",
-      ["linear"],
-      ["zoom"],
-      6,
-      ["*", 0.35, ["get", "size"]],
-      10,
-      ["*", 0.8, ["get", "size"]],
-    ],
-    "icon-anchor": "bottom",
-    "icon-allow-overlap": true,
-    "icon-ignore-placement": true,
-    "icon-pitch-alignment": "viewport",
-    "icon-rotation-alignment": "viewport",
-    "symbol-z-order": "viewport-y",
-  },
-};
 export const viewLayers: Record<MapView, string[]> = {
   plan: views.plan.map((layer) => layer.id),
   satellite: views.satellite.map((layer) => layer.id),
   pixel: views.pixel.map((layer) => layer.id),
-  lowpoly: [...views.lowpoly.map((layer) => layer.id), trees.id],
+  lowpoly: views.lowpoly.map((layer) => layer.id),
 };
+// The relief's height, as drawn: the low poly objects stand on it.
+export const exaggeration = 1.5;
+// The low poly view's 3D objects, drawn by three.js (health-map-objects.ts), loaded with it.
+export const objectsLayerId = "lowpoly-objects";
 // The relief the 3D surface follows in each view.
 export const viewTerrain = (view: MapView) => (view === "lowpoly" ? "terrain-lowpoly" : "terrain");
 // Lines drawn with a quarter of the pixels in pixel art: wider, so that they stay visible.
@@ -396,9 +374,8 @@ export function healthMapStyle(
       labels: { type: "geojson", data: data.labels },
       borders: { type: "geojson", data: data.borders },
       outside: { type: "geojson", data: data.outside },
-      trees: { type: "geojson", data: { type: "FeatureCollection", features: [] } },
     },
-    terrain: { source: viewTerrain(view), exaggeration: 1.5 },
+    terrain: { source: viewTerrain(view), exaggeration },
     sky: {
       "sky-color": plain,
       "horizon-color": plain,
@@ -468,7 +445,6 @@ export function healthMapStyle(
           "line-width": line["outline-line"],
         },
       },
-      ...shown(view, "lowpoly", [trees]),
       // Text drawn with a quarter of the pixels is unreadable: none in pixel art.
       ...readable(view, [
         {

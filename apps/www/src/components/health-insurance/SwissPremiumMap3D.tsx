@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Map as MapLibre, setWorkerUrl, type GeoJSONSource, type LngLatLike } from "maplibre-gl";
+import { Map as MapLibre, setWorkerUrl, type LngLatLike } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
 import type {
@@ -12,16 +12,17 @@ import { healthCopy as copy } from "../../content/fr/health-insurance";
 import { HealthRegionPopover } from "./HealthRegionPopover";
 import { HealthSelect } from "./HealthSelect";
 import {
+  exaggeration,
   healthMapStyle,
   lineWidthLayers,
   mapViews,
+  objectsLayerId,
   textLayers,
   viewLayers,
   viewLineWidths,
   viewTerrain,
   type MapView,
 } from "./health-map-style";
-import { treeImage } from "./health-map-trees";
 import { regionName } from "./health-format";
 
 setWorkerUrl(workerUrl);
@@ -114,15 +115,28 @@ export function SwissPremiumMap3D({
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibre | null>(null);
   const loaded = useRef(false);
-  // The low poly trees' file, asked for once that view is shown.
-  const planted = useRef(false);
-  const plant = (instance: MapLibre, next: MapView) => {
-    if (next !== "lowpoly" || planted.current) return;
-    planted.current = true;
-    // Nothing waits for the trees: without them, the view stays usable.
-    void instance
-      .getSource<GeoJSONSource>("trees")
-      ?.setData(`${window.location.origin}/map/trees-v1.json`);
+  // The low poly view's 3D objects: three.js and their file load once that view is shown,
+  // and leave the map with it.
+  const shownView = useRef(view);
+  const showObjects = async (instance: MapLibre, next: MapView) => {
+    if (next !== "lowpoly") {
+      if (instance.getLayer(objectsLayerId)) instance.removeLayer(objectsLayerId);
+      return;
+    }
+    const objects = await import("./health-map-objects").catch(() => null);
+    // Without three.js, the low poly view stays usable, without objects; the view may also
+    // have changed, or the map left the page, while it loaded.
+    if (
+      !objects ||
+      shownView.current !== "lowpoly" ||
+      map.current !== instance ||
+      instance.getLayer(objectsLayerId)
+    )
+      return;
+    instance.addLayer(
+      objects.objectsLayer(instance, `${window.location.origin}/map/objects-v1.json`, exaggeration),
+      "lakes",
+    );
   };
   // Once the person zooms or pans, a change of width no longer resets their view.
   const touched = useRef(false);
@@ -190,9 +204,7 @@ export function SwissPremiumMap3D({
       loaded.current = true;
       setReady(true);
       limit();
-      const image = treeImage();
-      if (image) instance.addImage("tree", image, { pixelRatio: 2 });
-      plant(instance, view);
+      void showObjects(instance, shownView.current);
     });
     instance.on("zoomend", limit);
     instance.on("movestart", (event) => {
@@ -284,6 +296,7 @@ export function SwissPremiumMap3D({
     const next = mapViews.find((own) => own === value);
     if (!next || next === view) return;
     setView(next);
+    shownView.current = next;
     try {
       localStorage.setItem(viewKey, next);
     } catch {
@@ -296,12 +309,12 @@ export function SwissPremiumMap3D({
         instance.setLayoutProperty(id, "visibility", own === next ? "visible" : "none");
     for (const id of textLayers)
       instance.setLayoutProperty(id, "visibility", next === "pixel" ? "none" : "visible");
-    instance.setTerrain({ source: viewTerrain(next), exaggeration: 1.5 });
+    instance.setTerrain({ source: viewTerrain(next), exaggeration });
     const widths = viewLineWidths(next);
     for (const [key, id] of Object.entries(lineWidthLayers))
       instance.setPaintProperty(id, "line-width", widths[key as keyof typeof widths]);
     instance.setPixelRatio(pixelRatio(next));
-    plant(instance, next);
+    void showObjects(instance, next);
   };
 
   // Keyboard focus: the area's label point, brought into view first if needed.

@@ -8,7 +8,7 @@
         "scripts/verify-planning.mjs",
         "scripts/verify-health-live.mjs",
         "scripts/health-terrain-tiles.mjs",
-        "scripts/health-map-trees.mjs",
+        "scripts/health-map-objects.mjs",
         ".claude/hooks/guard-bash.mjs"
       ],
       "project": [
@@ -40,7 +40,7 @@
       "project": ["src/**/*.{ts,tsx,css}"]
     },
     "apps/www": {
-      "ignoreDependencies": ["gsap", "@react-three/fiber", "three", "@types/three"],
+      "ignoreDependencies": ["gsap", "@react-three/fiber"],
       "project": ["src/**/*.{ts,tsx,astro,mdx,css}"]
     },
     "packages/ui": {
