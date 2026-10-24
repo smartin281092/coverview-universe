@@ -1,0 +1,38 @@
+# Comparateur du 24 octobre 2026 — carte 3D
+
+Entrée : proposition du 23 octobre (« Une carte 3D interactive serait surement plus stylé et plus rapide surtout si on peut la stylisé un peu avec des reliefs, des couleurs, foret, montagne, lac etc et délimité les avec des bordures transparente et une zone au dessus avec une opacité très très faible mais qui se renforce un petit peu au survol »), puis « GO carte 3D, fond swisstopo, 3D partout ». Le fond swisstopo demande une autorisation pour l’usage commercial et ne couvre pas les pays voisins ; réponse de l’utilisateur à la question posée : « OpenStreetMap définitivement » (fond OpenFreeMap, relief hébergé chez nous, aucune démarche auprès de swisstopo). Mandat PROG-23. Session réelle : Claude Code, Claude Opus 5.5, effort max.
+
+## Décisions déléguées (PROG-23)
+
+| ref | question | answer | evidence |
+|---|---|---|---|
+| M-1 | Bibliothèque ? | MapLibre GL JS (BSD-3-Clause), seule bibliothèque libre qui affiche tuiles vectorielles, relief 3D et surfaces GeoJSON en WebGL. Chargée à part, après le reste du comparateur. | DEP-01 au compte rendu |
+| M-2 | Fond de carte ? | Instance publique OpenFreeMap (OpenStreetMap, schéma OpenMapTiles) : usage commercial accepté, sans clé ni cookie, servie par Cloudflare, sans garantie de service. Style écrit chez nous : forêts, prairies, glaciers, rochers, lacs et rivières en couleurs, routes discrètes, noms en français. Attribution « © OpenMapTiles · © OpenStreetMap » sous la carte. | Conditions et politique de confidentialité OpenFreeMap lues le 24 octobre |
+| M-3 | Relief ? | Tuiles Terrarium de Mapterhorn (swissALTI3D swisstopo, IGN, BEV, Länder, régions italiennes, Copernicus GLO-30), copiées une fois et servies par le site (`/terrain/v1`), zooms 5 à 9 sur la Suisse et ses abords, réduites de 512 à 256 px (moyenne en mètres) : environ 210 m par pixel au zoom 9, 217 tuiles, 10,6 Mo. Aucune requête vers swisstopo ni Mapterhorn à l’affichage. Régénération : `scripts/health-terrain-tiles.mjs`. | Journal 5 |
+| M-4 | Régions ? | Contours actuels (swissBOUNDARIES3D, simplification commune de 150 m) reconvertis en WGS84 par `scripts/health-region-geo.py`, sans nouveau téléchargement ; pays voisins GISCO dont la Suisse est retirée. Voile bleu marine des régions à 5 %, 13 % au survol, 26 % et contour pour la région choisie ; bordures blanches semi-transparentes sur une ombre légère ; voile blanc de 18 % sur les pays voisins, levé au survol, pour détacher la Suisse. | Demande, journal 3 |
+| M-5 | 3D partout ? | Inclinaison et relief sur ordinateur et téléphone. Rotation à la souris (clic droit) seulement ; sur téléphone, zoom et inclinaison à deux doigts, sans rotation involontaire. Le bouton ⌖ remet le nord, l’inclinaison et la vue de départ. | Demande |
+| M-6 | Sans WebGL2 ? | La carte SVG actuelle reste en secours (navigateur sans WebGL2, échec de chargement), chargée seulement dans ce cas. | MapLibre 6 exige WebGL2 |
+| M-7 | Données personnelles ? | Le navigateur du visiteur demande les tuiles et polices à OpenFreeMap (adresse IP vue par Cloudflare et OpenFreeMap, journaux sans IP gardés 7 jours selon leur politique), sans cookie ni stockage. Ligne ajoutée à l’inventaire MKT-09 du README www ; la future politique de confidentialité (LAUNCH-02) doit la reprendre. | Politique OpenFreeMap |
+| M-8 | Clavier ? | Comme la carte SVG : chaque région et pays voisin reste un bouton atteignable au clavier ; le focus éclaire la région et ouvre la carte des trois primes, Entrée choisit et ouvre la liste, Échap ferme. | FRONT-12 |
+
+## Definition of Done — oracles
+
+- [x] Typecheck, lint, formatage des fichiers touchés — V0 (journal 1).
+- [x] Build du site, poids du chunk carte mesuré — V1 (journal 2).
+- [x] Ordinateur : relief, couleurs, lacs ; survol (opacité, carte des primes avec laurier) ; clic = région et liste ; zoom, ⌖, localité choisie — V3 Chromium (journal 3 et 4 ; le panneau du navigateur intégré, masqué, ne dessine pas WebGL).
+- [x] Téléphone 390 px : 3D, toucher = liste, attribution visible — V3 émulation (journal 4).
+- [x] Fluidité mesurée au zoom et au déplacement, comparée à la carte SVG — V3 (journal 6).
+- [x] Secours SVG sans WebGL2 — V3 forcé (journal 7).
+- [ ] Mise en production et revue du titulaire, sur un vrai téléphone — V5.
+
+## Journal de vérification
+
+| # | cible | oracle | résultat | suite |
+|---|---|---|---|---|
+| 1 | Statique | `tsc` www, ESLint, Prettier (fichiers propres à HEAD), knip, dependency-cruiser | verts ; knip : 7 fichiers inutilisés et 1 export dupliqué déjà présents ; dependency-cruiser : cycles dans `.astro/.prerender` (build local ignoré par Git) et 3 contenus orphelins déjà présents | — |
+| 2 | Build | `astro build` | OK ; carte 3D : 418 Ko gzip + worker 147 Ko gzip + CSS 71 Ko, chargés après le comparateur ; la carte SVG (117 Ko gzip) quitte le JS initial et ne se charge qu’en secours | — |
+| 3 | Rendu | Chromium de Playwright, GPU, 1440 x 900 | relief, forêts, lacs, glaciers ; bordures lisibles ; voisins voilés ; carte des primes au survol, laurier conservé | revue V5 |
+| 4 | Parcours | script Playwright | survol, clic = région et liste, 46 boutons clavier, focus = carte des primes, Entrée = liste, localité 3920 = vol vers Valais 2, téléphone : toucher = liste, attribution visible ; aucune erreur de page | — |
+| 5 | Poids | requêtes réseau, vue nationale 1440 x 900 | relief 512 px : 29 tuiles, environ 6 Mo ; réduit à 256 px : environ 1,5 Mo, rendu national presque identique, net au zoom 9 avec le niveau 9 ; tuiles OpenFreeMap : 12 x 250 Ko, environ 3 Mo, hors de notre contrôle | extrait vectoriel hébergé si le poids gêne |
+| 6 | Fluidité | intervalles rAF, 40 crans de molette puis déplacement | GPU : zoom 3D médiane 16,7 ms, p90 16,7, max 33 ; SVG 16,7 / 16,7 / 83. CPU ralenti 4 x : zoom 3D 33 / 67 / 133, déplacement p90 16,7, max 50 ; SVG zoom 16,7 / 33 / 133, déplacement p90 33, max 183 ; téléphone 3D : zoom 16,7 / 16,7 / 150, déplacement p90 16,7, max 33 | vrai téléphone en V5 |
+| 7 | Secours | Chromium sans GPU ni WebGL | carte SVG affichée et utilisable | — |
