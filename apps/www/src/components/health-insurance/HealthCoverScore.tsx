@@ -18,8 +18,8 @@ export const coverviewScorePreview = (modelId: string) =>
   previews[[...modelId].reduce((sum, char) => sum + char.charCodeAt(0), 0) % previews.length]!;
 
 // The model page's Coverview score, beside the price (user requests, 24 October 2026): its
-// level in Martius, a slanted metallic gradient outlined in its dark shade and crossed now and
-// then by a gleam, then the « i » whose floating detail gives the three ratings out of ten.
+// level in Martius, a slanted metallic gradient crossed now and then by a gleam, then the « i »
+// whose floating detail gives the three ratings out of ten.
 export function HealthCoverScore({ score }: { score: Score }) {
   return (
     <section className="hi-cover-score" aria-labelledby="hi-cover-score-title">
