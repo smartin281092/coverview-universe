@@ -55,14 +55,16 @@ const camera = (width: number, height: number, regionId: string | null) => ({
 const national = geo.borders.features.find((feature) => feature.properties.kind === "national");
 if (!national) throw new Error("regions-geo.json: Switzerland's outline is missing");
 const inside: object = national.geometry;
-// The chosen view, kept in this browser only (24 October 2026).
+// The chosen view, kept in this browser only (24 October 2026); low poly until one is chosen
+// (user request, same day: « Faire que la carte par défaut est la lowpoly »).
 const viewKey = "cv-map-view";
+const defaultView: MapView = "lowpoly";
 const storedView = (): MapView => {
   try {
     const stored = localStorage.getItem(viewKey);
-    return mapViews.find((view) => view === stored) ?? "plan";
+    return mapViews.find((view) => view === stored) ?? defaultView;
   } catch {
-    return "plan";
+    return defaultView;
   }
 };
 // Each view as an icon (user request, 24 October 2026: « Remplace les termes Satellite,

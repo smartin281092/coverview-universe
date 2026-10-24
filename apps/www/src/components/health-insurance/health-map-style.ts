@@ -5,9 +5,9 @@ import type { MapOptions } from "maplibre-gl";
 // request: « enlève les pays autour (pas de reliefs rien juste une forme géométrique
 // finalement basique de couleur uniforme légèrement espacé de la suisse) »). Three views of
 // the ground, chosen under the zoom buttons: a plan in the manner of Google Maps
-// (OpenStreetMap, OpenFreeMap tiles) by default, the swisstopo SWISSIMAGE aerial
-// photographs, and low poly with its 3D firs, houses, buildings and towers (pixel art,
-// added the same day, removed at the user's request).
+// (OpenStreetMap, OpenFreeMap tiles), the swisstopo SWISSIMAGE aerial photographs, and low
+// poly with its 3D firs, houses, buildings and towers, shown by default (pixel art, added
+// the same day, removed at the user's request).
 type MapStyle = Exclude<MapOptions["style"], string | null | undefined>;
 type Layer = MapStyle["layers"][number];
 export type MapView = "plan" | "satellite" | "lowpoly";

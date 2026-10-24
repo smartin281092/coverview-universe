@@ -410,20 +410,23 @@
   line-height: 1.4;
 }
 /* CoverScore (24 October 2026): each rating as ten small spaced bars, filled ones in a pink to
-   red gradient with a white inner edge. */
+   red gradient with a white inner edge. The bars start together, 20 px after the longest
+   label, each row sharing the list's two columns. */
 .hi-cover-score {
   margin: 18px 0 4px;
 }
 .hi-cover-score dl {
   display: grid;
-  gap: 4px;
+  grid-template-columns: max-content max-content;
+  column-gap: 20px;
+  row-gap: 4px;
   margin: 0;
 }
 .hi-cover-score dl > div {
-  display: flex;
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
 }
 .hi-cover-score dt {
   color: #6b7280;
