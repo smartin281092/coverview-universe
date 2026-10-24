@@ -41,6 +41,10 @@ const camera = (width: number, height: number, regionId: string | null) => ({
   pitch,
   bearing: 0,
 });
+// Switzerland's outline: only its ground keeps labels.
+const national = geo.borders.features.find((feature) => feature.properties.kind === "national");
+if (!national) throw new Error("regions-geo.json: Switzerland's outline is missing");
+const inside: object = national.geometry;
 // Country names for the neighbours' labels, in French.
 const countries = new Intl.DisplayNames(["fr-CH"], { type: "region" });
 const labels = {
@@ -112,7 +116,13 @@ export function SwissPremiumMap3D({
     try {
       instance = new MapLibre({
         container: element,
-        style: healthMapStyle(window.location.origin, geo.areas, labels, geo.borders),
+        style: healthMapStyle(window.location.origin, {
+          areas: geo.areas,
+          labels,
+          borders: geo.borders,
+          outside: geo.outside,
+          inside,
+        }),
         ...camera(box.width, box.height, current.localityId ? current.selected : null),
         minZoom: zoomFor(box.width, box.height, 1) - 0.3,
         maxZoom: 10,

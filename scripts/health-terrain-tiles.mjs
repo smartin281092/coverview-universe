@@ -1,13 +1,13 @@
 // Copies the comparator's 3D relief once, so visitors never ask a third party for it.
-// Mapterhorn Terrarium tiles, zooms 5 (the map's widest view) to 9, over Switzerland and
-// enough of its neighbours for tilted views. Switzerland, lakes included, is raised by a
-// constant height (user request, 24 October 2026: « découpe la suisse pour la surélever »):
-// a cliff along the border, the relief unchanged on both sides. Each 512 px tile is then
-// averaged down to 256 px (whole metres, lossless WebP): a quarter of the weight per view,
-// about 210 m per pixel at zoom 9.
-// Sources and licences: https://mapterhorn.com/attribution (swisstopo swissALTI3D, IGN,
-// BEV, German Länder, Italian regions, Copernicus GLO-30). Downloads are cached in the OS
-// temporary directory, so a new height or outline needs no new download.
+// Mapterhorn Terrarium tiles, zooms 5 (the map's widest view) to 9, over Switzerland only
+// (user requests, 24 October 2026: « découpe la suisse pour la surélever », then « enlève
+// les pays autour (pas de reliefs rien) »): Switzerland, lakes included, keeps its relief
+// raised by a constant height; around it the ground is flat at 0 m, as MapLibre assumes
+// beyond these tiles. Each 512 px tile is then averaged down to 256 px (whole metres,
+// lossless WebP), about 210 m per pixel at zoom 9.
+// Source inside Switzerland: swissALTI3D (swisstopo), through Mapterhorn
+// (https://mapterhorn.com/attribution). Downloads are cached in the OS temporary
+// directory, so a new height or outline needs no new download.
 //   node scripts/health-terrain-tiles.mjs [output directory]
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
@@ -21,13 +21,13 @@ const sharp = createRequire(join(root, "apps/www/package.json"))("sharp");
 const output = resolve(process.argv[2] ?? join(root, "apps/www/public/terrain/v1"));
 const cache = join(tmpdir(), "coverview-terrain-cache");
 const source = "https://tiles.mapterhorn.com";
-// West, south, east, north.
-const bounds = [3.6, 44.6, 13, 49.2];
+// West, south, east, north: Switzerland and a small margin.
+const bounds = [5.9, 45.77, 10.55, 47.86];
 const minzoom = 5;
 const maxzoom = 9;
 const size = 256;
 // Metres added inside Switzerland, before the map's own exaggeration.
-const raise = 4000;
+const raise = 2500;
 const geoFile = join(root, "data/health-insurance/2027/regions-geo.json");
 const geoBytes = readFileSync(geoFile);
 // Switzerland's outline, its lakes included, foreign enclaves excluded.
@@ -95,7 +95,7 @@ const swissShare = async ([z, x, y], width) => {
   return data;
 };
 
-// Terrarium: elevation = R × 256 + G + B / 256 − 32768. Raised and averaged in metres,
+// Terrarium: elevation = R × 256 + G + B / 256 − 32768. Raised, cut and averaged in metres,
 // never per colour channel, which would mix the high and low bytes.
 const prepare = async (tile, body) => {
   const { data, info } = await sharp(body)
@@ -113,8 +113,8 @@ const prepare = async (tile, body) => {
         for (let dx = 0; dx < factor; dx++) {
           const p = (y * factor + dy) * info.width + x * factor + dx;
           const i = p * 3;
-          sum += data[i] * 256 + data[i + 1] + data[i + 2] / 256 - 32768;
-          if (share) sum += (raise * share[p]) / 255;
+          const elevation = data[i] * 256 + data[i + 1] + data[i + 2] / 256 - 32768;
+          if (share) sum += ((elevation + raise) * share[p]) / 255;
         }
       const value = Math.round(sum / factor ** 2) + 32768;
       const o = (y * size + x) * 3;

@@ -9,20 +9,20 @@
   "minzoom": 5,
   "maxzoom": 9,
   "bounds": [
-    3.6,
-    44.6,
-    13,
-    49.2
+    5.9,
+    45.77,
+    10.55,
+    47.86
   ],
   "raise": {
-    "metres": 4000,
+    "metres": 2500,
     "inside": "regions-geo.json",
-    "sha256": "ec9eae1045c91f0ef1040ef7191cb5eeb21f9ee7c11883eb940db884f3f3ba25"
+    "sha256": "51a20806496403f7ff833cfcdf6fb242246510e07a68dd05d457e737935c70c7"
   },
   "attribution": "<a href=\"https://mapterhorn.com/attribution\">© Mapterhorn</a>",
   "source": "https://tiles.mapterhorn.com/{z}/{x}/{y}.webp",
   "copied": "2026-10-24",
-  "count": 217,
-  "bytes": 10631772,
-  "sha256": "a17a2b481c87ca5f01ecafb592ba31372cb1ccd34656f8f71de39cf042254dc0"
+  "count": 58,
+  "bytes": 1275556,
+  "sha256": "8f412f80c428ea5d84d9fa2f6953774ef90f6f59f8380c29bf361c20bb4d0900"
 }

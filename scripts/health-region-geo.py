@@ -21,6 +21,7 @@ from pyproj import Transformer  # noqa: E402
 from shapely import line_merge, make_valid, symmetric_difference_all, union_all  # noqa: E402
 from shapely.geometry import Point, Polygon, box  # noqa: E402
 from shapely.geometry.polygon import orient  # noqa: E402
+from shapely.ops import transform  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DATA = ROOT / "data/health-insurance/2027"
@@ -126,18 +127,10 @@ if len(kept) != len(enclaves):
     raise ValueError(f"Expected {len(enclaves)} foreign enclaves, found {len(kept)}")
 switzerland = union_all(outlines)
 shores = switzerland.difference(swiss).boundary.buffer(1)
-# The shadow's outline, rounded over 1.5 km: drawn offset outward, the exact outline spikes
-# at its sharp corners.
-shade = (
-    switzerland.buffer(1500, quad_segs=4)
-    .buffer(-3000, quad_segs=4)
-    .buffer(1500, quad_segs=4)
-    .simplify(100)
-)
 
 # Each border drawn once, by rank: the borders between cantons, then those between regions
 # of one canton, never along a lake shore. The national border is Switzerland's own
-# polygon, so that the map can draw the raised edge inward and its shadow outward.
+# polygon, which also raises the relief and keeps the ground's labels inside.
 national = switzerland.boundary
 cantons: dict[str, list] = {}
 for item, geometry in regions:
@@ -149,18 +142,38 @@ borders = [
     ("region", region_lines.difference(canton_lines.buffer(1)).difference(shores)),
 ]
 
-# Neighbours (1:3 million) are widened by 1.5 km toward the Swiss border, then the Swiss
-# area and the countries already placed are removed: no overlap, and no gap at the border.
-# Liechtenstein first, so Austria cannot spread into it; it is not selectable. Kept within
-# 150 km of Switzerland, beyond anything the 3D map shows.
-claimed = swiss
+# Neighbours as plain shapes (user request, 24 October 2026: « juste une forme géométrique
+# basique de couleur uniforme légèrement espacé de la suisse »): the 1:3 million outline
+# simplified and rounded over 3 km, kept 4 km from Switzerland and 2 km from each other,
+# within 150 km of it. Liechtenstein, not selectable, only keeps Austria away; it is not
+# drawn.
 near = box(minx - 150_000, miny - 150_000, maxx + 150_000, maxy + 150_000)
+claimed = switzerland.buffer(4000)
 countries = []
 for item in sorted(neighbors_map["regions"], key=lambda x: x["country"] != "LI"):
-    geometry = make_valid(area(item["path"]).buffer(1500).intersection(near).difference(claimed))
-    claimed = union_all([claimed, geometry])
+    shape = area(item["path"]).simplify(1500).buffer(3000, quad_segs=4)
+    shape = shape.buffer(-6000, quad_segs=4).buffer(3000, quad_segs=4)
+    geometry = make_valid(shape.intersection(near).difference(claimed))
+    claimed = union_all([claimed, geometry.buffer(2000)])
     if item["country"] != "LI":
         countries.append((item, geometry))
+
+# What the map hides around Switzerland, in degrees: the ground of every map tile that
+# reaches it, the foreign enclaves included.
+outside = box(-10, 35, 30, 60).difference(transform(to_wgs84, switzerland))
+
+
+def degrees(geometry) -> dict:
+    return {
+        "type": "MultiPolygon",
+        "coordinates": [
+            [
+                [[round(x, 4), round(y, 4)] for x, y in ring.coords]
+                for ring in [polygon.exterior, *polygon.interiors]
+            ]
+            for polygon in (orient(part, sign=1.0) for part in polygons(geometry))
+        ],
+    }
 
 features = [
     {
@@ -200,7 +213,7 @@ west, south, east, north = swiss.bounds
 output = {
     "year": regions_map["year"],
     "attribution": f"{regions_map['attribution']} · {neighbors_map['source']['attribution']}",
-    "method": "Contours de regions-map.json et neighbors-map.json reprojetés de LV95 en WGS84 (pyproj), arrondis à 4 décimales ; simplification de 150 m conservée ; pays voisins élargis de 1,5 km vers la Suisse, découpés par elle et limités à 150 km autour ; frontières nationale, cantonales et régionales tracées une seule fois chacune ; lacs hors communes inclus dans le contour suisse, hors enclaves étrangères.",
+    "method": "Contours de regions-map.json et neighbors-map.json reprojetés de LV95 en WGS84 (pyproj), arrondis à 4 décimales ; simplification de 150 m conservée ; pays voisins simplifiés et arrondis sur 3 km, à 4 km de la Suisse et 2 km les uns des autres, limités à 150 km autour ; frontières nationale, cantonales et régionales tracées une seule fois chacune ; lacs hors communes inclus dans le contour suisse, hors enclaves étrangères.",
     "sources": [
         {"file": "regions-map.json", "sha256": hashlib.sha256(regions_bytes).hexdigest()},
         {"file": "neighbors-map.json", "sha256": hashlib.sha256(neighbors_bytes).hexdigest()},
@@ -212,11 +225,11 @@ output = {
     "anchors": anchors,
     "areas": {"type": "FeatureCollection", "features": features},
     "labels": {"type": "FeatureCollection", "features": labels},
+    "outside": {"type": "Feature", "properties": {}, "geometry": degrees(outside)},
     "borders": {
         "type": "FeatureCollection",
         "features": [
             {"type": "Feature", "properties": {"kind": "national"}, "geometry": wgs84(switzerland)},
-            {"type": "Feature", "properties": {"kind": "shadow"}, "geometry": wgs84(shade)},
             *(
                 {"type": "Feature", "properties": {"kind": kind}, "geometry": lines(geometry)}
                 for kind, geometry in borders
