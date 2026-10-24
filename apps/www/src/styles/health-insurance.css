@@ -843,26 +843,25 @@
   outline: 2px solid #6366f1;
   outline-offset: -2px;
 }
-/* Plan or satellite (24 October 2026), under the zoom buttons. */
+/* The map's view (24 October 2026), under the zoom buttons, as tall and round as they are. */
 .hi-map-view {
   position: absolute;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  height: 44px;
-  padding: 0 14px;
-  border: 1px solid #e2e2e2;
-  border-radius: 12px;
-  background: #ffffff;
-  color: #373737;
-  font-size: 13px;
-}
-.hi-map-view:disabled {
-  opacity: 0.5;
+  width: 140px;
 }
 .health-comparator .hi-map-view {
   right: 24px;
   top: 247px;
+}
+.health-comparator .hi-map-view .hi-select-trigger {
+  height: 44px;
+  border: 1px solid #e2e2e2;
+  border-radius: 12px;
+  background: #ffffff;
+  font-size: 13px;
+}
+/* Pixel art: the map's quarter-size drawing enlarged without smoothing. */
+.hi-map-stage.is-pixel .maplibregl-canvas {
+  image-rendering: pixelated;
 }
 .hi-map-caption a {
   color: inherit;
@@ -3370,16 +3369,10 @@
     right: 14px;
     flex-direction: column;
   }
-  /* On phones, the icon alone, as square as the buttons above it. */
   .health-comparator .hi-map-view {
     top: 460px;
     right: 14px;
-    width: 44px;
-    padding: 0;
-    justify-content: center;
-  }
-  .health-comparator .hi-map-view > span {
-    display: none;
+    width: 116px;
   }
   /* Absolute again (24 October 2026): the phone rule above left it in the flow, below the
      full-screen map, so the attribution was out of sight. */

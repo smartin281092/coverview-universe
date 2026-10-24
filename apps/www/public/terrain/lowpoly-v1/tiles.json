@@ -1,0 +1,32 @@
+{
+  "tilejson": "3.0.0",
+  "tiles": [
+    "/terrain/lowpoly-v1/{z}/{x}/{y}.webp"
+  ],
+  "encoding": "terrarium",
+  "tileSize": 512,
+  "pixels": 256,
+  "minzoom": 5,
+  "maxzoom": 9,
+  "bounds": [
+    5.9,
+    45.77,
+    10.55,
+    47.86
+  ],
+  "raise": {
+    "metres": 2500,
+    "inside": "regions-geo.json",
+    "sha256": "51a20806496403f7ff833cfcdf6fb242246510e07a68dd05d457e737935c70c7"
+  },
+  "facet": {
+    "metres": 3500,
+    "corners": "zoom 9"
+  },
+  "attribution": "<a href=\"https://mapterhorn.com/attribution\">© Mapterhorn</a>",
+  "source": "https://tiles.mapterhorn.com/{z}/{x}/{y}.webp",
+  "copied": "2026-10-24",
+  "count": 58,
+  "bytes": 734288,
+  "sha256": "5636274c113c953efe269f5556d9d69908aedc7eca6eacfb05f1ce326742212b"
+}

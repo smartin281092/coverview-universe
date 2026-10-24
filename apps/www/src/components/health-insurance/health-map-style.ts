@@ -1,21 +1,24 @@
 import type { MapOptions } from "maplibre-gl";
 
 // The style of the 3D map (24 October 2026): Switzerland alone keeps its ground and its
-// relief, raised on a dark blue cliff; around it, the neighbours are plain shapes on a
-// plain background (user request: « enlève les pays autour (pas de reliefs rien juste une
-// forme géométrique finalement basique de couleur uniforme légèrement espacé de la
-// suisse) »). Two views of the ground, chosen under the zoom buttons: a plan in the manner
-// of Google Maps (OpenStreetMap, OpenFreeMap tiles) by default, or the swisstopo
-// SWISSIMAGE aerial photographs, both with a matte relief.
+// relief, raised above a plain background where the neighbours are plain shapes (user
+// request: « enlève les pays autour (pas de reliefs rien juste une forme géométrique
+// finalement basique de couleur uniforme légèrement espacé de la suisse) »). Four views of
+// the ground, chosen under the zoom buttons: a plan in the manner of Google Maps
+// (OpenStreetMap, OpenFreeMap tiles) by default, the swisstopo SWISSIMAGE aerial
+// photographs, pixel art, and low poly with its trees.
 type MapStyle = Exclude<MapOptions["style"], string | null | undefined>;
 type Layer = MapStyle["layers"][number];
-export type MapView = "plan" | "satellite";
+export type MapView = "plan" | "satellite" | "pixel" | "lowpoly";
+export const mapViews: MapView[] = ["plan", "satellite", "pixel", "lowpoly"];
 
 const navy = "#354777";
 // The background, the fog and the sky, so that the horizon disappears.
 const plain = "#f2f4f8";
 const neighbour = { rest: "#d6dde8", hover: "#b9c5d9", selected: "#adbbd3" };
-const cliff = "#1e3a6e";
+// The raised Switzerland's wall, light and plain (« enlève ce contour bleu foncé au tour de
+// la suisse »): without a colour, the map stretched over it shows streaks.
+const wall = "#c9d2de";
 // Sky blue (user request, 24 October 2026: « séparations des zones en bleu ciel »).
 const zoneBorder = "#3cb4f2";
 // West, south, east, north: no ground tile is needed beyond Switzerland.
@@ -46,127 +49,294 @@ const state = (key: "hover" | "selected"): ["boolean", ["feature-state", string]
   ["feature-state", key],
   false,
 ];
-const landcover = (id: string, classes: string[], color: string): Layer => ({
-  id,
-  type: "fill",
-  source: "ground",
-  "source-layer": "landcover",
-  filter: ["match", ["get", "class"], classes, true, false],
-  paint: { "fill-color": color, "fill-antialias": false },
-});
-// One road class: its casing, then its fill; widths at zoom 7 and 11.
-const road = (
-  id: string,
-  classes: string[],
-  minzoom: number,
-  [fill, casing]: [string, string],
-  [atSeven, atEleven]: [number, number],
-): Layer[] =>
-  [casing, fill].map((color, index): Layer => ({
-    id: `${id}-${index ? "fill" : "casing"}`,
-    type: "line",
-    source: "ground",
-    "source-layer": "transportation",
-    minzoom,
-    filter: [
-      "all",
-      ["match", ["get", "class"], classes, true, false],
-      ["!=", ["get", "brunnel"], "tunnel"],
-    ],
-    layout: { "line-cap": "round", "line-join": "round" },
-    paint: {
-      "line-color": color,
-      "line-width": [
-        "interpolate",
-        ["linear"],
-        ["zoom"],
-        7,
-        index ? atSeven : atSeven + 1,
-        11,
-        index ? atEleven : atEleven + 1.6,
-      ],
-    },
-  }));
-// One rank of the zones' borders.
-const border = (kind: string, [atSix, atTen]: [number, number], opacity: number): Layer => ({
-  id: `${kind}-border`,
-  type: "line",
-  source: "borders",
-  filter: ["==", ["get", "kind"], kind],
-  layout: { "line-join": "round", "line-cap": "round" },
-  paint: { "line-color": zoneBorder, "line-opacity": opacity, "line-width": byZoom(atSix, atTen) },
-});
 
-// The plan's own layers, in the manner of Google Maps: light land, green vegetation, blue
-// water, white roads and yellow motorways.
-const planLayers: Layer[] = [
-  {
-    id: "land",
-    type: "fill",
-    source: "borders",
-    filter: ["==", ["get", "kind"], "national"],
-    paint: { "fill-color": "#f1f0ec" },
-  },
-  landcover("grass", ["grass"], "#e1eed8"),
-  landcover("wetland", ["wetland"], "#d8eada"),
-  landcover("wood", ["wood"], "#c8e3bc"),
-  landcover("rock", ["rock"], "#e8e6e1"),
-  landcover("sand", ["sand"], "#f3ead2"),
-  landcover("ice", ["ice"], "#ffffff"),
-  {
-    id: "towns",
+// The ground of the flat views, in one palette each.
+type Palette = {
+  land: string;
+  grass: string;
+  wetland: string;
+  wood: string;
+  rock: string;
+  sand: string;
+  ice: string;
+  towns: string;
+  water: string;
+  roads: [string, string];
+  motorways: [string, string];
+};
+// In the manner of Google Maps: light land, green vegetation, blue water, white roads and
+// yellow motorways.
+const planPalette: Palette = {
+  land: "#f1f0ec",
+  grass: "#e1eed8",
+  wetland: "#d8eada",
+  wood: "#c8e3bc",
+  rock: "#e8e6e1",
+  sand: "#f3ead2",
+  ice: "#ffffff",
+  towns: "#e8e8eb",
+  water: "#a6d1f7",
+  roads: ["#ffffff", "#d9d6cf"],
+  motorways: ["#fcd581", "#e3b04f"],
+};
+// A few bright colours, as in the overworlds of old video games.
+const pixelPalette: Palette = {
+  land: "#a9d86e",
+  grass: "#8fcd5c",
+  wetland: "#7cc08a",
+  wood: "#3f9b45",
+  rock: "#b2a891",
+  sand: "#ead889",
+  ice: "#f4f8ff",
+  towns: "#d9b08a",
+  water: "#3d8ee0",
+  roads: ["#f6e7b0", "#c9a66b"],
+  motorways: ["#f2c13b", "#b8862a"],
+};
+const ground = (view: "plan" | "pixel", palette: Palette): Layer[] => {
+  const landcover = (name: string, classes: string[], color: string): Layer => ({
+    id: `${view}-${name}`,
     type: "fill",
     source: "ground",
-    "source-layer": "landuse",
-    minzoom: 8,
-    filter: ["match", ["get", "class"], ["residential", "suburb", "neighbourhood"], true, false],
-    paint: { "fill-color": "#e8e8eb" },
-  },
-  {
-    id: "water",
-    type: "fill",
-    source: "ground",
-    "source-layer": "water",
-    filter: ["!=", ["get", "brunnel"], "tunnel"],
-    paint: { "fill-color": "#a6d1f7" },
-  },
-  {
-    id: "rivers",
-    type: "line",
-    source: "ground",
-    "source-layer": "waterway",
-    minzoom: 7,
-    filter: ["all", ["==", ["get", "class"], "river"], ["!=", ["get", "brunnel"], "tunnel"]],
-    layout: { "line-cap": "round" },
-    paint: {
-      "line-color": "#a6d1f7",
-      "line-width": ["interpolate", ["linear"], ["zoom"], 7, 0.6, 11, 2],
+    "source-layer": "landcover",
+    filter: ["match", ["get", "class"], classes, true, false],
+    paint: { "fill-color": color, "fill-antialias": false },
+  });
+  // One road class: its casing, then its fill; widths at zoom 7 and 11.
+  const road = (
+    name: string,
+    classes: string[],
+    minzoom: number,
+    [fill, casing]: [string, string],
+    [atSeven, atEleven]: [number, number],
+  ): Layer[] =>
+    [casing, fill].map((color, index): Layer => ({
+      id: `${view}-${name}-${index ? "fill" : "casing"}`,
+      type: "line",
+      source: "ground",
+      "source-layer": "transportation",
+      minzoom,
+      filter: [
+        "all",
+        ["match", ["get", "class"], classes, true, false],
+        ["!=", ["get", "brunnel"], "tunnel"],
+      ],
+      layout: { "line-cap": "round", "line-join": "round" },
+      paint: {
+        "line-color": color,
+        "line-width": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          7,
+          index ? atSeven : atSeven + 1,
+          11,
+          index ? atEleven : atEleven + 1.6,
+        ],
+      },
+    }));
+  return [
+    {
+      id: `${view}-land`,
+      type: "fill",
+      source: "borders",
+      filter: ["==", ["get", "kind"], "national"],
+      paint: { "fill-color": palette.land },
     },
-  },
-  ...road("roads", ["trunk", "primary"], 8.5, ["#ffffff", "#d9d6cf"], [0.5, 2.2]),
-  ...road("motorways", ["motorway"], 7, ["#fcd581", "#e3b04f"], [0.7, 3]),
-];
-// Matte relief (user request, 24 October 2026: « sans l'effet plastique qui fait des
-// surbrillances trop fortes »): shadows only, no highlight.
-const relief: Layer = {
-  id: "relief",
-  type: "hillshade",
-  source: "hillshade",
-  paint: {
-    "hillshade-method": "igor",
-    "hillshade-exaggeration": 0.35,
-    "hillshade-shadow-color": "#56606f",
-    "hillshade-highlight-color": "rgba(255,255,255,0)",
-    "hillshade-accent-color": "#7d8797",
+    landcover("grass", ["grass"], palette.grass),
+    landcover("wetland", ["wetland"], palette.wetland),
+    landcover("wood", ["wood"], palette.wood),
+    landcover("rock", ["rock"], palette.rock),
+    landcover("sand", ["sand"], palette.sand),
+    landcover("ice", ["ice"], palette.ice),
+    {
+      id: `${view}-towns`,
+      type: "fill",
+      source: "ground",
+      "source-layer": "landuse",
+      minzoom: 8,
+      filter: ["match", ["get", "class"], ["residential", "suburb", "neighbourhood"], true, false],
+      paint: { "fill-color": palette.towns },
+    },
+    {
+      id: `${view}-water`,
+      type: "fill",
+      source: "ground",
+      "source-layer": "water",
+      filter: ["!=", ["get", "brunnel"], "tunnel"],
+      paint: { "fill-color": palette.water },
+    },
+    {
+      id: `${view}-rivers`,
+      type: "line",
+      source: "ground",
+      "source-layer": "waterway",
+      minzoom: 7,
+      filter: ["all", ["==", ["get", "class"], "river"], ["!=", ["get", "brunnel"], "tunnel"]],
+      layout: { "line-cap": "round" },
+      paint: {
+        "line-color": palette.water,
+        "line-width": ["interpolate", ["linear"], ["zoom"], 7, 0.6, 11, 2],
+      },
+    },
+    ...road("roads", ["trunk", "primary"], 8.5, palette.roads, [0.5, 2.2]),
+    ...road("motorways", ["motorway"], 7, palette.motorways, [0.7, 3]),
+  ];
+};
+
+// The layers of each view; the others are hidden, and MapLibre asks for no tile of a hidden
+// layer (the aerial photographs load once chosen).
+const views: Record<MapView, Layer[]> = {
+  plan: [
+    ...ground("plan", planPalette),
+    // Matte relief (« sans l'effet plastique qui fait des surbrillances trop fortes »):
+    // shadows only, no highlight.
+    {
+      id: "plan-relief",
+      type: "hillshade",
+      source: "hillshade",
+      paint: {
+        "hillshade-method": "igor",
+        "hillshade-exaggeration": 0.35,
+        "hillshade-shadow-color": "#56606f",
+        "hillshade-highlight-color": "rgba(255,255,255,0)",
+        "hillshade-accent-color": "#7d8797",
+      },
+    },
+  ],
+  satellite: [{ id: "satellite", type: "raster", source: "satellite" }],
+  pixel: [
+    ...ground("pixel", pixelPalette),
+    {
+      id: "pixel-relief",
+      type: "hillshade",
+      source: "hillshade",
+      paint: {
+        "hillshade-method": "standard",
+        "hillshade-exaggeration": 0.55,
+        "hillshade-shadow-color": "#24452f",
+        "hillshade-highlight-color": "rgba(255,255,255,0.2)",
+        "hillshade-accent-color": "#2f5a3c",
+        resampling: "nearest",
+      },
+    },
+  ],
+  lowpoly: [
+    // Colours by height, in steps (each stop doubled 1 m apart): lowlands, hills, alpine
+    // pastures, rock, snow. The relief is raised by 2500 m inside Switzerland.
+    {
+      id: "lowpoly-colors",
+      type: "color-relief",
+      source: "lowpoly",
+      paint: {
+        "color-relief-color": [
+          "interpolate",
+          ["linear"],
+          ["elevation"],
+          3099,
+          "#8fc86c",
+          3100,
+          "#a9cf6f",
+          3599,
+          "#a9cf6f",
+          3600,
+          "#c6c97c",
+          4099,
+          "#c6c97c",
+          4100,
+          "#bfae8f",
+          4699,
+          "#bfae8f",
+          4700,
+          "#d6d0c8",
+          5399,
+          "#d6d0c8",
+          5400,
+          "#f7f9fc",
+        ],
+      },
+    },
+    {
+      id: "lowpoly-wood",
+      type: "fill",
+      source: "ground",
+      "source-layer": "landcover",
+      filter: ["==", ["get", "class"], "wood"],
+      paint: { "fill-color": "#5c9e49", "fill-opacity": 0.35 },
+    },
+    {
+      id: "lowpoly-water",
+      type: "fill",
+      source: "ground",
+      "source-layer": "water",
+      filter: ["!=", ["get", "brunnel"], "tunnel"],
+      paint: { "fill-color": "#6fb3ea" },
+    },
+    // The facets of the low poly relief, each in one tone.
+    {
+      id: "lowpoly-relief",
+      type: "hillshade",
+      source: "lowpoly",
+      paint: {
+        "hillshade-method": "standard",
+        "hillshade-exaggeration": 0.7,
+        "hillshade-shadow-color": "#2b3542",
+        "hillshade-highlight-color": "rgba(255,255,255,0.45)",
+        "hillshade-accent-color": "#566170",
+      },
+    },
+  ],
+};
+// The trees stand above the regions' veil: listed apart, shown with the low poly view.
+// Fewer from afar: a 6 km grid below zoom 8, 3 km below zoom 9, then 1.5 km.
+const trees: Layer = {
+  id: "lowpoly-trees",
+  type: "symbol",
+  source: "trees",
+  filter: ["<=", ["get", "level"], ["step", ["zoom"], 0, 8, 1, 9, 2]],
+  layout: {
+    "icon-image": "tree",
+    "icon-size": [
+      "interpolate",
+      ["linear"],
+      ["zoom"],
+      6,
+      ["*", 0.35, ["get", "size"]],
+      10,
+      ["*", 0.8, ["get", "size"]],
+    ],
+    "icon-anchor": "bottom",
+    "icon-allow-overlap": true,
+    "icon-ignore-placement": true,
+    "icon-pitch-alignment": "viewport",
+    "icon-rotation-alignment": "viewport",
+    "symbol-z-order": "viewport-y",
   },
 };
-const satelliteLayers: Layer[] = [{ id: "satellite", type: "raster", source: "satellite" }];
-// The layers each view shows; the toggle switches their visibility.
 export const viewLayers: Record<MapView, string[]> = {
-  plan: [...planLayers.map((layer) => layer.id), relief.id],
-  satellite: satelliteLayers.map((layer) => layer.id),
+  plan: views.plan.map((layer) => layer.id),
+  satellite: views.satellite.map((layer) => layer.id),
+  pixel: views.pixel.map((layer) => layer.id),
+  lowpoly: [...views.lowpoly.map((layer) => layer.id), trees.id],
 };
-const shown = (view: MapView, layers: Layer[], own: MapView) =>
+// The relief the 3D surface follows in each view.
+export const viewTerrain = (view: MapView) => (view === "lowpoly" ? "terrain-lowpoly" : "terrain");
+// Lines drawn with a quarter of the pixels in pixel art: wider, so that they stay visible.
+const widths = { region: [0.9, 1.8], canton: [1.4, 2.6], wall: [3, 5], outline: [1.2, 2.6] };
+export const viewLineWidths = (view: MapView) =>
+  Object.fromEntries(
+    Object.entries(widths).map(([name, [atSix = 1, atTen = 1]]) => {
+      const scale = view === "pixel" ? 2.5 : 1;
+      return [`${name}-line`, byZoom(atSix * scale, atTen * scale)];
+    }),
+  ) as Record<`${keyof typeof widths}-line`, ReturnType<typeof byZoom>>;
+const readable = (view: MapView, layers: Layer[]) =>
+  layers.map((layer) => ({
+    ...layer,
+    layout: { ...layer.layout, visibility: view === "pixel" ? "none" : "visible" },
+  })) as Layer[];
+export const textLayers = ["lakes", "towns-label", "areas-label", "countries-label"];
+const shown = (view: MapView, own: MapView, layers: Layer[]) =>
   layers.map((layer) => ({
     ...layer,
     layout: { ...layer.layout, visibility: view === own ? "visible" : "none" },
@@ -179,13 +349,26 @@ export function healthMapStyle(
   view: MapView,
   data: { areas: object; labels: object; borders: object; outside: object; inside: object },
 ): MapStyle {
-  const dem = {
+  const dem = (path: string) => ({
     type: "raster-dem" as const,
-    url: `${origin}/terrain/v1/tiles.json`,
+    url: `${origin}/terrain/${path}/tiles.json`,
     encoding: "terrarium" as const,
     tileSize: 512,
-  };
+  });
   const swiss: ["within", object] = ["within", data.inside];
+  const line = viewLineWidths(view);
+  const border = (kind: "region" | "canton", width: ReturnType<typeof byZoom>): Layer => ({
+    id: `${kind}-border`,
+    type: "line",
+    source: "borders",
+    filter: ["==", ["get", "kind"], kind],
+    layout: { "line-join": "round", "line-cap": "round" },
+    paint: {
+      "line-color": zoneBorder,
+      "line-opacity": kind === "region" ? 0.85 : 1,
+      "line-width": width,
+    },
+  });
   return {
     version: 8,
     glyphs: "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
@@ -195,7 +378,6 @@ export function healthMapStyle(
         url: "https://tiles.openfreemap.org/planet",
         bounds: swissBounds,
       },
-      // Loaded only in the satellite view: MapLibre asks for no tile of a hidden layer.
       satellite: {
         type: "raster",
         tiles: [
@@ -206,14 +388,17 @@ export function healthMapStyle(
         bounds: swissBounds,
       },
       // Terrain and hillshade read the same tiles through two sources, as MapLibre advises.
-      terrain: dem,
-      hillshade: dem,
+      terrain: dem("v1"),
+      hillshade: dem("v1"),
+      "terrain-lowpoly": dem("lowpoly-v1"),
+      lowpoly: dem("lowpoly-v1"),
       areas: { type: "geojson", data: data.areas, promoteId: "id" },
       labels: { type: "geojson", data: data.labels },
       borders: { type: "geojson", data: data.borders },
       outside: { type: "geojson", data: data.outside },
+      trees: { type: "geojson", data: { type: "FeatureCollection", features: [] } },
     },
-    terrain: { source: "terrain", exaggeration: 1.5 },
+    terrain: { source: viewTerrain(view), exaggeration: 1.5 },
     sky: {
       "sky-color": plain,
       "horizon-color": plain,
@@ -225,9 +410,7 @@ export function healthMapStyle(
     },
     layers: [
       { id: "plain", type: "background", paint: { "background-color": plain } },
-      ...shown(view, planLayers, "plan"),
-      ...shown(view, satelliteLayers, "satellite"),
-      ...shown(view, [relief], "plan"),
+      ...mapViews.flatMap((own) => shown(view, own, views[own])),
       // Around Switzerland, the ground disappears under the plain background.
       { id: "outside", type: "fill", source: "outside", paint: { "fill-color": plain } },
       // Regions under a very light veil, clearly stronger on hover (user requests, 23 and
@@ -262,17 +445,17 @@ export function healthMapStyle(
           ],
         },
       },
-      border("region", [0.9, 1.8], 0.85),
-      border("canton", [1.4, 2.6], 1),
-      // The raised Switzerland's cliff, one dark blue (user request, 24 October 2026): the
-      // band covers the wall, where the map would otherwise be stretched into streaks.
+      border("region", line["region-line"]),
+      border("canton", line["canton-line"]),
+      // The band covers the raised Switzerland's wall, where the map would otherwise be
+      // stretched into streaks.
       {
-        id: "national-cliff",
+        id: "national-wall",
         type: "line",
         source: "borders",
         filter: ["==", ["get", "kind"], "national"],
         layout: { "line-join": "round" },
-        paint: { "line-color": cliff, "line-width": byZoom(6, 11) },
+        paint: { "line-color": wall, "line-width": line["wall-line"] },
       },
       {
         id: "areas-outline",
@@ -282,76 +465,92 @@ export function healthMapStyle(
         paint: {
           "line-color": navy,
           "line-opacity": ["case", state("selected"), 0.9, state("hover"), 0.6, 0],
-          "line-width": ["interpolate", ["linear"], ["zoom"], 6, 1.2, 10, 2.6],
+          "line-width": line["outline-line"],
         },
       },
-      {
-        id: "lakes",
-        type: "symbol",
-        source: "ground",
-        "source-layer": "water_name",
-        minzoom: 8,
-        filter: ["all", ["match", ["geometry-type"], ["Point", "MultiPoint"], true, false], swiss],
-        layout: {
-          "text-field": french,
-          "text-font": ["Noto Sans Italic"],
-          "text-size": 11,
-          "text-max-width": 6,
-        },
-        paint: label("#3f6aa4"),
-      },
-      {
-        id: "towns-label",
-        type: "symbol",
-        source: "ground",
-        "source-layer": "place",
-        minzoom: 8.2,
-        filter: [
-          "all",
-          swiss,
-          [
-            "any",
-            ["==", ["get", "class"], "city"],
-            ["all", ["==", ["get", "class"], "town"], [">=", ["zoom"], 9.3]],
+      ...shown(view, "lowpoly", [trees]),
+      // Text drawn with a quarter of the pixels is unreadable: none in pixel art.
+      ...readable(view, [
+        {
+          id: "lakes",
+          type: "symbol",
+          source: "ground",
+          "source-layer": "water_name",
+          minzoom: 8,
+          filter: [
+            "all",
+            ["match", ["geometry-type"], ["Point", "MultiPoint"], true, false],
+            swiss,
           ],
-        ],
-        layout: {
-          "text-field": french,
-          "text-font": ["Noto Sans Regular"],
-          "text-size": ["interpolate", ["linear"], ["zoom"], 8, 11, 11, 13],
-          "text-max-width": 8,
-          "symbol-sort-key": ["get", "rank"],
+          layout: {
+            "text-field": french,
+            "text-font": ["Noto Sans Italic"],
+            "text-size": 11,
+            "text-max-width": 6,
+          },
+          paint: label("#3f6aa4"),
         },
-        paint: label("#3c4043"),
-      },
-      {
-        id: "areas-label",
-        type: "symbol",
-        source: "labels",
-        maxzoom: 8.4,
-        filter: ["==", ["get", "kind"], "region"],
-        layout: {
-          "text-field": ["get", "text"],
-          "text-font": ["Noto Sans Bold"],
-          "text-size": 10,
-          "text-letter-spacing": 0.08,
-          "text-allow-overlap": true,
+        {
+          id: "towns-label",
+          type: "symbol",
+          source: "ground",
+          "source-layer": "place",
+          minzoom: 8.2,
+          filter: [
+            "all",
+            swiss,
+            [
+              "any",
+              ["==", ["get", "class"], "city"],
+              ["all", ["==", ["get", "class"], "town"], [">=", ["zoom"], 9.3]],
+            ],
+          ],
+          layout: {
+            "text-field": french,
+            "text-font": ["Noto Sans Regular"],
+            "text-size": ["interpolate", ["linear"], ["zoom"], 8, 11, 11, 13],
+            "text-max-width": 8,
+            "symbol-sort-key": ["get", "rank"],
+          },
+          paint: label("#3c4043"),
         },
-        paint: label("#4f5666"),
-      },
-      {
-        id: "countries-label",
-        type: "symbol",
-        source: "labels",
-        filter: ["==", ["get", "kind"], "country"],
-        layout: {
-          "text-field": ["get", "text"],
-          "text-font": ["Noto Sans Regular"],
-          "text-size": 15,
-          "text-letter-spacing": 0.14,
+        {
+          id: "areas-label",
+          type: "symbol",
+          source: "labels",
+          maxzoom: 8.4,
+          filter: ["==", ["get", "kind"], "region"],
+          layout: {
+            "text-field": ["get", "text"],
+            "text-font": ["Noto Sans Bold"],
+            "text-size": 10,
+            "text-letter-spacing": 0.08,
+            "text-allow-overlap": true,
+          },
+          paint: label("#4f5666"),
         },
-        paint: label("#7d879b"),
-      },
+        {
+          id: "countries-label",
+          type: "symbol",
+          source: "labels",
+          filter: ["==", ["get", "kind"], "country"],
+          layout: {
+            "text-field": ["get", "text"],
+            "text-font": ["Noto Sans Regular"],
+            "text-size": 15,
+            "text-letter-spacing": 0.14,
+          },
+          paint: label("#7d879b"),
+        },
+      ]),
     ],
   };
 }
+
+// Which line layer each width belongs to, for a change of view.
+export const lineWidthLayers: Record<`${keyof typeof widths}-line`, string> = {
+  "region-line": "region-border",
+  "canton-line": "canton-border",
+  "wall-line": "national-wall",
+  "outline-line": "areas-outline",
+};

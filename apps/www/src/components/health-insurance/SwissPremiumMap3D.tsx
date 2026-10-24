@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Map as MapLibre, setWorkerUrl, type LngLatLike } from "maplibre-gl";
+import { Map as MapLibre, setWorkerUrl, type GeoJSONSource, type LngLatLike } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
 import type {
@@ -10,8 +10,18 @@ import type {
 import geo from "../../../../../data/health-insurance/2027/regions-geo.json";
 import { healthCopy as copy } from "../../content/fr/health-insurance";
 import { HealthRegionPopover } from "./HealthRegionPopover";
-import { HealthIcon } from "./HealthIcon";
-import { healthMapStyle, viewLayers, type MapView } from "./health-map-style";
+import { HealthSelect } from "./HealthSelect";
+import {
+  healthMapStyle,
+  lineWidthLayers,
+  mapViews,
+  textLayers,
+  viewLayers,
+  viewLineWidths,
+  viewTerrain,
+  type MapView,
+} from "./health-map-style";
+import { treeImage } from "./health-map-trees";
 import { regionName } from "./health-format";
 
 setWorkerUrl(workerUrl);
@@ -50,11 +60,15 @@ const inside: object = national.geometry;
 const viewKey = "cv-map-view";
 const storedView = (): MapView => {
   try {
-    return localStorage.getItem(viewKey) === "satellite" ? "satellite" : "plan";
+    const stored = localStorage.getItem(viewKey);
+    return mapViews.find((view) => view === stored) ?? "plan";
   } catch {
     return "plan";
   }
 };
+// Pixel art: the map drawn with one pixel for four on each side, enlarged without smoothing.
+const pixelRatio = (view: MapView) =>
+  view === "pixel" ? 0.25 : Math.min(window.devicePixelRatio || 1, 2);
 // Country names for the neighbours' labels, in French.
 const countries = new Intl.DisplayNames(["fr-CH"], { type: "region" });
 const labels = {
@@ -100,6 +114,16 @@ export function SwissPremiumMap3D({
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibre | null>(null);
   const loaded = useRef(false);
+  // The low poly trees' file, asked for once that view is shown.
+  const planted = useRef(false);
+  const plant = (instance: MapLibre, next: MapView) => {
+    if (next !== "lowpoly" || planted.current) return;
+    planted.current = true;
+    // Nothing waits for the trees: without them, the view stays usable.
+    void instance
+      .getSource<GeoJSONSource>("trees")
+      ?.setData(`${window.location.origin}/map/trees-v1.json`);
+  };
   // Once the person zooms or pans, a change of width no longer resets their view.
   const touched = useRef(false);
   // The latest props for the map's own event handlers, registered once.
@@ -146,7 +170,7 @@ export function SwissPremiumMap3D({
         // A click chooses a region; a double click would also zoom behind the opened list.
         doubleClickZoom: false,
         trackResize: false,
-        pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+        pixelRatio: pixelRatio(view),
         locale: { "Map.Title": copy.mapCanvas },
       });
     } catch {
@@ -166,6 +190,9 @@ export function SwissPremiumMap3D({
       loaded.current = true;
       setReady(true);
       limit();
+      const image = treeImage();
+      if (image) instance.addImage("tree", image, { pixelRatio: 2 });
+      plant(instance, view);
     });
     instance.on("zoomend", limit);
     instance.on("movestart", (event) => {
@@ -250,10 +277,12 @@ export function SwissPremiumMap3D({
     if (canvas) canvas.style.cursor = hover ? "pointer" : "";
   }, [hover]);
 
-  // Plan or aerial photographs (user request, 24 October 2026), the relief kept: only the
-  // ground's layers change, through their visibility.
-  const switchView = () => {
-    const next: MapView = view === "plan" ? "satellite" : "plan";
+  // Plan, aerial photographs, pixel art or low poly (user requests, 24 October 2026), the
+  // relief kept: the ground's layers change through their visibility, the low poly view
+  // follows its own faceted relief, pixel art draws a quarter of the pixels.
+  const switchView = (value: string) => {
+    const next = mapViews.find((own) => own === value);
+    if (!next || next === view) return;
     setView(next);
     try {
       localStorage.setItem(viewKey, next);
@@ -265,6 +294,14 @@ export function SwissPremiumMap3D({
     for (const [own, ids] of Object.entries(viewLayers))
       for (const id of ids)
         instance.setLayoutProperty(id, "visibility", own === next ? "visible" : "none");
+    for (const id of textLayers)
+      instance.setLayoutProperty(id, "visibility", next === "pixel" ? "none" : "visible");
+    instance.setTerrain({ source: viewTerrain(next), exaggeration: 1.5 });
+    const widths = viewLineWidths(next);
+    for (const [key, id] of Object.entries(lineWidthLayers))
+      instance.setPaintProperty(id, "line-width", widths[key as keyof typeof widths]);
+    instance.setPixelRatio(pixelRatio(next));
+    plant(instance, next);
   };
 
   // Keyboard focus: the area's label point, brought into view first if needed.
@@ -311,7 +348,7 @@ export function SwissPremiumMap3D({
         if (!event.currentTarget.contains(event.relatedTarget)) setHover(null);
       }}
     >
-      <div ref={stage} className="hi-map-stage">
+      <div ref={stage} className={`hi-map-stage${view === "pixel" ? " is-pixel" : ""}`}>
         <div ref={container} className="hi-map hi-map-3d" />
         <div className="hi-map-keys" role="group" aria-label={copy.mapLabel}>
           {areaIds.map((id) => (
@@ -356,16 +393,15 @@ export function SwissPremiumMap3D({
             ⌖
           </button>
         </div>
-        <button
-          type="button"
-          className="hi-map-view"
-          onClick={switchView}
-          disabled={!ready}
-          aria-label={view === "plan" ? copy.mapToSatellite : copy.mapToPlan}
-        >
-          <HealthIcon name="layers" size={18} />
-          <span>{view === "plan" ? copy.mapSatellite : copy.mapPlan}</span>
-        </button>
+        <div className="hi-map-view">
+          <HealthSelect
+            label={copy.mapView}
+            value={view}
+            onChange={switchView}
+            disabled={!ready}
+            options={mapViews.map((value) => ({ value, label: copy.mapViews[value] }))}
+          />
+        </div>
         {hover && (
           <HealthRegionPopover
             region={hover}

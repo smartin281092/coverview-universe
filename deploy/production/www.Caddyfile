@@ -25,8 +25,9 @@
 	}
 	@assets path /_astro/*
 	header @assets Cache-Control "public, max-age=31536000, immutable"
-	# Relief de la carte 3D : tuiles versionnées dans le chemin (/terrain/v1), jamais modifiées.
-	@terrain path /terrain/*
+	# Relief et arbres de la carte 3D : fichiers versionnés dans le chemin (/terrain/v1,
+	# /terrain/lowpoly-v1, /map/trees-v1.json), jamais modifiés.
+	@terrain path /terrain/* /map/*
 	header @terrain Cache-Control "public, max-age=31536000, immutable"
 	try_files {path} {path}/index.html {path}.html
 	file_server

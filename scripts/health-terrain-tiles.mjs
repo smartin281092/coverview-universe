@@ -4,11 +4,14 @@
 // les pays autour (pas de reliefs rien) »): Switzerland, lakes included, keeps its relief
 // raised by a constant height; around it the ground is flat at 0 m, as MapLibre assumes
 // beyond these tiles. Each 512 px tile is then averaged down to 256 px (whole metres,
-// lossless WebP), about 210 m per pixel at zoom 9.
+// lossless WebP), about 210 m per pixel at zoom 9. Two copies: the relief itself
+// (/terrain/v1), and a low poly one (/terrain/lowpoly-v1, « une version disponible en mode
+// low poly ») made of flat triangles about 3.5 km wide, each a plane through the elevations
+// of its three corners, so that the hillshade gives each facet one tone.
 // Source inside Switzerland: swissALTI3D (swisstopo), through Mapterhorn
 // (https://mapterhorn.com/attribution). Downloads are cached in the OS temporary
-// directory, so a new height or outline needs no new download.
-//   node scripts/health-terrain-tiles.mjs [output directory]
+// directory, so a new height, outline or triangle size needs no new download.
+//   node scripts/health-terrain-tiles.mjs
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
@@ -18,7 +21,6 @@ import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const sharp = createRequire(join(root, "apps/www/package.json"))("sharp");
-const output = resolve(process.argv[2] ?? join(root, "apps/www/public/terrain/v1"));
 const cache = join(tmpdir(), "coverview-terrain-cache");
 const source = "https://tiles.mapterhorn.com";
 // West, south, east, north: Switzerland and a small margin.
@@ -28,6 +30,8 @@ const maxzoom = 9;
 const size = 256;
 // Metres added inside Switzerland, before the map's own exaggeration.
 const raise = 2500;
+// The low poly triangles' side, in metres on the ground at Switzerland's latitude.
+const facet = 3500;
 const geoFile = join(root, "data/health-insurance/2027/regions-geo.json");
 const geoBytes = readFileSync(geoFile);
 // Switzerland's outline, its lakes included, foreign enclaves excluded.
@@ -65,6 +69,20 @@ const fetchTile = async ([z, x, y], attempt = 1) => {
   }
 };
 
+// Terrarium: elevation = R × 256 + G + B / 256 − 32768. Raised, cut and averaged in metres,
+// never per colour channel, which would mix the high and low bytes.
+const decode = async (body) => {
+  const { data, info } = await sharp(body)
+    .removeAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  if (info.width !== info.height || info.width % size) throw new Error("tile size");
+  const elevations = new Float32Array(info.width * info.width);
+  for (let p = 0; p < elevations.length; p++)
+    elevations[p] = data[p * 3] * 256 + data[p * 3 + 1] + data[p * 3 + 2] / 256 - 32768;
+  return { elevations, width: info.width };
+};
+
 // Share of each pixel inside Switzerland (0 to 255, anti-aliased), drawn by librsvg.
 const swissShare = async ([z, x, y], width) => {
   const scale = 2 ** z;
@@ -95,26 +113,70 @@ const swissShare = async ([z, x, y], width) => {
   return data;
 };
 
-// Terrarium: elevation = R × 256 + G + B / 256 − 32768. Raised, cut and averaged in metres,
-// never per colour channel, which would mix the high and low bytes.
-const prepare = async (tile, body) => {
-  const { data, info } = await sharp(body)
-    .removeAlpha()
-    .raw()
-    .toBuffer({ resolveWithObject: true });
-  const factor = info.width / size;
-  if (info.width !== info.height || !Number.isInteger(factor)) throw new Error("tile size");
-  const share = await swissShare(tile, info.width);
+// The low poly lattice, in Web Mercator world units (0 to 1): equilateral triangles whose
+// corners take the zoom 9 relief's elevation, the same at every zoom.
+const finest = new Map();
+for (const tile of tiles.filter(([z]) => z === maxzoom))
+  finest.set(`${tile[1]}/${tile[2]}`, await decode(await fetchTile(tile)));
+const sampled = (worldX, worldY) => {
+  const scale = 2 ** maxzoom;
+  const tile = finest.get(`${Math.floor(worldX * scale)}/${Math.floor(worldY * scale)}`);
+  if (!tile) return 0;
+  const clamp = (value) => Math.max(0, Math.min(tile.width - 1, value));
+  const fx = clamp((worldX * scale - Math.floor(worldX * scale)) * tile.width - 0.5);
+  const fy = clamp((worldY * scale - Math.floor(worldY * scale)) * tile.width - 0.5);
+  const [x0, y0] = [Math.floor(fx), Math.floor(fy)];
+  const [x1, y1] = [clamp(x0 + 1), clamp(y0 + 1)];
+  const at = (x, y) => tile.elevations[y * tile.width + x];
+  const [dx, dy] = [fx - x0, fy - y0];
+  return (
+    (at(x0, y0) * (1 - dx) + at(x1, y0) * dx) * (1 - dy) +
+    (at(x0, y1) * (1 - dx) + at(x1, y1) * dx) * dy
+  );
+};
+const side = facet / (40_075_016.7 * Math.cos((46.8 * Math.PI) / 180));
+const height = (side * Math.sqrt(3)) / 2;
+const corners = new Map();
+const corner = (i, j) => {
+  const key = `${i},${j}`;
+  let elevation = corners.get(key);
+  if (elevation === undefined) {
+    elevation = sampled(i * side + (j * side) / 2, j * height);
+    corners.set(key, elevation);
+  }
+  return elevation;
+};
+const lowPoly = (worldX, worldY) => {
+  const v = worldY / height;
+  const u = (worldX - (v * side) / 2) / side;
+  const [i, j] = [Math.floor(u), Math.floor(v)];
+  const [fu, fv] = [u - i, v - j];
+  return fu + fv < 1
+    ? (1 - fu - fv) * corner(i, j) + fu * corner(i + 1, j) + fv * corner(i, j + 1)
+    : (1 - fv) * corner(i + 1, j) +
+        (fu + fv - 1) * corner(i + 1, j + 1) +
+        (1 - fu) * corner(i, j + 1);
+};
+
+const prepare = async (tile, body, shape) => {
+  const [z, tx, ty] = tile;
+  const { elevations, width } = await decode(body);
+  const factor = width / size;
+  const share = await swissShare(tile, width);
   const out = Buffer.alloc(size * size * 3);
   for (let y = 0; y < size; y++)
     for (let x = 0; x < size; x++) {
       let sum = 0;
       for (let dy = 0; dy < factor; dy++)
         for (let dx = 0; dx < factor; dx++) {
-          const p = (y * factor + dy) * info.width + x * factor + dx;
-          const i = p * 3;
-          const elevation = data[i] * 256 + data[i + 1] + data[i + 2] / 256 - 32768;
-          if (share) sum += ((elevation + raise) * share[p]) / 255;
+          const [px, py] = [x * factor + dx, y * factor + dy];
+          const p = py * width + px;
+          if (!share?.[p]) continue;
+          const elevation =
+            shape === "lowpoly"
+              ? lowPoly((tx + (px + 0.5) / width) / 2 ** z, (ty + (py + 0.5) / width) / 2 ** z)
+              : elevations[p];
+          sum += ((elevation + raise) * share[p]) / 255;
         }
       const value = Math.round(sum / factor ** 2) + 32768;
       const o = (y * size + x) * 3;
@@ -127,56 +189,63 @@ const prepare = async (tile, body) => {
     .toBuffer();
 };
 
-// Two tiles at a time.
-const bodies = new Array(tiles.length);
-let next = 0;
-await Promise.all(
-  [0, 1].map(async () => {
-    while (next < tiles.length) {
-      const index = next++;
-      bodies[index] = await prepare(tiles[index], await fetchTile(tiles[index]));
-    }
-  }),
-);
-// Only this copy's own zoom folders are replaced.
-for (let z = minzoom; z <= maxzoom; z++)
-  rmSync(join(output, String(z)), { recursive: true, force: true });
-const digest = createHash("sha256");
-let bytes = 0;
-for (const [index, [z, x, y]] of tiles.entries()) {
-  const file = join(output, String(z), String(x), `${y}.webp`);
-  mkdirSync(dirname(file), { recursive: true });
-  writeFileSync(file, bodies[index]);
-  digest.update(`${z}/${x}/${y}:`).update(bodies[index]);
-  bytes += bodies[index].length;
-}
-writeFileSync(
-  join(output, "tiles.json"),
-  JSON.stringify(
-    {
-      tilejson: "3.0.0",
-      tiles: ["/terrain/v1/{z}/{x}/{y}.webp"],
-      encoding: "terrarium",
-      // Displayed as 512 px tiles: each image has half the resolution of the source tile.
-      tileSize: 512,
-      pixels: size,
-      minzoom,
-      maxzoom,
-      bounds,
-      raise: {
-        metres: raise,
-        inside: "regions-geo.json",
-        sha256: createHash("sha256").update(geoBytes).digest("hex"),
+for (const [shape, path] of [
+  ["relief", "v1"],
+  ["lowpoly", "lowpoly-v1"],
+]) {
+  const output = join(root, "apps/www/public/terrain", path);
+  // Two tiles at a time.
+  const bodies = new Array(tiles.length);
+  let next = 0;
+  await Promise.all(
+    [0, 1].map(async () => {
+      while (next < tiles.length) {
+        const index = next++;
+        bodies[index] = await prepare(tiles[index], await fetchTile(tiles[index]), shape);
+      }
+    }),
+  );
+  // Only this copy's own zoom folders are replaced.
+  for (let z = minzoom; z <= maxzoom; z++)
+    rmSync(join(output, String(z)), { recursive: true, force: true });
+  const digest = createHash("sha256");
+  let bytes = 0;
+  for (const [index, [z, x, y]] of tiles.entries()) {
+    const file = join(output, String(z), String(x), `${y}.webp`);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, bodies[index]);
+    digest.update(`${z}/${x}/${y}:`).update(bodies[index]);
+    bytes += bodies[index].length;
+  }
+  writeFileSync(
+    join(output, "tiles.json"),
+    JSON.stringify(
+      {
+        tilejson: "3.0.0",
+        tiles: [`/terrain/${path}/{z}/{x}/{y}.webp`],
+        encoding: "terrarium",
+        // Displayed as 512 px tiles: each image has half the resolution of the source tile.
+        tileSize: 512,
+        pixels: size,
+        minzoom,
+        maxzoom,
+        bounds,
+        raise: {
+          metres: raise,
+          inside: "regions-geo.json",
+          sha256: createHash("sha256").update(geoBytes).digest("hex"),
+        },
+        ...(shape === "lowpoly" ? { facet: { metres: facet, corners: `zoom ${maxzoom}` } } : {}),
+        attribution: '<a href="https://mapterhorn.com/attribution">© Mapterhorn</a>',
+        source: `${source}/{z}/{x}/{y}.webp`,
+        copied: new Date().toISOString().slice(0, 10),
+        count: tiles.length,
+        bytes,
+        sha256: digest.digest("hex"),
       },
-      attribution: '<a href="https://mapterhorn.com/attribution">© Mapterhorn</a>',
-      source: `${source}/{z}/{x}/{y}.webp`,
-      copied: new Date().toISOString().slice(0, 10),
-      count: tiles.length,
-      bytes,
-      sha256: digest.digest("hex"),
-    },
-    null,
-    2,
-  ) + "\n",
-);
-console.log(JSON.stringify({ output, count: tiles.length, bytes, raise }));
+      null,
+      2,
+    ) + "\n",
+  );
+  console.log(JSON.stringify({ output, count: tiles.length, bytes, raise }));
+}
