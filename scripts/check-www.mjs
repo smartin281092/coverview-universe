@@ -24,6 +24,40 @@ const representatives = [
   "/sebastien-martin",
 ];
 const limits = { javascriptGzipBytes: 100 * 1024, lcpMs: 2500, cls: 0.1 };
+// Scripts admis par page (MKT-04). Depuis le 9 octobre 2026, deux décisions documentées donnent
+// à chaque page un chrome commun : l'en-tête SiteHeader, îlot React hydraté au chargement pour
+// ouvrir ses menus au survol, au clic et au clavier, liens présents dans le HTML même fermé
+// (W-30, roadmap/plans/wallet-feedback-2026-10-08.plan.md) ; le bandeau de consentement, îlot
+// différé, et le module du bouton « Cookies » de Layout, PostHog n'étant importé qu'après
+// « Accepter » (ADR-0011, MKT-09). Ces îlots imposent le runtime d'hydratation inline d'Astro.
+// La règle antérieure, zéro script hors accueil et un module unique sur l'accueil, précède ce
+// chrome : elle devient « chrome commun + scripts déclarés de la page, rien d'autre », et le
+// <main> des pages de contenu reste sans script ni îlot. Le JavaScript chargé reste borné par
+// measurePage.
+const siteChrome = { islands: ["SiteHeader@load", "consent@idle"], modules: ["Layout"] };
+const pageScripts = new Map([
+  // Accueil interactif : un module local pour les simulateurs et le mouvement. La landing rend
+  // l'en-tête dans son contenu, avec le bouton de pause des animations.
+  ["/", { modules: ["Landing"], interactiveMain: true }],
+  // Le comparateur rend l'en-tête dans son propre îlot, avec son vrai panier.
+  [
+    "/comparateur-assurance-maladie-2027",
+    { islands: ["HealthComparator@load"], ownHeader: true, interactiveMain: true },
+  ],
+  ["/suivi-demande-assurance", { islands: ["HealthRequestTracking@load"], interactiveMain: true }],
+  // Indicateur de connexion et lien vers Wallet, module natif hors du contenu (README www).
+  ["/account", { modules: ["account"] }],
+]);
+// « Se connecter » mène à la connexion côté serveur de l'API (AUTH-01), route que le build
+// statique ne sert pas. Sans PUBLIC_API_URL au build, l'API prend l'origine du site (README www) ;
+// le build de production l'exige et ce lien quitte alors l'origine contrôlée. Seule cette URL
+// exacte est exemptée, et comptée dans le résultat.
+const apiLinks = new Set(["/auth/login?surface=wallet"]);
+// Pages du parcours de demande du comparateur (30 septembre 2026, ledger health-offers), atteintes
+// depuis son îlot et non par un lien du HTML initial : la notice art. 45 LSA depuis le
+// récapitulatif de la demande, le suivi après l'envoi. Contrôlées comme les autres pages, elles
+// échappent seulement à la règle d'orphelinat, tant que le JavaScript émis y mène.
+const requestFlowPages = ["/informations-demande-assurance", "/suivi-demande-assurance"];
 const mime = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",
@@ -193,6 +227,62 @@ function checkStructured(html, route) {
   return nodes.filter((node) => node["@type"]).length;
 }
 
+// Nom source d'un fichier émis : « /_astro/SiteHeader.CMT2yV2v.js » donne « SiteHeader ».
+const emittedName = (url) => new URL(url, "http://build").pathname.split("/").pop().split(".")[0];
+
+function checkScripts(html, route, files) {
+  const expected = pageScripts.get(route) ?? {};
+  const chromeIslands = expected.ownHeader
+    ? siteChrome.islands.filter((island) => !island.startsWith("SiteHeader@"))
+    : siteChrome.islands;
+  assert.deepEqual(
+    html.islands.map((island) => `${emittedName(island.component)}@${island.directive}`).sort(),
+    [...chromeIslands, ...(expected.islands ?? [])].sort(),
+    `${route} : îlots attendus`,
+  );
+  for (const island of html.islands)
+    for (const asset of [island.component, island.renderer])
+      assert(asset && files.has(asset), `${route} : îlot absent du build local`);
+  assert.deepEqual(
+    html.scripts
+      .filter((script) => script.src)
+      .map((script) => emittedName(script.src))
+      .sort(),
+    [...siteChrome.modules, ...(expected.modules ?? [])].sort(),
+    `${route} : modules attendus`,
+  );
+  // Inline, seul le runtime d'Astro : l'élément astro-island et une directive par mode
+  // d'hydratation employé sur la page.
+  const inline = html.scripts.filter((script) => !script.src).map((script) => script.body.trim());
+  const runtime = inline.filter((body) => body.includes('customElements.define("astro-island",'));
+  const directives = inline
+    .map(
+      (body) =>
+        body.match(
+          /\(self\.Astro\|\|\(self\.Astro=\{\}\)\)\.(\w+)=\w+;window\.dispatchEvent\(new Event\("astro:\1"\)\);\}\)\(\);$/,
+        )?.[1],
+    )
+    .filter(Boolean);
+  assert.equal(runtime.length, 1, `${route} : runtime Astro unique`);
+  assert.deepEqual(
+    directives.sort(),
+    [...new Set(html.islands.map((island) => island.directive))].sort(),
+    `${route} : directives Astro attendues`,
+  );
+  assert.equal(
+    inline.length,
+    runtime.length + directives.length,
+    `${route} : script inline hors runtime Astro`,
+  );
+  if (!expected.interactiveMain)
+    assert(
+      [...html.scripts, ...html.islands].every((item) => !item.inMain),
+      `${route} : script exécutable dans le contenu statique`,
+    );
+  assert.equal(html.activeAttributes, false, `${route} : JavaScript dans les attributs HTML`);
+  return !expected.interactiveMain;
+}
+
 function checkIndexes(files) {
   for (const path of ["/sitemap.xml", "/feed.xml", "/llms.txt"])
     assert(files.has(path), `${path} : sortie générée absente`);
@@ -298,6 +388,7 @@ async function checkHtml(browser, files, origin) {
   let inlineGzipBytes = 0;
   let structuredEntities = 0;
   let mirrors = 0;
+  let staticContentPages = 0;
   try {
     for (const route of routes) {
       const response = await page.goto(`${origin}${route}?utm_source=build-check`);
@@ -342,10 +433,16 @@ async function checkHtml(browser, files, origin) {
           structured: [...document.querySelectorAll('script[type="application/ld+json"]')].map(
             (script) => JSON.parse(script.textContent),
           ),
-          scripts: scripts.map((script) => ({ src: script.src, body: script.textContent })),
+          scripts: scripts.map((script) => ({
+            src: script.src,
+            body: script.textContent,
+            inMain: Boolean(script.closest("main")),
+          })),
           islands: [...document.querySelectorAll("astro-island")].map((island) => ({
             component: island.getAttribute("component-url"),
             renderer: island.getAttribute("renderer-url"),
+            directive: island.getAttribute("client"),
+            inMain: Boolean(island.closest("main")),
           })),
           activeAttributes: [...document.querySelectorAll("*")].some((element) =>
             [...element.attributes].some(
@@ -395,34 +492,8 @@ async function checkHtml(browser, files, origin) {
         assert.equal(await mirrorResponse.text(), markdown, `${route} : corps du miroir servi`);
         mirrors++;
       }
-      if (route === "/") {
-        // Accueil interactif : un module local pour les simulateurs et le mouvement.
-        // Le contenu et les valeurs initiales sont déjà vérifiés sans JavaScript.
-        assert.equal(html.scripts.length, 1, `${route} : module de landing unique`);
-        assert(html.scripts[0].src, `${route} : module de landing externe attendu`);
-        assert.equal(html.activeAttributes, false, `${route} : JavaScript dans les attributs HTML`);
-      } else if (
-        ["/comparateur-assurance-maladie-2027", "/suivi-demande-assurance"].includes(route)
-      ) {
-        // Comparison and private tracking each require one hydrated island; editorial gates stay strict.
-        assert.equal(html.islands.length, 1, `${route} : îlot interactif unique`);
-        assert.equal(html.scripts.length, 2, `${route} : runtime Astro uniquement`);
-        assert(
-          html.scripts.every((script) => !script.src && script.body.includes("Astro")),
-          `${route} : scripts Astro attendus`,
-        );
-        for (const asset of [html.islands[0].component, html.islands[0].renderer]) {
-          assert(asset && files.has(asset), `${route} : îlot absent du build local`);
-        }
-        assert.equal(html.activeAttributes, false, `${route} : JavaScript dans les attributs HTML`);
-      } else if (route !== "/account") {
-        assert.equal(
-          html.scripts.length,
-          0,
-          `${route} : script exécutable dans le contenu statique`,
-        );
-        assert.equal(html.activeAttributes, false, `${route} : JavaScript dans les attributs HTML`);
-      }
+      // Le contenu et les valeurs initiales sont vérifiés ci-dessus sans JavaScript.
+      if (checkScripts(html, route, files)) staticContentPages++;
       for (const script of html.scripts) {
         if (script.src) {
           const url = new URL(script.src);
@@ -436,12 +507,17 @@ async function checkHtml(browser, files, origin) {
     assert.equal(mirrors, sources.size, "Chaque contenu de préversion possède HTML et miroir");
     let localLinks = 0;
     let localAnchors = 0;
+    let apiLinkCount = 0;
     const edges = new Map(routes.map((route) => [route, new Set()]));
     for (const [route, html] of pages) {
       for (const href of html.links) {
         assert(!/^(?:javascript|data):/i.test(href.trim()), `${route} : lien actif interdit`);
         const url = new URL(href, `${origin}${route}`);
         if (![origin, "https://coverview.ch"].includes(url.origin)) continue;
+        if (apiLinks.has(`${url.pathname}${url.search}`)) {
+          apiLinkCount++;
+          continue;
+        }
         const pathname = decodeURIComponent(url.pathname);
         const target = pathname.replace(/\/$/, "") || "/";
         assert(files.has(pathname) || pages.has(target), `${route} : lien local absent ${href}`);
@@ -467,8 +543,14 @@ async function checkHtml(browser, files, origin) {
         queue.push(target);
       }
     }
+    for (const route of requestFlowPages)
+      assert(
+        pages.has(route) &&
+          [...files].some(([path, body]) => /\.m?js$/.test(path) && body.includes(route)),
+        `${route} : page du parcours de demande sans lien dans le JavaScript émis`,
+      );
     assert.deepEqual(
-      routes.filter((route) => !reachable.has(route)),
+      routes.filter((route) => !reachable.has(route) && !requestFlowPages.includes(route)),
       [],
       "Pages orphelines depuis l'accueil",
     );
@@ -484,16 +566,20 @@ async function checkHtml(browser, files, origin) {
     assert.equal((await page.goto(`${origin}/page-absente-build-check`)).status(), 404);
     return {
       pages: routes.length,
+      siteChrome,
       landingExecutableScripts: pages.get("/").scripts.length,
       comparatorIslands: pages.get("/comparateur-assurance-maladie-2027")?.islands.length ?? 0,
-      otherEditorialExecutableScripts: 0,
+      staticContentPages,
+      staticContentExecutableScripts: 0,
       inlineGzipBytes,
       real404: true,
       mirrors,
       structuredEntities,
       localLinks,
       localAnchors,
+      apiLinks: apiLinkCount,
       orphanPages: 0,
+      requestFlowPages,
     };
   } finally {
     await context.close();
