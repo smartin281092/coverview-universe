@@ -17,12 +17,12 @@ export const healthCopy = {
   foreignModelType: "LAMal frontaliers",
   firstContactTitle: "Premier contact",
   partnerBadge: {
-    title: "Recommandation CoverView",
+    title: "Partenaire",
     level: "Gold",
-    details: "Pourquoi cette recommandation",
+    details: "Pourquoi ce badge",
     // To change with the partner list of the API (health.insurer-groups.ts).
     disclosure:
-      "Assura et Groupe Mutuel sont partenaires de CoverView : leurs modèles portent cette recommandation.",
+      "Assura et Groupe Mutuel sont partenaires de CoverView : leurs modèles portent ce badge.",
   },
   contactDetails: {
     free: "Vous consultez directement le médecin de votre choix.",
