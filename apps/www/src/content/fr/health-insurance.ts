@@ -16,9 +16,11 @@ export const healthCopy = {
   firstContact: "Premier contact",
   foreignModelType: "LAMal frontaliers",
   firstContactTitle: "Premier contact",
-  coverScore: {
-    title: "CoverScore",
-    labels: { service: "Service client", reviews: "Avis", quality: "Qualité" },
+  coverviewScore: {
+    title: "Coverview score",
+    tiers: { gold: "Gold", silver: "Silver", bronze: "Bronze" },
+    details: "Détail du Coverview score",
+    labels: { service: "Service client", reviews: "Avis", recommendation: "Recommandation" },
     rating: "{{value}} sur 10",
   },
   contactDetails: {

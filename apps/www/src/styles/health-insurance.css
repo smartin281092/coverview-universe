@@ -371,8 +371,6 @@
   font-weight: 500;
   letter-spacing: var(--cv-mono-letter-spacing);
   line-height: 1.4;
-}
-.hi-first-contacts h4 {
   text-transform: uppercase;
 }
 .hi-first-contacts ul {
@@ -409,12 +407,83 @@
   font-size: 12px;
   line-height: 1.4;
 }
-/* CoverScore (24 October 2026): each rating as ten small spaced bars, filled ones in a pink to
-   red gradient with a white inner edge. The bars start together, 20 px after the longest
-   label, each row sharing the list's two columns. */
+/* The Coverview score (24 October 2026): its title, its level in a metallic gradient crossed now
+   and then by a gleam, and right next to them the « i » whose floating detail gives the
+   ratings. */
 .hi-cover-score {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin: 18px 0 4px;
 }
+.hi-cover-score h4 {
+  margin-bottom: 2px;
+}
+.hi-cover-score-tier {
+  display: inline-block;
+  margin: 0;
+  font-size: 24px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1.15;
+  /* Condensed: the brand font has no narrow width, so its letters are narrowed. */
+  transform: scaleX(0.82);
+  transform-origin: left center;
+  color: transparent;
+  background-image:
+    linear-gradient(105deg, transparent 38%, rgb(255 255 255 / 90%) 48%, transparent 58%),
+    var(--hi-metal);
+  background-size:
+    300% 100%,
+    100% 100%;
+  background-repeat: no-repeat;
+  background-position:
+    150% 0,
+    0 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: hi-metal-gleam 6s ease-in-out infinite;
+}
+.hi-cover-score-tier.is-gold {
+  --hi-metal: linear-gradient(180deg, #fff3b5, #e2bd52 38%, #a87a22 58%, #f0cf72 78%, #8c6119);
+}
+.hi-cover-score-tier.is-silver {
+  --hi-metal: linear-gradient(180deg, #eef0f3, #b4bac2 38%, #6f7782 58%, #c3c8cf 78%, #545b65);
+}
+.hi-cover-score-tier.is-bronze {
+  --hi-metal: linear-gradient(180deg, #ffdcb5, #d8985c 38%, #94552a 58%, #e3a974 78%, #723f1d);
+}
+/* The gleam crosses the word in the last quarter of each cycle, then waits off to the left. */
+@keyframes hi-metal-gleam {
+  0%,
+  75% {
+    background-position:
+      150% 0,
+      0 0;
+  }
+  100% {
+    background-position:
+      -50% 0,
+      0 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hi-cover-score-tier {
+    animation: none;
+  }
+}
+.hi-cover-score-info {
+  position: relative;
+}
+.hi-cover-score-info [role="tooltip"] {
+  top: calc(100% + 4px);
+  left: -12px;
+  right: auto;
+  width: max-content;
+  padding: 14px 16px;
+}
+/* Each rating as ten small spaced bars, filled ones in a pink to red gradient with a white inner
+   edge; the bars start together, 20 px after the longest label. */
 .hi-cover-score dl {
   display: grid;
   grid-template-columns: max-content max-content;

@@ -38,7 +38,8 @@ export function HealthIcon({
     | "chevron"
     | "map"
     | "satellite"
-    | "lowpoly";
+    | "lowpoly"
+    | "info-i";
   size?: number;
 }) {
   const paths = {
@@ -87,6 +88,8 @@ export function HealthIcon({
     satellite:
       "M12 9l3 3-3 3-3-3 3-3ZM5 8l3-3 2.5 2.5-3 3L5 8Zm4 1 1.5 1.5M19 16l-3 3-2.5-2.5 3-3L19 16Zm-4-1-1.5-1.5M4 15a5 5 0 0 0 5 5",
     lowpoly: "M2 19 8.5 7l4 6 3-3L22 19H2Zm6.5-12L10 19l2.5-6 4 6m-1-9 1 9",
+    // An « i » in a circle (24 October 2026); "info" draws an exclamation mark.
+    "info-i": "M12 11v5m0-8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z",
   };
   return (
     <svg
