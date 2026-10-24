@@ -1,6 +1,9 @@
 import { ShaderGradientCanvas, ShaderGradient } from "@shadergradient/react";
 
-/** Wallet card: a folded luminous plane over midnight blue, with very slow drift. */
+/**
+ * Wallet card: a folded luminous plane over midnight blue. It drifts faster since 24 October
+ * 2026 (« Augmenter la vitesse d'animation des shaders dans les CTA »), for every call to action.
+ */
 export default function HealthShaderScene() {
   return (
     <ShaderGradientCanvas
@@ -14,7 +17,7 @@ export default function HealthShaderScene() {
         type="plane"
         shader="defaults"
         animate="on"
-        uSpeed={0.075}
+        uSpeed={0.2}
         uTime={1.2}
         uStrength={3.4}
         uDensity={1.3}

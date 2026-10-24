@@ -51,7 +51,8 @@ export function HealthEvidence({
                   {type && <small>{fact.insurerTerm ?? fact.title}</small>}
                 </summary>
                 <p>{fact.effect}</p>
-                {fact.telemedicine !== "not_applicable" && (
+                {/* The model page says what is known, no « à confirmer » (24 October 2026). */}
+                {fact.telemedicine !== "not_applicable" && fact.telemedicine !== "unknown" && (
                   <p>{copy.evidence.telemedicine[fact.telemedicine]}</p>
                 )}
                 <p>

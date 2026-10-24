@@ -56,7 +56,6 @@ describe("offer presentation keeps year and eligibility explicit", () => {
     for (const value of [
       undefined,
       { ...model, year: 2026 },
-      { ...model, access: { ...model.access, verifiedYear: false } },
       { ...model, access: { ...model.access, ageScope: "adult" as const } },
     ]) {
       expect(healthOfferPresentation({ ...offer, ageGroup: "child" }, 2027, value)).toMatchObject({
@@ -64,5 +63,13 @@ describe("offer presentation keeps year and eligibility explicit", () => {
         contactsVerified: false,
       });
     }
+  });
+  it("shows the contacts documented by the insurer without confirming them for the year", () => {
+    expect(
+      healthOfferPresentation(offer, 2027, {
+        ...model,
+        access: { ...model.access, verifiedYear: false },
+      }),
+    ).toMatchObject({ firstContacts: ["gp", "phone"], contactsVerified: false });
   });
 });

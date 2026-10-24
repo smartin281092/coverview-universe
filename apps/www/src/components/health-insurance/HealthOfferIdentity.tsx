@@ -59,10 +59,7 @@ export function HealthContactTags({ offer }: { offer: HealthOffer }) {
           </span>
         ))
       ) : (
-        <span
-          className="hi-contact-tag"
-          title={offer.category === "BASE" ? undefined : copy.contactVerification}
-        >
+        <span className="hi-contact-tag">
           <HealthIcon name={categoryIcons[offer.category]} size={14} />
           {offer.residenceCountry ? copy.foreignModelType : copy.typeLabels[offer.category]}
         </span>
@@ -70,8 +67,9 @@ export function HealthContactTags({ offer }: { offer: HealthOffer }) {
     </span>
   );
 }
-// The model page's first contacts (23 October 2026): each verified way in, with a plain sentence;
-// without a verified list for the year, the model type and the pending check.
+// The model page's first contacts (23 October 2026): each way in the insurer documents, with a
+// plain sentence (24 October 2026: « exactement à quoi ça correspond », no pending check
+// shown); without a documented list, the model type.
 export function HealthFirstContacts({ offer }: { offer: HealthOffer }) {
   const contacts = offer.firstContacts ?? [];
   return (
@@ -102,7 +100,6 @@ export function HealthFirstContacts({ offer }: { offer: HealthOffer }) {
               <strong>
                 {offer.residenceCountry ? copy.foreignModelType : copy.typeLabels[offer.category]}
               </strong>
-              {offer.category !== "BASE" && <small>{copy.contactVerification}</small>}
             </span>
           </li>
         </ul>

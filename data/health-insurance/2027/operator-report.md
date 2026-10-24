@@ -1,6 +1,6 @@
 # Contrôle documentaire maladie 2027
 
-Version catalog_fe98064955579fb8923847f0 · conditions consultées le 2026-10-01, pages produit et prestations le 2026-10-04.
+Version catalog_a802437ba0a8b7a152904c98 · conditions consultées le 2026-10-01, pages produit et prestations le 2026-10-04.
 
 32 assureurs, 153 modèles examinés sur 153. 0 modèles entièrement vérifiés ; 0 non examinés. 514 fiches, 40 types uniformisés, 812 passages de source, 227 dossiers de contrôle.
 

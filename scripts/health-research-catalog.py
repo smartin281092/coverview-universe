@@ -145,6 +145,12 @@ def build():
             model = by_id[researched['modelId']]
             pages = [source(dict(url=url, title=f"{company['brand']} — page produit {model['name']}", passage='Paraphrase : page produit officielle consultée pour l’inventaire des prestations supplémentaires.', page=None), checked=CHECKED_C) for url in researched.get('productPages', [])[:3]]
             model['sourceIds'] = list(dict.fromkeys(model['sourceIds'] + pages))
+            # The ways in that the insurer's own pages document (user request, 24 October 2026:
+            # « exactement à quoi ça correspond »): shown as published, still unconfirmed for the
+            # year (verifiedYear) until a 2027 document names them, so the engine ignores them.
+            documented = researched.get('access') or {}
+            if model['category'] != 'BASE' and documented.get('contacts'):
+                model['access'].update(contacts=documented['contacts'], multipleEntry=documented.get('multipleEntry'))
             if researched.get('status') == 'researched':
                 model['missing'] = model['missing'].replace('Inventaire exhaustif des avantages et exclusions.', 'Maintien 2027 des avantages annoncés sur la page produit (recherche du 4 octobre 2026).')
                 for case in cases:
@@ -212,14 +218,14 @@ def build():
     terms = {}
     for fact in benefits: terms.setdefault(fact['equivalenceGroup'], set()).add(fact.get('insurerTerm') or fact['title'])
     benefit_types = [dict(key=item['key'], family=item['family'], label=item['label'], description=item['description'],
-                          synonyms=sorted(terms.get(item['key'], set()), key=str.casefold)[:80], valuation=item['valuation']) for item in TAXONOMY['types']]
+                          synonyms=sorted(terms.get(item['key'], set()), key=lambda term: (term.casefold(), term))[:80], valuation=item['valuation']) for item in TAXONOMY['types']]
     assert all(fact['equivalenceGroup'] in TYPES and fact['category'] == TYPES[fact['equivalenceGroup']]['family'] for fact in benefits)
     catalog=dict(year=YEAR,datasetId=dataset,checkedAt=CHECKED_C if review_c['insurers'] else CHECKED,insurers=[dict(id=c['insurerId'],legalName=c['legalName'],brand=c['brand'],groupName=c.get('groupName'),aliases=c.get('aliases',[])) for c in insurers],models=models,benefitTypes=benefit_types,benefits=benefits,sources=list(sources.values()),cases=cases)
     catalog={'id':ident('catalog_',catalog),**catalog}
     (ROOT/'recommendation-catalog.json').write_text(json.dumps(catalog,ensure_ascii=False,indent=2)+'\n',encoding='utf-8', newline='\n')
     (ROOT/'operator-reviews.json').write_text(json.dumps(cases,ensure_ascii=False,indent=2)+'\n',encoding='utf-8', newline='\n')
     with (ROOT/'research-coverage.csv').open('w',encoding='utf-8-sig',newline='') as out:
-        writer=csv.writer(out);writer.writerow(['assureur_id','compagnie','modele_id','modele','code_tarif','annee','regions','statut','sources','manquant'])
+        writer=csv.writer(out,lineterminator='\n');writer.writerow(['assureur_id','compagnie','modele_id','modele','code_tarif','annee','regions','statut','sources','manquant'])
         for m in models: writer.writerow([m['insurerId'],m['insurerName'],m['id'],m['name'],m['tariffCode'],YEAR,';'.join(m['regions']),m['status'],';'.join(m['sourceIds']),m['missing']])
     report=[f'# Contrôle documentaire maladie {YEAR}',f'Version {catalog["id"]} · conditions consultées le {CHECKED}, pages produit et prestations le {CHECKED_C}.',f'{len(insurers)} assureurs, {len(models)} modèles examinés sur {len(inventory["models"])}. {sum(m["status"]=="verified" for m in models)} modèles entièrement vérifiés ; {sum(m["status"]=="not_researched" for m in models)} non examinés. {len(benefits)} fiches, {len(benefit_types)} types uniformisés, {len(sources)} passages de source, {len(cases)} dossiers de contrôle.',
             'La couverture de recherche n’est pas une certification d’exhaustivité des prestations. Les sources non confirmées pour 2027 restent conditionnelles. Aucun message aux assureurs envoyé. Les modèles et entités sont rapprochés des identifiants Priminfo, sans extrapolation de groupe.']

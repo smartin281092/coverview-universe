@@ -20,14 +20,15 @@ type Offer = z.infer<typeof healthOfferSchema>;
  */
 export function healthOfferPresentation(offer: Offer, year: number, model?: Model) {
   const swiss = !offer.residenceCountry && !offer.regionId.startsWith("EU-");
-  const verified =
-    swiss &&
-    model?.year === year &&
-    model.access.verifiedYear &&
-    (model.access.ageScope === "all" || offer.ageGroup !== "child");
+  // The ways in the insurer documents for this model (24 October 2026), confirmed for the year
+  // or not: contactsVerified tells which, and only confirmed ones reach the recommendation.
+  const documented =
+    swiss && model?.year === year && (model.access.ageScope === "all" || offer.ageGroup !== "child")
+      ? model
+      : undefined;
   return {
-    firstContacts: verified ? model.access.contacts : [],
-    contactsVerified: Boolean(verified),
+    firstContacts: documented?.access.contacts ?? [],
+    contactsVerified: Boolean(documented?.access.verifiedYear),
     redistribution:
       swiss && year === 2027
         ? {

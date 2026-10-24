@@ -357,18 +357,23 @@
   background: inherit;
   transform: translateX(-50%) rotate(45deg);
 }
-/* The model page's first contacts (23 October 2026), set apart from the rest. */
+/* The model page's first contacts (23 October 2026), without a background since 24 October
+   2026, under a small overline in the Wallet's eyebrow font. */
 .hi-first-contacts {
   margin: 0 0 18px;
-  padding: 14px 16px;
-  border-radius: 12px;
-  background: #eef4ff;
+}
+.hi-first-contacts h4,
+.hi-cover-score h4 {
+  margin: 0 0 10px;
+  color: #6b7280;
+  font-family: var(--cv-font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: var(--cv-mono-letter-spacing);
+  line-height: 1.4;
 }
 .hi-first-contacts h4 {
-  margin: 0 0 8px;
-  color: #1e3a8a;
-  font-size: 14px;
-  font-weight: 600;
+  text-transform: uppercase;
 }
 .hi-first-contacts-choice {
   margin: 0 0 8px;
@@ -394,7 +399,7 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  background: #fff;
+  background: #f1f5f9;
   color: #2563eb;
 }
 .hi-first-contacts strong {
@@ -408,6 +413,41 @@
   color: #475569;
   font-size: 12px;
   line-height: 1.4;
+}
+/* CoverScore (24 October 2026): each rating as ten small spaced bars, filled ones in a pink to
+   red gradient with a white inner edge. */
+.hi-cover-score {
+  margin: 18px 0 4px;
+}
+.hi-cover-score dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+.hi-cover-score dl > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.hi-cover-score dt {
+  color: #3f3f3f;
+  font-size: 12px;
+}
+.hi-cover-score dd {
+  display: flex;
+  gap: 3px;
+  margin: 0;
+}
+.hi-cover-score dd span {
+  width: 7px;
+  height: 16px;
+  border-radius: 2px;
+  background: #eef0f3;
+}
+.hi-cover-score dd span.is-full {
+  background: linear-gradient(180deg, #ff6f9c, #e11d48);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 45%);
 }
 .hi-payment {
   display: flex;

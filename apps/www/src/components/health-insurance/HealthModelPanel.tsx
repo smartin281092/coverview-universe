@@ -17,6 +17,7 @@ import { HealthProductImage } from "./HealthProductImage";
 import { HealthDialog } from "./HealthDialog";
 import { HealthIcon } from "./HealthIcon";
 import { HealthFirstContacts, HealthInsurerLogo, HealthOfferBadges } from "./HealthOfferIdentity";
+import { coverScorePreview, HealthCoverScore } from "./HealthCoverScore";
 import { interpolate, money, regionName } from "./health-format";
 import { HealthModelData } from "./HealthModelData";
 import { useModelConfiguration } from "./use-model-configuration";
@@ -144,6 +145,8 @@ export function HealthModelPanel({
                 )}
               </div>
               <HealthPremiumDifference value={difference} detail />
+              {/* Shown once CoverScore has real ratings; until then in the local preview only. */}
+              {import.meta.env.DEV && <HealthCoverScore scores={coverScorePreview} />}
               {onRequest && (
                 <button
                   className="hi-primary hi-full hi-request-cta"

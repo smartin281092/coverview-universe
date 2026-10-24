@@ -15,9 +15,13 @@ export const healthCopy = {
   provisionalBadge: "Selon les réponses actuelles · conditions à vérifier",
   firstContact: "Premier contact",
   foreignModelType: "LAMal frontaliers",
-  contactVerification: "Parcours précis à confirmer pour 2027",
-  firstContactTitle: "Votre premier contact",
+  firstContactTitle: "Premier contact",
   firstContactChoice: "Au choix :",
+  coverScore: {
+    title: "CoverScore",
+    labels: { service: "Service client", reviews: "Avis", quality: "Qualité" },
+    rating: "{{value}} sur 10",
+  },
   contactDetails: {
     free: "Vous consultez directement le médecin de votre choix.",
     gp: "Vous commencez par votre médecin de famille.",
@@ -44,7 +48,7 @@ export const healthCopy = {
     BASE: "Libre choix",
     PRAXIS: "Médecin / réseau médical",
     TEL_DIG: "Télémédecine",
-    FLEX: "Parcours combiné",
+    FLEX: "Plusieurs premiers contacts au choix",
     PHARM: "Pharmacie",
   },
   redistributionLabel: "Redistribution environnementale",
@@ -57,7 +61,7 @@ export const healthCopy = {
   foreignHint:
     "Primes LAMal selon le pays de résidence. Franchise ordinaire : 300 CHF pour les adultes, 0 CHF pour les enfants.",
   foreignConditions:
-    "L’affiliation et un éventuel droit d’option restent à vérifier. La participation aux soins dépend du pays de traitement ; les avantages des modèles suisses ne sont pas transposés à cette offre.",
+    "L’affiliation dépend de votre statut de frontalier et, selon le pays de résidence, d’un droit d’option. La participation aux soins dépend du pays de traitement ; les avantages des modèles suisses ne s’appliquent pas à cette offre.",
   foreignGuide:
     "Pour les frontaliers, comparez les primes sur la carte. Le calcul personnalisé des soins transfrontaliers nécessite encore de vérifier le pays de traitement et les règles applicables.",
   foreignSource: "Primes officielles UE/AELE/UK 2027",

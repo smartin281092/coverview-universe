@@ -115,13 +115,15 @@ export function HealthClubBenefits({
               <p className="hi-benefit-type">{labels.get(selected.equivalenceGroup)}</p>
             )}
             <p>{selected.effect}</p>
-            <p className="hi-small">
-              {copy.evidence.nature[selected.classification]} · {year}
-            </p>
-            <p className="hi-small">
-              {confirmed ? copy.evidence.confirmed : copy.evidence.partial}
-            </p>
-            {selected.telemedicine !== "not_applicable" && (
+            {/* No « à vérifier / à confirmer » mention on the model page (user request,
+                24 October 2026: « Ça ne fait pas sérieux »): only what is known is said. */}
+            {selected.classification !== "unknown" && (
+              <p className="hi-small">
+                {copy.evidence.nature[selected.classification]} · {year}
+              </p>
+            )}
+            {confirmed && <p className="hi-small">{copy.evidence.confirmed}</p>}
+            {selected.telemedicine !== "not_applicable" && selected.telemedicine !== "unknown" && (
               <p>{copy.evidence.telemedicine[selected.telemedicine]}</p>
             )}
             <h3>{copy.evidence.conditions}</h3>
