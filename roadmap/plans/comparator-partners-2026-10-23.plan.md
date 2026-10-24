@@ -64,6 +64,9 @@ Entrée : « Dans le panneau (qu'on va appeler page) d'un module : Le bloc Votre
 | C-18 | Onglets ? (« enlève le margin-top au hi-tabs ») | Marge haute de 26 px retirée. |
 | C-19 | Paiement des frais ? (« Monte Paiement des frais au-dessus de Année et mets une coche verte sur la gauche de Avancés par la caisse ») | Première ligne de l’onglet Données, coche verte #16a34a avant « Avancés par la caisse ». |
 | C-20 | Alignement du CoverScore ? (« ne pas mettre de space-between entre les service client, qualité, avis et les bars mais quand même aligner les barres entre elles et avoir bien 20px d'espace avec les titres ») | Deux colonnes partagées par les lignes (grille et sous-grille) : libellés à leur largeur, barres alignées 20 px après le plus long ; plus de répartition jusqu’au bord. |
+| C-21 | En-tête mobile ? (« Enlève Se connecter et Mon panier (mais garde l'icone et le nombre) du menu version mobile ») | Dès que le menu burger remplace les menus (960 px et moins, au lieu de 600 px), la barre n’a plus « Se connecter » ni le libellé « Mon panier » : icône et nombre gardés, lien du panier nommé pour les lecteurs d’écran sur les autres pages. « Créer un compte » reste dans la barre. |
+| C-22 | Menu ouvert ? (« déplacer les boutons Se connecter et Créer un compte tout en haut lorsque le burger menu est ouvert ») | « Se connecter » et « Créer un compte » juste sous le titre du panneau, séparés des menus par un trait, au lieu d’en bas. |
+| C-23 | Îlot de région ? (« Cache l'ilot de sélection de la région pour le moment ») | Masqué par une constante (`regionSelectEnabled = false`, comme le questionnaire) ; sur téléphone, l’indication remonte sous la recherche. La région se choisit par la carte, la recherche ou la localisation. Les 26 pays tarifaires non voisins, qu’on ne trouvait que dans cette liste, ne sont plus accessibles tant qu’il est masqué. |
 
 | # | cible | oracle | résultat |
 |---|---|---|---|
@@ -72,5 +75,6 @@ Entrée : « Dans le panneau (qu'on va appeler page) d'un module : Le bloc Votre
 | 11 | Build et outillage | `astro build`, tsc (www, api), ESLint, Prettier, knip | build OK ; `uSpeed:.2` dans le JS livré ; aucun CoverScore dans le JS de production ; knip : constats déjà présents sur main |
 | 12 | Retouches | script Playwright, 1440 px | plus de « Au choix » ; CoverScore : lignes à 4 px, libellés #6b7280, barres de 3 px ; onglets sans marge haute ; Données : « Paiement des frais » en premier, coche #16a34a |
 | 13 | Alignement du CoverScore | script Playwright, 1440 px | barres des trois lignes au même x, 20 px après « Service client », fin des barres loin du bord du panneau |
+| 14 | En-tête et barre de la carte | script Playwright, 390, 800 et 1280 px, comparateur et accueil | 390 et 800 px : ni « Se connecter » ni « Mon panier » dans la barre, icône et nombre du panier, « Créer un compte », burger ; 1280 px inchangé ; menu ouvert : titre, puis connexion et création de compte, puis les menus ; îlot de région absent, indication à 215 px sous la recherche (1 px d’écart, comme avant) ; parcours habituels OK |
 
 Production : après le déploiement, publier `data/health-insurance/2027/recommendation-catalog.json` (`catalog_a802437ba0a8b7a152904c98`) depuis l’Admin (Configuration › Comparateur maladie). Sans cette publication, les modèles FLEX montrent « Plusieurs premiers contacts au choix ».
