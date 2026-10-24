@@ -843,6 +843,27 @@
   outline: 2px solid #6366f1;
   outline-offset: -2px;
 }
+/* Plan or satellite (24 October 2026), under the zoom buttons. */
+.hi-map-view {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid #e2e2e2;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #373737;
+  font-size: 13px;
+}
+.hi-map-view:disabled {
+  opacity: 0.5;
+}
+.health-comparator .hi-map-view {
+  right: 24px;
+  top: 247px;
+}
 .hi-map-caption a {
   color: inherit;
   text-decoration: none;
@@ -3348,6 +3369,17 @@
     top: 312px;
     right: 14px;
     flex-direction: column;
+  }
+  /* On phones, the icon alone, as square as the buttons above it. */
+  .health-comparator .hi-map-view {
+    top: 460px;
+    right: 14px;
+    width: 44px;
+    padding: 0;
+    justify-content: center;
+  }
+  .health-comparator .hi-map-view > span {
+    display: none;
   }
   /* Absolute again (24 October 2026): the phone rule above left it in the flow, below the
      full-screen map, so the attribution was out of sight. */

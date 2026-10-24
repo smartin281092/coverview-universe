@@ -35,7 +35,8 @@ export function HealthIcon({
     | "family"
     | "swimming"
     | "bike"
-    | "chevron";
+    | "chevron"
+    | "layers";
   size?: number;
 }) {
   const paths = {
@@ -79,6 +80,7 @@ export function HealthIcon({
       "M2 16c2-3 4 3 6 0s4 3 6 0 4 3 8 0M2 21c2-3 4 3 6 0s4 3 6 0 4 3 8 0M7 12V5a2 2 0 0 1 4 0m3 7V5a2 2 0 0 1 4 0M7 8h7",
     bike: "M9 16a4 4 0 1 1-8 0 4 4 0 0 1 8 0Zm14 0a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM5 16l5-8 5 8H5Zm10 0 3-10h-3M8 5h4m-2 0v3",
     chevron: "m9 5 7 7-7 7",
+    layers: "m12 3 9 5-9 5-9-5 9-5Zm-9 9 9 5 9-5M3 16l9 5 9-5",
   };
   return (
     <svg

@@ -93,6 +93,10 @@ export const healthCopy = {
   mapZoomOut: "Dézoomer",
   mapReset: "Recentrer sur Vaud",
   mapRelief: "Relief",
+  mapSatellite: "Satellite",
+  mapPlan: "Plan",
+  mapToSatellite: "Afficher la vue satellite",
+  mapToPlan: "Afficher le plan",
   mapCanvas: "Carte en relief : flèches pour la déplacer, + et − pour zoomer",
   premiumCountLabel: "primes",
   modelCountLabel: "modèles",
@@ -172,7 +176,7 @@ export const healthCopy = {
   sourceBenefits:
     "Chaque avantage est lié à une source et à ses conditions. « 2027 à confirmer » signifie que la source consultée ne garantit pas son maintien en 2027. Une information non renseignée n’est pas une absence de prestation. Les avantages des clubs ne réduisent jamais artificiellement la prime affichée.",
   sourceMap:
-    "Limites communales swisstopo 2026, rapprochées des mutations OFS et des régions de primes officielles 2027. Géométrie simplifiée pour la lisibilité. Relief swissALTI3D (swisstopo) par Mapterhorn, servi par CoverView ; pays voisins simplifiés d’après EuroGeographics / GISCO. Fond de carte de la Suisse © OpenStreetMap (OpenMapTiles), chargé depuis OpenFreeMap : votre navigateur lui transmet son adresse IP, sans cookie ni traceur.",
+    "Limites communales swisstopo 2026, rapprochées des mutations OFS et des régions de primes officielles 2027. Géométrie simplifiée pour la lisibilité. Relief swissALTI3D (swisstopo) par Mapterhorn, servi par CoverView ; pays voisins simplifiés d’après EuroGeographics / GISCO. Fond de carte de la Suisse © OpenStreetMap (OpenMapTiles), chargé depuis OpenFreeMap ; vue satellite SWISSIMAGE (swisstopo), chargée depuis geo.admin.ch quand vous la choisissez. Votre navigateur leur transmet son adresse IP, sans cookie ni traceur.",
   noScript:
     "Activez JavaScript pour explorer la carte, comparer les primes et utiliser le guide. Les données officielles restent accessibles sur Priminfo.",
   profile: "Votre profil",

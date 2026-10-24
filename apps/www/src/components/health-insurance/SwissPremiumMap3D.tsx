@@ -10,7 +10,8 @@ import type {
 import geo from "../../../../../data/health-insurance/2027/regions-geo.json";
 import { healthCopy as copy } from "../../content/fr/health-insurance";
 import { HealthRegionPopover } from "./HealthRegionPopover";
-import { healthMapStyle } from "./health-map-style";
+import { HealthIcon } from "./HealthIcon";
+import { healthMapStyle, viewLayers, type MapView } from "./health-map-style";
 import { regionName } from "./health-format";
 
 setWorkerUrl(workerUrl);
@@ -45,6 +46,15 @@ const camera = (width: number, height: number, regionId: string | null) => ({
 const national = geo.borders.features.find((feature) => feature.properties.kind === "national");
 if (!national) throw new Error("regions-geo.json: Switzerland's outline is missing");
 const inside: object = national.geometry;
+// The chosen view, kept in this browser only (24 October 2026).
+const viewKey = "cv-map-view";
+const storedView = (): MapView => {
+  try {
+    return localStorage.getItem(viewKey) === "satellite" ? "satellite" : "plan";
+  } catch {
+    return "plan";
+  }
+};
 // Country names for the neighbours' labels, in French.
 const countries = new Intl.DisplayNames(["fr-CH"], { type: "region" });
 const labels = {
@@ -84,6 +94,7 @@ export function SwissPremiumMap3D({
   const [entry, setEntry] = useState({ x: 0, y: 0 });
   const [ready, setReady] = useState(false);
   const [limits, setLimits] = useState({ min: false, max: false });
+  const [view, setView] = useState<MapView>(storedView);
   const [size, setSize] = useState({ width: 1000, height: 650, left: 0, viewport: 1000 });
   const stage = useRef<HTMLDivElement>(null);
   const container = useRef<HTMLDivElement>(null);
@@ -116,7 +127,7 @@ export function SwissPremiumMap3D({
     try {
       instance = new MapLibre({
         container: element,
-        style: healthMapStyle(window.location.origin, {
+        style: healthMapStyle(window.location.origin, view, {
           areas: geo.areas,
           labels,
           borders: geo.borders,
@@ -239,6 +250,23 @@ export function SwissPremiumMap3D({
     if (canvas) canvas.style.cursor = hover ? "pointer" : "";
   }, [hover]);
 
+  // Plan or aerial photographs (user request, 24 October 2026), the relief kept: only the
+  // ground's layers change, through their visibility.
+  const switchView = () => {
+    const next: MapView = view === "plan" ? "satellite" : "plan";
+    setView(next);
+    try {
+      localStorage.setItem(viewKey, next);
+    } catch {
+      // Kept for this visit only.
+    }
+    const instance = map.current;
+    if (!instance) return;
+    for (const [own, ids] of Object.entries(viewLayers))
+      for (const id of ids)
+        instance.setLayoutProperty(id, "visibility", own === next ? "visible" : "none");
+  };
+
   // Keyboard focus: the area's label point, brought into view first if needed.
   const focus = (id: string) => {
     const instance = map.current;
@@ -328,6 +356,16 @@ export function SwissPremiumMap3D({
             ⌖
           </button>
         </div>
+        <button
+          type="button"
+          className="hi-map-view"
+          onClick={switchView}
+          disabled={!ready}
+          aria-label={view === "plan" ? copy.mapToSatellite : copy.mapToPlan}
+        >
+          <HealthIcon name="layers" size={18} />
+          <span>{view === "plan" ? copy.mapSatellite : copy.mapPlan}</span>
+        </button>
         {hover && (
           <HealthRegionPopover
             region={hover}
