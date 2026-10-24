@@ -18,6 +18,48 @@ const landcover = (id: string, classes: string[], color: string): Layer => ({
   filter: ["match", ["get", "class"], classes, true, false],
   paint: { "fill-color": color, "fill-antialias": false },
 });
+// A width or offset growing from zoom 6 to zoom 10.
+const byZoom = (atSix: number, atTen: number) =>
+  ["interpolate", ["linear"], ["zoom"], 6, atSix, 10, atTen] as [
+    "interpolate",
+    ["linear"],
+    ["zoom"],
+    number,
+    number,
+    number,
+    number,
+  ];
+// One border rank: its shadow, then its white line; widths at zoom 6 and 10.
+const border = (
+  kind: string,
+  shadow: number,
+  [narrow, wide]: [number, number],
+  [shadowNarrow, shadowWide]: [number, number],
+): Layer[] => [
+  {
+    id: `${kind}-border-shadow`,
+    type: "line",
+    source: "borders",
+    filter: ["==", ["get", "kind"], kind],
+    layout: { "line-join": "round", "line-cap": "round" },
+    paint: {
+      "line-color": navy,
+      "line-opacity": shadow,
+      "line-width": ["interpolate", ["linear"], ["zoom"], 6, shadowNarrow, 10, shadowWide],
+    },
+  },
+  {
+    id: `${kind}-border`,
+    type: "line",
+    source: "borders",
+    filter: ["==", ["get", "kind"], kind],
+    layout: { "line-join": "round", "line-cap": "round" },
+    paint: {
+      "line-color": "#ffffff",
+      "line-width": ["interpolate", ["linear"], ["zoom"], 6, narrow, 10, wide],
+    },
+  },
+];
 const label = (color: string) => ({
   "text-color": color,
   "text-halo-color": "rgba(255,255,255,0.9)",
@@ -27,7 +69,12 @@ const label = (color: string) => ({
 
 // The GeoJSON types MapLibre names are out of reach here (a global of @types/geojson that
 // modules cannot see): the collections are passed as plain objects.
-export function healthMapStyle(origin: string, areas: object, labels: object): MapStyle {
+export function healthMapStyle(
+  origin: string,
+  areas: object,
+  labels: object,
+  borders: object,
+): MapStyle {
   const relief = {
     type: "raster-dem" as const,
     url: `${origin}/terrain/v1/tiles.json`,
@@ -44,6 +91,7 @@ export function healthMapStyle(origin: string, areas: object, labels: object): M
       hillshade: relief,
       areas: { type: "geojson", data: areas, promoteId: "id" },
       labels: { type: "geojson", data: labels },
+      borders: { type: "geojson", data: borders },
     },
     terrain: { source: "terrain", exaggeration: 1.5 },
     sky: {
@@ -172,29 +220,46 @@ export function healthMapStyle(origin: string, areas: object, labels: object): M
           "fill-opacity": ["case", ["boolean", ["feature-state", "hover"], false], 0.1, 0],
         },
       },
-      // Transparent borders: white, over a faint shadow that keeps them visible on light ground.
+      // Borders more visible (user request, 24 October 2026), each drawn once, by rank:
+      // white over a navy shadow, from the regions of one canton to the national border.
+      ...border("region", 0.12, [1, 2.2], [2.2, 4]),
+      ...border("canton", 0.28, [1.6, 3], [3.4, 6]),
+      // Switzerland raised above its neighbours (user request, 24 October 2026): a soft shadow
+      // around a rounded outline, its cliff in one colour (the map stretched over it would
+      // show streaks), and a white rim along its top edge. Offsets on a polygon: positive
+      // inward.
       {
-        id: "areas-shadow",
+        id: "national-shadow",
         type: "line",
-        source: "areas",
-        filter: ["==", ["get", "kind"], "region"],
+        source: "borders",
+        filter: ["==", ["get", "kind"], "shadow"],
         layout: { "line-join": "round" },
         paint: {
           "line-color": navy,
-          "line-opacity": 0.14,
-          "line-width": ["interpolate", ["linear"], ["zoom"], 6, 2.4, 10, 4.4],
+          "line-opacity": 0.34,
+          "line-width": byZoom(14, 26),
+          "line-blur": byZoom(10, 18),
+          "line-offset": byZoom(-7, -12),
         },
       },
       {
-        id: "areas-line",
+        id: "national-cliff",
         type: "line",
-        source: "areas",
-        filter: ["==", ["get", "kind"], "region"],
+        source: "borders",
+        filter: ["==", ["get", "kind"], "national"],
+        layout: { "line-join": "round" },
+        paint: { "line-color": "#66728d", "line-width": byZoom(6, 11) },
+      },
+      {
+        id: "national-border",
+        type: "line",
+        source: "borders",
+        filter: ["==", ["get", "kind"], "national"],
         layout: { "line-join": "round" },
         paint: {
           "line-color": "#ffffff",
-          "line-opacity": 0.9,
-          "line-width": ["interpolate", ["linear"], ["zoom"], 6, 1, 10, 2.2],
+          "line-width": byZoom(2, 3.5),
+          "line-offset": byZoom(3, 5.5),
         },
       },
       {

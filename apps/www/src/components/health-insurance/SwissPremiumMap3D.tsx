@@ -112,7 +112,7 @@ export function SwissPremiumMap3D({
     try {
       instance = new MapLibre({
         container: element,
-        style: healthMapStyle(window.location.origin, geo.areas, labels),
+        style: healthMapStyle(window.location.origin, geo.areas, labels, geo.borders),
         ...camera(box.width, box.height, current.localityId ? current.selected : null),
         minZoom: zoomFor(box.width, box.height, 1) - 0.3,
         maxZoom: 10,

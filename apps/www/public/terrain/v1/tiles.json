@@ -14,10 +14,15 @@
     13,
     49.2
   ],
+  "raise": {
+    "metres": 4000,
+    "inside": "regions-geo.json",
+    "sha256": "ec9eae1045c91f0ef1040ef7191cb5eeb21f9ee7c11883eb940db884f3f3ba25"
+  },
   "attribution": "<a href=\"https://mapterhorn.com/attribution\">© Mapterhorn</a>",
   "source": "https://tiles.mapterhorn.com/{z}/{x}/{y}.webp",
   "copied": "2026-10-24",
   "count": 217,
-  "bytes": 10594920,
-  "sha256": "d791e00bd211197bd47792ba1b020d7026ae7358ca88c69fef232509dcde5692"
+  "bytes": 10631772,
+  "sha256": "a17a2b481c87ca5f01ecafb592ba31372cb1ccd34656f8f71de39cf042254dc0"
 }
