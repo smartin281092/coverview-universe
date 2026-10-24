@@ -7,6 +7,7 @@
         "scripts/verify-brand.mjs",
         "scripts/verify-planning.mjs",
         "scripts/verify-health-live.mjs",
+        "scripts/health-terrain-tiles.mjs",
         ".claude/hooks/guard-bash.mjs"
       ],
       "project": [

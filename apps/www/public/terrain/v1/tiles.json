@@ -1,0 +1,23 @@
+{
+  "tilejson": "3.0.0",
+  "tiles": [
+    "/terrain/v1/{z}/{x}/{y}.webp"
+  ],
+  "encoding": "terrarium",
+  "tileSize": 512,
+  "pixels": 256,
+  "minzoom": 5,
+  "maxzoom": 9,
+  "bounds": [
+    3.6,
+    44.6,
+    13,
+    49.2
+  ],
+  "attribution": "<a href=\"https://mapterhorn.com/attribution\">© Mapterhorn</a>",
+  "source": "https://tiles.mapterhorn.com/{z}/{x}/{y}.webp",
+  "copied": "2026-10-24",
+  "count": 217,
+  "bytes": 10594920,
+  "sha256": "d791e00bd211197bd47792ba1b020d7026ae7358ca88c69fef232509dcde5692"
+}

@@ -16,7 +16,7 @@ import { HealthIcon } from "./HealthIcon";
 import { SiteHeader } from "../site/SiteHeader";
 import { HealthDialog } from "./HealthDialog";
 import { LocalitySearch } from "./LocalitySearch";
-import { SwissPremiumMap } from "./SwissPremiumMap";
+import { HealthPremiumMap } from "./HealthPremiumMap";
 import { HealthModelPanel } from "./HealthModelPanel";
 import { AdaptiveHealthGuide, type HealthGuideSnapshot } from "./AdaptiveHealthGuide";
 import { HealthContactTags, HealthInsurerLogo, HealthRecommendedTag } from "./HealthOfferIdentity";
@@ -459,7 +459,7 @@ export default function HealthComparator({
               <button onClick={() => setRetry((x) => x + 1)}>{copy.retry}</button>
             </div>
           )}
-          <SwissPremiumMap
+          <HealthPremiumMap
             differences={differences}
             comparison={comparison}
             selected={region}

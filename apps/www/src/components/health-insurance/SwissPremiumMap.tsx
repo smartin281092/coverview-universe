@@ -1,16 +1,14 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState } from "react";
 import type {
   HealthComparison,
   HealthOffer,
   HealthPremiumDifference as Difference,
 } from "@coverview/api-client/health-insurance";
-import { HealthPremiumDifference } from "./HealthPremiumDifference";
 import map from "../../../../../data/health-insurance/2027/regions-map.json";
 import neighbors from "../../../../../data/health-insurance/2027/neighbors-map.json";
 import { healthCopy as copy } from "../../content/fr/health-insurance";
-import { HealthIcon } from "./HealthIcon";
-import { HealthContactTags, HealthInsurerLogo, HealthRecommendedMark } from "./HealthOfferIdentity";
-import { money, regionName } from "./health-format";
+import { HealthRegionPopover } from "./HealthRegionPopover";
+import { regionName } from "./health-format";
 const frame = { x: -160, y: -100, width: 1320, height: 850 };
 const vaudRegions = map.regions.filter((region) => region.canton === "VD");
 const vaud = {
@@ -72,15 +70,6 @@ export function SwissPremiumMap({
   const svg = useRef<SVGSVGElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const wrapper = useRef<HTMLDivElement>(null);
-  const popover = useRef<HTMLDivElement>(null);
-  const [popoverHeight, setPopoverHeight] = useState(300);
-  useEffect(() => {
-    const element = popover.current;
-    if (!element) return;
-    const observer = new ResizeObserver(() => setPopoverHeight(element.offsetHeight));
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, [hover]);
   useEffect(() => {
     const outside = (event: PointerEvent) => {
       if (event.target instanceof Node && !wrapper.current?.contains(event.target)) setHover(null);
@@ -198,7 +187,6 @@ export function SwissPremiumMap({
   }, []);
   const active = hover ?? selected;
   const region = [...map.regions, ...neighbors.regions].find((x) => x.id === active);
-  const offers = comparison?.regions.find((x) => x.regionId === active)?.offers ?? [];
   const x = region?.labelPoint[0] ?? 500;
   const y = region?.labelPoint[1] ?? 300;
   const enter = (id: string, clientX: number, clientY: number) => {
@@ -214,14 +202,6 @@ export function SwissPremiumMap({
   const anchorY =
     (size.height - frame.height * ratio) / 2 +
     ((entry?.y ?? y) * view.scale + view.y - frame.y) * ratio;
-  const below = anchorY < popoverHeight + 90 && size.height - anchorY > anchorY - 88;
-  const popupTop = below
-    ? Math.max(88, Math.min(size.height - popoverHeight - 24, anchorY + 18))
-    : Math.min(size.height - 24, Math.max(popoverHeight + 88, anchorY - 18));
-  const popupX = Math.max(
-    Math.min(166, size.width / 2) - size.left,
-    Math.min(size.viewport - Math.min(166, size.width / 2) - size.left, anchorX),
-  );
   return (
     <div
       className="hi-map-wrap"
@@ -442,66 +422,17 @@ export function SwissPremiumMap({
           </button>
         </div>
         {hover && region && (
-          <div
-            className={`hi-region-popover ${below ? "is-below" : ""}`}
-            ref={popover}
-            style={
-              {
-                left: `${popupX}px`,
-                "--hi-pointer-offset": `${anchorX - popupX}px`,
-                top: `${popupTop}px`,
-              } as CSSProperties
-            }
-          >
-            <div className="hi-popover-heading">
-              <span className="hi-region-dot" />
-              <strong>{regionName(active)}</strong>
-              <span className="hi-popover-year">2027</span>
-            </div>
-            <p className="hi-overline">{copy.cheapest}</p>
-            {active.startsWith("EU-") && <p className="hi-small">{copy.foreignHint}</p>}
-            {loading ? (
-              <p className="hi-map-state" role="status">
-                {copy.loading}
-              </p>
-            ) : offers.length ? (
-              offers.map((offer) => (
-                <button className="hi-map-offer" key={offer.id} onClick={() => onOffer(offer)}>
-                  <HealthInsurerLogo offer={offer} labelled />
-                  <span className="hi-offer-description">
-                    <span className="hi-result-name">
-                      <strong>{offer.name}</strong>
-                      {offer.recommended && <HealthRecommendedMark />}
-                    </span>
-                    <HealthContactTags offer={offer} />
-                    {offer.eligibility === "municipality_required" && (
-                      <em>{copy.chooseLocality}</em>
-                    )}
-                  </span>
-                  <span className="hi-offer-price">
-                    <strong>{money(offer.monthlyPremiumMinor)}</strong>
-                    <small>
-                      {copy.currency} {copy.perMonth}
-                    </small>
-                  </span>
-                  <HealthIcon name="chevron" size={15} />
-                  <HealthPremiumDifference value={differences.get(offer.id)} />
-                </button>
-              ))
-            ) : (
-              <p className="hi-map-state">{comparison ? copy.empty : copy.unavailable}</p>
-            )}
-            <button
-              className="hi-popover-all"
-              onClick={() => {
-                onRegion(active);
-                onList(active);
-              }}
-            >
-              {copy.viewAll}
-              <HealthIcon name="arrow" size={16} />
-            </button>
-          </div>
+          <HealthRegionPopover
+            region={active}
+            anchor={{ x: anchorX, y: anchorY }}
+            stage={size}
+            comparison={comparison}
+            loading={loading}
+            differences={differences}
+            onOffer={onOffer}
+            onRegion={onRegion}
+            onList={onList}
+          />
         )}
       </div>
       <div className="hi-map-caption">
