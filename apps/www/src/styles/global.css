@@ -1514,14 +1514,14 @@
   gap: 4px;
   margin-top: 20px;
 }
+/* At the top of the sheet since 24 October 2026, above the menus. */
 .cv-site-sheet-actions {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-top: 28px;
-  padding-top: 20px;
-  border-top: 1px solid #e6e6e6;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e6e6e6;
 }
 @media (max-width: 960px) {
   .cv-site-header-inner {
@@ -1537,6 +1537,12 @@
   .cv-site-actions {
     gap: 14px;
   }
+  /* With the burger menu (user request, 24 October 2026): signing in moves into the menu, the
+     cart keeps its icon and its count. */
+  .cv-site-actions > .cv-site-sign-in,
+  .cv-site-cart-label {
+    display: none;
+  }
 }
 @media (max-width: 600px) {
   .cv-site-header-inner {
@@ -1549,10 +1555,6 @@
   }
   .cv-site-actions {
     gap: 8px;
-  }
-  .cv-site-actions > .cv-site-sign-in,
-  .cv-site-cart-label {
-    display: none;
   }
   .cv-site-actions > .cv-site-account {
     padding-inline: 10px;

@@ -3404,6 +3404,10 @@
     right: 24px;
     line-height: 1.4;
   }
+  /* Without the region select (hidden for now, 24 October 2026), right under the search. */
+  .health-comparator .hi-map-toolbar:not(:has(.hi-region-select)) + .hi-location-hint {
+    top: 215px;
+  }
   .health-comparator .hi-guide-container {
     bottom: 28px;
     left: 14px;

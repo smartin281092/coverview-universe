@@ -40,8 +40,10 @@ const vaud: [number, number] = [
 const swissDegrees = (geo.switzerland[1]?.[0] ?? 10.5) - (geo.switzerland[0]?.[0] ?? 5.96);
 // Tilted everywhere (« 3D partout », 24 October 2026).
 const pitch = 45;
-// Small screens start much closer (12 October 2026): the whole country is unreadable there.
-const startScale = (width: number) => (width < 520 ? 2.5 : width < 900 ? 1.6 : 1);
+// Small screens start much closer (12 October 2026): the whole country is unreadable there;
+// phones closer still since 24 October 2026 (« Fais que le zoom soit au chargement de la page
+// plus fort sur mobile »), half a zoom level more.
+const startScale = (width: number) => (width < 520 ? 3.5 : width < 900 ? 1.6 : 1);
 // The SVG map's scale: Switzerland is 952 of its 1320 x 850 frame units, fitted in the stage.
 const zoomFor = (width: number, height: number, scale: number) =>
   Math.log2((952 * Math.min(width / 1320, height / 850) * scale * 360) / (swissDegrees * 512));

@@ -35,6 +35,9 @@ type Category = NonNullable<HealthCompareInput["categories"]>[number];
 // The model questionnaire is hidden for now (23 October 2026): no questions, ranking or option of
 // its own; the list keeps the API's order.
 const guideEnabled: boolean = false;
+// The region select is hidden for now (user request, 24 October 2026: « Cache l'ilot de
+// sélection de la région pour le moment »): the map, the search and the location choose it.
+const regionSelectEnabled: boolean = false;
 export default function HealthComparator({
   apiUrl,
   walletUrl,
@@ -435,22 +438,24 @@ export default function HealthComparator({
           <div className="hi-map-toolbar">
             <LocalitySearch api={api} selected={locality} onSelect={selectLocality} />
             <HealthLocate api={api} onSelect={selectLocality} />
-            <div className="hi-region-select">
-              <HealthSelect
-                label={copy.chooseRegion}
-                value={region}
-                onChange={selectRegion}
-                options={[
-                  ...(status?.regions ?? [{ id: "VD-1" }]),
-                  ...(status?.foreign?.countries ?? []).map((country) => ({
-                    id: `EU-${country.code}`,
-                  })),
-                ].map((item) => ({
-                  value: item.id,
-                  label: regionName(item.id),
-                }))}
-              />
-            </div>
+            {regionSelectEnabled && (
+              <div className="hi-region-select">
+                <HealthSelect
+                  label={copy.chooseRegion}
+                  value={region}
+                  onChange={selectRegion}
+                  options={[
+                    ...(status?.regions ?? [{ id: "VD-1" }]),
+                    ...(status?.foreign?.countries ?? []).map((country) => ({
+                      id: `EU-${country.code}`,
+                    })),
+                  ].map((item) => ({
+                    value: item.id,
+                    label: regionName(item.id),
+                  }))}
+                />
+              </div>
+            )}
           </div>
           <p className="hi-location-hint">
             {foreign

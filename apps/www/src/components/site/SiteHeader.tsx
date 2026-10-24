@@ -235,7 +235,11 @@ export function SiteHeader({
                 <span className="cv-site-cart-count">{cart.count}</span>
               </button>
             ) : (
-              <a href="/comparateur-assurance-maladie-2027?panier=1" className="cv-site-cart">
+              <a
+                href="/comparateur-assurance-maladie-2027?panier=1"
+                className="cv-site-cart"
+                aria-label={navigation.cart}
+              >
                 <ShoppingBag className="size-[19px]" aria-hidden="true" />
                 <span className="cv-site-cart-label">{navigation.cart}</span>
               </a>
@@ -275,6 +279,18 @@ export function SiteHeader({
             <X className="size-5" aria-hidden="true" />
           </button>
         </div>
+        {/* The account first (user request, 24 October 2026: « déplacer les boutons Se
+            connecter et Créer un compte tout en haut lorsque le burger menu est ouvert »). */}
+        {requestsEnabled && (
+          <div className="cv-site-sheet-actions">
+            <a href={loginUrl} className="cv-site-sign-in">
+              {navigation.signIn}
+            </a>
+            <a href={accountUrl} className="cv-site-account">
+              {navigation.createAccount}
+            </a>
+          </div>
+        )}
         {navigation.menus.map((menu) => (
           <section key={menu.id} aria-labelledby={`${id}-sheet-${menu.id}`}>
             <h2 id={`${id}-sheet-${menu.id}`} className="cv-mega-eyebrow">
@@ -298,16 +314,6 @@ export function SiteHeader({
             </ul>
           </section>
         ))}
-        {requestsEnabled && (
-          <div className="cv-site-sheet-actions">
-            <a href={loginUrl} className="cv-site-sign-in">
-              {navigation.signIn}
-            </a>
-            <a href={accountUrl} className="cv-site-account">
-              {navigation.createAccount}
-            </a>
-          </div>
-        )}
       </dialog>
     </header>
   );
