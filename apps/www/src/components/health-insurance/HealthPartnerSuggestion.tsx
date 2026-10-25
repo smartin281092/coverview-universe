@@ -28,8 +28,15 @@ export function HealthPartnerSuggestion({
     <div className="hi-suggestion">
       <HealthProductImage offer={offer} thumbnail fallback={<HealthInsurerLogo offer={offer} />} />
       <div className="hi-suggestion-model">
-        <button type="button" className="hi-suggestion-open" onClick={() => onOpen(offer)}>
-          {offer.insurerBrand ?? offer.insurerName} · {offer.name}
+        {/* The insurer, then the model beneath it in the eyebrow font (25 October 2026). */}
+        <button
+          type="button"
+          className="hi-suggestion-open"
+          aria-label={`${offer.insurerBrand ?? offer.insurerName} · ${offer.name}`}
+          onClick={() => onOpen(offer)}
+        >
+          <span>{offer.insurerBrand ?? offer.insurerName}</span>
+          <span className="hi-suggestion-name">{offer.name}</span>
         </button>
         <HealthPremiumDifference value={difference} />
       </div>

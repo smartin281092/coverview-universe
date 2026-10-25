@@ -4241,6 +4241,9 @@
   min-width: 0;
 }
 .hi-suggestion-open {
+  display: grid;
+  justify-items: start;
+  gap: 2px;
   padding: 0;
   border: 0;
   background: none;
@@ -4251,6 +4254,15 @@
   color: #27272e;
   overflow-wrap: anywhere;
   cursor: pointer;
+}
+/* The model under its insurer, light grey in the eyebrow font (user request, 25 October 2026);
+   #767676 is the lightest grey keeping 4.5:1 on white. */
+.hi-suggestion-name {
+  font-family: var(--cv-font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: var(--cv-mono-letter-spacing);
+  color: #767676;
 }
 .hi-suggestion-open::after {
   content: "";
