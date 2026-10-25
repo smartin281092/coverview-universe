@@ -42,3 +42,15 @@ Mandat PROG-23. Session réelle : Claude Code, Claude Opus 5.5, effort max.
 | 6 | Suite API | vitest complet, worktree figé sur c55468b | 83 fichiers, 799/799 | — |
 | 7 | Production | images construites sur le serveur ; sauvegarde `20261021T0959Z-before-c55468b` (19 354 877 octets) et copie chiffrée age (19 359 797) ; bascule, 85 migrations | conteneurs sains ; `/health` 200 ; `/action-center/summary` 401 au lieu de 404 ; `previous-contract` 403 sans cookie ; `identity-attachment` 404 `PLATFORM_NOT_FOUND` (documents fermés, boutons de dépôt désactivés) ; demande du titulaire en `year` 2027, sans réponse ; bundles Wallet et site servent le nouveau code ; aucune erreur API | V5 du titulaire |
 | 8 | Wallet connecté | navigateur intégré | aucune session de production ; aucune connexion faite à la place du titulaire | V5 du titulaire |
+
+## Suite du 25 octobre 2026 — suivi d’une demande en deux colonnes
+
+Entrée : « Dans Wallet : suivi d’une demande : quand l’espace en largeur le permet (typiquement PC voir tablette, mettre la section du produit sur la droite des etapes d’acheminement/réalisation de la demande. »
+
+| ref | question | answer | evidence |
+|---|---|---|---|
+| W-10 | Produits à droite des étapes ? | Dès 768 px (tablette en portrait, 688 px de contenu), deux colonnes égales : à gauche les étapes, précédées de « Demande annulée » le cas échéant ; à droite chaque personne avec son produit, puis le total et la mention. Les actions à faire restent au-dessus, sur toute la largeur. Une colonne d’étapes de moins de 440 px met l’animation au-dessus des étapes, comme sur téléphone ; la première personne s’aligne sur la première étape. Sous 768 px, rien ne change. | Demande |
+
+| # | cible | oracle | résultat | suite |
+|---|---|---|---|---|
+| 9 | Suivi en deux colonnes | page réelle de Wallet dans Chromium avec des réponses d’API simulées (identité et une demande fictive de deux personnes, offres réelles de l’API locale) : aucune session ni donnée réelle, la connexion locale passant par WorkOS (journal 5) ; `tsc`, ESLint, Prettier, vitest Wallet | 1440 et 1024 px : produits à droite, animation à côté des étapes ; 768 px : produits à droite, animation au-dessus des étapes ; 390 px : produits sous les étapes ; ni débordement ni erreur ; 26/26 tests | V5 du titulaire connecté |
