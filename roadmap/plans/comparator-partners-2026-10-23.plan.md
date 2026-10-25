@@ -109,6 +109,7 @@ Entrée : « Quand on est dans la fenêtre pour définir le modèle actuel, il e
 | C-37 | « Économies réalisées » ? | La mesure de la liste et de la page d’un modèle : par rapport au modèle actuel (tarif 2027, ou 2026 sans tarif 2027). Sans modèle actuel, pas de ligne d’économies, comme dans la liste. | health-current |
 | C-38 | Boîte ? | Contour seul (#e4e4e7, coins 14 px), image du produit 64 px (52 px sur téléphone), « Compagnie · Modèle », économies dessous, prix en 24 px (20 px) et « Ajouter au panier » en petit CTA avec le shader des CTA. Toute la boîte ouvre le modèle : son nom est un bouton dont la zone couvre la boîte, le petit bouton reste un contrôle distinct (pas de bouton dans un bouton). Agrandissement au survol comme les cartes. | Demande, FRONT-14 |
 | C-39 | Transition ? | La page du modèle suggéré remplace celle du modèle consulté avec le glissement existant du panneau (0,23 s), en haut de page, fond flou conservé. | Demande |
+| C-40 | Prix de la boîte ? (image de la page d’un modèle : « Modifie juste l’affichage du prix dans la box de recommandation […] par la mise en page ci-jointe ») | Même mise en page que le prix de la page d’un modèle : montant en graisse normale #464646, « CHF » (#999) sur « / mois » (#646464) à sa droite ; 30 px, 11 et 10 px (26 px sur téléphone). | Demande |
 
 | # | cible | oracle | résultat |
 |---|---|---|---|
@@ -119,5 +120,6 @@ Entrée : « Quand on est dans la fenêtre pour définir le modèle actuel, il e
 | 27 | Page d’un modèle sans convention | script Playwright, 1440 et 390 px | Helsana BeneFit PLUS Médecin de famille R1 : demande grisée #ececef, phrase dessous ; boîte sans fond bordée #e4e4e7 : image MediTel, « Assura · MediTel », « 1 843,20 CHF économisés / an », 427,00, « Ajouter au panier » ; survol 1,02 ; clic sur la boîte : page MediTel en haut, badge, demande active ; petit bouton : panier avec MediTel ; MediTel : demande active, ni phrase ni boîte ; 390 px : boîte dans la page, sans économies sans modèle actuel ; aucune erreur |
 | 28 | Clavier et mouvement réduit | script Playwright | Tab : lien OFEV de l’info-bulle, nom du modèle, petit bouton (demande grisée sautée) ; focus : contour #6366f1 de la boîte ; Entrée : page MediTel ; mouvement réduit : ombre sans agrandissement |
 | 29 | Build | `astro build`, `scripts/check-www.mjs` | 45 pages ; contrôle passé (44 pages HTML) |
+| 30 | Prix de la boîte | script Playwright, 1440, 768 et 390 px | « 427,00 » 30 px (26 px) en 400 #464646, « CHF » 11 px #999 sur « / mois » 10 px #646464 à droite du montant, tout dans la boîte ; aucune erreur |
 
 Hors périmètre (G-07) : sur téléphone, la page d’un modèle défile de 5 px en largeur (contenu 360 px pour 355 px), mesuré à l’identique sans la boîte (MediTel). Limite : le serveur ne refuse pas encore une demande pour un modèle non partenaire déjà dans un panier.
