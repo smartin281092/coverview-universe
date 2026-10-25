@@ -207,7 +207,7 @@ function Requests({ identity }: { identity: IdentityMe }) {
                   <div className="space-y-6">
                     <ul className="divide-y divide-border">
                       {selected.items.map((item) => (
-                        <li key={item.id} className="space-y-3 py-5">
+                        <li key={item.id} className="space-y-3 py-5 md:first:pt-1.5">
                           <div className="flex justify-between gap-4">
                             <strong className="font-medium">
                               {item.firstName} {item.lastName}
