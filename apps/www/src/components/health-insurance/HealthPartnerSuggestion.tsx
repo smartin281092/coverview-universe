@@ -36,9 +36,10 @@ export function HealthPartnerSuggestion({
       <div className="hi-suggestion-price">
         <p>
           {money(offer.monthlyPremiumMinor)}
-          <small>
-            {copy.currency} {copy.perMonth}
-          </small>
+          <span className="hi-price-unit">
+            <small>{copy.currency}</small>
+            <em>{copy.perMonth}</em>
+          </span>
         </p>
         <button type="button" className="hi-primary" onClick={() => onRequest(offer)}>
           <HealthGradient />

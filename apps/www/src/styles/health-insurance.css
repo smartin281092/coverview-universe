@@ -4269,22 +4269,26 @@
   justify-items: end;
   gap: 8px;
 }
+/* Laid out like the model page's price (user request, 25 October 2026): the amount, then CHF
+   over « / mois » beside it, scaled to the box. */
 .hi-suggestion-price p {
-  display: grid;
-  justify-items: end;
-  gap: 3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin: 0;
-  font-size: 24px;
-  font-weight: 650;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  color: #27272e;
-}
-.hi-suggestion-price small {
-  font-size: 11px;
+  font-size: 30px;
   font-weight: 400;
-  letter-spacing: 0;
-  color: #86868f;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+  color: #464646;
+}
+.hi-suggestion-price .hi-price-unit small {
+  font-size: 11px;
+}
+.hi-suggestion-price .hi-price-unit em {
+  font-size: 10px;
+  font-style: normal;
+  color: #646464;
 }
 .health-comparator .hi-suggestion-price .hi-primary {
   z-index: 1;
@@ -4306,7 +4310,8 @@
     height: 52px;
   }
   .hi-suggestion-price p {
-    font-size: 20px;
+    gap: 6px;
+    font-size: 26px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
