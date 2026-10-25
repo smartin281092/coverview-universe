@@ -145,6 +145,9 @@ export const healthComparisonSchema = z.object({
     .array(z.object({ regionId: healthRegionIdSchema, offers: z.array(healthOfferSchema).max(3) }))
     .max(80),
   offers: z.array(healthOfferSchema).max(15),
+  // The selected list's recommended model, whatever page is shown (25 October 2026): the model
+  // page suggests it in place of a model whose request CoverView cannot handle yet.
+  recommendedOffer: healthOfferSchema.nullable().optional(),
   total: z.number().int(),
   nextOffset: z.number().int().nullable(),
 });

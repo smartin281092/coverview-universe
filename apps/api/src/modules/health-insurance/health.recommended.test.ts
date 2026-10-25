@@ -125,6 +125,26 @@ it("keeps the tag on the list's first partner model, whatever the page or filter
   );
 });
 
+it("returns the list's recommended model whatever the page (25 October 2026)", async () => {
+  const later = await compare({ regionId: "VD-1", offset: 2 });
+  expect(later.offers.map((offer) => offer.modelId)).toEqual([mid(3), mid(4)]);
+  expect(later.recommendedOffer).toMatchObject({
+    modelId: mid(2),
+    recommended: true,
+    partner: true,
+    monthlyPremiumMinor: 41000,
+  });
+  // The overview keeps three models per region: the recommended one is not added there.
+  expect(later.regions.find((region) => region.regionId === "VD-1")?.offers).toHaveLength(3);
+  expect((await compare({ regionId: "VD-1" })).recommendedOffer?.id).toBe(pid(2));
+  expect((await compare({ regionId: "VD-2" })).recommendedOffer?.modelId).toBe(mid(3));
+  // Filters still apply: other insurers alone, no recommended model.
+  expect((await compare({ regionId: "VD-1", insurerIds: [98001] })).recommendedOffer).toBeNull();
+  const foreign = await compare({ regionId: "EU-FR", deductible: 300, offset: 2 });
+  expect(foreign.offers.map((offer) => offer.insurerId)).toEqual([1479]);
+  expect(foreign.recommendedOffer?.insurerId).toBe(1542);
+});
+
 it("applies the same rule to foreign residence countries", async () => {
   const foreign = await compare({ regionId: "EU-FR", deductible: 300 });
   expect(foreign.offers.map((offer) => offer.insurerId)).toEqual([98001, 1542, 1479]);

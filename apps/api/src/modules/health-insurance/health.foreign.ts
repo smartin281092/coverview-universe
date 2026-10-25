@@ -102,6 +102,7 @@ export function createHealthForeignRepository(pool: pg.Pool) {
         offers: offers.slice(0, 3),
       })),
       offers: selected.slice(offset, offset + 15),
+      recommendedOffer: selected.find((offer) => offer.recommended) ?? null,
       total: selected.length,
       nextOffset: offset + 15 < selected.length ? offset + 15 : null,
     });

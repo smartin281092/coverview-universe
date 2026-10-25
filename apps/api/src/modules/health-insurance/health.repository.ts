@@ -223,10 +223,11 @@ export function createHealthRepository(pool: pg.Pool) {
       and ($11::text[] is null or m.id=any($11))
     ), ranked as (select *,row_number() over(partition by "regionId" order by "monthlyPremiumMinor","insurerId","modelId",id) as ranking,
       count(*) over(partition by "regionId") as total from matching),
-    -- The first partner model of each region's whole list, whatever page is shown (23 October 2026).
+    -- The first partner model of each region's whole list, whatever page is shown (23 October 2026);
+    -- the selected region's one is always returned (25 October 2026).
     flagged as (select *,min(ranking) filter (where "insurerId"=any($12::integer[])) over(partition by "regionId") as "recommendedRanking" from ranked)
-    select * from flagged where ranking<=3 or ("regionId"=$5 and ranking>$10 and ranking<=$10+15)
-    order by "regionId",ranking limit 165`,
+    select * from flagged where ranking<=3 or ("regionId"=$5 and ((ranking>$10 and ranking<=$10+15) or ranking="recommendedRanking"))
+    order by "regionId",ranking limit 166`,
       [
         id,
         age,
@@ -277,6 +278,9 @@ export function createHealthRepository(pool: pg.Pool) {
       offers: foreignSelected
         ? foreignComparison.offers
         : selected.filter((row) => row.ranking > input.offset && row.ranking <= input.offset + 15),
+      recommendedOffer: foreignSelected
+        ? foreignComparison.recommendedOffer
+        : (selected.find((row) => row.recommended) ?? null),
       total: foreignSelected ? foreignComparison.total : total,
       nextOffset: foreignSelected
         ? foreignComparison.nextOffset
