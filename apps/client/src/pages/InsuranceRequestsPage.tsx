@@ -183,66 +183,76 @@ function Requests({ identity }: { identity: IdentityMe }) {
                     client.setQueryData([...requestsKey, "detail", requestId], request)
                   }
                 />
-                {selected.state === "cancelled" && <p>{t("states.cancelled")}</p>}
-                <RequestProgress
-                  current={Math.max(
-                    0,
-                    ...selected.history.map((event) =>
-                      stages.indexOf(event.state as (typeof stages)[number]),
-                    ),
-                  )}
-                  cancelled={selected.state === "cancelled"}
-                  complete={selected.state === "completed"}
-                  steps={stages.map((state) => ({
-                    label: t(`states.${state}`),
-                    description: t(`descriptions.${state}`),
-                    at: selected.history.find((event) => event.state === state)?.at,
-                  }))}
-                />
-                <ul className="divide-y divide-border">
-                  {selected.items.map((item) => (
-                    <li key={item.id} className="space-y-3 py-5">
-                      <div className="flex justify-between gap-4">
-                        <strong className="font-medium">
-                          {item.firstName} {item.lastName}
-                        </strong>
-                        <span>
-                          {amount(item.offer.monthlyPremiumMinor)} {t("amount")}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <ProductImage modelId={item.offer.modelId} />
-                        <p className="text-sm">
-                          {t("product", {
-                            insurer: item.offer.insurerBrand ?? item.offer.insurerName,
-                            model: item.offer.name,
-                          })}
-                        </p>
-                      </div>
-                      <p className="text-xs text-muted-foreground">
-                        {t("configuration", {
-                          year: item.birthYear,
-                          postalCode: item.locality.postalCode,
-                          locality: item.locality.locality,
-                          deductible: numberFormat("fr-CH").format(item.deductible),
-                          accident: t(item.accident ? "included" : "excluded"),
-                        })}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {t("sexValue", { value: t(`sex.${item.sex}`) })}
-                        {t("separator")}
-                        {t("currentInsurerValue", {
-                          name:
-                            item.currentInsurerBrand ?? item.currentInsurerName ?? t("notProvided"),
-                        })}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-                <p className="text-lg">
-                  {t("totalAmount", { amount: amount(selected.totalMonthlyMinor) })}
-                </p>
-                <p className="text-sm text-muted-foreground">{t("notContract")}</p>
+                {/* From tablets on, the products sit to the right of the request's steps (user
+                    request, 25 October 2026). */}
+                <div className="grid gap-8 md:grid-cols-2 md:items-start md:gap-10">
+                  <div className="wallet-request-steps space-y-4">
+                    {selected.state === "cancelled" && <p>{t("states.cancelled")}</p>}
+                    <RequestProgress
+                      current={Math.max(
+                        0,
+                        ...selected.history.map((event) =>
+                          stages.indexOf(event.state as (typeof stages)[number]),
+                        ),
+                      )}
+                      cancelled={selected.state === "cancelled"}
+                      complete={selected.state === "completed"}
+                      steps={stages.map((state) => ({
+                        label: t(`states.${state}`),
+                        description: t(`descriptions.${state}`),
+                        at: selected.history.find((event) => event.state === state)?.at,
+                      }))}
+                    />
+                  </div>
+                  <div className="space-y-6">
+                    <ul className="divide-y divide-border">
+                      {selected.items.map((item) => (
+                        <li key={item.id} className="space-y-3 py-5">
+                          <div className="flex justify-between gap-4">
+                            <strong className="font-medium">
+                              {item.firstName} {item.lastName}
+                            </strong>
+                            <span>
+                              {amount(item.offer.monthlyPremiumMinor)} {t("amount")}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <ProductImage modelId={item.offer.modelId} />
+                            <p className="text-sm">
+                              {t("product", {
+                                insurer: item.offer.insurerBrand ?? item.offer.insurerName,
+                                model: item.offer.name,
+                              })}
+                            </p>
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            {t("configuration", {
+                              year: item.birthYear,
+                              postalCode: item.locality.postalCode,
+                              locality: item.locality.locality,
+                              deductible: numberFormat("fr-CH").format(item.deductible),
+                              accident: t(item.accident ? "included" : "excluded"),
+                            })}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {t("sexValue", { value: t(`sex.${item.sex}`) })}
+                            {t("separator")}
+                            {t("currentInsurerValue", {
+                              name:
+                                item.currentInsurerBrand ??
+                                item.currentInsurerName ??
+                                t("notProvided"),
+                            })}
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="text-lg">
+                      {t("totalAmount", { amount: amount(selected.totalMonthlyMinor) })}
+                    </p>
+                    <p className="text-sm text-muted-foreground">{t("notContract")}</p>
+                  </div>
+                </div>
               </>
             )
           )}

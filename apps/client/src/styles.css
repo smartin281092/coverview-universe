@@ -239,3 +239,17 @@
   width: min(100% - var(--cv-page-gutter) * 2, 48rem);
   margin-inline: auto;
 }
+
+/* Request tracking (25 October 2026): from tablets on, the steps share the width with the
+   products; in a narrow column their animation goes above them, as on phones. */
+.wallet-request-steps {
+  container-type: inline-size;
+}
+@container (max-width: 440px) {
+  .wallet-request-steps .cv-request-progress {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .wallet-request-steps .cv-request-animation {
+    margin: 0 auto;
+  }
+}
