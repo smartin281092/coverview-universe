@@ -24,7 +24,8 @@ type Props = {
   birthKnown: boolean;
   locality: HealthLocality | null;
   selection: HealthCurrentSelection | null;
-  onSelect: (value: HealthCurrentSelection | null) => void;
+  // `adjusted`: a setting of the saved model changed in the open picker, which stays open.
+  onSelect: (value: HealthCurrentSelection | null, adjusted?: boolean) => void;
   comparison: {
     value: HealthCurrentComparison | null;
     busy: boolean;
@@ -41,19 +42,47 @@ type Entry = {
   terms: string;
   group: boolean;
 };
+// The saved choice of a model under the picker's settings.
+const choice = (
+  model: HealthCurrentOffer,
+  municipalityId: number | null,
+): HealthCurrentSelection => ({
+  year: 2026,
+  modelId: model.modelId,
+  regionId: model.regionId,
+  ...(municipalityId ? { municipalityId } : {}),
+  deductible: model.deductible,
+  accident: model.accident,
+});
+const sameChoice = (a: HealthCurrentSelection, b: HealthCurrentSelection | null) =>
+  !!b &&
+  a.modelId === b.modelId &&
+  a.regionId === b.regionId &&
+  (a.municipalityId ?? null) === (b.municipalityId ?? null) &&
+  a.deductible === b.deductible &&
+  a.accident === b.accident;
 function CurrentPicker({
   api,
   profile,
   birthKnown,
   locality,
   selection,
+  savedInsurerId,
   onSelect,
   onClose,
 }: Omit<Props, "onSelect"> & {
+  savedInsurerId: number | null;
   onClose: () => void;
-  onSelect: (selection: HealthCurrentSelection, model: HealthCurrentOffer) => void;
+  onSelect: (
+    selection: HealthCurrentSelection,
+    model: HealthCurrentOffer,
+    adjusted?: boolean,
+  ) => void;
 }) {
   const [insurer, setInsurer] = useState<Entry | null>(null);
+  // A setting the person changes applies at once to the saved model (user request, 25 October
+  // 2026): its premium is recalculated and saved without choosing the company and model again.
+  const [adjusted, setAdjusted] = useState(false);
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     heading.current?.focus();
@@ -106,6 +135,29 @@ function CurrentPicker({
   }, [api, input, key, retry, eligibleBirth]);
   const fresh = response?.key === key ? response : null;
   const data = fresh?.value;
+  // The saved model under the current settings, saved again as soon as a setting changes.
+  const saved =
+    data?.status === "available"
+      ? data.offers.find((model) => model.modelId === selection?.modelId)
+      : undefined;
+  const update =
+    saved && saved.eligibility !== "municipality_required"
+      ? choice(saved, data?.municipalityId ?? null)
+      : null;
+  const updateKey = adjusted && update ? JSON.stringify(update) : null;
+  useEffect(() => {
+    if (updateKey && saved && update && !sameChoice(update, selection))
+      onSelect(update, saved, true);
+  }, [updateKey]);
+  const autosave =
+    !adjusted || !selection || data?.status !== "available"
+      ? null
+      : !saved
+        ? "unavailable"
+        : saved.eligibility === "municipality_required"
+          ? "locality"
+          : "saved";
+  const savedCompany = selection ? (saved?.insurerId ?? savedInsurerId) : null;
   const filter = (value: string) =>
     value
       .normalize("NFD")
@@ -184,7 +236,10 @@ function CurrentPicker({
                 <HealthSelect
                   label={`${healthCopy.deductible} 2026`}
                   value={String(deductible)}
-                  onChange={(value) => setDeductible(Number(value))}
+                  onChange={(value) => {
+                    setDeductible(Number(value));
+                    setAdjusted(true);
+                  }}
                   options={(data?.deductibles ?? [deductible]).map((value) => ({
                     value: String(value),
                     label: `${money(value * 100)} CHF`,
@@ -196,7 +251,10 @@ function CurrentPicker({
                 <HealthSelect
                   label={`${healthCopy.accident} 2026`}
                   value={String(accident)}
-                  onChange={(value) => setAccident(value === "true")}
+                  onChange={(value) => {
+                    setAccident(value === "true");
+                    setAdjusted(true);
+                  }}
                   options={[
                     { value: "true", label: healthCopy.accidentIncluded },
                     { value: "false", label: healthCopy.accidentExcluded },
@@ -214,11 +272,24 @@ function CurrentPicker({
                     setLocation(value);
                     setMunicipality(value?.municipalityId ?? undefined);
                     if (value) setRegion(value.regionId);
+                    setAdjusted(true);
                   }}
                 />
               </div>
             )}
           </div>
+          <p className={`hi-current-autosave is-${autosave ?? "idle"}`} role="status">
+            {autosave === "saved" && (
+              <>
+                <HealthIcon name="check" size={15} />
+                {birthKnown && saved
+                  ? interpolate(copy.updatedPrice, { amount: money(saved.monthlyPremiumMinor) })
+                  : copy.updated}
+              </>
+            )}
+            {autosave === "locality" && copy.statuses.location_required}
+            {autosave === "unavailable" && copy.updateUnavailable}
+          </p>
           <p className="hi-field-help">
             {regionName(data?.regionId ?? region)}
             {!region.startsWith("EU-") && !municipality ? ` · ${copy.regionHint}` : ""}
@@ -254,38 +325,32 @@ function CurrentPicker({
               </label>
               <div className={`hi-current-cards ${insurer ? "is-models" : "is-companies"}`}>
                 {!insurer
-                  ? companies.map((company) => (
-                      <button
-                        key={company.key}
-                        className="hi-current-card"
-                        onClick={() => {
-                          setInsurer(company);
-                          setSearch("");
-                        }}
-                      >
-                        <HealthInsurerLogo offer={company.logo} />
-                        <strong>{company.label}</strong>
-                      </button>
-                    ))
+                  ? companies.map((company) => {
+                      // The saved company and model are outlined in blue (25 October 2026).
+                      const current = savedCompany !== null && company.ids.includes(savedCompany);
+                      return (
+                        <button
+                          key={company.key}
+                          className={`hi-current-card${current ? " is-saved" : ""}`}
+                          aria-current={current || undefined}
+                          onClick={() => {
+                            setInsurer(company);
+                            setSearch("");
+                          }}
+                        >
+                          <HealthInsurerLogo offer={company.logo} />
+                          <strong>{company.label}</strong>
+                        </button>
+                      );
+                    })
                   : models.map((model) => (
                       <button
                         key={model.id}
-                        className="hi-current-card"
+                        className={`hi-current-card${model.modelId === selection?.modelId ? " is-saved" : ""}`}
+                        aria-current={model.modelId === selection?.modelId || undefined}
                         disabled={model.eligibility === "municipality_required"}
                         onClick={() => {
-                          onSelect(
-                            {
-                              year: 2026,
-                              modelId: model.modelId,
-                              regionId: model.regionId,
-                              ...(data.municipalityId
-                                ? { municipalityId: data.municipalityId }
-                                : {}),
-                              deductible: model.deductible,
-                              accident: model.accident,
-                            },
-                            model,
-                          );
+                          onSelect(choice(model, data.municipalityId), model);
                           onClose();
                         }}
                       >
@@ -416,10 +481,11 @@ export function HealthCurrentInsurance(props: Props) {
       {open && (
         <CurrentPicker
           {...props}
+          savedInsurerId={identity?.insurerId ?? null}
           onClose={() => setOpen(false)}
-          onSelect={(selection, model) => {
+          onSelect={(selection, model, adjusted) => {
             setSelectedModel(model);
-            props.onSelect(selection);
+            props.onSelect(selection, adjusted);
           }}
         />
       )}

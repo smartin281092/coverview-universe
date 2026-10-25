@@ -3901,14 +3901,23 @@
   text-align: left;
   cursor: pointer;
   color: #27272e;
+  position: relative;
   transition:
-    background 0.15s,
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
     border-color 0.15s;
 }
+/* Hover (user request, 25 October 2026): the card grows slightly with a soft, diffuse shadow
+   instead of a coloured background. */
 .hi-current-card:hover:not(:disabled),
 .hi-current-card:focus-visible {
-  background: #f2f3fb;
-  border-color: #a5a8ed;
+  z-index: 1;
+  transform: scale(1.02);
+  box-shadow: 0 14px 34px #1b1d2e12;
+}
+/* The saved company and model (25 October 2026). */
+.hi-current-card.is-saved {
+  border-color: #3b82f6;
 }
 .hi-current-card:disabled {
   cursor: not-allowed;
@@ -4165,5 +4174,146 @@
   }
   .hi-profile dialog .hi-field-help {
     margin-top: 7px;
+  }
+}
+/* A setting of the saved current model, saved at once (25 October 2026). */
+.hi-current-autosave:not(:empty) {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 12px 0 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+.hi-current-autosave.is-saved svg {
+  flex: none;
+  color: #16a34a;
+}
+/* A model whose insurer has no CoverView agreement yet (25 October 2026): its request is greyed
+   out, a short reason follows, then a model CoverView can handle. */
+.health-comparator .hi-primary.hi-request-cta:disabled {
+  background: #ececef;
+  color: #a1a1aa;
+  text-shadow: none;
+  box-shadow: none;
+  filter: none;
+  cursor: not-allowed;
+}
+.hi-request-unavailable {
+  margin: -8px 0 14px;
+  font-size: 12px;
+  color: #6b7280;
+}
+/* Only a border, no background; it grows on hover like the picker's cards. The model's name
+   opens it, its hit area covering the box; the cart button sits above that area. */
+.hi-suggestion {
+  position: relative;
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding: 14px 16px;
+  border: 1px solid #e4e4e7;
+  border-radius: 14px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.hi-suggestion:hover,
+.hi-suggestion:has(.hi-suggestion-open:focus-visible) {
+  transform: scale(1.02);
+  box-shadow: 0 14px 34px #1b1d2e12;
+}
+.hi-suggestion:has(.hi-suggestion-open:focus-visible) {
+  outline: 2px solid #6366f1;
+  outline-offset: 3px;
+}
+.hi-suggestion .hi-product-image.is-thumbnail,
+.hi-suggestion > .hi-insurer-logo {
+  width: 64px;
+  height: 64px;
+  margin: 0;
+}
+.hi-suggestion-model {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+.hi-suggestion-open {
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #27272e;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+.hi-suggestion-open::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+}
+.health-comparator .hi-suggestion-open:focus-visible {
+  outline: none;
+}
+.hi-suggestion-model .hi-premium-difference {
+  margin: 0;
+}
+.hi-suggestion-price {
+  display: grid;
+  justify-items: end;
+  gap: 8px;
+}
+.hi-suggestion-price p {
+  display: grid;
+  justify-items: end;
+  gap: 3px;
+  margin: 0;
+  font-size: 24px;
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: #27272e;
+}
+.hi-suggestion-price small {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: #86868f;
+}
+.health-comparator .hi-suggestion-price .hi-primary {
+  z-index: 1;
+  min-height: 30px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 11px !important;
+  white-space: nowrap;
+}
+@media (max-width: 480px) {
+  .hi-suggestion {
+    grid-template-columns: 52px minmax(0, 1fr) auto;
+    gap: 10px;
+    padding: 12px;
+  }
+  .hi-suggestion .hi-product-image.is-thumbnail,
+  .hi-suggestion > .hi-insurer-logo {
+    width: 52px;
+    height: 52px;
+  }
+  .hi-suggestion-price p {
+    font-size: 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hi-current-card:hover:not(:disabled),
+  .hi-current-card:focus-visible,
+  .hi-suggestion:hover,
+  .hi-suggestion:has(.hi-suggestion-open:focus-visible) {
+    transform: none;
   }
 }

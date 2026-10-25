@@ -24,6 +24,8 @@ export const healthCopy = {
     disclosure:
       "Assura et Groupe Mutuel sont partenaires de CoverView : leurs modèles portent ce badge.",
   },
+  // Under the greyed request of a model whose insurer has no CoverView agreement yet.
+  requestUnavailable: "Demande d’offre pas encore disponible chez {{brand}}.",
   contactDetails: {
     free: "Vous consultez directement le médecin de votre choix.",
     gp: "Vous commencez par votre médecin de famille.",

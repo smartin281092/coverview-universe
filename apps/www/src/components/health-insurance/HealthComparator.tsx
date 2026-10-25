@@ -29,6 +29,7 @@ import { HealthCurrentInsurance } from "./HealthCurrentInsurance";
 import { HealthBirthDate } from "./HealthBirthDate";
 import { HealthPremiumDifference } from "./HealthPremiumDifference";
 import { useCurrentInsurance } from "./use-current-insurance";
+import { usePartnerSuggestion } from "./use-partner-suggestion";
 import { healthCurrentCopy } from "../../content/fr/health-current";
 
 type Category = NonNullable<HealthCompareInput["categories"]>[number];
@@ -263,6 +264,7 @@ export default function HealthComparator({
     setProfileRevision((value) => value + 1);
     setProfileOpen(true);
   };
+  const suggestion = usePartnerSuggestion(api, requestsEnabled ? offer : null, profile, locality);
   const currentComparison = useCurrentInsurance(
     api,
     birthKnown ? currentInsurance : null,
@@ -276,6 +278,7 @@ export default function HealthComparator({
         ? (recommendation.result?.ranked.map((row) => row.offer.id) ?? [])
         : []),
       ...(offer ? [offer.id] : []),
+      ...(suggestion ? [suggestion.id] : []),
     ],
   );
   const differences = new Map(
@@ -339,9 +342,10 @@ export default function HealthComparator({
               birthKnown={birthKnown}
               locality={locality}
               selection={currentInsurance}
-              onSelect={(value) => {
+              onSelect={(value, adjusted) => {
                 setCurrentInsurance(value);
-                if (value) afterProfile();
+                // A setting adjusted in the open picker saves at once, without leaving it.
+                if (value && !adjusted) afterProfile();
               }}
               comparison={currentComparison}
             />
@@ -753,6 +757,9 @@ export default function HealthComparator({
           }}
           apiUrl={apiUrl}
           difference={offer ? differences.get(offer.id) : undefined}
+          suggestion={suggestion}
+          suggestionDifference={suggestion ? differences.get(suggestion.id) : undefined}
+          onOpenOffer={setOffer}
           year={profile.year ?? 2027}
           onBack={() => {
             if (offer && offer.regionId !== region) selectRegion(offer.regionId);

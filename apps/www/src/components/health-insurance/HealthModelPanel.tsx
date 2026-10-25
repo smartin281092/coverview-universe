@@ -18,6 +18,7 @@ import { HealthDialog } from "./HealthDialog";
 import { HealthIcon } from "./HealthIcon";
 import { HealthFirstContacts, HealthInsurerLogo, HealthOfferBadges } from "./HealthOfferIdentity";
 import { HealthPartnerBadge } from "./HealthPartnerBadge";
+import { HealthPartnerSuggestion } from "./HealthPartnerSuggestion";
 import { interpolate, money, regionName } from "./health-format";
 import { HealthModelData } from "./HealthModelData";
 import { useModelConfiguration } from "./use-model-configuration";
@@ -37,6 +38,9 @@ export function HealthModelPanel({
   locality,
   status,
   onConfigured,
+  suggestion,
+  suggestionDifference,
+  onOpenOffer,
 }: {
   offer: HealthOffer;
   onClose: () => void;
@@ -54,6 +58,10 @@ export function HealthModelPanel({
   locality: HealthLocality | null;
   status: HealthStatus | null;
   onConfigured: (offer: HealthOffer) => void;
+  // A model CoverView can handle, shown when this one's request cannot be yet (25 October 2026).
+  suggestion?: HealthOffer | null;
+  suggestionDifference?: Difference | undefined;
+  onOpenOffer?: (offer: HealthOffer) => void;
 }) {
   const [tab, setTab] = useState<"coverage" | "benefits" | "club">("coverage");
   const evidence = useHealthEvidence(apiUrl, year, !!offer && !offer.residenceCountry);
@@ -148,16 +156,43 @@ export function HealthModelPanel({
                 )}
               </div>
               <HealthPremiumDifference value={difference} detail />
-              {onRequest && (
-                <button
-                  className="hi-primary hi-full hi-request-cta"
-                  onClick={() => onRequest(offer)}
-                >
-                  <HealthGradient />
-                  {offerCopy.request}
-                  <HealthIcon name="arrow" size={16} />
-                </button>
-              )}
+              {onRequest &&
+                (offer.partner ? (
+                  <button
+                    className="hi-primary hi-full hi-request-cta"
+                    onClick={() => onRequest(offer)}
+                  >
+                    <HealthGradient />
+                    {offerCopy.request}
+                    <HealthIcon name="arrow" size={16} />
+                  </button>
+                ) : (
+                  // Requests go only to the insurers with a CoverView agreement, the partners
+                  // (health.partner.1); the others' models suggest one (25 October 2026).
+                  <>
+                    <button
+                      className="hi-primary hi-full hi-request-cta"
+                      disabled
+                      aria-describedby="hi-request-unavailable"
+                    >
+                      {offerCopy.request}
+                      <HealthIcon name="arrow" size={16} />
+                    </button>
+                    <p id="hi-request-unavailable" className="hi-request-unavailable">
+                      {interpolate(copy.requestUnavailable, {
+                        brand: offer.insurerBrand ?? offer.insurerName,
+                      })}
+                    </p>
+                    {suggestion && onOpenOffer && (
+                      <HealthPartnerSuggestion
+                        offer={suggestion}
+                        difference={suggestionDifference}
+                        onOpen={onOpenOffer}
+                        onRequest={onRequest}
+                      />
+                    )}
+                  </>
+                ))}
             </div>
             {!configuration.ready && (
               <div

@@ -18,6 +18,10 @@ export const healthCurrentCopy = {
     "Renseignez votre date de naissance ci-dessous pour retrouver vos tarifs 2026 et 2027.",
   birthAfter2026: "Aucun contrat 2026 ne peut être comparé pour une naissance après 2026.",
   selectModel: "Choisir ce modèle",
+  updated: "Modèle actuel mis à jour",
+  updatedPrice: "Modèle actuel mis à jour · {{amount}} CHF / mois",
+  updateUnavailable:
+    "Votre modèle actuel n’est pas proposé avec ces réglages : choisissez-en un autre.",
   modify: "Modifier",
   remove: "Retirer mon assurance actuelle",
   loading: "Recherche des tarifs officiels 2026…",
