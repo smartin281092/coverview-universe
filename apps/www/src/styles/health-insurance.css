@@ -4334,3 +4334,20 @@
     transform: none;
   }
 }
+/* The cart's savings (user request, 29 October 2026): each person's under their model, as in the
+   list, and all the people's at the bottom of the total. */
+.hi-cart-savings {
+  grid-column: 1 / -1;
+  display: grid;
+  gap: 4px;
+  padding-top: 12px;
+  border-top: 1px solid #e5e5e5;
+}
+.hi-cart-savings .hi-premium-difference {
+  margin: 0;
+  max-width: none;
+}
+.hi-cart-savings small {
+  font-size: 11px;
+  color: #646464;
+}

@@ -8,7 +8,8 @@ export const offerCopy = {
   cart: "Mon panier",
   title: "Votre demande d’offre",
   subtitle: "Les bonnes couvertures, pour chaque personne de votre famille.",
-  steps: ["Votre accès", "La personne", "Votre panier", "Récapitulatif"],
+  // The cart is the last step since 29 October 2026: the recap repeated it.
+  steps: ["Votre accès", "La personne", "Votre panier"],
   accessTitle: "Comment souhaitez-vous continuer ?",
   accessHint:
     "Choisissez le parcours qui vous convient. Votre sélection d’assurance est conservée.",
@@ -61,6 +62,12 @@ export const offerCopy = {
   empty: "Votre panier est vide. Choisissez un modèle sur la carte.",
   total: "Primes mensuelles estimées",
   annual: "Primes annuelles estimées",
+  // Under the total, the people's savings against the current models given in the comparator.
+  savingsOne: "Par rapport au modèle actuel indiqué",
+  savingsAll: "Pour les {{count}} personnes, par rapport à leur modèle actuel",
+  savingsSome: "Pour {{known}} personnes sur {{count}}, celles dont le modèle actuel est indiqué",
+  savingsSomeOne: "Pour 1 personne sur {{count}}, la seule dont le modèle actuel est indiqué",
+  repriced: "Les primes ont été mises à jour. Vérifiez votre panier, puis envoyez votre demande.",
   noPayment: "Demande d’offre sans paiement. Aucun contrat d’assurance n’est conclu à cette étape.",
   submit: "Envoyer ma demande d’offre",
   sending: "Envoi en cours…",
@@ -69,8 +76,7 @@ export const offerCopy = {
   error: "L’opération n’a pas abouti. Vérifiez vos informations et réessayez.",
   invalidCode:
     "Le code est incorrect, expiré ou déjà utilisé. Vous pouvez demander un nouveau code.",
-  conflict:
-    "Les données ou le prix ont changé. Revenez au panier pour actualiser le récapitulatif.",
+  conflict: "Les données ou le prix ont changé. Reprenez votre panier pour le mettre à jour.",
   required: "Complétez les coordonnées et la localité avant de poursuivre.",
   full: "Le panier accepte jusqu’à 12 personnes.",
   legalIntro:

@@ -809,6 +809,9 @@ export default function HealthComparator({
                           )?.locality ?? null),
                     birth: birthEntered ? birth : "",
                     ...(sex && sex !== "declined" ? { sex } : {}),
+                    current: birthKnown ? currentInsurance : null,
+                    currentInsurerId:
+                      (birthKnown && currentComparison.value?.current?.insurerId) || null,
                   });
                   setCheckout(true);
                 }

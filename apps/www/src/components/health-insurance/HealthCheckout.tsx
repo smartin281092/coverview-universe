@@ -13,14 +13,17 @@ import type {
   HealthLocality,
   HealthStatus,
   HealthCompareInput,
+  HealthCurrentSelection,
 } from "@coverview/api-client/health-insurance";
 import { offerCopy as copy } from "../../content/fr/insurance-requests";
 import { healthCopy } from "../../content/fr/health-insurance";
 import { HealthDialog } from "./HealthDialog";
 import { HealthSelect } from "./HealthSelect";
 import { HealthProductImage } from "./HealthProductImage";
+import { HealthPremiumDifference } from "./HealthPremiumDifference";
 import { LocalitySearch } from "./LocalitySearch";
-import { money } from "./health-format";
+import { interpolate, money } from "./health-format";
+import { useCartSavings } from "./use-cart-savings";
 export type CheckoutCandidate = {
   key: string;
   offer: HealthOffer;
@@ -28,8 +31,24 @@ export type CheckoutCandidate = {
   locality: HealthLocality | null;
   birth: string;
   sex?: "female" | "male" | "other";
+  // The person's current model given in the comparator, for the cart's savings, and its company.
+  current?: HealthCurrentSelection | null;
+  currentInsurerId?: number | null;
 };
 type Browser = Awaited<ReturnType<ReturnType<typeof createInsuranceClient>["browser"]>>;
+// Each person's current model, kept for the browser tab only and never sent with the request
+// (29 October 2026): the cart measures their savings with it, as the list does.
+const currentsKey = "cv-cart-current-models";
+function readCurrents(): Record<string, HealthCurrentSelection> {
+  try {
+    const value: unknown = JSON.parse(sessionStorage.getItem(currentsKey) ?? "{}");
+    return value && typeof value === "object" && !Array.isArray(value)
+      ? (value as Record<string, HealthCurrentSelection>)
+      : {};
+  } catch {
+    return {};
+  }
+}
 
 export function HealthCheckout({
   apiUrl,
@@ -70,7 +89,20 @@ export function HealthCheckout({
   const [selectedOffer, setSelectedOffer] = useState<HealthOffer | null>(null);
   const [priced, setPriced] = useState<InsuranceRequest | null>(null);
   const [busy, setBusy] = useState(false);
+  const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
+  const [currents, setCurrents] = useState(readCurrents);
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(currentsKey, JSON.stringify(currents));
+    } catch {
+      // Without storage, the savings stay shown until the page is left.
+    }
+  }, [currents]);
+  const cartItems = (priced?.items ?? []).filter((item) =>
+    items.some((person) => person.id === item.id),
+  );
+  const savings = useCartSavings(healthApi, cartItems, currents);
   const emailFlight = useRef<Promise<boolean> | null>(null);
   const keys = useRef(new Map<string, string>());
   const abort = useRef(new AbortController());
@@ -105,14 +137,18 @@ export function HealthCheckout({
   }, [api, open, browser, loadAttempt]);
   useEffect(() => {
     if (!candidate) return;
+    const personId = crypto.randomUUID();
+    const current = candidate.current;
+    if (current) setCurrents((value) => ({ ...value, [personId]: current }));
     setPerson({
-      id: crypto.randomUUID(),
+      id: personId,
       firstName: "",
       lastName: "",
       sex: candidate.sex ?? "female",
       birthYear: candidate.profile.birthYear,
       ...(candidate.birth ? { birthDate: candidate.birth } : {}),
-      currentInsurerId: null,
+      // The company of the current model given in the comparator, still editable here.
+      currentInsurerId: candidate.currentInsurerId ?? null,
       modelId: candidate.offer.modelId,
       localityId: candidate.locality?.id ?? "",
       accident: candidate.offer.accident,
@@ -204,7 +240,7 @@ export function HealthCheckout({
   async function price(nextItems: InsurancePerson[], nextStep: number) {
     if (!id) {
       setError(copy.error);
-      return;
+      return false;
     }
     setBusy(true);
     setError("");
@@ -217,8 +253,10 @@ export function HealthCheckout({
       setPriced(value);
       setItems(value.items.map((item) => insurancePersonSchema.strip().parse(item)));
       setStep(nextStep);
+      return true;
     } catch (cause) {
       showError(cause);
+      return false;
     } finally {
       setBusy(false);
     }
@@ -226,6 +264,7 @@ export function HealthCheckout({
   async function submit() {
     if (!id || !priced || busy) return;
     setBusy(true);
+    setSending(true);
     setError("");
     try {
       const value = await api.submit(
@@ -239,8 +278,15 @@ export function HealthCheckout({
           : `/suivi-demande-assurance?id=${encodeURIComponent(value.id)}`,
       );
     } catch (cause) {
-      showError(cause);
       setBusy(false);
+      setSending(false);
+      // Premiums changed since the cart was priced: nothing is sent, the cart shows the new
+      // amounts to review first, as the separate recap step did before 29 October 2026.
+      if (cause instanceof InsuranceApiError && cause.code === "INSURANCE_REQUEST_PRICE_CHANGED") {
+        if (await price(items, 2)) setError(copy.repriced);
+        return;
+      }
+      showError(cause);
     }
   }
   const patch = (value: Partial<InsurancePerson>) =>
@@ -622,99 +668,96 @@ export function HealthCheckout({
               </div>
             </form>
           )}
-          {step >= 2 && (
+          {/* The cart is also the last step (user request, 29 October 2026): the separate recap
+              repeated it, its conditions and sending now close the cart. */}
+          {step === 2 && (
             <>
-              {priced?.items.length ? (
+              {cartItems.length ? (
                 <ul className="hi-cart-items">
-                  {priced.items
-                    .filter((item) => items.some((person) => person.id === item.id))
-                    .map((item) => (
-                      <li key={item.id}>
-                        <div className="hi-cart-person">
-                          <span>
-                            {item.firstName.slice(0, 1)}
-                            {item.lastName.slice(0, 1)}
-                          </span>
-                          <div>
-                            <strong>
-                              {item.firstName} {item.lastName}
-                            </strong>
-                            <small>
-                              {item.birthYear} · {item.locality.postalCode} {item.locality.locality}
-                            </small>
-                          </div>
-                          <b>
-                            {money(item.offer.monthlyPremiumMinor)}
-                            <small>{copy.month}</small>
-                          </b>
+                  {cartItems.map((item) => (
+                    <li key={item.id}>
+                      <div className="hi-cart-person">
+                        <span>
+                          {item.firstName.slice(0, 1)}
+                          {item.lastName.slice(0, 1)}
+                        </span>
+                        <div>
+                          <strong>
+                            {item.firstName} {item.lastName}
+                          </strong>
+                          <small>
+                            {item.birthYear} · {item.locality.postalCode} {item.locality.locality}
+                          </small>
                         </div>
-                        <div className="hi-cart-product">
-                          <HealthProductImage offer={item.offer} thumbnail />
-                          <p>
-                            {item.offer.insurerBrand ?? item.offer.insurerName} · {item.offer.name}
-                          </p>
-                        </div>
-                        <p className="hi-small">
-                          {copy.deductible} : {item.deductible} CHF · {copy.accident} :{" "}
-                          {item.accident ? copy.yes : copy.no}
+                        <b>
+                          {money(item.offer.monthlyPremiumMinor)}
+                          <small>{copy.month}</small>
+                        </b>
+                      </div>
+                      <div className="hi-cart-product">
+                        <HealthProductImage offer={item.offer} thumbnail />
+                        <p>
+                          {item.offer.insurerBrand ?? item.offer.insurerName} · {item.offer.name}
                         </p>
-                        <p className="hi-small">
-                          {copy.currentInsurer} :{" "}
-                          {status?.insurers.find((x) => x.id === item.currentInsurerId)?.brand ??
-                            item.currentInsurerBrand ??
-                            item.currentInsurerName ??
-                            copy.noInsurer}
-                        </p>
-                        {step === 2 && (
-                          <div className="hi-cart-actions">
-                            <button
-                              disabled={busy}
-                              onClick={() => {
-                                const original = items.find((x) => x.id === item.id);
-                                if (original) {
-                                  setPerson(original);
-                                  setSexChosen(true);
-                                  setLocality(item.locality);
-                                  setSelectedOffer(item.offer);
-                                  setStep(1);
-                                }
-                              }}
-                            >
-                              {copy.edit}
-                            </button>
-                            <button
-                              disabled={busy}
-                              onClick={() => {
-                                const remaining = items.filter((x) => x.id !== item.id);
-                                void price(remaining, 2);
-                              }}
-                            >
-                              {copy.remove}
-                            </button>
-                          </div>
-                        )}
-                      </li>
-                    ))}
+                      </div>
+                      <HealthPremiumDifference value={savings.byPerson.get(item.id)} />
+                      <p className="hi-small">
+                        {copy.deductible} : {item.deductible} CHF · {copy.accident} :{" "}
+                        {item.accident ? copy.yes : copy.no}
+                      </p>
+                      <p className="hi-small">
+                        {copy.currentInsurer} :{" "}
+                        {status?.insurers.find((x) => x.id === item.currentInsurerId)?.brand ??
+                          item.currentInsurerBrand ??
+                          item.currentInsurerName ??
+                          copy.noInsurer}
+                      </p>
+                      <div className="hi-cart-actions">
+                        <button
+                          disabled={busy}
+                          onClick={() => {
+                            const original = items.find((x) => x.id === item.id);
+                            if (original) {
+                              setPerson(original);
+                              setSexChosen(true);
+                              setLocality(item.locality);
+                              setSelectedOffer(item.offer);
+                              setStep(1);
+                            }
+                          }}
+                        >
+                          {copy.edit}
+                        </button>
+                        <button
+                          disabled={busy}
+                          onClick={() => {
+                            const remaining = items.filter((x) => x.id !== item.id);
+                            void price(remaining, 2);
+                          }}
+                        >
+                          {copy.remove}
+                        </button>
+                      </div>
+                    </li>
+                  ))}
                 </ul>
               ) : (
                 <p className="hi-small">{copy.empty}</p>
               )}
-              {step === 2 && (
-                <button
-                  className="hi-add-person"
-                  disabled={busy || items.length >= 12}
-                  onClick={() => {
-                    setPerson(null);
-                    setSexChosen(false);
-                    setLocality(null);
-                    setSelectedOffer(null);
-                    setError("");
-                    onAddPerson();
-                  }}
-                >
-                  + {copy.addPerson}
-                </button>
-              )}
+              <button
+                className="hi-add-person"
+                disabled={busy || items.length >= 12}
+                onClick={() => {
+                  setPerson(null);
+                  setSexChosen(false);
+                  setLocality(null);
+                  setSelectedOffer(null);
+                  setError("");
+                  onAddPerson();
+                }}
+              >
+                + {copy.addPerson}
+              </button>
               {priced && (
                 <div className="hi-cart-total">
                   <span>{copy.total}</span>
@@ -723,9 +766,25 @@ export function HealthCheckout({
                   </strong>
                   <span>{copy.annual}</span>
                   <span>{money(priced.totalMonthlyMinor * 12)} CHF</span>
+                  {/* All the people's savings under the total (29 October 2026). */}
+                  {savings.total && (
+                    <div className="hi-cart-savings">
+                      <HealthPremiumDifference value={savings.total} />
+                      <small>
+                        {savings.known < cartItems.length
+                          ? interpolate(
+                              savings.known === 1 ? copy.savingsSomeOne : copy.savingsSome,
+                              { known: savings.known, count: cartItems.length },
+                            )
+                          : cartItems.length === 1
+                            ? copy.savingsOne
+                            : interpolate(copy.savingsAll, { count: cartItems.length })}
+                      </small>
+                    </div>
+                  )}
                 </div>
               )}
-              {step === 3 && (
+              {cartItems.length > 0 && (
                 <>
                   <p className="hi-small">
                     {registeredEmail} · {wallet ? copy.wallet : copy.guest}
@@ -771,20 +830,16 @@ export function HealthCheckout({
               )}
               <p className="hi-small">{copy.noPayment}</p>
               <div className="hi-checkout-actions">
-                <button
-                  className="hi-secondary"
-                  disabled={busy}
-                  onClick={() => setStep(step === 3 ? 2 : 0)}
-                >
+                <button className="hi-secondary" disabled={busy} onClick={() => setStep(0)}>
                   {copy.back}
                 </button>
                 <button
                   className="hi-primary"
                   disabled={busy || !items.length}
-                  onClick={() => (step === 2 ? void price(items, 3) : void submit())}
+                  onClick={() => void submit()}
                 >
                   <HealthGradient />
-                  {step === 2 ? copy.continue : busy ? copy.sending : copy.submit}
+                  {sending ? copy.sending : copy.submit}
                 </button>
               </div>
             </>

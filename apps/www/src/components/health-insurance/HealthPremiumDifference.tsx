@@ -6,7 +6,10 @@ export function HealthPremiumDifference({
   value,
   detail = false,
 }: {
-  value?: Difference | undefined;
+  // A model's difference, or a sum of them (the cart's total since 29 October 2026).
+  value?:
+    | Pick<Difference, "direction" | "annualSavingMinor" | "monthlySavingMinor" | "baselineYear">
+    | undefined;
   detail?: boolean;
 }) {
   if (!value) return null;

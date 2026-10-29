@@ -65,6 +65,12 @@ const links = siteLinks(Astro.site?.origin ?? Astro.url.origin);
     <script>
       import { openConsentSettings } from '@coverview/ui/analytics';
       for (const button of document.querySelectorAll('[data-consent-open]')) button.addEventListener('click', openConsentSettings);
+      // iOS zooms into a focused field under 16 px and leaves the page zoomed (user request,
+      // 29 October 2026). maximum-scale=1 stops that, and iOS still lets people pinch-zoom; other
+      // browsers would block zooming with it, so it is set on iOS only, the one engine with
+      // -webkit-touch-callout.
+      if (CSS.supports('-webkit-touch-callout', 'none'))
+        document.querySelector('meta[name="viewport"]')?.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1');
     </script>
   </body>
 </html>
