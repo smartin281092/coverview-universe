@@ -86,7 +86,12 @@ function Configuration({ identity, blocked }: { identity: IdentityMe; blocked: b
     [error, setError] = useState(""),
     [saved, setSaved] = useState(false),
     [imported, setImported] = useState<EvidenceCatalog | null>(null),
-    [catalogReason, setCatalogReason] = useState("");
+    [catalogReason, setCatalogReason] = useState(""),
+    [catalogIssue, setCatalogIssue] = useState(""),
+    [catalogDone, setCatalogDone] = useState<string | null>(null),
+    [fileKey, setFileKey] = useState(0),
+    // The operation that failed last, so its error shows next to it.
+    [failed, setFailed] = useState<string | null>(null);
   const [profile, setProfile] = useState(JSON.stringify(fictional, null, 2)),
     [simulation, setSimulation] = useState<RecommendationResult | null>(null);
   const abort = useRef(new AbortController()),
@@ -126,7 +131,9 @@ function Configuration({ identity, blocked }: { identity: IdentityMe; blocked: b
     if (blocked || pending) return;
     setPending(true);
     setError("");
+    setFailed(null);
     setSaved(false);
+    if (name !== "catalog") setCatalogDone(null);
     const operation = name + JSON.stringify(body),
       key = keys.current.get(operation) ?? crypto.randomUUID();
     keys.current.set(operation, key);
@@ -143,10 +150,12 @@ function Configuration({ identity, blocked }: { identity: IdentityMe; blocked: b
         }
       }
     } catch (cause) {
-      if (!abort.current.signal.aborted)
+      if (!abort.current.signal.aborted) {
+        setFailed(name);
         setError(
           t(cause instanceof RecommendationApiError && cause.status === 409 ? "conflict" : "error"),
         );
+      }
     } finally {
       if (!abort.current.signal.aborted) setPending(false);
     }
@@ -196,12 +205,124 @@ function Configuration({ identity, blocked }: { identity: IdentityMe; blocked: b
         <h1 className="cv-app-heading">{t("title")}</h1>
         <p className="text-muted-foreground">{t("description")}</p>
       </header>
-      {error && (
+      {error && failed !== "catalog" && (
         <p role="alert" className="text-destructive">
           {error}
         </p>
       )}
-      {saved && <p role="status">{t("saved")}</p>}
+      {saved && failed !== "catalog" && !catalogDone && <p role="status">{t("saved")}</p>}
+      {/* Publishing a catalogue first, in one place (user request, 29 October 2026): the file, its
+          check right beneath it, a reason of its own and the result next to the button. */}
+      <section
+        id="catalog-publish"
+        className="space-y-4 rounded-xl border p-5"
+        aria-labelledby="catalog-publish-title"
+      >
+        <h2 id="catalog-publish-title" className="text-xl font-medium">
+          {t("catalogPublishTitle")}
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          {catalog ? t("catalogCurrent", { id: catalog.id }) : t("noCatalog")}
+        </p>
+        <p className="text-sm text-muted-foreground">{t("importHint")}</p>
+        <label className="grid gap-2 text-sm">
+          {t("catalogFile")}
+          <Input
+            key={fileKey}
+            type="file"
+            accept=".json,application/json"
+            onChange={(event) => {
+              const file = event.target.files?.[0];
+              setImported(null);
+              setCatalogDone(null);
+              setCatalogIssue("");
+              if (!file) return;
+              if (file.size > 5000000) {
+                setCatalogIssue(t("catalogTooLarge"));
+                return;
+              }
+              void file.text().then((value) => {
+                let raw: unknown;
+                try {
+                  raw = JSON.parse(value);
+                } catch {
+                  setCatalogIssue(t("catalogUnreadable"));
+                  return;
+                }
+                const parsed = evidenceCatalogSchema.safeParse({
+                  ...(raw as object),
+                  id: `catalog_${crypto.randomUUID()}`,
+                });
+                if (!parsed.success) {
+                  const issue = parsed.error.issues[0];
+                  setCatalogIssue(
+                    t("catalogInvalid", {
+                      detail: `${issue?.path.join(".") || "—"} : ${issue?.message ?? ""}`,
+                    }),
+                  );
+                  return;
+                }
+                setImported(parsed.data);
+              });
+            }}
+          />
+        </label>
+        {catalogIssue && (
+          <p role="alert" className="text-sm text-destructive">
+            {catalogIssue}
+          </p>
+        )}
+        {imported && (
+          <>
+            <p role="status" className="text-sm font-medium">
+              {t("catalogReady", {
+                models: imported.models.length,
+                benefits: imported.benefits.length,
+                cases: imported.cases.length,
+                checkedAt: imported.checkedAt,
+              })}
+            </p>
+            <label className="grid gap-2 text-sm">
+              {t("catalogReasonLabel")}
+              <Input
+                value={catalogReason}
+                onChange={(event) => setCatalogReason(event.target.value)}
+                maxLength={2000}
+              />
+            </label>
+            <Button
+              disabled={pending || catalogReason.trim().length < 10}
+              onClick={() => {
+                const input = {
+                  catalog: imported,
+                  reason: catalogReason,
+                  expectedCatalogId: catalog?.id ?? null,
+                };
+                void perform("catalog", input, (options) =>
+                  api.publishCatalog(input, options).then(() => {
+                    setCatalogDone(imported.id);
+                    setImported(null);
+                    setCatalogReason("");
+                    setFileKey((value) => value + 1);
+                  }),
+                );
+              }}
+            >
+              {pending ? t("loading") : t("publishCatalog")}
+            </Button>
+          </>
+        )}
+        {error && failed === "catalog" && (
+          <p role="alert" className="text-sm text-destructive">
+            {error}
+          </p>
+        )}
+        {catalogDone && (
+          <p role="status" className="text-sm font-medium text-emerald-700">
+            {t("catalogPublished", { id: catalogDone })}
+          </p>
+        )}
+      </section>
       {config && (
         <section className="space-y-5">
           <h2 className="text-xl font-medium">{t("rules")}</h2>
@@ -635,35 +756,6 @@ function Configuration({ identity, blocked }: { identity: IdentityMe; blocked: b
                 {t("reportExport")}
               </Button>
             </div>
-            <p className="text-sm text-muted-foreground">{t("importHint")}</p>
-            <label className="grid gap-2 text-sm">
-              {t("import")}
-              <Input
-                type="file"
-                accept=".json,application/json"
-                onChange={(event) => {
-                  const file = event.target.files?.[0];
-                  if (!file) return;
-                  if (file.size > 5000000) {
-                    setError(t("error"));
-                    return;
-                  }
-                  void file.text().then((value) => {
-                    try {
-                      setImported(
-                        evidenceCatalogSchema.parse({
-                          ...JSON.parse(value),
-                          id: `catalog_${crypto.randomUUID()}`,
-                        }),
-                      );
-                      setError("");
-                    } catch {
-                      setError(t("error"));
-                    }
-                  });
-                }}
-              />
-            </label>
             <p className="text-sm text-muted-foreground">
               {t("reviewDue", {
                 count: query.data.reviewDue.sourceIds.length,
@@ -695,6 +787,11 @@ function Configuration({ identity, blocked }: { identity: IdentityMe; blocked: b
                         if (!options.signal.aborted) {
                           setImported({ ...previous, id: `catalog_${crypto.randomUUID()}` });
                           setCatalogReason(t("rollbackReason", { id: version.id }));
+                          setCatalogIssue("");
+                          setCatalogDone(null);
+                          document
+                            .getElementById("catalog-publish")
+                            ?.scrollIntoView({ behavior: "smooth", block: "start" });
                         }
                       })
                     }
@@ -704,45 +801,6 @@ function Configuration({ identity, blocked }: { identity: IdentityMe; blocked: b
                 </div>
               ))}
             </details>
-            {imported && (
-              <>
-                <p>
-                  {t("preview", {
-                    models: imported.models.length,
-                    benefits: imported.benefits.length,
-                    cases: imported.cases.length,
-                  })}
-                </p>
-                <label className="grid gap-2 text-sm">
-                  {t("reason")}
-                  <Input
-                    value={catalogReason}
-                    onChange={(event) => setCatalogReason(event.target.value)}
-                    maxLength={2000}
-                  />
-                </label>
-                <Button
-                  disabled={pending || catalogReason.trim().length < 10}
-                  onClick={() =>
-                    void perform(
-                      "catalog",
-                      { catalog: imported, reason: catalogReason, expectedCatalogId: catalog.id },
-                      (options) =>
-                        api.publishCatalog(
-                          {
-                            catalog: imported,
-                            reason: catalogReason,
-                            expectedCatalogId: catalog.id,
-                          },
-                          options,
-                        ),
-                    )
-                  }
-                >
-                  {t("publishCatalog")}
-                </Button>
-              </>
-            )}
           </section>
         </>
       )}
