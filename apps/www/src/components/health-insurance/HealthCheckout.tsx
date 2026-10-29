@@ -22,7 +22,7 @@ import { HealthSelect } from "./HealthSelect";
 import { HealthProductImage } from "./HealthProductImage";
 import { HealthPremiumDifference } from "./HealthPremiumDifference";
 import { LocalitySearch } from "./LocalitySearch";
-import { interpolate, money } from "./health-format";
+import { integer, interpolate, money } from "./health-format";
 import { useCartSavings } from "./use-cart-savings";
 export type CheckoutCandidate = {
   key: string;
@@ -689,29 +689,34 @@ export function HealthCheckout({
                             {item.birthYear} · {item.locality.postalCode} {item.locality.locality}
                           </small>
                         </div>
-                        <b>
-                          {money(item.offer.monthlyPremiumMinor)}
-                          <small>{copy.month}</small>
-                        </b>
+                        {/* The person's savings under their price (29 October 2026). */}
+                        <div className="hi-cart-price">
+                          <b>
+                            {money(item.offer.monthlyPremiumMinor)}
+                            <small>{copy.month}</small>
+                          </b>
+                          <HealthPremiumDifference value={savings.byPerson.get(item.id)} />
+                        </div>
                       </div>
                       <div className="hi-cart-product">
                         <HealthProductImage offer={item.offer} thumbnail />
-                        <p>
-                          {item.offer.insurerBrand ?? item.offer.insurerName} · {item.offer.name}
-                        </p>
+                        <div>
+                          <p>
+                            {item.offer.insurerBrand ?? item.offer.insurerName} · {item.offer.name}
+                          </p>
+                          {/* One setting per line on light grey, as in a model's details. */}
+                          <dl className="hi-cart-specs">
+                            <div>
+                              <dt>{copy.deductible}</dt>
+                              <dd>{integer(item.deductible)} CHF</dd>
+                            </div>
+                            <div>
+                              <dt>{copy.accident}</dt>
+                              <dd>{item.accident ? copy.yes : copy.no}</dd>
+                            </div>
+                          </dl>
+                        </div>
                       </div>
-                      <HealthPremiumDifference value={savings.byPerson.get(item.id)} />
-                      <p className="hi-small">
-                        {copy.deductible} : {item.deductible} CHF · {copy.accident} :{" "}
-                        {item.accident ? copy.yes : copy.no}
-                      </p>
-                      <p className="hi-small">
-                        {copy.currentInsurer} :{" "}
-                        {status?.insurers.find((x) => x.id === item.currentInsurerId)?.brand ??
-                          item.currentInsurerBrand ??
-                          item.currentInsurerName ??
-                          copy.noInsurer}
-                      </p>
                       <div className="hi-cart-actions">
                         <button
                           disabled={busy}
@@ -785,50 +790,41 @@ export function HealthCheckout({
                 </div>
               )}
               {cartItems.length > 0 && (
-                <>
-                  <p className="hi-small">
-                    {registeredEmail} · {wallet ? copy.wallet : copy.guest}
+                <div className="hi-legal-ack">
+                  <p>
+                    {copy.legalIntro}{" "}
+                    <a
+                      href="https://www.finma.ch/fr/autorisation/intermediation-dassurance/registersuche/#query=F01536662"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      F01536662
+                    </a>
+                    .
                   </p>
-                  <div className="hi-legal-ack">
-                    <p>
-                      {copy.legalIntro}{" "}
-                      <a
-                        href="https://www.finma.ch/fr/autorisation/intermediation-dassurance/registersuche/#query=F01536662"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        F01536662
-                      </a>
-                      .
-                    </p>
-                    <p>{copy.legalContinue}</p>
-                    <div>
-                      <a
-                        href="/informations-demande-assurance#lsa45"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {copy.lsa45}
-                      </a>
-                      <a
-                        href="/informations-demande-assurance#protection-des-donnees"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {copy.privacy}
-                      </a>
-                      <a
-                        href="/informations-demande-assurance#cgv"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {copy.terms}
-                      </a>
-                    </div>
+                  <p>{copy.legalContinue}</p>
+                  <div>
+                    <a
+                      href="/informations-demande-assurance#lsa45"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {copy.lsa45}
+                    </a>
+                    <a
+                      href="/informations-demande-assurance#protection-des-donnees"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {copy.privacy}
+                    </a>
+                    <a href="/informations-demande-assurance#cgv" target="_blank" rel="noreferrer">
+                      {copy.terms}
+                    </a>
                   </div>
-                </>
+                </div>
               )}
-              <p className="hi-small">{copy.noPayment}</p>
+              <p className="hi-small hi-cart-note">{copy.noPayment}</p>
               <div className="hi-checkout-actions">
                 <button className="hi-secondary" disabled={busy} onClick={() => setStep(0)}>
                   {copy.back}

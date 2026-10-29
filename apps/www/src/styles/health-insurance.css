@@ -4334,13 +4334,13 @@
     transform: none;
   }
 }
-/* The cart's savings (user request, 29 October 2026): each person's under their model, as in the
+/* The cart's savings (user request, 29 October 2026): each person's under their price, as in the
    list, and all the people's at the bottom of the total. */
 .hi-cart-savings {
   grid-column: 1 / -1;
   display: grid;
-  gap: 4px;
-  padding-top: 12px;
+  gap: 1px;
+  padding-top: 10px;
   border-top: 1px solid #e5e5e5;
 }
 .hi-cart-savings .hi-premium-difference {
@@ -4349,5 +4349,93 @@
 }
 .hi-cart-savings small {
   font-size: 11px;
+  line-height: 1.4;
   color: #646464;
+}
+.hi-cart-price {
+  display: grid;
+  justify-items: end;
+  margin-left: auto;
+  text-align: right;
+}
+.hi-cart-price .hi-premium-difference {
+  align-items: flex-end;
+  max-width: none;
+  margin-top: 6px;
+}
+/* Under the model, beside its picture: one setting per line on light grey, as in a model's
+   details. */
+.hi-cart-product > div {
+  flex: 1;
+  min-width: 0;
+}
+.hi-cart-specs {
+  display: grid;
+  gap: 4px;
+  margin: 6px 0 0;
+}
+.hi-cart-specs > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #f3f3f3;
+  font-size: 11px;
+  line-height: 1.5;
+}
+.hi-cart-specs dt {
+  color: #646464;
+}
+.hi-cart-specs dd {
+  margin: 0;
+  color: #3f3f3f;
+  white-space: nowrap;
+}
+/* Tighter cart (user request, 29 October 2026), in the checkout only: the request tracking page
+   shares these classes. */
+.hi-checkout .hi-cart-items li {
+  padding: 16px 0 12px;
+}
+.hi-checkout .hi-cart-person {
+  align-items: flex-start;
+}
+.hi-checkout .hi-cart-person small {
+  margin-top: 2px;
+}
+.hi-checkout .hi-cart-product {
+  margin-top: 10px;
+}
+.hi-checkout .hi-cart-actions {
+  margin-top: 8px;
+}
+.hi-checkout .hi-add-person {
+  margin: 14px 0;
+}
+.hi-checkout .hi-cart-total {
+  margin: 14px 0;
+  row-gap: 6px;
+}
+.hi-checkout .hi-legal-ack {
+  padding: 0;
+}
+.hi-cart-note {
+  margin: 8px 0 0;
+}
+/* Phones: the price and its savings stay beside the name, the savings on two short lines,
+   instead of dropping the whole column under the name. */
+@media (max-width: 540px) {
+  .hi-checkout .hi-cart-person {
+    flex-wrap: nowrap;
+  }
+  .hi-checkout .hi-cart-person > div:not(.hi-cart-price) {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .hi-cart-price .hi-premium-difference {
+    max-width: 112px;
+  }
+  .hi-cart-price .hi-difference-heading {
+    text-align: left;
+  }
 }
