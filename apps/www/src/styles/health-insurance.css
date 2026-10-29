@@ -4358,37 +4358,39 @@
   margin-left: auto;
   text-align: right;
 }
-.hi-cart-price .hi-premium-difference {
+/* The person's savings under the price: one line across the card, aligned right. */
+.hi-cart-items .hi-premium-difference {
   align-items: flex-end;
   max-width: none;
-  margin-top: 6px;
+  margin: 4px 0 0;
+  white-space: nowrap;
 }
-/* Under the model, beside its picture: one setting per line on light grey, as in a model's
-   details. */
+/* Under the model, beside its picture: one setting per line, its value alone on light grey as in
+   a model's details; both values share the width of the longer one. */
 .hi-cart-product > div {
   flex: 1;
   min-width: 0;
 }
 .hi-cart-specs {
   display: grid;
-  gap: 4px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 10px;
   margin: 6px 0 0;
-}
-.hi-cart-specs > div {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 4px 8px;
-  border-radius: 6px;
-  background: #f3f3f3;
   font-size: 11px;
   line-height: 1.5;
+}
+.hi-cart-specs > div {
+  display: contents;
 }
 .hi-cart-specs dt {
   color: #646464;
 }
 .hi-cart-specs dd {
   margin: 0;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #f3f3f3;
   color: #3f3f3f;
   white-space: nowrap;
 }
@@ -4396,6 +4398,13 @@
    shares these classes. */
 .hi-checkout .hi-cart-items li {
   padding: 16px 0 12px;
+}
+/* Half the space between the heading and the first person (45 px before 29 October 2026). */
+.hi-checkout .hi-cart-heading {
+  margin-bottom: 17.5px;
+}
+.hi-checkout .hi-cart-items > li:first-child {
+  padding-top: 0;
 }
 .hi-checkout .hi-cart-person {
   align-items: flex-start;
@@ -4412,30 +4421,19 @@
 .hi-checkout .hi-add-person {
   margin: 14px 0;
 }
+/* The button is inline-block, its margin does not collapse: the total starts right after it,
+   at the same distance as the button from the line above. */
 .hi-checkout .hi-cart-total {
-  margin: 14px 0;
-  row-gap: 6px;
+  margin: 0 0 14px;
+  row-gap: 2px;
+}
+/* Half the space between the two premium rows (20 px before). */
+.hi-checkout .hi-cart-total strong {
+  line-height: 1;
 }
 .hi-checkout .hi-legal-ack {
   padding: 0;
 }
 .hi-cart-note {
   margin: 8px 0 0;
-}
-/* Phones: the price and its savings stay beside the name, the savings on two short lines,
-   instead of dropping the whole column under the name. */
-@media (max-width: 540px) {
-  .hi-checkout .hi-cart-person {
-    flex-wrap: nowrap;
-  }
-  .hi-checkout .hi-cart-person > div:not(.hi-cart-price) {
-    min-width: 0;
-    overflow-wrap: anywhere;
-  }
-  .hi-cart-price .hi-premium-difference {
-    max-width: 112px;
-  }
-  .hi-cart-price .hi-difference-heading {
-    text-align: left;
-  }
 }

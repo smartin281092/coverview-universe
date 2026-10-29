@@ -313,7 +313,7 @@ export function HealthCheckout({
             </li>
           ))}
         </ol>
-        <h3 tabIndex={-1} ref={heading}>
+        <h3 tabIndex={-1} ref={heading} className={step === 2 ? "hi-cart-heading" : undefined}>
           {step === 0
             ? access === null
               ? copy.accessTitle
@@ -689,15 +689,16 @@ export function HealthCheckout({
                             {item.birthYear} · {item.locality.postalCode} {item.locality.locality}
                           </small>
                         </div>
-                        {/* The person's savings under their price (29 October 2026). */}
                         <div className="hi-cart-price">
                           <b>
                             {money(item.offer.monthlyPremiumMinor)}
                             <small>{copy.month}</small>
                           </b>
-                          <HealthPremiumDifference value={savings.byPerson.get(item.id)} />
                         </div>
                       </div>
+                      {/* The person's savings under their price, on one full-width line aligned
+                          right (29 October 2026). */}
+                      <HealthPremiumDifference value={savings.byPerson.get(item.id)} />
                       <div className="hi-cart-product">
                         <HealthProductImage offer={item.offer} thumbnail />
                         <div>
