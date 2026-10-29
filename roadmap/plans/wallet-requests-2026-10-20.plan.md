@@ -54,3 +54,4 @@ Entrée : « Dans Wallet : suivi d’une demande : quand l’espace en largeur l
 | # | cible | oracle | résultat | suite |
 |---|---|---|---|---|
 | 9 | Suivi en deux colonnes | page réelle de Wallet dans Chromium avec des réponses d’API simulées (identité et une demande fictive de deux personnes, offres réelles de l’API locale) : aucune session ni donnée réelle, la connexion locale passant par WorkOS (journal 5) ; `tsc`, ESLint, Prettier, vitest Wallet | 1440 et 1024 px : produits à droite, animation à côté des étapes ; 768 px : produits à droite, animation au-dessus des étapes ; 390 px : produits sous les étapes ; ni débordement ni erreur ; 26/26 tests | V5 du titulaire connecté |
+| 10 | Production (`0f88672`) | image apps construite sur le serveur, Wallet 200 ([journal de production](deploy-full-2026-10-16.plan.md#journal-de-vérification)) | en ligne ; suivi non ouvert en production, aucune connexion faite à la place du titulaire | V5 du titulaire connecté |
