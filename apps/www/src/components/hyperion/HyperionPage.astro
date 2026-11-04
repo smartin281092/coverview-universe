@@ -1,0 +1,117 @@
+---
+import TitleText from '../landing/TitleText.astro';
+import Arrow from '../landing/Arrow.astro';
+import HyperionBuy from './HyperionBuy';
+import HyperionSimulator from './HyperionSimulator';
+import HyperionIllustration from './HyperionIllustration.astro';
+import HyperionReturnsChart from './HyperionReturnsChart.astro';
+import HyperionPerformance from './HyperionPerformance.astro';
+import HyperionProof from './HyperionProof.astro';
+import HyperionReviews from './HyperionReviews.astro';
+import { hyperionCopy as c } from '../../content/fr/hyperion';
+import { hyperionReviews } from '../../content/fr/hyperion-reviews';
+import { HYPERION, annualisedReturn, formatPercent, formatSignedPercent, netReturns } from './hyperion-model';
+import liechtensteinLife from '../../assets/companies/liechtenstein-life.svg?url';
+import '../../styles/landing.css';
+import '../../styles/hyperion.css';
+// The official logo once provided (assets/hyperion/README.md); nothing is invented meanwhile.
+const logos = import.meta.glob<string>('../../assets/hyperion/logo.{svg,png}', { eager: true, query: '?url', import: 'default' });
+const logo = Object.values(logos)[0];
+const apiUrl = import.meta.env.PUBLIC_API_URL ?? (import.meta.env.DEV ? 'http://127.0.0.1:4100' : (Astro.site?.origin ?? Astro.url.origin));
+const currentYear = new Date().getFullYear();
+const annualised = annualisedReturn(netReturns());
+const current = HYPERION.history[HYPERION.history.length - 1]!;
+const stars = (rating: number) => c.reviews.stars.replace('{{rating}}', String(rating));
+const icons: Record<(typeof c.advantages.items)[number]['icon'], string> = {
+  refresh: 'M20 12a8 8 0 1 1-2.3-5.6M20 4v4.5h-4.5',
+  radar: 'M12 12 18.4 5.6M12 21a9 9 0 1 1 6.4-15.4M12 17a5 5 0 1 1 3.5-8.5M12 12h.01',
+  growth: 'M3 17 9 11l4 4 8-8M15 7h6v6',
+  medal: 'M8 3h8l2 6-6 3.5L6 9l2-6ZM12 12.5V15m0 0a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z',
+  shield: 'm12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Zm-4 9 3 3 5-6',
+  person: 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 9a7 7 0 0 1 14 0M16 14l2 2 3-3',
+};
+---
+<div class="lp hp" data-hyperion>
+  <nav class="lp-container hp-breadcrumb" aria-label={c.breadcrumb.label}>
+    <ol><li><a href="/">{c.breadcrumb.home}</a></li><li><a href="/benchmark">{c.breadcrumb.category}</a></li><li aria-current="page">{c.breadcrumb.current}</li></ol>
+  </nav>
+
+  <section class="hp-hero" aria-labelledby="hp-title">
+    <div class="lp-container hp-hero-grid">
+      <div class="hp-gallery" data-reveal>
+        <input type="radio" name="hp-gallery" id="hp-view-1" class="hp-gallery-radio" checked />
+        <input type="radio" name="hp-gallery" id="hp-view-2" class="hp-gallery-radio" />
+        <input type="radio" name="hp-gallery" id="hp-view-3" class="hp-gallery-radio" />
+        <div class="hp-gallery-stage">
+          <figure class="hp-gallery-view hp-view-1"><HyperionIllustration /></figure>
+          <figure class="hp-gallery-view hp-view-2"><div class="hp-gallery-chart"><p class="lp-eyebrow">{c.gallery.items.performance}</p><HyperionReturnsChart compact /></div></figure>
+          <figure class="hp-gallery-view hp-view-3"><div class="hp-gallery-top"><span class="hp-top-badge hp-top-badge-large">{c.hero.top.badge}</span><p>{c.hero.top.title}</p><small>{c.hero.top.text}</small><img src={liechtensteinLife} alt={c.hero.partnerName} width="56" height="56" loading="lazy" /></div></figure>
+        </div>
+        <div class="hp-gallery-thumbs" role="group" aria-label={c.gallery.label}>
+          <label for="hp-view-1"><HyperionIllustration id="hyperion-thumb" class="is-thumb" /><span>{c.gallery.items.illustration}</span></label>
+          <label for="hp-view-2"><span class="hp-thumb-chart" aria-hidden="true"><i></i><i></i><i class="is-down"></i><i></i><i></i></span><span>{c.gallery.items.performance}</span></label>
+          <label for="hp-view-3"><span class="hp-thumb-top" aria-hidden="true">1 %</span><span>{c.gallery.items.top}</span></label>
+        </div>
+      </div>
+      <div class="hp-summary" data-reveal>
+        <p class="lp-eyebrow hp-eyebrow">{c.hero.eyebrow}</p>
+        <div class="hp-title-row">{logo && <img src={logo} alt="" class="hp-logo" width="160" height="48" />}<h1 id="hp-title">{c.hero.title}</h1></div>
+        <p class="hp-subtitle">{c.hero.subtitle}</p>
+        <a href="#avis" class="hp-rating"><span class="hp-stars" aria-label={stars(hyperionReviews.rating)}>{[1,2,3,4,5].map(() => <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="m12 2.6 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.5l-5.9 3.1 1.2-6.5L2.5 9.5l6.6-.9z" fill="currentColor"/></svg>)}</span><strong>{c.hero.rating.value}</strong><span>· {c.hero.rating.count}</span><span class="hp-rating-link">{c.hero.rating.link}</span></a>
+        <div class="hp-stats">
+          <div><strong>{formatPercent(annualised)}</strong><p>{c.hero.stats.annualised.label}</p><small>{c.hero.stats.annualised.note}</small></div>
+          <div><strong>{formatSignedPercent(current.grossReturn)}</strong><p>{c.hero.stats.current.label}</p><small>{c.hero.stats.current.note}</small></div>
+          <div><strong>{c.hero.stats.rank.value}</strong><p>{c.hero.stats.rank.label}</p><small>{c.hero.stats.rank.note}</small></div>
+        </div>
+        <div class="hp-top"><span class="hp-top-badge">{c.hero.top.badge}</span><div><p>{c.hero.top.title}</p><small>{c.hero.top.text}</small></div><img src={liechtensteinLife} alt={c.hero.partnerName} class="hp-top-logo" width="44" height="44" /></div>
+        <HyperionBuy client:load apiUrl={apiUrl} currentYear={currentYear} />
+      </div>
+    </div>
+  </section>
+
+  <div class="lp-dimensions hp-strip"><div class="lp-container"><p>{c.strip.lead}</p><div>{c.strip.items.map((item, i) => <span><span class="dimension-symbol" aria-hidden="true">{['◈','↻','◎','◇','⊕'][i]}</span>{item}</span>)}</div></div></div>
+
+  <section class="lp-section hp-advantages" id="avantages" aria-labelledby="hp-advantages-title">
+    <div class="lp-container">
+      <div class="lp-section-head" data-reveal>
+        <div><p class="lp-eyebrow">{c.advantages.eyebrow}</p><h2 id="hp-advantages-title"><TitleText text={c.advantages.title}/></h2></div>
+        <p class="lp-description">{c.advantages.description}</p>
+      </div>
+      <div class="hp-advantage-grid">
+        {c.advantages.items.map((item) => <article class="hp-advantage" data-reveal><span class="hp-advantage-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none"><path d={icons[item.icon]} stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span><h3>{item.title}</h3><p>{item.text}</p></article>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="lp-section hp-specs" id="caracteristiques" aria-labelledby="hp-specs-title">
+    <div class="lp-container hp-specs-grid">
+      <div data-reveal><p class="lp-eyebrow">{c.specs.eyebrow}</p><h2 id="hp-specs-title"><TitleText text={c.specs.title}/></h2></div>
+      <dl class="hp-spec-table" data-reveal>{c.specs.rows.map((row) => <div><dt>{row.label}</dt><dd>{row.value}</dd></div>)}</dl>
+    </div>
+  </section>
+
+  <HyperionPerformance />
+
+  <section class="lp-section hp-simulator-section" id="simulateur" aria-labelledby="hp-simulator-title">
+    <div class="lp-container">
+      <div class="lp-section-head" data-reveal>
+        <div><p class="lp-eyebrow">{c.simulator.eyebrow}</p><h2 id="hp-simulator-title"><TitleText text={c.simulator.title}/></h2></div>
+        <p class="lp-description">{c.simulator.description}</p>
+      </div>
+      <HyperionSimulator client:visible currentYear={currentYear} />
+    </div>
+  </section>
+  <dialog class="lp-dialog" id="hyperion-assumptions" aria-labelledby="hp-assumptions-title">
+    <div class="dialog-top"><p class="lp-eyebrow">{c.simulator.eyebrow}</p><button type="button" class="dialog-close" data-close-dialog aria-label={c.simulator.assumptionsDialog.close}>×</button></div>
+    <h2 id="hp-assumptions-title"><TitleText text={c.simulator.assumptionsDialog.title}/></h2>
+    <ol class="hp-assumptions">{c.simulator.assumptionsDialog.items.map((item) => <li>{item}</li>)}</ol>
+  </dialog>
+
+  <HyperionProof />
+  <HyperionReviews />
+
+  <section class="lp-section faq-section" id="questions" aria-labelledby="hp-faq-title"><div class="lp-container faq-grid"><div data-reveal><p class="lp-eyebrow">{c.faq.eyebrow}</p><h2 id="hp-faq-title"><TitleText text={c.faq.title}/></h2></div><div class="landing-faq">{c.faq.items.map(item => <details><summary>{item.question}<span aria-hidden="true"></span></summary><div><p>{item.answer}</p></div></details>)}</div></div></section>
+
+  <section class="closing-section hp-closing"><div class="closing-aurora" aria-hidden="true"></div><div class="lp-container center-heading" data-reveal><p class="lp-eyebrow">{c.closing.eyebrow}</p><h2><TitleText text={c.closing.title}/></h2><p class="lp-description">{c.closing.description}</p><button type="button" class="lp-button hp-cta" data-open-order>{c.closing.cta}<Arrow/></button><p class="closing-note">{c.closing.note}</p></div></section>
+</div>
+<script>import './hyperion';</script>

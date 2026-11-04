@@ -19,6 +19,7 @@ import {
   ShieldCheck,
   ShoppingBag,
   SlidersHorizontal,
+  TrendingUp,
   X,
   type LucideIcon,
 } from "lucide-react";
@@ -45,6 +46,7 @@ const icons: Record<NavigationIcon, LucideIcon> = {
   briefcase: Briefcase,
   route: Route,
   signature: PenLine,
+  trending: TrendingUp,
 };
 const fold = (value: string) =>
   value

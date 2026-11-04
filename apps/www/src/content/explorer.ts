@@ -2,6 +2,7 @@ import { acquisition as copy, journeys, plannedPages } from "./fr/acquisition";
 import { content } from "./fr/interface";
 import { readableEditorialPaths } from "./editorial";
 import { healthCopy } from "./fr/health-insurance";
+import { hyperionCopy } from "./fr/hyperion";
 
 const status = (slug: string) =>
   readableEditorialPaths.has(slug) && !["contact", "retire", "miles"].includes(slug)
@@ -31,6 +32,7 @@ export const explorerGroups = [
     ...copy.explorer.sections.tools,
     label: copy.explorer.tools,
     links: [
+      { href: "/hyperion-3e-pilier", label: hyperionCopy.explorerLabel, status: copy.readable },
       { href: "/#simuler", label: copy.savingsTool, status: copy.freeTool },
       { href: "/#inflation", label: copy.inflationTool, status: copy.freeTool },
       {

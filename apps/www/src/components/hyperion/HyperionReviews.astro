@@ -1,0 +1,48 @@
+---
+import TitleText from '../landing/TitleText.astro';
+import Arrow from '../landing/Arrow.astro';
+import { hyperionCopy } from '../../content/fr/hyperion';
+import { hyperionReviews } from '../../content/fr/hyperion-reviews';
+const c = hyperionCopy.reviews;
+const reviews = hyperionReviews.items;
+const initials = (name: string) => name.split(' ').filter(Boolean).slice(0, 2).map((part) => part[0]).join('').toUpperCase();
+const rows = [reviews.filter((_, i) => i % 2 === 0), reviews.filter((_, i) => i % 2 === 1)];
+const stars = (rating: number) => c.stars.replace('{{rating}}', String(rating));
+---
+<section class="lp-section hp-reviews" id="avis" aria-labelledby="hp-reviews-title" data-reviews>
+  <div class="lp-container">
+    <div class="hp-reviews-head" data-reveal>
+      <p class="lp-eyebrow">{c.eyebrow}</p>
+      <h2 id="hp-reviews-title"><TitleText text={c.title}/></h2>
+      <p class="hp-reviews-subtitle"><span class="hp-stars" aria-label={stars(hyperionReviews.rating)}>{[1,2,3,4,5].map(() => <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m12 2.6 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.5l-5.9 3.1 1.2-6.5L2.5 9.5l6.6-.9z" fill="currentColor"/></svg>)}</span>{c.subtitle}</p>
+    </div>
+  </div>
+  <div class="hp-marquee" data-reveal>
+    {rows.map((row, r) => <div class:list={['hp-marquee-row', r === 1 ? 'is-reverse' : '']}>
+      <div class="hp-marquee-track">
+        {[0, 1, 2].map((copyIndex) => <div class="hp-marquee-group" inert={copyIndex > 0 ? true : undefined} aria-hidden={copyIndex > 0 ? 'true' : undefined}>
+          {row.map((review) => <article class="hp-review" aria-label={`${review.fullName} · ${stars(review.rating)}`}>
+            <header><span class="hp-review-avatar" aria-hidden="true">{initials(review.fullName)}</span><div><p class="hp-review-name">{review.fullName}</p><p class="hp-review-meta"><span class="hp-stars hp-stars-small" aria-label={stars(review.rating)}>{[1,2,3,4,5].map(() => <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="m12 2.6 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.5l-5.9 3.1 1.2-6.5L2.5 9.5l6.6-.9z" fill="currentColor"/></svg>)}</span>{c.google}</p></div></header>
+            <p class="hp-review-text">{review.comment}</p>
+          </article>)}
+        </div>)}
+      </div>
+    </div>)}
+  </div>
+  <div class="lp-container hp-reviews-bottom">
+    <button type="button" class="lp-text-link" data-open-dialog="hyperion-reviews">{c.readAll}<Arrow/></button>
+    <button type="button" class="hp-reviews-toggle" data-reviews-toggle aria-pressed="false" data-play-label={c.play}>{c.pause}</button>
+    <p>{c.note}</p>
+  </div>
+</section>
+<dialog class="lp-dialog hp-dialog-wide" id="hyperion-reviews" aria-labelledby="hp-reviews-dialog-title">
+  <div class="dialog-top"><p class="lp-eyebrow">{c.eyebrow}</p><button type="button" class="dialog-close" data-close-dialog aria-label={c.close}>×</button></div>
+  <h2 id="hp-reviews-dialog-title"><TitleText text={c.dialogTitle}/></h2>
+  <p>{c.subtitle} · {c.note}</p>
+  <ul class="hp-review-list">
+    {reviews.map((review) => <li><article class="hp-review is-full">
+      <header><span class="hp-review-avatar" aria-hidden="true">{initials(review.fullName)}</span><div><p class="hp-review-name">{review.fullName}</p><p class="hp-review-meta"><span class="hp-stars hp-stars-small" aria-label={stars(review.rating)}>{[1,2,3,4,5].map(() => <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="m12 2.6 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.5l-5.9 3.1 1.2-6.5L2.5 9.5l6.6-.9z" fill="currentColor"/></svg>)}</span>{c.google}</p></div></header>
+      <p class="hp-review-text">{review.comment}</p>
+    </article></li>)}
+  </ul>
+</dialog>

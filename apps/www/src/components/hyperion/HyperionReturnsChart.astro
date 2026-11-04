@@ -1,0 +1,32 @@
+---
+import { hyperionCopy } from '../../content/fr/hyperion';
+import { HYPERION, formatSignedPercent } from './hyperion-model';
+interface Props { compact?: boolean; }
+const { compact = false } = Astro.props;
+const c = hyperionCopy.performance.chart;
+const width = 760, height = compact ? 520 : 340, left = 14, right = width - 14, top = compact ? 60 : 46, bottom = height - (compact ? 56 : 40);
+const min = -0.35, max = 0.5;
+const y = (value: number) => bottom - ((value - min) / (max - min)) * (bottom - top);
+const zero = y(0);
+const points = HYPERION.history;
+const slot = (right - left) / points.length;
+const barWidth = Math.min(44, slot * 0.62);
+const alt = c.alt.replace('{{values}}', points.map((p) => `${p.year} ${formatSignedPercent(p.grossReturn)}`).join(', '));
+---
+<svg class:list={['hp-returns-chart', { 'is-compact': compact }]} viewBox={`0 0 ${width} ${height}`} role="img" aria-label={alt}>
+  {[-0.3, -0.15, 0.15, 0.3, 0.45].map((v) => <path d={`M${left},${y(v).toFixed(1)} H${right}`} class="hp-grid" />)}
+  <path d={`M${left},${zero.toFixed(1)} H${right}`} class="hp-zero" />
+  {points.map((point, i) => {
+    const x = left + slot * i + (slot - barWidth) / 2;
+    const value = point.grossReturn;
+    const current = point.kind === 'current-year';
+    const barTop = Math.min(y(value), zero), barHeight = Math.max(2, Math.abs(y(value) - zero));
+    const labelY = value >= 0 ? barTop - (compact ? 12 : 9) : barTop + barHeight + (compact ? 24 : 17);
+    return <g class:list={['hp-bar', { 'is-negative': value < 0, 'is-current': current }]}>
+      <rect x={x.toFixed(1)} y={barTop.toFixed(1)} width={barWidth.toFixed(1)} height={barHeight.toFixed(1)} rx="4" />
+      <text x={(x + barWidth / 2).toFixed(1)} y={labelY.toFixed(1)} text-anchor="middle" class="hp-bar-value">{formatSignedPercent(value, compact ? 0 : 1)}</text>
+      <text x={(x + barWidth / 2).toFixed(1)} y={(bottom + (compact ? 32 : 24)).toFixed(1)} text-anchor="middle" class="hp-bar-year">{point.year}</text>
+      {current && !compact && <text x={(x + barWidth / 2).toFixed(1)} y={(bottom + 38).toFixed(1)} text-anchor="middle" class="hp-bar-current">{c.current}</text>}
+    </g>;
+  })}
+</svg>

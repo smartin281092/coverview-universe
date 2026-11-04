@@ -2,6 +2,7 @@
 import TitleText from './TitleText.astro';
 import { ButtonLink } from '@coverview/ui';
 import { landing as c } from '../../content/fr/landing';
+import { hyperionCopy } from '../../content/fr/hyperion';
 import { content } from '../../content/fr/interface';
 import logo from '../../../../../assets/logo-coverview.svg?url';
 import icon from '../../../../../assets/icon-coverview.svg?url';
@@ -61,7 +62,7 @@ const links = siteLinks(Astro.site?.origin ?? Astro.url.origin);
   </div></section>
 
   <section class="strategy-section"><div class="strategy-glow" aria-hidden="true"></div><div class="lp-container strategy-grid">
-    <div data-reveal><p class="lp-eyebrow">{c.strategy.eyebrow}</p><h2><TitleText text={c.strategy.title}/></h2><p class="lp-description">{c.strategy.description}</p><p class="independence-note">{c.strategy.independence}</p><a href="#resultats" class="lp-button">{c.strategy.link}<Arrow/></a></div>
+    <div data-reveal><p class="lp-eyebrow">{c.strategy.eyebrow}</p><h2><TitleText text={c.strategy.title}/></h2><p class="lp-description">{c.strategy.description}</p><p class="independence-note">{c.strategy.independence}</p><div class="strategy-actions"><a href="#resultats" class="lp-button">{c.strategy.link}<Arrow/></a><a href="/hyperion-3e-pilier" class="lp-text-link">{hyperionCopy.homeLink}<Arrow/></a></div></div>
     <div class="strategy-visual" data-scene data-reveal><p class="lp-eyebrow">{c.strategy.visual}</p><div class="strategy-sculpture" aria-hidden="true">{Array.from({length:16},(_,i)=><div class="sculpture-bar" style={`--i:${i};--bar-height:${45+Math.pow(i,1.45)*6}px`}></div>)}</div><div class="strategy-labels">{c.strategy.labels.map(label=><span>{label}</span>)}</div><p class="strategy-caption">{c.strategy.caption}</p></div>
   </div><p class="strategy-foot">{c.strategy.foot}</p></section>
 

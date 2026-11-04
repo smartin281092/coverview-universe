@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HyperionPage from '../components/hyperion/HyperionPage.astro';
+import { hyperionCopy as copy } from '../content/fr/hyperion';
+// Product page of the Hyperion strategy (4 November 2026): static HTML, two islands, FAQ and the
+// order through the API's public order route.
+const url = new URL('/hyperion-3e-pilier', Astro.site).href;
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebPage', '@id': `${url}#webpage`, url, name: copy.seo.title, description: copy.seo.description, inLanguage: 'fr-CH', isPartOf: { '@id': 'https://coverview.ch/#website' } },
+    { '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: copy.breadcrumb.home, item: new URL('/', Astro.site).href },
+      { '@type': 'ListItem', position: 2, name: copy.breadcrumb.category, item: new URL('/benchmark', Astro.site).href },
+      { '@type': 'ListItem', position: 3, name: copy.breadcrumb.current, item: url },
+    ] },
+    { '@type': 'FAQPage', mainEntity: copy.faq.items.map(item => ({ '@type': 'Question', name: item.question, acceptedAnswer: { '@type': 'Answer', text: item.answer } })) },
+  ],
+};
+---
+<Layout title={copy.seo.title} description={copy.seo.description} structuredData={schema}><HyperionPage /></Layout>

@@ -1,0 +1,60 @@
+---
+import TitleText from '../landing/TitleText.astro';
+import Arrow from '../landing/Arrow.astro';
+import HyperionReturnsChart from './HyperionReturnsChart.astro';
+import { hyperionCopy } from '../../content/fr/hyperion';
+import {
+  HYPERION, annualisedReturn, cumulativeGrowth, formatFrancs, formatPercent, formatSignedPercent, grossReturns, netReturn, netReturns, historyYears,
+} from './hyperion-model';
+const c = hyperionCopy.performance;
+const gross = grossReturns();
+const net = netReturns();
+const annualised = annualisedReturn(net);
+const mean = gross.reduce((sum, value) => sum + value, 0) / gross.length;
+const current = HYPERION.history[HYPERION.history.length - 1]!;
+const positive = gross.filter((value) => value > 0).length;
+const growthTo2025 = Math.round(10000 * cumulativeGrowth(historyYears(2025).map((value) => netReturn(value))));
+const growthAll = Math.round(10000 * cumulativeGrowth(net));
+const interpolate = (template: string, values: Record<string, string>) =>
+  Object.entries(values).reduce((text, [key, value]) => text.replaceAll(`{{${key}}}`, value), template);
+---
+<section class="lp-section hp-performance" id="performances" aria-labelledby="hp-performance-title">
+  <div class="lp-container">
+    <div class="lp-section-head" data-reveal>
+      <div><p class="lp-eyebrow">{c.eyebrow}</p><h2 id="hp-performance-title"><TitleText text={c.title}/></h2></div>
+      <p class="lp-description">{c.description}</p>
+    </div>
+    <div class="hp-kpis" data-reveal>
+      <div class="hp-kpi hp-kpi-main"><p>{c.kpis.annualised.label}</p><strong><span data-count={(annualised * 100).toFixed(1)} data-count-digits="1">{formatFrancs(annualised * 100, 1)}</span> %</strong><small>{c.kpis.annualised.note}</small></div>
+      <div class="hp-kpi"><p>{c.kpis.mean.label}</p><strong><span data-count={(mean * 100).toFixed(1)} data-count-digits="1">{formatFrancs(mean * 100, 1)}</span> %</strong><small>{c.kpis.mean.note}</small></div>
+      <div class="hp-kpi"><p>{c.kpis.current.label}</p><strong>{formatSignedPercent(current.grossReturn)}</strong><small>{c.kpis.current.note}</small></div>
+      <div class="hp-kpi"><p>{c.kpis.positive.label}</p><strong>{positive} / {gross.length}</strong><small>{c.kpis.positive.note}</small></div>
+    </div>
+    <div class="hp-chart-card" data-reveal>
+      <div class="hp-chart-card-head"><p class="lp-eyebrow">{c.chart.title}</p><p class="hp-growth"><span>{c.growth.label}</span><strong>{interpolate(c.growth.value, { amount: formatFrancs(growthTo2025) })}</strong><small>{interpolate(c.growth.note, { current: formatFrancs(growthAll) })}</small></p></div>
+      <HyperionReturnsChart />
+    </div>
+    <div class="hp-performance-bottom">
+      <button type="button" class="lp-text-link" data-open-dialog="hyperion-performance">{c.detail}<Arrow/></button>
+      <p>{c.note}</p>
+    </div>
+  </div>
+</section>
+<dialog class="lp-dialog hp-dialog-wide" id="hyperion-performance" aria-labelledby="hp-performance-dialog-title">
+  <div class="dialog-top"><p class="lp-eyebrow">{c.dialog.eyebrow}</p><button type="button" class="dialog-close" data-close-dialog aria-label={c.dialog.close}>×</button></div>
+  <h2 id="hp-performance-dialog-title"><TitleText text={c.dialog.title}/></h2>
+  <p>{c.dialog.intro}</p>
+  <table class="hp-table">
+    <thead><tr><th scope="col">{c.dialog.columns.year}</th><th scope="col">{c.dialog.columns.gross}</th><th scope="col">{c.dialog.columns.net}</th><th scope="col">{c.dialog.columns.status}</th></tr></thead>
+    <tbody>{HYPERION.history.map((point) => <tr class:list={{ 'is-negative': point.grossReturn < 0 }}><th scope="row">{point.year}</th><td>{formatSignedPercent(point.grossReturn)}</td><td>{formatSignedPercent(netReturn(point.grossReturn))}</td><td>{point.kind === 'current-year' ? c.dialog.status.current : c.dialog.status.reported} · {point.source === 'legacy' ? c.dialog.status.legacy : c.dialog.status.communicated}</td></tr>)}</tbody>
+    <tfoot><tr><th scope="row">{c.kpis.annualised.label}</th><td>{formatPercent(annualisedReturn(gross), 2)}</td><td>{formatPercent(annualised, 2)}</td><td>2016 – 2026</td></tr></tfoot>
+  </table>
+  <div class="hp-dialog-text"><h3>{c.dialog.methodTitle}</h3>{c.dialog.method.map((paragraph) => <p>{paragraph}</p>)}</div>
+  <div class="hp-dialog-text"><h3>{c.dialog.rankingTitle}</h3><p>{c.dialog.rankingIntro}</p>
+    <table class="hp-table hp-table-ranking">
+      <thead><tr><th scope="col">{c.dialog.rankingColumns.rank}</th><th scope="col">{c.dialog.rankingColumns.solution}</th><th scope="col">{c.dialog.rankingColumns.performance}</th></tr></thead>
+      <tbody>{c.dialog.ranking.map((row) => <tr class:list={{ 'is-hyperion': row.rank === 1 }}><td>{row.rank}</td><th scope="row">{row.name}<small>{row.company}</small></th><td>{formatSignedPercent(row.performance)}</td></tr>)}</tbody>
+    </table>
+    <p>{c.dialog.rankingNote}</p>
+  </div>
+</dialog>

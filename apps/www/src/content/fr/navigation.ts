@@ -1,6 +1,7 @@
 // The site's main menu (9 October 2026): the comparator's header everywhere, with a Comparator
 // and an Audit menu built on the model the user gave (highlights on the left, a filterable list on
 // the right). Every link is a page of its own: no anchor.
+import { hyperionCopy } from "./hyperion";
 export type NavigationIcon =
   | "heart-pulse"
   | "chart"
@@ -15,7 +16,8 @@ export type NavigationIcon =
   | "folder"
   | "briefcase"
   | "route"
-  | "signature";
+  | "signature"
+  | "trending";
 export type NavigationLink = { href: string; icon: NavigationIcon; label: string };
 type NavigationHighlight = NavigationLink & { description: string };
 export type NavigationMenu = {
@@ -47,6 +49,12 @@ export const navigation = {
       listTitle: "Comparer",
       highlights: [
         {
+          href: "/hyperion-3e-pilier",
+          icon: "trending",
+          label: hyperionCopy.navLabel,
+          description: hyperionCopy.navDescription,
+        },
+        {
           href: "/comparateur-assurance-maladie-2027",
           icon: "heart-pulse",
           label: "Assurance maladie 2027",
@@ -67,6 +75,7 @@ export const navigation = {
         },
       ],
       links: [
+        { href: "/hyperion-3e-pilier", icon: "trending", label: hyperionCopy.navLabel },
         {
           href: "/comparateur-assurance-maladie-2027",
           icon: "heart-pulse",

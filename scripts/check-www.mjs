@@ -22,6 +22,7 @@ const representatives = [
   "/etudes-de-cas/maintien",
   "/rapports/exemple",
   "/sebastien-martin",
+  "/hyperion-3e-pilier",
 ];
 const limits = { javascriptGzipBytes: 100 * 1024, lcpMs: 2500, cls: 0.1 };
 // Scripts admis par page (MKT-04). Depuis le 9 octobre 2026, deux décisions documentées donnent
@@ -45,6 +46,17 @@ const pageScripts = new Map([
     { islands: ["HealthComparator@load"], ownHeader: true, interactiveMain: true },
   ],
   ["/suivi-demande-assurance", { islands: ["HealthRequestTracking@load"], interactiveMain: true }],
+  // Page produit Hyperion (4 novembre 2026) : le bloc d'achat s'hydrate au chargement pour que la
+  // commande réponde tout de suite, le simulateur Monte Carlo quand il devient visible ; un module
+  // local pour les dialogues, les compteurs et la pause des avis.
+  [
+    "/hyperion-3e-pilier",
+    {
+      islands: ["HyperionBuy@load", "HyperionSimulator@visible"],
+      modules: ["HyperionPage"],
+      interactiveMain: true,
+    },
+  ],
   // Indicateur de connexion et lien vers Wallet, module natif hors du contenu (README www).
   ["/account", { modules: ["account"] }],
 ]);
