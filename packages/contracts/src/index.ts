@@ -1,6 +1,7 @@
 import { healthRecommendationErrorCodes } from "./health-recommendation-errors.js";
 import { z } from "zod";
 import { insuranceRequestErrorCodes } from "./insurance-request-errors.js";
+import { pensionSearchErrorCodes } from "./pension-searches.js";
 export * from "./authorization-notice.js";
 import { documentErrorCodes } from "./documents.js";
 import { managedProfileErrorCodes } from "./managed-profiles.js";
@@ -51,6 +52,7 @@ export const identityErrorCodeSchema = z.enum([
 export const apiErrorCodeSchema = z.union([
   z.enum(healthRecommendationErrorCodes),
   z.enum(insuranceRequestErrorCodes),
+  z.enum(pensionSearchErrorCodes),
   z.enum(adminProfileTransferErrorCodes),
   z.enum(clientActivityErrorCodes),
   platformErrorCodeSchema,

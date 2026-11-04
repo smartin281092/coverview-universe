@@ -37,6 +37,8 @@ const avsNumber = z
   .transform(
     (value) => `${value.slice(0, 3)}.${value.slice(3, 7)}.${value.slice(7, 11)}.${value.slice(11)}`,
   );
+// Shared with the LPP search requests (4 November 2026): the same syntax rule.
+export const avsNumberSchema = avsNumber;
 const phone = z
   .string()
   .trim()

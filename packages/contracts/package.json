@@ -7,6 +7,7 @@
     ".": "./src/index.ts",
     "./health-insurance": "./src/health-insurance.ts",
     "./insurance-requests": "./src/insurance-requests.ts",
+    "./pension-searches": "./src/pension-searches.ts",
     "./health-recommendation": "./src/health-recommendation.ts",
     "./partner": "./src/partner.ts",
     "./partner-economy": "./src/partner-economy.ts",

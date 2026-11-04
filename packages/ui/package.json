@@ -8,6 +8,7 @@
     "./consent": "./src/consent.ts",
     "./health-product-images": "./src/health-product-images.ts",
     "./number-format": "./src/number-format.ts",
+    "./pixel-field": "./src/PixelField.tsx",
     "./styles.css": "./src/styles.css",
     "./theme.css": "./src/theme.css"
   },

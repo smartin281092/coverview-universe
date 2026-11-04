@@ -5,6 +5,7 @@ const tile = 128; // CSS pixels of the repeated tile: 32 × 32 dots
 
 /**
  * White one-pixel dots that flicker like a screen's pixels, each at its own pace (8 October 2026).
+ * Shared since 4 November 2026: Wallet's offer pages and the LPP search page of the public site.
  * One small tile is drawn and repeated over the canvas. Decorative: still when the user reduces
  * motion, paused while off screen or in a hidden tab.
  */

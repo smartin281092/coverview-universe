@@ -44,7 +44,7 @@ export const explorerGroups = [
         .map((page) => ({
           href: `/${page.slug}`,
           label: page.label,
-          status: copy.coming,
+          status: "ownPage" in page ? copy.freeSearch : copy.coming,
         })),
     ],
   },

@@ -30,6 +30,7 @@ import {
   ClientActivityError,
 } from "../modules/client-activities/index.js";
 import { registerAuthorizations } from "../modules/authorizations/index.js";
+import { registerPensionSearches, PensionSearchError } from "../modules/pension-searches/index.js";
 import {
   IdentityError,
   registerIdentity,
@@ -116,6 +117,7 @@ export async function buildServer(
       error instanceof PartnerError ||
       error instanceof RecommendationError ||
       error instanceof InsuranceRequestError ||
+      error instanceof PensionSearchError ||
       error instanceof IdentityError ||
       error instanceof DocumentError ||
       error instanceof ManagedProfileError ||
@@ -131,6 +133,7 @@ export async function buildServer(
       error instanceof PartnerError ||
       error instanceof RecommendationError ||
       error instanceof InsuranceRequestError ||
+      error instanceof PensionSearchError ||
       error instanceof IdentityError ||
       error instanceof DocumentError ||
       error instanceof ManagedProfileError ||
@@ -196,6 +199,7 @@ export async function buildServer(
   const identity = await registerIdentity(app, config, identityService);
   registerHealthInsurance(app, config, identity);
   registerInsuranceRequests(app, config, identity);
+  registerPensionSearches(app, config, identity);
   registerManagedProfiles(app, config, identity);
   registerClientActivities(app, config, identity);
   registerAdminProfileTransfers(app, config, identity);
