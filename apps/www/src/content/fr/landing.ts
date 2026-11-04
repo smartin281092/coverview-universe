@@ -17,15 +17,18 @@ export const landing = {
   cta: "Analyser mon 3e pilier",
   alternative: "Commencer sans mon contrat",
   arrow: "Découvrir",
+  close: "Fermer",
   motion: { pause: "Mettre les animations en pause", play: "Activer les animations" },
   hero: {
     eyebrow: "COURTIER INDÉPENDANT · NON LIÉ",
     title: ["Votre 3e pilier.", "Tout son potentiel."],
-    wheelLabel:
-      "Carrousel de logos de prévoyance : AXA, Pax, Finpension, Helvetia, UBS, Swiss Life, VIAC, Generali, Swissquote, La Mobilière, Raiffeisen, Groupe Mutuel, Zurich, Liechtenstein Life, Allianz et Retraites Populaires.",
     description:
       "Comprenez vos frais, vos garanties et le potentiel de votre épargne. Identifiez ce qui mérite d’être conservé ou ajusté pour préparer votre retraite.",
-    assurances: ["Simulations gratuites", "Sans compte pour simuler", "Sans engagement"],
+    assurances: [
+      "Audit gratuit en 3 minutes",
+      "Sans compte",
+      "Vos données restent dans votre navigateur",
+    ],
     caption: "Comprendre aujourd’hui. Choisir la suite librement.",
     visual: {
       label: "L’EFFET DU TEMPS",
@@ -248,12 +251,12 @@ export const landing = {
       {
         question: "Puis-je commencer gratuitement et sans compte ?",
         answer:
-          "Oui, les simulations sont gratuites et accessibles immédiatement, sans compte ni numéro de téléphone. Pour commencer avec votre contrat, connectez-vous à Wallet : vous pourrez y déposer et retrouver vos documents dans votre espace personnel.",
+          "Oui. L’audit et les simulations sont gratuits et accessibles immédiatement, sans compte ni numéro de téléphone. Pour conserver vos documents et suivre vos contrats dans la durée, Wallet vous attend après connexion.",
       },
       {
         question: "Je n’ai pas mon contrat. Est-ce un problème ?",
         answer:
-          "Vous pouvez commencer dès maintenant avec les simulateurs pour explorer votre épargne et votre pouvoir d’achat futur. Vous pourrez ensuite retrouver votre contrat pour approfondir ses frais, ses garanties et ses conditions.",
+          "Non. L’audit commence par quelques questions : votre prestataire, vos versements, l’année de début et votre année de naissance suffisent pour une première estimation. Si vous avez votre contrat en PDF, nous le lisons dans votre navigateur pour préremplir ces réponses.",
       },
       {
         question: "L’analyse va-t-elle forcément me conseiller de changer ?",
@@ -268,7 +271,7 @@ export const landing = {
       {
         question: "Que deviennent mes données ?",
         answer:
-          "Vos paramètres de simulation restent dans votre navigateur. Pour vos documents, le dépôt passe par votre espace Wallet après connexion. Les informations sur leur traitement sont accessibles dans ce parcours avant le dépôt.",
+          "Vos réponses et vos paramètres restent dans votre navigateur ; un contrat déposé dans l’audit y est lu localement et n’est transmis à personne. Pour conserver vos documents, le dépôt passe par votre espace Wallet après connexion, avec les informations sur leur traitement.",
       },
       {
         question: "Comment connaître la rémunération de CoverView ?",
@@ -283,21 +286,6 @@ export const landing = {
     description:
       "Avec votre contrat ou une première simulation, avancez vers une prévoyance que vous comprenez mieux.",
     note: "Vous décidez de la suite. Aucune obligation de changer de contrat.",
-  },
-  entry: {
-    title: "Commençons par vous.",
-    description: "Avec ou sans votre contrat, choisissez comment avancer.",
-    close: "Fermer",
-    with: "J’ai mon contrat",
-    withText:
-      "Connectez-vous à Wallet pour déposer votre contrat et retrouver vos documents au même endroit.",
-    withNote: "Votre espace personnel · connexion requise",
-    withCta: "Continuer dans Wallet",
-    without: "Je commence sans contrat",
-    withoutText:
-      "Voyez ce que vos versements, le temps et l’inflation peuvent changer pour votre épargne.",
-    withoutNote: "Gratuit · sans compte · aucun document nécessaire",
-    withoutCta: "Essayer les simulateurs",
   },
   footer: {
     tagline: "La clarté, pour aller plus loin.",

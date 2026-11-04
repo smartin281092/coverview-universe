@@ -5,6 +5,8 @@ import {
   purchasingPower,
   savingsDefaults,
 } from "./calculations";
+import { GradientScene, coverviewColors } from "../scene/gradient-shader";
+import { PixelField } from "../scene/pixel-field";
 
 const root = document.querySelector<HTMLElement>("[data-landing]");
 if (root) {
@@ -19,13 +21,13 @@ if (root) {
   const motionButton = root.querySelector<HTMLButtonElement>("[data-motion-toggle]");
   const pauseLabel = motionButton?.getAttribute("aria-label") ?? "";
   const playLabel = motionButton?.dataset.playLabel ?? "";
-  let refreshWheel = () => {};
+  let refreshScene = () => {};
   function updateMotion() {
     if (!root) return;
     root.dataset.motion = paused ? "paused" : "running";
     motionButton?.setAttribute("aria-pressed", String(paused));
     motionButton?.setAttribute("aria-label", paused ? playLabel : pauseLabel);
-    refreshWheel();
+    refreshScene();
   }
   motionButton?.addEventListener("click", () => {
     paused = !paused;
@@ -99,47 +101,27 @@ if (root) {
     .querySelectorAll<HTMLElement>("[data-scene]")
     .forEach((element) => sceneObserver.observe(element));
 
-  const wheel = root.querySelector<HTMLElement>("[data-brand-wheel]");
-  const rotor = wheel?.querySelector<HTMLElement>("[data-wheel-rotor]");
-  if (wheel && rotor) {
-    const cards = [...wheel.querySelectorAll<HTMLElement>("[data-wheel-card]")].map((card) => ({
-      angle: Number(card.dataset.angle),
-      face: card.querySelector<HTMLElement>("[data-wheel-face]"),
-    }));
-    let wheelFrame = 0;
-    let lastTime = 0;
-    let rotation = 0;
+  // Hero (4 November 2026): the shader gradient and the pixel field run only while the hero is on
+  // screen, the tab visible, the animations not paused and motion not reduced.
+  const hero = root.querySelector<HTMLElement>("[data-hero-scene]");
+  const gradientCanvas = hero?.querySelector<HTMLCanvasElement>("[data-hero-gradient]");
+  const pixelCanvas = hero?.querySelector<HTMLCanvasElement>("[data-hero-pixels]");
+  if (hero && gradientCanvas && pixelCanvas) {
+    const gradient = new GradientScene(gradientCanvas, { colors: coverviewColors });
+    const pixels = new PixelField(pixelCanvas, { still: motionPreference.matches });
     let visible = true;
-    const canRotate = () => visible && !paused && !motionPreference.matches && !document.hidden;
-    const turn = (now: number) => {
-      if (!canRotate()) {
-        wheelFrame = 0;
-        lastTime = 0;
-        return;
-      }
-      if (lastTime) rotation = (rotation + (Math.min(now - lastTime, 64) * 360) / 44000) % 360;
-      lastTime = now;
-      rotor.style.transform = `rotateY(${rotation}deg)`;
-      for (const card of cards) {
-        const depth = (Math.cos(((card.angle + rotation) * Math.PI) / 180) + 1) / 2;
-        if (card.face) card.face.style.opacity = String(0.12 + 0.88 * Math.pow(depth, 1.5));
-      }
-      wheelFrame = requestAnimationFrame(turn);
-    };
-    refreshWheel = () => {
-      if (canRotate()) {
-        if (!wheelFrame) wheelFrame = requestAnimationFrame(turn);
-      } else {
-        cancelAnimationFrame(wheelFrame);
-        wheelFrame = 0;
-        lastTime = 0;
-      }
+    const canRun = () => visible && !paused && !motionPreference.matches && !document.hidden;
+    refreshScene = () => {
+      const running = canRun();
+      pixels.setStill(motionPreference.matches);
+      gradient.setRunning(running);
+      pixels.setRunning(running);
     };
     new IntersectionObserver(([entry]) => {
       visible = entry?.isIntersecting ?? false;
-      refreshWheel();
-    }).observe(wheel);
-    refreshWheel();
+      refreshScene();
+    }).observe(hero);
+    refreshScene();
   }
 
   root.querySelectorAll<HTMLElement>("[data-tilt]").forEach((element) => {
@@ -344,6 +326,6 @@ if (root) {
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) root.dataset.motion = "paused";
     else updateMotion();
-    refreshWheel();
+    refreshScene();
   });
 }

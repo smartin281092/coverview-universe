@@ -86,10 +86,11 @@ export const navigation = {
       listTitle: "Analyser",
       highlights: [
         {
-          href: "/analyser-3p",
+          href: "/audit-3e-pilier",
           icon: "search-check",
-          label: "Analyser mon 3e pilier",
-          description: "Placements, frais, garanties : les points clés de votre contrat.",
+          label: "Auditer mon 3e pilier",
+          description:
+            "Capital espéré, capital nécessaire et années de cotisation : votre audit en 3 minutes.",
         },
         {
           href: "/rapports/exemple",
@@ -105,6 +106,7 @@ export const navigation = {
         },
       ],
       links: [
+        { href: "/audit-3e-pilier", icon: "search-check", label: "Auditer mon 3e pilier" },
         { href: "/analyser-3p", icon: "search-check", label: "Analyser mon 3e pilier" },
         { href: "/recuperer-contrats", icon: "folder", label: "Récupérer mes contrats" },
         { href: "/retrouver-lpp", icon: "briefcase", label: "Retrouver mes avoirs LPP" },

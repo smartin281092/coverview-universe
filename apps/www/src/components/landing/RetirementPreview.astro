@@ -20,7 +20,7 @@ import '../../styles/landing-proof.css';
   <ol class="discovery-flow">{c.steps.map((step,i)=><li><span>{i+1}</span>{step}</li>)}</ol>
 </div>
 <dialog class="lp-dialog retirement-dialog" id="retirement-examples" aria-labelledby="retirement-dialog-title">
-  <div class="dialog-top"><p class="lp-eyebrow">{c.label}</p><button class="dialog-close" data-close-dialog aria-label={landing.entry.close}>×</button></div>
+  <div class="dialog-top"><p class="lp-eyebrow">{c.label}</p><button class="dialog-close" data-close-dialog aria-label={landing.close}>×</button></div>
   <h2 id="retirement-dialog-title"><TitleText text={c.dialogTitle}/></h2><p>{c.intro}</p>
   {c.examples.map(example=><div class="retirement-assumption"><h3>{example.title}</h3><p>{example.text}</p></div>)}
   <p>{c.assumptions}</p><p>{c.personal}</p>
