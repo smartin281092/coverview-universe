@@ -1,8 +1,11 @@
 import { z } from "zod";
 
-// Orders sent by horizon3.finance from the visitor's browser (14 October 2026). A public contract:
-// every field is bounded, unknown fields are ignored, amounts are francs with at most two decimals.
+// Orders sent from the visitor's browser (14 October 2026) by horizon3.finance and, since
+// 4 November 2026, by the Hyperion page of coverview.ch. A public contract: every field is bounded,
+// unknown fields are ignored, amounts are francs with at most two decimals.
 const text = (max: number) => z.string().trim().min(1).max(max);
+export const externalRequestSourceSchema = z.enum(["horizon3", "coverview"]);
+export type ExternalRequestSource = z.infer<typeof externalRequestSourceSchema>;
 const francs = z
   .number()
   .min(0)
@@ -12,7 +15,7 @@ const francs = z
     "At most two decimals",
   );
 export const horizon3ContactSchema = z.object({
-  source: z.literal("horizon3"),
+  source: externalRequestSourceSchema,
   requestId: z.guid(),
   firstName: text(80),
   lastName: text(80),

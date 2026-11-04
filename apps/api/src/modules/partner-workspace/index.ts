@@ -256,12 +256,13 @@ export function registerPartnerWorkspace(
         });
       },
     );
-  // Orders from horizon3.finance (14 October 2026), sent from the visitor's browser: no secret can
-  // authenticate them (SEC-05 exception, plan S-042a), hence exact origins, a small body, strict
-  // validation and a per-address limit. @fastify/cors reads these route options, preflight included.
+  // Orders from horizon3.finance (14 October 2026) and from the Hyperion page of the site
+  // (4 November 2026), sent from the visitor's browser: no secret can authenticate them (SEC-05
+  // exception, plan S-042a), hence exact origins, a small body, strict validation and a per-address
+  // limit. @fastify/cors reads these route options, preflight included.
   const h3 = {
     cors: {
-      origin: config.H3_ORIGINS,
+      origin: [...new Set([...config.H3_ORIGINS, config.AUTH_WWW_ORIGIN])],
       methods: ["POST", "OPTIONS"],
       allowedHeaders: ["Content-Type"],
       credentials: false,

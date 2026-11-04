@@ -1,7 +1,11 @@
 import { createHash } from "node:crypto";
 import type { Pool } from "pg";
 import { z } from "zod";
-import type { Horizon3Contact } from "@coverview/contracts/partner-intake";
+import {
+  externalRequestSourceSchema,
+  type ExternalRequestSource,
+  type Horizon3Contact,
+} from "@coverview/contracts/partner-intake";
 import type { Mailer } from "../../platform/mailer.js";
 import { event, newId, type PartnerAuditActor } from "./partner.audit.js";
 import { horizon3RequestMessage, horizon3RequestTemplate } from "./partner.intake-template.js";
@@ -9,8 +13,9 @@ import { syncLeadNotifications } from "./partner.notifications.js";
 import { fail, type Executor } from "./partner.policy.js";
 import copy from "./partner.intake.fr.json" with { type: "json" };
 
-// Orders from horizon3.finance (14 October 2026). The order is stored before it is confirmed; its
-// Lead, restricted to one account, and the internal notification follow. The table is the outbox.
+// Orders from horizon3.finance (14 October 2026) and from the site's Hyperion page (4 November
+// 2026). The order is stored before it is confirmed; its Lead, restricted to one account, and the
+// internal notification follow. The table is the outbox.
 const system: PartnerAuditActor = { userId: null, systemActor: "partner-intake-v1" };
 const maxAttempts = 10;
 // MAIL-07: the public form can never send more than this many notices an hour.
@@ -50,6 +55,9 @@ const frequency = (value: string) =>
     : copy.otherFrequency.replace("{frequency}", value);
 const fill = (template: string, values: Record<string, string>) =>
   template.replace(/\{(\w+)\}/gu, (_, key: string) => values[key] ?? "");
+// The site an order comes from, as named to the people who follow it.
+const origins = { horizon3: "horizon3.finance", coverview: "coverview.ch" } as const;
+const originOf = (source: ExternalRequestSource) => origins[source];
 
 // The account that follows these orders: exactly one active account with that address.
 async function owner(db: Executor, email: string) {
@@ -65,6 +73,7 @@ async function owner(db: Executor, email: string) {
 async function openLead(
   db: Executor,
   account: string,
+  source: ExternalRequestSource,
   requestId: string,
   data: Stored,
   receivedAt: Date,
@@ -72,6 +81,7 @@ async function openLead(
   const id = newId("lead");
   const name = `${data.firstName} ${data.lastName}`;
   const values = {
+    origin: originOf(source),
     name,
     date: new Intl.DateTimeFormat("fr-CH", {
       dateStyle: "medium",
@@ -102,13 +112,20 @@ async function openLead(
         email: data.email,
         phone: data.phone,
         language: "fr",
-        source: `horizon3:${requestId}`,
+        source: `${source}:${requestId}`,
         transmissionAuthorized: false,
       }),
       copy.nextAction,
     ],
   );
-  await event(db, system, id, "lead.external_request_received", copy.event, "assigned");
+  await event(
+    db,
+    system,
+    id,
+    "lead.external_request_received",
+    fill(copy.event, values),
+    "assigned",
+  );
   await syncLeadNotifications(db, id);
   return id;
 }
@@ -150,8 +167,8 @@ export async function linkExternalRequest(pool: Pool, id: string, ownerEmail: st
     await tx.query("set local lock_timeout='2s'");
     await tx.query("set local statement_timeout='10s'");
     const row = (
-      await tx.query<{ request_id: string; data: unknown; created_at: Date }>(
-        "select request_id,data,created_at from partner_external_requests where id=$1 and lead_id is null for update skip locked",
+      await tx.query<{ source: string; request_id: string; data: unknown; created_at: Date }>(
+        "select source,request_id,data,created_at from partner_external_requests where id=$1 and lead_id is null for update skip locked",
         [id],
       )
     ).rows[0];
@@ -163,6 +180,7 @@ export async function linkExternalRequest(pool: Pool, id: string, ownerEmail: st
     const leadId = await openLead(
       tx,
       account,
+      externalRequestSourceSchema.parse(row.source),
       row.request_id,
       storedSchema.parse(row.data),
       row.created_at,
@@ -215,6 +233,7 @@ export async function processExternalRequests(
     const claimed = (
       await pool.query<{
         id: string;
+        source: string;
         request_id: string;
         data: unknown;
         lead_id: string | null;
@@ -224,7 +243,7 @@ export async function processExternalRequests(
          where id=(select id from partner_external_requests where notification='queued'
            and (claimed_at is null or claimed_at<now()-attempts*interval '5 minutes')
            order by created_at,id for update skip locked limit 1)
-         returning id,request_id,data,lead_id,created_at`,
+         returning id,source,request_id,data,lead_id,created_at`,
       )
     ).rows[0];
     if (!claimed) break;
@@ -232,6 +251,7 @@ export async function processExternalRequests(
       const data = storedSchema.parse(claimed.data);
       const message = horizon3RequestMessage({
         locale: "fr",
+        origin: originOf(externalRequestSourceSchema.parse(claimed.source)),
         name: `${data.firstName} ${data.lastName}`,
         email: data.email,
         phone: data.phone,
@@ -275,6 +295,7 @@ export async function processExternalRequests(
 export function horizon3RequestPreview(partnerOrigin: string | undefined) {
   return horizon3RequestMessage({
     locale: "fr",
+    origin: "horizon3.finance",
     name: "Camille Exemple",
     email: "camille@example.test",
     phone: "+41 79 000 00 00",

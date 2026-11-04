@@ -122,6 +122,7 @@ const stored = async (requestId: string) =>
   (
     await database.pool.query<{
       id: string;
+      source: string;
       lead_id: string | null;
       data: unknown;
       notification: string;
@@ -243,7 +244,44 @@ it("stores an order once, answers a retry alike and refuses another content or a
     // MAIL-03 preview, fictitious values, local adapter only.
     const preview = await app.inject({ url: "/local/emails/horizon3-request?format=text" });
     expect(preview.statusCode).toBe(200);
-    expect(preview.body).toContain("horizon3-request-v2");
+    expect(preview.body).toContain("horizon3-request-v3");
+  } finally {
+    await app.close();
+  }
+});
+
+it("accepts an order from the site's Hyperion page, under its own origin and source", async () => {
+  const { app, config } = await server(`${randomUUID()}@intake.test`);
+  try {
+    const site = config.AUTH_WWW_ORIGIN;
+    const preflight = await app.inject({
+      method: "OPTIONS",
+      url,
+      headers: { origin: site, "access-control-request-method": "POST" },
+    });
+    expect(preflight.statusCode).toBe(204);
+    expect(preflight.headers["access-control-allow-origin"]).toBe(site);
+    const body = order({ source: "coverview", initialCapital: null });
+    const response = await app.inject({
+      method: "POST",
+      url,
+      headers: { origin: site },
+      payload: body,
+    });
+    expect(response.statusCode, response.body).toBe(200);
+    expect(response.headers["access-control-allow-origin"]).toBe(site);
+    const rows = await stored(body.requestId);
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toMatchObject({ source: "coverview", lead_id: null, notification: "queued" });
+    // The same request id under the other source is another order.
+    const other = await app.inject({
+      method: "POST",
+      url,
+      headers: { origin },
+      payload: { ...body, source: "horizon3" },
+    });
+    expect(other.statusCode, other.body).toBe(200);
+    expect(await stored(body.requestId)).toHaveLength(2);
   } finally {
     await app.close();
   }
@@ -493,7 +531,7 @@ it("notifies each order once, with minimal data, retries refused sends and caps 
   expect(notice).toMatchObject({
     to: "notices@intake.test",
     subject: "Nouvelle commande 3e pilier reçue de horizon3.finance",
-    tag: "horizon3-request-v2",
+    tag: "horizon3-request-v3",
   });
   expect(notice.text).toContain("Produit : Hyperion (Liechtenstein Life)");
   expect(notice.text).toContain("Versement : 300 CHF par mois");

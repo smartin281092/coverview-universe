@@ -1,12 +1,14 @@
 import { z } from "zod";
 
-// Template horizon3-request-v2 (MAIL-03): the internal notice of an order received from
-// horizon3.finance. It names the client with their email and phone, at the user's explicit
-// choice of 16 October 2026 (plan S-042a, Q-3 b, beyond MAIL-06): one internal address only.
-export const horizon3RequestTemplate = "horizon3-request-v2";
+// Template horizon3-request-v3 (MAIL-03): the internal notice of an order received from
+// horizon3.finance or from the site's Hyperion page (v3, 4 November 2026: the origin is a variable).
+// It names the client with their email and phone, at the user's explicit choice of 16 October 2026
+// (plan S-042a, Q-3 b, beyond MAIL-06): one internal address only.
+export const horizon3RequestTemplate = "horizon3-request-v3";
 const variablesSchema = z
   .object({
     locale: z.enum(["fr"]),
+    origin: z.enum(["horizon3.finance", "coverview.ch"]),
     name: z.string().trim().min(1).max(161),
     email: z.email().max(254),
     phone: z.string().trim().min(1).max(40),
@@ -23,9 +25,9 @@ const variablesSchema = z
 const copy = {
   fr: {
     dateLocale: "fr-CH",
-    subject: "Nouvelle commande 3e pilier reçue de horizon3.finance",
+    subject: "Nouvelle commande 3e pilier reçue de {{origin}}",
     greeting: "Bonjour,",
-    intro: "Une commande de solution 3e pilier a été reçue de horizon3.finance le {{date}}.",
+    intro: "Une commande de solution 3e pilier a été reçue de {{origin}} le {{date}}.",
     client: "Client : {{name}}",
     email: "Email : {{email}}",
     phone: "Téléphone : {{phone}}",
@@ -33,7 +35,7 @@ const copy = {
     strategy: "Stratégie : {{strategy}}",
     investment: "Versement : {{investment}}",
     capital: "Capital initial : {{capital}}",
-    reference: "Référence horizon3 : {{reference}}",
+    reference: "Référence {{origin}} : {{reference}}",
     action: "Suivre la commande dans CoverView Partner :",
     button: "Ouvrir la demande",
     pending:
@@ -78,6 +80,7 @@ export function horizon3RequestMessage(raw: z.input<typeof variablesSchema>) {
   const v = variablesSchema.parse(raw),
     c = copy[v.locale];
   const variables = {
+    origin: v.origin,
     name: v.name,
     email: v.email,
     phone: v.phone,
@@ -115,7 +118,7 @@ export function horizon3RequestMessage(raw: z.input<typeof variablesSchema>) {
   };
   const layout = v.link ? "link" : "pending";
   return {
-    subject: c.subject,
+    subject: fill(c.subject, variables),
     text: fill(textLayouts[layout], values),
     html: fill(htmlLayouts[layout], values, escape),
   };

@@ -1,6 +1,6 @@
-# Commandes 3e pilier de horizon3.finance
+# Commandes 3e pilier de horizon3.finance et de la page Hyperion
 
-Depuis le 14 octobre 2026 ([plan S-042a](../../../../../../roadmap/plans/S-042a-horizon3-intake.plan.md)). Un client commande une solution 3e pilier sur horizon3.finance ; son navigateur envoie la commande à CoverView, qui la garde une seule fois, avertit en interne et la fait suivre par un seul compte.
+Depuis le 14 octobre 2026 ([plan S-042a](../../../../../../roadmap/plans/S-042a-horizon3-intake.plan.md)). Un client commande une solution 3e pilier sur horizon3.finance ; son navigateur envoie la commande à CoverView, qui la garde une seule fois, avertit en interne et la fait suivre par un seul compte. Depuis le 4 novembre 2026 ([page produit Hyperion](../../../../../../roadmap/plans/hyperion-product-page.plan.md)), la page `/hyperion-3e-pilier` du site envoie ses commandes sur la même route, avec la source `coverview` : même enregistrement, même Lead réservé, même avis interne ; seul le nom du site d’origine change dans les textes.
 
 ## Contrat public
 
@@ -8,7 +8,7 @@ Depuis le 14 octobre 2026 ([plan S-042a](../../../../../../roadmap/plans/S-042a-
 
 | champ                    | règle                                                                                                                                                                     |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `source`                 | `"horizon3"`                                                                                                                                                              |
+| `source`                 | `"horizon3"` (horizon3.finance) ou `"coverview"` (page Hyperion du site) ; la clé de déduplication est le couple `(source, requestId)`                                   |
 | `requestId`              | GUID (8-4-4-4-12 hexadécimal), clé de déduplication                                                                                                                       |
 | `firstName`, `lastName`  | 1 à 80 caractères                                                                                                                                                         |
 | `email`                  | adresse valide, 254 caractères au plus                                                                                                                                    |
@@ -33,7 +33,7 @@ Les champs inconnus sont ignorés et jamais conservés.
 
 Une erreur a la forme `{ "error": { "code", "message", "requestId" } }` ; ce `requestId`-là identifie la requête HTTP chez CoverView, pas la commande.
 
-**CORS.** Pour cette route seulement : origines exactes `H3_ORIGINS` (par défaut `https://horizon3.finance`, `https://www.horizon3.finance`, `http://127.0.0.1:5187`, `http://localhost:5187`), méthodes `POST` et `OPTIONS`, en-tête `Content-Type`, sans cookies, pré-vol gardé 10 minutes. Les autres routes gardent leurs propres origines.
+**CORS.** Pour cette route seulement : origines exactes `H3_ORIGINS` (par défaut `https://horizon3.finance`, `https://www.horizon3.finance`, `http://127.0.0.1:5187`, `http://localhost:5187`) plus l’origine du site `AUTH_WWW_ORIGIN` (page Hyperion, 4 novembre 2026), méthodes `POST` et `OPTIONS`, en-tête `Content-Type`, sans cookies, pré-vol gardé 10 minutes. Les autres routes gardent leurs propres origines.
 
 **Sécurité.** L’appel part du navigateur du visiteur : aucune clé secrète ne peut l’authentifier. C’est une exception à SEC-05 (signature), compensée par les origines exactes, la taille, la validation stricte et la limite par adresse. Un client hors navigateur peut aussi appeler l’endpoint : une commande est une demande à qualifier, jamais une preuve d’identité.
 
@@ -43,7 +43,7 @@ Une erreur a la forme `{ "error": { "code", "message", "requestId" } }` ; ce `re
 
 **Lead.** Il est ouvert pour le compte `H3_OWNER_EMAIL` (par défaut `sebastien@coverview.ch`) : exactement un compte actif avec cette adresse, casse ignorée.
 
-- Catégorie prévoyance, intitulé « 3e pilier · Prénom Nom », objet « Produit · Compagnie ».
+- Catégorie prévoyance, intitulé « 3e pilier · Prénom Nom », objet « Produit · Compagnie » ; le contexte et l’événement nomment le site d’origine (`horizon3.finance` ou `coverview.ch`) et la source figure dans `details.source` (`horizon3:<requestId>` ou `coverview:<requestId>`).
 - Étape « À contacter », déjà accepté, priorité haute.
 - Action « Contacter le client au sujet de sa commande 3e pilier » sous 24 h.
 - Transmission à un autre intervenant non autorisée : la modifier demande de cocher l’autorisation, comme pour tout Lead.
@@ -56,7 +56,7 @@ Une erreur a la forme `{ "error": { "code", "message", "requestId" } }` ; ce `re
 - La continuité garde ses rappels, mais ne propose ni ne remonte jamais ce Lead. Ses rappels ne vont jamais dans la file CoverView.
 - Le client lui-même, s’il est un jour invité et relié dans Wallet, voit sa demande comme toute autre.
 
-**Avis interne.** Destinataire `H3_NOTIFY_EMAIL` (par défaut `sebastien@coverview.ch`), gabarit `horizon3-request-v2` en texte et HTML ; aperçu local : `/local/emails/horizon3-request`.
+**Avis interne.** Destinataire `H3_NOTIFY_EMAIL` (par défaut `sebastien@coverview.ch`), gabarit `horizon3-request-v3` en texte et HTML (v3 : le site d’origine, horizon3.finance ou coverview.ch, est une variable du sujet, de l’introduction et de la référence) ; aperçu local : `/local/emails/horizon3-request`.
 
 - Contenu : nom, email et téléphone du client, produit, compagnie, stratégie, versement, capital, référence et lien vers le Lead. Les coordonnées y figurent par choix explicite de l’utilisateur du 16 octobre 2026 (réponse Q-3 b), au-delà du minimum de MAIL-06 : l’avis ne part qu’à l’adresse interne configurée.
 - Envoi par la tâche Partner, chaque minute (MAIL-01).
