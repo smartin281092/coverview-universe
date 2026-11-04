@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import { hyperionCopy } from "../../content/fr/hyperion";
+import { hyperionOrder } from "../../content/fr/hyperion-order";
+import { hyperionUi } from "../../content/fr/hyperion-ui";
 import { HealthGradient } from "../health-insurance/HealthGradient";
 import { HYPERION, formatFrancs } from "./hyperion-model";
 import type { HyperionConfig } from "./hyperion-store";
 
-const copy = hyperionCopy.order;
-const buy = hyperionCopy.buy;
+const copy = hyperionOrder;
+const buy = hyperionUi.buy;
 type Fields = {
   firstName: string;
   lastName: string;
@@ -42,7 +43,7 @@ function uuid() {
  * API's public order route, the one horizon3.finance uses, with the source "coverview". One request
  * id per content: a retry after a network error resends the same order, which the API keeps once.
  */
-export function HyperionOrderDialog({
+export default function HyperionOrderDialog({
   open,
   onClose,
   config,
@@ -199,7 +200,7 @@ export function HyperionOrderDialog({
     >
       <div className="hp-order-inner">
         <div className="dialog-top">
-          <p className="lp-eyebrow">{hyperionCopy.hero.eyebrow}</p>
+          <p className="lp-eyebrow">{hyperionOrder.eyebrow}</p>
           <button type="button" className="dialog-close" onClick={onClose} aria-label={copy.close}>
             ×
           </button>

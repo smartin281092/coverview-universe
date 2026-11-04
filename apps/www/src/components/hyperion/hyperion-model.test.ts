@@ -2,8 +2,6 @@ import { describe, expect, it } from "vitest";
 import {
   HYPERION,
   annualisedReturn,
-  createCapitalRanges,
-  createRandom,
   cumulativeGrowth,
   effectiveContribution,
   formatFrancs,
@@ -11,14 +9,13 @@ import {
   grossReturns,
   historicalProjection,
   insuranceMonthlyCost,
-  monteCarlo,
   netReturn,
   netReturns,
-  percentile,
   reducedContribution,
   totalInvested,
   yearsUntilRetirement,
 } from "./hyperion-model";
+import { createCapitalRanges, createRandom, monteCarlo, percentile } from "./hyperion-monte-carlo";
 
 describe("Hyperion : série et frais, comme le comparateur horizon3", () => {
   it("retrouve les taux annualisés publiés par horizon3", () => {

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { hyperionCopy } from "../../content/fr/hyperion";
+import { PixelField } from "@coverview/ui/pixel-field";
+import { hyperionUi } from "../../content/fr/hyperion-ui";
 import { HealthGradient } from "../health-insurance/HealthGradient";
 import { ArrowIcon } from "./HyperionIcons";
 import { HyperionFields } from "./HyperionFields";
@@ -12,12 +13,12 @@ import {
   historicalProjection,
   netReturns,
   yearsUntilRetirement,
-  type MonteCarloResult,
   type Projection,
 } from "./hyperion-model";
+import type { MonteCarloResult } from "./hyperion-monte-carlo";
 import { requestOrder, updateConfig, useHyperionConfig } from "./hyperion-store";
 
-const copy = hyperionCopy.simulator;
+const copy = hyperionUi.simulator;
 const mc = copy.monteCarlo;
 const rate = annualisedReturn(netReturns());
 const interpolate = (template: string, values: Record<string, string>) =>
@@ -137,7 +138,8 @@ function MonteCarloPanel({
         </p>
       </div>
       <div className="hp-mc-tiles">
-        <div className="hp-mc-tile hp-mc-tile-median">
+        <div className="hp-mc-tile hp-mc-tile-median hp-card-dark">
+          <PixelField className="hp-pixels" />
           <p>{mc.median}</p>
           <strong>{chf(result.median)}</strong>
           <small>{mc.medianNote}</small>
@@ -312,7 +314,7 @@ export default function HyperionSimulator({ currentYear }: { currentYear: number
             </button>
           </>
         ) : (
-          <p className="hp-buy-note">{hyperionCopy.buy.horizonShort}</p>
+          <p className="hp-buy-note">{hyperionUi.buy.horizonShort}</p>
         )}
       </div>
     </div>

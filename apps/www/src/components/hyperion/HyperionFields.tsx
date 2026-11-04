@@ -1,8 +1,8 @@
-import { hyperionCopy } from "../../content/fr/hyperion";
+import { hyperionUi } from "../../content/fr/hyperion-ui";
 import { formatFrancs } from "./hyperion-model";
 import type { HyperionConfig } from "./hyperion-store";
 
-const copy = hyperionCopy.buy;
+const copy = hyperionUi.buy;
 // Monthly bounds: 100 CHF (risk premium scale) to the 3a cap without a pension fund, 36'288 / 12.
 const bounds = {
   monthly: { min: 100, max: 3024, cap: 605, step: 10 },

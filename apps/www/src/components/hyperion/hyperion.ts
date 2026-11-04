@@ -1,3 +1,4 @@
+import { mountPixelField } from "@coverview/ui/pixel-field";
 import { formatFrancs } from "./hyperion-model";
 
 // The page's own behaviours: reveal on scroll, counters, dialogs, the reviews' pause button and
@@ -80,6 +81,9 @@ if (root) {
         dialog.close();
     });
   });
+
+  // The Wallet's flickering pixels over the dark cards.
+  root.querySelectorAll<HTMLCanvasElement>("canvas[data-pixel-field]").forEach(mountPixelField);
 
   const reviews = root.querySelector<HTMLElement>("[data-reviews]");
   const toggle = root.querySelector<HTMLButtonElement>("[data-reviews-toggle]");

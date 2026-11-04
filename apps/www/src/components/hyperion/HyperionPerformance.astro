@@ -3,7 +3,6 @@ import TitleText from '../landing/TitleText.astro';
 import Arrow from '../landing/Arrow.astro';
 import HyperionReturnsChart from './HyperionReturnsChart.astro';
 import HyperionChevrons from './HyperionChevrons.astro';
-import HyperionPixels from './HyperionPixels.astro';
 import { hyperionCopy } from '../../content/fr/hyperion';
 import {
   HYPERION, annualisedReturn, cumulativeGrowth, formatFrancs, formatPercent, formatSignedPercent, grossReturns, netReturn, netReturns, historyYears,
@@ -27,9 +26,9 @@ const interpolate = (template: string, values: Record<string, string>) =>
       <p class="lp-description">{c.description}</p>
     </div>
     <div class="hp-kpis" data-reveal>
-      <div class="hp-kpi hp-kpi-main hp-card-dark"><HyperionPixels seed={7} count={30} /><div class="hp-kpi-row"><HyperionChevrons /><div><p>{c.kpis.current.label}</p><strong><span aria-hidden="true">+</span><span data-count={(current.grossReturn * 100).toFixed(2)} data-count-digits="2">{formatFrancs(current.grossReturn * 100, 2)}</span> %</strong><small>{c.kpis.current.note}</small></div></div></div>
+      <div class="hp-kpi hp-kpi-main hp-card-dark"><canvas class="hp-pixels" data-pixel-field aria-hidden="true"></canvas><div class="hp-kpi-row"><HyperionChevrons /><div><p>{c.kpis.current.label}</p><strong><span aria-hidden="true">+</span><span data-count={(current.grossReturn * 100).toFixed(2)} data-count-digits="2">{formatFrancs(current.grossReturn * 100, 2)}</span> %</strong><small>{c.kpis.current.note}</small></div></div></div>
       <div class="hp-kpi"><p>{c.kpis.annualised.label}</p><strong><span data-count={(annualised * 100).toFixed(1)} data-count-digits="1">{formatFrancs(annualised * 100, 1)}</span> %</strong><small>{c.kpis.annualised.note}</small></div>
-      <div class="hp-kpi hp-card-dark"><HyperionPixels seed={11} count={18} /><p>{c.kpis.mean.label}</p><strong><span data-count={(mean * 100).toFixed(1)} data-count-digits="1">{formatFrancs(mean * 100, 1)}</span> %</strong><small>{c.kpis.mean.note}</small></div>
+      <div class="hp-kpi hp-card-dark"><canvas class="hp-pixels" data-pixel-field aria-hidden="true"></canvas><p>{c.kpis.mean.label}</p><strong><span data-count={(mean * 100).toFixed(1)} data-count-digits="1">{formatFrancs(mean * 100, 1)}</span> %</strong><small>{c.kpis.mean.note}</small></div>
       <div class="hp-kpi"><p>{c.kpis.positive.label}</p><strong>{positive} / {gross.length}</strong><small>{c.kpis.positive.note}</small></div>
     </div>
     <div class="hp-chart-card" data-reveal>

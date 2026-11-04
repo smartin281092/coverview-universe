@@ -1,4 +1,4 @@
-import { monteCarlo, type MonteCarloRequest } from "./hyperion-model";
+import { monteCarlo, type MonteCarloRequest } from "./hyperion-monte-carlo";
 
 // 100'000 trajectories off the page's thread. The reply carries the summary only.
 type Request = MonteCarloRequest & { id: number };

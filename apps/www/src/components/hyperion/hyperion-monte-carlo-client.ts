@@ -1,4 +1,4 @@
-import { monteCarlo, type MonteCarloRequest, type MonteCarloResult } from "./hyperion-model";
+import { monteCarlo, type MonteCarloRequest, type MonteCarloResult } from "./hyperion-monte-carlo";
 
 // The worker is created on first use; without workers, or if it fails, the page's thread computes.
 let worker: Worker | null = null;

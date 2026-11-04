@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
-import { hyperionCopy } from "../../content/fr/hyperion";
+import { Suspense, lazy, useEffect, useState } from "react";
+import { hyperionUi } from "../../content/fr/hyperion-ui";
 import { HealthGradient } from "../health-insurance/HealthGradient";
 import { HyperionFields } from "./HyperionFields";
 import { ArrowIcon } from "./HyperionIcons";
-import { HyperionOrderDialog } from "./HyperionOrderDialog";
 import {
   annualisedReturn,
   formatFrancs,
@@ -13,7 +12,9 @@ import {
 } from "./hyperion-model";
 import { ORDER_EVENT, updateConfig, useHyperionConfig } from "./hyperion-store";
 
-const copy = hyperionCopy.buy;
+const copy = hyperionUi.buy;
+// The order dialog and its texts load at the first opening, then stay mounted with their state.
+const HyperionOrderDialog = lazy(() => import("./HyperionOrderDialog"));
 const rate = annualisedReturn(netReturns());
 const interpolate = (template: string, values: Record<string, string>) =>
   Object.entries(values).reduce(
@@ -31,6 +32,10 @@ export default function HyperionBuy({
 }) {
   const config = useHyperionConfig();
   const [open, setOpen] = useState(false);
+  const [requested, setRequested] = useState(false);
+  useEffect(() => {
+    if (open) setRequested(true);
+  }, [open]);
   useEffect(() => {
     const handler = () => setOpen(true);
     document.addEventListener(ORDER_EVENT, handler);
@@ -93,12 +98,16 @@ export default function HyperionBuy({
           </li>
         ))}
       </ul>
-      <HyperionOrderDialog
-        open={open}
-        onClose={() => setOpen(false)}
-        config={config}
-        apiUrl={apiUrl}
-      />
+      {requested && (
+        <Suspense fallback={null}>
+          <HyperionOrderDialog
+            open={open}
+            onClose={() => setOpen(false)}
+            config={config}
+            apiUrl={apiUrl}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }
