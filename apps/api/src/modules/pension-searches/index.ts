@@ -20,7 +20,6 @@ import { createDatabase } from "../../platform/db/database.js";
 import { IdentityError, type registerIdentity } from "../identity/index.js";
 import { createPensionSearchRepository } from "./pension-searches.repository.js";
 export { PensionSearchError } from "./pension-searches.repository.js";
-export { pensionSearches } from "./pension-searches.schema.js";
 type Identity = Awaited<ReturnType<typeof registerIdentity>>;
 const hash = (value: string) => createHash("sha256").update(value).digest("hex");
 const csrf = (value: string) => hash(`pension-csrf:${value}`);

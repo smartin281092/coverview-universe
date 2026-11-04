@@ -6,6 +6,10 @@ Aucune entrée active. Les décisions durables vivent dans leur documentation pr
 
 ## Candidats
 
+Décisions du 4 novembre 2026, recherche d’avoirs LPP ([plan](roadmap/plans/lpp-search-2026-11-04.plan.md), [module](apps/api/src/modules/pension-searches/README.md)).
+- **Instruction utilisateur** : page pour retrouver les avoirs LPP perdus, inspirée de la page d’accueil de Kala (structure et contenu) dans le style du site ; commande par le checkout multi-étapes du comparateur ; demande enregistrée, suivie étape par étape et retrouvée dans Wallet ; hero avec shadergradient animé, flou et trame de pixels des offres Wallet.
+- **Défauts PROG-23** : `/retrouver-lpp` ; recherche gratuite, aucun tarif pour l’étape 2 ; compte Wallet vérifié obligatoire (n° AVS, mandat), pas de suivi invité ; mandat en case explicite, version `pension-search-2026-11-04`, sans validation juridique ; étapes Demande reçue → Vérification du dossier → Recherche lancée → Résultats reçus → Démarche terminée, posées une à une par l’Admin ; aucun chiffre de Kala repris. Revue : à la prochaine revue mémoire.
+
 Décisions du 29 octobre 2026, comparateur maladie ([plan](roadmap/plans/comparator-partners-2026-10-23.plan.md#suite-du-29-octobre-2026--iphone-économies-du-panier-panier-sans-récapitulatif)).
 - **Instruction utilisateur** : plus de zoom automatique au focus d’un champ sur iPhone ; dans le panier, les économies annuelles de chaque modèle comme dans la liste et leur total sous le total ; le récapitulatif doublonnait le panier, à supprimer ou fusionner.
 - **Défauts PROG-23** : `maximum-scale=1` sur iOS seulement, posé par le module Layout (le pincement reste possible sur iOS, ailleurs le zoom n’est pas bloqué) ; économies par rapport au modèle actuel indiqué pour chaque personne, gardé dans l’onglet et jamais envoyé ; caisse actuelle préremplie depuis ce modèle ; récapitulatif fusionné dans le panier, dernière étape, avec recalcul annoncé si les primes ont changé avant l’envoi. Revue : à la prochaine revue mémoire.

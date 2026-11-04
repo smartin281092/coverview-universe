@@ -1,0 +1,61 @@
+{
+  "title": "Recherches LPP",
+  "description": "Traitez les recherches d’avoirs LPP commandées depuis le site et actualisez leur progression.",
+  "loading": "Chargement des recherches…",
+  "error": "Impossible de charger les recherches. Vérifiez votre accès puis réessayez.",
+  "retry": "Réessayer",
+  "empty": "Aucune recherche pour ce filtre.",
+  "all": "Tous les statuts",
+  "filter": "Filtrer par statut",
+  "details": "Détails",
+  "back": "Fermer",
+  "previous": "Première page",
+  "next": "Page suivante",
+  "line": "{{email}} · {{state}} · {{date}}",
+  "states": {
+    "submitted": "Demande reçue",
+    "reviewing": "Vérification du dossier",
+    "search_sent": "Recherche lancée",
+    "results_received": "Résultats reçus",
+    "completed": "Démarche terminée",
+    "cancelled": "Recherche annulée"
+  },
+  "descriptions": {
+    "submitted": "La demande est enregistrée.",
+    "reviewing": "Informations et autorisation vérifiées.",
+    "search_sent": "Demande transmise à la Centrale du 2e pilier.",
+    "results_received": "Réponse reçue de la Centrale du 2e pilier.",
+    "completed": "Recherche terminée et suite communiquée au client."
+  },
+  "identity": "Identité",
+  "address": "Adresse et contact",
+  "path": "Parcours",
+  "previousNames": "Ancien(s) nom(s) : {{value}}",
+  "born": "Naissance : {{date}} · {{sex}} · {{nationality}}",
+  "avs": "N° AVS : {{value}}",
+  "sex": {
+    "female": "Féminin",
+    "male": "Masculin"
+  },
+  "situations": {
+    "job_change": "Changement d’employeur",
+    "unemployment": "Chômage",
+    "break": "Pause ou congé",
+    "leaving_switzerland": "Départ de Suisse",
+    "retirement": "Préparer sa retraite",
+    "self_employed": "Devenir indépendant",
+    "home": "Achat d’un logement",
+    "divorce": "Divorce",
+    "other": "Simple vérification"
+  },
+  "noEmployer": "Aucun ancien employeur indiqué.",
+  "employer": "{{name}} · {{city}} · {{period}}",
+  "mandate": "Mandat accepté, version {{version}}.",
+  "transitionHint": "Enregistrez uniquement une étape réellement effectuée. Le client la voit aussitôt dans son Wallet.",
+  "nextStep": "Passer à : {{state}}",
+  "cancel": "Annuler la recherche",
+  "saving": "Enregistrement…",
+  "conflict": "La recherche a été modifiée. Actualisez-la avant de poursuivre.",
+  "transitionError": "L’étape n’a pas été enregistrée. Réessayez.",
+  "locality": "{{postalCode}} {{city}} · {{country}}"
+}

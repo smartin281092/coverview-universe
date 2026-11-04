@@ -77,6 +77,13 @@ export function AppShell() {
                     {t("insuranceRequests:title")}
                   </Link>
                   <Link
+                    to="/pension-searches"
+                    aria-current={pathname === "/pension-searches" ? "page" : undefined}
+                    className="cv-app-nav-link"
+                  >
+                    {t("pensionSearches:title")}
+                  </Link>
+                  <Link
                     to="/configuration/comparateur-maladie"
                     aria-current={
                       pathname === "/configuration/comparateur-maladie" ? "page" : undefined
