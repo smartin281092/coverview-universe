@@ -22,6 +22,17 @@ Mandat : demande de l’utilisateur du 4 novembre 2026 (page produit « à la D�
 | Maillage : à la une du menu Comparateur, Explorer, section stratégie de l’accueil | Vérifié | `check-www` : page atteinte depuis l’accueil ; lint ciblé |
 | Préférence de réduction des mouvements | Fait non vérifié sur un OS réglé ainsi | Branches CSS et `data-motion="paused"` relues ; marquee et dégradé du CTA immobiles sous `prefers-reduced-motion` |
 
+## Premier retour du 4 novembre 2026 (H-13 à H-16)
+
+| Élément | Statut | Oracle et portée |
+| --- | --- | --- |
+| CTA « Découvrir Hyperion » dans le héros de l’accueil, vers la page produit | Vérifié | Build et `check-www` (lien local compté, page atteinte) ; capture du héros de l’accueil |
+| Bouton shader du comparateur sur les quatre CTA de la page (achat, simulateur, envoi de commande, clôture) | Vérifié V1 · rendu WebGL fait non vérifié en headless | `HealthGradient` dans chaque bouton, îlot `HyperionOrderCta` déclaré dans l’oracle ; le dialogue de commande s’ouvre depuis la clôture. La scène WebGL ne s’est pas chargée dans Chromium headless (serveur de développement : dépendance en cours d’optimisation ; oracle : `deferredDecorationGzipBytes` à 0), le fond statique du bouton s’affiche alors, comme sur le comparateur |
+| Budget JavaScript du gabarit | Vérifié | `check-www` : 100’803 octets gzip chargés hors décoration différée (plafond 102’400), LCP 244 ms, CLS 0 ; les chunks `HealthShaderScene` et `three.module` sont déclarés décoration différée de cette seule page (G-08, H-14) |
+| Card « 2026, année en cours » en tête, fond sombre BM Partners, chevrons verts montants, pixels scintillants ; alternance dark / clair sur les indicateurs et les résultats clients ; chevrons sur la tuile du héros | Vérifié visuellement | Captures bureau après défilement ; animations CSS seules, immobiles sous `prefers-reduced-motion` et en mode pause |
+| « Composez votre Hyperion » en 18 px ; logo en exposant du titre (0,36 em) | Vérifié visuellement | Capture du héros |
+| Types, lint, build | Vérifié | Astro Check (0 erreur), ESLint, build (46 pages) |
+
 ## Observations de la revue navigateur
 
 - Le serveur de développement affiche « Invalid hook call » au rendu serveur de **toutes** les pages (accueil compris), avant cette livraison : non introduit ici, à examiner à part (G-07). Aucun avertissement dans le navigateur.

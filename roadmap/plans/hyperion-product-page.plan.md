@@ -26,6 +26,17 @@ Entrée : demande de l’utilisateur du 4 novembre 2026. « Fais une page produi
 | H-11 | Maillage ? | À la une du menu Comparateur, lien dans Explorer (outils), lien depuis la section stratégie de l’accueil ; aucune page orpheline. | SEO-08 |
 | H-12 | Frais affichés ? | Honnêteté avant conversion (MKT-01) : frais annuels 2,21 % et retenues des 5 premières années dits dans les hypothèses et la FAQ, en précisant que le périmètre exact des frais figure dans l’offre Liechtenstein Life. | CLAUDE.md §2 |
 
+## Retour utilisateur du 4 novembre 2026 (premier retour)
+
+Entrée : « Ajoute un CTA, tu oublies le CTA, donc en haut vers le produit. Pour les boutons, CTA, reprends le même bouton que pour le comparateur d’assurance maladie, avec le shader. Pour les cards où tu affiches les performances, la performance positive year to date doit être plus mise en avant : trois petits chevrons sur la gauche, les uns au-dessus des autres, en vert avec des opacités différentes, animés comme une flèche qui monte. Fond dark : reprends les fonds dark du site BM Partners, cette charte visuelle, et ajoute au-dessus les animations de pixels ; varie entre cards à fond dark et fond clair, avec les pixels aussi sur les petites cartes. Diminue la taille de « Composez votre Hyperion ». Diminue un peu le logo, comme un exposant du titre. »
+
+| ref | question | answer | evidence |
+|---|---|---|---|
+| H-13 | Quel CTA « en haut vers le produit » ? | Lu comme le CTA manquant en haut de l’accueil : bouton « Découvrir Hyperion » à côté de « Analyser mon 3e pilier » dans le héros, vers `/hyperion-3e-pilier`, dans la livrée statique du bouton du comparateur (sans scène WebGL sur l’accueil, dont le budget JavaScript est déjà presque atteint). | Demande ; `check-www` |
+| H-14 | Bouton shader ? | Le `HealthGradient` du comparateur (scène WebGL chargée seulement quand le bouton est visible et que le mouvement n’est pas réduit) dans les quatre CTA de la page : bloc d’achat, simulateur, envoi de la commande, clôture (nouvel îlot `HyperionOrderCta`). Cela remplace la dérogation initiale (dégradé CSS) : l’oracle `check-www` déclare désormais ces chunks (`HealthShaderScene`, `three.module`) comme décoration différée de la page, mesurée et rapportée à part du budget de 100 KiB, qui continue de s’appliquer au reste du gabarit ; une autre page qui les chargerait les compterait en plein. Écart assumé à la lettre de MKT-06 sur instruction explicite, documenté (G-08). | Instruction du 24 octobre (« tous les CTA partout ») réitérée |
+| H-15 | Mise en avant de l’année en cours et charte dark ? | La card « 2026, année en cours » devient la première et la plus grande, sur le dégradé sombre de BM Partners (`#0f172a → #172554 → #312e81 → #1e1b4b`), avec trois chevrons verts montant en cascade à gauche du chiffre et un champ de pixels scintillants (positions déterministes, CSS seul, immobiles sous mouvement réduit). Alternance dark / clair : cards 1 et 3 des indicateurs et cards 1 et 3 des résultats clients sombres avec pixels ; chevrons aussi sur la tuile « Année en cours » du héros et sur chaque résultat client positif. | Charte BM Partners (`performance-cosmic-surface`) |
+| H-16 | Titre du bloc d’achat et logo ? | « Composez votre Hyperion » en 18 px ; logo en exposant du H1, 0,36 em, à droite du mot. | Demande |
+
 ## Hors périmètre
 
 Souscription en ligne, signature, paiement ; comparaison interactive avec d’autres produits ; données de composition de la stratégie ; mesure de conversion ; déploiement.
@@ -48,3 +59,4 @@ Souscription en ligne, signature, paiement ; comparaison interactive avec d’au
 | 4 | Build livré | `astro build`, `check-www` | 46 pages, oracle réussi : 45 pages, 0 orpheline, 99’479 octets gzip sur la route, LCP 280 ms, CLS 0,0002 | — |
 | 5 | Navigateur | Playwright 1440 et 390 px | galerie, 4 dialogues + commande (Échap), simulateur et Monte Carlo (worker), bascule mensuel/annuel, pause des avis, FAQ ; pas de débordement ; console propre ; vignette du graphique agrandie après revue | — |
 | 6 | Logo vectorisé | Rastérisation des polygones et comparaison pixel à pixel avec l’original | première géométrie : crochets trop longs (fin de barre verticale placée sous le centre), Jaccard 0,84 ; corrigée et paramètres ajustés : 0,9517, écarts en bandes de 1 à 3 px sur les bords | — |
+| 7 | Premier retour (H-13 à H-16) | Astro Check, ESLint, build, `check-www`, captures du serveur de développement | voir le ledger, section « Premier retour » | — |
