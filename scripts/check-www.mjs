@@ -49,12 +49,18 @@ const pageScripts = new Map([
   // Page produit Hyperion (4 novembre 2026) : le bloc d'achat s'hydrate au chargement pour que la
   // commande réponde tout de suite, le simulateur Monte Carlo quand il devient visible ; un module
   // local pour les dialogues, les compteurs et la pause des avis.
+  // Ses CTA reprennent le bouton shader du comparateur (demande du 4 novembre 2026) : la scène
+  // WebGL et three.js se chargent après coup, seulement quand un CTA est visible et que le
+  // mouvement n'est pas réduit, et ne portent aucun contenu ni aucune interaction. Ces chunks
+  // sont déclarés ici comme décoration différée : mesurés et rapportés à part, hors du budget
+  // des scripts du gabarit (G-08). Toute autre page qui les chargerait les compterait en plein.
   [
     "/hyperion-3e-pilier",
     {
-      islands: ["HyperionBuy@load", "HyperionSimulator@visible"],
+      islands: ["HyperionBuy@load", "HyperionOrderCta@visible", "HyperionSimulator@visible"],
       modules: ["HyperionPage"],
       interactiveMain: true,
+      deferredDecoration: ["HealthShaderScene", "three.module"],
     },
   ],
   // Indicateur de connexion et lien vers Wallet, module natif hors du contenu (README www).
@@ -689,11 +695,17 @@ async function measurePage(browser, origin, route, files) {
     assert(metrics.cls < limits.cls, `${route} : CLS local ${metrics.cls}`);
     assert.deepEqual(unexpected, [], `${route} : tentative de requête externe`);
     // MKT-06 borne le JavaScript chargé par gabarit, pas les chunks inutilisés
-    // que les intégrations Astro peuvent émettre pour d’autres pages.
+    // que les intégrations Astro peuvent émettre pour d’autres pages. La décoration différée
+    // déclarée par la page (shader WebGL des CTA) est mesurée à part.
+    const deferredDecoration = pageScripts.get(route)?.deferredDecoration ?? [];
     let javascriptGzipBytes = 0;
+    let deferredDecorationGzipBytes = 0;
     for (const path of requestedScripts) {
       assert(files.has(path), `${route} : script chargé absent du build ${path}`);
-      javascriptGzipBytes += gzipSync(files.get(path)).length;
+      const bytes = gzipSync(files.get(path)).length;
+      if (deferredDecoration.some((prefix) => emittedName(path).startsWith(prefix)))
+        deferredDecorationGzipBytes += bytes;
+      else javascriptGzipBytes += bytes;
     }
     const inlineScripts = await page.evaluate(() =>
       [...document.scripts]
@@ -730,6 +742,7 @@ async function measurePage(browser, origin, route, files) {
     return {
       route,
       javascriptGzipBytes,
+      deferredDecorationGzipBytes,
       lcpMs: Math.round(metrics.lcpMs),
       cls: Number(metrics.cls.toFixed(4)),
       skipLink: "passed",

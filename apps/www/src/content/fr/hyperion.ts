@@ -21,6 +21,7 @@ export const hyperionCopy = {
   navDescription:
     "La stratégie 3e pilier de CoverView : gestion active, rendements 2016 – 2026, simulateur et commande.",
   homeLink: "Découvrir Hyperion, notre 3e pilier",
+  homeCta: "Découvrir Hyperion",
   hero: {
     eyebrow: "3E PILIER 3A · STRATÉGIE COVERVIEW · ASSUREUR LIECHTENSTEIN LIFE",
     title: "Hyperion",

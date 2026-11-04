@@ -1,0 +1,7 @@
+---
+// Three chevrons rising one after the other: the sign of a positive performance (user request,
+// 4 November 2026). Decorative; the figure next to it carries the information.
+interface Props { class?: string; }
+const { class: className } = Astro.props;
+---
+<span class:list={['hp-chevrons', className]} aria-hidden="true"><i></i><i></i><i></i></span>

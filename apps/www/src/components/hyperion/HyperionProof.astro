@@ -3,6 +3,8 @@ import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import TitleText from '../landing/TitleText.astro';
 import Arrow from '../landing/Arrow.astro';
+import HyperionChevrons from './HyperionChevrons.astro';
+import HyperionPixels from './HyperionPixels.astro';
 import { performanceCopy } from '../../content/fr/performance';
 import { hyperionCopy } from '../../content/fr/hyperion';
 import { formatNumber } from '../landing/calculations';
@@ -29,10 +31,11 @@ const featured = performanceCopy.captures.slice(0, 3);
       <p class="lp-description">{c.description}</p>
     </div>
     <div class="performance-grid" data-scene>
-      {featured.map((capture, i) => <article class={`performance-card performance-card-${i}`} data-reveal>
+      {featured.map((capture, i) => <article class:list={['performance-card', `performance-card-${i}`, { 'hp-proof-dark hp-card-dark': i % 2 === 0 }]} data-reveal>
+        {i % 2 === 0 && <HyperionPixels seed={20 + i} count={22} />}
         <div class="performance-card-copy">
           <p class="performance-card-label">{capture.title}</p>
-          <p class="performance-value"><span aria-hidden="true">+</span><span>{formatNumber(capture.value, 2)}</span><span class="performance-unit">%</span></p>
+          <div class="hp-proof-value"><HyperionChevrons class="is-small" /><p class="performance-value"><span aria-hidden="true">+</span><span>{formatNumber(capture.value, 2)}</span><span class="performance-unit">%</span></p></div>
           <p class="performance-period">{capture.period}</p>
           <p class="performance-metric">{capture.metric}</p>
         </div>

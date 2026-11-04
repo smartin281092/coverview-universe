@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { hyperionCopy } from "../../content/fr/hyperion";
+import { HealthGradient } from "../health-insurance/HealthGradient";
 import { HyperionFields } from "./HyperionFields";
+import { ArrowIcon } from "./HyperionIcons";
 import { HyperionOrderDialog } from "./HyperionOrderDialog";
 import {
   annualisedReturn,
@@ -18,20 +20,6 @@ const interpolate = (template: string, values: Record<string, string>) =>
     (text, [key, value]) => text.replaceAll(`{{${key}}}`, value),
     template,
   );
-
-export function ArrowIcon() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M5 12h14M13 6l6 6-6 6"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 /** The hero's buy box: the parameters, the capital they lead to and the order. */
 export default function HyperionBuy({
@@ -89,6 +77,7 @@ export default function HyperionBuy({
         )}
       </div>
       <button type="button" className="lp-button hp-cta hp-cta-main" onClick={() => setOpen(true)}>
+        <HealthGradient />
         {copy.cta}
         <ArrowIcon />
       </button>

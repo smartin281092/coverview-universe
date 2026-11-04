@@ -196,18 +196,16 @@
   font-size: 10px;
   margin-bottom: 14px !important;
 }
-.hp-title-row {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
 .hp-logo-mark {
   display: block;
   flex: none;
 }
-.hp-logo {
-  width: 54px;
-  height: 54px;
+.hp h1 .hp-logo-sup {
+  display: inline-block;
+  width: 0.36em;
+  height: 0.36em;
+  margin: 0.06em 0 0 0.16em;
+  vertical-align: top;
   color: var(--lp-ink);
 }
 .hp-closing-mark {
@@ -334,9 +332,12 @@
   background: #fff;
   box-shadow: 0 14px 40px #1a1a3a0d;
 }
-.hp-buy-title {
-  margin-bottom: 16px;
-  font-size: 20px;
+.lp .hp-buy-title {
+  margin-bottom: 14px;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
 }
 .hp-fields {
   display: grid;
@@ -469,45 +470,52 @@
   line-height: 1.5;
   color: #8a8a96;
 }
-/* Le CTA reprend les couleurs du shader du comparateur en dégradés CSS animés : le budget
-   JavaScript de la page reste celui du gabarit (MKT-06). */
-.hp-cta {
+/* Le CTA du comparateur maladie, shader compris (demande du 4 novembre 2026) : le fond statique
+   sert tant que la scène WebGL n’est pas chargée, et sous mouvement réduit. */
+.hp .hp-cta,
+.hp .hp-cta:hover {
   position: relative;
   isolation: isolate;
   overflow: hidden;
+  border: 0;
   border-radius: 10px;
-  background: #111e38;
   color: #fff;
+  background:
+    radial-gradient(ellipse at 82% 10%, #3567b2, transparent 55%),
+    radial-gradient(ellipse at 77% 110%, #5955a3, transparent 53%), #111e38;
+  box-shadow: 0 2px 5px #111e3814;
+  text-shadow: 0 1px 2px #07112160;
+  transform: none;
+  transition: filter 0.2s;
 }
-.hp-cta::before {
+.hp .hp-cta:hover {
+  filter: brightness(1.12);
+}
+.hp .hp-cta:active {
+  filter: brightness(0.94);
+}
+.hp .hp-cta .hi-cta-shader {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
+}
+.hp .hp-cta .hi-cta-shader::after {
   content: "";
   position: absolute;
-  inset: -45%;
-  z-index: -1;
-  background:
-    radial-gradient(ellipse at 22% 30%, #3b82f6, transparent 46%),
-    radial-gradient(ellipse at 78% 72%, #6366f1, transparent 46%),
-    radial-gradient(ellipse at 60% 18%, #4f46e5, transparent 40%), #111e38;
-  animation: hp-cta-drift 9s ease-in-out infinite alternate;
+  inset: 0;
+  background: #091426a8;
 }
-.hp-cta:hover {
-  background: #111e38;
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px #111e3833;
+.hp .hp-cta .hi-cta-shader > div {
+  width: 100%;
+  height: 100%;
 }
 .hp-cta-main {
   width: 100%;
   min-height: 56px;
   margin-top: 18px;
   font-size: 15px;
-}
-@keyframes hp-cta-drift {
-  from {
-    transform: rotate(0deg) scale(1);
-  }
-  to {
-    transform: rotate(16deg) scale(1.18);
-  }
 }
 .hp-buy-alternative {
   display: flex;
@@ -639,18 +647,161 @@
   line-height: 1.5;
   color: #8a8a96;
 }
-.hp-kpi-main {
+/* Surfaces sombres de BM Partners (dégradé « cosmique ») et pixels scintillants. */
+.hp-card-dark {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   border-color: transparent;
-  background: linear-gradient(135deg, #1b2566, #141c4a);
+  background-color: #0f172a;
+  background-image: linear-gradient(125deg, #0f172a 0%, #172554 42%, #312e81 72%, #1e1b4b 100%);
   color: #fff;
 }
-.hp-kpi-main p,
-.hp-kpi-main small {
+.hp-card-dark > :not(.hp-pixels) {
+  position: relative;
+  z-index: 1;
+}
+.hp-pixels {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.hp-pixels i {
+  position: absolute;
+  display: block;
+  border-radius: 1px;
+  opacity: 0;
+  animation: hp-pixel-twinkle 4s ease-in-out infinite;
+}
+@keyframes hp-pixel-twinkle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  50% {
+    opacity: 0.95;
+    transform: translateY(-6px);
+  }
+}
+.hp-chevrons {
+  display: inline-flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 20px;
+  padding: 2px 0;
+  --hp-chevron: #16a34a;
+}
+.hp-card-dark .hp-chevrons,
+.hp-proof-dark .hp-chevrons {
+  --hp-chevron: #4ade80;
+}
+.hp-chevrons i {
+  display: block;
+  width: 11px;
+  height: 11px;
+  border-top: 2.5px solid var(--hp-chevron);
+  border-left: 2.5px solid var(--hp-chevron);
+  transform: rotate(45deg);
+  animation: hp-chevron-rise 1.8s ease-in-out infinite;
+}
+.hp-chevrons i:nth-child(1) {
+  opacity: 0.35;
+  animation-delay: 0.5s;
+}
+.hp-chevrons i:nth-child(2) {
+  opacity: 0.6;
+  animation-delay: 0.25s;
+}
+.hp-chevrons i:nth-child(3) {
+  opacity: 1;
+}
+.hp-chevrons.is-small {
+  width: 14px;
+  gap: 3px;
+}
+.hp-chevrons.is-small i {
+  width: 8px;
+  height: 8px;
+  border-width: 2px;
+}
+@keyframes hp-chevron-rise {
+  0% {
+    opacity: 0.15;
+    transform: translateY(5px) rotate(45deg);
+  }
+  45% {
+    opacity: 1;
+    transform: translateY(0) rotate(45deg);
+  }
+  100% {
+    opacity: 0.15;
+    transform: translateY(-5px) rotate(45deg);
+  }
+}
+.hp-kpi.hp-card-dark p,
+.hp-kpi.hp-card-dark small {
   color: #c8cbe6;
+}
+.hp-kpi.hp-card-dark strong {
+  color: #fff;
 }
 .hp-kpi-main strong {
   font-size: 52px;
-  color: #fff;
+}
+.hp-kpi-main .hp-kpi-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.hp-kpi-main .hp-chevrons {
+  width: 26px;
+  gap: 5px;
+}
+.hp-kpi-main .hp-chevrons i {
+  width: 14px;
+  height: 14px;
+  border-width: 3px;
+}
+.hp-stats .hp-stat-current {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hp-proof-value {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hp-proof-value .performance-value {
+  margin: 17px 0 12px;
+}
+.lp .performance-card.hp-proof-dark {
+  border-color: transparent;
+  background-color: #0f172a;
+  background-image: linear-gradient(125deg, #0f172a 0%, #172554 42%, #312e81 72%, #1e1b4b 100%);
+  box-shadow: 0 12px 35px #0f172a2e;
+}
+.lp .hp-proof-dark .performance-card-label {
+  color: #c8cbe6;
+}
+.lp .hp-proof-dark .performance-value {
+  color: #86efac;
+}
+.lp .hp-proof-dark .performance-period {
+  color: #e0e7ff;
+}
+.lp .hp-proof-dark .performance-metric {
+  color: #a5b4fc;
+}
+.lp .hp-proof-dark .performance-chart-preview {
+  margin: 10px 16px 16px;
+  border-radius: 10px;
 }
 .hp-chart-card {
   padding: 24px 24px 10px;
@@ -1395,8 +1546,14 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hp-cta::before {
+  .hp-pixels i {
     animation: none;
+    opacity: 0.55;
+    transform: none;
+  }
+  .hp-chevrons i {
+    animation: none;
+    transform: rotate(45deg);
   }
   .hp-marquee-track {
     animation: none;
@@ -1407,6 +1564,10 @@
   .hp-marquee {
     mask-image: none;
   }
+}
+.hp[data-motion="paused"] .hp-pixels i {
+  opacity: 0.55;
+  transform: none;
 }
 .hp[data-motion="paused"] .hp-marquee-row {
   overflow-x: auto;
@@ -1479,6 +1640,9 @@
   .hp-kpi strong,
   .hp-kpi-main strong {
     font-size: 40px;
+  }
+  .hp-kpi-main .hp-kpi-row {
+    gap: 12px;
   }
   .hp-number input {
     width: 130px;

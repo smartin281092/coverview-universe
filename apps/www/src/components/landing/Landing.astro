@@ -31,7 +31,7 @@ const links = siteLinks(Astro.site?.origin ?? Astro.url.origin);
         <p class="lp-eyebrow hero-eyebrow"><span class="live-dot" aria-hidden="true"></span>{c.hero.eyebrow}</p>
         <h1 id="hero-title"><TitleText text={c.hero.title.join("\n")}/></h1>
         <p class="hero-description">{c.hero.description}</p>
-        <button class="lp-button hero-cta" data-open-dialog="start-analysis">{c.cta}<Arrow /></button>
+        <div class="hero-actions-row"><button class="lp-button hero-cta" data-open-dialog="start-analysis">{c.cta}<Arrow /></button><a class="lp-button hero-hyperion" href="/hyperion-3e-pilier">{hyperionCopy.homeCta}<Arrow /></a></div>
         <a class="hero-alternative" href="#simuler">{c.alternative}<span aria-hidden="true">↗</span></a>
         <ul class="hero-assurances">{c.hero.assurances.map(text=><li><span aria-hidden="true">✓</span>{text}</li>)}</ul>
       </div>

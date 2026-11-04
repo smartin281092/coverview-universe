@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { hyperionCopy } from "../../content/fr/hyperion";
+import { HealthGradient } from "../health-insurance/HealthGradient";
 import { HYPERION, formatFrancs } from "./hyperion-model";
 import type { HyperionConfig } from "./hyperion-store";
 
@@ -283,6 +284,7 @@ export function HyperionOrderDialog({
                 disabled={status.kind === "submitting"}
                 aria-busy={status.kind === "submitting"}
               >
+                <HealthGradient />
                 {status.kind === "submitting"
                   ? copy.submitting
                   : status.kind === "error"

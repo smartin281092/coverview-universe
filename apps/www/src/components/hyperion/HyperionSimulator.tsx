@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { hyperionCopy } from "../../content/fr/hyperion";
-import { ArrowIcon } from "./HyperionBuy";
+import { HealthGradient } from "../health-insurance/HealthGradient";
+import { ArrowIcon } from "./HyperionIcons";
 import { HyperionFields } from "./HyperionFields";
 import { simulateMonteCarlo } from "./hyperion-monte-carlo-client";
 import {
@@ -305,6 +306,7 @@ export default function HyperionSimulator({ currentYear }: { currentYear: number
               invested={projection.totalInvested}
             />
             <button type="button" className="lp-button hp-cta" onClick={requestOrder}>
+              <HealthGradient />
               {copy.cta}
               <ArrowIcon />
             </button>

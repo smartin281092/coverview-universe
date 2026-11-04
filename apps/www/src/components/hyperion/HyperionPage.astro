@@ -9,6 +9,8 @@ import HyperionPerformance from './HyperionPerformance.astro';
 import HyperionProof from './HyperionProof.astro';
 import HyperionReviews from './HyperionReviews.astro';
 import HyperionLogo from './HyperionLogo.astro';
+import HyperionChevrons from './HyperionChevrons.astro';
+import HyperionOrderCta from './HyperionOrderCta';
 import { hyperionCopy as c } from '../../content/fr/hyperion';
 import { hyperionReviews } from '../../content/fr/hyperion-reviews';
 import { HYPERION, annualisedReturn, formatPercent, formatSignedPercent, netReturns } from './hyperion-model';
@@ -53,12 +55,12 @@ const icons: Record<(typeof c.advantages.items)[number]['icon'], string> = {
       </div>
       <div class="hp-summary" data-reveal>
         <p class="lp-eyebrow hp-eyebrow">{c.hero.eyebrow}</p>
-        <div class="hp-title-row"><HyperionLogo class="hp-logo" /><h1 id="hp-title">{c.hero.title}</h1></div>
+        <h1 id="hp-title">{c.hero.title}<HyperionLogo class="hp-logo-sup" size={22} /></h1>
         <p class="hp-subtitle">{c.hero.subtitle}</p>
         <a href="#avis" class="hp-rating"><span class="hp-stars" aria-label={stars(hyperionReviews.rating)}>{[1,2,3,4,5].map(() => <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="m12 2.6 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.5l-5.9 3.1 1.2-6.5L2.5 9.5l6.6-.9z" fill="currentColor"/></svg>)}</span><strong>{c.hero.rating.value}</strong><span>· {c.hero.rating.count}</span><span class="hp-rating-link">{c.hero.rating.link}</span></a>
         <div class="hp-stats">
           <div><strong>{formatPercent(annualised)}</strong><p>{c.hero.stats.annualised.label}</p><small>{c.hero.stats.annualised.note}</small></div>
-          <div><strong>{formatSignedPercent(current.grossReturn)}</strong><p>{c.hero.stats.current.label}</p><small>{c.hero.stats.current.note}</small></div>
+          <div class="hp-stat-current"><HyperionChevrons class="is-small" /><div><strong>{formatSignedPercent(current.grossReturn)}</strong><p>{c.hero.stats.current.label}</p><small>{c.hero.stats.current.note}</small></div></div>
           <div><strong>{c.hero.stats.rank.value}</strong><p>{c.hero.stats.rank.label}</p><small>{c.hero.stats.rank.note}</small></div>
         </div>
         <div class="hp-top"><span class="hp-top-badge">{c.hero.top.badge}</span><div><p>{c.hero.top.title}</p><small>{c.hero.top.text}</small></div><img src={liechtensteinLife} alt={c.hero.partnerName} class="hp-top-logo" width="44" height="44" /></div>
@@ -110,6 +112,6 @@ const icons: Record<(typeof c.advantages.items)[number]['icon'], string> = {
 
   <section class="lp-section faq-section" id="questions" aria-labelledby="hp-faq-title"><div class="lp-container faq-grid"><div data-reveal><p class="lp-eyebrow">{c.faq.eyebrow}</p><h2 id="hp-faq-title"><TitleText text={c.faq.title}/></h2></div><div class="landing-faq">{c.faq.items.map(item => <details><summary>{item.question}<span aria-hidden="true"></span></summary><div><p>{item.answer}</p></div></details>)}</div></div></section>
 
-  <section class="closing-section hp-closing"><div class="closing-aurora" aria-hidden="true"></div><div class="lp-container center-heading" data-reveal><HyperionLogo class="hp-closing-mark" size={40} /><p class="lp-eyebrow">{c.closing.eyebrow}</p><h2><TitleText text={c.closing.title}/></h2><p class="lp-description">{c.closing.description}</p><button type="button" class="lp-button hp-cta" data-open-order>{c.closing.cta}<Arrow/></button><p class="closing-note">{c.closing.note}</p></div></section>
+  <section class="closing-section hp-closing"><div class="closing-aurora" aria-hidden="true"></div><div class="lp-container center-heading" data-reveal><HyperionLogo class="hp-closing-mark" size={32} /><p class="lp-eyebrow">{c.closing.eyebrow}</p><h2><TitleText text={c.closing.title}/></h2><p class="lp-description">{c.closing.description}</p><HyperionOrderCta client:visible label={c.closing.cta} /><p class="closing-note">{c.closing.note}</p></div></section>
 </div>
 <script>import './hyperion';</script>
