@@ -65,6 +65,16 @@ const pageScripts = new Map([
   ],
   // L'audit 3e pilier (4 novembre 2026) : questionnaire, calcul et résultats dans un seul îlot.
   ["/audit-3e-pilier", { islands: ["PillarAudit@load"], interactiveMain: true }],
+  // Recherche LPP (4 novembre 2026) : la commande s'hydrate au chargement, le fond animé du héros
+  // quand il devient visible ; le module de la landing pour ses sections animées.
+  [
+    "/retrouver-lpp",
+    {
+      islands: ["PensionSearchCheckout@load", "PensionHeroBackground@visible"],
+      modules: ["retrouver-lpp"],
+      interactiveMain: true,
+    },
+  ],
   // Indicateur de connexion et lien vers Wallet, module natif hors du contenu (README www).
   ["/account", { modules: ["account"] }],
 ]);
