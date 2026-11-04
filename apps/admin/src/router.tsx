@@ -78,6 +78,11 @@ const insuranceRequestsRoute = createRoute({
     "InsuranceRequestsPage",
   ),
 });
+const pensionSearchesRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/pension-searches",
+  component: lazyRouteComponent(() => import("./pages/PensionSearchesPage"), "PensionSearchesPage"),
+});
 const usersRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/users",
@@ -143,6 +148,7 @@ export const router = createRouter({
     partnerDashboardRoute,
     healthRecommendationRoute,
     insuranceRequestsRoute,
+    pensionSearchesRoute,
     usersRoute,
     notificationsRoute,
     serviceRequestsRoute,

@@ -1,4 +1,5 @@
 import insuranceRequests from "./locales/fr/insurance-requests.json";
+import pensionSearches from "./locales/fr/pension-searches.json";
 import offers from "./locales/fr/offers.json";
 import activation from "./locales/fr/activation.json";
 import conclusion from "./locales/fr/conclusion.json";
@@ -33,6 +34,7 @@ void i18next.use(initReactI18next).init({
       quality,
       communications,
       insuranceRequests,
+      pensionSearches,
       common,
       profile,
       documents,

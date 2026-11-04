@@ -7,7 +7,7 @@ import EditorialIndex from '../components/EditorialIndex.astro';
 import { editorials, editorialIndexes, readableEditorialPaths } from '../content/editorial';
 export function getStaticPaths() {
   return [
-    ...[...journeys, ...plannedPages].filter((page) => !readableEditorialPaths.has(page.slug)).map((page) => ({ params: { slug: page.slug }, props: { page, entry: undefined, listing: undefined } })),
+    ...[...journeys, ...plannedPages].filter((page) => !readableEditorialPaths.has(page.slug) && !('ownPage' in page)).map((page) => ({ params: { slug: page.slug }, props: { page, entry: undefined, listing: undefined } })),
     ...editorials.filter((entry) => !entry.data.slug.includes('/') && !['methode', 'sebastien-martin'].includes(entry.data.slug)).map((entry) => ({ params: { slug: entry.data.slug }, props: { entry, page: undefined, listing: undefined } })),
     ...editorialIndexes.filter((listing) => !listing.slug.includes('/')).map((listing) => ({ params: { slug: listing.slug }, props: { listing, page: undefined, entry: undefined } })),
   ];

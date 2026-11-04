@@ -103,6 +103,12 @@ const insuranceRequestRoute = createRoute({
     "InsuranceRequestsPage",
   ),
 });
+// An LPP search ordered from the public site (4 November 2026), followed step by step.
+const pensionSearchRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/pension-searches/$searchId",
+  component: lazyRouteComponent(() => import("./pages/PensionSearchPage"), "PensionSearchPage"),
+});
 const actionsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/actions",
@@ -255,6 +261,7 @@ export const router = createRouter({
     homeRoute,
     insuranceRequestsRoute,
     insuranceRequestRoute,
+    pensionSearchRoute,
     diagnosticsRoute,
     previewRoute,
     statesRoute,

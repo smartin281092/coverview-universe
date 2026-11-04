@@ -2,14 +2,16 @@ import { useState } from "react";
 import { Link, useNavigate, useParams, useSearch } from "@tanstack/react-router";
 import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { ArrowLeft, ArrowUpRight, Plus } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Plus, SearchCheck } from "lucide-react";
 import type { IdentityMe } from "@coverview/api-client";
 import type { InsuranceRequest } from "@coverview/contracts/insurance-requests";
 import { healthYear } from "@coverview/contracts/health-insurance";
 import type { LeadSummary } from "@coverview/contracts/partner";
+import type { PensionSearch } from "@coverview/api-client/pension-searches";
 import { Button, EmptyState, ErrorState, LoadingState, RequestProgress } from "@coverview/ui";
 import { healthProductImage } from "@coverview/ui/health-product-images";
 import { insuranceApi } from "../insurance-api";
+import { pensionApi } from "../pension-api";
 import { partnerApi } from "../partner-api";
 import { IdentityBoundary } from "../features/identity/IdentityBoundary";
 import { useWalletProfileScope } from "../features/profile/use-wallet-profile-scope";
@@ -31,11 +33,13 @@ const card =
   "flex h-full w-full flex-col gap-2 rounded-xl border border-border p-5 text-left hover:bg-muted";
 type Entry =
   | { kind: "lead"; id: string; at: number; lead: LeadSummary }
-  | { kind: "comparator"; id: string; at: number; request: InsuranceRequest };
+  | { kind: "comparator"; id: string; at: number; request: InsuranceRequest }
+  | { kind: "pension"; id: string; at: number; search: PensionSearch };
 // The client's requests (8 October 2026): those sent to CoverView from Wallet, opened in the same
 // request window as the offers, and those made from the health comparator, in one list.
 function Requests({ identity }: { identity: IdentityMe }) {
-  const { t } = useTranslation("insuranceRequests");
+  const { t, i18n } = useTranslation("insuranceRequests");
+  const { t: tp } = useTranslation("pensionSearches");
   const { requestId } = useParams({ strict: false });
   const { filter, scope } = useWalletProfileScope();
   const search = useSearch({ strict: false });
@@ -71,6 +75,21 @@ function Requests({ identity }: { identity: IdentityMe }) {
       await insuranceApi.browser(signal);
       return insuranceApi.list({ ...filter, ...(pageParam ? { cursor: pageParam } : {}) }, signal);
     },
+    initialPageParam: "",
+    getNextPageParam: (page) => page.nextCursor ?? undefined,
+    enabled: !requestId,
+    retry: false,
+    staleTime: 0,
+    gcTime: 0,
+    refetchInterval: (query) => (query.state.status === "error" ? false : 15000),
+    refetchIntervalInBackground: false,
+  });
+  // LPP searches ordered from the public site (4 November 2026), the account's own only. They
+  // belong to the account, not to a person's profile: shown in every profile view.
+  const pension = useInfiniteQuery({
+    queryKey: ["private", identity.user.id, identity.session.id, "pension-searches"],
+    queryFn: ({ pageParam, signal }) =>
+      pensionApi.list(pageParam ? { cursor: pageParam } : {}, signal),
     initialPageParam: "",
     getNextPageParam: (page) => page.nextCursor ?? undefined,
     enabled: !requestId,
@@ -116,6 +135,17 @@ function Requests({ identity }: { identity: IdentityMe }) {
           request,
         })),
       more: comparator.hasNextPage,
+    },
+    {
+      items: (pension.data?.pages ?? [])
+        .flatMap((page) => page.searches)
+        .map((search): Entry => ({
+          kind: "pension",
+          id: search.id,
+          at: Date.parse(search.createdAt),
+          search,
+        })),
+      more: pension.hasNextPage,
     },
   ]);
   // The request window is driven by the address, as on the offers page.
@@ -257,9 +287,9 @@ function Requests({ identity }: { identity: IdentityMe }) {
             )
           )}
         </>
-      ) : leads.isPending || comparator.isPending ? (
+      ) : leads.isPending || comparator.isPending || pension.isPending ? (
         <LoadingState label={t("loading")} />
-      ) : leads.isError || comparator.isError ? (
+      ) : leads.isError || comparator.isError || pension.isError ? (
         <ErrorState
           title={t("error")}
           description=""
@@ -268,6 +298,7 @@ function Requests({ identity }: { identity: IdentityMe }) {
           onRetry={() => {
             if (leads.isError) void leads.refetch();
             if (comparator.isError) void comparator.refetch();
+            if (pension.isError) void pension.refetch();
           }}
         />
       ) : entries.items.length ? (
@@ -287,6 +318,33 @@ function Requests({ identity }: { identity: IdentityMe }) {
                     </span>
                     {open}
                   </button>
+                ) : entry.kind === "pension" ? (
+                  <Link
+                    className={card}
+                    to="/pension-searches/$searchId"
+                    params={{ searchId: entry.search.id }}
+                  >
+                    <span
+                      aria-hidden="true"
+                      className="grid size-14 place-items-center rounded-md bg-indigo-50 text-indigo-600"
+                    >
+                      <SearchCheck className="size-6" />
+                    </span>
+                    <span className="font-medium">{tp("name")}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {entry.search.details.firstName} {entry.search.details.lastName}
+                    </span>
+                    <span className="text-sm text-muted-foreground">
+                      {tp("card", {
+                        state: tp(`states.${entry.search.state}`),
+                        date: new Intl.DateTimeFormat(i18n.language, {
+                          dateStyle: "medium",
+                          timeZone: "Europe/Zurich",
+                        }).format(new Date(entry.search.createdAt)),
+                      })}
+                    </span>
+                    {open}
+                  </Link>
                 ) : (
                   <Link
                     className={card}
@@ -323,10 +381,15 @@ function Requests({ identity }: { identity: IdentityMe }) {
           {entries.more && (
             <Button
               variant="outline"
-              disabled={leads.isFetchingNextPage || comparator.isFetchingNextPage}
+              disabled={
+                leads.isFetchingNextPage ||
+                comparator.isFetchingNextPage ||
+                pension.isFetchingNextPage
+              }
               onClick={() => {
                 if (leads.hasNextPage) void leads.fetchNextPage();
                 if (comparator.hasNextPage) void comparator.fetchNextPage();
+                if (pension.hasNextPage) void pension.fetchNextPage();
               }}
             >
               {t("loadMore")}

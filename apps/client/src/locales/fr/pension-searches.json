@@ -1,0 +1,51 @@
+{
+  "name": "Recherche d’avoirs LPP",
+  "back": "Toutes les demandes",
+  "loading": "Chargement de la recherche…",
+  "error": "Impossible de charger cette recherche. Vérifiez votre accès puis réessayez.",
+  "retry": "Réessayer",
+  "requested": "Demandée le {{date}}",
+  "states": {
+    "submitted": "Demande reçue",
+    "reviewing": "Vérification du dossier",
+    "search_sent": "Recherche lancée",
+    "results_received": "Résultats reçus",
+    "completed": "Démarche terminée",
+    "cancelled": "Recherche annulée"
+  },
+  "descriptions": {
+    "submitted": "Votre demande est enregistrée chez CoverView.",
+    "reviewing": "Notre équipe vérifie vos informations et votre autorisation.",
+    "search_sent": "Votre demande a été transmise à la Centrale du 2e pilier.",
+    "results_received": "La réponse est arrivée ; nous préparons la suite avec vous.",
+    "completed": "La recherche est terminée."
+  },
+  "cancelled": "Cette recherche a été annulée.",
+  "summary": "Vos informations",
+  "identity": "Identité",
+  "address": "Adresse",
+  "path": "Parcours",
+  "previousNames": "Ancien(s) nom(s) : {{value}}",
+  "avs": "N° AVS {{value}}",
+  "situations": {
+    "job_change": "Changement d’employeur",
+    "unemployment": "Chômage",
+    "break": "Pause ou congé",
+    "leaving_switzerland": "Départ de Suisse",
+    "retirement": "Préparer ma retraite",
+    "self_employed": "Devenir indépendant",
+    "home": "Achat d’un logement",
+    "divorce": "Divorce",
+    "other": "Simple vérification"
+  },
+  "noEmployer": "Aucun ancien employeur indiqué.",
+  "period": "{{from}} – {{to}}",
+  "periodFrom": "Depuis {{from}}",
+  "periodTo": "Jusqu’en {{to}}",
+  "mandate": "Vous avez autorisé CoverView Sàrl à transmettre cette demande en votre nom à la Centrale du 2e pilier et aux institutions concernées.",
+  "free": "Recherche gratuite et sans engagement.",
+  "card": "{{state}} · demandée le {{date}}",
+  "locality": "{{postalCode}} {{city}} · {{country}}",
+  "born_female": "Née le {{date}} · {{nationality}}",
+  "born_male": "Né le {{date}} · {{nationality}}"
+}

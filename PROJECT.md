@@ -81,3 +81,5 @@ Dépôt donné par l'utilisateur : [smartin281092/coverview-universe](https://gi
 Le remote est raccordé ; aucun push ni déploiement n'a été effectué pendant la préparation. Le premier push suit BOOT-07 / ENV-06. Le [journal d'initialisation](roadmap/initialisation.md) donne les preuves et limites.
 
 Extension du 30.09.2026 : [insurance-requests](apps/api/src/modules/insurance-requests/README.md), propriétaire des demandes d’offre familiales, du suivi invité/Wallet et du traitement Admin. [Vérifications et limites](roadmap/evidence/health-offers.md).
+
+Extension du 4 novembre 2026 : [pension-searches](apps/api/src/modules/pension-searches/README.md), recherches d’avoirs LPP commandées depuis `/retrouver-lpp` par un compte Wallet vérifié, suivies dans Wallet et traitées dans Admin. Recherche gratuite ; mandat versionné non validé juridiquement. [Plan et preuves](roadmap/plans/lpp-search-2026-11-04.plan.md).

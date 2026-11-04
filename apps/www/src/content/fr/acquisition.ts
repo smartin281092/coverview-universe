@@ -55,6 +55,8 @@ export const plannedPages = [
     label: "Retrouver mes avoirs LPP",
     owner: "S-021",
     group: "tools",
+    // Its own page and order since 4 November 2026 (pages/retrouver-lpp.astro).
+    ownPage: true,
     description:
       "Un parcours professionnel peut laisser des documents dispersés. Faites le point sur les informations utiles pour retrouver vos avoirs de prévoyance.",
     unavailable:
@@ -246,6 +248,7 @@ export const acquisition = {
   savingsTool: "Simulateur d’épargne",
   inflationTool: "Simulateur d’inflation",
   freeTool: "Gratuit · sans compte",
+  freeSearch: "Recherche gratuite",
   readable: "À lire",
   choose: "Choisir mon point de départ",
   returnHome: "Revenir à l’accueil",

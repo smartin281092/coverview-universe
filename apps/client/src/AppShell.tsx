@@ -93,6 +93,8 @@ export function AppShell() {
   const isCurrent = (destination: (typeof destinations)[number]["to"]) => {
     if (destination === "/actions" && pathname === "/requests") return true;
     if (destination === "/documents" && pathname.startsWith("/insurance-companies/")) return true;
+    if (destination === "/insurance-requests" && pathname.startsWith("/pension-searches/"))
+      return true;
     return pathname === destination || pathname.startsWith(destination + "/");
   };
 
@@ -151,14 +153,16 @@ export function AppShell() {
                   className="cv-app-nav-link"
                 >
                   {t("mobileNav." + destination.key)}
-                  {destination.key === "actions" && actionCount !== undefined && actionCount > 0 && (
-                    <span
-                      className="ml-2 inline-flex h-4 min-w-4 items-center justify-center rounded-sm bg-chart-3 px-1 text-2xs font-medium tabular-nums text-white"
-                      aria-label={t("actions:badge", { count: actionCount })}
-                    >
-                      {actionCount}
-                    </span>
-                  )}
+                  {destination.key === "actions" &&
+                    actionCount !== undefined &&
+                    actionCount > 0 && (
+                      <span
+                        className="ml-2 inline-flex h-4 min-w-4 items-center justify-center rounded-sm bg-chart-3 px-1 text-2xs font-medium tabular-nums text-white"
+                        aria-label={t("actions:badge", { count: actionCount })}
+                      >
+                        {actionCount}
+                      </span>
+                    )}
                 </Link>
               ))}
             </nav>
@@ -212,7 +216,19 @@ export function AppShell() {
                     </SheetDescription>
                   </SheetHeader>
                   <nav aria-label={t("navigation")} className="grid gap-2">
-                    {destinations.map(({to,key,icon:Icon}) => <SheetClose asChild key={to}><Link to={to} search={{}} className="flex min-h-11 items-center gap-3 rounded-md px-3 hover:bg-muted" aria-current={isCurrent(to)?"page":undefined}><Icon className="size-5" />{t("mobileNav."+key)}</Link></SheetClose>)}
+                    {destinations.map(({ to, key, icon: Icon }) => (
+                      <SheetClose asChild key={to}>
+                        <Link
+                          to={to}
+                          search={{}}
+                          className="flex min-h-11 items-center gap-3 rounded-md px-3 hover:bg-muted"
+                          aria-current={isCurrent(to) ? "page" : undefined}
+                        >
+                          <Icon className="size-5" />
+                          {t("mobileNav." + key)}
+                        </Link>
+                      </SheetClose>
+                    ))}
                   </nav>
                   <nav aria-label={t("mobileNav.secondaryNavigation")}>
                     <ul className="divide-y divide-border">

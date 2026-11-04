@@ -1,7 +1,7 @@
 // White one-pixel dots that flicker like a screen's pixels, each at its own pace (Wallet's offer
-// page, 8 October 2026; shared with the site's Hyperion page since 4 November 2026). One small tile
-// is drawn and repeated over the canvas. Decorative: still when the user reduces motion, paused
-// while off screen or in a hidden tab.
+// page, 8 October 2026; shared with the site's Hyperion and LPP search pages since 4 November
+// 2026). One small tile is drawn and repeated over the canvas. Decorative: still when the user
+// reduces motion, paused while off screen or in a hidden tab.
 const step = 4; // CSS pixels between two dots, as on the reference page analysed on 8 October 2026
 const tile = 128; // CSS pixels of the repeated tile: 32 × 32 dots
 

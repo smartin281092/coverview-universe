@@ -1,0 +1,137 @@
+---
+import Layout from '../layouts/Layout.astro';
+import TitleText from '../components/landing/TitleText.astro';
+import Arrow from '../components/landing/Arrow.astro';
+import { SiteHeader } from '../components/site/SiteHeader';
+import { siteLinks } from '../components/site/site-links';
+import PensionHeroBackground from '../components/pension-search/PensionHeroBackground';
+import PensionSearchCheckout from '../components/pension-search/PensionSearchCheckout';
+import { pensionSearch as c } from '../content/fr/pension-search';
+import { landing } from '../content/fr/landing';
+import { content } from '../content/fr/interface';
+import logo from '../../../../assets/logo-coverview.svg?url';
+import icon from '../../../../assets/icon-coverview.svg?url';
+import { Briefcase, CirclePause, Compass, Plane, Sunrise, Sparkles, House, Split, Search, ShieldCheck, Landmark, LockKeyhole, Check, FileSearch, Building2, Archive } from 'lucide-react';
+import '../styles/landing.css';
+import '../styles/health-insurance.css';
+import '../styles/pension-search.css';
+// 4 November 2026: the LPP search page, its order and its follow-up in Wallet.
+const apiUrl = import.meta.env.PUBLIC_API_URL ?? (import.meta.env.DEV ? 'http://127.0.0.1:4100' : Astro.site?.origin ?? Astro.url.origin);
+const links = siteLinks(Astro.site?.origin ?? Astro.url.origin);
+const icons = { briefcase: Briefcase, pause: CirclePause, compass: Compass, plane: Plane, sunrise: Sunrise, spark: Sparkles, home: House, split: Split, search: Search };
+const trustIcons = [ShieldCheck, Landmark, LockKeyhole];
+const nodeIcons = [Building2, Archive, FileSearch];
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    { '@type': 'WebPage', name: c.seo.title, description: c.seo.description, url: 'https://coverview.ch/retrouver-lpp', inLanguage: 'fr-CH', publisher: { '@id': 'https://coverview.ch/#organization' } },
+    { '@type': 'FAQPage', mainEntity: c.faq.items.map(item => ({ '@type': 'Question', name: item.question, acceptedAnswer: { '@type': 'Answer', text: item.answer } })) },
+  ],
+};
+---
+<Layout title={c.seo.title} description={c.seo.description} structuredData={schema} minimal ownHeader>
+  <div class="lp lpp" data-landing>
+    <SiteHeader client:load pathname="/retrouver-lpp" {...links}><button class="motion-toggle" data-motion-toggle data-play-label={landing.motion.play} aria-label={landing.motion.pause} aria-pressed="false"><span class="pause-icon" aria-hidden="true">Ⅱ</span><span class="play-icon" aria-hidden="true">▷</span></button></SiteHeader>
+
+    <section class="lpp-hero" aria-labelledby="lpp-title">
+      <div class="lpp-hero-background"><PensionHeroBackground client:visible /></div>
+      <div class="lp-container lpp-hero-grid">
+        <div class="lpp-hero-copy" data-reveal>
+          <p class="lp-eyebrow lpp-hero-eyebrow"><span class="live-dot" aria-hidden="true"></span>{c.hero.eyebrow}</p>
+          <h1 id="lpp-title"><TitleText text={c.hero.title} /></h1>
+          <p class="lpp-hero-description">{c.hero.description}</p>
+          <div class="lpp-hero-actions">
+            <button type="button" class="lp-button lpp-cta-light" data-lpp-order>{c.cta}<Arrow /></button>
+            <a class="lpp-hero-secondary" href="#comment">{c.hero.secondary}<span aria-hidden="true">↓</span></a>
+          </div>
+          <ul class="lpp-hero-assurances">{c.hero.assurances.map(text => <li><Check size={13} aria-hidden="true" />{text}</li>)}</ul>
+        </div>
+        <div class="lpp-radar" data-scene data-reveal>
+          <p class="lp-eyebrow">{c.hero.visual.label}</p>
+          <div class="lpp-radar-field" aria-hidden="true">
+            <span class="lpp-radar-ring ring-1"></span><span class="lpp-radar-ring ring-2"></span><span class="lpp-radar-ring ring-3"></span>
+            <span class="lpp-radar-sweep"></span>
+            <div class="lpp-radar-center"><img src={icon} alt="" width="34" height="31" /><span>{c.hero.visual.center}</span></div>
+            {c.hero.visual.nodes.map((label, i) => { const NodeIcon = nodeIcons[i]!; return <div class={`lpp-radar-node node-${i}`}><i><NodeIcon size={15} /></i><span>{label}</span></div>; })}
+          </div>
+          <p class="lpp-radar-caption">{c.hero.visual.caption}</p>
+          <span class="lpp-radar-badge"><i class="live-dot"></i>{c.hero.visual.badge}</span>
+        </div>
+      </div>
+      <div class="lp-container lpp-tiles">
+        {c.tiles.map(tile => <a class="lpp-tile" href={tile.href} data-reveal><span class="lp-eyebrow">{tile.eyebrow}</span><strong>{tile.title}</strong><p>{tile.text}</p><span class="lpp-tile-arrow" aria-hidden="true">↓</span></a>)}
+      </div>
+    </section>
+
+    <section class="lp-section lpp-offer" id="service"><div class="lp-container">
+      <div class="lp-section-head" data-reveal><div><p class="lp-eyebrow">{c.offer.eyebrow}</p><h2><TitleText text={c.offer.title} /></h2></div><p class="lp-description">{c.offer.description}</p></div>
+      <div class="lpp-offer-grid">
+        {c.offer.steps.map((step, i) => <article class={`lpp-offer-card ${i === 0 ? 'is-free' : ''}`} data-reveal>
+          <div class="lpp-offer-top"><span class="lp-eyebrow">{step.label}</span><span class="lpp-offer-price">{step.price}</span></div>
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+          <ul>{step.points.map(point => <li><Check size={14} aria-hidden="true" />{point}</li>)}</ul>
+          {i === 0 && <button type="button" class="lp-button lp-button-small" data-lpp-order>{c.cta}<Arrow /></button>}
+        </article>)}
+      </div>
+      <p class="lpp-offer-note">{c.offer.note}</p>
+    </div></section>
+
+    <section class="lp-section lpp-problem" id="probleme"><div class="lp-container lpp-problem-grid">
+      <div data-reveal><p class="lp-eyebrow">{c.problem.eyebrow}</p><h2><TitleText text={c.problem.title} /></h2><p class="lp-description">{c.problem.description}</p></div>
+      <ol class="discovery-list lpp-problem-list" data-reveal>{c.problem.items.map((item, i) => <li><span>0{i + 1}</span><div><h3>{item.title}</h3><p>{item.text}</p></div></li>)}</ol>
+    </div></section>
+
+    <section class="lp-section lpp-when" id="quand"><div class="lp-container">
+      <div class="lp-section-head" data-reveal><div><p class="lp-eyebrow">{c.when.eyebrow}</p><h2><TitleText text={c.when.title} /></h2></div><p class="lp-description">{c.when.description}</p></div>
+      <ul class="lpp-when-grid">{c.when.items.map(item => { const ItemIcon = icons[item.icon as keyof typeof icons]; return <li data-reveal><span class="lpp-when-icon" aria-hidden="true"><ItemIcon size={20} strokeWidth={1.6} /></span><h3>{item.title}</h3><p>{item.text}</p></li>; })}</ul>
+      <div class="lpp-center"><button type="button" class="lp-button" data-lpp-order>{c.cta}<Arrow /></button></div>
+    </div></section>
+
+    <section class="lp-section lpp-how" id="comment"><div class="lp-container">
+      <div class="lp-section-head" data-reveal><div><p class="lp-eyebrow">{c.how.eyebrow}</p><h2><TitleText text={c.how.title} /></h2></div><p class="lp-description">{c.how.description}</p></div>
+      <div class="lpp-how-grid">
+        <div class="lpp-how-with" data-reveal>
+          <p class="lpp-how-label"><img src={icon} alt="" width="18" height="17" />{c.how.with}</p>
+          <ol class="follow-timeline lpp-how-steps">{c.how.steps.map((step, i) => <li><div class="timeline-rail"><span>0{i + 1}</span><i></i></div><h3>{step.title}</h3><p>{step.text}</p></li>)}</ol>
+        </div>
+        <div class="lpp-how-alone" data-reveal>
+          <p class="lpp-how-label">{c.how.without}</p>
+          <ol>{c.how.alone.map((item, i) => <li><span>{i + 1}</span>{item}</li>)}</ol>
+        </div>
+      </div>
+    </div></section>
+
+    <section class="lp-section lpp-wallet"><div class="lp-container lpp-wallet-grid">
+      <div class="lpp-tracking" data-scene data-reveal>
+        <p class="lp-eyebrow">{c.wallet.visualLabel}</p>
+        <div class="lpp-tracking-card" aria-hidden="true">
+          <p class="lpp-tracking-title">{c.wallet.visualTitle}</p>
+          <ol>{c.wallet.visualSteps.map((label, i) => <li class={i < 2 ? 'is-done' : i === 2 ? 'is-current' : ''}><span>{i < 2 ? '✓' : i + 1}</span><b>{label}</b></li>)}</ol>
+        </div>
+      </div>
+      <div data-reveal>
+        <p class="lp-eyebrow">{c.wallet.eyebrow}</p><h2><TitleText text={c.wallet.title} /></h2><p class="lp-description">{c.wallet.description}</p>
+        <ul class="wallet-benefits">{c.wallet.benefits.map(item => <li><span aria-hidden="true">✓</span>{item}</li>)}</ul>
+        <button type="button" class="lp-button" data-lpp-order>{c.cta}<Arrow /></button>
+      </div>
+    </div></section>
+
+    <section class="lp-section lpp-trust"><div class="lp-container">
+      <div data-reveal><p class="lp-eyebrow">{c.trust.eyebrow}</p><h2><TitleText text={c.trust.title} /></h2></div>
+      <ul class="lpp-trust-grid">{c.trust.items.map((item, i) => { const TrustIcon = trustIcons[i]!; return <li data-reveal><span aria-hidden="true"><TrustIcon size={20} strokeWidth={1.6} /></span><h3>{item.title}</h3><p>{item.text}</p></li>; })}</ul>
+      <a class="lp-text-link" href="https://www.finma.ch/fr/autorisation/intermediation-dassurance/registersuche/#query=F01536662" target="_blank" rel="noreferrer">{c.trust.register}<span aria-hidden="true">↗</span></a>
+    </div></section>
+
+    <section class="lp-section faq-section" id="questions"><div class="lp-container faq-grid"><div data-reveal><p class="lp-eyebrow">{c.faq.eyebrow}</p><h2><TitleText text={c.faq.title} /></h2></div><div class="landing-faq">{c.faq.items.map(item => <details><summary>{item.question}<span aria-hidden="true"></span></summary><div><p>{item.answer}</p></div></details>)}</div></div></section>
+
+    <section class="closing-section lpp-closing"><div class="closing-aurora" aria-hidden="true"></div><div class="lp-container center-heading" data-reveal><p class="lp-eyebrow">{c.closing.eyebrow}</p><h2><TitleText text={c.closing.title} /></h2><p class="lp-description">{c.closing.description}</p><button type="button" class="lp-button hero-cta" data-lpp-order>{c.closing.cta}<Arrow /></button><p class="closing-note">{c.closing.note}</p></div></section>
+
+    <footer class="lp-footer"><div class="lp-container"><div class="lp-footer-top"><div><a href="/" class="lp-logo"><img src={logo} alt="CoverView" width="444" height="73" /></a><p>{landing.footer.tagline}</p></div><nav aria-label={landing.footerLabel}>{landing.footer.links.map(link => <a href={link.href}>{link.label}<span aria-hidden="true">↗</span></a>)}</nav></div><div class="lp-footer-bottom"><p>© {new Date().getFullYear()} {landing.footer.copyright}</p><p>{landing.footer.address}</p><span>{landing.footer.status}</span>{import.meta.env.PUBLIC_POSTHOG_KEY && <button type="button" class="footer-consent" data-consent-open>{content.consent.settings}</button>}</div></div></footer>
+
+    <noscript><p class="lp-container lpp-noscript">{c.noscript}</p></noscript>
+  </div>
+  {/* Outside .lp: the landing's element rules would override the comparator's checkout styles. */}
+  <div class="health-comparator lpp-checkout-host"><PensionSearchCheckout apiUrl={apiUrl} enabled={links.requestsEnabled} client:load /></div>
+</Layout>
+<script>import '../components/landing/landing';</script>
