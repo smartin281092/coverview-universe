@@ -7,7 +7,7 @@ Entrée : demande de l’utilisateur du 4 novembre 2026. « Fais une page produi
 - `smartin281092/horizon3` (commit `b96fad6`) : `client/src/data/thirdPillarProducts.js` et `returnHistory.js` — Hyperion, Liechtenstein Life, type assurance, frais annuels 2,21 %, retenue de 67 % des versements pendant 5 ans, prime de risque 5–30 CHF par mois, rendements 2016–2025 : 12,25 · 17,16 · −4,36 · 41,76 · 43,84 · 31,62 · −30,82 · 45,82 · 32,68 · 26,47 % ; 2026 (année en cours, communiquée par le responsable) : 38,21 %. `client/src/lib/monteCarlo.js` et la note de méthodologie Monte Carlo de ce dépôt-là : moteur de projection et bootstrap historique à 100’000 trajectoires.
 - `smartin281092/bmpartners` (commit `bba0848`) : `frontend/src/components/google-reviews.jsx` (15 avis Google, note 5/5), `frontend/src/data/third-pillar-performance-2026.js` (classement 2026, 1er semestre, Hyperion +21,85 % en CHF, huit solutions).
 - Ce dépôt : captures de performance de clients accompagnés (`apps/www/src/assets/performance`, `content/fr/performance.ts`), logo Liechtenstein Life (`assets/companies`, provenance conservée), commande 3e pilier existante `POST /api/public/h3/contact` (module partner-workspace, S-042a).
-- **Logo Hyperion : absent des trois dépôts.** Aucun logo n’est inventé ; la page réserve son emplacement (H-2) et le fichier est demandé à l’utilisateur dans le compte rendu.
+- **Logo Hyperion : absent des trois dépôts** à l’ouverture ; aucun logo n’est inventé, la page réserve son emplacement (H-2). Fourni par l’utilisateur le 4 novembre 2026 en PNG, conservé et vectorisé dans `apps/www/src/assets/hyperion/`.
 
 ## Décisions déléguées (PROG-23)
 
@@ -36,7 +36,7 @@ Souscription en ligne, signature, paiement ; comparaison interactive avec d’au
 - [ ] Contrat et route : `source: "coverview"` accepté, texte du Lead et de l’avis adaptés — V0 typecheck réussi ; V2 Testcontainers non exécuté (Docker absent, journal 3).
 - [x] Types, lint, build, `check-www` (route déclarée : îlots `HyperionBuy@load`, `HyperionSimulator@visible`, module `HyperionPage`) — V0/V1 (journal 2, 4).
 - [x] Rendu bureau et mobile, galerie, dialogues (Échap, focus), simulateur et Monte Carlo, marquee en pause, FAQ, commande (erreurs puis succès contre un serveur de substitution validant le contrat réel) — V3 navigateur (journal 5).
-- [ ] Logo Hyperion reçu et posé — V5 utilisateur (bloquant pour l’illustration finale, pas pour la page).
+- [x] Logo Hyperion reçu et posé — fourni le 4 novembre 2026, vectorisé et vérifié par recouvrement avec l’original (journal 6).
 
 ## Journal de vérification
 
@@ -47,3 +47,4 @@ Souscription en ligne, signature, paiement ; comparaison interactive avec d’au
 | 3 | Commande API | Testcontainers | Docker absent de la session : test non exécuté ; serveur local de substitution validant le corps avec le schéma zod du contrat : deux commandes acceptées (bureau, mobile) | exécuter en CI / local |
 | 4 | Build livré | `astro build`, `check-www` | 46 pages, oracle réussi : 45 pages, 0 orpheline, 99’479 octets gzip sur la route, LCP 280 ms, CLS 0,0002 | — |
 | 5 | Navigateur | Playwright 1440 et 390 px | galerie, 4 dialogues + commande (Échap), simulateur et Monte Carlo (worker), bascule mensuel/annuel, pause des avis, FAQ ; pas de débordement ; console propre ; vignette du graphique agrandie après revue | — |
+| 6 | Logo vectorisé | Rastérisation des polygones et comparaison pixel à pixel avec l’original | première géométrie : crochets trop longs (fin de barre verticale placée sous le centre), Jaccard 0,84 ; corrigée et paramètres ajustés : 0,9517, écarts en bandes de 1 à 3 px sur les bords | — |
