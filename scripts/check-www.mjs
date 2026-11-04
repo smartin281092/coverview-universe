@@ -63,6 +63,8 @@ const pageScripts = new Map([
       deferredDecoration: ["HealthShaderScene", "three.module"],
     },
   ],
+  // L'audit 3e pilier (4 novembre 2026) : questionnaire, calcul et résultats dans un seul îlot.
+  ["/audit-3e-pilier", { islands: ["PillarAudit@load"], interactiveMain: true }],
   // Indicateur de connexion et lien vers Wallet, module natif hors du contenu (README www).
   ["/account", { modules: ["account"] }],
 ]);
@@ -722,15 +724,16 @@ async function measurePage(browser, origin, route, files) {
     );
     if (route === "/") {
       // Régression observée : une animation d’ouverture gelée à opacity:0
-      // rendait le dialogue invisible après activation du bouton pause.
+      // rendait le dialogue invisible après activation du bouton pause. Depuis le 4 novembre
+      // 2026, le CTA mène à la page d'audit ; le dialogue des résultats clients sert de témoin.
       await page
         .getByRole("button", { name: "Mettre les animations en pause", exact: true })
         .click();
       await page
-        .getByRole("button", { name: "Analyser mon 3e pilier", exact: true })
+        .getByRole("button", { name: "Voir les résultats en détail", exact: true })
         .first()
         .click();
-      const dialog = page.getByRole("dialog", { name: "Commençons par vous." });
+      const dialog = page.getByRole("dialog", { name: "Les résultats. Avec leur contexte." });
       assert(await dialog.isVisible(), "Dialogue invisible avec les animations en pause");
       assert.equal(
         await dialog.evaluate((element) => window.getComputedStyle(element).opacity),

@@ -40,7 +40,7 @@
       "project": ["src/**/*.{ts,tsx,css}"]
     },
     "apps/www": {
-      "ignoreDependencies": ["gsap", "@react-three/fiber"],
+      "ignoreDependencies": ["@react-three/fiber"],
       "project": ["src/**/*.{ts,tsx,astro,mdx,css}"]
     },
     "packages/ui": {

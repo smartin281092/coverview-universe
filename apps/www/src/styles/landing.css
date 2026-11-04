@@ -215,50 +215,47 @@
 .lp-hero {
   position: relative;
   isolation: isolate;
-  padding: 68px 0 22px;
+  overflow: hidden;
+  display: grid;
+  align-content: center;
+  min-height: clamp(560px, 84svh, 780px);
+  padding: 72px 0 36px;
+  color: #fff;
+  background:
+    radial-gradient(ellipse at 85% 0%, #6366f1 0%, transparent 55%),
+    radial-gradient(ellipse at 10% 100%, #3b82f6 0%, transparent 60%), #111e38;
 }
-.hero-aurora {
+/* Fond shader (4 novembre 2026) : dégradé WebGL dessiné petit, agrandi et flouté ; voile sombre ;
+   trame de pixels nette par-dessus. Sans WebGL, le dégradé CSS de la section reste visible. */
+.hero-backdrop {
   position: absolute;
   inset: 0;
-  z-index: -2;
+  z-index: -1;
   overflow: hidden;
   pointer-events: none;
 }
-.hero-aurora i {
+.hero-backdrop canvas,
+.hero-backdrop .hero-shade {
   position: absolute;
-  border-radius: 50%;
-  filter: blur(70px);
-  opacity: 0.7;
-  animation: aurora 17s ease-in-out infinite alternate;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
-.hero-aurora i:nth-child(1) {
-  background: #e1ddff;
-  width: 640px;
-  height: 450px;
-  top: 30px;
-  right: -120px;
+.hero-backdrop [data-hero-gradient] {
+  inset: -14%;
+  width: 128%;
+  height: 128%;
+  filter: blur(48px) saturate(1.15);
+  opacity: 0.96;
 }
-.hero-aurora i:nth-child(2) {
-  background: #ffe8dc;
-  width: 500px;
-  height: 340px;
-  bottom: 0;
-  right: 90px;
-  animation-delay: -7s;
-}
-.hero-aurora i:nth-child(3) {
-  background: #dae5ff;
-  width: 280px;
-  height: 280px;
-  right: 200px;
-  top: 100px;
-  animation-delay: -12s;
+.hero-backdrop .hero-shade {
+  background:
+    linear-gradient(to top, #000000a6, #00000030 42%, #0000000d 70%, transparent),
+    linear-gradient(to right, #0a142b73, transparent 55%);
 }
 .hero-grid {
   display: grid;
-  grid-template-columns: 1.35fr 1fr;
-  align-items: center;
-  gap: 28px;
+  grid-template-columns: minmax(0, 860px);
 }
 .hero-copy {
   position: relative;
@@ -268,7 +265,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #585970;
+  color: #ffffffb8;
   font-size: 10px;
 }
 .live-dot {
@@ -280,6 +277,10 @@
   box-shadow: 0 0 0 4px #6560ff12;
   flex-shrink: 0;
 }
+.hero-eyebrow .live-dot {
+  background: #8fb4ff;
+  box-shadow: 0 0 0 4px #ffffff24;
+}
 .lp h1 {
   font-size: clamp(54px, 5.3vw, 80px);
   line-height: 1.025;
@@ -287,6 +288,13 @@
 }
 .lp h1 > span {
   color: lab(2.83994 0.367254 0.969091 / 0.6);
+}
+.lp-hero h1 {
+  color: #fff;
+  text-shadow: 0 2px 24px #0b132a66;
+}
+.lp-hero h1 > span {
+  color: #ffffff94;
 }
 .lp h1 {
   white-space: pre-line;
@@ -297,18 +305,25 @@
 .hero-description {
   font-size: 18px;
   line-height: 1.65;
-  color: #62636e;
-  max-width: 390px;
-  margin: 27px 0 28px !important;
+  color: #ffffffc4;
+  max-width: 470px;
+  margin: 27px 0 30px !important;
 }
-.hero-cta {
-  background: var(--lp-blue);
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 26px;
+}
+.lp-hero .hero-cta {
+  background: #fff;
+  color: #111e38;
   box-shadow:
-    inset 0 1px 0 #ffffff33,
-    0 5px 14px #5654e81a;
+    0 1px 0 #ffffff66 inset,
+    0 10px 30px #06102a3d;
 }
-.hero-cta:hover {
-  background: #4542d5;
+.lp-hero .hero-cta:hover {
+  background: #eef2ff;
 }
 .hero-alternative {
   display: flex;
@@ -318,17 +333,25 @@
   min-height: 44px;
   font-size: 13px;
   color: #51515d;
-  margin-top: 8px;
+}
+.lp-hero .hero-alternative {
+  color: #ffffffd6;
+  margin-top: 0;
+}
+.lp-hero .hero-alternative:hover {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
 }
 .hero-assurances {
   display: flex;
   flex-wrap: wrap;
   gap: 17px;
   padding: 0;
-  margin: 24px 0 0;
+  margin: 30px 0 0;
   list-style: none;
   font-size: 10px;
-  color: #646472;
+  color: #ffffffb3;
 }
 .hero-assurances li {
   display: flex;
@@ -337,14 +360,23 @@
   white-space: nowrap;
 }
 .hero-assurances li > span {
-  color: var(--lp-blue);
+  color: #93c5fd;
   font-size: 12px;
 }
-.hero-scene {
-  position: relative;
-  height: 535px;
-  perspective: 1100px;
-  min-width: 0;
+.lp-hero .hero-baseline {
+  margin-top: 64px;
+  color: #ffffff99;
+}
+.lp-hero .hero-baseline a {
+  color: #fff;
+  border-color: #ffffff4d;
+  background: #ffffff14;
+}
+.lp-hero .hero-baseline a:hover {
+  background: #ffffff2b;
+}
+.lp-hero a:focus-visible {
+  outline-color: #fff;
 }
 .scene-orbit {
   position: absolute;
@@ -3142,4 +3174,26 @@ html:has(.lp[data-motion="paused"]) {
 }
 .hero-hyperion:hover {
   filter: brightness(1.12);
+}
+
+/* Hero sombre (4 novembre 2026) : hauteur et espacements sur petits écrans. */
+@media (max-width: 900px) {
+  .lp-hero {
+    min-height: clamp(520px, 78svh, 700px);
+  }
+}
+@media (max-width: 680px) {
+  .lp-hero {
+    min-height: auto;
+    padding: 56px 0 30px;
+  }
+  .lp-hero .hero-baseline {
+    margin-top: 40px;
+  }
+  .hero-actions {
+    gap: 10px 20px;
+  }
+  .lp-hero .hero-cta {
+    width: 100%;
+  }
 }

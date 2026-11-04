@@ -1,0 +1,11 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PillarAudit from '../components/audit/PillarAudit';
+import { auditCopy } from '../content/fr/audit';
+import '../styles/audit.css';
+const walletOrigin = import.meta.env.PUBLIC_WALLET_URL ?? (import.meta.env.DEV ? 'http://127.0.0.1:4101' : undefined);
+const walletUrl = walletOrigin ? new URL('/account', walletOrigin).href : '/account';
+---
+<Layout title={auditCopy.seo.title} description={auditCopy.seo.description} minimal structuredData={{'@context':'https://schema.org','@type':'WebPage',name:auditCopy.seo.title,description:auditCopy.seo.description,url:'https://coverview.ch/audit-3e-pilier',inLanguage:'fr-CH'}}>
+  <div class="pillar-audit"><PillarAudit walletUrl={walletUrl} client:load /></div>
+</Layout>
