@@ -8,15 +8,13 @@ import HyperionReturnsChart from './HyperionReturnsChart.astro';
 import HyperionPerformance from './HyperionPerformance.astro';
 import HyperionProof from './HyperionProof.astro';
 import HyperionReviews from './HyperionReviews.astro';
+import HyperionLogo from './HyperionLogo.astro';
 import { hyperionCopy as c } from '../../content/fr/hyperion';
 import { hyperionReviews } from '../../content/fr/hyperion-reviews';
 import { HYPERION, annualisedReturn, formatPercent, formatSignedPercent, netReturns } from './hyperion-model';
 import liechtensteinLife from '../../assets/companies/liechtenstein-life.svg?url';
 import '../../styles/landing.css';
 import '../../styles/hyperion.css';
-// The official logo once provided (assets/hyperion/README.md); nothing is invented meanwhile.
-const logos = import.meta.glob<string>('../../assets/hyperion/logo.{svg,png}', { eager: true, query: '?url', import: 'default' });
-const logo = Object.values(logos)[0];
 const apiUrl = import.meta.env.PUBLIC_API_URL ?? (import.meta.env.DEV ? 'http://127.0.0.1:4100' : (Astro.site?.origin ?? Astro.url.origin));
 const currentYear = new Date().getFullYear();
 const annualised = annualisedReturn(netReturns());
@@ -55,7 +53,7 @@ const icons: Record<(typeof c.advantages.items)[number]['icon'], string> = {
       </div>
       <div class="hp-summary" data-reveal>
         <p class="lp-eyebrow hp-eyebrow">{c.hero.eyebrow}</p>
-        <div class="hp-title-row">{logo && <img src={logo} alt="" class="hp-logo" width="160" height="48" />}<h1 id="hp-title">{c.hero.title}</h1></div>
+        <div class="hp-title-row"><HyperionLogo class="hp-logo" /><h1 id="hp-title">{c.hero.title}</h1></div>
         <p class="hp-subtitle">{c.hero.subtitle}</p>
         <a href="#avis" class="hp-rating"><span class="hp-stars" aria-label={stars(hyperionReviews.rating)}>{[1,2,3,4,5].map(() => <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="m12 2.6 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.5l-5.9 3.1 1.2-6.5L2.5 9.5l6.6-.9z" fill="currentColor"/></svg>)}</span><strong>{c.hero.rating.value}</strong><span>· {c.hero.rating.count}</span><span class="hp-rating-link">{c.hero.rating.link}</span></a>
         <div class="hp-stats">
@@ -112,6 +110,6 @@ const icons: Record<(typeof c.advantages.items)[number]['icon'], string> = {
 
   <section class="lp-section faq-section" id="questions" aria-labelledby="hp-faq-title"><div class="lp-container faq-grid"><div data-reveal><p class="lp-eyebrow">{c.faq.eyebrow}</p><h2 id="hp-faq-title"><TitleText text={c.faq.title}/></h2></div><div class="landing-faq">{c.faq.items.map(item => <details><summary>{item.question}<span aria-hidden="true"></span></summary><div><p>{item.answer}</p></div></details>)}</div></div></section>
 
-  <section class="closing-section hp-closing"><div class="closing-aurora" aria-hidden="true"></div><div class="lp-container center-heading" data-reveal><p class="lp-eyebrow">{c.closing.eyebrow}</p><h2><TitleText text={c.closing.title}/></h2><p class="lp-description">{c.closing.description}</p><button type="button" class="lp-button hp-cta" data-open-order>{c.closing.cta}<Arrow/></button><p class="closing-note">{c.closing.note}</p></div></section>
+  <section class="closing-section hp-closing"><div class="closing-aurora" aria-hidden="true"></div><div class="lp-container center-heading" data-reveal><HyperionLogo class="hp-closing-mark" size={40} /><p class="lp-eyebrow">{c.closing.eyebrow}</p><h2><TitleText text={c.closing.title}/></h2><p class="lp-description">{c.closing.description}</p><button type="button" class="lp-button hp-cta" data-open-order>{c.closing.cta}<Arrow/></button><p class="closing-note">{c.closing.note}</p></div></section>
 </div>
 <script>import './hyperion';</script>

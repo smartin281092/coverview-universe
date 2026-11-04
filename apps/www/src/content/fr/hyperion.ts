@@ -38,7 +38,6 @@ export const hyperionCopy = {
       title: "Top 1 % des 3e piliers analysés",
       text: "Sur plus de 140’000 contrats analysés par notre partenaire Liechtenstein Life, pour la 4e année consécutive.",
     },
-    logoMissing: "Logo Hyperion",
   },
   gallery: {
     label: "Visuels du produit",

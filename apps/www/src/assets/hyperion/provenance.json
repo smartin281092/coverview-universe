@@ -1,0 +1,27 @@
+[
+  {
+    "providedAt": "2026-11-04",
+    "sourceAttachment": "d0976102-image.png",
+    "file": "hyperion-logo-original.png",
+    "sha256": "00438d0ccc2e3899218cc1cbd51257976551056efe6c822c2e3871b4f51a6f12",
+    "width": 1254,
+    "height": 1254,
+    "note": "Logo Hyperion fourni par l’utilisateur, copié sans retouche."
+  },
+  {
+    "derivedAt": "2026-11-04",
+    "file": "logo.svg",
+    "derivedFrom": "hyperion-logo-original.png",
+    "method": "Polygones reconstruits depuis la géométrie mesurée dans les pixels de l’original, idéalisation symétrique.",
+    "parameters": {
+      "frameHalfSize": 282,
+      "stroke": 57,
+      "chamfer": 117,
+      "halfGap": 69,
+      "barLength": 300,
+      "barThickness": 50,
+      "barAngles": [0, 45, 90, 135]
+    },
+    "jaccardWithOriginal": 0.9517
+  }
+]

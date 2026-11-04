@@ -201,10 +201,18 @@
   align-items: center;
   gap: 16px;
 }
+.hp-logo-mark {
+  display: block;
+  flex: none;
+}
 .hp-logo {
-  width: auto;
-  max-width: 160px;
-  height: 48px;
+  width: 54px;
+  height: 54px;
+  color: var(--lp-ink);
+}
+.hp-closing-mark {
+  margin: 0 auto 18px;
+  color: var(--hp-indigo);
 }
 .hp h1 {
   font-size: clamp(46px, 4.6vw, 66px);

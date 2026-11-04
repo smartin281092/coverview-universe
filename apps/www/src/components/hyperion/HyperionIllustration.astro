@@ -1,9 +1,7 @@
 ---
 import { hyperionCopy } from '../../content/fr/hyperion';
 import { HYPERION } from './hyperion-model';
-// The official logo, once provided (assets/hyperion/README.md): on the box face, above the name.
-const logos = import.meta.glob<string>('../../assets/hyperion/logo.{svg,png}', { eager: true, query: '?url', import: 'default' });
-const logo = Object.values(logos)[0];
+import { hyperionLogo } from './hyperion-logo';
 interface Props { id?: string; class?: string; }
 const { id = 'hyperion-box', class: className } = Astro.props;
 const c = hyperionCopy.gallery;
@@ -63,10 +61,10 @@ const candles = [
   <polygon points="200,92 236,108 236,112 200,96" fill="#fff" opacity=".18"/>
 
   <g transform="skewY(4.65)" font-family="var(--cv-font-sans), sans-serif" fill="#fff">
-    {logo && <image href={logo} x="272" y="150" width="248" height="72" preserveAspectRatio="xMinYMid meet"/>}
-    <text x="272" y={logo ? 300 : 268} font-size="60" font-weight="500" letter-spacing="-2.4">{HYPERION.name}</text>
-    <text x="274" y={logo ? 348 : 316} font-size="30" font-weight="500" letter-spacing="-0.6" fill={`url(#${id}-gold)`}>{c.box.line1}</text>
-    <text x="274" y={logo ? 386 : 354} font-size="15" letter-spacing=".2" fill="#fff" opacity=".74">{c.box.line2}</text>
+    <g transform="translate(316 190) scale(0.1528)"><path d={hyperionLogo.d} fill="#fff"/></g>
+    <text x="272" y="310" font-size="60" font-weight="500" letter-spacing="-2.4">{HYPERION.name}</text>
+    <text x="274" y="358" font-size="30" font-weight="500" letter-spacing="-0.6" fill={`url(#${id}-gold)`}>{c.box.line1}</text>
+    <text x="274" y="396" font-size="15" letter-spacing=".2" fill="#fff" opacity=".74">{c.box.line2}</text>
     <text x="274" y="552" font-size="12" letter-spacing="1.4" fill="#fff" opacity=".55">COVERVIEW · {HYPERION.company.toUpperCase()}</text>
   </g>
   <text transform="translate(226 602) rotate(-90) skewX(-24)" font-family="var(--cv-font-sans), sans-serif" font-size="17" letter-spacing="1.8" fill="#fff" opacity=".78">{c.box.spine.toUpperCase()}</text>
