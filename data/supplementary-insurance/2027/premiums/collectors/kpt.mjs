@@ -194,6 +194,7 @@ async function collect() {
 const PRODUCT_KEYS = {
   PUL: 'kpt-pulse',
   H: 'kpt-hospitalisation',
+  HS: 'kpt-hospitalisation', // même produit à l'écran (« Complémentaire Hôpital »), code tarifaire des 52 ans et plus
   FLEX: 'kpt-hospitalisation-flex',
   HT: 'kpt-indemnites-journalieres-hospitalisation',
   GH: 'kpt-sicuranta',
@@ -277,9 +278,13 @@ function rowsForProduct(product, ctx) {
     }
 
     const notes = [];
+    // Rabais déjà déduits du prix affiché, avec leur montant mensuel en CHF tel que renvoyé par l'API.
     for (const d of product.appliedDiscounts?.[key] || []) {
-      notes.push(d.type === 'OnlineDiscount' ? `online_discount_included=${Number(d.amount).toFixed(2)}` : `discount_${d.type}_included=${Number(d.amount).toFixed(2)}`);
+      if (d.type === 'OnlineDiscount') notes.push(`online_discount_included=${Number(d.amount).toFixed(2)}`);
+      else if (d.type === 'ChildFree') notes.push('child_free');
+      else notes.push(`discount_${d.type}_included=${Number(d.amount).toFixed(2)}`);
     }
+    if (product.productCode === 'HS') notes.push('calculator_code=HS');
     for (const pt of threeYear) {
       const withKey = withFlag(product, key, pt.id);
       if (prices[withKey] !== undefined) notes.push(`three_year_contract_price=${Number(prices[withKey]).toFixed(2)}`);
@@ -443,14 +448,22 @@ async function verify(specs) {
       const locality = wanted;
       await page.locator('#button-to-products').click();
       // Étape « Assurance de base » : on passe sans rien choisir.
-      await page.waitForSelector('#button-to-additional-products', { timeout: 90000 });
       await page.waitForSelector('.product--okp', { timeout: 90000 });
+      const csvKeys = [...index.keys()].filter((k) => k.startsWith(`${postalCode}|${birthYear}|${sex}|`));
+      if (!(await page.locator('#button-to-additional-products').count())) {
+        // Aucune complémentaire proposée pour ce profil : le calculateur n'offre pas l'étape.
+        const buttons = (await page.locator('main button[id^="button-"]:not([id^="button-product"]):not([id^="button-show-more"])').allInnerTexts()).map(clean).filter(Boolean);
+        console.log(`${spec} ${wanted} · étape « Assurance complémentaire » non proposée (boutons : ${buttons.join(' / ')}) · ${csvKeys.length} ligne(s) dans le CSV`);
+        await context.close();
+        await sleep(delayMs);
+        continue;
+      }
       await page.locator('#button-to-additional-products').click();
       await page.waitForSelector('.product--vvg', { timeout: 60000 });
       const startDate = await page.locator('#select-startDate').inputValue();
 
       const codes = await page.$$eval('.product--vvg', (els) => els.map((e) => e.id.replace('product-', '')));
-      const result = { spec, locality, startDate, shown: 0, matched: 0, mismatches: [], notInCsv: [] };
+      const result = { spec, locality, startDate, shown: 0, matched: 0, blank: 0, mismatches: [], notInCsv: [] };
       const seen = new Set();
 
       const readCard = (code) => page.evaluate((c) => {
@@ -495,6 +508,7 @@ async function verify(specs) {
           const accident = accidentOn === null ? '' : String(accidentOn);
           const key = [postalCode, birthYear, sex, card.title, variant, option, accident].join('|');
           if (seen.has(key)) continue;
+          if (card.price === '' && !index.has(key)) { result.blank += 1; continue; } // combinaison sans prix à l'écran
           seen.add(key);
           result.shown += 1;
           const row = index.get(key);
@@ -519,11 +533,10 @@ async function verify(specs) {
       };
       for (const code of codes) await walk(code, 0);
 
-      const csvRows = [...index.keys()].filter((k) => k.startsWith(`${postalCode}|${birthYear}|${sex}|`));
-      result.csvRows = csvRows.length;
-      result.csvRowsNotShown = csvRows.filter((k) => !seen.has(k));
+      result.csvRows = csvKeys.length;
+      result.csvRowsNotShown = csvKeys.filter((k) => !seen.has(k));
       report.push(result);
-      console.log(`${spec} ${locality} · début ${startDate} · ${result.shown} prix affichés, ${result.matched} identiques au CSV, ${result.mismatches.length} écarts, ${result.notInCsv.length} absents du CSV, ${result.csvRowsNotShown.length}/${result.csvRows} lignes du CSV non affichées`);
+      console.log(`${spec} ${locality} · début ${startDate} · ${result.shown} prix affichés, ${result.matched} identiques au CSV, ${result.mismatches.length} écarts, ${result.notInCsv.length} absents du CSV, ${result.blank} combinaisons sans prix à l'écran, ${result.csvRowsNotShown.length}/${result.csvRows} lignes du CSV non affichées`);
       for (const m of [...result.mismatches, ...result.notInCsv.map((x) => `absent du CSV : ${x}`), ...result.csvRowsNotShown.map((x) => `non affiché : ${x}`)]) console.log(`   ${m}`);
       await context.close();
       await sleep(delayMs);
