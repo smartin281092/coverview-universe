@@ -25,6 +25,12 @@
       "verification:read": 152,
       "prices": 97
     },
+    "css": {
+      "products": 20,
+      "benefits": 268,
+      "verification:read": 268,
+      "prices": 329
+    },
     "helsana": {
       "products": 18,
       "benefits": 176,

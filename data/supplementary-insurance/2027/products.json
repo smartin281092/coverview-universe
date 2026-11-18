@@ -77,6 +77,28 @@
       "retrievedAt": "2026-11-18"
     },
     {
+      "key": "css",
+      "name": "CSS",
+      "legalEntityLca": "CSS Assurance SA, Tribschenstrasse 21, 6002 Lucerne",
+      "website": "https://www.css.ch/fr/clients-prives.html",
+      "calculatorUrl": "https://calculator.css.ch/start?lang=fr",
+      "calculatorHosts": [
+        "calculator.css.ch",
+        "api.css.ch",
+        "travel.css.ch"
+      ],
+      "publishedTariffUrls": [
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/540h_f_produktblatt_heilungskosten_unfall.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/540u_f_produktblatt_uti.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/544_f_produktblatt_kti.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/544k-f-produktblatt-uti-kinder-jugendliche.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/539_f_produktblatt_spitaltaggeld.pdf",
+        "https://www.css.ch/fr/clients-prives/bien-assure/autres-assurances/assurance-voyages.html"
+      ],
+      "notes": "Entités porteuses : CSS Assurance SA pour les complémentaires LCA ; CSS Assurance-vie SA pour les assurances de capital décès/invalidité (accident et maladie) ; Orion Assurance de Protection Juridique SA pour la protection juridique (y c. celle incluse dans myFlex ambulatoire, Livo Top et l'assurance voyages). Trois gammes coexistent : myFlex (ambulatoire, hospitalisation, médecine alternative, échelons Economy/Balance/Premium, calculable en ligne), Livo (lancée le 01.01.2025 : cas d'urgence, prévention, Smart, Top ; sur demande d'offre) et des produits « classic » encore présentés dans l'offre 2027 avec bouton « Demander une offre » (Standard CSS, cas d'urgence, cure et soins, médecine alternative 2001) dont l'ouverture aux nouvelles conclusions reste à confirmer. Calculateur : paramètres d'URL product=AMBULANT_MYFLEX:1|2|3, SPITAL_MYFLEX:1|3|5, ALTERNATIVVERSICHERUNG_MYFLEX, ZAHNPFLEGE, HEILUNGSKOSTEN, UTI, KTI ; application web sur calculator.css.ch, API sur api.css.ch (chemins /css/angebot/v2/kv/web/rechner et /css/anzu/v1/stammdaten/ d'après la configuration publique), assurance voyages sur travel.css.ch (hôte refusé par le proxy). Le calculateur demande le NPA et les CGA myFlex permettent un échelonnement selon l'âge, le sexe, l'état de santé déclaré ou le domicile : l'effet de la région sur les primes LCA n'est pas publié. Rabais familiaux : conditions cumulatives (assurance de base CSS de l'enfant et du parent, complémentaire équivalente du parent). Avantages liés à toute complémentaire CSS : appli active365 (jusqu'à CHF 400 par an), shop enjoy365, CSS Coin. Produits fermés ou documentés seulement pour le portefeuille existant (page « Autres assurances ») : Assurance Standard CSS plus, assurances d'hospitalisation demi-privée et privée, Hôpital20, Hôpital30, assurance des frais de chambre d'hôpital, variantes Sanagate (ambulatoire, hospitalisation, médecine alternative, soins dentaires), assurance pour médecine alternative 97, assurance pour soins dentaires myFlex (Economy/Balance/Premium), reprise du portefeuille, CGA décès/invalidité par accident édition 01.2026_A, gamme Intras (UNO+, DUE+, CASA, OPTIMA+, QUADRA+, FLEXIMA, BASIC, FT/FP, SANFIT, DENTA, ECODENTA ; INTRAS Assurance SA a fusionné avec CSS Assurance SA au 01.01.2022), assurance d'indemnités journalières CGA 01.1997. Un passage sans examen de santé de ces produits vers myFlex est possible chaque 1er janvier. Hors périmètre : assurance-ménage (responsabilité civile, inventaire, bâtiments), prévoyance.",
+      "retrievedAt": "2026-11-18"
+    },
+    {
       "key": "helsana",
       "name": "Helsana",
       "legalEntityLca": "Helsana Assurances complémentaires SA",
@@ -3210,6 +3232,933 @@
         "daily_allowance"
       ],
       "benefitCount": 4
+    },
+    {
+      "insurer": "css",
+      "key": "css-myflex-ambulatoire",
+      "name": "Assurance ambulatoire myFlex",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Complémentaire ambulatoire en trois échelons (Economy, Balance, Premium) : médicaments hors liste, urgences et transports dans le monde entier, protection juridique du patient, et selon l'échelon lunettes, dentaire des enfants, psychothérapie, soins à domicile.",
+      "variants": [
+        {
+          "key": "economy",
+          "name": "Economy",
+          "description": "Médicaments, moyens auxiliaires (CHF 500), vaccins (CHF 100), urgences à l'étranger, transports, maternité."
+        },
+        {
+          "key": "balance",
+          "name": "Balance",
+          "description": "Ajoute lunettes (CHF 150), dentaire et orthodontie des enfants, psychothérapie (CHF 1000), soins et aide à domicile, stérilisation, vaccins illimités."
+        },
+        {
+          "key": "premium",
+          "name": "Premium",
+          "description": "Plafonds supérieurs, médecins récusés, produits médicaux, traitements ambulatoires planifiés à l'étranger, entreprises téméraires."
+        }
+      ],
+      "prerequisites": "Déclaration de santé à la conclusion et pour tout passage à l'échelon supérieur. Nouveau-nés admis sans réserve en Economy et Balance si la proposition est reçue dans les 30 jours suivant la naissance. Couverture accidents excluable.",
+      "pricing": {
+        "factors": [
+          "age",
+          "accident"
+        ],
+        "ageBands": null,
+        "discounts": "Rabais familial 50 % (Economy, Balance, Premium) pour enfants et jeunes jusqu'à la fin de l'année des 20 ans, si l'enfant et le parent ont l'assurance de base CSS et que le parent a une complémentaire équivalente. Exclusion de l'accident : réduction de prime de 7 % (page produit). Supplément de prime pour l'option Upgrade. Bonus pour absence de prestations."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) Assurance ambulatoire myFlex + CGA Assurance-maladie complémentaire selon la LCA (produits myFlex)",
+        "edition": "01.2027",
+        "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/zb/416a_f_zb_ambulant_myflex_ausgabe-01.2027.pdf"
+      },
+      "sourceUrls": [
+        "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-complementaire/assurance-ambulatoire.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/zb/416a_f_zb_ambulant_myflex_ausgabe-01.2027.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/406_f_avb_myflex_ausgabe-01.2027.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/501_f_produktblatt_leistungsuebersicht_myflex.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/3015_f_merkblatt_mutterschaft_myflex.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "abroad_planned_treatment",
+        "ambulatory_free_doctor_choice",
+        "bonus_program",
+        "breastfeeding",
+        "cosmetic_corrections",
+        "dental_surgery",
+        "dental_treatment",
+        "glasses_lenses",
+        "gynecological_prevention",
+        "home_care",
+        "home_help",
+        "innovative_treatments",
+        "legal_protection",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "orthodontics",
+        "other:entreprises_temeraires",
+        "psychotherapy_non_medical",
+        "search_recovery",
+        "sterilization_contraception",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "travel_expenses_treatment",
+        "upgrade_option",
+        "vaccination"
+      ],
+      "benefitCount": 51
+    },
+    {
+      "insurer": "css",
+      "key": "css-myflex-hospitalisation",
+      "name": "Assurance d'hospitalisation myFlex",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Assurance d'hospitalisation flexible : la division (commune, demi-privée, privée) se choisit avant chaque séjour, avec une participation aux coûts annuelle dépendant de l'échelon (Economy, Balance, Premium) et de la variante choisie.",
+      "variants": [
+        {
+          "key": "economy",
+          "name": "Economy",
+          "description": "Participations les plus élevées en demi-privé et privé ; réadaptation et psychiatrie 60 jours ; compte santé CHF 300."
+        },
+        {
+          "key": "balance",
+          "name": "Balance",
+          "description": "Participations réduites ; réadaptation et psychiatrie 90 jours ; rooming-in ; compte santé CHF 500."
+        },
+        {
+          "key": "premium",
+          "name": "Premium",
+          "description": "Tous les hôpitaux, demi-privé sans participation, traitements planifiés à l'étranger (CHF 500 000), réadaptation illimitée, compte santé CHF 700."
+        }
+      ],
+      "prerequisites": "Déclaration de santé à la conclusion et pour tout passage à l'échelon supérieur. Nouveau-nés admis sans réserve en Economy si la proposition est reçue dans les 30 jours. Couvertures accidents et maternité excluables.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "deductible",
+          "accident"
+        ],
+        "ageBands": null,
+        "discounts": "Rabais familial jusqu'à la fin de l'année des 20 ans : 100 % en Economy, 50 % en Balance et Premium. Exclusion de l'accident : réduction de 7 % (page produit). Réduction de prime pour la variante à choix limité des fournisseurs (Economy, Balance). Supplément pour l'option Upgrade. Rabais de 25 % accordé sur l'assurance d'indemnités journalières en cas d'hospitalisation. « deductible » désigne ici la variante de participation aux coûts (1 ou 2)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) Assurance d'hospitalisation myFlex + CGA Assurance-maladie complémentaire selon la LCA (produits myFlex)",
+        "edition": "01.2027",
+        "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/zb/416s_f_zb_spital_myflex_ausgabe-01.2027.pdf"
+      },
+      "sourceUrls": [
+        "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-complementaire/assurance-d-hospitalisation.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/zb/416s_f_zb_spital_myflex_ausgabe-01.2027.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/406_f_avb_myflex_ausgabe-01.2027.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/501_f_produktblatt_leistungsuebersicht_myflex.pdf",
+        "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-complementaire/assurance-d-hospitalisation/traitements-ambulatoires-a-l-hopital.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/3015_f_merkblatt_mutterschaft_myflex.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "ambulatory_surgery",
+        "assistance_services",
+        "bonus_program",
+        "fitness_health_promotion",
+        "hospital_abroad",
+        "hospital_flex",
+        "hospital_general_ch",
+        "hospital_private",
+        "hospital_semi_private",
+        "maternity",
+        "newborn_coverage",
+        "other:entreprises_temeraires",
+        "prevention_checkup",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "spa_cure",
+        "sterilization_contraception",
+        "travel_expenses_treatment",
+        "upgrade_option"
+      ],
+      "benefitCount": 56
+    },
+    {
+      "insurer": "css",
+      "key": "css-myflex-medecine-alternative",
+      "name": "Assurance pour médecine alternative myFlex",
+      "category": "alternative_medicine",
+      "audience": "all",
+      "summary": "Prend en charge 75 % des traitements et remèdes de médecine complémentaire auprès de thérapeutes et pour des méthodes reconnus par la CSS (environ 80 méthodes), sans franchise et sans prescription médicale.",
+      "variants": [
+        {
+          "key": "economy",
+          "name": "Economy",
+          "description": "75 %, max. CHF 1000 par année civile (couverture limitée CHF 200)."
+        },
+        {
+          "key": "balance",
+          "name": "Balance",
+          "description": "75 %, max. CHF 3000 par année civile (couverture limitée CHF 600)."
+        },
+        {
+          "key": "premium",
+          "name": "Premium",
+          "description": "75 %, max. CHF 10 000 par année civile (couverture limitée CHF 2000)."
+        }
+      ],
+      "prerequisites": "Déclaration de santé à la conclusion et pour tout passage à l'échelon supérieur. Selon la page produit, les prestations complètes supposent aussi l'assurance ambulatoire myFlex ou l'assurance d'hospitalisation myFlex. Nouveau-nés admis sans réserve en Economy et Balance (proposition dans les 30 jours). Accident toujours inclus.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex"
+        ],
+        "ageBands": null,
+        "discounts": "Rabais familial 25 % jusqu'à la fin de l'année des 20 ans. Bonus pour absence de prestations."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) Assurance pour médecine alternative myFlex",
+        "edition": "01.2011 (formulaire 496f-04.22) ; CGA myFlex 01.2027",
+        "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/zb/496_f_zb_alternativ_myflex.pdf"
+      },
+      "sourceUrls": [
+        "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-complementaire/medecine-alternative.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/zb/496_f_zb_alternativ_myflex.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/406_f_avb_myflex_ausgabe-01.2027.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/501_f_produktblatt_leistungsuebersicht_myflex.pdf"
+      ],
+      "tags": [
+        "alt_medicine_therapies",
+        "bonus_program"
+      ],
+      "benefitCount": 7
+    },
+    {
+      "insurer": "css",
+      "key": "css-soins-dentaires",
+      "name": "Assurance pour soins dentaires",
+      "category": "dental",
+      "audience": "all",
+      "summary": "Assurance dentaire en quatre variantes couvrant contrôles, traitements conservateurs, hygiène, orthodontie (sauf variante 75 % / CHF 2000) et prothèses, jusqu'à CHF 5000 par année civile.",
+      "variants": [
+        {
+          "key": "v1-50-1000",
+          "name": "Variante 1 : 50 %, max. CHF 1000",
+          "description": "50 % des factures, au maximum CHF 1000 par année civile."
+        },
+        {
+          "key": "v2-75-2000",
+          "name": "Variante 2 : 75 %, max. CHF 2000",
+          "description": "75 %, max. CHF 2000, sans correction de la position des dents ; conclusion possible avec ou sans test dentaire ; bonus-malus."
+        },
+        {
+          "key": "v3-75-3000",
+          "name": "Variante 3 : 75 %, max. CHF 3000",
+          "description": "75 % des factures, au maximum CHF 3000 par année civile."
+        },
+        {
+          "key": "v4-75-5000",
+          "name": "Variante 4 : 75 %, max. CHF 5000",
+          "description": "75 %, au maximum CHF 5000 par année civile, franchise annuelle de CHF 500."
+        }
+      ],
+      "prerequisites": "Attestation dentaire d'un dentiste confirmant le bon état des dents (pas nécessaire pour les enfants de moins de 3 ans ; variante 75 % / CHF 2000 possible sans test dentaire). Conclusion uniquement en combinaison avec l'assurance de base, l'assurance ambulatoire myFlex ou l'assurance d'hospitalisation myFlex (page produit). Nouveau-nés sans réserve si demande dans les 30 jours.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "0–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66 ans et plus (groupes d'âge tarifaires des CGA ; âge de référence, atteint dans l'année ou exact, non précisé)",
+        "discounts": "Rabais familial 25 % jusqu'à la fin de l'année civile des 18 ans. Variante 75 % / CHF 2000 : bonus-malus (échelon 1 = 140 % sans test dentaire, échelon 4 = 80 % avec test dentaire, jusqu'à 60 %)."
+      },
+      "conditionsDoc": {
+        "title": "CGA Assurance pour soins dentaires (+ CC variante 75 %, max. CHF 2000, édition 01.2013)",
+        "edition": "01.2027",
+        "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/437_f_avb_zahnpflege_ausgabe-01.2027.pdf"
+      },
+      "sourceUrls": [
+        "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-complementaire/assurance-soins-dentaires.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/437_f_avb_zahnpflege_ausgabe-01.2027.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/zb/437z_f_zb_zahnpflegeversicherung.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/537_f_produktblatt_zahnpflege.pdf"
+      ],
+      "tags": [
+        "dental_accident",
+        "dental_hygiene",
+        "dental_treatment"
+      ],
+      "benefitCount": 7
+    },
+    {
+      "insurer": "css",
+      "key": "css-livo-cas-urgence",
+      "name": "Assurance cas d'urgence Livo",
+      "category": "travel_abroad",
+      "audience": "all",
+      "summary": "Couverture mondiale des urgences médicales à l'étranger, des transports d'urgence, du rapatriement et des opérations de recherche et de sauvetage ; socle de la gamme Livo lancée le 01.01.2025.",
+      "variants": [],
+      "prerequisites": "Peut être conclue seule ou avec d'autres assurances Livo (les assurances santé Livo Smart et Livo Top doivent toujours être conclues avec elle). Nouveau-nés sans réserve si la proposition est reçue au plus tard le jour de la naissance. Pas de calcul en ligne : « Demander une offre ».",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex"
+        ],
+        "ageBands": "0–5, 6–10, 11–15, 16–20, 21–27, 28–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81–85, 86+ (CGA Livo ch. 18.2) ; âge de référence : âge atteint à l'anniversaire au cours de l'année civile",
+        "discounts": "Rabais familial 50 % pour enfants et jeunes jusqu'à 20 ans."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) Assurance cas d'urgence Livo + CGA Assurances-maladie complémentaires Livo (01.2025)",
+        "edition": "01.2025",
+        "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/zb/578_f_zb_notfallversicherung_livo.pdf"
+      },
+      "sourceUrls": [
+        "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-complementaire/livo/assurance-urgence-livo.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/zb/578_f_zb_notfallversicherung_livo.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/575_f_avb_vvg_livo.pdf",
+        "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-complementaire/livo.html"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "search_recovery",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "travel_expenses_treatment"
+      ],
+      "benefitCount": 8
+    },
+    {
+      "insurer": "css",
+      "key": "css-livo-prevention",
+      "name": "Assurance prévention Livo",
+      "category": "prevention_wellbeing",
+      "audience": "all",
+      "summary": "Contributions aux vaccinations, aux examens préventifs et check-up ainsi qu'à des offres de prévention (premiers secours, gestion du stress, natation pour enfants).",
+      "variants": [],
+      "prerequisites": "Ne peut être conclue qu'en combinaison avec au moins une autre assurance complémentaire Livo ; prend fin si celle-ci est résiliée. Nouveau-nés sans réserve si proposition reçue au plus tard le jour de la naissance.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex"
+        ],
+        "ageBands": "0–5, 6–10, 11–15, 16–20, 21–27, 28–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81–85, 86+ (CGA Livo ch. 18.2) ; âge de référence : âge atteint à l'anniversaire au cours de l'année civile",
+        "discounts": "Rabais familial 50 % pour enfants et jeunes jusqu'à 20 ans."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) Assurance prévention Livo + CGA Livo (01.2025)",
+        "edition": "01.2025",
+        "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/zb/579_f_zb_praeventionsversicherung_livo.pdf"
+      },
+      "sourceUrls": [
+        "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-complementaire/livo/assurance-prevention-livo.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/zb/579_f_zb_praeventionsversicherung_livo.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/575_f_avb_vvg_livo.pdf"
+      ],
+      "tags": [
+        "fitness_health_promotion",
+        "prevention_checkup",
+        "vaccination"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "css",
+      "key": "css-livo-smart",
+      "name": "Assurance santé Livo Smart",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Paquet ambulatoire Livo : médicaments hors liste, lunettes, moyens auxiliaires, médecine alternative (50 %), santé mentale, promotion de la santé, dentaire des enfants, maternité et division commune dans toute la Suisse.",
+      "variants": [],
+      "prerequisites": "Doit toujours être conclue avec l'assurance cas d'urgence Livo (page produit). Nouveau-nés sans réserve si proposition reçue au plus tard le jour de la naissance. Souscription via demande d'offre.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex"
+        ],
+        "ageBands": "0–5, 6–10, 11–15, 16–20, 21–27, 28–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81–85, 86+ (CGA Livo ch. 18.2) ; âge de référence : âge atteint à l'anniversaire au cours de l'année civile",
+        "discounts": "Rabais familial 50 % pour enfants et jeunes jusqu'à 20 ans."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) Assurance santé Livo Smart + CGA Livo (01.2025)",
+        "edition": "01.2026",
+        "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/zb/577_f_zb_gesundheitsversicherung_livo_smart.pdf"
+      },
+      "sourceUrls": [
+        "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-complementaire/livo/assurance-sante-livo-smart.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/zb/577_f_zb_gesundheitsversicherung_livo_smart.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/575_f_avb_vvg_livo.pdf"
+      ],
+      "tags": [
+        "alt_medicine_therapies",
+        "assistance_services",
+        "breastfeeding",
+        "dental_surgery",
+        "dental_treatment",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "hospital_general_ch",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "orthodontics",
+        "psychotherapy_non_medical"
+      ],
+      "benefitCount": 16
+    },
+    {
+      "insurer": "css",
+      "key": "css-livo-top",
+      "name": "Assurance santé Livo Top",
+      "category": "combined",
+      "audience": "all",
+      "summary": "Assurance combinée Livo : toutes les prestations ambulatoires de Livo Smart avec médecine alternative à 75 %, plus libre choix du médecin, prestations cliniques et d'hôtellerie (chambre à un ou deux lits) en stationnaire et pour les interventions ambulatoires, cures et protection juridique.",
+      "variants": [
+        {
+          "key": "balance",
+          "name": "Balance",
+          "description": "Choix limité à la liste de fournisseurs stationnaires Balance ; réadaptation et psychiatrie 90 jours ; santé mentale CHF 1000."
+        },
+        {
+          "key": "premium",
+          "name": "Premium",
+          "description": "Liste de fournisseurs Premium (presque toutes les cliniques), traitements planifiés à l'étranger, entreprises téméraires, médecins récusés, Private Assistance, plafonds supérieurs."
+        }
+      ],
+      "prerequisites": "Doit toujours être conclue avec l'assurance cas d'urgence Livo (page produit). Déclaration de santé (passage de Balance à Premium, réduction de la participation, intégration de l'accident). Nouveau-nés admis sans réserve en Balance si proposition reçue au plus tard le jour de la naissance. Accident et maternité excluables.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "deductible",
+          "accident"
+        ],
+        "ageBands": "0–5, 6–10, 11–15, 16–20, 21–27, 28–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81–85, 86+ (CGA Livo ch. 18.2) ; âge de référence : âge atteint à l'anniversaire au cours de l'année civile",
+        "discounts": "Rabais familial 50 % jusqu'à 20 ans. Rabais de prime en excluant la maternité et l'accident (exclusion de l'accident : 6 % selon la page produit). « deductible » = variante de participation aux coûts (CHF 0 ; 25 % max. CHF 5000 ; 50 % max. CHF 10 000). Donne droit à 25 % de rabais sur l'assurance d'indemnités journalières en cas d'hospitalisation."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) Assurance santé Livo Top + CGA Livo (01.2025)",
+        "edition": "01.2026",
+        "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/zb/576_f_zb_gesundheitsversicherung_livo_top.pdf"
+      },
+      "sourceUrls": [
+        "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-complementaire/livo/assurance-sante-livo-top.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/zb/576_f_zb_gesundheitsversicherung_livo_top.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/575_f_avb_vvg_livo.pdf"
+      ],
+      "tags": [
+        "abroad_planned_treatment",
+        "alt_medicine_therapies",
+        "ambulatory_free_doctor_choice",
+        "assistance_services",
+        "breastfeeding",
+        "cosmetic_corrections",
+        "dental_surgery",
+        "dental_treatment",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "home_care",
+        "home_help",
+        "hospital_deductible_option",
+        "hospital_free_doctor_choice",
+        "hospital_general_ch",
+        "hospital_room_upgrade",
+        "innovative_treatments",
+        "legal_protection",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "orthodontics",
+        "other:entreprises_temeraires",
+        "psychotherapy_non_medical",
+        "rooming_in",
+        "spa_cure",
+        "sterilization_contraception",
+        "upgrade_option",
+        "vision_laser"
+      ],
+      "benefitCount": 43
+    },
+    {
+      "insurer": "css",
+      "key": "css-standard",
+      "name": "Assurance Standard CSS",
+      "category": "combined",
+      "audience": "all",
+      "summary": "Combinaison classique ambulatoire et hospitalisation : division commune dans toute la Suisse, médicaments hors liste, lunettes, orthodontie et dentaire des enfants, psychothérapie, maternité et urgences à l'étranger.",
+      "variants": [],
+      "prerequisites": "Souscription sur demande d'offre (pas dans le calculateur en ligne) ; produit de la gamme « classic » toujours présenté dans l'offre d'assurance 2027, à confirmer pour les nouvelles conclusions. Nouveau-nés sans réserve si demande dans les 30 jours.",
+      "pricing": {
+        "factors": [
+          "age",
+          "accident"
+        ],
+        "ageBands": "0–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66 ans et plus (groupes d'âge tarifaires des CGA ; âge de référence, atteint dans l'année ou exact, non précisé)",
+        "discounts": "Rabais familial 75 % pour enfants et jeunes jusqu'à la fin de l'année des 25 ans. Rabais pour absence de prestations 25 %. Rabais de combinaison « Zoom » jusqu'à 30 ans (Standard CSS + médecine alternative + cas d'urgence variante 1)."
+      },
+      "conditionsDoc": {
+        "title": "CGA Assurance Standard CSS (assurance des frais de guérison)",
+        "edition": "01.2026",
+        "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/461_f_css_avb_standard.pdf"
+      },
+      "sourceUrls": [
+        "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-complementaire/assurance-standard.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/461_f_css_avb_standard.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/502_f_produktblatt_leistungsuebersicht_classic.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/534_f_css_produktblatt_standardversicherung.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "ambulatory_free_doctor_choice",
+        "bonus_program",
+        "breastfeeding",
+        "cosmetic_corrections",
+        "dental_hygiene",
+        "dental_surgery",
+        "dental_treatment",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "gynecological_prevention",
+        "hospital_general_ch",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "newborn_coverage",
+        "orthodontics",
+        "prevention_checkup",
+        "psychotherapy_non_medical",
+        "rooming_in",
+        "sterilization_contraception"
+      ],
+      "benefitCount": 22
+    },
+    {
+      "insurer": "css",
+      "key": "css-cas-urgence",
+      "name": "Assurance pour cas d'urgence",
+      "category": "other",
+      "audience": "all",
+      "summary": "Petite assurance classique couvrant les transports d'urgence, les actions de recherche et de sauvetage et les transports évitant une hospitalisation, en trois variantes de montants.",
+      "variants": [
+        {
+          "key": "variante-1",
+          "name": "Variante 1",
+          "description": "Transport d'urgence CHF 5000 par cas, recherche et sauvetage CHF 50 000, transports CHF 750 par an."
+        },
+        {
+          "key": "variante-2",
+          "name": "Variante 2",
+          "description": "Transport d'urgence CHF 7000 par cas, recherche et sauvetage CHF 70 000, transports CHF 1050 par an."
+        },
+        {
+          "key": "variante-3",
+          "name": "Variante 3",
+          "description": "Transport d'urgence illimité, recherche et sauvetage CHF 100 000, transports CHF 1500 par an."
+        }
+      ],
+      "prerequisites": "Souscription sur demande d'offre ; gamme « classic » (ouverture aux nouvelles conclusions à confirmer).",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": null,
+        "discounts": "Rabais familial 50 % jusqu'à la fin de l'année des 18 ans. Rabais de combinaison « Zoom » jusqu'à 30 ans avec la variante 1."
+      },
+      "conditionsDoc": {
+        "title": "CGA Assurance pour cas d'urgence",
+        "edition": "01.2026",
+        "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/462_f_avb_notfall.pdf"
+      },
+      "sourceUrls": [
+        "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-complementaire/assurance-urgence.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/547_f_produktblatt_notfallversicherung.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/462_f_avb_notfall.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/502_f_produktblatt_leistungsuebersicht_classic.pdf"
+      ],
+      "tags": [
+        "search_recovery",
+        "transport_rescue",
+        "travel_expenses_treatment"
+      ],
+      "benefitCount": 9
+    },
+    {
+      "insurer": "css",
+      "key": "css-cure-soins",
+      "name": "Assurance de cure et de soins",
+      "category": "other",
+      "audience": "all",
+      "summary": "Complément classique pour les cures balnéaires et de convalescence, les soins à domicile et l'aide ménagère, en trois variantes de plafond annuel.",
+      "variants": [
+        {
+          "key": "variante-1",
+          "name": "Variante 1",
+          "description": "CHF 80 par jour, CHF 800 par année."
+        },
+        {
+          "key": "variante-2",
+          "name": "Variante 2",
+          "description": "CHF 80 par jour, CHF 1600 par année."
+        },
+        {
+          "key": "variante-3",
+          "name": "Variante 3",
+          "description": "CHF 80 par jour, CHF 2400 par année."
+        }
+      ],
+      "prerequisites": "Valable uniquement en combinaison avec l'assurance Standard CSS, Standard CSS plus, l'assurance d'hospitalisation privée ou demi-privée, Hôpital20, Hôpital30 ou l'assurance pour médecine alternative (CGA art. 18). Souscription sur demande d'offre ; ouverture aux nouvelles conclusions à confirmer.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": null,
+        "discounts": "Rabais familial 50 % jusqu'à la fin de l'année des 18 ans."
+      },
+      "conditionsDoc": {
+        "title": "CGA Assurance de cure et de soins",
+        "edition": "01.2026",
+        "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/446_f_avb_kur_pflege.pdf"
+      },
+      "sourceUrls": [
+        "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-complementaire/assurance-cure-soins.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/546_f_produktblatt_kur_pflegeversicherung.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/446_f_avb_kur_pflege.pdf"
+      ],
+      "tags": [
+        "spa_cure"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "css",
+      "key": "css-medecine-alternative-2001",
+      "name": "Assurance pour médecine alternative 2001",
+      "category": "alternative_medicine",
+      "audience": "all",
+      "summary": "Assurance classique de médecine alternative : jusqu'à CHF 10 000 par année civile, quote-part de 20 % et franchise de CHF 300 pour les adultes, sans prescription médicale.",
+      "variants": [],
+      "prerequisites": "Souscription sur demande d'offre ; produit « classic » coexistant avec l'assurance pour médecine alternative myFlex (ouverture aux nouvelles conclusions à confirmer).",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "0–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66 ans et plus (groupes d'âge tarifaires des CGA ; âge de référence, atteint dans l'année ou exact, non précisé)",
+        "discounts": "Rabais familial 25 % jusqu'à la fin de l'année des 25 ans. Rabais pour absence de prestations 50 %. Rabais de combinaison « Zoom » jusqu'à 30 ans."
+      },
+      "conditionsDoc": {
+        "title": "CGA Assurance pour médecine alternative 2001",
+        "edition": "01.2026",
+        "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/459_f_avb_alternativ.pdf"
+      },
+      "sourceUrls": [
+        "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-complementaire/assurance-medecine-alternative-classic.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/533_f_produktblatt_alternativversicherung.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/459_f_avb_alternativ.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/502_f_produktblatt_leistungsuebersicht_classic.pdf"
+      ],
+      "tags": [
+        "alt_medicine_therapies",
+        "bonus_program"
+      ],
+      "benefitCount": 2
+    },
+    {
+      "insurer": "css",
+      "key": "css-frais-guerison-accident",
+      "name": "Assurance des frais de guérison en cas d'accident",
+      "category": "other",
+      "audience": "all",
+      "summary": "Assurance accident à prime modique : traitements illimités pendant cinq ans avec libre choix du médecin, de l'hôpital et de la division, plus transports, recherche, soins à domicile et lésions dentaires.",
+      "variants": [],
+      "prerequisites": "Aucun délai d'attente. Calculable en ligne (produit HEILUNGSKOSTEN).",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Enfants jusqu'à 18 ans ; jeunes de 19 à 25 ans ; adultes jusqu'à 60 ans ; adultes dès 61 ans (fiche produit ; âge de référence non précisé)",
+        "discounts": "50 % de rabais pour les enfants (page produit : « assurez tous vos enfants à moitié prix »)."
+      },
+      "conditionsDoc": {
+        "title": "CGA Assurance frais de guérison en cas d'accident",
+        "edition": "01.2011 (formulaire 440Hf-09.22)",
+        "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/440h_f_avb_heilungskostenversicherung.pdf"
+      },
+      "sourceUrls": [
+        "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-complementaire/assurance-frais-guerison.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/540h_f_produktblatt_heilungskosten_unfall.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/440h_f_avb_heilungskostenversicherung.pdf"
+      ],
+      "tags": [
+        "cosmetic_corrections",
+        "dental_accident",
+        "home_care",
+        "hospital_private",
+        "medical_aids",
+        "other:dommages_materiels",
+        "other:vetements_sauveteurs",
+        "search_recovery",
+        "spa_cure",
+        "transport_rescue"
+      ],
+      "benefitCount": 10
+    },
+    {
+      "insurer": "css",
+      "key": "css-deces-invalidite-accident",
+      "name": "Assurance pour décès ou invalidité par accident",
+      "category": "capital_accident",
+      "audience": "all",
+      "summary": "Assurance de capital versant la somme convenue en cas de décès ou d'invalidité à la suite d'un accident, avec progression du capital-invalidité jusqu'à 350 %, valable dans le monde entier.",
+      "variants": [],
+      "prerequisites": "Porteur du risque : CSS Assurance-vie SA (et non CSS Assurance SA). Conclusion possible jusqu'à la fin de l'année civile des 65 ans ; pas de délai d'attente ; protection jusqu'à trois ans hors d'Europe. Calculable en ligne (produit UTI).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex"
+        ],
+        "ageBands": "Enfants jusqu'à 18 ans ; jeunes de 19 à 25 ans ; adultes jusqu'à 60 ans ; adultes de 61 à 65 ans (fiche produit ; âge de référence non précisé)",
+        "discounts": "50 % de rabais familial sur les primes des enfants. La prime dépend aussi des sommes assurées choisies. La fiche « enfants et jeunes » (Form. 544Kf-03.26) publie des primes combinées accident + maladie égales à la somme des deux barèmes."
+      },
+      "conditionsDoc": {
+        "title": "CGA Assurance pour décès ou invalidité par accident",
+        "edition": "01.2026_B",
+        "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/615_f_avb_uti.pdf"
+      },
+      "sourceUrls": [
+        "https://www.css.ch/fr/clients-prives/bien-assure/autres-assurances/adi-mdi.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/540u_f_produktblatt_uti.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/615_f_avb_uti.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/544k-f-produktblatt-uti-kinder-jugendliche.pdf"
+      ],
+      "tags": [
+        "accident_capital"
+      ],
+      "benefitCount": 2
+    },
+    {
+      "insurer": "css",
+      "key": "css-deces-invalidite-maladie",
+      "name": "Assurance pour décès ou invalidité par maladie",
+      "category": "capital_illness",
+      "audience": "all",
+      "summary": "Assurance de capital versant la somme convenue en cas de décès ou d'invalidité à la suite d'une maladie (capital-invalidité intégral dès 70 % d'invalidité).",
+      "variants": [],
+      "prerequisites": "Porteur du risque : CSS Assurance-vie SA (et non CSS Assurance SA). Conclusion possible jusqu'à la fin de l'année civile des 55 ans. Calculable en ligne (produit KTI).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex"
+        ],
+        "ageBands": "0–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–59 (cette dernière tranche pour les polices existantes) ; âge de référence non précisé sur la fiche",
+        "discounts": "Rabais familial de 5 % sur les primes des enfants. La prime dépend aussi des sommes assurées. En passant de 0–18 à 19–25 ans, la variante 5000/100 000 devient 10 000/100 000."
+      },
+      "conditionsDoc": {
+        "title": "CGA Assurance en cas de décès ou d'invalidité à la suite d'une maladie",
+        "edition": "01.2026",
+        "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/445_f_avb_kti.pdf"
+      },
+      "sourceUrls": [
+        "https://www.css.ch/fr/clients-prives/bien-assure/autres-assurances/adi-mdi.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/544_f_produktblatt_kti.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/445_f_avb_kti.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/544k-f-produktblatt-uti-kinder-jugendliche.pdf"
+      ],
+      "tags": [
+        "illness_capital"
+      ],
+      "benefitCount": 2
+    },
+    {
+      "insurer": "css",
+      "key": "css-indemnites-journalieres-hospitalisation",
+      "name": "Assurance d'indemnités journalières en cas d'hospitalisation",
+      "category": "hospital_daily_cash",
+      "audience": "all",
+      "summary": "Verse un forfait journalier librement utilisable pour chaque jour d'hospitalisation (cinq plans de CHF 50 à CHF 350 par jour), doublé en soins intensifs ou en cas d'urgence à l'étranger, avec un forfait par naissance.",
+      "variants": [
+        {
+          "key": "plan-a",
+          "name": "Plan de prestations A",
+          "description": "CHF 150 par jour, max. CHF 216 000 par séjour hospitalier."
+        },
+        {
+          "key": "plan-b",
+          "name": "Plan de prestations B",
+          "description": "CHF 250 par jour, max. CHF 360 000 par séjour hospitalier."
+        },
+        {
+          "key": "plan-c",
+          "name": "Plan de prestations C",
+          "description": "CHF 350 par jour, max. CHF 504 000 par séjour hospitalier."
+        },
+        {
+          "key": "plan-d",
+          "name": "Plan de prestations D",
+          "description": "CHF 50 par jour, max. CHF 72 000 par séjour hospitalier."
+        },
+        {
+          "key": "plan-e",
+          "name": "Plan de prestations E",
+          "description": "CHF 100 par jour, max. CHF 144 000 par séjour hospitalier."
+        }
+      ],
+      "prerequisites": "Affiliation possible jusqu'à 82 ans révolus. Souscription sur demande d'offre. Valable dans le monde entier (séjours à l'étranger limités à 12 mois).",
+      "pricing": {
+        "factors": [
+          "entry_age"
+        ],
+        "ageBands": "17–39, 40–54, 55–65, 66–75, 76–82 ans : âge à l'entrée en vigueur du contrat (année de naissance ; pour un couple ou une famille, celle de la personne la plus âgée) ; pas d'adaptation de prime avec l'âge",
+        "discounts": "10 % de rabais pour les assurés CSS ; 25 % de rabais de combinaison avec l'assurance santé Livo Top, l'assurance d'hospitalisation myFlex ou l'assurance Standard CSS plus (non cumulable avec le rabais clientèle) ; tarifs couple et famille (jusqu'à 3 enfants, supplément dès le 4e enfant)."
+      },
+      "conditionsDoc": {
+        "title": "CGA Assurance d'indemnités journalières en cas d'hospitalisation",
+        "edition": "06.2012 (formulaire 439f2012-09.22)",
+        "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/439_f_avb_spitaltaggeld.pdf"
+      },
+      "sourceUrls": [
+        "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-complementaire/indemnites-journalieres-hospitalisation.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/539_f_produktblatt_spitaltaggeld.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/439_f_avb_spitaltaggeld.pdf"
+      ],
+      "tags": [
+        "hospital_capital",
+        "hospital_daily_cash"
+      ],
+      "benefitCount": 10
+    },
+    {
+      "insurer": "css",
+      "key": "css-indemnites-journalieres-individuelle",
+      "name": "Assurance individuelle d'indemnités journalières selon la LCA",
+      "category": "daily_allowance",
+      "audience": "adult",
+      "summary": "Assurance perte de gain pour personnes exerçant une activité lucrative : indemnité journalière en cas de maladie, d'accident et, en option, de maternité, avec délai d'attente au choix.",
+      "variants": [],
+      "prerequisites": "Personnes exerçant une activité lucrative dès 15 ans (apprentis compris) jusqu'à l'âge de l'AVS ; maintien possible jusqu'à 70 ans en cas de poursuite de l'activité. Souscription sur demande d'offre.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": null,
+        "discounts": "Prime plus avantageuse avec un délai d'attente plus long ; économies de primes pour les non-fumeurs. Les facteurs tarifaires exacts ne sont pas publiés (montant assuré, délai d'attente, statut non-fumeur)."
+      },
+      "conditionsDoc": {
+        "title": "CGA Assurance individuelle d'indemnités journalières selon la LCA",
+        "edition": "08.2010 (formulaire 430f-09.22)",
+        "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/430_f_avb_einzeltaggeld.pdf"
+      },
+      "sourceUrls": [
+        "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-complementaire/individuelle-indemnites-journalieres.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/530_f_produktblatt_einzeltaggeld.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/430_f_avb_einzeltaggeld.pdf"
+      ],
+      "tags": [
+        "daily_allowance"
+      ],
+      "benefitCount": 2
+    },
+    {
+      "insurer": "css",
+      "key": "css-frais-menage",
+      "name": "Assurance des frais de ménage",
+      "category": "other",
+      "audience": "adult",
+      "summary": "Forfait journalier (CHF 10 à 100) couvrant les dépenses supplémentaires du ménage et de la famille lorsque la personne qui en a la charge est en incapacité de travail pour maladie, accident ou maternité.",
+      "variants": [],
+      "prerequisites": "Personnes assumant la charge d'un ménage, de 16 ans jusqu'à l'âge de l'AVS ; fin automatique à l'âge de la retraite. Souscription sur demande d'offre.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": null,
+        "discounts": "Prime identique pour les hommes et les femmes ; plus le délai d'attente est long, plus la prime est avantageuse ; dépend aussi du forfait journalier choisi."
+      },
+      "conditionsDoc": {
+        "title": "CGA Assurance des frais de ménage",
+        "edition": "01.1997 (formulaire 425f-09.24 pour la fiche produit)",
+        "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/425_f_avb_haushaltkostenversicherung.pdf"
+      },
+      "sourceUrls": [
+        "https://www.css.ch/fr/clients-prives/bien-assure/caisse-maladie/assurance-complementaire/frais-menage.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/525_f_produktblatt_haushaltskosten.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/425_f_avb_haushaltkostenversicherung.pdf"
+      ],
+      "tags": [
+        "home_help"
+      ],
+      "benefitCount": 2
+    },
+    {
+      "insurer": "css",
+      "key": "css-assurance-voyages",
+      "name": "Assurance voyages",
+      "category": "travel_abroad",
+      "audience": "all",
+      "summary": "Assurance voyages modulaire (frais de guérison, assistance de personnes, annulation, bagages, protection juridique à l'étranger) en trois paquets, pour 17 ou 31 jours ou à l'année, pour une personne ou un ménage.",
+      "variants": [
+        {
+          "key": "economy",
+          "name": "Paquet Economy",
+          "description": "Frais de guérison, assistance de personnes, protection juridique à l'étranger."
+        },
+        {
+          "key": "balance",
+          "name": "Paquet Balance",
+          "description": "Assistance de personnes et frais d'annulation."
+        },
+        {
+          "key": "premium",
+          "name": "Paquet Premium",
+          "description": "Frais de guérison, assistance de personnes, frais d'annulation, bagages, protection juridique à l'étranger."
+        }
+      ],
+      "prerequisites": "Conclusion en ligne sur travel.css.ch jusqu'à peu avant le départ, sans questionnaire de santé mentionné ; événements ou maladies préexistants ou identifiables à la conclusion non assurés. Ouverte aussi aux personnes sans autre contrat CSS (non précisé).",
+      "pricing": {
+        "factors": [],
+        "ageBands": null,
+        "discounts": "La prime dépend des modules ou du paquet, de la durée (17 jours, 31 jours, annuel) et du nombre de personnes (personne individuelle, ménage de deux ou plusieurs personnes) ; pas de tarif par âge publié."
+      },
+      "conditionsDoc": {
+        "title": "CGA Assurance voyages (valable pour les contrats à partir du 01.01.2017)",
+        "edition": "04.2016",
+        "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/457_f_avb_reiseversicherung.pdf"
+      },
+      "sourceUrls": [
+        "https://www.css.ch/fr/clients-prives/bien-assure/autres-assurances/assurance-voyages.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/542_f_produktblatt_reiseversicherung.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/457_f_avb_reiseversicherung.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "legal_protection",
+        "travel_assistance_repatriation",
+        "travel_cancellation_luggage"
+      ],
+      "benefitCount": 10
+    },
+    {
+      "insurer": "css",
+      "key": "css-protection-juridique",
+      "name": "Assurance de protection juridique privée et de circulation",
+      "category": "legal_protection",
+      "audience": "all",
+      "summary": "Protection juridique privée et circulation en partenariat avec Orion, avec un module optionnel de protection juridique des patients ; produit non spécifique à la santé, retenu pour ce module.",
+      "variants": [],
+      "prerequisites": "Porteur du risque : Orion Assurance de Protection Juridique SA, Bâle (produit distribué par la CSS). Personne individuelle ou ménage de plusieurs personnes. Souscription sur demande d'offre. Une protection juridique du patient et à l'étranger est déjà incluse dans l'assurance ambulatoire myFlex et dans Livo Top.",
+      "pricing": {
+        "factors": [],
+        "ageBands": null,
+        "discounts": "10 % de rabais pour les personnes déjà assurées à la CSS ; 3 % ou 5 % pour contrat pluriannuel (jusqu'à 15 % au total) ; avantage de prime en combinant privée et circulation."
+      },
+      "conditionsDoc": {
+        "title": "CGA Protection juridique privée et de circulation",
+        "edition": "08.2017",
+        "url": "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/463_f_avb_privat_verkehrsschutzversicherung.pdf"
+      },
+      "sourceUrls": [
+        "https://www.css.ch/fr/clients-prives/bien-assure/autres-assurances/assurance-de-protection-juridique.html",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/produktblatt/550_f_produktblatt_rechtsschutzversicherung.pdf",
+        "https://www.css.ch/content/dam/css/fr/documents/privatkunden/richtig-versichert/avb/463_f_avb_privat_verkehrsschutzversicherung.pdf"
+      ],
+      "tags": [
+        "legal_protection"
+      ],
+      "benefitCount": 3
     },
     {
       "insurer": "helsana",
