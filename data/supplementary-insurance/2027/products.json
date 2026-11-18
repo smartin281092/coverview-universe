@@ -106,6 +106,26 @@
       "retrievedAt": "2026-11-18"
     },
     {
+      "key": "sanitas",
+      "name": "Sanitas",
+      "legalEntityLca": "Sanitas Assurances privées SA, Jägergasse 3, 8004 Zurich",
+      "website": "https://www.sanitas.com/fr/clients-prives.html",
+      "calculatorUrl": "https://www.sanitas.com/fr/clients-prives/services/rapidement-fait/calculateur-de-primes.html",
+      "calculatorHosts": [
+        "www.sanitas.com",
+        "calculator.sanitas.com",
+        "entry.sanitas.com",
+        "static.sanitas.tech"
+      ],
+      "publishedTariffUrls": [
+        "https://www.sanitas.com/fr/clients-prives/assurances/assurances-complementaires/desir-enfant-assurance.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Produktblatt_Easy_9032_fr.pdf",
+        "https://www.sanitas.com/fr/clients-prives/services/connaissance/important.html"
+      ],
+      "notes": "Complémentaires LCA portées par Sanitas Assurances privées SA (toutes des assurances dommages, sauf Capital et Salary pour certains groupes, assurances de sommes). Capital maladie : organisme d'assurance tiers indiqué sur la police ; protection juridique des patients : CAP Protection Juridique SA. Calculateur : la page d'entrée www.sanitas.com/fr/clients-prives/prime.html (redirigée vers .../services/rapidement-fait/calculateur-de-primes.html) renvoie par script vers https://calculator.sanitas.com/<langue>/... (liens profonds observés : /fr/persons/?goto=/fr/products/:personId/HOSP et ?goto=/products/:personId/ADDITIONAL) ; hôte entry.sanitas.com pour les liens d'offre à jeton ; ressources de l'application sur static.sanitas.tech (dvp). Ces hôtes sont hors de la liste autorisée et n'ont pas été interrogés. Facteurs tarifaires (CGA, information clientèle) : domicile, âge, sexe, état de santé (surprime individuelle en % de la prime), risques assurés, couverture choisie, participation aux coûts ; selon les CC : durée contractuelle (rabais pluriannuel) et, pour Hospital Extra/Top Liberty, âge d'admission. Classes d'âge propres à chaque produit, le plus souvent de 5 ans, âge atteint dans l'année civile, changement au 1er janvier. Rabais selon le mode de paiement (page conseils d'épargne : 1 % en paiement annuel, 0,5 % en paiement semestriel) ; suspension possible des complémentaires contre réduction de prime (70 % d'économie citée). Paquet zéro souci (dès le 01.01.2027, coopération Swiss Life) : rabais de 4 % sur Vital et Hospital Standard/Extra/Top Liberty (combinaison requise : au moins une ambulatoire et une hospitalisation) ainsi que, à titre facultatif, sur Hospital Upgrade, Medical Private, Hospital Day Comfort, Accident Extra/Top Liberty, Désir d'enfant, Dental, Dental Basic, Salary LCA et Capital accident, pour une durée de 5 ans ; aucun rabais sur Capital maladie ; renonciation au délai de carence maternité en cas d'assurance équivalente antérieure, service de transmission des factures, protection juridique des patients. Surprime individuelle (à la place d'une réserve) possible pour toutes les assurances d'hospitalisation, Vital, Medical Private, Easy et Capital accident. Primes 2027 (page « Important pour vous en 2027 ») : primes des complémentaires « majoritairement stables » (Easy, Dental, Dental Basic, Désir d'enfant, Hospital Standard Liberty, Medical Private) ; rabais sur la prime mensuelle : Medical Private 10 % (inchangé), Hospital Day Comfort 25 % (nouveau), Hospital Top Liberty 15 % (inchangé), Hôpitaux non répertoriés [Wincare] 15 % (inchangé), Corporate Hospital Top 10 % et Corporate Hospital Standard 10 % (inchangés) ; hausse pour Vital « d'un peu moins de CHF 2 à CHF 10 par mois » ; baisses de la prime mensuelle pour Hospital Top Liberty et Hospital Extra Liberty ; assurance de base : hausse moyenne de 3,8 %. Listes « non exhaustives ». Produits fermés à la souscription (non relevés) : Jump, Classic et Family (remplacés par Vital depuis 2024), Hospital Standard, Hospital Comfort, Hospital Comfort Liberty, Hospital Private, Hospital Private Liberty, HirslandenCare, gamme Wincare (Diversa Confort, Natura Confort, assurances d'hospitalisation, indemnités journalières d'hospitalisation, soins dentaires, Capital), assurance maladie et accidents pour particuliers 1997/HIP, anciens paquets Sanitas Corporate Private Care (Basic/Comfort/Private/Royal s-care, p-care, h-care). Hors périmètre : gamme collective Sanitas Corporate Private Care (Corporate Hospital, Alternative Care, Preventive Care, Accident, Medical Private, Risk), Salary LAMal, assurance animaux.",
+      "retrievedAt": "2026-11-18"
+    },
+    {
       "key": "swica",
       "name": "SWICA",
       "legalEntityLca": "SWICA Assurances SA, Römerstrasse 37, 8401 Winterthour",
@@ -4634,6 +4654,794 @@
         "ambulatory_free_doctor_choice"
       ],
       "benefitCount": 2
+    },
+    {
+      "insurer": "sanitas",
+      "key": "sanitas-vital",
+      "name": "Vital",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Complémentaire ambulatoire en trois niveaux (Basic, Smart, Premium) : urgences et sauvetage dans le monde entier, médicaments hors liste, moyens auxiliaires, lunettes, orthodontie, prévention, puis médecine alternative, promotion de la santé et prestations parentales dès le niveau Smart. A remplacé Jump, Classic et Family depuis 2024.",
+      "variants": [
+        {
+          "key": "basic",
+          "name": "Vital Basic",
+          "description": "Combler les lacunes : urgences, sauvetage, médicaments, moyens auxiliaires, lunettes (CHF 300.–/3 ans), orthodontie 50 % jusqu'à CHF 10 000.–, prévention jusqu'à CHF 500.– ; sans médecine alternative, promotion de la santé ni prestations parentales."
+        },
+        {
+          "key": "smart",
+          "name": "Vital Smart",
+          "description": "Ajoute check-up et dépistage (prévention jusqu'à CHF 1000.–), médecine alternative (au choix CHF 2500.– ou CHF 5000.–), promotion de la santé (au choix CHF 400.– ou CHF 600.–), autres formes de traitement jusqu'à CHF 1000.–, prestations parentales ; orthodontie 50 % sans plafond. Les deux options se choisissent indépendamment."
+        },
+        {
+          "key": "premium",
+          "name": "Vital Premium",
+          "description": "Protection maximale : lunettes CHF 600.–/3 ans, orthodontie 80 % sans plafond, prévention jusqu'à CHF 1500.–, médecine alternative jusqu'à CHF 10 000.–, promotion de la santé 80 % jusqu'à CHF 800.–, autres formes de traitement jusqu'à CHF 5000.– (tests génétiques, thérapies numériques), indemnités de congé parental, transports planifiés."
+        }
+      ],
+      "prerequisites": "Questionnaire sur l'état de santé obligatoire ; Sanitas peut refuser la proposition, émettre une réserve et/ou prélever une surprime individuelle (CGA ch. 14). Exception : inscription prénatale. Passage à un niveau ou à une option supérieurs soumis à un examen de risque, changement possible le 1er de chaque mois. Aucun âge maximal d'admission publié.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "0–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81–85, 86–90, 91–95, 96+ (CC Vital ch. 9.4). Âge de référence : âge atteint dans l'année civile (à l'admission : âge atteint à l'anniversaire de l'année d'admission) ; passage à la classe supérieure au 1er janvier de l'année civile du premier anniversaire de la classe supérieure (tarif selon l'âge effectif).",
+        "discounts": "Aucun barème publié. Page « Important pour vous en 2027 » : hausse de la prime Vital « d'un peu moins de CHF 2 à CHF 10 par mois » en 2027. Rabais zéro souci de 4 % (paquet distribué avec Swiss Life, durée 5 ans, au moins une complémentaire ambulatoire et une d'hospitalisation). Contrat pluriannuel possible (CC ch. 9.3). Surprime individuelle possible selon l'état de santé. Accident, maladie et maternité inclus (pas d'exclusion de l'accident prévue par les CC)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) Vital",
+        "edition": "01.2024 (version 2026), réf. 6005 05.25 ; CGA LCA édition 01.2004, version 2027 (réf. 6002 10.26)",
+        "url": "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/ZB_Vital_6005_fr.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sanitas.com/fr/clients-prives/assurances/assurances-complementaires/ambulatoire.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/ZB_Vital_6005_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Produktblatt_Vital_9046_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Produktblatt_Vital_Basic_9047_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Produktblatt_Vital_Smart_9048_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Produktblatt_Vital_Premium_9049_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Vital_02_Liste_Hilfsmittel_und_Gegenstaende_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Vital_03_Liste_medizinische_Vorsorge_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Vital_04_Liste_anerkannter_Therapiemethoden_und_Anforderungen_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Vital_05_Liste_gesundheitsfoerdernde_Massnahmen_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Vital_06_Liste_weitere_Behandlungsformen_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Vital_07_Liste_Elternschaft_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6002_Sanitas_AVB_VVG_fr.pdf",
+        "https://www.sanitas.com/fr/clients-prives/services/connaissance/important.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Liste_Rabatt_Zusatzversicherung_Sorglos_Paket_fr.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "alt_medicine_therapies",
+        "cosmetic_corrections",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "innovative_treatments",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "orthodontics",
+        "other:genetic_tests",
+        "other:hippotherapy",
+        "other:parental_leave_allowance",
+        "other:shockwave_therapy",
+        "podiatry",
+        "prevention_checkup",
+        "psychotherapy_non_medical",
+        "search_recovery",
+        "sterilization_contraception",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "travel_cancellation_luggage",
+        "travel_expenses_treatment",
+        "vaccination"
+      ],
+      "benefitCount": 41
+    },
+    {
+      "insurer": "sanitas",
+      "key": "sanitas-easy",
+      "name": "Easy",
+      "category": "travel_abroad",
+      "audience": "all",
+      "summary": "Assurance maladie pour l'étranger : traitements d'urgence à l'étranger (90 % ambulatoire, 100 % stationnaire) pendant 180 jours, transport et sauvetage dans le monde entier et Sanitas Assistance, pour des séjours de six mois au maximum.",
+      "variants": [],
+      "prerequisites": "Domicile en Suisse et assujettissement à la LAMal. Conclusion uniquement avec une assurance de base du groupe Sanitas ou une complémentaire LCA de Sanitas (Dental, Dental Basic, Désir d'enfant, Salary, Capital) ; non combinable avec Vital, Classic ou les assurances d'hospitalisation (double assurance). Risque accidents non excluable. Questionnaire sur l'état de santé obligatoire ; Sanitas peut refuser la proposition, émettre une réserve et/ou prélever une surprime individuelle (CGA ch. 14).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "0–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81+ (CC Easy ch. 4). Âge de référence : âge atteint dans l'année civile (à l'admission : âge atteint à l'anniversaire de l'année d'admission) ; passage à la classe supérieure au 1er janvier de l'année civile du premier anniversaire de la classe supérieure (tarif selon l'âge effectif).",
+        "discounts": "Rabais pour contrat pluriannuel (supprimé à l'échéance de la durée convenue ; taux non publié). Le tarif dépend aussi de la durée contractuelle. Primes annoncées « majoritairement stables » en 2027. Surprime individuelle possible."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) Easy",
+        "edition": "01.2012 (version 2023), réf. 6031 11.22",
+        "url": "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6031_Sanitas_ZB_Easy_fr.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sanitas.com/fr/clients-prives/assurances/assurances-complementaires/assurances-voyages.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6031_Sanitas_ZB_Easy_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Produktblatt_Easy_9032_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6002_Sanitas_AVB_VVG_fr.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "search_recovery",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "travel_cancellation_luggage"
+      ],
+      "benefitCount": 6
+    },
+    {
+      "insurer": "sanitas",
+      "key": "sanitas-dental",
+      "name": "Dental",
+      "category": "dental",
+      "audience": "all",
+      "summary": "Assurance des soins dentaires complète : 80 % des traitements dentaires, prothétiques et d'orthodontie jusqu'à CHF 5000.– par année civile (franchise CHF 350.–), plus un traitement prophylactique par an ; valable en Suisse et à l'étranger.",
+      "variants": [],
+      "prerequisites": "Attestation dentaire obligatoire (pas d'expertise avant le 5e anniversaire ; dès 7 ans, expertise avec radiographies). Souscription possible jusqu'à 59 ans. Risque accidents inclus sur option.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": null,
+        "discounts": "Rabais partenaire swiss smile : CHF 50.– sur le détartrage par des hygiénistes, CHF 30.– auprès des assistant-es en prophylaxie. Rabais zéro souci de 4 % si le produit est ajouté au paquet zéro souci avec une durée de 5 ans (liste valable dès le 01.01.2027). Primes annoncées « majoritairement stables » en 2027. Classes d'âge non précisées dans les CC Dental (CGA ch. 22 : passages à 19 et 26 ans, classes supplémentaires possibles)."
+      },
+      "conditionsDoc": {
+        "title": "Dental : conditions complémentaires (CC)",
+        "edition": "01.2004 (version 2018), réf. 6015 05.18",
+        "url": "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6015_Sanitas_ZB_Dental_fr.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sanitas.com/fr/clients-prives/assurances/assurances-complementaires/assurances-dentaires.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6015_Sanitas_ZB_Dental_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Produktblatt_Dental_9083_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6002_Sanitas_AVB_VVG_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Liste_Rabatt_Zusatzversicherung_Sorglos_Paket_fr.pdf"
+      ],
+      "tags": [
+        "dental_accident",
+        "dental_hygiene",
+        "dental_surgery",
+        "dental_treatment",
+        "orthodontics"
+      ],
+      "benefitCount": 5
+    },
+    {
+      "insurer": "sanitas",
+      "key": "sanitas-dental-basic",
+      "name": "Dental Basic",
+      "category": "dental",
+      "audience": "all",
+      "summary": "Assurance dentaire d'entrée de gamme : 80 % des traitements dentaires et prothétiques jusqu'à CHF 2000.– par année civile (franchise CHF 250.–), dont CHF 100.– de prophylaxie ; sans orthodontie.",
+      "variants": [],
+      "prerequisites": "Sans attestation dentaire si : hygiène dentaire dans les 12 derniers mois, examen dentaire avec radiographie dans les 24 derniers mois et absence de lésions importantes (dents manquantes, couronnes) ; aucune attestation jusqu'au 5e anniversaire. Souscription possible jusqu'à 65 ans.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "0–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81–85, 86+ (CC Dental Basic ch. 6). Âge de référence : âge atteint dans l'année civile (à l'admission : âge atteint à l'anniversaire de l'année d'admission) ; passage à la classe supérieure au 1er janvier de l'année civile du premier anniversaire de la classe supérieure (tarif selon l'âge effectif).",
+        "discounts": "Rabais pour contrat pluriannuel (taux non publié). Rabais partenaire swiss smile jusqu'à CHF 50.–. Rabais zéro souci de 4 % si le produit est ajouté au paquet zéro souci avec une durée de 5 ans (liste valable dès le 01.01.2027). Primes annoncées « majoritairement stables » en 2027."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) Dental Basic",
+        "edition": "12.2019 (version 2023), réf. 6014 11.22",
+        "url": "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/ZB_Dental_Basic_6014_fr.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sanitas.com/fr/clients-prives/assurances/assurances-complementaires/assurances-dentaires.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/ZB_Dental_Basic_6014_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Produktblatt_Dental_9083_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6002_Sanitas_AVB_VVG_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Liste_Rabatt_Zusatzversicherung_Sorglos_Paket_fr.pdf"
+      ],
+      "tags": [
+        "dental_accident",
+        "dental_hygiene",
+        "dental_surgery",
+        "dental_treatment"
+      ],
+      "benefitCount": 5
+    },
+    {
+      "insurer": "sanitas",
+      "key": "sanitas-desir-d-enfant",
+      "name": "Désir d'enfant",
+      "category": "family_maternity",
+      "audience": "adult",
+      "summary": "Complémentaire pour les femmes : 75 % des coûts d'inséminations artificielles supplémentaires, de la FIV/ICSI, du diagnostic préimplantatoire et du test prénatal non invasif, après les prestations de l'assurance de base.",
+      "variants": [],
+      "prerequisites": "Réservée aux femmes ; souscription au plus tôt un mois après le 18e anniversaire et au plus tard à la fin de l'année du 35e anniversaire ; l'assurance expire le 31 décembre de l'année des 44 ans. Examen de l'état de santé ; exclue en cas de fécondation artificielle antérieure ou de problème de fertilité diagnostiqué. Domicile en Suisse.",
+      "pricing": {
+        "factors": [
+          "age",
+          "region"
+        ],
+        "ageBands": "18–25, 26–30, 31–35, 36–40, 41–44 (CC Désir d'enfant ch. 7). Âge de référence : âge atteint dans l'année civile (à l'admission : âge atteint à l'anniversaire de l'année d'admission) ; passage à la classe supérieure au 1er janvier de l'année civile du premier anniversaire de la classe supérieure (tarif selon l'âge effectif).",
+        "discounts": "Rabais pour contrat pluriannuel (taux non publié). Rabais zéro souci de 4 % si le produit est ajouté au paquet zéro souci avec une durée de 5 ans (liste valable dès le 01.01.2027). Primes annoncées « majoritairement stables » en 2027. Moniteur de fertilité Daysy offert à la souscription."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) Désir d'enfant",
+        "edition": "12.2019 (version 2023), réf. 6021 11.22",
+        "url": "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/ZB_Kinderwunsch_6021_fr.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sanitas.com/fr/clients-prives/assurances/assurances-complementaires/desir-enfant-assurance.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/ZB_Kinderwunsch_6021_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Produktblatt_Kinderwunsch_9084_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6002_Sanitas_AVB_VVG_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Liste_Rabatt_Zusatzversicherung_Sorglos_Paket_fr.pdf"
+      ],
+      "tags": [
+        "fertility",
+        "other:prenatal_test"
+      ],
+      "benefitCount": 5
+    },
+    {
+      "insurer": "sanitas",
+      "key": "sanitas-medical-private",
+      "name": "Medical Private",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Libre choix du médecin dans le monde entier pour les traitements ambulatoires planifiés : médecins récusés en Suisse et médecins ou hôpitaux à l'étranger, jusqu'à CHF 100 000.– par année civile avec une quote-part de 10 %.",
+      "variants": [],
+      "prerequisites": "Conclusion uniquement avec une autre complémentaire ambulatoire ou une complémentaire d'hospitalisation de Sanitas ; prend fin si cette condition n'est plus remplie. Questionnaire sur l'état de santé obligatoire ; Sanitas peut refuser la proposition, émettre une réserve et/ou prélever une surprime individuelle (CGA ch. 14). Risque accidents inclus sur option.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": null,
+        "discounts": "Rabais de 10 % sur la prime mensuelle (inchangé en 2027) et primes annoncées « majoritairement stables » selon la page « Important pour vous en 2027 ». Classes d'âge non précisées dans les CC (CGA ch. 22). Rabais zéro souci de 4 % si le produit est ajouté au paquet zéro souci avec une durée de 5 ans (liste valable dès le 01.01.2027). Surprime individuelle possible."
+      },
+      "conditionsDoc": {
+        "title": "Medical Private : conditions complémentaires (CC)",
+        "edition": "01.2004 (version 2013), réf. 6012 10.13",
+        "url": "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6012_Sanitas_ZB_MedicalPrivate_fr.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sanitas.com/fr/clients-prives/assurances/assurances-complementaires/choix-medecin-mondial.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6012_Sanitas_ZB_MedicalPrivate_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Produktblatt_Medical_Private_9080_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6002_Sanitas_AVB_VVG_fr.pdf",
+        "https://www.sanitas.com/fr/clients-prives/services/connaissance/important.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Liste_Rabatt_Zusatzversicherung_Sorglos_Paket_fr.pdf"
+      ],
+      "tags": [
+        "abroad_planned_treatment",
+        "ambulatory_free_doctor_choice",
+        "medication_non_listed"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "sanitas",
+      "key": "sanitas-salary",
+      "name": "Salary (LCA)",
+      "category": "daily_allowance",
+      "audience": "adult",
+      "summary": "Assurance d'indemnités journalières en cas d'incapacité de travail à la suite d'une maladie, d'un accident (sur option) ou de complications de grossesse : jusqu'à CHF 500.– par jour pendant 720 jours sur 900.",
+      "variants": [],
+      "prerequisites": "Salarié-es, indépendant-es, femmes et hommes au foyer (jusqu'à CHF 165.– par jour en cas de maladie). Souscription via le Conseil clientèle (téléphone, e-mail, chat) selon la page produit. Expire au plus tard le 31 décembre de l'année des 65 ans en cas de cessation de l'activité lucrative. Examen de l'état de santé.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": null,
+        "discounts": "La prime dépend du montant journalier assuré et du délai d'attente choisi (2, 14, 30, 60, 90, 120, 150, 180, 240, 270, 300 ou 360 jours). Aucun barème publié. Résiliable au 1er du mois suivant en cas de couverture équivalente chez l'employeur (CGA ch. 17.3). Rabais zéro souci de 4 % si le produit est ajouté au paquet zéro souci avec une durée de 5 ans (liste valable dès le 01.01.2027)."
+      },
+      "conditionsDoc": {
+        "title": "Salary LCA : conditions complémentaires (CC)",
+        "edition": "01.2004 (version 2013), réf. 6013 10.13",
+        "url": "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6013_Sanitas_ZB_Salary_VVG_fr.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sanitas.com/fr/clients-prives/assurances/assurances-complementaires/assurance-indemnites-journalieres.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6013_Sanitas_ZB_Salary_VVG_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Produktblatt_Capital_Salary_9082_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6002_Sanitas_AVB_VVG_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Liste_Rabatt_Zusatzversicherung_Sorglos_Paket_fr.pdf"
+      ],
+      "tags": [
+        "daily_allowance"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "sanitas",
+      "key": "sanitas-capital-accident",
+      "name": "Capital (invalidité et décès en cas d'accident)",
+      "category": "capital_accident",
+      "audience": "all",
+      "summary": "Assurance de sommes : capital invalidité (progression jusqu'à 350 %) et/ou capital décès à la suite d'un accident, versés indépendamment des autres assurances, dans le monde entier.",
+      "variants": [
+        {
+          "key": "invalidite",
+          "name": "Capital invalidité en cas d'accident",
+          "description": "Capital assurable jusqu'à CHF 300 000.–, versé selon le degré d'invalidité avec progression."
+        },
+        {
+          "key": "deces",
+          "name": "Capital décès en cas d'accident",
+          "description": "Capital assurable jusqu'à CHF 500 000.– pour les adultes, limité pour les enfants."
+        }
+      ],
+      "prerequisites": "Souscription possible jusqu'à la fin de l'année des 65 ans ; capital et âge terme fixés dans la police. Questionnaire sur l'état de santé obligatoire ; Sanitas peut refuser la proposition, émettre une réserve et/ou prélever une surprime individuelle (CGA ch. 14). Surprime individuelle possible pour Capital accident.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Capital invalidité accident : 0–15, 16–18, 19–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75. Capital décès accident : 0–2, 3–15, 16–18, 19–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75 (CC Capital ch. 9). Primes adaptées au 1er janvier selon la classe d'âge atteinte ; âge déterminant à l'admission : âge atteint dans l'année civile du début de l'assurance.",
+        "discounts": "La prime dépend du capital assuré. Aucun barème publié. Rabais zéro souci de 4 % si le produit est ajouté au paquet zéro souci avec une durée de 5 ans (liste valable dès le 01.01.2027)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) Capital",
+        "edition": "01.2009 (version 2023), réf. 6019 11.22",
+        "url": "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6019_Sanitas_ZB_Capital_fr.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sanitas.com/fr/clients-prives/assurances/assurances-complementaires/assurance-capital.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6019_Sanitas_ZB_Capital_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Produktblatt_Capital_Salary_9082_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6002_Sanitas_AVB_VVG_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Liste_Rabatt_Zusatzversicherung_Sorglos_Paket_fr.pdf"
+      ],
+      "tags": [
+        "accident_capital"
+      ],
+      "benefitCount": 2
+    },
+    {
+      "insurer": "sanitas",
+      "key": "sanitas-capital-maladie",
+      "name": "Capital (invalidité et décès en cas de maladie)",
+      "category": "capital_illness",
+      "audience": "all",
+      "summary": "Assurance de sommes : capital invalidité et/ou capital décès à la suite d'une maladie, avec libération des primes en cas d'incapacité de travail ; le risque est porté par un assureur tiers indiqué sur la police (contrat collectif conclu par Sanitas).",
+      "variants": [
+        {
+          "key": "invalidite",
+          "name": "Capital invalidité en cas de maladie",
+          "description": "Versé selon le degré d'invalidité AI (dès 25 %, intégral dès 66 %), après 12 mois d'attente."
+        },
+        {
+          "key": "deces",
+          "name": "Capital décès en cas de maladie",
+          "description": "Capital versé en cas de décès par maladie avant l'âge terme."
+        }
+      ],
+      "prerequisites": "Souscription possible jusqu'à la fin de l'année des 55 ans. Examen de l'état de santé (accès de l'organisme d'assurance aux documents médicaux). Prend fin si aucune autre assurance n'est conclue auprès de Sanitas, ou si le contrat collectif avec l'organisme d'assurance est résilié sans remplacement.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Capital invalidité maladie : 0–15, 16–18, 19–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60. Capital décès maladie : 0–2, 3–15, 16–18, 19–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60 (CC Capital ch. 9). Primes adaptées au 1er janvier selon la classe d'âge atteinte ; âge déterminant à l'admission : âge atteint dans l'année civile du début de l'assurance.",
+        "discounts": "La prime dépend du capital assuré. Aucun barème publié. Aucun rabais zéro souci sur Capital maladie (liste zéro souci valable dès le 01.01.2027)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) Capital",
+        "edition": "01.2009 (version 2023), réf. 6019 11.22",
+        "url": "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6019_Sanitas_ZB_Capital_fr.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sanitas.com/fr/clients-prives/assurances/assurances-complementaires/assurance-capital.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6019_Sanitas_ZB_Capital_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Produktblatt_Capital_Salary_9082_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6002_Sanitas_AVB_VVG_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Liste_Rabatt_Zusatzversicherung_Sorglos_Paket_fr.pdf"
+      ],
+      "tags": [
+        "illness_capital",
+        "premium_waiver"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "sanitas",
+      "key": "sanitas-hospital-standard-liberty",
+      "name": "Hospital Standard Liberty",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Division générale dans tous les hôpitaux conventionnés de Suisse, avec possibilité de choisir avant chaque admission la division demi-privée (75 %) ou privée (50 %) moyennant participation, urgences stationnaires à l'étranger et Sanitas Assistance.",
+      "variants": [],
+      "prerequisites": "Questionnaire sur l'état de santé obligatoire ; Sanitas peut refuser la proposition, émettre une réserve et/ou prélever une surprime individuelle (CGA ch. 14). Risque accidents coassurable. Hospital Upgrade peut être ajouté pour un passage ultérieur à Hospital Extra Liberty sans examen de santé.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": null,
+        "discounts": "Exemption des primes dès le 3e enfant jusqu'à 18 ans révolus (si les deux premiers enfants ont aussi cette assurance). Rabais zéro souci de 4 % (paquet de 5 ans). Primes annoncées « majoritairement stables » en 2027. Classes d'âge non précisées dans les CC (CGA ch. 22 : passages à 19 et 26 ans, classes supplémentaires possibles). Surprime individuelle possible."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) Hospital Standard Liberty",
+        "edition": "01.2004 (version 2023), réf. 6011 11.22",
+        "url": "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6011_Sanitas_ZB_HSL_fr.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sanitas.com/fr/clients-prives/assurances/assurances-hospitalisation/hopital-stationnaire.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6011_Sanitas_ZB_HSL_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Produktblatt_Hospital_Standard_Liberty_9038_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Merkblatt_Spitalversicherungen_Mehrwert_MWSPR_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6002_Sanitas_AVB_VVG_fr.pdf",
+        "https://www.sanitas.com/fr/clients-prives/services/connaissance/important.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Liste_Rabatt_Zusatzversicherung_Sorglos_Paket_fr.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "bonus_program",
+        "convalescence_cure",
+        "home_care",
+        "home_help",
+        "hospital_flex",
+        "hospital_general_ch",
+        "long_term_care",
+        "maternity",
+        "newborn_coverage",
+        "psychiatry_rehab_stay",
+        "spa_cure",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "travel_expenses_treatment"
+      ],
+      "benefitCount": 17
+    },
+    {
+      "insurer": "sanitas",
+      "key": "sanitas-hospital-extra-liberty",
+      "name": "Hospital Extra Liberty",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Division demi-privée (chambre à deux lits) et libre choix du médecin dans les hôpitaux de soins aigus de Suisse reconnus par Sanitas, option division privée à 75 %, traitements planifiés à l'étranger jusqu'à CHF 1000.– par jour, Priority Access et second avis médical.",
+      "variants": [],
+      "prerequisites": "Questionnaire sur l'état de santé obligatoire ; Sanitas peut refuser la proposition, émettre une réserve et/ou prélever une surprime individuelle (CGA ch. 14). Risque accidents coassurable ; franchise annuelle à option. Hospital Upgrade peut être ajouté pour un passage ultérieur à Hospital Top Liberty sans examen de santé.",
+      "pricing": {
+        "factors": [
+          "age",
+          "entry_age",
+          "sex",
+          "region",
+          "deductible",
+          "accident"
+        ],
+        "ageBands": "Âge effectif : 0–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81–85, 86–90, 91+. Âge d'admission (fixe pendant toute la durée du contrat) : 0–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81–85, 86–90, 91–95, 96+. Les deux âges sont pris en compte « pour l'essentiel de manière égale ». Âge de référence : âge atteint dans l'année civile (admission : anniversaire de l'année d'admission) ; passage à la classe d'âge effectif supérieure au 1er janvier de l'année du premier anniversaire de la classe. En cas de passage depuis une autre assurance d'hospitalisation Sanitas, la durée contractuelle antérieure peut réduire l'âge d'admission. (CC Hospital Extra Liberty ch. 16).",
+        "discounts": "Réduction de la prime mensuelle annoncée pour 2027 (page « Important pour vous en 2027 », montant non publié). Rabais pluriannuel (supprimé à l'échéance de la durée convenue ; taux non publié). Rabais zéro souci de 4 % (paquet de 5 ans). Franchise annuelle à option : montants non publiés ; due pour moitié si le contrat débute entre le 1er juillet et le 31 décembre. Surprime individuelle possible."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) Hospital Extra Liberty",
+        "edition": "07.2012 (version 2027), réf. 6034 10.26",
+        "url": "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6034_Sanitas_ZB_Hospital_Extra_Liberty_fr.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sanitas.com/fr/clients-prives/assurances/assurances-hospitalisation/hopital-stationnaire.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6034_Sanitas_ZB_Hospital_Extra_Liberty_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Produktblatt_Hospital_Extra_Liberty_9040_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Merkblatt_Spitalversicherungen_Mehrwert_MWSPR_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6002_Sanitas_AVB_VVG_fr.pdf",
+        "https://www.sanitas.com/fr/clients-prives/services/connaissance/important.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Liste_Rabatt_Zusatzversicherung_Sorglos_Paket_fr.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "assistance_services",
+        "convalescence_cure",
+        "home_care",
+        "home_help",
+        "hospital_abroad",
+        "hospital_deductible_option",
+        "hospital_flex",
+        "hospital_semi_private",
+        "maternity",
+        "newborn_coverage",
+        "other:private_expenses",
+        "psychiatry_rehab_stay",
+        "second_opinion",
+        "spa_cure",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "travel_expenses_treatment"
+      ],
+      "benefitCount": 19
+    },
+    {
+      "insurer": "sanitas",
+      "key": "sanitas-hospital-top-liberty",
+      "name": "Hospital Top Liberty",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Division privée (chambre individuelle) et libre choix du médecin et de l'hôpital dans le monde entier, traitements planifiés à l'étranger jusqu'à CHF 250 000.– par séjour, urgences à l'étranger sans limite, soins à domicile intégraux, Priority Access en trois jours.",
+      "variants": [],
+      "prerequisites": "Questionnaire sur l'état de santé obligatoire ; Sanitas peut refuser la proposition, émettre une réserve et/ou prélever une surprime individuelle (CGA ch. 14). Risque accidents coassurable ; franchise annuelle à option.",
+      "pricing": {
+        "factors": [
+          "age",
+          "entry_age",
+          "sex",
+          "region",
+          "deductible",
+          "accident"
+        ],
+        "ageBands": "Âge effectif : 0–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81–85, 86–90, 91+. Âge d'admission (fixe pendant toute la durée du contrat) : 0–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81–85, 86–90, 91–95, 96+. Les deux âges sont pris en compte « pour l'essentiel de manière égale ». Âge de référence : âge atteint dans l'année civile (admission : anniversaire de l'année d'admission) ; passage à la classe d'âge effectif supérieure au 1er janvier de l'année du premier anniversaire de la classe. En cas de passage depuis une autre assurance d'hospitalisation Sanitas, la durée contractuelle antérieure peut réduire l'âge d'admission. (CC Hospital Top Liberty ch. 18).",
+        "discounts": "Rabais de 15 % sur la prime mensuelle (inchangé) et réduction de la prime mensuelle annoncée pour 2027 (page « Important pour vous en 2027 », montant non publié). Rabais pluriannuel (taux non publié). Rabais zéro souci de 4 % (paquet de 5 ans). Franchise annuelle à option : montants non publiés. Surprime individuelle possible."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) Hospital Top Liberty",
+        "edition": "07.2012 (version 2027), réf. 6035 10.26",
+        "url": "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6035_Sanitas_ZB_Hospital_Top_Liberty_fr.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sanitas.com/fr/clients-prives/assurances/assurances-hospitalisation/hopital-stationnaire.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6035_Sanitas_ZB_Hospital_Top_Liberty_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Produktblatt_Hospital_Top_Liberty_9041_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Merkblatt_Spitalversicherungen_Mehrwert_MWSPR_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6002_Sanitas_AVB_VVG_fr.pdf",
+        "https://www.sanitas.com/fr/clients-prives/services/connaissance/important.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Liste_Rabatt_Zusatzversicherung_Sorglos_Paket_fr.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "assistance_services",
+        "convalescence_cure",
+        "dental_accident",
+        "home_care",
+        "home_help",
+        "hospital_abroad",
+        "hospital_deductible_option",
+        "hospital_private",
+        "maternity",
+        "medical_aids",
+        "newborn_coverage",
+        "other:private_expenses",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "search_recovery",
+        "second_opinion",
+        "spa_cure",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "travel_expenses_treatment"
+      ],
+      "benefitCount": 23
+    },
+    {
+      "insurer": "sanitas",
+      "key": "sanitas-hospital-upgrade",
+      "name": "Hospital Upgrade",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Option garantissant le passage unique, sans nouvel examen de l'état de santé, de Hospital Standard Liberty à Hospital Extra Liberty ou de Hospital Extra Liberty à Hospital Top Liberty ; ne verse aucune prestation de soins.",
+      "variants": [
+        {
+          "key": "vers-extra",
+          "name": "Hospital Upgrade vers Hospital Extra Liberty",
+          "description": "Pour les titulaires de Hospital Standard Liberty."
+        },
+        {
+          "key": "vers-top",
+          "name": "Hospital Upgrade vers Hospital Top Liberty",
+          "description": "Pour les titulaires de Hospital Extra Liberty."
+        }
+      ],
+      "prerequisites": "Hospital Standard Liberty ou Hospital Extra Liberty conclue après examen de l'état de santé (nouvel examen si Hospital Upgrade est ajouté ultérieurement). Conclusion jusqu'à 60 ans révolus ; le changement doit prendre effet au plus tard le 1er janvier suivant le 64e anniversaire.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "0–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–64 (CC Hospital Upgrade ch. 6). Âge de référence : âge atteint dans l'année civile (à l'admission : âge atteint à l'anniversaire de l'année d'admission) ; passage à la classe supérieure au 1er janvier de l'année civile du premier anniversaire de la classe supérieure (tarif selon l'âge effectif).",
+        "discounts": "Rabais pour contrat pluriannuel (taux non publié). Rabais zéro souci de 4 % si le produit est ajouté au paquet zéro souci avec une durée de 5 ans (liste valable dès le 01.01.2027). Les primes payées restent acquises à Sanitas, que l'option soit exercée ou non."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) Hospital Upgrade",
+        "edition": "04.2013 (version 2023), réf. 6042 11.22",
+        "url": "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Sanitas_ZB_HospitalUpgrade_6042_fr.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sanitas.com/fr/clients-prives/assurances/assurances-hospitalisation/hospital-upgrade.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Sanitas_ZB_HospitalUpgrade_6042_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Produktblatt_Hospital_Upgrade_9028_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6002_Sanitas_AVB_VVG_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Liste_Rabatt_Zusatzversicherung_Sorglos_Paket_fr.pdf"
+      ],
+      "tags": [
+        "upgrade_option"
+      ],
+      "benefitCount": 2
+    },
+    {
+      "insurer": "sanitas",
+      "key": "sanitas-hospital-day-comfort",
+      "name": "Hospital Day Comfort",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Complémentaire pour les interventions ambulatoires en Suisse : libre choix du médecin et zone de réveil privée dans les institutions partenaires, prestations innovantes, trajets, nuitée, aide-ménagère et garde après l'intervention.",
+      "variants": [],
+      "prerequisites": "Questionnaire sur l'état de santé obligatoire ; Sanitas peut refuser la proposition, émettre une réserve et/ou prélever une surprime individuelle (CGA ch. 14). Domicile en Suisse et assujettissement à la LAMal ; prestations en Suisse uniquement ; accident et maternité inclus.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "0–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81–85, 86–90, 91+ (CC Hospital Day Comfort ch. 9). Âge de référence : âge atteint dans l'année civile (à l'admission : âge atteint à l'anniversaire de l'année d'admission) ; passage à la classe supérieure au 1er janvier de l'année civile du premier anniversaire de la classe supérieure (tarif selon l'âge effectif).",
+        "discounts": "Rabais de 25 % sur la prime mensuelle, nouveau en 2027 (page « Important pour vous en 2027 »). Rabais pour contrat pluriannuel (taux non publié). Rabais zéro souci de 4 % si le produit est ajouté au paquet zéro souci avec une durée de 5 ans (liste valable dès le 01.01.2027). Surprime individuelle possible."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) Hospital Day Comfort",
+        "edition": "07.2022 (version 2023), réf. 6027 11.22",
+        "url": "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/ZB_Hospital_Day_Comfort_6027_fr.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sanitas.com/fr/clients-prives/assurances/assurances-hospitalisation/hopital-ambulatoire.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/ZB_Hospital_Day_Comfort_6027_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Produktblatt_Hospital_Day_Comfort_9027_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6002_Sanitas_AVB_VVG_fr.pdf",
+        "https://www.sanitas.com/fr/clients-prives/services/connaissance/important.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Liste_Rabatt_Zusatzversicherung_Sorglos_Paket_fr.pdf"
+      ],
+      "tags": [
+        "ambulatory_surgery",
+        "assistance_services",
+        "childcare_assistance",
+        "home_help",
+        "innovative_treatments",
+        "other:overnight_stay",
+        "second_opinion",
+        "travel_expenses_treatment"
+      ],
+      "benefitCount": 9
+    },
+    {
+      "insurer": "sanitas",
+      "key": "sanitas-accident-extra-liberty",
+      "name": "Accident Extra Liberty",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Assurance accidents complémentaire : division demi-privée dans les hôpitaux de Suisse reconnus par Sanitas, urgences stationnaires et ambulatoires à l'étranger, aide à domicile, moyens auxiliaires et Sanitas Assistance.",
+      "variants": [],
+      "prerequisites": "Personnes de moins de 65 ans (page produit) ; ne peut pas être conclue lors du départ à la retraite. Questionnaire sur l'état de santé obligatoire ; Sanitas peut refuser la proposition, émettre une réserve et/ou prélever une surprime individuelle (CGA ch. 14).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "0–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81–85, 86–90, 91+ (CC ch. 19). Âge de référence : âge atteint dans l'année civile (à l'admission : âge atteint à l'anniversaire de l'année d'admission) ; passage à la classe supérieure au 1er janvier de l'année civile du premier anniversaire de la classe supérieure (tarif selon l'âge effectif).",
+        "discounts": "Rabais pour contrat pluriannuel (taux non publié). Rabais zéro souci de 4 % si le produit est ajouté au paquet zéro souci avec une durée de 5 ans (liste valable dès le 01.01.2027). Surprime individuelle possible."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) Accident Extra Liberty",
+        "edition": "07.2015 (version 2023), réf. 6052 11.22",
+        "url": "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/ZB_Accident_ExtraLiberty_6052_fr.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sanitas.com/fr/clients-prives/assurances/assurances-hospitalisation/hopital-accident.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/ZB_Accident_ExtraLiberty_6052_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Produktblatt_Accident_9015_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6002_Sanitas_AVB_VVG_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Liste_Rabatt_Zusatzversicherung_Sorglos_Paket_fr.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "home_care",
+        "home_help",
+        "hospital_abroad",
+        "hospital_flex",
+        "hospital_semi_private",
+        "medical_aids",
+        "other:personal_effects",
+        "other:private_expenses",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "spa_cure",
+        "transport_rescue",
+        "travel_assistance_repatriation"
+      ],
+      "benefitCount": 15
+    },
+    {
+      "insurer": "sanitas",
+      "key": "sanitas-accident-top-liberty",
+      "name": "Accident Top Liberty",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Assurance accidents complémentaire : division privée et libre choix du médecin et de l'hôpital dans le monde entier, traitements planifiés à l'étranger jusqu'à CHF 250 000.– par séjour, soins à domicile intégraux et Sanitas Assistance.",
+      "variants": [],
+      "prerequisites": "Personnes de moins de 65 ans (page produit). Questionnaire sur l'état de santé obligatoire ; Sanitas peut refuser la proposition, émettre une réserve et/ou prélever une surprime individuelle (CGA ch. 14).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "0–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81–85, 86–90, 91+ (CC ch. 19). Âge de référence : âge atteint dans l'année civile (à l'admission : âge atteint à l'anniversaire de l'année d'admission) ; passage à la classe supérieure au 1er janvier de l'année civile du premier anniversaire de la classe supérieure (tarif selon l'âge effectif).",
+        "discounts": "Rabais pour contrat pluriannuel (taux non publié). Rabais zéro souci de 4 % si le produit est ajouté au paquet zéro souci avec une durée de 5 ans (liste valable dès le 01.01.2027). Surprime individuelle possible."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) Accident Top Liberty",
+        "edition": "07.2015 (version 2023), réf. 6053 11.22",
+        "url": "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/ZB_Accident_TopLiberty_6053_fr.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sanitas.com/fr/clients-prives/assurances/assurances-hospitalisation/hopital-accident.html",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/ZB_Accident_TopLiberty_6053_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Produktblatt_Accident_9015_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/6002_Sanitas_AVB_VVG_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Liste_Rabatt_Zusatzversicherung_Sorglos_Paket_fr.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "convalescence_cure",
+        "home_care",
+        "home_help",
+        "hospital_abroad",
+        "hospital_private",
+        "medical_aids",
+        "other:personal_effects",
+        "other:private_expenses",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "search_recovery",
+        "spa_cure",
+        "transport_rescue",
+        "travel_assistance_repatriation"
+      ],
+      "benefitCount": 16
+    },
+    {
+      "insurer": "sanitas",
+      "key": "sanitas-protection-juridique-patients-zero-souci",
+      "name": "Protection juridique des patients zéro souci",
+      "category": "legal_protection",
+      "audience": "all",
+      "summary": "Protection juridique du patient incluse dans le paquet zéro souci (coopération Swiss Life / Sanitas) : défense des droits face aux prestataires de soins jusqu'à CHF 600 000.– par cas ; le risque est porté par la CAP Protection Juridique SA.",
+      "variants": [],
+      "prerequisites": "Avantage réservé aux personnes assurées dans le paquet zéro souci : au moins une complémentaire ambulatoire (Vital Basic, Smart ou Premium) et une assurance d'hospitalisation (Hospital Standard, Extra ou Top Liberty), chacune avec une durée contractuelle de cinq ans ; distribution et conseil par Swiss Life. Non souscriptible séparément.",
+      "pricing": {
+        "factors": [],
+        "ageBands": null,
+        "discounts": "Aucune prime propre publiée (avantage du paquet). Le paquet donne un rabais zéro souci de 4 % sur les complémentaires éligibles."
+      },
+      "conditionsDoc": {
+        "title": "Protection juridique des patients zéro souci : conditions complémentaires (CC)",
+        "edition": "01.2027",
+        "url": "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Sanitas_Patienten-RS_ZB_F.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Sanitas_Patienten-RS_ZB_F.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Paketbedingungen_Sorglos_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Liste_Weitere_Vorteile_Sorglos_Paket_fr.pdf",
+        "https://www.sanitas.com/content/dam/sanitas-internet/Dokumente/Liste_Rabatt_Zusatzversicherung_Sorglos_Paket_fr.pdf"
+      ],
+      "tags": [
+        "legal_protection"
+      ],
+      "benefitCount": 1
     },
     {
       "insurer": "swica",
