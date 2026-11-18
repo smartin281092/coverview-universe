@@ -188,19 +188,20 @@ async function collect() {
 // ---------------------------------------------------------------------------------------------
 // Construction du CSV
 
-// Clés de produit de ../insurers/kpt.json (si le fichier existe) par code produit du calculateur.
-// Renseigné uniquement quand la correspondance est évidente (le nom du fichier assureur contient le mot-clé).
-const PRODUCT_KEY_HINTS = {
-  PUL: ['pulse'],
-  H: ['complementaire hopital', 'frais d\'hospitalisation', 'frais d’hospitalisation'],
-  FLEX: ['flex'],
-  KTI: ['deces et d\'invalidite', 'deces et d’invalidite', 'kti'],
-  K: ['accidents en cas de deces', 'capital accident'],
-  U: ['complementaire accidents'],
-  VPR: ['protection juridique'],
-  Z: ['dentaire'],
-  GH: ['sicuranta'],
-  HT: ['indemnite journaliere d\'hospitalisation', 'indemnite journaliere d’hospitalisation'],
+// Code produit du calculateur -> clé de produit dans ../insurers/kpt.json (correspondance par le code
+// que KPT indique entre parenthèses dans le nom du produit). La clé n'est écrite que si elle existe dans ce fichier.
+const PRODUCT_KEYS = {
+  PUL: 'kpt-pulse',
+  H: 'kpt-hospitalisation',
+  FLEX: 'kpt-hospitalisation-flex',
+  HT: 'kpt-indemnites-journalieres-hospitalisation',
+  GH: 'kpt-sicuranta',
+  Z: 'kpt-soins-dentaires',
+  U: 'kpt-accidents-prestations-soins',
+  K: 'kpt-capital-accident',
+  KTI: 'kpt-capital-maladie-accident',
+  VPR: 'kpt-protection-juridique-circulation-privee',
+  TD: 'kpt-teddy',
 };
 
 function loadProductKeys() {
@@ -208,11 +209,8 @@ function loadProductKeys() {
   const map = {};
   if (!fs.existsSync(file)) return map;
   try {
-    const products = JSON.parse(fs.readFileSync(file, 'utf8')).products || [];
-    for (const [code, hints] of Object.entries(PRODUCT_KEY_HINTS)) {
-      const hits = products.filter((pr) => hints.some((h) => norm(pr.name).includes(norm(h))));
-      if (hits.length === 1) map[code] = hits[0].key; // une seule correspondance, sinon vide
-    }
+    const known = new Set((JSON.parse(fs.readFileSync(file, 'utf8')).products || []).map((pr) => pr.key));
+    for (const [code, key] of Object.entries(PRODUCT_KEYS)) if (known.has(key)) map[code] = key;
   } catch {
     /* fichier illisible : product_key reste vide */
   }

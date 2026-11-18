@@ -507,7 +507,7 @@
           "maxPeriod": null,
           "unlimited": false,
           "waitingPeriod": null,
-          "conditions": "Plafonds de quote-part selon le récapitulatif 2027 (les CS mentionnent seulement 10 %). La participation aux coûts déjà acquittée dans l'assurance obligatoire des soins est décomptée. Passage à la franchise 0 soumis à examen de santé. À 19 ans : affectation automatique à l'option franchise 600 francs.",
+          "conditions": "Plafonds de quote-part selon le récapitulatif 2027 (les CS mentionnent seulement 10 %). La participation aux coûts déjà acquittée dans l'assurance obligatoire des soins est décomptée. Passage à la franchise 0 soumis à examen de santé. Dès l'année d'assurance qui suit les 18 ans révolus : affectation automatique à l'option franchise 600 francs.",
           "sourceUrl": "https://www4.swica.ch/p/186_f_ZB_Completa_Top.pdf",
           "verification": "read"
         }
@@ -1020,7 +1020,7 @@
           "maxPeriod": null,
           "unlimited": false,
           "waitingPeriod": null,
-          "conditions": "Plafonds de quote-part selon le récapitulatif 2027 (les CS mentionnent seulement 10 %). La participation aux coûts déjà acquittée dans l'assurance obligatoire des soins est décomptée. Passage à la franchise 0 soumis à examen de santé. À 19 ans : affectation automatique à l'option sans franchise.",
+          "conditions": "Plafonds de quote-part selon le récapitulatif 2027 (les CS mentionnent seulement 10 %). La participation aux coûts déjà acquittée dans l'assurance obligatoire des soins est décomptée. Passage à la franchise 0 soumis à examen de santé. Dès l'année d'assurance qui suit les 18 ans révolus : affectation automatique à l'option sans franchise.",
           "sourceUrl": "https://www4.swica.ch/p/196_f_ZB_Completa_Forte.pdf",
           "verification": "read"
         }
@@ -1829,7 +1829,7 @@
           ],
           "label": "Choix d'une division hospitalière supérieure à celle assurée",
           "variant": "commune",
-          "coverage": "Jusqu'à 50 francs par jour pour les frais de pension et jusqu'à 5 000 francs par année civile pour les frais de traitement, en complément de l'assurance obligatoire",
+          "coverage": "Jusqu'à 50 francs par jour pour les frais de pension et jusqu'à 5000 francs par année civile pour les frais de traitement, en complément de l'assurance obligatoire",
           "ratePercent": null,
           "maxAmountChf": 5000,
           "maxPeriod": "year",
@@ -1845,7 +1845,7 @@
           ],
           "label": "Traitement hospitalier à l'étranger",
           "variant": "commune",
-          "coverage": "Jusqu'à 50 francs par jour pour les frais de pension et jusqu'à 5 000 francs par année civile pour les frais de traitement, en complément de l'assurance obligatoire",
+          "coverage": "Jusqu'à 50 francs par jour pour les frais de pension et jusqu'à 5000 francs par année civile pour les frais de traitement, en complément de l'assurance obligatoire",
           "ratePercent": null,
           "maxAmountChf": 5000,
           "maxPeriod": "year",
@@ -4186,7 +4186,7 @@
         "factors": [
           "age"
         ],
-        "ageBands": "La prime dépend de l'âge du preneur d’assurance (CS) ; la page produit distingue adultes (plus de 18 ans) et enfants. Tranches détaillées non publiées.",
+        "ageBands": "La prime dépend de l'âge du preneur d'assurance (CS) ; la page produit distingue adultes (plus de 18 ans) et enfants. Tranches détaillées non publiées.",
         "publishedPrices": [
           {
             "profile": "Adulte de plus de 18 ans, prix d'appel « à partir de » ; page produit consultée le 18.11.2026, année tarifaire non précisée",
