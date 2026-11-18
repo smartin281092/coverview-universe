@@ -99,6 +99,22 @@
       "retrievedAt": "2026-11-18"
     },
     {
+      "key": "groupe-mutuel",
+      "name": "Groupe Mutuel",
+      "legalEntityLca": "Groupe Mutuel Assurances GMA SA (Martigny)",
+      "website": "https://www.groupemutuel.ch/fr/clients-prives.html",
+      "calculatorUrl": "https://www.groupemutuel.ch/poelGM/index.html?langue=fr",
+      "calculatorHosts": [
+        "www.groupemutuel.ch",
+        "groupemutuel.ch",
+        "offres-sante.groupemutuel.ch",
+        "datapoel.groupemutuel.ch"
+      ],
+      "publishedTariffUrls": [],
+      "notes": "Gamme LCA vendue selon l'« Aperçu des assurances complémentaires selon la LCA » GMA SA, édition 8.26 : Global smart (GO), Premium (SD), Optimum (SO), Start (ST), HC, H-Bonus (HB), Hôpital senior (HS), H-Capital (KH), BH, Mundo (MU), Dentaire plus (DP), Acrobat (AB), ActiVita (AJ), indemnité journalière individuelle (PI), Sekunda (AM), Legis priva / strada / duo / sana+, ProVista (ID), ProVista light (AD), KidsProtect (KP). Porteur du risque : Groupe Mutuel Assurances GMA SA ; un aperçu identique existe au nom d'AMB Assurances SA (édition 01.2025). Protection juridique : sinistres gérés par Dextra Protection juridique SA. PrimaCapital est porté par Groupe Mutuel Vie GMV SA et rangé sous « Vie » sur le site, mais vendu dans les packages santé KidSafe et StarterSafe. Hors périmètre, non détaillés : Legis priva, Legis strada et Legis duo (protection juridique privée et mobilité), CyberProtect et le package LegalSafe (qui inclut Legis sana+) ; CHV Capital (capital hospitalisation/naissance rattaché à l'épargne 3b VariaInvest, GMV SA) ; ProtectLife (assurance vie). Produits absents de l'aperçu 8.26 et des pages produit, donc considérés comme non proposés à la souscription (statut non confirmé par l'assureur) : Global classic (GI), Global flex (GX) et SC (soins complémentaires niveau 2), encore cités dans la fiche comparative édition 7.24 toujours en ligne. Les autres noms évoqués dans les pistes de recherche (Bonus, Vitalis, Alterna, SanaTel, Hôpital Global, HP, HJ) n'apparaissent ni dans l'aperçu 8.26 ni sur les pages produit. Règles communes (CGC CAGA04-F2, édition 01.01.2022, et aperçu 8.26) : durée minimale de 3 ans (1 an pour Mundo et Legis sana+) ; résiliation pour la fin d'une année civile avec préavis de 3 mois ; primes en principe selon le sexe, la région et la classe d'âge (par défaut 0-18, 19-25, puis tranches de 5 ans dès la 26e année jusqu'à 70 ans et classe unique 71-99, sauf disposition des conditions particulières) ; l'assuré qui atteint dans l'année l'âge maximal de sa classe passe dans la classe supérieure au 1er janvier suivant. Rabais : rabais famille sur la prime des enfants pour Global smart, Premium et Optimum si un parent a la même assurance ; rabais de combinaison sur Mundo ; bonus de 20 % sur H-Bonus ; franchises optionnelles sur HC, Hôpital senior et Optimum ; assurance prénatale (admission du nouveau-né sans questionnaire de santé, Dentaire plus niveau 2 offerte la première année). Le rabais de 25 % dès le troisième enfant ne concerne que l'assurance de base. Calculateur : formulaire « Afficher ma prime » sur chaque page produit (NPA, date de naissance, sexe ; requêtes ajaxAction=calculator sur www.groupemutuel.ch) et application d'offre en ligne /poelGM/ dont la configuration pointe vers offres-sante.groupemutuel.ch (poel-bff, offers-api). Aucun barème de primes LCA publié ; seule mention chiffrée : Start « dès CHF 9.90 par mois ».",
+      "retrievedAt": "2026-11-18"
+    },
+    {
       "key": "helsana",
       "name": "Helsana",
       "legalEntityLca": "Helsana Assurances complémentaires SA",
@@ -4125,11 +4141,13 @@
       ],
       "tags": [
         "abroad_emergency",
+        "assistance_services",
         "legal_protection",
+        "search_recovery",
         "travel_assistance_repatriation",
         "travel_cancellation_luggage"
       ],
-      "benefitCount": 10
+      "benefitCount": 16
     },
     {
       "insurer": "css",
@@ -4159,6 +4177,997 @@
         "legal_protection"
       ],
       "benefitCount": 3
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-global-smart",
+      "name": "Global smart",
+      "category": "combined",
+      "audience": "all",
+      "summary": "Assurance complémentaire combinée (soins ambulatoires, prévention, dentaire, étranger et hospitalisation) en trois niveaux ; le niveau 3 donne accès à la division mi-privée ou privée.",
+      "variants": [
+        {
+          "key": "n1",
+          "name": "Niveau 1",
+          "description": "Division commune toute la Suisse ; médecines alternatives 30 % ; pas de dentaire, moyens auxiliaires, cures ni garde d'enfants."
+        },
+        {
+          "key": "n2",
+          "name": "Niveau 2",
+          "description": "Division commune ; médecines alternatives 60 % ; ajoute dentaire, moyens auxiliaires, cures, garde d'enfants, stérilisation et interventions ambulatoires."
+        },
+        {
+          "key": "n3",
+          "name": "Niveau 3",
+          "description": "Division mi-privée ou privée (sous-variante indiquée sur la police) dans les établissements reconnus ; plafonds les plus élevés."
+        }
+      ],
+      "prerequisites": "Domicile en Suisse. Niveaux 1 et 2 sans limite d'âge ; niveau 3 : entrée en vigueur au plus tard le jour des 70 ans. Proposition avec questionnaire de santé (CGC) ; l'assureur peut refuser ou émettre des réserves.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "0-18 ; 19-25 ; puis tranches de 5 ans de la 26e à la 85e année (26-30, 31-35, …, 81-85) ; 86 ans et plus. Tarif selon classe d'âge, sexe et canton de domicile. Âge de référence : âge atteint dans l'année civile (l'assuré qui atteint durant l'année l'âge maximal de sa classe passe dans la classe supérieure au 1er janvier suivant).",
+        "discounts": "Rabais famille sur la prime des enfants jusqu'à 18 ans si au moins un parent est assuré Global smart à un niveau équivalent ou supérieur (montant non publié)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières de l'assurance Global smart (GOGA03-F1)",
+        "edition": "01.12.2025",
+        "url": "https://www.groupemutuel.ch/doc/jcr:a429b13d-6367-4f4e-849e-962dad7908ff/GOGA03_F1.pdf/lang:fr/GOGA03_F1.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurances-complementaires/protection-complete/Global-smart.html",
+        "https://www.groupemutuel.ch/doc/jcr:a429b13d-6367-4f4e-849e-962dad7908ff/GOGA03_F1.pdf/lang:fr/GOGA03_F1.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:86880ed8-03ff-4868-b459-152fb59ca14b/26-Flyer-GlobalSmart-FR.pdf/lang:fr/26-Flyer-GlobalSmart-FR.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:2b9ab9aa-fa15-4458-b627-b8c51e1870f8/Apercu-GMASA-fr-8-2026.pdf/lang:fr/Apercu-GMASA-fr-8-2026.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:7a8f9756-63a4-4429-ba8f-0ff74258410d/2026-GOGA-SD-SO-Liste-therapies-reconnues_F.pdf/lang:fr/2026-GOGA-SD-SO-Liste-therapies-reconnues_F.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:de02cd20-0bf5-4a67-b5bd-50260e25ad9b/26-liste-prevention-GlobalSmart-FR.pdf/lang:fr/26-liste-prevention-GlobalSmart-FR.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:cb742f15-abcf-4754-b251-11019f7ac6e3/Liste-check-up-reconnus-Global-smart-et-Start-2026_fr.pdf/lang:fr/Liste-check-up-reconnus-Global-smart-et-Start-2026_fr.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "abroad_planned_treatment",
+        "alt_medicine_therapies",
+        "ambulatory_surgery",
+        "assistance_services",
+        "childcare_assistance",
+        "convalescence_cure",
+        "cost_sharing_coverage",
+        "dental_treatment",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "gynecological_prevention",
+        "home_help",
+        "hospital_general_ch",
+        "hospital_semi_private",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "other:indemnite_division_commune",
+        "other:visite_famille_etranger",
+        "prevention_checkup",
+        "psychiatry_rehab_stay",
+        "search_recovery",
+        "second_opinion",
+        "sterilization_contraception",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "travel_expenses_treatment",
+        "vaccination"
+      ],
+      "benefitCount": 52
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-start",
+      "name": "Start",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Assurance des soins complémentaires d'entrée de gamme : médicaments hors liste, lunettes, prévention (vaccins, check-up, examens gynécologiques), transport et petite participation dentaire.",
+      "variants": [],
+      "prerequisites": "Domicile en Suisse ; adhésion sans limite d'âge, sous réserve d'acceptation.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "0-15 ; 16-18 ; 19-25 ; puis tranches de 5 ans de la 26e à la 85e année ; 86 ans et plus. Prime selon classe d'âge, sexe et canton de domicile. Âge de référence : âge atteint dans l'année civile (l'assuré qui atteint durant l'année l'âge maximal de sa classe passe dans la classe supérieure au 1er janvier suivant).",
+        "discounts": null
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières de l'assurance des soins complémentaires Start (STGA01-F1)",
+        "edition": "01.10.2026",
+        "url": "https://www.groupemutuel.ch/doc/jcr:1d8307bb-7f76-417f-a90b-50bfa6c8ac94/STGA01-F1-2.pdf/lang:fr/STGA01-F1-2.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurances-complementaires/soins-et-prevention/Start.html",
+        "https://www.groupemutuel.ch/doc/jcr:1d8307bb-7f76-417f-a90b-50bfa6c8ac94/STGA01-F1-2.pdf/lang:fr/STGA01-F1-2.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:083f93a5-09bc-4d85-820a-10aaf1ac0a63/26_Flyer_Start-FR.pdf/lang:fr/26_Flyer_Start-FR.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:2b9ab9aa-fa15-4458-b627-b8c51e1870f8/Apercu-GMASA-fr-8-2026.pdf/lang:fr/Apercu-GMASA-fr-8-2026.pdf"
+      ],
+      "tags": [
+        "dental_treatment",
+        "glasses_lenses",
+        "gynecological_prevention",
+        "medical_aids",
+        "medication_non_listed",
+        "other:livraison_medicaments",
+        "prevention_checkup",
+        "psychotherapy_non_medical",
+        "search_recovery",
+        "second_opinion",
+        "transport_rescue",
+        "vaccination"
+      ],
+      "benefitCount": 15
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-optimum",
+      "name": "Optimum",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Assurance des soins complémentaires de niveau intermédiaire : médecines alternatives 75 %, médicaments hors liste, prévention, aide à domicile, corrections esthétiques et participation dentaire.",
+      "variants": [],
+      "prerequisites": "Domicile en Suisse ; adhésion sans limite d'âge. Questionnaire de santé selon CGC.",
+      "pricing": {
+        "factors": [
+          "age",
+          "deductible"
+        ],
+        "ageBands": "0-15 ; 16-18 ; 19-25 ; puis tranches de 5 ans de la 26e à la 85e année. Âge de référence : âge atteint dans l'année civile (l'assuré qui atteint durant l'année l'âge maximal de sa classe passe dans la classe supérieure au 1er janvier suivant). Franchise annuelle à choix : CHF 0 ou CHF 150. Les conditions particulières ne citent que les classes d'âge ; sexe et région de primes possibles selon l'art. 26 CGC (le formulaire en ligne demande NPA, date de naissance et sexe).",
+        "discounts": "Franchise annuelle optionnelle de CHF 150 contre rabais de prime (taux non publié). Rabais famille sur la prime des enfants jusqu'à 18 ans si au moins un parent est assuré Optimum (montant non publié)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières de l'assurance des soins complémentaires Optimum (SOGA01-F1)",
+        "edition": "01.09.2023",
+        "url": "https://www.groupemutuel.ch/doc/jcr:ccd690cf-bde9-460e-8b36-ed648701045c/SOGA01-F1.pdf/lang:fr/SOGA01-F1.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurances-complementaires/soins-et-prevention/Optimum.html",
+        "https://www.groupemutuel.ch/doc/jcr:ccd690cf-bde9-460e-8b36-ed648701045c/SOGA01-F1.pdf/lang:fr/SOGA01-F1.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:a9e8a698-903d-4f6d-92fe-5920f0a8a3f7/24-Flyer-Optimum-FR-BR.pdf/lang:fr/24-Flyer-Optimum-FR-BR.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:2b9ab9aa-fa15-4458-b627-b8c51e1870f8/Apercu-GMASA-fr-8-2026.pdf/lang:fr/Apercu-GMASA-fr-8-2026.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:9315ff9a-ca60-4e31-b180-7d493a9ab033/23-liste-prevention-Optimum-FR.pdf/lang:fr/23-liste-prevention-Optimum-FR.pdf"
+      ],
+      "tags": [
+        "alt_medicine_therapies",
+        "ambulatory_surgery",
+        "assistance_services",
+        "childcare_assistance",
+        "convalescence_cure",
+        "cosmetic_corrections",
+        "cost_sharing_coverage",
+        "dental_treatment",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "gynecological_prevention",
+        "home_help",
+        "medical_aids",
+        "medication_non_listed",
+        "other:livraison_medicaments",
+        "other:repas_domicile",
+        "prevention_checkup",
+        "psychotherapy_non_medical",
+        "rooming_in",
+        "search_recovery",
+        "second_opinion",
+        "transport_rescue",
+        "vaccination"
+      ],
+      "benefitCount": 26
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-premium",
+      "name": "Premium (version 2024)",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Assurance des soins complémentaires haut de gamme : médecines alternatives 80 %, médicaments hors liste, prévention et sport, contraception, lunettes, dentaire et orthodontie des enfants.",
+      "variants": [],
+      "prerequisites": "Domicile en Suisse ; entrée en vigueur au plus tard le jour des 70 ans. Questionnaire de santé selon CGC.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "0-15 ; 16-18 ; 19-25 ; puis tranches de 5 ans de la 26e à la 85e année. Âge de référence : âge atteint dans l'année civile (l'assuré qui atteint durant l'année l'âge maximal de sa classe passe dans la classe supérieure au 1er janvier suivant). Les conditions particulières ne citent que les classes d'âge ; sexe et région de primes possibles selon l'art. 26 CGC (le formulaire en ligne demande NPA, date de naissance et sexe).",
+        "discounts": "Rabais famille sur la prime des enfants jusqu'à 18 ans si au moins un parent est assuré Premium (édition 01.09.2024) ; montant non publié."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières de l'assurance des soins complémentaires Premium – version 2024 (SDGA02-F1)",
+        "edition": "01.09.2024",
+        "url": "https://www.groupemutuel.ch/doc/jcr:1339e9ca-6c78-4e6b-b0ad-71ee31ad300a/SDGA02-F1.pdf/lang:fr/SDGA02-F1.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurances-complementaires/soins-et-prevention/premium.html",
+        "https://www.groupemutuel.ch/doc/jcr:1339e9ca-6c78-4e6b-b0ad-71ee31ad300a/SDGA02-F1.pdf/lang:fr/SDGA02-F1.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:e90374b5-bf97-43df-9830-5295a5184689/24_Flyer_Premium_Fr.pdf/lang:fr/24_Flyer_Premium_Fr.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:2b9ab9aa-fa15-4458-b627-b8c51e1870f8/Apercu-GMASA-fr-8-2026.pdf/lang:fr/Apercu-GMASA-fr-8-2026.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:22f74887-ccab-408e-ba17-00d0022ccdf7/Premium_activites-sportives-et-abonnements-03-2026_FR.pdf/lang:fr/Premium_activites-sportives-et-abonnements-03-2026_FR.pdf"
+      ],
+      "tags": [
+        "alt_medicine_therapies",
+        "ambulatory_surgery",
+        "assistance_services",
+        "childcare_assistance",
+        "convalescence_cure",
+        "cost_sharing_coverage",
+        "dental_treatment",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "gynecological_prevention",
+        "home_help",
+        "medical_aids",
+        "medication_non_listed",
+        "orthodontics",
+        "other:conseil_pharmacie",
+        "other:repas_domicile",
+        "prevention_checkup",
+        "psychotherapy_non_medical",
+        "rooming_in",
+        "search_recovery",
+        "second_opinion",
+        "sterilization_contraception",
+        "transport_rescue",
+        "vaccination",
+        "vision_laser"
+      ],
+      "benefitCount": 29
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-hc",
+      "name": "Assurance complémentaire d'hospitalisation HC",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Assurance d'hospitalisation en quatre classes : division commune toute la Suisse (1), semi-privée (2), privée (3) et privée avec indemnité étranger renforcée (4).",
+      "variants": [
+        {
+          "key": "hc1",
+          "name": "Niveau / classe 1",
+          "description": "Division commune toute la Suisse ; étranger CHF 500/jour."
+        },
+        {
+          "key": "hc2",
+          "name": "Niveau / classe 2",
+          "description": "Division semi-privée (2 lits), libre choix du médecin ; étranger CHF 1'000/jour ; allocation accouchement ambulatoire CHF 800."
+        },
+        {
+          "key": "hc3",
+          "name": "Niveau / classe 3",
+          "description": "Division privée (1 lit) ; étranger CHF 1'500/jour ; allocation accouchement ambulatoire CHF 1'200."
+        },
+        {
+          "key": "hc4",
+          "name": "Niveau / classe 4",
+          "description": "Division privée (1 lit) ; étranger CHF 3'000/jour ; allocation accouchement ambulatoire CHF 1'200."
+        }
+      ],
+      "prerequisites": "Domicile en Suisse ; entrée en vigueur au plus tard le jour des 60 ans. Questionnaire de santé selon CGC.",
+      "pricing": {
+        "factors": [
+          "age",
+          "entry_age",
+          "sex",
+          "region",
+          "deductible"
+        ],
+        "ageBands": "0-18 ; 19-25 ; puis tranches de 5 ans de la 26e à la 85e année ; 86 ans et plus. Tarif selon la classe d'âge, l'âge d'entrée dans l'assurance, le sexe ou le canton de domicile. Âge de référence : âge atteint dans l'année civile (l'assuré qui atteint durant l'année l'âge maximal de sa classe passe dans la classe supérieure au 1er janvier suivant).",
+        "discounts": "Classes 2 à 4 : franchise annuelle de CHF 1'000 (jusqu'à 25 % de rabais) ou CHF 3'000 (jusqu'à 45 % de rabais) selon le flyer HC édition 8.22. Détenir HC 2, 3 ou 4 ouvre le rabais de combinaison sur Mundo."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières de l'assurance complémentaire d'hospitalisation (HCGA02-F1)",
+        "edition": "01.07.2025",
+        "url": "https://www.groupemutuel.ch/doc/jcr:3f3e5754-4c12-4595-9d80-7f8852238d2d/HCGA02-F.pdf/lang:fr/HCGA02-F.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurances-complementaires/hospitalisation/Assurance-complementaire-d-hospitalisation.html",
+        "https://www.groupemutuel.ch/doc/jcr:3f3e5754-4c12-4595-9d80-7f8852238d2d/HCGA02-F.pdf/lang:fr/HCGA02-F.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:4fd9c9fa-f83a-4d4c-a761-73c67c71eccf/24-Flyer-HC-F.pdf/lang:fr/24-Flyer-HC-F.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:2b9ab9aa-fa15-4458-b627-b8c51e1870f8/Apercu-GMASA-fr-8-2026.pdf/lang:fr/Apercu-GMASA-fr-8-2026.pdf"
+      ],
+      "tags": [
+        "hospital_abroad",
+        "hospital_deductible_option",
+        "hospital_flex",
+        "hospital_general_ch",
+        "hospital_private",
+        "hospital_semi_private",
+        "maternity",
+        "other:indemnite_division_commune",
+        "psychiatry_rehab_stay"
+      ],
+      "benefitCount": 17
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-h-bonus",
+      "name": "H-Bonus (hospitalisation flexible)",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Assurance d'hospitalisation flexible : choix de la division (commune, mi-privée, privée) à chaque admission contre une participation journalière, avec bonus de prime de 20 % tant qu'aucun séjour mi-privé ou privé n'est indemnisé.",
+      "variants": [],
+      "prerequisites": "Adhésion jusqu'au jour des 60 ans. Questionnaire de santé selon CGC.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "0-18 ; 19-25 ; puis tranches de 5 ans de la 26e à la 80e année. Prime selon la classe d'âge et l'échelon de primes (80 % ou 100 %). Âge de référence : âge atteint dans l'année civile (l'assuré qui atteint durant l'année l'âge maximal de sa classe passe dans la classe supérieure au 1er janvier suivant). Les conditions particulières ne citent que les classes d'âge ; sexe et région de primes possibles selon l'art. 26 CGC (le formulaire en ligne demande NPA, date de naissance et sexe).",
+        "discounts": "Bonus : prime à 80 % de la prime ordinaire dès l'adhésion ; 100 % pendant 3 ans après un séjour en mi-privé ou privé. Détenir H-Bonus ouvre le rabais de combinaison sur Mundo."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières de l'assurance complémentaire en cas d'hospitalisation H-Bonus (HBGA01-F6)",
+        "edition": "01.01.2024",
+        "url": "https://www.groupemutuel.ch/doc/jcr:0efe6809-0722-4d8e-b916-c421c9c912c4/HBGA01-F6-2024.pdf/lang:fr/HBGA01-F6-2024.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurances-complementaires/hospitalisation/H-Bonus.html",
+        "https://www.groupemutuel.ch/doc/jcr:0efe6809-0722-4d8e-b916-c421c9c912c4/HBGA01-F6-2024.pdf/lang:fr/HBGA01-F6-2024.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:67cd9a88-f2ec-47d4-b689-14a7e7f928c1/Flyer-hospitalisation-flexible-FR.pdf/lang:fr/Flyer-hospitalisation-flexible-FR.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:2b9ab9aa-fa15-4458-b627-b8c51e1870f8/Apercu-GMASA-fr-8-2026.pdf/lang:fr/Apercu-GMASA-fr-8-2026.pdf"
+      ],
+      "tags": [
+        "bonus_program",
+        "hospital_abroad",
+        "hospital_flex",
+        "maternity",
+        "psychiatry_rehab_stay"
+      ],
+      "benefitCount": 7
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-hopital-senior",
+      "name": "Hôpital senior",
+      "category": "hospital",
+      "audience": "senior",
+      "summary": "Assurance d'hospitalisation sans limite d'âge d'admission, pensée pour les plus de 55 ans : confort hôtelier en division commune (classes 1 et 2), mi-privé (3) ou privé (4) ; maladie et accident, maternité exclue.",
+      "variants": [
+        {
+          "key": "hs1",
+          "name": "Niveau / classe 1",
+          "description": "Soins de la division commune, chambre à deux lits ; étranger CHF 500/jour."
+        },
+        {
+          "key": "hs2",
+          "name": "Niveau / classe 2",
+          "description": "Soins de la division commune, chambre à un lit ; étranger CHF 500/jour."
+        },
+        {
+          "key": "hs3",
+          "name": "Niveau / classe 3",
+          "description": "Division mi-privée, libre choix du médecin ; étranger CHF 1'000/jour ; franchise optionnelle."
+        },
+        {
+          "key": "hs4",
+          "name": "Niveau / classe 4",
+          "description": "Division privée, libre choix du médecin ; étranger CHF 1'500/jour ; franchise optionnelle."
+        }
+      ],
+      "prerequisites": "Domicile en Suisse ; adhésion sans limite d'âge. Classes 1 et 2 : établissement figurant sur la liste de l'assureur pour le supplément hôtelier. Questionnaire de santé selon CGC.",
+      "pricing": {
+        "factors": [
+          "age",
+          "deductible"
+        ],
+        "ageBands": "Pas de classes d'âge : indice progressif de 100 jusqu'à 55 ans inclus, puis +7 points par année d'âge ; âge déterminant = âge révolu atteint au cours de l'année civile. Prime identique pour les hommes et les femmes. Région de primes non précisée par les conditions particulières (le formulaire en ligne demande le NPA).",
+        "discounts": "Classes 3 et 4 : franchise de CHF 2'000 (−10 % de prime) ou CHF 5'000 (−25 % de prime). Détenir Hôpital senior ouvre le rabais de combinaison sur Mundo."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières de l'assurance Hôpital senior (HSGA01-F8)",
+        "edition": "01.01.2024",
+        "url": "https://www.groupemutuel.ch/doc/jcr:67d1a543-e2c1-4023-9a33-6965363275e7/HSGA01-F8-2024.pdf/lang:fr/HSGA01-F8-2024.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurances-complementaires/hospitalisation/Hopital-senior.html",
+        "https://www.groupemutuel.ch/doc/jcr:67d1a543-e2c1-4023-9a33-6965363275e7/HSGA01-F8-2024.pdf/lang:fr/HSGA01-F8-2024.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:5e1ef9ae-9cdc-4094-b473-a9864242802d/24-Flyer-HopitalSenior-F.pdf/lang:fr/24-Flyer-HopitalSenior-F.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:2b9ab9aa-fa15-4458-b627-b8c51e1870f8/Apercu-GMASA-fr-8-2026.pdf/lang:fr/Apercu-GMASA-fr-8-2026.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:ebd86b20-ee57-4eaf-9062-c98ce1351e2a/liste-HS-classe-1-2-2026.pdf/lang:fr/liste-HS-classe-1-2-2026.pdf"
+      ],
+      "tags": [
+        "assistance_services",
+        "hospital_abroad",
+        "hospital_deductible_option",
+        "hospital_flex",
+        "hospital_private",
+        "hospital_room_upgrade",
+        "hospital_semi_private",
+        "other:indemnite_division_commune",
+        "psychiatry_rehab_stay"
+      ],
+      "benefitCount": 13
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-h-capital",
+      "name": "H-Capital",
+      "category": "hospital_daily_cash",
+      "audience": "all",
+      "summary": "Assurance de sommes versant un capital annuel choisi (CHF 300 à CHF 3'500) en cas d'hospitalisation stationnaire de type aigu, en Suisse ou à l'étranger.",
+      "variants": [],
+      "prerequisites": "Adhésion sans limite d'âge ; entrée en vigueur au plus tôt 3 mois après la naissance.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex"
+        ],
+        "ageBands": "0-18 ; 19-25 ; puis tranches de 5 ans dès la 26e année. Primes selon le sexe, la classe d'âge et le capital assuré. Âge de référence : âge atteint dans l'année civile (l'assuré qui atteint durant l'année l'âge maximal de sa classe passe dans la classe supérieure au 1er janvier suivant).",
+        "discounts": "Inclus dans les packages KidSafe (capital CHF 1'000 ou 2'500) et StarterSafe (CHF 1'500 ou 2'500)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières de l'assurance H-Capital (KHGA02-F6)",
+        "edition": "01.02.2022",
+        "url": "https://www.groupemutuel.ch/doc/jcr:fd748a50-0ed3-455b-8f35-9bc70df543e4/KHGA02-F6.pdf/lang:fr/KHGA02-F6.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurances-complementaires/hospitalisation/H-Capital.html",
+        "https://www.groupemutuel.ch/doc/jcr:fd748a50-0ed3-455b-8f35-9bc70df543e4/KHGA02-F6.pdf/lang:fr/KHGA02-F6.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:9f0269e7-3370-49be-89bb-483c1698eacd/25-Flyer-H-Capital-F.pdf/lang:fr/25-Flyer-H-Capital-F.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:2b9ab9aa-fa15-4458-b627-b8c51e1870f8/Apercu-GMASA-fr-8-2026.pdf/lang:fr/Apercu-GMASA-fr-8-2026.pdf"
+      ],
+      "tags": [
+        "hospital_capital"
+      ],
+      "benefitCount": 1
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-bh",
+      "name": "Indemnité journalière en cas d'hospitalisation BH",
+      "category": "hospital_daily_cash",
+      "audience": "all",
+      "summary": "Assurance de sommes versant une indemnité journalière librement choisie (jusqu'à CHF 200) pour chaque jour d'hospitalisation.",
+      "variants": [],
+      "prerequisites": "Adhésion jusqu'à l'âge de 60 ans révolus.",
+      "pricing": {
+        "factors": [
+          "age",
+          "entry_age"
+        ],
+        "ageBands": "0-18 ; 19-25 ; puis tranches de 5 ans de la 26e à la 71e année. Le tarif tient aussi compte de l'âge d'entrée dans l'assurance et du montant assuré. Âge de référence : âge atteint dans l'année civile (l'assuré qui atteint durant l'année l'âge maximal de sa classe passe dans la classe supérieure au 1er janvier suivant).",
+        "discounts": null
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières de l'assurance d'une indemnité journalière en cas d'hospitalisation (BHGA01-F8)",
+        "edition": "01.02.2022",
+        "url": "https://www.groupemutuel.ch/doc/jcr:4c865a25-da36-4e42-8a79-f4cc58459489/BHGA01-F8.pdf/lang:fr/BHGA01-F8.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurances-complementaires/hospitalisation/indemnite-journaliere-BH.html",
+        "https://www.groupemutuel.ch/doc/jcr:4c865a25-da36-4e42-8a79-f4cc58459489/BHGA01-F8.pdf/lang:fr/BHGA01-F8.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:3b129c58-69d9-4eed-899d-a8932c6c027e/26-Flyer-BH-FR.pdf/lang:fr/26-Flyer-BH-FR.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:2b9ab9aa-fa15-4458-b627-b8c51e1870f8/Apercu-GMASA-fr-8-2026.pdf/lang:fr/Apercu-GMASA-fr-8-2026.pdf"
+      ],
+      "tags": [
+        "hospital_daily_cash"
+      ],
+      "benefitCount": 1
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-mundo",
+      "name": "Mundo",
+      "category": "travel_abroad",
+      "audience": "all",
+      "summary": "Assurance voyage maladie et accident valable dans le monde entier hors de Suisse : soins d'urgence, hospitalisation, transport, rapatriement, recherche et sauvetage jusqu'à CHF 100'000 par année civile.",
+      "variants": [],
+      "prerequisites": "Domicile en Suisse ; sans limitation d'âge. Durée minimale du contrat : 1 an.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "0-18 ; 19-25 ; puis tranches de 5 ans dès la 26e année. L'aperçu LCA signale une structure tarifaire propre à Mundo. Âge de référence : âge atteint dans l'année civile (l'assuré qui atteint durant l'année l'âge maximal de sa classe passe dans la classe supérieure au 1er janvier suivant). Les conditions particulières ne citent que les classes d'âge ; sexe et région de primes possibles selon l'art. 26 CGC (le formulaire en ligne demande NPA, date de naissance et sexe).",
+        "discounts": "Rabais de combinaison pour les personnes ayant conclu au moins l'un des produits GO (Global smart), HB (H-Bonus), HC 2, 3 ou 4, HS (Hôpital senior), SD (Premium) ou SO (Optimum) ; supprimé dès que la condition n'est plus remplie. La fiche comparative édition 7.24 mentionnait des primes offertes durant les trois premières années pour Dentaire plus 2 et Mundo conclues avant la naissance ; la brochure prénatale édition 11.25 ne cite plus que Dentaire plus niveau 2 la première année."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières de l'assurance Mundo (MUGA01-F7)",
+        "edition": "01.02.2022",
+        "url": "https://www.groupemutuel.ch/doc/jcr:e939d269-0d0c-49de-acaf-469b6b22fa05/MUGA01-F7.pdf/lang:fr/MUGA01-F7.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurances-complementaires/urgence-a-etranger/Mundo.html",
+        "https://www.groupemutuel.ch/doc/jcr:e939d269-0d0c-49de-acaf-469b6b22fa05/MUGA01-F7.pdf/lang:fr/MUGA01-F7.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:8f7ea027-4db6-4008-ad4b-b75ac4b394e2/24-Flyer-MUNDO-F.pdf/lang:fr/24-Flyer-MUNDO-F.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:2b9ab9aa-fa15-4458-b627-b8c51e1870f8/Apercu-GMASA-fr-8-2026.pdf/lang:fr/Apercu-GMASA-fr-8-2026.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "cost_sharing_coverage",
+        "hospital_abroad",
+        "other:capital_deces_etranger",
+        "other:visite_famille_etranger",
+        "search_recovery",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "vaccination"
+      ],
+      "benefitCount": 9
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-dentaire-plus",
+      "name": "Dentaire plus",
+      "category": "dental",
+      "audience": "all",
+      "summary": "Assurance des soins dentaires remboursant 75 % des traitements, de l'orthodontie et des frais de laboratoire, avec un plafond annuel de CHF 1'000, 3'000 ou 15'000 selon la classe.",
+      "variants": [
+        {
+          "key": "dp1",
+          "name": "Niveau / classe 1",
+          "description": "75 %, max. CHF 1'000 par année civile."
+        },
+        {
+          "key": "dp2",
+          "name": "Niveau / classe 2",
+          "description": "75 %, max. CHF 3'000 par année civile."
+        },
+        {
+          "key": "dp3",
+          "name": "Niveau / classe 3",
+          "description": "75 %, max. CHF 15'000 par année civile."
+        }
+      ],
+      "prerequisites": "Domicile en Suisse ; entrée en vigueur au plus tard le jour des 60 ans. Admission sur formulaire accompagné d'un certificat établi par un médecin-dentiste exerçant en Suisse.",
+      "pricing": {
+        "factors": [
+          "age",
+          "region"
+        ],
+        "ageBands": "0-5 ; puis tranches de 5 ans de la 6e à la 85e année (6-10, 11-15, …, 81-85) ; 86 ans et plus. Primes différenciées selon la classe d'âge ou le domicile. Âge de référence : âge atteint dans l'année civile (l'assuré qui atteint durant l'année l'âge maximal de sa classe passe dans la classe supérieure au 1er janvier suivant).",
+        "discounts": "Dentaire plus niveau 2 offerte la première année de l'enfant en cas d'assurance prénatale."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières de l'assurance des soins Dentaire plus (DPGA03-F1)",
+        "edition": "01.09.2025",
+        "url": "https://www.groupemutuel.ch/doc/jcr:1f2c55c3-15f2-4627-9bef-a80ed2edca58/DPGA03-F1.pdf/lang:fr/DPGA03-F1.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurances-complementaires/soins-dentaires/Soins-Dentaire-Plus.html",
+        "https://www.groupemutuel.ch/doc/jcr:1f2c55c3-15f2-4627-9bef-a80ed2edca58/DPGA03-F1.pdf/lang:fr/DPGA03-F1.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:2bff7967-92d3-4769-8ee0-6580c80216e1/25-Flyer-Dentaire-Plus-F-br.pdf/lang:fr/25-Flyer-Dentaire-Plus-F-br.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:2b9ab9aa-fa15-4458-b627-b8c51e1870f8/Apercu-GMASA-fr-8-2026.pdf/lang:fr/Apercu-GMASA-fr-8-2026.pdf"
+      ],
+      "tags": [
+        "abroad_planned_treatment",
+        "dental_accident",
+        "dental_hygiene",
+        "dental_treatment",
+        "other:certificat_dentaire_admission"
+      ],
+      "benefitCount": 7
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-acrobat",
+      "name": "Acrobat",
+      "category": "family_maternity",
+      "audience": "child",
+      "summary": "Assurance complémentaire accident des 0-18 ans, valable dans le monde entier : frais de guérison, sauvetage, chirurgie esthétique, rattrapage scolaire et, selon le niveau, division privée et capitaux décès, invalidité et hospitalisation.",
+      "variants": [
+        {
+          "key": "eco",
+          "name": "Acrobat eco (niveau 1P)",
+          "description": "Division privée en cas d'accident ; pas de capitaux ni d'assistance."
+        },
+        {
+          "key": "light",
+          "name": "Acrobat light (niveau 1)",
+          "description": "Division commune ; capitaux décès CHF 10'000 et invalidité jusqu'à CHF 700'000."
+        },
+        {
+          "key": "standard",
+          "name": "Acrobat standard (niveau 2)",
+          "description": "Division privée ; capitaux décès, invalidité et hospitalisation (CHF 500/an) ; Groupe Mutuel Assistance."
+        }
+      ],
+      "prerequisites": "Domicile en Suisse ; l'enfant ne doit pas avoir atteint 18 ans révolus. Le contrat prend fin à la fin de l'année civile des 18 ans.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Prime uniforme pour tous les assurés de 0 à 18 ans, par niveau de couverture.",
+        "discounts": "Une année de prime Acrobat offerte à la conclusion du package KidSafe ; l'avantage affiché (CHF 3.40/mois pour KidSafe avec Acrobat light, CHF 6.90/mois pour KidSafe+ avec Acrobat standard, pendant 1 an) correspond vraisemblablement à la prime mensuelle du niveau, sans que la page le dise explicitement."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières de l'assurance Acrobat (ABGA02-F8)",
+        "edition": "01.10.2021",
+        "url": "https://www.groupemutuel.ch/doc/jcr:d2532d24-9c50-4cd0-bd7e-b0e1b735af95/ABGA02-F8.pdf/lang:fr/ABGA02-F8.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurances-complementaires/accident/Acrobat.html",
+        "https://www.groupemutuel.ch/doc/jcr:d2532d24-9c50-4cd0-bd7e-b0e1b735af95/ABGA02-F8.pdf/lang:fr/ABGA02-F8.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:bf99b8f8-dd00-47ec-93b2-151bf47c2b14/24-Flyer-Acrobat-F.pdf/lang:fr/24-Flyer-Acrobat-F.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:2b9ab9aa-fa15-4458-b627-b8c51e1870f8/Apercu-GMASA-fr-8-2026.pdf/lang:fr/Apercu-GMASA-fr-8-2026.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "accident_capital",
+        "assistance_services",
+        "cosmetic_corrections",
+        "home_help",
+        "hospital_capital",
+        "hospital_general_ch",
+        "hospital_private",
+        "medical_aids",
+        "other:abonnement_sport",
+        "other:frais_guerison_accident",
+        "other:rattrapage_scolaire",
+        "premium_waiver",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "upgrade_option"
+      ],
+      "benefitCount": 20
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-activita",
+      "name": "ActiVita",
+      "category": "hospital",
+      "audience": "adult",
+      "summary": "Assurance complémentaire accident dès 18 ans : division privée en cas d'accident en Suisse et à l'étranger, sauvetage, rapatriement, rééducation, chirurgie esthétique et services (gardiennage du domicile, conseil juridique téléphonique).",
+      "variants": [],
+      "prerequisites": "Domicile en Suisse ; adhésion jusqu'au jour des 60 ans. Admission sans examen de santé si ActiVita remplace Acrobat arrivé à échéance pour cause d'âge.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "0-18 ; 19-25 ; puis tranches de 5 ans de la 26e à la 71e année. Âge de référence : âge atteint dans l'année civile (l'assuré qui atteint durant l'année l'âge maximal de sa classe passe dans la classe supérieure au 1er janvier suivant). Les conditions particulières ne citent que les classes d'âge ; sexe et région de primes possibles selon l'art. 26 CGC (le formulaire en ligne demande NPA, date de naissance et sexe).",
+        "discounts": null
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières de l'assurance ActiVita (AJGA01-F5)",
+        "edition": "01.06.2006",
+        "url": "https://www.groupemutuel.ch/doc/jcr:fa0e2ce8-816c-410d-ad00-1f2a24409891/AJGA01-F5.pdf/lang:fr/AJGA01-F5.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurances-complementaires/accident/ActiVita.html",
+        "https://www.groupemutuel.ch/doc/jcr:fa0e2ce8-816c-410d-ad00-1f2a24409891/AJGA01-F5.pdf/lang:fr/AJGA01-F5.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:d9fd874a-de00-4d8a-8023-80969db87f09/24-Flyer-Activita-F.pdf/lang:fr/24-Flyer-Activita-F.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:2b9ab9aa-fa15-4458-b627-b8c51e1870f8/Apercu-GMASA-fr-8-2026.pdf/lang:fr/Apercu-GMASA-fr-8-2026.pdf"
+      ],
+      "tags": [
+        "assistance_services",
+        "cosmetic_corrections",
+        "hospital_abroad",
+        "hospital_private",
+        "other:abonnement_sport",
+        "psychiatry_rehab_stay",
+        "search_recovery",
+        "travel_assistance_repatriation",
+        "travel_expenses_treatment"
+      ],
+      "benefitCount": 10
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-provista",
+      "name": "ProVista",
+      "category": "capital_accident",
+      "audience": "all",
+      "summary": "Assurance de sommes versant un capital en cas d'invalidité (progressif jusqu'à 350 %) ou de décès par suite d'accident, selon les sommes choisies à la conclusion.",
+      "variants": [],
+      "prerequisites": "Domicile en Suisse ; adhésion jusqu'à l'âge de 65 ans.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex"
+        ],
+        "ageBands": "Primes échelonnées selon le sexe, des tranches d'âge (bornes non publiées) et les capitaux assurés.",
+        "discounts": "Une année de primes ProVista offerte à la conclusion du package StarterSafe (avantage affiché : CHF 3.70/mois pour StarterSafe, CHF 7.30/mois pour StarterSafe+, pendant 1 an)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières de l'assurance ProVista (IDGA02-F9)",
+        "edition": "01.10.2021",
+        "url": "https://www.groupemutuel.ch/doc/jcr:002d4578-5adc-4344-9f6d-2d1fb0563d9e/IDGA02-F9.pdf/lang:fr/IDGA02-F9.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurances-complementaires/accident/ProVista-et-ProVistalight.html",
+        "https://www.groupemutuel.ch/doc/jcr:002d4578-5adc-4344-9f6d-2d1fb0563d9e/IDGA02-F9.pdf/lang:fr/IDGA02-F9.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:9f76249b-3fca-4dc7-97be-15c8a62059d4/24-Flyer-ProVista-Light-F.pdf/lang:fr/24-Flyer-ProVista-Light-F.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:2b9ab9aa-fa15-4458-b627-b8c51e1870f8/Apercu-GMASA-fr-8-2026.pdf/lang:fr/Apercu-GMASA-fr-8-2026.pdf"
+      ],
+      "tags": [
+        "accident_capital",
+        "other:prejudice_esthetique",
+        "premium_waiver"
+      ],
+      "benefitCount": 4
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-provista-light",
+      "name": "ProVista light",
+      "category": "capital_accident",
+      "audience": "all",
+      "summary": "Assurance de sommes versant uniquement un capital en cas de décès par suite d'accident.",
+      "variants": [],
+      "prerequisites": "Domicile en Suisse ; adhésion jusqu'à l'âge de 65 ans.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex"
+        ],
+        "ageBands": "Primes échelonnées selon le sexe, des tranches d'âge (bornes non publiées) et le capital assuré.",
+        "discounts": null
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières de l'assurance ProVista light (ADGA01-F4)",
+        "edition": "01.10.2021",
+        "url": "https://www.groupemutuel.ch/doc/jcr:b627c86b-0b29-4c44-9a05-c8bc79082f4f/ADGA01-F4.pdf/lang:fr/ADGA01-F4.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurances-complementaires/accident/ProVista-et-ProVistalight.html",
+        "https://www.groupemutuel.ch/doc/jcr:b627c86b-0b29-4c44-9a05-c8bc79082f4f/ADGA01-F4.pdf/lang:fr/ADGA01-F4.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:9f76249b-3fca-4dc7-97be-15c8a62059d4/24-Flyer-ProVista-Light-F.pdf/lang:fr/24-Flyer-ProVista-Light-F.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:2b9ab9aa-fa15-4458-b627-b8c51e1870f8/Apercu-GMASA-fr-8-2026.pdf/lang:fr/Apercu-GMASA-fr-8-2026.pdf"
+      ],
+      "tags": [
+        "accident_capital"
+      ],
+      "benefitCount": 1
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-kidsprotect",
+      "name": "KidsProtect",
+      "category": "family_maternity",
+      "audience": "child",
+      "summary": "Assurance de sommes versant aux parents une rente mensuelle de CHF 4'000 (15 rentes au maximum) lorsqu'un cancer est diagnostiqué chez l'enfant assuré et tant qu'il est en traitement.",
+      "variants": [],
+      "prerequisites": "Domicile en Suisse ; enfant n'ayant pas atteint 17 ans révolus, ne souffrant pas et n'ayant jamais souffert d'un cancer. Admission sans examen médical selon la page produit.",
+      "pricing": {
+        "factors": [],
+        "ageBands": "Prime unique, quel que soit l'âge ou le sexe de l'enfant ; pas de franchise.",
+        "discounts": "Compris dans le package KidSafe."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières de l'assurance KidsProtect (KPGA01-F4)",
+        "edition": "01.02.2022",
+        "url": "https://www.groupemutuel.ch/doc/jcr:097b8a11-aa46-40a9-98a1-648778c63850/KPGA01-F4.pdf/lang:fr/KPGA01-F4.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurances-complementaires/Indemnites-journalieres-rentes-et-capitaux/KidsProtect.html",
+        "https://www.groupemutuel.ch/doc/jcr:097b8a11-aa46-40a9-98a1-648778c63850/KPGA01-F4.pdf/lang:fr/KPGA01-F4.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:f09a8a8e-34f2-4e27-8ee3-2d1ed3886232/24-Flyer-Kids-Protect-zoe4life-F-BR.pdf/lang:fr/24-Flyer-Kids-Protect-zoe4life-F-BR.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:2b9ab9aa-fa15-4458-b627-b8c51e1870f8/Apercu-GMASA-fr-8-2026.pdf/lang:fr/Apercu-GMASA-fr-8-2026.pdf"
+      ],
+      "tags": [
+        "other:rente_cancer_enfant"
+      ],
+      "benefitCount": 1
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-sekunda",
+      "name": "Sekunda",
+      "category": "daily_allowance",
+      "audience": "adult",
+      "summary": "Assurance de sommes versant une allocation journalière en cas d'incapacité de travail ménager consécutive à un accident (maladie et maternité exclues).",
+      "variants": [],
+      "prerequisites": "Domicile en Suisse ; âge de 18 ans révolus à moins de 55 ans révolus. Le contrat prend fin à la fin du mois du 65e anniversaire.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex"
+        ],
+        "ageBands": "Primes échelonnées selon le sexe, des tranches d'âge (bornes non publiées) et l'allocation assurée.",
+        "discounts": "Compris dans le package StarterSafe (CHF 30/jour) et StarterSafe+ (CHF 50/jour)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières de l'assurance Sekunda (AMGA01-F7)",
+        "edition": "01.10.2021",
+        "url": "https://www.groupemutuel.ch/doc/jcr:db749182-5f47-4221-a09d-1d2ff6ab7062/AMGA01-F7.pdf/lang:fr/AMGA01-F7.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurances-complementaires/Indemnites-journalieres-rentes-et-capitaux/Sekunda.html",
+        "https://www.groupemutuel.ch/doc/jcr:db749182-5f47-4221-a09d-1d2ff6ab7062/AMGA01-F7.pdf/lang:fr/AMGA01-F7.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:b847a3ec-e353-495f-9454-c5ebdb8ec3db/24-Flyer-Sekunda-F.pdf/lang:fr/24-Flyer-Sekunda-F.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:2b9ab9aa-fa15-4458-b627-b8c51e1870f8/Apercu-GMASA-fr-8-2026.pdf/lang:fr/Apercu-GMASA-fr-8-2026.pdf"
+      ],
+      "tags": [
+        "daily_allowance"
+      ],
+      "benefitCount": 1
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-indemnite-journaliere-pi",
+      "name": "Assurance individuelle d'une indemnité journalière (PI)",
+      "category": "daily_allowance",
+      "audience": "adult",
+      "summary": "Assurance individuelle perte de gain selon la LCA : indemnité journalière en cas d'incapacité de travail due à la maladie et/ou à l'accident, avec délai d'attente et durée de prestations au choix.",
+      "variants": [],
+      "prerequisites": "Domicile en Suisse et activité lucrative en Suisse ; âge de 15 ans révolus à moins de 55 ans révolus ; examen de santé exigé (sauf libre passage depuis une assurance collective de l'assureur).",
+      "pricing": {
+        "factors": [
+          "age",
+          "accident"
+        ],
+        "ageBands": "15-20 ; puis tranches de 5 ans dès la 21e année. Prime calculée sur le montant assuré et la classe d'âge ; dépend aussi du délai d'attente, de la durée et des risques assurés indiqués dans la police. Âge de référence : âge atteint dans l'année civile (l'assuré qui atteint durant l'année l'âge maximal de sa classe passe dans la classe supérieure au 1er janvier suivant).",
+        "discounts": null
+      },
+      "conditionsDoc": {
+        "title": "Conditions générales de l'assurance indemnité journalière (PIGA02-F1)",
+        "edition": "01.02.2023",
+        "url": "https://www.groupemutuel.ch/doc/jcr:0e4909b9-ef60-4d71-b27c-e9bbb71c3118/PIGA02-F1.pdf/lang:fr/PIGA02-F1.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/assurances-complementaires/Indemnites-journalieres-rentes-et-capitaux/Assurance-d-une-indemnite-journaliere.html",
+        "https://www.groupemutuel.ch/doc/jcr:0e4909b9-ef60-4d71-b27c-e9bbb71c3118/PIGA02-F1.pdf/lang:fr/PIGA02-F1.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:2b9ab9aa-fa15-4458-b627-b8c51e1870f8/Apercu-GMASA-fr-8-2026.pdf/lang:fr/Apercu-GMASA-fr-8-2026.pdf"
+      ],
+      "tags": [
+        "daily_allowance"
+      ],
+      "benefitCount": 1
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-legis-sana-plus",
+      "name": "Legis sana+",
+      "category": "legal_protection",
+      "audience": "all",
+      "summary": "Protection juridique du patient (sinistres gérés par Dextra Protection juridique SA) : erreurs de diagnostic ou de traitement, violation de la protection des données de santé, défaut d'un moyen auxiliaire ou d'un médicament.",
+      "variants": [],
+      "prerequisites": "Toute personne physique domiciliée en Suisse. Durée minimale du contrat : 1 an.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Prime uniforme pour les assurés de 0 à 18 ans et pour ceux de 19 à 99 ans.",
+        "discounts": "Compris dans le package LegalSafe (Legis duo + Legis sana+ + CyberProtect), avec un rabais jusqu'à CHF 116.40 la première année."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières de l'assurance de protection juridique du patient Legis sana+ (LSGA01-F1)",
+        "edition": "01.06.2024",
+        "url": "https://www.groupemutuel.ch/doc/jcr:5bb9c121-3f55-4ef9-bcf1-57c9e1ea85da/LSGA01-F1.pdf/lang:fr/LSGA01-F1.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/patrimoine/Protection-juridique/Legis-sana.html",
+        "https://www.groupemutuel.ch/doc/jcr:5bb9c121-3f55-4ef9-bcf1-57c9e1ea85da/LSGA01-F1.pdf/lang:fr/LSGA01-F1.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:98eda826-3938-44d8-b00a-5dfcc36595f5/24-Flyer-Legis_Sana-FR-BR.pdf/lang:fr/24-Flyer-Legis_Sana-FR-BR.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:2b9ab9aa-fa15-4458-b627-b8c51e1870f8/Apercu-GMASA-fr-8-2026.pdf/lang:fr/Apercu-GMASA-fr-8-2026.pdf"
+      ],
+      "tags": [
+        "legal_protection"
+      ],
+      "benefitCount": 2
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-primacapital",
+      "name": "PrimaCapital",
+      "category": "capital_illness",
+      "audience": "all",
+      "summary": "Assurance de sommes versant un capital en cas de décès ou d'invalidité (besoin de soins avant 18 ans) à la suite d'une maladie, ou d'une maladie et d'un accident selon l'option. Porteur du risque : Groupe Mutuel Vie GMV SA (et non GMA SA).",
+      "variants": [
+        {
+          "key": "ic-m",
+          "name": "Option maladie uniquement (IC-m)",
+          "description": "Décès et invalidité permanente consécutifs à une maladie."
+        },
+        {
+          "key": "ic-ma",
+          "name": "Option maladie et accident (IC-m/a)",
+          "description": "Décès et invalidité permanente consécutifs à une maladie ou à un accident."
+        }
+      ],
+      "prerequisites": "Domicile légal en Suisse ; âge inférieur à 55 ans à la date d'effet ; questionnaire de santé. Le contrat prend fin au plus tard à la fin du mois du 65e anniversaire.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex"
+        ],
+        "ageBands": "Primes échelonnées selon des tranches d'âge (bornes non publiées), le sexe et le capital assuré.",
+        "discounts": "Compris dans les packages KidSafe (CHF 10'000 ou 25'000, maladie) et StarterSafe (CHF 25'000 ou 50'000, maladie)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions générales d'assurance d'un capital en cas de décès ou d'invalidité « PrimaCapital » (ICGM03-F6), lues dans le recueil des conditions du package KidSafe",
+        "edition": "01.06.2024",
+        "url": "https://www.groupemutuel.ch/doc/jcr:d5e5f91c-2cfa-45e0-9136-2b9591b9d8b7/Conditions-PackageKidSafe-FR.pdf/lang:fr/Conditions-PackageKidSafe-FR.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/vie/Assurances-en-cas-de-deces-ou-d-incapacite-de-gain/PrimaCapital.html",
+        "https://www.groupemutuel.ch/doc/jcr:d5e5f91c-2cfa-45e0-9136-2b9591b9d8b7/Conditions-PackageKidSafe-FR.pdf/lang:fr/Conditions-PackageKidSafe-FR.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:da85cd3e-3fbf-4329-b996-559e313eb98c/25-Flyer-PrimaCapital-FR-BR.pdf/lang:fr/25-Flyer-PrimaCapital-FR-BR.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:d838593a-74f2-4c39-808d-b51b94a102c3/ICGM03-F6.pdf/lang:fr/ICGM03-F6.pdf"
+      ],
+      "tags": [
+        "accident_capital",
+        "illness_capital"
+      ],
+      "benefitCount": 5
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-package-kidsafe",
+      "name": "Package KidSafe",
+      "category": "family_maternity",
+      "audience": "child",
+      "summary": "Package réunissant quatre assurances pour enfant : Acrobat, KidsProtect, H-Capital et PrimaCapital, en deux niveaux (KidSafe et KidSafe+). Chaque produit garde ses propres conditions.",
+      "variants": [
+        {
+          "key": "kidsafe",
+          "name": "KidSafe",
+          "description": "H-Capital CHF 1'000 ; PrimaCapital CHF 10'000 (maladie) ; Acrobat light."
+        },
+        {
+          "key": "kidsafe-plus",
+          "name": "KidSafe+",
+          "description": "H-Capital CHF 2'500 ; PrimaCapital CHF 25'000 (maladie) ; Acrobat standard (division privée en cas d'accident)."
+        }
+      ],
+      "prerequisites": "Conditions d'admission de chaque produit du package (Acrobat : moins de 18 ans ; KidsProtect : moins de 17 ans).",
+      "pricing": {
+        "factors": [],
+        "ageBands": null,
+        "discounts": "Avantage client : une année de prime Acrobat offerte, soit CHF 3.40 par mois (KidSafe) ou CHF 6.90 par mois (KidSafe+) pendant 1 an ; rabais jusqu'à CHF 82.80 la première année."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières des produits figurant dans le package KidSafe (KHGA02-F6, KPGA01-F4, ABGA02-F8, ICGM03-F6)",
+        "edition": "recueil non daté (éditions 01.10.2021 à 01.06.2024)",
+        "url": "https://www.groupemutuel.ch/doc/jcr:d5e5f91c-2cfa-45e0-9136-2b9591b9d8b7/Conditions-PackageKidSafe-FR.pdf/lang:fr/Conditions-PackageKidSafe-FR.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/Packages/Package-KidSafe.html",
+        "https://www.groupemutuel.ch/doc/jcr:654f5c9c-44b7-4b39-9de0-862d24f36232/Flyer_KidSafe_FR.pdf/lang:fr/Flyer_KidSafe_FR.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:d5e5f91c-2cfa-45e0-9136-2b9591b9d8b7/Conditions-PackageKidSafe-FR.pdf/lang:fr/Conditions-PackageKidSafe-FR.pdf"
+      ],
+      "tags": [
+        "accident_capital",
+        "hospital_capital",
+        "illness_capital",
+        "other:rente_cancer_enfant"
+      ],
+      "benefitCount": 7
+    },
+    {
+      "insurer": "groupe-mutuel",
+      "key": "groupe-mutuel-package-startersafe",
+      "name": "Package StarterSafe",
+      "category": "other",
+      "audience": "young_adult",
+      "summary": "Package réunissant quatre assurances de sommes : H-Capital, Sekunda, PrimaCapital et ProVista, en deux niveaux (StarterSafe et StarterSafe+). Chaque produit garde ses propres conditions.",
+      "variants": [
+        {
+          "key": "startersafe",
+          "name": "StarterSafe",
+          "description": "H-Capital CHF 1'500 ; Sekunda CHF 30/jour ; PrimaCapital CHF 25'000 ; ProVista invalidité jusqu'à CHF 175'000 et décès CHF 25'000."
+        },
+        {
+          "key": "startersafe-plus",
+          "name": "StarterSafe+",
+          "description": "H-Capital CHF 2'500 ; Sekunda CHF 50/jour ; PrimaCapital CHF 50'000 ; ProVista invalidité jusqu'à CHF 350'000 et décès CHF 50'000."
+        }
+      ],
+      "prerequisites": "Conditions d'admission de chaque produit du package (Sekunda : 18 à 55 ans ; ProVista : jusqu'à 65 ans ; PrimaCapital : moins de 55 ans).",
+      "pricing": {
+        "factors": [],
+        "ageBands": null,
+        "discounts": "Avantage client : une année de primes ProVista offerte, soit CHF 3.70 par mois (StarterSafe) ou CHF 7.30 par mois (StarterSafe+) pendant 1 an ; rabais jusqu'à CHF 87.60 la première année."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières des produits figurant dans le package StarterSafe",
+        "edition": "recueil non daté (non relu en détail ; conditions de chaque produit lues séparément)",
+        "url": "https://www.groupemutuel.ch/doc/jcr:e2a8440e-8e9c-4c0f-863d-942c1111f8b9/Conditions-StarterSafe-FR.pdf/lang:fr/Conditions-StarterSafe-FR.pdf"
+      },
+      "sourceUrls": [
+        "https://www.groupemutuel.ch/fr/clients-prives/nos-produits/sante/Packages/Package-StarterSafe.html",
+        "https://www.groupemutuel.ch/doc/jcr:4c6a1164-d482-456f-98fe-cf01f7440845/Flyer_StarterSafe_FR.pdf/lang:fr/Flyer_StarterSafe_FR.pdf",
+        "https://www.groupemutuel.ch/doc/jcr:e2a8440e-8e9c-4c0f-863d-942c1111f8b9/Conditions-StarterSafe-FR.pdf/lang:fr/Conditions-StarterSafe-FR.pdf"
+      ],
+      "tags": [
+        "accident_capital",
+        "daily_allowance",
+        "hospital_capital",
+        "illness_capital"
+      ],
+      "benefitCount": 8
     },
     {
       "insurer": "helsana",

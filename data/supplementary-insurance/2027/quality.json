@@ -17,7 +17,7 @@
       "products": 13,
       "benefits": 166,
       "verification:read": 166,
-      "calculatorPrices": 102
+      "calculatorPrices": 149
     },
     "concordia": {
       "products": 9,
@@ -27,9 +27,15 @@
     },
     "css": {
       "products": 20,
-      "benefits": 268,
-      "verification:read": 268,
+      "benefits": 274,
+      "verification:read": 274,
       "prices": 329
+    },
+    "groupe-mutuel": {
+      "products": 22,
+      "benefits": 237,
+      "verification:read": 237,
+      "prices": 1
     },
     "helsana": {
       "products": 18,
