@@ -1,0 +1,1227 @@
+{
+  "year": 2027,
+  "insurers": [
+    {
+      "key": "concordia",
+      "name": "CONCORDIA",
+      "legalEntityLca": "CONCORDIA Assurances SA",
+      "website": "https://www.concordia.ch/fr.html",
+      "calculatorUrl": "https://www.praemienrechner.concordia.ch/ipr/home?lang=fr",
+      "calculatorHosts": [
+        "www.praemienrechner.concordia.ch",
+        "www.concordia.ch"
+      ],
+      "publishedTariffUrls": [
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/A.10_Zahnpflegeversicherung_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/A.11_Ferien_Reiseversicherung_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/1.15_AVB_Ferien_Reiseversicherung_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/vorsorge/A.20_TIKU_Pr%C3%A4mientabelle_fr.pdf",
+        "https://www.concordia.ch/fr/versicherungen/zusatzversicherungen/diversa.html",
+        "https://www.concordia.ch/fr/versicherungen/zusatzversicherungen/natura.html",
+        "https://www.concordia.ch/fr/versicherungen/zusatzversicherungen/spital/allgemein.html",
+        "https://www.concordia.ch/fr/versicherungen/lebenssituationen/familie.html",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/A.07_Spitalversicherung_fr.pdf"
+      ],
+      "notes": "Entité porteuse LCA : CONCORDIA Assurances SA, Bundesplatz 15, 6002 Lucerne (l'AOS relève de CONCORDIA Assurance suisse de maladie et accidents SA). La protection juridique des patient·es incluse dans DIVERSAcare et DIVERSApremium est assurée par Protekta Assurance de protection juridique SA (Berne) ; il n'existe pas de produit de protection juridique vendu séparément. Éditions lues : aucune édition datée 01.01.2027 n'est publiée ; les conditions en vigueur sont les CGA et CCA « édition 2022 » (tirages 03.23/04.23, information clientèle 2025), les CGA ACCIDENTA et DIMA « édition 2025 », l'aperçu des prestations A.01 (06.25) et les flyers 12.24 à 03.26. Rabais : à partir du 3e enfant, DIVERSA, NATURA et l'Assurance-hospitalisation sont gratuites si les deux premiers enfants ont les mêmes assurances ; primes enfants jusqu'à 15 ans publiées : NATURA CHF 6, DIVERSA CHF 4, hospitalisation COMMUNE CHF 2 par mois ; rabais de franchise à option en hospitalisation (12 à 65 %) ; rabais HMO sur les complémentaires seulement à titre transitoire pour les affiliations antérieures au 31.12.2025 (CPA HMO, édition 2026) ; aucun rabais de durée de contrat ni de combinaison publié. Classes d'âge tarifaires des complémentaires des soins (CGA art. 20.3) : 0–15 ans, puis tranches de 5 ans jusqu'à 60 ans, 61 ans et plus ; les CGA prévoient un échelonnement possible selon l'âge, le sexe, la profession, l'activité et le domicile, l'information clientèle ne citant que l'âge, le domicile, les risques assurés et la participation aux coûts. Le formulaire du calculateur demande date de naissance, sexe, NPA et option prénatale. Calculateur : entrée https://www.praemienrechner.concordia.ch/ipr/home?lang=fr ; les pages produit postent un formulaire GET vers https://www.concordia.ch/bin/rateCalculator (paramètres lang, gebDat, geschlecht m/w, plz, vorgeburtlich) qui redirige (302) vers https://www.praemienrechner.concordia.ch?lang=fr&vorname=&gebDat=&plz=&ort=&webcode=&geschlecht=&vorgeburtlich= ; l'hôte www.praemienrechner.concordia.ch n'est pas dans la liste des hôtes autorisés et n'a pas été consulté. Pistes sans produit correspondant : aucune assurance de soins de longue durée, aucune indemnité ou capital d'hospitalisation, aucune couverture annulation/bagages (l'Assurance vacances et voyages ne couvre que les frais médicaux et l'assistance). Hors périmètre, non détaillés : INVIVA (assurance de risque et d'épargne liée à des fonds, pilier 3b), CONVENIA (assurance-vie mixte), CONVITA save/risk (pilier 3a), assurance facultative d'indemnités journalières selon la LAMal (max. CHF 30 par jour), assurance individuelle d'indemnités journalières agricoles (CGA 2022, public professionnel, non lue en détail). Produits probablement fermés à la souscription : Assurance-hospitalisation COMMUNE CONFORT et COMMUNE CONFORT plus (une liste d'hôpitaux « état 1er janvier 2025 » reste publiée, mais ces variantes ne figurent ni dans les CCA 2022, ni dans l'aperçu des prestations, ni dans la gamme actuelle) ; statut à confirmer. Divergences relevées : la page web DIVERSA indique CHF 20'000 de frais de recherche à l'étranger pour toutes les variantes alors que les CCA et le flyer donnent CHF 10'000 pour DIVERSA et DIVERSAcare ; la psychothérapie non médicale figure dans les CCA DIVERSA mais plus dans l'aperçu ni le flyer ; la page LIBERO renvoie à une version antérieure des CCA LIBERO (2.23.F.03, 08.21) alors que le centre de téléchargement publie la version 2.23.F.04 (04.23), retenue ici.",
+      "retrievedAt": "2026-11-18"
+    },
+    {
+      "key": "kpt",
+      "name": "KPT",
+      "legalEntityLca": "KPT Assurances SA",
+      "website": "https://www.kpt.ch/fr",
+      "calculatorUrl": "https://assistant.kpt.ch/fr/donnees-personnelles",
+      "calculatorHosts": [
+        "assistant.kpt.ch",
+        "www.kpt.ch",
+        "reiseversicherung.kpt.ch"
+      ],
+      "publishedTariffUrls": [],
+      "notes": "Complémentaires LCA portées par KPT Assurances SA (assurance de base : KPT Caisse-maladie SA). Assureurs partenaires pour les couvertures incluses : AWP P&C S.A. / Allianz (assistance, bagages, annulation) et Coop Protection Juridique SA (protection juridique). Calculateur : application « assistant » sur assistant.kpt.ch (entrée /fr/donnees-personnelles : sexe ou prénatal, code postal, date de naissance) ; les boutons « Calculer la prime » des pages produit pointent vers www.kpt.ch/api/premium-calculator?productCode=<code>&productClass=<classe>&lang=fr, qui redirige (302) vers assistant.kpt.ch/fr/preselect/<code>?part=…&option=… (codes observés : PUL ECO/TOP/PREM, FLEX ECO/TOP, H 1/2/3, HT 3100/6100, GH 220, Z 1/3/4, U 1, K 15, KTI 10, TD 3, VPR 0). L'adresse de l'API de prix est chargée à l'exécution et n'a pas été relevée. assistant.kpt.ch répond depuis le conteneur bien qu'il ne figure pas dans la liste du brief ; reiseversicherung.kpt.ch (souscription de l'assurance voyages) est refusé par le proxy (403). Aucun barème de primes LCA publié sur www.kpt.ch ; perte de gain et assurance-maladie internationale uniquement sur offre. Rabais transversaux : 6,7 % pour un contrat de 3 ans (Pulse et assurances des frais d'hospitalisation) ; 5 % de rabais en ligne KPTnet sur presque toutes les complémentaires ; escompte 0,5 % (semestriel) ou 1 % (annuel) ; rabais collectif ; franchise hospitalière demi-privé/privé (−15 %, −25 %, −50 %) ; Payback en cas de séjour volontaire en division commune ; aucun rabais famille général publié (sauf protection juridique VPR). Résiliation : préavis de 3 mois pour le 31 décembre (30 septembre), ou jusqu'au 30 novembre en cas d'adaptation de prime ; KPT renonce à son droit de résiliation à l'échéance ou en cas de sinistre (CGA art. 7). Délai d'attente maternité : 270 jours (CGA art. 2). La protection juridique en matière de santé (GR, édition 01.2025) n'est pas vendue séparément : elle est incluse dans Pulse. Hors périmètre, non repris comme produits : assurance-maladie internationale / facultative (F, édition 01.2023, pour les personnes transférant leur domicile à l'étranger, sur offre), assurance pour invités en Suisse (vendue via Allianz Travel, dès CHF 32.– par voyage pour une personne seule et 4 jours), protection juridique Internet (gratuite avec KPTnet), Area International et Area MedEvac (entreprises). Produits retirés de l'offre (conditions encore publiées) : assurance des soins Plus (AP) et Comfort (APC) avec le module ActivePlus, Natura (N), Joker, Joker light, PRIO (libre choix du médecin), indemnités journalières de ménage, assurance d'hospitalisation pour les aînés, CASA, COMBI et TIP TOP (CGA/P). Édition des conditions : aucune édition 01.2027 publiée au 18.11.2026 ; les éditions en vigueur listées sur la page « Conditions d'assurance » ont été lues et concordent avec l'« Aperçu des prestations 2027 » (réf. 115/f HJB 09.26).",
+      "retrievedAt": "2026-11-18"
+    }
+  ],
+  "products": [
+    {
+      "insurer": "concordia",
+      "key": "concordia-diversa",
+      "name": "DIVERSA",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Complémentaire ambulatoire en quatre variantes (DIVERSA, DIVERSAcare, DIVERSAplus, DIVERSApremium) : médicaments hors liste, lunettes, moyens auxiliaires, orthodontie, cures, aide ménagère, transports, urgences à l'étranger. Les variantes care et premium ajoutent des prestations familiales, la chirurgie réfractive et la protection juridique des patient·es ; premium couvre aussi les traitements ambulatoires planifiés à l'étranger.",
+      "variants": [
+        {
+          "key": "diversa",
+          "name": "DIVERSA",
+          "description": "Niveau de base : taux de 50 %, forfaits journaliers CHF 30, lunettes CHF 150, urgence à l'étranger stationnaire max. 30 jours."
+        },
+        {
+          "key": "care",
+          "name": "DIVERSAcare",
+          "description": "Niveau de base (50 %, CHF 30/jour, lunettes CHF 200, 45 jours à l'étranger) plus prestations familiales (rooming-in, chambre familiale, garde d'enfants, cours d'urgence), chirurgie réfractive, nuitée ambulatoire et protection juridique des patient·es (CHF 300'000 en Europe)."
+        },
+        {
+          "key": "plus",
+          "name": "DIVERSAplus",
+          "description": "Niveau supérieur : taux de 75 %, forfaits journaliers CHF 50, lunettes CHF 250, médecins en récusation, 60 jours à l'étranger ; sans les prestations familiales ni la protection juridique."
+        },
+        {
+          "key": "premium",
+          "name": "DIVERSApremium",
+          "description": "Niveau supérieur (75 %, CHF 50/jour, lunettes CHF 300, 75 jours à l'étranger) plus prestations familiales à CHF 100/nuit, chirurgie réfractive CHF 600, protection juridique CHF 500'000 en Europe et traitements ambulatoires planifiés à l'étranger."
+        }
+      ],
+      "prerequisites": "Proposition avec déclaration de santé (réserves ou refus possibles). Conclusion prénatale sans examen de santé pour DIVERSA et DIVERSAcare ; examen du risque simplifié à l'annonce de la naissance pour DIVERSAplus et DIVERSApremium. Les CGA lient la fin des complémentaires, en cas de départ à l'étranger, à la fin de l'AOS chez CONCORDIA ; l'obligation d'avoir l'AOS chez CONCORDIA n'est pas énoncée explicitement dans les documents lus.",
+      "pricing": {
+        "factors": [
+          "age",
+          "region"
+        ],
+        "ageBands": "CGA assurances complémentaires des soins, art. 20.3 : classes d'âge 0–15 ans ; puis tranches de 5 ans jusqu'à 60 ans (16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60) ; 61 ans et plus. La prime augmente lorsque la classe d'âge supérieure est atteinte. Le texte ne précise pas si l'âge s'entend atteint dans l'année civile ou à l'anniversaire (à vérifier dans le calculateur).",
+        "discounts": "À partir du 3e enfant, l'assurance est gratuite si la même assurance complémentaire a été conclue pour les deux premiers enfants (DIVERSA, NATURA, Assurance-hospitalisation). Pas de franchise ni de quote-part (sauf franchise annuelle de CHF 1'000 pour les traitements ambulatoires planifiés à l'étranger de DIVERSApremium). Rabais transitoire pour les assurés HMO affiliés sans interruption à une complémentaire au plus tard depuis le 31.12.2025 (CPA HMO, édition 2026)."
+      },
+      "conditionsDoc": {
+        "title": "CCA Assurance DIVERSA, édition 2022 (réf. 2.18.F.04, tirage 03.23) ; CGA Assurances complémentaires des soins, édition 2022 (information clientèle édition 2025, réf. 2.08.F 08.25)",
+        "edition": "2022",
+        "url": "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/2.18_ZVB_DIVERSA_FR_2022.pdf"
+      },
+      "sourceUrls": [
+        "https://www.concordia.ch/fr/versicherungen/zusatzversicherungen/diversa.html",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/2.18_ZVB_DIVERSA_FR_2022.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/A.04_DIVERSA_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/A.05_DIVERSA_Premium_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/A.37_DIVERSA_Kinderbetreuung_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/2.35_Patienten-Rechtsschutzversicherung_FR_2022.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/A.01_Leistungsuebersicht_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/CON_2.08_AVB_Pflegezusatz_210x297mm_FR_low.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/konfigurator/A.16_Werdendes_Kind_fr.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "abroad_planned_treatment",
+        "ambulatory_free_doctor_choice",
+        "ambulatory_surgery",
+        "childcare_assistance",
+        "convalescence_cure",
+        "cosmetic_corrections",
+        "dental_surgery",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "home_help",
+        "legal_protection",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "orthodontics",
+        "other:indemnite_deces",
+        "psychotherapy_non_medical",
+        "rooming_in",
+        "search_recovery",
+        "spa_cure",
+        "telemedicine_services",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "vaccination",
+        "vision_laser"
+      ],
+      "benefitCount": 75
+    },
+    {
+      "insurer": "concordia",
+      "key": "concordia-natura",
+      "name": "NATURA",
+      "category": "alternative_medicine",
+      "audience": "all",
+      "summary": "Complémentaire de médecine alternative, promotion de la santé et prévention, en deux variantes (NATURA : plus de 70 méthodes reconnues ; NATURAplus : plus de 130 méthodes, plafonds plus élevés, Sport Bonus et bébés-nageurs). Sans franchise.",
+      "variants": [
+        {
+          "key": "natura",
+          "name": "NATURA",
+          "description": "Plus de 70 méthodes ; 75 % jusqu'à CHF 4'000/an (médecins, naturopathes diplômés) et CHF 1'500/an (autres thérapeutes), plafond global CHF 4'000."
+        },
+        {
+          "key": "plus",
+          "name": "NATURAplus",
+          "description": "Plus de 130 méthodes ; 75 % jusqu'à CHF 6'000/an et CHF 2'000/an, plafond global CHF 6'000 ; Sport Bonus, bébés-nageurs, cours de yoga chez des thérapeutes reconnus."
+        }
+      ],
+      "prerequisites": "Proposition avec déclaration de santé. Conclusion prénatale sans examen de santé pour NATURA ; examen du risque simplifié à l'annonce de la naissance pour NATURAplus.",
+      "pricing": {
+        "factors": [
+          "age",
+          "region"
+        ],
+        "ageBands": "CGA assurances complémentaires des soins, art. 20.3 : classes d'âge 0–15 ans ; puis tranches de 5 ans jusqu'à 60 ans (16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60) ; 61 ans et plus. La prime augmente lorsque la classe d'âge supérieure est atteinte. Le texte ne précise pas si l'âge s'entend atteint dans l'année civile ou à l'anniversaire (à vérifier dans le calculateur).",
+        "discounts": "À partir du 3e enfant, l'assurance est gratuite si la même assurance complémentaire a été conclue pour les deux premiers enfants (DIVERSA, NATURA, Assurance-hospitalisation). Pas de franchise. Rabais transitoire HMO pour les affiliations antérieures au 31.12.2025."
+      },
+      "conditionsDoc": {
+        "title": "CCA Assurance NATURA, édition 2022 (réf. 2.19.F.04, tirage 03.23) ; CGA Assurances complémentaires des soins, édition 2022",
+        "edition": "2022",
+        "url": "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/2.19_ZVB_NATURA_FR_2022.pdf"
+      },
+      "sourceUrls": [
+        "https://www.concordia.ch/fr/versicherungen/zusatzversicherungen/natura.html",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/2.19_ZVB_NATURA_FR_2022.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/A.06_NATURA_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/A.28_SportBonus_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/A.01_Leistungsuebersicht_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/CON_2.08_AVB_Pflegezusatz_210x297mm_FR_low.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/konfigurator/A.16_Werdendes_Kind_fr.pdf"
+      ],
+      "tags": [
+        "alt_medicine_therapies",
+        "fitness_health_promotion",
+        "maternity",
+        "prevention_checkup",
+        "telemedicine_services"
+      ],
+      "benefitCount": 10
+    },
+    {
+      "insurer": "concordia",
+      "key": "concordia-assurance-hospitalisation",
+      "name": "Assurance-hospitalisation (COMMUNE, MI-PRIVÉE, PRIVÉE)",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Assurance d'hospitalisation en trois variantes régies par les mêmes CCA : COMMUNE (division commune dans toute la Suisse), MI-PRIVÉE (chambre à deux lits, libre choix du médecin en Suisse) et PRIVÉE (chambre individuelle, libre choix du médecin et de l'hôpital dans le monde entier). Inclut cures, aide ménagère, rooming-in, forfait d'accouchement ambulatoire et deuxième avis médical.",
+      "variants": [
+        {
+          "key": "commune",
+          "name": "Assurance-hospitalisation COMMUNE",
+          "description": "Division commune, libre choix de l'hôpital dans toute la Suisse ; forfaits CHF 30/jour ; accouchement ambulatoire CHF 300 ; pas de franchise."
+        },
+        {
+          "key": "mi-privee",
+          "name": "Assurance-hospitalisation MI-PRIVÉE",
+          "description": "Chambre à deux lits et libre choix du médecin dans toute la Suisse ; forfaits CHF 50/jour ; accouchement ambulatoire CHF 1'000 ; franchise à option CHF 0 à 10'000."
+        },
+        {
+          "key": "privee",
+          "name": "Assurance-hospitalisation PRIVÉE",
+          "description": "Chambre individuelle, libre choix du médecin et de l'hôpital dans le monde entier ; forfaits CHF 70/jour ; accouchement ambulatoire CHF 1'500 ; concordiaMed premium ; franchise à option CHF 0 à 10'000."
+        }
+      ],
+      "prerequisites": "Examen de l'état de santé obligatoire (flyer A.07). Conclusion prénatale sans réserve possible uniquement pour la COMMUNE ; MI-PRIVÉE et PRIVÉE ne peuvent pas être conclues avant la naissance (art. 3 CCA ; examen du risque simplifié à l'annonce de la naissance selon le flyer prénatal).",
+      "pricing": {
+        "factors": [
+          "age",
+          "region",
+          "deductible",
+          "accident"
+        ],
+        "ageBands": "CGA assurances complémentaires des soins, art. 20.3 : classes d'âge 0–15 ans ; puis tranches de 5 ans jusqu'à 60 ans (16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60) ; 61 ans et plus. La prime augmente lorsque la classe d'âge supérieure est atteinte. Le texte ne précise pas si l'âge s'entend atteint dans l'année civile ou à l'anniversaire (à vérifier dans le calculateur).",
+        "discounts": "À partir du 3e enfant, l'assurance est gratuite si la même assurance complémentaire a été conclue pour les deux premiers enfants (DIVERSA, NATURA, Assurance-hospitalisation). Rabais de franchise à option : PRIVÉE 12/22/32/42/62 % et MI-PRIVÉE 12/22/32/42/65 % pour CHF 1'000/2'000/3'000/5'000/10'000. Options tarifaires : avec ou sans couverture accident ; restriction du choix de l'hôpital (réduction) ou extension (majoration). Rabais de primes transitoire pour les assurances conclues avant 1997 (art. 23 CCA). Pas de majoration de prime après perception de prestations."
+      },
+      "conditionsDoc": {
+        "title": "CCA Assurance-hospitalisation, édition 2022 (réf. 2.20.F.05, tirage 03.23) ; CGA Assurances complémentaires des soins, édition 2022",
+        "edition": "2022",
+        "url": "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/2.20_ZVB_Spitalversicherung_FR_2022.pdf"
+      },
+      "sourceUrls": [
+        "https://www.concordia.ch/fr/versicherungen/zusatzversicherungen/spital.html",
+        "https://www.concordia.ch/fr/versicherungen/zusatzversicherungen/spital/allgemein.html",
+        "https://www.concordia.ch/fr/versicherungen/zusatzversicherungen/spital/halbprivat.html",
+        "https://www.concordia.ch/fr/versicherungen/zusatzversicherungen/spital/privat.html",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/2.20_ZVB_Spitalversicherung_FR_2022.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/A.07_Spitalversicherung_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/A.08_Spitalversicherung_PRIVAT_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/A.01_Leistungsuebersicht_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/CON_2.08_AVB_Pflegezusatz_210x297mm_FR_low.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/konfigurator/A.16_Werdendes_Kind_fr.pdf"
+      ],
+      "tags": [
+        "ambulatory_surgery",
+        "assistance_services",
+        "convalescence_cure",
+        "dental_surgery",
+        "home_help",
+        "hospital_abroad",
+        "hospital_deductible_option",
+        "hospital_flex",
+        "hospital_general_ch",
+        "hospital_private",
+        "hospital_semi_private",
+        "maternity",
+        "newborn_coverage",
+        "other:choix_hopital",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "second_opinion",
+        "spa_cure",
+        "telemedicine_services"
+      ],
+      "benefitCount": 29
+    },
+    {
+      "insurer": "concordia",
+      "key": "concordia-assurance-hospitalisation-libero",
+      "name": "Assurance-hospitalisation LIBERO",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Modèle d'hospitalisation flexible : la division (commune, mi-privée ou privée) est choisie avant chaque entrée à l'hôpital, dans toute la Suisse, avec quote-part de 20 % (max. CHF 2'000/an) en mi-privée et de 35 % (max. CHF 4'000/an) en privée. Aucune prestation à l'étranger.",
+      "variants": [],
+      "prerequisites": "Proposition avec examen de l'état de santé ; conclusion avant la naissance impossible (art. 4 CCA ; examen du risque simplifié à l'annonce de la naissance selon le flyer prénatal).",
+      "pricing": {
+        "factors": [
+          "age",
+          "region",
+          "accident"
+        ],
+        "ageBands": "CGA assurances complémentaires des soins, art. 20.3 : classes d'âge 0–15 ans ; puis tranches de 5 ans jusqu'à 60 ans (16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60) ; 61 ans et plus. La prime augmente lorsque la classe d'âge supérieure est atteinte. Le texte ne précise pas si l'âge s'entend atteint dans l'année civile ou à l'anniversaire (à vérifier dans le calculateur).",
+        "discounts": "Primes gratuites à partir du 3e enfant si les deux premiers disposent aussi de LIBERO. Options tarifaires : avec ou sans couverture accident ; restriction du choix de l'hôpital (réduction) ou extension (majoration). Pas de franchise à option. Pas de majoration de prime après perception de prestations."
+      },
+      "conditionsDoc": {
+        "title": "CCA Assurance-hospitalisation LIBERO, édition 2022 (réf. 2.23.F.04, tirage 04.23) ; CGA Assurances complémentaires des soins, édition 2022",
+        "edition": "2022",
+        "url": "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/ZVB_LIBERO_2022_fr.pdf"
+      },
+      "sourceUrls": [
+        "https://www.concordia.ch/fr/versicherungen/zusatzversicherungen/spital/libero.html",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/ZVB_LIBERO_2022_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/A.09_Spitalversicherung_LIBERO_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/A.07_Spitalversicherung_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/A.01_Leistungsuebersicht_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/CON_2.08_AVB_Pflegezusatz_210x297mm_FR_low.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/konfigurator/A.16_Werdendes_Kind_fr.pdf"
+      ],
+      "tags": [
+        "convalescence_cure",
+        "home_help",
+        "hospital_abroad",
+        "hospital_flex",
+        "maternity",
+        "newborn_coverage",
+        "other:choix_hopital",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "second_opinion",
+        "spa_cure",
+        "telemedicine_services"
+      ],
+      "benefitCount": 14
+    },
+    {
+      "insurer": "concordia",
+      "key": "concordia-assurance-soins-dentaires",
+      "name": "Assurance pour soins dentaires",
+      "category": "dental",
+      "audience": "all",
+      "summary": "Assurance dentaire en quatre classes (variantes 1 à 4) remboursant 50 % ou 75 % des factures de dentiste jusqu'à CHF 500 à 2'000 par année civile, y compris contrôles, soins conservateurs, prothétique et orthodontie.",
+      "variants": [
+        {
+          "key": "classe-1",
+          "name": "Variante 1 (classe 1)",
+          "description": "50 %, max. CHF 500 par année civile."
+        },
+        {
+          "key": "classe-2",
+          "name": "Variante 2 (classe 2)",
+          "description": "50 %, max. CHF 1'000 par année civile."
+        },
+        {
+          "key": "classe-3",
+          "name": "Variante 3 (classe 3)",
+          "description": "75 %, max. CHF 1'500 par année civile."
+        },
+        {
+          "key": "classe-4",
+          "name": "Variante 4 (classe 4)",
+          "description": "75 %, max. CHF 2'000 par année civile."
+        }
+      ],
+      "prerequisites": "Attestation dentaire sur l'état de la dentition à joindre à la proposition (à la charge du proposant) ; aucune attestation ni examen de santé pour les enfants jusqu'à leur 5e anniversaire ; refus possible en cas de dentition déficiente ou de malposition dentaire (art. 7 CCA). Conclusion prénatale sans examen de santé possible.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Art. 8 CCA : 0–4 ans ; 5–8 ans ; 9–15 ans ; 16–20 ans ; 21 ans et plus. La prime augmente à chaque passage à une classe d'âge supérieure. Âge de référence (année civile ou anniversaire) non précisé.",
+        "discounts": "Aucun rabais spécifique publié (la gratuité dès le 3e enfant ne vise que DIVERSA, NATURA et l'Assurance-hospitalisation)."
+      },
+      "conditionsDoc": {
+        "title": "CCA Assurance pour soins dentaires, édition 2022 (réf. 2.21.F.04, tirage 03.23) ; CGA Assurances complémentaires des soins, édition 2022",
+        "edition": "2022",
+        "url": "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/2.21_ZVB_Zahnpflegeversicherung_FR_2022.pdf"
+      },
+      "sourceUrls": [
+        "https://www.concordia.ch/fr/versicherungen/zusatzversicherungen/zahnpflege.html",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/2.21_ZVB_Zahnpflegeversicherung_FR_2022.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/A.10_Zahnpflegeversicherung_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/A.01_Leistungsuebersicht_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/CON_2.08_AVB_Pflegezusatz_210x297mm_FR_low.pdf",
+        "https://www.concordia.ch/fr/versicherungen/lebenssituationen/familie.html"
+      ],
+      "tags": [
+        "dental_treatment"
+      ],
+      "benefitCount": 4
+    },
+    {
+      "insurer": "concordia",
+      "key": "concordia-assurance-vacances-voyages",
+      "name": "Assurance vacances et voyages",
+      "category": "travel_abroad",
+      "audience": "all",
+      "summary": "Assurance temporaire (8 à 365 jours) couvrant à l'étranger les frais de guérison au tarif local, le sauvetage, le rapatriement et l'assistance ; peut être conclue par toute personne domiciliée en Suisse ou au Liechtenstein, même non assurée chez CONCORDIA. Pas de couverture annulation ni bagages.",
+      "variants": [
+        {
+          "key": "personne-seule",
+          "name": "Personne seule",
+          "description": "Une personne."
+        },
+        {
+          "key": "couple",
+          "name": "Couple",
+          "description": "Preneur d'assurance et une personne parente ou vivant dans le même ménage, voyage en commun uniquement."
+        },
+        {
+          "key": "famille",
+          "name": "Famille",
+          "description": "Preneur d'assurance, conjoint·e ou compagnon/compagne en ménage commun et enfants jusqu'à 25 ans, voyage en commun uniquement."
+        }
+      ],
+      "prerequisites": "Domicile en Suisse ou au Liechtenstein ; aucun âge limite ; pas d'obligation d'être assuré chez CONCORDIA ; conclusion par paiement de la prime (en ligne ou en agence) ; affections existant à la conclusion ou au début du voyage exclues.",
+      "pricing": {
+        "factors": [],
+        "ageBands": null,
+        "discounts": "Tarif forfaitaire selon la durée (8, 15, 22, 30, 60, 90, 120, 150, 180 ou 365 jours) et la variante (personne seule, couple, famille) ; pas de tarif selon l'âge. Barème complet en CHF (prime unique) – personne seule : 16/32/49/65/117/162/200/240/280/350 ; couple : 31/61/92/122/220/306/380/453/527/598 ; famille : 36/72/108/144/260/360/446/533/620/690."
+      },
+      "conditionsDoc": {
+        "title": "CGA Assurance vacances et voyages, édition 2022 (information clientèle édition 2025, réf. B.1.15.F 08.25)",
+        "edition": "2022 (information clientèle 2025)",
+        "url": "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/1.15_AVB_Ferien_Reiseversicherung_fr.pdf"
+      },
+      "sourceUrls": [
+        "https://www.concordia.ch/fr/versicherungen/zusatzversicherungen/ferien-und-reisen.html",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/1.15_AVB_Ferien_Reiseversicherung_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/A.11_Ferien_Reiseversicherung_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/A.01_Leistungsuebersicht_fr.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "assistance_services",
+        "search_recovery",
+        "telemedicine_services",
+        "transport_rescue",
+        "travel_assistance_repatriation"
+      ],
+      "benefitCount": 7
+    },
+    {
+      "insurer": "concordia",
+      "key": "concordia-accidenta",
+      "name": "ACCIDENTA",
+      "category": "capital_accident",
+      "audience": "all",
+      "summary": "Assurance-accidents de capital (pilier 3b, risque pur) : capital en cas de décès ou d'invalidité par suite d'accident, sommes d'assurance au choix, versement progressif selon le degré d'invalidité (variantes de progression 225 % ou 350 %).",
+      "variants": [
+        {
+          "key": "progression-225",
+          "name": "Progression 225 %",
+          "description": "Capital-invalidité jusqu'à 225 % de la somme d'assurance pour une invalidité de 100 %."
+        },
+        {
+          "key": "progression-350",
+          "name": "Progression 350 %",
+          "description": "Capital-invalidité jusqu'à 350 % de la somme d'assurance pour une invalidité de 100 %."
+        }
+      ],
+      "prerequisites": "Proposition d'assurance ; conclusion prénatale sans examen de santé possible. Limitations pour les plus de 65 ans (décès max. CHF 20'000, invalidité max. CHF 100'000, pas de progression) et pour les enfants et adolescent·es.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Primes selon le tarif du groupe d'âge déterminant, adaptées à chaque changement de groupe d'âge (art. 18.2 CGA) ; les bornes des groupes d'âge ne sont pas publiées.",
+        "discounts": null
+      },
+      "conditionsDoc": {
+        "title": "CGA Assurance-accidents ACCIDENTA, édition 2025 (réf. 2.09.F 08.25)",
+        "edition": "2025",
+        "url": "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/vorsorge/CON_2.09_AVB_ACCIDENTA_210x297mm_FR_low.pdf"
+      },
+      "sourceUrls": [
+        "https://www.concordia.ch/fr/versicherungen/vorsorge/accidenta.html",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/vorsorge/CON_2.09_AVB_ACCIDENTA_210x297mm_FR_low.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/A.21_ACCIDENTA_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/A.01_Leistungsuebersicht_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/konfigurator/A.16_Werdendes_Kind_fr.pdf"
+      ],
+      "tags": [
+        "accident_capital",
+        "other:validite_territoriale"
+      ],
+      "benefitCount": 4
+    },
+    {
+      "insurer": "concordia",
+      "key": "concordia-dima",
+      "name": "DIMA (assurance de capital risque)",
+      "category": "capital_illness",
+      "audience": "all",
+      "summary": "Assurance de capital risque (pilier 3b, sans part d'épargne) : capital en cas de décès et/ou d'invalidité par suite de maladie ou d'accident, sommes au choix par tranche de CHF 10'000, tarif publié par sexe et tranche d'âge. Portée par CONCORDIA Assurances SA et présentée avec la gamme santé (aperçu des prestations, offre prénatale).",
+      "variants": [
+        {
+          "key": "maladie-accident",
+          "name": "Maladie et accident",
+          "description": "Capitaux décès et invalidité couvrant maladie et accident (seule variante jusqu'à 20 ans)."
+        },
+        {
+          "key": "maladie-seule",
+          "name": "Maladie uniquement",
+          "description": "Couverture accidents exclue, pour les adultes (dès 21 ans selon les CGA, dès 18 ans selon le tableau des primes)."
+        }
+      ],
+      "prerequisites": "Domicile en Suisse ou au Liechtenstein ; admission au plus tôt le premier jour du mois suivant la naissance ; plus de nouvelle conclusion ni d'augmentation à partir de l'année civile des 56 ans ; proposition avec questions de santé (examen du risque) ; conclusion prénatale sans examen jusqu'à CHF 20'000 (décès) et CHF 200'000 (invalidité), examen simplifié au-delà.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex"
+        ],
+        "ageBands": "Tableau des primes DIMA (réf. A.20.T.F 08.25, valable dès le 26.03.2026) : 0–17 ans (tarif unique enfants/adolescent·es, sans distinction de sexe) ; puis par sexe 18–22, 23–27, 28–32, 33–37, 38–42, 43–47, 48–52, 53–57, 58–65. Âge de référence = année civile en cours moins année de naissance (art. 3.2 CGA ; « la date de référence est toujours le 1er janvier »). La tranche 58–65 figure au tarif alors que les CGA 2025 fixent l'âge-terme à 59 ans.",
+        "discounts": "Rabais bébés : première prime annuelle offerte à concurrence de CHF 192 si DIMA est conclue avant la naissance ou durant la première année de vie (examen du risque positif requis). 10 % de rabais sur les primes à partir de deux personnes (aperçu A.01). Majoration possible pour paiement échelonné."
+      },
+      "conditionsDoc": {
+        "title": "CGA Assurance de capital risque DIMA, édition 2025 (réf. 2.10.F 08.25, valable dès le 26.03.2026)",
+        "edition": "2025",
+        "url": "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/vorsorge/AVB-TIKU-FR_2025.pdf"
+      },
+      "sourceUrls": [
+        "https://www.concordia.ch/fr/versicherungen/vorsorge/tiku.html",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/vorsorge/AVB-TIKU-FR_2025.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/vorsorge/A.20_TIKU_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/vorsorge/A.20_TIKU_Pr%C3%A4mientabelle_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/A.01_Leistungsuebersicht_fr.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/konfigurator/A.16_Werdendes_Kind_fr.pdf"
+      ],
+      "tags": [
+        "illness_capital",
+        "other:validite_territoriale"
+      ],
+      "benefitCount": 5
+    },
+    {
+      "insurer": "concordia",
+      "key": "concordia-indemnites-journalieres-standard-plus",
+      "name": "Assurances individuelles d'indemnités journalières STANDARD et PLUS",
+      "category": "daily_allowance",
+      "audience": "adult",
+      "summary": "Indemnités journalières LCA en cas d'incapacité de travail due à une maladie, à un accident ou à des complications de grossesse : STANDARD (assurance de dommages pour salarié·es) et PLUS (assurance de sommes pour indépendant·es et personnes tenant un ménage). Montant, délai d'attente et modules maladie/accident au choix.",
+      "variants": [
+        {
+          "key": "standard",
+          "name": "STANDARD",
+          "description": "Assurance de dommages : indemnité limitée à la perte de salaire effective, coordonnée avec les autres assurances."
+        },
+        {
+          "key": "plus",
+          "name": "PLUS",
+          "description": "Assurance de sommes : prestation convenue versée dans tous les cas, sans justificatif de perte de revenu."
+        }
+      ],
+      "prerequisites": "Réservé aux personnes exerçant une activité lucrative ou tenant un ménage ; admission sur la base d'un examen de l'état de santé (art. 4 CGA). Tranches d'âge dès 16 ans.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Art. 30.3 CGA – PLUS (modules maladie et accident) : 16–30 ans, puis tranches de 10 ans, 61 ans et plus ; STANDARD : 16–25 ans, puis tranches de 5 ans, 61 ans et plus ; PLUS pour personnes tenant un ménage : 16–20 ans, puis tranches de 5 ans, 61 ans et plus. Autres facteurs : profession, activité, délai d'attente, durée des prestations, montant assuré.",
+        "discounts": null
+      },
+      "conditionsDoc": {
+        "title": "CGA Assurances individuelles d'indemnités journalières STANDARD et PLUS, édition 2022 (information clientèle édition 2025, réf. 2.06.F 08.25)",
+        "edition": "2022 (information clientèle 2025)",
+        "url": "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/CON_2.06_AVB_Einzeltaggeld_StandardPlus_210x297mm_FR_low.pdf"
+      },
+      "sourceUrls": [
+        "https://www.concordia.ch/fr/versicherungen/zusatzversicherungen/taggeld.html",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/CON_2.06_AVB_Einzeltaggeld_StandardPlus_210x297mm_FR_low.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/CON_A.18_Taggeldversicherung_Flyer_210x297_4f_fr_low.pdf",
+        "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/A.01_Leistungsuebersicht_fr.pdf"
+      ],
+      "tags": [
+        "daily_allowance"
+      ],
+      "benefitCount": 4
+    },
+    {
+      "insurer": "kpt",
+      "key": "kpt-pulse",
+      "name": "Pulse (assurance complémentaire ambulatoire)",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Complémentaire ambulatoire en trois niveaux (Eco, Top, Premium) : médicaments hors AOS, vaccins, moyens auxiliaires, promotion de la santé, conseils psychologiques digitaux, assurance voyages 56 jours et protection juridique santé ; Top et Premium ajoutent lunettes, maternité, check-up, médecine complémentaire et massages.",
+      "variants": [
+        {
+          "key": "eco",
+          "name": "Pulse Eco",
+          "description": "Socle : médicaments, vaccins (CHF 200), aides (CHF 150), promotion de la santé (CHF 50), conseils psychologiques digitaux, voyages et protection juridique santé. Pas de lunettes, maternité, check-up ni médecine complémentaire."
+        },
+        {
+          "key": "top",
+          "name": "Pulse Top",
+          "description": "Ajoute lunettes (CHF 250/3 ans), maternité, check-up et médecine complémentaire jusqu'à CHF 2'000 par an, médicaments complémentaires, massages (CHF 250), frais de déplacement ; promotion de la santé CHF 200."
+        },
+        {
+          "key": "premium",
+          "name": "Pulse Premium",
+          "description": "Plafonds les plus élevés (check-up et médecine complémentaire CHF 4'000, promotion de la santé CHF 600, lunettes CHF 500/3 ans), plus laser des yeux et ligature/stérilisation."
+        }
+      ],
+      "prerequisites": "Questionnaire de santé (examen du risque) ; souscription possible jusqu'à 65 ans pour presque toutes les complémentaires (Aperçu des prestations 2027) ; conclusion possible sans assurance de base auprès de la KPT. L'assurance perdure tant que la personne reste soumise à l'AOS. Assurance prénatale possible sans examen de santé.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "00–05, 06–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81–85, 86–90, 91+ (CS Pulse, art. Classes d'âge). Âge de référence : âge atteint dans l'année civile (année de la prime − année de naissance) ; le passage à la classe supérieure a lieu le 1er janvier de l'année où l'âge déterminant est atteint.",
+        "discounts": "Rabais de fidélité de 6,7 % par an pour un contrat de 3 ans. Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. Facteurs annoncés sur la page produit : « La prime mensuelle dépend de l'âge, du lieu de résidence et du sexe » (mention générique du module de calcul, à confirmer produit par produit dans le calculateur)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions spéciales Pulse Eco / Pulse Top / Pulse Premium, en complément aux CGA des assurances complémentaires selon la LCA (édition 01.2023)",
+        "edition": "01.2025",
+        "url": "https://www.kpt.ch/documents/5f82eb3e-263a-4bce-874f-ca25bc12ff01/CGA%20Pulse%20Premium%20FR.pdf"
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/assurance-complementaire-ambulatoire",
+        "https://www.kpt.ch/documents/c4390de7-1f9c-48ec-851c-9122cf62d5f1/CGA%20Pulse%20Eco%20FR.pdf",
+        "https://www.kpt.ch/documents/dd166954-992b-4cfc-bde2-1c92fc5305f1/CGA%20Pulse%20Top%20FR.pdf",
+        "https://www.kpt.ch/documents/5f82eb3e-263a-4bce-874f-ca25bc12ff01/CGA%20Pulse%20Premium%20FR.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf",
+        "https://www.kpt.ch/documents/88bcf526-a78d-49f9-b079-298199ecffd2/Pulse-Komplementaermedizinische-Methoden-KPT.pdf",
+        "https://www.kpt.ch/documents/3e609e24-38e4-495f-a61f-511238c7fa9f/Pulse-Liste-Frueherkennung-Diagnostik-KPT.pdf",
+        "https://www.kpt.ch/documents/1e321f2d-5a91-4d39-b4d7-01ab47ceb09c/Pulse-Liste-Leistungen-Gesundheitsfoerderung-KPT.pdf",
+        "https://www.kpt.ch/documents/75397190-f4f2-4b5d-8202-063f16791986/Pulse_Liste-Beratungsleistungen_f_05.2025.pdf",
+        "https://www.kpt.ch/documents/73613597-8624-4cbd-89f3-8e0c0b81be1b/Pulse-Liste-nicht-versicherte-Praeparate.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "alt_medicine_remedies",
+        "alt_medicine_therapies",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "gynecological_prevention",
+        "legal_protection",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "prevention_checkup",
+        "psychotherapy_non_medical",
+        "sterilization_contraception",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "travel_cancellation_luggage",
+        "travel_expenses_treatment",
+        "vaccination",
+        "vision_laser"
+      ],
+      "benefitCount": 38
+    },
+    {
+      "insurer": "kpt",
+      "key": "kpt-hospitalisation",
+      "name": "Assurance des frais d'hospitalisation (H)",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Complémentaire d'hospitalisation classique en quatre divisions : commune (libre choix de l'hôpital en Suisse), demi-privée, privée et privée mondiale. Inclut psychiatrie, cures, aide ménagère, transports, sauvetage, hospitalisation à l'étranger et l'assurance voyages 56 jours.",
+      "variants": [
+        {
+          "key": "commune",
+          "name": "Division commune",
+          "description": "Division commune dans toute la Suisse, sans libre choix du médecin ; étranger max. CHF 20'000."
+        },
+        {
+          "key": "demi-prive",
+          "name": "Division demi-privée",
+          "description": "Chambre à deux lits et libre choix du médecin en Suisse ; étranger intégral en Europe/Méditerranée, CHF 50'000 ailleurs."
+        },
+        {
+          "key": "prive",
+          "name": "Division privée",
+          "description": "Chambre individuelle et libre choix du médecin en Suisse ; étranger intégral sauf USA/Canada (CHF 100'000)."
+        },
+        {
+          "key": "prive-mondial",
+          "name": "Division privée mondiale",
+          "description": "Division privée et libre choix du médecin dans tous les hôpitaux du monde, sans plafond USA/Canada."
+        }
+      ],
+      "prerequisites": "Questionnaire de santé ; souscription d'une complémentaire d'hospitalisation possible jusqu'au 65e anniversaire (page Sicuranta) ; en complément de l'AOS ou de l'assurance-maladie facultative de la KPT. Examen de santé requis aussi pour passer de commune/demi-privée à privée ; en assurance prénatale, les divisions demi-privée et privée restent soumises à examen de santé.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "entry_age",
+          "deductible"
+        ],
+        "ageBands": "Conclusion jusqu'à 50 ans : 0–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, dès 66 ans. Conclusion dès la 51e année : 51–55, 56–60, 61–65, 66–70, dès 71 ans (H art. 15). Âge de référence : âge atteint dans l'année civile (année de la prime − année de naissance) ; le passage à la classe supérieure a lieu le 1er janvier de l'année où l'âge déterminant est atteint.",
+        "discounts": "Rabais de fidélité de 6,7 % par an pour un contrat de 3 ans. Franchise hospitalière (demi-privée/privée) : CHF 1'000 = −15 %, CHF 2'000 = −25 %, CHF 5'000 = −50 %. Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. Facteurs annoncés sur la page produit : « La prime mensuelle dépend de l'âge, du lieu de résidence et du sexe » (mention générique du module de calcul, à confirmer produit par produit dans le calculateur)."
+      },
+      "conditionsDoc": {
+        "title": "Assurance des frais d'hospitalisation (H) – Conditions spéciales en complément des CGA",
+        "edition": "01.2023",
+        "url": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf"
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/assurances-complementaires-hospitalisation",
+        "https://www.kpt.ch/fr/assurances-complementaires-hospitalisation/assurance-hospitalisation-commune",
+        "https://www.kpt.ch/fr/assurances-complementaires-hospitalisation/assurance-hospitalisation-semiprivee",
+        "https://www.kpt.ch/fr/assurances-complementaires-hospitalisation/assurance-hospitalisation-privee",
+        "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf",
+        "https://www.kpt.ch/fr/savoir/economiser-sur-les-primes"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "bonus_program",
+        "convalescence_cure",
+        "home_help",
+        "hospital_abroad",
+        "hospital_deductible_option",
+        "hospital_general_ch",
+        "hospital_private",
+        "hospital_semi_private",
+        "legal_protection",
+        "maternity",
+        "newborn_coverage",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "second_opinion",
+        "spa_cure",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "travel_cancellation_luggage"
+      ],
+      "benefitCount": 50
+    },
+    {
+      "insurer": "kpt",
+      "key": "kpt-hospitalisation-flex",
+      "name": "Assurance des frais d'hospitalisation Flex (Hôpital Flex Eco / Flex Top)",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Complémentaire d'hospitalisation flexible : division commune dans toute la Suisse sans supplément et choix de la division demi-privée ou privée avant chaque séjour, moyennant une participation journalière. Flex Top réduit la participation et ajoute interventions ambulatoires, rooming-in, cures, aide ménagère, capital maladie grave et droit d'option.",
+      "variants": [
+        {
+          "key": "flex-eco",
+          "name": "Hôpital Flex Eco",
+          "description": "Participation CHF 300/jour (demi-privé) ou CHF 500/jour (privé), max. CHF 6'000 par an ; psychiatrie 45 jours ; indemnité d'accouchement ambulatoire CHF 500."
+        },
+        {
+          "key": "flex-top",
+          "name": "Hôpital Flex Top",
+          "description": "Participation CHF 150/jour (demi-privé) ou CHF 250/jour (privé), max. CHF 4'000 par an ; psychiatrie 90 jours ; interventions ambulatoires, rooming-in, cures, aide ménagère, capital maladie grave CHF 5'000, droit d'option."
+        }
+      ],
+      "prerequisites": "Questionnaire de santé (examen du risque) ; souscription possible jusqu'à 65 ans pour presque toutes les complémentaires (Aperçu des prestations 2027) ; conclusion possible sans assurance de base auprès de la KPT. En complément de l'AOS ou de l'assurance-maladie facultative (F) de la KPT. Assurance prénatale possible sans examen de santé.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "0–5, 6–10, 11–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81–85, 86–90, 91+ (art. 15 Flex Eco / art. 18 Flex Top). Âge de référence : âge atteint dans l'année civile (année de la prime − année de naissance) ; le passage à la classe supérieure a lieu le 1er janvier de l'année où l'âge déterminant est atteint.",
+        "discounts": "Rabais de fidélité de 6,7 % par an pour un contrat de 3 ans. (mention affichée sur la carte Flex Top et sur la carte « flexible » des pages d'aperçu ; absente de la carte Flex Eco de la page produit, à confirmer). Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. Facteurs annoncés sur la page produit : « La prime mensuelle dépend de l'âge, du lieu de résidence et du sexe » (mention générique du module de calcul, à confirmer produit par produit dans le calculateur)."
+      },
+      "conditionsDoc": {
+        "title": "Assurance des frais d'hospitalisation Flex Eco / Flex Top – Conditions spéciales en complément aux CGA",
+        "edition": "07.2023",
+        "url": "https://www.kpt.ch/documents/a9519f25-de76-46ac-99d1-f441e8382f10/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Top.pdf"
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/assurances-complementaires-hospitalisation/assurance-hospitalisation-flexible",
+        "https://www.kpt.ch/documents/b67217bb-ef7a-452f-8d6d-135cc6da3ab6/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Eco.pdf",
+        "https://www.kpt.ch/documents/a9519f25-de76-46ac-99d1-f441e8382f10/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Top.pdf",
+        "https://www.kpt.ch/documents/a0a6cad1-0c0c-4f93-a53b-fa75727e4139/Spitalkostenversicherung%20Flex_Beratungsleistungen.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "ambulatory_surgery",
+        "convalescence_cure",
+        "home_help",
+        "hospital_abroad",
+        "hospital_flex",
+        "hospital_general_ch",
+        "legal_protection",
+        "maternity",
+        "newborn_coverage",
+        "other:critical_illness_capital",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "search_recovery",
+        "second_opinion",
+        "spa_cure",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "travel_cancellation_luggage",
+        "upgrade_option"
+      ],
+      "benefitCount": 27
+    },
+    {
+      "insurer": "kpt",
+      "key": "kpt-indemnites-journalieres-hospitalisation",
+      "name": "Assurance d'indemnités journalières d'hospitalisation (HT)",
+      "category": "hospital_daily_cash",
+      "audience": "all",
+      "summary": "Indemnité journalière forfaitaire à libre disposition pour chaque jour passé dans un hôpital pour soins aigus, de CHF 100 à CHF 300 par jour, pendant 30 ou 60 jours par an.",
+      "variants": [
+        {
+          "key": "30-jours",
+          "name": "30 jours",
+          "description": "Indemnité versée durant max. 30 jours par an."
+        },
+        {
+          "key": "60-jours",
+          "name": "60 jours",
+          "description": "Indemnité versée durant max. 60 jours par an."
+        }
+      ],
+      "prerequisites": "Questionnaire de santé (examen du risque) ; souscription possible jusqu'à 65 ans pour presque toutes les complémentaires (Aperçu des prestations 2027) ; conclusion possible sans assurance de base auprès de la KPT.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "0–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, dès 66 ans (HT art. 3). Âge de référence : âge atteint dans l'année civile (année de la prime − année de naissance) ; le passage à la classe supérieure a lieu le 1er janvier de l'année où l'âge déterminant est atteint.",
+        "discounts": "Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. Facteurs annoncés sur la page produit : « La prime mensuelle dépend de l'âge, du lieu de résidence et du sexe » (mention générique du module de calcul, à confirmer produit par produit dans le calculateur). La prime dépend aussi du montant journalier et de la durée choisis."
+      },
+      "conditionsDoc": {
+        "title": "Assurance d'indemnités journalières d'hospitalisation (HT) – Conditions spéciales en complément des CGA",
+        "edition": "01.2023",
+        "url": "https://www.kpt.ch/documents/9fb1765c-0e96-421a-86e3-df0e891b494d/BB%20Spitaltaggeldversicherung.pdf"
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/assurances-complementaires-hospitalisation/assurance-indemnite-journaliere-hospitalisation",
+        "https://www.kpt.ch/documents/9fb1765c-0e96-421a-86e3-df0e891b494d/BB%20Spitaltaggeldversicherung.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf"
+      ],
+      "tags": [
+        "hospital_daily_cash"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "kpt",
+      "key": "kpt-sicuranta",
+      "name": "Sicuranta – assurance de garantie d'admission (GH)",
+      "category": "other",
+      "audience": "all",
+      "summary": "Garantit la conclusion ultérieure d'une assurance des frais d'hospitalisation (H) en division demi-privée, privée ou privée mondiale sans nouvel examen du risque, après une durée choisie de 5, 10, 15 ou 20 ans. Aucune prestation de soins pendant la durée de la garantie.",
+      "variants": [
+        {
+          "key": "5-ans",
+          "name": "Sicuranta 5 ans",
+          "description": "Droit d'option après 5 ans."
+        },
+        {
+          "key": "10-ans",
+          "name": "Sicuranta 10 ans",
+          "description": "Droit d'option après 10 ans."
+        },
+        {
+          "key": "15-ans",
+          "name": "Sicuranta 15 ans",
+          "description": "Droit d'option après 15 ans."
+        },
+        {
+          "key": "20-ans",
+          "name": "Sicuranta 20 ans",
+          "description": "Droit d'option après 20 ans."
+        }
+      ],
+      "prerequisites": "Examen du risque (questionnaire de santé) à la conclusion de Sicuranta, y compris en assurance prénatale ; la souscription de l'assurance d'hospitalisation visée n'est possible que jusqu'au 65e anniversaire.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "0–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, dès 66 ans (GH art. 7). Âge de référence : âge atteint dans l'année civile (année de la prime − année de naissance) ; le passage à la classe supérieure a lieu le 1er janvier de l'année où l'âge déterminant est atteint.",
+        "discounts": "Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. Facteurs annoncés sur la page produit : « La prime mensuelle dépend de l'âge, du lieu de résidence et du sexe » (mention générique du module de calcul, à confirmer produit par produit dans le calculateur). La prime dépend aussi de la classe de prestations (demi-privé, privé, privé mondial) et de la durée choisies."
+      },
+      "conditionsDoc": {
+        "title": "Assurance garantissant l'admission Sicuranta (GH) – Conditions spéciales en complément des CGA",
+        "edition": "01.2023",
+        "url": "https://www.kpt.ch/documents/353eda1c-ce03-4190-a9b9-5611f58bf66b/BB%20Sicuranta%20AufnahmegarantieVersicherung.pdf"
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/assurances-complementaires-hospitalisation/assurance-garantie-admission",
+        "https://www.kpt.ch/documents/353eda1c-ce03-4190-a9b9-5611f58bf66b/BB%20Sicuranta%20AufnahmegarantieVersicherung.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf"
+      ],
+      "tags": [
+        "upgrade_option"
+      ],
+      "benefitCount": 1
+    },
+    {
+      "insurer": "kpt",
+      "key": "kpt-soins-dentaires",
+      "name": "Assurance des soins dentaires (Z) – assurance dentaire complémentaire",
+      "category": "dental",
+      "audience": "all",
+      "summary": "Contributions aux traitements dentaires, à l'hygiène dentaire, à la chirurgie dentaire et à l'orthodontie. Trois classes de prestations vendues en ligne (1, 3 et 4) ; la classe 4 couvre l'orthodontie à 75 % sans plafond jusqu'à 20 ans.",
+      "variants": [
+        {
+          "key": "cp1",
+          "name": "Classe de prestations 1",
+          "description": "50 %, max. CHF 500 par année civile ; sans questionnaire dentaire."
+        },
+        {
+          "key": "cp3",
+          "name": "Classe de prestations 3",
+          "description": "75 %, max. CHF 1'500 par année civile."
+        },
+        {
+          "key": "cp4",
+          "name": "Classe de prestations 4",
+          "description": "75 %, max. CHF 2'000 par année civile ; orthodontie à 75 % sans plafond jusqu'à 20 ans révolus."
+        }
+      ],
+      "prerequisites": "Classe 1 : aucun questionnaire dentaire. Classes 3 et 4 : attestation d'un dentiste à partir du 5e anniversaire (aucune avant). Les conditions spéciales décrivent aussi les classes 0 (50 %, max. CHF 300), 2 (50 %, max. CHF 1'000), 5 et 6 (orthodontie seule, 75 %, max. CHF 10'000 ; Cp 6 liée à l'assurance des soins Plus, retirée de l'offre), qui ne sont pas proposées sur le site.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Cp 0–4 : 0–5, 6–10, 11–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, dès 66 ans (Z art. 6). Âge de référence : âge atteint dans l'année civile (année de la prime − année de naissance) ; le passage à la classe supérieure a lieu le 1er janvier de l'année où l'âge déterminant est atteint.",
+        "discounts": "Classe de prestations 4 gratuite durant la première année de vie de l'enfant en cas d'assurance prénatale. Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. Facteurs annoncés sur la page produit : « La prime mensuelle dépend de l'âge, du lieu de résidence et du sexe » (mention générique du module de calcul, à confirmer produit par produit dans le calculateur)."
+      },
+      "conditionsDoc": {
+        "title": "Assurance des soins dentaires (Z) – Conditions spéciales en complément des CGA",
+        "edition": "01.2025",
+        "url": "https://www.kpt.ch/documents/96c49233-12c6-43da-9cf7-404b2f7b1840/CS%20Assurance%20des%20soins%20dentaires.pdf"
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/autres-assurances/assurance-dentaire-complementaire",
+        "https://www.kpt.ch/documents/96c49233-12c6-43da-9cf7-404b2f7b1840/CS%20Assurance%20des%20soins%20dentaires.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf",
+        "https://www.kpt.ch/fr/situations-personnelles/assurance-prenatale"
+      ],
+      "tags": [
+        "dental_treatment",
+        "orthodontics"
+      ],
+      "benefitCount": 4
+    },
+    {
+      "insurer": "kpt",
+      "key": "kpt-accidents-prestations-soins",
+      "name": "Assurance-accidents complémentaire pour prestations de soins (U)",
+      "category": "other",
+      "audience": "all",
+      "summary": "Prend en charge, pendant 5 ans après un accident, les coûts non couverts par la couverture accidents LAMal, LAA ou LAM : division commune hors canton, moyens auxiliaires, aide ménagère, soins à domicile, cures et transports.",
+      "variants": [],
+      "prerequisites": "Aucun examen de santé ; les accidents antérieurs à la conclusion ne sont pas couverts. Résiliable pour la fin d'un mois.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "0–18 ; dès 19 ans (U art. 4). Âge de référence : âge atteint dans l'année civile (année de la prime − année de naissance) ; le passage à la classe supérieure a lieu le 1er janvier de l'année où l'âge déterminant est atteint.",
+        "discounts": "Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. Facteurs annoncés sur la page produit : « La prime mensuelle dépend de l'âge, du lieu de résidence et du sexe » (mention générique du module de calcul, à confirmer produit par produit dans le calculateur)."
+      },
+      "conditionsDoc": {
+        "title": "Assurance-accidents complémentaire pour prestations de soins (U) – Conditions spéciales en complément des CGA",
+        "edition": "01.2023",
+        "url": "https://www.kpt.ch/documents/281cb7d5-1a64-41c1-aef3-998ca983475e/Assurance-accidents-complementaire-pour-prestations-soins.pdf"
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/autres-assurances/asssurance-accidents-complementaire",
+        "https://www.kpt.ch/documents/281cb7d5-1a64-41c1-aef3-998ca983475e/Assurance-accidents-complementaire-pour-prestations-soins.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf"
+      ],
+      "tags": [
+        "convalescence_cure",
+        "home_care",
+        "home_help",
+        "hospital_general_ch",
+        "medical_aids",
+        "spa_cure",
+        "transport_rescue"
+      ],
+      "benefitCount": 7
+    },
+    {
+      "insurer": "kpt",
+      "key": "kpt-capital-accident",
+      "name": "Assurance vie risque – accident : assurance-accidents en cas de décès et d'invalidité (K)",
+      "category": "capital_accident",
+      "audience": "all",
+      "summary": "Capital en cas de décès ou d'invalidité à la suite d'un accident, avec barème d'invalidité progressif jusqu'à 350 % de la somme assurée. Sommes d'assurance au choix par combinaisons prédéfinies.",
+      "variants": [],
+      "prerequisites": "Aucune question de santé pour la variante accident uniquement. Résiliable pour la fin d'un mois.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "0–18 ; dès 19 ans (K art. 9). Âge de référence : âge atteint dans l'année civile (année de la prime − année de naissance) ; le passage à la classe supérieure a lieu le 1er janvier de l'année où l'âge déterminant est atteint.",
+        "discounts": "Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. Facteurs annoncés sur la page produit : « La prime mensuelle dépend de l'âge, du lieu de résidence et du sexe » (mention générique du module de calcul, à confirmer produit par produit dans le calculateur). La prime dépend de la combinaison de sommes choisie."
+      },
+      "conditionsDoc": {
+        "title": "Assurance-accidents en cas de décès et d'invalidité (K) – Conditions spéciales en complément des CGA",
+        "edition": "01.2023",
+        "url": "https://www.kpt.ch/documents/81aa9ace-acc0-4082-9248-fc4fc1ad4b43/BB%20Unfallversicherung%20fuer%20Tod%20und%20Invaliditaet.pdf"
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/autres-assurances/assurance-vie-risque",
+        "https://www.kpt.ch/documents/81aa9ace-acc0-4082-9248-fc4fc1ad4b43/BB%20Unfallversicherung%20fuer%20Tod%20und%20Invaliditaet.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf"
+      ],
+      "tags": [
+        "accident_capital"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "kpt",
+      "key": "kpt-capital-maladie-accident",
+      "name": "Assurance vie risque – maladie et accident : assurance en cas de décès et d'invalidité (KUTI)",
+      "category": "capital_illness",
+      "audience": "all",
+      "summary": "Capital en cas de décès ou d'invalidité à la suite d'une maladie (et d'un accident si assuré). Droit proportionnel dès 40 % d'invalidité, plein capital dès 70 % ; l'assurance prend fin le 31 décembre qui suit le 59e anniversaire.",
+      "variants": [],
+      "prerequisites": "Examen de santé à la conclusion ; âge terme : 31 décembre suivant le 59e anniversaire ; domicile en Suisse.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex"
+        ],
+        "ageBands": "00–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–59 (K(U)TI art. 13 : prime selon la tranche d'âge atteinte, âge effectif).",
+        "discounts": "Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. K(U)TI art. 13 : primes calculées d'après l'âge, le sexe et les sommes d'assurance choisies ; la page produit mentionne aussi le lieu de résidence (mention générique du calculateur)."
+      },
+      "conditionsDoc": {
+        "title": "Assurance en cas de décès et d'invalidité par suite de maladie ou par suite de maladie et d'accident (KUTI) – Conditions spéciales en complément des CGA",
+        "edition": "01.2022",
+        "url": "https://www.kpt.ch/documents/99b59905-0841-49b7-a39a-5853fda8a4fd/BB%20Versicherung%20fuer%20Tod%20und%20Invaliditaet%20bei%20Krankheit%20und%20Unfall.pdf"
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/autres-assurances/assurance-vie-risque",
+        "https://www.kpt.ch/documents/99b59905-0841-49b7-a39a-5853fda8a4fd/BB%20Versicherung%20fuer%20Tod%20und%20Invaliditaet%20bei%20Krankheit%20und%20Unfall.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf"
+      ],
+      "tags": [
+        "illness_capital"
+      ],
+      "benefitCount": 2
+    },
+    {
+      "insurer": "kpt",
+      "key": "kpt-teddy",
+      "name": "Assurance enfants « Teddy »",
+      "category": "family_maternity",
+      "audience": "child",
+      "summary": "Assurance de somme pour enfants : rente mensuelle à libre disposition si l'enfant se voit diagnostiquer un cancer, en trois classes de prestations.",
+      "variants": [
+        {
+          "key": "classe-1",
+          "name": "Classe de prestations 1",
+          "description": "CHF 2'000 par mois pendant 12 mois."
+        },
+        {
+          "key": "classe-2",
+          "name": "Classe de prestations 2",
+          "description": "CHF 4'000 par mois pendant 12 mois."
+        },
+        {
+          "key": "classe-3",
+          "name": "Classe de prestations 3",
+          "description": "CHF 4'000 par mois pendant 24 mois."
+        }
+      ],
+      "prerequisites": "Enfants jusqu'à 17 ans, sans examen de santé, pour autant qu'aucun cancer n'ait été diagnostiqué à la souscription ; fin de l'assurance à la fin de l'année civile des 18 ans ; l'enfant doit rester soumis à l'AOS.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": null,
+        "discounts": "Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. Facteurs annoncés sur la page produit : « La prime mensuelle dépend de l'âge, du lieu de résidence et du sexe » (mention générique du module de calcul, à confirmer produit par produit dans le calculateur). Aucune classe d'âge publiée dans les conditions."
+      },
+      "conditionsDoc": {
+        "title": "Assurance enfants « Teddy » – Conditions spéciales en complément des CGA",
+        "edition": "01.2022",
+        "url": "https://www.kpt.ch/documents/2da92553-405c-42fb-9732-96e10d5557e4/CGA%20Assurance%20enfants%20Teddy.pdf"
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/autres-assurances/assurance-pour-enfants",
+        "https://www.kpt.ch/documents/2da92553-405c-42fb-9732-96e10d5557e4/CGA%20Assurance%20enfants%20Teddy.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf"
+      ],
+      "tags": [
+        "other:child_cancer_annuity"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "kpt",
+      "key": "kpt-voyages-vacances",
+      "name": "Assurance voyages et vacances (RF)",
+      "category": "travel_abroad",
+      "audience": "all",
+      "summary": "Assurance voyage vendue séparément pour une durée de 17, 31, 62, 92, 183 ou 365 jours, en variante individuelle ou famille : frais de guérison à l'étranger, assistance, bagages, frais d'annulation et protection juridique. La même couverture est incluse 56 jours par an dans Pulse et dans les assurances des frais d'hospitalisation.",
+      "variants": [
+        {
+          "key": "individuelle",
+          "name": "Personne seule",
+          "description": "Bagages jusqu'à CHF 2'000."
+        },
+        {
+          "key": "famille",
+          "name": "Famille",
+          "description": "Preneur, conjoint/partenaire et enfants jusqu'à 25 ans du même foyer ; bagages jusqu'à CHF 4'000."
+        }
+      ],
+      "prerequisites": "Domicile en Suisse ou statut de frontalier au bénéfice de l'AOS en Suisse ; prime payée avant le départ. Souscription en ligne sur reiseversicherung.kpt.ch (hôte non accessible depuis le conteneur) ; les prestations se choisissent à la souscription (modules exacts non vérifiés).",
+      "pricing": {
+        "factors": [],
+        "ageBands": null,
+        "discounts": null
+      },
+      "conditionsDoc": {
+        "title": "Assurance voyages et vacances (RF) – Conditions générales d'assurance CGA",
+        "edition": "01.2020",
+        "url": "https://www.kpt.ch/documents/59116dab-88f4-489f-b7db-3251f3647230/AVB%20Reise%20und%20Ferienversicherung.pdf"
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/autres-assurances/assurance-voyage",
+        "https://www.kpt.ch/documents/59116dab-88f4-489f-b7db-3251f3647230/AVB%20Reise%20und%20Ferienversicherung.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "dental_accident",
+        "legal_protection",
+        "search_recovery",
+        "travel_assistance_repatriation",
+        "travel_cancellation_luggage"
+      ],
+      "benefitCount": 9
+    },
+    {
+      "insurer": "kpt",
+      "key": "kpt-protection-juridique-circulation-privee",
+      "name": "Assurance de protection juridique de circulation et privée (VPR)",
+      "category": "legal_protection",
+      "audience": "all",
+      "summary": "Protection juridique générale (circulation routière, vie privée, litiges avec des assurances, employeur, bailleur) portée par Coop Protection Juridique SA ; complément à la protection juridique en matière de santé et à l'étranger déjà incluses dans Pulse. Uniquement en combinaison avec Pulse.",
+      "variants": [],
+      "prerequisites": "Assurance complémentaire ambulatoire Pulse requise (ou anciennes assurances des soins Plus/Comfort) ; couvre une seule personne par contrat.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": null,
+        "discounts": "Rabais famille : enfants de moins de 18 ans assurés gratuitement ; jeunes de 19 à 25 ans à moitié prix ; premier adulte de 26 ans ou plus à plein tarif, autres adultes du même foyer à moitié prix. Autres facteurs tarifaires non publiés (calculateur)."
+      },
+      "conditionsDoc": {
+        "title": "Assurance de protection juridique de circulation et privée (VPR) – Conditions générales d'assurance CGA",
+        "edition": "01.2025",
+        "url": "https://www.kpt.ch/documents/019c4334-6e65-498d-bbab-4374935c2069/AVB%20Verkehrs%20und%20Privatrechtsschutz%20Versicherung.pdf"
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/autres-assurances/assurance-protection-juridique",
+        "https://www.kpt.ch/documents/019c4334-6e65-498d-bbab-4374935c2069/AVB%20Verkehrs%20und%20Privatrechtsschutz%20Versicherung.pdf",
+        "https://www.kpt.ch/documents/3b826d60-2c0e-44fd-b5fe-0be198bda55f/BB%20GesundheitsrechtsschutzVersicherung.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf"
+      ],
+      "tags": [
+        "legal_protection"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "kpt",
+      "key": "kpt-perte-de-gain",
+      "name": "Assurance perte de gain (J)",
+      "category": "daily_allowance",
+      "audience": "adult",
+      "summary": "Indemnité journalière en cas d'incapacité de travail par suite de maladie ou d'accident, en variante assurance dommages (salariés) ou assurance de sommes (indépendants, personnes au foyer), avec délai de carence au choix. Offre sur demande uniquement.",
+      "variants": [
+        {
+          "key": "dommages",
+          "name": "Assurance dommages",
+          "description": "Indemnité jusqu'à concurrence du salaire AVS perçu avant l'incapacité de travail ; perte de revenu à justifier."
+        },
+        {
+          "key": "sommes",
+          "name": "Assurance de sommes",
+          "description": "Indemnité fixe sans tenir compte de la perte de gain effective ; max. CHF 100 par jour pour les personnes tenant un foyer."
+        }
+      ],
+      "prerequisites": "Offre sur demande (pas de calcul en ligne) ; l'assurance s'éteint à l'épuisement du droit aux prestations ou à l'âge AVS.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "15–30, 31–40, 41–50, 51–60, 61–65 ans (J art. 14). Âge de référence : âge atteint dans l'année civile (année de la prime − année de naissance) ; le passage à la classe supérieure a lieu le 1er janvier de l'année où l'âge déterminant est atteint.",
+        "discounts": "Un délai de carence plus long réduit la prime. Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. Autres facteurs tarifaires non publiés (prime dépendant du montant journalier et du délai de carence)."
+      },
+      "conditionsDoc": {
+        "title": "Assurance perte de gain (J) – Conditions spéciales en complément des CGA",
+        "edition": "01.2023",
+        "url": "https://www.kpt.ch/documents/a3174fc3-3c8f-4767-bf34-c3045a1646ad/BB%20Erwerbsausfallversicherung.pdf"
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/autres-assurances/assurance-perte-de-gain",
+        "https://www.kpt.ch/documents/a3174fc3-3c8f-4767-bf34-c3045a1646ad/BB%20Erwerbsausfallversicherung.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf",
+        "https://www.kpt.ch/fr/savoir/economiser-sur-les-primes"
+      ],
+      "tags": [
+        "daily_allowance"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "kpt",
+      "key": "kpt-patient-prive",
+      "name": "Assurance patient privé (PP)",
+      "category": "other",
+      "audience": "all",
+      "summary": "Prend en charge 90 % des coûts non couverts des médecins qui se sont récusés au sens de l'art. 44 LAMal. Conditions listées parmi les documents en vigueur (non classées « retirées de l'offre »), mais produit absent des pages produit, du calculateur et de l'Aperçu des prestations 2027 : statut de vente à confirmer.",
+      "variants": [],
+      "prerequisites": "L'assurance déploie ses effets aussi longtemps que la personne est soumise à l'AOS. Modalités de souscription non publiées.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "0–18 ; dès 19 ans (PP art. 4). Âge de référence : âge atteint dans l'année civile (année de la prime − année de naissance) ; le passage à la classe supérieure a lieu le 1er janvier de l'année où l'âge déterminant est atteint.",
+        "discounts": null
+      },
+      "conditionsDoc": {
+        "title": "Assurance patient privé (PP) – Conditions spéciales en complément des CGA",
+        "edition": "01.2023",
+        "url": "https://www.kpt.ch/documents/9ea0621c-931d-446f-a2a7-9003941a5069/BB%20Privatpatienten%20Versicherun_FR.pdf"
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/services-clientele/comprendre-documents/conditions-generales-assurance",
+        "https://www.kpt.ch/documents/9ea0621c-931d-446f-a2a7-9003941a5069/BB%20Privatpatienten%20Versicherun_FR.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf"
+      ],
+      "tags": [
+        "ambulatory_free_doctor_choice"
+      ],
+      "benefitCount": 2
+    }
+  ]
+}

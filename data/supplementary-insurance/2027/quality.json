@@ -1,0 +1,17 @@
+{
+  "year": 2027,
+  "perInsurer": {
+    "concordia": {
+      "products": 9,
+      "benefits": 152,
+      "verification:read": 152,
+      "prices": 97
+    },
+    "kpt": {
+      "products": 14,
+      "benefits": 155,
+      "verification:read": 155
+    }
+  },
+  "issues": []
+}

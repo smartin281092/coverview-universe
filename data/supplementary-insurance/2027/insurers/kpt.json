@@ -1,0 +1,3148 @@
+{
+  "insurer": {
+    "key": "kpt",
+    "name": "KPT",
+    "legalEntityLca": "KPT Assurances SA",
+    "website": "https://www.kpt.ch/fr",
+    "calculatorUrl": "https://assistant.kpt.ch/fr/donnees-personnelles",
+    "calculatorHosts": [
+      "assistant.kpt.ch",
+      "www.kpt.ch",
+      "reiseversicherung.kpt.ch"
+    ],
+    "publishedTariffUrls": [],
+    "notes": "Complémentaires LCA portées par KPT Assurances SA (assurance de base : KPT Caisse-maladie SA). Assureurs partenaires pour les couvertures incluses : AWP P&C S.A. / Allianz (assistance, bagages, annulation) et Coop Protection Juridique SA (protection juridique). Calculateur : application « assistant » sur assistant.kpt.ch (entrée /fr/donnees-personnelles : sexe ou prénatal, code postal, date de naissance) ; les boutons « Calculer la prime » des pages produit pointent vers www.kpt.ch/api/premium-calculator?productCode=<code>&productClass=<classe>&lang=fr, qui redirige (302) vers assistant.kpt.ch/fr/preselect/<code>?part=…&option=… (codes observés : PUL ECO/TOP/PREM, FLEX ECO/TOP, H 1/2/3, HT 3100/6100, GH 220, Z 1/3/4, U 1, K 15, KTI 10, TD 3, VPR 0). L'adresse de l'API de prix est chargée à l'exécution et n'a pas été relevée. assistant.kpt.ch répond depuis le conteneur bien qu'il ne figure pas dans la liste du brief ; reiseversicherung.kpt.ch (souscription de l'assurance voyages) est refusé par le proxy (403). Aucun barème de primes LCA publié sur www.kpt.ch ; perte de gain et assurance-maladie internationale uniquement sur offre. Rabais transversaux : 6,7 % pour un contrat de 3 ans (Pulse et assurances des frais d'hospitalisation) ; 5 % de rabais en ligne KPTnet sur presque toutes les complémentaires ; escompte 0,5 % (semestriel) ou 1 % (annuel) ; rabais collectif ; franchise hospitalière demi-privé/privé (−15 %, −25 %, −50 %) ; Payback en cas de séjour volontaire en division commune ; aucun rabais famille général publié (sauf protection juridique VPR). Résiliation : préavis de 3 mois pour le 31 décembre (30 septembre), ou jusqu'au 30 novembre en cas d'adaptation de prime ; KPT renonce à son droit de résiliation à l'échéance ou en cas de sinistre (CGA art. 7). Délai d'attente maternité : 270 jours (CGA art. 2). La protection juridique en matière de santé (GR, édition 01.2025) n'est pas vendue séparément : elle est incluse dans Pulse. Hors périmètre, non repris comme produits : assurance-maladie internationale / facultative (F, édition 01.2023, pour les personnes transférant leur domicile à l'étranger, sur offre), assurance pour invités en Suisse (vendue via Allianz Travel, dès CHF 32.– par voyage pour une personne seule et 4 jours), protection juridique Internet (gratuite avec KPTnet), Area International et Area MedEvac (entreprises). Produits retirés de l'offre (conditions encore publiées) : assurance des soins Plus (AP) et Comfort (APC) avec le module ActivePlus, Natura (N), Joker, Joker light, PRIO (libre choix du médecin), indemnités journalières de ménage, assurance d'hospitalisation pour les aînés, CASA, COMBI et TIP TOP (CGA/P). Édition des conditions : aucune édition 01.2027 publiée au 18.11.2026 ; les éditions en vigueur listées sur la page « Conditions d'assurance » ont été lues et concordent avec l'« Aperçu des prestations 2027 » (réf. 115/f HJB 09.26)."
+  },
+  "retrievedAt": "2026-11-18",
+  "products": [
+    {
+      "key": "kpt-pulse",
+      "name": "Pulse (assurance complémentaire ambulatoire)",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Complémentaire ambulatoire en trois niveaux (Eco, Top, Premium) : médicaments hors AOS, vaccins, moyens auxiliaires, promotion de la santé, conseils psychologiques digitaux, assurance voyages 56 jours et protection juridique santé ; Top et Premium ajoutent lunettes, maternité, check-up, médecine complémentaire et massages.",
+      "variants": [
+        {
+          "key": "eco",
+          "name": "Pulse Eco",
+          "description": "Socle : médicaments, vaccins (CHF 200), aides (CHF 150), promotion de la santé (CHF 50), conseils psychologiques digitaux, voyages et protection juridique santé. Pas de lunettes, maternité, check-up ni médecine complémentaire."
+        },
+        {
+          "key": "top",
+          "name": "Pulse Top",
+          "description": "Ajoute lunettes (CHF 250/3 ans), maternité, check-up et médecine complémentaire jusqu'à CHF 2'000 par an, médicaments complémentaires, massages (CHF 250), frais de déplacement ; promotion de la santé CHF 200."
+        },
+        {
+          "key": "premium",
+          "name": "Pulse Premium",
+          "description": "Plafonds les plus élevés (check-up et médecine complémentaire CHF 4'000, promotion de la santé CHF 600, lunettes CHF 500/3 ans), plus laser des yeux et ligature/stérilisation."
+        }
+      ],
+      "prerequisites": "Questionnaire de santé (examen du risque) ; souscription possible jusqu'à 65 ans pour presque toutes les complémentaires (Aperçu des prestations 2027) ; conclusion possible sans assurance de base auprès de la KPT. L'assurance perdure tant que la personne reste soumise à l'AOS. Assurance prénatale possible sans examen de santé.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "00–05, 06–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81–85, 86–90, 91+ (CS Pulse, art. Classes d'âge). Âge de référence : âge atteint dans l'année civile (année de la prime − année de naissance) ; le passage à la classe supérieure a lieu le 1er janvier de l'année où l'âge déterminant est atteint.",
+        "publishedPrices": [],
+        "discounts": "Rabais de fidélité de 6,7 % par an pour un contrat de 3 ans. Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. Facteurs annoncés sur la page produit : « La prime mensuelle dépend de l'âge, du lieu de résidence et du sexe » (mention générique du module de calcul, à confirmer produit par produit dans le calculateur)."
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/assurance-complementaire-ambulatoire",
+        "https://www.kpt.ch/documents/c4390de7-1f9c-48ec-851c-9122cf62d5f1/CGA%20Pulse%20Eco%20FR.pdf",
+        "https://www.kpt.ch/documents/dd166954-992b-4cfc-bde2-1c92fc5305f1/CGA%20Pulse%20Top%20FR.pdf",
+        "https://www.kpt.ch/documents/5f82eb3e-263a-4bce-874f-ca25bc12ff01/CGA%20Pulse%20Premium%20FR.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf",
+        "https://www.kpt.ch/documents/88bcf526-a78d-49f9-b079-298199ecffd2/Pulse-Komplementaermedizinische-Methoden-KPT.pdf",
+        "https://www.kpt.ch/documents/3e609e24-38e4-495f-a61f-511238c7fa9f/Pulse-Liste-Frueherkennung-Diagnostik-KPT.pdf",
+        "https://www.kpt.ch/documents/1e321f2d-5a91-4d39-b4d7-01ab47ceb09c/Pulse-Liste-Leistungen-Gesundheitsfoerderung-KPT.pdf",
+        "https://www.kpt.ch/documents/75397190-f4f2-4b5d-8202-063f16791986/Pulse_Liste-Beratungsleistungen_f_05.2025.pdf",
+        "https://www.kpt.ch/documents/73613597-8624-4cbd-89f3-8e0c0b81be1b/Pulse-Liste-nicht-versicherte-Praeparate.pdf"
+      ],
+      "conditionsDoc": {
+        "title": "Conditions spéciales Pulse Eco / Pulse Top / Pulse Premium, en complément aux CGA des assurances complémentaires selon la LCA (édition 01.2023)",
+        "edition": "01.2025",
+        "url": "https://www.kpt.ch/documents/5f82eb3e-263a-4bce-874f-ca25bc12ff01/CGA%20Pulse%20Premium%20FR.pdf"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "medication_non_listed"
+          ],
+          "label": "Médicaments",
+          "variant": null,
+          "coverage": "90 % des coûts jusqu'à max. CHF 50'000.– par année civile pour les médicaments nécessaires sur le plan médical, prescrits par un médecin et autorisés par Swissmedic pour l'indication concrète",
+          "ratePercent": 90,
+          "maxAmountChf": 50000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 6 Eco / art. 9 Top / art. 9 Premium. Exclus : médicaments de la « Liste des préparations non assurées » de la KPT (notamment prévention, médicaments orphelins, cytostatiques, thérapies géniques et cellulaires, cosmétiques, préparations de confort, compléments alimentaires, substitution, stimulation sexuelle, perte de poids) et de la LPPA ; pas de prise en charge hors limitation lorsque l'AOS couvre une application limitée.",
+          "sourceUrl": "https://www.kpt.ch/documents/c4390de7-1f9c-48ec-851c-9122cf62d5f1/CGA%20Pulse%20Eco%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "vaccination"
+          ],
+          "label": "Vaccinations",
+          "variant": "eco",
+          "coverage": "100 % des coûts jusqu'à max. CHF 200.– par année civile pour les vaccinations contre les maladies infectieuses",
+          "ratePercent": 100,
+          "maxAmountChf": 200,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 3.",
+          "sourceUrl": "https://www.kpt.ch/documents/c4390de7-1f9c-48ec-851c-9122cf62d5f1/CGA%20Pulse%20Eco%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "vaccination"
+          ],
+          "label": "Vaccinations",
+          "variant": "top",
+          "coverage": "100 % des coûts jusqu'à max. CHF 400.– par année civile pour les vaccinations contre les maladies infectieuses",
+          "ratePercent": 100,
+          "maxAmountChf": 400,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 3.",
+          "sourceUrl": "https://www.kpt.ch/documents/dd166954-992b-4cfc-bde2-1c92fc5305f1/CGA%20Pulse%20Top%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "vaccination"
+          ],
+          "label": "Vaccinations",
+          "variant": "premium",
+          "coverage": "100 % des coûts jusqu'à max. CHF 800.– par année civile pour les vaccinations contre les maladies infectieuses",
+          "ratePercent": 100,
+          "maxAmountChf": 800,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 3.",
+          "sourceUrl": "https://www.kpt.ch/documents/5f82eb3e-263a-4bce-874f-ca25bc12ff01/CGA%20Pulse%20Premium%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "glasses_lenses"
+          ],
+          "label": "Lunettes et lentilles de contact",
+          "variant": "top",
+          "coverage": "Jusqu'à CHF 250.– par période de trois années civiles pour les aides visuelles nécessaires avec prescription d'un médecin ou d'un opticien",
+          "ratePercent": null,
+          "maxAmountChf": 250,
+          "maxPeriod": "3_years",
+          "unlimited": false,
+          "waitingPeriod": "365 jours à compter du début de l'assurance à la KPT",
+          "conditions": "Art. 4. Perception partielle possible en cours de période (Aperçu 2027).",
+          "sourceUrl": "https://www.kpt.ch/documents/dd166954-992b-4cfc-bde2-1c92fc5305f1/CGA%20Pulse%20Top%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "glasses_lenses"
+          ],
+          "label": "Lunettes et lentilles de contact",
+          "variant": "premium",
+          "coverage": "Jusqu'à CHF 500.– par période de trois années civiles pour les aides visuelles nécessaires avec prescription d'un médecin ou d'un opticien",
+          "ratePercent": null,
+          "maxAmountChf": 500,
+          "maxPeriod": "3_years",
+          "unlimited": false,
+          "waitingPeriod": "365 jours à compter du début de l'assurance à la KPT",
+          "conditions": "Art. 4. Perception partielle possible en cours de période (Aperçu 2027). Aucune prestation lunettes/lentilles l'année d'un traitement au laser et les 5 années civiles suivantes.",
+          "sourceUrl": "https://www.kpt.ch/documents/5f82eb3e-263a-4bce-874f-ca25bc12ff01/CGA%20Pulse%20Premium%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "vision_laser"
+          ],
+          "label": "Traitement par laser des yeux",
+          "variant": "premium",
+          "coverage": "Montant unique de max. CHF 600.– par œil sur les frais d'une intervention de chirurgie réfractive au laser",
+          "ratePercent": null,
+          "maxAmountChf": 600,
+          "maxPeriod": "lifetime",
+          "unlimited": false,
+          "waitingPeriod": "365 jours à compter du début de l'assurance à la KPT",
+          "conditions": "Art. 4 al. 2. Montant par œil, une seule fois ; exclut ensuite les prestations lunettes/lentilles l'année de l'intervention et les 5 années civiles suivantes.",
+          "sourceUrl": "https://www.kpt.ch/documents/5f82eb3e-263a-4bce-874f-ca25bc12ff01/CGA%20Pulse%20Premium%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "medical_aids"
+          ],
+          "label": "Aides (moyens auxiliaires)",
+          "variant": "eco",
+          "coverage": "Participation jusqu'à CHF 150.– par année civile aux aides avec prescription médicale (objets mobiliers pour malades, supports plantaires, appareils auditifs)",
+          "ratePercent": 100,
+          "maxAmountChf": 150,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 4 al. 1. Taux de 100 % indiqué dans l'Aperçu des prestations 2027 ; uniquement si non assurés en tout ou partie par d'autres assurances sociales.",
+          "sourceUrl": "https://www.kpt.ch/documents/c4390de7-1f9c-48ec-851c-9122cf62d5f1/CGA%20Pulse%20Eco%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "medical_aids"
+          ],
+          "label": "Aides – surcoût en cas de limitation LiMA",
+          "variant": "eco",
+          "coverage": "Prise en charge du surcoût dans la limite de CHF 10.– par année civile lorsque l'AOS ne rembourse qu'une partie en raison d'une limitation LiMA",
+          "ratePercent": null,
+          "maxAmountChf": 10,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 4 al. 2.",
+          "sourceUrl": "https://www.kpt.ch/documents/c4390de7-1f9c-48ec-851c-9122cf62d5f1/CGA%20Pulse%20Eco%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "medical_aids"
+          ],
+          "label": "Aides (moyens auxiliaires)",
+          "variant": "top",
+          "coverage": "Participation jusqu'à CHF 300.– par année civile aux aides avec prescription médicale (objets mobiliers pour malades, supports plantaires, appareils auditifs)",
+          "ratePercent": 100,
+          "maxAmountChf": 300,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 5 al. 1. Taux de 100 % indiqué dans l'Aperçu des prestations 2027 ; uniquement si non assurés en tout ou partie par d'autres assurances sociales.",
+          "sourceUrl": "https://www.kpt.ch/documents/dd166954-992b-4cfc-bde2-1c92fc5305f1/CGA%20Pulse%20Top%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "medical_aids"
+          ],
+          "label": "Aides – surcoût en cas de limitation LiMA",
+          "variant": "top",
+          "coverage": "Prise en charge du surcoût dans la limite de CHF 20.– par année civile lorsque l'AOS ne rembourse qu'une partie en raison d'une limitation LiMA",
+          "ratePercent": null,
+          "maxAmountChf": 20,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 5 al. 2.",
+          "sourceUrl": "https://www.kpt.ch/documents/dd166954-992b-4cfc-bde2-1c92fc5305f1/CGA%20Pulse%20Top%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "medical_aids"
+          ],
+          "label": "Aides (moyens auxiliaires)",
+          "variant": "premium",
+          "coverage": "Participation jusqu'à CHF 600.– par année civile aux aides avec prescription médicale (objets mobiliers pour malades, supports plantaires, appareils auditifs)",
+          "ratePercent": 100,
+          "maxAmountChf": 600,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 5 al. 1. Taux de 100 % indiqué dans l'Aperçu des prestations 2027 ; uniquement si non assurés en tout ou partie par d'autres assurances sociales.",
+          "sourceUrl": "https://www.kpt.ch/documents/5f82eb3e-263a-4bce-874f-ca25bc12ff01/CGA%20Pulse%20Premium%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "medical_aids"
+          ],
+          "label": "Aides – surcoût en cas de limitation LiMA",
+          "variant": "premium",
+          "coverage": "Prise en charge du surcoût dans la limite de CHF 40.– par année civile lorsque l'AOS ne rembourse qu'une partie en raison d'une limitation LiMA",
+          "ratePercent": null,
+          "maxAmountChf": 40,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 5 al. 2.",
+          "sourceUrl": "https://www.kpt.ch/documents/5f82eb3e-263a-4bce-874f-ca25bc12ff01/CGA%20Pulse%20Premium%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "maternity",
+            "breastfeeding"
+          ],
+          "label": "Grossesse et maternité",
+          "variant": "top",
+          "coverage": "75 % des coûts par grossesse (dans la limite de CHF 300.–) pour la préparation à l'accouchement, l'allaitement et les contrôles supplémentaires (examens avant et après la naissance)",
+          "ratePercent": 75,
+          "maxAmountChf": 300,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": "270 jours (maternité, CGA art. 2 al. 2 et Aperçu 2027)",
+          "conditions": "Art. 6. Prestations fournies par des sages-femmes ou des formateurs ; yoga prénatal et gymnastique postnatale relèvent de la promotion de la santé.",
+          "sourceUrl": "https://www.kpt.ch/documents/dd166954-992b-4cfc-bde2-1c92fc5305f1/CGA%20Pulse%20Top%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "maternity",
+            "breastfeeding"
+          ],
+          "label": "Grossesse et maternité",
+          "variant": "premium",
+          "coverage": "75 % des coûts par grossesse (dans la limite de CHF 450.–) pour la préparation à l'accouchement, l'allaitement et les contrôles supplémentaires (examens avant et après la naissance)",
+          "ratePercent": 75,
+          "maxAmountChf": 450,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": "270 jours (maternité, CGA art. 2 al. 2 et Aperçu 2027)",
+          "conditions": "Art. 6. Prestations fournies par des sages-femmes ou des formateurs ; yoga prénatal et gymnastique postnatale relèvent de la promotion de la santé.",
+          "sourceUrl": "https://www.kpt.ch/documents/5f82eb3e-263a-4bce-874f-ca25bc12ff01/CGA%20Pulse%20Premium%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "gynecological_prevention"
+          ],
+          "label": "Examens gynécologiques préventifs",
+          "variant": null,
+          "coverage": "100 % des coûts des examens gynécologiques préventifs, en l'absence de droit à des prestations au titre de l'AOS",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "Art. 5 Eco / art. 7 Top / art. 7 Premium. Pas de plafond indiqué.",
+          "sourceUrl": "https://www.kpt.ch/documents/c4390de7-1f9c-48ec-851c-9122cf62d5f1/CGA%20Pulse%20Eco%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "prevention_checkup"
+          ],
+          "label": "Dépistage / Diagnostic / Check-up",
+          "variant": "top",
+          "coverage": "75 % des coûts jusqu'à max. CHF 2000.– par année civile : check-ups et autres examens préventifs, ostéodensitométrie, prévention de certains risques de cancer, dépistage de certains risques de grossesse, test salivaire de l'endométriose et test de carence en testostérone tous les 3 ans",
+          "ratePercent": 75,
+          "maxAmountChf": 2000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 8. Prestations et fournisseurs reconnus selon la liste exhaustive « Dépistage et diagnostic de la KPT » (valable dès le 01.02.2026 ; p. ex. bilan complet du corps max. CHF 1'000.– par bilan, un tous les deux ans ; test prostate max. CHF 500.– par an). Exclus : examens exigés par l'employeur, le service des automobiles, une assurance ou une administration.",
+          "sourceUrl": "https://www.kpt.ch/documents/dd166954-992b-4cfc-bde2-1c92fc5305f1/CGA%20Pulse%20Top%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "prevention_checkup"
+          ],
+          "label": "Dépistage / Diagnostic / Check-up",
+          "variant": "premium",
+          "coverage": "75 % des coûts jusqu'à max. CHF 4000.– par année civile : check-ups et autres examens préventifs, ostéodensitométrie, prévention de certains risques de cancer, dépistage de certains risques de grossesse, test salivaire de l'endométriose et test de carence en testostérone tous les 3 ans",
+          "ratePercent": 75,
+          "maxAmountChf": 4000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 8. Prestations et fournisseurs reconnus selon la liste exhaustive « Dépistage et diagnostic de la KPT » (valable dès le 01.02.2026 ; p. ex. bilan complet du corps max. CHF 1'000.– par bilan, un tous les deux ans ; test prostate max. CHF 500.– par an). Exclus : examens exigés par l'employeur, le service des automobiles, une assurance ou une administration.",
+          "sourceUrl": "https://www.kpt.ch/documents/5f82eb3e-263a-4bce-874f-ca25bc12ff01/CGA%20Pulse%20Premium%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "transport_rescue"
+          ],
+          "label": "Sauvetages et transports d'urgence en Suisse",
+          "variant": null,
+          "coverage": "En complément de l'AOS, remboursement en Suisse des frais de sauvetage et de transport d'urgence médicalement nécessaires jusque chez le médecin ou à l'hôpital le plus proche",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "Art. 7 Eco / art. 10 Top / art. 10 Premium. Nécessité médicale confirmée par un médecin ; frais de recherche, de récupération et de transport de corps non pris en charge. À l'étranger : via l'assistance de l'assurance voyages et vacances incluse.",
+          "sourceUrl": "https://www.kpt.ch/documents/c4390de7-1f9c-48ec-851c-9122cf62d5f1/CGA%20Pulse%20Eco%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_expenses_treatment"
+          ],
+          "label": "Frais de déplacement pour traitement",
+          "variant": "top",
+          "coverage": "Jusqu'à CHF 250.– par année civile pour les frais de déplacement liés à des traitements ambulatoires en série de chimiothérapie, de radiothérapie ou de dialyse dans une clinique universitaire ou un centre de dialyse",
+          "ratePercent": null,
+          "maxAmountChf": 250,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 10 al. 2.",
+          "sourceUrl": "https://www.kpt.ch/documents/dd166954-992b-4cfc-bde2-1c92fc5305f1/CGA%20Pulse%20Top%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_expenses_treatment"
+          ],
+          "label": "Frais de déplacement pour traitement",
+          "variant": "premium",
+          "coverage": "Jusqu'à CHF 500.– par année civile pour les frais de déplacement liés à des traitements ambulatoires en série de chimiothérapie, de radiothérapie ou de dialyse dans une clinique universitaire ou un centre de dialyse",
+          "ratePercent": null,
+          "maxAmountChf": 500,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 10 al. 2.",
+          "sourceUrl": "https://www.kpt.ch/documents/5f82eb3e-263a-4bce-874f-ca25bc12ff01/CGA%20Pulse%20Premium%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "sterilization_contraception"
+          ],
+          "label": "Ligature (vasectomie) / Stérilisation",
+          "variant": "premium",
+          "coverage": "Une fois 75 % des coûts d'une ligature ou d'une stérilisation jusqu'à max. CHF 2'000.–",
+          "ratePercent": 75,
+          "maxAmountChf": 2000,
+          "maxPeriod": "lifetime",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 11. Une seule fois.",
+          "sourceUrl": "https://www.kpt.ch/documents/5f82eb3e-263a-4bce-874f-ca25bc12ff01/CGA%20Pulse%20Premium%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "fitness_health_promotion",
+            "smoking_cessation"
+          ],
+          "label": "Promotion de la santé",
+          "variant": "eco",
+          "coverage": "Participation jusqu'à CHF 50.– par année civile aux mesures de promotion de la santé (clubs sportifs affiliés à Swiss Olympic, cours et abonnements de fitness, de sport et de bien-être)",
+          "ratePercent": null,
+          "maxAmountChf": 50,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 8. Activités reconnues selon la liste exhaustive « Prestations de la KPT en matière de promotion de la santé » (valable dès le 01.07.2024 ; abonnements d'au moins 3 mois ou 10 cours ; inclut notamment yoga, pilates, piscine, cours de sevrage tabagique, méditation). La couverture doit exister au moment de la conclusion de l'abonnement.",
+          "sourceUrl": "https://www.kpt.ch/documents/c4390de7-1f9c-48ec-851c-9122cf62d5f1/CGA%20Pulse%20Eco%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "fitness_health_promotion",
+            "smoking_cessation"
+          ],
+          "label": "Promotion de la santé",
+          "variant": "top",
+          "coverage": "Participation jusqu'à CHF 200.– par année civile aux mesures de promotion de la santé (clubs sportifs affiliés à Swiss Olympic, cours et abonnements de fitness, de sport et de bien-être)",
+          "ratePercent": null,
+          "maxAmountChf": 200,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 11. Activités reconnues selon la liste exhaustive « Prestations de la KPT en matière de promotion de la santé » (valable dès le 01.07.2024 ; abonnements d'au moins 3 mois ou 10 cours ; inclut notamment yoga, pilates, piscine, cours de sevrage tabagique, méditation). La couverture doit exister au moment de la conclusion de l'abonnement.",
+          "sourceUrl": "https://www.kpt.ch/documents/dd166954-992b-4cfc-bde2-1c92fc5305f1/CGA%20Pulse%20Top%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "fitness_health_promotion",
+            "smoking_cessation"
+          ],
+          "label": "Promotion de la santé",
+          "variant": "premium",
+          "coverage": "Participation jusqu'à CHF 600.– par année civile aux mesures de promotion de la santé (clubs sportifs affiliés à Swiss Olympic, cours et abonnements de fitness, de sport et de bien-être), dont max. CHF 300.– par domaine d'activité",
+          "ratePercent": null,
+          "maxAmountChf": 600,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 12. Dont max. CHF 300.– par domaine d'activité (domaine 1 : cours et abonnements de fitness, de sport et de bien-être ; domaine 2 : adhésions actives à un club sportif). Activités reconnues selon la liste exhaustive « Prestations de la KPT en matière de promotion de la santé » (valable dès le 01.07.2024 ; abonnements d'au moins 3 mois ou 10 cours ; inclut notamment yoga, pilates, piscine, cours de sevrage tabagique, méditation). La couverture doit exister au moment de la conclusion de l'abonnement.",
+          "sourceUrl": "https://www.kpt.ch/documents/5f82eb3e-263a-4bce-874f-ca25bc12ff01/CGA%20Pulse%20Premium%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "alt_medicine_therapies"
+          ],
+          "label": "Médecine complémentaire",
+          "variant": "top",
+          "coverage": "75 % des coûts jusqu'à CHF 2000.– par année civile pour les traitements ambulatoires de médecine complémentaire (hors médicaments), après déduction d'une participation aux frais de CHF 100.– par année civile et par personne assurée majeure",
+          "ratePercent": 75,
+          "maxAmountChf": 2000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 12. Thérapeutes : médecin diplômé fédéral avec certificat d'aptitude ou thérapeute reconnu RME ou ASCA pour la méthode ; méthodes reconnues selon la liste exhaustive « Méthodes médicales complémentaires de la KPT » (valable dès le 01.01.2025 ; p. ex. acupuncture, ostéopathie, homéopathie, shiatsu, kinésiologie).",
+          "sourceUrl": "https://www.kpt.ch/documents/dd166954-992b-4cfc-bde2-1c92fc5305f1/CGA%20Pulse%20Top%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "alt_medicine_therapies"
+          ],
+          "label": "Médecine complémentaire",
+          "variant": "premium",
+          "coverage": "75 % des coûts jusqu'à CHF 4000.– par année civile pour les traitements ambulatoires de médecine complémentaire (hors médicaments), après déduction d'une participation aux frais de CHF 100.– par année civile et par personne assurée majeure",
+          "ratePercent": 75,
+          "maxAmountChf": 4000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 13. Thérapeutes : médecin diplômé fédéral avec certificat d'aptitude ou thérapeute reconnu RME ou ASCA pour la méthode ; méthodes reconnues selon la liste exhaustive « Méthodes médicales complémentaires de la KPT » (valable dès le 01.01.2025 ; p. ex. acupuncture, ostéopathie, homéopathie, shiatsu, kinésiologie).",
+          "sourceUrl": "https://www.kpt.ch/documents/5f82eb3e-263a-4bce-874f-ca25bc12ff01/CGA%20Pulse%20Premium%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "alt_medicine_remedies"
+          ],
+          "label": "Médicaments de médecine complémentaire",
+          "variant": "top",
+          "coverage": "75 % des coûts jusqu'à max. CHF 250.– par année civile : phytothérapie, médicaments anthroposophiques, homéopathie, spagyrie (liste exhaustive)",
+          "ratePercent": 75,
+          "maxAmountChf": 250,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 13. Prescription par un médecin diplômé fédéral avec certificat d'aptitude ou par un thérapeute reconnu RME ou ASCA.",
+          "sourceUrl": "https://www.kpt.ch/documents/dd166954-992b-4cfc-bde2-1c92fc5305f1/CGA%20Pulse%20Top%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "alt_medicine_remedies"
+          ],
+          "label": "Médicaments de médecine complémentaire",
+          "variant": "premium",
+          "coverage": "75 % des coûts jusqu'à max. CHF 500.– par année civile : phytothérapie, médicaments anthroposophiques, homéopathie, spagyrie (liste exhaustive)",
+          "ratePercent": 75,
+          "maxAmountChf": 500,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 14. Prescription par un médecin diplômé fédéral avec certificat d'aptitude ou par un thérapeute reconnu RME ou ASCA.",
+          "sourceUrl": "https://www.kpt.ch/documents/5f82eb3e-263a-4bce-874f-ca25bc12ff01/CGA%20Pulse%20Premium%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "alt_medicine_therapies"
+          ],
+          "label": "Massages médicaux",
+          "variant": "top",
+          "coverage": "75 % des coûts jusqu'à max. CHF 250.– par année civile pour les massages médicaux",
+          "ratePercent": 75,
+          "maxAmountChf": 250,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 14. Médecin avec certificat d'aptitude ou thérapeute reconnu RME ou ASCA ; méthodes de massage selon la liste « Méthodes médicales complémentaires de la KPT » (massages thérapeutiques et classiques, réflexologie plantaire, drainage lymphatique manuel, etc.). Plafond distinct de celui de la médecine complémentaire.",
+          "sourceUrl": "https://www.kpt.ch/documents/dd166954-992b-4cfc-bde2-1c92fc5305f1/CGA%20Pulse%20Top%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "alt_medicine_therapies"
+          ],
+          "label": "Massages médicaux",
+          "variant": "premium",
+          "coverage": "75 % des coûts jusqu'à max. CHF 650.– par année civile pour les massages médicaux",
+          "ratePercent": 75,
+          "maxAmountChf": 650,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 15. Médecin avec certificat d'aptitude ou thérapeute reconnu RME ou ASCA ; méthodes de massage selon la liste « Méthodes médicales complémentaires de la KPT » (massages thérapeutiques et classiques, réflexologie plantaire, drainage lymphatique manuel, etc.). Plafond distinct de celui de la médecine complémentaire.",
+          "sourceUrl": "https://www.kpt.ch/documents/5f82eb3e-263a-4bce-874f-ca25bc12ff01/CGA%20Pulse%20Premium%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "abroad_emergency"
+          ],
+          "label": "Voyages et vacances à l'étranger – frais de guérison",
+          "variant": null,
+          "coverage": "Pendant 8 semaines (56 jours) par année civile : frais de guérison lors de voyages et de vacances à l'étranger (traitements et frais hospitaliers nécessaires non couverts par un autre assureur)",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Couverture incluse (art. 9 Eco / art. 15 Top / art. 16 Premium) fondée sur les CGA de l'assurance voyages et vacances, édition 01.2020 ; max. 8 semaines (56 jours) par année civile ; non cumulable avec l'assurance voyages incluse dans une autre complémentaire de KPT Assurances SA. Assureur : KPT Assurances SA. Franchises et quotes-parts non assurées ; traitements dentaires uniquement après accident, jusqu'à CHF 3'000.– (CGA RF art. 7).",
+          "sourceUrl": "https://www.kpt.ch/documents/c4390de7-1f9c-48ec-851c-9122cf62d5f1/CGA%20Pulse%20Eco%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_assistance_repatriation",
+            "search_recovery"
+          ],
+          "label": "Voyages et vacances à l'étranger – assistance aux personnes",
+          "variant": null,
+          "coverage": "Pendant 8 semaines (56 jours) par année civile : assistance aux personnes (sauvetage, transports, rapatriement, recherche jusqu'à CHF 20'000.– par personne selon CGA RF art. 8)",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Couverture incluse (art. 9 Eco / art. 15 Top / art. 16 Premium) fondée sur les CGA de l'assurance voyages et vacances, édition 01.2020 ; max. 8 semaines (56 jours) par année civile ; non cumulable avec l'assurance voyages incluse dans une autre complémentaire de KPT Assurances SA. Assureur : AWP P&C S.A. (Allianz), succursale de Wallisellen. Passer par la centrale d'alarme KPT, sinon prestations limitées à CHF 200.–.",
+          "sourceUrl": "https://www.kpt.ch/documents/c4390de7-1f9c-48ec-851c-9122cf62d5f1/CGA%20Pulse%20Eco%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_cancellation_luggage"
+          ],
+          "label": "Voyages et vacances à l'étranger – bagages",
+          "variant": null,
+          "coverage": "Perte/endommagement de bagages jusqu'à concurrence de CHF 2'000.–",
+          "ratePercent": null,
+          "maxAmountChf": 2000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Couverture incluse (art. 9 Eco / art. 15 Top / art. 16 Premium) fondée sur les CGA de l'assurance voyages et vacances, édition 01.2020 ; max. 8 semaines (56 jours) par année civile ; non cumulable avec l'assurance voyages incluse dans une autre complémentaire de KPT Assurances SA. Assureur : AWP P&C S.A. Franchise de CHF 100.– en cas de vol (CGA RF art. 9).",
+          "sourceUrl": "https://www.kpt.ch/documents/c4390de7-1f9c-48ec-851c-9122cf62d5f1/CGA%20Pulse%20Eco%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_cancellation_luggage"
+          ],
+          "label": "Voyages et vacances à l'étranger – frais d'annulation",
+          "variant": null,
+          "coverage": "Frais d'annulation dans la limite de CHF 20'000.–",
+          "ratePercent": null,
+          "maxAmountChf": 20000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Couverture incluse (art. 9 Eco / art. 15 Top / art. 16 Premium) fondée sur les CGA de l'assurance voyages et vacances, édition 01.2020 ; max. 8 semaines (56 jours) par année civile ; non cumulable avec l'assurance voyages incluse dans une autre complémentaire de KPT Assurances SA. Assureur : AWP P&C S.A. Valable dès la réservation, également en Suisse (CGA RF art. 1 et 10).",
+          "sourceUrl": "https://www.kpt.ch/documents/c4390de7-1f9c-48ec-851c-9122cf62d5f1/CGA%20Pulse%20Eco%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "legal_protection"
+          ],
+          "label": "Voyages et vacances à l'étranger – protection juridique à l'étranger",
+          "variant": null,
+          "coverage": "Protection juridique à l'étranger jusqu'à concurrence de CHF 300'000.– (CHF 100'000.– hors de l'Europe et des pays méditerranéens)",
+          "ratePercent": null,
+          "maxAmountChf": 300000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Couverture incluse (art. 9 Eco / art. 15 Top / art. 16 Premium) fondée sur les CGA de l'assurance voyages et vacances, édition 01.2020 ; max. 8 semaines (56 jours) par année civile ; non cumulable avec l'assurance voyages incluse dans une autre complémentaire de KPT Assurances SA. Assureur : Coop Protection Juridique SA.",
+          "sourceUrl": "https://www.kpt.ch/documents/c4390de7-1f9c-48ec-851c-9122cf62d5f1/CGA%20Pulse%20Eco%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "legal_protection"
+          ],
+          "label": "Protection juridique en matière de santé",
+          "variant": null,
+          "coverage": "Couverture, en lien avec une atteinte à la santé, des litiges relevant de la responsabilité civile et du droit des assurances : CHF 300'000.– par sinistre (CHF 100'000.– hors de l'Europe et des pays méditerranéens)",
+          "ratePercent": null,
+          "maxAmountChf": 300000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 10 Eco / art. 16 Top / art. 17 Premium. Assureur : Coop Protection Juridique SA ; CS protection juridique en matière de santé (GR), édition 01.2025 : valeur litigieuse minimale CHF 500.– ; exclus notamment les cas liés à des traitements psychiatriques ou psychothérapeutiques, à des factures ou à des primes ; validité mondiale.",
+          "sourceUrl": "https://www.kpt.ch/documents/c4390de7-1f9c-48ec-851c-9122cf62d5f1/CGA%20Pulse%20Eco%20FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "psychotherapy_non_medical",
+            "telemedicine_services"
+          ],
+          "label": "Prestations digitales de conseils psychologiques",
+          "variant": null,
+          "coverage": "75 % des coûts jusqu'à max. CHF 1'000.– par année civile pour des prestations digitales de conseils psychologiques",
+          "ratePercent": 75,
+          "maxAmountChf": 1000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 11 Eco / art. 17 Top / art. 18 Premium. Uniquement les services de la liste exhaustive « Prestations de conseil de la KPT au titre de Pulse Eco, Top et Premium » (valable dès le 01.07.2024 : Klenico, Aepsy, HelloBetter, en combinaison avec WePractice).",
+          "sourceUrl": "https://www.kpt.ch/documents/c4390de7-1f9c-48ec-851c-9122cf62d5f1/CGA%20Pulse%20Eco%20FR.pdf",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "kpt-hospitalisation",
+      "name": "Assurance des frais d'hospitalisation (H)",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Complémentaire d'hospitalisation classique en quatre divisions : commune (libre choix de l'hôpital en Suisse), demi-privée, privée et privée mondiale. Inclut psychiatrie, cures, aide ménagère, transports, sauvetage, hospitalisation à l'étranger et l'assurance voyages 56 jours.",
+      "variants": [
+        {
+          "key": "commune",
+          "name": "Division commune",
+          "description": "Division commune dans toute la Suisse, sans libre choix du médecin ; étranger max. CHF 20'000."
+        },
+        {
+          "key": "demi-prive",
+          "name": "Division demi-privée",
+          "description": "Chambre à deux lits et libre choix du médecin en Suisse ; étranger intégral en Europe/Méditerranée, CHF 50'000 ailleurs."
+        },
+        {
+          "key": "prive",
+          "name": "Division privée",
+          "description": "Chambre individuelle et libre choix du médecin en Suisse ; étranger intégral sauf USA/Canada (CHF 100'000)."
+        },
+        {
+          "key": "prive-mondial",
+          "name": "Division privée mondiale",
+          "description": "Division privée et libre choix du médecin dans tous les hôpitaux du monde, sans plafond USA/Canada."
+        }
+      ],
+      "prerequisites": "Questionnaire de santé ; souscription d'une complémentaire d'hospitalisation possible jusqu'au 65e anniversaire (page Sicuranta) ; en complément de l'AOS ou de l'assurance-maladie facultative de la KPT. Examen de santé requis aussi pour passer de commune/demi-privée à privée ; en assurance prénatale, les divisions demi-privée et privée restent soumises à examen de santé.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "entry_age",
+          "deductible"
+        ],
+        "ageBands": "Conclusion jusqu'à 50 ans : 0–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, dès 66 ans. Conclusion dès la 51e année : 51–55, 56–60, 61–65, 66–70, dès 71 ans (H art. 15). Âge de référence : âge atteint dans l'année civile (année de la prime − année de naissance) ; le passage à la classe supérieure a lieu le 1er janvier de l'année où l'âge déterminant est atteint.",
+        "publishedPrices": [],
+        "discounts": "Rabais de fidélité de 6,7 % par an pour un contrat de 3 ans. Franchise hospitalière (demi-privée/privée) : CHF 1'000 = −15 %, CHF 2'000 = −25 %, CHF 5'000 = −50 %. Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. Facteurs annoncés sur la page produit : « La prime mensuelle dépend de l'âge, du lieu de résidence et du sexe » (mention générique du module de calcul, à confirmer produit par produit dans le calculateur)."
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/assurances-complementaires-hospitalisation",
+        "https://www.kpt.ch/fr/assurances-complementaires-hospitalisation/assurance-hospitalisation-commune",
+        "https://www.kpt.ch/fr/assurances-complementaires-hospitalisation/assurance-hospitalisation-semiprivee",
+        "https://www.kpt.ch/fr/assurances-complementaires-hospitalisation/assurance-hospitalisation-privee",
+        "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf",
+        "https://www.kpt.ch/fr/savoir/economiser-sur-les-primes"
+      ],
+      "conditionsDoc": {
+        "title": "Assurance des frais d'hospitalisation (H) – Conditions spéciales en complément des CGA",
+        "edition": "01.2023",
+        "url": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "hospital_general_ch"
+          ],
+          "label": "Hôpital pour soins aigus – division commune",
+          "variant": "commune",
+          "coverage": "Couverture intégrale des coûts en division commune dans toute la Suisse ; pas de libre choix du médecin",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "H art. 1 et 11. Institutions reconnues : hôpitaux répertoriés ou conventionnés ayant une convention tarifaire valable avec KPT Assurances SA ; liste d'exceptions (aucune prise en charge) et liste des tarifs à bien plaire publiées par la KPT.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_semi_private",
+            "hospital_free_doctor_choice"
+          ],
+          "label": "Hôpital pour soins aigus – division demi-privée",
+          "variant": "demi-prive",
+          "coverage": "Couverture intégrale des coûts en division demi-privée (chambre à deux lits) dans toute la Suisse ; libre choix du médecin",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "H art. 1 et 11. Institutions reconnues uniquement (convention tarifaire avec KPT Assurances SA) ; vérifier la liste d'exceptions avant tout séjour planifiable.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_private",
+            "hospital_free_doctor_choice"
+          ],
+          "label": "Hôpital pour soins aigus – division privée",
+          "variant": "prive",
+          "coverage": "Couverture intégrale des coûts en division privée (chambre individuelle) dans toute la Suisse ; libre choix du médecin",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "H art. 1 et 11. Institutions reconnues uniquement (convention tarifaire avec KPT Assurances SA) ; vérifier la liste d'exceptions avant tout séjour planifiable.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_private",
+            "hospital_free_doctor_choice",
+            "hospital_abroad"
+          ],
+          "label": "Hôpital pour soins aigus – division privée mondiale",
+          "variant": "prive-mondial",
+          "coverage": "Couverture intégrale des coûts en division privée dans tous les hôpitaux du monde entier ; libre choix du médecin",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "H art. 2 al. 3 et art. 11 : couverture étendue même si l'institution ne remplit pas les conditions de reconnaissance de l'art. 1 al. 2.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "psychiatry_rehab_stay"
+          ],
+          "label": "Psychiatrie",
+          "variant": "commune",
+          "coverage": "1er–90e jour : couverture intégrale dans la division assurée ; 91e–180e jour : CHF 60.– par jour ; 181e–720e jour : CHF 20.– par jour",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 4 et 11. Durée des prestations 720 jours au maximum ; journées précédentes imputées en cas de réadmission dans les 180 jours.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "psychiatry_rehab_stay"
+          ],
+          "label": "Psychiatrie",
+          "variant": "demi-prive",
+          "coverage": "1er–90e jour : couverture intégrale dans la division assurée ; 91e–180e jour : CHF 120.– par jour ; 181e–720e jour : CHF 30.– par jour",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 4 et 11. Durée des prestations 720 jours au maximum ; journées précédentes imputées en cas de réadmission dans les 180 jours.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "psychiatry_rehab_stay"
+          ],
+          "label": "Psychiatrie",
+          "variant": "prive",
+          "coverage": "1er–90e jour : couverture intégrale dans la division assurée ; 91e–180e jour : CHF 200.– par jour ; 181e–720e jour : CHF 50.– par jour",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 4 et 11. Durée des prestations 720 jours au maximum ; journées précédentes imputées en cas de réadmission dans les 180 jours.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "psychiatry_rehab_stay"
+          ],
+          "label": "Psychiatrie",
+          "variant": "prive-mondial",
+          "coverage": "1er–90e jour : couverture intégrale dans la division assurée ; 91e–180e jour : CHF 200.– par jour ; 181e–720e jour : CHF 50.– par jour",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 4 et 11. Durée des prestations 720 jours au maximum ; journées précédentes imputées en cas de réadmission dans les 180 jours.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "psychiatry_rehab_stay"
+          ],
+          "label": "Réadaptation stationnaire",
+          "variant": null,
+          "coverage": "Couverture intégrale des coûts dans la division assurée durant 60 jours au plus par période de 5 années civiles",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 11.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "rooming_in"
+          ],
+          "label": "Rooming-in",
+          "variant": null,
+          "coverage": "CHF 50.– par jour pendant 14 jours pour une personne accompagnante qui passe la nuit à l'hôpital",
+          "ratePercent": null,
+          "maxAmountChf": 50,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 5 et 11. Séjour dans un hôpital pour soins aigus reconnu.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "newborn_coverage",
+            "maternity"
+          ],
+          "label": "Accouchement – nouveau-né en bonne santé",
+          "variant": null,
+          "coverage": "Frais de séjour et de soins du nouveau-né en bonne santé, à charge de l'assurance des frais d'hospitalisation de la mère",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": "270 jours (maternité, CGA art. 2 al. 2)",
+          "conditions": "H art. 6.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "maternity"
+          ],
+          "label": "Accouchement – maison de naissance",
+          "variant": "commune",
+          "coverage": "CHF 100.– par jour pendant 5 jours, à titre de contribution aux coûts de l'accouchement dans une maison de naissance sans mandat de prestations d'un canton",
+          "ratePercent": null,
+          "maxAmountChf": 100,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": "270 jours (maternité, CGA art. 2 al. 2)",
+          "conditions": "H art. 6 et 11. L'art. 6 prévoit aussi un montant journalier pour l'aide ménagère en cas d'accouchement à domicile ou dans une maternité (montant non chiffré à l'art. 6).",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "maternity"
+          ],
+          "label": "Accouchement – maison de naissance",
+          "variant": "demi-prive",
+          "coverage": "CHF 200.– par jour pendant 5 jours, à titre de contribution aux coûts de l'accouchement dans une maison de naissance sans mandat de prestations d'un canton",
+          "ratePercent": null,
+          "maxAmountChf": 200,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": "270 jours (maternité, CGA art. 2 al. 2)",
+          "conditions": "H art. 6 et 11. L'art. 6 prévoit aussi un montant journalier pour l'aide ménagère en cas d'accouchement à domicile ou dans une maternité (montant non chiffré à l'art. 6).",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "maternity"
+          ],
+          "label": "Accouchement – maison de naissance",
+          "variant": "prive",
+          "coverage": "CHF 300.– par jour pendant 5 jours, à titre de contribution aux coûts de l'accouchement dans une maison de naissance sans mandat de prestations d'un canton",
+          "ratePercent": null,
+          "maxAmountChf": 300,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": "270 jours (maternité, CGA art. 2 al. 2)",
+          "conditions": "H art. 6 et 11. L'art. 6 prévoit aussi un montant journalier pour l'aide ménagère en cas d'accouchement à domicile ou dans une maternité (montant non chiffré à l'art. 6).",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "maternity"
+          ],
+          "label": "Accouchement – maison de naissance",
+          "variant": "prive-mondial",
+          "coverage": "CHF 300.– par jour pendant 5 jours, à titre de contribution aux coûts de l'accouchement dans une maison de naissance sans mandat de prestations d'un canton",
+          "ratePercent": null,
+          "maxAmountChf": 300,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": "270 jours (maternité, CGA art. 2 al. 2)",
+          "conditions": "H art. 6 et 11. L'art. 6 prévoit aussi un montant journalier pour l'aide ménagère en cas d'accouchement à domicile ou dans une maternité (montant non chiffré à l'art. 6).",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "spa_cure"
+          ],
+          "label": "Cures balnéaires",
+          "variant": "commune",
+          "coverage": "CHF 20.– par jour pendant 42 jours au plus par période de 5 années civiles, pour les cures balnéaires avec mesures thérapeutiques dans des établissements reconnus en Suisse",
+          "ratePercent": null,
+          "maxAmountChf": 20,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 7 et 11. Immédiatement après un traitement médical intensif ; annonce avec ordonnance médicale au plus tard 14 jours avant le début ; pas de cures à l'étranger ni préventives.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "convalescence_cure"
+          ],
+          "label": "Cures de convalescence",
+          "variant": "commune",
+          "coverage": "CHF 20.– par jour pendant 30 jours au plus par année civile, dans un établissement de cure sous direction médicale reconnu par santésuisse",
+          "ratePercent": null,
+          "maxAmountChf": 20,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 7 et 11. Immédiatement après un traitement médical intensif ; annonce avec ordonnance médicale au plus tard 14 jours avant le début.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "spa_cure"
+          ],
+          "label": "Cures balnéaires",
+          "variant": "demi-prive",
+          "coverage": "CHF 40.– par jour pendant 42 jours au plus par période de 5 années civiles, pour les cures balnéaires avec mesures thérapeutiques dans des établissements reconnus en Suisse",
+          "ratePercent": null,
+          "maxAmountChf": 40,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 7 et 11. Immédiatement après un traitement médical intensif ; annonce avec ordonnance médicale au plus tard 14 jours avant le début ; pas de cures à l'étranger ni préventives.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "convalescence_cure"
+          ],
+          "label": "Cures de convalescence",
+          "variant": "demi-prive",
+          "coverage": "CHF 40.– par jour pendant 30 jours au plus par année civile, dans un établissement de cure sous direction médicale reconnu par santésuisse",
+          "ratePercent": null,
+          "maxAmountChf": 40,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 7 et 11. Immédiatement après un traitement médical intensif ; annonce avec ordonnance médicale au plus tard 14 jours avant le début.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "spa_cure"
+          ],
+          "label": "Cures balnéaires",
+          "variant": "prive",
+          "coverage": "CHF 60.– par jour pendant 42 jours au plus par période de 5 années civiles, pour les cures balnéaires avec mesures thérapeutiques dans des établissements reconnus en Suisse",
+          "ratePercent": null,
+          "maxAmountChf": 60,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 7 et 11. Immédiatement après un traitement médical intensif ; annonce avec ordonnance médicale au plus tard 14 jours avant le début ; pas de cures à l'étranger ni préventives.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "convalescence_cure"
+          ],
+          "label": "Cures de convalescence",
+          "variant": "prive",
+          "coverage": "CHF 60.– par jour pendant 30 jours au plus par année civile, dans un établissement de cure sous direction médicale reconnu par santésuisse",
+          "ratePercent": null,
+          "maxAmountChf": 60,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 7 et 11. Immédiatement après un traitement médical intensif ; annonce avec ordonnance médicale au plus tard 14 jours avant le début.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "spa_cure"
+          ],
+          "label": "Cures balnéaires",
+          "variant": "prive-mondial",
+          "coverage": "CHF 60.– par jour pendant 42 jours au plus par période de 5 années civiles, pour les cures balnéaires avec mesures thérapeutiques dans des établissements reconnus en Suisse",
+          "ratePercent": null,
+          "maxAmountChf": 60,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 7 et 11. Immédiatement après un traitement médical intensif ; annonce avec ordonnance médicale au plus tard 14 jours avant le début ; pas de cures à l'étranger ni préventives.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "convalescence_cure"
+          ],
+          "label": "Cures de convalescence",
+          "variant": "prive-mondial",
+          "coverage": "CHF 60.– par jour pendant 30 jours au plus par année civile, dans un établissement de cure sous direction médicale reconnu par santésuisse",
+          "ratePercent": null,
+          "maxAmountChf": 60,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 7 et 11. Immédiatement après un traitement médical intensif ; annonce avec ordonnance médicale au plus tard 14 jours avant le début.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "home_help",
+            "home_care"
+          ],
+          "label": "Aide ménagère / soins à domicile",
+          "variant": "commune",
+          "coverage": "CHF 20.– par jour pendant 60 jours pour l'aide ménagère ou les soins à domicile ordonnés par un médecin, immédiatement après une hospitalisation ou une opération ambulatoire",
+          "ratePercent": null,
+          "maxAmountChf": 20,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 8 et 11. Soins à domicile par des proches ayant une formation professionnelle (preuve d'une perte de gain) ; également si les soins évitent un séjour hospitalier ; non cumulable avec les prestations de cure.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "home_help",
+            "home_care"
+          ],
+          "label": "Aide ménagère / soins à domicile",
+          "variant": "demi-prive",
+          "coverage": "CHF 30.– par jour pendant 60 jours pour l'aide ménagère ou les soins à domicile ordonnés par un médecin, immédiatement après une hospitalisation ou une opération ambulatoire",
+          "ratePercent": null,
+          "maxAmountChf": 30,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 8 et 11. Soins à domicile par des proches ayant une formation professionnelle (preuve d'une perte de gain) ; également si les soins évitent un séjour hospitalier ; non cumulable avec les prestations de cure.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "home_help",
+            "home_care"
+          ],
+          "label": "Aide ménagère / soins à domicile",
+          "variant": "prive",
+          "coverage": "CHF 50.– par jour pendant 60 jours pour l'aide ménagère ou les soins à domicile ordonnés par un médecin, immédiatement après une hospitalisation ou une opération ambulatoire",
+          "ratePercent": null,
+          "maxAmountChf": 50,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 8 et 11. Soins à domicile par des proches ayant une formation professionnelle (preuve d'une perte de gain) ; également si les soins évitent un séjour hospitalier ; non cumulable avec les prestations de cure.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "home_help",
+            "home_care"
+          ],
+          "label": "Aide ménagère / soins à domicile",
+          "variant": "prive-mondial",
+          "coverage": "CHF 50.– par jour pendant 60 jours pour l'aide ménagère ou les soins à domicile ordonnés par un médecin, immédiatement après une hospitalisation ou une opération ambulatoire",
+          "ratePercent": null,
+          "maxAmountChf": 50,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 8 et 11. Soins à domicile par des proches ayant une formation professionnelle (preuve d'une perte de gain) ; également si les soins évitent un séjour hospitalier ; non cumulable avec les prestations de cure.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "transport_rescue"
+          ],
+          "label": "Transport d'urgence en Suisse",
+          "variant": null,
+          "coverage": "Couverture intégrale des coûts des transports d'urgence médicalement nécessaires vers l'hôpital approprié le plus proche pour un traitement hospitalier",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "H art. 9 et 11. Pas de rapatriement ni de transport de la dépouille mortelle.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "transport_rescue",
+            "abroad_emergency"
+          ],
+          "label": "Transport d'urgence à l'étranger",
+          "variant": "commune",
+          "coverage": "Jusqu'à CHF 2000.– par transport pour les transports d'urgence médicalement nécessaires vers l'hôpital approprié le plus proche à l'étranger",
+          "ratePercent": null,
+          "maxAmountChf": 2000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 9 et 11.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "transport_rescue",
+            "abroad_emergency"
+          ],
+          "label": "Transport d'urgence à l'étranger",
+          "variant": "demi-prive",
+          "coverage": "Jusqu'à CHF 3000.– par transport pour les transports d'urgence médicalement nécessaires vers l'hôpital approprié le plus proche à l'étranger",
+          "ratePercent": null,
+          "maxAmountChf": 3000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 9 et 11.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "transport_rescue",
+            "abroad_emergency"
+          ],
+          "label": "Transport d'urgence à l'étranger",
+          "variant": "prive",
+          "coverage": "Jusqu'à CHF 6000.– par transport pour les transports d'urgence médicalement nécessaires vers l'hôpital approprié le plus proche à l'étranger",
+          "ratePercent": null,
+          "maxAmountChf": 6000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 9 et 11.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "transport_rescue",
+            "abroad_emergency"
+          ],
+          "label": "Transport d'urgence à l'étranger",
+          "variant": "prive-mondial",
+          "coverage": "Jusqu'à CHF 6000.– par transport pour les transports d'urgence médicalement nécessaires vers l'hôpital approprié le plus proche à l'étranger",
+          "ratePercent": null,
+          "maxAmountChf": 6000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 9 et 11.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "transport_rescue",
+            "search_recovery"
+          ],
+          "label": "Sauvetage / dégagement en Suisse",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 20'000.– par événement pour les actions de sauvetage et de dégagement médicalement nécessaires en Suisse, y compris les actions de recherche qui y sont directement liées",
+          "ratePercent": null,
+          "maxAmountChf": 20000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 9 et 11.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_abroad",
+            "abroad_emergency"
+          ],
+          "label": "Prestations hospitalières à l'étranger",
+          "variant": "commune",
+          "coverage": "Monde entier : jusqu'à CHF 20'000.– (par année civile selon l'Aperçu des prestations 2027) dans un hôpital pour soins aigus",
+          "ratePercent": null,
+          "maxAmountChf": 20000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 10 et 11. Urgence pendant un séjour temporaire ; traitement volontaire à l'étranger seulement s'il n'existe pas d'équivalent en Suisse pour des raisons médicales et avec autorisation préalable. Les 56 premiers jours sont couverts par l'assurance voyages incluse.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_abroad",
+            "abroad_emergency"
+          ],
+          "label": "Prestations hospitalières à l'étranger",
+          "variant": "demi-prive",
+          "coverage": "Europe et pays méditerranéens : couverture intégrale des coûts ; reste du monde : jusqu'à CHF 50'000.– (par année civile selon l'Aperçu des prestations 2027)",
+          "ratePercent": null,
+          "maxAmountChf": 50000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 10 et 11. Plafond applicable hors Europe et pays méditerranéens uniquement. Traitement volontaire à l'étranger seulement sans équivalent en Suisse et avec autorisation préalable.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_abroad",
+            "abroad_emergency"
+          ],
+          "label": "Prestations hospitalières à l'étranger",
+          "variant": "prive",
+          "coverage": "Monde entier : couverture intégrale des coûts ; exception : USA et Canada jusqu'à CHF 100'000.– (par année civile selon l'Aperçu des prestations 2027)",
+          "ratePercent": null,
+          "maxAmountChf": 100000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "H art. 10 et 11. Plafond applicable aux USA et au Canada uniquement. Traitement volontaire à l'étranger seulement sans équivalent en Suisse et avec autorisation préalable.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_abroad",
+            "abroad_emergency",
+            "abroad_planned_treatment"
+          ],
+          "label": "Prestations hospitalières à l'étranger",
+          "variant": "prive-mondial",
+          "coverage": "Couverture intégrale des coûts dans le monde entier, y compris USA et Canada",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "H art. 2 al. 3 et 11. Libre choix de l'hôpital et du médecin dans le monde entier (page produit).",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "abroad_emergency"
+          ],
+          "label": "Voyages et vacances à l'étranger – frais de guérison",
+          "variant": null,
+          "coverage": "Pendant 8 semaines (56 jours) par année civile : frais de guérison lors de voyages et de vacances à l'étranger (traitements et frais hospitaliers nécessaires non couverts par un autre assureur)",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Couverture incluse (H art. 12) fondée sur les CGA de l'assurance voyages et vacances, édition 01.2020 ; max. 8 semaines (56 jours) par année civile ; non cumulable avec l'assurance voyages incluse dans une autre complémentaire de KPT Assurances SA. Assureur : KPT Assurances SA. Franchises et quotes-parts non assurées ; traitements dentaires uniquement après accident, jusqu'à CHF 3'000.– (CGA RF art. 7).",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_assistance_repatriation",
+            "search_recovery"
+          ],
+          "label": "Voyages et vacances à l'étranger – assistance aux personnes",
+          "variant": null,
+          "coverage": "Pendant 8 semaines (56 jours) par année civile : assistance aux personnes (sauvetage, transports, rapatriement, recherche jusqu'à CHF 20'000.– par personne selon CGA RF art. 8)",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Couverture incluse (H art. 12) fondée sur les CGA de l'assurance voyages et vacances, édition 01.2020 ; max. 8 semaines (56 jours) par année civile ; non cumulable avec l'assurance voyages incluse dans une autre complémentaire de KPT Assurances SA. Assureur : AWP P&C S.A. (Allianz), succursale de Wallisellen. Passer par la centrale d'alarme KPT, sinon prestations limitées à CHF 200.–.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_cancellation_luggage"
+          ],
+          "label": "Voyages et vacances à l'étranger – bagages",
+          "variant": null,
+          "coverage": "Perte/endommagement de bagages jusqu'à concurrence de CHF 2'000.–",
+          "ratePercent": null,
+          "maxAmountChf": 2000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Couverture incluse (H art. 12) fondée sur les CGA de l'assurance voyages et vacances, édition 01.2020 ; max. 8 semaines (56 jours) par année civile ; non cumulable avec l'assurance voyages incluse dans une autre complémentaire de KPT Assurances SA. Assureur : AWP P&C S.A. Franchise de CHF 100.– en cas de vol (CGA RF art. 9).",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_cancellation_luggage"
+          ],
+          "label": "Voyages et vacances à l'étranger – frais d'annulation",
+          "variant": null,
+          "coverage": "Frais d'annulation dans la limite de CHF 20'000.–",
+          "ratePercent": null,
+          "maxAmountChf": 20000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Couverture incluse (H art. 12) fondée sur les CGA de l'assurance voyages et vacances, édition 01.2020 ; max. 8 semaines (56 jours) par année civile ; non cumulable avec l'assurance voyages incluse dans une autre complémentaire de KPT Assurances SA. Assureur : AWP P&C S.A. Valable dès la réservation, également en Suisse (CGA RF art. 1 et 10).",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "legal_protection"
+          ],
+          "label": "Voyages et vacances à l'étranger – protection juridique à l'étranger",
+          "variant": null,
+          "coverage": "Protection juridique à l'étranger jusqu'à concurrence de CHF 300'000.– (CHF 100'000.– hors de l'Europe et des pays méditerranéens)",
+          "ratePercent": null,
+          "maxAmountChf": 300000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Couverture incluse (H art. 12) fondée sur les CGA de l'assurance voyages et vacances, édition 01.2020 ; max. 8 semaines (56 jours) par année civile ; non cumulable avec l'assurance voyages incluse dans une autre complémentaire de KPT Assurances SA. Assureur : Coop Protection Juridique SA.",
+          "sourceUrl": "https://www.kpt.ch/documents/3dddcd19-05b6-4b5d-a807-e5247155cc90/BB%20Spitalkostenversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_deductible_option"
+          ],
+          "label": "Franchise hospitalière à option",
+          "variant": "demi-prive",
+          "coverage": "Franchise hospitalière annuelle au choix : CHF 1'000.– (15 % de réduction de prime), CHF 2'000.– (25 %) ou CHF 5'000.– (50 %)",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Aperçu des prestations 2027 (« participation aux frais d'hospitalisation », divisions demi-privée ou privée ; applicabilité à la variante privée mondiale non précisée). CS H art. 3 : souscription ou augmentation possible en tout temps ; suppression ou diminution pour la fin de l'année avec préavis de 3 mois et examen du risque ; perçue une seule fois si le séjour chevauche deux années.",
+          "sourceUrl": "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_deductible_option"
+          ],
+          "label": "Franchise hospitalière à option",
+          "variant": "prive",
+          "coverage": "Franchise hospitalière annuelle au choix : CHF 1'000.– (15 % de réduction de prime), CHF 2'000.– (25 %) ou CHF 5'000.– (50 %)",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Aperçu des prestations 2027 (« participation aux frais d'hospitalisation », divisions demi-privée ou privée ; applicabilité à la variante privée mondiale non précisée). CS H art. 3 : souscription ou augmentation possible en tout temps ; suppression ou diminution pour la fin de l'année avec préavis de 3 mois et examen du risque ; perçue une seule fois si le séjour chevauche deux années.",
+          "sourceUrl": "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "bonus_program"
+          ],
+          "label": "Payback – séjour volontaire en division commune",
+          "variant": "demi-prive",
+          "coverage": "Remboursement de CHF 100.– par jour, max. CHF 1000.– par année civile, en cas de choix volontaire de la division commune",
+          "ratePercent": null,
+          "maxAmountChf": 1000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Aperçu des prestations 2027. Cliniques sous contrat valide avec la KPT ; assurance sans franchise hospitalière ; informer le centre clients avant l'admission. Le texte cite aussi la division privée mondiale sans indiquer de montant propre.",
+          "sourceUrl": "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "bonus_program",
+            "maternity"
+          ],
+          "label": "Payback – accouchement ambulatoire",
+          "variant": "demi-prive",
+          "coverage": "Remboursement forfaitaire de CHF 1000.– par accouchement en cas d'accouchement ambulatoire (hôpital, maison de naissance ou domicile) à la place de la division assurée",
+          "ratePercent": null,
+          "maxAmountChf": 1000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Aperçu des prestations 2027.",
+          "sourceUrl": "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "second_opinion",
+            "assistance_services"
+          ],
+          "label": "BetterDoc – recherche de spécialistes et deuxième avis",
+          "variant": "demi-prive",
+          "coverage": "Recherche gratuite et sans engagement d'un spécialiste sous 48 heures pour un deuxième avis médical, un traitement ou une opération (BetterDoc)",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Aperçu des prestations 2027 : réservé aux assurés avec une assurance demi-privée, privée ou Flex (variante privée mondiale non citée explicitement).",
+          "sourceUrl": "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "bonus_program"
+          ],
+          "label": "Payback – séjour volontaire en division commune",
+          "variant": "prive",
+          "coverage": "Remboursement de CHF 125.– par jour, max. CHF 1250.– par année civile, en cas de choix volontaire de la division commune",
+          "ratePercent": null,
+          "maxAmountChf": 1250,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Aperçu des prestations 2027. Cliniques sous contrat valide avec la KPT ; assurance sans franchise hospitalière ; informer le centre clients avant l'admission. Le texte cite aussi la division privée mondiale sans indiquer de montant propre.",
+          "sourceUrl": "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "bonus_program",
+            "maternity"
+          ],
+          "label": "Payback – accouchement ambulatoire",
+          "variant": "prive",
+          "coverage": "Remboursement forfaitaire de CHF 1250.– par accouchement en cas d'accouchement ambulatoire (hôpital, maison de naissance ou domicile) à la place de la division assurée",
+          "ratePercent": null,
+          "maxAmountChf": 1250,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Aperçu des prestations 2027.",
+          "sourceUrl": "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "second_opinion",
+            "assistance_services"
+          ],
+          "label": "BetterDoc – recherche de spécialistes et deuxième avis",
+          "variant": "prive",
+          "coverage": "Recherche gratuite et sans engagement d'un spécialiste sous 48 heures pour un deuxième avis médical, un traitement ou une opération (BetterDoc)",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Aperçu des prestations 2027 : réservé aux assurés avec une assurance demi-privée, privée ou Flex (variante privée mondiale non citée explicitement).",
+          "sourceUrl": "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "kpt-hospitalisation-flex",
+      "name": "Assurance des frais d'hospitalisation Flex (Hôpital Flex Eco / Flex Top)",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Complémentaire d'hospitalisation flexible : division commune dans toute la Suisse sans supplément et choix de la division demi-privée ou privée avant chaque séjour, moyennant une participation journalière. Flex Top réduit la participation et ajoute interventions ambulatoires, rooming-in, cures, aide ménagère, capital maladie grave et droit d'option.",
+      "variants": [
+        {
+          "key": "flex-eco",
+          "name": "Hôpital Flex Eco",
+          "description": "Participation CHF 300/jour (demi-privé) ou CHF 500/jour (privé), max. CHF 6'000 par an ; psychiatrie 45 jours ; indemnité d'accouchement ambulatoire CHF 500."
+        },
+        {
+          "key": "flex-top",
+          "name": "Hôpital Flex Top",
+          "description": "Participation CHF 150/jour (demi-privé) ou CHF 250/jour (privé), max. CHF 4'000 par an ; psychiatrie 90 jours ; interventions ambulatoires, rooming-in, cures, aide ménagère, capital maladie grave CHF 5'000, droit d'option."
+        }
+      ],
+      "prerequisites": "Questionnaire de santé (examen du risque) ; souscription possible jusqu'à 65 ans pour presque toutes les complémentaires (Aperçu des prestations 2027) ; conclusion possible sans assurance de base auprès de la KPT. En complément de l'AOS ou de l'assurance-maladie facultative (F) de la KPT. Assurance prénatale possible sans examen de santé.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "0–5, 6–10, 11–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81–85, 86–90, 91+ (art. 15 Flex Eco / art. 18 Flex Top). Âge de référence : âge atteint dans l'année civile (année de la prime − année de naissance) ; le passage à la classe supérieure a lieu le 1er janvier de l'année où l'âge déterminant est atteint.",
+        "publishedPrices": [],
+        "discounts": "Rabais de fidélité de 6,7 % par an pour un contrat de 3 ans. (mention affichée sur la carte Flex Top et sur la carte « flexible » des pages d'aperçu ; absente de la carte Flex Eco de la page produit, à confirmer). Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. Facteurs annoncés sur la page produit : « La prime mensuelle dépend de l'âge, du lieu de résidence et du sexe » (mention générique du module de calcul, à confirmer produit par produit dans le calculateur)."
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/assurances-complementaires-hospitalisation/assurance-hospitalisation-flexible",
+        "https://www.kpt.ch/documents/b67217bb-ef7a-452f-8d6d-135cc6da3ab6/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Eco.pdf",
+        "https://www.kpt.ch/documents/a9519f25-de76-46ac-99d1-f441e8382f10/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Top.pdf",
+        "https://www.kpt.ch/documents/a0a6cad1-0c0c-4f93-a53b-fa75727e4139/Spitalkostenversicherung%20Flex_Beratungsleistungen.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf"
+      ],
+      "conditionsDoc": {
+        "title": "Assurance des frais d'hospitalisation Flex Eco / Flex Top – Conditions spéciales en complément aux CGA",
+        "edition": "07.2023",
+        "url": "https://www.kpt.ch/documents/a9519f25-de76-46ac-99d1-f441e8382f10/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Top.pdf"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "hospital_general_ch"
+          ],
+          "label": "Hospitalisation stationnaire en Suisse – division commune",
+          "variant": null,
+          "coverage": "Frais de traitement et de séjour stationnaire en division commune d'un hôpital ou d'une clinique de réadaptation reconnus dans toute la Suisse, sans participation aux coûts",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "Art. 1, 4 et 5 Flex Eco / Flex Top. Institutions reconnues (convention tarifaire avec KPT Assurances SA) ; garantie de prise en charge requise au plus tard à l'admission pour les traitements planifiables.",
+          "sourceUrl": "https://www.kpt.ch/documents/b67217bb-ef7a-452f-8d6d-135cc6da3ab6/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Eco.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_flex",
+            "hospital_semi_private",
+            "hospital_private",
+            "hospital_free_doctor_choice"
+          ],
+          "label": "Liberté de choix de la division avec participation aux coûts",
+          "variant": "flex-eco",
+          "coverage": "Choix de la division avant chaque traitement stationnaire ; participation aux coûts : division commune aucune, demi-privée CHF 300.– par journée d'hospitalisation, privée CHF 500.– par journée ; participation maximale CHF 6'000.– par année civile (CHF 3'000.– jusqu'à la fin de l'année suivant le 18e anniversaire)",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 3 et 4. Libre choix du médecin en division demi-privée ou privée d'un hôpital sous convention (page produit). Montants adaptables annuellement avec droit de résiliation.",
+          "sourceUrl": "https://www.kpt.ch/documents/b67217bb-ef7a-452f-8d6d-135cc6da3ab6/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Eco.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_flex",
+            "hospital_semi_private",
+            "hospital_private",
+            "hospital_free_doctor_choice"
+          ],
+          "label": "Liberté de choix de la division avec participation aux coûts",
+          "variant": "flex-top",
+          "coverage": "Choix de la division avant chaque traitement stationnaire ; participation aux coûts : division commune aucune, demi-privée CHF 150.– par journée d'hospitalisation, privée CHF 250.– par journée ; participation maximale CHF 4'000.– par année civile (CHF 2'000.– jusqu'à la fin de l'année suivant le 18e anniversaire)",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 3 et 4. Libre choix du médecin en division demi-privée ou privée d'un hôpital sous convention (page produit). Montants adaptables annuellement avec droit de résiliation.",
+          "sourceUrl": "https://www.kpt.ch/documents/a9519f25-de76-46ac-99d1-f441e8382f10/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Top.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "ambulatory_surgery",
+            "ambulatory_free_doctor_choice",
+            "travel_expenses_treatment",
+            "childcare_assistance"
+          ],
+          "label": "Interventions ambulatoires",
+          "variant": "flex-top",
+          "coverage": "75 % des coûts en tout, dans la limite de CHF 1'000 par année civile, pour : libre choix du médecin, frais supplémentaires de séjour, transport aller-retour (max. CHF 200 par intervention), nuitées non médicalement nécessaires (max. CHF 200 par nuit pour deux personnes), livraisons de repas (max. CHF 50 par jour pendant 7 jours), prise en charge d'enfants, de personnes dépendantes ou d'animaux domestiques (max. CHF 100 par jour, jusqu'à 7 jours après l'intervention)",
+          "ratePercent": 75,
+          "maxAmountChf": 1000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 6 Flex Top. Intervention ambulatoire dans une institution reconnue, en complément de l'AOS.",
+          "sourceUrl": "https://www.kpt.ch/documents/a9519f25-de76-46ac-99d1-f441e8382f10/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Top.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_abroad",
+            "abroad_emergency"
+          ],
+          "label": "Traitements hospitaliers à l'étranger",
+          "variant": null,
+          "coverage": "Urgences pendant un séjour provisoire à l'étranger et traitements ne pouvant pas être dispensés en Suisse pour des raisons médicales (autorisation préalable) : prise en charge dans la division choisie d'un hôpital pour soins aigus dans le monde entier, avec la même participation aux coûts qu'en Suisse",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 6 Flex Eco / art. 7 Flex Top ; précisions de l'Aperçu des prestations 2027 et de la page produit (100 % en division commune). Les 56 premiers jours relèvent de l'assurance voyages incluse.",
+          "sourceUrl": "https://www.kpt.ch/documents/b67217bb-ef7a-452f-8d6d-135cc6da3ab6/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Eco.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "psychiatry_rehab_stay"
+          ],
+          "label": "Psychiatrie",
+          "variant": "flex-eco",
+          "coverage": "Prestations dans la division choisie, après déduction de la participation aux coûts, pendant max. 45 jours par année civile",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 7. Journées précédentes imputées en cas de réadmission dans les 180 jours.",
+          "sourceUrl": "https://www.kpt.ch/documents/b67217bb-ef7a-452f-8d6d-135cc6da3ab6/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Eco.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "psychiatry_rehab_stay"
+          ],
+          "label": "Psychiatrie",
+          "variant": "flex-top",
+          "coverage": "Prestations dans la division choisie, après déduction de la participation aux coûts, pendant max. 90 jours par année civile",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 8. Journées précédentes imputées en cas de réadmission dans les 180 jours.",
+          "sourceUrl": "https://www.kpt.ch/documents/a9519f25-de76-46ac-99d1-f441e8382f10/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Top.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "rooming_in"
+          ],
+          "label": "Rooming-in",
+          "variant": "flex-top",
+          "coverage": "Max. CHF 50 par jour pendant max. 30 jours par année civile pour l'hébergement et les repas d'un accompagnant dormant à l'hôpital",
+          "ratePercent": null,
+          "maxAmountChf": 50,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 9 Flex Top. Hôpital pour soins aigus reconnu.",
+          "sourceUrl": "https://www.kpt.ch/documents/a9519f25-de76-46ac-99d1-f441e8382f10/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Top.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "spa_cure"
+          ],
+          "label": "Cures balnéaires",
+          "variant": "flex-top",
+          "coverage": "Max. CHF 50 par jour pendant max. 30 jours par année civile pour les cures balnéaires prescrites par un médecin dans des établissements reconnus en Suisse",
+          "ratePercent": null,
+          "maxAmountChf": 50,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 9 Flex Top. Max. 30 jours de cure par année civile au total (balnéaires et convalescence) ; immédiatement après un traitement médical intensif ; annonce 14 jours avant.",
+          "sourceUrl": "https://www.kpt.ch/documents/a9519f25-de76-46ac-99d1-f441e8382f10/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Top.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "convalescence_cure"
+          ],
+          "label": "Cures de convalescence",
+          "variant": "flex-top",
+          "coverage": "Max. CHF 50 par jour pendant max. 30 jours par année civile pour les cures de convalescence dans un établissement dirigé par un médecin et reconnu par la KPT",
+          "ratePercent": null,
+          "maxAmountChf": 50,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 9 Flex Top. Liste des établissements de cure reconnus tenue par la KPT ; max. 30 jours de cure par année civile au total.",
+          "sourceUrl": "https://www.kpt.ch/documents/a9519f25-de76-46ac-99d1-f441e8382f10/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Top.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "home_help",
+            "home_care"
+          ],
+          "label": "Aide ménagère et soins à domicile",
+          "variant": "flex-top",
+          "coverage": "Max. CHF 50 par jour pendant max. 30 jours par année civile pour l'aide ménagère ou les soins à domicile prescrits par un médecin, immédiatement après un séjour à l'hôpital ou une intervention ambulatoire",
+          "ratePercent": null,
+          "maxAmountChf": 50,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 9 Flex Top. Non cumulable avec les prestations de cure ; proches : formation adéquate et perte de gain justifiée.",
+          "sourceUrl": "https://www.kpt.ch/documents/a9519f25-de76-46ac-99d1-f441e8382f10/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Top.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "newborn_coverage",
+            "maternity"
+          ],
+          "label": "Accouchement – nouveau-né en bonne santé",
+          "variant": null,
+          "coverage": "Coûts liés au séjour et aux soins du nouveau-né en bonne santé, au titre de l'assurance de la mère",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": "270 jours (CGA art. 2 al. 2)",
+          "conditions": "Art. 8 Flex Eco / art. 10 Flex Top.",
+          "sourceUrl": "https://www.kpt.ch/documents/b67217bb-ef7a-452f-8d6d-135cc6da3ab6/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Eco.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "home_help",
+            "maternity"
+          ],
+          "label": "Accouchement – aide ménagère",
+          "variant": null,
+          "coverage": "Max. CHF 50 par jour, pendant max. 5 jours, pour l'aide ménagère après un accouchement stationnaire dans une institution reconnue",
+          "ratePercent": null,
+          "maxAmountChf": 50,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": "270 jours (CGA art. 2 al. 2)",
+          "conditions": "Art. 8 Flex Eco / art. 10 Flex Top.",
+          "sourceUrl": "https://www.kpt.ch/documents/b67217bb-ef7a-452f-8d6d-135cc6da3ab6/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Eco.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "maternity"
+          ],
+          "label": "Accouchement ambulatoire ou à domicile – indemnité unique",
+          "variant": "flex-eco",
+          "coverage": "Indemnité unique de CHF 500 en cas d'accouchement ambulatoire dans une institution reconnue ou d'accouchement à domicile",
+          "ratePercent": null,
+          "maxAmountChf": 500,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": "270 jours (CGA art. 2 al. 2)",
+          "conditions": "Art. 8. Versée une seule fois, même en cas de naissance multiple.",
+          "sourceUrl": "https://www.kpt.ch/documents/b67217bb-ef7a-452f-8d6d-135cc6da3ab6/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Eco.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "maternity"
+          ],
+          "label": "Accouchement ambulatoire ou à domicile – indemnité unique",
+          "variant": "flex-top",
+          "coverage": "Indemnité unique de CHF 1'000 en cas d'accouchement ambulatoire dans une institution reconnue ou d'accouchement à domicile",
+          "ratePercent": null,
+          "maxAmountChf": 1000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": "270 jours (CGA art. 2 al. 2)",
+          "conditions": "Art. 10. Versée une seule fois, même en cas de naissance multiple.",
+          "sourceUrl": "https://www.kpt.ch/documents/a9519f25-de76-46ac-99d1-f441e8382f10/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Top.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "transport_rescue"
+          ],
+          "label": "Transports d'urgence, sauvetage et dégagement en Suisse",
+          "variant": null,
+          "coverage": "Prise en charge intégrale en Suisse des transports d'urgence médicalement nécessaires à un traitement stationnaire dans l'hôpital le plus proche et des mesures de sauvetage et de dégagement médicalement nécessaires",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "Art. 9 Flex Eco / art. 11 Flex Top. Pas de rapatriement ni de transport de corps.",
+          "sourceUrl": "https://www.kpt.ch/documents/b67217bb-ef7a-452f-8d6d-135cc6da3ab6/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Eco.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "transport_rescue",
+            "abroad_emergency"
+          ],
+          "label": "Transports d'urgence à l'étranger",
+          "variant": null,
+          "coverage": "Transports d'urgence médicalement nécessaires à un traitement stationnaire dans l'hôpital le plus proche à l'étranger, dans la limite de CHF 5'000 par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 5000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 9 Flex Eco / art. 11 Flex Top.",
+          "sourceUrl": "https://www.kpt.ch/documents/b67217bb-ef7a-452f-8d6d-135cc6da3ab6/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Eco.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "search_recovery"
+          ],
+          "label": "Opérations de recherche",
+          "variant": "flex-eco",
+          "coverage": "Opérations de recherche directement liées à une mesure de sauvetage ou de dégagement médicalement nécessaire, jusqu'à concurrence de CHF 20'000 par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 20000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 9 al. 3.",
+          "sourceUrl": "https://www.kpt.ch/documents/b67217bb-ef7a-452f-8d6d-135cc6da3ab6/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Eco.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "search_recovery"
+          ],
+          "label": "Opérations de recherche",
+          "variant": "flex-top",
+          "coverage": "Opérations de recherche directement liées à une mesure de sauvetage ou de dégagement médicalement nécessaire, jusqu'à concurrence de CHF 30'000 par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 30000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 11 al. 3.",
+          "sourceUrl": "https://www.kpt.ch/documents/a9519f25-de76-46ac-99d1-f441e8382f10/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Top.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "abroad_emergency"
+          ],
+          "label": "Voyages et vacances à l'étranger – frais de guérison",
+          "variant": null,
+          "coverage": "Pendant 8 semaines (56 jours) par année civile : frais de guérison lors de voyages et de vacances à l'étranger (traitements et frais hospitaliers nécessaires non couverts par un autre assureur)",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Couverture incluse (art. 10 Flex Eco / art. 12 Flex Top) fondée sur les CGA de l'assurance voyages et vacances, édition 01.2020 ; max. 8 semaines (56 jours) par année civile ; non cumulable avec l'assurance voyages incluse dans une autre complémentaire de KPT Assurances SA. Assureur : KPT Assurances SA. Franchises et quotes-parts non assurées ; traitements dentaires uniquement après accident, jusqu'à CHF 3'000.– (CGA RF art. 7).",
+          "sourceUrl": "https://www.kpt.ch/documents/b67217bb-ef7a-452f-8d6d-135cc6da3ab6/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Eco.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_assistance_repatriation",
+            "search_recovery"
+          ],
+          "label": "Voyages et vacances à l'étranger – assistance aux personnes",
+          "variant": null,
+          "coverage": "Pendant 8 semaines (56 jours) par année civile : assistance aux personnes (sauvetage, transports, rapatriement, recherche jusqu'à CHF 20'000.– par personne selon CGA RF art. 8)",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Couverture incluse (art. 10 Flex Eco / art. 12 Flex Top) fondée sur les CGA de l'assurance voyages et vacances, édition 01.2020 ; max. 8 semaines (56 jours) par année civile ; non cumulable avec l'assurance voyages incluse dans une autre complémentaire de KPT Assurances SA. Assureur : AWP P&C S.A. (Allianz), succursale de Wallisellen. Passer par la centrale d'alarme KPT, sinon prestations limitées à CHF 200.–.",
+          "sourceUrl": "https://www.kpt.ch/documents/b67217bb-ef7a-452f-8d6d-135cc6da3ab6/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Eco.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_cancellation_luggage"
+          ],
+          "label": "Voyages et vacances à l'étranger – bagages",
+          "variant": null,
+          "coverage": "Perte/endommagement de bagages jusqu'à concurrence de CHF 2'000.–",
+          "ratePercent": null,
+          "maxAmountChf": 2000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Couverture incluse (art. 10 Flex Eco / art. 12 Flex Top) fondée sur les CGA de l'assurance voyages et vacances, édition 01.2020 ; max. 8 semaines (56 jours) par année civile ; non cumulable avec l'assurance voyages incluse dans une autre complémentaire de KPT Assurances SA. Assureur : AWP P&C S.A. Franchise de CHF 100.– en cas de vol (CGA RF art. 9).",
+          "sourceUrl": "https://www.kpt.ch/documents/b67217bb-ef7a-452f-8d6d-135cc6da3ab6/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Eco.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_cancellation_luggage"
+          ],
+          "label": "Voyages et vacances à l'étranger – frais d'annulation",
+          "variant": null,
+          "coverage": "Frais d'annulation dans la limite de CHF 20'000.–",
+          "ratePercent": null,
+          "maxAmountChf": 20000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Couverture incluse (art. 10 Flex Eco / art. 12 Flex Top) fondée sur les CGA de l'assurance voyages et vacances, édition 01.2020 ; max. 8 semaines (56 jours) par année civile ; non cumulable avec l'assurance voyages incluse dans une autre complémentaire de KPT Assurances SA. Assureur : AWP P&C S.A. Valable dès la réservation, également en Suisse (CGA RF art. 1 et 10).",
+          "sourceUrl": "https://www.kpt.ch/documents/b67217bb-ef7a-452f-8d6d-135cc6da3ab6/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Eco.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "legal_protection"
+          ],
+          "label": "Voyages et vacances à l'étranger – protection juridique à l'étranger",
+          "variant": null,
+          "coverage": "Protection juridique à l'étranger jusqu'à concurrence de CHF 300'000.– (CHF 100'000.– hors de l'Europe et des pays méditerranéens)",
+          "ratePercent": null,
+          "maxAmountChf": 300000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Couverture incluse (art. 10 Flex Eco / art. 12 Flex Top) fondée sur les CGA de l'assurance voyages et vacances, édition 01.2020 ; max. 8 semaines (56 jours) par année civile ; non cumulable avec l'assurance voyages incluse dans une autre complémentaire de KPT Assurances SA. Assureur : Coop Protection Juridique SA.",
+          "sourceUrl": "https://www.kpt.ch/documents/b67217bb-ef7a-452f-8d6d-135cc6da3ab6/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Eco.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "upgrade_option"
+          ],
+          "label": "Droit d'option pour un produit hospitalier supérieur sans déclaration de santé",
+          "variant": "flex-top",
+          "coverage": "Dans les 10 ans à compter du début de l'assurance, possibilité d'opter pour une assurance complémentaire d'hospitalisation supérieure (demi-privée ou privée) de la KPT sans déclaration de santé",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": "Délai de carence d'un an, changement au 1er janvier suivant",
+          "conditions": "Art. 13 Flex Top. Une seule fois, jusqu'au 65e anniversaire ; le produit visé doit autoriser les nouvelles adhésions.",
+          "sourceUrl": "https://www.kpt.ch/documents/a9519f25-de76-46ac-99d1-f441e8382f10/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Top.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "other:critical_illness_capital"
+          ],
+          "label": "Versement d'un capital en cas de maladie grave",
+          "variant": "flex-top",
+          "coverage": "Capital unique de CHF 5'000 par catégorie de maladie, à libre disposition, en cas d'infarctus du myocarde, d'attaque cérébrale ou de cancer (liste exhaustive)",
+          "ratePercent": null,
+          "maxAmountChf": 5000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 14 Flex Top. Définitions et exclusions détaillées (p. ex. décès dans les 48 heures, AIT, cancers cutanés non mélanomes, mélanomes de stade 0 et I).",
+          "sourceUrl": "https://www.kpt.ch/documents/a9519f25-de76-46ac-99d1-f441e8382f10/CS%20Assurance%20des%20frais%20d%20hospitalisation%20Flex%20Top.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "second_opinion",
+            "assistance_services"
+          ],
+          "label": "Prestations de conseil en lien avec des traitements et des interventions",
+          "variant": null,
+          "coverage": "Recherche de spécialiste pour un deuxième avis médical, un traitement ou une opération via BetterDoc (seule prestation de la liste « Prestations de conseil … couverts par Flex »)",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Art. 12 Flex Eco / art. 15 Flex Top ; liste valable dès le 01.07.2023. Le montant de la contribution n'est pas chiffré dans la liste ; l'Aperçu 2027 présente le service comme gratuit.",
+          "sourceUrl": "https://www.kpt.ch/documents/a0a6cad1-0c0c-4f93-a53b-fa75727e4139/Spitalkostenversicherung%20Flex_Beratungsleistungen.pdf",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "kpt-indemnites-journalieres-hospitalisation",
+      "name": "Assurance d'indemnités journalières d'hospitalisation (HT)",
+      "category": "hospital_daily_cash",
+      "audience": "all",
+      "summary": "Indemnité journalière forfaitaire à libre disposition pour chaque jour passé dans un hôpital pour soins aigus, de CHF 100 à CHF 300 par jour, pendant 30 ou 60 jours par an.",
+      "variants": [
+        {
+          "key": "30-jours",
+          "name": "30 jours",
+          "description": "Indemnité versée durant max. 30 jours par an."
+        },
+        {
+          "key": "60-jours",
+          "name": "60 jours",
+          "description": "Indemnité versée durant max. 60 jours par an."
+        }
+      ],
+      "prerequisites": "Questionnaire de santé (examen du risque) ; souscription possible jusqu'à 65 ans pour presque toutes les complémentaires (Aperçu des prestations 2027) ; conclusion possible sans assurance de base auprès de la KPT.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "0–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, dès 66 ans (HT art. 3). Âge de référence : âge atteint dans l'année civile (année de la prime − année de naissance) ; le passage à la classe supérieure a lieu le 1er janvier de l'année où l'âge déterminant est atteint.",
+        "publishedPrices": [],
+        "discounts": "Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. Facteurs annoncés sur la page produit : « La prime mensuelle dépend de l'âge, du lieu de résidence et du sexe » (mention générique du module de calcul, à confirmer produit par produit dans le calculateur). La prime dépend aussi du montant journalier et de la durée choisis."
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/assurances-complementaires-hospitalisation/assurance-indemnite-journaliere-hospitalisation",
+        "https://www.kpt.ch/documents/9fb1765c-0e96-421a-86e3-df0e891b494d/BB%20Spitaltaggeldversicherung.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf"
+      ],
+      "conditionsDoc": {
+        "title": "Assurance d'indemnités journalières d'hospitalisation (HT) – Conditions spéciales en complément des CGA",
+        "edition": "01.2023",
+        "url": "https://www.kpt.ch/documents/9fb1765c-0e96-421a-86e3-df0e891b494d/BB%20Spitaltaggeldversicherung.pdf"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "hospital_daily_cash"
+          ],
+          "label": "Indemnité journalière d'hospitalisation",
+          "variant": "30-jours",
+          "coverage": "Montant au choix de CHF 100.–, 150.–, 200.–, 250.– ou 300.– par journée d'hospitalisation, durant max. 30 jours par an",
+          "ratePercent": null,
+          "maxAmountChf": 300,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Séjour dans un hôpital pour soins aigus avec nécessité de soins hospitaliers (HT art. 1) ; classe de prestations selon la police ; montants selon l'Aperçu des prestations 2027 ; aucun justificatif d'utilisation ; versée aussi en cas d'urgence à l'étranger (pas pour un traitement volontaire à l'étranger).",
+          "sourceUrl": "https://www.kpt.ch/fr/assurances-complementaires-hospitalisation/assurance-indemnite-journaliere-hospitalisation",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_daily_cash"
+          ],
+          "label": "Indemnité journalière d'hospitalisation",
+          "variant": "60-jours",
+          "coverage": "Montant au choix de CHF 100.–, 150.–, 200.–, 250.– ou 300.– par journée d'hospitalisation, durant max. 60 jours par an",
+          "ratePercent": null,
+          "maxAmountChf": 300,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Séjour dans un hôpital pour soins aigus avec nécessité de soins hospitaliers (HT art. 1) ; classe de prestations selon la police ; montants selon l'Aperçu des prestations 2027 ; aucun justificatif d'utilisation ; versée aussi en cas d'urgence à l'étranger (pas pour un traitement volontaire à l'étranger).",
+          "sourceUrl": "https://www.kpt.ch/fr/assurances-complementaires-hospitalisation/assurance-indemnite-journaliere-hospitalisation",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_daily_cash",
+            "maternity"
+          ],
+          "label": "Indemnité journalière en cas d'hospitalisation pour accouchement",
+          "variant": null,
+          "coverage": "Indemnités journalières versées également en cas d'hospitalisation en lien avec un accouchement",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": "270 jours",
+          "conditions": "Page produit ; montant et durée selon la classe assurée.",
+          "sourceUrl": "https://www.kpt.ch/fr/assurances-complementaires-hospitalisation/assurance-indemnite-journaliere-hospitalisation",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "kpt-sicuranta",
+      "name": "Sicuranta – assurance de garantie d'admission (GH)",
+      "category": "other",
+      "audience": "all",
+      "summary": "Garantit la conclusion ultérieure d'une assurance des frais d'hospitalisation (H) en division demi-privée, privée ou privée mondiale sans nouvel examen du risque, après une durée choisie de 5, 10, 15 ou 20 ans. Aucune prestation de soins pendant la durée de la garantie.",
+      "variants": [
+        {
+          "key": "5-ans",
+          "name": "Sicuranta 5 ans",
+          "description": "Droit d'option après 5 ans."
+        },
+        {
+          "key": "10-ans",
+          "name": "Sicuranta 10 ans",
+          "description": "Droit d'option après 10 ans."
+        },
+        {
+          "key": "15-ans",
+          "name": "Sicuranta 15 ans",
+          "description": "Droit d'option après 15 ans."
+        },
+        {
+          "key": "20-ans",
+          "name": "Sicuranta 20 ans",
+          "description": "Droit d'option après 20 ans."
+        }
+      ],
+      "prerequisites": "Examen du risque (questionnaire de santé) à la conclusion de Sicuranta, y compris en assurance prénatale ; la souscription de l'assurance d'hospitalisation visée n'est possible que jusqu'au 65e anniversaire.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "0–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, dès 66 ans (GH art. 7). Âge de référence : âge atteint dans l'année civile (année de la prime − année de naissance) ; le passage à la classe supérieure a lieu le 1er janvier de l'année où l'âge déterminant est atteint.",
+        "publishedPrices": [],
+        "discounts": "Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. Facteurs annoncés sur la page produit : « La prime mensuelle dépend de l'âge, du lieu de résidence et du sexe » (mention générique du module de calcul, à confirmer produit par produit dans le calculateur). La prime dépend aussi de la classe de prestations (demi-privé, privé, privé mondial) et de la durée choisies."
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/assurances-complementaires-hospitalisation/assurance-garantie-admission",
+        "https://www.kpt.ch/documents/353eda1c-ce03-4190-a9b9-5611f58bf66b/BB%20Sicuranta%20AufnahmegarantieVersicherung.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf"
+      ],
+      "conditionsDoc": {
+        "title": "Assurance garantissant l'admission Sicuranta (GH) – Conditions spéciales en complément des CGA",
+        "edition": "01.2023",
+        "url": "https://www.kpt.ch/documents/353eda1c-ce03-4190-a9b9-5611f58bf66b/BB%20Sicuranta%20AufnahmegarantieVersicherung.pdf"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "upgrade_option"
+          ],
+          "label": "Garantie d'admission dans l'assurance des frais d'hospitalisation",
+          "variant": null,
+          "coverage": "Conclusion garantie d'une assurance des frais d'hospitalisation (H) en division demi-privée, privée ou privée mondiale sans nouvel examen du risque, à l'expiration de la durée choisie (5, 10, 15 ou 20 ans)",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "GH art. 1 à 4. Droit d'option à exercer par écrit avant l'expiration, sinon il échoit ; entrée dans H aux conditions et au tarif valables à ce moment-là ; résiliation anticipée possible dès la fin de la 3e année d'assurance (préavis de 3 mois). Durée non modifiable après conclusion.",
+          "sourceUrl": "https://www.kpt.ch/documents/353eda1c-ce03-4190-a9b9-5611f58bf66b/BB%20Sicuranta%20AufnahmegarantieVersicherung.pdf",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "kpt-soins-dentaires",
+      "name": "Assurance des soins dentaires (Z) – assurance dentaire complémentaire",
+      "category": "dental",
+      "audience": "all",
+      "summary": "Contributions aux traitements dentaires, à l'hygiène dentaire, à la chirurgie dentaire et à l'orthodontie. Trois classes de prestations vendues en ligne (1, 3 et 4) ; la classe 4 couvre l'orthodontie à 75 % sans plafond jusqu'à 20 ans.",
+      "variants": [
+        {
+          "key": "cp1",
+          "name": "Classe de prestations 1",
+          "description": "50 %, max. CHF 500 par année civile ; sans questionnaire dentaire."
+        },
+        {
+          "key": "cp3",
+          "name": "Classe de prestations 3",
+          "description": "75 %, max. CHF 1'500 par année civile."
+        },
+        {
+          "key": "cp4",
+          "name": "Classe de prestations 4",
+          "description": "75 %, max. CHF 2'000 par année civile ; orthodontie à 75 % sans plafond jusqu'à 20 ans révolus."
+        }
+      ],
+      "prerequisites": "Classe 1 : aucun questionnaire dentaire. Classes 3 et 4 : attestation d'un dentiste à partir du 5e anniversaire (aucune avant). Les conditions spéciales décrivent aussi les classes 0 (50 %, max. CHF 300), 2 (50 %, max. CHF 1'000), 5 et 6 (orthodontie seule, 75 %, max. CHF 10'000 ; Cp 6 liée à l'assurance des soins Plus, retirée de l'offre), qui ne sont pas proposées sur le site.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Cp 0–4 : 0–5, 6–10, 11–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, dès 66 ans (Z art. 6). Âge de référence : âge atteint dans l'année civile (année de la prime − année de naissance) ; le passage à la classe supérieure a lieu le 1er janvier de l'année où l'âge déterminant est atteint.",
+        "publishedPrices": [],
+        "discounts": "Classe de prestations 4 gratuite durant la première année de vie de l'enfant en cas d'assurance prénatale. Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. Facteurs annoncés sur la page produit : « La prime mensuelle dépend de l'âge, du lieu de résidence et du sexe » (mention générique du module de calcul, à confirmer produit par produit dans le calculateur)."
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/autres-assurances/assurance-dentaire-complementaire",
+        "https://www.kpt.ch/documents/96c49233-12c6-43da-9cf7-404b2f7b1840/CS%20Assurance%20des%20soins%20dentaires.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf",
+        "https://www.kpt.ch/fr/situations-personnelles/assurance-prenatale"
+      ],
+      "conditionsDoc": {
+        "title": "Assurance des soins dentaires (Z) – Conditions spéciales en complément des CGA",
+        "edition": "01.2025",
+        "url": "https://www.kpt.ch/documents/96c49233-12c6-43da-9cf7-404b2f7b1840/CS%20Assurance%20des%20soins%20dentaires.pdf"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "dental_treatment",
+            "dental_hygiene",
+            "orthodontics",
+            "dental_surgery"
+          ],
+          "label": "Traitements dentaires, mesures d'orthodontie et corrections de défauts de positionnement des dents",
+          "variant": "cp1",
+          "coverage": "50 %, max. CHF 500.– par année civile",
+          "ratePercent": 50,
+          "maxAmountChf": 500,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": "6 mois à compter du début du contrat ; 12 mois pour l'orthopédie dento-faciale, les travaux prothétiques et les assainissements liés à une intolérance à l'amalgame",
+          "conditions": "Z art. 2, 3 et 5. Plafond commun à l'hygiène dentaire, aux soins, à la chirurgie dentaire (dents de sagesse) et à l'orthodontie (page produit). Traitements sur plusieurs années civiles : prestations au prorata. Aucun questionnaire dentaire.",
+          "sourceUrl": "https://www.kpt.ch/documents/96c49233-12c6-43da-9cf7-404b2f7b1840/CS%20Assurance%20des%20soins%20dentaires.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "dental_treatment",
+            "dental_hygiene",
+            "orthodontics",
+            "dental_surgery"
+          ],
+          "label": "Traitements dentaires, mesures d'orthodontie et corrections de défauts de positionnement des dents",
+          "variant": "cp3",
+          "coverage": "75 %, max. CHF 1'500.– par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 1500,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": "6 mois à compter du début du contrat ; 12 mois pour l'orthopédie dento-faciale, les travaux prothétiques et les assainissements liés à une intolérance à l'amalgame",
+          "conditions": "Z art. 2, 3 et 5. Plafond commun à l'hygiène dentaire, aux soins, à la chirurgie dentaire (dents de sagesse) et à l'orthodontie (page produit). Traitements sur plusieurs années civiles : prestations au prorata. Attestation d'un dentiste requise à partir du 5e anniversaire.",
+          "sourceUrl": "https://www.kpt.ch/documents/96c49233-12c6-43da-9cf7-404b2f7b1840/CS%20Assurance%20des%20soins%20dentaires.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "dental_treatment",
+            "dental_hygiene",
+            "orthodontics",
+            "dental_surgery"
+          ],
+          "label": "Traitements dentaires, mesures d'orthodontie et corrections de défauts de positionnement des dents",
+          "variant": "cp4",
+          "coverage": "75 %, max. CHF 2'000.– par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 2000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": "6 mois à compter du début du contrat ; 12 mois pour l'orthopédie dento-faciale, les travaux prothétiques et les assainissements liés à une intolérance à l'amalgame",
+          "conditions": "Z art. 2, 3 et 5. Plafond commun à l'hygiène dentaire, aux soins, à la chirurgie dentaire (dents de sagesse) et à l'orthodontie (page produit). Traitements sur plusieurs années civiles : prestations au prorata. Attestation d'un dentiste requise à partir du 5e anniversaire.",
+          "sourceUrl": "https://www.kpt.ch/documents/96c49233-12c6-43da-9cf7-404b2f7b1840/CS%20Assurance%20des%20soins%20dentaires.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "orthodontics"
+          ],
+          "label": "Orthodontie jusqu'à 20 ans",
+          "variant": "cp4",
+          "coverage": "75 % des frais de traitement, sans montant limite, pour les mesures d'orthodontie et les corrections de défauts de positionnement des dents jusqu'à l'âge de 20 ans révolus",
+          "ratePercent": 75,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": "12 mois (orthopédie dento-faciale)",
+          "conditions": "Z art. 2 (Cp 4). Dès le 20e anniversaire, le plafond de CHF 2'000.– par année civile s'applique.",
+          "sourceUrl": "https://www.kpt.ch/documents/96c49233-12c6-43da-9cf7-404b2f7b1840/CS%20Assurance%20des%20soins%20dentaires.pdf",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "kpt-accidents-prestations-soins",
+      "name": "Assurance-accidents complémentaire pour prestations de soins (U)",
+      "category": "other",
+      "audience": "all",
+      "summary": "Prend en charge, pendant 5 ans après un accident, les coûts non couverts par la couverture accidents LAMal, LAA ou LAM : division commune hors canton, moyens auxiliaires, aide ménagère, soins à domicile, cures et transports.",
+      "variants": [],
+      "prerequisites": "Aucun examen de santé ; les accidents antérieurs à la conclusion ne sont pas couverts. Résiliable pour la fin d'un mois.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "0–18 ; dès 19 ans (U art. 4). Âge de référence : âge atteint dans l'année civile (année de la prime − année de naissance) ; le passage à la classe supérieure a lieu le 1er janvier de l'année où l'âge déterminant est atteint.",
+        "publishedPrices": [],
+        "discounts": "Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. Facteurs annoncés sur la page produit : « La prime mensuelle dépend de l'âge, du lieu de résidence et du sexe » (mention générique du module de calcul, à confirmer produit par produit dans le calculateur)."
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/autres-assurances/asssurance-accidents-complementaire",
+        "https://www.kpt.ch/documents/281cb7d5-1a64-41c1-aef3-998ca983475e/Assurance-accidents-complementaire-pour-prestations-soins.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf"
+      ],
+      "conditionsDoc": {
+        "title": "Assurance-accidents complémentaire pour prestations de soins (U) – Conditions spéciales en complément des CGA",
+        "edition": "01.2023",
+        "url": "https://www.kpt.ch/documents/281cb7d5-1a64-41c1-aef3-998ca983475e/Assurance-accidents-complementaire-pour-prestations-soins.pdf"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "hospital_general_ch"
+          ],
+          "label": "Hôpital (accident)",
+          "variant": null,
+          "coverage": "Frais hospitaliers en cas de séjour en division commune",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "U art. 3. Coûts non couverts occasionnés dans les 5 ans qui suivent le jour de l'accident ; frais supplémentaires hors canton dans un hôpital répertorié (page produit).",
+          "sourceUrl": "https://www.kpt.ch/documents/281cb7d5-1a64-41c1-aef3-998ca983475e/Assurance-accidents-complementaire-pour-prestations-soins.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "medical_aids",
+            "glasses_lenses"
+          ],
+          "label": "Moyens auxiliaires (accident)",
+          "variant": null,
+          "coverage": "Lunettes, appareils acoustiques et prothèses si la lésion corporelle nécessite un traitement",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "U art. 3. Sur ordonnance médicale ; aucun plafond indiqué.",
+          "sourceUrl": "https://www.kpt.ch/documents/281cb7d5-1a64-41c1-aef3-998ca983475e/Assurance-accidents-complementaire-pour-prestations-soins.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "home_help"
+          ],
+          "label": "Aide ménagère (accident)",
+          "variant": null,
+          "coverage": "Max. CHF 5'000.–",
+          "ratePercent": null,
+          "maxAmountChf": 5000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "U art. 3 et 4. Plafond par accident (période de 5 ans) ; proches : preuve d'une perte de gain.",
+          "sourceUrl": "https://www.kpt.ch/documents/281cb7d5-1a64-41c1-aef3-998ca983475e/Assurance-accidents-complementaire-pour-prestations-soins.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "home_care"
+          ],
+          "label": "Soins à domicile (accident)",
+          "variant": null,
+          "coverage": "Max. CHF 10'000.–",
+          "ratePercent": null,
+          "maxAmountChf": 10000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "U art. 3 et 4. Plafond par accident (période de 5 ans) ; proches : preuve d'une perte de gain.",
+          "sourceUrl": "https://www.kpt.ch/documents/281cb7d5-1a64-41c1-aef3-998ca983475e/Assurance-accidents-complementaire-pour-prestations-soins.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "convalescence_cure"
+          ],
+          "label": "Cures de convalescence (accident)",
+          "variant": null,
+          "coverage": "Cures dans un établissement de cure dirigé par un médecin selon la liste de santésuisse",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "U art. 3. Aucun montant indiqué.",
+          "sourceUrl": "https://www.kpt.ch/documents/281cb7d5-1a64-41c1-aef3-998ca983475e/Assurance-accidents-complementaire-pour-prestations-soins.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "spa_cure"
+          ],
+          "label": "Cures balnéaires (accident)",
+          "variant": null,
+          "coverage": "Cures dans un établissement de cure balnéaire reconnu en Suisse",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "U art. 3. Aucun montant indiqué.",
+          "sourceUrl": "https://www.kpt.ch/documents/281cb7d5-1a64-41c1-aef3-998ca983475e/Assurance-accidents-complementaire-pour-prestations-soins.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "transport_rescue",
+            "search_recovery"
+          ],
+          "label": "Transports (accident)",
+          "variant": null,
+          "coverage": "Max. CHF 10'000.– par accident pour les frais de dégagement, de sauvetage et de transport (sans rapatriement) ainsi que les transports de la dépouille mortelle",
+          "ratePercent": null,
+          "maxAmountChf": 10000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "U art. 3.",
+          "sourceUrl": "https://www.kpt.ch/documents/281cb7d5-1a64-41c1-aef3-998ca983475e/Assurance-accidents-complementaire-pour-prestations-soins.pdf",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "kpt-capital-accident",
+      "name": "Assurance vie risque – accident : assurance-accidents en cas de décès et d'invalidité (K)",
+      "category": "capital_accident",
+      "audience": "all",
+      "summary": "Capital en cas de décès ou d'invalidité à la suite d'un accident, avec barème d'invalidité progressif jusqu'à 350 % de la somme assurée. Sommes d'assurance au choix par combinaisons prédéfinies.",
+      "variants": [],
+      "prerequisites": "Aucune question de santé pour la variante accident uniquement. Résiliable pour la fin d'un mois.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "0–18 ; dès 19 ans (K art. 9). Âge de référence : âge atteint dans l'année civile (année de la prime − année de naissance) ; le passage à la classe supérieure a lieu le 1er janvier de l'année où l'âge déterminant est atteint.",
+        "publishedPrices": [],
+        "discounts": "Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. Facteurs annoncés sur la page produit : « La prime mensuelle dépend de l'âge, du lieu de résidence et du sexe » (mention générique du module de calcul, à confirmer produit par produit dans le calculateur). La prime dépend de la combinaison de sommes choisie."
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/autres-assurances/assurance-vie-risque",
+        "https://www.kpt.ch/documents/81aa9ace-acc0-4082-9248-fc4fc1ad4b43/BB%20Unfallversicherung%20fuer%20Tod%20und%20Invaliditaet.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf"
+      ],
+      "conditionsDoc": {
+        "title": "Assurance-accidents en cas de décès et d'invalidité (K) – Conditions spéciales en complément des CGA",
+        "edition": "01.2023",
+        "url": "https://www.kpt.ch/documents/81aa9ace-acc0-4082-9248-fc4fc1ad4b43/BB%20Unfallversicherung%20fuer%20Tod%20und%20Invaliditaet.pdf"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "accident_capital"
+          ],
+          "label": "Capital en cas de décès par accident",
+          "variant": null,
+          "coverage": "Capital assuré versé si l'accident entraîne la mort immédiatement ou dans les cinq ans ; sommes au choix : adultes CHF 0, 10'000, 20'000, 40'000, 50'000, 100'000 ou 300'000 ; enfants CHF 5'000 ou 10'000",
+          "ratePercent": null,
+          "maxAmountChf": 300000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "K art. 3 ; combinaisons décès/invalidité adultes (page produit) : 0/100'000, 0/200'000, 10'000/20'000, 10'000/100'000, 10'000/200'000, 20'000/40'000, 20'000/100'000, 40'000/80'000, 50'000/100'000, 50'000/300'000, 100'000/200'000, 300'000/300'000. Enfants : 5'000/50'000, 5'000/75'000, 5'000/100'000, 5'000/200'000, 10'000/100'000 ; versement limité à CHF 2'500 avant le 2e anniversaire et à CHF 20'000 avant 12 ans. Faute d'ayants droit : frais d'enterrement.",
+          "sourceUrl": "https://www.kpt.ch/fr/autres-assurances/assurance-vie-risque",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "accident_capital"
+          ],
+          "label": "Capital en cas d'invalidité par accident",
+          "variant": null,
+          "coverage": "Capital versé selon le degré d'invalidité (barème des membres) ; au-delà de 25 % d'invalidité, indemnité progressive jusqu'à 350 % de la somme assurée pour 100 % d'invalidité ; sommes au choix : adultes de CHF 20'000 à 300'000, enfants de CHF 50'000 à 200'000",
+          "ratePercent": null,
+          "maxAmountChf": 300000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "K art. 3 à 6. maxAmountChf = somme d'assurance maximale (avant progression). Versement dès que l'invalidité permanente peut être constatée, au plus tard 5 ans après l'accident ; défiguration : 10 % (visage) ou 5 % (autres parties visibles) de la somme invalidité.",
+          "sourceUrl": "https://www.kpt.ch/fr/autres-assurances/assurance-vie-risque",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "accident_capital"
+          ],
+          "label": "Frais de reclassement professionnel",
+          "variant": null,
+          "coverage": "Frais de reclassement professionnel nécessaire à la suite d'un accident assuré, en complément de l'AI, au maximum 10 % de la somme assurée en cas d'invalidité",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "K art. 7.",
+          "sourceUrl": "https://www.kpt.ch/documents/81aa9ace-acc0-4082-9248-fc4fc1ad4b43/BB%20Unfallversicherung%20fuer%20Tod%20und%20Invaliditaet.pdf",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "kpt-capital-maladie-accident",
+      "name": "Assurance vie risque – maladie et accident : assurance en cas de décès et d'invalidité (KUTI)",
+      "category": "capital_illness",
+      "audience": "all",
+      "summary": "Capital en cas de décès ou d'invalidité à la suite d'une maladie (et d'un accident si assuré). Droit proportionnel dès 40 % d'invalidité, plein capital dès 70 % ; l'assurance prend fin le 31 décembre qui suit le 59e anniversaire.",
+      "variants": [],
+      "prerequisites": "Examen de santé à la conclusion ; âge terme : 31 décembre suivant le 59e anniversaire ; domicile en Suisse.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex"
+        ],
+        "ageBands": "00–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–59 (K(U)TI art. 13 : prime selon la tranche d'âge atteinte, âge effectif).",
+        "publishedPrices": [],
+        "discounts": "Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. K(U)TI art. 13 : primes calculées d'après l'âge, le sexe et les sommes d'assurance choisies ; la page produit mentionne aussi le lieu de résidence (mention générique du calculateur)."
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/autres-assurances/assurance-vie-risque",
+        "https://www.kpt.ch/documents/99b59905-0841-49b7-a39a-5853fda8a4fd/BB%20Versicherung%20fuer%20Tod%20und%20Invaliditaet%20bei%20Krankheit%20und%20Unfall.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf"
+      ],
+      "conditionsDoc": {
+        "title": "Assurance en cas de décès et d'invalidité par suite de maladie ou par suite de maladie et d'accident (KUTI) – Conditions spéciales en complément des CGA",
+        "edition": "01.2022",
+        "url": "https://www.kpt.ch/documents/99b59905-0841-49b7-a39a-5853fda8a4fd/BB%20Versicherung%20fuer%20Tod%20und%20Invaliditaet%20bei%20Krankheit%20und%20Unfall.pdf"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "illness_capital",
+            "accident_capital"
+          ],
+          "label": "Capital en cas de décès",
+          "variant": null,
+          "coverage": "Capital assuré versé en cas de décès par suite de maladie et, si assuré, par suite d'accident ; sommes au choix : adultes CHF 10'000, 50'000 ou 100'000 ; enfants CHF 10'000",
+          "ratePercent": null,
+          "maxAmountChf": 100000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "K(U)TI art. 5 et 12 ; combinaisons décès/invalidité adultes (page produit) : 10'000/100'000, 10'000/200'000, 50'000/100'000, 50'000/200'000, 100'000/200'000 ; enfants : 10'000/100'000, 10'000/200'000 (versement limité à CHF 2'500 avant le 2e anniversaire et à CHF 20'000 avant 12 ans). Dès le 1er janvier de l'année des 56 ans, les sommes diminuent de 20 % par année.",
+          "sourceUrl": "https://www.kpt.ch/fr/autres-assurances/assurance-vie-risque",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "illness_capital",
+            "accident_capital"
+          ],
+          "label": "Capital en cas d'invalidité",
+          "variant": null,
+          "coverage": "Capital assuré en cas d'invalidité présumée permanente par suite de maladie et, si assuré, d'accident : aucun droit sous 40 % d'invalidité, droit proportionnel dès 40 %, pleines prestations dès 70 % ; sommes au choix : CHF 100'000 ou 200'000",
+          "ratePercent": null,
+          "maxAmountChf": 200000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "K(U)TI art. 6 à 9. Degré d'invalidité fixé par l'assurance-invalidité sociale ; atteintes psychiques assurées uniquement si dues à une lésion organique importante du système nerveux ; réduction de 20 % par année dès 56 ans ; infirmités congénitales exclues.",
+          "sourceUrl": "https://www.kpt.ch/fr/autres-assurances/assurance-vie-risque",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "kpt-teddy",
+      "name": "Assurance enfants « Teddy »",
+      "category": "family_maternity",
+      "audience": "child",
+      "summary": "Assurance de somme pour enfants : rente mensuelle à libre disposition si l'enfant se voit diagnostiquer un cancer, en trois classes de prestations.",
+      "variants": [
+        {
+          "key": "classe-1",
+          "name": "Classe de prestations 1",
+          "description": "CHF 2'000 par mois pendant 12 mois."
+        },
+        {
+          "key": "classe-2",
+          "name": "Classe de prestations 2",
+          "description": "CHF 4'000 par mois pendant 12 mois."
+        },
+        {
+          "key": "classe-3",
+          "name": "Classe de prestations 3",
+          "description": "CHF 4'000 par mois pendant 24 mois."
+        }
+      ],
+      "prerequisites": "Enfants jusqu'à 17 ans, sans examen de santé, pour autant qu'aucun cancer n'ait été diagnostiqué à la souscription ; fin de l'assurance à la fin de l'année civile des 18 ans ; l'enfant doit rester soumis à l'AOS.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": null,
+        "publishedPrices": [],
+        "discounts": "Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. Facteurs annoncés sur la page produit : « La prime mensuelle dépend de l'âge, du lieu de résidence et du sexe » (mention générique du module de calcul, à confirmer produit par produit dans le calculateur). Aucune classe d'âge publiée dans les conditions."
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/autres-assurances/assurance-pour-enfants",
+        "https://www.kpt.ch/documents/2da92553-405c-42fb-9732-96e10d5557e4/CGA%20Assurance%20enfants%20Teddy.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf"
+      ],
+      "conditionsDoc": {
+        "title": "Assurance enfants « Teddy » – Conditions spéciales en complément des CGA",
+        "edition": "01.2022",
+        "url": "https://www.kpt.ch/documents/2da92553-405c-42fb-9732-96e10d5557e4/CGA%20Assurance%20enfants%20Teddy.pdf"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "other:child_cancer_annuity"
+          ],
+          "label": "Rente mensuelle en cas de cancer de l'enfant",
+          "variant": "classe-1",
+          "coverage": "CHF 2000.– par mois pendant 12 mois dès le mois suivant le diagnostic d'une maladie cancéreuse",
+          "ratePercent": null,
+          "maxAmountChf": 2000,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Teddy art. 1, 2 et 4. maxAmountChf = rente mensuelle. Assurance de somme, à libre disposition, versée pour toute la durée même en cas de guérison ou de décès ; couvre tumeurs malignes, leucémies, lymphomes et tumeurs bénignes traitées par chirurgie, radiothérapie, chimiothérapie ou immunothérapie ; cancers antérieurs à la souscription exclus.",
+          "sourceUrl": "https://www.kpt.ch/documents/2da92553-405c-42fb-9732-96e10d5557e4/CGA%20Assurance%20enfants%20Teddy.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "other:child_cancer_annuity"
+          ],
+          "label": "Rente mensuelle en cas de cancer de l'enfant",
+          "variant": "classe-2",
+          "coverage": "CHF 4000.– par mois pendant 12 mois dès le mois suivant le diagnostic d'une maladie cancéreuse",
+          "ratePercent": null,
+          "maxAmountChf": 4000,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Teddy art. 1, 2 et 4. maxAmountChf = rente mensuelle. Assurance de somme, à libre disposition, versée pour toute la durée même en cas de guérison ou de décès ; couvre tumeurs malignes, leucémies, lymphomes et tumeurs bénignes traitées par chirurgie, radiothérapie, chimiothérapie ou immunothérapie ; cancers antérieurs à la souscription exclus.",
+          "sourceUrl": "https://www.kpt.ch/documents/2da92553-405c-42fb-9732-96e10d5557e4/CGA%20Assurance%20enfants%20Teddy.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "other:child_cancer_annuity"
+          ],
+          "label": "Rente mensuelle en cas de cancer de l'enfant",
+          "variant": "classe-3",
+          "coverage": "CHF 4000.– par mois pendant 24 mois dès le mois suivant le diagnostic d'une maladie cancéreuse",
+          "ratePercent": null,
+          "maxAmountChf": 4000,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Teddy art. 1, 2 et 4. maxAmountChf = rente mensuelle. Assurance de somme, à libre disposition, versée pour toute la durée même en cas de guérison ou de décès ; couvre tumeurs malignes, leucémies, lymphomes et tumeurs bénignes traitées par chirurgie, radiothérapie, chimiothérapie ou immunothérapie ; cancers antérieurs à la souscription exclus.",
+          "sourceUrl": "https://www.kpt.ch/documents/2da92553-405c-42fb-9732-96e10d5557e4/CGA%20Assurance%20enfants%20Teddy.pdf",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "kpt-voyages-vacances",
+      "name": "Assurance voyages et vacances (RF)",
+      "category": "travel_abroad",
+      "audience": "all",
+      "summary": "Assurance voyage vendue séparément pour une durée de 17, 31, 62, 92, 183 ou 365 jours, en variante individuelle ou famille : frais de guérison à l'étranger, assistance, bagages, frais d'annulation et protection juridique. La même couverture est incluse 56 jours par an dans Pulse et dans les assurances des frais d'hospitalisation.",
+      "variants": [
+        {
+          "key": "individuelle",
+          "name": "Personne seule",
+          "description": "Bagages jusqu'à CHF 2'000."
+        },
+        {
+          "key": "famille",
+          "name": "Famille",
+          "description": "Preneur, conjoint/partenaire et enfants jusqu'à 25 ans du même foyer ; bagages jusqu'à CHF 4'000."
+        }
+      ],
+      "prerequisites": "Domicile en Suisse ou statut de frontalier au bénéfice de l'AOS en Suisse ; prime payée avant le départ. Souscription en ligne sur reiseversicherung.kpt.ch (hôte non accessible depuis le conteneur) ; les prestations se choisissent à la souscription (modules exacts non vérifiés).",
+      "pricing": {
+        "factors": [],
+        "ageBands": null,
+        "publishedPrices": [],
+        "discounts": null
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/autres-assurances/assurance-voyage",
+        "https://www.kpt.ch/documents/59116dab-88f4-489f-b7db-3251f3647230/AVB%20Reise%20und%20Ferienversicherung.pdf"
+      ],
+      "conditionsDoc": {
+        "title": "Assurance voyages et vacances (RF) – Conditions générales d'assurance CGA",
+        "edition": "01.2020",
+        "url": "https://www.kpt.ch/documents/59116dab-88f4-489f-b7db-3251f3647230/AVB%20Reise%20und%20Ferienversicherung.pdf"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "abroad_emergency"
+          ],
+          "label": "Frais de guérison à l'étranger",
+          "variant": null,
+          "coverage": "Traitements et frais hospitaliers nécessaires et appropriés qui ne sont pas couverts par un autre assureur ; avance des coûts à charge de cet assureur",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "RF art. 7. Assureur : KPT Assurances SA. Franchises et quotes-parts non assurées ; si le retour est médicalement impossible, frais hospitaliers couverts durant 30 jours au plus après l'échéance ; exclus notamment les affections préexistantes et les complications de grossesse après la 26e semaine.",
+          "sourceUrl": "https://www.kpt.ch/documents/59116dab-88f4-489f-b7db-3251f3647230/AVB%20Reise%20und%20Ferienversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "dental_accident"
+          ],
+          "label": "Traitements dentaires par suite d'accident à l'étranger",
+          "variant": null,
+          "coverage": "Seuls les traitements dentaires par suite d'accident sont assurés, jusqu'à concurrence de CHF 3'000.–",
+          "ratePercent": null,
+          "maxAmountChf": 3000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "RF art. 7 al. 2.",
+          "sourceUrl": "https://www.kpt.ch/documents/59116dab-88f4-489f-b7db-3251f3647230/AVB%20Reise%20und%20Ferienversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_assistance_repatriation",
+            "transport_rescue"
+          ],
+          "label": "Assistance de personnes – sauvetage, transports et rapatriement",
+          "variant": null,
+          "coverage": "Organisation et prise en charge des actions de sauvetage et transports nécessaires, du rapatriement ou du voyage de retour (classe touristes, y compris accompagnant ou famille), du dégagement et du rapatriement de personnes décédées, de l'envoi de médicaments et d'une aide linguistique",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "RF art. 8. Assureur : AWP P&C S.A. Mesures à organiser via la centrale d'alarme KPT, sinon prestations limitées à CHF 200.–.",
+          "sourceUrl": "https://www.kpt.ch/documents/59116dab-88f4-489f-b7db-3251f3647230/AVB%20Reise%20und%20Ferienversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "search_recovery"
+          ],
+          "label": "Assistance – actions de recherche",
+          "variant": null,
+          "coverage": "Actions de recherche entreprises en vue d'un sauvetage ou d'un dégagement jusqu'à concurrence de CHF 20'000.– par personne assurée",
+          "ratePercent": null,
+          "maxAmountChf": 20000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "RF art. 8.",
+          "sourceUrl": "https://www.kpt.ch/documents/59116dab-88f4-489f-b7db-3251f3647230/AVB%20Reise%20und%20Ferienversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_assistance_repatriation"
+          ],
+          "label": "Assistance – prolongation du séjour à l'hôtel",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 1'500.– (CHF 150.– par jour pendant 10 jours) si l'assuré ne peut pas entreprendre le voyage de retour à la date prévue après une hospitalisation ; somme doublée pour les membres de la famille voyageant avec lui",
+          "ratePercent": null,
+          "maxAmountChf": 1500,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "RF art. 8.",
+          "sourceUrl": "https://www.kpt.ch/documents/59116dab-88f4-489f-b7db-3251f3647230/AVB%20Reise%20und%20Ferienversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_cancellation_luggage"
+          ],
+          "label": "Assurance bagages",
+          "variant": "individuelle",
+          "coverage": "Bagages assurés jusqu'à concurrence de CHF 2'000.– (vol, endommagement, perte ou retard de livraison)",
+          "ratePercent": null,
+          "maxAmountChf": 2000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "RF art. 9. Franchise de CHF 100.– en cas de vol ; retard de livraison : max. 20 % de la somme ; bijoux, fourrures, appareils photo : max. 50 % ; argent liquide et titres de transport : max. CHF 1'000.– (vol avec effraction ou détroussement).",
+          "sourceUrl": "https://www.kpt.ch/documents/59116dab-88f4-489f-b7db-3251f3647230/AVB%20Reise%20und%20Ferienversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_cancellation_luggage"
+          ],
+          "label": "Assurance bagages",
+          "variant": "famille",
+          "coverage": "Bagages assurés jusqu'à concurrence de CHF 4'000.– (vol, endommagement, perte ou retard de livraison)",
+          "ratePercent": null,
+          "maxAmountChf": 4000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "RF art. 9. Franchise de CHF 100.– en cas de vol ; retard de livraison : max. 20 % de la somme ; bijoux, fourrures, appareils photo : max. 50 % ; argent liquide et titres de transport : max. CHF 1'000.–.",
+          "sourceUrl": "https://www.kpt.ch/documents/59116dab-88f4-489f-b7db-3251f3647230/AVB%20Reise%20und%20Ferienversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_cancellation_luggage"
+          ],
+          "label": "Assurance frais d'annulation",
+          "variant": null,
+          "coverage": "Jusqu'à concurrence du prix de l'arrangement, au maximum CHF 20'000.– : frais d'annulation, frais supplémentaires de voyage et remboursement proportionnel du séjour non utilisé",
+          "ratePercent": null,
+          "maxAmountChf": 20000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "RF art. 10. Valable dès la réservation et également en Suisse ; maladie grave, accident ou décès de l'assuré ou d'un proche, retard du transport public vers le départ, dommages graves au domicile, danger sur le lieu de vacances ; aucune prestation si l'organisateur annule.",
+          "sourceUrl": "https://www.kpt.ch/documents/59116dab-88f4-489f-b7db-3251f3647230/AVB%20Reise%20und%20Ferienversicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "legal_protection"
+          ],
+          "label": "Protection juridique voyages et circulation routière",
+          "variant": null,
+          "coverage": "Paiement jusqu'à concurrence de CHF 300'000.– (hors Europe et pays méditerranéens : CHF 100'000.–) des frais d'avocat, d'expertise, de justice et dépens ; avance de caution jusqu'à CHF 100'000.– ; indemnité de comparution jusqu'à CHF 1'000.–",
+          "ratePercent": null,
+          "maxAmountChf": 300000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "RF art. 11. Assureur : Coop Protection Juridique SA.",
+          "sourceUrl": "https://www.kpt.ch/documents/59116dab-88f4-489f-b7db-3251f3647230/AVB%20Reise%20und%20Ferienversicherung.pdf",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "kpt-protection-juridique-circulation-privee",
+      "name": "Assurance de protection juridique de circulation et privée (VPR)",
+      "category": "legal_protection",
+      "audience": "all",
+      "summary": "Protection juridique générale (circulation routière, vie privée, litiges avec des assurances, employeur, bailleur) portée par Coop Protection Juridique SA ; complément à la protection juridique en matière de santé et à l'étranger déjà incluses dans Pulse. Uniquement en combinaison avec Pulse.",
+      "variants": [],
+      "prerequisites": "Assurance complémentaire ambulatoire Pulse requise (ou anciennes assurances des soins Plus/Comfort) ; couvre une seule personne par contrat.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": null,
+        "publishedPrices": [],
+        "discounts": "Rabais famille : enfants de moins de 18 ans assurés gratuitement ; jeunes de 19 à 25 ans à moitié prix ; premier adulte de 26 ans ou plus à plein tarif, autres adultes du même foyer à moitié prix. Autres facteurs tarifaires non publiés (calculateur)."
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/autres-assurances/assurance-protection-juridique",
+        "https://www.kpt.ch/documents/019c4334-6e65-498d-bbab-4374935c2069/AVB%20Verkehrs%20und%20Privatrechtsschutz%20Versicherung.pdf",
+        "https://www.kpt.ch/documents/3b826d60-2c0e-44fd-b5fe-0be198bda55f/BB%20GesundheitsrechtsschutzVersicherung.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf"
+      ],
+      "conditionsDoc": {
+        "title": "Assurance de protection juridique de circulation et privée (VPR) – Conditions générales d'assurance CGA",
+        "edition": "01.2025",
+        "url": "https://www.kpt.ch/documents/019c4334-6e65-498d-bbab-4374935c2069/AVB%20Verkehrs%20und%20Privatrechtsschutz%20Versicherung.pdf"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "legal_protection"
+          ],
+          "label": "Protection juridique de circulation et privée – garantie par cas",
+          "variant": null,
+          "coverage": "Prise en charge des intérêts par le service juridique de Coop Protection Juridique et paiement jusqu'à concurrence de CHF 300'000.– par cas (honoraires d'avocats et d'experts, frais de justice, dépens, cautions pénales à titre d'avance)",
+          "ratePercent": null,
+          "maxAmountChf": 300000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": "3 mois pour les litiges avec des assurances, de contrat, de bail, de travail, de voisinage et de propriété ; aucun pour les dommages-intérêts et les procédures pénales",
+          "conditions": "VPR art. 4 et annexes 1 et 2. Garantie maximale commune de CHF 300'000.– avec la protection juridique santé et à l'étranger ; validité Europe et pays riverains de la Méditerranée (monde entier pour les dommages-intérêts extracontractuels, limités à CHF 30'000.– hors d'Europe) ; valeur litigieuse minimale CHF 300.–.",
+          "sourceUrl": "https://www.kpt.ch/documents/019c4334-6e65-498d-bbab-4374935c2069/AVB%20Verkehrs%20und%20Privatrechtsschutz%20Versicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "legal_protection"
+          ],
+          "label": "Protection juridique – cas à prestations limitées",
+          "variant": null,
+          "coverage": "Limite de CHF 3'000.– pour les litiges de contrats de droit privé liés à la circulation, de voisinage, de propriété et de construction soumise à autorisation",
+          "ratePercent": null,
+          "maxAmountChf": 3000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": "3 mois",
+          "conditions": "VPR annexes 1 (let. e) et 2 (let. f, g, h).",
+          "sourceUrl": "https://www.kpt.ch/documents/019c4334-6e65-498d-bbab-4374935c2069/AVB%20Verkehrs%20und%20Privatrechtsschutz%20Versicherung.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "legal_protection"
+          ],
+          "label": "Consultation juridique pour toute autre question de droit",
+          "variant": null,
+          "coverage": "Protection pour consultation : CHF 300.– par cas, chaque cas donnant droit à un conseil",
+          "ratePercent": null,
+          "maxAmountChf": 300,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "VPR annexe 1 let. g et annexe 2 let. i. S'applique aussi aux domaines exclus de la couverture complète (droit de la famille, fiscal, activité indépendante, etc.).",
+          "sourceUrl": "https://www.kpt.ch/documents/019c4334-6e65-498d-bbab-4374935c2069/AVB%20Verkehrs%20und%20Privatrechtsschutz%20Versicherung.pdf",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "kpt-perte-de-gain",
+      "name": "Assurance perte de gain (J)",
+      "category": "daily_allowance",
+      "audience": "adult",
+      "summary": "Indemnité journalière en cas d'incapacité de travail par suite de maladie ou d'accident, en variante assurance dommages (salariés) ou assurance de sommes (indépendants, personnes au foyer), avec délai de carence au choix. Offre sur demande uniquement.",
+      "variants": [
+        {
+          "key": "dommages",
+          "name": "Assurance dommages",
+          "description": "Indemnité jusqu'à concurrence du salaire AVS perçu avant l'incapacité de travail ; perte de revenu à justifier."
+        },
+        {
+          "key": "sommes",
+          "name": "Assurance de sommes",
+          "description": "Indemnité fixe sans tenir compte de la perte de gain effective ; max. CHF 100 par jour pour les personnes tenant un foyer."
+        }
+      ],
+      "prerequisites": "Offre sur demande (pas de calcul en ligne) ; l'assurance s'éteint à l'épuisement du droit aux prestations ou à l'âge AVS.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "15–30, 31–40, 41–50, 51–60, 61–65 ans (J art. 14). Âge de référence : âge atteint dans l'année civile (année de la prime − année de naissance) ; le passage à la classe supérieure a lieu le 1er janvier de l'année où l'âge déterminant est atteint.",
+        "publishedPrices": [],
+        "discounts": "Un délai de carence plus long réduit la prime. Rabais en ligne de 5 % sur presque toutes les assurances complémentaires avec le portail clients KPTnet (gestion sans papier, protection juridique Internet offerte) ; escompte de 0,5 % (paiement semestriel) ou 1 % (paiement annuel) ; rabais collectif possible via l'employeur ou une association. Aucun rabais famille publié pour ce produit. Autres facteurs tarifaires non publiés (prime dépendant du montant journalier et du délai de carence)."
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/autres-assurances/assurance-perte-de-gain",
+        "https://www.kpt.ch/documents/a3174fc3-3c8f-4767-bf34-c3045a1646ad/BB%20Erwerbsausfallversicherung.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf",
+        "https://www.kpt.ch/documents/aef74eb4-b7f5-4159-95e9-98adbd06c0a3/kpt_leistungs%C3%BCbersicht-2027-FR.pdf",
+        "https://www.kpt.ch/fr/savoir/economiser-sur-les-primes"
+      ],
+      "conditionsDoc": {
+        "title": "Assurance perte de gain (J) – Conditions spéciales en complément des CGA",
+        "edition": "01.2023",
+        "url": "https://www.kpt.ch/documents/a3174fc3-3c8f-4767-bf34-c3045a1646ad/BB%20Erwerbsausfallversicherung.pdf"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "daily_allowance"
+          ],
+          "label": "Indemnité journalière en cas d'incapacité de travail",
+          "variant": null,
+          "coverage": "Indemnité journalière assurée, au choix dans la limite de CHF 600.– par jour, versée selon le degré d'incapacité de travail durant 730 jours dans une période de 900 jours consécutifs",
+          "ratePercent": null,
+          "maxAmountChf": 600,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": "Délai de carence au choix : 2, 7, 14, 21, 30, 60, 90, 120, 150, 180, 270 ou 360 jours",
+          "conditions": "J art. 1, 2, 5 et 6 (durée) ; plafond de CHF 600.– et délais selon la page produit. Assurance dommages : jusqu'à concurrence du salaire AVS, réduction en cas de surindemnisation. Maternité non assurée sauf complications ayant valeur de maladie ; à l'étranger, indemnité uniquement pendant un séjour hospitalier justifié.",
+          "sourceUrl": "https://www.kpt.ch/fr/autres-assurances/assurance-perte-de-gain",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "daily_allowance"
+          ],
+          "label": "Indemnité journalière – personnes tenant un foyer",
+          "variant": "sommes",
+          "coverage": "Assurance de sommes pour les personnes qui tiennent un foyer : indemnité journalière de CHF 100.– au maximum",
+          "ratePercent": null,
+          "maxAmountChf": 100,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Page produit ; J art. 3 : transformation d'une assurance dommages en assurance de sommes possible dans les 3 mois et jusqu'à 55 ans en cas de cessation d'activité (reprise jusqu'à CHF 100.–).",
+          "sourceUrl": "https://www.kpt.ch/fr/autres-assurances/assurance-perte-de-gain",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "daily_allowance",
+            "maternity"
+          ],
+          "label": "Indemnité d'accouchement",
+          "variant": null,
+          "coverage": "Indemnité journalière assurée durant 20 jours à compter du jour de l'accouchement, pour les accouchements après le sixième mois de grossesse",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "J art. 6 al. 7. Non imputée sur la durée de 730 jours ; l'indemnité maladie est suspendue 4 semaines avant et 8 semaines après l'accouchement (J art. 10).",
+          "sourceUrl": "https://www.kpt.ch/documents/a3174fc3-3c8f-4767-bf34-c3045a1646ad/BB%20Erwerbsausfallversicherung.pdf",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "kpt-patient-prive",
+      "name": "Assurance patient privé (PP)",
+      "category": "other",
+      "audience": "all",
+      "summary": "Prend en charge 90 % des coûts non couverts des médecins qui se sont récusés au sens de l'art. 44 LAMal. Conditions listées parmi les documents en vigueur (non classées « retirées de l'offre »), mais produit absent des pages produit, du calculateur et de l'Aperçu des prestations 2027 : statut de vente à confirmer.",
+      "variants": [],
+      "prerequisites": "L'assurance déploie ses effets aussi longtemps que la personne est soumise à l'AOS. Modalités de souscription non publiées.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "0–18 ; dès 19 ans (PP art. 4). Âge de référence : âge atteint dans l'année civile (année de la prime − année de naissance) ; le passage à la classe supérieure a lieu le 1er janvier de l'année où l'âge déterminant est atteint.",
+        "publishedPrices": [],
+        "discounts": null
+      },
+      "sourceUrls": [
+        "https://www.kpt.ch/fr/services-clientele/comprendre-documents/conditions-generales-assurance",
+        "https://www.kpt.ch/documents/9ea0621c-931d-446f-a2a7-9003941a5069/BB%20Privatpatienten%20Versicherun_FR.pdf",
+        "https://www.kpt.ch/documents/a2fc1375-e9b6-4820-8635-f09a8aac68d5/AVB%20fuer%20die%20Zusatzversicherungen.pdf"
+      ],
+      "conditionsDoc": {
+        "title": "Assurance patient privé (PP) – Conditions spéciales en complément des CGA",
+        "edition": "01.2023",
+        "url": "https://www.kpt.ch/documents/9ea0621c-931d-446f-a2a7-9003941a5069/BB%20Privatpatienten%20Versicherun_FR.pdf"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "ambulatory_free_doctor_choice"
+          ],
+          "label": "Médecins récusés – Suisse",
+          "variant": null,
+          "coverage": "90 % des frais de traitement et des mesures médicales et thérapeutiques prescrites par le médecin (médecin récusé au sens de l'art. 44 LAMal)",
+          "ratePercent": 90,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "PP art. 1 à 3. Remboursement sur la base des tarifs pour patients privés pratiqués dans la région ; factures excessives réduites. Aucun plafond indiqué.",
+          "sourceUrl": "https://www.kpt.ch/documents/9ea0621c-931d-446f-a2a7-9003941a5069/BB%20Privatpatienten%20Versicherun_FR.pdf",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "ambulatory_free_doctor_choice",
+            "abroad_planned_treatment"
+          ],
+          "label": "Médecins récusés – étranger",
+          "variant": null,
+          "coverage": "90 % des coûts non couverts par l'AOS",
+          "ratePercent": 90,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "PP art. 2 et 3. Tarifs pour patients privés pratiqués dans la région ; factures excessives réduites.",
+          "sourceUrl": "https://www.kpt.ch/documents/9ea0621c-931d-446f-a2a7-9003941a5069/BB%20Privatpatienten%20Versicherun_FR.pdf",
+          "verification": "read"
+        }
+      ]
+    }
+  ]
+}
