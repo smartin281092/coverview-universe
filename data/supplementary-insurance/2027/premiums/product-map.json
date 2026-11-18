@@ -1,0 +1,30 @@
+{
+  "note": "Rattache un nom de produit du calculateur à une clé de insurers/<clé>.json quand le relevé n'a pas rempli product_key. Appliqué par scripts/supplementary-insurance-build.py.",
+  "axa": {
+    "Santé ACTIF": "axa-sante-actif",
+    "Santé PLUS": "axa-sante-plus",
+    "Santé COMPLET": "axa-sante-complet",
+    "Hôpital division commune": "axa-hopital-division-commune",
+    "Hôpital division semi-privée": "axa-hopital-division-semi-privee",
+    "Hôpital division privée": "axa-hopital-division-privee",
+    "Hôpital Flex 1": "axa-hopital-flex",
+    "Hôpital Flex 2": "axa-hopital-flex",
+    "Indemnité d'hospitalisation": "axa-indemnite-hospitalisation",
+    "Accident Privé": "axa-accident-prive",
+    "Assurance dentaire 1000": "axa-assurance-dentaire",
+    "Assurance dentaire 2000": "axa-assurance-dentaire",
+    "Assurance dentaire 3000": "axa-assurance-dentaire"
+  },
+  "visana": {
+    "Protection juridique": "visana-protection-juridique-sante"
+  },
+  "unmapped": {
+    "axa": {
+      "CAPITAL": "Le calculateur tarife ensemble les sommes accident et maladie ; deux clés possibles (axa-capital-accident, axa-capital-maladie)."
+    },
+    "groupe-mutuel": {
+      "Legis": "Protection juridique générale, hors périmètre santé, absente de insurers/groupe-mutuel.json.",
+      "CyberProtect": "Hors périmètre santé."
+    }
+  }
+}
