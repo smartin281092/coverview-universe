@@ -27,7 +27,7 @@ BENEFIT_COLUMNS = [
     "conditions", "verification", "source_url",
 ]
 PREMIUM_COLUMNS = [
-    "insurer", "product_key", "product_name", "variant", "year", "age_band",
+    "insurer", "product_key", "product_name", "variant", "year", "birth_year", "age", "age_band",
     "sex", "region", "deductible_chf", "accident", "monthly_chf",
     "source_type", "source_url", "profile", "notes",
 ]
@@ -123,6 +123,8 @@ def main() -> int:
                     "product_name": product["name"],
                     "variant": text(price.get("variant")),
                     "year": text(price.get("year")),
+                    "birth_year": text(price.get("birthYear")),
+                    "age": text(price.get("age")),
                     "age_band": text(price.get("ageBand")),
                     "sex": text(price.get("sex")),
                     "region": text(price.get("region")),

@@ -1,6 +1,6 @@
 # Complémentaires santé (LCA) — comparatif interne 2027
 
-Jeu de données prévu : pour les principaux assureurs actifs en Suisse romande, tous les produits d'assurance maladie complémentaire, leurs prestations classées par tags communs et leurs primes par tranche d'âge.
+Jeu de données prévu : pour les principaux assureurs actifs en Suisse romande, tous les produits d'assurance maladie complémentaire, leurs prestations classées par tags communs et leurs primes pour chaque année de naissance.
 
 ## État au 18 novembre 2026 : collecte non commencée
 
@@ -24,5 +24,5 @@ Assura, Groupe Mutuel, CSS, Helsana, Sanitas, CONCORDIA, SWICA, AXA, Atupri, Vis
 
 1. Ouvrir le réseau de la session aux hôtes listés dans `source-leads.md` (pages et PDF). Les hôtes techniques des calculateurs de primes restent à observer une fois les pages d'entrée chargées.
 2. Relancer la recherche par assureur avec `research-brief.md` ; chaque assureur écrit `insurers/<clé>.json`.
-3. Relever les primes dans les calculateurs officiels sur des profils fixes (âges, sexe, localité, franchise, accident) et les ajouter dans `pricing.publishedPrices` avec `sourceType: "official_calculator"`.
+3. Relever les primes dans les calculateurs officiels **pour chaque année de naissance** (demande du 18 novembre 2026 : pas seulement des tranches d'âge), les autres paramètres étant fixés par profil (sexe, localité, franchise, accident). Les ajouter dans `pricing.publishedPrices` avec `birthYear`, `age` et `sourceType: "official_calculator"`. Quand un assureur tarife par tranche, relever les bornes exactes de la tranche (`ageBand`) et en déduire les années de naissance, sans interpoler.
 4. Lancer `python3 scripts/supplementary-insurance-build.py 2027` et traiter les anomalies de `quality.json`.

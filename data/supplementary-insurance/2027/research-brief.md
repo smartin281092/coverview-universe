@@ -19,7 +19,7 @@ Objectif : inventorier **tous les produits d'assurance maladie complémentaire (
 
 Tu ne peux probablement pas piloter le calculateur. Relève quand même :
 - l'URL d'entrée du calculateur de primes et tout hôte technique visible (sous-domaine, iframe, API) ;
-- les facteurs tarifaires (âge, sexe, région, franchise, accident, âge d'entrée) et les tranches d'âge si elles sont publiées ;
+- les facteurs tarifaires (âge, sexe, région, franchise, accident, âge d'entrée) et les tranches d'âge si elles sont publiées (l'objectif final est une prime par année de naissance : note précisément les bornes de chaque tranche et l'âge de référence, âge atteint dans l'année ou âge d'entrée) ;
 - tout barème ou exemple de prime publié officiellement (PDF de primes, « dès CHF x par mois ») avec son profil exact et sa source ;
 - les rabais (famille, durée de contrat, combinaison).
 

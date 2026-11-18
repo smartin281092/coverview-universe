@@ -25,7 +25,7 @@
       "pricing": {
         "factors": ["age", "sex", "region", "deductible", "accident", "entry_age"],
         "ageBands": "tranches d'âge tarifaires si publiées, sinon null",
-        "publishedPrices": [{"profile": "description", "monthlyChf": 0, "year": 2027, "sourceUrl": "…"}],
+        "publishedPrices": [{"profile": "description", "birthYear": 1990, "age": 37, "ageBand": "36-40 ou null", "sex": "f | m | null", "region": "localité ou région tarifaire", "deductibleChf": null, "accident": true, "variant": "clé ou null", "monthlyChf": 0, "year": 2027, "sourceType": "official_calculator | official_published | secondary", "sourceUrl": "…"}],
         "discounts": "rabais famille, durée, combinaison, sinon null"
       },
       "sourceUrls": ["page produit", "PDF conditions"],
