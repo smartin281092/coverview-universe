@@ -27,9 +27,9 @@ BENEFIT_COLUMNS = [
     "conditions", "verification", "source_url",
 ]
 PREMIUM_COLUMNS = [
-    "insurer", "product_key", "product_name", "variant", "year", "birth_year", "age", "age_band",
-    "sex", "region", "deductible_chf", "accident", "monthly_chf",
-    "source_type", "source_url", "profile", "notes",
+    "insurer", "product_key", "product_name", "variant", "option", "year",
+    "birth_year", "age", "sex", "postal_code", "locality", "accident",
+    "monthly_chf", "source_type", "source_url", "retrieved_at", "notes",
 ]
 
 
@@ -122,19 +122,19 @@ def main() -> int:
                     "product_key": product_key,
                     "product_name": product["name"],
                     "variant": text(price.get("variant")),
+                    "option": text(price.get("option")),
                     "year": text(price.get("year")),
                     "birth_year": text(price.get("birthYear")),
-                    "age": text(price.get("age")),
-                    "age_band": text(price.get("ageBand")),
+                    "age": text(price.get("age") if price.get("age") is not None else price.get("ageBand")),
                     "sex": text(price.get("sex")),
-                    "region": text(price.get("region")),
-                    "deductible_chf": text(price.get("deductibleChf")),
+                    "postal_code": text(price.get("postalCode")),
+                    "locality": text(price.get("region")),
                     "accident": text(price.get("accident")),
                     "monthly_chf": text(price.get("monthlyChf")),
                     "source_type": text(price.get("sourceType") or "official_published"),
                     "source_url": text(price.get("sourceUrl")),
-                    "profile": text(price.get("profile")),
-                    "notes": text(price.get("notes")),
+                    "retrieved_at": text(data.get("retrievedAt")),
+                    "notes": text(price.get("profile") or price.get("notes")),
                 })
 
             products.append({
@@ -153,6 +153,30 @@ def main() -> int:
                 "benefitCount": sum(tags_in_product.values()),
             })
         stats[key] = dict(counts)
+
+    known_products = {(p["insurer"], p["key"]) for p in products}
+    for path in sorted((BASE / "premiums").glob("*.csv")):
+        with path.open(encoding="utf-8", newline="") as handle:
+            reader = csv.DictReader(handle)
+            missing = [c for c in PREMIUM_COLUMNS if c not in (reader.fieldnames or [])]
+            if missing:
+                issues.append(f"premiums/{path.name}: colonnes manquantes {missing}")
+                continue
+            count = 0
+            unmatched = Counter()
+            for row in reader:
+                try:
+                    float(row["monthly_chf"])
+                except (TypeError, ValueError):
+                    issues.append(f"premiums/{path.name}: prime illisible {row['monthly_chf']!r}")
+                    continue
+                if row["product_key"] and (row["insurer"], row["product_key"]) not in known_products:
+                    unmatched[row["product_key"]] += 1
+                premium_rows.append({c: row[c] for c in PREMIUM_COLUMNS})
+                count += 1
+            stats.setdefault(path.stem, {})["calculatorPrices"] = count
+            for product_key, n in unmatched.items():
+                issues.append(f"premiums/{path.name}: product_key inconnu {product_key!r} ({n} lignes)")
 
     def write_csv(name, columns, rows):
         with (BASE / name).open("w", encoding="utf-8", newline="") as handle:
