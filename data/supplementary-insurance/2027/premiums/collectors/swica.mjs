@@ -48,6 +48,20 @@ const GROUPS = ['group.additional.insurance', 'group.hospital.insurance']; // gr
 const FRANCHISE_TYPES = new Set(['DEDUCTIBLE', 'FRANCHISE', 'YEARLY_FRANCHISE']);
 const ACC_ON = 'COD_UZ_EIN';
 const ACC_OFF = 'COD_UZ_AUS';
+// Clé de `../../insurers/swica.json` pour chaque identifiant de produit du calculateur (correspondances
+// évidentes seulement ; une clé absente du fichier n'est pas écrite).
+const PRODUCT_KEYS = [
+  [/^prod\.completa\.top$/, 'swica-completa-top'],
+  [/^prod\.completa\.forte$/, 'swica-completa-forte'],
+  [/^prod\.praevita$/, 'swica-praevita'],
+  [/^prod\.supplementa$/, 'swica-supplementa'],
+  [/^prod\.optima$/, 'swica-optima'],
+  [/^prod\.vivia$/, 'swica-vivia'],
+  [/^prod\.denta$/, 'swica-denta'],
+  [/^prod\.hospita\./, 'swica-hospita'],
+  [/^prod\.infortuna\./, 'swica-infortuna'],
+  [/^prod\.law\.protection$/, 'swica-protection-juridique-sante'],
+];
 const PILOTS = [
   [1987, 'f'],
   [2015, 'm'],
@@ -70,6 +84,13 @@ const groupSize = Number(args['group-size'] ?? 8);
 const outPath = path.resolve(HERE, String(args.out ?? '../swica.csv'));
 const rawDir = path.resolve(String(args['raw-dir'] ?? path.join(os.tmpdir(), 'swica-premiums-raw')));
 fs.mkdirSync(rawDir, { recursive: true });
+
+const insurerFile = path.resolve(HERE, '../../insurers/swica.json');
+const knownKeys = new Set(fs.existsSync(insurerFile) ? JSON.parse(fs.readFileSync(insurerFile, 'utf8')).products.map((p) => p.key) : []);
+const productKey = (productId) => {
+  const key = PRODUCT_KEYS.find(([pattern]) => pattern.test(productId))?.[1];
+  return key && knownKeys.has(key) ? key : '';
+};
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const csv = (v) => (/[",\n]/.test(String(v)) ? `"${String(v).replace(/"/g, '""')}"` : String(v));
@@ -205,7 +226,7 @@ function rowsFromGroups(groups, netGroups, netBase, who, t, retrievedAt) {
           notes.push(`id=${model.id.startsWith('special.') ? productId : model.id}`);
           rows.push([
             'swica',
-            '',
+            productKey(productId),
             name,
             variant.join(' / '),
             option.join(' / '),
@@ -302,9 +323,10 @@ try {
   const openSession = async (who, postcodeId) => {
     const session = await call('POST', '', { ...personDto(who, postcodeId), offerAnalytics: { campaignId: CAMPAIGN, utmParameters: {} } });
     if (!session?.pin) return null;
-    await call('PUT', `/session/${session.pin}/kvg`, { ...session, insuranceBegin: START }, who.postalCode);
-    await call('PUT', `/session/${session.pin}/vvg`, { ...session, insuranceBegin: START }, who.postalCode);
-    return session;
+    // Sans ces deux appels la date de début n'est pas fixée : une session où l'un échoue est abandonnée.
+    const kvg = await call('PUT', `/session/${session.pin}/kvg`, { ...session, insuranceBegin: START }, who.postalCode);
+    const vvg = kvg && (await call('PUT', `/session/${session.pin}/vvg`, { ...session, insuranceBegin: START }, who.postalCode));
+    return kvg && vvg ? session : null;
   };
   const productGroups = (pin, personId, zip) => call('GET', `/session/${pin}/insurableperson/${personId}/productgroup`, null, zip);
 
@@ -315,6 +337,7 @@ try {
     const gross = await productGroups(session.pin, session.personId, who.postalCode);
     if (!Array.isArray(gross)) return;
     const proposal = await call('GET', `/session/${session.pin}/insurableperson/${session.personId}/insuranceneeds/productproposal`, null, who.postalCode);
+    if (proposal && proposal.calculationYear !== YEAR) throw new Stop(3, `Année de calcul ${proposal.calculationYear} au lieu de ${YEAR} pour ${who.birthYear}/${who.sex} : arrêt.`);
     const netGroups = proposal ? await productGroups(session.pin, session.personId, who.postalCode) : null;
     if (!proposal || !Array.isArray(netGroups)) return;
     writeRaw(who, 'proposal', proposal);
@@ -330,8 +353,11 @@ try {
       const added = await call('POST', `/session/${session.pin}/insurableperson`, { ...personDto(who, postcodeId), idSynced: false }, who.postalCode);
       ids.push(added?.personId ?? null);
     }
+    // Le calculateur doit avoir enregistré le début au 01.01 pour chaque personne de la session.
+    const listed = await call('GET', `/session/${session.pin}/insurableperson`, null, people[0].postalCode);
+    const begins = new Map((Array.isArray(listed) ? listed : []).map((p) => [p.id, p.insuranceBegin]));
     for (let i = 0; i < people.length; i += 1) {
-      if (!ids[i]) continue;
+      if (!ids[i] || begins.get(ids[i]) !== START) continue;
       const gross = await productGroups(session.pin, ids[i], people[i].postalCode);
       if (Array.isArray(gross)) writeRaw(people[i], kind, gross);
     }

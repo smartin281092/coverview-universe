@@ -32,7 +32,7 @@
       "benefits": 274,
       "verification:read": 274,
       "prices": 329,
-      "calculatorPrices": 5624
+      "calculatorPrices": 30324
     },
     "groupe-mutuel": {
       "products": 22,
@@ -56,13 +56,15 @@
     "sanitas": {
       "products": 17,
       "benefits": 175,
-      "verification:read": 175
+      "verification:read": 175,
+      "calculatorPrices": 4829
     },
     "swica": {
       "products": 11,
       "benefits": 229,
       "verification:read": 229,
-      "prices": 4
+      "prices": 4,
+      "calculatorPrices": 35928
     },
     "sympany": {
       "products": 12,

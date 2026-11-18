@@ -178,6 +178,8 @@ async function collectProfile(page, args, locality, birthYear, sex) {
     key: profileKey(locality.npa, birthYear, sex),
     npa: locality.npa,
     locality: locality.nomComplet,
+    commune: locality.nomCommune,
+    numeroCommune: locality.numeroCommune,
     canton: locality.codeCanton,
     birthYear,
     sex,
@@ -189,6 +191,7 @@ async function collectProfile(page, args, locality, birthYear, sex) {
     scopes: [],
     entryDates: {},
     bh: {},
+    bhErrors: {},
     errors: [],
   };
   if (!needs.length) return record;
@@ -222,7 +225,11 @@ async function collectProfile(page, args, locality, birthYear, sex) {
       });
       await wait();
       const t = rb.json?.produits?.[0]?.lca?.selection?.[bhIndex]?.tarif;
-      if (rb.status !== 200 || !t) throw new Error(`recalculate BH HTTP ${rb.status} ${rb.text || JSON.stringify(rb.json).slice(0, 300)}`);
+      if (rb.status !== 200 || !t) {
+        // Les autres tarifs du profil restent valables : on note l'échec, sans prix BH.
+        record.bhErrors[amount] = `HTTP ${rb.status} ${rb.text || JSON.stringify(rb.json).slice(0, 200)}`;
+        continue;
+      }
       if (t.codeProduit === 'BHGA01' && t.dailyAmount === amount && typeof t.montant === 'number') {
         record.bh[amount] = { montant: t.montant, tarif: slimTarif(t) };
       } else {
@@ -349,6 +356,8 @@ function loadRaw(file) {
   for (const line of fs.readFileSync(file, 'utf8').split('\n')) {
     if (!line.trim()) continue;
     const rec = JSON.parse(line);
+    const wanted = LOCALITIES[rec.npa];
+    if (wanted && rec.commune !== wanted) continue; // relevé sur une autre commune du même NPA
     map.set(rec.key, rec);
   }
   return map;
@@ -392,11 +401,13 @@ async function main() {
         await sleep(args.delay);
         const wanted = LOCALITIES[npa];
         const list = Array.isArray(r.json) ? r.json : [];
-        const loc = list.find((l) => l.npa === npa && (!wanted || l.nomComplet === wanted))
-          ?? list.find((l) => l.npa === npa && (!wanted || l.nomCommune === wanted));
-        if (!loc) throw new StopError(`localité introuvable pour ${npa} : ${JSON.stringify(r.json ?? r.text).slice(0, 300)}`);
+        // Un même NPA peut couvrir plusieurs communes (« 1950 Sion (Savièse) », « 1950 Sion ») :
+        // on prend l'entrée dont la localité ET la commune portent le nom attendu, comme « 1950 Sion » à l'écran.
+        const matches = list.filter((l) => l.npa === npa && (wanted ? l.nomComplet === wanted && l.nomCommune === wanted : true));
+        if (matches.length !== 1) throw new StopError(`localité ambiguë ou introuvable pour ${npa} : ${JSON.stringify(r.json ?? r.text).slice(0, 600)}`);
+        const loc = matches[0];
         localityCache.set(npa, loc);
-        console.log(`localité ${npa} : ${loc.nomComplet} (${loc.codeCanton}), commune ${loc.numeroCommune}`);
+        console.log(`localité ${npa} : ${loc.nomComplet}, commune ${loc.nomCommune} (${loc.numeroCommune}, ${loc.codeCanton}) ; ${list.length} entrée(s) pour ce NPA`);
       }
       let consecutiveErrors = 0;
       let n = 0;
@@ -405,8 +416,15 @@ async function main() {
           const rec = await collectProfile(page, args, localityCache.get(p.npa), p.birthYear, p.sex);
           fs.appendFileSync(args.raw, `${JSON.stringify(rec)}\n`);
           done.set(rec.key, rec);
-          consecutiveErrors = 0;
           n += 1;
+          const bhFailures = Object.entries(rec.bhErrors);
+          if (bhFailures.length) {
+            consecutiveErrors += 1;
+            console.error(`erreur BH ${rec.key} : ${bhFailures.map(([a, m]) => `${a} CHF/jour ${m}`).join(' ; ')}`);
+            if (consecutiveErrors >= 3) throw new StopError('3 erreurs consécutives : arrêt');
+          } else {
+            consecutiveErrors = 0;
+          }
           if (n % 20 === 0) console.log(`${n}/${todo.length} (${rec.key} : ${rec.tarifs.length} tarifs)`);
         } catch (e) {
           if (e instanceof StopError) throw e;
