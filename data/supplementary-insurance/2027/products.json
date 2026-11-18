@@ -2,6 +2,20 @@
   "year": 2027,
   "insurers": [
     {
+      "key": "axa",
+      "name": "AXA",
+      "legalEntityLca": "AXA Assurances SA, General-Guisan-Strasse 40, 8401 Winterthur (porteur du risque du produit CAPITAL : AXA Vie SA)",
+      "website": "https://www.axa.ch/fr/particuliers.html",
+      "calculatorUrl": "https://www.axa.ch/health-dsn/fr",
+      "calculatorHosts": [
+        "www.axa.ch",
+        "api.axa.ch"
+      ],
+      "publishedTariffUrls": [],
+      "notes": "AXA Suisse ne vend que des complémentaires LCA (« Prévoyance santé d'AXA »), pas d'assurance de base ; elle propose un service gratuit de comparaison et de changement d'assurance de base, un service de transmission des factures et un service de protection juridique (AXA-ARAG, jusqu'à CHF 20 000 par cas et CHF 40 000 par an) aux titulaires d'une complémentaire avec l'offre de services. Documents lus : CGA Prévoyance santé édition 02.2024 (nouveaux clients depuis le 01.01.2023 ; les clients antérieurs restent soumis à l'édition 01.2024, différences sans effet sur les prestations), CC de chaque produit toutes en édition 01.2022, aperçu des prestations 15775FR – 2026-10. Aucune édition datée 01.2027 n'est publiée ; ce sont les éditions en vigueur au 18.11.2026. Plafond général : prestations limitées à CHF 10 millions par année civile (CGA C1.3) ; validité en Suisse sauf disposition contraire ; délai de carence maternité de 365 jours. Contrat d'un an au minimum (1, 2 ou 3 ans au choix), résiliable pour la fin d'une année civile avec préavis de trois mois ; seul le preneur d'assurance peut résilier ordinairement ou après sinistre (CGA G6.1). Rabais : famille 5 % (2 personnes) ou 10 % (dès 3 personnes du même ménage, au moins un majeur et un mineur) ; Dentaire 1000, Hôpital Flex 1, Hôpital Flex 2, Hôpital Division semi-privée et Accident Privé gratuits de la naissance au premier anniversaire ; rabais collaborateurs par contrats-cadres (hors périmètre). Âge maximal d'admission : 65 ans (calculateur). Calculateur : application Next.js sous www.axa.ch/health-dsn, API GraphQL configurée sur api.axa.ch (/rest/health/b2c-ext-pi/api-gateway/v1/gateway-service/graphql et /app-1834-1/rest/health/api-gateway/v1/gateway-service/graphql), hôte hors liste autorisée et non testé ; saisies demandées : NPA/localité (tarifs régionaux), date de naissance, sexe, couverture accident, durée du contrat. Aucun barème de primes ni prix « dès CHF » publié. Produit fermé ou remplacé : myTravel (assurance de voyages pour les urgences médicales à l'étranger, CC édition 01.2022, primes selon la taille du ménage, max. CHF 1 million par an) est décrite par le site comme « l'ancienne assurance-maladie à l'étranger », remplacée par les modules « Assistance aux personnes » et « Frais médicaux à l'étranger » de l'assurance de voyages Intertours ; ses CC restent listées et l'aperçu 2026-10 la mentionne encore (« déjà inclus dans COMPLET et PLUS »). Hors périmètre : offres collectives /fr/partner/…, assurance par convention, assurance-accidents pour employés de maison, indemnités journalières d'entreprise.",
+      "retrievedAt": "2026-11-18"
+    },
+    {
       "key": "concordia",
       "name": "CONCORDIA",
       "legalEntityLca": "CONCORDIA Assurances SA",
@@ -42,6 +56,639 @@
     }
   ],
   "products": [
+    {
+      "insurer": "axa",
+      "key": "axa-sante-actif",
+      "name": "Santé ACTIF",
+      "category": "alternative_medicine",
+      "audience": "all",
+      "summary": "Complémentaire ambulatoire « bien-être » : médecine complémentaire, prévention, bilans de santé et promotion de la santé (fitness, sport). Assurance de dommages, valable en Suisse.",
+      "variants": [],
+      "prerequisites": "Proposition avec déclaration de santé ; AXA peut exiger un examen médical, émettre des réserves, exclure ou refuser (CGA A5). Pas de déclaration de santé pour un enfant annoncé avant la naissance (calculateur). Âge maximal d'admission : 65 ans selon le calculateur en ligne (« Nous ne proposons pas d'assurance complémentaire aux personnes de plus de 65 ans »).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–18, 19–25, 26–35, 36–45, 46–55, 56–65, 66–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit.",
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Exclusion du risque accident possible contre réduction de prime (CC). Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) « Santé ACTIF » d'AXA (15804FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adncs"
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-complementaire-ambulatoire.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adncs",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "tags": [
+        "alt_medicine_remedies",
+        "alt_medicine_therapies",
+        "fitness_health_promotion",
+        "gynecological_prevention",
+        "legal_protection",
+        "maternity",
+        "nutrition_counselling",
+        "prevention_checkup"
+      ],
+      "benefitCount": 13
+    },
+    {
+      "insurer": "axa",
+      "key": "axa-sante-plus",
+      "name": "Santé PLUS",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Complémentaire ambulatoire « quotidien » : médicaments hors liste, moyens auxiliaires, lunettes, orthodontie des jeunes, psychothérapie non médicale, vaccins, transports et couverture d'urgence et d'assistance à l'étranger. Sans médecine complémentaire ni prévention (voir Santé ACTIF ou COMPLET).",
+      "variants": [],
+      "prerequisites": "Proposition avec déclaration de santé ; AXA peut exiger un examen médical, émettre des réserves, exclure ou refuser (CGA A5). Pas de déclaration de santé pour un enfant annoncé avant la naissance (calculateur). Âge maximal d'admission : 65 ans selon le calculateur en ligne (« Nous ne proposons pas d'assurance complémentaire aux personnes de plus de 65 ans »).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–18, 19–25, 26–35, 36–45, 46–55, 56–65, 66–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit.",
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Exclusion du risque accident possible contre réduction de prime (CC). Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) « Santé PLUS » d'AXA (15806FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adnkp"
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-complementaire-ambulatoire.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adnkp",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "abroad_planned_treatment",
+        "glasses_lenses",
+        "legal_protection",
+        "medical_aids",
+        "medication_non_listed",
+        "orthodontics",
+        "psychotherapy_non_medical",
+        "search_recovery",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "vaccination"
+      ],
+      "benefitCount": 14
+    },
+    {
+      "insurer": "axa",
+      "key": "axa-sante-complet",
+      "name": "Santé COMPLET",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Complémentaire ambulatoire la plus étendue : réunit les prestations de Santé PLUS (à des taux et plafonds supérieurs) et de Santé ACTIF, plus aide-ménagère, stérilisation et fitness mental. Environ 90 % des clients choisissent ce modèle selon le site.",
+      "variants": [],
+      "prerequisites": "Proposition avec déclaration de santé ; AXA peut exiger un examen médical, émettre des réserves, exclure ou refuser (CGA A5). Pas de déclaration de santé pour un enfant annoncé avant la naissance (calculateur). Âge maximal d'admission : 65 ans selon le calculateur en ligne (« Nous ne proposons pas d'assurance complémentaire aux personnes de plus de 65 ans »).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–18, 19–25, 26–35, 36–45, 46–55, 56–65, 66–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit.",
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Exclusion du risque accident possible contre réduction de prime (CC). Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) « Santé COMPLET » d'AXA (15805FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9"
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-complementaire-ambulatoire.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/services-sante.html"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "abroad_planned_treatment",
+        "alt_medicine_remedies",
+        "alt_medicine_therapies",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "gynecological_prevention",
+        "home_help",
+        "legal_protection",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "nutrition_counselling",
+        "orthodontics",
+        "prevention_checkup",
+        "psychotherapy_non_medical",
+        "search_recovery",
+        "sterilization_contraception",
+        "telemedicine_services",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "vaccination"
+      ],
+      "benefitCount": 30
+    },
+    {
+      "insurer": "axa",
+      "key": "axa-hopital-division-commune",
+      "name": "Hôpital Division commune",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Division commune (chambre à plusieurs lits) avec libre choix de l'hôpital dans toute la Suisse, plus rooming-in, cures et contributions pour les séjours à l'étranger. Sans libre choix du médecin.",
+      "variants": [],
+      "prerequisites": "Proposition avec déclaration de santé ; AXA peut exiger un examen médical, émettre des réserves, exclure ou refuser (CGA A5). Pas de déclaration de santé pour un enfant annoncé avant la naissance (calculateur). Âge maximal d'admission : 65 ans selon le calculateur en ligne (« Nous ne proposons pas d'assurance complémentaire aux personnes de plus de 65 ans »).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–5, 6–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit.",
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Exclusion du risque accident possible contre réduction de prime (CC). Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) « Hôpital division commune » d'AXA (15800FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admvv"
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-complementaire-hospitalisation.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admvv",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "convalescence_cure",
+        "hospital_abroad",
+        "hospital_flex",
+        "hospital_general_ch",
+        "maternity",
+        "newborn_coverage",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "spa_cure"
+      ],
+      "benefitCount": 12
+    },
+    {
+      "insurer": "axa",
+      "key": "axa-hopital-division-semi-privee",
+      "name": "Hôpital Division semi-privée",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Chambre à deux lits avec libre choix de l'hôpital et du médecin dans toute la Suisse ; participation aux coûts annuelle à option ; rooming-in, garde d'enfants, forfait de naissance à domicile, cures et séjours à l'étranger.",
+      "variants": [],
+      "prerequisites": "Proposition avec déclaration de santé ; AXA peut exiger un examen médical, émettre des réserves, exclure ou refuser (CGA A5). Pas de déclaration de santé pour un enfant annoncé avant la naissance (calculateur). Âge maximal d'admission : 65 ans selon le calculateur en ligne (« Nous ne proposons pas d'assurance complémentaire aux personnes de plus de 65 ans »).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident",
+          "deductible"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–5, 6–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit.",
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Produit gratuit de la naissance au premier anniversaire (FAQ du site). Exclusion du risque accident possible contre réduction de prime (CC). Réduction de prime en cas de participation aux coûts de CHF 1000, 3000 ou 5000 par an. Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) « Hôpital division semi-privée » d'AXA (15802FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm4s"
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-complementaire-hospitalisation.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm4s",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "childcare_assistance",
+        "convalescence_cure",
+        "hospital_abroad",
+        "hospital_deductible_option",
+        "hospital_flex",
+        "hospital_free_doctor_choice",
+        "hospital_general_ch",
+        "hospital_semi_private",
+        "maternity",
+        "newborn_coverage",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "spa_cure"
+      ],
+      "benefitCount": 16
+    },
+    {
+      "insurer": "axa",
+      "key": "axa-hopital-division-privee",
+      "name": "Hôpital Division privée",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Chambre individuelle avec libre choix de l'hôpital et du médecin dans toute la Suisse ; urgences à l'étranger prises en charge sans plafond journalier ; participation aux coûts annuelle à option.",
+      "variants": [],
+      "prerequisites": "Proposition avec déclaration de santé ; AXA peut exiger un examen médical, émettre des réserves, exclure ou refuser (CGA A5). Pas de déclaration de santé pour un enfant annoncé avant la naissance (calculateur). Âge maximal d'admission : 65 ans selon le calculateur en ligne (« Nous ne proposons pas d'assurance complémentaire aux personnes de plus de 65 ans »).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident",
+          "deductible"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–5, 6–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit.",
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Exclusion du risque accident possible contre réduction de prime (CC). Réduction de prime en cas de participation aux coûts de CHF 1000, 3000 ou 5000 par an. Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) « Hôpital division privée » d'AXA (15803FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm89"
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-complementaire-hospitalisation.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm89",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "childcare_assistance",
+        "convalescence_cure",
+        "hospital_abroad",
+        "hospital_deductible_option",
+        "hospital_free_doctor_choice",
+        "hospital_private",
+        "hospital_semi_private",
+        "maternity",
+        "newborn_coverage",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "spa_cure"
+      ],
+      "benefitCount": 15
+    },
+    {
+      "insurer": "axa",
+      "key": "axa-hopital-flex",
+      "name": "Hôpital Flex",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Assurance d'hospitalisation flexible : la division (commune, semi-privée ou privée) se choisit à chaque admission ; quote-part de 20 % (semi-privée) ou 35 % (privée) plafonnée par année civile selon la variante Flex 1 ou Flex 2.",
+      "variants": [
+        {
+          "key": "flex-1",
+          "name": "Hôpital Flex 1",
+          "description": "Quote-part plafonnée à CHF 2000 par an en semi-privé et CHF 4000 par an en privé."
+        },
+        {
+          "key": "flex-2",
+          "name": "Hôpital Flex 2",
+          "description": "Quote-part plafonnée à CHF 4000 par an en semi-privé et CHF 8000 par an en privé."
+        }
+      ],
+      "prerequisites": "Proposition avec déclaration de santé ; AXA peut exiger un examen médical, émettre des réserves, exclure ou refuser (CGA A5). Pas de déclaration de santé pour un enfant annoncé avant la naissance (calculateur). Âge maximal d'admission : 65 ans selon le calculateur en ligne (« Nous ne proposons pas d'assurance complémentaire aux personnes de plus de 65 ans »).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–5, 6–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit.",
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Produit gratuit de la naissance au premier anniversaire (FAQ du site). Exclusion du risque accident possible contre réduction de prime (CC). Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) « Hôpital Flex » d'AXA – Hôpital Flex 1, Hôpital Flex 2 (15801FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc"
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-complementaire-hospitalisation.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "childcare_assistance",
+        "convalescence_cure",
+        "hospital_abroad",
+        "hospital_flex",
+        "hospital_free_doctor_choice",
+        "maternity",
+        "newborn_coverage",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "spa_cure"
+      ],
+      "benefitCount": 17
+    },
+    {
+      "insurer": "axa",
+      "key": "axa-indemnite-hospitalisation",
+      "name": "Indemnité d'hospitalisation",
+      "category": "hospital_daily_cash",
+      "audience": "all",
+      "summary": "Capital forfaitaire (CHF 1000, 2000 ou 3000) versé en cas de séjour hospitalier pour soins aigus d'au moins trois nuits, jusqu'à deux fois par an. Ce n'est pas une indemnité par jour malgré l'appellation « indemnité journalière » utilisée sur le site.",
+      "variants": [
+        {
+          "key": "sa-1000",
+          "name": "Somme d'assurance CHF 1000",
+          "description": "CHF 1000 par versement."
+        },
+        {
+          "key": "sa-2000",
+          "name": "Somme d'assurance CHF 2000",
+          "description": "CHF 2000 par versement."
+        },
+        {
+          "key": "sa-3000",
+          "name": "Somme d'assurance CHF 3000",
+          "description": "CHF 3000 par versement."
+        }
+      ],
+      "prerequisites": "Ne peut être souscrite qu'en complément d'une assurance d'hospitalisation AXA Prévoyance santé et prend fin avec elle. Proposition avec déclaration de santé ; AXA peut exiger un examen médical, émettre des réserves, exclure ou refuser (CGA A5). Pas de déclaration de santé pour un enfant annoncé avant la naissance (calculateur). Âge maximal d'admission : 65 ans selon le calculateur en ligne (« Nous ne proposons pas d'assurance complémentaire aux personnes de plus de 65 ans »).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–5, 6–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit.",
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) « Indemnité d'hospitalisation » d'AXA (16665FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=afmvz"
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=afmvz",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "tags": [
+        "hospital_capital"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "axa",
+      "key": "axa-accident-prive",
+      "name": "Accident Privé",
+      "category": "combined",
+      "audience": "all",
+      "summary": "Assurance-accidents privée des frais de guérison : division privée et prestations ambulatoires étendues dans le monde entier, uniquement en cas d'accident, en complément de la LAA ou de l'assurance de base. Désignée « Accident Division privée » sur la page des conditions et « Assurance-accidents privée » sur la page produit.",
+      "variants": [],
+      "prerequisites": "Proposition avec déclaration de santé ; AXA peut exiger un examen médical, émettre des réserves, exclure ou refuser (CGA A5). Pas de déclaration de santé pour un enfant annoncé avant la naissance (calculateur). Âge maximal d'admission : 65 ans selon le calculateur en ligne (« Nous ne proposons pas d'assurance complémentaire aux personnes de plus de 65 ans »). Ne remplace aucune assurance-accidents existante (calculateur).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–5, 6–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit.",
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Produit gratuit de la naissance au premier anniversaire (FAQ du site). Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) « Accident Privé » d'AXA (17136FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt"
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-accidents-privee.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "abroad_planned_treatment",
+        "alt_medicine_remedies",
+        "alt_medicine_therapies",
+        "childcare_assistance",
+        "convalescence_cure",
+        "cosmetic_corrections",
+        "cost_sharing_coverage",
+        "dental_accident",
+        "home_care",
+        "home_help",
+        "hospital_abroad",
+        "hospital_free_doctor_choice",
+        "hospital_private",
+        "medical_aids",
+        "medication_non_listed",
+        "other:accident_ambulatory_treatment",
+        "other:school_support",
+        "psychotherapy_non_medical",
+        "rooming_in",
+        "search_recovery",
+        "spa_cure",
+        "transport_rescue",
+        "travel_assistance_repatriation"
+      ],
+      "benefitCount": 24
+    },
+    {
+      "insurer": "axa",
+      "key": "axa-assurance-dentaire",
+      "name": "Assurance dentaire",
+      "category": "dental",
+      "audience": "all",
+      "summary": "Assurance des soins dentaires (maladie et prophylaxie) en trois niveaux – Dentaire 1000, 2000, 3000 – couvrant hygiène, blanchiment, contrôles, soins, prothèses et orthodontie. Même produit pour les enfants (« assurance dentaire complémentaire pour les enfants »).",
+      "variants": [
+        {
+          "key": "dentaire-1000",
+          "name": "Assurance dentaire 1000",
+          "description": "50 % des frais, max. CHF 1000 par an (hygiène/blanchiment max. CHF 200)."
+        },
+        {
+          "key": "dentaire-2000",
+          "name": "Assurance dentaire 2000",
+          "description": "75 % des frais, max. CHF 2000 par an (hygiène/blanchiment max. CHF 300)."
+        },
+        {
+          "key": "dentaire-3000",
+          "name": "Assurance dentaire 3000",
+          "description": "75 % des frais, max. CHF 3000 par an (hygiène/blanchiment max. CHF 500)."
+        }
+      ],
+      "prerequisites": "Conclusion possible jusqu'à 65 ans (page produit). Jusqu'à 5 ans : sans attestation du dentiste ; dès 5 ans : examen et attestation du dentiste, exclusions possibles (malpositions, caries). Déclaration de santé (CGA A5). Peut être conclue indépendamment des autres produits.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–18, 19–25, 26–35, 36–45, 46–55, 56–65, 66–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit.",
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Dentaire 1000 gratuite de la naissance au premier anniversaire (FAQ du site). Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) « Assurance dentaire » d'AXA – Assurance dentaire 1000, 2000, 3000 (15798FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admny"
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-dentaire.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-dentaire-enfants.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admny",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "tags": [
+        "dental_hygiene",
+        "dental_treatment",
+        "orthodontics"
+      ],
+      "benefitCount": 9
+    },
+    {
+      "insurer": "axa",
+      "key": "axa-capital-accident",
+      "name": "CAPITAL – accident",
+      "category": "capital_accident",
+      "audience": "all",
+      "summary": "Assurance de capital en cas d'invalidité et/ou de décès par accident (volet accident du produit CAPITAL), conclusion sans questionnaire de santé, somme au choix jusqu'à CHF 300 000.",
+      "variants": [],
+      "prerequisites": "Volet accident : conclusion sans questionnaire de santé (page produit). Couverture au plus tôt le 8e jour après la naissance ; un enfant à naître peut être assuré d'avance. Peut être souscrit seul.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–5, 6–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit. La prime dépend aussi des sommes d'assurance choisies.",
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Résiliable en tout temps pour la fin d'un mois (CC D1). Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) CAPITAL d'AXA (16190FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aemp9"
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-capital.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aemp9",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "tags": [
+        "accident_capital",
+        "premium_waiver"
+      ],
+      "benefitCount": 4
+    },
+    {
+      "insurer": "axa",
+      "key": "axa-capital-maladie",
+      "name": "CAPITAL – maladie",
+      "category": "capital_illness",
+      "audience": "all",
+      "summary": "Assurance de capital en cas d'invalidité et/ou de décès par maladie (volet maladie du produit CAPITAL), avec questionnaire de santé, somme au choix jusqu'à CHF 300 000, couverture jusqu'à l'âge-terme (60 ans).",
+      "variants": [],
+      "prerequisites": "Volet maladie : questionnaire de santé obligatoire (page produit). Couverture au plus tôt le 8e jour après la naissance. Peut être souscrit seul ou avec le volet accident.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–5, 6–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit. La prime dépend aussi des sommes d'assurance choisies.",
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Résiliable en tout temps pour la fin d'un mois (CC D1). Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) CAPITAL d'AXA (16190FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aemp9"
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-capital.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aemp9",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "tags": [
+        "illness_capital",
+        "premium_waiver"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "axa",
+      "key": "axa-intertours-voyages",
+      "name": "Assurance de voyages Intertours (modules « Assistance aux personnes » et « Frais médicaux à l'étranger »)",
+      "category": "travel_abroad",
+      "audience": "all",
+      "summary": "Assurance de voyages modulaire d'AXA (branche voyages, hors CGA Prévoyance santé). La combinaison des modules « Assistance aux personnes » et « Frais médicaux à l'étranger » remplace, selon le site, l'ancienne assurance-maladie à l'étranger myTravel. Contrat annuel ou contrat à court terme (voyage ponctuel jusqu'à 125 jours).",
+      "variants": [
+        {
+          "key": "annuel",
+          "name": "Contrat annuel",
+          "description": "Renouvellement tacite d'année en année ; personnes du ménage nommées dans la police."
+        },
+        {
+          "key": "court-terme",
+          "name": "Contrat à court terme (assurance de voyages ponctuelle)",
+          "description": "Un voyage de 125 jours au maximum, jusqu'à 11 personnes, conclusion en ligne jusqu'à la veille du départ."
+        }
+      ],
+      "prerequisites": "Domicile civil en Suisse ou au Liechtenstein. « Frais médicaux à l'étranger » uniquement en combinaison avec le module de base « Assistance aux personnes ». Pas de questionnaire de santé mentionné ; événements déjà survenus ou prévisibles exclus (CGA A16).",
+      "pricing": {
+        "factors": [
+          "age",
+          "region"
+        ],
+        "ageBands": "Tranches d'âge non publiées. Les CGA (A9.4) mentionnent des modifications de prime en raison de l'âge, d'un déménagement et du nombre de personnes assurées ; la prime dépend aussi des modules, des sommes d'assurance et des franchises choisis.",
+        "discounts": "Rabais de combinaison : 25 % si les trois modules de base sont souscrits, 10 % pour deux modules (factsheet). Offre jeunes : deux primes mensuelles offertes aux moins de 30 ans (page produit). Calculateur distinct, non piloté : https://www.axa.ch/fr/calculatrice/assurance-voyages.html."
+      },
+      "conditionsDoc": {
+        "title": "Conditions générales d'assurance (CGA) Assurance de voyages Intertours – contrat annuel, contrat à court terme (18369FR)",
+        "edition": "04.2025",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=ana5g"
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/vehicules-voyages/assurance-voyages.html",
+        "https://www.axa.ch/fr/particuliers/offres/vehicules-voyages/assurance-voyages/assurance-maladie-etranger.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=ana5g",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aavej",
+        "https://www.axa.ch/fr/calculatrice/assurance-voyages.html"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "legal_protection",
+        "search_recovery",
+        "travel_assistance_repatriation",
+        "travel_cancellation_luggage"
+      ],
+      "benefitCount": 6
+    },
     {
       "insurer": "concordia",
       "key": "concordia-diversa",

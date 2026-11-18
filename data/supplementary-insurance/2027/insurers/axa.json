@@ -1,0 +1,3199 @@
+{
+  "insurer": {
+    "key": "axa",
+    "name": "AXA",
+    "legalEntityLca": "AXA Assurances SA, General-Guisan-Strasse 40, 8401 Winterthur (porteur du risque du produit CAPITAL : AXA Vie SA)",
+    "website": "https://www.axa.ch/fr/particuliers.html",
+    "calculatorUrl": "https://www.axa.ch/health-dsn/fr",
+    "calculatorHosts": [
+      "www.axa.ch",
+      "api.axa.ch"
+    ],
+    "publishedTariffUrls": [],
+    "notes": "AXA Suisse ne vend que des complémentaires LCA (« Prévoyance santé d'AXA »), pas d'assurance de base ; elle propose un service gratuit de comparaison et de changement d'assurance de base, un service de transmission des factures et un service de protection juridique (AXA-ARAG, jusqu'à CHF 20 000 par cas et CHF 40 000 par an) aux titulaires d'une complémentaire avec l'offre de services. Documents lus : CGA Prévoyance santé édition 02.2024 (nouveaux clients depuis le 01.01.2023 ; les clients antérieurs restent soumis à l'édition 01.2024, différences sans effet sur les prestations), CC de chaque produit toutes en édition 01.2022, aperçu des prestations 15775FR – 2026-10. Aucune édition datée 01.2027 n'est publiée ; ce sont les éditions en vigueur au 18.11.2026. Plafond général : prestations limitées à CHF 10 millions par année civile (CGA C1.3) ; validité en Suisse sauf disposition contraire ; délai de carence maternité de 365 jours. Contrat d'un an au minimum (1, 2 ou 3 ans au choix), résiliable pour la fin d'une année civile avec préavis de trois mois ; seul le preneur d'assurance peut résilier ordinairement ou après sinistre (CGA G6.1). Rabais : famille 5 % (2 personnes) ou 10 % (dès 3 personnes du même ménage, au moins un majeur et un mineur) ; Dentaire 1000, Hôpital Flex 1, Hôpital Flex 2, Hôpital Division semi-privée et Accident Privé gratuits de la naissance au premier anniversaire ; rabais collaborateurs par contrats-cadres (hors périmètre). Âge maximal d'admission : 65 ans (calculateur). Calculateur : application Next.js sous www.axa.ch/health-dsn, API GraphQL configurée sur api.axa.ch (/rest/health/b2c-ext-pi/api-gateway/v1/gateway-service/graphql et /app-1834-1/rest/health/api-gateway/v1/gateway-service/graphql), hôte hors liste autorisée et non testé ; saisies demandées : NPA/localité (tarifs régionaux), date de naissance, sexe, couverture accident, durée du contrat. Aucun barème de primes ni prix « dès CHF » publié. Produit fermé ou remplacé : myTravel (assurance de voyages pour les urgences médicales à l'étranger, CC édition 01.2022, primes selon la taille du ménage, max. CHF 1 million par an) est décrite par le site comme « l'ancienne assurance-maladie à l'étranger », remplacée par les modules « Assistance aux personnes » et « Frais médicaux à l'étranger » de l'assurance de voyages Intertours ; ses CC restent listées et l'aperçu 2026-10 la mentionne encore (« déjà inclus dans COMPLET et PLUS »). Hors périmètre : offres collectives /fr/partner/…, assurance par convention, assurance-accidents pour employés de maison, indemnités journalières d'entreprise."
+  },
+  "retrievedAt": "2026-11-18",
+  "products": [
+    {
+      "key": "axa-sante-actif",
+      "name": "Santé ACTIF",
+      "category": "alternative_medicine",
+      "audience": "all",
+      "summary": "Complémentaire ambulatoire « bien-être » : médecine complémentaire, prévention, bilans de santé et promotion de la santé (fitness, sport). Assurance de dommages, valable en Suisse.",
+      "variants": [],
+      "prerequisites": "Proposition avec déclaration de santé ; AXA peut exiger un examen médical, émettre des réserves, exclure ou refuser (CGA A5). Pas de déclaration de santé pour un enfant annoncé avant la naissance (calculateur). Âge maximal d'admission : 65 ans selon le calculateur en ligne (« Nous ne proposons pas d'assurance complémentaire aux personnes de plus de 65 ans »).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–18, 19–25, 26–35, 36–45, 46–55, 56–65, 66–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit.",
+        "publishedPrices": [],
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Exclusion du risque accident possible contre réduction de prime (CC). Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-complementaire-ambulatoire.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adncs",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) « Santé ACTIF » d'AXA (15804FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adncs"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "alt_medicine_therapies"
+          ],
+          "label": "Traitements ambulatoires de médecine complémentaire (thérapeutes et méthodes reconnus par AXA)",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 1000 par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 1000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Traitements médicalement nécessaires, dispensés par des médecins, naturopathes ou thérapeutes reconnus par AXA (RME/ASCA selon la page produit), selon des méthodes reconnues (listes AXA). Plafond global incluant les massages. Exclus : astrologie, guérison spirituelle et à distance, imposition des mains, magnétothérapie, hypnose ; traitements par des proches. Prestations en complément des assurances sociales ; franchise et quote-part LAMal non couvertes. Sommes par année civile, non reportables.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adncs",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "alt_medicine_therapies"
+          ],
+          "label": "Massages médicaux et autres types de massages",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 200 par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 200,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Montant imputé sur le plafond de CHF 1000 de la médecine complémentaire.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adncs",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "alt_medicine_remedies"
+          ],
+          "label": "Médicaments remis ou prescrits par des médecins ou des naturopathes (médecine complémentaire)",
+          "variant": null,
+          "coverage": "75 % du coût, max. CHF 500 par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 500,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Médecins ou naturopathes reconnus par AXA.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adncs",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "gynecological_prevention"
+          ],
+          "label": "Examens gynécologiques préventifs",
+          "variant": null,
+          "coverage": "La totalité des frais, dans la limite du plafond prévention de CHF 500 par année civile",
+          "ratePercent": 100,
+          "maxAmountChf": 500,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Mesure prescrite par un médecin. Plafond commun de CHF 500 par année civile pour l'ensemble des mesures de médecine préventive (examens gynécologiques, préparation à l'accouchement, dépistage). Selon l'aperçu : 100 % durant les années intermédiaires non couvertes par l'assurance de base.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adncs",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "maternity"
+          ],
+          "label": "Cours de préparation à l'accouchement et de rééducation périnéale",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 300 par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 300,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Compris dans le plafond prévention de CHF 500 par année civile. Réserve générale maternité des CGA B3 (365 jours d'assurance).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adncs",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "prevention_checkup"
+          ],
+          "label": "Examens de dépistage (p. ex. examen cardiaque, contrôle du diabète, mammographie, coloscopie, grains de beauté)",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 300 par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 300,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Compris dans le plafond prévention de CHF 500 par année civile. Fournisseurs et mesures reconnus par AXA ; aussi en pharmacie reconnue (examen cardiaque, diabète, bilan allergologique) selon l'aperçu.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adncs",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "nutrition_counselling"
+          ],
+          "label": "Conseils nutritionnels et perte de poids chez l'enfant",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 300 par an",
+          "ratePercent": 75,
+          "maxAmountChf": 300,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Budget prévention (au total CHF 500 par an). Non détaillé dans les CC ; lu dans l'aperçu des prestations 2026-10.",
+          "sourceUrl": "https://www.axa.ch/doc/aebdx",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "fitness_health_promotion"
+          ],
+          "label": "Conseil par un coach santé personnel (Personal Health Coach)",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 300 par an",
+          "ratePercent": 75,
+          "maxAmountChf": 300,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Coach inscrit au registre de médecine empirique (RME). Budget prévention (au total CHF 500 par an). Lu dans l'aperçu 2026-10.",
+          "sourceUrl": "https://www.axa.ch/doc/aebdx",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "prevention_checkup"
+          ],
+          "label": "Bilan de santé médical",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 500 au cours d'une période de trois années civiles",
+          "ratePercent": 75,
+          "maxAmountChf": 500,
+          "maxPeriod": "3_years",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Examen médical général de personnes sans symptômes (page produit).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adncs",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "fitness_health_promotion"
+          ],
+          "label": "Abonnements de fitness (durée minimale de six mois)",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 200 par an",
+          "ratePercent": 75,
+          "maxAmountChf": 200,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Centre listé dans la recherche de centres fitness AXA ; début de l'abonnement postérieur au début de l'assurance. Plafond commun promotion de la santé et sport : CHF 400 par an. Prestation supplémentaire de promotion de la santé au sens des CC (liste fixée et modifiable unilatéralement par AXA) ; montants lus dans l'aperçu des prestations 2026-10 et sur la page produit.",
+          "sourceUrl": "https://www.axa.ch/doc/aebdx",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "fitness_health_promotion"
+          ],
+          "label": "Clubs sportifs (membre actif, disciplines olympiques, unihockey, course d'orientation), abonnements annuels de piscine et d'escalade",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 100 par an",
+          "ratePercent": 75,
+          "maxAmountChf": 100,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Plafond commun promotion de la santé et sport : CHF 400 par an. Prestation supplémentaire de promotion de la santé au sens des CC (liste fixée et modifiable unilatéralement par AXA) ; montants lus dans l'aperçu des prestations 2026-10 et sur la page produit.",
+          "sourceUrl": "https://www.axa.ch/doc/aebdx",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "fitness_health_promotion"
+          ],
+          "label": "Cours d'activité physique (natation, yoga, Pilates, etc.)",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 200 par an",
+          "ratePercent": 75,
+          "maxAmountChf": 200,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Prestataires listés ou certifiés (Fitness Guide, Qualicert, Qualitop ; écoles de natation aQuality ou Swiss Aquatics). Plafond commun promotion de la santé et sport : CHF 400 par an. Prestation supplémentaire de promotion de la santé au sens des CC (liste fixée et modifiable unilatéralement par AXA) ; montants lus dans l'aperçu des prestations 2026-10 et sur la page produit.",
+          "sourceUrl": "https://www.axa.ch/doc/aebdx",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "legal_protection",
+            "assistance_services"
+          ],
+          "label": "Service de protection juridique (prestation gratuite de l'offre de services, fournie par AXA-ARAG)",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 20 000 par cas juridique, max. CHF 40 000 par assuré et par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 20000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Ce n'est pas une assurance mais un service gratuit, résiliable par AXA en tout temps avec un préavis de 30 jours. Réservé aux personnes ayant une assurance-maladie complémentaire AXA et l'offre de services. Litiges avec l'assureur de base concernant le changement d'assurance ou la transmission de factures, ou avec un prestataire reconnu au sujet d'un traitement médical ; for en Suisse uniquement. Mémento édition 10.2024.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adno6",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "axa-sante-plus",
+      "name": "Santé PLUS",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Complémentaire ambulatoire « quotidien » : médicaments hors liste, moyens auxiliaires, lunettes, orthodontie des jeunes, psychothérapie non médicale, vaccins, transports et couverture d'urgence et d'assistance à l'étranger. Sans médecine complémentaire ni prévention (voir Santé ACTIF ou COMPLET).",
+      "variants": [],
+      "prerequisites": "Proposition avec déclaration de santé ; AXA peut exiger un examen médical, émettre des réserves, exclure ou refuser (CGA A5). Pas de déclaration de santé pour un enfant annoncé avant la naissance (calculateur). Âge maximal d'admission : 65 ans selon le calculateur en ligne (« Nous ne proposons pas d'assurance complémentaire aux personnes de plus de 65 ans »).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–18, 19–25, 26–35, 36–45, 46–55, 56–65, 66–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit.",
+        "publishedPrices": [],
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Exclusion du risque accident possible contre réduction de prime (CC). Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-complementaire-ambulatoire.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adnkp",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) « Santé PLUS » d'AXA (15806FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adnkp"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "abroad_planned_treatment"
+          ],
+          "label": "Traitements ambulatoires planifiés à l'étranger",
+          "variant": null,
+          "coverage": "90 % des frais, max. CHF 1000 par année civile",
+          "ratePercent": 90,
+          "maxAmountChf": 1000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Sans nuitée à l'hôpital ; justificatif de paiement exigé (aperçu des prestations).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adnkp",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "abroad_emergency",
+            "hospital_abroad"
+          ],
+          "label": "Traitements d'urgence à l'étranger (ambulatoires ou stationnaires)",
+          "variant": null,
+          "coverage": "Prise en charge des frais (100 % selon l'aperçu des prestations), sans plafond propre",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "Séjour temporaire à l'étranger d'un an au maximum (CGA A4.2) ; traitements scientifiquement reconnus et appropriés ; AXA ou sa centrale d'appel d'urgence (+41 58 218 11 11) doit être informée immédiatement, sinon réduction ou refus. En complément des assurances sociales et des autres assurances privées. Plafond général des CGA : CHF 10 millions par année civile (C1.3).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adnkp",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_assistance_repatriation",
+            "transport_rescue"
+          ],
+          "label": "Assistance aux personnes à l'étranger : sauvetage, transport et rapatriement",
+          "variant": null,
+          "coverage": "Prise en charge des frais de sauvetage, de transport et de rapatriement jusqu'au domicile en Suisse ou dans un hôpital",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "Maladie grave, accident grave, aggravation imprévue d'une affection chronique ou décès à l'étranger ; nécessité médicale jugée par le médecin mandaté par AXA ou la centrale d'appel d'urgence ; appel à la centrale d'appel d'urgence d'AXA et garantie de prise en charge requis. Valable dans le monde entier.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adnkp",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "search_recovery"
+          ],
+          "label": "Opérations de recherche à l'étranger en vue du sauvetage ou de l'évacuation",
+          "variant": null,
+          "coverage": "Max. CHF 20 000 par personne assurée",
+          "ratePercent": null,
+          "maxAmountChf": 20000,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Les CC indiquent « par personne assurée » ; l'aperçu des prestations 2026-10 indique « jusqu'à CHF 20 000 par an ».",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adnkp",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_assistance_repatriation"
+          ],
+          "label": "Visite d'un proche en cas d'hospitalisation à l'étranger de plus de 7 jours",
+          "variant": null,
+          "coverage": "Voyage aller-retour (max. vol en classe économique) et frais de repas et d'hébergement jusqu'à CHF 1000 par sinistre",
+          "ratePercent": null,
+          "maxAmountChf": 1000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Une seule visite d'une personne proche.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adnkp",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_assistance_repatriation"
+          ],
+          "label": "Frais supplémentaires de voyage de retour prématuré",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 500",
+          "ratePercent": null,
+          "maxAmountChf": 500,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Cas énumérés exhaustivement : rapatriement d'un accompagnant proche, maladie grave/accident grave/décès d'un proche, biens gravement détériorés au domicile, grève/épidémie/panne des transports publics empêchant le voyage pendant au moins 72 heures, suppléant professionnel défaillant. En cas d'hospitalisation : frais de modification du billet de retour ou billet en classe économique, s'il n'existe aucune autre assurance voyage.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adnkp",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "transport_rescue",
+            "search_recovery"
+          ],
+          "label": "Transports de sauvetage, d'évacuation et d'urgence, transferts entre hôpitaux et opérations de recherche en Suisse",
+          "variant": null,
+          "coverage": "Prise en charge des frais, max. CHF 50 000 par année civile",
+          "ratePercent": 100,
+          "maxAmountChf": 50000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Personne accidentée ou atteinte d'une maladie aiguë ; moyen de transport économique et approprié.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adnkp",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "medication_non_listed"
+          ],
+          "label": "Médicaments prescrits par un médecin, non obligatoirement à la charge de l'assurance obligatoire",
+          "variant": null,
+          "coverage": "75 % des frais",
+          "ratePercent": 75,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Médicament enregistré auprès de Swissmedic pour l'indication ; hors limitation LAMal non couvert ; liste AXA de médicaments non pris en charge ou pris à 50 % seulement ; préparations pour application spécifique (LPPA) exclues. Aussi pour les médicaments prescrits par un pharmacien d'une pharmacie reconnue (aperçu). Prestations en complément des assurances sociales ; franchise et quote-part LAMal non couvertes. Sommes par année civile, non reportables.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adnkp",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "glasses_lenses"
+          ],
+          "label": "Verres de lunettes et lentilles de contact",
+          "variant": null,
+          "coverage": "Max. CHF 150 par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 150,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Taux de prise en charge non précisé dans les CC.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adnkp",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "medical_aids"
+          ],
+          "label": "Moyens auxiliaires et appareils médicalement prescrits",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 1000 par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 1000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Moyens et appareils nécessaires qui améliorent l'utilisation d'une fonction corporelle réduite, selon listes AXA (p. ex. appareils auditifs, semelles orthopédiques, fauteuils roulants) ; frais d'utilisation, d'entretien et de réparation non couverts.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adnkp",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "orthodontics"
+          ],
+          "label": "Traitements orthodontiques pour les personnes assurées jusqu'à 20 ans révolus",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 10 000 par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 10000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Contributions des soins dentaires scolaires et à la jeunesse imputées. Traitements à l'étranger admis si formation équivalente et coûts ne dépassant pas ceux de la Suisse. Selon la page dentaire enfants, attestation du dentiste exigée à partir de 5 ans à la conclusion.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adnkp",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "psychotherapy_non_medical"
+          ],
+          "label": "Psychothérapie non médicale par un psychothérapeute reconnu",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 1000 par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 1000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Psychothérapeutes reconnus par AXA (liste), non autorisés à pratiquer à la charge de l'assurance de base (aperçu).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adnkp",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "vaccination"
+          ],
+          "label": "Vaccins préventifs reconnus en Suisse et vaccins de voyage reconnus par AXA",
+          "variant": null,
+          "coverage": "90 % des frais",
+          "ratePercent": 90,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Selon la liste des vaccinations AXA ; aussi en pharmacie agréée par AXA (aperçu).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adnkp",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "legal_protection",
+            "assistance_services"
+          ],
+          "label": "Service de protection juridique (prestation gratuite de l'offre de services, fournie par AXA-ARAG)",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 20 000 par cas juridique, max. CHF 40 000 par assuré et par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 20000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Ce n'est pas une assurance mais un service gratuit, résiliable par AXA en tout temps avec un préavis de 30 jours. Réservé aux personnes ayant une assurance-maladie complémentaire AXA et l'offre de services. Litiges avec l'assureur de base concernant le changement d'assurance ou la transmission de factures, ou avec un prestataire reconnu au sujet d'un traitement médical ; for en Suisse uniquement. Mémento édition 10.2024.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adno6",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "axa-sante-complet",
+      "name": "Santé COMPLET",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Complémentaire ambulatoire la plus étendue : réunit les prestations de Santé PLUS (à des taux et plafonds supérieurs) et de Santé ACTIF, plus aide-ménagère, stérilisation et fitness mental. Environ 90 % des clients choisissent ce modèle selon le site.",
+      "variants": [],
+      "prerequisites": "Proposition avec déclaration de santé ; AXA peut exiger un examen médical, émettre des réserves, exclure ou refuser (CGA A5). Pas de déclaration de santé pour un enfant annoncé avant la naissance (calculateur). Âge maximal d'admission : 65 ans selon le calculateur en ligne (« Nous ne proposons pas d'assurance complémentaire aux personnes de plus de 65 ans »).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–18, 19–25, 26–35, 36–45, 46–55, 56–65, 66–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit.",
+        "publishedPrices": [],
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Exclusion du risque accident possible contre réduction de prime (CC). Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-complementaire-ambulatoire.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/services-sante.html"
+      ],
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) « Santé COMPLET » d'AXA (15805FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "abroad_planned_treatment"
+          ],
+          "label": "Traitements ambulatoires planifiés à l'étranger",
+          "variant": null,
+          "coverage": "90 % des frais, max. CHF 2000 par année civile",
+          "ratePercent": 90,
+          "maxAmountChf": 2000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Sans nuitée à l'hôpital ; justificatif de paiement exigé (aperçu des prestations).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "abroad_emergency",
+            "hospital_abroad"
+          ],
+          "label": "Traitements d'urgence à l'étranger (ambulatoires ou stationnaires)",
+          "variant": null,
+          "coverage": "Prise en charge des frais (100 % selon l'aperçu des prestations), sans plafond propre",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "Séjour temporaire à l'étranger d'un an au maximum (CGA A4.2) ; traitements scientifiquement reconnus et appropriés ; AXA ou sa centrale d'appel d'urgence (+41 58 218 11 11) doit être informée immédiatement, sinon réduction ou refus. En complément des assurances sociales et des autres assurances privées. Plafond général des CGA : CHF 10 millions par année civile (C1.3).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_assistance_repatriation",
+            "transport_rescue"
+          ],
+          "label": "Assistance aux personnes à l'étranger : sauvetage, transport et rapatriement",
+          "variant": null,
+          "coverage": "Prise en charge des frais de sauvetage, de transport et de rapatriement jusqu'au domicile en Suisse ou dans un hôpital",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "Maladie grave, accident grave, aggravation imprévue d'une affection chronique ou décès à l'étranger ; nécessité médicale ; appel à la centrale d'appel d'urgence d'AXA et garantie de prise en charge requis. Valable dans le monde entier.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "search_recovery"
+          ],
+          "label": "Opérations de recherche à l'étranger en vue du sauvetage ou de l'évacuation",
+          "variant": null,
+          "coverage": "Max. CHF 20 000 par personne assurée",
+          "ratePercent": null,
+          "maxAmountChf": 20000,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Les CC indiquent « par personne assurée » ; l'aperçu des prestations 2026-10 indique « jusqu'à CHF 20 000 par an ».",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_assistance_repatriation"
+          ],
+          "label": "Visite d'un proche en cas d'hospitalisation à l'étranger de plus de 7 jours",
+          "variant": null,
+          "coverage": "Voyage aller-retour (max. vol en classe économique) et frais de repas et d'hébergement jusqu'à CHF 1000 par sinistre",
+          "ratePercent": null,
+          "maxAmountChf": 1000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Une seule visite d'une personne proche.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_assistance_repatriation"
+          ],
+          "label": "Frais supplémentaires de voyage de retour prématuré",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 500",
+          "ratePercent": null,
+          "maxAmountChf": 500,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Cas énumérés exhaustivement : rapatriement d'un accompagnant proche, maladie grave/accident grave/décès d'un proche, biens gravement détériorés au domicile, grève/épidémie/panne des transports publics empêchant le voyage pendant au moins 72 heures, suppléant professionnel défaillant. En cas d'hospitalisation : frais de modification du billet de retour ou billet en classe économique, s'il n'existe aucune autre assurance voyage.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "transport_rescue",
+            "search_recovery"
+          ],
+          "label": "Transports de sauvetage, d'évacuation et d'urgence, transferts entre hôpitaux et opérations de recherche en Suisse",
+          "variant": null,
+          "coverage": "Prise en charge des frais, max. CHF 100 000 par année civile",
+          "ratePercent": 100,
+          "maxAmountChf": 100000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Personne accidentée ou atteinte d'une maladie aiguë ; moyen de transport économique et approprié.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "medication_non_listed"
+          ],
+          "label": "Médicaments prescrits par un médecin, non obligatoirement à la charge de l'assurance obligatoire",
+          "variant": null,
+          "coverage": "90 % des frais",
+          "ratePercent": 90,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Médicament enregistré auprès de Swissmedic pour l'indication ; hors limitation LAMal non couvert ; liste AXA de médicaments non pris en charge ou pris à 50 % seulement ; préparations pour application spécifique (LPPA) exclues. Aussi pour les médicaments prescrits par un pharmacien d'une pharmacie reconnue (aperçu). Prestations en complément des assurances sociales ; franchise et quote-part LAMal non couvertes. Sommes par année civile, non reportables.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "glasses_lenses"
+          ],
+          "label": "Verres de lunettes et lentilles de contact",
+          "variant": null,
+          "coverage": "Max. CHF 300 par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 300,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Taux de prise en charge non précisé dans les CC.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "medical_aids"
+          ],
+          "label": "Moyens auxiliaires et appareils médicalement prescrits",
+          "variant": null,
+          "coverage": "90 % des frais, max. CHF 2000 par année civile",
+          "ratePercent": 90,
+          "maxAmountChf": 2000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Moyens et appareils nécessaires qui améliorent l'utilisation d'une fonction corporelle réduite, selon listes AXA (p. ex. appareils auditifs, semelles orthopédiques, fauteuils roulants) ; frais d'utilisation, d'entretien et de réparation non couverts.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "orthodontics"
+          ],
+          "label": "Traitements orthodontiques pour les personnes assurées jusqu'à 20 ans révolus",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 12 000 par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 12000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Contributions des soins dentaires scolaires et à la jeunesse imputées. Traitements à l'étranger admis si formation équivalente et coûts ne dépassant pas ceux de la Suisse. Selon la page dentaire enfants, attestation du dentiste exigée à partir de 5 ans à la conclusion.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "home_help"
+          ],
+          "label": "Aide-ménagère sur prescription médicale",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 50 par jour, pendant 30 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 50,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Incapacité de travail de 100 % et dépendance d'une aide-ménagère en raison de l'état de santé et de la situation familiale ; pas de prestation en cas de séjour en établissement de soins.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "psychotherapy_non_medical"
+          ],
+          "label": "Psychothérapie non médicale par un psychothérapeute reconnu",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 3000 par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 3000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Psychothérapeutes reconnus par AXA (liste), non autorisés à pratiquer à la charge de l'assurance de base (aperçu).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "vaccination"
+          ],
+          "label": "Vaccins préventifs reconnus en Suisse et vaccins de voyage reconnus par AXA",
+          "variant": null,
+          "coverage": "90 % des frais",
+          "ratePercent": 90,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Selon la liste des vaccinations AXA ; aussi en pharmacie agréée par AXA (aperçu).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "sterilization_contraception"
+          ],
+          "label": "Stérilisation ambulatoire volontaire (vasectomie, ligature des trompes)",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 1000 par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 1000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Prise en charge au maximum selon le tarif LAMal en vigueur.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "alt_medicine_therapies"
+          ],
+          "label": "Traitements ambulatoires de médecine complémentaire (thérapeutes et méthodes reconnus par AXA)",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 3000 par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 3000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Traitements médicalement nécessaires, dispensés par des médecins, naturopathes ou thérapeutes reconnus par AXA (RME/ASCA selon la page produit), selon des méthodes reconnues (listes AXA). Plafond global incluant les massages. Exclus : astrologie, guérison spirituelle et à distance, imposition des mains, magnétothérapie, hypnose ; traitements par des proches.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "alt_medicine_therapies"
+          ],
+          "label": "Massages médicaux et autres types de massages",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 200 par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 200,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Montant imputé sur le plafond de CHF 3000 de la médecine complémentaire.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "alt_medicine_remedies"
+          ],
+          "label": "Médicaments remis ou prescrits par des médecins ou des naturopathes (médecine complémentaire)",
+          "variant": null,
+          "coverage": "75 % du coût, max. CHF 1000 par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 1000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Médecins ou naturopathes reconnus par AXA.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "gynecological_prevention"
+          ],
+          "label": "Examens gynécologiques préventifs",
+          "variant": null,
+          "coverage": "La totalité des frais, dans la limite du plafond prévention de CHF 600 par année civile",
+          "ratePercent": 100,
+          "maxAmountChf": 600,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Mesure prescrite par un médecin. Plafond commun de CHF 600 par année civile pour l'ensemble des mesures de médecine préventive. Selon l'aperçu : 100 % durant les années intermédiaires non couvertes par l'assurance de base.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "maternity"
+          ],
+          "label": "Cours de préparation à l'accouchement et de rééducation périnéale",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 500 par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 500,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Compris dans le plafond prévention de CHF 600 par année civile. Réserve générale maternité des CGA B3 (365 jours d'assurance).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "prevention_checkup"
+          ],
+          "label": "Examens de dépistage (p. ex. examen cardiaque, contrôle du diabète, mammographie, coloscopie, grains de beauté)",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 500 par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 500,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Compris dans le plafond prévention de CHF 600 par année civile. Fournisseurs et mesures reconnus par AXA ; aussi en pharmacie reconnue (examen cardiaque, diabète, bilan allergologique) selon l'aperçu.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "nutrition_counselling"
+          ],
+          "label": "Conseils nutritionnels et perte de poids chez l'enfant",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 500 par an",
+          "ratePercent": 75,
+          "maxAmountChf": 500,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Budget prévention (au total CHF 600 par an). Non détaillé dans les CC ; lu dans l'aperçu des prestations 2026-10.",
+          "sourceUrl": "https://www.axa.ch/doc/aebdx",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "fitness_health_promotion"
+          ],
+          "label": "Conseil par un coach santé personnel (Personal Health Coach)",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 500 par an",
+          "ratePercent": 75,
+          "maxAmountChf": 500,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Coach inscrit au registre de médecine empirique (RME). Budget prévention (au total CHF 600 par an). Lu dans l'aperçu 2026-10.",
+          "sourceUrl": "https://www.axa.ch/doc/aebdx",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "telemedicine_services"
+          ],
+          "label": "Conseil santé en pharmacie reconnue par AXA et frais de coordination des consultations médicales par téléphone (Book a Doc)",
+          "variant": null,
+          "coverage": "75 %, max. CHF 100 par an, sur le budget prévention",
+          "ratePercent": 75,
+          "maxAmountChf": 100,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Pharmacies reconnues par AXA (Sun Store, Amavita, Coop Vitality, TopPharm, Medbase, Rotpunkt selon la page services). Lu dans l'aperçu 2026-10.",
+          "sourceUrl": "https://www.axa.ch/doc/aebdx",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "prevention_checkup"
+          ],
+          "label": "Bilan de santé médical",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 1000 au cours d'une période de trois années civiles",
+          "ratePercent": 75,
+          "maxAmountChf": 1000,
+          "maxPeriod": "3_years",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Examen médical général de personnes sans symptômes (page produit).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adng9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "fitness_health_promotion",
+            "psychotherapy_non_medical"
+          ],
+          "label": "Fitness mental : conseil en santé mentale (prévention et promotion de la santé mentale)",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 500 en l'espace de trois années civiles",
+          "ratePercent": 75,
+          "maxAmountChf": 500,
+          "maxPeriod": "3_years",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Psychologues reconnus, membres FSP ou SBAP (page produit) ; en présence d'une maladie mentale, les prestations relèvent de l'assurance obligatoire. Non détaillé dans les CC ; lu dans l'aperçu 2026-10 et la page produit.",
+          "sourceUrl": "https://www.axa.ch/doc/aebdx",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "fitness_health_promotion"
+          ],
+          "label": "Abonnements de fitness (durée minimale de six mois)",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 300 par an",
+          "ratePercent": 75,
+          "maxAmountChf": 300,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Centre listé dans la recherche de centres fitness AXA ; début de l'abonnement postérieur au début de l'assurance. Plafond commun promotion de la santé et sport : CHF 500 par an. Prestation supplémentaire de promotion de la santé au sens des CC (liste fixée et modifiable unilatéralement par AXA) ; montants lus dans l'aperçu des prestations 2026-10 et sur la page produit.",
+          "sourceUrl": "https://www.axa.ch/doc/aebdx",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "fitness_health_promotion"
+          ],
+          "label": "Clubs sportifs (membre actif, disciplines olympiques, unihockey, course d'orientation), abonnements annuels de piscine et d'escalade",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 150 par an",
+          "ratePercent": 75,
+          "maxAmountChf": 150,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Plafond commun promotion de la santé et sport : CHF 500 par an. Prestation supplémentaire de promotion de la santé au sens des CC (liste fixée et modifiable unilatéralement par AXA) ; montants lus dans l'aperçu des prestations 2026-10 et sur la page produit.",
+          "sourceUrl": "https://www.axa.ch/doc/aebdx",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "fitness_health_promotion"
+          ],
+          "label": "Cours d'activité physique (natation, yoga, Pilates, etc.)",
+          "variant": null,
+          "coverage": "75 % des frais, max. CHF 300 par an",
+          "ratePercent": 75,
+          "maxAmountChf": 300,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Prestataires listés ou certifiés (Fitness Guide, Qualicert, Qualitop ; écoles de natation aQuality ou Swiss Aquatics). Plafond commun promotion de la santé et sport : CHF 500 par an. Prestation supplémentaire de promotion de la santé au sens des CC (liste fixée et modifiable unilatéralement par AXA) ; montants lus dans l'aperçu des prestations 2026-10 et sur la page produit.",
+          "sourceUrl": "https://www.axa.ch/doc/aebdx",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "legal_protection",
+            "assistance_services"
+          ],
+          "label": "Service de protection juridique (prestation gratuite de l'offre de services, fournie par AXA-ARAG)",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 20 000 par cas juridique, max. CHF 40 000 par assuré et par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 20000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Ce n'est pas une assurance mais un service gratuit, résiliable par AXA en tout temps avec un préavis de 30 jours. Réservé aux personnes ayant une assurance-maladie complémentaire AXA et l'offre de services. Litiges avec l'assureur de base concernant le changement d'assurance ou la transmission de factures, ou avec un prestataire reconnu au sujet d'un traitement médical ; for en Suisse uniquement. Mémento édition 10.2024.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adno6",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "axa-hopital-division-commune",
+      "name": "Hôpital Division commune",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Division commune (chambre à plusieurs lits) avec libre choix de l'hôpital dans toute la Suisse, plus rooming-in, cures et contributions pour les séjours à l'étranger. Sans libre choix du médecin.",
+      "variants": [],
+      "prerequisites": "Proposition avec déclaration de santé ; AXA peut exiger un examen médical, émettre des réserves, exclure ou refuser (CGA A5). Pas de déclaration de santé pour un enfant annoncé avant la naissance (calculateur). Âge maximal d'admission : 65 ans selon le calculateur en ligne (« Nous ne proposons pas d'assurance complémentaire aux personnes de plus de 65 ans »).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–5, 6–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit.",
+        "publishedPrices": [],
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Exclusion du risque accident possible contre réduction de prime (CC). Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-complementaire-hospitalisation.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admvv",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) « Hôpital division commune » d'AXA (15800FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admvv"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "hospital_general_ch"
+          ],
+          "label": "Séjour et traitement en division commune d'un hôpital reconnu, dans toute la Suisse",
+          "variant": null,
+          "coverage": "Prise en charge des frais (honoraires médicaux, pension, soins, mesures diagnostiques et thérapeutiques), aussi longtemps que médicalement nécessaire en soins aigus",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "Hôpital reconnu par AXA ou hôpital répertorié (art. 39 LAMal), hors liste négative AXA ; traitement stationnaire nécessaire ; garantie de prise en charge à demander avant tout traitement planifié. En complément de l'assurance obligatoire ; franchise, quote-part et contribution hospitalière LAMal non couvertes. Soins aigus uniquement : maladies chroniques, EMS et soins de longue durée exclus. Chambre à plusieurs lits, pas de libre choix du médecin (aperçu).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admvv",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_flex",
+            "hospital_semi_private"
+          ],
+          "label": "Séjour en division semi-privée (sous-assurance)",
+          "variant": null,
+          "coverage": "40 % des frais de séjour et de traitement, au maximum 40 % du tarif reconnu par AXA pour la division semi-privée de l'hôpital",
+          "ratePercent": 40,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Le solde reste à la charge de la personne assurée.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admvv",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_flex",
+            "hospital_private"
+          ],
+          "label": "Séjour en division privée (sous-assurance)",
+          "variant": null,
+          "coverage": "20 % des frais de séjour et de traitement, au maximum 20 % du tarif reconnu par AXA pour la division privée de l'hôpital",
+          "ratePercent": 20,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "S'applique aussi par analogie aux hôpitaux sans classification en divisions.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admvv",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "psychiatry_rehab_stay"
+          ],
+          "label": "Séjour en clinique de réadaptation",
+          "variant": null,
+          "coverage": "Prise en charge des frais en division commune, 60 jours au maximum par année civile",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Tant que le séjour est médicalement nécessaire et qu'il ne s'agit pas d'une maladie chronique.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admvv",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "psychiatry_rehab_stay"
+          ],
+          "label": "Séjour en clinique psychiatrique",
+          "variant": null,
+          "coverage": "Prise en charge des frais en division commune, 90 jours au maximum par année civile",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Aucune prestation pour les cliniques psychiatriques de jour ou de nuit.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admvv",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_abroad"
+          ],
+          "label": "Traitements stationnaires planifiés à l'étranger",
+          "variant": null,
+          "coverage": "Contribution de max. CHF 500 par jour, pendant 30 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 500,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Contribution totale ; justificatif de paiement exigé ; vaut aussi pour l'accouchement stationnaire (aperçu).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admvv",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "abroad_emergency",
+            "hospital_abroad"
+          ],
+          "label": "Traitements stationnaires d'urgence à l'étranger",
+          "variant": null,
+          "coverage": "Max. CHF 500 par jour, pendant 30 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 500,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Tant que le retour en Suisse ne peut être raisonnablement exigé ; séjour temporaire d'un an au plus (CGA A4.2).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admvv",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "rooming_in"
+          ],
+          "label": "Séjour d'une personne accompagnatrice à l'hôpital (rooming-in)",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 50 par jour, max. CHF 500 par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 500,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Uniquement si la personne assurée hospitalisée n'a pas encore atteint l'âge de 50 ans.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admvv",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "maternity"
+          ],
+          "label": "Maternité : accouchement à l'hôpital, en maison de naissance ou en clinique d'obstétrique",
+          "variant": null,
+          "coverage": "Mêmes prestations qu'en cas de maladie ; maison de naissance ou clinique d'obstétrique selon le tarif reconnu",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": "365 jours (la mère doit avoir été assurée au moins 365 jours au moment de l'accouchement, CGA B3)",
+          "conditions": "Pas de forfait pour accouchement à domicile dans ce produit.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admvv",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "newborn_coverage"
+          ],
+          "label": "Frais du nouveau-né en bonne santé",
+          "variant": null,
+          "coverage": "Pris en charge pendant la durée du séjour hospitalier de la mère",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": "365 jours (la mère doit avoir été assurée au moins 365 jours au moment de l'accouchement, CGA B3)",
+          "conditions": null,
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admvv",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "spa_cure"
+          ],
+          "label": "Cure balnéaire stationnaire",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 10 par jour, pendant 21 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 10,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Une seule cure balnéaire ou de convalescence par année civile. Prescription médicale remise avant le début ; établissement admis LAMal ou reconnu par AXA, sous direction médicale ; traitement intensif préalable ; durée minimale de 14 jours. À l'étranger sur demande.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admvv",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "convalescence_cure"
+          ],
+          "label": "Cure de convalescence stationnaire",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 30 par jour, pendant 21 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 30,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Une seule cure balnéaire ou de convalescence par année civile. Prescription médicale remise avant le début ; nécessaire après une maladie grave ou un séjour hospitalier ; en Suisse dans un établissement reconnu par AXA (à l'étranger sur demande).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admvv",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "axa-hopital-division-semi-privee",
+      "name": "Hôpital Division semi-privée",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Chambre à deux lits avec libre choix de l'hôpital et du médecin dans toute la Suisse ; participation aux coûts annuelle à option ; rooming-in, garde d'enfants, forfait de naissance à domicile, cures et séjours à l'étranger.",
+      "variants": [],
+      "prerequisites": "Proposition avec déclaration de santé ; AXA peut exiger un examen médical, émettre des réserves, exclure ou refuser (CGA A5). Pas de déclaration de santé pour un enfant annoncé avant la naissance (calculateur). Âge maximal d'admission : 65 ans selon le calculateur en ligne (« Nous ne proposons pas d'assurance complémentaire aux personnes de plus de 65 ans »).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident",
+          "deductible"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–5, 6–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit.",
+        "publishedPrices": [],
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Produit gratuit de la naissance au premier anniversaire (FAQ du site). Exclusion du risque accident possible contre réduction de prime (CC). Réduction de prime en cas de participation aux coûts de CHF 1000, 3000 ou 5000 par an. Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-complementaire-hospitalisation.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm4s",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) « Hôpital division semi-privée » d'AXA (15802FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm4s"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "hospital_semi_private"
+          ],
+          "label": "Séjour et traitement en chambre à deux lits (division semi-privée) d'un hôpital reconnu, dans toute la Suisse",
+          "variant": null,
+          "coverage": "Prise en charge des frais (honoraires médicaux, pension, soins, mesures diagnostiques et thérapeutiques), après déduction de la participation aux coûts éventuellement choisie",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "Hôpital reconnu par AXA ou hôpital répertorié (art. 39 LAMal), hors liste négative AXA ; traitement stationnaire nécessaire ; garantie de prise en charge à demander avant tout traitement planifié. En complément de l'assurance obligatoire ; franchise, quote-part et contribution hospitalière LAMal non couvertes. Soins aigus uniquement : maladies chroniques, EMS et soins de longue durée exclus.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm4s",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_free_doctor_choice"
+          ],
+          "label": "Libre choix du médecin à l'hôpital",
+          "variant": null,
+          "coverage": "Libre choix parmi les médecins reconnus par AXA",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "AXA tient une liste des médecins non reconnus.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm4s",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_deductible_option"
+          ],
+          "label": "Participation aux coûts à option",
+          "variant": null,
+          "coverage": "CHF 0 (standard), CHF 1000, CHF 3000 ou CHF 5000 par année civile",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Participation aux coûts convenue dans la police : standard CHF 0 ; options CHF 1000, CHF 3000 ou CHF 5000 par année civile contre réduction de prime (montants lus dans l'aperçu des prestations 2026-10 ; les CC ne citent qu'« un montant fixe par année civile »). Elle s'applique aux séjours stationnaires, aux naissances à l'hôpital, aux traitements planifiés à l'étranger et aux séjours en réadaptation ou en psychiatrie. La participation est supprimée en cas de séjour en division commune (CC A4).",
+          "sourceUrl": "https://www.axa.ch/doc/aebdx",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_flex",
+            "hospital_private"
+          ],
+          "label": "Séjour en division privée (sous-assurance)",
+          "variant": null,
+          "coverage": "75 % des frais de séjour et de traitement, au maximum 75 % du tarif reconnu par AXA pour la division privée de l'hôpital",
+          "ratePercent": 75,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "S'applique aussi par analogie aux hôpitaux sans classification en divisions.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm4s",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_general_ch"
+          ],
+          "label": "Séjour en division commune",
+          "variant": null,
+          "coverage": "Totalité des frais, au maximum selon le tarif reconnu par AXA pour la division commune ; participation aux coûts supprimée",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": null,
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm4s",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "psychiatry_rehab_stay"
+          ],
+          "label": "Séjour en clinique de réadaptation",
+          "variant": null,
+          "coverage": "Prise en charge des frais, 60 jours au maximum par année civile",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Tant que le séjour est médicalement nécessaire et qu'il ne s'agit pas d'une maladie chronique ; participation aux coûts choisie applicable.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm4s",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "psychiatry_rehab_stay"
+          ],
+          "label": "Séjour en clinique psychiatrique",
+          "variant": null,
+          "coverage": "Prise en charge des frais, 90 jours au maximum par année civile",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Aucune prestation pour les cliniques psychiatriques de jour ou de nuit ; participation aux coûts choisie applicable.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm4s",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_abroad"
+          ],
+          "label": "Traitements stationnaires planifiés à l'étranger",
+          "variant": null,
+          "coverage": "Contribution de max. CHF 1000 par jour, pendant 30 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 1000,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Justificatif de paiement exigé ; vaut aussi pour l'accouchement stationnaire (aperçu) ; réseau d'hôpitaux partenaires en Europe.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm4s",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "abroad_emergency",
+            "hospital_abroad"
+          ],
+          "label": "Traitements stationnaires d'urgence à l'étranger",
+          "variant": null,
+          "coverage": "Max. CHF 1000 par jour, pendant 30 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 1000,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Tant que le retour en Suisse ne peut être raisonnablement exigé ; séjour temporaire d'un an au plus (CGA A4.2).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm4s",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "rooming_in"
+          ],
+          "label": "Séjour d'une personne accompagnatrice à l'hôpital (rooming-in)",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 80 par jour, max. CHF 2000 par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 2000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Uniquement si la personne assurée hospitalisée n'a pas encore atteint l'âge de 50 ans.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm4s",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "childcare_assistance"
+          ],
+          "label": "Garde d'enfants à domicile pendant l'hospitalisation",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 50 par jour, pendant 30 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 50,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Garde à domicile des enfants jusqu'à 15 ans d'une personne assurée hospitalisée (maladie ou accident) ; heures habituelles de travail des jours de semaine ; organisée par la centrale d'appel d'urgence et d'organisation d'AXA, à contacter au préalable.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm4s",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "maternity"
+          ],
+          "label": "Maternité : accouchement à l'hôpital, en maison de naissance ou en clinique d'obstétrique",
+          "variant": null,
+          "coverage": "Mêmes prestations qu'en cas de maladie ; maison de naissance ou clinique d'obstétrique selon le tarif reconnu",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": "365 jours (la mère doit avoir été assurée au moins 365 jours au moment de l'accouchement, CGA B3)",
+          "conditions": null,
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm4s",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "maternity"
+          ],
+          "label": "Naissance ambulatoire à la maison",
+          "variant": null,
+          "coverage": "Montant unique de max. CHF 1500 par naissance",
+          "ratePercent": null,
+          "maxAmountChf": 1500,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": "365 jours (la mère doit avoir été assurée au moins 365 jours au moment de l'accouchement, CGA B3)",
+          "conditions": "Les naissances multiples comptent comme une seule naissance.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm4s",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "newborn_coverage"
+          ],
+          "label": "Frais du nouveau-né en bonne santé",
+          "variant": null,
+          "coverage": "Pris en charge pendant la durée du séjour hospitalier de la mère",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": "365 jours (la mère doit avoir été assurée au moins 365 jours au moment de l'accouchement, CGA B3)",
+          "conditions": null,
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm4s",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "spa_cure"
+          ],
+          "label": "Cure balnéaire stationnaire",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 30 par jour, pendant 21 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 30,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Une seule cure balnéaire ou de convalescence par année civile. Prescription médicale remise avant le début ; établissement admis LAMal ou reconnu par AXA, sous direction médicale ; traitement intensif préalable ; durée minimale de 14 jours. À l'étranger sur demande.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm4s",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "convalescence_cure"
+          ],
+          "label": "Cure de convalescence stationnaire",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 60 par jour, pendant 21 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 60,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Une seule cure balnéaire ou de convalescence par année civile. Prescription médicale remise avant le début ; nécessaire après une maladie grave ou un séjour hospitalier ; en Suisse dans un établissement reconnu par AXA (à l'étranger sur demande).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm4s",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "axa-hopital-division-privee",
+      "name": "Hôpital Division privée",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Chambre individuelle avec libre choix de l'hôpital et du médecin dans toute la Suisse ; urgences à l'étranger prises en charge sans plafond journalier ; participation aux coûts annuelle à option.",
+      "variants": [],
+      "prerequisites": "Proposition avec déclaration de santé ; AXA peut exiger un examen médical, émettre des réserves, exclure ou refuser (CGA A5). Pas de déclaration de santé pour un enfant annoncé avant la naissance (calculateur). Âge maximal d'admission : 65 ans selon le calculateur en ligne (« Nous ne proposons pas d'assurance complémentaire aux personnes de plus de 65 ans »).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident",
+          "deductible"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–5, 6–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit.",
+        "publishedPrices": [],
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Exclusion du risque accident possible contre réduction de prime (CC). Réduction de prime en cas de participation aux coûts de CHF 1000, 3000 ou 5000 par an. Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-complementaire-hospitalisation.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm89",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) « Hôpital division privée » d'AXA (15803FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm89"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "hospital_private"
+          ],
+          "label": "Séjour et traitement en chambre à un lit (division privée) d'un hôpital reconnu, dans toute la Suisse",
+          "variant": null,
+          "coverage": "Prise en charge des frais (honoraires médicaux, pension, soins, mesures diagnostiques et thérapeutiques), après déduction de la participation aux coûts éventuellement choisie",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "Hôpital reconnu par AXA ou hôpital répertorié (art. 39 LAMal), hors liste négative AXA ; traitement stationnaire nécessaire ; garantie de prise en charge à demander avant tout traitement planifié. En complément de l'assurance obligatoire ; franchise, quote-part et contribution hospitalière LAMal non couvertes. Soins aigus uniquement : maladies chroniques, EMS et soins de longue durée exclus.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm89",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_free_doctor_choice"
+          ],
+          "label": "Libre choix du médecin à l'hôpital",
+          "variant": null,
+          "coverage": "Libre choix parmi les médecins reconnus par AXA",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "AXA tient une liste des médecins non reconnus.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm89",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_deductible_option"
+          ],
+          "label": "Participation aux coûts à option",
+          "variant": null,
+          "coverage": "CHF 0 (standard), CHF 1000, CHF 3000 ou CHF 5000 par année civile",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Participation aux coûts convenue dans la police : standard CHF 0 ; options CHF 1000, CHF 3000 ou CHF 5000 par année civile contre réduction de prime (montants lus dans l'aperçu des prestations 2026-10 ; les CC ne citent qu'« un montant fixe par année civile »). Elle s'applique aux séjours stationnaires, aux naissances à l'hôpital, aux traitements planifiés à l'étranger et aux séjours en réadaptation ou en psychiatrie. Supprimée en cas de séjour en division commune ; réduite de CHF 3000 (ou supprimée si elle est inférieure à CHF 3000) en cas de séjour en division semi-privée (CC A3.2).",
+          "sourceUrl": "https://www.axa.ch/doc/aebdx",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_semi_private",
+            "hospital_general_ch"
+          ],
+          "label": "Séjour en division commune ou semi-privée",
+          "variant": null,
+          "coverage": "Totalité des frais, au maximum selon le tarif reconnu par AXA pour la division concernée",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": null,
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm89",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "psychiatry_rehab_stay"
+          ],
+          "label": "Séjour en clinique de réadaptation",
+          "variant": null,
+          "coverage": "Prise en charge des frais, 90 jours au maximum par année civile",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Tant que le séjour est médicalement nécessaire et qu'il ne s'agit pas d'une maladie chronique ; participation aux coûts choisie applicable.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm89",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "psychiatry_rehab_stay"
+          ],
+          "label": "Séjour en clinique psychiatrique",
+          "variant": null,
+          "coverage": "Prise en charge des frais, 90 jours au maximum par année civile",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Aucune prestation pour les cliniques psychiatriques de jour ou de nuit ; participation aux coûts choisie applicable.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm89",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_abroad"
+          ],
+          "label": "Traitements stationnaires planifiés à l'étranger",
+          "variant": null,
+          "coverage": "Contribution de max. CHF 1000 par jour, pendant 60 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 1000,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Justificatif de paiement exigé ; vaut aussi pour l'accouchement stationnaire (aperçu) ; réseau d'hôpitaux partenaires en Europe.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm89",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "abroad_emergency",
+            "hospital_abroad"
+          ],
+          "label": "Traitements stationnaires d'urgence à l'étranger",
+          "variant": null,
+          "coverage": "Prise en charge des frais (100 % selon l'aperçu), sans plafond journalier",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "Tant que le retour en Suisse ne peut être raisonnablement exigé ; séjour temporaire d'un an au plus (CGA A4.2) ; plafond général des CGA de CHF 10 millions par année civile.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm89",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "rooming_in"
+          ],
+          "label": "Séjour d'une personne accompagnatrice à l'hôpital (rooming-in)",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 160 par jour, max. CHF 4000 par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 4000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Uniquement si la personne assurée hospitalisée n'a pas encore atteint l'âge de 50 ans.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm89",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "childcare_assistance"
+          ],
+          "label": "Garde d'enfants à domicile pendant l'hospitalisation",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 50 par jour, pendant 60 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 50,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Garde à domicile des enfants jusqu'à 15 ans d'une personne assurée hospitalisée (maladie ou accident) ; heures habituelles de travail des jours de semaine ; organisée par la centrale d'appel d'urgence et d'organisation d'AXA, à contacter au préalable.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm89",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "maternity"
+          ],
+          "label": "Maternité : accouchement à l'hôpital, en maison de naissance ou en clinique d'obstétrique",
+          "variant": null,
+          "coverage": "Mêmes prestations qu'en cas de maladie ; maison de naissance ou clinique d'obstétrique selon le tarif reconnu",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": "365 jours (la mère doit avoir été assurée au moins 365 jours au moment de l'accouchement, CGA B3)",
+          "conditions": null,
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm89",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "maternity"
+          ],
+          "label": "Naissance ambulatoire à la maison",
+          "variant": null,
+          "coverage": "Montant unique de max. CHF 2000 par naissance",
+          "ratePercent": null,
+          "maxAmountChf": 2000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": "365 jours (la mère doit avoir été assurée au moins 365 jours au moment de l'accouchement, CGA B3)",
+          "conditions": "Les naissances multiples comptent comme une seule naissance.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm89",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "newborn_coverage"
+          ],
+          "label": "Frais du nouveau-né en bonne santé",
+          "variant": null,
+          "coverage": "Pris en charge pendant la durée du séjour hospitalier de la mère",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": "365 jours (la mère doit avoir été assurée au moins 365 jours au moment de l'accouchement, CGA B3)",
+          "conditions": null,
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm89",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "spa_cure"
+          ],
+          "label": "Cure balnéaire stationnaire",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 60 par jour, pendant 21 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 60,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Une seule cure balnéaire ou de convalescence par année civile. Prescription médicale remise avant le début ; établissement admis LAMal ou reconnu par AXA, sous direction médicale ; traitement intensif préalable ; durée minimale de 14 jours. À l'étranger sur demande.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm89",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "convalescence_cure"
+          ],
+          "label": "Cure de convalescence stationnaire",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 90 par jour, pendant 21 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 90,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Une seule cure balnéaire ou de convalescence par année civile. Prescription médicale remise avant le début ; nécessaire après une maladie grave ou un séjour hospitalier ; en Suisse dans un établissement reconnu par AXA (à l'étranger sur demande).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=adm89",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "axa-hopital-flex",
+      "name": "Hôpital Flex",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Assurance d'hospitalisation flexible : la division (commune, semi-privée ou privée) se choisit à chaque admission ; quote-part de 20 % (semi-privée) ou 35 % (privée) plafonnée par année civile selon la variante Flex 1 ou Flex 2.",
+      "variants": [
+        {
+          "key": "flex-1",
+          "name": "Hôpital Flex 1",
+          "description": "Quote-part plafonnée à CHF 2000 par an en semi-privé et CHF 4000 par an en privé."
+        },
+        {
+          "key": "flex-2",
+          "name": "Hôpital Flex 2",
+          "description": "Quote-part plafonnée à CHF 4000 par an en semi-privé et CHF 8000 par an en privé."
+        }
+      ],
+      "prerequisites": "Proposition avec déclaration de santé ; AXA peut exiger un examen médical, émettre des réserves, exclure ou refuser (CGA A5). Pas de déclaration de santé pour un enfant annoncé avant la naissance (calculateur). Âge maximal d'admission : 65 ans selon le calculateur en ligne (« Nous ne proposons pas d'assurance complémentaire aux personnes de plus de 65 ans »).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–5, 6–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit.",
+        "publishedPrices": [],
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Produit gratuit de la naissance au premier anniversaire (FAQ du site). Exclusion du risque accident possible contre réduction de prime (CC). Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-complementaire-hospitalisation.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) « Hôpital Flex » d'AXA – Hôpital Flex 1, Hôpital Flex 2 (15801FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "hospital_flex",
+            "hospital_general_ch"
+          ],
+          "label": "Libre choix de la division à l'admission ; séjour en division commune dans toute la Suisse",
+          "variant": null,
+          "coverage": "Division commune : prise en charge des frais sans aucune participation aux coûts",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "Hôpital reconnu par AXA ou hôpital répertorié (art. 39 LAMal), hors liste négative AXA ; traitement stationnaire nécessaire ; garantie de prise en charge à demander avant tout traitement planifié. En complément de l'assurance obligatoire ; franchise, quote-part et contribution hospitalière LAMal non couvertes. Soins aigus uniquement : maladies chroniques, EMS et soins de longue durée exclus. La personne assurée choisit la division au plus tard à l'admission ; sans choix, la division commune s'applique (pas de libre choix du médecin).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_flex",
+            "hospital_semi_private"
+          ],
+          "label": "Séjour en chambre à deux lits (division semi-privée)",
+          "variant": "flex-1",
+          "coverage": "80 % des coûts ; quote-part de 20 %, max. CHF 2000 par année civile",
+          "ratePercent": 80,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Hôpital Flex 1. Une fois le plafond annuel de quote-part atteint, AXA prend en charge 100 % des frais.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_flex",
+            "hospital_private"
+          ],
+          "label": "Séjour en chambre à un lit (division privée)",
+          "variant": "flex-1",
+          "coverage": "65 % des coûts ; quote-part de 35 %, max. CHF 4000 par année civile",
+          "ratePercent": 65,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Hôpital Flex 1. Une fois le plafond annuel de quote-part atteint, AXA prend en charge 100 % des frais.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_flex",
+            "hospital_semi_private"
+          ],
+          "label": "Séjour en chambre à deux lits (division semi-privée)",
+          "variant": "flex-2",
+          "coverage": "80 % des coûts ; quote-part de 20 %, max. CHF 4000 par année civile",
+          "ratePercent": 80,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Hôpital Flex 2. Une fois le plafond annuel de quote-part atteint, AXA prend en charge 100 % des frais.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_flex",
+            "hospital_private"
+          ],
+          "label": "Séjour en chambre à un lit (division privée)",
+          "variant": "flex-2",
+          "coverage": "65 % des coûts ; quote-part de 35 %, max. CHF 8000 par année civile",
+          "ratePercent": 65,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Hôpital Flex 2. Une fois le plafond annuel de quote-part atteint, AXA prend en charge 100 % des frais.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_free_doctor_choice"
+          ],
+          "label": "Libre choix du médecin à l'hôpital",
+          "variant": null,
+          "coverage": "Libre choix parmi les médecins reconnus par AXA",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Selon l'aperçu : seulement si la division semi-privée ou privée est choisie.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "psychiatry_rehab_stay"
+          ],
+          "label": "Séjour en clinique de réadaptation",
+          "variant": null,
+          "coverage": "Prise en charge des frais, 60 jours au maximum par année civile",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Tant que le séjour est médicalement nécessaire et qu'il ne s'agit pas d'une maladie chronique ; en division commune dans toute la Suisse selon l'aperçu.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "psychiatry_rehab_stay"
+          ],
+          "label": "Séjour en clinique psychiatrique",
+          "variant": null,
+          "coverage": "Prise en charge des frais, 90 jours au maximum par année civile",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Aucune prestation pour les cliniques psychiatriques de jour ou de nuit ; en division commune dans toute la Suisse selon l'aperçu.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_abroad"
+          ],
+          "label": "Traitements stationnaires planifiés à l'étranger",
+          "variant": null,
+          "coverage": "Contribution de max. CHF 1000 par jour, pendant 30 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 1000,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Justificatif de paiement exigé ; vaut aussi pour l'accouchement stationnaire (aperçu).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "abroad_emergency",
+            "hospital_abroad"
+          ],
+          "label": "Traitements stationnaires d'urgence à l'étranger",
+          "variant": null,
+          "coverage": "Max. CHF 1000 par jour, pendant 30 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 1000,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Tant que le retour en Suisse ne peut être raisonnablement exigé ; séjour temporaire d'un an au plus (CGA A4.2).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "rooming_in"
+          ],
+          "label": "Séjour d'une personne accompagnatrice à l'hôpital (rooming-in)",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 80 par jour, max. CHF 2000 par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 2000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Uniquement si la personne assurée hospitalisée n'a pas encore atteint l'âge de 50 ans.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "childcare_assistance"
+          ],
+          "label": "Garde d'enfants à domicile pendant l'hospitalisation",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 50 par jour, pendant 30 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 50,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Garde à domicile des enfants jusqu'à 15 ans d'une personne assurée hospitalisée (maladie ou accident) ; heures habituelles de travail des jours de semaine ; organisée par la centrale d'appel d'urgence et d'organisation d'AXA, à contacter au préalable.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "maternity"
+          ],
+          "label": "Maternité : accouchement à l'hôpital, en maison de naissance ou en clinique d'obstétrique",
+          "variant": null,
+          "coverage": "Mêmes prestations qu'en cas de maladie ; maison de naissance ou clinique d'obstétrique au tarif reconnu",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": "365 jours (la mère doit avoir été assurée au moins 365 jours au moment de l'accouchement, CGA B3)",
+          "conditions": "Quote-part Flex applicable selon la division choisie.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "maternity"
+          ],
+          "label": "Naissance ambulatoire à la maison",
+          "variant": null,
+          "coverage": "Montant unique de max. CHF 1500 par naissance",
+          "ratePercent": null,
+          "maxAmountChf": 1500,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": "365 jours (la mère doit avoir été assurée au moins 365 jours au moment de l'accouchement, CGA B3)",
+          "conditions": "Les naissances multiples comptent comme une seule naissance.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "newborn_coverage"
+          ],
+          "label": "Frais du nouveau-né en bonne santé",
+          "variant": null,
+          "coverage": "Pris en charge pendant la durée du séjour hospitalier de la mère",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": "365 jours (la mère doit avoir été assurée au moins 365 jours au moment de l'accouchement, CGA B3)",
+          "conditions": null,
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "spa_cure"
+          ],
+          "label": "Cure balnéaire stationnaire",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 30 par jour, pendant 21 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 30,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Une seule cure balnéaire ou de convalescence par année civile. Prescription médicale remise avant le début ; établissement admis LAMal ou reconnu par AXA, sous direction médicale ; traitement intensif préalable ; durée minimale de 14 jours. À l'étranger sur demande.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "convalescence_cure"
+          ],
+          "label": "Cure de convalescence stationnaire",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 60 par jour, pendant 21 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 60,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Une seule cure balnéaire ou de convalescence par année civile. Prescription médicale remise avant le début ; nécessaire après une maladie grave ou un séjour hospitalier ; en Suisse dans un établissement reconnu par AXA (à l'étranger sur demande).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admzc",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "axa-indemnite-hospitalisation",
+      "name": "Indemnité d'hospitalisation",
+      "category": "hospital_daily_cash",
+      "audience": "all",
+      "summary": "Capital forfaitaire (CHF 1000, 2000 ou 3000) versé en cas de séjour hospitalier pour soins aigus d'au moins trois nuits, jusqu'à deux fois par an. Ce n'est pas une indemnité par jour malgré l'appellation « indemnité journalière » utilisée sur le site.",
+      "variants": [
+        {
+          "key": "sa-1000",
+          "name": "Somme d'assurance CHF 1000",
+          "description": "CHF 1000 par versement."
+        },
+        {
+          "key": "sa-2000",
+          "name": "Somme d'assurance CHF 2000",
+          "description": "CHF 2000 par versement."
+        },
+        {
+          "key": "sa-3000",
+          "name": "Somme d'assurance CHF 3000",
+          "description": "CHF 3000 par versement."
+        }
+      ],
+      "prerequisites": "Ne peut être souscrite qu'en complément d'une assurance d'hospitalisation AXA Prévoyance santé et prend fin avec elle. Proposition avec déclaration de santé ; AXA peut exiger un examen médical, émettre des réserves, exclure ou refuser (CGA A5). Pas de déclaration de santé pour un enfant annoncé avant la naissance (calculateur). Âge maximal d'admission : 65 ans selon le calculateur en ligne (« Nous ne proposons pas d'assurance complémentaire aux personnes de plus de 65 ans »).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–5, 6–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit.",
+        "publishedPrices": [],
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=afmvz",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) « Indemnité d'hospitalisation » d'AXA (16665FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=afmvz"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "hospital_capital"
+          ],
+          "label": "Somme d'assurance versée en cas de séjour hospitalier pour soins aigus dès trois nuits",
+          "variant": "sa-1000",
+          "coverage": "CHF 1000 par versement, au maximum deux versements par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 1000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Assurance de sommes, versée indépendamment d'autres assurances, dans le monde entier, en cas de maladie ou d'accident (maternité exclue). Versée au maximum deux fois par année civile : une fois pour un séjour stationnaire d'au moins 3 nuits, une deuxième fois pour un séjour d'au moins 7 nuits la même année, ou deux fois pour un seul séjour d'au moins 10 nuits. Dès 70 ans : au maximum un versement par année civile. Hôpitaux de soins aigus, psychiatrie aiguë, réadaptation et hôpitaux étrangers comparables ; exclus : maladies chroniques, cures, EMS, séjours semi-stationnaires, traitements non reconnus LAMal. Versement sur présentation de la facture de l'hôpital.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=afmvz",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_capital"
+          ],
+          "label": "Somme d'assurance versée en cas de séjour hospitalier pour soins aigus dès trois nuits",
+          "variant": "sa-2000",
+          "coverage": "CHF 2000 par versement, au maximum deux versements par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 2000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Assurance de sommes, versée indépendamment d'autres assurances, dans le monde entier, en cas de maladie ou d'accident (maternité exclue). Versée au maximum deux fois par année civile : une fois pour un séjour stationnaire d'au moins 3 nuits, une deuxième fois pour un séjour d'au moins 7 nuits la même année, ou deux fois pour un seul séjour d'au moins 10 nuits. Dès 70 ans : au maximum un versement par année civile. Hôpitaux de soins aigus, psychiatrie aiguë, réadaptation et hôpitaux étrangers comparables ; exclus : maladies chroniques, cures, EMS, séjours semi-stationnaires, traitements non reconnus LAMal. Versement sur présentation de la facture de l'hôpital.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=afmvz",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_capital"
+          ],
+          "label": "Somme d'assurance versée en cas de séjour hospitalier pour soins aigus dès trois nuits",
+          "variant": "sa-3000",
+          "coverage": "CHF 3000 par versement, au maximum deux versements par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 3000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Assurance de sommes, versée indépendamment d'autres assurances, dans le monde entier, en cas de maladie ou d'accident (maternité exclue). Versée au maximum deux fois par année civile : une fois pour un séjour stationnaire d'au moins 3 nuits, une deuxième fois pour un séjour d'au moins 7 nuits la même année, ou deux fois pour un seul séjour d'au moins 10 nuits. Dès 70 ans : au maximum un versement par année civile. Hôpitaux de soins aigus, psychiatrie aiguë, réadaptation et hôpitaux étrangers comparables ; exclus : maladies chroniques, cures, EMS, séjours semi-stationnaires, traitements non reconnus LAMal. Versement sur présentation de la facture de l'hôpital.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=afmvz",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "axa-accident-prive",
+      "name": "Accident Privé",
+      "category": "combined",
+      "audience": "all",
+      "summary": "Assurance-accidents privée des frais de guérison : division privée et prestations ambulatoires étendues dans le monde entier, uniquement en cas d'accident, en complément de la LAA ou de l'assurance de base. Désignée « Accident Division privée » sur la page des conditions et « Assurance-accidents privée » sur la page produit.",
+      "variants": [],
+      "prerequisites": "Proposition avec déclaration de santé ; AXA peut exiger un examen médical, émettre des réserves, exclure ou refuser (CGA A5). Pas de déclaration de santé pour un enfant annoncé avant la naissance (calculateur). Âge maximal d'admission : 65 ans selon le calculateur en ligne (« Nous ne proposons pas d'assurance complémentaire aux personnes de plus de 65 ans »). Ne remplace aucune assurance-accidents existante (calculateur).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–5, 6–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit.",
+        "publishedPrices": [],
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Produit gratuit de la naissance au premier anniversaire (FAQ du site). Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-accidents-privee.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) « Accident Privé » d'AXA (17136FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "hospital_private"
+          ],
+          "label": "Séjour stationnaire en chambre à un lit (division privée) après un accident : hôpital de soins aigus, clinique de réadaptation ou clinique psychiatrique",
+          "variant": null,
+          "coverage": "Prise en charge des frais (honoraires médicaux, pension, soins, mesures diagnostiques et thérapeutiques) ; séjour en commune ou semi-privé au tarif reconnu",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "Accident uniquement (maladie non couverte). Frais pris en charge pendant cinq ans à compter du jour de l'accident, puis jusqu'à CHF 200 000 par événement. En complément des assurances sociales et des autres assurances privées ; franchises et quotes-parts suisses non couvertes. Hôpital répertorié ou reconnu par AXA ; garantie préalable pour les traitements stationnaires planifiés ; soins aigus uniquement.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_free_doctor_choice"
+          ],
+          "label": "Libre choix du médecin à l'hôpital",
+          "variant": null,
+          "coverage": "Libre choix parmi les médecins reconnus par AXA",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": null,
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "hospital_abroad"
+          ],
+          "label": "Traitements stationnaires planifiés à l'étranger",
+          "variant": null,
+          "coverage": "Contribution de max. CHF 2000 par jour, pendant 60 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 2000,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Garantie préalable de prise en charge requise.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "abroad_emergency",
+            "hospital_abroad"
+          ],
+          "label": "Traitements d'urgence à l'étranger",
+          "variant": null,
+          "coverage": "Prise en charge des frais (100 % selon l'aperçu)",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": "Tant que le retour en Suisse ne peut être raisonnablement exigé ; séjour temporaire d'un an au plus (CGA A4.2) ; centrale d'appel d'urgence à informer immédiatement.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "cost_sharing_coverage",
+            "abroad_emergency"
+          ],
+          "label": "Participation aux frais (franchise, quote-part) encourue dans un État de l'UE/AELE",
+          "variant": null,
+          "coverage": "Prise en charge de la participation aux frais selon la législation sur les assurances sociales du pays",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Accident lors d'un séjour temporaire à l'étranger.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "spa_cure"
+          ],
+          "label": "Cure balnéaire après un accident",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 120 par jour, pendant 21 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 120,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Prescrite avant le début ; établissement admis par une assurance sociale ou reconnu par AXA ; traitement intensif préalable ; durée minimale de 14 jours ; aussi à l'étranger.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "convalescence_cure"
+          ],
+          "label": "Cure de convalescence après un accident grave",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 180 par jour, pendant 21 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 180,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Prescrite avant le début ; sous surveillance médicale dans un établissement de cure reconnu ; aussi à l'étranger.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "cosmetic_corrections"
+          ],
+          "label": "Opérations esthétiques de reconstruction rendues nécessaires par un accident",
+          "variant": null,
+          "coverage": "Max. CHF 50 000 par sinistre",
+          "ratePercent": null,
+          "maxAmountChf": 50000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Médecin autorisé ; frais acceptés au préalable par AXA.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "rooming_in"
+          ],
+          "label": "Séjour d'une personne accompagnante à l'hôpital (rooming-in), en Suisse",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 320 par jour, max. CHF 4000 par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 4000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": null,
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "other:accident_ambulatory_treatment",
+            "ambulatory_free_doctor_choice"
+          ],
+          "label": "Traitements ambulatoires après un accident (médecins, chiropraticiens reconnus, personnel paramédical sur prescription)",
+          "variant": null,
+          "coverage": "Prise en charge des frais nécessaires et attestés",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Accident uniquement (maladie non couverte). Frais pris en charge pendant cinq ans à compter du jour de l'accident, puis jusqu'à CHF 200 000 par événement. En complément des assurances sociales et des autres assurances privées ; franchises et quotes-parts suisses non couvertes.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "abroad_planned_treatment"
+          ],
+          "label": "Traitements ambulatoires planifiés à l'étranger",
+          "variant": null,
+          "coverage": "Max. CHF 2000 par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 2000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Garantie de prise en charge requise pour un traitement planifié à l'étranger.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "dental_accident"
+          ],
+          "label": "Reconstruction dentaire due à un accident",
+          "variant": null,
+          "coverage": "Prise en charge des frais des traitements prescrits par un médecin (100 %, dans le monde entier selon l'aperçu)",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": true,
+          "waitingPeriod": null,
+          "conditions": null,
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "psychotherapy_non_medical"
+          ],
+          "label": "Psychothérapie non médicale par des psychothérapeutes reconnus par AXA",
+          "variant": null,
+          "coverage": "Max. CHF 3000 par année civile",
+          "ratePercent": 100,
+          "maxAmountChf": 3000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": null,
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "alt_medicine_therapies"
+          ],
+          "label": "Traitements ambulatoires de médecine complémentaire, y compris massages médicaux",
+          "variant": null,
+          "coverage": "Max. CHF 3000 par année civile",
+          "ratePercent": 100,
+          "maxAmountChf": 3000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Thérapeutes et méthodes reconnus par AXA ; mêmes exclusions que les produits Santé (astrologie, guérison spirituelle, imposition des mains, magnétothérapie, hypnose) ; pas de traitements par des proches.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "alt_medicine_remedies"
+          ],
+          "label": "Médicaments de médecine complémentaire prescrits et remis par des médecins ou naturopathes reconnus",
+          "variant": null,
+          "coverage": "Max. CHF 1000 par année civile",
+          "ratePercent": 100,
+          "maxAmountChf": 1000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": null,
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "medication_non_listed"
+          ],
+          "label": "Médicaments prescrits par un médecin, non à la charge de l'assurance obligatoire",
+          "variant": null,
+          "coverage": "Prise en charge des frais",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Enregistrés auprès de Swissmedic pour l'indication ; liste AXA de médicaments exclus ou pris à 50 % ; LPPA exclues.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "medical_aids",
+            "glasses_lenses"
+          ],
+          "label": "Moyens auxiliaires et appareils (y compris premier achat ou location d'appareils auditifs, orthophoniques, verres de lunettes, lentilles, aides pour malvoyants)",
+          "variant": null,
+          "coverage": "Max. CHF 2000 par année civile",
+          "ratePercent": 100,
+          "maxAmountChf": 2000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Nécessaires à la suite d'un accident ; réparation ou remplacement (y compris montures) si endommagés lors d'un accident ayant entraîné un traitement.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "home_care"
+          ],
+          "label": "Soins médicaux à domicile prescrits",
+          "variant": null,
+          "coverage": "Max. CHF 300 par jour, pendant la durée de l'incapacité de travail attestée",
+          "ratePercent": null,
+          "maxAmountChf": 300,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Personnel soignant reconnu (hors membres de la famille) ; pas en cas de séjour en établissement de soins.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "childcare_assistance"
+          ],
+          "label": "Garde d'enfants à domicile (enfants jusqu'à 15 ans)",
+          "variant": null,
+          "coverage": "Prise en charge des frais, 60 heures au maximum par année civile",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Pendant l'hospitalisation d'une personne assurée après un accident, ou soins à domicile d'un enfant accidenté ; organisée par la centrale d'AXA.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "home_help"
+          ],
+          "label": "Service de maison et aide-ménagère",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 100 par jour, pendant 30 jours au maximum par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 100,
+          "maxPeriod": "day",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Service de maison (animaux, plantes, courrier, achats) à la suite d'un accident ayant entraîné un séjour stationnaire, organisé par la centrale d'AXA ; aide-ménagère sur prescription médicale en cas d'incapacité de travail de 100 %. Heures habituelles de travail des jours de semaine.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "other:school_support"
+          ],
+          "label": "Soutien scolaire pour les enfants accidentés (jusqu'à 15 ans)",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 100 par jour, max. CHF 3000 par année civile",
+          "ratePercent": null,
+          "maxAmountChf": 3000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Enfant ne pouvant fréquenter l'école en raison d'un accident ; soutien par une personne spécialisée.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "transport_rescue"
+          ],
+          "label": "Transports de sauvetage, d'évacuation et d'urgence, transferts entre hôpitaux",
+          "variant": null,
+          "coverage": "Prise en charge des frais",
+          "ratePercent": 100,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Moyen de transport économique et approprié ; monde entier.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "search_recovery"
+          ],
+          "label": "Opérations de recherche en vue du sauvetage ou de l'évacuation",
+          "variant": null,
+          "coverage": "Max. CHF 20 000 par personne assurée pour les recherches en Suisse",
+          "ratePercent": null,
+          "maxAmountChf": 20000,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Les CC limitent à CHF 20 000 les recherches « entreprises en Suisse » ; l'aperçu 2026-10 indique 100 % en Suisse et « jusqu'à CHF 20 000 par an » à l'étranger. À clarifier.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_assistance_repatriation"
+          ],
+          "label": "Rapatriement, rapatriement du corps, visite d'un proche et billet de retour à l'étranger",
+          "variant": null,
+          "coverage": "Rapatriement médicalement nécessaire et rapatriement du corps pris en charge ; visite d'un proche (hospitalisation de plus de 7 jours) : voyage en classe économique et max. CHF 1000 par sinistre pour repas et hébergement",
+          "ratePercent": null,
+          "maxAmountChf": 1000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Séjour temporaire à l'étranger ; frais de modification du billet de retour en cas d'hospitalisation.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=agbbt",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "axa-assurance-dentaire",
+      "name": "Assurance dentaire",
+      "category": "dental",
+      "audience": "all",
+      "summary": "Assurance des soins dentaires (maladie et prophylaxie) en trois niveaux – Dentaire 1000, 2000, 3000 – couvrant hygiène, blanchiment, contrôles, soins, prothèses et orthodontie. Même produit pour les enfants (« assurance dentaire complémentaire pour les enfants »).",
+      "variants": [
+        {
+          "key": "dentaire-1000",
+          "name": "Assurance dentaire 1000",
+          "description": "50 % des frais, max. CHF 1000 par an (hygiène/blanchiment max. CHF 200)."
+        },
+        {
+          "key": "dentaire-2000",
+          "name": "Assurance dentaire 2000",
+          "description": "75 % des frais, max. CHF 2000 par an (hygiène/blanchiment max. CHF 300)."
+        },
+        {
+          "key": "dentaire-3000",
+          "name": "Assurance dentaire 3000",
+          "description": "75 % des frais, max. CHF 3000 par an (hygiène/blanchiment max. CHF 500)."
+        }
+      ],
+      "prerequisites": "Conclusion possible jusqu'à 65 ans (page produit). Jusqu'à 5 ans : sans attestation du dentiste ; dès 5 ans : examen et attestation du dentiste, exclusions possibles (malpositions, caries). Déclaration de santé (CGA A5). Peut être conclue indépendamment des autres produits.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–18, 19–25, 26–35, 36–45, 46–55, 56–65, 66–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit.",
+        "publishedPrices": [],
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Dentaire 1000 gratuite de la naissance au premier anniversaire (FAQ du site). Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-dentaire.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-dentaire-enfants.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admny",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) « Assurance dentaire » d'AXA – Assurance dentaire 1000, 2000, 3000 (15798FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admny"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "dental_hygiene"
+          ],
+          "label": "Hygiène dentaire ou blanchiment",
+          "variant": "dentaire-1000",
+          "coverage": "50 % des frais, max. CHF 200 par année civile",
+          "ratePercent": 50,
+          "maxAmountChf": 200,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": "6 mois dès le début de l'assurance (CC A2.1). Selon le site : pas de délai si une assurance dentaire équivalente en Suisse précède immédiatement ; l'aperçu 2026-10 indique « pas de délai de carence » pour l'hygiène dentaire et le blanchiment.",
+          "conditions": "Compris dans le plafond global de CHF 1000 par année civile. Médecins-dentistes diplômés ; tarif SSO comme limite maximale ; étranger : zone frontalière de 20 km uniquement, à formation équivalente. Accidents non couverts. Contributions des soins dentaires scolaires imputées. Exclus : remplacement de dents déjà manquantes, remplacées ou incluses à la conclusion ; perte ou dommage de prothèses ou d'appareils orthodontiques.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admny",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "dental_hygiene"
+          ],
+          "label": "Hygiène dentaire ou blanchiment",
+          "variant": "dentaire-2000",
+          "coverage": "75 % des frais, max. CHF 300 par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 300,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": "6 mois dès le début de l'assurance (CC A2.1). Selon le site : pas de délai si une assurance dentaire équivalente en Suisse précède immédiatement ; l'aperçu 2026-10 indique « pas de délai de carence » pour l'hygiène dentaire et le blanchiment.",
+          "conditions": "Compris dans le plafond global de CHF 2000 par année civile. Médecins-dentistes diplômés ; tarif SSO comme limite maximale ; étranger : zone frontalière de 20 km uniquement, à formation équivalente. Accidents non couverts. Contributions des soins dentaires scolaires imputées. Exclus : remplacement de dents déjà manquantes, remplacées ou incluses à la conclusion ; perte ou dommage de prothèses ou d'appareils orthodontiques.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admny",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "dental_hygiene"
+          ],
+          "label": "Hygiène dentaire ou blanchiment",
+          "variant": "dentaire-3000",
+          "coverage": "75 % des frais, max. CHF 500 par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 500,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": "6 mois dès le début de l'assurance (CC A2.1). Selon le site : pas de délai si une assurance dentaire équivalente en Suisse précède immédiatement ; l'aperçu 2026-10 indique « pas de délai de carence » pour l'hygiène dentaire et le blanchiment.",
+          "conditions": "Compris dans le plafond global de CHF 3000 par année civile. Médecins-dentistes diplômés ; tarif SSO comme limite maximale ; étranger : zone frontalière de 20 km uniquement, à formation équivalente. Accidents non couverts. Contributions des soins dentaires scolaires imputées. Exclus : remplacement de dents déjà manquantes, remplacées ou incluses à la conclusion ; perte ou dommage de prothèses ou d'appareils orthodontiques.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admny",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "dental_treatment",
+            "dental_surgery"
+          ],
+          "label": "Examens de contrôle par un médecin-dentiste et autres soins dentaires consécutifs à une maladie ou prophylactiques, chirurgie maxillo-faciale",
+          "variant": "dentaire-1000",
+          "coverage": "50 % des frais, max. CHF 1000 par année civile pour l'ensemble des prestations",
+          "ratePercent": 50,
+          "maxAmountChf": 1000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": "6 mois dès le début de l'assurance (CC A2.1). Selon le site : pas de délai si une assurance dentaire équivalente en Suisse précède immédiatement ; l'aperçu 2026-10 indique « pas de délai de carence » pour l'hygiène dentaire et le blanchiment.",
+          "conditions": "Plafond global tous traitements confondus. Médecins-dentistes diplômés ; tarif SSO comme limite maximale ; étranger : zone frontalière de 20 km uniquement, à formation équivalente. Accidents non couverts. Contributions des soins dentaires scolaires imputées. Exclus : remplacement de dents déjà manquantes, remplacées ou incluses à la conclusion ; perte ou dommage de prothèses ou d'appareils orthodontiques.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admny",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "dental_treatment",
+            "dental_surgery"
+          ],
+          "label": "Examens de contrôle par un médecin-dentiste et autres soins dentaires consécutifs à une maladie ou prophylactiques, chirurgie maxillo-faciale",
+          "variant": "dentaire-2000",
+          "coverage": "75 % des frais, max. CHF 2000 par année civile pour l'ensemble des prestations",
+          "ratePercent": 75,
+          "maxAmountChf": 2000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": "6 mois dès le début de l'assurance (CC A2.1). Selon le site : pas de délai si une assurance dentaire équivalente en Suisse précède immédiatement ; l'aperçu 2026-10 indique « pas de délai de carence » pour l'hygiène dentaire et le blanchiment.",
+          "conditions": "Plafond global tous traitements confondus. Médecins-dentistes diplômés ; tarif SSO comme limite maximale ; étranger : zone frontalière de 20 km uniquement, à formation équivalente. Accidents non couverts. Contributions des soins dentaires scolaires imputées. Exclus : remplacement de dents déjà manquantes, remplacées ou incluses à la conclusion ; perte ou dommage de prothèses ou d'appareils orthodontiques.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admny",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "dental_treatment",
+            "dental_surgery"
+          ],
+          "label": "Examens de contrôle par un médecin-dentiste et autres soins dentaires consécutifs à une maladie ou prophylactiques, chirurgie maxillo-faciale",
+          "variant": "dentaire-3000",
+          "coverage": "75 % des frais, max. CHF 3000 par année civile pour l'ensemble des prestations",
+          "ratePercent": 75,
+          "maxAmountChf": 3000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": "6 mois dès le début de l'assurance (CC A2.1). Selon le site : pas de délai si une assurance dentaire équivalente en Suisse précède immédiatement ; l'aperçu 2026-10 indique « pas de délai de carence » pour l'hygiène dentaire et le blanchiment.",
+          "conditions": "Plafond global tous traitements confondus. Médecins-dentistes diplômés ; tarif SSO comme limite maximale ; étranger : zone frontalière de 20 km uniquement, à formation équivalente. Accidents non couverts. Contributions des soins dentaires scolaires imputées. Exclus : remplacement de dents déjà manquantes, remplacées ou incluses à la conclusion ; perte ou dommage de prothèses ou d'appareils orthodontiques.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admny",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "orthodontics"
+          ],
+          "label": "Traitements orthodontiques (enfants et adultes)",
+          "variant": "dentaire-1000",
+          "coverage": "50 % des frais, dans la limite du plafond global de CHF 1000 par année civile",
+          "ratePercent": 50,
+          "maxAmountChf": 1000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": "6 mois dès le début de l'assurance (CC A2.1). Selon le site : pas de délai si une assurance dentaire équivalente en Suisse précède immédiatement ; l'aperçu 2026-10 indique « pas de délai de carence » pour l'hygiène dentaire et le blanchiment.",
+          "conditions": "Plafond global partagé avec les autres soins dentaires. Cumulable avec l'orthodontie de Santé PLUS/COMPLET (exemple du site : CHF 10 000 remboursés avec COMPLET et Dentaire 3000). Médecins-dentistes diplômés ; tarif SSO comme limite maximale ; étranger : zone frontalière de 20 km uniquement, à formation équivalente. Accidents non couverts. Contributions des soins dentaires scolaires imputées. Exclus : remplacement de dents déjà manquantes, remplacées ou incluses à la conclusion ; perte ou dommage de prothèses ou d'appareils orthodontiques.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admny",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "orthodontics"
+          ],
+          "label": "Traitements orthodontiques (enfants et adultes)",
+          "variant": "dentaire-2000",
+          "coverage": "75 % des frais, dans la limite du plafond global de CHF 2000 par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 2000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": "6 mois dès le début de l'assurance (CC A2.1). Selon le site : pas de délai si une assurance dentaire équivalente en Suisse précède immédiatement ; l'aperçu 2026-10 indique « pas de délai de carence » pour l'hygiène dentaire et le blanchiment.",
+          "conditions": "Plafond global partagé avec les autres soins dentaires. Cumulable avec l'orthodontie de Santé PLUS/COMPLET (exemple du site : CHF 10 000 remboursés avec COMPLET et Dentaire 3000). Médecins-dentistes diplômés ; tarif SSO comme limite maximale ; étranger : zone frontalière de 20 km uniquement, à formation équivalente. Accidents non couverts. Contributions des soins dentaires scolaires imputées. Exclus : remplacement de dents déjà manquantes, remplacées ou incluses à la conclusion ; perte ou dommage de prothèses ou d'appareils orthodontiques.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admny",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "orthodontics"
+          ],
+          "label": "Traitements orthodontiques (enfants et adultes)",
+          "variant": "dentaire-3000",
+          "coverage": "75 % des frais, dans la limite du plafond global de CHF 3000 par année civile",
+          "ratePercent": 75,
+          "maxAmountChf": 3000,
+          "maxPeriod": "year",
+          "unlimited": false,
+          "waitingPeriod": "6 mois dès le début de l'assurance (CC A2.1). Selon le site : pas de délai si une assurance dentaire équivalente en Suisse précède immédiatement ; l'aperçu 2026-10 indique « pas de délai de carence » pour l'hygiène dentaire et le blanchiment.",
+          "conditions": "Plafond global partagé avec les autres soins dentaires. Cumulable avec l'orthodontie de Santé PLUS/COMPLET (exemple du site : CHF 10 000 remboursés avec COMPLET et Dentaire 3000). Médecins-dentistes diplômés ; tarif SSO comme limite maximale ; étranger : zone frontalière de 20 km uniquement, à formation équivalente. Accidents non couverts. Contributions des soins dentaires scolaires imputées. Exclus : remplacement de dents déjà manquantes, remplacées ou incluses à la conclusion ; perte ou dommage de prothèses ou d'appareils orthodontiques.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=admny",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "axa-capital-accident",
+      "name": "CAPITAL – accident",
+      "category": "capital_accident",
+      "audience": "all",
+      "summary": "Assurance de capital en cas d'invalidité et/ou de décès par accident (volet accident du produit CAPITAL), conclusion sans questionnaire de santé, somme au choix jusqu'à CHF 300 000.",
+      "variants": [],
+      "prerequisites": "Volet accident : conclusion sans questionnaire de santé (page produit). Couverture au plus tôt le 8e jour après la naissance ; un enfant à naître peut être assuré d'avance. Peut être souscrit seul.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–5, 6–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit. La prime dépend aussi des sommes d'assurance choisies.",
+        "publishedPrices": [],
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Résiliable en tout temps pour la fin d'un mois (CC D1). Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-capital.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aemp9",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) CAPITAL d'AXA (16190FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aemp9"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "accident_capital"
+          ],
+          "label": "Capital en cas d'invalidité permanente consécutive à un accident",
+          "variant": null,
+          "coverage": "Capital assuré de CHF 10 000 à CHF 300 000 versé selon le degré d'invalidité (barème des membres) ; progression dès 26 % d'invalidité jusqu'à 350 % du capital à 100 % d'invalidité",
+          "ratePercent": null,
+          "maxAmountChf": 300000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Somme d'assurance au choix : CHF 10 000, 20 000, 50 000, 100 000, 200 000 ou 300 000 (page produit) ; invalidité et décès se choisissent séparément. Assurance de sommes versée indépendamment d'autres assurances, valable dans le monde entier. Porteur du risque : AXA Vie SA (contrat de coopération avec AXA Assurances SA). Dès 70 ans : capital limité à CHF 100 000, sans progression. Maladies professionnelles non couvertes. Après un versement, le capital restant assuré est réduit d'autant.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aemp9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "accident_capital"
+          ],
+          "label": "Préjudices esthétiques durables et sévères consécutifs à un accident",
+          "variant": null,
+          "coverage": "Max. 10 % du capital invalidité (visage) ou 5 % (autres parties visibles), au maximum CHF 20 000",
+          "ratePercent": null,
+          "maxAmountChf": 20000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Sans perte fonctionnelle mais avec difficultés d'intégration sociale ; pas de progression.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aemp9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "accident_capital"
+          ],
+          "label": "Capital en cas de décès consécutif à un accident",
+          "variant": null,
+          "coverage": "Capital-décès assuré de CHF 10 000 à CHF 300 000",
+          "ratePercent": null,
+          "maxAmountChf": 300000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Somme d'assurance au choix : CHF 10 000, 20 000, 50 000, 100 000, 200 000 ou 300 000 (page produit) ; invalidité et décès se choisissent séparément. Assurance de sommes versée indépendamment d'autres assurances, valable dans le monde entier. Porteur du risque : AXA Vie SA (contrat de coopération avec AXA Assurances SA). Enfants de moins de 2 ans et demi : max. CHF 2500 ; enfants jusqu'à 14 ans et personnes dès 70 ans : max. CHF 20 000. Une indemnité d'invalidité déjà versée pour le même accident n'est pas déduite. Sans ayant droit : frais funéraires jusqu'à CHF 5000.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aemp9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "premium_waiver"
+          ],
+          "label": "Libération du paiement des primes en cas d'incapacité de travail ou d'invalidité consécutive à un accident",
+          "variant": null,
+          "coverage": "Exemption des primes de l'assurance de capital accident",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": "6 mois dès le début de l'incapacité de travail attestée",
+          "conditions": "Cesse au premier versement du capital invalidité ou au recouvrement de la capacité de travail.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aemp9",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "axa-capital-maladie",
+      "name": "CAPITAL – maladie",
+      "category": "capital_illness",
+      "audience": "all",
+      "summary": "Assurance de capital en cas d'invalidité et/ou de décès par maladie (volet maladie du produit CAPITAL), avec questionnaire de santé, somme au choix jusqu'à CHF 300 000, couverture jusqu'à l'âge-terme (60 ans).",
+      "variants": [],
+      "prerequisites": "Volet maladie : questionnaire de santé obligatoire (page produit). Couverture au plus tôt le 8e jour après la naissance. Peut être souscrit seul ou avec le volet accident.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Groupes d'âge publiés dans les CC (édition 01.2022) : 0–5, 6–10, 11–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76 ans et plus. Âge de référence non précisé dans les CC (ni « âge atteint dans l'année » ni « âge d'entrée » n'est écrit) ; le passage dans un autre groupe d'âge entraîne une adaptation de prime communiquée au plus tard 30 jours avant la fin de l'année civile (CGA D2.2), ce qui indique un tarif selon l'âge atteint et non selon l'âge d'entrée. Sexe et domicile (NPA, tarifs régionaux) cités comme facteurs généraux par les CGA D1.2 et par le calculateur, sans détail par produit. La prime dépend aussi des sommes d'assurance choisies.",
+        "publishedPrices": [],
+        "discounts": "Rabais famille : 5 % pour un ménage de 2 personnes, 10 % dès 3 personnes vivant dans le même ménage, à condition qu'au moins une personne soit majeure et une autre mineure (FAQ du site et calculateur ; base CGA D2.7, modifiable chaque année). Résiliable en tout temps pour la fin d'un mois (CC D1). Durée de contrat au choix dans le calculateur : 1, 2 ou 3 ans ; aucun rabais de durée publié. Rabais collaborateurs via contrats-cadres d'employeurs (CGA D2.6, offres collectives hors périmètre)."
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/assurance-capital.html",
+        "https://www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aemp9",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=akjam",
+        "https://www.axa.ch/doc/aebdx"
+      ],
+      "conditionsDoc": {
+        "title": "Conditions complémentaires (CC) CAPITAL d'AXA (16190FR) ; CGA Prévoyance santé édition 02.2024",
+        "edition": "01.2022",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aemp9"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "illness_capital"
+          ],
+          "label": "Capital en cas d'invalidité permanente consécutive à une maladie",
+          "variant": null,
+          "coverage": "Capital assuré de CHF 10 000 à CHF 300 000 versé selon le degré d'invalidité AI : aucun droit en dessous de 25 %, totalité du capital dès 70 %",
+          "ratePercent": null,
+          "maxAmountChf": 300000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": "Versement au plus tôt 12 mois après le début de l'invalidité (versement anticipé possible si l'invalidité permanente est établie avant)",
+          "conditions": "Somme d'assurance au choix : CHF 10 000, 20 000, 50 000, 100 000, 200 000 ou 300 000 (page produit) ; invalidité et décès se choisissent séparément. Assurance de sommes versée indépendamment d'autres assurances, valable dans le monde entier. Porteur du risque : AXA Vie SA (contrat de coopération avec AXA Assurances SA). Dès 56 ans : capital limité à CHF 100 000. La couverture maladie cesse le 31 décembre qui suit l'âge-terme indiqué dans la police ; selon l'aperçu 2026-10, à la fin de l'année du 60e anniversaire. Maladies professionnelles LAA exclues ; infirmités congénitales et lésions prénatales exclues.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aemp9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "illness_capital"
+          ],
+          "label": "Capital en cas de décès consécutif à une maladie",
+          "variant": null,
+          "coverage": "Capital-décès assuré de CHF 10 000 à CHF 300 000",
+          "ratePercent": null,
+          "maxAmountChf": 300000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Somme d'assurance au choix : CHF 10 000, 20 000, 50 000, 100 000, 200 000 ou 300 000 (page produit) ; invalidité et décès se choisissent séparément. Assurance de sommes versée indépendamment d'autres assurances, valable dans le monde entier. Porteur du risque : AXA Vie SA (contrat de coopération avec AXA Assurances SA). Enfants de moins de 2 ans et demi : max. CHF 2500 ; enfants jusqu'à 14 ans : max. CHF 20 000. La couverture maladie cesse le 31 décembre qui suit l'âge-terme indiqué dans la police ; selon l'aperçu 2026-10, à la fin de l'année du 60e anniversaire. Suicide exclu. Sans ayant droit : frais funéraires jusqu'à CHF 5000.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aemp9",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "premium_waiver"
+          ],
+          "label": "Libération du paiement des primes en cas d'incapacité de travail ou d'invalidité consécutive à une maladie",
+          "variant": null,
+          "coverage": "Exemption des primes de l'assurance de capital maladie",
+          "ratePercent": null,
+          "maxAmountChf": null,
+          "maxPeriod": null,
+          "unlimited": false,
+          "waitingPeriod": "6 mois dès le début de l'incapacité de travail attestée",
+          "conditions": "Cesse au premier versement du capital invalidité ou au recouvrement de la capacité de travail.",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aemp9",
+          "verification": "read"
+        }
+      ]
+    },
+    {
+      "key": "axa-intertours-voyages",
+      "name": "Assurance de voyages Intertours (modules « Assistance aux personnes » et « Frais médicaux à l'étranger »)",
+      "category": "travel_abroad",
+      "audience": "all",
+      "summary": "Assurance de voyages modulaire d'AXA (branche voyages, hors CGA Prévoyance santé). La combinaison des modules « Assistance aux personnes » et « Frais médicaux à l'étranger » remplace, selon le site, l'ancienne assurance-maladie à l'étranger myTravel. Contrat annuel ou contrat à court terme (voyage ponctuel jusqu'à 125 jours).",
+      "variants": [
+        {
+          "key": "annuel",
+          "name": "Contrat annuel",
+          "description": "Renouvellement tacite d'année en année ; personnes du ménage nommées dans la police."
+        },
+        {
+          "key": "court-terme",
+          "name": "Contrat à court terme (assurance de voyages ponctuelle)",
+          "description": "Un voyage de 125 jours au maximum, jusqu'à 11 personnes, conclusion en ligne jusqu'à la veille du départ."
+        }
+      ],
+      "prerequisites": "Domicile civil en Suisse ou au Liechtenstein. « Frais médicaux à l'étranger » uniquement en combinaison avec le module de base « Assistance aux personnes ». Pas de questionnaire de santé mentionné ; événements déjà survenus ou prévisibles exclus (CGA A16).",
+      "pricing": {
+        "factors": [
+          "age",
+          "region"
+        ],
+        "ageBands": "Tranches d'âge non publiées. Les CGA (A9.4) mentionnent des modifications de prime en raison de l'âge, d'un déménagement et du nombre de personnes assurées ; la prime dépend aussi des modules, des sommes d'assurance et des franchises choisis.",
+        "publishedPrices": [],
+        "discounts": "Rabais de combinaison : 25 % si les trois modules de base sont souscrits, 10 % pour deux modules (factsheet). Offre jeunes : deux primes mensuelles offertes aux moins de 30 ans (page produit). Calculateur distinct, non piloté : https://www.axa.ch/fr/calculatrice/assurance-voyages.html."
+      },
+      "sourceUrls": [
+        "https://www.axa.ch/fr/particuliers/offres/vehicules-voyages/assurance-voyages.html",
+        "https://www.axa.ch/fr/particuliers/offres/vehicules-voyages/assurance-voyages/assurance-maladie-etranger.html",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=ana5g",
+        "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aavej",
+        "https://www.axa.ch/fr/calculatrice/assurance-voyages.html"
+      ],
+      "conditionsDoc": {
+        "title": "Conditions générales d'assurance (CGA) Assurance de voyages Intertours – contrat annuel, contrat à court terme (18369FR)",
+        "edition": "04.2025",
+        "url": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=ana5g"
+      },
+      "benefits": [
+        {
+          "tags": [
+            "abroad_emergency",
+            "hospital_abroad"
+          ],
+          "label": "Module complémentaire « Frais médicaux à l'étranger » : traitements ambulatoires ou stationnaires urgents hors de Suisse",
+          "variant": null,
+          "coverage": "Prise en charge des frais dépassant les prestations LAMal/LAA, somme d'assurance CHF 500 000, sans franchise",
+          "ratePercent": null,
+          "maxAmountChf": 500000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Accident ou maladie pendant un voyage ou des vacances ; somme globale par sinistre pour toutes les personnes assurées (CGA E4). Souscription uniquement avec le module de base « Assistance aux personnes ». Exclus : traitements planifiés, dentaires, esthétiques, PMA, épidémies et pandémies, tremblements de terre, participations aux coûts LAMal, traitements en Suisse. Les sommes sont celles de la police ; montant indiqué lu dans le factsheet Intertours (14824FR – 2025-01).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aavej",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_assistance_repatriation",
+            "transport_rescue"
+          ],
+          "label": "Module de base « Assistance aux personnes » : sauvetage, transport à l'hôpital, rapatriement, voyage de retour, frais supplémentaires de séjour",
+          "variant": null,
+          "coverage": "Organisation et prise en charge des frais jusqu'à la somme globale de CHF 1 million, sans franchise",
+          "ratePercent": null,
+          "maxAmountChf": 1000000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Monde entier ; voyages d'affaires exclus. Comprend aussi le rapatriement du corps, la venue d'un proche si le séjour hospitalier à l'étranger dépasse sept jours, le retour des enfants mineurs, une avance remboursable pour des traitements médicaux, les frais d'interprète et de documents de voyage (limites par prestation selon la police). Les sommes sont celles de la police ; montant indiqué lu dans le factsheet Intertours (14824FR – 2025-01).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aavej",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "search_recovery"
+          ],
+          "label": "Frais de recherches (module « Assistance aux personnes »)",
+          "variant": null,
+          "coverage": "Jusqu'à CHF 20 000",
+          "ratePercent": null,
+          "maxAmountChf": 20000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Prestation subsidiaire ; déclaration de disparition à la police requise (CGA C4.2). Les sommes sont celles de la police ; montant indiqué lu dans le factsheet Intertours (14824FR – 2025-01).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aavej",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_cancellation_luggage"
+          ],
+          "label": "Module de base « Assurance des frais d'annulation »",
+          "variant": null,
+          "coverage": "Somme d'assurance au choix : CHF 80 000, 100 000, 120 000 ou 200 000 ; limites CHF 2000 pour les billets et CHF 5000 pour les cours",
+          "ratePercent": null,
+          "maxAmountChf": 200000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Franchise au choix (CHF 200, 400, 500, 1000, 5000) à partir d'une somme de CHF 100 000 ; monde entier. Les sommes sont celles de la police ; montant indiqué lu dans le factsheet Intertours (14824FR – 2025-01).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aavej",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "travel_cancellation_luggage"
+          ],
+          "label": "Module complémentaire « Bagages »",
+          "variant": null,
+          "coverage": "Somme d'assurance au choix de CHF 1000 à CHF 30 000 ; franchise au choix de CHF 200 à CHF 500",
+          "ratePercent": null,
+          "maxAmountChf": 30000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Vol, endommagement, livraison tardive, remplacement des documents de voyage ; uniquement avec un module de base. Les sommes sont celles de la police ; montant indiqué lu dans le factsheet Intertours (14824FR – 2025-01).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aavej",
+          "verification": "read"
+        },
+        {
+          "tags": [
+            "legal_protection"
+          ],
+          "label": "Module complémentaire « Protection juridique pour les voyages » (assureur AXA-ARAG)",
+          "variant": null,
+          "coverage": "Somme d'assurance CHF 600 000, sans franchise",
+          "ratePercent": null,
+          "maxAmountChf": 600000,
+          "maxPeriod": "case",
+          "unlimited": false,
+          "waitingPeriod": null,
+          "conditions": "Inclut les litiges en tant que patient lors d'urgences à l'étranger ; uniquement avec un module de base. Les sommes sont celles de la police ; montant indiqué lu dans le factsheet Intertours (14824FR – 2025-01).",
+          "sourceUrl": "https://www.axa.ch/servlets/external/docstoredocument?accesscode=aavej",
+          "verification": "read"
+        }
+      ]
+    }
+  ]
+}
