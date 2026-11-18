@@ -17,6 +17,28 @@
       "retrievedAt": "2026-11-18"
     },
     {
+      "key": "atupri",
+      "name": "Atupri",
+      "legalEntityLca": "Atupri Assurance de la santé SA, Laupenstrasse 18, 3008 Berne",
+      "website": "https://atupri.ch/fr",
+      "calculatorUrl": "https://calculateur-de-primes.atupri.ch",
+      "calculatorHosts": [
+        "calculateur-de-primes.atupri.ch",
+        "pcalculateur.ocp.atupri.ch",
+        "atupri.ch",
+        "api.atupri.ch",
+        "shop.atupri.ch",
+        "reiseversicherung.atupri.ch",
+        "praemienrechner.atupri.ch"
+      ],
+      "publishedTariffUrls": [
+        "https://atupri.ch/assets/f/253863/x/46aa01d4fa/prospectus-adi.pdf",
+        "https://atupri.ch/assets/f/253863/x/37a1d15e2c/prospectus-assurance-voyages.pdf"
+      ],
+      "notes": "Gamme en vente au 18.11.2026 d’après le site actuel (atupri.ch, documents sous atupri.ch/assets/f/253863/… ; www.atupri.ch redirige en 301 vers atupri.ch et l’ancienne arborescence www.atupri.ch/sites/default/files/… n’est plus référencée) : Basic, Balance (nouveau, CCA 01.05.2026), Intense, Comforta, Hôpital, Assurance dentaire (nouvelle, CCA 01.05.2026), ADI, Assurance voyages, indemnités journalières LCA et de ménage. Éditions en vigueur selon la page « Conditions d’assurance » pour les contrats débutant dès le 01.01.2022 : CGA LCA 2026, CCA Basic 2023, Balance 2026, Intense 2024, Assurance dentaire 2026, Comforta 2022, Hôpital 2022, Mivita Reala 2022, Denta 2022, indemnités journalières 2022, CGA ADI 2022, CGA Assurance voyages 2020 ; les éditions 2007 à 2021 (CCA Mivita 2020, Denta 2007, Comforta 2018, Hôpital 2018, etc.) ne valent que pour les contrats ayant débuté jusqu’au 31.12.2021. Aucune édition datée 01.01.2027 n’était publiée. Produits fermés à la souscription : Diversa, Extra, Hôpital combi, Hôtel et Mivita Extensa. Mivita Reala et Denta « arrivent à échéance » (anciens modèles, hors aperçu des produits) ; Mivita Reala reste souscriptible par téléphone, le statut de Denta est à confirmer ; ils sont inventoriés ici avec cette mention. L’indemnité journalière LAMal (jusqu’à CHF 30.– par jour) relève de la LAMal et n’est pas inventoriée. Entités porteuses : Atupri Assurance de la santé SA pour les complémentaires ; SOLIDA Assurances SA (Zurich) pour l’ADI (contrat collectif) ; Européenne Assurances Voyages SA (Bâle) pour l’annulation et les bagages ; Coop Protection Juridique pour la protection juridique des patients incluse dans Intense, Mivita et Hôpital. Rabais : escompte 1 % (annuel) ou 0,5 % (semestriel) ; rabais combiné de 5 % sur Comforta et Hôpital avec un modèle alternatif d’assurance de base Atupri (SmartCare, TelFirst, CareMed, FlexCare, HMO) ; rabais familial pour les groupes 0–12, 13–18 et 19–25 (jusqu’à 35 % sur certaines complémentaires selon le site, taux exacts non publiés) ; rabais pour durée de contrat de trois ans sur Comforta, Hôpital et Mivita. Âge maximal d’admission général : 60 ans (CGA LCA art. 11.3), porté à 70 ans pour Basic, Balance, Intense, Mivita, ADI et les niveaux Opti 1. Calculateur : application monopage (hôte interne pcalculateur.ocp.atupri.ch) appelant sur le même hôte /api-esb/tariffs/v1/vvg et /api-esb/tariffs/v1/okp (paramètres : birthDate, postalCode, city, communityId, gender, coverBegin, language, okp, collectiveAgreementNumber, residencePermit) et /api/tariffs/uti pour l’ADI ; le calcul rapide intégré aux pages du site (sexe, date de naissance, NPA) appelle atupri.ch/venda/api/v1/instantcalculator/vvg (et /vvg/defaults) ; api.atupri.ch n’apparaît qu’en preconnect ; l’offre passe par shop.atupri.ch/fr/create/offerLead ; l’assurance voyages se conclut sur reiseversicherung.atupri.ch. Le calculateur n’a pas été piloté.",
+      "retrievedAt": "2026-11-18"
+    },
+    {
       "key": "axa",
       "name": "AXA",
       "legalEntityLca": "AXA Assurances SA, General-Guisan-Strasse 40, 8401 Winterthur (porteur du risque du produit CAPITAL : AXA Vie SA)",
@@ -1340,6 +1362,675 @@
         "newborn_coverage"
       ],
       "benefitCount": 2
+    },
+    {
+      "insurer": "atupri",
+      "key": "atupri-basic",
+      "name": "Basic",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Complémentaire ambulatoire d’entrée de gamme : médicaments hors liste, vaccins, transports et sauvetage (CHF 20’000.–), prévention, fitness, maternité, division commune dans toute la Suisse et urgences à l’étranger.",
+      "variants": [],
+      "prerequisites": "Souscription possible jusqu’à 70 ans (dérogation à la limite générale de 60 ans des CGA LCA) ; Atupri peut prononcer des réserves ou refuser (CGA art. 11.1) ; souscription prénatale sans restriction ; accident et maternité non excluables ; assurance de base chez Atupri non requise. Durée minimale 12 mois, puis résiliation pour la fin de chaque mois avec préavis de 3 mois.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Classes d’âge tarifaires (CCA art. 3 / 2a) : la prime change au début de l’année civile au cours de laquelle l’âge de 13, 19, 26, 30, 35, 40, 45, 50, 55, 60, 65 et 70 ans est atteint ; tranches déduites : 0–12, 13–18, 19–25, 26–29, 30–34, 35–39, 40–44, 45–49, 50–54, 55–59, 60–64, 65–69, 70+. Âge de référence : âge atteint dans l’année civile (prime selon l’âge actuel, CGA LCA art. 24.2), pas l’âge d’entrée.",
+        "discounts": "Escompte de 1 % en cas de paiement annuel anticipé et de 0,5 % en cas de paiement semestriel (assurance de base et complémentaires). Rabais familial (CGA LCA 2026, art. 23a) : accordé aux personnes des groupes d’âge 0–12, 13–18 et 19–25 lorsqu’au moins deux personnes d’un même ménage figurent sur la même police ; le preneur d’assurance ou la personne la plus âgée de la police n’en bénéficie pas ; taux non publiés dans les conditions (« indiqués sur le site et sur la police ») ; le site mentionne des rabais familiaux « pouvant atteindre 35 % sur certaines assurances complémentaires »."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires d’assurance (CCA) Basic",
+        "edition": "01.04.2023",
+        "url": "https://atupri.ch/assets/f/253863/x/08f80a5cc1/cca-basic-2023-f.pdf"
+      },
+      "sourceUrls": [
+        "https://atupri.ch/fr/assurances/assurances-complementaires/basic",
+        "https://atupri.ch/assets/f/253863/x/08f80a5cc1/cca-basic-2023-f.pdf",
+        "https://atupri.ch/assets/f/253863/x/2b06e4601e/atupri-prospectus-basic.pdf",
+        "https://atupri.ch/fr/assurances/assurances-complementaires/apercu"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "fitness_health_promotion",
+        "gynecological_prevention",
+        "hospital_general_ch",
+        "maternity",
+        "medication_non_listed",
+        "newborn_coverage",
+        "prevention_checkup",
+        "psychiatry_rehab_stay",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "vaccination"
+      ],
+      "benefitCount": 14
+    },
+    {
+      "insurer": "atupri",
+      "key": "atupri-balance",
+      "name": "Balance",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Complémentaire ambulatoire intermédiaire lancée en 2026 : lacunes de l’assurance de base à 100 % (transport et sauvetage jusqu’à CHF 100’000.–), prévention, promotion de la santé, thérapies, médecine alternative, vision et famille à 60 % (médecine alternative 50 %).",
+      "variants": [],
+      "prerequisites": "Souscription possible jusqu’à 70 ans ; Atupri peut prononcer des réserves ou refuser (CGA art. 11.1) ; souscription prénatale sans restriction ; accident et maternité non excluables. Durée minimale 12 mois, puis résiliation pour la fin de chaque mois avec préavis de 3 mois.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Classes d’âge tarifaires (CCA art. 3) : la prime change au début de l’année civile au cours de laquelle l’âge de 13, 19, 26, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75 et 80 ans est atteint ; tranches déduites : 0–12, 13–18, 19–25, 26–29, 30–34, 35–39, 40–44, 45–49, 50–54, 55–59, 60–64, 65–69, 70–74, 75–79, 80+. Âge de référence : âge atteint dans l’année civile (prime selon l’âge actuel, CGA LCA art. 24.2), pas l’âge d’entrée.",
+        "discounts": "Escompte de 1 % en cas de paiement annuel anticipé et de 0,5 % en cas de paiement semestriel (assurance de base et complémentaires). Rabais familial (CGA LCA 2026, art. 23a) : accordé aux personnes des groupes d’âge 0–12, 13–18 et 19–25 lorsqu’au moins deux personnes d’un même ménage figurent sur la même police ; le preneur d’assurance ou la personne la plus âgée de la police n’en bénéficie pas ; taux non publiés dans les conditions (« indiqués sur le site et sur la police ») ; le site mentionne des rabais familiaux « pouvant atteindre 35 % sur certaines assurances complémentaires »."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires d’assurance (CCA) Balance",
+        "edition": "01.05.2026",
+        "url": "https://atupri.ch/assets/f/253863/x/f133d3750b/cca-balance-2026-f.pdf"
+      },
+      "sourceUrls": [
+        "https://atupri.ch/fr/assurances/assurances-complementaires/balance",
+        "https://atupri.ch/assets/f/253863/x/f133d3750b/cca-balance-2026-f.pdf",
+        "https://atupri.ch/assets/f/253863/x/15093a1e0c/atupri-prospectus-balance.pdf",
+        "https://atupri.ch/fr/assurances/assurances-complementaires/apercu"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "alt_medicine_therapies",
+        "breastfeeding",
+        "cosmetic_corrections",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "gynecological_prevention",
+        "home_help",
+        "hospital_general_ch",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "newborn_coverage",
+        "other:obesity_treatment",
+        "other:sleep_therapy",
+        "prevention_checkup",
+        "psychiatry_rehab_stay",
+        "psychotherapy_non_medical",
+        "sterilization_contraception",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "vaccination",
+        "vision_laser"
+      ],
+      "benefitCount": 25
+    },
+    {
+      "insurer": "atupri",
+      "key": "atupri-intense",
+      "name": "Intense",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Complémentaire ambulatoire haut de gamme : lacunes de l’assurance de base à 100 % sans plafond, protection juridique des patients, prévention, promotion de la santé, thérapies, vision et famille à 75 %, médecine alternative 50 % jusqu’à CHF 3’000.–.",
+      "variants": [],
+      "prerequisites": "Souscription possible jusqu’à 70 ans ; Atupri peut prononcer des réserves ou refuser (CGA art. 11.1) ; souscription prénatale sans restriction ; accident et maternité non excluables. Durée minimale 12 mois, puis résiliation pour la fin de chaque mois avec préavis de 3 mois.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Classes d’âge tarifaires (CCA art. 3) : la prime change au début de l’année civile au cours de laquelle l’âge de 13, 19, 26, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75 et 80 ans est atteint ; tranches déduites : 0–12, 13–18, 19–25, 26–29, 30–34, 35–39, 40–44, 45–49, 50–54, 55–59, 60–64, 65–69, 70–74, 75–79, 80+. Âge de référence : âge atteint dans l’année civile (prime selon l’âge actuel, CGA LCA art. 24.2), pas l’âge d’entrée. Le prospectus Intense annonce toutefois « un tarif uniforme pour toutes les personnes à partir de 30 ans ».",
+        "discounts": "Escompte de 1 % en cas de paiement annuel anticipé et de 0,5 % en cas de paiement semestriel (assurance de base et complémentaires). Rabais familial (CGA LCA 2026, art. 23a) : accordé aux personnes des groupes d’âge 0–12, 13–18 et 19–25 lorsqu’au moins deux personnes d’un même ménage figurent sur la même police ; le preneur d’assurance ou la personne la plus âgée de la police n’en bénéficie pas ; taux non publiés dans les conditions (« indiqués sur le site et sur la police ») ; le site mentionne des rabais familiaux « pouvant atteindre 35 % sur certaines assurances complémentaires »."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires d’assurance (CCA) Intense",
+        "edition": "01.04.2024",
+        "url": "https://atupri.ch/assets/f/253863/x/5a0c82173c/cca-intense-2024-f.pdf"
+      },
+      "sourceUrls": [
+        "https://atupri.ch/fr/assurances/assurances-complementaires/intense",
+        "https://atupri.ch/assets/f/253863/x/5a0c82173c/cca-intense-2024-f.pdf",
+        "https://atupri.ch/assets/f/253863/x/1de64d2625/atupri_prospekt_intense_f.pdf",
+        "https://atupri.ch/fr/assurances/assurances-complementaires/apercu",
+        "https://atupri.ch/assets/f/253863/x/2a316832c0/atupri-conditions-d-assurance-lca-2026.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "alt_medicine_therapies",
+        "breastfeeding",
+        "convalescence_cure",
+        "cosmetic_corrections",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "gynecological_prevention",
+        "home_help",
+        "hospital_general_ch",
+        "legal_protection",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "newborn_coverage",
+        "other:hair_loss",
+        "other:obesity_treatment",
+        "other:sleep_therapy",
+        "prevention_checkup",
+        "psychiatry_rehab_stay",
+        "psychotherapy_non_medical",
+        "spa_cure",
+        "sterilization_contraception",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "vaccination",
+        "vision_laser"
+      ],
+      "benefitCount": 29
+    },
+    {
+      "insurer": "atupri",
+      "key": "atupri-comforta",
+      "name": "Comforta",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Assurance d’hospitalisation demi-privée, privée ou flexible (Opti 1 / Opti 2) réservée aux titulaires d’une complémentaire ambulatoire Atupri ; libre choix du médecin et de l’hôpital (hôpitaux répertoriés et conventionnés).",
+      "variants": [
+        {
+          "key": "demi-prive",
+          "name": "Comforta Demi-privé",
+          "description": "Division demi-privée (chambre à deux lits), libre choix du médecin et de l’hôpital."
+        },
+        {
+          "key": "prive",
+          "name": "Comforta Privé",
+          "description": "Division privée (chambre à un lit), libre choix du médecin et de l’hôpital."
+        },
+        {
+          "key": "opti-1",
+          "name": "Comforta Opti 1",
+          "description": "Choix de la division avant chaque admission ; participation de 40 % (max. CHF 4’000.–/an) en demi-privé et de 50 % (max. CHF 8’000.–/an) en privé ; souscription possible jusqu’à 70 ans ; passage à Opti 2 possible après 3 ans (exclu si souscription après 60 ans)."
+        },
+        {
+          "key": "opti-2",
+          "name": "Comforta Opti 2",
+          "description": "Choix de la division avant chaque admission ; participation de 20 % (max. CHF 2’000.–/an) en demi-privé et de 30 % (max. CHF 4’000.–/an) en privé."
+        }
+      ],
+      "prerequisites": "Complémentaire ambulatoire Atupri requise : Basic, Balance ou Intense selon le site (les CCA 2022 mentionnent encore Mivita) ; examen de santé ; âge maximal d’admission 60 ans (Opti 1 : 70 ans) ; pas de souscription prénatale ; assurance de base chez Atupri non requise ; pour les assurés HMO/CareMed/TelFirst/FlexCare/SmartCare, les restrictions de choix du fournisseur s’appliquent aussi à Comforta.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Classes d’âge tarifaires (CCA art. 3 / 2a) : la prime change au début de l’année civile au cours de laquelle l’âge de 13, 19, 26, 30, 35, 40, 45, 50, 55, 60, 65 et 70 ans est atteint ; tranches déduites : 0–12, 13–18, 19–25, 26–29, 30–34, 35–39, 40–44, 45–49, 50–54, 55–59, 60–64, 65–69, 70+. Âge de référence : âge atteint dans l’année civile (prime selon l’âge actuel, CGA LCA art. 24.2), pas l’âge d’entrée. Facteur « accident » : selon le site, la couverture accidents peut être exclue des assurances d’hospitalisation ; les CCA Comforta ne le précisent pas.",
+        "discounts": "Rabais combiné de 5 % avec un modèle alternatif d’assurance de base Atupri (SmartCare, TelFirst, CareMed, FlexCare ou HMO). Rabais de prime pour une première durée de contrat minimale prolongée à trois ans (CCA art. 4a, taux non publié). Supplément de prime pour la variante « choix élargi d’hôpitaux ». Escompte de 1 % en cas de paiement annuel anticipé et de 0,5 % en cas de paiement semestriel (assurance de base et complémentaires). Rabais familial (CGA LCA 2026, art. 23a) : accordé aux personnes des groupes d’âge 0–12, 13–18 et 19–25 lorsqu’au moins deux personnes d’un même ménage figurent sur la même police ; le preneur d’assurance ou la personne la plus âgée de la police n’en bénéficie pas ; taux non publiés dans les conditions (« indiqués sur le site et sur la police ») ; le site mentionne des rabais familiaux « pouvant atteindre 35 % sur certaines assurances complémentaires »."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires d’assurance (CCA) Comforta",
+        "edition": "01.01.2022",
+        "url": "https://atupri.ch/assets/f/253863/x/907dc552bf/cca-comforta-2022-f.pdf"
+      },
+      "sourceUrls": [
+        "https://atupri.ch/fr/assurances/assurances-complementaires/comforta",
+        "https://atupri.ch/assets/f/253863/x/907dc552bf/cca-comforta-2022-f.pdf",
+        "https://atupri.ch/assets/f/253863/x/bd61508b0c/prospectus-comforta.pdf",
+        "https://atupri.ch/assets/f/253863/x/47ae07243e/atupri-hopitaux-cliniques-limitations-des-prestations.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "ambulatory_surgery",
+        "hospital_flex",
+        "hospital_private",
+        "hospital_semi_private",
+        "newborn_coverage",
+        "other:extended_hospital_choice",
+        "psychiatry_rehab_stay",
+        "rooming_in"
+      ],
+      "benefitCount": 12
+    },
+    {
+      "insurer": "atupri",
+      "key": "atupri-hopital",
+      "name": "Hôpital",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Assurance d’hospitalisation autonome (sans complémentaire ambulatoire Atupri) en cinq niveaux : Commun, Demi-privé, Privé, Opti 1 et Opti 2 ; inclut une couverture d’urgence hospitalière à l’étranger et la protection juridique des patients.",
+      "variants": [
+        {
+          "key": "commun",
+          "name": "Hôpital Commun",
+          "description": "Division commune avec libre choix de l’hôpital répertorié dans toute la Suisse ; urgence hospitalière à l’étranger jusqu’à CHF 20’000.– par an."
+        },
+        {
+          "key": "demi-prive",
+          "name": "Hôpital Demi-privé",
+          "description": "Division demi-privée (chambre à deux lits), libre choix du médecin et de l’hôpital ; étranger jusqu’à CHF 40’000.– par an."
+        },
+        {
+          "key": "prive",
+          "name": "Hôpital Privé",
+          "description": "Division privée (chambre à un lit), libre choix du médecin et de l’hôpital ; étranger sans plafond en francs."
+        },
+        {
+          "key": "opti-1",
+          "name": "Hôpital Opti 1",
+          "description": "Choix de la division avant chaque admission ; participation de 40 % (max. CHF 4’000.–/an) en demi-privé et de 50 % (max. CHF 8’000.–/an) en privé ; souscription possible jusqu’à 70 ans."
+        },
+        {
+          "key": "opti-2",
+          "name": "Hôpital Opti 2",
+          "description": "Choix de la division avant chaque admission ; participation de 20 % (max. CHF 2’000.–/an) en demi-privé et de 30 % (max. CHF 4’000.–/an) en privé."
+        }
+      ],
+      "prerequisites": "Aucune complémentaire ambulatoire requise ; examen de santé (réserves ou refus possibles) ; âge maximal d’admission 60 ans (Opti 1 : 70 ans) ; souscription prénatale uniquement pour Hôpital Commun ; assurance de base chez Atupri non requise.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Classes d’âge tarifaires (CCA art. 3 / 2a) : la prime change au début de l’année civile au cours de laquelle l’âge de 13, 19, 26, 30, 35, 40, 45, 50, 55, 60, 65 et 70 ans est atteint ; tranches déduites : 0–12, 13–18, 19–25, 26–29, 30–34, 35–39, 40–44, 45–49, 50–54, 55–59, 60–64, 65–69, 70+. Âge de référence : âge atteint dans l’année civile (prime selon l’âge actuel, CGA LCA art. 24.2), pas l’âge d’entrée. Facteur « accident » : chaque niveau peut être conclu avec ou sans inclusion du risque accident (CCA art. 2.2).",
+        "discounts": "Rabais combiné de 5 % avec un modèle alternatif d’assurance de base Atupri (SmartCare, TelFirst, CareMed, FlexCare ou HMO). Rabais de prime pour une première durée de contrat minimale prolongée à trois ans (CCA art. 4a, taux non publié). Supplément de prime pour la variante « choix élargi de l’hôpital ». Franchises à option (CHF 1’000 à 5’000) réservées aux contrats antérieurs au 01.01.2006. Escompte de 1 % en cas de paiement annuel anticipé et de 0,5 % en cas de paiement semestriel (assurance de base et complémentaires). Rabais familial (CGA LCA 2026, art. 23a) : accordé aux personnes des groupes d’âge 0–12, 13–18 et 19–25 lorsqu’au moins deux personnes d’un même ménage figurent sur la même police ; le preneur d’assurance ou la personne la plus âgée de la police n’en bénéficie pas ; taux non publiés dans les conditions (« indiqués sur le site et sur la police ») ; le site mentionne des rabais familiaux « pouvant atteindre 35 % sur certaines assurances complémentaires »."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires d’assurance (CCA) Hôpital",
+        "edition": "01.01.2022",
+        "url": "https://atupri.ch/assets/f/253863/x/b366924a70/cca-hopital-2022.pdf"
+      },
+      "sourceUrls": [
+        "https://atupri.ch/fr/assurances/assurances-complementaires/hopital",
+        "https://atupri.ch/assets/f/253863/x/b366924a70/cca-hopital-2022.pdf",
+        "https://atupri.ch/assets/f/253863/x/80683c92d2/prospectus-hopital_20231120.pdf",
+        "https://atupri.ch/assets/f/253863/x/2a316832c0/atupri-conditions-d-assurance-lca-2026.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "ambulatory_surgery",
+        "hospital_flex",
+        "hospital_general_ch",
+        "hospital_private",
+        "hospital_semi_private",
+        "legal_protection",
+        "newborn_coverage",
+        "other:extended_hospital_choice",
+        "psychiatry_rehab_stay",
+        "rooming_in"
+      ],
+      "benefitCount": 21
+    },
+    {
+      "insurer": "atupri",
+      "key": "atupri-assurance-dentaire",
+      "name": "Assurance dentaire",
+      "category": "dental",
+      "audience": "all",
+      "summary": "Nouvelle assurance dentaire à niveau unique (2026) : 60 % des coûts jusqu’à CHF 10’000.– par année civile pour prévention, traitements, chirurgie, orthodontie sans limite d’âge et prothèses ; remplace l’ancienne Denta.",
+      "variants": [],
+      "prerequisites": "Souscription autonome, indépendante du modèle ambulatoire ; délai de carence de 6 mois ; enfants admis sans déclaration de santé jusqu’au 3e anniversaire ; ensuite examen de santé et certificat dentaire ; entre le 3e et le 18e anniversaire, admission seulement si aucun traitement orthodontique n’est prévu ou commencé ; adultes jusqu’à 60 ans révolus avec déclaration de santé (attestation du dentiste possible) ; traitements en cours ou prévus non assurables. Durée minimale 12 mois, puis résiliation mensuelle avec préavis de 3 mois.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Classes d’âge tarifaires (CCA art. 3) : la prime change au début de l’année civile au cours de laquelle l’âge de 13, 19, 26, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75 et 80 ans est atteint ; tranches déduites : 0–12, 13–18, 19–25, 26–29, 30–34, 35–39, 40–44, 45–49, 50–54, 55–59, 60–64, 65–69, 70–74, 75–79, 80+. Âge de référence : âge atteint dans l’année civile (prime selon l’âge actuel, CGA LCA art. 24.2), pas l’âge d’entrée.",
+        "discounts": "Escompte de 1 % en cas de paiement annuel anticipé et de 0,5 % en cas de paiement semestriel (assurance de base et complémentaires). Rabais familial (CGA LCA 2026, art. 23a) : accordé aux personnes des groupes d’âge 0–12, 13–18 et 19–25 lorsqu’au moins deux personnes d’un même ménage figurent sur la même police ; le preneur d’assurance ou la personne la plus âgée de la police n’en bénéficie pas ; taux non publiés dans les conditions (« indiqués sur le site et sur la police ») ; le site mentionne des rabais familiaux « pouvant atteindre 35 % sur certaines assurances complémentaires »."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires d’assurance (CCA) Assurance dentaire",
+        "edition": "01.05.2026",
+        "url": "https://atupri.ch/assets/f/253863/x/5dc0b6d92b/cca-assurance-dentaire-2026-f.pdf"
+      },
+      "sourceUrls": [
+        "https://atupri.ch/fr/assurances/assurances-complementaires/assurance-dentaire",
+        "https://atupri.ch/assets/f/253863/x/5dc0b6d92b/cca-assurance-dentaire-2026-f.pdf",
+        "https://atupri.ch/assets/f/253863/x/56e43baecf/atupri-prospectus-assurance-dentaire.pdf"
+      ],
+      "tags": [
+        "bonus_program",
+        "dental_accident",
+        "dental_hygiene",
+        "dental_surgery",
+        "dental_treatment",
+        "orthodontics"
+      ],
+      "benefitCount": 6
+    },
+    {
+      "insurer": "atupri",
+      "key": "atupri-adi",
+      "name": "ADI – assurance-accidents avec capital décès et invalidité",
+      "category": "capital_accident",
+      "audience": "all",
+      "summary": "Assurance de capital en cas de décès ou d’invalidité à la suite d’un accident, proposée par Atupri via un contrat collectif dont l’assureur est SOLIDA Assurances SA ; sommes au choix, jusqu’à 350 % de la somme assurée en cas d’invalidité totale.",
+      "variants": [
+        {
+          "key": "a",
+          "name": "Variante de prestations A",
+          "description": "Progression du capital d’invalidité jusqu’à 225 % de la somme assurée pour une invalidité de 100 %."
+        },
+        {
+          "key": "b",
+          "name": "Variante de prestations B",
+          "description": "Progression du capital d’invalidité jusqu’à 350 % de la somme assurée pour une invalidité de 100 %."
+        }
+      ],
+      "prerequisites": "Réservée aux clients existants d’Atupri (contrat collectif Atupri / SOLIDA Assurances SA) ; souscription et augmentation des sommes jusqu’à 70 ans révolus ; sans examen de santé et sans délai de carence (site) ; durée minimale d’un an, reconduction tacite ; couverture mondiale, hors de Suisse et du Liechtenstein seulement pour des voyages et séjours de 12 mois au plus.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex"
+        ],
+        "ageBands": "Trois groupes tarifaires publiés dans le prospectus : enfants jusqu’à 15 ans, jeunes de 16 à 20 ans, adultes à partir de 20 ans (chevauchement à 20 ans dans le prospectus) ; primes différenciées hommes/femmes pour les adultes uniquement ; âge de référence non précisé.",
+        "discounts": null
+      },
+      "conditionsDoc": {
+        "title": "Conditions générales d’assurance (CGA) ADI – assurance accidents avec capital décès et invalidité",
+        "edition": "01.01.2022",
+        "url": "https://atupri.ch/assets/f/253863/x/7adfd2ad34/atupri-cga-adi.pdf"
+      },
+      "sourceUrls": [
+        "https://atupri.ch/fr/assurances/assurances-complementaires/adi",
+        "https://atupri.ch/assets/f/253863/x/7adfd2ad34/atupri-cga-adi.pdf",
+        "https://atupri.ch/assets/f/253863/x/46aa01d4fa/prospectus-adi.pdf"
+      ],
+      "tags": [
+        "accident_capital"
+      ],
+      "benefitCount": 4
+    },
+    {
+      "insurer": "atupri",
+      "key": "atupri-assurance-voyages",
+      "name": "Assurance voyages",
+      "category": "travel_abroad",
+      "audience": "all",
+      "summary": "Assurance voyage à durée déterminée (1 à 12 mois) pour personne seule ou ménage : frais de guérison à l’étranger illimités, sauvetage et rapatriement, avec en option frais d’annulation et bagages (assurés par l’Européenne Assurances Voyages SA).",
+      "variants": [
+        {
+          "key": "frais-de-guerison",
+          "name": "Frais de guérison (assurance voyages de base)",
+          "description": "Frais de guérison à l’étranger, sauvetage, rapatriement, recherche, frais d’hôtel ; assureur Atupri."
+        },
+        {
+          "key": "frais-annulation",
+          "name": "Frais d’annulation",
+          "description": "Couverture annulation seule ou en complément de la formule de base ; assureur EAV."
+        },
+        {
+          "key": "annulation-bagages",
+          "name": "Frais d’annulation et bagages",
+          "description": "Annulation plus bagages (les bagages ne peuvent être assurés qu’avec l’annulation) ; assureur EAV."
+        }
+      ],
+      "prerequisites": "Domicile légal ou séjour habituel en Suisse ; souscription possible jusqu’à la veille du départ, sans assurance de base ni complémentaire chez Atupri ; durée maximale de 12 mois ; prime payable d’avance ; délai de carence de 24 heures si l’assurance est conclue après le début du voyage. Les frais de guérison à l’étranger sont déjà compris dans Basic, Balance et Intense.",
+      "pricing": {
+        "factors": [
+          "other:coverage_duration",
+          "other:household_size"
+        ],
+        "ageBands": "Non publiées : les CGA (art. 8.1) prévoient un échelonnement possible selon l’âge, la durée et le nombre de personnes, mais le prospectus ne publie que des primes par durée et type de ménage.",
+        "discounts": null
+      },
+      "conditionsDoc": {
+        "title": "Conditions générales d’assurances (CGA) Assurance voyages",
+        "edition": "01.01.2020",
+        "url": "https://atupri.ch/assets/f/253863/x/2fe4cf52d5/cga-assurance-voyages-2020.pdf"
+      },
+      "sourceUrls": [
+        "https://atupri.ch/fr/assurances/assurances-complementaires/assurance-voyages",
+        "https://atupri.ch/assets/f/253863/x/2fe4cf52d5/cga-assurance-voyages-2020.pdf",
+        "https://atupri.ch/assets/f/253863/x/37a1d15e2c/prospectus-assurance-voyages.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "assistance_services",
+        "search_recovery",
+        "travel_assistance_repatriation",
+        "travel_cancellation_luggage"
+      ],
+      "benefitCount": 7
+    },
+    {
+      "insurer": "atupri",
+      "key": "atupri-indemnite-journaliere-lca",
+      "name": "Indemnité journalière LCA",
+      "category": "daily_allowance",
+      "audience": "adult",
+      "summary": "Assurance individuelle de perte de gain en cas d’incapacité de travail par maladie et/ou accident : indemnité de CHF 30.– à 300.– par jour après un délai d’attente de 3 à 360 jours.",
+      "variants": [
+        {
+          "key": "365",
+          "name": "Durée de prestations 365 jours",
+          "description": "Au maximum 365 jours dans une période de 540 jours consécutifs."
+        },
+        {
+          "key": "730",
+          "name": "Durée de prestations 730 jours",
+          "description": "Au maximum 730 jours civils dans une période de 900 jours consécutifs."
+        }
+      ],
+      "prerequisites": "Personnes exerçant une activité lucrative (salariés en complément de l’employeur, indépendants) ; perte de gain attestée ; conseil et souscription via Atupri (pas de calcul en ligne) ; l’assurance s’éteint à la cessation de l’activité lucrative, au plus tard à 70 ans.",
+      "pricing": {
+        "factors": [
+          "age",
+          "accident",
+          "other:daily_amount",
+          "other:waiting_period",
+          "other:benefit_duration",
+          "other:indexation"
+        ],
+        "ageBands": "Classes d’âge tarifaires (CCA art. 4a / 2a) : la prime change au début de l’année civile au cours de laquelle l’âge de 26, 31, 36, 41, 46, 51, 56 et 61 ans est atteint ; tranches déduites : jusqu’à 25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61+. Âge de référence : âge atteint dans l’année civile.",
+        "discounts": null
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires d’assurance (CCA) Indemnité journalière LCA",
+        "edition": "01.01.2022",
+        "url": "https://atupri.ch/assets/f/253863/x/92e181bfb7/cca-indemnite-jounaliere-lca-2022.pdf"
+      },
+      "sourceUrls": [
+        "https://atupri.ch/fr/assurances/assurances-complementaires/indemnite-journaliere",
+        "https://atupri.ch/assets/f/253863/x/92e181bfb7/cca-indemnite-jounaliere-lca-2022.pdf"
+      ],
+      "tags": [
+        "daily_allowance",
+        "maternity"
+      ],
+      "benefitCount": 2
+    },
+    {
+      "insurer": "atupri",
+      "key": "atupri-indemnite-journaliere-menage",
+      "name": "Indemnité journalière LCA de ménage",
+      "category": "daily_allowance",
+      "audience": "adult",
+      "summary": "Indemnité journalière pour les personnes tenant un ménage : CHF 10.– à 100.– par jour pour couvrir les frais du ménage et de la famille en cas d’incapacité de travail par maladie ou accident.",
+      "variants": [],
+      "prerequisites": "Personne tenant un ménage ; l’assurance s’éteint au plus tard à 70 ans ; à l’âge AVS, l’indemnité est réduite à CHF 50.– par jour au maximum ; conseil et souscription via Atupri (pas de calcul en ligne).",
+      "pricing": {
+        "factors": [
+          "age",
+          "other:daily_amount",
+          "other:waiting_period"
+        ],
+        "ageBands": "Classes d’âge tarifaires (CCA art. 4a / 2a) : la prime change au début de l’année civile au cours de laquelle l’âge de 26, 31, 36, 41, 46, 51, 56 et 61 ans est atteint ; tranches déduites : jusqu’à 25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61+. Âge de référence : âge atteint dans l’année civile.",
+        "discounts": null
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires d’assurance (CCA) Indemnité journalière LCA de ménage",
+        "edition": "01.01.2022",
+        "url": "https://atupri.ch/assets/f/253863/x/838c48ea40/cca-indemnite-journaliere_de-menage-2022.pdf"
+      },
+      "sourceUrls": [
+        "https://atupri.ch/fr/assurances/assurances-complementaires/indemnite-journaliere",
+        "https://atupri.ch/assets/f/253863/x/838c48ea40/cca-indemnite-journaliere_de-menage-2022.pdf",
+        "https://atupri.ch/assets/f/253863/x/701d0d5955/informations-clientele-lca.pdf"
+      ],
+      "tags": [
+        "daily_allowance",
+        "maternity"
+      ],
+      "benefitCount": 2
+    },
+    {
+      "insurer": "atupri",
+      "key": "atupri-mivita-reala",
+      "name": "Mivita Reala",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Ancienne complémentaire ambulatoire par phases de vie (âge et sexe), en fin de commercialisation : absente de l’aperçu des produits et du menu, classée parmi les « anciens modèles » qui « arrivent à échéance », mais encore souscriptible par téléphone auprès du Service Center selon sa page produit. Le niveau Extensa est fermé.",
+      "variants": [
+        {
+          "key": "0-12",
+          "name": "Mivita 0–12 féminin et masculin",
+          "description": "Prestations spécifiques enfants (plafond CHF 750.–/an) ; Denta incluse ; sans promotion de la santé, prévention, cures ni aide ménagère."
+        },
+        {
+          "key": "13-25-f",
+          "name": "Mivita 13–25 féminin",
+          "description": "Prestations spécifiques jeunes femmes (plafond CHF 1’000.–/an) ; Denta incluse ; sans cures ni aide ménagère."
+        },
+        {
+          "key": "13-25-m",
+          "name": "Mivita 13–25 masculin",
+          "description": "Prestations spécifiques jeunes hommes (plafond CHF 1’000.–/an) ; Denta incluse ; sans cures ni aide ménagère."
+        },
+        {
+          "key": "26-44-f",
+          "name": "Mivita 26–44 féminin",
+          "description": "Prestations spécifiques (plafond CHF 1’000.–/an) : contraception, maternité, FIV, psychothérapie, chirurgie plastique."
+        },
+        {
+          "key": "26-44-m",
+          "name": "Mivita 26–44 masculin",
+          "description": "Prestations spécifiques (plafond CHF 1’000.–/an) : psychothérapie, troubles de l’érection, surpoids, chirurgie plastique, vasectomie."
+        },
+        {
+          "key": "45-59-f",
+          "name": "Mivita 45–59 féminin",
+          "description": "Prestations spécifiques (plafond CHF 1’000.–/an) : psychothérapie, surpoids, tabliers adipeux, ligature."
+        },
+        {
+          "key": "45-59-m",
+          "name": "Mivita 45–59 masculin",
+          "description": "Prestations spécifiques (plafond CHF 1’000.–/an) : psychothérapie, troubles de l’érection, surpoids, tabliers adipeux, vasectomie."
+        },
+        {
+          "key": "60-plus",
+          "name": "Mivita 60 Plus féminin et masculin",
+          "description": "Prestations spécifiques (plafond CHF 1’000.–/an) : psychothérapie, encadrement spécial, soins à domicile, complément de cure."
+        }
+      ],
+      "prerequisites": "Souscription uniquement via le Service Center (0800 200 888), jusqu’à 70 ans ; réserves ou refus possibles ; souscription prénatale sans restriction ; accident et maternité non excluables ; phase de vie attribuée d’après l’anniversaire atteint dans l’année, passage automatique à la phase suivante au début de l’année civile concernée (les prestations de la phase précédente cessent). Statut : produit en extinction, Atupri recommande Balance.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Classes d’âge tarifaires (CCA art. 3 / 2a) : la prime change au début de l’année civile au cours de laquelle l’âge de 13, 19, 26, 30, 35, 40, 45, 50, 55, 60, 65 et 70 ans est atteint ; tranches déduites : 0–12, 13–18, 19–25, 26–29, 30–34, 35–39, 40–44, 45–49, 50–54, 55–59, 60–64, 65–69, 70+. Âge de référence : âge atteint dans l’année civile (prime selon l’âge actuel, CGA LCA art. 24.2), pas l’âge d’entrée. Les phases de vie de prestations (0–12, 13–25, 26–44, 45–59, 60+) sont distinctes des classes d’âge tarifaires.",
+        "discounts": "Rabais de 5 % sur Mivita Reala pour les assurés ayant un modèle d’assurance de base chez Atupri (page produit). Rabais de prime pour une première durée de contrat minimale prolongée à trois ans (CCA art. 5a, taux non publié). Escompte de 1 % en cas de paiement annuel anticipé et de 0,5 % en cas de paiement semestriel (assurance de base et complémentaires). Rabais familial (CGA LCA 2026, art. 23a) : accordé aux personnes des groupes d’âge 0–12, 13–18 et 19–25 lorsqu’au moins deux personnes d’un même ménage figurent sur la même police ; le preneur d’assurance ou la personne la plus âgée de la police n’en bénéficie pas ; taux non publiés dans les conditions (« indiqués sur le site et sur la police ») ; le site mentionne des rabais familiaux « pouvant atteindre 35 % sur certaines assurances complémentaires »."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires d’assurance (CCA) Mivita",
+        "edition": "01.01.2022",
+        "url": "https://atupri.ch/assets/f/253863/x/c0a8ed2bf9/cca-mivita-2022-f.pdf"
+      },
+      "sourceUrls": [
+        "https://atupri.ch/fr/assurances/assurances-complementaires/mivita",
+        "https://atupri.ch/assets/f/253863/x/c0a8ed2bf9/cca-mivita-2022-f.pdf",
+        "https://atupri.ch/assets/f/253863/x/7a1c1f1104/atupri-mivita-0-12-fr.pdf",
+        "https://atupri.ch/assets/f/253863/x/e42f5a2fd9/atupri-mivita-26-44_femme.pdf",
+        "https://atupri.ch/fr/assurances/assurances-complementaires/anciennes-formules-complementaires",
+        "https://atupri.ch/assets/f/253863/x/2a316832c0/atupri-conditions-d-assurance-lca-2026.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "alt_medicine_therapies",
+        "breastfeeding",
+        "convalescence_cure",
+        "cosmetic_corrections",
+        "dental_treatment",
+        "fertility",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "gynecological_prevention",
+        "home_care",
+        "home_help",
+        "hospital_general_ch",
+        "legal_protection",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "newborn_coverage",
+        "orthodontics",
+        "other:acne_treatment",
+        "other:allergy_preparations",
+        "other:baby_massage",
+        "other:erectile_dysfunction",
+        "other:obesity_treatment",
+        "prevention_checkup",
+        "psychiatry_rehab_stay",
+        "psychotherapy_non_medical",
+        "rooming_in",
+        "spa_cure",
+        "speech_psychomotor_therapy",
+        "sterilization_contraception",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "travel_expenses_treatment",
+        "vaccination"
+      ],
+      "benefitCount": 70
+    },
+    {
+      "insurer": "atupri",
+      "key": "atupri-denta",
+      "name": "Denta",
+      "category": "dental",
+      "audience": "all",
+      "summary": "Ancienne assurance pour soins dentaires à deux niveaux, liée à Mivita, en fin de commercialisation : classée parmi les « anciens modèles » qui « arrivent à échéance » et remplacée par la nouvelle Assurance dentaire, mais sa page produit reste en ligne.",
+      "variants": [
+        {
+          "key": "niveau-1",
+          "name": "Denta niveau 1",
+          "description": "Traitement dentaire 60 % jusqu’à CHF 500.– par an ; orthodontie 80 % jusqu’à CHF 3’000.– par an (jusqu’à 30 ans)."
+        },
+        {
+          "key": "niveau-2",
+          "name": "Denta niveau 2",
+          "description": "Traitement dentaire 60 % jusqu’à CHF 1’000.– par an ; orthodontie 80 % jusqu’à CHF 5’000.– par an (jusqu’à 30 ans)."
+        }
+      ],
+      "prerequisites": "Selon les CCA 2022 : uniquement en combinaison avec Mivita (prend fin avec elle) ; incluse automatiquement dans Mivita 0–12 et 13–25, facultative ensuite ; la page produit la décrit pour les personnes d’au moins 26 ans déjà assurées avec Intense, Balance ou Basic ; exclusions possibles pour dommages antérieurs. Statut de vente à confirmer : produit en extinction, Atupri recommande la nouvelle Assurance dentaire.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "CCA art. 2a : les primes sont modifiées au début de l’année au cours de laquelle l’âge de 50 ans est atteint (seule borne publiée ; tranches tarifaires avant 50 ans non précisées).",
+        "discounts": "Escompte de 1 % en cas de paiement annuel anticipé et de 0,5 % en cas de paiement semestriel (assurance de base et complémentaires)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions complémentaires d’assurance (CCA) Denta",
+        "edition": "01.01.2022",
+        "url": "https://atupri.ch/assets/f/253863/x/85639d773b/cca-denta-2022-f.pdf"
+      },
+      "sourceUrls": [
+        "https://atupri.ch/fr/assurances/assurances-complementaires/denta",
+        "https://atupri.ch/assets/f/253863/x/85639d773b/cca-denta-2022-f.pdf",
+        "https://atupri.ch/fr/assurances/assurances-complementaires/anciennes-formules-complementaires"
+      ],
+      "tags": [
+        "dental_accident",
+        "dental_surgery",
+        "dental_treatment",
+        "orthodontics"
+      ],
+      "benefitCount": 6
     },
     {
       "insurer": "axa",
