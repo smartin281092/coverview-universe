@@ -16,6 +16,18 @@
       "products": 14,
       "benefits": 155,
       "verification:read": 155
+    },
+    "swica": {
+      "products": 11,
+      "benefits": 229,
+      "verification:read": 229,
+      "prices": 4
+    },
+    "visana": {
+      "products": 21,
+      "benefits": 418,
+      "verification:read": 418,
+      "prices": 15
     }
   },
   "issues": []

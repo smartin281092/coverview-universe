@@ -53,6 +53,43 @@
       "publishedTariffUrls": [],
       "notes": "Complémentaires LCA portées par KPT Assurances SA (assurance de base : KPT Caisse-maladie SA). Assureurs partenaires pour les couvertures incluses : AWP P&C S.A. / Allianz (assistance, bagages, annulation) et Coop Protection Juridique SA (protection juridique). Calculateur : application « assistant » sur assistant.kpt.ch (entrée /fr/donnees-personnelles : sexe ou prénatal, code postal, date de naissance) ; les boutons « Calculer la prime » des pages produit pointent vers www.kpt.ch/api/premium-calculator?productCode=<code>&productClass=<classe>&lang=fr, qui redirige (302) vers assistant.kpt.ch/fr/preselect/<code>?part=…&option=… (codes observés : PUL ECO/TOP/PREM, FLEX ECO/TOP, H 1/2/3, HT 3100/6100, GH 220, Z 1/3/4, U 1, K 15, KTI 10, TD 3, VPR 0). L'adresse de l'API de prix est chargée à l'exécution et n'a pas été relevée. assistant.kpt.ch répond depuis le conteneur bien qu'il ne figure pas dans la liste du brief ; reiseversicherung.kpt.ch (souscription de l'assurance voyages) est refusé par le proxy (403). Aucun barème de primes LCA publié sur www.kpt.ch ; perte de gain et assurance-maladie internationale uniquement sur offre. Rabais transversaux : 6,7 % pour un contrat de 3 ans (Pulse et assurances des frais d'hospitalisation) ; 5 % de rabais en ligne KPTnet sur presque toutes les complémentaires ; escompte 0,5 % (semestriel) ou 1 % (annuel) ; rabais collectif ; franchise hospitalière demi-privé/privé (−15 %, −25 %, −50 %) ; Payback en cas de séjour volontaire en division commune ; aucun rabais famille général publié (sauf protection juridique VPR). Résiliation : préavis de 3 mois pour le 31 décembre (30 septembre), ou jusqu'au 30 novembre en cas d'adaptation de prime ; KPT renonce à son droit de résiliation à l'échéance ou en cas de sinistre (CGA art. 7). Délai d'attente maternité : 270 jours (CGA art. 2). La protection juridique en matière de santé (GR, édition 01.2025) n'est pas vendue séparément : elle est incluse dans Pulse. Hors périmètre, non repris comme produits : assurance-maladie internationale / facultative (F, édition 01.2023, pour les personnes transférant leur domicile à l'étranger, sur offre), assurance pour invités en Suisse (vendue via Allianz Travel, dès CHF 32.– par voyage pour une personne seule et 4 jours), protection juridique Internet (gratuite avec KPTnet), Area International et Area MedEvac (entreprises). Produits retirés de l'offre (conditions encore publiées) : assurance des soins Plus (AP) et Comfort (APC) avec le module ActivePlus, Natura (N), Joker, Joker light, PRIO (libre choix du médecin), indemnités journalières de ménage, assurance d'hospitalisation pour les aînés, CASA, COMBI et TIP TOP (CGA/P). Édition des conditions : aucune édition 01.2027 publiée au 18.11.2026 ; les éditions en vigueur listées sur la page « Conditions d'assurance » ont été lues et concordent avec l'« Aperçu des prestations 2027 » (réf. 115/f HJB 09.26).",
       "retrievedAt": "2026-11-18"
+    },
+    {
+      "key": "swica",
+      "name": "SWICA",
+      "legalEntityLca": "SWICA Assurances SA, Römerstrasse 37, 8401 Winterthour",
+      "website": "https://www.swica.ch/fr/prive",
+      "calculatorUrl": "https://calculate.swica.ch/?LANGUAGES=2&SWICAKDN=0",
+      "calculatorHosts": [
+        "calculate.swica.ch",
+        "www.swica.ch"
+      ],
+      "publishedTariffUrls": [
+        "https://www.swica.ch/fr/prive/assurances/assurances-speciales/protection-juridique-sante",
+        "https://www.swica.ch/fr/prive/assurances/assurances-complementaires/denta"
+      ],
+      "notes": "Sources lues le 18.11.2026 : récapitulatif des prestations 2027 (021f / 08.2026), CGA LCA édition 2027 et conditions spéciales de chaque produit. Éditions 2027 publiées pour Hospita, Infortuna, Vivia et Protection Juridique Santé ; pour Completa Top, Completa Forte, Praevita, Supplementa, Optima et Denta, l'édition en ligne reste celle du 01.01.2026, les montants concordant avec le récapitulatif 2027. Structure de la gamme : Completa Top ou Completa Forte (assurance complémentaire de base, mutuellement exclusives) ; Praevita, Supplementa et Optima ne se concluent qu'en complément de l'une d'elles et leurs pourcentages se calculent sur les coûts restants ; Hospita, Denta, Infortuna et Vivia se concluent séparément. Particularité : la participation aux coûts déjà payée dans l'assurance de base SWICA est décomptée de celle des complémentaires. Le coût excédentaire des traitements pour accident n'est pris en charge par les complémentaires maladie que s'il existe une obligation de prise en charge LAMal, LAA ou LAM. Calculateur : widget (NPA, date de naissance, sexe) sur https://www.swica.ch/fr/prive/services/calculateur-de-primes renvoyant vers calculate.swica.ch avec les paramètres ID (prm-allg, prm-vvg-ctop, prm-vvg-cfort, prm-vvg-prae, prm-vvg-supp, prm-vvg-opti, prm-vvg-vivi, prm-vvg-dent, prm-vvg-fort, prm-vvg-kapi, prm-vvg-gere, prm-hos-uebe) et PRODUKT (prod.completa.top, prod.completa.forte, prod.praevita, prod.supplementa, prod.optima, prod.vivia, prod.denta, prod.infortuna.disability, prod.hospita.general, prod.hospita.semiprivate, prod.hospita.semiprivate.flex, prod.hospita.private, prod.hospita.private.flex, prod.hospita.private.world) ; l'hôte calculate.swica.ch n'est pas dans la liste des hôtes autorisés et n'a pas été interrogé. Aucun barème de primes LCA publié en PDF ; seuls des prix d'appel figurent sur les pages Protection Juridique Santé et Denta. Rabais transversaux : paiement annuel 0,5 % ; rabais collectifs (entreprises et associations) ; bonus Benevita (5 % sur Completa Top et Forte, jusqu'à 15 % sur Hospita hors Commune) ; 15 % sur Hospita avec le modèle de base Favorit Santé. Aucun rabais famille spécifique aux complémentaires n'a été trouvé. Produits fermés ou hors périmètre : Vacanza (assurance voyage) n'est plus proposée depuis le 31.12.2025, les contrats en cours restant valables ; Completa Praeventa n'est plus conclue depuis le 01.01.2026 et est remplacée par Praevita ; Hospita Comforta (classes 7 et 8 des CS Hospita 2027) n'apparaît ni sur le site ni dans le récapitulatif 2027 (statut de vente à confirmer, variantes signalées comme telles). Non retenus : Global Care (assurance maladie internationale pour personnes s'établissant à l'étranger, CGA édition 2022), Student Care (substitut à la LAMal pour étudiants étrangers), assurance pour hôtes étrangers (produit ERV), assurance par convention (LAA), assurance des frontaliers (LAMal), assurance pour animaux. Entités porteuses tierces : Coop Protection Juridique SA (Protection Juridique Santé) et CONCORDIA Assurances SA (assurance de capital risque MDI).",
+      "retrievedAt": "2026-11-18"
+    },
+    {
+      "key": "visana",
+      "name": "Visana",
+      "legalEntityLca": "Visana Assurances SA (Berne)",
+      "website": "https://www.visana.ch/fr/clientele-privee",
+      "calculatorUrl": "https://dap.visana.ch/offer",
+      "calculatorHosts": [
+        "dap.visana.ch",
+        "entry.visana.ch"
+      ],
+      "publishedTariffUrls": [
+        "https://www.visana.ch/dam/jcr:4bc1927d-8c29-4c32-8f03-b2356328b9af/260303_CH_Visana_Factsheet-Vacanza_A4_FR_web.2026-09-01-14-34-10.pdf",
+        "https://www.visana.ch/fr/clientele-privee/assurances/vehicules-et-voyages/assurance-voyage",
+        "https://www.visana.ch/dam/jcr:82cb6d74-6f70-4baa-a2b5-c3edbc4b4281/260329_Visana_Factsheet_Kapitalversicherung_TUP_A4_FR_Web.2026-09-28-13-53-03.pdf",
+        "https://www.visana.ch/fr/clientele-privee/assurances/prevoyance-et-patrimoine/assurance-sous-forme-de-capital",
+        "https://www.visana.ch/dam/jcr:a303036f-58a3-432d-be90-2746c6c2dfd9/260330_Visana_Factsheet_KTI_A4_RZ_FR_Web.2026-09-28-14-03-46.pdf"
+      ],
+      "notes": "Assureur LCA : Visana Assurances SA ; l'assurance de base est portée par Visana SA, sana24 SA et Galenos SA. Édition de référence : aperçu des prestations « Offres d'assurance 2027 pour la clientèle privée » (V-3021 – 11.2026) ; les CGA/CC en vigueur datent de 01.2022 (CGA LCA, Médecine complémentaire, Hôpital, Hôpital Flex, Flex Plus, capital Hôpital, Soins dentaires), 01.2024 (Traitements ambulatoires, Basic, Basic Flex) et 03.2026 (gamme VIVA) ; l'annexe à la police 2027 renvoie à visana.ch/cga pour les conditions valables au 01.01.2027, aucune nouvelle édition 2027 n'y est publiée. Calculateur : https://dap.visana.ch/offer (liens profonds /offer/insurance/outpatient, /complementary, /hospital, /hospital_capital) ; hôte dap.visana.ch hors de la liste d'accès, non ouvert. Calculateur Vacanza : https://entry.visana.ch/b2a/apps/igs/vacanza/#/calculator (hôte non autorisé, non ouvert). Aucun barème de primes par âge n'est publié pour les complémentaires santé ; seuls des tarifs Vacanza (primes par voyage) et des exemples TUP/CDI le sont. Rabais : familial 50 % dès le 2e enfant jusqu'à 18 ans (Traitements ambulatoires, Médecine complémentaire, Hôpital, Soins dentaires, Basic) ; contrat pluriannuel 2 % (3 ans) / 3 % (5 ans) ; paiement semestriel 1 %, annuel 2 % ; rabais de santé 20 % la 1re année puis rabais pour absence de sinistre 20 % (Hôpital commune/mi-privée/privée, Basic) ; participation aux coûts d'hôpital à option ; rabais VIVA 5 % ; rabais collectifs via contrats-cadres ; suspension possible avec 90 % de réduction de prime (séjour à l'étranger). Programme de bonus myPoints : jusqu'à CHF 120.– par an (150.– avec contrat-cadre) pour toute personne de plus de 12 ans ayant une complémentaire Visana. Chèques Wellness (jusqu'à CHF 350.– par an) : prestation facultative non contractuelle liée à Traitements ambulatoires, Basic, Basic Flex, Managed Care Traitements ambulatoires et Traitements ambulatoires VIVA. Les « formules santé » S, M et L sont des combinaisons commerciales de produits existants (S : Ambulatoires I + Médecine complémentaire I + Hôpital commune ; M : II + II + Hôpital Flex 2/4 ; L : III + III + Hôpital Flex 4/8), non des produits distincts. Délai de carence maternité : 270 jours dès la signature de la proposition (CGA ch. 3.1). Résiliation : 3 mois pour la fin de l'année civile. Produits fermés ou non proposés à la souscription : Traitements ambulatoires IV (catégorie close), Soins dentaires classes 1 et 2 (closes), Hôpital Plus Hôtel (catégorie fermée), assurance d'indemnité journalière d'hospitalisation ex-Grutli (partie D des CC Hôpital, close), gamme Managed Care LCA (CGA V-803 01.2022 et CC Managed Care Ambulatoire 01.2024 toujours publiées, mais absente de l'aperçu 2027, des pages produit et du formulaire de proposition 06.2026 : statut de vente à confirmer). Hors périmètre non inventoriés : assurance facultative d'indemnités journalières LAMal, assurance agricole, IJ petites entreprises, garantie de la cotisation d'épargne (prévoyance 3a/3b), protection juridique privée/circulation Protekta, assurances de choses Directa. La partie C des CC Hôpital (« assurance de personnes domiciliées à l'étranger », régions 1 à 3) n'a pas été détaillée.",
+      "retrievedAt": "2026-11-18"
     }
   ],
   "products": [
@@ -1869,6 +1906,1715 @@
         "ambulatory_free_doctor_choice"
       ],
       "benefitCount": 2
+    },
+    {
+      "insurer": "swica",
+      "key": "swica-completa-top",
+      "name": "Completa Top",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Assurance complémentaire de base pour les traitements ambulatoires et stationnaires : médecine complémentaire (jusqu'à 80 francs/h), médicaments hors liste, lunettes, soins dentaires, transports et urgences à l'étranger. Peut être complétée par Praevita, Supplementa et Optima.",
+      "variants": [
+        {
+          "key": "sans-franchise",
+          "name": "Sans franchise",
+          "description": "Aucune franchise ; quote-part de 10 %."
+        },
+        {
+          "key": "franchise-600",
+          "name": "Franchise 600 francs",
+          "description": "Franchise annuelle de 600 francs (adultes) sur la médecine complémentaire, les médicaments et les prestations à l'étranger ; quote-part de 10 %."
+        }
+      ],
+      "prerequisites": "Domicile légal en Suisse. Proposition avec déclaration de santé : SWICA peut émettre une réserve ou refuser (CGA art. 23). S'exclut mutuellement avec Completa Forte.",
+      "pricing": {
+        "factors": [
+          "entry_age",
+          "deductible"
+        ],
+        "ageBands": "Tarif selon l'âge de conclusion (CS art. 26) : la classe d'âge à la conclusion est conservée ; classes d'âge CGA 2027 art. 17 : enfants 0–18 ans, jeunes 19–25 ans, puis adultes en général 26–30 ans et tranches de cinq ans jusqu'à 61 ans et plus. Âge de référence : âge atteint dans l'année civile (CGA 2027 art. 17 : passage à l'échelon supérieur au début de l'année d'assurance qui suit le 18e ou le 25e anniversaire). Le calculateur demande le NPA, la date de naissance et le sexe : l'effet de la région et du sexe sur la prime de ce produit n'a pas été vérifié (calculateur non piloté).",
+        "discounts": "Franchise 600 francs : réduction de prime pouvant atteindre 20 % (page produit). Bonus Benevita : 5 %. Rabais collectif (5 %) cumulable avec Benevita, soit jusqu'à 10 %. Paiement annuel : 0,5 %."
+      },
+      "conditionsDoc": {
+        "title": "Completa Top – Conditions spéciales (CS) selon la LCA",
+        "edition": "Édition 2026, entrée en vigueur le 01.01.2026 (186f / 10.2025) ; CGA édition 2027",
+        "url": "https://www4.swica.ch/p/186_f_ZB_Completa_Top.pdf"
+      },
+      "sourceUrls": [
+        "https://www.swica.ch/fr/prive/assurances/assurances-complementaires/completa-top",
+        "https://www4.swica.ch/p/186_f_ZB_Completa_Top.pdf",
+        "https://www4.swica.ch/p/030_f_AVB.pdf",
+        "https://www4.swica.ch/p/021_f_Leistungsuebersicht_online.pdf",
+        "https://dam.swica.ch/image/upload/v1775123280/541_f_Completa_t0tzjc.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "alt_medicine_remedies",
+        "alt_medicine_therapies",
+        "bonus_program",
+        "breastfeeding",
+        "convalescence_cure",
+        "cosmetic_corrections",
+        "dental_surgery",
+        "dental_treatment",
+        "glasses_lenses",
+        "home_help",
+        "innovative_treatments",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "orthodontics",
+        "other:participation_couts",
+        "psychotherapy_non_medical",
+        "search_recovery",
+        "spa_cure",
+        "sterilization_contraception",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "vision_laser"
+      ],
+      "benefitCount": 28
+    },
+    {
+      "insurer": "swica",
+      "key": "swica-completa-forte",
+      "name": "Completa Forte",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Version étendue de Completa Top : médecine complémentaire jusqu'à 120 francs/h, lunettes jusqu'à 900 francs par trois ans, promotion de la santé (90 % jusqu'à 500 francs par an), plafonds de transport et d'assistance à l'étranger plus élevés.",
+      "variants": [
+        {
+          "key": "sans-franchise",
+          "name": "Sans franchise",
+          "description": "Aucune franchise ; quote-part de 10 %."
+        },
+        {
+          "key": "franchise-600",
+          "name": "Franchise 600 francs",
+          "description": "Franchise annuelle de 600 francs (adultes) sur la médecine complémentaire, les médicaments et les prestations à l'étranger ; quote-part de 10 %."
+        }
+      ],
+      "prerequisites": "Domicile légal en Suisse. Proposition avec déclaration de santé (CGA art. 23). S'exclut mutuellement avec Completa Top ; le passage de Completa Top à Completa Forte a lieu après examen de santé et peut être refusé (CS art. 26).",
+      "pricing": {
+        "factors": [
+          "entry_age",
+          "deductible"
+        ],
+        "ageBands": "Tarif selon l'âge de conclusion (CS art. 29) : la classe d'âge à la conclusion est conservée ; classes d'âge CGA 2027 art. 17 : enfants 0–18 ans, jeunes 19–25 ans, puis adultes en général 26–30 ans et tranches de cinq ans jusqu'à 61 ans et plus. Âge de référence : âge atteint dans l'année civile (CGA 2027 art. 17 : passage à l'échelon supérieur au début de l'année d'assurance qui suit le 18e ou le 25e anniversaire). Le calculateur demande le NPA, la date de naissance et le sexe : l'effet de la région et du sexe sur la prime de ce produit n'a pas été vérifié (calculateur non piloté).",
+        "discounts": "Franchise 600 francs : réduction de prime de près de 9 % (page produit). Bonus Benevita : 5 %. Rabais collectif (5 %) cumulable avec Benevita, soit jusqu'à 10 %. Paiement annuel : 0,5 %."
+      },
+      "conditionsDoc": {
+        "title": "Completa Forte – Conditions spéciales (CS) selon la LCA",
+        "edition": "Édition 2026, entrée en vigueur le 01.01.2026 (196f / 10.2025) ; CGA édition 2027",
+        "url": "https://www4.swica.ch/p/196_f_ZB_Completa_Forte.pdf"
+      },
+      "sourceUrls": [
+        "https://www.swica.ch/fr/prive/assurances/assurances-complementaires/completa-forte",
+        "https://www4.swica.ch/p/196_f_ZB_Completa_Forte.pdf",
+        "https://www4.swica.ch/p/030_f_AVB.pdf",
+        "https://www4.swica.ch/p/021_f_Leistungsuebersicht_online.pdf",
+        "https://dam.swica.ch/image/upload/v1775123280/541_f_Completa_t0tzjc.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "alt_medicine_remedies",
+        "alt_medicine_therapies",
+        "bonus_program",
+        "breastfeeding",
+        "convalescence_cure",
+        "cosmetic_corrections",
+        "dental_surgery",
+        "dental_treatment",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "home_help",
+        "innovative_treatments",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "orthodontics",
+        "other:participation_couts",
+        "psychotherapy_non_medical",
+        "search_recovery",
+        "spa_cure",
+        "sterilization_contraception",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "vision_laser"
+      ],
+      "benefitCount": 29
+    },
+    {
+      "insurer": "swica",
+      "key": "swica-praevita",
+      "name": "Praevita",
+      "category": "prevention_wellbeing",
+      "audience": "all",
+      "summary": "Module de prévention en complément de Completa Top ou Completa Forte : vaccinations, promotion de la santé (fitness, alimentation, bien-être) et bilans de santé. Remplace Completa Praeventa dans la vente depuis le 01.01.2026.",
+      "variants": [],
+      "prerequisites": "Completa Top ou Completa Forte requise (CS art. 2) ; Praevita prend fin automatiquement avec celle-ci. Domicile légal en Suisse.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Tarif selon l'âge effectif (CS art. 8), prime adaptée à la nouvelle classe d'âge au début de chaque année civile. Classes : 0–18 ans, 19–25 ans, 26–30 ans, puis tranches de cinq ans (31–35 … 66–70) jusqu'à 71 ans et plus. Âge de référence : âge atteint dans l'année civile (CGA 2027 art. 17 : passage à l'échelon supérieur au début de l'année d'assurance qui suit le 18e ou le 25e anniversaire). Le calculateur demande le NPA, la date de naissance et le sexe : l'effet de la région et du sexe sur la prime de ce produit n'a pas été vérifié (calculateur non piloté).",
+        "discounts": "Paiement annuel : 0,5 %. Aucune remise Benevita mentionnée pour ce produit."
+      },
+      "conditionsDoc": {
+        "title": "Praevita – Conditions spéciales (CS) selon la LCA",
+        "edition": "Édition 2026, entrée en vigueur le 01.01.2026 (022f / 10.2025)",
+        "url": "https://dam.swica.ch/image/upload/v1775120951/022_f_ZB_Praevita_j86ruu.pdf"
+      },
+      "sourceUrls": [
+        "https://www.swica.ch/fr/prive/assurances/assurances-complementaires/praevita",
+        "https://dam.swica.ch/image/upload/v1775120951/022_f_ZB_Praevita_j86ruu.pdf",
+        "https://www4.swica.ch/p/030_f_AVB.pdf",
+        "https://www4.swica.ch/p/021_f_Leistungsuebersicht_online.pdf",
+        "https://dam.swica.ch/image/upload/v1775123128/032_f_Gesundheitsfoerderung_Praevention_trupsr.pdf",
+        "https://dam.swica.ch/image/upload/v1775120981/083_f_Check_up_AVB_ZB_l3mw7u.pdf",
+        "https://dam.swica.ch/image/upload/v1775123280/541_f_Completa_t0tzjc.pdf"
+      ],
+      "tags": [
+        "fitness_health_promotion",
+        "prevention_checkup",
+        "vaccination"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "swica",
+      "key": "swica-supplementa",
+      "name": "Supplementa",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Complément à Completa Top ou Completa Forte qui augmente les contributions pour les lunettes et lentilles, les moyens auxiliaires et les transports d'urgence.",
+      "variants": [],
+      "prerequisites": "Completa Top ou Completa Forte requise (CS art. 2) ; Supplementa prend fin automatiquement avec celle-ci. Domicile légal en Suisse.",
+      "pricing": {
+        "factors": [
+          "entry_age"
+        ],
+        "ageBands": "Tarif selon l'âge de conclusion (CS art. 9) ; classes d'âge CGA 2027 art. 17 : enfants 0–18 ans, jeunes 19–25 ans, puis adultes en général 26–30 ans et tranches de cinq ans jusqu'à 61 ans et plus. Âge de référence : âge atteint dans l'année civile (CGA 2027 art. 17 : passage à l'échelon supérieur au début de l'année d'assurance qui suit le 18e ou le 25e anniversaire). Le calculateur demande le NPA, la date de naissance et le sexe : l'effet de la région et du sexe sur la prime de ce produit n'a pas été vérifié (calculateur non piloté).",
+        "discounts": "Paiement annuel : 0,5 %."
+      },
+      "conditionsDoc": {
+        "title": "Supplementa – Conditions spéciales (CS) selon la LCA",
+        "edition": "Édition 2026, entrée en vigueur le 01.01.2026 (188f / 10.2025)",
+        "url": "https://www4.swica.ch/p/188_f_ZB_SUPPLEMENTA.pdf"
+      },
+      "sourceUrls": [
+        "https://www.swica.ch/fr/prive/assurances/assurances-complementaires/supplementa",
+        "https://www4.swica.ch/p/188_f_ZB_SUPPLEMENTA.pdf",
+        "https://www4.swica.ch/p/030_f_AVB.pdf",
+        "https://www4.swica.ch/p/021_f_Leistungsuebersicht_online.pdf",
+        "https://dam.swica.ch/image/upload/v1775120975/082_f_Hilfsmittel_VVG_pglytt.pdf"
+      ],
+      "tags": [
+        "glasses_lenses",
+        "medical_aids",
+        "transport_rescue"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "swica",
+      "key": "swica-optima",
+      "name": "Optima",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Extension haut de gamme de Completa Top ou Completa Forte : traitements ambulatoires chez des médecins non conventionnés et à l'étranger, médecine complémentaire sans plafond horaire, bilans de santé et vaccinations à 90 % sans plafond, contributions supplémentaires (prévention, lunettes, cures).",
+      "variants": [],
+      "prerequisites": "Ne peut être conclue qu'en combinaison avec Completa Top ou Completa Forte (page produit ; les CS art. 1 la définissent comme complément de ces produits). Domicile légal en Suisse.",
+      "pricing": {
+        "factors": [
+          "entry_age"
+        ],
+        "ageBands": "Tarif selon l'âge de conclusion (CS art. 20) ; classes d'âge CGA 2027 art. 17 : enfants 0–18 ans, jeunes 19–25 ans, puis adultes en général 26–30 ans et tranches de cinq ans jusqu'à 61 ans et plus. Âge de référence : âge atteint dans l'année civile (CGA 2027 art. 17 : passage à l'échelon supérieur au début de l'année d'assurance qui suit le 18e ou le 25e anniversaire). Le calculateur demande le NPA, la date de naissance et le sexe : l'effet de la région et du sexe sur la prime de ce produit n'a pas été vérifié (calculateur non piloté).",
+        "discounts": "Paiement annuel : 0,5 %."
+      },
+      "conditionsDoc": {
+        "title": "Optima – Conditions spéciales (CS) selon la LCA",
+        "edition": "Édition 2026, entrée en vigueur le 01.01.2026 (189f / 10.2025)",
+        "url": "https://www4.swica.ch/p/189_f_ZB_optima.pdf"
+      },
+      "sourceUrls": [
+        "https://www.swica.ch/fr/prive/assurances/assurances-complementaires/optima",
+        "https://www4.swica.ch/p/189_f_ZB_optima.pdf",
+        "https://www4.swica.ch/p/030_f_AVB.pdf",
+        "https://www4.swica.ch/p/021_f_Leistungsuebersicht_online.pdf",
+        "https://dam.swica.ch/image/upload/v1775123059/550_f_Optima_pfpqh0.pdf",
+        "https://dam.swica.ch/image/upload/v1775121068/147_f_Liste_innovativer_Therapiemethoden_yp16nl.pdf",
+        "https://dam.swica.ch/image/upload/v1775120981/083_f_Check_up_AVB_ZB_l3mw7u.pdf",
+        "https://dam.swica.ch/image/upload/v1775122989/033_f_Komplementaermedizin_o3mdrl.pdf"
+      ],
+      "tags": [
+        "abroad_planned_treatment",
+        "alt_medicine_therapies",
+        "ambulatory_free_doctor_choice",
+        "convalescence_cure",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "innovative_treatments",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "prevention_checkup",
+        "psychotherapy_non_medical",
+        "spa_cure",
+        "sterilization_contraception",
+        "transport_rescue",
+        "vaccination",
+        "vision_laser"
+      ],
+      "benefitCount": 17
+    },
+    {
+      "insurer": "swica",
+      "key": "swica-vivia",
+      "name": "Vivia",
+      "category": "combined",
+      "audience": "adult",
+      "summary": "Nouveau produit dès le 01.01.2027, destiné aux jeunes à partir de 19 ans : transports d'urgence, urgences et assistance à l'étranger, médicaments, vaccinations, division commune dans toute la Suisse et Protection Juridique Santé incluse.",
+      "variants": [],
+      "prerequisites": "Souscription possible dès le 1er janvier de l'année du 19e anniversaire ; début de couverture au plus tôt le 01.01.2027. Domicile légal en Suisse. Combinable avec Denta, Infortuna et les assurances de capital (page produit).",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Tarif selon l'âge effectif (CS art. 16). Classes : 19–25 ans, 26–30 ans, puis tranches de cinq ans (31–35 … 66–70) jusqu'à 71 ans et plus. Âge de référence : âge atteint dans l'année civile (CGA 2027 art. 17 : passage à l'échelon supérieur au début de l'année d'assurance qui suit le 18e ou le 25e anniversaire). Le calculateur demande le NPA, la date de naissance et le sexe : l'effet de la région et du sexe sur la prime de ce produit n'a pas été vérifié (calculateur non piloté).",
+        "discounts": "Paiement annuel : 0,5 %. SWICA peut adapter la quote-part en fonction de l'évolution des coûts (CS art. 14)."
+      },
+      "conditionsDoc": {
+        "title": "Vivia – Conditions spéciales (CS) selon la LCA",
+        "edition": "Édition 2027, entrée en vigueur le 01.01.2027 (080f / 08.2026)",
+        "url": "https://dam.swica.ch/image/upload/v1787033903/080_f_ZB_Viva_bx2i8f.pdf"
+      },
+      "sourceUrls": [
+        "https://www.swica.ch/fr/prive/assurances/assurances-complementaires/vivia",
+        "https://dam.swica.ch/image/upload/v1787033903/080_f_ZB_Viva_bx2i8f.pdf",
+        "https://dam.swica.ch/image/upload/v1786548135/539_f_Vivia_iwqnhp.pdf",
+        "https://www4.swica.ch/p/030_f_AVB.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "hospital_general_ch",
+        "legal_protection",
+        "maternity",
+        "medication_non_listed",
+        "search_recovery",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "vaccination"
+      ],
+      "benefitCount": 12
+    },
+    {
+      "insurer": "swica",
+      "key": "swica-hospita",
+      "name": "Hospita",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Assurance complémentaire d'hospitalisation en huit classes : division commune dans toute la Suisse, demi-privée, privée, variantes « liste », modèles Flex avec participation journalière et division privée dans le monde entier (BestMed), avec prestations annexes (cures, soins à domicile, aide-ménagère, transports, rapatriement).",
+      "variants": [
+        {
+          "key": "commune",
+          "name": "Hospita Commune (classe 1)",
+          "description": "Division commune des hôpitaux reconnus par SWICA en Suisse et au Liechtenstein. Avec l'option Hospita Plus : garantie de passage en demi-privé ou privé sans examen de santé."
+        },
+        {
+          "key": "demi-privee",
+          "name": "Hospita Demi-Privée (classe 2)",
+          "description": "Division demi-privée des hôpitaux reconnus par SWICA en Suisse et au Liechtenstein (hôpitaux répertoriés et conventionnés) ; tarif maximal SWICA sans convention."
+        },
+        {
+          "key": "demi-privee-liste",
+          "name": "Hospita Demi-Privée (liste) (classe 3)",
+          "description": "Division demi-privée uniquement dans les hôpitaux désignés dans le répertoire des hôpitaux SWICA ; second avis médical inclus."
+        },
+        {
+          "key": "flex-demi-privee",
+          "name": "Hospita Flex Demi-Privée",
+          "description": "Hospita Demi-Privée (classes 2 et 3) avec modèle de participation : choix entre division commune (sans participation) et demi-privée (300 francs par jour, max. 6000 francs par an) avant chaque hospitalisation."
+        },
+        {
+          "key": "privee",
+          "name": "Hospita Privée (classe 4)",
+          "description": "Division privée des hôpitaux reconnus par SWICA en Suisse et au Liechtenstein (hôpitaux répertoriés et conventionnés) ; tarif maximal SWICA sans convention."
+        },
+        {
+          "key": "privee-liste",
+          "name": "Hospita Privée (liste) (classe 5)",
+          "description": "Division privée uniquement dans les hôpitaux désignés dans le répertoire des hôpitaux SWICA ; second avis médical inclus."
+        },
+        {
+          "key": "flex-privee",
+          "name": "Hospita Flex Privée",
+          "description": "Hospita Privée (classes 4 et 5) avec modèle de participation : choix entre division commune (sans participation), demi-privée (300 francs par jour, max. 6000 francs par an) et privée (400 francs par jour, max. 8000 francs par an) avant chaque hospitalisation."
+        },
+        {
+          "key": "privee-monde-entier",
+          "name": "Hospita Privée Monde Entier (BestMed) (classe 6)",
+          "description": "Division privée dans tous les hôpitaux publics et privés du monde entier ; garantie BestMed."
+        },
+        {
+          "key": "comforta-2-lits",
+          "name": "Hospita Comforta chambre à deux lits (classe 7)",
+          "description": "Hôtellerie en chambre à deux lits, sans libre choix du médecin ni frais de traitement. Figure dans les CS 2027 mais ni sur le site, ni dans le récapitulatif 2027, ni dans le calculateur : statut de vente à confirmer."
+        },
+        {
+          "key": "comforta-1-lit",
+          "name": "Hospita Comforta chambre à un lit (classe 8)",
+          "description": "Hôtellerie en chambre à un lit, sans libre choix du médecin ni frais de traitement. Figure dans les CS 2027 mais ni sur le site, ni dans le récapitulatif 2027, ni dans le calculateur : statut de vente à confirmer."
+        }
+      ],
+      "prerequisites": "Domicile légal en Suisse. Proposition avec déclaration de santé : SWICA peut émettre une réserve ou refuser (CGA art. 23). Hospita Plus : à conclure jusqu'à la fin de l'année civile des 18 ans.",
+      "pricing": {
+        "factors": [
+          "age",
+          "entry_age",
+          "deductible"
+        ],
+        "ageBands": "CS 2027 art. 22 : tarif selon l'âge effectif jusqu'à 50 ans (enfants 0–18 ans, jeunes 19–25 ans, puis 26–30 ans et tranches de cinq ans jusqu'à 71 ans et plus, prime adaptée au début de chaque année civile) ; après 50 ans, passage automatique au début de l'année civile suivante au tarif selon l'âge de conclusion, en tenant compte de la durée d'affiliation, sans examen de santé (renonciation possible jusqu'à la fin de l'année des 50 ans). Début d'assurance dès 51 ans : choix unique du modèle tarifaire. Le graphique du récapitulatif 2027 présente des tranches 26–30 … 86–90 et 91 ans et plus. Âge de référence : âge atteint dans l'année civile (CGA 2027 art. 17 : passage à l'échelon supérieur au début de l'année d'assurance qui suit le 18e ou le 25e anniversaire). Le calculateur demande le NPA, la date de naissance et le sexe : l'effet de la région et du sexe sur la prime de ce produit n'a pas été vérifié (calculateur non piloté).",
+        "discounts": "Franchise à option : 15 % (1000 francs), 35 % (2000 francs), 50 % (5000 francs). Modèles Flex : 59,6 % (Flex Demi-Privée) et 64,6 % (Flex Privée). Benevita : jusqu'à 15 % (sauf Hospita Commune). Combinaison avec le modèle de base Favorit Santé : 15 % (non cumulable avec un rabais collectif, cumulable avec Benevita, total jusqu'à 30 %). Paiement annuel : 0,5 %."
+      },
+      "conditionsDoc": {
+        "title": "Hospita – Conditions spéciales (CS) selon la LCA",
+        "edition": "Édition 2027, entrée en vigueur le 01.01.2027 (190f / 10.2026)",
+        "url": "https://www4.swica.ch/p/190_f_ZB_hospita.pdf"
+      },
+      "sourceUrls": [
+        "https://www.swica.ch/fr/prive/assurances/assurances-complementaires/assurance-hospitalisation",
+        "https://www4.swica.ch/p/190_f_ZB_hospita.pdf",
+        "https://www4.swica.ch/p/030_f_AVB.pdf",
+        "https://www4.swica.ch/p/021_f_Leistungsuebersicht_online.pdf",
+        "https://dam.swica.ch/image/upload/v1775123057/544_f_Hospita_gxxvpt.pdf",
+        "https://www.swica.ch/fr/prive/services/optimiser-economiser/assurance-complementaire-hospitalisation",
+        "https://www.swica.ch/fr/prive/services/optimiser-economiser/avantage-de-combinaison"
+      ],
+      "tags": [
+        "ambulatory_surgery",
+        "bonus_program",
+        "convalescence_cure",
+        "dental_surgery",
+        "home_care",
+        "home_help",
+        "hospital_abroad",
+        "hospital_deductible_option",
+        "hospital_flex",
+        "hospital_general_ch",
+        "hospital_private",
+        "hospital_room_upgrade",
+        "hospital_semi_private",
+        "maternity",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "second_opinion",
+        "spa_cure",
+        "sterilization_contraception",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "upgrade_option"
+      ],
+      "benefitCount": 110
+    },
+    {
+      "insurer": "swica",
+      "key": "swica-denta",
+      "name": "Denta",
+      "category": "dental",
+      "audience": "all",
+      "summary": "Assurance de soins dentaires en quatre niveaux (50 % jusqu'à 500 ou 1000 francs, 75 % jusqu'à 1500 ou 2000 francs par an), montants doublés pour l'orthodontie jusqu'à 25 ans.",
+      "variants": [
+        {
+          "key": "denta-1",
+          "name": "Denta 1",
+          "description": "50 % des honoraires du dentiste, max. 500 francs par année civile."
+        },
+        {
+          "key": "denta-2",
+          "name": "Denta 2",
+          "description": "50 % des honoraires du dentiste, max. 1000 francs par année civile."
+        },
+        {
+          "key": "denta-3",
+          "name": "Denta 3",
+          "description": "75 % des honoraires du dentiste, max. 1500 francs par année civile."
+        },
+        {
+          "key": "denta-4",
+          "name": "Denta 4",
+          "description": "75 % des honoraires du dentiste, max. 2000 francs par année civile."
+        }
+      ],
+      "prerequisites": "Formulaire d'admission SWICA à faire remplir par un dentiste, examen dentaire à la charge du proposant (CS art. 2). Domicile légal en Suisse. SWICA recommande une conclusion avant le cinquième anniversaire de l'enfant.",
+      "pricing": {
+        "factors": [
+          "entry_age"
+        ],
+        "ageBands": "Tarif selon l'âge de conclusion (CS art. 8) ; classes d'âge CGA 2027 art. 17 : enfants 0–18 ans, jeunes 19–25 ans, puis adultes en général 26–30 ans et tranches de cinq ans jusqu'à 61 ans et plus. Âge de référence : âge atteint dans l'année civile (CGA 2027 art. 17 : passage à l'échelon supérieur au début de l'année d'assurance qui suit le 18e ou le 25e anniversaire). La page produit cite des primes « pour les enfants jusqu'à 18 ans » et « pour les personnes jusqu'à 35 ans ». Le calculateur demande le NPA, la date de naissance et le sexe : l'effet de la région et du sexe sur la prime de ce produit n'a pas été vérifié (calculateur non piloté).",
+        "discounts": "Paiement annuel : 0,5 %."
+      },
+      "conditionsDoc": {
+        "title": "Denta – Conditions spéciales (CS) selon la LCA",
+        "edition": "Édition 2026, entrée en vigueur le 01.01.2026 (191f / 10.2025)",
+        "url": "https://dam.swica.ch/image/upload/v1775122092/191_f_ZB_Denta_h97haf.pdf"
+      },
+      "sourceUrls": [
+        "https://www.swica.ch/fr/prive/assurances/assurances-complementaires/denta",
+        "https://dam.swica.ch/image/upload/v1775122092/191_f_ZB_Denta_h97haf.pdf",
+        "https://dam.swica.ch/image/upload/v1775123221/558_f_Denta_hcdx0b.pdf",
+        "https://www4.swica.ch/p/030_f_AVB.pdf",
+        "https://www4.swica.ch/p/021_f_Leistungsuebersicht_online.pdf"
+      ],
+      "tags": [
+        "dental_treatment",
+        "orthodontics"
+      ],
+      "benefitCount": 8
+    },
+    {
+      "insurer": "swica",
+      "key": "swica-infortuna",
+      "name": "Infortuna",
+      "category": "capital_accident",
+      "audience": "all",
+      "summary": "Assurance-accidents individuelle valable dans le monde entier, en trois modules au choix : frais de guérison en division privée, capital en cas de décès et capital en cas d'invalidité par accident (commercialisés aussi sous le nom « assurance de capital ADI »).",
+      "variants": [
+        {
+          "key": "frais-de-guerison",
+          "name": "Infortuna Frais de guérison",
+          "description": "Frais de guérison après accident en complément de la LAMal, LAA, LAM et LAI : division privée, traitements ambulatoires, médecine complémentaire, transports."
+        },
+        {
+          "key": "capital-deces",
+          "name": "Capital en cas de décès par accident",
+          "description": "Somme assurée selon la police (10 000 à 300 000 francs par paliers de 10 000 francs selon la page produit)."
+        },
+        {
+          "key": "capital-invalidite",
+          "name": "Capital en cas d'invalidité par accident",
+          "description": "Somme assurée selon la police (10 000 à 300 000 francs par paliers de 10 000 francs), avec progression jusqu'à 350 %."
+        }
+      ],
+      "prerequisites": "Domicile légal en Suisse. Après 70 ans révolus, sommes maximales de 50 000 francs (décès) et 100 000 francs (invalidité).",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Tarif selon l'âge effectif (CS art. 16), prime adaptée à la nouvelle classe d'âge au début de chaque année civile ; classes d'âge CGA 2027 art. 17 : enfants 0–18 ans, jeunes 19–25 ans, puis adultes en général 26–30 ans et tranches de cinq ans jusqu'à 61 ans et plus. Âge de référence : âge atteint dans l'année civile (CGA 2027 art. 17 : passage à l'échelon supérieur au début de l'année d'assurance qui suit le 18e ou le 25e anniversaire). Le calculateur demande le NPA, la date de naissance et le sexe : l'effet de la région et du sexe sur la prime de ce produit n'a pas été vérifié (calculateur non piloté).",
+        "discounts": "Paiement annuel : 0,5 %."
+      },
+      "conditionsDoc": {
+        "title": "Infortuna – Conditions spéciales (CS) selon la LCA",
+        "edition": "Édition 2027, entrée en vigueur le 01.01.2027 (192f / 10.2026)",
+        "url": "https://www4.swica.ch/p/192_f_ZB_infortuna.pdf"
+      },
+      "sourceUrls": [
+        "https://www.swica.ch/fr/prive/assurances/assurances-complementaires/assurance-accidents",
+        "https://www.swica.ch/fr/prive/assurances/assurances-speciales/assurances-de-capital",
+        "https://www4.swica.ch/p/192_f_ZB_infortuna.pdf",
+        "https://www4.swica.ch/p/030_f_AVB.pdf",
+        "https://www4.swica.ch/p/021_f_Leistungsuebersicht_online.pdf",
+        "https://dam.swica.ch/image/upload/v1775123165/949_f_UTI_KTI_un6w7l.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "accident_capital",
+        "alt_medicine_therapies",
+        "ambulatory_free_doctor_choice",
+        "dental_accident",
+        "home_care",
+        "home_help",
+        "hospital_private",
+        "medical_aids",
+        "psychotherapy_non_medical",
+        "search_recovery",
+        "spa_cure",
+        "transport_rescue"
+      ],
+      "benefitCount": 15
+    },
+    {
+      "insurer": "swica",
+      "key": "swica-capital-risque-mdi",
+      "name": "Assurance de capital risque MDI",
+      "category": "capital_illness",
+      "audience": "all",
+      "summary": "Assurance de risque sans épargne versant un capital en cas de décès et/ou d'invalidité à la suite d'une maladie, avec exonération des primes en cas d'incapacité de gain. Assureur : CONCORDIA Assurances SA ; SWICA assure la distribution, la police et l'encaissement.",
+      "variants": [],
+      "prerequisites": "Domicile en Suisse ou au Liechtenstein ; proposition avec questions de santé (examen médical possible). Plus de nouvelle conclusion ni d'augmentation de capital dès le début de l'année civile des 56 ans ; l'assurance prend fin à la fin de l'année civile des 60 ans.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Prime fonction du capital assuré et de l'âge de la personne assurée, adaptée avec l'âge ; âge déterminant = année civile en cours moins année de naissance (CGA MDI art. 3.2). Tranches non publiées. Le calculateur demande le NPA, la date de naissance et le sexe : l'effet de la région et du sexe sur la prime de ce produit n'a pas été vérifié (calculateur non piloté).",
+        "discounts": null
+      },
+      "conditionsDoc": {
+        "title": "Assurance de capital risque MDI – Conditions générales d'assurance (CGA)",
+        "edition": "Édition 2023 (010f / 04.2025)",
+        "url": "https://dam.swica.ch/image/upload/v1775120999/010_f_AVB_Risikokapitalversicherung_KTI_yhanqe.pdf"
+      },
+      "sourceUrls": [
+        "https://www.swica.ch/fr/prive/assurances/assurances-speciales/assurances-de-capital",
+        "https://dam.swica.ch/image/upload/v1775120999/010_f_AVB_Risikokapitalversicherung_KTI_yhanqe.pdf",
+        "https://dam.swica.ch/image/upload/v1775123165/949_f_UTI_KTI_un6w7l.pdf"
+      ],
+      "tags": [
+        "illness_capital",
+        "premium_waiver"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "swica",
+      "key": "swica-protection-juridique-sante",
+      "name": "Protection Juridique Santé",
+      "category": "legal_protection",
+      "audience": "all",
+      "summary": "Protection juridique mondiale pour les litiges de responsabilité civile et de droit des assurances liés à une atteinte à la santé (erreurs de traitement, litiges avec des assurances). Assureur : Coop Protection Juridique SA, dans le cadre d'un contrat collectif conclu par SWICA.",
+      "variants": [],
+      "prerequisites": "Au moins une assurance complémentaire active Completa Top, Completa Forte et/ou Hospita auprès de SWICA (incluse d'office dans Vivia).",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "La prime dépend de l'âge du preneur d’assurance (CS) ; la page produit distingue adultes (plus de 18 ans) et enfants. Tranches détaillées non publiées.",
+        "discounts": null
+      },
+      "conditionsDoc": {
+        "title": "Protection Juridique Santé – Conditions spéciales (CS)",
+        "edition": "Édition 2027, entrée en vigueur le 1er janvier 2027 (038f / 08.2026)",
+        "url": "https://www4.swica.ch/p/038_f_ZB_Gesundheitsrechtsschutz.pdf"
+      },
+      "sourceUrls": [
+        "https://www.swica.ch/fr/prive/assurances/assurances-speciales/protection-juridique-sante",
+        "https://www4.swica.ch/p/038_f_ZB_Gesundheitsrechtsschutz.pdf"
+      ],
+      "tags": [
+        "legal_protection"
+      ],
+      "benefitCount": 1
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-traitements-ambulatoires",
+      "name": "Traitements ambulatoires",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Complémentaire ambulatoire en trois degrés (I, II, III) : médicaments hors liste, prévention, lunettes, moyens auxiliaires, transports, chirurgie dentaire et orthodontie dès le degré II. Inclut l'assurance de voyage Vacanza (8 semaines), Visana Assistance CH et donne droit aux chèques Wellness.",
+      "variants": [
+        {
+          "key": "amb-1",
+          "name": "Traitements ambulatoires I",
+          "description": "Étendue la plus restreinte : médicaments (max. CHF 1'000.–/an), examens préventifs, vaccinations, transports et sauvetage"
+        },
+        {
+          "key": "amb-2",
+          "name": "Traitements ambulatoires II",
+          "description": "Ajoute chirurgie dentaire, orthodontie, moyens auxiliaires, lunettes, aide ménagère, maternité, frais de voyage ; médicaments illimités"
+        },
+        {
+          "key": "amb-3",
+          "name": "Traitements ambulatoires III",
+          "description": "Plafonds supérieurs ou illimités, médecins en récusation, psychothérapie non médicale, gymnastique pré-/postnatale, prestations du catalogue aussi à l'étranger"
+        }
+      ],
+      "prerequisites": "Conclusion possible jusqu'à l'âge de 70 ans révolus (aperçu 2027) ; proposition avec questions de santé (examen des risques possible) ; risque accidents obligatoirement inclus ; le degré IV est une catégorie close",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Âge réel : 0–18, 19–25, 26–30, puis groupes de cinq ans (31–35, 36–40, …) ; dernier groupe d'âge atteint à 86 ans (CGA LCA 01.2022, ch. 7.2). Le changement de groupe a lieu au 1er janvier de l'année civile au cours de laquelle l'âge limite est atteint (âge atteint dans l'année). La page web « changement de groupe d'âge » liste 00–18 / 19–25 / 26–30 / 31–35 / … / 66–70 / « à partir de 71 ans » : écart avec les CGA à lever.",
+        "discounts": "Rabais familial : 50 % sur la prime dès le 2e enfant, jusqu'à 18 ans (au moins deux enfants avec une complémentaire Visana) ; Contrat pluriannuel : 2 % (3 ans) ou 3 % (5 ans) ; Paiement semestriel 1 % d'escompte, annuel 2 %"
+      },
+      "conditionsDoc": {
+        "title": "CC Assurance-maladie complémentaire (LCA) Traitements ambulatoires (V-901 ZB I) + CGA Assurances-maladie complémentaires (LCA) 01.2022",
+        "edition": "01.2024",
+        "url": "https://www.visana.ch/dam/jcr:a3f70356-ab85-4509-946a-6ddb1bc19053/CC_Assurance-maladie_complementaire_LCA_Traitements_ambulatoires_2024-01_fr.2026-03-12-10-49-44.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurances-complementaires/traitements-ambulatoires",
+        "https://www.visana.ch/dam/jcr:a3f70356-ab85-4509-946a-6ddb1bc19053/CC_Assurance-maladie_complementaire_LCA_Traitements_ambulatoires_2024-01_fr.2026-03-12-10-49-44.pdf",
+        "https://www.visana.ch/dam/jcr:b55a066c-a680-4afb-af5a-c486061f2a60/CGA_Assurances-maladie_complementaires_LCA_2022-01_fr.e358153725bdce4d7a8d69d257f028fa.pdf",
+        "https://www.visana.ch/dam/jcr:577ea0a7-5319-4609-bf3a-71fc91d92029/261112_Visana_Leistungsuebersicht_2027_FR_web.61a74c024533e534c9f3c9d68891bb97.pdf",
+        "https://www.visana.ch/dam/jcr:6d4ef5ba-cf6d-4f02-ab5e-26955d88675f/260304_CH_Visana_Flyer-Wellness-Scheck_A4_FR_web.2026-09-01-14-31-39.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "ambulatory_free_doctor_choice",
+        "assistance_services",
+        "cosmetic_corrections",
+        "dental_surgery",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "gynecological_prevention",
+        "home_help",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "orthodontics",
+        "prevention_checkup",
+        "psychotherapy_non_medical",
+        "search_recovery",
+        "sterilization_contraception",
+        "transport_rescue",
+        "travel_expenses_treatment",
+        "vaccination"
+      ],
+      "benefitCount": 52
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-medecine-complementaire",
+      "name": "Médecine complémentaire",
+      "category": "alternative_medicine",
+      "audience": "all",
+      "summary": "Contributions de 90 % aux traitements, formes de thérapie et médicaments de médecine complémentaire (ambulatoires et hospitaliers), en trois degrés avec plafond annuel de CHF 1'000.–, 4'000.– ou 10'000.–.",
+      "variants": [
+        {
+          "key": "comp-1",
+          "name": "Médecine complémentaire I",
+          "description": "Max. CHF 1'000.–/an ; ordonnance médicale obligatoire ; thérapeutes agréés et thérapies de la liste"
+        },
+        {
+          "key": "comp-2",
+          "name": "Médecine complémentaire II",
+          "description": "Max. CHF 4'000.–/an ; sans ordonnance ; thérapeutes agréés et thérapies de la liste"
+        },
+        {
+          "key": "comp-3",
+          "name": "Médecine complémentaire III",
+          "description": "Max. CHF 10'000.–/an ; aussi thérapies hors liste et thérapeutes non agréés (50 %, max. CHF 1'000.–)"
+        }
+      ],
+      "prerequisites": "Conclusion possible jusqu'à l'âge de 70 ans révolus (aperçu 2027) ; proposition avec questions de santé (examen des risques possible) ; risque accidents obligatoirement inclus",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Âge réel : 0–18, 19–25, 26–30, puis groupes de cinq ans (31–35, 36–40, …) ; dernier groupe d'âge atteint à 86 ans (CGA LCA 01.2022, ch. 7.2). Le changement de groupe a lieu au 1er janvier de l'année civile au cours de laquelle l'âge limite est atteint (âge atteint dans l'année). La page web « changement de groupe d'âge » liste 00–18 / 19–25 / 26–30 / 31–35 / … / 66–70 / « à partir de 71 ans » : écart avec les CGA à lever.",
+        "discounts": "Rabais familial : 50 % sur la prime dès le 2e enfant, jusqu'à 18 ans (au moins deux enfants avec une complémentaire Visana) ; Contrat pluriannuel : 2 % (3 ans) ou 3 % (5 ans) ; Paiement semestriel 1 % d'escompte, annuel 2 %"
+      },
+      "conditionsDoc": {
+        "title": "CC Assurance-maladie complémentaire (LCA) Médecine complémentaire (V-901 ZB II)",
+        "edition": "01.2022",
+        "url": "https://www.visana.ch/dam/jcr:2149105f-e04f-4a93-9cea-816a03d92b71/cc_assurance-maladie-complementaire-medecine-complementaire_lca-2022-01_fr.2025-10-29-11-27-53.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurances-complementaires/medecine-complementaire",
+        "https://www.visana.ch/dam/jcr:2149105f-e04f-4a93-9cea-816a03d92b71/cc_assurance-maladie-complementaire-medecine-complementaire_lca-2022-01_fr.2025-10-29-11-27-53.pdf",
+        "https://www.visana.ch/dam/jcr:b55a066c-a680-4afb-af5a-c486061f2a60/CGA_Assurances-maladie_complementaires_LCA_2022-01_fr.e358153725bdce4d7a8d69d257f028fa.pdf",
+        "https://www.visana.ch/dam/jcr:241d33d2-43ef-42b1-8c9a-b4b00565a3f5/260331_YZ_Liste_Therapieformen_Komplementaer_A4_FR_Web.2026-09-24-14-23-33.pdf",
+        "https://www.visana.ch/dam/jcr:577ea0a7-5319-4609-bf3a-71fc91d92029/261112_Visana_Leistungsuebersicht_2027_FR_web.61a74c024533e534c9f3c9d68891bb97.pdf"
+      ],
+      "tags": [
+        "alt_medicine_remedies",
+        "alt_medicine_therapies"
+      ],
+      "benefitCount": 11
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-hopital",
+      "name": "Hôpital (frais de guérison à l'hôpital)",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Assurance complémentaire d'hospitalisation en division commune, mi-privée ou privée (Europe ou Monde) dans tous les hôpitaux pour soins aigus reconnus de Suisse, avec option cures, rooming-in, forfait accouchement, deuxième avis médical et assurance de voyage Vacanza incluse.",
+      "variants": [
+        {
+          "key": "commune",
+          "name": "Hôpital division commune",
+          "description": "Libre choix parmi tous les hôpitaux de Suisse, chambre à plusieurs lits, sans libre choix du médecin ; sans participation aux coûts"
+        },
+        {
+          "key": "mi-privee",
+          "name": "Hôpital division mi-privée",
+          "description": "Chambre à deux lits, libre choix du médecin ; participation aux coûts à option CHF 0 à 10'000.–"
+        },
+        {
+          "key": "privee-europe",
+          "name": "Hôpital division privée Europe",
+          "description": "Chambre à un lit, libre choix du médecin ; urgences : 100 % en Europe, 75 % hors Europe ; Vacanza 8 semaines"
+        },
+        {
+          "key": "privee-monde",
+          "name": "Hôpital division privée Monde",
+          "description": "Chambre à un lit, libre choix du médecin ; urgences couvertes à 100 % dans le monde entier ; Vacanza 11 mois par voyage"
+        }
+      ],
+      "prerequisites": "Conclusion possible jusqu'à l'âge de 70 ans révolus (aperçu 2027) ; proposition avec questions de santé (examen des risques possible) ; questionnaire de santé obligatoire ; options : avec/sans accidents, avec/sans cures (partie B), participation aux coûts (pas en division commune) ; la couverture privée Monde ne peut pas être conclue avant la naissance",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "deductible",
+          "accident"
+        ],
+        "ageBands": "Âge réel : 0–18, 19–25, 26–30, puis groupes de cinq ans (31–35, 36–40, …) ; dernier groupe d'âge atteint à 86 ans (CGA LCA 01.2022, ch. 7.2). Le changement de groupe a lieu au 1er janvier de l'année civile au cours de laquelle l'âge limite est atteint (âge atteint dans l'année). La page web « changement de groupe d'âge » liste 00–18 / 19–25 / 26–30 / 31–35 / … / 66–70 / « à partir de 71 ans » : écart avec les CGA à lever.",
+        "discounts": "Rabais familial : 50 % sur la prime dès le 2e enfant, jusqu'à 18 ans (au moins deux enfants avec une complémentaire Visana) ; Contrat pluriannuel : 2 % (3 ans) ou 3 % (5 ans) ; Paiement semestriel 1 % d'escompte, annuel 2 % ; Rabais de santé de 20 % la première année si l'examen des risques est réussi, remplacé ensuite par le rabais pour absence de sinistre de 20 % (période d'observation 1er juillet – 30 juin) ; Participation aux coûts à option : réduction de 15 / 25 / 50 / 65 % (mi-privée) et 10 / 20 / 40 / 55 % (privée) pour CHF 1'000 / 2'000 / 5'000 / 10'000 ; Réduction de prime en cas d'exclusion du risque accidents"
+      },
+      "conditionsDoc": {
+        "title": "CC Assurance-maladie complémentaire (LCA) Frais de guérison à l'hôpital (V-901 ZB III)",
+        "edition": "01.2022",
+        "url": "https://www.visana.ch/dam/jcr:19ca03d0-caac-45b9-96e3-fa4dd22c4de2/assurance-maladie-complementaire-lca-frais-de-guerison-a-lhopital.2025-12-23-15-38-30.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurances-complementaires/hopital",
+        "https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurances-complementaires/hopital/allgemein",
+        "https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurances-complementaires/hopital/division-mi-privee",
+        "https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurances-complementaires/hopital/division-privee",
+        "https://www.visana.ch/dam/jcr:19ca03d0-caac-45b9-96e3-fa4dd22c4de2/assurance-maladie-complementaire-lca-frais-de-guerison-a-lhopital.2025-12-23-15-38-30.pdf",
+        "https://www.visana.ch/dam/jcr:b55a066c-a680-4afb-af5a-c486061f2a60/CGA_Assurances-maladie_complementaires_LCA_2022-01_fr.e358153725bdce4d7a8d69d257f028fa.pdf",
+        "https://www.visana.ch/dam/jcr:577ea0a7-5319-4609-bf3a-71fc91d92029/261112_Visana_Leistungsuebersicht_2027_FR_web.61a74c024533e534c9f3c9d68891bb97.pdf",
+        "https://www.visana.ch/dam/jcr:6b966591-369d-4b73-8492-8dce55fcd5d8/vis-factsheet-spital-a4-rz-fr-web.2025-09-29-19-00-44.pdf",
+        "https://www.visana.ch/dam/jcr:1cc1fbc4-2d67-43cb-9e3b-fcca2aac7e37/260304_CH_Visana_Formular_Geburtspauschale_FR_web.2026-09-24-16-01-36.pdf",
+        "https://www.visana.ch/fr/clientele-privee/services-et-contact/services/adapter-assurance/economiser-et-optimiser"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "assistance_services",
+        "convalescence_cure",
+        "hospital_deductible_option",
+        "hospital_flex",
+        "hospital_general_ch",
+        "hospital_private",
+        "hospital_semi_private",
+        "maternity",
+        "other:addiction_treatment",
+        "other:therapeutic_community",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "second_opinion",
+        "spa_cure"
+      ],
+      "benefitCount": 47
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-hopital-flex",
+      "name": "Hôpital Flex",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Complémentaire d'hospitalisation avec libre choix de la division (commune, mi-privée, privée) avant chaque séjour, contre une participation annuelle fixe en mi-privée/privée (variantes 2/4 et 4/8). Vendue aussi en combinaison avec un capital Hôpital de CHF 4'000.– (« Flex division mi-privée / privée », 19–45 ans).",
+      "variants": [
+        {
+          "key": "flex-2-4",
+          "name": "Hôpital Flex 2/4",
+          "description": "Participation : commune CHF 0, mi-privée CHF 2'000.–, privée CHF 4'000.– par année civile"
+        },
+        {
+          "key": "flex-4-8",
+          "name": "Hôpital Flex 4/8",
+          "description": "Participation : commune CHF 0, mi-privée CHF 4'000.–, privée CHF 8'000.– par année civile"
+        },
+        {
+          "key": "flex-privee",
+          "name": "Flex division privée",
+          "description": "Hôpital Flex 2/4 combiné à un capital Hôpital de CHF 4'000.– ; conclusion entre 19 et 45 ans"
+        },
+        {
+          "key": "flex-mi-privee",
+          "name": "Flex division mi-privée",
+          "description": "Hôpital Flex 4/8 combiné à un capital Hôpital de CHF 4'000.– ; conclusion entre 19 et 45 ans"
+        }
+      ],
+      "prerequisites": "Conclusion possible jusqu'à l'âge de 70 ans révolus (aperçu 2027) ; proposition avec questions de santé (examen des risques possible) ; risque accidents inclus (pas d'exclusion) ; option « avec cures » pour l'élément individuel ; Flex division mi-privée/privée : 19 à 45 ans",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Âge réel : 0–18, 19–25, 26–30, puis groupes de cinq ans ; par dérogation aux CGA, le dernier groupe d'âge est atteint à 71 ans (CC Hôpital Flex ch. 7.1). Tarif plus élevé si un capital Hôpital est conclu en parallèle (CC capital Hôpital ch. 8).",
+        "discounts": "Rabais familial : 50 % sur la prime dès le 2e enfant, jusqu'à 18 ans (au moins deux enfants avec une complémentaire Visana) ; Contrat pluriannuel : 2 % (3 ans) ou 3 % (5 ans) ; Paiement semestriel 1 % d'escompte, annuel 2 %"
+      },
+      "conditionsDoc": {
+        "title": "CC Assurance-maladie complémentaire (LCA) Hôpital Flex (V-901 ZB IV)",
+        "edition": "01.2022",
+        "url": "https://www.visana.ch/dam/jcr:b2f79f08-18b3-4def-b38a-913277792c80/assurance-maladie-complementaire-lca-hopital-flex.2025-10-29-11-14-22.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurances-complementaires/hopital/flex",
+        "https://www.visana.ch/dam/jcr:b2f79f08-18b3-4def-b38a-913277792c80/assurance-maladie-complementaire-lca-hopital-flex.2025-10-29-11-14-22.pdf",
+        "https://www.visana.ch/dam/jcr:b55a066c-a680-4afb-af5a-c486061f2a60/CGA_Assurances-maladie_complementaires_LCA_2022-01_fr.e358153725bdce4d7a8d69d257f028fa.pdf",
+        "https://www.visana.ch/dam/jcr:577ea0a7-5319-4609-bf3a-71fc91d92029/261112_Visana_Leistungsuebersicht_2027_FR_web.61a74c024533e534c9f3c9d68891bb97.pdf",
+        "https://www.visana.ch/dam/jcr:6b966591-369d-4b73-8492-8dce55fcd5d8/vis-factsheet-spital-a4-rz-fr-web.2025-09-29-19-00-44.pdf",
+        "https://www.visana.ch/dam/jcr:1cc1fbc4-2d67-43cb-9e3b-fcca2aac7e37/260304_CH_Visana_Formular_Geburtspauschale_FR_web.2026-09-24-16-01-36.pdf",
+        "https://www.visana.ch/dam/jcr:35ccf785-7038-4323-b436-001c2c0b161b/260615_Versicherungsantrag_VVG_FR_Web.2026-06-25-13-22-11.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "assistance_services",
+        "convalescence_cure",
+        "hospital_capital",
+        "hospital_flex",
+        "maternity",
+        "other:addiction_treatment",
+        "other:therapeutic_community",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "second_opinion",
+        "spa_cure"
+      ],
+      "benefitCount": 23
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-hopital-flex-plus",
+      "name": "Hôpital Flex Plus",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Complémentaire d'hospitalisation flexible : libre choix de la division avant chaque séjour, participation proportionnelle (20 % max. CHF 2'000.– en mi-privée, 35 % max. CHF 4'000.– en privée), urgences à l'étranger à 100 %, traitements volontaires dans des hôpitaux étrangers reconnus, bonus pour absence de prestations.",
+      "variants": [],
+      "prerequisites": "Conclusion possible jusqu'à l'âge de 70 ans révolus (aperçu 2027) ; proposition avec questions de santé (examen des risques possible) ; exclusion du risque accidents possible",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Âge réel, groupes propres : 0–15, 16–20, 21–27, 28–30, puis groupes de cinq ans (31–35, 36–40, …) ; dernier groupe d'âge atteint à 81 ans (CC Hôpital Flex Plus ch. 4.1)",
+        "discounts": "Rabais familial : 50 % sur la prime dès le 2e enfant, jusqu'à 18 ans (au moins deux enfants avec une complémentaire Visana) ; Contrat pluriannuel : 2 % (3 ans) ou 3 % (5 ans) ; Paiement semestriel 1 % d'escompte, annuel 2 % ; Bonus annuel pour absence de prestations (montant fixé chaque année, non garanti)"
+      },
+      "conditionsDoc": {
+        "title": "CC Assurance-maladie complémentaire (LCA) Hôpital Flex Plus (V-901 ZB V)",
+        "edition": "01.2022",
+        "url": "https://www.visana.ch/dam/jcr:ac600d32-b90e-4a42-92e4-58ee3d1b070d/Hopital%20Flex%20Plus_cc_fr.2025-10-28-14-45-16.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurances-complementaires/hopital/flex",
+        "https://www.visana.ch/dam/jcr:ac600d32-b90e-4a42-92e4-58ee3d1b070d/Hopital%20Flex%20Plus_cc_fr.2025-10-28-14-45-16.pdf",
+        "https://www.visana.ch/dam/jcr:b55a066c-a680-4afb-af5a-c486061f2a60/CGA_Assurances-maladie_complementaires_LCA_2022-01_fr.e358153725bdce4d7a8d69d257f028fa.pdf",
+        "https://www.visana.ch/dam/jcr:577ea0a7-5319-4609-bf3a-71fc91d92029/261112_Visana_Leistungsuebersicht_2027_FR_web.61a74c024533e534c9f3c9d68891bb97.pdf",
+        "https://www.visana.ch/dam/jcr:1cc1fbc4-2d67-43cb-9e3b-fcca2aac7e37/260304_CH_Visana_Formular_Geburtspauschale_FR_web.2026-09-24-16-01-36.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "assistance_services",
+        "bonus_program",
+        "hospital_abroad",
+        "hospital_flex",
+        "maternity",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "second_opinion",
+        "spa_cure"
+      ],
+      "benefitCount": 14
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-basic",
+      "name": "Basic (combinaison d'assurances complémentaires)",
+      "category": "combined",
+      "audience": "all",
+      "summary": "Paquet combinant Basic Traitements ambulatoires (≈ Traitements ambulatoires II), Basic Médecine complémentaire (max. CHF 4'000.–/an) et Basic Hôpital dans la division choisie à la conclusion, avec Vacanza et Assistance CH. Exclus par rapport aux produits individuels : cures, institutions pour dépendances, communautés thérapeutiques, médicaments de la liste Visana.",
+      "variants": [
+        {
+          "key": "commune",
+          "name": "Basic Hôpital division commune",
+          "description": "Libre choix parmi tous les hôpitaux de Suisse, chambre à plusieurs lits, sans libre choix du médecin ; sans participation aux coûts"
+        },
+        {
+          "key": "mi-privee",
+          "name": "Basic Hôpital division mi-privée",
+          "description": "Chambre à deux lits, libre choix du médecin ; participation aux coûts à option CHF 0 à 10'000.–"
+        },
+        {
+          "key": "privee-europe",
+          "name": "Basic Hôpital division privée Europe",
+          "description": "Chambre à un lit, libre choix du médecin ; urgences : 100 % en Europe, 75 % hors Europe ; Vacanza 8 semaines"
+        },
+        {
+          "key": "privee-monde",
+          "name": "Basic Hôpital division privée Monde",
+          "description": "Chambre à un lit, libre choix du médecin ; urgences couvertes à 100 % dans le monde entier ; Vacanza 11 mois par voyage"
+        }
+      ],
+      "prerequisites": "Conclusion possible jusqu'à l'âge de 70 ans révolus (aperçu 2027) ; proposition avec questions de santé (examen des risques possible) ; risque accidents inclus ; participation aux coûts d'hôpital à option (pas en division commune)",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "deductible"
+        ],
+        "ageBands": "Âge réel : 0–18, 19–25, 26–30, puis groupes de cinq ans (31–35, 36–40, …) ; dernier groupe d'âge atteint à 86 ans (CGA LCA 01.2022, ch. 7.2). Le changement de groupe a lieu au 1er janvier de l'année civile au cours de laquelle l'âge limite est atteint (âge atteint dans l'année). La page web « changement de groupe d'âge » liste 00–18 / 19–25 / 26–30 / 31–35 / … / 66–70 / « à partir de 71 ans » : écart avec les CGA à lever.",
+        "discounts": "Rabais familial : 50 % sur la prime dès le 2e enfant, jusqu'à 18 ans (au moins deux enfants avec une complémentaire Visana) ; Contrat pluriannuel : 2 % (3 ans) ou 3 % (5 ans) ; Paiement semestriel 1 % d'escompte, annuel 2 % ; Rabais pour absence de sinistre de 20 % (aucune prestation stationnaire durant la période d'observation 1er juillet – 30 juin) ; Réduction de prime avec participation aux coûts d'hôpital à option (CHF 1'000 / 2'000 / 5'000 / 10'000)"
+      },
+      "conditionsDoc": {
+        "title": "CC Assurance-maladie complémentaire Basic (LCA) – traitements ambulatoires, médecine complémentaire, Hôpital (V-905 ZB I-III) + CGA Basic 01.2022",
+        "edition": "01.2024",
+        "url": "https://www.visana.ch/dam/jcr:a563607a-2918-4c22-9f8c-4540063477ab/CC_Assurance-maladie_complementaire_Basic.2025-10-30-10-29-40.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurances-complementaires/assurances-complementaires-combinees",
+        "https://www.visana.ch/dam/jcr:a563607a-2918-4c22-9f8c-4540063477ab/CC_Assurance-maladie_complementaire_Basic.2025-10-30-10-29-40.pdf",
+        "https://www.visana.ch/dam/jcr:8b3f92e0-2595-44ce-965c-da08a66126c3/assurance-maladie-complementaire-basic.2025-10-30-10-25-37.pdf",
+        "https://www.visana.ch/dam/jcr:577ea0a7-5319-4609-bf3a-71fc91d92029/261112_Visana_Leistungsuebersicht_2027_FR_web.61a74c024533e534c9f3c9d68891bb97.pdf",
+        "https://www.visana.ch/dam/jcr:6d4ef5ba-cf6d-4f02-ab5e-26955d88675f/260304_CH_Visana_Flyer-Wellness-Scheck_A4_FR_web.2026-09-01-14-31-39.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "alt_medicine_remedies",
+        "alt_medicine_therapies",
+        "assistance_services",
+        "cosmetic_corrections",
+        "dental_surgery",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "gynecological_prevention",
+        "home_help",
+        "hospital_deductible_option",
+        "hospital_flex",
+        "hospital_general_ch",
+        "hospital_private",
+        "hospital_semi_private",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "orthodontics",
+        "prevention_checkup",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "search_recovery",
+        "sterilization_contraception",
+        "transport_rescue",
+        "travel_expenses_treatment",
+        "vaccination"
+      ],
+      "benefitCount": 51
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-basic-flex",
+      "name": "Basic Flex",
+      "category": "combined",
+      "audience": "all",
+      "summary": "Paquet Basic (ambulatoire ≈ degré II, médecine complémentaire max. CHF 4'000.–/an) avec couverture hospitalière flexible Basic Hôpital Flex : division choisie à chaque hospitalisation, participation 2/4 ou 4/8.",
+      "variants": [
+        {
+          "key": "flex-2-4",
+          "name": "Basic Flex 2/4",
+          "description": "Participation : commune CHF 0, mi-privée CHF 2'000.–, privée CHF 4'000.– par année civile"
+        },
+        {
+          "key": "flex-4-8",
+          "name": "Basic Flex 4/8",
+          "description": "Participation : commune CHF 0, mi-privée CHF 4'000.–, privée CHF 8'000.– par année civile"
+        }
+      ],
+      "prerequisites": "Conclusion possible jusqu'à l'âge de 70 ans révolus (aperçu 2027) ; proposition avec questions de santé (examen des risques possible) ; risque accidents inclus",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Âge réel : 0–18, 19–25, 26–30, puis groupes de cinq ans (31–35, 36–40, …) ; dernier groupe d'âge atteint à 86 ans (CGA LCA 01.2022, ch. 7.2). Le changement de groupe a lieu au 1er janvier de l'année civile au cours de laquelle l'âge limite est atteint (âge atteint dans l'année). La page web « changement de groupe d'âge » liste 00–18 / 19–25 / 26–30 / 31–35 / … / 66–70 / « à partir de 71 ans » : écart avec les CGA à lever. Tarif plus élevé si un capital Hôpital est conclu en parallèle (CC capital Hôpital ch. 8).",
+        "discounts": "Rabais familial : 50 % sur la prime dès le 2e enfant, jusqu'à 18 ans (au moins deux enfants avec une complémentaire Visana) ; Contrat pluriannuel : 2 % (3 ans) ou 3 % (5 ans) ; Paiement semestriel 1 % d'escompte, annuel 2 %"
+      },
+      "conditionsDoc": {
+        "title": "CC Assurance-maladie complémentaire Basic Flex (LCA) – Traitements ambulatoires, Médecine complémentaire, Hôpital Flex (V-905 ZB IV)",
+        "edition": "01.2024",
+        "url": "https://www.visana.ch/dam/jcr:38d413c3-7304-43d8-8793-af72ba29998b/CC_Assurance-maladie_complementaire_Basic_Flex.2025-10-30-10-29-45.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurances-complementaires/assurances-complementaires-combinees",
+        "https://www.visana.ch/dam/jcr:38d413c3-7304-43d8-8793-af72ba29998b/CC_Assurance-maladie_complementaire_Basic_Flex.2025-10-30-10-29-45.pdf",
+        "https://www.visana.ch/dam/jcr:8b3f92e0-2595-44ce-965c-da08a66126c3/assurance-maladie-complementaire-basic.2025-10-30-10-25-37.pdf",
+        "https://www.visana.ch/dam/jcr:577ea0a7-5319-4609-bf3a-71fc91d92029/261112_Visana_Leistungsuebersicht_2027_FR_web.61a74c024533e534c9f3c9d68891bb97.pdf",
+        "https://www.visana.ch/dam/jcr:35ccf785-7038-4323-b436-001c2c0b161b/260615_Versicherungsantrag_VVG_FR_Web.2026-06-25-13-22-11.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "alt_medicine_remedies",
+        "alt_medicine_therapies",
+        "assistance_services",
+        "cosmetic_corrections",
+        "dental_surgery",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "gynecological_prevention",
+        "home_help",
+        "hospital_flex",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "orthodontics",
+        "prevention_checkup",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "search_recovery",
+        "sterilization_contraception",
+        "transport_rescue",
+        "travel_expenses_treatment",
+        "vaccination"
+      ],
+      "benefitCount": 37
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-soins-dentaires",
+      "name": "Soins dentaires",
+      "category": "dental",
+      "audience": "all",
+      "summary": "Assurance des soins dentaires en huit classes vendues (3 à 10) : 50 % ou 75 % des frais de contrôle, d'hygiène, de traitements conservateurs, d'orthodontie, de prothèses et de parodontose, jusqu'à CHF 600.– à 5'000.– par année civile.",
+      "variants": [
+        {
+          "key": "classe-3",
+          "name": "Soins dentaires classe 3",
+          "description": "50 % des frais' max. CHF 600.– par année civile"
+        },
+        {
+          "key": "classe-4",
+          "name": "Soins dentaires classe 4",
+          "description": "75 % des frais' max. CHF 600.– par année civile"
+        },
+        {
+          "key": "classe-5",
+          "name": "Soins dentaires classe 5",
+          "description": "50 % des frais' max. CHF 1'200.– par année civile"
+        },
+        {
+          "key": "classe-6",
+          "name": "Soins dentaires classe 6",
+          "description": "75 % des frais' max. CHF 1'200.– par année civile"
+        },
+        {
+          "key": "classe-7",
+          "name": "Soins dentaires classe 7",
+          "description": "75 % des frais' max. CHF 1'500.– par année civile"
+        },
+        {
+          "key": "classe-8",
+          "name": "Soins dentaires classe 8",
+          "description": "75 % des frais' max. CHF 1'800.– par année civile"
+        },
+        {
+          "key": "classe-9",
+          "name": "Soins dentaires classe 9",
+          "description": "75 % des frais' max. CHF 3'000.– par année civile"
+        },
+        {
+          "key": "classe-10",
+          "name": "Soins dentaires classe 10",
+          "description": "75 % des frais' max. CHF 5'000.– par année civile"
+        }
+      ],
+      "prerequisites": "Denture assainie et aucun traitement prévu à la signature de la proposition ; pas d'examen de santé si l'enfant est assuré avant son 4e anniversaire ; conclusion possible jusqu'à 70 ans révolus ; classes 1 et 2 = catégorie close",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Âge réel : 0–18, 19–25, 26–30, puis groupes de cinq ans (31–35, 36–40, …) ; dernier groupe d'âge atteint à 86 ans (CGA LCA 01.2022, ch. 7.2). Le changement de groupe a lieu au 1er janvier de l'année civile au cours de laquelle l'âge limite est atteint (âge atteint dans l'année). La page web « changement de groupe d'âge » liste 00–18 / 19–25 / 26–30 / 31–35 / … / 66–70 / « à partir de 71 ans » : écart avec les CGA à lever.",
+        "discounts": "Rabais familial : 50 % sur la prime dès le 2e enfant, jusqu'à 18 ans (au moins deux enfants avec une complémentaire Visana) ; Paiement semestriel 1 % d'escompte, annuel 2 %"
+      },
+      "conditionsDoc": {
+        "title": "CC Assurance-maladie complémentaire (LCA) Soins dentaires (V-903 ZB II)",
+        "edition": "01.2022",
+        "url": "https://www.visana.ch/dam/jcr:b98e451c-377b-430a-931f-c9885b4a8142/assurance-maladie-complementaire-soins-dentaires.2025-10-30-10-27-17.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurances-complementaires/assurance-soins-dentaires",
+        "https://www.visana.ch/dam/jcr:b98e451c-377b-430a-931f-c9885b4a8142/assurance-maladie-complementaire-soins-dentaires.2025-10-30-10-27-17.pdf",
+        "https://www.visana.ch/dam/jcr:b55a066c-a680-4afb-af5a-c486061f2a60/CGA_Assurances-maladie_complementaires_LCA_2022-01_fr.e358153725bdce4d7a8d69d257f028fa.pdf",
+        "https://www.visana.ch/dam/jcr:577ea0a7-5319-4609-bf3a-71fc91d92029/261112_Visana_Leistungsuebersicht_2027_FR_web.61a74c024533e534c9f3c9d68891bb97.pdf"
+      ],
+      "tags": [
+        "dental_hygiene",
+        "dental_treatment",
+        "orthodontics"
+      ],
+      "benefitCount": 24
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-indemnites-journalieres-hospitalisation",
+      "name": "Assurance d'indemnités journalières d'hospitalisation",
+      "category": "hospital_daily_cash",
+      "audience": "all",
+      "summary": "Assurance de somme versant un montant journalier librement utilisable (CHF 50.– à 500.–) pour chaque jour passé dans un hôpital pour maladies aiguës, pendant 30, 60 ou 90 jours par année civile.",
+      "variants": [],
+      "prerequisites": "Conclusion possible dès 1 an révolu jusqu'à 70 ans révolus (aperçu 2027) ; personnes résidant ou travaillant en Suisse ; proposition avec questions de santé ; couverture accidents excluable",
+      "pricing": {
+        "factors": [
+          "age",
+          "accident"
+        ],
+        "ageBands": "Primes selon l'âge réel : 0–18, 19–25, 26–30, puis groupes de cinq ans ; dernier groupe d'âge atteint à 86 ans (CGA IJ hospitalisation ch. 6) ; changement au 1er janvier de l'année où l'âge limite est atteint",
+        "discounts": "Contrat pluriannuel : 2 % (3 ans) ou 3 % (5 ans) ; Paiement semestriel 1 % d'escompte, annuel 2 % ; pas de rabais familial ni de rabais pour absence de sinistre"
+      },
+      "conditionsDoc": {
+        "title": "CGA Assurance d'indemnités journalières d'hospitalisation (LCA) (V-904)",
+        "edition": "01.2022",
+        "url": "https://www.visana.ch/dam/jcr:47753894-c44a-49ea-bb42-17f075d9833e/assurance-indemnites-journalieres-hospitalisation.2025-10-29-10-48-19.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurances-complementaires/hopital/indemnites-journalieres-hospitalisation",
+        "https://www.visana.ch/dam/jcr:47753894-c44a-49ea-bb42-17f075d9833e/assurance-indemnites-journalieres-hospitalisation.2025-10-29-10-48-19.pdf",
+        "https://www.visana.ch/dam/jcr:35ccf785-7038-4323-b436-001c2c0b161b/260615_Versicherungsantrag_VVG_FR_Web.2026-06-25-13-22-11.pdf",
+        "https://www.visana.ch/dam/jcr:577ea0a7-5319-4609-bf3a-71fc91d92029/261112_Visana_Leistungsuebersicht_2027_FR_web.61a74c024533e534c9f3c9d68891bb97.pdf"
+      ],
+      "tags": [
+        "hospital_daily_cash"
+      ],
+      "benefitCount": 2
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-capital-hopital",
+      "name": "Assurance sous forme de capital Hôpital",
+      "category": "hospital_daily_cash",
+      "audience": "adult",
+      "summary": "Assurance de somme : capital annuel de CHF 500.– à 15'000.– versé une fois par année civile en cas de séjour stationnaire dans un hôpital pour soins aigus, en Suisse ou à l'étranger, librement utilisable. Peut être conclue indépendamment d'autres assurances.",
+      "variants": [],
+      "prerequisites": "Conclusion possible de 19 ans jusqu'à 70 ans révolus ; combinaison avec Hôpital Flex possible de 19 à 45 ans (aperçu 2027) ; exclusion du risque accidents possible",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "accident"
+        ],
+        "ageBands": "Primes échelonnées selon le sexe et la classe d'âge ; pas de groupe 0–18 (pas assurable avant 18 ans) ; sinon groupes des CGA LCA (19–25, 26–30, puis cinq ans)",
+        "discounts": "Contrat pluriannuel : 2 % (3 ans) ou 3 % (5 ans) ; Paiement semestriel 1 % d'escompte, annuel 2 % ; attention : la conclusion entraîne un tarif plus élevé dans Hôpital Flex, Managed Care Hôpital Flex et Basic Flex"
+      },
+      "conditionsDoc": {
+        "title": "CC Assurance sous forme de capital Hôpital (LCA) (V-902 ZB I)",
+        "edition": "01.2022",
+        "url": "https://www.visana.ch/dam/jcr:1cdea100-68f4-4c42-ba99-57608b420272/assurance-sous-forme-de-capital-hopital.2025-10-29-11-16-09.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurances-complementaires/hopital/capital-hopital",
+        "https://www.visana.ch/dam/jcr:1cdea100-68f4-4c42-ba99-57608b420272/assurance-sous-forme-de-capital-hopital.2025-10-29-11-16-09.pdf",
+        "https://www.visana.ch/dam/jcr:ed1ffe0b-52b8-4540-abbb-1662099e397a/V-3032_261112_Visana_Factsheet_Spitalkapital_A4_FR_web.270884dde00e325e48feabf532767c98.pdf",
+        "https://www.visana.ch/dam/jcr:577ea0a7-5319-4609-bf3a-71fc91d92029/261112_Visana_Leistungsuebersicht_2027_FR_web.61a74c024533e534c9f3c9d68891bb97.pdf"
+      ],
+      "tags": [
+        "hospital_capital"
+      ],
+      "benefitCount": 2
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-vacanza",
+      "name": "Assurance de voyage Vacanza",
+      "category": "travel_abroad",
+      "audience": "all",
+      "summary": "Assurance de voyage en complément à la caisse-maladie : part non couverte des frais d'hospitalisation et de traitement ambulatoire à l'étranger (montant illimité, 6 mois dès le début du traitement), aide immédiate 24 h/24 et rapatriement, protection juridique à l'étranger ; options bagages et frais d'annulation. Incluse 8 semaines par voyage dans Traitements ambulatoires, Hôpital et Basic ; conclue séparément pour des séjours de 8 semaines à 12 mois.",
+      "variants": [
+        {
+          "key": "base",
+          "name": "Couverture de base Vacanza",
+          "description": "Frais de guérison à l'étranger, aide immédiate, protection juridique"
+        },
+        {
+          "key": "options",
+          "name": "Options supplémentaires Vacanza",
+          "description": "Assurance des bagages, des frais d'annulation et des cartes de crédit/cartes-clients (porteur de risque : Zurich Compagnie d'Assurances SA) ; uniquement avec la couverture de base"
+        }
+      ],
+      "prerequisites": "Être assuré pour les soins selon la LAMal et avoir son domicile légal en Suisse ; pas de questionnaire de santé mentionné",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Deux catégories : enfants (jusqu'à la fin de l'année civile des 18 ans) et adultes (dès la 19e année) ; prime unique selon la durée du voyage",
+        "discounts": "Incluse sans supplément (8 semaines par voyage ; 11 mois avec Hôpital division privée Monde) pour les assurés Traitements ambulatoires, Hôpital ou Basic ; tarifs réduits au-delà pour ces assurés"
+      },
+      "conditionsDoc": {
+        "title": "CGA Assurance de voyage Vacanza (LCA) (V-706.01)",
+        "edition": "01.2022",
+        "url": "https://www.visana.ch/dam/jcr:ce13dcf6-b9a1-4f85-b17c-0d73d8e83097/Vacanza_cga_fr.2025-12-23-15-41-33.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/fr/clientele-privee/assurances/vehicules-et-voyages/assurance-voyage",
+        "https://www.visana.ch/dam/jcr:ce13dcf6-b9a1-4f85-b17c-0d73d8e83097/Vacanza_cga_fr.2025-12-23-15-41-33.pdf",
+        "https://www.visana.ch/dam/jcr:4bc1927d-8c29-4c32-8f03-b2356328b9af/260303_CH_Visana_Factsheet-Vacanza_A4_FR_web.2026-09-01-14-34-10.pdf",
+        "https://www.visana.ch/dam/jcr:577ea0a7-5319-4609-bf3a-71fc91d92029/261112_Visana_Leistungsuebersicht_2027_FR_web.61a74c024533e534c9f3c9d68891bb97.pdf",
+        "https://entry.visana.ch/b2a/apps/igs/vacanza/#/calculator"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "assistance_services",
+        "legal_protection",
+        "search_recovery",
+        "travel_assistance_repatriation",
+        "travel_cancellation_luggage"
+      ],
+      "benefitCount": 13
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-capital-accident-tup",
+      "name": "Assurance-accidents sous forme de capital (TUP)",
+      "category": "capital_accident",
+      "audience": "all",
+      "summary": "Assurance de somme en cas de décès (T) ou d'invalidité (U) par accident, sommes librement choisies, capital d'invalidité progressif jusqu'à 350 % ; complément facultatif P pour les frais de guérison en division privée après accident.",
+      "variants": [
+        {
+          "key": "capital-tu",
+          "name": "Capital décès et/ou invalidité (T et U)",
+          "description": "Sommes au choix ; décès et invalidité assurables indépendamment"
+        },
+        {
+          "key": "frais-guerison-p",
+          "name": "Assurance complémentaire privée pour frais de guérison en cas d'accident (P)",
+          "description": "Frais de guérison en division privée à la suite d'un accident, en complément à la LAMal/LAA"
+        }
+      ],
+      "prerequisites": "T et U : avoir chez Visana l'assurance de base LAMal, ou Basic, ou Hôpital + Traitements ambulatoires + Médecine complémentaire, ou une assurance d'indemnités journalières, ou une solution d'assistance et de prévoyance ; conclusion comme enfant jusqu'à 18 ans révolus, comme adulte jusqu'à 65 ans révolus ; la variante P n'est pas soumise à cette condition",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Variante enfants (jusqu'au 31 décembre de l'année des 18 ans) puis variante adultes (19 à 65 ans) ; prime selon les sommes assurées",
+        "discounts": "Capital-décès des enfants inclus sans prime avec l'assurance invalidité ; Rabais familial : 50 % sur la prime dès le 2e enfant, jusqu'à 18 ans (au moins deux enfants avec une complémentaire Visana) (mentionné sur la page produit)"
+      },
+      "conditionsDoc": {
+        "title": "CGA Assurance-accidents sous forme de capital TUP (V-651.01)",
+        "edition": "01.2022",
+        "url": "https://www.visana.ch/dam/jcr:2a7063f7-6b75-4bd4-85d7-2393cd91172a/assurance-accidents-sous-forme-de-capital-tup.2025-10-30-14-02-59.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/fr/clientele-privee/assurances/prevoyance-et-patrimoine/assurance-sous-forme-de-capital",
+        "https://www.visana.ch/dam/jcr:2a7063f7-6b75-4bd4-85d7-2393cd91172a/assurance-accidents-sous-forme-de-capital-tup.2025-10-30-14-02-59.pdf",
+        "https://www.visana.ch/dam/jcr:82cb6d74-6f70-4baa-a2b5-c3edbc4b4281/260329_Visana_Factsheet_Kapitalversicherung_TUP_A4_FR_Web.2026-09-28-13-53-03.pdf",
+        "https://www.visana.ch/dam/jcr:577ea0a7-5319-4609-bf3a-71fc91d92029/261112_Visana_Leistungsuebersicht_2027_FR_web.61a74c024533e534c9f3c9d68891bb97.pdf"
+      ],
+      "tags": [
+        "accident_capital",
+        "daily_allowance",
+        "other:accident_treatment_private",
+        "premium_waiver",
+        "search_recovery"
+      ],
+      "benefitCount": 7
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-capital-maladie-cdi",
+      "name": "Assurance sous forme de capital en cas de décès ou d'invalidité dus à la maladie (CDI)",
+      "category": "capital_illness",
+      "audience": "all",
+      "summary": "Assurance de somme versant un capital en cas d'invalidité (CHF 100'000.– ou 200'000.–) ou de décès (CHF 10'000.– à 100'000.–) par suite de maladie, en cinq modèles ; prend fin le 31 décembre suivant le 59e anniversaire.",
+      "variants": [
+        {
+          "key": "modele-1",
+          "name": "Modèle 1",
+          "description": "Invalidité CHF 100'000.– / décès CHF 10'000.– (enfants et adultes)"
+        },
+        {
+          "key": "modele-2",
+          "name": "Modèle 2",
+          "description": "Invalidité CHF 200'000.– / décès CHF 10'000.– (enfants et adultes)"
+        },
+        {
+          "key": "modele-3",
+          "name": "Modèle 3",
+          "description": "Invalidité CHF 100'000.– / décès CHF 50'000.– (adultes de 19 à 55 ans)"
+        },
+        {
+          "key": "modele-4",
+          "name": "Modèle 4",
+          "description": "Invalidité CHF 200'000.– / décès CHF 50'000.– (adultes de 19 à 55 ans)"
+        },
+        {
+          "key": "modele-5",
+          "name": "Modèle 5",
+          "description": "Invalidité CHF 200'000.– / décès CHF 100'000.– (adultes de 19 à 55 ans)"
+        }
+      ],
+      "prerequisites": "Examen de santé ; conclusion possible jusqu'à 55 ans ; uniquement en combinaison avec l'assurance de base Visana, le paquet Basic, l'assurance Hôpital ou le complément frais de guérison en cas d'accident (page produit)",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex"
+        ],
+        "ageBands": "Âge effectif, groupes : 00–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–59 (CC CDI ch. 1.13)",
+        "discounts": "Rabais familial : 50 % sur la prime dès le 2e enfant, jusqu'à 18 ans (au moins deux enfants avec une complémentaire Visana) (mentionné sur la page produit)"
+      },
+      "conditionsDoc": {
+        "title": "CC Assurance sous forme de capital en cas de décès ou d'invalidité, dus à la maladie (CDI) LCA (V-908 ZB) + CGA CDI 01.2023",
+        "edition": "01.2023",
+        "url": "https://www.visana.ch/dam/jcr:21a46274-df4e-498f-bf47-cccc77cff3da/cc-assurance-sous-forme-capital-cdi.2025-11-10-09-11-17.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/fr/clientele-privee/assurances/prevoyance-et-patrimoine/assurance-sous-forme-de-capital",
+        "https://www.visana.ch/dam/jcr:21a46274-df4e-498f-bf47-cccc77cff3da/cc-assurance-sous-forme-capital-cdi.2025-11-10-09-11-17.pdf",
+        "https://www.visana.ch/dam/jcr:c68b0969-ac07-46fd-97de-3dd654ffcb8a/assurance-sous-forme-de-capital-en-cas-de-deces-ou-dinvalidite-dus-a-la-maladie-cdi.2025-10-30-14-03-24.pdf",
+        "https://www.visana.ch/dam/jcr:a303036f-58a3-432d-be90-2746c6c2dfd9/260330_Visana_Factsheet_KTI_A4_RZ_FR_Web.2026-09-28-14-03-46.pdf",
+        "https://www.visana.ch/dam/jcr:577ea0a7-5319-4609-bf3a-71fc91d92029/261112_Visana_Leistungsuebersicht_2027_FR_web.61a74c024533e534c9f3c9d68891bb97.pdf"
+      ],
+      "tags": [
+        "illness_capital"
+      ],
+      "benefitCount": 10
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-indemnites-journalieres-soins",
+      "name": "Indemnités journalières de soins",
+      "category": "long_term_care",
+      "audience": "all",
+      "summary": "Assurance de dommages couvrant, à hauteur de l'indemnité journalière assurée (CHF 15.– à 200.–), les frais non couverts de séjour en institution ou division pour malades chroniques et personnes nécessitant des soins (EMS) en Suisse, après un délai d'attente de deux ans et pendant dix ans au maximum.",
+      "variants": [],
+      "prerequisites": "Peut être conclue jusqu'à l'âge de 65 ans révolus (aperçu 2027) ; proposition avec questions de santé ; ne figure pas sur le formulaire de proposition LCA standard (conclusion via conseil)",
+      "pricing": {
+        "factors": [
+          "age",
+          "entry_age"
+        ],
+        "ageBands": "Âge réel pour 0–18 et 19–25 ; dès 26 ans, tarif selon l'âge au moment de l'affiliation (âge d'entrée) : 26–30, puis groupes de cinq ans (31–35, 36–40, …), dernier groupe atteint à 66 ans ; une partie de la prime constitue un capital de couverture (aucun droit en cas de sortie)",
+        "discounts": "Rabais familial : 50 % sur la prime dès le 2e enfant, jusqu'à 18 ans (au moins deux enfants avec une complémentaire Visana) ; Paiement semestriel 1 % d'escompte, annuel 2 %"
+      },
+      "conditionsDoc": {
+        "title": "CC Assurance complémentaire (LCA) Indemnités journalières de soins (V-903 ZB III)",
+        "edition": "01.2022",
+        "url": "https://www.visana.ch/dam/jcr:c979d0a8-c4e6-4477-8e7e-e9c168eea538/zb_pflegetaggeld_fr.2025-12-23-15-40-07.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/fr/clientele-privee/assurances/prevoyance-et-patrimoine/assurance-indemnites-journalieres",
+        "https://www.visana.ch/dam/jcr:c979d0a8-c4e6-4477-8e7e-e9c168eea538/zb_pflegetaggeld_fr.2025-12-23-15-40-07.pdf",
+        "https://www.visana.ch/dam/jcr:b55a066c-a680-4afb-af5a-c486061f2a60/CGA_Assurances-maladie_complementaires_LCA_2022-01_fr.e358153725bdce4d7a8d69d257f028fa.pdf",
+        "https://www.visana.ch/dam/jcr:577ea0a7-5319-4609-bf3a-71fc91d92029/261112_Visana_Leistungsuebersicht_2027_FR_web.61a74c024533e534c9f3c9d68891bb97.pdf"
+      ],
+      "tags": [
+        "long_term_care"
+      ],
+      "benefitCount": 1
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-assistance-urgence",
+      "name": "Assistance d'urgence en cas d'accident et de maladie",
+      "category": "other",
+      "audience": "adult",
+      "summary": "Assurance de dommages prenant en charge des prestations d'assistance à domicile (repas, aide ménagère, garde d'enfants, soin des animaux, courses et accompagnements) en cas d'incapacité de travail de plus de 70 % attestée médicalement, jusqu'à CHF 5'000.– par année civile.",
+      "variants": [],
+      "prerequisites": "Examen de santé ; domicile en Suisse ; l'assurance prend fin à l'âge ordinaire de la retraite AVS (maintien au plus jusqu'à 70 ans si activité lucrative prouvée) ; proposée sur le formulaire de proposition LCA (06.2026)",
+      "pricing": {
+        "factors": [
+          "age",
+          "entry_age"
+        ],
+        "ageBands": "Âge réel pour le groupe 19–25 ; dès 26 ans, tarif selon l'âge au moment de l'affiliation : 26–30, puis groupes de cinq ans, dernier groupe atteint à 66 ans (CGA Assistance d'urgence)",
+        "discounts": null
+      },
+      "conditionsDoc": {
+        "title": "CC Assistance d'urgence en cas d'accident et de maladie LCA (V-652.04) + CGA V-652.03",
+        "edition": "01.2022",
+        "url": "https://www.visana.ch/dam/jcr:823d1eff-9083-4e3a-b045-ee4f58b8a79d/cc_assistance-d-urgence-en-cas-d-accident-et-de-maladie_lca-2022-01_fr.2025-10-30-14-04-33.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/dam/jcr:823d1eff-9083-4e3a-b045-ee4f58b8a79d/cc_assistance-d-urgence-en-cas-d-accident-et-de-maladie_lca-2022-01_fr.2025-10-30-14-04-33.pdf",
+        "https://www.visana.ch/dam/jcr:e399a0d3-0a79-4e39-a77c-efb368ec308f/CGA%2520Assistance%2520d%25E2%2580%2599urgence.2025-10-30-14-03-44.pdf",
+        "https://www.visana.ch/dam/jcr:35ccf785-7038-4323-b436-001c2c0b161b/260615_Versicherungsantrag_VVG_FR_Web.2026-06-25-13-22-11.pdf",
+        "https://www.visana.ch/fr/clientele-privee/services-et-contact/services/listes-de-controles-et-repertoires/cga"
+      ],
+      "tags": [
+        "childcare_assistance",
+        "home_help"
+      ],
+      "benefitCount": 2
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-indemnites-journalieres-lca",
+      "name": "Assurance individuelle d'indemnités journalières en cas de maladie (LCA)",
+      "category": "daily_allowance",
+      "audience": "adult",
+      "summary": "Assurance perte de gain individuelle selon la LCA : indemnité journalière de CHF 5.– à 685.– en cas d'incapacité de travail due à la maladie ou à l'accident, dès 25 % d'incapacité, pendant 730 jours au maximum, délai d'attente au choix.",
+      "variants": [],
+      "prerequisites": "Conclusion possible dès 15 ans révolus jusqu'à 64 ans révolus (aperçu 2027) ; personnes exerçant une activité lucrative ; proposition avec questions de santé",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex"
+        ],
+        "ageBands": null,
+        "discounts": "Contrat pluriannuel : 2 % (3 ans) ou 3 % (5 ans) (assurance d'indemnités journalières d'hospitalisation ; non confirmé pour ce produit)"
+      },
+      "conditionsDoc": {
+        "title": "CGA Assurance individuelle d'indemnités journalières en cas de maladie (V-1020) + CS V-1025EB",
+        "edition": "01.2022",
+        "url": "https://www.visana.ch/dam/jcr:e144d3f5-4ed2-4eef-ba89-0690e2a9b724/assurance-individuelle-dindemnites-journalieres-en-cas-de-maladie.2025-10-30-14-02-46.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/fr/clientele-privee/assurances/prevoyance-et-patrimoine/assurance-indemnites-journalieres",
+        "https://www.visana.ch/dam/jcr:e144d3f5-4ed2-4eef-ba89-0690e2a9b724/assurance-individuelle-dindemnites-journalieres-en-cas-de-maladie.2025-10-30-14-02-46.pdf",
+        "https://www.visana.ch/dam/jcr:577ea0a7-5319-4609-bf3a-71fc91d92029/261112_Visana_Leistungsuebersicht_2027_FR_web.61a74c024533e534c9f3c9d68891bb97.pdf"
+      ],
+      "tags": [
+        "daily_allowance"
+      ],
+      "benefitCount": 1
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-protection-juridique-sante",
+      "name": "Protection juridique de la santé",
+      "category": "legal_protection",
+      "audience": "all",
+      "summary": "Protection juridique en matière de santé (porteur de risque : Protekta Assurance de protection juridique SA, contrat collectif) incluse automatiquement et sans supplément pour toute personne ayant l'assurance obligatoire des soins auprès d'une caisse du groupe Visana ; non vendue séparément.",
+      "variants": [],
+      "prerequisites": "Avoir l'assurance obligatoire des soins auprès de Visana SA, sana24 SA ou Galenos SA ; aucune souscription séparée",
+      "pricing": {
+        "factors": [],
+        "ageBands": null,
+        "discounts": "Incluse sans prime dans l'assurance de base du groupe Visana"
+      },
+      "conditionsDoc": {
+        "title": "CGA Protection juridique de la santé (LCA) (V-1101)",
+        "edition": "01.2024",
+        "url": "https://www.visana.ch/dam/jcr:cd6bd94b-662c-4ce3-98ad-390c26707953/gca-protection-juridique-de-la-sante-lca-2024-01-fr.2025-10-30-14-03-58.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/dam/jcr:cd6bd94b-662c-4ce3-98ad-390c26707953/gca-protection-juridique-de-la-sante-lca-2024-01-fr.2025-10-30-14-03-58.pdf",
+        "https://www.visana.ch/dam/jcr:577ea0a7-5319-4609-bf3a-71fc91d92029/261112_Visana_Leistungsuebersicht_2027_FR_web.61a74c024533e534c9f3c9d68891bb97.pdf"
+      ],
+      "tags": [
+        "legal_protection"
+      ],
+      "benefitCount": 1
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-traitements-ambulatoires-viva",
+      "name": "Traitements ambulatoires VIVA",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Version VIVA de Traitements ambulatoires (degrés I à III, mêmes montants) pour les assurés du plan de santé VIVA : prestations coordonnées par le médecin VIVA, 60 % seulement des contributions sans sa prescription, rabais de prime de 5 %.",
+      "variants": [
+        {
+          "key": "amb-1",
+          "name": "Traitements ambulatoires VIVA I",
+          "description": "Mêmes prestations que Traitements ambulatoires I"
+        },
+        {
+          "key": "amb-2",
+          "name": "Traitements ambulatoires VIVA II",
+          "description": "Mêmes prestations que Traitements ambulatoires II"
+        },
+        {
+          "key": "amb-3",
+          "name": "Traitements ambulatoires VIVA III",
+          "description": "Mêmes prestations que Traitements ambulatoires III"
+        }
+      ],
+      "prerequisites": "Uniquement en combinaison avec l'assurance de base plan de santé VIVA (soins intégrés ; Arc jurassien, région de Zofingen, Tessin, ville de Berne et environs) ; prestations à solliciter après consultation et sur prescription d'un médecin VIVA ; passage automatique au produit standard correspondant si l'assurance de base VIVA prend fin ; risque accidents inclus",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Âge réel : 0–18, 19–25, 26–30, puis groupes de cinq ans (31–35, 36–40, …) ; dernier groupe d'âge atteint à 86 ans (CGA LCA 01.2022, ch. 7.2). Le changement de groupe a lieu au 1er janvier de l'année civile au cours de laquelle l'âge limite est atteint (âge atteint dans l'année). La page web « changement de groupe d'âge » liste 00–18 / 19–25 / 26–30 / 31–35 / … / 66–70 / « à partir de 71 ans » : écart avec les CGA à lever.",
+        "discounts": "Rabais VIVA de 5 % sur la prime par rapport au produit standard ; Rabais familial : 50 % sur la prime dès le 2e enfant, jusqu'à 18 ans (au moins deux enfants avec une complémentaire Visana) ; Contrat pluriannuel : 2 % (3 ans) ou 3 % (5 ans) ; Paiement semestriel 1 % d'escompte, annuel 2 %"
+      },
+      "conditionsDoc": {
+        "title": "CC Assurance-maladie complémentaire (LCA) Traitements ambulatoires VIVA (V-810 ZB III) + CGA LCA VIVA 03.2026",
+        "edition": "03.2026",
+        "url": "https://www.visana.ch/dam/jcr:3baec786-1970-4fa0-922a-1ddb1e165d8e/CC_Assurance-maladie_complementaire_LCA_Traitements_ambulatoires_VIVA_fr.2026-07-17-09-45-50.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurances-complementaires/assurances-complementaires-viva",
+        "https://www.visana.ch/dam/jcr:3baec786-1970-4fa0-922a-1ddb1e165d8e/CC_Assurance-maladie_complementaire_LCA_Traitements_ambulatoires_VIVA_fr.2026-07-17-09-45-50.pdf",
+        "https://www.visana.ch/dam/jcr:37f75abb-0f16-48c6-89ac-1849318ec1b5/CGA_Assurances-maladie_complementaires_LCA_VIVA_fr.2026-07-17-09-45-01.pdf",
+        "https://www.visana.ch/dam/jcr:3374390b-9a3a-48fa-8fec-16194968cfff/250916_VIVA_Flyer-Zusatzversicherungen_A5_FR_Web.2026-09-01-14-14-48.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "ambulatory_free_doctor_choice",
+        "cosmetic_corrections",
+        "dental_surgery",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "gynecological_prevention",
+        "home_help",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "orthodontics",
+        "prevention_checkup",
+        "psychotherapy_non_medical",
+        "search_recovery",
+        "sterilization_contraception",
+        "transport_rescue",
+        "travel_expenses_treatment",
+        "vaccination"
+      ],
+      "benefitCount": 51
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-medecine-complementaire-viva",
+      "name": "Médecine complémentaire VIVA",
+      "category": "alternative_medicine",
+      "audience": "all",
+      "summary": "Version VIVA de Médecine complémentaire (degrés I à III, mêmes plafonds de CHF 1'000.– / 4'000.– / 10'000.–) : prestations uniquement sur prescription d'un médecin VIVA, rabais de prime de 5 %.",
+      "variants": [
+        {
+          "key": "comp-1",
+          "name": "Médecine complémentaire VIVA I",
+          "description": "Max. CHF 1'000.–/an"
+        },
+        {
+          "key": "comp-2",
+          "name": "Médecine complémentaire VIVA II",
+          "description": "Max. CHF 4'000.–/an"
+        },
+        {
+          "key": "comp-3",
+          "name": "Médecine complémentaire VIVA III",
+          "description": "Max. CHF 10'000.–/an ; aussi thérapies hors liste et thérapeutes non reconnus"
+        }
+      ],
+      "prerequisites": "Uniquement en combinaison avec l'assurance de base plan de santé VIVA (soins intégrés ; Arc jurassien, région de Zofingen, Tessin, ville de Berne et environs) ; prestations à solliciter après consultation et sur prescription d'un médecin VIVA ; passage automatique au produit standard correspondant si l'assurance de base VIVA prend fin ; risque accidents inclus",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Âge réel : 0–18, 19–25, 26–30, puis groupes de cinq ans (31–35, 36–40, …) ; dernier groupe d'âge atteint à 86 ans (CGA LCA 01.2022, ch. 7.2). Le changement de groupe a lieu au 1er janvier de l'année civile au cours de laquelle l'âge limite est atteint (âge atteint dans l'année). La page web « changement de groupe d'âge » liste 00–18 / 19–25 / 26–30 / 31–35 / … / 66–70 / « à partir de 71 ans » : écart avec les CGA à lever.",
+        "discounts": "Rabais VIVA de 5 % sur la prime par rapport au produit standard ; Rabais familial : 50 % sur la prime dès le 2e enfant, jusqu'à 18 ans (au moins deux enfants avec une complémentaire Visana) ; Contrat pluriannuel : 2 % (3 ans) ou 3 % (5 ans) ; Paiement semestriel 1 % d'escompte, annuel 2 %"
+      },
+      "conditionsDoc": {
+        "title": "CC Assurance-maladie complémentaire (LCA) Médecine complémentaire VIVA (V-810 ZB IV)",
+        "edition": "03.2026",
+        "url": "https://www.visana.ch/dam/jcr:f92ff00a-853d-4d1b-879e-b1e85dccb63d/CC_Assurance-maladie_complementaire_LCA_Medecine_complementaire_VIVA_fr.2026-07-17-09-46-38.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurances-complementaires/assurances-complementaires-viva",
+        "https://www.visana.ch/dam/jcr:f92ff00a-853d-4d1b-879e-b1e85dccb63d/CC_Assurance-maladie_complementaire_LCA_Medecine_complementaire_VIVA_fr.2026-07-17-09-46-38.pdf",
+        "https://www.visana.ch/dam/jcr:37f75abb-0f16-48c6-89ac-1849318ec1b5/CGA_Assurances-maladie_complementaires_LCA_VIVA_fr.2026-07-17-09-45-01.pdf",
+        "https://www.visana.ch/dam/jcr:3374390b-9a3a-48fa-8fec-16194968cfff/250916_VIVA_Flyer-Zusatzversicherungen_A5_FR_Web.2026-09-01-14-14-48.pdf"
+      ],
+      "tags": [
+        "alt_medicine_remedies",
+        "alt_medicine_therapies"
+      ],
+      "benefitCount": 11
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-hopital-viva",
+      "name": "Hôpital VIVA",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Version VIVA de l'assurance Hôpital (division commune, mi-privée, privée Europe, privée Monde ; mêmes forfaits de cures) : hospitalisation coordonnée par le médecin VIVA, prestations réduites de 40 % (max. CHF 5'000.– par hospitalisation) sans sa prescription, rabais de prime de 5 %.",
+      "variants": [
+        {
+          "key": "commune",
+          "name": "Hôpital VIVA division commune",
+          "description": "Libre choix parmi tous les hôpitaux de Suisse, chambre à plusieurs lits, sans libre choix du médecin ; sans participation aux coûts"
+        },
+        {
+          "key": "mi-privee",
+          "name": "Hôpital VIVA division mi-privée",
+          "description": "Chambre à deux lits, libre choix du médecin ; participation aux coûts à option CHF 0 à 10'000.–"
+        },
+        {
+          "key": "privee-europe",
+          "name": "Hôpital VIVA division privée Europe",
+          "description": "Chambre à un lit, libre choix du médecin ; urgences : 100 % en Europe, 75 % hors Europe ; Vacanza 8 semaines"
+        },
+        {
+          "key": "privee-monde",
+          "name": "Hôpital VIVA division privée Monde",
+          "description": "Chambre à un lit, libre choix du médecin ; urgences couvertes à 100 % dans le monde entier ; Vacanza 11 mois par voyage"
+        }
+      ],
+      "prerequisites": "Uniquement en combinaison avec l'assurance de base plan de santé VIVA (soins intégrés ; Arc jurassien, région de Zofingen, Tessin, ville de Berne et environs) ; prestations à solliciter après consultation et sur prescription d'un médecin VIVA ; passage automatique au produit standard correspondant si l'assurance de base VIVA prend fin ; passage depuis une assurance Hôpital Visana de même classe sans examen de santé",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "deductible",
+          "accident"
+        ],
+        "ageBands": "Âge réel : 0–18, 19–25, 26–30, puis groupes de cinq ans (31–35, 36–40, …) ; dernier groupe d'âge atteint à 86 ans (CGA LCA 01.2022, ch. 7.2). Le changement de groupe a lieu au 1er janvier de l'année civile au cours de laquelle l'âge limite est atteint (âge atteint dans l'année). La page web « changement de groupe d'âge » liste 00–18 / 19–25 / 26–30 / 31–35 / … / 66–70 / « à partir de 71 ans » : écart avec les CGA à lever.",
+        "discounts": "Rabais VIVA de 5 % sur la prime par rapport au produit standard ; Rabais familial : 50 % sur la prime dès le 2e enfant, jusqu'à 18 ans (au moins deux enfants avec une complémentaire Visana) ; Contrat pluriannuel : 2 % (3 ans) ou 3 % (5 ans) ; Paiement semestriel 1 % d'escompte, annuel 2 % ; Rabais de santé de 20 % la première année si l'examen des risques est réussi, remplacé ensuite par le rabais pour absence de sinistre de 20 % (période d'observation 1er juillet – 30 juin) ; Participation aux coûts à option : réduction de 15 / 25 / 50 / 65 % (mi-privée) et 10 / 20 / 40 / 55 % (privée) pour CHF 1'000 / 2'000 / 5'000 / 10'000 ; Réduction de prime en cas d'exclusion du risque accidents"
+      },
+      "conditionsDoc": {
+        "title": "CC Assurance-maladie complémentaire (LCA) Hôpital VIVA (V-810 ZB I)",
+        "edition": "03.2026",
+        "url": "https://www.visana.ch/dam/jcr:bd2fdc7d-13ec-48ca-be13-7d1e16c86b3f/CC_Assurance-maladie_complementaire_LCA_Hopital_VIVA_fr.2026-07-17-09-47-29.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurances-complementaires/assurances-complementaires-viva",
+        "https://www.visana.ch/dam/jcr:bd2fdc7d-13ec-48ca-be13-7d1e16c86b3f/CC_Assurance-maladie_complementaire_LCA_Hopital_VIVA_fr.2026-07-17-09-47-29.pdf",
+        "https://www.visana.ch/dam/jcr:37f75abb-0f16-48c6-89ac-1849318ec1b5/CGA_Assurances-maladie_complementaires_LCA_VIVA_fr.2026-07-17-09-45-01.pdf",
+        "https://www.visana.ch/dam/jcr:3374390b-9a3a-48fa-8fec-16194968cfff/250916_VIVA_Flyer-Zusatzversicherungen_A5_FR_Web.2026-09-01-14-14-48.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "convalescence_cure",
+        "hospital_deductible_option",
+        "hospital_flex",
+        "hospital_general_ch",
+        "hospital_private",
+        "hospital_semi_private",
+        "other:addiction_treatment",
+        "other:therapeutic_community",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "spa_cure"
+      ],
+      "benefitCount": 42
+    },
+    {
+      "insurer": "visana",
+      "key": "visana-hopital-flex-viva",
+      "name": "Hôpital Flex VIVA",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Version VIVA d'Hôpital Flex (variantes 2/4 et 4/8, mêmes participations et forfaits de cures) pour les assurés du plan de santé VIVA, avec réduction de 40 % (max. CHF 5'000.– par hospitalisation) sans prescription d'un médecin VIVA et rabais de prime de 5 %.",
+      "variants": [
+        {
+          "key": "flex-2-4",
+          "name": "Hôpital Flex VIVA 2/4",
+          "description": "Participation : commune CHF 0, mi-privée CHF 2'000.–, privée CHF 4'000.–"
+        },
+        {
+          "key": "flex-4-8",
+          "name": "Hôpital Flex VIVA 4/8",
+          "description": "Participation : commune CHF 0, mi-privée CHF 4'000.–, privée CHF 8'000.–"
+        }
+      ],
+      "prerequisites": "Uniquement en combinaison avec l'assurance de base plan de santé VIVA (soins intégrés ; Arc jurassien, région de Zofingen, Tessin, ville de Berne et environs) ; prestations à solliciter après consultation et sur prescription d'un médecin VIVA ; passage automatique au produit standard correspondant si l'assurance de base VIVA prend fin ; risque accidents inclus",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Âge réel : 0–18, 19–25, 26–30, puis groupes de cinq ans (31–35, 36–40, …) ; dernier groupe d'âge atteint à 86 ans (CGA LCA 01.2022, ch. 7.2). Le changement de groupe a lieu au 1er janvier de l'année civile au cours de laquelle l'âge limite est atteint (âge atteint dans l'année). La page web « changement de groupe d'âge » liste 00–18 / 19–25 / 26–30 / 31–35 / … / 66–70 / « à partir de 71 ans » : écart avec les CGA à lever.",
+        "discounts": "Rabais VIVA de 5 % sur la prime par rapport au produit standard ; Rabais familial : 50 % sur la prime dès le 2e enfant, jusqu'à 18 ans (au moins deux enfants avec une complémentaire Visana) ; Contrat pluriannuel : 2 % (3 ans) ou 3 % (5 ans) ; Paiement semestriel 1 % d'escompte, annuel 2 %"
+      },
+      "conditionsDoc": {
+        "title": "CC Assurance-maladie complémentaire (LCA) Hôpital Flex VIVA (V-810 ZB II)",
+        "edition": "03.2026",
+        "url": "https://www.visana.ch/dam/jcr:a5999a27-2508-4945-8dfb-713650d26530/CC_Assurance-maladie_complementaire_LCA_Hopital_Flex_VIVA_fr.2026-07-17-09-48-13.pdf"
+      },
+      "sourceUrls": [
+        "https://www.visana.ch/fr/clientele-privee/assurances/maladie-et-accidents/assurances-complementaires/assurances-complementaires-viva",
+        "https://www.visana.ch/dam/jcr:a5999a27-2508-4945-8dfb-713650d26530/CC_Assurance-maladie_complementaire_LCA_Hopital_Flex_VIVA_fr.2026-07-17-09-48-13.pdf",
+        "https://www.visana.ch/dam/jcr:37f75abb-0f16-48c6-89ac-1849318ec1b5/CGA_Assurances-maladie_complementaires_LCA_VIVA_fr.2026-07-17-09-45-01.pdf",
+        "https://www.visana.ch/dam/jcr:3374390b-9a3a-48fa-8fec-16194968cfff/250916_VIVA_Flyer-Zusatzversicherungen_A5_FR_Web.2026-09-01-14-14-48.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "convalescence_cure",
+        "hospital_flex",
+        "other:addiction_treatment",
+        "other:therapeutic_community",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "spa_cure"
+      ],
+      "benefitCount": 16
     }
   ]
 }
