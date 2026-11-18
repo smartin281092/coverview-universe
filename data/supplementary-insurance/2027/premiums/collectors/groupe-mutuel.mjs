@@ -385,22 +385,23 @@ async function main() {
       fs.writeFileSync(labelsFile, JSON.stringify(labels));
       await sleep(args.delay);
 
+      // Résolution de toutes les localités avant de commencer (arrêt immédiat si l'une manque).
       const localityCache = new Map();
+      for (const npa of new Set(todo.map((p) => p.npa))) {
+        const r = await api(page, 'GET', `/localities?search=${npa}`);
+        await sleep(args.delay);
+        const wanted = LOCALITIES[npa];
+        const list = Array.isArray(r.json) ? r.json : [];
+        const loc = list.find((l) => l.npa === npa && (!wanted || l.nomComplet === wanted))
+          ?? list.find((l) => l.npa === npa && (!wanted || l.nomCommune === wanted));
+        if (!loc) throw new StopError(`localité introuvable pour ${npa} : ${JSON.stringify(r.json ?? r.text).slice(0, 300)}`);
+        localityCache.set(npa, loc);
+        console.log(`localité ${npa} : ${loc.nomComplet} (${loc.codeCanton}), commune ${loc.numeroCommune}`);
+      }
       let consecutiveErrors = 0;
       let n = 0;
       for (const p of todo) {
         try {
-          if (!localityCache.has(p.npa)) {
-            const r = await api(page, 'GET', `/localities?search=${p.npa}`);
-            await sleep(args.delay);
-            const wanted = LOCALITIES[p.npa];
-            const list = Array.isArray(r.json) ? r.json : [];
-            const loc = list.find((l) => l.npa === p.npa && (!wanted || l.nomComplet === wanted))
-              ?? list.find((l) => l.npa === p.npa && (!wanted || l.nomCommune === wanted));
-            if (!loc) throw new StopError(`localité introuvable pour ${p.npa} : ${JSON.stringify(r.json ?? r.text).slice(0, 300)}`);
-            localityCache.set(p.npa, loc);
-            console.log(`localité ${p.npa} : ${loc.nomComplet} (${loc.codeCanton}), commune ${loc.numeroCommune}`);
-          }
           const rec = await collectProfile(page, args, localityCache.get(p.npa), p.birthYear, p.sex);
           fs.appendFileSync(args.raw, `${JSON.stringify(rec)}\n`);
           done.set(rec.key, rec);

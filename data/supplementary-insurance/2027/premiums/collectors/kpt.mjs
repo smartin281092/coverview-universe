@@ -445,7 +445,6 @@ async function verify(specs) {
       const wanted = LOCALITIES.find((l) => l.postalCode === postalCode)?.city;
       const cityOption = page.locator('.citySelect__list li').filter({ hasText: new RegExp(`^${postalCode} ${wanted}$`) }).first();
       await cityOption.click({ timeout: 20000 });
-      const locality = wanted;
       await page.locator('#button-to-products').click();
       // Étape « Assurance de base » : on passe sans rien choisir.
       await page.waitForSelector('.product--okp', { timeout: 90000 });
@@ -463,7 +462,7 @@ async function verify(specs) {
       const startDate = await page.locator('#select-startDate').inputValue();
 
       const codes = await page.$$eval('.product--vvg', (els) => els.map((e) => e.id.replace('product-', '')));
-      const result = { spec, locality, startDate, shown: 0, matched: 0, blank: 0, mismatches: [], notInCsv: [] };
+      const result = { spec, locality: wanted, startDate, shown: 0, matched: 0, blank: 0, mismatches: [], notInCsv: [] };
       const seen = new Set();
 
       const readCard = (code) => page.evaluate((c) => {
@@ -536,7 +535,7 @@ async function verify(specs) {
       result.csvRows = csvKeys.length;
       result.csvRowsNotShown = csvKeys.filter((k) => !seen.has(k));
       report.push(result);
-      console.log(`${spec} ${locality} · début ${startDate} · ${result.shown} prix affichés, ${result.matched} identiques au CSV, ${result.mismatches.length} écarts, ${result.notInCsv.length} absents du CSV, ${result.blank} combinaisons sans prix à l'écran, ${result.csvRowsNotShown.length}/${result.csvRows} lignes du CSV non affichées`);
+      console.log(`${spec} ${wanted} · début ${startDate} · ${result.shown} prix affichés, ${result.matched} identiques au CSV, ${result.mismatches.length} écarts, ${result.notInCsv.length} absents du CSV, ${result.blank} combinaisons sans prix à l'écran, ${result.csvRowsNotShown.length}/${result.csvRows} lignes du CSV non affichées`);
       for (const m of [...result.mismatches, ...result.notInCsv.map((x) => `absent du CSV : ${x}`), ...result.csvRowsNotShown.map((x) => `non affiché : ${x}`)]) console.log(`   ${m}`);
       await context.close();
       await sleep(delayMs);

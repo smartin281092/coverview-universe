@@ -3,7 +3,7 @@
 
 Lit data/supplementary-insurance/<année>/insurers/*.json, contrôle chaque
 fichier contre la taxonomie, puis écrit products.json, benefits.csv,
-premiums.csv et quality.json dans le même dossier.
+premiums.csv.gz et quality.json dans le même dossier.
 
 Usage : python3 scripts/supplementary-insurance-build.py [année]
 """
@@ -11,6 +11,8 @@ Usage : python3 scripts/supplementary-insurance-build.py [année]
 from __future__ import annotations
 
 import csv
+import gzip
+import io
 import json
 import sys
 from collections import Counter
@@ -187,7 +189,14 @@ def main() -> int:
             writer.writerows(rows)
 
     write_csv("benefits.csv", BENEFIT_COLUMNS, benefit_rows)
-    write_csv("premiums.csv", PREMIUM_COLUMNS, premium_rows)
+    # Le consolidé des primes dépasse cent mille lignes : gzip déterministe.
+    buffer = io.StringIO()
+    writer = csv.DictWriter(buffer, fieldnames=PREMIUM_COLUMNS, lineterminator="\n")
+    writer.writeheader()
+    writer.writerows(premium_rows)
+    with (BASE / "premiums.csv.gz").open("wb") as raw:
+        with gzip.GzipFile(fileobj=raw, mode="wb", mtime=0, filename="") as handle:
+            handle.write(buffer.getvalue().encode("utf-8"))
     (BASE / "products.json").write_text(
         json.dumps({"year": int(YEAR), "insurers": insurers, "products": products},
                    ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

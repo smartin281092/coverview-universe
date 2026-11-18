@@ -1,83 +1,97 @@
 # Assura — relevé des primes LCA 2027 dans le calculateur officiel
 
-**État au 2026-11-18 : aucun prix relevé, `assura.csv` n'existe pas.** Le calculateur prend ses localités et ses prix sur `public-api.assura.ch`, hôte refusé par le proxy de la session (`net::ERR_TUNNEL_CONNECTION_FAILED`) et absent de la liste autorisée. Le formulaire ne peut pas être validé sans localité, donc aucun prix n'a été affiché ni lu. Rien n'a été contourné ni estimé.
-
-Pour reprendre : ouvrir `public-api.assura.ch` à la session, puis `node premiums/collectors/assura.mjs`.
+Relevé du 2026-11-18 : **25 896 lignes** dans `assura.csv`, 13 produits complémentaires (21 couples produit/variante), naissances 1947 à 2026, femme et homme, 6 localités. Les prix viennent de l'API du calculateur, rejouée depuis la page ; trois profils ont été comparés à l'écran, sans écart.
 
 ## Calculateur
 
 - URL : https://calculator.assura.ch/fr (« Assura - Configurateur de produits », application Next.js).
-- Formulaire d'entrée : sexe (homme / femme / enfant à naître), prénom, date de naissance, code postal et localité, puis « Sauvegarder ».
-- `www.assura.ch` renvoie vers ce même calculateur ; aucun autre calculateur n'a été vu sur les hôtes autorisés.
+- Parcours : formulaire (sexe, prénom, date de naissance, code postal et localité) → « Sauvegarder » → page des modèles d'assurance de base → « Choisissez vos assurances complémentaires » → cartes des produits complémentaires. Le relevé s'arrête à cette page ; rien n'a été envoyé (ni récapitulatif, ni offre, ni coordonnées).
+- Aucun captcha ni blocage rencontré.
 
 ## Hôtes
 
 | Hôte | Rôle | Résultat |
 | --- | --- | --- |
 | `calculator.assura.ch` | page, scripts | atteint |
-| `cms-blue.assura.ch` | CMS : catalogue de produits, textes, FAQ (aucun prix) | atteint |
-| `www.assura.ch` | site public, fiches produit ouvertes depuis le calculateur | atteint |
-| `static.assura.ch` | documents | non sollicité par le calculateur |
-| **`public-api.assura.ch`** | **API du calculateur : localités et prix** | **refusé par le proxy** |
-| `web.cmp.usercentrics.eu`, `io.fusedeck.net`, `www.googletagmanager.com`, `westeurope-0.in.applicationinsights.azure.com` | consentement, traceurs, télémétrie | refusés, sans importance |
+| `cms-blue.assura.ch` | CMS : catalogue de produits, textes (aucun prix) | atteint |
+| `public-api.assura.ch` | API du calculateur : localités et prix | atteint (ouvert en cours de session ; refusé par le proxy au premier passage) |
+| `www.assura.ch`, `static.assura.ch` | site public, documents | non nécessaires au relevé |
+| `web.cmp.usercentrics.eu`, `io.fusedeck.net`, `www.googletagmanager.com`, `westeurope-0.in.applicationinsights.azure.com` | consentement, traceurs, télémétrie | refusés par le proxy, sans importance |
 
-## Points d'API
+## Méthode et points d'API
 
-Observés (requêtes réellement émises par la page) :
+API rejouée. `collectors/assura.mjs` parcourt d'abord le formulaire pour trois profils de contrôle, puis rejoue la requête de prix depuis la page du calculateur (`fetch` dans le navigateur), une personne par requête, 1,1 s entre deux requêtes : 6 recherches de localité et 960 requêtes de prix, toutes en HTTP 200.
 
-- `POST https://cms-blue.assura.ch/api/collections/get/productsConfigurations` avec `{"filter":{"identifier":"Default_Calc"},"simple":true,"populate":7,"lang":"fr"}` : groupes, produits (`insurance_id`, `title`, `variants`), sans prix.
-- `POST https://cms-blue.assura.ch/api/collections/get/journeys` avec `{"filter":{"identifier":"Default"},"simple":true}` : parcours « Default ».
-- `GET https://public-api.assura.ch/api/Localities/1003` : émise à la saisie du code postal, refusée par le proxy ; la page affiche alors une erreur de chargement des localités.
+- `POST https://cms-blue.assura.ch/api/collections/get/productsConfigurations` avec `{"filter":{"identifier":"Default_Calc"},"simple":true,"populate":7,"lang":"fr"}` : groupes et produits (`insurance_id`, `title`). Donne les noms affichés.
+- `GET https://public-api.assura.ch/api/Localities/<code postal>` : liste `[{id, cantonCode, name, regionCode, nameLocation}]`. Le relevé prend l'entrée dont `name` vaut exactement « 1003 Lausanne », « 1204 Genève », etc.
+- `POST https://public-api.assura.ch/api/DisplayRules/GetDisplayProductRulesSyrius` : requête de prix, sans jeton ni cookie. Corps émis par l'application et repris tel quel, sauf les champs variables :
+  `{"common":{"localityId":<id>,"policyNumber":null,"lang":"fr"},"productIdsFilter":[…23 identifiants…],"partners":[{"id":"…","gender":"f|m","birthDate":"AAAA-06-15","nationality":"CH","affiliationReason":"change","selectedProducts":[]}],"journeyIdentifier":"Default"}`
+- Réponse : `partners[0].products[]`, avec pour chaque produit `id`, `basicInsurance`, `selectable`, `discountDetail`, `accident { hasAccidentCoverage, selectable }` et `variants[] { id, defaultSelected, contractStartDate, insuredCapital | annualAmount | previsiaExtraFields, premium { gross, net, accident, netWithAccident } }`.
 
-Lus dans le code de l'application (bundle `_app`), **jamais émis ni observés** :
+## Lecture des prix
 
-- `POST https://public-api.assura.ch/api/DisplayRules/GetDisplayProductRulesSyrius` : requête de prix. Corps construit par l'application : `common { localityId, policyNumber: null, lang }`, `productIdsFilter` (identifiants des produits non obsolètes), `partners[] { id, gender, birthDate, nationality, affiliationReason, selectedProducts }`, `journeyIdentifier: "Default"`.
-- Champs que l'application lit dans la réponse : `partners[].products[] { id, basicInsurance, selectable, contractStartDate, accident { selectable, selected }, variants[] { id, franchise, insuredCapital, annualAmount, premium { gross, net, netWithAccident } } }`.
-- Autres routes du même hôte : `Localities/byid/<id>`, `Offers/Draft`, `Offers/SubmitOffer` (envoi d'offre, à ne jamais appeler).
-- `calculator.assura.ch/api/client/display-rules` existe pour le parcours des clients connectés (session requise) : non essayé.
+- `premium.gross` est toujours nul pour les complémentaires. `premium.net` est la prime mensuelle sans accident, `premium.accident` le supplément accident, `premium.netWithAccident` leur somme.
+- Avec `selectedProducts` vide, aucun rabais n'est appliqué (`discountDetail` à zéro sur toutes les lignes) : `net` est donc la prime avant rabais. Le calculateur accorde un **rabais de combinaison** dès que plusieurs produits sont choisis (constaté : Complementa Extra + Optima Varia, CHF 2.00 de moins sur chacun ; idem avec Hospita). Il n'est pas dans le CSV.
+- Option accident : le calculateur affiche « Inclure le risque accident » avec son supplément une fois le produit coché. Le CSV contient donc **deux lignes** par profil pour ces produits : `accident=true` (prime avec accident, profil standard du brief) et `accident=false` (prime sans accident). Les notes indiquent `price=net+accident(<supplément>)` ou `price=net`.
+- Supplément accident nul (Denta Sana, Denta Ortho, Hospita 500 et 1000 des enfants) : une seule ligne `accident=true`, note `accident_surcharge=0.00`.
+- Previsia Extra est l'assurance accident elle-même (`hasAccidentCoverage=false`) : `accident` vide. Quand elle est choisie, le calculateur retire l'option accident des autres produits (« incluse dans la couverture du produit Previsia Extra »).
 
-## Méthode prévue et état du script
+## Profil appliqué
 
-`collectors/assura.mjs` : ouvre le calculateur, lit le catalogue du CMS, saisit un profil pilote (femme, 15.06.1987, 1003 Lausanne, prénom « Test »), capture la requête de prix que l'application émet, puis la rejoue depuis la page pour chaque année de naissance et chaque sexe, une personne par requête, 1,1 s entre deux requêtes, arrêt sur blocage ou trois erreurs de suite.
+- Début d'assurance : 01.01.2027 (`contractStartDate` de toutes les variantes, valeur par défaut du calculateur).
+- Localités : 1003 Lausanne, 1204 Genève, 1700 Fribourg, 1950 Sion, 2000 Neuchâtel, 2800 Delémont (4 316 lignes chacune).
+- Naissances : 15.06 de chaque année de 1947 à 2026, femme et homme ; `age` = 2027 − année de naissance, soit 1 à 80. Chaque année a été interrogée, aucune ligne dérivée d'une tranche.
+- Nouvelle souscription sans assurance de base Assura ni autre produit sélectionné, nationalité CH, motif « change » (valeurs par défaut du formulaire).
+- Pas de franchise à choisir : les produits hospitaliers n'ont qu'une variante dans le calculateur. `option` est vide partout.
 
-- Exécuté : lecture du catalogue et saisie du formulaire jusqu'au champ localité. Le script s'arrête là avec le code 2 et n'écrit rien.
-- Non exécuté : capture de la requête de prix, rejeu, lecture de la réponse, contrôle à l'écran. Cette partie est écrite d'après le code de l'application ; `rowsFromResponse` est à relire contre la première réponse réelle (enregistrée dans `--raw-dir`).
-- Garde-fou : le script n'écrit le CSV que si au moins 3 prix du profil pilote se retrouvent dans le texte de la page. Selon le code, la carte d'un produit affiche le prix net de sa dernière variante et les autres variantes en écart : le contrôle peut donc échouer à tort et demander un ajustement.
-- Choix non vérifiés dans le script : `monthly_chf` = `premium.gross`, ou `premium.netWithAccident` quand l'option accident est proposée (les autres montants vont dans `notes`) ; `option` = franchise, sinon capital assuré.
+## Produits, variantes et limites d'âge constatées
 
-## Profil
+Un produit hors limite est simplement absent de la réponse et de l'écran. Les limites sont identiques pour les deux sexes et les six localités.
 
-Prévu : début 01.01.2027, 1003 Lausanne puis 1204 Genève, 1950 Sion, 2000 Neuchâtel, 1700 Fribourg, 2800 Delémont, naissances au 15.06 de 1947 à 2026, femme et homme, sans assurance de base, nouvelle souscription. Réellement appliqué : aucun. La date de début proposée par le calculateur n'a pas été vue.
+| Produit (`product_key`) | Variantes relevées | Âges obtenus (2027 − naissance) | Accident |
+| --- | --- | --- | --- |
+| Complementa Extra (`assura-complementa-extra`) | une | 1 à 80 | option payante |
+| Natura (`assura-natura`) | une | 1 à 60 | option payante |
+| Medna (`assura-medna`) | une | 1 à 80 | option payante |
+| Mondia (`assura-mondia`) | une | 1 à 80 | option payante |
+| Mondia Plus (`assura-mondia-plus`) | une | 1 à 80 | option payante |
+| Denta Sana (`assura-denta-sana`) | une | 1 à 80 | inclus, supplément 0 |
+| Denta Ortho (`assura-denta-ortho`) | montant 2'000, 6'000 (défaut), 10'000 | 1 à 80 | inclus, supplément 0 |
+| Previsia Extra (`assura-previsia-extra`) | Variante 6 de 1 à 18 ans, Variante 2 de 19 à 65 ans | 1 à 65 | sans objet |
+| Optima Flex Varia (`assura-optima-flex-varia`) | une | 1 à 75 | option payante |
+| Optima Varia (`assura-optima-varia`) | une | 1 à 75 | option payante |
+| Optima Plus Varia (`assura-optima-plus-varia`) | une | 1 à 75 | option payante |
+| Ultra Varia (`assura-ultra-varia`) | une | 1 à 75 | option payante |
+| Hospita (`assura-hospita`) | capital 500 et 1'000 de 1 à 50 ans ; 1'500, 2'000, 2'500, 3'000 (défaut) de 19 à 50 ans | 1 à 50 | option payante (0 pour les enfants) |
 
-## Produits du calculateur
+- `variant` : libellé de l'écran suivi de la valeur (« Capital à choix 3'000 », « Choix du montant de la couverture 6'000 »). Pour Previsia Extra l'écran ne nomme pas la variante : « Variante 2 » / « Variante 6 » vient du champ `previsiaExtraFields.variante` de la réponse. L'identifiant technique est dans `notes` (`variant_id=…`), ainsi que `default_variant` pour la variante présélectionnée.
+- Medna porte la note `not_selectable_alone` : sans autre produit, le calculateur la renvoie avec `selectable=false`. Elle devient sélectionnable une fois Complementa Extra ou Natura choisie (constaté à 40 ans). Le prix affiché est le même.
+- Seule Previsia Extra dépend du sexe (dès 19 ans, CHF 6.00 de plus pour les hommes). Seuls les quatre produits hospitaliers Varia dépendent de la localité (exemple Optima Varia, 40 ans, avec accident : Genève 78.00, Lausanne 67.00, Neuchâtel 64.00, Delémont 59.00, Fribourg 54.00, Sion 52.00).
 
-Catalogue lu dans le CMS (13 produits complémentaires, tous absents du relevé pour la raison ci-dessus) :
+## Produits du calculateur absents du relevé
 
-| Groupe affiché | Sous-groupe | Produits (`insurance_id`) |
-| --- | --- | --- |
-| Votre couverture santé | Complément à l'assurance de base | Complementa Extra (`PRD_Complementa_Extra`) |
-| | Médecine alternative | Natura (`PRD_Natura`), Medna (`PRD_Medna`) |
-| | Assurance voyage | Mondia (`PRD_Mondia`), Mondia Plus (`PRD_Mondia_Plus`) |
-| | Soins dentaires | Denta Sana (`PRD_Denta_Reparo`), Denta Ortho (`PRD_Denta_Ortho`) |
-| | Assurance accident | Previsia Extra (`PRD_Previsia_Extra`) |
-| Votre couverture hospitalisation | Assurance hospitalisation | Optima Flex Varia (`PRD_Optima_Flex_Varia`), Optima Varia (`PRD_Optima_Varia`), Optima Plus Varia (`PRD_Optima_Plus_Varia`), Ultra Varia (`PRD_Ultra_Varia_2022`) |
-| | Capital en cas d'hospitalisation | Hospita (`PRD_Hospita`) |
-
-Hors périmètre, exclus par le script : « Assurance de base » (9 modèles LAMal) et « Votre protection juridique » (Lexa, 4 variantes, pas une assurance santé).
-
-Le CMS ne décrit de variantes que pour Lexa. Les variantes des autres produits (franchises hospitalières, capitaux Hospita, montants Denta Ortho) viennent de la réponse de prix et restent inconnues.
-
-## Limites d'âge
-
-Aucune limite constatée. À titre d'indice seulement, le code de l'application contient une table d'âges d'admission, **non confrontée au calculateur** : Complementa Extra, Denta Sana, Denta Ortho, Mondia, Mondia Plus et Medna 0 à 99 ans ; Natura 0 à 60 ; Optima Varia, Optima Plus Varia, Optima Flex Varia, Ultra Varia et Previsia Extra 0 à 75 ; Hospita 500 et 1000 de 0 à 50, Hospita 1500 à 3000 de 19 à 50.
+- Assurance de base (9 modèles LAMal) : hors périmètre.
+- Lexa (protection juridique, 4 variantes) : pas une assurance santé, exclue par le script.
+- Previsia Extra : le calculateur ne propose qu'une variante par classe d'âge et rien après 65 ans ; les autres variantes du produit n'y sont pas configurables.
+- Produits Assura absents du calculateur, donc sans prix ici : Materna Varia, Nativa, Pecunia, Previsia, Previsia Plus, Previsia Maxi, Previsia Maladie.
 
 ## Vérifications à l'écran
 
-Aucune : aucun prix n'a été affiché.
+Faites par le script avant d'écrire le CSV : prix de chaque carte produit comparé au relevé (la carte affiche la prime sans accident de la dernière variante de la liste).
+
+| Profil (Lausanne) | Cartes comparées | Résultat |
+| --- | --- | --- |
+| Femme, 15.06.1987 | 13 (Complementa Extra 13.20, Natura 16.00, Medna 4.00, Mondia 7.00, Mondia Plus 8.00, Denta Sana 22.50, Denta Ortho 19.00, Previsia Extra 23.60, Optima Flex Varia 38.50, Optima Varia 61.00, Optima Plus Varia 101.00, Ultra Varia 149.00, Hospita 5.00) | identiques |
+| Homme, 15.06.1958 | 10 (Complementa Extra 27.10, Medna 4.00, Mondia 7.00, Mondia Plus 8.00, Denta Sana 108.50, Denta Ortho 19.00, Optima Flex Varia 246.60, Optima Varia 311.00, Optima Plus Varia 409.00, Ultra Varia 572.00) ; Natura, Previsia Extra et Hospita absents de l'écran comme du relevé | identiques |
+| Fille, 15.06.2019 | 13 (Complementa Extra 5.55, Natura 5.00, Medna 1.80, Mondia 7.00, Mondia Plus 8.00, Denta Sana 16.00, Denta Ortho 26.00, Previsia Extra 9.15, Optima Flex Varia 9.30, Optima Varia 16.00, Optima Plus Varia 26.00, Ultra Varia 53.00, Hospita 2.00) | identiques |
+
+Option accident (femme 1987, Complementa Extra seule cochée) : supplément affiché 2.05 et total 15.25 avec l'option, identiques au relevé.
+
+Non vérifié à l'écran : les cinq autres localités (prix lus dans l'API seulement) et le prix avec accident des autres produits.
 
 ## Anomalies
 
-- La liste d'hôtes fournie ne contenait pas l'hôte qui porte les prix ; `cms-blue.assura.ch` ne sert que des contenus.
-- La configuration de la page cite aussi `iassuraassets01.blob.core.windows.net` (images du CMS) et `assura.enterprisebot.co` (chat) : inutiles pour les prix.
-- L'application embarque une clé de site reCAPTCHA ; son usage n'a pas été observé. Le script s'arrête si une réponse évoque un captcha.
-- `../insurers/assura.json` n'existe pas : `product_key` restera vide tant que ce fichier manque.
+- Denta Sana baisse après 75 ans : 130.50 de 71 à 75 ans, 120.00 de 76 à 80 ans (toutes localités). Valeur telle que renvoyée par le calculateur, à confirmer auprès d'une autre source avant publication.
+- L'âge affiché par le calculateur est l'âge au jour du relevé (39 ans pour une naissance en 1987), alors que les tranches tarifaires suivent l'année de naissance : les changements de prix tombent sur les âges 2027 − naissance (19, 26, 31, 36…).
+- Dans la réponse sans produit sélectionné, `accident.hasAccidentCoverage` vaut `false` pour tous les produits ; il n'est renseigné qu'une fois un produit coché. Le script lit donc ce champ dans la réponse du profil pilote, après avoir coché Complementa Extra.
+- L'application embarque une clé de site reCAPTCHA ; elle n'a pas été sollicitée par ce parcours.

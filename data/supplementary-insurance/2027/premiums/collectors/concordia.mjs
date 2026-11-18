@@ -43,6 +43,17 @@ const HOSPITAL_FRANCHISES = [1000, 2000, 3000, 5000, 10000];
 // Années revérifiées en demande individuelle (une seule personne) contre la demande à deux personnes.
 const SINGLE_CHECK_YEARS = [1962, 1963, 1975, 1990, 2008, 2009, 2015, 2026];
 
+// Clés produit de ../../insurers/concordia.json (correspondance évidente par nom de produit).
+const PRODUCT_KEYS = {
+  hospital: 'concordia-assurance-hospitalisation', // COMMUNE, MI-PRIVÉE, PRIVÉE
+  libero: 'concordia-assurance-hospitalisation-libero',
+  diversa: 'concordia-diversa',
+  natura: 'concordia-natura',
+  dental: 'concordia-assurance-soins-dentaires',
+  accidenta: 'concordia-accidenta',
+  dima: 'concordia-dima',
+};
+
 const BASIC_KEYS = new Set(['A', 'AHMO', 'AmyDoc', 'AsmDoc']); // assurance de base LAMal : hors périmètre
 const LEGACY_DIMA_KEYS = new Set(['TIKU_Tod', 'TIKU_Invaliditaet']); // ancienne génération DIMA, jamais demandée par l'interface
 
@@ -182,38 +193,40 @@ function describe(entry, labels) {
   const code = product.produkt;
   const title = (group, key) => stripTags(labels.PRODUKTE[group][key].TITLE);
   if (/^PE[1-4]$/.test(code)) {
-    return { group: 1, productName: stripTags(labels.PRODUKTE.SPITAL_VERSICHERUNG.NAME), variant: title('SPITAL_VERSICHERUNG', code), variantRank: { PE3: 1, PE4: 2, PE2: 3, PE1: 4 }[code], accident: 'true' };
+    return { group: 1, productKey: code === 'PE4' ? PRODUCT_KEYS.libero : PRODUCT_KEYS.hospital, productName: stripTags(labels.PRODUKTE.SPITAL_VERSICHERUNG.NAME), variant: title('SPITAL_VERSICHERUNG', code), variantRank: { PE3: 1, PE4: 2, PE2: 3, PE1: 4 }[code], accident: 'true' };
   }
   if (/^A1(-|$)/.test(code)) {
-    return { group: 2, productName: title('AMBULANTE_ZUSATZVERSICHERUNG', 'A1'), variant: title('AMBULANTE_ZUSATZVERSICHERUNG', code), variantRank: ['A1', 'A1-Care', 'A1-Plus', 'A1-Premium'].indexOf(code), accident: '' };
+    return { group: 2, productKey: PRODUCT_KEYS.diversa, productName: title('AMBULANTE_ZUSATZVERSICHERUNG', 'A1'), variant: title('AMBULANTE_ZUSATZVERSICHERUNG', code), variantRank: ['A1', 'A1-Care', 'A1-Plus', 'A1-Premium'].indexOf(code), accident: '' };
   }
   if (/^A2(-|$)/.test(code)) {
-    return { group: 3, productName: title('ALTERNATIVE_ZUSATZVERSICHERUNG', 'A2'), variant: title('ALTERNATIVE_ZUSATZVERSICHERUNG', code), variantRank: ['A2', 'A2-Plus'].indexOf(code), accident: '' };
+    return { group: 3, productKey: PRODUCT_KEYS.natura, productName: title('ALTERNATIVE_ZUSATZVERSICHERUNG', 'A2'), variant: title('ALTERNATIVE_ZUSATZVERSICHERUNG', code), variantRank: ['A2', 'A2-Plus'].indexOf(code), accident: '' };
   }
   if (/^Z-[1-4]$/.test(code)) {
-    return { group: 4, productName: stripTags(labels.PRODUKTE.ZAHN_ZUSATZVERSICHERUNG['Z-NONE'].TITLE).replace(/^Pas d'/, ''), variant: title('ZAHN_ZUSATZVERSICHERUNG', code), variantRank: Number(code.slice(2)), accident: '' };
+    return { group: 4, productKey: PRODUCT_KEYS.dental, productName: stripTags(labels.PRODUKTE.ZAHN_ZUSATZVERSICHERUNG['Z-NONE'].TITLE).replace(/^Pas d'/, ''), variant: title('ZAHN_ZUSATZVERSICHERUNG', code), variantRank: Number(code.slice(2)), accident: '' };
   }
   const accidenta = /^G_(\d+)_(\d+)$/.exec(code);
   if (accidenta) {
     const death = Number(accidenta[1]);
     const disability = Number(accidenta[2]);
-    return { group: 5, productName: title('ACCIDENTA_ZUSATZVERSICHERUNG', 'ACCIDENTA'), variant: `CHF ${thousands(death)} / ${thousands(disability)}`, variantRank: death * 1e7 + disability, accident: 'true', note: 'variant=capital décès / invalidité' };
+    // variante = capitaux décès / invalidité, comme dans la liste déroulante du calculateur
+    return { group: 5, productKey: PRODUCT_KEYS.accidenta, productName: title('ACCIDENTA_ZUSATZVERSICHERUNG', 'ACCIDENTA'), variant: `CHF ${thousands(death)} / ${thousands(disability)}`, variantRank: death * 1e7 + disability, accident: 'true' };
   }
   if (code === 'TIKU2026_Tod' || code === 'TIKU2026_Invaliditaet') {
     const group = code === 'TIKU2026_Tod' ? 'TIKU2026_TODESFALL' : 'TIKU2026_INVALIDITAET';
     const withAccident = product.tikuUnfallEinschluss === true;
     return {
       group: code === 'TIKU2026_Tod' ? 6 : 7,
+      productKey: PRODUCT_KEYS.dima,
       productName: stripTags(labels.PRODUKTE[group].TITLE),
-      variant: `CHF ${thousands(product.insuredAmount)}`,
+      variant: `CHF ${thousands(product.insuredAmount)}`, // somme assurée
       variantRank: product.insuredAmount,
-      option: withAccident ? 'avec accident' : 'sans accident',
+      option: withAccident ? 'maladie et accident' : 'maladie uniquement',
       optionRank: withAccident ? 0 : 1,
       accident: withAccident ? 'true' : 'false',
-      note: 'variant=somme assurée;api_only_not_shown_in_public_calculator',
+      note: 'api_only_not_in_public_ui', // renvoyé par l'API, section masquée dans le calculateur public
     };
   }
-  return { group: 9, productName: code, variant: JSON.stringify(product), variantRank: 0, accident: '', note: 'unmapped_product_key' };
+  return { group: 9, productKey: '', productName: code, variant: JSON.stringify(product), variantRank: 0, accident: '', note: 'unmapped_product_key' };
 }
 
 function csvCell(value) {
@@ -223,6 +236,9 @@ function csvCell(value) {
 
 async function main() {
   if (RAW_DIR) fs.mkdirSync(RAW_DIR, { recursive: true });
+  // product_key seulement si la clé existe dans le fichier assureur.
+  const insurerFile = path.join(HERE, '..', '..', 'insurers', 'concordia.json');
+  const knownKeys = fs.existsSync(insurerFile) ? new Set(JSON.parse(fs.readFileSync(insurerFile, 'utf8')).products.map((p) => p.key)) : new Set();
   const browser = await chromium.launch();
   const rows = [];
   const anomalies = [];
@@ -268,7 +284,7 @@ async function main() {
         if (premium.gueltigAb !== START_DATE) notes.push(`valable_des=${premium.gueltigAb}`);
         rows.push({
           sort: [LOCALITIES.indexOf(locality), info.group, info.variantRank, franchise, info.optionRank ?? 0, sex === 'w' ? 0 : 1, birthYear],
-          cells: ['concordia', '', info.productName, info.variant, option, TARIFF_YEAR, birthYear, TARIFF_YEAR - birthYear, sex === 'w' ? 'f' : 'm', locality.postalCode, locality.locality, info.accident, money(monthly), 'official_calculator', CALCULATOR_URL, record.retrievedAt, notes.join(';')],
+          cells: ['concordia', knownKeys.has(info.productKey) ? info.productKey : '', info.productName, info.variant, option, TARIFF_YEAR, birthYear, TARIFF_YEAR - birthYear, sex === 'w' ? 'f' : 'm', locality.postalCode, locality.locality, info.accident, money(monthly), 'official_calculator', CALCULATOR_URL, record.retrievedAt, notes.join(';')],
         });
       }
       return index;

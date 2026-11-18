@@ -15,7 +15,7 @@ Assureurs : Assura, Groupe Mutuel, CSS, Helsana, Sanitas, CONCORDIA, SWICA, AXA,
 | `taxonomy.json` | 15 catégories de produits, 12 familles et 65 tags de prestations. |
 | `products.json` | Consolidé : assureurs et produits, avec les tags couverts par chaque produit. |
 | `benefits.csv` | Consolidé : une ligne par prestation, avec famille, tag, taux, plafond, période et source. |
-| `premiums.csv` | Consolidé : primes des calculateurs et prix publiés par les assureurs. |
+| `premiums.csv.gz` | Consolidé : primes des calculateurs et prix publiés par les assureurs (CSV compressé). |
 | `quality.json` | Compteurs par assureur et anomalies du contrôle. |
 | `research-brief.md`, `premium-brief.md` | Consignes de collecte. |
 
