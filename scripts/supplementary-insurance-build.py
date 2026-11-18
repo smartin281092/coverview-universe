@@ -157,6 +157,8 @@ def main() -> int:
         stats[key] = dict(counts)
 
     known_products = {(p["insurer"], p["key"]) for p in products}
+    map_path = BASE / "premiums" / "product-map.json"
+    product_map = json.loads(map_path.read_text(encoding="utf-8")) if map_path.exists() else {}
     for path in sorted((BASE / "premiums").glob("*.csv")):
         with path.open(encoding="utf-8", newline="") as handle:
             reader = csv.DictReader(handle)
@@ -166,6 +168,7 @@ def main() -> int:
                 continue
             count = 0
             unmatched = Counter()
+            unmapped = Counter()
             for row in reader:
                 try:
                     float(row["monthly_chf"])
@@ -174,11 +177,17 @@ def main() -> int:
                     continue
                 # Le fichier porte le nom de la clé assureur ; elle fait foi.
                 row["insurer"] = path.stem
+                if not row["product_key"]:
+                    row["product_key"] = product_map.get(path.stem, {}).get(row["product_name"], "")
+                    if not row["product_key"]:
+                        unmapped[row["product_name"]] += 1
                 if row["product_key"] and (row["insurer"], row["product_key"]) not in known_products:
                     unmatched[row["product_key"]] += 1
                 premium_rows.append({c: row[c] for c in PREMIUM_COLUMNS})
                 count += 1
             stats.setdefault(path.stem, {})["calculatorPrices"] = count
+            for name, n in unmapped.items():
+                issues.append(f"premiums/{path.name}: produit sans clé {name!r} ({n} lignes)")
             for product_key, n in unmatched.items():
                 issues.append(f"premiums/{path.name}: product_key inconnu {product_key!r} ({n} lignes)")
 
