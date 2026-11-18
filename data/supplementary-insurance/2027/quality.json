@@ -45,6 +45,12 @@
       "verification:read": 229,
       "prices": 4
     },
+    "sympany": {
+      "products": 12,
+      "benefits": 172,
+      "verification:read": 172,
+      "prices": 388
+    },
     "visana": {
       "products": 21,
       "benefits": 414,

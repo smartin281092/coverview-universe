@@ -2419,8 +2419,8 @@
           "maxPeriod": null,
           "unlimited": false,
           "waitingPeriod": "Maternité : 365 jours d'assurance",
-          "conditions": "Participation aux coûts fixée dans la police ; valeurs publiées dans le cahier de produits 2026/27. ratePercent = part remboursée avant plafonnement de la participation à CHF 3000 par an. Hôpitaux reconnus : répertoriés ou conventionnés LAMal et disposant d'une convention tarifaire Helsana pour la division demi-privée ou privée ; aucun droit dans les hôpitaux et auprès des médecins agréés des listes négatives Helsana.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf",
+          "conditions": "Participation aux coûts fixée dans la police ; valeurs publiées dans le cahier de produits 2026/27. ratePercent = part remboursée avant plafonnement de la participation à CHF 3000 par an. Hôpitaux reconnus : répertoriés ou conventionnés LAMal et disposant d'une convention tarifaire Helsana pour la division demi-privée ou privée ; aucun droit dans les hôpitaux et auprès des médecins agréés des listes négatives Helsana. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         },
         {
@@ -2437,8 +2437,8 @@
           "maxPeriod": null,
           "unlimited": false,
           "waitingPeriod": "Maternité : 365 jours d'assurance",
-          "conditions": "Participation aux coûts fixée dans la police ; valeurs publiées dans le cahier de produits 2026/27. ratePercent = part remboursée avant plafonnement de la participation à CHF 9000 par an. Hôpitaux reconnus : répertoriés ou conventionnés LAMal et disposant d'une convention tarifaire Helsana pour la division demi-privée ou privée ; aucun droit dans les hôpitaux et auprès des médecins agréés des listes négatives Helsana.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf",
+          "conditions": "Participation aux coûts fixée dans la police ; valeurs publiées dans le cahier de produits 2026/27. ratePercent = part remboursée avant plafonnement de la participation à CHF 9000 par an. Hôpitaux reconnus : répertoriés ou conventionnés LAMal et disposant d'une convention tarifaire Helsana pour la division demi-privée ou privée ; aucun droit dans les hôpitaux et auprès des médecins agréés des listes négatives Helsana. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         },
         {
@@ -2455,8 +2455,8 @@
           "maxPeriod": null,
           "unlimited": false,
           "waitingPeriod": "Maternité : 365 jours d'assurance",
-          "conditions": "Participation aux coûts fixée dans la police ; valeurs publiées dans le cahier de produits 2026/27. ratePercent = part remboursée avant plafonnement de la participation à CHF 2000 par an. Hôpitaux reconnus : répertoriés ou conventionnés LAMal et disposant d'une convention tarifaire Helsana pour la division demi-privée ou privée ; aucun droit dans les hôpitaux et auprès des médecins agréés des listes négatives Helsana.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf",
+          "conditions": "Participation aux coûts fixée dans la police ; valeurs publiées dans le cahier de produits 2026/27. ratePercent = part remboursée avant plafonnement de la participation à CHF 2000 par an. Hôpitaux reconnus : répertoriés ou conventionnés LAMal et disposant d'une convention tarifaire Helsana pour la division demi-privée ou privée ; aucun droit dans les hôpitaux et auprès des médecins agréés des listes négatives Helsana. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         },
         {
@@ -2473,8 +2473,8 @@
           "maxPeriod": null,
           "unlimited": false,
           "waitingPeriod": "Maternité : 365 jours d'assurance",
-          "conditions": "Participation aux coûts fixée dans la police ; valeurs publiées dans le cahier de produits 2026/27. ratePercent = part remboursée avant plafonnement de la participation à CHF 4000 par an. Hôpitaux reconnus : répertoriés ou conventionnés LAMal et disposant d'une convention tarifaire Helsana pour la division demi-privée ou privée ; aucun droit dans les hôpitaux et auprès des médecins agréés des listes négatives Helsana.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf",
+          "conditions": "Participation aux coûts fixée dans la police ; valeurs publiées dans le cahier de produits 2026/27. ratePercent = part remboursée avant plafonnement de la participation à CHF 4000 par an. Hôpitaux reconnus : répertoriés ou conventionnés LAMal et disposant d'une convention tarifaire Helsana pour la division demi-privée ou privée ; aucun droit dans les hôpitaux et auprès des médecins agréés des listes négatives Helsana. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         },
         {
@@ -2506,8 +2506,8 @@
           "maxPeriod": "day",
           "unlimited": false,
           "waitingPeriod": null,
-          "conditions": "CSA ch. 5 (montant journalier convenu ; valeur publiée dans le cahier de produits). Demande de prise en charge avant un traitement prévu.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf",
+          "conditions": "CSA ch. 5 (montant journalier convenu ; valeur publiée dans le cahier de produits). Demande de prise en charge avant un traitement prévu. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         },
         {
@@ -2523,8 +2523,8 @@
           "maxPeriod": "day",
           "unlimited": false,
           "waitingPeriod": null,
-          "conditions": "CSA ch. 5 (montant journalier convenu ; valeur publiée dans le cahier de produits). Demande de prise en charge avant un traitement prévu.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf",
+          "conditions": "CSA ch. 5 (montant journalier convenu ; valeur publiée dans le cahier de produits). Demande de prise en charge avant un traitement prévu. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         },
         {
@@ -2555,8 +2555,8 @@
           "maxPeriod": "case",
           "unlimited": false,
           "waitingPeriod": "365 jours d'assurance",
-          "conditions": "CSA ch. 2.2 et 7 (forfait convenu ; valeur publiée dans le cahier de produits).",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf",
+          "conditions": "CSA ch. 2.2 et 7 (forfait convenu ; valeur publiée dans le cahier de produits). Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         },
         {
@@ -2571,8 +2571,8 @@
           "maxPeriod": "case",
           "unlimited": false,
           "waitingPeriod": "365 jours d'assurance",
-          "conditions": "CSA ch. 2.2 et 7 (forfait convenu ; valeur publiée dans le cahier de produits).",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf",
+          "conditions": "CSA ch. 2.2 et 7 (forfait convenu ; valeur publiée dans le cahier de produits). Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         },
         {
@@ -2587,8 +2587,8 @@
           "maxPeriod": "day",
           "unlimited": false,
           "waitingPeriod": null,
-          "conditions": "CSA ch. 8 (durée) ; montant publié dans le cahier de produits.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf",
+          "conditions": "CSA ch. 8 (durée) ; montant publié dans le cahier de produits. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         },
         {
@@ -2603,8 +2603,8 @@
           "maxPeriod": "day",
           "unlimited": false,
           "waitingPeriod": null,
-          "conditions": "CSA ch. 8 (durée) ; montant publié dans le cahier de produits.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf",
+          "conditions": "CSA ch. 8 (durée) ; montant publié dans le cahier de produits. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         },
         {
@@ -2717,8 +2717,8 @@
           "maxPeriod": "day",
           "unlimited": false,
           "waitingPeriod": "Aucun délai d'attente ; maternité : délai de carence de 365 jours",
-          "conditions": "CSA ch. 2-5 ; montants au choix selon le cahier de produits 2026/27. Hôpitaux répertoriés ou conventionnés LAMal Helsana ; accident co-assuré. Exclus : psychiatrie, malades chroniques, désintoxication, EMS, gériatrie aiguë, séjours ambulatoires, cures, traitements à l'étranger.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-extra.pdf",
+          "conditions": "CSA ch. 2-5 ; montants au choix selon le cahier de produits 2026/27. Hôpitaux répertoriés ou conventionnés LAMal Helsana ; accident co-assuré. Exclus : psychiatrie, malades chroniques, désintoxication, EMS, gériatrie aiguë, séjours ambulatoires, cures, traitements à l'étranger. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-extra.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         }
       ]
@@ -2795,8 +2795,8 @@
           "maxPeriod": "year",
           "unlimited": false,
           "waitingPeriod": "6 mois à compter du début de l'assurance (date du traitement déterminante)",
-          "conditions": "Traitements dentaires, prophylaxie, hygiène dentaire et contrôles, orthopédie maxillaire et chirurgie maxillaire ; jusqu'à concurrence du tarif SSO, aussi à l'étranger (formation équivalente). Exclus : accidents dentaires, remplacement de dents manquantes à la conclusion, perte fautive de prothèses ou d'appareils ; contributions de soins dentaires scolaires imputées. Montants des variantes mentionnés dans la police et publiés dans le cahier de produits 2026/27 et sur la page produit.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/dentaplus.pdf",
+          "conditions": "Traitements dentaires, prophylaxie, hygiène dentaire et contrôles, orthopédie maxillaire et chirurgie maxillaire ; jusqu'à concurrence du tarif SSO, aussi à l'étranger (formation équivalente). Exclus : accidents dentaires, remplacement de dents manquantes à la conclusion, perte fautive de prothèses ou d'appareils ; contributions de soins dentaires scolaires imputées. Montants des variantes mentionnés dans la police et publiés dans le cahier de produits 2026/27 et sur la page produit. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/dentaplus.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         },
         {
@@ -2814,8 +2814,8 @@
           "maxPeriod": "year",
           "unlimited": false,
           "waitingPeriod": "6 mois à compter du début de l'assurance (date du traitement déterminante)",
-          "conditions": "Traitements dentaires, prophylaxie, hygiène dentaire et contrôles, orthopédie maxillaire et chirurgie maxillaire ; jusqu'à concurrence du tarif SSO, aussi à l'étranger (formation équivalente). Exclus : accidents dentaires, remplacement de dents manquantes à la conclusion, perte fautive de prothèses ou d'appareils ; contributions de soins dentaires scolaires imputées. Montants des variantes mentionnés dans la police et publiés dans le cahier de produits 2026/27 et sur la page produit.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/dentaplus.pdf",
+          "conditions": "Traitements dentaires, prophylaxie, hygiène dentaire et contrôles, orthopédie maxillaire et chirurgie maxillaire ; jusqu'à concurrence du tarif SSO, aussi à l'étranger (formation équivalente). Exclus : accidents dentaires, remplacement de dents manquantes à la conclusion, perte fautive de prothèses ou d'appareils ; contributions de soins dentaires scolaires imputées. Montants des variantes mentionnés dans la police et publiés dans le cahier de produits 2026/27 et sur la page produit. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/dentaplus.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         },
         {
@@ -2833,8 +2833,8 @@
           "maxPeriod": "year",
           "unlimited": false,
           "waitingPeriod": "6 mois à compter du début de l'assurance (date du traitement déterminante)",
-          "conditions": "Traitements dentaires, prophylaxie, hygiène dentaire et contrôles, orthopédie maxillaire et chirurgie maxillaire ; jusqu'à concurrence du tarif SSO, aussi à l'étranger (formation équivalente). Exclus : accidents dentaires, remplacement de dents manquantes à la conclusion, perte fautive de prothèses ou d'appareils ; contributions de soins dentaires scolaires imputées. Montants des variantes mentionnés dans la police et publiés dans le cahier de produits 2026/27 et sur la page produit.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/dentaplus.pdf",
+          "conditions": "Traitements dentaires, prophylaxie, hygiène dentaire et contrôles, orthopédie maxillaire et chirurgie maxillaire ; jusqu'à concurrence du tarif SSO, aussi à l'étranger (formation équivalente). Exclus : accidents dentaires, remplacement de dents manquantes à la conclusion, perte fautive de prothèses ou d'appareils ; contributions de soins dentaires scolaires imputées. Montants des variantes mentionnés dans la police et publiés dans le cahier de produits 2026/27 et sur la page produit. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/dentaplus.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         },
         {
@@ -2852,8 +2852,8 @@
           "maxPeriod": "year",
           "unlimited": false,
           "waitingPeriod": "6 mois à compter du début de l'assurance (date du traitement déterminante)",
-          "conditions": "Traitements dentaires, prophylaxie, hygiène dentaire et contrôles, orthopédie maxillaire et chirurgie maxillaire ; jusqu'à concurrence du tarif SSO, aussi à l'étranger (formation équivalente). Exclus : accidents dentaires, remplacement de dents manquantes à la conclusion, perte fautive de prothèses ou d'appareils ; contributions de soins dentaires scolaires imputées. Montants des variantes mentionnés dans la police et publiés dans le cahier de produits 2026/27 et sur la page produit.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/dentaplus.pdf",
+          "conditions": "Traitements dentaires, prophylaxie, hygiène dentaire et contrôles, orthopédie maxillaire et chirurgie maxillaire ; jusqu'à concurrence du tarif SSO, aussi à l'étranger (formation équivalente). Exclus : accidents dentaires, remplacement de dents manquantes à la conclusion, perte fautive de prothèses ou d'appareils ; contributions de soins dentaires scolaires imputées. Montants des variantes mentionnés dans la police et publiés dans le cahier de produits 2026/27 et sur la page produit. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/dentaplus.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         },
         {
@@ -2871,8 +2871,8 @@
           "maxPeriod": "year",
           "unlimited": false,
           "waitingPeriod": "6 mois à compter du début de l'assurance (date du traitement déterminante)",
-          "conditions": "Traitements dentaires, prophylaxie, hygiène dentaire et contrôles, orthopédie maxillaire et chirurgie maxillaire ; jusqu'à concurrence du tarif SSO, aussi à l'étranger (formation équivalente). Exclus : accidents dentaires, remplacement de dents manquantes à la conclusion, perte fautive de prothèses ou d'appareils ; contributions de soins dentaires scolaires imputées. Montants des variantes mentionnés dans la police et publiés dans le cahier de produits 2026/27 et sur la page produit.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/dentaplus.pdf",
+          "conditions": "Traitements dentaires, prophylaxie, hygiène dentaire et contrôles, orthopédie maxillaire et chirurgie maxillaire ; jusqu'à concurrence du tarif SSO, aussi à l'étranger (formation équivalente). Exclus : accidents dentaires, remplacement de dents manquantes à la conclusion, perte fautive de prothèses ou d'appareils ; contributions de soins dentaires scolaires imputées. Montants des variantes mentionnés dans la police et publiés dans le cahier de produits 2026/27 et sur la page produit. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/dentaplus.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         },
         {
@@ -2890,8 +2890,8 @@
           "maxPeriod": null,
           "unlimited": true,
           "waitingPeriod": "6 mois à compter du début de l'assurance (date du traitement déterminante)",
-          "conditions": "Traitements dentaires, prophylaxie, hygiène dentaire et contrôles, orthopédie maxillaire et chirurgie maxillaire ; jusqu'à concurrence du tarif SSO, aussi à l'étranger (formation équivalente). Exclus : accidents dentaires, remplacement de dents manquantes à la conclusion, perte fautive de prothèses ou d'appareils ; contributions de soins dentaires scolaires imputées. Montants des variantes mentionnés dans la police et publiés dans le cahier de produits 2026/27 et sur la page produit.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/dentaplus.pdf",
+          "conditions": "Traitements dentaires, prophylaxie, hygiène dentaire et contrôles, orthopédie maxillaire et chirurgie maxillaire ; jusqu'à concurrence du tarif SSO, aussi à l'étranger (formation équivalente). Exclus : accidents dentaires, remplacement de dents manquantes à la conclusion, perte fautive de prothèses ou d'appareils ; contributions de soins dentaires scolaires imputées. Montants des variantes mentionnés dans la police et publiés dans le cahier de produits 2026/27 et sur la page produit. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/dentaplus.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         },
         {
@@ -2952,8 +2952,8 @@
           "maxPeriod": "case",
           "unlimited": false,
           "waitingPeriod": null,
-          "conditions": "CGA ch. 10-13 et 18. Invalidité survenant dans les cinq ans suivant l'accident ; assurance de sommes. Dès 70 ans : somme max. CHF 100 000, sans progression, versée sous forme de rente viagère (CHF 100 par an par CHF 1000 de capital à 70 ans, CHF 125 au-delà). Préjudice esthétique : 10 % (visage) ou 5 % de la somme, max. CHF 20 000.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/prevea-accident.pdf",
+          "conditions": "CGA ch. 10-13 et 18. Invalidité survenant dans les cinq ans suivant l'accident ; assurance de sommes. Dès 70 ans : somme max. CHF 100 000, sans progression, versée sous forme de rente viagère (CHF 100 par an par CHF 1000 de capital à 70 ans, CHF 125 au-delà). Préjudice esthétique : 10 % (visage) ou 5 % de la somme, max. CHF 20 000. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/prevea-accident.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         },
         {
@@ -2968,8 +2968,8 @@
           "maxPeriod": "case",
           "unlimited": false,
           "waitingPeriod": null,
-          "conditions": "CGA ch. 15-18. Décès dans les cinq ans suivant l'accident ; déduction du capital-invalidité déjà versé pour le même accident ; capital-décès versé une seconde fois aux enfants si les deux conjoints décèdent du même accident. Plafond de CHF 300 000 publié dans le cahier de produits et sur la page produit.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/prevea-accident.pdf",
+          "conditions": "CGA ch. 15-18. Décès dans les cinq ans suivant l'accident ; déduction du capital-invalidité déjà versé pour le même accident ; capital-décès versé une seconde fois aux enfants si les deux conjoints décèdent du même accident. Plafond de CHF 300 000 publié dans le cahier de produits et sur la page produit. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/prevea-accident.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         },
         {
@@ -3129,8 +3129,8 @@
           "maxPeriod": "case",
           "unlimited": false,
           "waitingPeriod": "Délai d'attente de 12 mois d'invalidité effective et décision de rente AI",
-          "conditions": "CGA ch. 12-18 ; plafonds par âge publiés dans le cahier de produits 2026/27 et sur la page produit. Enfants et jeunes : selon l'incapacité future à exercer une activité lucrative.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/prevea-maladie.pdf",
+          "conditions": "CGA ch. 12-18 ; plafonds par âge publiés dans le cahier de produits 2026/27 et sur la page produit. Enfants et jeunes : selon l'incapacité future à exercer une activité lucrative. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/prevea-maladie.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         },
         {
@@ -3145,8 +3145,8 @@
           "maxPeriod": "case",
           "unlimited": false,
           "waitingPeriod": null,
-          "conditions": "CGA ch. 19-21 (limites pour enfants) ; plafonds de CHF 300 000 et 500 000 publiés sur la page produit.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/prevea-maladie.pdf",
+          "conditions": "CGA ch. 19-21 (limites pour enfants) ; plafonds de CHF 300 000 et 500 000 publiés sur la page produit. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/prevea-maladie.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         }
       ]
@@ -3194,8 +3194,8 @@
           "maxPeriod": "day",
           "unlimited": false,
           "waitingPeriod": "Délai d'attente au choix : 180, 360, 720 ou 1080 jours",
-          "conditions": "CSA ch. 2-7 ; forfaits au choix selon le cahier de produits 2026/27. Droit si des prestations de soins OPAS de plus de 60 minutes en moyenne par jour à la charge de l'AOS sont sollicitées sans interruption pendant et après le délai d'attente ; durée illimitée en cas de nécessité médicale constante (certificat médical tous les six mois) ; aucune prestation hors de Suisse.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/cura.pdf",
+          "conditions": "CSA ch. 2-7 ; forfaits au choix selon le cahier de produits 2026/27. Droit si des prestations de soins OPAS de plus de 60 minutes en moyenne par jour à la charge de l'AOS sont sollicitées sans interruption pendant et après le délai d'attente ; durée illimitée en cas de nécessité médicale constante (certificat médical tous les six mois) ; aucune prestation hors de Suisse. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/cura.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         },
         {
@@ -3211,8 +3211,8 @@
           "maxPeriod": "day",
           "unlimited": false,
           "waitingPeriod": "Délai d'attente au choix : 180, 360, 720 ou 1080 jours",
-          "conditions": "CSA ch. 4.2. Droit si des prestations de soins OPAS de plus de 60 minutes en moyenne par jour à la charge de l'AOS sont sollicitées sans interruption pendant et après le délai d'attente ; durée illimitée en cas de nécessité médicale constante (certificat médical tous les six mois) ; aucune prestation hors de Suisse. Pas d'aide ménagère en cas de séjour en EMS.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/cura.pdf",
+          "conditions": "CSA ch. 4.2. Droit si des prestations de soins OPAS de plus de 60 minutes en moyenne par jour à la charge de l'AOS sont sollicitées sans interruption pendant et après le délai d'attente ; durée illimitée en cas de nécessité médicale constante (certificat médical tous les six mois) ; aucune prestation hors de Suisse. Pas d'aide ménagère en cas de séjour en EMS. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/cura.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         }
       ]
@@ -3260,8 +3260,8 @@
           "maxPeriod": "day",
           "unlimited": false,
           "waitingPeriod": "Délai de carence de 3 ans en cas de maladie ou de maladie professionnelle ; aucun en cas d'accident ; aucun délai d'attente",
-          "conditions": "CSA ch. 1-10. Nécessité de soins d'au moins six mois et d'au moins 25 points (questionnaire sur dix actes ordinaires de la vie ; « indice de Barthel » selon le cahier de produits) ; versement mensuel ; soins en Suisse uniquement ; aucune prestation pendant un séjour hospitalier ni pour des infirmités congénitales ou une nécessité de soins liée à la grossesse. Liste exacte des six montants non publiée.",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/vivante.pdf",
+          "conditions": "CSA ch. 1-10. Nécessité de soins d'au moins six mois et d'au moins 25 points (questionnaire sur dix actes ordinaires de la vie ; « indice de Barthel » selon le cahier de produits) ; versement mensuel ; soins en Suisse uniquement ; aucune prestation pendant un séjour hospitalier ni pour des infirmités congénitales ou une nécessité de soins liée à la grossesse. Liste exacte des six montants non publiée. Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/vivante.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         }
       ]
@@ -3310,8 +3310,8 @@
           "maxPeriod": "day",
           "unlimited": false,
           "waitingPeriod": "Délai d'attente au choix : 3, 7, 14, 21, 30, 60, 90, 120, 150, 180, 240, 270 ou 360 jours (imputé sur la durée des prestations)",
-          "conditions": "CSA ch. 1-10 ; montants, durées et délais selon le cahier de produits 2026/27. Accident inclus seulement si convenu ; aucune indemnité en cas de maternité ; prestations de tiers imputées (complément à la différence).",
-          "sourceUrl": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/salaria-lca.pdf",
+          "conditions": "CSA ch. 1-10 ; montants, durées et délais selon le cahier de produits 2026/27. Accident inclus seulement si convenu ; aucune indemnité en cas de maternité ; prestations de tiers imputées (complément à la différence). Montants lus dans le cahier de produits 2026/27 ; conditions lues dans https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/salaria-lca.pdf.",
+          "sourceUrl": "https://www.helsana.ch/docs/cahier-de-produits.pdf",
           "verification": "read"
         }
       ]

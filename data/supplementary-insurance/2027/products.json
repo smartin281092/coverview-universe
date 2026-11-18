@@ -143,6 +143,31 @@
       "retrievedAt": "2026-11-18"
     },
     {
+      "key": "sympany",
+      "name": "Sympany",
+      "legalEntityLca": "Sympany Versicherungen AG, Bâle (protect : Coop Protection Juridique SA, Aarau ; capita maladie : Helvetia Compagnie Suisse d’Assurances sur la Vie SA comme preneur du risque)",
+      "website": "https://www.sympany.ch/fr.html",
+      "calculatorUrl": null,
+      "calculatorHosts": [
+        "tourist.sympany.ch",
+        "hello.sympany.ch",
+        "api-public.sympany.ch",
+        "sales.sympany.ch"
+      ],
+      "publishedTariffUrls": [
+        "https://www.sympany.ch/dam/jcr:3be51150-3d17-4199-80ac-6750a311f656/Broschuere-tourist-Sympany-1201-0526-fr.2026-05-22-13-40-54.pdf",
+        "https://www.sympany.ch/dam/jcr:53022f1f-ae33-418f-8157-e3e2117527d7/Broschuere-tourist-subito-Sympany-1200-0526-fr.2026-05-15-10-26-27.pdf",
+        "https://www.sympany.ch/dam/jcr:2b3d048d-d9af-4d44-8e17-a795d907aa0f/Broschuere-capita-unfall-Sympany-1170-1024-fr.2024-10-24-14-25-18.pdf",
+        "https://www.sympany.ch/dam/jcr:debce72c-2e70-4a0b-8a08-9f341849a6e0/Broschuere-capita-krankheit-Sympany-1171-1024-fr.2024-10-24-14-23-02.pdf",
+        "https://www.sympany.ch/fr/particuliers/assurances-complementaires/protection-juridique.html",
+        "https://www.sympany.ch/dam/jcr:7fc28e5a-95f5-4223-b16c-d5f9ad0f28a8/Primes-2024-supplement-prive-DE-FR-Sympany.pdf",
+        "https://www.sympany.ch/fr/portrait/news-medias/news/informations-primes.html",
+        "https://www.sympany.ch/fr/portrait/news-medias/news/informations-primes/primes-suisse.html"
+      ],
+      "notes": "Calculateur : aucun calculateur de primes public n’a été trouvé pour les complémentaires LCA sur www.sympany.ch (ni lien, ni page dans les sitemaps FR et DE) ; les pages produit renvoient à une demande d’offre par formulaire (https://www.sympany.ch/fr/contact/conseil-a-la-vente.html, iframe hello.sympany.ch) ou par téléphone (+41 58 262 39 70). Hôtes observés : tourist.sympany.ch (souscription en ligne de tourist subito, avec affichage de la prime), hello.sympany.ch (formulaire d’offre), api-public.sympany.ch (API du composant « product-comparison-points » des pages produit : /products/{id}/variations/{id}/comparison ; codes Z/PL plus, Z/PR premium, KO/KO-1 à KO-4 hospita générale, demi-privée, privée, globale, KO/KOF3 hospita flex), sales.sympany.ch (« Login intermédiaire », portail des intermédiaires). Depuis ce conteneur, seul www.sympany.ch est autorisé : tourist.sympany.ch n’a pas répondu et aucun de ces hôtes n’a été exploré. robots.txt de www.sympany.ch interdit /.premiumCalculator/ (chemin non visité). Barèmes publiés : brochures tourist, tourist subito (primes uniques par durée), capita accident, capita maladie et prime forfaitaire protect. Le PDF « Evolution des primes, état 2024 » (supplément privé comparé à premium, région de primes Allemagne/France) est un graphique en barres sans valeurs chiffrées : rien n’en a été relevé. Aucune édition 2026 ou 2027 d’un barème plus/premium/hospita/dental n’est publiée. Année des primes relevées : 2026 pour tourist et tourist subito (brochures datées 05.26) ; null pour protect, capita accident (barème « dès le 1.1.2014 ») et capita maladie (brochure 04.2024), dont les documents ne précisent pas l’année tarifaire ; aucune prime 2027 n’est publiée. Primes 2027 (page « Informations sur les primes 2027 ») : hausse pour plus et premium sans natura (et praevention), baisse pour supplément général, supplément privé et kombi général, primes inchangées pour les autres complémentaires ambulatoires et hospitalières et pour « tous les produits complémentaires ». Tarification : tarif selon l’âge par classes (âge atteint dans l’année civile), lieu de domicile et participation ; rabais pluriannuel de 3 % (contrat de trois ans, plus/premium sans natura et hospita), escompte 2 % (paiement annuel) ou 1 % (semestriel), rabais familial et exonération dès le 3e enfant (CGA 8.1.3), prime offerte au nouveau-né le mois de la naissance, admission sans réserve des bébés jusqu’à 3 mois dans hospita générale, plus, dental, capita maladie et capita accident ; conclusion prénatale possible. Délai de carence maternité : 270 jours. plus/premium, hospita et dental ne peuvent être conclus qu’avec un domicile en Suisse. Documents lus : CGA des assurances complémentaires édition 2022 (1041/f/12.21), CP édition 2022 de chaque produit, aperçus des prestations LCA 2026 (ambulatoire et hospitalisation) et « Offre d’assurance et aperçu des prestations 2027 » (état octobre 2026, 1100/f/10.2026), dont les montants concordent avec les CP. Produits non retenus car fermés à la vente ou hors périmètre : supplément général et supplément privé (ambulatoire, « plus proposés à la vente » ; CP 2022 encore en ligne) ; salto (paquet ambulatoire + hospitalisation + voyage pour 19–30 ans, CP 2022 en ligne mais aucune page produit ni mention dans l’aperçu 2027 : statut à confirmer) ; produits de l’ancienne Kolping Krankenkasse (alternativ, light, plus kolping, praevention, dental kolping, kombi, flex kolping, indemnité d’hospitalisation, adi, cdi, life, indemnités journalières LCA : plus proposés aux nouveaux clients) ; hospita avec rabais pour absence de prestations (plus conclu depuis 2016) ; hospita confort (niveau régional lié à des hôpitaux contractuels, décrit dans les CP hospita mais sans page produit) ; « Privatpatienten-Zusatz für stationäre Behandlung » (CP en allemand seulement) ; mondial (assurance de base LCA pour frontaliers et personnes non soumises à la LAMal) et euroline (LAMal frontaliers) ; laa employés de maison (assurance-accidents obligatoire) ; assurances de choses et 3e pilier.",
+      "retrievedAt": "2026-11-18"
+    },
+    {
       "key": "visana",
       "name": "Visana",
       "legalEntityLca": "Visana Assurances SA (Berne)",
@@ -6031,6 +6056,658 @@
         "legal_protection"
       ],
       "benefitCount": 1
+    },
+    {
+      "insurer": "sympany",
+      "key": "sympany-plus",
+      "name": "plus",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Complémentaire ambulatoire de base : médicaments hors liste, médecine alternative, prévention, lunettes, moyens auxiliaires, transports et sauvetage, orthodontie jusqu’à 25 ans. Option natura pour des contributions accrues en médecine alternative.",
+      "variants": [
+        {
+          "key": "plus",
+          "name": "plus",
+          "description": "Sans natura : méthodes reconnues de médecine alternative à 50 %, limite globale CHF 3’000.– par année civile."
+        },
+        {
+          "key": "plus-natura",
+          "name": "plus natura",
+          "description": "Avec natura : méthodes reconnues à 80 %, méthodes étendues à 50 % (max. CHF 1’000.–), limite globale CHF 6’000.– par année civile."
+        }
+      ],
+      "prerequisites": "Domicile en Suisse ; déclaration de santé (examen du risque, réserves ou refus possibles) ; conclusion sans limite d’âge. Admission des bébés sans réserve ni examen du risque jusqu’à 3 mois après la naissance (plus).",
+      "pricing": {
+        "factors": [
+          "age",
+          "region"
+        ],
+        "ageBands": "Classes d’âge (CP plus et premium 2022, art. 12) : 0–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–70, 71–80, 81+. Âge de référence : âge atteint dans l’année civile (année civile − année de naissance) ; le changement de classe prend effet au 1er janvier (page « Informations sur les primes 2027 » : les personnes nées en 2008 passent en 2027 dans la classe 19–25 ans, celles nées en 2001 dans la classe 26–30 ans).",
+        "discounts": "Rabais pluriannuel de 3 % pour un contrat de trois ans (nouvelle conclusion ou passage à une meilleure couverture) ; escompte de 2 % en cas de paiement annuel, 1 % en cas de paiement semestriel ; rabais familial selon CGA 8.1.3 (enfants jusqu’à 18 ans si contrat de trois ans et parent assuré de façon au moins équivalente ; exonération de prime dès le 3e enfant si les deux aînés jusqu’à 25 ans du même ménage sont assurés de façon au moins équivalente) ; prime offerte au nouveau-né le mois de sa naissance. Le rabais pluriannuel ne s’applique pas aux variantes natura (aperçu 2027).",
+        "notes": "Aucun barème publié : Sympany ne propose pas de calculateur en ligne pour ce produit, l’offre se demande par formulaire ou par téléphone. Facteurs selon CGA 8.1.2 : âge ou groupe d’âge, lieu de domicile, participation assumée. Hausse de primes annoncée pour 2027 pour plus sans natura ; primes inchangées pour plus natura (page « Informations sur les primes 2027 »)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières (CP) plus et premium selon la LCA",
+        "edition": "Édition 2022 (1047/f/02.2022) ; aperçu des prestations 2027, état octobre 2026 (1100/f/10.2026)",
+        "url": "https://www.sympany.ch/dam/jcr:79afdf2e-efab-4ac9-9809-e86fe2b271f5/BB-plus-premium-2022-Sympany-1047-0222-fr.2024-07-19-08-13-48.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sympany.ch/fr/particuliers/assurances-complementaires/ambulatoire/plus.html",
+        "https://www.sympany.ch/fr/particuliers/assurances-complementaires/ambulatoire/prestations.html",
+        "https://www.sympany.ch/dam/jcr:79afdf2e-efab-4ac9-9809-e86fe2b271f5/BB-plus-premium-2022-Sympany-1047-0222-fr.2024-07-19-08-13-48.pdf",
+        "https://www.sympany.ch/dam/jcr:2a5fe087-c083-4e8b-8d17-7a1bf0b1473b/AVB-Zusatzversicherungen-2022-Sympany-1041-0924-fr.2025-07-30-10-00-11.pdf",
+        "https://www.sympany.ch/dam/jcr:a78f7b47-46dd-400a-8f31-dbb59b82a132/Leistungsuebersicht-2027-Sympany-1100-1126-fr.24fb92758e128625b51a27efe766132b.pdf",
+        "https://www.sympany.ch/dam/jcr:ffb5edb6-dc12-4d5d-bac1-39c0da228c07/Leistungsuebersicht-VVG-ambulant-2026-Sympany-1100-1225-fr.2025-12-18-10-36-13.pdf",
+        "https://www.sympany.ch/fr/particuliers/bon-a-savoir/avantages/contribution-au-sport.html"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "alt_medicine_remedies",
+        "alt_medicine_therapies",
+        "ambulatory_free_doctor_choice",
+        "breastfeeding",
+        "dental_hygiene",
+        "dental_surgery",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "gynecological_prevention",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "orthodontics",
+        "prevention_checkup",
+        "psychotherapy_non_medical",
+        "search_recovery",
+        "smoking_cessation",
+        "spa_cure",
+        "transport_rescue",
+        "travel_expenses_treatment",
+        "vaccination"
+      ],
+      "benefitCount": 26
+    },
+    {
+      "insurer": "sympany",
+      "key": "sympany-premium",
+      "name": "premium",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Complémentaire ambulatoire supérieure : mêmes prestations que plus avec des plafonds plus élevés, plus les traitements ambulatoires choisis à l’étranger et les médecins non soumis à la LAMal. Option natura pour la médecine alternative.",
+      "variants": [
+        {
+          "key": "premium",
+          "name": "premium",
+          "description": "Sans natura : méthodes reconnues de médecine alternative à 50 %, limite globale CHF 6’000.– par année civile."
+        },
+        {
+          "key": "premium-natura",
+          "name": "premium natura",
+          "description": "Avec natura : méthodes reconnues à 80 %, méthodes étendues à 50 % (max. CHF 2’000.–), limite globale CHF 10’000.– par année civile."
+        }
+      ],
+      "prerequisites": "Domicile en Suisse ; déclaration de santé (examen du risque, réserves ou refus possibles) ; conclusion jusqu’à l’âge de 60 ans révolus. Admission des bébés sans réserve ni examen du risque jusqu’à 3 mois après la naissance annoncée pour plus uniquement.",
+      "pricing": {
+        "factors": [
+          "age",
+          "region"
+        ],
+        "ageBands": "Classes d’âge (CP plus et premium 2022, art. 12) : 0–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–70, 71–80, 81+. Âge de référence : âge atteint dans l’année civile (année civile − année de naissance) ; le changement de classe prend effet au 1er janvier (page « Informations sur les primes 2027 » : les personnes nées en 2008 passent en 2027 dans la classe 19–25 ans, celles nées en 2001 dans la classe 26–30 ans).",
+        "discounts": "Rabais pluriannuel de 3 % pour un contrat de trois ans (nouvelle conclusion ou passage à une meilleure couverture) ; escompte de 2 % en cas de paiement annuel, 1 % en cas de paiement semestriel ; rabais familial selon CGA 8.1.3 (enfants jusqu’à 18 ans si contrat de trois ans et parent assuré de façon au moins équivalente ; exonération de prime dès le 3e enfant si les deux aînés jusqu’à 25 ans du même ménage sont assurés de façon au moins équivalente) ; prime offerte au nouveau-né le mois de sa naissance. Le rabais pluriannuel ne s’applique pas aux variantes natura (aperçu 2027).",
+        "notes": "Aucun barème publié : Sympany ne propose pas de calculateur en ligne pour ce produit, l’offre se demande par formulaire ou par téléphone. Facteurs selon CGA 8.1.2 : âge ou groupe d’âge, lieu de domicile, participation assumée. Hausse de primes annoncée pour 2027 pour premium sans natura ; primes inchangées pour premium natura. Seul document chiffré repéré : un graphique « Evolution des primes, état 2024 » (région de primes Allemagne/France, primes brutes hommes et femmes par groupe d’âge, premium comparé à supplément privé) sans valeurs lisibles : non relevé."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières (CP) plus et premium selon la LCA",
+        "edition": "Édition 2022 (1047/f/02.2022) ; aperçu des prestations 2027, état octobre 2026 (1100/f/10.2026)",
+        "url": "https://www.sympany.ch/dam/jcr:79afdf2e-efab-4ac9-9809-e86fe2b271f5/BB-plus-premium-2022-Sympany-1047-0222-fr.2024-07-19-08-13-48.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sympany.ch/fr/particuliers/assurances-complementaires/ambulatoire/premium.html",
+        "https://www.sympany.ch/fr/particuliers/assurances-complementaires/ambulatoire/prestations.html",
+        "https://www.sympany.ch/dam/jcr:79afdf2e-efab-4ac9-9809-e86fe2b271f5/BB-plus-premium-2022-Sympany-1047-0222-fr.2024-07-19-08-13-48.pdf",
+        "https://www.sympany.ch/dam/jcr:2a5fe087-c083-4e8b-8d17-7a1bf0b1473b/AVB-Zusatzversicherungen-2022-Sympany-1041-0924-fr.2025-07-30-10-00-11.pdf",
+        "https://www.sympany.ch/dam/jcr:a78f7b47-46dd-400a-8f31-dbb59b82a132/Leistungsuebersicht-2027-Sympany-1100-1126-fr.24fb92758e128625b51a27efe766132b.pdf",
+        "https://www.sympany.ch/dam/jcr:ffb5edb6-dc12-4d5d-bac1-39c0da228c07/Leistungsuebersicht-VVG-ambulant-2026-Sympany-1100-1225-fr.2025-12-18-10-36-13.pdf",
+        "https://www.sympany.ch/fr/particuliers/bon-a-savoir/avantages/contribution-au-sport.html"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "abroad_planned_treatment",
+        "alt_medicine_remedies",
+        "alt_medicine_therapies",
+        "ambulatory_free_doctor_choice",
+        "breastfeeding",
+        "dental_hygiene",
+        "dental_surgery",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "gynecological_prevention",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "orthodontics",
+        "prevention_checkup",
+        "psychotherapy_non_medical",
+        "search_recovery",
+        "smoking_cessation",
+        "spa_cure",
+        "transport_rescue",
+        "travel_expenses_treatment",
+        "vaccination"
+      ],
+      "benefitCount": 28
+    },
+    {
+      "insurer": "sympany",
+      "key": "sympany-hospita",
+      "name": "hospita",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Complémentaire d’hospitalisation en quatre niveaux (générale, demi-privée, privée, globale) : libre choix de l’hôpital en Suisse (monde entier avec globale), cures, aide ménagère, transports, rooming-in, garde d’enfants et maternité.",
+      "variants": [
+        {
+          "key": "generale",
+          "name": "hospita générale",
+          "description": "Division commune (chambre à plusieurs lits), libre choix de l’hôpital dans toute la Suisse, sans libre choix du médecin."
+        },
+        {
+          "key": "demi-privee",
+          "name": "hospita demi-privée",
+          "description": "Division demi-privée (chambre à deux lits), libre choix du médecin et de l’hôpital dans toute la Suisse."
+        },
+        {
+          "key": "privee",
+          "name": "hospita privée",
+          "description": "Division privée (chambre individuelle), libre choix du médecin et de l’hôpital dans toute la Suisse."
+        },
+        {
+          "key": "globale",
+          "name": "hospita globale",
+          "description": "Division privée dans le monde entier, y compris traitements planifiés à l’étranger ; montants forfaitaires les plus élevés."
+        }
+      ],
+      "prerequisites": "Domicile en Suisse ; déclaration de santé pour toute conclusion ou augmentation de couverture (réserves ou refus possibles) ; conclusion jusqu’à l’âge de 60 ans révolus. La couverture accidents peut être exclue. Admission des bébés sans réserve dans hospita générale jusqu’à 3 mois après la naissance.",
+      "pricing": {
+        "factors": [
+          "age",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Classes d’âge (CP hospita 2022, art. 9) – hospita générale : 0–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–70, 71–80, 81+ ; hospita demi-privée, privée, globale : 0–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81+. La page « Informations sur les primes 2027 » résume pour les complémentaires d’hospitalisation : jusqu’à 18 ans, 19–25 ans, paliers de 5 ans jusqu’à 60 ans, 61–70, 71–80, puis prime inchangée dès 81 ans. Âge de référence : âge atteint dans l’année civile (année civile − année de naissance) ; le changement de classe prend effet au 1er janvier (page « Informations sur les primes 2027 » : les personnes nées en 2008 passent en 2027 dans la classe 19–25 ans, celles nées en 2001 dans la classe 26–30 ans).",
+        "discounts": "Rabais pluriannuel de 3 % pour un contrat de trois ans (nouvelle conclusion ou passage à une meilleure couverture) ; escompte de 2 % en cas de paiement annuel, 1 % en cas de paiement semestriel ; rabais familial selon CGA 8.1.3 (enfants jusqu’à 18 ans si contrat de trois ans et parent assuré de façon au moins équivalente ; exonération de prime dès le 3e enfant si les deux aînés jusqu’à 25 ans du même ménage sont assurés de façon au moins équivalente) ; prime offerte au nouveau-né le mois de sa naissance. Variantes avec rabais pour absence de prestations (RAP : +20 % / prime ordinaire / −30 %) décrites dans les CP art. 7 mais plus proposées à la conclusion depuis 2016.",
+        "notes": "Aucun barème publié : Sympany ne propose pas de calculateur en ligne pour ce produit, l’offre se demande par formulaire ou par téléphone. Facteurs selon CGA 8.1.2 : âge ou groupe d’âge, lieu de domicile, participation assumée ; inclusion ou exclusion de la couverture accidents. Primes inchangées en 2027 pour les complémentaires d’hospitalisation hospita (page « Informations sur les primes 2027 »)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières (CP) hospita selon la LCA",
+        "edition": "Édition 2022 (1045/f/02.2022) ; aperçu des prestations 2027, état octobre 2026 (1100/f/10.2026)",
+        "url": "https://www.sympany.ch/dam/jcr:6f496d29-42b2-4dd8-8da6-01ea4452e1ba/BB-hospita-2022-Sympany-1045-0222-fr.2024-07-12-13-55-38.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sympany.ch/fr/particuliers/assurances-complementaires/hospitalisation.html",
+        "https://www.sympany.ch/fr/particuliers/assurances-complementaires/hospitalisation/prestations.html",
+        "https://www.sympany.ch/fr/particuliers/assurances-complementaires/hospitalisation/hospita-generale.html",
+        "https://www.sympany.ch/fr/particuliers/assurances-complementaires/hospitalisation/hospita-demi-privee.html",
+        "https://www.sympany.ch/fr/particuliers/assurances-complementaires/hospitalisation/hospita-privee.html",
+        "https://www.sympany.ch/fr/particuliers/assurances-complementaires/hospitalisation/hospita-globale.html",
+        "https://www.sympany.ch/dam/jcr:6f496d29-42b2-4dd8-8da6-01ea4452e1ba/BB-hospita-2022-Sympany-1045-0222-fr.2024-07-12-13-55-38.pdf",
+        "https://www.sympany.ch/dam/jcr:2a5fe087-c083-4e8b-8d17-7a1bf0b1473b/AVB-Zusatzversicherungen-2022-Sympany-1041-0924-fr.2025-07-30-10-00-11.pdf",
+        "https://www.sympany.ch/dam/jcr:a78f7b47-46dd-400a-8f31-dbb59b82a132/Leistungsuebersicht-2027-Sympany-1100-1126-fr.24fb92758e128625b51a27efe766132b.pdf",
+        "https://www.sympany.ch/dam/jcr:5ae96b58-4b64-4d2f-acf5-ca174edc99c7/Leistungsuebersicht-VVG-Spital-2026-Sympany-1100-1024-fr.2025-12-18-10-37-09.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "childcare_assistance",
+        "convalescence_cure",
+        "home_help",
+        "hospital_abroad",
+        "hospital_general_ch",
+        "hospital_private",
+        "hospital_semi_private",
+        "maternity",
+        "medical_aids",
+        "newborn_coverage",
+        "other:higher_division_forfait",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "spa_cure",
+        "transport_rescue"
+      ],
+      "benefitCount": 47
+    },
+    {
+      "insurer": "sympany",
+      "key": "sympany-hospita-flex",
+      "name": "hospita flex",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Complémentaire d’hospitalisation flexible : la division (commune, demi-privée ou privée) se choisit à chaque admission ; la division supérieure est couverte moyennant une participation aux coûts plafonnée par année civile. Trois variantes.",
+      "variants": [
+        {
+          "key": "option-demi-privee",
+          "name": "hospita flex avec option demi-privée (variante 1)",
+          "description": "Commune 100 % ; demi-privée 75 % (participation 25 %, max. CHF 3’000.– par an) ; privée non couverte."
+        },
+        {
+          "key": "option-demi-privee-et-privee",
+          "name": "hospita flex avec option demi-privée et privée (variante 2)",
+          "description": "Commune 100 % ; demi-privée 85 % (participation 15 %, max. CHF 1’500.–) ; privée 75 % (participation 25 %, max. CHF 4’500.–)."
+        },
+        {
+          "key": "option-privee",
+          "name": "hospita flex avec option privée (variante 3)",
+          "description": "Commune et demi-privée 100 % ; privée 80 % (participation 20 %, max. CHF 3’000.– par an)."
+        }
+      ],
+      "prerequisites": "Domicile en Suisse ; déclaration de santé ; conclusion jusqu’à l’âge de 60 ans révolus. La couverture accidents peut être exclue.",
+      "pricing": {
+        "factors": [
+          "age",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Classes d’âge (CP hospita 2022, art. 9) : 0–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81+. Âge de référence : âge atteint dans l’année civile (année civile − année de naissance) ; le changement de classe prend effet au 1er janvier (page « Informations sur les primes 2027 » : les personnes nées en 2008 passent en 2027 dans la classe 19–25 ans, celles nées en 2001 dans la classe 26–30 ans).",
+        "discounts": "Rabais pluriannuel de 3 % pour un contrat de trois ans (nouvelle conclusion ou passage à une meilleure couverture) ; escompte de 2 % en cas de paiement annuel, 1 % en cas de paiement semestriel ; rabais familial selon CGA 8.1.3 (enfants jusqu’à 18 ans si contrat de trois ans et parent assuré de façon au moins équivalente ; exonération de prime dès le 3e enfant si les deux aînés jusqu’à 25 ans du même ménage sont assurés de façon au moins équivalente) ; prime offerte au nouveau-né le mois de sa naissance. Plafond familial de la participation aux coûts : CHF 3’000.– (variantes 1 et 3) ou CHF 4’500.– (variante 2, ou variantes différentes dans la même police).",
+        "notes": "Aucun barème publié : Sympany ne propose pas de calculateur en ligne pour ce produit, l’offre se demande par formulaire ou par téléphone. Code interne de la variante affichée sur la page produit : produit KO, variation KOF3. Primes inchangées en 2027 pour les complémentaires d’hospitalisation hospita."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières (CP) hospita selon la LCA",
+        "edition": "Édition 2022 (1045/f/02.2022) ; brochure hospita flex 1080/f/05.24 ; aperçu des prestations 2027 (1100/f/10.2026)",
+        "url": "https://www.sympany.ch/dam/jcr:6f496d29-42b2-4dd8-8da6-01ea4452e1ba/BB-hospita-2022-Sympany-1045-0222-fr.2024-07-12-13-55-38.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sympany.ch/fr/particuliers/assurances-complementaires/hospitalisation/hospita-flex.html",
+        "https://www.sympany.ch/fr/particuliers/assurances-complementaires/hospitalisation/prestations.html",
+        "https://www.sympany.ch/dam/jcr:6f496d29-42b2-4dd8-8da6-01ea4452e1ba/BB-hospita-2022-Sympany-1045-0222-fr.2024-07-12-13-55-38.pdf",
+        "https://www.sympany.ch/dam/jcr:91fdd1dc-cfe8-47ef-a871-0f9317eafe7a/Broschuere-hospita-flex-Sympany-1080-1024-fr.2024-10-24-14-46-06.pdf",
+        "https://www.sympany.ch/dam/jcr:2a5fe087-c083-4e8b-8d17-7a1bf0b1473b/AVB-Zusatzversicherungen-2022-Sympany-1041-0924-fr.2025-07-30-10-00-11.pdf",
+        "https://www.sympany.ch/dam/jcr:a78f7b47-46dd-400a-8f31-dbb59b82a132/Leistungsuebersicht-2027-Sympany-1100-1126-fr.24fb92758e128625b51a27efe766132b.pdf",
+        "https://www.sympany.ch/dam/jcr:5ae96b58-4b64-4d2f-acf5-ca174edc99c7/Leistungsuebersicht-VVG-Spital-2026-Sympany-1100-1024-fr.2025-12-18-10-37-09.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "childcare_assistance",
+        "convalescence_cure",
+        "home_help",
+        "hospital_abroad",
+        "hospital_flex",
+        "maternity",
+        "medical_aids",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "spa_cure",
+        "transport_rescue"
+      ],
+      "benefitCount": 20
+    },
+    {
+      "insurer": "sympany",
+      "key": "sympany-hospita-accident-prive",
+      "name": "hospita accident privé",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Complément accident : division privée avec libre choix du médecin après un accident (urgence dans le monde entier, séquelles dans toute la Suisse), à combiner avec une autre complémentaire Sympany.",
+      "variants": [],
+      "prerequisites": "Ne peut être souscrite ou maintenue qu’avec plus, premium (y c. natura), hospita générale, hospita demi-privée ou hospita flex (pas avec hospita privée ni hospita globale) ; conclusion jusqu’à l’âge de 60 ans révolus ; offre par téléphone ou formulaire.",
+      "pricing": {
+        "factors": [
+          "age",
+          "region"
+        ],
+        "ageBands": "Classes d’âge (CP hospita 2022, art. 9) : 0–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65, 66–70, 71–75, 76–80, 81+. Âge de référence : âge atteint dans l’année civile (année civile − année de naissance) ; le changement de classe prend effet au 1er janvier (page « Informations sur les primes 2027 » : les personnes nées en 2008 passent en 2027 dans la classe 19–25 ans, celles nées en 2001 dans la classe 26–30 ans).",
+        "discounts": "Escompte de 2 % (paiement annuel) ou 1 % (semestriel) ; rabais familial selon CGA 8.1.3.",
+        "notes": "Aucun barème publié : Sympany ne propose pas de calculateur en ligne pour ce produit, l’offre se demande par formulaire ou par téléphone. "
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières (CP) hospita selon la LCA",
+        "edition": "Édition 2022 (1045/f/02.2022) ; aperçu des prestations 2027 (1100/f/10.2026)",
+        "url": "https://www.sympany.ch/dam/jcr:6f496d29-42b2-4dd8-8da6-01ea4452e1ba/BB-hospita-2022-Sympany-1045-0222-fr.2024-07-12-13-55-38.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sympany.ch/fr/particuliers/assurances-complementaires/hospitalisation/hospita-accident-prive.html",
+        "https://www.sympany.ch/fr/particuliers/assurances-complementaires/hospitalisation/prestations.html",
+        "https://www.sympany.ch/dam/jcr:6f496d29-42b2-4dd8-8da6-01ea4452e1ba/BB-hospita-2022-Sympany-1045-0222-fr.2024-07-12-13-55-38.pdf",
+        "https://www.sympany.ch/dam/jcr:2a5fe087-c083-4e8b-8d17-7a1bf0b1473b/AVB-Zusatzversicherungen-2022-Sympany-1041-0924-fr.2025-07-30-10-00-11.pdf",
+        "https://www.sympany.ch/dam/jcr:a78f7b47-46dd-400a-8f31-dbb59b82a132/Leistungsuebersicht-2027-Sympany-1100-1126-fr.24fb92758e128625b51a27efe766132b.pdf",
+        "https://www.sympany.ch/dam/jcr:5ae96b58-4b64-4d2f-acf5-ca174edc99c7/Leistungsuebersicht-VVG-Spital-2026-Sympany-1100-1024-fr.2025-12-18-10-37-09.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "ambulatory_free_doctor_choice",
+        "childcare_assistance",
+        "convalescence_cure",
+        "home_help",
+        "hospital_private",
+        "medical_aids",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "spa_cure",
+        "transport_rescue"
+      ],
+      "benefitCount": 12
+    },
+    {
+      "insurer": "sympany",
+      "key": "sympany-dental",
+      "name": "dental",
+      "category": "dental",
+      "audience": "all",
+      "summary": "Assurance dentaire complémentaire : contributions de 50 % ou 75 % aux traitements dentaires et de laboratoire jusqu’à un plafond annuel choisi (CHF 1’000.–, 1’500.– ou 5’000.–), plus CHF 100.– par an pour la prophylaxie et le contrôle.",
+      "variants": [
+        {
+          "key": "c",
+          "name": "dental c",
+          "description": "50 % des coûts, max. CHF 1’000.– par année civile."
+        },
+        {
+          "key": "e",
+          "name": "dental e",
+          "description": "75 % des coûts, max. CHF 1’500.– par année civile."
+        },
+        {
+          "key": "h",
+          "name": "dental h",
+          "description": "75 % des coûts, max. CHF 5’000.– par année civile."
+        },
+        {
+          "key": "piccolo",
+          "name": "dental piccolo",
+          "description": "Contrôle annuel jusqu’à CHF 50.– pour les enfants jusqu’à 15 ans assurés plus ou premium ; défini dans les CP 2022 et cité dans les informations sur les primes 2027, mais absent des pages produit et de la brochure : statut de vente à confirmer."
+        }
+      ],
+      "prerequisites": "Conclusion jusqu’à l’âge de 60 ans révolus ; uniquement en combinaison avec l’assurance de base Sympany, plus, premium, hospita, salto, supplément général ou supplément privé ; domicile en Suisse ; examen de santé (dernier contrôle dentaire de moins d’un an), sauf pour les enfants jusqu’à 3 ans admis sans examen de santé.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Classes d’âge (CP dental 2022, art. 3) : 0–3, 4–5, 6–10, 11–15, 16–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–70, 71–80, 81+. Âge de référence : âge atteint dans l’année civile (année civile − année de naissance) ; le changement de classe prend effet au 1er janvier (page « Informations sur les primes 2027 » : les personnes nées en 2008 passent en 2027 dans la classe 19–25 ans, celles nées en 2001 dans la classe 26–30 ans). Pour dental, changements de classe en 2027 pour les personnes nées en 2023, 2021, 2016, 2011 (dental piccolo), 2008 et 2001.",
+        "discounts": "Gratuite pour les enfants jusqu’à l’âge de 3 ans (prime due dès le 1er janvier de l’année des 4 ans) ; escompte de 2 % (paiement annuel) ou 1 % (semestriel) ; rabais familial selon CGA 8.1.3.",
+        "notes": "Aucun barème publié : Sympany ne propose pas de calculateur en ligne pour ce produit, l’offre se demande par formulaire ou par téléphone. Le lieu de domicile est un critère tarifaire général des CGA (8.1.2) ; son application à dental n’est pas confirmée. Les CP 2022 définissent aussi les variantes a (75 %, max. CHF 1’000.–, franchise CHF 500.–), b (50 %, max. CHF 500.–), d (75 %, max. CHF 1’000.–), f (75 %, max. CHF 3’000.–) et g (75 %, max. CHF 5’000.–, franchise CHF 500.–), non proposées sur le site ni dans la brochure 03.2025. « Pour tous les produits complémentaires, les primes restent inchangées en 2027 » (page « Informations sur les primes 2027 »)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières (CP) dental selon la LCA",
+        "edition": "Édition 2022 (1044/0/f/07.2022) ; brochure dental 1050/f/03.2025",
+        "url": "https://www.sympany.ch/dam/jcr:7ecc35aa-8730-4d25-bcd2-2c2e304edb3b/BB-dental-2022-Sympany-1044-0222-fr.2023-01-05-10-35-29.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sympany.ch/fr/particuliers/assurances-complementaires/dentaire.html",
+        "https://www.sympany.ch/fr/particuliers/assurances-complementaires/dentaire/prestations.html",
+        "https://www.sympany.ch/dam/jcr:7ecc35aa-8730-4d25-bcd2-2c2e304edb3b/BB-dental-2022-Sympany-1044-0222-fr.2023-01-05-10-35-29.pdf",
+        "https://www.sympany.ch/dam/jcr:015544af-f9d8-4a5b-a346-84d75f58af06/Broschuere-dental-Sympany-1050-0325-fr.2025-03-26-13-49-57.pdf",
+        "https://www.sympany.ch/dam/jcr:2a5fe087-c083-4e8b-8d17-7a1bf0b1473b/AVB-Zusatzversicherungen-2022-Sympany-1041-0924-fr.2025-07-30-10-00-11.pdf",
+        "https://www.sympany.ch/dam/jcr:a78f7b47-46dd-400a-8f31-dbb59b82a132/Leistungsuebersicht-2027-Sympany-1100-1126-fr.24fb92758e128625b51a27efe766132b.pdf"
+      ],
+      "tags": [
+        "dental_hygiene",
+        "dental_treatment"
+      ],
+      "benefitCount": 5
+    },
+    {
+      "insurer": "sympany",
+      "key": "sympany-tourist",
+      "name": "tourist",
+      "category": "travel_abroad",
+      "audience": "all",
+      "summary": "Assurance-maladie de voyage permanente incluse dans la police : traitements d’urgence, transports, sauvetage et rapatriement hors du canton de résidence et dans le monde entier, pour des séjours jusqu’à 21 ou 42 jours.",
+      "variants": [
+        {
+          "key": "50-100",
+          "name": "tourist 50/100",
+          "description": "Capital assuré de CHF 50’000.– par personne, CHF 100’000.– par famille ; séjours jusqu’à 21 ou 42 jours."
+        },
+        {
+          "key": "250-500",
+          "name": "tourist 250/500",
+          "description": "Capital assuré de CHF 250’000.– par personne, CHF 500’000.– par famille ; séjours jusqu’à 21 ou 42 jours."
+        }
+      ],
+      "prerequisites": "Sans limite d’âge ; ne peut être conclue et maintenue qu’avec plus, premium, supplément général, supplément privé, hospita ou salto (pour une famille, au moins un parent). Couverture familiale : conjoint ou partenaire et enfants jusqu’à 25 ans du même ménage.",
+      "pricing": {
+        "factors": [
+          "variant",
+          "family",
+          "stay_duration"
+        ],
+        "ageBands": "Aucune : prime identique à tout âge.",
+        "discounts": "Aucun rabais spécifique publié ; prime dès CHF 1.– par mois (CHF 12.– par an).",
+        "notes": "Barème complet publié dans la brochure tourist (05.2026)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières (CP) tourist selon la LCA",
+        "edition": "Édition 2022 (1051/0/f/02.2022) ; brochure tourist 1201/f/05.26",
+        "url": "https://www.sympany.ch/dam/jcr:fdb69bdf-f0a7-46b6-bd8b-ccaa27929712/BB-tourist-2022-Sympany-1051-0222-fr.2024-07-12-13-48-58.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sympany.ch/fr/particuliers/assurance-maladie-voyage/tourist.html",
+        "https://www.sympany.ch/fr/particuliers/assurance-maladie-voyage.html",
+        "https://www.sympany.ch/fr/particuliers/assurance-maladie-voyage/prestations.html",
+        "https://www.sympany.ch/dam/jcr:fdb69bdf-f0a7-46b6-bd8b-ccaa27929712/BB-tourist-2022-Sympany-1051-0222-fr.2024-07-12-13-48-58.pdf",
+        "https://www.sympany.ch/dam/jcr:3be51150-3d17-4199-80ac-6750a311f656/Broschuere-tourist-Sympany-1201-0526-fr.2026-05-22-13-40-54.pdf",
+        "https://www.sympany.ch/dam/jcr:a78f7b47-46dd-400a-8f31-dbb59b82a132/Leistungsuebersicht-2027-Sympany-1100-1126-fr.24fb92758e128625b51a27efe766132b.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "assistance_services",
+        "search_recovery",
+        "telemedicine_services",
+        "transport_rescue",
+        "travel_assistance_repatriation"
+      ],
+      "benefitCount": 9
+    },
+    {
+      "insurer": "sympany",
+      "key": "sympany-tourist-subito",
+      "name": "tourist subito",
+      "category": "travel_abroad",
+      "audience": "all",
+      "summary": "Assurance-maladie de voyage à court terme, souscrite en ligne avec effet immédiat pour une durée de 10 à 365 jours : traitements d’urgence, transports, sauvetage et rapatriement hors du canton de résidence et dans le monde entier.",
+      "variants": [
+        {
+          "key": "50-100",
+          "name": "tourist subito 50/100",
+          "description": "Capital assuré de CHF 50’000.– par personne, CHF 100’000.– par famille."
+        },
+        {
+          "key": "250-500",
+          "name": "tourist subito 250/500",
+          "description": "Capital assuré de CHF 250’000.– par personne, CHF 500’000.– par famille."
+        }
+      ],
+      "prerequisites": "Sans limite d’âge ; toute personne au bénéfice d’une assurance des soins en Suisse (pas besoin d’être assuré chez Sympany) ; souscription en ligne (tourist.sympany.ch) ou par bulletin de versement, paiement par Saferpay (MasterCard, Visa, Twint) ; durée maximale 365 jours.",
+      "pricing": {
+        "factors": [
+          "variant",
+          "family",
+          "duration"
+        ],
+        "ageBands": "Aucune : prime identique à tout âge.",
+        "discounts": "Aucun ; prime dès CHF 10.– (personne seule, 10 jours, variante 50/100).",
+        "notes": "Primes uniques par durée (10, 17, 24, 31, 62, 92, 183, 365 jours) enregistrées dans publishedPrices avec monthlyChf null et premiumChf : ce ne sont pas des primes mensuelles. La prime s’affiche aussi dans l’outil de souscription en ligne tourist.sympany.ch (hôte non accessible depuis ce conteneur)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions générales d’assurance (CGA) tourist subito selon la LCA",
+        "edition": "Édition 2022 (1052/0/f/02.2022) ; brochure tourist subito 1200/f/05.26",
+        "url": "https://www.sympany.ch/dam/jcr:58bb0a70-4ce8-4994-a479-c736b877232d/CGA-tourist-subito-2022-Sympany-1052-1024-fr.2024-10-25-10-51-56.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sympany.ch/fr/particuliers/assurance-maladie-voyage/tourist-subito.html",
+        "https://www.sympany.ch/fr/particuliers/assurance-maladie-voyage.html",
+        "https://www.sympany.ch/fr/particuliers/assurance-maladie-voyage/prestations.html",
+        "https://www.sympany.ch/dam/jcr:58bb0a70-4ce8-4994-a479-c736b877232d/CGA-tourist-subito-2022-Sympany-1052-1024-fr.2024-10-25-10-51-56.pdf",
+        "https://www.sympany.ch/dam/jcr:53022f1f-ae33-418f-8157-e3e2117527d7/Broschuere-tourist-subito-Sympany-1200-0526-fr.2026-05-15-10-26-27.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "assistance_services",
+        "search_recovery",
+        "telemedicine_services",
+        "transport_rescue",
+        "travel_assistance_repatriation"
+      ],
+      "benefitCount": 9
+    },
+    {
+      "insurer": "sympany",
+      "key": "sympany-protect",
+      "name": "protect",
+      "category": "legal_protection",
+      "audience": "all",
+      "summary": "Protection juridique en matière de santé pour toutes les personnes d’une même police : litiges de responsabilité civile et de droit des assurances liés à une atteinte à la santé, dans le monde entier. Assureur : Coop Protection Juridique SA.",
+      "variants": [],
+      "prerequisites": "Ne peut être conclue et maintenue qu’avec plus, premium, hospita ou dental (les CP citent aussi supplément général, supplément privé et salto) ; l’événement initial doit être postérieur à la conclusion.",
+      "pricing": {
+        "factors": [],
+        "ageBands": "Aucune : prime forfaitaire par police.",
+        "discounts": null
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières (CP) protect selon la LCA",
+        "edition": "Édition 2022 (1048/f/02.2022)",
+        "url": "https://www.sympany.ch/dam/jcr:931251f6-b99b-4ca4-b965-3aeed4f282fb/BB-protect-2022-Sympany-1048-0222-fr.2024-07-12-13-39-45.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sympany.ch/fr/particuliers/assurances-complementaires/protection-juridique.html",
+        "https://www.sympany.ch/dam/jcr:931251f6-b99b-4ca4-b965-3aeed4f282fb/BB-protect-2022-Sympany-1048-0222-fr.2024-07-12-13-39-45.pdf",
+        "https://www.sympany.ch/dam/jcr:2a5fe087-c083-4e8b-8d17-7a1bf0b1473b/AVB-Zusatzversicherungen-2022-Sympany-1041-0924-fr.2025-07-30-10-00-11.pdf",
+        "https://www.sympany.ch/dam/jcr:a78f7b47-46dd-400a-8f31-dbb59b82a132/Leistungsuebersicht-2027-Sympany-1100-1126-fr.24fb92758e128625b51a27efe766132b.pdf"
+      ],
+      "tags": [
+        "legal_protection"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "sympany",
+      "key": "sympany-capita-accident",
+      "name": "capita accident",
+      "category": "capital_accident",
+      "audience": "all",
+      "summary": "Capital-risque en cas de décès ou d’invalidité à la suite d’un accident (professionnel ou non, maladies professionnelles comprises), valable dans le monde entier, avec progression jusqu’à 350 % de la somme d’invalidité.",
+      "variants": [],
+      "prerequisites": "Conclusion jusqu’à l’âge de 65 ans révolus ; uniquement avec plus, premium, supplément général, supplément privé, hospita ou salto ; aucune déclaration de santé supplémentaire ; admission des bébés sans réserve jusqu’à 3 mois après la naissance.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "sum_insured"
+        ],
+        "ageBands": "Classes d’âge (CP capita accident 2022, art. 15) : 0–3, 4–15, 16–20, 21–65, 66+. La brochure tarifaire distingue hommes et femmes de 21 à 65 ans et dès 65 ans, et une prime unique pour les adolescents (16–20) et les enfants (4–15, 0–3). Âge de référence non précisé dans les CP ; sommes maximales réduites dès le 1er janvier de l’année civile qui suit le 65e anniversaire.",
+        "discounts": "Gratuit pour le troisième enfant et les suivants si tous les enfants sont assurés de manière équivalente auprès de Sympany ; « dès CHF 3.70 par mois » (femmes à partir de 21 ans, décès CHF 5’000.– / invalidité CHF 60’000.–).",
+        "notes": "Barème complet publié dans la brochure produit (26 combinaisons de sommes d’assurance, plus 7 combinaisons dès 65 ans)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières (CP) capita accident selon la LCA",
+        "edition": "Édition 2022 (1043/f/07.2022) ; brochure capita accident 1170/f/6.2023",
+        "url": "https://www.sympany.ch/dam/jcr:e226c52f-25b4-4314-b054-9cc9d1bbbafb/BB-capita-unfall-2022-Sympany-1043-0722-fr.2023-01-05-10-47-31.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sympany.ch/fr/particuliers/assurances-de-risque/capita-accident.html",
+        "https://www.sympany.ch/fr/particuliers/assurances-de-risque.html",
+        "https://www.sympany.ch/dam/jcr:e226c52f-25b4-4314-b054-9cc9d1bbbafb/BB-capita-unfall-2022-Sympany-1043-0722-fr.2023-01-05-10-47-31.pdf",
+        "https://www.sympany.ch/dam/jcr:2b3d048d-d9af-4d44-8e17-a795d907aa0f/Broschuere-capita-unfall-Sympany-1170-1024-fr.2024-10-24-14-25-18.pdf",
+        "https://www.sympany.ch/dam/jcr:a78f7b47-46dd-400a-8f31-dbb59b82a132/Leistungsuebersicht-2027-Sympany-1100-1126-fr.24fb92758e128625b51a27efe766132b.pdf"
+      ],
+      "tags": [
+        "accident_capital",
+        "other:retraining_costs"
+      ],
+      "benefitCount": 5
+    },
+    {
+      "insurer": "sympany",
+      "key": "sympany-capita-maladie",
+      "name": "capita maladie",
+      "category": "capital_illness",
+      "audience": "all",
+      "summary": "Capital-risque unique en cas de décès ou d’invalidité (incapacité de gain permanente) à la suite d’une maladie, valable dans le monde entier. Preneur du risque : Helvetia Compagnie Suisse d’Assurances sur la Vie SA.",
+      "variants": [],
+      "prerequisites": "Réservée aux personnes ayant (ou demandant) une assurance-maladie ou une complémentaire chez Sympany ; domicile en Suisse ou statut de frontalier ; questions de santé dans la proposition (aucun examen si proposition dans les 90 premiers jours de vie) ; conclusion jusqu’à l’âge de 60 ans révolus ; fin de l’assurance à 65 ans révolus (veille du 66e anniversaire).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "sum_insured"
+        ],
+        "ageBands": "Tranches tarifaires de la brochure 04.2024 : 0–3, 4–15, 16–20, 21–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–65 ; hommes et femmes séparés (primes identiques jusqu’à 20 ans). Âge de référence : différence entre l’année civile et l’année de naissance (CP art. 1.7). Lors du passage à la catégorie supérieure, les sommes sont ramenées aux maxima de la catégorie (décès / invalidité : 0–3 ans CHF 2’500.– / 100’000.– ; 4–15 ans 20’000.– / 100’000.– ; 16–50 ans 300’000.– / 300’000.– ; 51–55 ans 200’000.– / 200’000.– ; 56–65 ans 100’000.– / 100’000.–).",
+        "discounts": "Aucun rabais publié ; libération des primes du risque invalidité à l’expiration du délai d’attente lorsqu’un capital invalidité est dû.",
+        "notes": "Barème complet publié dans la brochure produit (21 combinaisons de sommes d’assurance, selon l’âge). Dès 57 ans, les prestations en capital diminuent de 10 % de la somme d’assurance par an à prime inchangée."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières (CP) capita maladie selon la LCA",
+        "edition": "Édition 2022 (1023/0/f/07.2022) ; brochure capita maladie 1171/f/04.2024",
+        "url": "https://www.sympany.ch/dam/jcr:9390c806-f3c5-46ae-abd4-68240cd26224/BB-capita-krankheit-2022-Sympany-1023-0722-fr.2023-01-05-10-45-13.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sympany.ch/fr/particuliers/assurances-de-risque/capita-maladie.html",
+        "https://www.sympany.ch/fr/particuliers/assurances-de-risque.html",
+        "https://www.sympany.ch/dam/jcr:9390c806-f3c5-46ae-abd4-68240cd26224/BB-capita-krankheit-2022-Sympany-1023-0722-fr.2023-01-05-10-45-13.pdf",
+        "https://www.sympany.ch/dam/jcr:debce72c-2e70-4a0b-8a08-9f341849a6e0/Broschuere-capita-krankheit-Sympany-1171-1024-fr.2024-10-24-14-23-02.pdf",
+        "https://www.sympany.ch/dam/jcr:a78f7b47-46dd-400a-8f31-dbb59b82a132/Leistungsuebersicht-2027-Sympany-1100-1126-fr.24fb92758e128625b51a27efe766132b.pdf"
+      ],
+      "tags": [
+        "illness_capital",
+        "premium_waiver"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "sympany",
+      "key": "sympany-compensa",
+      "name": "compensa",
+      "category": "daily_allowance",
+      "audience": "adult",
+      "summary": "Assurance perte de gain individuelle selon la LCA : indemnité journalière en cas de maladie, d’accident ou d’accouchement, dès 25 % d’incapacité de travail, aussi pour les personnes sans activité lucrative.",
+      "variants": [
+        {
+          "key": "maladie",
+          "name": "Indemnité journalière en cas de maladie et d’accouchement",
+          "description": "Couverture maladie ; l’accouchement est inclus dans l’indemnité journalière maladie."
+        },
+        {
+          "key": "accident",
+          "name": "Indemnité journalière en cas d’accident",
+          "description": "Couverture accident seule."
+        },
+        {
+          "key": "maladie-accident",
+          "name": "Indemnité journalière en cas de maladie, d’accouchement et d’accident",
+          "description": "Couverture maladie et accident ; mêmes prestations en cas d’accident qu’en cas de maladie."
+        }
+      ],
+      "prerequisites": "Indépendants, salariés et personnes sans activité lucrative âgés d’au moins 15 ans révolus et de moins de 60 ans révolus, pleinement capables de travailler au dépôt de la proposition et domiciliés en Suisse ; certificat médical ou examen par un médecin-conseil possible.",
+      "pricing": {
+        "factors": [
+          "age",
+          "region",
+          "waiting_period",
+          "benefit_duration",
+          "sum_insured",
+          "accident",
+          "claims_history",
+          "occupation"
+        ],
+        "ageBands": "Classes d’âge (CP compensa 2022) : 15–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–70. Âge de référence : âge atteint dans l’année civile (année civile − année de naissance) ; le changement de classe prend effet au 1er janvier (page « Informations sur les primes 2027 » : les personnes nées en 2008 passent en 2027 dans la classe 19–25 ans, celles nées en 2001 dans la classe 26–30 ans).",
+        "discounts": "Rabais en cas de non-recours aux prestations : variante A – échelon A0 +56,25 %, A1 prime ordinaire, A2 −36 %, A3 −59,04 % (brochure : 156 % / 100 % / 64 % / 41 % de la prime) ; variante B – B1 prime ordinaire, B2 −36 %. Un échelon gagné après trois périodes d’observation (1er septembre au 31 août) sans prestation, un échelon perdu l’année suivant une prestation. Mêmes primes pour femmes et hommes.",
+        "notes": "Aucun barème publié : Sympany ne propose pas de calculateur en ligne pour ce produit, l’offre se demande par formulaire ou par téléphone. Montant de la prime fixé d’après l’âge, le lieu de domicile, le recours aux prestations ou la branche professionnelle (CP art. 10.1), ainsi que l’indemnité, le délai d’attente et la durée choisis."
+      },
+      "conditionsDoc": {
+        "title": "Conditions particulières (CP) compensa selon la LCA",
+        "edition": "Édition 2022 (1053/f/02.2022) ; brochure compensa 1040/f/04.2024",
+        "url": "https://www.sympany.ch/dam/jcr:e272aa02-c9bb-43e9-b33b-89ffe748ea4d/BB-compensa-2022-Sympany-1053-0222-fr.2024-07-12-13-33-06.pdf"
+      },
+      "sourceUrls": [
+        "https://www.sympany.ch/fr/particuliers/assurances-de-risque/compensa.html",
+        "https://www.sympany.ch/fr/particuliers/assurances-de-risque.html",
+        "https://www.sympany.ch/dam/jcr:e272aa02-c9bb-43e9-b33b-89ffe748ea4d/BB-compensa-2022-Sympany-1053-0222-fr.2024-07-12-13-33-06.pdf",
+        "https://www.sympany.ch/dam/jcr:c589877a-93bd-4e51-875a-a2b0da532a9e/Broschuere-compensa-Sympany-1040-1024-fr.2024-10-24-14-34-40.pdf",
+        "https://www.sympany.ch/dam/jcr:2a5fe087-c083-4e8b-8d17-7a1bf0b1473b/AVB-Zusatzversicherungen-2022-Sympany-1041-0924-fr.2025-07-30-10-00-11.pdf"
+      ],
+      "tags": [
+        "bonus_program",
+        "daily_allowance",
+        "upgrade_option"
+      ],
+      "benefitCount": 5
     },
     {
       "insurer": "visana",
