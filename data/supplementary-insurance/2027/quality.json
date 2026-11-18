@@ -74,7 +74,8 @@
       "products": 21,
       "benefits": 414,
       "verification:read": 414,
-      "prices": 15
+      "prices": 15,
+      "calculatorPrices": 71754
     }
   },
   "issues": [
@@ -96,6 +97,7 @@
     "premiums/groupe-mutuel.csv: produit sans clé 'Premium' (154 lignes)",
     "premiums/groupe-mutuel.csv: produit sans clé 'PrimaCapital' (944 lignes)",
     "premiums/groupe-mutuel.csv: produit sans clé 'ProVista' (246 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé 'Start' (160 lignes)"
+    "premiums/groupe-mutuel.csv: produit sans clé 'Start' (160 lignes)",
+    "premiums/visana.csv: produit sans clé 'Protection juridique' (960 lignes)"
   ]
 }
