@@ -12,7 +12,7 @@ URL remontées par la recherche web le 18 novembre 2026. Aucune n'a été ouvert
 | Helsana | `www.helsana.ch`, `helsana.ch` | entrée : `www.helsana.ch/fr/prives/assurances/calculateur-primes.html` |
 | Sanitas | `www.sanitas.com` | inconnu |
 | CONCORDIA | `www.concordia.ch`, `concordia.ch` | inconnu |
-| SWICA | `www.swica.ch`, `www4.swica.ch` | inconnu |
+| SWICA | `www.swica.ch`, `www4.swica.ch`, `dam.swica.ch` | inconnu |
 | AXA | `www.axa.ch`, `axa.ch` | inconnu |
 | Atupri | `www.atupri.ch`, `atupri.ch` | `calculateur-de-primes.atupri.ch` |
 | Visana | `www.visana.ch`, `visana.ch`, `fit.visana.ch` | inconnu |
@@ -33,7 +33,7 @@ URL remontées par la recherche web le 18 novembre 2026. Aucune n'a été ouvert
 
 **CONCORDIA** — `www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/A.04_DIVERSA_de.pdf` (version française probable : `A.04_DIVERSA_fr.pdf`), `A.06_NATURA_*.pdf`.
 
-**SWICA** — conditions sous `www4.swica.ch/p/` (ex. `186_f_ZB_Completa_Top.pdf`), pages produit sous `www.swica.ch/fr/prive/assurances/assurances-complementaires`.
+**SWICA** — à lire en premier : `www4.swica.ch/p/021_f_Leistungsuebersicht_online.pdf` (récapitulatif des prestations 2027). Conditions sous `www4.swica.ch/p/` ou `dam.swica.ch/image/upload/…` : `186_f_ZB_Completa_Top.pdf`, `196_f_ZB_Completa_Forte.pdf`, `022_f_ZB_Praevita…`, `188_f_ZB_SUPPLEMENTA.pdf`, `189_f_ZB_optima.pdf`, `190_f_ZB_hospita.pdf`, `191_f_ZB_Denta…`, `192_f_ZB_infortuna.pdf`, `038_f_ZB_Gesundheitsrechtsschutz.pdf`, `030_f_AVB.pdf`. Gamme à confirmer : Vacanza ne serait plus vendue depuis fin 2025, Completa Praeventa serait remplacée par Praevita depuis 2026, Vivia serait un nouveau produit dès le 01.01.2027.
 
 **AXA** — `www.axa.ch/fr/particuliers/offres/sante-accidents/assurance-complementaire/conditions-contractuelles.html`, pages `assurance-complementaire-ambulatoire.html` et `assurance-complementaire-hospitalisation.html` du même dossier.
 
