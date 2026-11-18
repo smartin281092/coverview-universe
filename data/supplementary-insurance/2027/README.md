@@ -9,9 +9,10 @@ Assureurs : Assura, Groupe Mutuel, CSS, Helsana, Sanitas, CONCORDIA, SWICA, AXA,
 | Fichier | Contenu |
 | --- | --- |
 | `insurers/<clé>.json` | Source par assureur : produits, variantes, prestations, facteurs tarifaires, prix publiés. Format dans `schema.md`. |
-| `premiums/<clé>.csv` | Primes relevées dans le calculateur officiel, une ligne par produit, variante, année de naissance et sexe. |
+| `premiums/<clé>.csv.gz` | Primes relevées dans le calculateur officiel, une ligne par produit, variante, année de naissance, sexe et localité (CSV compressé). |
+| `premiums/product-map.json` | Rattachement des noms de produits des calculateurs aux clés de produits, quand le relevé ne l'a pas fait. |
 | `premiums/<clé>.md` | Méthode du relevé, profil appliqué, limites et anomalies. |
-| `premiums/collectors/` | Scripts qui ont produit les relevés, relançables. |
+| `premiums/collectors/` | Scripts qui ont produit les relevés, relançables. Ils écrivent un `.csv` ; le compresser avec `gzip -n -9` avant de committer. |
 | `taxonomy.json` | 15 catégories de produits, 12 familles et 65 tags de prestations. |
 | `products.json` | Consolidé : assureurs et produits, avec les tags couverts par chaque produit. |
 | `benefits.csv` | Consolidé : une ligne par prestation, avec famille, tag, taux, plafond, période et source. |

@@ -43,6 +43,11 @@ export default tseslint.config(
   { languageOptions: { globals: globals.node } },
   { files: ["tests/e2e/**/*.mjs"], languageOptions: { globals: globals.browser } },
   {
+    // Premium collectors run part of their code inside the calculator's page.
+    files: ["data/supplementary-insurance/**/collectors/*.mjs"],
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
+  },
+  {
     files: ["apps/**/*.ts", "apps/**/*.tsx", "packages/**/*.ts", "packages/**/*.tsx"],
     extends: [tseslint.configs.recommendedTypeChecked],
     languageOptions: {

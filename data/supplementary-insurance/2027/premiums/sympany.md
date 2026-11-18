@@ -1,104 +1,122 @@
-# Sympany — relevé des primes LCA 2027
+# Sympany — relevé des primes LCA 2027 dans le calculateur officiel
 
-**État au 2026-11-18 : aucun prix 2027 relevé, aucun prix pour Lausanne.** Le calculateur public existe (`calculator.sympany.ch`, API `api-public.sympany.ch`), mais ces deux hôtes sont refusés par le proxy de la session (403 au `CONNECT`) et ne figurent pas dans la liste autorisée. Rien n'a été contourné.
+**État au 2026-11-18 : relevé complet.** `sympany.csv` contient 11 784 lignes : 9 produits (15 combinaisons produit / variante / option), 6 localités, naissances 1957 à 2026 selon le produit, femme et homme. Tous les prix viennent de l'API du calculateur officiel ; 7 profils ont été ressaisis dans l'interface et leurs 49 prix affichés concordent avec le relevé.
 
-`sympany.csv` contient à la place la transcription du **seul barème de primes LCA publié** trouvé sur `www.sympany.ch` : 328 lignes, **état 2024, région de primes « Allemagne, France » (frontaliers)**, produits « premium » et « supplément privé ». Ce ne sont ni des primes 2027, ni des primes pour un domicile suisse : à exclure de tout comparatif Lausanne 2027 (filtrer sur `year` = 2027 ou sur `postal_code`).
-
-Pour reprendre le relevé du calculateur : ouvrir `calculator.sympany.ch` et `api-public.sympany.ch` à la session.
+À savoir avant d'utiliser les données : le site `www.sympany.ch` ne lie ce calculateur que pour les frontaliers (`country=de`). Le parcours pour un domicile suisse s'ouvre en remplaçant ce paramètre par `country=ch`, valeur que l'application prévoit et accepte ; aucun lien public n'y mène.
 
 ## Calculateur
 
-- URL : `https://calculator.sympany.ch/#/fr` (allemand : `https://calculator.sympany.ch/#/de`, étape de configuration `#/de/produkte-konfiguration`). Application à routage par fragment, jamais chargée ici.
-- Où le site y renvoie, et seulement là :
-  - `https://www.sympany.ch/fr/particuliers/assurance-de-base/euroline.html`, carte « Offre » (« établir mon offre personnelle sans engagement dans le calculateur de primes »), lien `https://calculator.sympany.ch/#/fr#&country=de#` ;
-  - `https://www.sympany.ch/fr/landingpages/recommandation-euroline.html`, formulaire « Calculer la prime maintenant! » (sexe, date de naissance, pays, NPA/localité, bouton « Calculez votre prime »), `action="https://calculator.sympany.ch/#/fr"`, champs `gender`, `dob`, `country`, `areaId`. Le seul pays proposé est l'Allemagne ;
-  - `https://www.sympany.ch/de/privatkunden/grundversicherung/euroline.html`, composant `<product-offer productid="BA" variationid="EBA" country="de" calculatorpageurl="https://calculator.sympany.ch/#/de/produkte-konfiguration" soaserviceuri="https://api-public.sympany.ch">`.
-- Les pages des complémentaires (`/fr/particuliers/assurances-complementaires/…` : plus, premium, hospita générale, demi-privée, privée, globale, flex, accident privé, dentaire, protection juridique) et la page d'accueil n'ont **aucun** bouton de calcul : elles ne mènent qu'à « Demander un conseil ou une offre » (`/fr/contact/conseil-a-la-vente.html`, formulaire de contact).
-- Non vérifié, faute d'accès : que le calculateur accepte un domicile suisse et qu'il propose les complémentaires LCA. Indice favorable, lu dans le code du site : le composant d'offre prévoit le pays `ch` (début d'assurance au 1er janvier de l'année suivante pour `ch`, au 1er du mois suivant sinon).
+- URL utilisée : `https://calculator.sympany.ch/#/fr?country=ch` (l'application réécrit l'adresse en `https://calculator.sympany.ch/?country=ch`). Titre « Calculateur de primes », application React.
+- Sans paramètre `country`, l'application renvoie vers `https://www.sympany.ch/fr/contact/conseil-a-la-vente.html` : sa configuration ne propose aucun pays par défaut (`offerableCountries: []`) et elle prend alors le pays dans l'URL. Valeurs acceptées par le code : `ch` et `de`.
+- Étapes : Personnes (sexe, prénom facultatif, date de naissance, pays « Suisse », NPA) → Assurance de base → Assurance complémentaire (hospitalisation, ambulatoire, dentaire) → Vérifier → Confirmation. Le relevé s'arrête à l'étape dentaire : aucune coordonnée, aucun questionnaire, aucune demande d'offre.
+- Le calculateur accepte 1003 Lausanne et chiffre les complémentaires sans qu'un modèle d'assurance de base soit choisi.
+
+## Méthode
+
+API rejouée. L'application obtient tous les prix d'une personne par un seul appel, sans jeton ni cookie :
+
+`GET https://api-public.sympany.ch/products/offer?sex=<f|m>&dateOfBirth=<AAAA-MM-JJ>&country=ch&zip=<npa>&subZip=<n>&language=fr&isPolicyOwner=true&insuranceStartDate=2027-01-01`
+
+- Réponse : `products[] { id, title, isBasicInsurance, productDependencies, variations[] { id, title, descriptiveTitle, configurations[] { id, label, coverageOptions[] { accident, price, preselected } } } }`, plus `discounts[]` (toujours vide ici).
+- Autres points utiles : `GET /products/areas?searchZip=<npa>&country=ch` (localités : `id`, `zip`, `subZip`, `name`) et `GET /maintenance/features` (état des fonctions).
+- Le script saisit d'abord un profil pilote dans l'interface (femme, 15.06.1987, 1003 Lausanne, prénom « Test »), capte l'appel réellement émis, vérifie ses paramètres et la date de début, compare les prix affichés à la réponse, puis rejoue l'appel dans la page pour chaque profil : une personne par requête, 1,1 s de pause, arrêt sur 403/429 ou trois erreurs de suite.
+- Volume : 1 864 appels de prix rejoués (960 profils, puis 904 demandes de complément, voir « Anomalies »), tous en HTTP 200, environ 4 s par appel. S'y ajoutent une vingtaine de sessions d'interface (exploration et contrôles) et 24 appels directs de contrôle pour l'année 1967. Aucun captcha, aucun blocage.
+
+## Profil réellement appliqué
+
+- Début d'assurance : 01.01.2027, proposé d'office par le calculateur pour la Suisse.
+- Localités : 1003 Lausanne, 1204 Genève, 1950 Sion, 2000 Neuchâtel, 1700 Fribourg, 2800 Delémont.
+- Naissances : 15.06 de chaque année de 1947 à 2026, femme et homme, soit 960 profils. `age` = 2027 − année de naissance.
+- Personne seule, preneuse d'assurance (`isPolicyOwner=true`), nouvelle souscription, sans assurance de base.
+- Accident : inclus quand l'option existe (gamme hospita) ; le prix sans accident est dans `notes` (`sans_accident=…`). Les produits plus, premium, dental et hospita accident privée n'ont pas d'option accident dans le calculateur : colonne `accident` vide.
+- Prime brute mensuelle : la réponse ne contient aucun rabais (`discounts` vide pour les 960 profils).
+
+## Produits relevés
+
+| Produit affiché | Identifiant | `product_key` | `variant` | `option` | Âges obtenus |
+| --- | --- | --- | --- | --- | --- |
+| hospita générale | `KO-1` | `sympany-hospita` | Division commune | | 1 à 69 |
+| hospita demi-privée | `KO-2` | `sympany-hospita` | Division demi-privée | | 1 à 69 |
+| hospita privée | `KO-3` | `sympany-hospita` | Division privée | | 1 à 69 |
+| hospita globale | `KO-4` | `sympany-hospita` | Division privée dans le monde entier | | 1 à 69 |
+| hospita flex | `KOF3` | `sympany-hospita-flex` | Choix flexible de la division | 3 participations aux coûts | 1 à 59 |
+| hospita accident privée | `KOU-3` | `sympany-hospita-accident-prive` | | | 1 à 69 |
+| plus | `PL` | `sympany-plus` | Sans natura, Avec natura | | 1 à 70 |
+| premium | `PR` | `sympany-premium` | Sans natura, Avec natura | | 1 à 70 |
+| dental | `DE` | `sympany-dental` | 3 niveaux : 50 % max. 1’000.-, 75 % max. 1’500.-, 75 % max. 5’000.- | | 1 à 60 |
+
+- hospita flex : l'option par défaut de l'interface (« Demi-privée: sans participation aux coûts | Privée: 20% participation aux coûts, max. 3’000.- ») a la colonne `option` vide et la mention `default_option` dans `notes` ; les deux autres participations portent leur libellé dans `option`.
+- `notes` commence par `id=<produit>/<variation>/<configuration>` (par exemple `id=DE/DE/C` pour dental C).
+- dental exige un autre produit Sympany : la réponse indique `productDependencies` = ambulatoire, hospitalisation ou assurance de base. Le prix relevé est celui de dental seul.
+
+## Limites d'âge constatées
+
+Identiques dans les six localités et pour les deux sexes :
+
+- plus, premium : jusqu'aux naissances 1957 (70 ans en 2027).
+- hospita générale, demi-privée, privée, globale et accident privée : jusqu'aux naissances 1958 (69 ans).
+- dental : jusqu'aux naissances 1967 (60 ans).
+- hospita flex : jusqu'aux naissances 1968 (59 ans) ; absent des 24 réponses demandées pour 1967.
+- Naissances 1947 à 1956 : le calculateur ne propose que l'assurance de base, donc aucune ligne.
+- L'âge 0 (naissance en 2027) est hors du profil ; l'option « bébé à naître » n'a pas été utilisée.
+
+## Ce que montrent les prix
+
+- Région : Lausanne, Genève, Sion, Neuchâtel et Delémont ont exactement les mêmes primes pour tous les produits. Fribourg diffère pour la gamme hospita, hospita accident privée et premium ; plus et dental sont identiques partout.
+- Sexe : hospita demi-privée, privée, globale et flex ont un tarif par sexe ; les autres produits sont unisexes.
+- Classes d'âge observées à Lausanne (CHF par mois, avec accident pour hospita) :
+  - plus sans natura : 1–25 : 23.70 ; 26–35 : 24.90 ; 36–45 : 28.40 ; 46–70 : 29.70.
+  - premium sans natura : 1–25 : 46.40 ; 26–35 : 51.50 ; 36–45 : 58.80 ; 46–70 : 61.30.
+  - hospita générale : 1–18 : 2.90 ; 19–25 : 4.10 ; 26–30 : 5.80 ; 31–35 : 6.70 ; 36–40 : 7.30 ; 41–45 : 7.70 ; 46–50 : 8.30 ; 51–55 : 9.30 ; 56–60 : 11.60 ; 61–69 : 16.30.
+  - hospita demi-privée, femme : 1–18 : 43.50 ; 19–25 : 89.30 ; 26–30 : 175.50 ; 31–55 : 221.30 ; 56–60 : 288.50 ; 61–69 : 373.90. Homme : 36.70 ; 52.70 ; 76.30 ; puis 84.00 (31–35), 99.20, 125.90, 160.30, 217.50 (51–55), 288.50, 373.90.
+  - dental 50 % : 1–3 : 0.00 ; 4–5 : 4.50 ; 6–10 : 7.00 ; 11–18 : 17.00 ; 19–25 : 15.50 ; 26–30 : 22.00 ; puis par 5 ans jusqu'à 56–60 : 35.00.
+
+## Vérifications à l'écran
+
+Sept profils ressaisis dans l'interface, prix des cartes lus aux étapes hospitalisation, ambulatoire et dentaire, comparés au relevé : 49 prix, 49 concordances.
+
+| Profil | Prix contrôlés | Exemples affichés |
+| --- | --- | --- |
+| Lausanne, femme, 1987 | 8 | hospita demi-privée 221.30, hospita flex 238.00, plus 28.40, dental 26.00 |
+| Genève, homme, 1962 | 6 | hospita générale 16.30, hospita privée 533.20, premium 61.30 |
+| Sion, femme, 2015 | 7 | hospita demi-privée 43.50, plus 23.70, dental 17.00 |
+| Neuchâtel, homme, 1999 | 7 | hospita demi-privée 76.30, premium 51.50, dental 22.00 |
+| Fribourg, femme, 1975 | 7 | hospita demi-privée 148.50, premium 54.30, dental 33.50 |
+| Delémont, homme, 1990 | 7 | hospita privée 141.50, plus 28.40, dental 26.00 |
+| Lausanne, homme, 2026 | 7 | hospita demi-privée 36.70, plus 23.70, dental 0.00 |
+
+Pour le profil pilote, les écarts affichés par l'interface ont aussi été recoupés à la main : hospita demi-privée sans accident (−20.10, soit 201.20) et les deux autres participations d'hospita flex (−100.70 et −151.10, soit 137.30 et 86.90).
+
+## Produits absents du relevé
+
+- Assurance de base (six modèles, franchises 300 à 2500) : chiffrée par le calculateur, mais hors LCA, donc non relevée.
+- Le calculateur ne propose pas les autres complémentaires de Sympany (mondial, salto, capita accident, capita maladie, compensa, tourist, tourist subito, protect) : aucun prix.
+
+## Anomalies
+
+- **hospita flex absent par intermittence.** Pour un même profil, l'API renvoie ou non la variation `KOF3` d'un appel à l'autre (présente dans environ une réponse sur deux), et l'interface affiche ou non la carte correspondante. Le script redemande donc les profils où elle manque alors qu'elle a été vue au même âge ailleurs, puis fusionne les réponses : 367 profils complétés ainsi, jusqu'à 17 demandes pour un même profil, aucun écart de prix entre deux réponses d'un même profil. Les 708 profils éligibles (naissances 1968 à 2026) sont tous couverts.
+- Le site public ne mène pas au calculateur pour un domicile suisse (voir plus haut). Les prix sont ceux que l'API officielle renvoie pour 2027, mais Sympany oriente ces clients vers le conseil.
+- hospita flex, femme : la prime baisse à 41 ans (238.00 de 31 à 40 ans, 213.40 de 41 à 45 ans à Lausanne). dental : la prime baisse à 19 ans (17.00 de 11 à 18 ans, 15.50 de 19 à 25 ans). Relevé tel quel.
+- dental est à 0.00 pour les naissances 2024 à 2026, à l'écran comme dans l'API.
 
 ## Hôtes
 
 | Hôte | Rôle | Résultat |
 | --- | --- | --- |
-| `www.sympany.ch` | site public, documents `dam/jcr:…`, scripts des composants | atteint |
-| `hello.sympany.ch` | formulaires de contact et de concours (`/public/e/l/<nom>`), intégrés en iframe ; 404 à la racine | atteint, aucun calculateur |
-| `sales.sympany.ch` | « Login intermédiaire » (application KLICK.app pour courtiers) | page de connexion atteinte, pas public, aucune tentative de connexion |
-| `cdn.sympany.ch` | feuilles de style, recherche de thérapeutes | référencé, sans rapport avec les primes |
-| **`calculator.sympany.ch`** | **calculateur de primes public** | **refusé par le proxy (403)** |
-| **`api-public.sympany.ch`** | **API du calculateur et des composants d'offre (localités, produits, prix)** | **refusé par le proxy (403)** |
-| `rum.sympany.ch`, `chatbot.sympany.ch`, `my.sympany.ch`, `tourist.sympany.ch` | télémétrie, chatbot, portail client, assurance voyage | non sollicités |
+| `calculator.sympany.ch` | calculateur | atteint |
+| `api-public.sympany.ch` | API : localités, offre chiffrée, état des fonctions | atteint |
+| `www.sympany.ch`, `cdn.sympany.ch` | site public, feuilles de style | atteints |
+| `hello.sympany.ch` | formulaires de contact, aucun calculateur | atteint |
+| `sales.sympany.ch` | « Login intermédiaire » pour courtiers | page de connexion vue, aucune tentative |
+| `api-auth.sympany.ch` | étapes de souscription après « Vérifier » | jamais sollicité |
+| `rum.sympany.ch`, `app.usercentrics.eu`, `www.googletagmanager.com` | télémétrie, consentement, traceur | refusés par le proxy, sans importance |
 
-Chaque hôte refusé a été sollicité une seule fois (`HEAD /`), sans nouvelle tentative.
-
-## Points d'API
-
-Lus dans les scripts de `www.sympany.ch` (`/.resources/sympany/webresources/…body.js`, `…head.js`, `webcomponents/…product-offer.js`). **Aucun n'a été émis ni observé.** Base : `https://api-public.sympany.ch`.
-
-- `GET /maintenance/features` : état des fonctions (`PRODUCT-INFORMATION`, `PRODUCT-OFFER`…) ; le site masque le formulaire de calcul si elles sont hors ligne.
-- `GET /products/areas?searchZip=<npa>&country=<ch|de>` : localités (`id`, `zip`, `subZip`, `name`, `countryId`).
-- `GET /products/areas/<areaId>`.
-- `GET /products/<productId>?language=fr` et `GET /products/<productId>/variations/<variationId>?language=fr`.
-- `GET /products/<productId>/variations/<variationId>/offer?sex=<f|m>&dateOfBirth=<AAAA-MM-JJ>&country=<ch|de>&zip=<npa>&subZip=<n>&language=fr&isPolicyOwner=true&insuranceStartDate=<AAAA-MM-JJ>` : offre chiffrée d'une variante. C'est l'appel à rejouer en priorité quand l'hôte sera ouvert.
-- `GET /products/BA/variations/<variationId>/comparison?language=fr` : tableau comparatif de l'assurance de base.
-- Seuls identifiants vus : produit `BA` (assurance de base), variante `EBA` (euroline). Les identifiants des complémentaires sont inconnus.
-
-`robots.txt` de `www.sympany.ch` interdit `/.premiumCalculator/` : chemin non sollicité.
-
-## Recherche menée sur les hôtes autorisés
-
-- Pages lues sur `www.sympany.ch` : 390 (page d'accueil FR, plan du site FR hors communiqués, actualités, conseils santé et clientèle entreprises, plus 112 pages DE : complémentaires, assurance de base, téléchargements, pages d'atterrissage, information sur les primes). Une requête par seconde, aucune erreur.
-- Recherché dans chaque page : `calculator.sympany.ch`, `api-public.sympany.ch`, formulaire `health-insurance-calculator`, `premiumCalculator`, liens `hello.sympany.ch/…`, documents `dam/jcr:…` (269 PDF distincts).
-- Aucun barème de primes parmi les 269 PDF liés : conditions (CGA, CP), brochures, aperçus des prestations 2026 et 2027, comparaisons de prestations, notices sur les classes d'âge, rapports annuels, formulaires.
-- Le document « Primes-2024-supplement-prive-DE-FR-Sympany.pdf » (piste de `source-leads.md`) n'est plus lié depuis aucune page lue, mais reste servi. Aucune édition 2025, 2026 ou 2027 trouvée, ni de pendant « supplément général / plus ».
-
-## Barème transcrit dans `sympany.csv`
-
-- Source : `https://www.sympany.ch/dam/jcr:7fc28e5a-95f5-4223-b16c-d5f9ad0f28a8/Primes-2024-supplement-prive-DE-FR-Sympany.pdf` (une page, « Evolution des primes, Etat 2024 », modifié le 17.07.2024).
-- Contenu : « Région de primes: Allemagne, France », « Produit actuel: supplément privé », « Produit comparable: premium », « Prime mensuelle hommes et femmes », primes brutes 2024, rabais non pris en compte. Le document précise que seule l'offre personnelle fait foi.
-- **Le document n'imprime aucun montant** : c'est un histogramme vectoriel. Les montants sont recalculés à partir de la hauteur des barres et de l'échelle de l'axe (graduations 0 à 70 CHF, 2.731 points par franc). Les huit hauteurs distinctes tombent chacune à moins de 0.002 CHF d'un multiple de 0.10 CHF, et l'ordre de grandeur a été contrôlé à l'œil sur le rendu de la page. Le script refuse d'écrire si une barre s'écarte de plus de 0.02 CHF d'un multiple de 0.05 CHF.
-
-| Tranche publiée | 0–18 | –25 | –30 | –35 | –40 | –45 | –50 | –55 | –60 | –70 | –80 | 81– |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| premium (CHF/mois) | 38.00 | 38.00 | 42.20 | 42.20 | 48.20 | 48.20 | 50.30 | 50.30 | 50.30 | 50.30 | 50.30 | 50.30 |
-| supplément privé (CHF/mois) | 39.20 | 39.20 | 49.00 | 49.00 | 58.80 | 58.80 | 61.30 | 61.30 | 61.30 | 61.30 | 61.30 | 61.30 |
-
-Conventions du CSV, différentes du profil standard :
-
-- `year` = 2024 ; `age` = 2024 − année de naissance (et non 2027 − année de naissance), parce que la classe d'âge suit l'âge atteint dans l'année du barème.
-- Une ligne par année de naissance et par sexe pour les âges 0 à 80 (naissances 1944 à 2024), plus l'âge 81 (naissance 1943) comme seule borne de la tranche ouverte « 81– ». Tarif unisexe : lignes `f` et `m` identiques.
-- `postal_code` vide, `locality` = « Région de primes Allemagne, France » ; `accident` vide (non précisé) ; `variant` vide (le document ne dit pas si « premium » s'entend avec ou sans natura).
-- `product_key` = `sympany-premium` pour premium ; vide pour « supplément privé », produit fermé à la vente et absent de `../insurers/sympany.json`.
-- `source_type` = `official_published` ; `notes` commence par `derived_from_band <tranche>` et répète les réserves ci-dessus.
-
-Ces montants ne valent pas pour 2027 : la page « Informations sur les primes 2027 » (`/fr/portrait/news-medias/news/informations-primes/primes-suisse.html`, assurés domiciliés en Suisse) annonce pour 2027 une hausse de plus (sans natura), premium (sans natura) et praevention, une baisse de supplément général, supplément privé et kombi général, et des primes inchangées pour les autres complémentaires, sans aucun montant.
-
-## Classes d'âge publiées (utile à la reprise)
-
-Notice « Merkblatt Altersklassen », 09/2022 (`/dam/jcr:4a3f32c9-e874-442e-871b-4d6c3216e842/…`), changement de classe au 1er janvier de l'année où l'âge est atteint :
-
-- plus, premium, supplément général, supplément privé, hospita générale : 0–18, 19–25, 26–30, 31–35, 36–40, 41–45, 46–50, 51–55, 56–60, 61–70, 71–80, 81+.
-- hospita demi-privée, privée, accident privé, globale, flex, confort : 0–18, 19–25, puis par 5 ans jusqu'à 76–80, 81+.
-- dental : 0–3, 4–5, 6–10, 11–15, 16–18, 19–25, puis par 5 ans jusqu'à 56–60, 61–70, 71–80, 81+.
-- capita accident : 0–3, 4–15, 16–20, 21–65, 66+ ; capita maladie : 0–3, 4–15, 16–20, 21–25, puis par 5 ans jusqu'à 61–65 ; compensa : 15–18, 19–25, puis par 5 ans jusqu'à 56–60, 61–70 ; mondial : 0–18, 19–25, puis par 5 ans jusqu'à 56–60, 61–70, 71+ ; salto : 19–27, 28–32 ; tourist et protect : sans classe d'âge.
-
-## Profil
-
-Prévu : début 01.01.2027, 1003 Lausanne, naissances au 15.06 de 1947 à 2026, femme et homme, accident inclus, sans franchise, nouvelle souscription sans assurance de base. Réellement appliqué : aucun, le calculateur n'ayant pas été ouvert. Limites d'âge du calculateur : non constatées.
-
-## Produits absents du relevé
-
-Tous les produits du calculateur, pour la raison ci-dessus : plus, premium (avec et sans natura), hospita (générale, demi-privée, privée, globale, flex, accident privé, confort), dental, mondial, salto, capita, compensa, tourist, protect. La liste même des produits que le calculateur propose n'a pas pu être lue.
-
-## Vérifications
-
-- Contrôle à l'écran de 3 profils : impossible, aucun prix de calculateur affiché.
-- Barème 2024 : relecture du CSV (328 lignes, en-tête exact, bornes de tranches aux âges 18/19, 25/26, 45/46, 80/81) et comparaison visuelle des montants avec le rendu de la page.
+`robots.txt` : `calculator.sympany.ch` n'en publie pas (404) ; celui de `www.sympany.ch` interdit `/.premiumCalculator/` et `/chat/`, chemins jamais sollicités.
 
 ## Script
 
-`collectors/sympany.py` (Python, dépendance `pdfplumber`) : télécharge le PDF (une requête sur `www.sympany.ch`), relit le graphique et réécrit `sympany.csv`. `--print` affiche le barème sans écrire, `--pdf` relit un fichier local. Il ne contient aucun relevé du calculateur : cette partie reste à écrire quand les deux hôtes seront ouverts.
+`collectors/sympany.mjs` (Node, Playwright) : `node sympany.mjs` refait tout le relevé ; `--localities=1003 --years=1990-1992` le restreint ; `--verify=1003:1987:f,…` ressaisit des profils dans l'interface ; `--build-only` reconstruit le CSV depuis le cache des réponses (`--raw-dir`, par défaut dans le dossier temporaire du système). Le relevé complet prend environ deux heures à cause de la lenteur de l'API et des demandes de complément.
 
-## Anomalies
+## Barème 2024 écarté
 
-- Le formulaire de calcul du site ne propose que l'Allemagne comme pays de résidence, et n'apparaît que sur des pages euroline (frontaliers) : le site suisse oriente les complémentaires vers le conseil, pas vers le calculateur.
-- Dans le barème 2024, les tranches 0–18 et 19–25 ont le même montant, et le tarif est plat dès 46 ans, alors que la notice sur les classes d'âge annonce une prime qui évolue à chaque classe. Rien n'indique que le tarif des assurés domiciliés en Suisse ait cette forme.
+Le seul barème publié trouvé sur `www.sympany.ch` est le graphique « Evolution des primes, Etat 2024 » (`/dam/jcr:7fc28e5a-95f5-4223-b16c-d5f9ad0f28a8/Primes-2024-supplement-prive-DE-FR-Sympany.pdf`) : région de primes Allemagne/France (frontaliers), produits « supplément privé » et « premium », sans aucun montant imprimé. Il n'est pas repris dans le CSV : année 2024, hors domicile suisse, valeurs lisibles seulement en mesurant les barres.

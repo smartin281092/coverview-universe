@@ -11,22 +11,30 @@
 // Points importants constatés le 2026-11-18 :
 // - Le prix d'une tuile non sélectionnée (réponse du POST) n'est pas toujours celui de l'offre : seul le prix d'un
 //   produit SÉLECTIONNÉ (réponse de basketSimulate, identique à la fenêtre « Détails » et à la page « Panier ») est relevé.
-// - Un produit est sélectionné seul (ou avec son prérequis) : sélectionner plusieurs produits ensemble peut déclencher
-//   un « rabais combiné » (p. ex. Dental + Vital pour les enfants).
+// - Sélectionner plusieurs produits ensemble peut déclencher un « rabais combiné » (Dental + Vital pour les enfants).
+//   NPA de --full : un produit par appel (avec son prérequis éventuel). Autres NPA : six tours groupés de produits
+//   compatibles, refaits sur les NPA de --full et comparés aux prix isolés ; une variante en désaccord n'est pas écrite.
 // - Plusieurs personnes par panier donnent les mêmes prix qu'une personne seule, SAUF à partir du 3e enfant
 //   (réduction « Kind3 »). Le script met donc au plus deux mineurs par panier, refuse toute réduction autre que le
 //   « rabais variable sur les primes » et recalcule en personne seule les cas signalés.
+// - Le prix affiché est net du « rabais variable sur les primes » (Hospital Top Liberty, Hospital Day Comfort,
+//   Medical Private) ; le montant et la prime brute sont donnés dans `notes`.
 //
 // Usage (Playwright installé globalement) :
 //   NODE_PATH=$(npm root -g) node collectors/sanitas.mjs
 //   options : --out=<csv>            (défaut : ../sanitas.csv à côté du script)
-//             --raw=<dossier>        (défaut : <tmp>/sanitas-premiums-2027-raw ; un fichier JSON par panier, sert à la reprise)
-//             --zips=1003,1204,…     (défaut : 1003,1204,1950,2000,1700,2800)
-//             --full=1003            (NPA relevés avec toutes les options ; les autres : variantes par défaut seulement)
-//             --others=packed|solo   (NPA hors --full : tours groupés, défaut, ou une variante par appel)
-//             --years=1947-2026 --basket-size=8 --csv-only --limit-baskets=<n>
+//             --raw=<dossier>        (défaut : <tmp>/sanitas-premiums-2027-raw ; un fichier JSON par panier, sert à la
+//                                     reprise : supprimer le dossier pour un relevé neuf)
+//             --zips=1003,1204,…     (défaut : 1003,1204,1950,2000,1700,2800 ; « NPA:Localité » si le NPA couvre plusieurs communes)
+//             --full=1003            (NPA relevés avec toutes les options ; les autres : variantes par défaut, accident inclus)
+//             --others=packed|solo   (NPA hors --full : tours groupés, défaut, ou un produit par appel)
+//             --check-packed         (refait les tours groupés sur les NPA de --full ; implicite avec --others=packed)
+//             --years=1947-2026 --basket-size=8 --limit-baskets=<n>
+//             --csv-only             (reconstruit le CSV depuis --raw, sans appel réseau)
 //
+// Durée : environ 50 min pour un NPA complet, 15 à 20 min par autre NPA (les calculs hospitaliers du serveur sont lents).
 // Rien n'est soumis : prénom fictif « Test », aucune coordonnée, aucun questionnaire de santé, aucune proposition.
+// Chaque panier créé (POST /baskets) reste un brouillon anonyme côté Sanitas, comme après « Continuer » dans l'interface.
 
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
@@ -74,7 +82,6 @@ const PRODUCTS = {
   PUISProdukt: { key: 'sanitas-capital-accident', name: 'Capital: invalidité à la suite d’un accident', variant: '', hidden: true },
   PUTSProdukt: { key: 'sanitas-capital-accident', name: 'Capital: décès à la suite d’un accident', variant: '', hidden: true },
 };
-const PRODUCT_ORDER = Object.keys(PRODUCTS);
 
 // Une variante = un produit sélectionné seul (ou avec `parent` / `companion`), une option, accident inclus ou non.
 // `set: 'extra'` : relevé seulement pour les NPA de --full.
@@ -135,7 +142,11 @@ const args = Object.fromEntries(process.argv.slice(2).map((a) => { const m = a.m
 const here = path.dirname(fileURLToPath(import.meta.url));
 const OUT = path.resolve(args.out || path.join(here, '..', 'sanitas.csv'));
 const RAW = path.resolve(args.raw || path.join(os.tmpdir(), 'sanitas-premiums-2027-raw'));
-const ZIPS = String(args.zips || '1003,1204,1950,2000,1700,2800').split(',');
+// Un NPA peut couvrir plusieurs communes (1950 : Sion, Grimisuat, Savièse ; 2800 : Delémont, Courrendlin, Develier) :
+// la localité voulue est nommée, « NPA:Localité » ; sans nom, la localité du profil standard ci-dessous.
+const STANDARD_LOCALITIES = { 1003: 'Lausanne', 1204: 'Genève', 1950: 'Sion', 2000: 'Neuchâtel', 1700: 'Fribourg', 2800: 'Delémont' };
+const ZIP_SPECS = String(args.zips || '1003,1204,1950,2000,1700,2800').split(',').map((z) => { const [zip, name] = z.split(':'); return { zip, name: name || STANDARD_LOCALITIES[zip] }; });
+const ZIPS = ZIP_SPECS.map((z) => z.zip);
 const FULL = new Set(String(args.full ?? '1003').split(','));
 const [Y0, Y1] = String(args.years || '1947-2026').split('-').map(Number);
 const BASKET_SIZE = Number(args['basket-size'] || 8);
@@ -282,12 +293,17 @@ async function collect() {
     };
 
     const baskets = buildBaskets();
-    for (const zip of ZIPS) {
+    for (const { zip, name: wanted } of ZIP_SPECS) {
       const dir = path.join(RAW, zip);
       fs.mkdirSync(dir, { recursive: true });
       const loc = await call('GET', `${LOCATIONS_API}?country=CH&q=${zip}&referenceDate=${START}`);
-      const address = (loc.data || []).find((a) => a.zipCode === zip);
-      if (!address) throw new Stop(`NPA ${zip} introuvable : ${JSON.stringify(loc).slice(0, 300)}`);
+      const candidates = (loc.data || []).filter((a) => a.zipCode === zip);
+      const address = wanted ? candidates.find((a) => a.name === wanted) : candidates.length === 1 ? candidates[0] : null;
+      if (!address) throw new Stop(`localité ${zip} ${wanted || '(à préciser : NPA:Localité)'} introuvable ; proposées : ${candidates.map((a) => a.displayName).join(' | ') || JSON.stringify(loc).slice(0, 200)}`);
+      if (candidates.length > 1) log(`NPA ${zip} : ${candidates.length} localités proposées (${candidates.map((a) => `${a.name} ${a.primeRegion} n°${a.locationNumber}`).join(', ')}) ; retenue : ${address.name}`);
+      const marker = path.join(dir, 'locality.txt');
+      if (fs.existsSync(marker) && fs.readFileSync(marker, 'utf8') !== address.name) throw new Stop(`${dir} contient un relevé pour une autre localité (${fs.readFileSync(marker, 'utf8')})`);
+      fs.writeFileSync(marker, address.name);
       const mainRounds = FULL.has(zip) ? SOLO_ROUNDS : OTHERS === 'packed' ? PACKED_ROUNDS : SOLO_ROUNDS.filter((r) => r.set !== 'extra');
       log(`== ${zip} ${address.name} (${address.canton}, région ${address.primeRegion}) : ${baskets.length} paniers, ${mainRounds.length} appels de prix par panier`);
 

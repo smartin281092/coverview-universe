@@ -57,7 +57,7 @@
       "products": 17,
       "benefits": 175,
       "verification:read": 175,
-      "calculatorPrices": 4829
+      "calculatorPrices": 18394
     },
     "swica": {
       "products": 11,
@@ -70,7 +70,8 @@
       "products": 12,
       "benefits": 172,
       "verification:read": 172,
-      "prices": 388
+      "prices": 388,
+      "calculatorPrices": 11784
     },
     "visana": {
       "products": 21,
@@ -80,10 +81,5 @@
       "calculatorPrices": 71754
     }
   },
-  "issues": [
-    "premiums/axa.csv: produit sans clé 'CAPITAL' (780 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé 'CyberProtect' (1488 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé 'Legis' (5760 lignes)",
-    "premiums/visana.csv: produit sans clé 'Protection juridique' (960 lignes)"
-  ]
+  "issues": []
 }

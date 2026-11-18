@@ -14,5 +14,17 @@
     "Assurance dentaire 1000": "axa-assurance-dentaire",
     "Assurance dentaire 2000": "axa-assurance-dentaire",
     "Assurance dentaire 3000": "axa-assurance-dentaire"
+  },
+  "visana": {
+    "Protection juridique": "visana-protection-juridique-sante"
+  },
+  "unmapped": {
+    "axa": {
+      "CAPITAL": "Le calculateur tarife ensemble les sommes accident et maladie ; deux clés possibles (axa-capital-accident, axa-capital-maladie)."
+    },
+    "groupe-mutuel": {
+      "Legis": "Protection juridique générale, hors périmètre santé, absente de insurers/groupe-mutuel.json.",
+      "CyberProtect": "Hors périmètre santé."
+    }
   }
 }

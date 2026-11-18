@@ -1,25 +1,25 @@
-# Pistes de sources (non lues)
+# Hôtes et documents de départ
 
-URL remontées par la recherche web le 18 novembre 2026. Aucune n'a été ouverte : éditions, contenu et statut de vente restent à vérifier.
+Liste de travail du 18 novembre 2026. Les documents ci-dessous ont servi de points d'entrée ; les sources réellement lues figurent, ligne par ligne, dans `insurers/<clé>.json` (`sourceUrl`) et les méthodes de relevé dans `premiums/<clé>.md`.
 
-## Hôtes à autoriser
+## Hôtes utilisés
 
 | Assureur | Pages et PDF | Calculateur |
 | --- | --- | --- |
-| Assura | `www.assura.ch`, `static.assura.ch`, `passuraassets01.blob.core.windows.net` | inconnu |
-| Groupe Mutuel | `www.groupemutuel.ch`, `groupemutuel.ch` | inconnu |
-| CSS | `www.css.ch` | inconnu |
-| Helsana | `www.helsana.ch`, `helsana.ch` | entrée : `www.helsana.ch/fr/prives/assurances/calculateur-primes.html` |
-| Sanitas | `www.sanitas.com` | inconnu |
-| CONCORDIA | `www.concordia.ch`, `concordia.ch` | inconnu |
-| SWICA | `www.swica.ch`, `www4.swica.ch`, `dam.swica.ch` | inconnu |
-| AXA | `www.axa.ch`, `axa.ch` | inconnu |
-| Atupri | `www.atupri.ch`, `atupri.ch` | `calculateur-de-primes.atupri.ch` |
-| Visana | `www.visana.ch`, `visana.ch`, `fit.visana.ch` | inconnu |
-| Sympany | `www.sympany.ch`, `sympany.ch` | inconnu |
-| KPT | `www.kpt.ch`, `kpt.ch` | inconnu |
+| Assura | `www.assura.ch`, `static.assura.ch` | `calculator.assura.ch`, `cms-blue.assura.ch`, `public-api.assura.ch` |
+| Groupe Mutuel | `www.groupemutuel.ch`, `groupemutuel.ch` | `www.groupemutuel.ch/poelGM/`, `offres-sante.groupemutuel.ch`, `datapoel.groupemutuel.ch` |
+| CSS | `www.css.ch` | `calculator.css.ch`, `api.css.ch` |
+| Helsana | `www.helsana.ch` | `portal.helsana.ch` |
+| Sanitas | `www.sanitas.com` | `calculator.sanitas.com`, `api3.sanitas.com`, `static.sanitas.tech` |
+| CONCORDIA | `www.concordia.ch`, `concordia.ch` | `www.praemienrechner.concordia.ch` |
+| SWICA | `www.swica.ch`, `www4.swica.ch`, `dam.swica.ch` | `calculate.swica.ch`, `rms.swica.ch` |
+| AXA | `www.axa.ch` | `www.axa.ch/health-dsn/` |
+| Atupri | `atupri.ch`, `www.atupri.ch` | `shop.atupri.ch`, `calculateur-de-primes.atupri.ch` (pare-feu : navigateur automatisé refusé) |
+| Visana | `www.visana.ch`, `fit.visana.ch` | `dap.visana.ch` |
+| Sympany | `www.sympany.ch` | `calculator.sympany.ch` (parcours suisse avec `?country=ch`), `api-public.sympany.ch` |
+| KPT | `www.kpt.ch` | `assistant.kpt.ch` |
 
-## Documents repérés
+## Documents de départ
 
 **Assura** — conditions sous `static.assura.ch/blue/cockpit-assets/…` : Complementa Extra (CSC 07.2015), Denta Plus, Denta Sana (03.2024), Medna, Optima Varia, Ultra Varia, Mondia Plus (06.2017), Natura, assistance touristique (01.2021), CGA LCA 07.2015.
 

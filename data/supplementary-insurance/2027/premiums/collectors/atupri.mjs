@@ -194,7 +194,7 @@ try {
   // Étape 4 (non exécutée) : profil pilote, puis contrôle à l'écran avant tout relevé en série.
   const pilot = [{ birthYear: 1987, sex: 'f' }, { birthYear: 1957, sex: 'm' }, { birthYear: 2017, sex: 'f' }];
   const pilotRows = await collectLead(page, localities[0], pilot, rawDir);
-  const screen = (await page.locator('body').innerText()).replace(/[’'  ]/g, '');
+  const screen = (await page.locator('body').innerText()).replace(/[\u2019'\u00a0\u202f]/g, '');
   const seen = pilotRows.filter((r) => r[6] === 1987 && screen.includes(r[12])).length;
   if (seen < 3) throw new Stop(4, `contrôle à l'écran : ${seen} prix du profil pilote retrouvés dans la page (3 requis)`);
   console.log(`contrôle à l'écran : ${seen} prix retrouvés`);

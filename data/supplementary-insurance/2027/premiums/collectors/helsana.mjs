@@ -239,7 +239,7 @@ function toCsvRows(res, { birthYear, sex, loc, labels, retrievedAt }) {
       const option = optionDims.filter((n) => byName[n].value !== byName[n].def).map((n) => valueLabel(n, byName[n].value)).join('; ');
       const accident = byName.unfall ? String(byName.unfall.value === 'COD_eingeschlossen_HEL') : '';
       const net = Number(row.net), gross = Number(row.gross);
-      const notes = [`tranche=${(/^COD_Alter_(.+)_HEL$/.exec(info.ageGroup) || [, info.ageGroup])[1]}`];
+      const notes = [`tranche=${(/^COD_Alter_(.+)_HEL$/.exec(info.ageGroup) || [null, info.ageGroup])[1]}`];
       if (!option && optionDims.length) notes.push(`défaut du calculateur: ${optionDims.map((n) => valueLabel(n, byName[n].def)).join(', ')}`);
       if (byName.unfall && byName.unfall.value !== byName.unfall.def) notes.push('accident exclu par défaut dans le calculateur');
       if (byName.praemienrabatt) notes.push(`rabais sur les primes ${byName.praemienrabatt.value} % déjà déduit`);

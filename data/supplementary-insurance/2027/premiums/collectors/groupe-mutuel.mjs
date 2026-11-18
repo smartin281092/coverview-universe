@@ -172,7 +172,11 @@ function initialState(profile) {
   };
 }
 
-const slimTarif = ({ insuranceSelectionCode, ...t }) => t;
+const slimTarif = (tarif) => {
+  const slim = { ...tarif };
+  delete slim.insuranceSelectionCode;
+  return slim;
+};
 
 async function collectProfile(page, args, locality, birthYear, sex) {
   const wait = () => sleep(args.delay);
