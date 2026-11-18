@@ -1,6 +1,12 @@
 {
   "year": 2027,
   "perInsurer": {
+    "assura": {
+      "products": 21,
+      "benefits": 323,
+      "verification:read": 323,
+      "prices": 19
+    },
     "axa": {
       "products": 13,
       "benefits": 166,
@@ -11,6 +17,11 @@
       "benefits": 152,
       "verification:read": 152,
       "prices": 97
+    },
+    "helsana": {
+      "products": 18,
+      "benefits": 176,
+      "verification:read": 176
     },
     "kpt": {
       "products": 14,
@@ -25,8 +36,8 @@
     },
     "visana": {
       "products": 21,
-      "benefits": 418,
-      "verification:read": 418,
+      "benefits": 414,
+      "verification:read": 414,
       "prices": 15
     }
   },

@@ -2,6 +2,21 @@
   "year": 2027,
   "insurers": [
     {
+      "key": "assura",
+      "name": "Assura",
+      "legalEntityLca": "Assura SA (Pully)",
+      "website": "https://www.assura.ch/fr",
+      "calculatorUrl": "https://calculator.assura.ch/fr?journey=Default",
+      "calculatorHosts": [
+        "calculator.assura.ch",
+        "public-api.assura.ch",
+        "www.assura.ch"
+      ],
+      "publishedTariffUrls": [],
+      "notes": "Complémentaires portées par Assura SA, sauf : Previsia Maladie (assureur GENERALI Assurances de personnes SA, contrat vie collectif dont Assura SA est preneur), Lexa (assureur Orion Assurance de Protection Juridique SA, Assura SA intermédiaire lié) et l'assurance frais d'annulation de Mondia Plus (Européenne Assurances Voyages SA, ERV, contrat collectif). Assistance à l'étranger opérée par AWP P&C SA (Allianz). Assurance de base : Assura-Basis SA. Calculateur : sur les pages produit, le bouton « Calculer votre prime » ouvre un module (lien interne ##openCalculator?productId=PRD_…) avec date de naissance et code postal ; la configuration du site déclare CALCULATOR_URL=https://calculator.assura.ch et BACKEND_API=https://public-api.assura.ch (hôtes hors liste autorisée, non testés). Identifiants produit observés : PRD_Complementa_Extra, PRD_Natura, PRD_Optima_Flex_Varia, PRD_Optima_Varia, PRD_Optima_Plus_Varia, PRD_Ultra_Varia_2022, PRD_Hospita, PRD_Denta_Reparo (Denta Sana), PRD_Denta_Ortho, PRD_Mondia, PRD_Mondia_Plus, PRD_Previsia_Extra, PRD_Lexa. Materna Varia, Pecunia, Previsia Maladie et Nativa ne se souscrivent pas en ligne (conseiller). Aucun barème de primes LCA publié en PDF n'a été trouvé ; seuls des prix « à partir de » figurent sur les pages et fiches produit. Rabais : 20 % sur les complémentaires des enfants mineurs si au moins deux personnes de la même famille sont assurées (sauf gamme Previsia et Denta Ortho) ; rabais de combinaison avec Complementa Extra (Mondia Plus CHF 2/mois, Hospita dès CHF 1/mois) ; Natura + Medna (jusqu'à CHF 2.25 sur Medna, franchise unique) ; Denta Ortho 15 % en souscription prénatale ; Lexa jusqu'à 25 % avec les trois modules ; package Nativa (six mois de primes offerts, jusqu'à CHF 8.90/mois). Le site indique des tarifs identiques pour les hommes et les femmes pour les complémentaires santé, alors que les CSC Optima Flex Varia et Denta Ortho citent le sexe parmi les critères de prime. Classe d'âge d'entrée acquise à vie dès 26 ans pour les produits soumis à l'art. 12 CGA ; prime évolutive selon l'âge réel pour Optima Flex Varia, Optima Varia, Optima Plus Varia, Ultra Varia, Denta Sana, Materna Varia et Previsia Maladie. Durée minimale du contrat de 3 ans (CGA art. 9). Produits fermés à la vente (page « Assurances complémentaires fermées à la vente ») : Complementa, Complementa Maxi, Complementa Plus, Décès, Denta, Materna Eco, Materna Media, Materna Plus, Natura R3, Optima, Optima Plus, Priveco, Priveco Plus, Priveco Varia, Priveco Plus Varia, Serenity, Serenity Plus, Ultra ; Denta Plus est également fermée (FAQ fermeture Denta Plus, libre passage vers Denta Sana / Denta Ortho) ; Ultra Varia : éditions CSC antérieures à 2022 fermées. Aventura et Assuralex sont cités dans d'anciens documents mais ne sont pas présentés à la vente. Previsia, Previsia Plus et Previsia Maxi sont présentés comme « variantes de Previsia » sur la page accident (document 11.2020, CSC Previsia Plus 03.2024, CGA Previsia Maxi 01.2020) sans figurer dans le calculateur ni dans la liste des produits fermés : statut de vente à confirmer. Les PDF sont liés depuis le site sur passuraassets01.blob.core.windows.net (hôte non autorisé) et ont été lus via le même chemin sur static.assura.ch.",
+      "retrievedAt": "2026-11-18"
+    },
+    {
       "key": "axa",
       "name": "AXA",
       "legalEntityLca": "AXA Assurances SA, General-Guisan-Strasse 40, 8401 Winterthur (porteur du risque du produit CAPITAL : AXA Vie SA)",
@@ -37,6 +52,20 @@
         "https://www.concordia.ch/content/dam/concordia.ch/privatpersonen/leistungen/zusatzversicherungen/A.07_Spitalversicherung_fr.pdf"
       ],
       "notes": "Entité porteuse LCA : CONCORDIA Assurances SA, Bundesplatz 15, 6002 Lucerne (l'AOS relève de CONCORDIA Assurance suisse de maladie et accidents SA). La protection juridique des patient·es incluse dans DIVERSAcare et DIVERSApremium est assurée par Protekta Assurance de protection juridique SA (Berne) ; il n'existe pas de produit de protection juridique vendu séparément. Éditions lues : aucune édition datée 01.01.2027 n'est publiée ; les conditions en vigueur sont les CGA et CCA « édition 2022 » (tirages 03.23/04.23, information clientèle 2025), les CGA ACCIDENTA et DIMA « édition 2025 », l'aperçu des prestations A.01 (06.25) et les flyers 12.24 à 03.26. Rabais : à partir du 3e enfant, DIVERSA, NATURA et l'Assurance-hospitalisation sont gratuites si les deux premiers enfants ont les mêmes assurances ; primes enfants jusqu'à 15 ans publiées : NATURA CHF 6, DIVERSA CHF 4, hospitalisation COMMUNE CHF 2 par mois ; rabais de franchise à option en hospitalisation (12 à 65 %) ; rabais HMO sur les complémentaires seulement à titre transitoire pour les affiliations antérieures au 31.12.2025 (CPA HMO, édition 2026) ; aucun rabais de durée de contrat ni de combinaison publié. Classes d'âge tarifaires des complémentaires des soins (CGA art. 20.3) : 0–15 ans, puis tranches de 5 ans jusqu'à 60 ans, 61 ans et plus ; les CGA prévoient un échelonnement possible selon l'âge, le sexe, la profession, l'activité et le domicile, l'information clientèle ne citant que l'âge, le domicile, les risques assurés et la participation aux coûts. Le formulaire du calculateur demande date de naissance, sexe, NPA et option prénatale. Calculateur : entrée https://www.praemienrechner.concordia.ch/ipr/home?lang=fr ; les pages produit postent un formulaire GET vers https://www.concordia.ch/bin/rateCalculator (paramètres lang, gebDat, geschlecht m/w, plz, vorgeburtlich) qui redirige (302) vers https://www.praemienrechner.concordia.ch?lang=fr&vorname=&gebDat=&plz=&ort=&webcode=&geschlecht=&vorgeburtlich= ; l'hôte www.praemienrechner.concordia.ch n'est pas dans la liste des hôtes autorisés et n'a pas été consulté. Pistes sans produit correspondant : aucune assurance de soins de longue durée, aucune indemnité ou capital d'hospitalisation, aucune couverture annulation/bagages (l'Assurance vacances et voyages ne couvre que les frais médicaux et l'assistance). Hors périmètre, non détaillés : INVIVA (assurance de risque et d'épargne liée à des fonds, pilier 3b), CONVENIA (assurance-vie mixte), CONVITA save/risk (pilier 3a), assurance facultative d'indemnités journalières selon la LAMal (max. CHF 30 par jour), assurance individuelle d'indemnités journalières agricoles (CGA 2022, public professionnel, non lue en détail). Produits probablement fermés à la souscription : Assurance-hospitalisation COMMUNE CONFORT et COMMUNE CONFORT plus (une liste d'hôpitaux « état 1er janvier 2025 » reste publiée, mais ces variantes ne figurent ni dans les CCA 2022, ni dans l'aperçu des prestations, ni dans la gamme actuelle) ; statut à confirmer. Divergences relevées : la page web DIVERSA indique CHF 20'000 de frais de recherche à l'étranger pour toutes les variantes alors que les CCA et le flyer donnent CHF 10'000 pour DIVERSA et DIVERSAcare ; la psychothérapie non médicale figure dans les CCA DIVERSA mais plus dans l'aperçu ni le flyer ; la page LIBERO renvoie à une version antérieure des CCA LIBERO (2.23.F.03, 08.21) alors que le centre de téléchargement publie la version 2.23.F.04 (04.23), retenue ici.",
+      "retrievedAt": "2026-11-18"
+    },
+    {
+      "key": "helsana",
+      "name": "Helsana",
+      "legalEntityLca": "Helsana Assurances complémentaires SA",
+      "website": "https://www.helsana.ch/fr/prives.html",
+      "calculatorUrl": "https://www.helsana.ch/fr/prives/assurances/calculateur-primes.html",
+      "calculatorHosts": [
+        "www.helsana.ch",
+        "portal.helsana.ch"
+      ],
+      "publishedTariffUrls": [],
+      "notes": "Entités : le Groupe Helsana comprend Helsana Assurances SA (LAMal), Helsana Assurances complémentaires SA (LCA) et Helsana Accidents SA. Risques portés par des tiers : protection juridique (incluse dans TOP/COMPLETA et Advocare) par Helsana Protection juridique SA (HERAG, Aarau) ; PREVEA Accident (capitaux) par Solida Assurances SA ; PREVEA Maladie par Helvetia Compagnie Suisse d'Assurances sur la Vie SA ; prestations aux victimes d'Advocare par Helsana Accidents SA. Éditions lues : CGA des assurances-maladie complémentaires éd. 01.01.2027 ; CSA COMPLETA éd. 01.01.2027 (nouvelles limites pour certains médicaments autorisés dès le 01.11.2026) ; les autres CSA sont les éditions en vigueur publiées (TOP et SANA 2021, COMPLETA PLUS 2024, PRIMEO, HOSPITAL FLEX et Advocare 2025, HOSPITAL Demi-Privée/Privée 2018, HOSPITAL ECO 2016, HOSPITAL EXTRA 2014, WORLD et CURA 2011, DENTAplus 2009, VIVANTE et PREVEA Accident 2022, PREVEA Maladie 2023, SALARIA 2024). Cahier de produits et aperçu des prestations : édition 2026/27. Tarification (CGA ch. 12) : âge actuel par classes de 5 ans (0-5, 6-10, … jusqu'à 91+), domicile (région de prime), sexe ; prime des plus de 65 ans plafonnée au triple de celle des 30 ans et au quadruple après 70 ans (ch. 12.2, non applicable à PRIMEO, HOSPITAL Demi-Privée/Privée, HOSPITAL FLEX, HOSPITAL EXTRA, VIVANTE). Rabais : famille 5 % dès 2 personnes et 10 % dès 3 personnes dans le même contrat (pas sur PREVEA ni sur les produits à effectif fermé) ; pluriannuel 3 % pour un contrat de 3 ans (nouveaux clients, complémentaires ambulatoires et d'hospitalisation) ; franchise hospitalière 15 à 35 % ; rabais Advocare pour enfants, jeunes et couples. Aucun barème de primes ni exemple « dès CHF » publié. Calculateur : la page d'entrée (encore intitulée « Calculateur de primes 2026 » le 18.11.2026) renvoie à l'application https://portal.helsana.ch/offer/#/?locale=fr (hôte hors liste du brief, mais qui a répondu 200 via le proxy ; non piloté). Les pages produit embarquent un indicateur de prix (composants price-indicator / product-variation-list : sexe, date de naissance, NPA/localité) alimenté par le moteur tarifaire PROMOS (SBI AG, WebAssembly) servi depuis https://www.helsana.ch/promos/ (pmsrtall.min.js). Clés produit du calculateur : TOP PRO_Z1TOP__HEL_IG, SANA PRO_Z1SANA_HEL_IG, COMPLETA PRO_Z1COMP_HEL_IG, COMPLETA PLUS PRO_Z1COPL_HEL_IG, PRIMEO PRO_Z1PRIM_HEL_IG, WORLD PRO_Z1WORL_HEL_IG, HOSPITAL ECO PRO_Z2ECO__HEL_IG, Demi-Privée PRO_Z2HHP__HEL_IG, Privée PRO_Z2HPR__HEL_IG, FLEX PRO_Z2FLEX_HEL_IG (variantes FLEX1/FLEX2, paramètres accident et module complémentaire), HOSPITAL EXTRA PRO_Z2EXTR_HEL_IG, DENTAplus PRO_Z8DEPL_HEL_IG (Light, Bronze, Silber, Gold, Combi), PREVEA Accident PRO_Z4PRUN_HEL_IG, PREVEA Maladie PRO_Z4PRKR_HEL_IG, SALARIA PRO_Z5SALA_HEL_IG, CURA PRO_Z7CURA_HEL_IG, VIVANTE PRO_Z7VIVA_HEL_IG, Advocare PLUS PRO_Z9ADPL_HEL_IG, Advocare EXTRA PRO_Z9ADEX_HEL_IG. Paramètres observés : couverture accident incluse/exclue (TOP, SANA, COMPLETA, PRIMEO, ECO, Demi-Privée, Privée, FLEX), franchise hospitalière CHF 0/1000/2000/3000/5000/7000 et maternité incluse/exclue (Demi-Privée, Privée), limites d'âge d'admission (DENTAplus 50, FLEX 70, CURA 70, VIVANTE 16-70, SALARIA dès 16). Produits non repris : COMPLETA EXTRA (CSA éd. 01.01.2024 toujours en ligne à /dam/fr/pdf/prives/conditions-assurance/completa-extra.pdf : lunettes max. CHF 300/an ou 1500 par 5 ans, laser CHF 750 par œil, étranger max. CHF 4000/an, promotion de la santé max. CHF 800/an, mais absente du site, du cahier de produits 2026/27 et du calculateur : statut de vente à confirmer) ; OMNIA (CSA éd. 01.07.2014, plus proposée sur le site, citée seulement pour les rabais Advocare) ; assurances d'hospitalisation fermées HOSPITAL PLUS / COMFORT, PLUS BONUS / COMFORT BONUS, PLUS CLASSICA / COMFORT CLASSICA et HOSPITAL ALBERGO (« nous ne proposons plus ») ; SALARIA selon la LAMal (hors LCA) ; assurance pour hôtes (partenaire EUROPÉENNE Assurances Voyages SA, destinée aux visiteurs étrangers) ; assurance pour animaux (non-santé). Le Baby Package est un forfait prénatal sans examen de santé composé de BASIS, HOSPITAL ECO, COMPLETA, DENTAplus Bronze, Advocare PLUS (gratuite jusqu'à 18 ans) et PREVEA Accident, pas un produit distinct.",
       "retrievedAt": "2026-11-18"
     },
     {
@@ -93,6 +122,1225 @@
     }
   ],
   "products": [
+    {
+      "insurer": "assura",
+      "key": "assura-complementa-extra",
+      "name": "Complementa Extra",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Complément étendu à l'assurance de base : division générale dans toute la Suisse, transports et sauvetage, médicaments hors liste, psychothérapie non médicale, contributions lunettes, soins dentaires, cures, aides à domicile et libération des primes en cas de chômage. Pas de couverture des urgences à l'étranger ni de la maternité.",
+      "variants": [],
+      "prerequisites": "Souscription possible jusqu'à 99 ans. Affections en cours et suites d'accidents antérieurs à la signature de la proposition exclues ; réserves possibles (CGA art. 4.1.1). Maternité, soins palliatifs et obésité non couverts (CSC art. 19).",
+      "pricing": {
+        "factors": [
+          "age",
+          "entry_age",
+          "accident"
+        ],
+        "ageBands": "CGA LCA 07.2015 art. 12 : prime fixée selon l'âge de l'assuré à la conclusion du contrat. Tranches : 0-18 ans, passage automatique au tarif supérieur à 19 ans (19-25 ans), puis à 26 ans, le tarif devenant alors définitif (classe d'âge d'entrée acquise à vie dès 26 ans). Les classes d'âge d'entrée au-delà de 26 ans ne sont pas publiées. Le calculateur demande la date de naissance et le code postal ; l'option accident modifie la prime.",
+        "discounts": "Rabais de 20 % sur les assurances complémentaires des enfants mineurs si au moins deux personnes de la même famille sont assurées chez Assura (sauf gamme Previsia et Denta Ortho). Complementa Extra ouvre des rabais de combinaison sur d'autres complémentaires (Mondia Plus : CHF 2/mois ; Hospita : dès CHF 1/mois, selon fiches produit)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions spéciales pour l'assurance maladie complémentaire Complementa Extra (CSC) + CGA LCA 07.2015 (mise à jour 01.2022)",
+        "edition": "07.2015",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_ComplementaExtra_2015.07_F_uid_6671518f6a356.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/complement-assurance-de-base",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_ComplementaExtra_2015.07_F_uid_6671518f6a356.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2025/02/20/CGA_ASSURA_LCA_-07.2015-MAJ-01.2022_F_uid_67b7432312070.pdf"
+      ],
+      "tags": [
+        "childcare_assistance",
+        "convalescence_cure",
+        "dental_treatment",
+        "glasses_lenses",
+        "home_care",
+        "home_help",
+        "hospital_free_doctor_choice",
+        "hospital_general_ch",
+        "medical_aids",
+        "medication_non_listed",
+        "other:assistance_scolaire",
+        "other:garde_speciale",
+        "other:tarif_ambulatoire_hors_canton",
+        "premium_waiver",
+        "psychotherapy_non_medical",
+        "rooming_in",
+        "search_recovery",
+        "spa_cure",
+        "transport_rescue",
+        "vision_laser"
+      ],
+      "benefitCount": 21
+    },
+    {
+      "insurer": "assura",
+      "key": "assura-natura",
+      "name": "Natura",
+      "category": "alternative_medicine",
+      "audience": "all",
+      "summary": "Médecines alternatives pratiquées par des thérapeutes non-médecins membres d'associations reconnues : 24 thérapies, 90 % après franchise annuelle de CHF 200, tarifs plafonnés par séance, 12 séances par année, remèdes et laboratoire jusqu'à CHF 800 par année.",
+      "variants": [],
+      "prerequisites": "Souscription possible jusqu'à 60 ans. Affections en cours et suites d'accidents antérieurs à la signature de la proposition exclues ; réserves possibles (CGA art. 4.1.1). Maladies psychiques, maternité, soins préventifs, d'entretien ou de confort exclus.",
+      "pricing": {
+        "factors": [
+          "age",
+          "entry_age",
+          "accident"
+        ],
+        "ageBands": "CGA LCA 07.2015 art. 12 : prime fixée selon l'âge de l'assuré à la conclusion du contrat. Tranches : 0-18 ans, passage automatique au tarif supérieur à 19 ans (19-25 ans), puis à 26 ans, le tarif devenant alors définitif (classe d'âge d'entrée acquise à vie dès 26 ans). Les classes d'âge d'entrée au-delà de 26 ans ne sont pas publiées. Le calculateur demande la date de naissance et le code postal ; l'option accident modifie la prime.",
+        "discounts": "Avec Medna : la franchise annuelle de CHF 200 n'est perçue qu'une seule fois et rabais de prime jusqu'à CHF 2.25 sur Medna. Rabais de 20 % sur les assurances complémentaires des enfants mineurs si au moins deux personnes de la même famille sont assurées chez Assura (sauf gamme Previsia et Denta Ortho)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions spéciales pour l'assurance maladie complémentaire Natura (CSC) avec annexe",
+        "edition": "07.2015",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_-Natura_2015.07_F_uid_6671518cba07b.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/medecine-alternative",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_-Natura_2015.07_F_uid_6671518cba07b.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2026/11/02/Liste_des_associations_professionnelles_Natura_V5.10.2026_BD_uid_6ae8b3c8c1cc5.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2025/02/20/CGA_ASSURA_LCA_-07.2015-MAJ-01.2022_F_uid_67b7432312070.pdf"
+      ],
+      "tags": [
+        "alt_medicine_remedies",
+        "alt_medicine_therapies",
+        "bonus_program"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "assura",
+      "key": "assura-medna",
+      "name": "Medna",
+      "category": "alternative_medicine",
+      "audience": "all",
+      "summary": "Médecines complémentaires pratiquées par des médecins (11 thérapies, dans la mesure où l'assurance de base ne les prend pas en charge) : CHF 80 par séance sans limite de nombre et 80 % des médicaments prescrits jusqu'à CHF 2'000 par année, après franchise annuelle de CHF 200.",
+      "variants": [],
+      "prerequisites": "Souscription possible jusqu'à 99 ans. Affections en cours et suites d'accidents antérieurs à la signature de la proposition exclues ; réserves possibles (CGA art. 4.1.1). Maternité exclue.",
+      "pricing": {
+        "factors": [
+          "age",
+          "entry_age",
+          "accident"
+        ],
+        "ageBands": "CGA LCA 07.2015 art. 12 : prime fixée selon l'âge de l'assuré à la conclusion du contrat. Tranches : 0-18 ans, passage automatique au tarif supérieur à 19 ans (19-25 ans), puis à 26 ans, le tarif devenant alors définitif (classe d'âge d'entrée acquise à vie dès 26 ans). Les classes d'âge d'entrée au-delà de 26 ans ne sont pas publiées. Le calculateur demande la date de naissance et le code postal ; l'option accident modifie la prime.",
+        "discounts": "Rabais de combinaison : en souscrivant Natura et Medna, rabais de prime jusqu'à max. CHF 2.25 sur Medna et franchise annuelle perçue une seule fois (CSC Medna art. 3). Rabais de 20 % sur les assurances complémentaires des enfants mineurs si au moins deux personnes de la même famille sont assurées chez Assura (sauf gamme Previsia et Denta Ortho)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions spéciales pour l'assurance maladie complémentaire Medna (CSC)",
+        "edition": "07.2015",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_Medna-2015.07_F_uid_66715190870e8.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/medecine-alternative",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_Medna-2015.07_F_uid_66715190870e8.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2025/02/20/CGA_ASSURA_LCA_-07.2015-MAJ-01.2022_F_uid_67b7432312070.pdf"
+      ],
+      "tags": [
+        "alt_medicine_remedies",
+        "alt_medicine_therapies",
+        "cost_sharing_coverage"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "assura",
+      "key": "assura-optima-flex-varia",
+      "name": "Optima Flex Varia",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Hospitalisation avec choix de la division (commune, semi-privée ou privée) à chaque séjour parmi une liste de fournisseurs de soins agréés, moyennant une participation journalière forfaitaire ; indemnité de CHF 250 par jour en division commune. Pas de couverture des urgences à l'étranger ni d'assistance.",
+      "variants": [],
+      "prerequisites": "Souscription possible jusqu'à 75 ans ; couverture dès le premier jour. Affections en cours et suites d'accidents antérieurs à la signature de la proposition exclues ; réserves possibles (CGA art. 4.1.1). Maladies psychiques, soins palliatifs, obésité et maternité exclus (voir Materna Varia). Risque accident en option. Le choix de la division doit être communiqué par écrit au plus tard la veille de l'hospitalisation (le jour de l'admission en cas d'urgence), sinon division commune.",
+      "pricing": {
+        "factors": [
+          "age",
+          "region",
+          "sex",
+          "accident"
+        ],
+        "ageBands": "CSC 09.2019 art. 8 : prime définie selon l'âge, le canton de domicile et le sexe. Adaptation le 1er janvier de l'année au cours de laquelle l'assuré atteint 6, 11, 19, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86, 91, 96 ans, soit les tranches 0-5, 6-10, 11-18, 19-25, 26-30, 31-35, 36-40, 41-45, 46-50, 51-55, 56-60, 61-65, 66-70, 71-75, 76-80, 81-85, 86-90, 91-95, 96+ (âge atteint dans l'année civile). Risque accident moyennant surprime (art. 1.5).",
+        "discounts": "Rabais de 20 % sur les assurances complémentaires des enfants mineurs si au moins deux personnes de la même famille sont assurées chez Assura (sauf gamme Previsia et Denta Ortho)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions spéciales pour l'assurance maladie complémentaire Optima Flex Varia (CSC)",
+        "edition": "09.2019",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_-OptimaFlexVaria_09.2019_F_uid_6671518d1e53d.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/assurance-hospitalisation",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_-OptimaFlexVaria_09.2019_F_uid_6671518d1e53d.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2026/08/26/Fiche_Produit_LCA_Optima_Flex_Varia_FR_A5_V7_05.2026_BD_uid_6a8e94107ab49.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2022/09/22/Liste_des_services_disponibles_en_cas_dhospitalision_Gamme_Varia_FR_V1_uid_632c1d86a0798.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2025/02/20/CGA_ASSURA_LCA_-07.2015-MAJ-01.2022_F_uid_67b7432312070.pdf",
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/liste-fournisseurs-de-soins-optima-flex-varia"
+      ],
+      "tags": [
+        "hospital_abroad",
+        "hospital_daily_cash",
+        "hospital_deductible_option",
+        "hospital_flex",
+        "hospital_room_upgrade",
+        "other:fournisseur_non_agree",
+        "psychiatry_rehab_stay",
+        "upgrade_option"
+      ],
+      "benefitCount": 10
+    },
+    {
+      "insurer": "assura",
+      "key": "assura-optima-varia",
+      "name": "Optima Varia",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Hospitalisation en division semi-privée (chambre à deux lits) parmi une liste de fournisseurs de soins agréés, sans limite de durée ni de montant, avec indemnité en cas de séjour en division générale, assistance touristique et rapatriement. Prime évolutive selon l'âge réel.",
+      "variants": [],
+      "prerequisites": "Souscription possible jusqu'à 75 ans ; couverture dès le premier jour. Affections en cours et suites d'accidents antérieurs à la signature de la proposition exclues ; réserves possibles (CGA art. 4.1.1). Maladies psychiques, soins palliatifs, obésité et maternité exclus (voir Materna Varia). Risque accident en option.",
+      "pricing": {
+        "factors": [
+          "age",
+          "accident"
+        ],
+        "ageBands": "CSC 07.2015 art. 9 : prime variant selon l'âge réel de l'assuré ; adaptation le 1er janvier de l'année où l'assuré atteint 19, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86 et 91 ans, soit les tranches 0-18, 19-25, 26-30, 31-35, 36-40, 41-45, 46-50, 51-55, 56-60, 61-65, 66-70, 71-75, 76-80, 81-85, 86-90, 91+ (âge atteint dans l'année civile). Le calculateur demande la date de naissance et le code postal ; le risque accident est une option.",
+        "discounts": "Rabais de 20 % sur les assurances complémentaires des enfants mineurs si au moins deux personnes de la même famille sont assurées chez Assura (sauf gamme Previsia et Denta Ortho)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions spéciales pour l'assurance maladie complémentaire Optima Varia (CSC)",
+        "edition": "07.2015",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_OptimaVaria_2015.07_F_uid_6671519119750.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/assurance-hospitalisation",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_OptimaVaria_2015.07_F_uid_6671519119750.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/ASSURA_Conditions-assistance-touristique_2021.01_F__uid_667151c2626b6.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2022/09/22/Liste_des_services_disponibles_en_cas_dhospitalision_Gamme_Varia_FR_V1_uid_632c1d86a0798.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2025/02/20/CGA_ASSURA_LCA_-07.2015-MAJ-01.2022_F_uid_67b7432312070.pdf",
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/liste-fournisseurs-de-soins-optima-varia"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "assistance_services",
+        "hospital_abroad",
+        "hospital_daily_cash",
+        "hospital_room_upgrade",
+        "hospital_semi_private",
+        "other:fournisseur_non_agree",
+        "other:garde_speciale",
+        "psychiatry_rehab_stay",
+        "search_recovery",
+        "travel_assistance_repatriation",
+        "upgrade_option"
+      ],
+      "benefitCount": 12
+    },
+    {
+      "insurer": "assura",
+      "key": "assura-optima-plus-varia",
+      "name": "Optima Plus Varia",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Hospitalisation en division privée (chambre à un lit) parmi une liste de fournisseurs de soins agréés, sans limite de durée ni de montant, avec indemnité en cas de séjour en division générale, assistance touristique et rapatriement. Prime évolutive selon l'âge réel.",
+      "variants": [],
+      "prerequisites": "Souscription possible jusqu'à 75 ans ; couverture dès le premier jour. Affections en cours et suites d'accidents antérieurs à la signature de la proposition exclues ; réserves possibles (CGA art. 4.1.1). Maladies psychiques, soins palliatifs, obésité et maternité exclus (voir Materna Varia). Risque accident en option.",
+      "pricing": {
+        "factors": [
+          "age",
+          "accident"
+        ],
+        "ageBands": "CSC 07.2015 art. 9 : prime variant selon l'âge réel de l'assuré ; adaptation le 1er janvier de l'année où l'assuré atteint 19, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86 et 91 ans, soit les tranches 0-18, 19-25, 26-30, 31-35, 36-40, 41-45, 46-50, 51-55, 56-60, 61-65, 66-70, 71-75, 76-80, 81-85, 86-90, 91+ (âge atteint dans l'année civile). Le calculateur demande la date de naissance et le code postal ; le risque accident est une option.",
+        "discounts": "Rabais de 20 % sur les assurances complémentaires des enfants mineurs si au moins deux personnes de la même famille sont assurées chez Assura (sauf gamme Previsia et Denta Ortho)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions spéciales pour l'assurance maladie complémentaire Optima Plus Varia (CSC)",
+        "edition": "07.2015",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_-ASSURA_OptimaPlusVaria_2015.07_F_uid_6671518b6d9b5.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/assurance-hospitalisation",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_-ASSURA_OptimaPlusVaria_2015.07_F_uid_6671518b6d9b5.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/ASSURA_Conditions-assistance-touristique_2021.01_F__uid_667151c2626b6.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2022/09/22/Liste_des_services_disponibles_en_cas_dhospitalision_Gamme_Varia_FR_V1_uid_632c1d86a0798.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2025/02/20/CGA_ASSURA_LCA_-07.2015-MAJ-01.2022_F_uid_67b7432312070.pdf",
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/liste-fournisseurs-de-soins-optima-plus-varia"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "assistance_services",
+        "hospital_abroad",
+        "hospital_daily_cash",
+        "hospital_private",
+        "hospital_room_upgrade",
+        "other:fournisseur_non_agree",
+        "other:garde_speciale",
+        "psychiatry_rehab_stay",
+        "search_recovery",
+        "travel_assistance_repatriation",
+        "upgrade_option"
+      ],
+      "benefitCount": 12
+    },
+    {
+      "insurer": "assura",
+      "key": "assura-ultra-varia",
+      "name": "Ultra Varia",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Hospitalisation en division privée (chambre à un lit) dans tout établissement autorisé de Suisse, hormis les fournisseurs de soins exclus ou soumis à condition dans la liste tenue par Assura SA ; sans limite de durée, traitement à l'étranger au tarif privé du canton de domicile, assistance et rapatriement. Prime évolutive selon l'âge réel.",
+      "variants": [],
+      "prerequisites": "Souscription possible jusqu'à 75 ans ; couverture dès le premier jour. Affections en cours et suites d'accidents antérieurs à la signature de la proposition exclues ; réserves possibles (CGA art. 4.1.1). Maladies psychiques, soins palliatifs, obésité et maternité exclus (voir Materna Varia). Risque accident en option. Demande de garantie préalable obligatoire avant toute hospitalisation (sauf urgence).",
+      "pricing": {
+        "factors": [
+          "age",
+          "accident"
+        ],
+        "ageBands": "CSC 08.2022 art. 5 : prime augmentant en règle générale selon l'âge réel ; adaptation le 1er janvier de l'année où l'assuré atteint 19, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86 et 91 ans, soit les tranches 0-18, 19-25, 26-30, 31-35, 36-40, 41-45, 46-50, 51-55, 56-60, 61-65, 66-70, 71-75, 76-80, 81-85, 86-90, 91+ (âge atteint dans l'année civile). Le calculateur demande la date de naissance et le code postal ; le risque accident est une option.",
+        "discounts": "Rabais de 20 % sur les assurances complémentaires des enfants mineurs si au moins deux personnes de la même famille sont assurées chez Assura (sauf gamme Previsia et Denta Ortho)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions spéciales pour l'assurance maladie complémentaire Ultra Varia (CSC)",
+        "edition": "08.2022",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_-UltraVaria_-New-version_08.2022_F_uid_6671518d47390.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/assurance-hospitalisation",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_-UltraVaria_-New-version_08.2022_F_uid_6671518d47390.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/ASSURA_Conditions-assistance-touristique_2021.01_F__uid_667151c2626b6.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2022/09/22/Liste_des_services_disponibles_en_cas_dhospitalision_Gamme_Varia_FR_V1_uid_632c1d86a0798.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2025/02/20/CGA_ASSURA_LCA_-07.2015-MAJ-01.2022_F_uid_67b7432312070.pdf",
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/liste-fournisseurs-de-soins-ultra-varia-2022"
+      ],
+      "tags": [
+        "assistance_services",
+        "hospital_abroad",
+        "hospital_daily_cash",
+        "hospital_private",
+        "hospital_room_upgrade",
+        "other:garde_speciale",
+        "other:libre_passage_downgrade",
+        "psychiatry_rehab_stay",
+        "search_recovery",
+        "travel_assistance_repatriation"
+      ],
+      "benefitCount": 11
+    },
+    {
+      "insurer": "assura",
+      "key": "assura-materna-varia",
+      "name": "Materna Varia",
+      "category": "family_maternity",
+      "audience": "adult",
+      "summary": "Assurance maternité : séjour en division privée (chambre à un lit) dans les établissements agréés, forfait de CHF 1'500 pour accouchement ambulatoire ou à domicile, 75 % des prestations ambulatoires supplémentaires jusqu'à CHF 2'000 par maternité, prestations pour le nouveau-né. Valable uniquement en Suisse.",
+      "variants": [],
+      "prerequisites": "Délai de carence de douze mois. L'assurance prend fin à la fin de l'année des 50 ans de l'assurée. Ne peut pas être souscrite en ligne (conseiller). Procréation assistée et traitements de la stérilité exclus.",
+      "pricing": {
+        "factors": [
+          "age",
+          "region"
+        ],
+        "ageBands": "CSC 09.2021 art. 9 : primes déterminées notamment selon l'âge et le canton de domicile ; adaptation le 1er janvier de l'année au cours de laquelle l'assurée atteint 26, 31, 36, 41 et 46 ans, soit les tranches jusqu'à 25, 26-30, 31-35, 36-40, 41-45, 46-50 (âge atteint dans l'année civile).",
+        "discounts": null
+      },
+      "conditionsDoc": {
+        "title": "Conditions spéciales pour l'assurance complémentaire Materna Varia (CSC)",
+        "edition": "09.2021",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_MaternaVaria_2021.09_F_uid_667151905941f.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/assurance-maternite",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_MaternaVaria_2021.09_F_uid_667151905941f.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2026/08/26/Fiche_Produit_LCA_Materna_Varia_FR_A5_V4_05.2026_BD_uid_6a8e9407f1de1.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2025/02/20/CGA_ASSURA_LCA_-07.2015-MAJ-01.2022_F_uid_67b7432312070.pdf",
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/liste-fournisseurs-de-soins-materna-varia"
+      ],
+      "tags": [
+        "breastfeeding",
+        "maternity",
+        "newborn_coverage"
+      ],
+      "benefitCount": 5
+    },
+    {
+      "insurer": "assura",
+      "key": "assura-hospita",
+      "name": "Hospita",
+      "category": "hospital_daily_cash",
+      "audience": "all",
+      "summary": "Capital à choix de CHF 500 à CHF 3'000 versé une fois par année civile en cas d'hospitalisation de plus de 24 heures en soins aigus (maladie ou accident, hors cas LAA/LAI/LAM et maternité), valable dans le monde entier, avec capital bonus en cas de choix délibéré de la division générale.",
+      "variants": [
+        {
+          "key": "c500",
+          "name": "Capital CHF 500",
+          "description": "Capital souscrit de CHF 500 (uniquement pour les enfants)"
+        },
+        {
+          "key": "c1000",
+          "name": "Capital CHF 1'000",
+          "description": "Capital souscrit de CHF 1'000 (uniquement pour les enfants)"
+        },
+        {
+          "key": "c1500",
+          "name": "Capital CHF 1'500",
+          "description": "Capital souscrit de CHF 1'500"
+        },
+        {
+          "key": "c2000",
+          "name": "Capital CHF 2'000",
+          "description": "Capital souscrit de CHF 2'000"
+        },
+        {
+          "key": "c2500",
+          "name": "Capital CHF 2'500",
+          "description": "Capital souscrit de CHF 2'500"
+        },
+        {
+          "key": "c3000",
+          "name": "Capital CHF 3'000",
+          "description": "Capital souscrit de CHF 3'000"
+        }
+      ],
+      "prerequisites": "Souscription possible jusqu'à 50 ans. Affections en cours et suites d'accidents antérieurs à la signature de la proposition exclues ; réserves possibles (CGA art. 4.1.1). Maladies psychiques, soins palliatifs, obésité et maternité exclus.",
+      "pricing": {
+        "factors": [
+          "age",
+          "entry_age",
+          "accident"
+        ],
+        "ageBands": "CGA LCA 07.2015 art. 12 : prime fixée selon l'âge de l'assuré à la conclusion du contrat. Tranches : 0-18 ans, passage automatique au tarif supérieur à 19 ans (19-25 ans), puis à 26 ans, le tarif devenant alors définitif (classe d'âge d'entrée acquise à vie dès 26 ans). Les classes d'âge d'entrée au-delà de 26 ans ne sont pas publiées. Le calculateur demande la date de naissance et le code postal ; l'option accident modifie la prime.",
+        "discounts": "Rabais dès CHF 1/mois avec Complementa Extra (fiche produit). Rabais de 20 % sur les assurances complémentaires des enfants mineurs si au moins deux personnes de la même famille sont assurées chez Assura (sauf gamme Previsia et Denta Ortho)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions spéciales pour l'assurance de capital en cas d'hospitalisation Hospita (CSC)",
+        "edition": "07.2015",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_-Hospita_2015.07_F_uid_6671518c09e5e.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/protection-financiere",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_-Hospita_2015.07_F_uid_6671518c09e5e.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2026/08/26/Fiche_Produit_LCA_Hospita_FR_A5_V5_05.2026_BD_uid_6a8e93fc6eda1.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2025/02/20/CGA_ASSURA_LCA_-07.2015-MAJ-01.2022_F_uid_67b7432312070.pdf"
+      ],
+      "tags": [
+        "hospital_capital"
+      ],
+      "benefitCount": 8
+    },
+    {
+      "insurer": "assura",
+      "key": "assura-denta-sana",
+      "name": "Denta Sana",
+      "category": "dental",
+      "audience": "all",
+      "summary": "Assurance dentaire : prophylaxie remboursée à 100 % jusqu'à CHF 80 par année civile et 75 % des traitements dentaires et prestations de technique dentaire jusqu'à CHF 6'000 nets par année (CHF 8'000 bruts), en Suisse et dans les pays limitrophes. Orthodontie exclue (voir Denta Ortho).",
+      "variants": [],
+      "prerequisites": "Questionnaire dentaire rempli par le médecin-dentiste traitant et radiographies (Bitewing) ; admission sans questionnaire dentaire pour les enfants de moins de cinq ans. Aucune limite d'âge à la conclusion (souscription possible jusqu'à 99 ans). Lésions dentaires préexistantes exclues.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "CSC 03.2024 art. 5 : prime augmentant en règle générale selon l'âge réel ; adaptation le 1er janvier de l'année où l'assuré atteint 6, 11, 16, 19, 26, 31, 36, 41, 46, 51, 56, 61, 66, 71, 76, 81, 86, 91 et 96 ans, soit les tranches 0-5, 6-10, 11-15, 16-18, 19-25, 26-30, 31-35, 36-40, 41-45, 46-50, 51-55, 56-60, 61-65, 66-70, 71-75, 76-80, 81-85, 86-90, 91-95, 96+ (âge atteint dans l'année civile). Le calculateur demande la date de naissance et le code postal. Identifiant produit du calculateur : PRD_Denta_Reparo.",
+        "discounts": "Rabais de 20 % sur les assurances complémentaires des enfants mineurs si au moins deux personnes de la même famille sont assurées chez Assura (sauf gamme Previsia et Denta Ortho)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions spéciales pour l'assurance maladie complémentaire Assura Denta Sana (CSC)",
+        "edition": "03.2024",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_DentaSana_03.2024_F_uid_6671518fe6294.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/soins-dentaires",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_DentaSana_03.2024_F_uid_6671518fe6294.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2026/08/26/Fiche_Produit_LCA_Denta_Sana_FR_A5_V4_05.2026_BD_uid_6a8e93f5c4269.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2025/02/20/CGA_ASSURA_LCA_-07.2015-MAJ-01.2022_F_uid_67b7432312070.pdf"
+      ],
+      "tags": [
+        "abroad_planned_treatment",
+        "dental_hygiene",
+        "dental_surgery",
+        "dental_treatment",
+        "other:questionnaire_dentaire"
+      ],
+      "benefitCount": 5
+    },
+    {
+      "insurer": "assura",
+      "key": "assura-denta-ortho",
+      "name": "Denta Ortho",
+      "category": "dental",
+      "audience": "all",
+      "summary": "Assurance pour les traitements d'orthodontie : 75 % des frais de traitement, de laboratoire et de radiographie, jusqu'au montant annuel assuré choisi (CHF 2'000, CHF 6'000 ou CHF 10'000), en Suisse et dans les pays limitrophes. Peut être combinée avec Denta Sana.",
+      "variants": [
+        {
+          "key": "ortho2000",
+          "name": "Niveau CHF 2'000",
+          "description": "Montant annuel maximal versé à l'assuré (après participation de 25 %) : CHF 2'000"
+        },
+        {
+          "key": "ortho6000",
+          "name": "Niveau CHF 6'000",
+          "description": "Montant annuel maximal versé à l'assuré (après participation de 25 %) : CHF 6'000"
+        },
+        {
+          "key": "ortho10000",
+          "name": "Niveau CHF 10'000",
+          "description": "Montant annuel maximal versé à l'assuré (après participation de 25 %) : CHF 10'000"
+        }
+      ],
+      "prerequisites": "Questionnaire dentaire rempli par le médecin-dentiste traitant et radiographies (Bitewing) ; admission sans questionnaire dentaire pour les enfants de moins de cinq ans. Aucune limite d'âge à la conclusion. Délai de carence de 12 mois. Problème orthodontique préexistant exclu.",
+      "pricing": {
+        "factors": [
+          "age",
+          "entry_age",
+          "region",
+          "sex"
+        ],
+        "ageBands": "CSC 04.2025 art. 6 : prime fixée selon l'âge, le canton de domicile et le sexe de l'assuré à la conclusion du contrat ; 0-18 ans, passage au tarif supérieur le 1er janvier de l'année des 19 ans (19-25 ans), puis le 1er janvier de l'année des 26 ans, la classe d'âge dès 26 ans étant alors acquise définitivement. Prime adaptée en cas de changement de région de prime. Upgrade ou downgrade du montant assuré = nouveau contrat avec adaptation de la classe d'âge. L'infobulle du site mentionne une tranche « 0-5 ans ».",
+        "discounts": "Rabais de 15 % en cas de souscription avant la naissance, applicable jusqu'à l'âge adulte (19 ans). Le rabais famille de 20 % ne s'applique pas à Denta Ortho."
+      },
+      "conditionsDoc": {
+        "title": "Conditions spéciales pour l'assurance maladie complémentaire Assura Denta Ortho (CSC)",
+        "edition": "04.2025",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2025/03/10/CSC-Denta-Ortho_04.2025_F_uid_67ceabf13bac3.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/soins-dentaires",
+        "https://static.assura.ch/blue/cockpit-assets/2025/03/10/CSC-Denta-Ortho_04.2025_F_uid_67ceabf13bac3.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2026/08/26/Fiche_Produit_LCA_Denta_Ortho_FR_A5_V3_05.2026_BD_uid_6a8e93f45900d.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2025/02/20/CGA_ASSURA_LCA_-07.2015-MAJ-01.2022_F_uid_67b7432312070.pdf"
+      ],
+      "tags": [
+        "abroad_planned_treatment",
+        "orthodontics",
+        "other:questionnaire_dentaire",
+        "upgrade_option"
+      ],
+      "benefitCount": 6
+    },
+    {
+      "insurer": "assura",
+      "key": "assura-mondia",
+      "name": "Mondia",
+      "category": "travel_abroad",
+      "audience": "all",
+      "summary": "Assurance voyage : urgences médicales à l'étranger dans le monde entier au tarif local, participation UE/AELE, transports, assistance 24h/24 et rapatriement, pour des séjours jusqu'à 45 jours consécutifs. Sans assurance annulation.",
+      "variants": [],
+      "prerequisites": "Souscription possible jusqu'à 99 ans ; pas de questionnaire médical. Séjours de plus de 45 jours : prolongation sur accord préalable d'Assura SA.",
+      "pricing": {
+        "factors": [
+          "age",
+          "entry_age",
+          "accident"
+        ],
+        "ageBands": "CGA LCA 07.2015 art. 12 : prime fixée selon l'âge de l'assuré à la conclusion du contrat. Tranches : 0-18 ans, passage automatique au tarif supérieur à 19 ans (19-25 ans), puis à 26 ans, le tarif devenant alors définitif (classe d'âge d'entrée acquise à vie dès 26 ans). Les classes d'âge d'entrée au-delà de 26 ans ne sont pas publiées. Le calculateur demande la date de naissance et le code postal ; l'option accident modifie la prime.",
+        "discounts": "Rabais de 20 % sur les assurances complémentaires des enfants mineurs si au moins deux personnes de la même famille sont assurées chez Assura (sauf gamme Previsia et Denta Ortho)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions spéciales pour l'assurance maladie complémentaire Mondia (CSC) + Conditions de l'assistance touristique (06.2017, mise à jour 01.2021)",
+        "edition": "07.2015",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_-Mondia_2015.07_F_uid_6671518c32b25.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/voyage",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_-Mondia_2015.07_F_uid_6671518c32b25.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/ASSURA_Conditions-assistance-touristique_2021.01_F__uid_667151c2626b6.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2025/02/20/CGA_ASSURA_LCA_-07.2015-MAJ-01.2022_F_uid_67b7432312070.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "assistance_services",
+        "cost_sharing_coverage",
+        "search_recovery",
+        "transport_rescue",
+        "travel_assistance_repatriation"
+      ],
+      "benefitCount": 6
+    },
+    {
+      "insurer": "assura",
+      "key": "assura-mondia-plus",
+      "name": "Mondia Plus",
+      "category": "travel_abroad",
+      "audience": "all",
+      "summary": "Assurance voyage et annulation : mêmes prestations que Mondia (urgences médicales monde entier, assistance, rapatriement) plus une assurance frais d'annulation portée par l'Européenne Assurances Voyages SA (ERV) : annulation, départ retardé, retour anticipé et prestations de loisirs.",
+      "variants": [],
+      "prerequisites": "Souscription possible jusqu'à 99 ans ; pas de questionnaire médical. Séjours ou voyages de plus de 45 jours : extension sur accord préalable d'Assura SA.",
+      "pricing": {
+        "factors": [
+          "age",
+          "entry_age",
+          "accident"
+        ],
+        "ageBands": "CGA LCA 07.2015 art. 12 : prime fixée selon l'âge de l'assuré à la conclusion du contrat. Tranches : 0-18 ans, passage automatique au tarif supérieur à 19 ans (19-25 ans), puis à 26 ans, le tarif devenant alors définitif (classe d'âge d'entrée acquise à vie dès 26 ans). Les classes d'âge d'entrée au-delà de 26 ans ne sont pas publiées. Le calculateur demande la date de naissance et le code postal ; l'option accident modifie la prime.",
+        "discounts": "Rabais de CHF 2/mois avec Complementa Extra (fiche produit). Rabais de 20 % sur les assurances complémentaires des enfants mineurs si au moins deux personnes de la même famille sont assurées chez Assura (sauf gamme Previsia et Denta Ortho)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions spéciales pour l'assurance maladie complémentaire Mondia Plus (CSC) + Conditions de l'assistance touristique (06.2017, mise à jour 01.2021)",
+        "edition": "06.2017",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_-ASSURA_Mondia-Plus_2017.06_F_uid_6671518b3d04f.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/voyage",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_-ASSURA_Mondia-Plus_2017.06_F_uid_6671518b3d04f.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2026/08/26/Fiche_Produit_LCA_Mondia_Plus_FR_A5_V7_05.2026_BD_uid_6a8e940bc67f7.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/ASSURA_Conditions-assistance-touristique_2021.01_F__uid_667151c2626b6.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2025/02/20/CGA_ASSURA_LCA_-07.2015-MAJ-01.2022_F_uid_67b7432312070.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "assistance_services",
+        "cost_sharing_coverage",
+        "search_recovery",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "travel_cancellation_luggage"
+      ],
+      "benefitCount": 10
+    },
+    {
+      "insurer": "assura",
+      "key": "assura-previsia-extra",
+      "name": "Previsia Extra",
+      "category": "capital_accident",
+      "audience": "all",
+      "summary": "Assurance accident complémentaire individuelle : frais de guérison en division privée dans le monde entier, capitaux décès et invalidité, allocation journalière d'hospitalisation, indemnité pour perte de gain (adultes) selon variante, capital en cas d'hospitalisation à choix et nombreux frais annexes (aide ménagère, garde d'enfants, dommages matériels, chirurgie esthétique, médecines alternatives).",
+      "variants": [
+        {
+          "key": "v1",
+          "name": "Variante 1 (adultes 19-65 ans)",
+          "description": "Capital décès CHF 20'000, capital d'invalidité progressif CHF 100'000, allocation d'hospitalisation CHF 30 par jour, indemnité pour perte de gain CHF 10 à 60 par jour"
+        },
+        {
+          "key": "v2",
+          "name": "Variante 2 (adultes 19-65 ans)",
+          "description": "Capital décès CHF 5'000, capital d'invalidité progressif CHF 100'000, allocation d'hospitalisation CHF 20 par jour, indemnité pour perte de gain CHF 10 à 40 par jour"
+        },
+        {
+          "key": "v3",
+          "name": "Variante 3 (adultes 19-65 ans)",
+          "description": "Capital décès CHF 30'000, capital d'invalidité progressif CHF 60'000, allocation d'hospitalisation CHF 30 par jour, indemnité pour perte de gain CHF 10 à 40 par jour"
+        },
+        {
+          "key": "v4",
+          "name": "Variante 4 (adultes 19-65 ans)",
+          "description": "Capital décès CHF 50'000, capital d'invalidité progressif CHF 100'000, allocation d'hospitalisation CHF 30 par jour, indemnité pour perte de gain CHF 10 à 60 par jour"
+        },
+        {
+          "key": "v5",
+          "name": "Variante 5 (adultes 19-65 ans)",
+          "description": "Capital décès CHF 10'000, capital d'invalidité progressif CHF 20'000, allocation d'hospitalisation CHF 10 par jour, indemnité pour perte de gain CHF 10 à 20 par jour"
+        },
+        {
+          "key": "v12",
+          "name": "Variante 12 (seniors 66-75 ans)",
+          "description": "Capital décès aucun, capital d'invalidité proportionnel aucun, allocation d'hospitalisation CHF 10 par jour"
+        },
+        {
+          "key": "v13",
+          "name": "Variante 13 (seniors 66-75 ans)",
+          "description": "Capital décès aucun, capital d'invalidité proportionnel CHF 5'000, allocation d'hospitalisation CHF 10 par jour"
+        },
+        {
+          "key": "v14",
+          "name": "Variante 14 (seniors 66-75 ans)",
+          "description": "Capital décès CHF 5'000, capital d'invalidité proportionnel CHF 10'000, allocation d'hospitalisation CHF 10 par jour"
+        },
+        {
+          "key": "v15",
+          "name": "Variante 15 (seniors 66-75 ans)",
+          "description": "Capital décès CHF 10'000, capital d'invalidité proportionnel CHF 20'000, allocation d'hospitalisation CHF 10 par jour"
+        },
+        {
+          "key": "v6",
+          "name": "Variante 6 (enfants 0-18 ans)",
+          "description": "Capital décès CHF 5'000, capital d'invalidité progressif CHF 150'000, allocation d'hospitalisation CHF 10 par jour"
+        },
+        {
+          "key": "v7",
+          "name": "Variante 7 (enfants 0-18 ans)",
+          "description": "Capital décès CHF 3'000, capital d'invalidité progressif CHF 100'000, allocation d'hospitalisation CHF 10 par jour"
+        },
+        {
+          "key": "v8",
+          "name": "Variante 8 (enfants 0-18 ans)",
+          "description": "Capital décès CHF 3'000, capital d'invalidité progressif CHF 75'000, allocation d'hospitalisation CHF 10 par jour"
+        },
+        {
+          "key": "v9",
+          "name": "Variante 9 (enfants 0-18 ans)",
+          "description": "Capital décès CHF 3'000, capital d'invalidité progressif CHF 50'000, allocation d'hospitalisation CHF 10 par jour"
+        },
+        {
+          "key": "v10",
+          "name": "Variante 10 (enfants 0-18 ans)",
+          "description": "Capital décès CHF 3'000, capital d'invalidité progressif CHF 30'000, allocation d'hospitalisation CHF 10 par jour"
+        },
+        {
+          "key": "v16",
+          "name": "Variante 16 (enfants 0-18 ans)",
+          "description": "Capital décès CHF 10'000, capital d'invalidité progressif CHF 200'000, allocation d'hospitalisation CHF 10 par jour"
+        },
+        {
+          "key": "v17",
+          "name": "Variante 17 (enfants 0-18 ans)",
+          "description": "Capital décès CHF 10'000, capital d'invalidité progressif CHF 250'000, allocation d'hospitalisation CHF 10 par jour"
+        }
+      ],
+      "prerequisites": "Souscription possible jusqu'à 75 ans (variantes par classe d'âge : enfants 0-18 ans, adultes 19-65 ans, seniors 66-75 ans). Suites d'accidents antérieurs à la signature de la proposition exclues. Couverture mondiale pour des séjours hors de Suisse de 12 mois au plus.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Variantes tarifées par classe d'âge : enfants 0-18 ans, adultes 19-65 ans, seniors 66-75 ans ; à la majorité, les capitaux de l'enfant sont adaptés automatiquement. Tranches tarifaires fines non publiées. Le calculateur demande la date de naissance et le code postal (identifiant PRD_Previsia_Extra).",
+        "discounts": "Le rabais famille de 20 % ne s'applique pas à la gamme Previsia. Libération du paiement des primes de l'enfant assuré en cas de décès du preneur d'assurance, jusqu'à 18 ans révolus au plus."
+      },
+      "conditionsDoc": {
+        "title": "Conditions spéciales pour l'assurance accidents individuelle pour adultes et enfants Previsia Extra (CSC)",
+        "edition": "04.2016",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2023/06/14/NEW_ASSURA_CSC-Previsia-Extra_04.2016_F_uid_6489def5662b7.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/accident",
+        "https://static.assura.ch/blue/cockpit-assets/2023/06/14/NEW_ASSURA_CSC-Previsia-Extra_04.2016_F_uid_6489def5662b7.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2026/08/26/Fiche_Produit_LCA_Previsia_Extra_FR_A5_V7_05.2026_BD_uid_6a8e93f061792.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2020/11/10/5faa41c09588bAssurances_complementaires_accident_Previsia_F_V2_11.2020_BD.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/ASSURA_Conditions-assistance-touristique_2021.01_F__uid_667151c2626b6.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2025/02/20/CGA_ASSURA_LCA_-07.2015-MAJ-01.2022_F_uid_67b7432312070.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "accident_capital",
+        "alt_medicine_therapies",
+        "childcare_assistance",
+        "convalescence_cure",
+        "cosmetic_corrections",
+        "daily_allowance",
+        "dental_accident",
+        "home_care",
+        "home_help",
+        "hospital_capital",
+        "hospital_daily_cash",
+        "hospital_private",
+        "medical_aids",
+        "other:assistance_scolaire",
+        "other:contribution_frais_entretien",
+        "other:dommages_materiels",
+        "other:transport_depouille",
+        "premium_waiver",
+        "rooming_in",
+        "search_recovery",
+        "transport_rescue",
+        "travel_assistance_repatriation"
+      ],
+      "benefitCount": 72
+    },
+    {
+      "insurer": "assura",
+      "key": "assura-previsia-plus",
+      "name": "Previsia Plus",
+      "category": "capital_accident",
+      "audience": "all",
+      "summary": "Assurance accident complémentaire individuelle avec les mêmes frais de guérison (division privée dans le monde entier) et les mêmes variantes fixes de capitaux décès/invalidité, d'allocation d'hospitalisation et de perte de gain que Previsia Extra, mais sans le capital en cas d'hospitalisation. Présentée sur le site comme variante de la gamme Previsia (document 11.2020), non proposée dans le calculateur en ligne.",
+      "variants": [
+        {
+          "key": "v1",
+          "name": "Variante 1 (adultes 19-65 ans)",
+          "description": "Capital décès CHF 20'000, capital d'invalidité progressif CHF 100'000, allocation d'hospitalisation CHF 30 par jour, indemnité pour perte de gain CHF 10 à 60 par jour"
+        },
+        {
+          "key": "v2",
+          "name": "Variante 2 (adultes 19-65 ans)",
+          "description": "Capital décès CHF 5'000, capital d'invalidité progressif CHF 100'000, allocation d'hospitalisation CHF 20 par jour, indemnité pour perte de gain CHF 10 à 40 par jour"
+        },
+        {
+          "key": "v3",
+          "name": "Variante 3 (adultes 19-65 ans)",
+          "description": "Capital décès CHF 30'000, capital d'invalidité progressif CHF 60'000, allocation d'hospitalisation CHF 30 par jour, indemnité pour perte de gain CHF 10 à 40 par jour"
+        },
+        {
+          "key": "v4",
+          "name": "Variante 4 (adultes 19-65 ans)",
+          "description": "Capital décès CHF 50'000, capital d'invalidité progressif CHF 100'000, allocation d'hospitalisation CHF 30 par jour, indemnité pour perte de gain CHF 10 à 60 par jour"
+        },
+        {
+          "key": "v5",
+          "name": "Variante 5 (adultes 19-65 ans)",
+          "description": "Capital décès CHF 10'000, capital d'invalidité progressif CHF 20'000, allocation d'hospitalisation CHF 10 par jour, indemnité pour perte de gain CHF 10 à 20 par jour"
+        },
+        {
+          "key": "v12",
+          "name": "Variante 12 (seniors 66-75 ans)",
+          "description": "Capital décès aucun, capital d'invalidité proportionnel aucun, allocation d'hospitalisation CHF 10 par jour"
+        },
+        {
+          "key": "v13",
+          "name": "Variante 13 (seniors 66-75 ans)",
+          "description": "Capital décès aucun, capital d'invalidité proportionnel CHF 5'000, allocation d'hospitalisation CHF 10 par jour"
+        },
+        {
+          "key": "v14",
+          "name": "Variante 14 (seniors 66-75 ans)",
+          "description": "Capital décès CHF 5'000, capital d'invalidité proportionnel CHF 10'000, allocation d'hospitalisation CHF 10 par jour"
+        },
+        {
+          "key": "v15",
+          "name": "Variante 15 (seniors 66-75 ans)",
+          "description": "Capital décès CHF 10'000, capital d'invalidité proportionnel CHF 20'000, allocation d'hospitalisation CHF 10 par jour"
+        },
+        {
+          "key": "v6",
+          "name": "Variante 6 (enfants 0-18 ans)",
+          "description": "Capital décès CHF 5'000, capital d'invalidité progressif CHF 150'000, allocation d'hospitalisation CHF 10 par jour"
+        },
+        {
+          "key": "v7",
+          "name": "Variante 7 (enfants 0-18 ans)",
+          "description": "Capital décès CHF 3'000, capital d'invalidité progressif CHF 100'000, allocation d'hospitalisation CHF 10 par jour"
+        },
+        {
+          "key": "v8",
+          "name": "Variante 8 (enfants 0-18 ans)",
+          "description": "Capital décès CHF 3'000, capital d'invalidité progressif CHF 75'000, allocation d'hospitalisation CHF 10 par jour"
+        },
+        {
+          "key": "v9",
+          "name": "Variante 9 (enfants 0-18 ans)",
+          "description": "Capital décès CHF 3'000, capital d'invalidité progressif CHF 50'000, allocation d'hospitalisation CHF 10 par jour"
+        },
+        {
+          "key": "v10",
+          "name": "Variante 10 (enfants 0-18 ans)",
+          "description": "Capital décès CHF 3'000, capital d'invalidité progressif CHF 30'000, allocation d'hospitalisation CHF 10 par jour"
+        },
+        {
+          "key": "v16",
+          "name": "Variante 16 (enfants 0-18 ans)",
+          "description": "Capital décès CHF 10'000, capital d'invalidité progressif CHF 200'000, allocation d'hospitalisation CHF 10 par jour"
+        },
+        {
+          "key": "v17",
+          "name": "Variante 17 (enfants 0-18 ans)",
+          "description": "Capital décès CHF 10'000, capital d'invalidité progressif CHF 250'000, allocation d'hospitalisation CHF 10 par jour"
+        }
+      ],
+      "prerequisites": "Souscription possible jusqu'à 75 ans (variantes par classe d'âge : enfants 0-18 ans, adultes 19-65 ans, seniors 66-75 ans). Suites d'accidents antérieurs à la signature de la proposition exclues. Couverture mondiale pour des séjours hors de Suisse de 12 mois au plus. Souscription via un conseiller (statut de vente à confirmer).",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Variantes tarifées par classe d'âge : enfants 0-18 ans, adultes 19-65 ans, seniors 66-75 ans ; à la majorité, les capitaux de l'enfant sont adaptés automatiquement. Tranches tarifaires fines non publiées.",
+        "discounts": "Le rabais famille de 20 % ne s'applique pas à la gamme Previsia."
+      },
+      "conditionsDoc": {
+        "title": "Conditions spéciales pour l'assurance accidents individuelle pour adultes et enfants Previsia Plus (CSC)",
+        "edition": "03.2024",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2024/09/19/CSC_ASSURA_PrevisiaPlus_2024.03_F_uid_66ebd72643294.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/accident",
+        "https://static.assura.ch/blue/cockpit-assets/2024/09/19/CSC_ASSURA_PrevisiaPlus_2024.03_F_uid_66ebd72643294.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2020/11/10/5faa41c09588bAssurances_complementaires_accident_Previsia_F_V2_11.2020_BD.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/ASSURA_Conditions-assistance-touristique_2021.01_F__uid_667151c2626b6.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2025/02/20/CGA_ASSURA_LCA_-07.2015-MAJ-01.2022_F_uid_67b7432312070.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "accident_capital",
+        "alt_medicine_therapies",
+        "childcare_assistance",
+        "convalescence_cure",
+        "cosmetic_corrections",
+        "daily_allowance",
+        "dental_accident",
+        "home_care",
+        "home_help",
+        "hospital_daily_cash",
+        "hospital_private",
+        "medical_aids",
+        "other:assistance_scolaire",
+        "other:contribution_frais_entretien",
+        "other:dommages_materiels",
+        "other:transport_depouille",
+        "premium_waiver",
+        "rooming_in",
+        "search_recovery",
+        "transport_rescue",
+        "travel_assistance_repatriation"
+      ],
+      "benefitCount": 70
+    },
+    {
+      "insurer": "assura",
+      "key": "assura-previsia-maxi",
+      "name": "Previsia Maxi",
+      "category": "capital_accident",
+      "audience": "all",
+      "summary": "Assurance accident complémentaire individuelle avec libre choix intégral des montants (capital décès, capital d'invalidité progressif, allocation d'hospitalisation, indemnité pour perte de gain) et mêmes frais de guérison que Previsia Plus/Extra ; possibilité de désigner un bénéficiaire. Présentée sur le site comme variante de la gamme Previsia (document 11.2020), non proposée dans le calculateur en ligne.",
+      "variants": [
+        {
+          "key": "adulte",
+          "name": "Adultes (19-65 ans)",
+          "description": "Libre choix : capital décès CHF 10'000 à 300'000, capital d'invalidité progressif CHF 20'000 à 400'000, allocation d'hospitalisation CHF 10 à 100 par jour, perte de gain CHF 10 à 200 par jour"
+        },
+        {
+          "key": "senior",
+          "name": "Seniors (66-75 ans)",
+          "description": "Capital décès jusqu'à CHF 10'000, capital d'invalidité proportionnel jusqu'à CHF 30'000, allocation d'hospitalisation jusqu'à CHF 10 par jour, perte de gain jusqu'à CHF 20 par jour"
+        }
+      ],
+      "prerequisites": "Souscription possible jusqu'à 75 ans (variantes par classe d'âge : enfants 0-18 ans, adultes 19-65 ans, seniors 66-75 ans). Suites d'accidents antérieurs à la signature de la proposition exclues. Couverture mondiale pour des séjours hors de Suisse de 12 mois au plus. Souscription via un conseiller (statut de vente à confirmer).",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Classes d'âge adultes 19-65 ans et seniors 66-75 ans (aperçu 11.2020). CGA art. 22 : adaptation de prime selon l'âge le 1er janvier de l'année qui suit celle des 18 ans de l'assuré. Tranches tarifaires non publiées.",
+        "discounts": "Le rabais famille de 20 % ne s'applique pas à la gamme Previsia."
+      },
+      "conditionsDoc": {
+        "title": "Conditions générales pour l'assurance accidents individuelle pour adultes et enfants Previsia Maxi (CGA)",
+        "edition": "01.2020 (mise à jour 01.2022)",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2024/09/19/CGA_ASSURA_Previsia-Maxi_01.2020_MAJ-01.2022_F_uid_66ebd7aabb954.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/accident",
+        "https://static.assura.ch/blue/cockpit-assets/2024/09/19/CGA_ASSURA_Previsia-Maxi_01.2020_MAJ-01.2022_F_uid_66ebd7aabb954.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2020/11/10/5faa41c09588bAssurances_complementaires_accident_Previsia_F_V2_11.2020_BD.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/ASSURA_Conditions-assistance-touristique_2021.01_F__uid_667151c2626b6.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "accident_capital",
+        "alt_medicine_therapies",
+        "childcare_assistance",
+        "convalescence_cure",
+        "cosmetic_corrections",
+        "daily_allowance",
+        "dental_accident",
+        "home_care",
+        "home_help",
+        "hospital_daily_cash",
+        "hospital_private",
+        "medical_aids",
+        "other:assistance_scolaire",
+        "other:contribution_frais_entretien",
+        "other:dommages_materiels",
+        "other:transport_depouille",
+        "premium_waiver",
+        "rooming_in",
+        "search_recovery",
+        "transport_rescue",
+        "travel_assistance_repatriation"
+      ],
+      "benefitCount": 28
+    },
+    {
+      "insurer": "assura",
+      "key": "assura-previsia",
+      "name": "Previsia",
+      "category": "capital_accident",
+      "audience": "all",
+      "summary": "Assurance invalidité-décès en cas d'accident, valable dans le monde entier : capital en cas de décès ou d'invalidité selon des combinaisons fixes, sans prise en charge des frais de guérison. Présentée sur le site comme variante de la gamme Previsia (document 11.2020) ; conditions d'assurance non publiées sur la page et produit absent du calculateur en ligne.",
+      "variants": [
+        {
+          "key": "a1",
+          "name": "Adultes (19-65 ans) : décès CHF 10'000 / invalidité CHF 20'000",
+          "description": "Prestation en cas de décès CHF 10'000, prestation en cas d'invalidité CHF 20'000"
+        },
+        {
+          "key": "a2",
+          "name": "Adultes (19-65 ans) : décès CHF 20'000 / invalidité CHF 40'000",
+          "description": "Prestation en cas de décès CHF 20'000, prestation en cas d'invalidité CHF 40'000"
+        },
+        {
+          "key": "a3",
+          "name": "Adultes (19-65 ans) : décès CHF 30'000 / invalidité CHF 60'000",
+          "description": "Prestation en cas de décès CHF 30'000, prestation en cas d'invalidité CHF 60'000"
+        },
+        {
+          "key": "a4",
+          "name": "Adultes (19-65 ans) : décès CHF 40'000 / invalidité CHF 80'000",
+          "description": "Prestation en cas de décès CHF 40'000, prestation en cas d'invalidité CHF 80'000"
+        },
+        {
+          "key": "a5",
+          "name": "Adultes (19-65 ans) : décès CHF 5'000 / invalidité CHF 100'000",
+          "description": "Prestation en cas de décès CHF 5'000, prestation en cas d'invalidité CHF 100'000"
+        },
+        {
+          "key": "a6",
+          "name": "Adultes (19-65 ans) : décès CHF 20'000 / invalidité CHF 100'000",
+          "description": "Prestation en cas de décès CHF 20'000, prestation en cas d'invalidité CHF 100'000"
+        },
+        {
+          "key": "a7",
+          "name": "Adultes (19-65 ans) : décès CHF 50'000 / invalidité CHF 100'000",
+          "description": "Prestation en cas de décès CHF 50'000, prestation en cas d'invalidité CHF 100'000"
+        },
+        {
+          "key": "a8",
+          "name": "Adultes (19-65 ans) : décès CHF 50'000 / invalidité CHF 200'000",
+          "description": "Prestation en cas de décès CHF 50'000, prestation en cas d'invalidité CHF 200'000"
+        },
+        {
+          "key": "e1",
+          "name": "Enfants (0-18 ans) : décès CHF 3'000 / invalidité CHF 30'000",
+          "description": "Prestation en cas de décès CHF 3'000, prestation en cas d'invalidité CHF 30'000"
+        },
+        {
+          "key": "e2",
+          "name": "Enfants (0-18 ans) : décès CHF 3'000 / invalidité CHF 50'000",
+          "description": "Prestation en cas de décès CHF 3'000, prestation en cas d'invalidité CHF 50'000"
+        },
+        {
+          "key": "e3",
+          "name": "Enfants (0-18 ans) : décès CHF 3'000 / invalidité CHF 75'000",
+          "description": "Prestation en cas de décès CHF 3'000, prestation en cas d'invalidité CHF 75'000"
+        },
+        {
+          "key": "e4",
+          "name": "Enfants (0-18 ans) : décès CHF 3'000 / invalidité CHF 100'000",
+          "description": "Prestation en cas de décès CHF 3'000, prestation en cas d'invalidité CHF 100'000"
+        },
+        {
+          "key": "e5",
+          "name": "Enfants (0-18 ans) : décès CHF 5'000 / invalidité CHF 150'000",
+          "description": "Prestation en cas de décès CHF 5'000, prestation en cas d'invalidité CHF 150'000"
+        }
+      ],
+      "prerequisites": "Variantes adultes 19-65 ans et enfants 0-18 ans. Souscription via un conseiller (statut de vente et conditions à confirmer).",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Variantes par classe d'âge : enfants 0-18 ans, adultes 19-65 ans. Tranches tarifaires non publiées.",
+        "discounts": "Le rabais famille de 20 % ne s'applique pas à la gamme Previsia."
+      },
+      "conditionsDoc": {
+        "title": "Aperçu « Assurances complémentaires accident Previsia » (document commercial ; conditions d'assurance Previsia non trouvées)",
+        "edition": "V2 11.2020",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2020/11/10/5faa41c09588bAssurances_complementaires_accident_Previsia_F_V2_11.2020_BD.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/accident",
+        "https://static.assura.ch/blue/cockpit-assets/2020/11/10/5faa41c09588bAssurances_complementaires_accident_Previsia_F_V2_11.2020_BD.pdf"
+      ],
+      "tags": [
+        "accident_capital"
+      ],
+      "benefitCount": 26
+    },
+    {
+      "insurer": "assura",
+      "key": "assura-previsia-maladie",
+      "name": "Previsia Maladie",
+      "category": "capital_illness",
+      "audience": "all",
+      "summary": "Capital en cas de décès et/ou d'invalidité à la suite d'une maladie diagnostiquée après le début de la couverture ; capitaux distincts à choix par tranches de CHF 10'000 jusqu'à CHF 100'000. Assurance de sommes portée par GENERALI Assurances de personnes SA (contrat d'assurance vie collectif dont Assura SA est preneur).",
+      "variants": [
+        {
+          "key": "deces",
+          "name": "Décès uniquement",
+          "description": "Capital en cas de décès par maladie"
+        },
+        {
+          "key": "invalidite",
+          "name": "Invalidité uniquement",
+          "description": "Capital en cas d'invalidité par maladie"
+        },
+        {
+          "key": "deces-invalidite",
+          "name": "Décès et invalidité",
+          "description": "Les deux couvertures, avec des capitaux déterminés séparément"
+        }
+      ],
+      "prerequisites": "Avoir une assurance de base (Assura-Basis SA) ou une complémentaire (Assura SA) ; domicile civil en Suisse ; citoyens suisses ou permis B ou C ; moins de 55 ans révolus au début de la couverture ; frontaliers exclus. Pas de questionnaire médical, aucun délai de carence. Fin de couverture à la fin du mois du 65e anniversaire. Ne peut pas être souscrit en ligne (conseiller).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex"
+        ],
+        "ageBands": "CGA Previsia Maladie 05.2025 art. 11 : tarif annuel défini selon le groupe d'âge et le sexe ; adaptation le 1er janvier de l'année où l'assuré atteint 19, 26, 31, 36, 41, 46, 51, 56 et 61 ans, soit les tranches 0-18, 19-25, 26-30, 31-35, 36-40, 41-45, 46-50, 51-55, 56-60, 61-65. Âge déterminant = année civile moins année de naissance.",
+        "discounts": "Le rabais famille de 20 % ne s'applique pas à la gamme Previsia."
+      },
+      "conditionsDoc": {
+        "title": "Conditions générales pour l'assurance capital décès et invalidité par suite de maladie (CGA Previsia Maladie)",
+        "edition": "05.2025",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2025/04/17/CGA_Previsia-Maladie_05.2025_F_V2_uid_6800ae2e6ebe6.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/capital-invalidite-deces",
+        "https://static.assura.ch/blue/cockpit-assets/2025/04/17/CGA_Previsia-Maladie_05.2025_F_V2_uid_6800ae2e6ebe6.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2026/08/26/Fiche_Produit_LCA_Previsia_Maladie_FR_A5_V1.1_05.2026_BD_uid_6a8e93f203c3a.pdf",
+        "https://www.assura.ch/fr/FAQ/previsia-maladie"
+      ],
+      "tags": [
+        "illness_capital"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "assura",
+      "key": "assura-pecunia",
+      "name": "Pecunia",
+      "category": "daily_allowance",
+      "audience": "adult",
+      "summary": "Assurance d'indemnités journalières pour perte de gain en cas d'incapacité de travail par maladie (accident sur option) : jusqu'à CHF 300 par jour, délai d'attente à choix de 30 à 720 jours, 720 indemnités, jusqu'à concurrence de la perte économique réelle.",
+      "variants": [
+        {
+          "key": "d30",
+          "name": "Délai d'attente 30 jours",
+          "description": "Paiement des indemnités dès le 31e jour d'incapacité de travail"
+        },
+        {
+          "key": "d60",
+          "name": "Délai d'attente 60 jours",
+          "description": "Paiement des indemnités dès le 61e jour d'incapacité de travail"
+        },
+        {
+          "key": "d90",
+          "name": "Délai d'attente 90 jours",
+          "description": "Paiement des indemnités dès le 91e jour d'incapacité de travail"
+        },
+        {
+          "key": "d120",
+          "name": "Délai d'attente 120 jours",
+          "description": "Paiement des indemnités dès le 121e jour d'incapacité de travail"
+        },
+        {
+          "key": "d150",
+          "name": "Délai d'attente 150 jours",
+          "description": "Paiement des indemnités dès le 151e jour d'incapacité de travail"
+        },
+        {
+          "key": "d180",
+          "name": "Délai d'attente 180 jours",
+          "description": "Paiement des indemnités dès le 181e jour d'incapacité de travail"
+        },
+        {
+          "key": "d270",
+          "name": "Délai d'attente 270 jours",
+          "description": "Paiement des indemnités dès le 271e jour d'incapacité de travail"
+        },
+        {
+          "key": "d360",
+          "name": "Délai d'attente 360 jours",
+          "description": "Paiement des indemnités dès le 361e jour d'incapacité de travail"
+        },
+        {
+          "key": "d720",
+          "name": "Délai d'attente 720 jours",
+          "description": "Paiement des indemnités dès le 721e jour d'incapacité de travail"
+        }
+      ],
+      "prerequisites": "Souscription possible jusqu'à 60 ans ; personnes de nationalité suisse ou titulaires d'un permis C résidant en Suisse ; salariés ; indépendants avec deux ans de cotisations AVS. Ne peut pas être souscrit en ligne (conseiller). Affections en cours et suites d'accidents antérieurs à la signature de la proposition exclues ; réserves possibles (CGA art. 4.1.1). Maternité exclue ; seules les incapacités survenues et suivies en Suisse sont indemnisées.",
+      "pricing": {
+        "factors": [
+          "age",
+          "accident"
+        ],
+        "ageBands": "Non publié. Prime dégressive selon le délai d'attente choisi et fonction du montant journalier assuré ; risque accident en option.",
+        "discounts": "Primes dégressives selon le délai d'attente choisi."
+      },
+      "conditionsDoc": {
+        "title": "Conditions spéciales pour l'assurance maladie complémentaire Pecunia - assurance d'indemnités journalières pour perte de gain (CSC)",
+        "edition": "07.2015 (mise à jour 01.2022)",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_Pecunia_07.2015_MAJ-01.2022_F_uid_667151921e396.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/assurance-perte-de-gain",
+        "https://static.assura.ch/blue/cockpit-assets/2024/06/18/CSC_ASSURA_Pecunia_07.2015_MAJ-01.2022_F_uid_667151921e396.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2026/08/26/Fiche_Produit_LCA_Pecunia_FR_A5_V3_05.2026_BD_uid_6a8e93ed618b6.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2025/02/20/CGA_ASSURA_LCA_-07.2015-MAJ-01.2022_F_uid_67b7432312070.pdf"
+      ],
+      "tags": [
+        "daily_allowance",
+        "upgrade_option"
+      ],
+      "benefitCount": 3
+    },
+    {
+      "insurer": "assura",
+      "key": "assura-lexa",
+      "name": "Lexa",
+      "category": "legal_protection",
+      "audience": "adult",
+      "summary": "Assurance de protection juridique modulaire portée par Orion Assurance de Protection Juridique SA (Assura SA agit comme intermédiaire lié et gère le contrat) : module A protection juridique privée (variantes Basis et Maxi), module B protection juridique des patients (uniquement avec le module A), module C protection juridique circulation.",
+      "variants": [
+        {
+          "key": "a-basis",
+          "name": "Module A - Protection juridique privée, variante Basis",
+          "description": "Somme d'assurance CHF 100'000, validité Suisse"
+        },
+        {
+          "key": "a-maxi",
+          "name": "Module A - Protection juridique privée, variante Maxi",
+          "description": "Somme d'assurance CHF 600'000 en Suisse et en Europe, CHF 150'000 dans le monde entier ; domaines supplémentaires et options bail / immobilier"
+        },
+        {
+          "key": "b-patient",
+          "name": "Module B - Protection juridique des patients",
+          "description": "Litiges avec des médecins, hôpitaux et autres fournisseurs de prestations médicales ; uniquement en combinaison avec le module A"
+        },
+        {
+          "key": "c-circulation",
+          "name": "Module C - Protection juridique circulation",
+          "description": "Litiges liés à la mobilité (accident, retrait de permis, contrats liés aux véhicules)"
+        }
+      ],
+      "prerequisites": "Souscription possible dès 18 ans et jusqu'à 99 ans ; domicile en Suisse. Le module B (patients) n'est disponible qu'avec le module A. Délais de carence de 1 à 12 mois selon le module et le domaine.",
+      "pricing": {
+        "factors": [],
+        "ageBands": "Non publié. La prime dépend des modules, de la variante et des options choisis (personne individuelle ou plusieurs personnes).",
+        "discounts": "Rabais de combinaison allant jusqu'à 25 % en combinant les trois modules."
+      },
+      "conditionsDoc": {
+        "title": "Assura Lexa - Informations clients et conditions générales d'assurance (CGA), assureur Orion Assurance de Protection Juridique SA",
+        "edition": "09.2024",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2024/09/05/ASU_CGA_Lexa_09-2024-F_uid_66d9821ae227c.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/protection-juridique",
+        "https://static.assura.ch/blue/cockpit-assets/2024/09/05/ASU_CGA_Lexa_09-2024-F_uid_66d9821ae227c.pdf",
+        "https://static.assura.ch/blue/cockpit-assets/2026/08/26/Fiche_Produit_LCA_Lexa_FR_A5_V3_05.2026_BD_uid_6a8e9400ea279.pdf"
+      ],
+      "tags": [
+        "assistance_services",
+        "legal_protection"
+      ],
+      "benefitCount": 7
+    },
+    {
+      "insurer": "assura",
+      "key": "assura-nativa",
+      "name": "Nativa",
+      "category": "family_maternity",
+      "audience": "child",
+      "summary": "Package d'assurances complémentaires prénatales : une seule souscription avant la naissance, sans questionnaire médical, regroupant sept complémentaires (Complementa Extra, Denta Sana, Denta Ortho, Mondia Plus, Previsia Extra, Medna, Natura), avec six mois de primes offerts. Les prestations sont celles de chacun des sept produits.",
+      "variants": [],
+      "prerequisites": "Souscription prénatale (possible dès le sixième mois de grossesse selon la page nouveau-nés) pour bénéficier de l'absence de questionnaire médical et des six mois de primes offerts ; souscription possible jusqu'à 18 ans. Ne peut pas être souscrit en ligne (conseiller).",
+      "pricing": {
+        "factors": [
+          "age",
+          "accident"
+        ],
+        "ageBands": "Somme des primes enfant (0-18 ans) des sept produits ; voir chaque produit.",
+        "discounts": "Six mois de primes offerts en cas de souscription prénatale ; rabais de prime allant jusqu'à CHF 8.90 par mois avec le package (page assurances enfants) ; rabais de 15 % sur Denta Ortho en cas de souscription avant la naissance. Rabais de 20 % sur les assurances complémentaires des enfants mineurs si au moins deux personnes de la même famille sont assurées chez Assura (sauf gamme Previsia et Denta Ortho)."
+      },
+      "conditionsDoc": {
+        "title": "Pas de conditions propres : CSC des sept produits composant le package + CGA LCA 07.2015",
+        "edition": "07.2015 (mise à jour 01.2022)",
+        "url": "https://static.assura.ch/blue/cockpit-assets/2025/02/20/CGA_ASSURA_LCA_-07.2015-MAJ-01.2022_F_uid_67b7432312070.pdf"
+      },
+      "sourceUrls": [
+        "https://www.assura.ch/fr/assurances/assurances-complementaires/package-enfants",
+        "https://www.assura.ch/fr/assurances/situation-de-vie/assurances-nouveau-nes",
+        "https://www.assura.ch/fr/assurances/situation-de-vie/assurances-enfants"
+      ],
+      "tags": [
+        "bonus_program",
+        "newborn_coverage"
+      ],
+      "benefitCount": 2
+    },
     {
       "insurer": "axa",
       "key": "axa-sante-actif",
@@ -1226,6 +2474,795 @@
         "daily_allowance"
       ],
       "benefitCount": 4
+    },
+    {
+      "insurer": "helsana",
+      "key": "helsana-top",
+      "name": "TOP",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Assurance complémentaire des soins pour prestations ambulatoires importantes : médicaments hors liste, urgences et assistance à l'étranger, transports, lunettes, moyens auxiliaires, orthodontie jusqu'à 20 ans, thérapies spéciales et protection juridique santé/étranger.",
+      "variants": [],
+      "prerequisites": "Domicile officiel en Suisse ; déclaration de santé avec admission. Couverture accident excluable contre réduction de prime.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Classes d'âge de 5 ans (0-5 ans, 6-10 ans, etc.) jusqu'à la classe 91+ au maximum ; passage automatique à l'échelon supérieur à l'entrée dans une nouvelle classe ; la dernière classe déterminante pour le produit figure dans la police (CGA éd. 01.01.2027, ch. 12.1). Âge de référence : « âge actuel » de la personne assurée (le texte ne précise pas s'il s'agit de l'âge atteint dans l'année civile ou de l'âge au jour anniversaire). Seules les bornes 0-5, 6-10 et 91+ sont écrites ; les classes intermédiaires (11-15 … 86-90) sont déduites du « etc. ».",
+        "discounts": "Rabais de famille (personnes du même ménage dans le même contrat) : 5 % dès 2 personnes, 10 % dès 3 personnes. Rabais pluriannuel pour les nouveaux clients : 3 % pour un contrat de 3 ans. Suspension possible contre réduction de prime en cas d'autre couverture prouvée."
+      },
+      "conditionsDoc": {
+        "title": "Conditions supplémentaires d'assurance (CSA) – Assurance complémentaire des soins TOP",
+        "edition": "01.01.2021",
+        "url": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/top.pdf"
+      },
+      "sourceUrls": [
+        "https://www.helsana.ch/fr/prives/assurances/assurances-complementaires/ambulatoires/top.html",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/top.pdf",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/assurances-maladie-complementaires.pdf",
+        "https://www.helsana.ch/docs/cahier-de-produits.pdf",
+        "https://www.helsana.ch/content/dam/helsana/fr/pdf/prives/brochures/apercu-prestations.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "assistance_services",
+        "glasses_lenses",
+        "legal_protection",
+        "medical_aids",
+        "medication_non_listed",
+        "newborn_coverage",
+        "orthodontics",
+        "psychotherapy_non_medical",
+        "search_recovery",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "upgrade_option"
+      ],
+      "benefitCount": 17
+    },
+    {
+      "insurer": "helsana",
+      "key": "helsana-sana",
+      "name": "SANA",
+      "category": "alternative_medicine",
+      "audience": "all",
+      "summary": "Assurance complémentaire des soins pour la médecine complémentaire (traitements et remèdes), la prévention médicale et la promotion de la santé.",
+      "variants": [],
+      "prerequisites": "Domicile officiel en Suisse ; déclaration de santé avec admission. Couverture accident excluable.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Classes d'âge de 5 ans (0-5 ans, 6-10 ans, etc.) jusqu'à la classe 91+ au maximum ; passage automatique à l'échelon supérieur à l'entrée dans une nouvelle classe ; la dernière classe déterminante pour le produit figure dans la police (CGA éd. 01.01.2027, ch. 12.1). Âge de référence : « âge actuel » de la personne assurée (le texte ne précise pas s'il s'agit de l'âge atteint dans l'année civile ou de l'âge au jour anniversaire). Seules les bornes 0-5, 6-10 et 91+ sont écrites ; les classes intermédiaires (11-15 … 86-90) sont déduites du « etc. ».",
+        "discounts": "Rabais de famille (personnes du même ménage dans le même contrat) : 5 % dès 2 personnes, 10 % dès 3 personnes. Rabais pluriannuel pour les nouveaux clients : 3 % pour un contrat de 3 ans. Suspension possible contre réduction de prime en cas d'autre couverture prouvée."
+      },
+      "conditionsDoc": {
+        "title": "Conditions supplémentaires d'assurance (CSA) – Assurance complémentaire des soins SANA",
+        "edition": "01.01.2021",
+        "url": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/sana.pdf"
+      },
+      "sourceUrls": [
+        "https://www.helsana.ch/fr/prives/assurances/assurances-complementaires/ambulatoires/sana.html",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/sana.pdf",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/assurances-maladie-complementaires.pdf",
+        "https://www.helsana.ch/docs/cahier-de-produits.pdf",
+        "https://www.helsana.ch/content/dam/helsana/fr/pdf/prives/brochures/apercu-prestations.pdf",
+        "https://www.helsana.ch/fr/meta/versicherungsleistungen/gesundheitsfoerderung/sana.popup.html",
+        "https://www.helsana.ch/fr/meta/versicherungsleistungen/komplementaermedizin/sana.popup.html"
+      ],
+      "tags": [
+        "alt_medicine_remedies",
+        "alt_medicine_therapies",
+        "fitness_health_promotion",
+        "maternity",
+        "newborn_coverage",
+        "prevention_checkup"
+      ],
+      "benefitCount": 7
+    },
+    {
+      "insurer": "helsana",
+      "key": "helsana-completa",
+      "name": "COMPLETA",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Assurance complémentaire des soins réunissant les prestations de TOP et de SANA avec des plafonds plus élevés, plus les médecins non conventionnés et les traitements ambulatoires choisis à l'étranger.",
+      "variants": [],
+      "prerequisites": "Domicile officiel en Suisse ; déclaration de santé avec admission. Couverture accident excluable contre réduction de prime.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Classes d'âge de 5 ans (0-5 ans, 6-10 ans, etc.) jusqu'à la classe 91+ au maximum ; passage automatique à l'échelon supérieur à l'entrée dans une nouvelle classe ; la dernière classe déterminante pour le produit figure dans la police (CGA éd. 01.01.2027, ch. 12.1). Âge de référence : « âge actuel » de la personne assurée (le texte ne précise pas s'il s'agit de l'âge atteint dans l'année civile ou de l'âge au jour anniversaire). Seules les bornes 0-5, 6-10 et 91+ sont écrites ; les classes intermédiaires (11-15 … 86-90) sont déduites du « etc. ».",
+        "discounts": "Rabais de famille (personnes du même ménage dans le même contrat) : 5 % dès 2 personnes, 10 % dès 3 personnes. Rabais pluriannuel pour les nouveaux clients : 3 % pour un contrat de 3 ans. Suspension possible contre réduction de prime en cas d'autre couverture prouvée."
+      },
+      "conditionsDoc": {
+        "title": "Conditions supplémentaires d'assurance (CSA) – Assurance complémentaire des soins COMPLETA",
+        "edition": "01.01.2027",
+        "url": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/completa.pdf"
+      },
+      "sourceUrls": [
+        "https://www.helsana.ch/fr/prives/assurances/assurances-complementaires/ambulatoires/completa.html",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/completa.pdf",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/assurances-maladie-complementaires.pdf",
+        "https://www.helsana.ch/docs/cahier-de-produits.pdf",
+        "https://www.helsana.ch/content/dam/helsana/fr/pdf/prives/brochures/apercu-prestations.pdf",
+        "https://www.helsana.ch/fr/meta/versicherungsleistungen/gesundheitsfoerderung/completa.popup.html",
+        "https://www.helsana.ch/fr/meta/versicherungsleistungen/komplementaermedizin/completa.popup.html",
+        "https://www.helsana.ch/fr/meta/versicherungsleistungen/arzneimittel/completa.popup.html"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "abroad_planned_treatment",
+        "alt_medicine_remedies",
+        "alt_medicine_therapies",
+        "ambulatory_free_doctor_choice",
+        "assistance_services",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "legal_protection",
+        "maternity",
+        "medical_aids",
+        "medication_non_listed",
+        "newborn_coverage",
+        "orthodontics",
+        "prevention_checkup",
+        "psychotherapy_non_medical",
+        "search_recovery",
+        "transport_rescue",
+        "travel_assistance_repatriation",
+        "upgrade_option"
+      ],
+      "benefitCount": 30
+    },
+    {
+      "insurer": "helsana",
+      "key": "helsana-completa-plus",
+      "name": "COMPLETA PLUS",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Extension de COMPLETA : remboursements complémentaires pour lunettes (monture comprise), correction au laser, médecine complémentaire, prévention, promotion de la santé, thérapies spéciales, traitements choisis à l'étranger et actions de recherche en Suisse.",
+      "variants": [],
+      "prerequisites": "Souscription possible uniquement en combinaison avec COMPLETA (déjà conclue ou demandée en même temps) ; domicile officiel en Suisse. S'éteint avec COMPLETA.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Classes d'âge de 5 ans (0-5 ans, 6-10 ans, etc.) jusqu'à la classe 91+ au maximum ; passage automatique à l'échelon supérieur à l'entrée dans une nouvelle classe ; la dernière classe déterminante pour le produit figure dans la police (CGA éd. 01.01.2027, ch. 12.1). Âge de référence : « âge actuel » de la personne assurée (le texte ne précise pas s'il s'agit de l'âge atteint dans l'année civile ou de l'âge au jour anniversaire). Seules les bornes 0-5, 6-10 et 91+ sont écrites ; les classes intermédiaires (11-15 … 86-90) sont déduites du « etc. ».",
+        "discounts": "Rabais de famille (personnes du même ménage dans le même contrat) : 5 % dès 2 personnes, 10 % dès 3 personnes. Rabais pluriannuel pour les nouveaux clients : 3 % pour un contrat de 3 ans."
+      },
+      "conditionsDoc": {
+        "title": "Conditions supplémentaires d'assurance (CSA) – Assurance complémentaire des soins COMPLETA PLUS",
+        "edition": "01.01.2024",
+        "url": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/completa-plus.pdf"
+      },
+      "sourceUrls": [
+        "https://www.helsana.ch/fr/prives/assurances/assurances-complementaires/ambulatoires/completa/completa-plus.html",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/completa-plus.pdf",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/assurances-maladie-complementaires.pdf",
+        "https://www.helsana.ch/docs/cahier-de-produits.pdf",
+        "https://www.helsana.ch/content/dam/helsana/fr/pdf/prives/brochures/apercu-prestations.pdf"
+      ],
+      "tags": [
+        "abroad_planned_treatment",
+        "alt_medicine_therapies",
+        "fitness_health_promotion",
+        "glasses_lenses",
+        "prevention_checkup",
+        "psychotherapy_non_medical",
+        "search_recovery",
+        "vision_laser"
+      ],
+      "benefitCount": 10
+    },
+    {
+      "insurer": "helsana",
+      "key": "helsana-primeo",
+      "name": "PRIMEO",
+      "category": "ambulatory_bundle",
+      "audience": "all",
+      "summary": "Assurance complémentaire pour les interventions ambulatoires à l'hôpital : libre choix du médecin et confort dans les établissements partenaires, innovations médicales, implants, check-up et services d'accompagnement.",
+      "variants": [],
+      "prerequisites": "Domicile officiel en Suisse ; examen de santé avec décision d'admission positive. Contacter Helsana avant chaque traitement. Couverture accident excluable.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Classes d'âge de 5 ans (0-5 ans, 6-10 ans, etc.) jusqu'à la classe 91+ au maximum ; passage automatique à l'échelon supérieur à l'entrée dans une nouvelle classe ; la dernière classe déterminante pour le produit figure dans la police (CGA éd. 01.01.2027, ch. 12.1). Âge de référence : « âge actuel » de la personne assurée (le texte ne précise pas s'il s'agit de l'âge atteint dans l'année civile ou de l'âge au jour anniversaire). Seules les bornes 0-5, 6-10 et 91+ sont écrites ; les classes intermédiaires (11-15 … 86-90) sont déduites du « etc. ».",
+        "discounts": "Rabais de famille (personnes du même ménage dans le même contrat) : 5 % dès 2 personnes, 10 % dès 3 personnes. Rabais pluriannuel pour les nouveaux clients : 3 % pour un contrat de 3 ans. Le plafonnement de prime du ch. 12.2 CGA n'est pas applicable (CSA ch. 16)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions supplémentaires d'assurance (CSA) – Assurance complémentaire des soins pour les prestations ambulatoires PRIMEO",
+        "edition": "01.01.2025",
+        "url": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/primeo.pdf"
+      },
+      "sourceUrls": [
+        "https://www.helsana.ch/fr/prives/assurances/assurances-complementaires/ambulatoires/primeo.html",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/primeo.pdf",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/assurances-maladie-complementaires.pdf",
+        "https://www.helsana.ch/docs/cahier-de-produits.pdf",
+        "https://www.helsana.ch/content/dam/helsana/fr/pdf/prives/brochures/apercu-prestations.pdf",
+        "https://www.helsana.ch/dam/fr/pdf/prives/listes/etablissements-partenaires-reconnus-primeo.pdf"
+      ],
+      "tags": [
+        "abroad_planned_treatment",
+        "ambulatory_surgery",
+        "childcare_assistance",
+        "home_help",
+        "innovative_treatments",
+        "medical_aids",
+        "other:implants",
+        "other:pet_care",
+        "prevention_checkup",
+        "rooming_in",
+        "spa_cure",
+        "telemedicine_services",
+        "travel_expenses_treatment"
+      ],
+      "benefitCount": 15
+    },
+    {
+      "insurer": "helsana",
+      "key": "helsana-world",
+      "name": "WORLD",
+      "category": "travel_abroad",
+      "audience": "all",
+      "summary": "Assurance pour la couverture à l'étranger : frais de guérison d'urgence dépassant l'assurance de base, assistance, rapatriement et frais de voyage.",
+      "variants": [],
+      "prerequisites": "Domicile officiel en Suisse ; assurance de base auprès du Groupe Helsana (existante ou demandée en même temps). Aucune déclaration de santé : les affections ou événements déjà survenus ou connus au début de l'assurance ou à la réservation du voyage ne sont pas assurés.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Classes d'âge de 5 ans (0-5 ans, 6-10 ans, etc.) jusqu'à la classe 91+ au maximum ; passage automatique à l'échelon supérieur à l'entrée dans une nouvelle classe ; la dernière classe déterminante pour le produit figure dans la police (CGA éd. 01.01.2027, ch. 12.1). Âge de référence : « âge actuel » de la personne assurée (le texte ne précise pas s'il s'agit de l'âge atteint dans l'année civile ou de l'âge au jour anniversaire). Seules les bornes 0-5, 6-10 et 91+ sont écrites ; les classes intermédiaires (11-15 … 86-90) sont déduites du « etc. ».",
+        "discounts": "Rabais de famille (personnes du même ménage dans le même contrat) : 5 % dès 2 personnes, 10 % dès 3 personnes."
+      },
+      "conditionsDoc": {
+        "title": "Conditions supplémentaires d'assurance (CSA) – Assurance WORLD pour couverture à l'étranger",
+        "edition": "01.01.2011",
+        "url": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/world.pdf"
+      },
+      "sourceUrls": [
+        "https://www.helsana.ch/fr/prives/assurances/assurances-complementaires/ambulatoires/world.html",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/world.pdf",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/assurances-maladie-complementaires.pdf",
+        "https://www.helsana.ch/docs/cahier-de-produits.pdf",
+        "https://www.helsana.ch/content/dam/helsana/fr/pdf/prives/brochures/apercu-prestations.pdf"
+      ],
+      "tags": [
+        "abroad_emergency",
+        "assistance_services",
+        "search_recovery",
+        "travel_assistance_repatriation",
+        "travel_cancellation_luggage"
+      ],
+      "benefitCount": 9
+    },
+    {
+      "insurer": "helsana",
+      "key": "helsana-hospital-eco",
+      "name": "HOSPITAL ECO",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Assurance complémentaire d'hospitalisation en division commune avec libre choix de l'hôpital dans toute la Suisse et contributions pour soins de transition, cures, aide-ménagère et garde d'enfants.",
+      "variants": [],
+      "prerequisites": "Domicile officiel en Suisse ; examen de santé avec décision d'admission positive (admission prénatale sans examen dans le Baby Package). Couverture accident excluable ; ré-inclusion sans examen de santé possible jusqu'à 70 ans révolus.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Classes d'âge de 5 ans (0-5 ans, 6-10 ans, etc.) jusqu'à la classe 91+ au maximum ; passage automatique à l'échelon supérieur à l'entrée dans une nouvelle classe ; la dernière classe déterminante pour le produit figure dans la police (CGA éd. 01.01.2027, ch. 12.1). Âge de référence : « âge actuel » de la personne assurée (le texte ne précise pas s'il s'agit de l'âge atteint dans l'année civile ou de l'âge au jour anniversaire). Seules les bornes 0-5, 6-10 et 91+ sont écrites ; les classes intermédiaires (11-15 … 86-90) sont déduites du « etc. ».",
+        "discounts": "Rabais de famille (personnes du même ménage dans le même contrat) : 5 % dès 2 personnes, 10 % dès 3 personnes. Rabais pluriannuel pour les nouveaux clients : 3 % pour un contrat de 3 ans."
+      },
+      "conditionsDoc": {
+        "title": "Conditions supplémentaires d'assurance (CSA) – Assurance complémentaire d'hospitalisation HOSPITAL ECO",
+        "edition": "01.01.2016",
+        "url": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-eco.pdf"
+      },
+      "sourceUrls": [
+        "https://www.helsana.ch/fr/prives/assurances/assurances-complementaires/assurance-hospitalisation/hospital-eco.html",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-eco.pdf",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/assurances-maladie-complementaires.pdf",
+        "https://www.helsana.ch/docs/cahier-de-produits.pdf",
+        "https://www.helsana.ch/content/dam/helsana/fr/pdf/prives/brochures/apercu-prestations.pdf"
+      ],
+      "tags": [
+        "childcare_assistance",
+        "home_help",
+        "hospital_abroad",
+        "hospital_flex",
+        "hospital_general_ch",
+        "newborn_coverage",
+        "other:acute_transition_care",
+        "psychiatry_rehab_stay",
+        "spa_cure"
+      ],
+      "benefitCount": 10
+    },
+    {
+      "insurer": "helsana",
+      "key": "helsana-hospital-demi-privee-privee",
+      "name": "HOSPITAL Demi-Privée / HOSPITAL Privée",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Assurances complémentaires d'hospitalisation en division demi-privée (chambre à deux lits) ou privée (chambre individuelle) avec libre choix du médecin dans les hôpitaux reconnus de toute la Suisse ; mêmes conditions supplémentaires, montants différenciés par division.",
+      "variants": [
+        {
+          "key": "demi-privee",
+          "name": "HOSPITAL Demi-Privée",
+          "description": "Division demi-privée, chambre à deux lits ; contributions annexes au niveau inférieur."
+        },
+        {
+          "key": "privee",
+          "name": "HOSPITAL Privée",
+          "description": "Division privée, chambre individuelle ; contributions annexes doublées et couverture intégrale à l'étranger."
+        }
+      ],
+      "prerequisites": "Domicile officiel en Suisse ; examen de santé avec décision d'admission positive. Accident et maternité excluables. Passage de Privée à Demi-Privée sans examen de santé après la durée minimale ; l'inverse sur questionnaire de santé.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "deductible",
+          "accident"
+        ],
+        "ageBands": "Classes d'âge de 5 ans (0-5 ans, 6-10 ans, etc.) jusqu'à la classe 91+ au maximum ; passage automatique à l'échelon supérieur à l'entrée dans une nouvelle classe ; la dernière classe déterminante pour le produit figure dans la police (CGA éd. 01.01.2027, ch. 12.1). Âge de référence : « âge actuel » de la personne assurée (le texte ne précise pas s'il s'agit de l'âge atteint dans l'année civile ou de l'âge au jour anniversaire). Seules les bornes 0-5, 6-10 et 91+ sont écrites ; les classes intermédiaires (11-15 … 86-90) sont déduites du « etc. ».",
+        "discounts": "Rabais de famille (personnes du même ménage dans le même contrat) : 5 % dès 2 personnes, 10 % dès 3 personnes. Rabais pluriannuel pour les nouveaux clients : 3 % pour un contrat de 3 ans. Franchise hospitalière : 15 % (CHF 1000), 20 % (CHF 2000), 25 % (CHF 3000), 30 % (CHF 5000), 35 % (CHF 7000). Réduction en cas d'exclusion de la maternité, selon le groupe d'âge. Le plafonnement du ch. 12.2 CGA n'est pas applicable (CSA ch. 15)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions supplémentaires d'assurance (CSA) – Assurances complémentaires d'hospitalisation HOSPITAL Demi-Privée et HOSPITAL Privée",
+        "edition": "01.09.2018",
+        "url": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-demiprivee-privee.pdf"
+      },
+      "sourceUrls": [
+        "https://www.helsana.ch/fr/prives/assurances/assurances-complementaires/assurance-hospitalisation/hospital-demi-privee.html",
+        "https://www.helsana.ch/fr/prives/assurances/assurances-complementaires/assurance-hospitalisation/hospital-privee.html",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-demiprivee-privee.pdf",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/assurances-maladie-complementaires.pdf",
+        "https://www.helsana.ch/docs/cahier-de-produits.pdf",
+        "https://www.helsana.ch/content/dam/helsana/fr/pdf/prives/brochures/apercu-prestations.pdf",
+        "https://www.helsana.ch/fr/prives/services/finances/economies-de-primes.html"
+      ],
+      "tags": [
+        "childcare_assistance",
+        "home_help",
+        "hospital_abroad",
+        "hospital_deductible_option",
+        "hospital_flex",
+        "hospital_private",
+        "hospital_semi_private",
+        "maternity",
+        "newborn_coverage",
+        "other:acute_transition_care",
+        "other:fast_track",
+        "other:lower_ward_allowance",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "second_opinion",
+        "spa_cure",
+        "travel_expenses_treatment"
+      ],
+      "benefitCount": 27
+    },
+    {
+      "insurer": "helsana",
+      "key": "helsana-hospital-flex",
+      "name": "HOSPITAL FLEX",
+      "category": "hospital",
+      "audience": "all",
+      "summary": "Assurance d'hospitalisation flexible : choix de la division (commune, demi-privée ou privée) à chaque séjour, avec participation aux coûts en division supérieure ; module complémentaire optionnel pour cures, aide ménagère, garde d'enfants et soins de transition.",
+      "variants": [
+        {
+          "key": "flex1",
+          "name": "HOSPITAL FLEX 1",
+          "description": "Participation : 35 % en demi-privé (max. CHF 3000/an), 50 % en privé (max. CHF 9000/an) ; étranger CHF 500/jour."
+        },
+        {
+          "key": "flex2",
+          "name": "HOSPITAL FLEX 2",
+          "description": "Participation : 20 % en demi-privé (max. CHF 2000/an), 35 % en privé (max. CHF 4000/an) ; étranger CHF 1000/jour."
+        }
+      ],
+      "prerequisites": "Domicile officiel en Suisse ; moins de 70 ans à la conclusion ; questionnaire de santé avec décision d'admission. Couverture accident excluable ; module complémentaire FLEX en option.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Classes d'âge de 5 ans (0-5 ans, 6-10 ans, etc.) jusqu'à la classe 91+ au maximum ; passage automatique à l'échelon supérieur à l'entrée dans une nouvelle classe ; la dernière classe déterminante pour le produit figure dans la police (CGA éd. 01.01.2027, ch. 12.1). Âge de référence : « âge actuel » de la personne assurée (le texte ne précise pas s'il s'agit de l'âge atteint dans l'année civile ou de l'âge au jour anniversaire). Seules les bornes 0-5, 6-10 et 91+ sont écrites ; les classes intermédiaires (11-15 … 86-90) sont déduites du « etc. ».",
+        "discounts": "Rabais de famille (personnes du même ménage dans le même contrat) : 5 % dès 2 personnes, 10 % dès 3 personnes. Rabais pluriannuel pour les nouveaux clients : 3 % pour un contrat de 3 ans. Prime selon variante (FLEX 1 / FLEX 2) et inclusion du module complémentaire. CSA ch. 15 : primes « en fonction de l'âge et du sexe », groupe d'âge selon l'âge actuel ; le plafonnement du ch. 12.2 CGA n'est pas applicable (la région relève du ch. 12.3 CGA)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions supplémentaires d'assurance (CSA) – HOSPITAL FLEX",
+        "edition": "01.01.2025",
+        "url": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf"
+      },
+      "sourceUrls": [
+        "https://www.helsana.ch/fr/prives/assurances/assurances-complementaires/assurance-hospitalisation/hospital-flex.html",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-flex.pdf",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/assurances-maladie-complementaires.pdf",
+        "https://www.helsana.ch/docs/cahier-de-produits.pdf",
+        "https://www.helsana.ch/content/dam/helsana/fr/pdf/prives/brochures/apercu-prestations.pdf"
+      ],
+      "tags": [
+        "childcare_assistance",
+        "home_help",
+        "hospital_abroad",
+        "hospital_flex",
+        "hospital_general_ch",
+        "maternity",
+        "newborn_coverage",
+        "other:acute_transition_care",
+        "psychiatry_rehab_stay",
+        "rooming_in",
+        "spa_cure"
+      ],
+      "benefitCount": 17
+    },
+    {
+      "insurer": "helsana",
+      "key": "helsana-hospital-extra",
+      "name": "HOSPITAL EXTRA",
+      "category": "hospital_daily_cash",
+      "audience": "all",
+      "summary": "Assurance d'indemnités journalières d'hospitalisation versées sans justificatif de coûts lors d'un séjour en hôpital de soins aigus ou en clinique de réadaptation en Suisse.",
+      "variants": [],
+      "prerequisites": "Domicile officiel en Suisse ; déclaration de santé avec admission.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Classes d'âge de 5 ans (0-5 ans, 6-10 ans, etc.) jusqu'à la classe 91+ au maximum ; passage automatique à l'échelon supérieur à l'entrée dans une nouvelle classe ; la dernière classe déterminante pour le produit figure dans la police (CGA éd. 01.01.2027, ch. 12.1). Âge de référence : « âge actuel » de la personne assurée (le texte ne précise pas s'il s'agit de l'âge atteint dans l'année civile ou de l'âge au jour anniversaire). Seules les bornes 0-5, 6-10 et 91+ sont écrites ; les classes intermédiaires (11-15 … 86-90) sont déduites du « etc. ».",
+        "discounts": "Rabais de famille (personnes du même ménage dans le même contrat) : 5 % dès 2 personnes, 10 % dès 3 personnes. Sous certaines conditions, 50 % de rabais la première année pour les enfants de moins de 18 ans (page produit). Prime selon le montant journalier choisi ; le plafonnement du ch. 12.2 CGA n'est pas applicable (CSA ch. 6)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions supplémentaires d'assurance (CSA) – Assurance indemnités journalières d'hospitalisation HOSPITAL EXTRA",
+        "edition": "01.01.2014",
+        "url": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-extra.pdf"
+      },
+      "sourceUrls": [
+        "https://www.helsana.ch/fr/prives/assurances/assurances-complementaires/autres/hospital-extra.html",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/hospital-extra.pdf",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/assurances-maladie-complementaires.pdf",
+        "https://www.helsana.ch/docs/cahier-de-produits.pdf",
+        "https://www.helsana.ch/content/dam/helsana/fr/pdf/prives/brochures/apercu-prestations.pdf"
+      ],
+      "tags": [
+        "hospital_daily_cash"
+      ],
+      "benefitCount": 1
+    },
+    {
+      "insurer": "helsana",
+      "key": "helsana-dentaplus",
+      "name": "DENTAplus",
+      "category": "dental",
+      "audience": "all",
+      "summary": "Assurance des soins dentaires en cinq variantes (LIGHT, BRONZE, ARGENT, OR, COMBI) couvrant traitements, hygiène dentaire, contrôles, orthodontie et chirurgie maxillaire dans le monde entier au tarif suisse.",
+      "variants": [
+        {
+          "key": "light",
+          "name": "DENTAplus LIGHT",
+          "description": "75 %, max. CHF 300 par année civile ; sans examen de santé ni contrôle dentaire."
+        },
+        {
+          "key": "bronze",
+          "name": "DENTAplus BRONZE",
+          "description": "50 %, max. CHF 1000 par année civile."
+        },
+        {
+          "key": "argent",
+          "name": "DENTAplus ARGENT",
+          "description": "75 %, max. CHF 2000 par année civile."
+        },
+        {
+          "key": "or",
+          "name": "DENTAplus OR",
+          "description": "75 %, max. CHF 3000 par année civile."
+        },
+        {
+          "key": "combi",
+          "name": "DENTAplus COMBI",
+          "description": "50 % (max. CHF 1000) jusqu'à CHF 2000 de frais, puis 80 % de la part excédant CHF 2000, sans limite annuelle."
+        }
+      ],
+      "prerequisites": "Domicile en Suisse ; moins de 50 ans à la conclusion ; déclaration de santé (examen du risque), sauf variante LIGHT et enfants de moins de 3 ans ; pas de radiographies demandées jusqu'au 7e anniversaire. Durée minimale d'un an.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Classes d'âge de 5 ans (0-5 ans, 6-10 ans, etc.) jusqu'à la classe 91+ au maximum ; passage automatique à l'échelon supérieur à l'entrée dans une nouvelle classe ; la dernière classe déterminante pour le produit figure dans la police (CGA éd. 01.01.2027, ch. 12.1). Âge de référence : « âge actuel » de la personne assurée (le texte ne précise pas s'il s'agit de l'âge atteint dans l'année civile ou de l'âge au jour anniversaire). Seules les bornes 0-5, 6-10 et 91+ sont écrites ; les classes intermédiaires (11-15 … 86-90) sont déduites du « etc. ».",
+        "discounts": "Rabais de famille (personnes du même ménage dans le même contrat) : 5 % dès 2 personnes, 10 % dès 3 personnes."
+      },
+      "conditionsDoc": {
+        "title": "Conditions supplémentaires d'assurance (CSA) – DENTAplus, l'assurance des soins dentaires flexible pour tous les besoins",
+        "edition": "01.01.2009",
+        "url": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/dentaplus.pdf"
+      },
+      "sourceUrls": [
+        "https://www.helsana.ch/fr/prives/assurances/assurances-complementaires/assurance-dentaire.html",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/dentaplus.pdf",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/assurances-maladie-complementaires.pdf",
+        "https://www.helsana.ch/docs/cahier-de-produits.pdf",
+        "https://www.helsana.ch/content/dam/helsana/fr/pdf/prives/brochures/apercu-prestations.pdf"
+      ],
+      "tags": [
+        "dental_treatment",
+        "newborn_coverage"
+      ],
+      "benefitCount": 7
+    },
+    {
+      "insurer": "helsana",
+      "key": "helsana-prevea-accident",
+      "name": "PREVEA Accident",
+      "category": "capital_accident",
+      "audience": "all",
+      "summary": "Assurance de capital en cas de décès et d'invalidité consécutifs à un accident (assurance de sommes portée par Solida Assurances SA via un contrat collectif), avec prestations complémentaires selon les normes LAA fournies par Helsana.",
+      "variants": [],
+      "prerequisites": "Moins de 70 ans à la conclusion ; déclaration de santé avec admission (page produit). Sans durée minimale : résiliable en tout temps pour la fin d'un mois (préavis 3 mois). Combinable avec PREVEA Maladie.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Rémunération échelonnée par classes d'âge, selon les sommes assurées ; passage à la classe supérieure au début de l'année civile. Âge déterminant = année civile moins année de naissance (CGA PREVEA Accident éd. 01.01.2022, ch. 9). Bornes des classes non publiées.",
+        "discounts": "Aucun rabais de famille sur PREVEA (page « Économies de primes »)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions générales d'assurance (CGA) de PREVEA – Assurance de capital en cas de décès et d'invalidité consécutive à un accident",
+        "edition": "01.01.2022",
+        "url": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/prevea-accident.pdf"
+      },
+      "sourceUrls": [
+        "https://www.helsana.ch/fr/prives/assurances/assurances-complementaires/autres/prevea-accident.html",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/prevea-accident.pdf",
+        "https://www.helsana.ch/docs/cahier-de-produits.pdf",
+        "https://www.helsana.ch/content/dam/helsana/fr/pdf/prives/brochures/apercu-prestations.pdf"
+      ],
+      "tags": [
+        "accident_capital",
+        "home_care",
+        "medical_aids",
+        "other:funeral_costs",
+        "other:mobility_costs",
+        "other:retraining_costs",
+        "premium_waiver",
+        "transport_rescue"
+      ],
+      "benefitCount": 9
+    },
+    {
+      "insurer": "helsana",
+      "key": "helsana-prevea-maladie",
+      "name": "PREVEA Maladie",
+      "category": "capital_illness",
+      "audience": "all",
+      "summary": "Assurance de capital en cas de décès et d'invalidité consécutifs à une maladie (assurance de sommes portée par Helvetia Compagnie Suisse d'Assurances sur la Vie SA via un contrat collectif).",
+      "variants": [],
+      "prerequisites": "Moins de 55 ans à la conclusion ; déclaration de santé (examen de santé). S'éteint le 31 décembre qui suit l'âge de 59 ans révolus. Résiliable en tout temps pour la fin d'un mois (préavis 3 mois). Combinable avec PREVEA Accident.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex"
+        ],
+        "ageBands": "Groupes d'âge de 5 ans (0-5 ans, 6-10 ans, etc.) ; rémunération selon l'âge, le sexe et la somme assurée ; passage au tarif supérieur à l'entrée dans un groupe plus élevé (CGA PREVEA Maladie éd. 01.01.2023, ch. 8). Âge de référence non précisé.",
+        "discounts": "Aucun rabais de famille sur PREVEA (page « Économies de primes »)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions générales d'assurance (CGA) de PREVEA – Assurance de capital en cas de décès et d'invalidité consécutive à une maladie",
+        "edition": "01.01.2023",
+        "url": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/prevea-maladie.pdf"
+      },
+      "sourceUrls": [
+        "https://www.helsana.ch/fr/prives/assurances/assurances-complementaires/autres/prevea-maladie.html",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/prevea-maladie.pdf",
+        "https://www.helsana.ch/docs/cahier-de-produits.pdf",
+        "https://www.helsana.ch/content/dam/helsana/fr/pdf/prives/brochures/apercu-prestations.pdf"
+      ],
+      "tags": [
+        "illness_capital"
+      ],
+      "benefitCount": 2
+    },
+    {
+      "insurer": "helsana",
+      "key": "helsana-cura",
+      "name": "CURA",
+      "category": "long_term_care",
+      "audience": "all",
+      "summary": "Assurance des soins de longue durée : forfait journalier pour les frais d'hôtellerie non couverts en établissement médico-social ou pour l'aide ménagère lors de soins à domicile (assurance de dommages, frais à attester).",
+      "variants": [],
+      "prerequisites": "Moins de 70 ans à la conclusion ; déclaration de santé avec admission.",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Classes d'âge de 5 ans (0-5 ans, 6-10 ans, etc.) jusqu'à la classe 91+ au maximum ; passage automatique à l'échelon supérieur à l'entrée dans une nouvelle classe ; la dernière classe déterminante pour le produit figure dans la police (CGA éd. 01.01.2027, ch. 12.1). Âge de référence : « âge actuel » de la personne assurée (le texte ne précise pas s'il s'agit de l'âge atteint dans l'année civile ou de l'âge au jour anniversaire). Seules les bornes 0-5, 6-10 et 91+ sont écrites ; les classes intermédiaires (11-15 … 86-90) sont déduites du « etc. ».",
+        "discounts": "Rabais de famille (personnes du même ménage dans le même contrat) : 5 % dès 2 personnes, 10 % dès 3 personnes. Prime selon le forfait journalier et le délai d'attente choisis ; elle augmente avec l'âge (cahier de produits)."
+      },
+      "conditionsDoc": {
+        "title": "Conditions supplémentaires d'assurance (CSA) – Assurance des soins de longue durée CURA",
+        "edition": "01.01.2011",
+        "url": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/cura.pdf"
+      },
+      "sourceUrls": [
+        "https://www.helsana.ch/fr/prives/assurances/assurances-complementaires/autres/cura.html",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/cura.pdf",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/assurances-maladie-complementaires.pdf",
+        "https://www.helsana.ch/docs/cahier-de-produits.pdf",
+        "https://www.helsana.ch/content/dam/helsana/fr/pdf/prives/brochures/apercu-prestations.pdf"
+      ],
+      "tags": [
+        "long_term_care"
+      ],
+      "benefitCount": 2
+    },
+    {
+      "insurer": "helsana",
+      "key": "helsana-vivante",
+      "name": "VIVANTE",
+      "category": "long_term_care",
+      "audience": "adult",
+      "summary": "Assurance des soins de longue durée sous forme d'indemnité journalière librement disponible (assurance de sommes), versée selon quatre niveaux de soins, à domicile ou en établissement.",
+      "variants": [],
+      "prerequisites": "Entre 16 et 70 ans à la conclusion ; déclaration de santé avec admission. Prend fin en cas de transfert du domicile à l'étranger.",
+      "pricing": {
+        "factors": [
+          "entry_age",
+          "sex",
+          "region"
+        ],
+        "ageBands": "Prime à l'âge d'admission (CSA VIVANTE éd. 01.01.2022, ch. 12, en dérogation au ch. 12.1 CGA) ; échelons d'âge d'entrée non publiés. Le plafonnement du ch. 12.2 CGA n'est pas applicable.",
+        "discounts": "Rabais de famille (personnes du même ménage dans le même contrat) : 5 % dès 2 personnes, 10 % dès 3 personnes. Prime définie selon l'âge d'admission : l'échelon de prime reste inchangé pendant toute la durée de l'assurance."
+      },
+      "conditionsDoc": {
+        "title": "Conditions supplémentaires d'assurance (CSA) VIVANTE – l'assurance des soins de longue durée pour les privés",
+        "edition": "01.01.2022",
+        "url": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/vivante.pdf"
+      },
+      "sourceUrls": [
+        "https://www.helsana.ch/fr/prives/assurances/assurances-complementaires/autres/vivante.html",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/vivante.pdf",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/assurances-maladie-complementaires.pdf",
+        "https://www.helsana.ch/docs/cahier-de-produits.pdf",
+        "https://www.helsana.ch/content/dam/helsana/fr/pdf/prives/brochures/apercu-prestations.pdf"
+      ],
+      "tags": [
+        "long_term_care"
+      ],
+      "benefitCount": 1
+    },
+    {
+      "insurer": "helsana",
+      "key": "helsana-salaria-lca",
+      "name": "SALARIA (LCA)",
+      "category": "daily_allowance",
+      "audience": "adult",
+      "summary": "Assurance d'indemnités journalières perte de gain selon la LCA (assurance de dommages) en cas d'incapacité de travail due à la maladie et, si convenu, à l'accident. Une variante SALARIA selon la LAMal existe à part (hors périmètre LCA).",
+      "variants": [],
+      "prerequisites": "Au moins 16 ans au début de l'assurance et âge AVS non atteint ; déclaration de santé avec admission. S'éteint à l'âge AVS ordinaire (maintien possible jusqu'à 70 ans en cas d'activité lucrative, avec délai d'attente de 30 jours et 180 jours de prestations sur 5 ans).",
+      "pricing": {
+        "factors": [
+          "age",
+          "sex",
+          "region",
+          "accident"
+        ],
+        "ageBands": "Classes d'âge de 5 ans (0-5 ans, 6-10 ans, etc.) jusqu'à la classe 91+ au maximum ; passage automatique à l'échelon supérieur à l'entrée dans une nouvelle classe ; la dernière classe déterminante pour le produit figure dans la police (CGA éd. 01.01.2027, ch. 12.1). Âge de référence : « âge actuel » de la personne assurée (le texte ne précise pas s'il s'agit de l'âge atteint dans l'année civile ou de l'âge au jour anniversaire). Seules les bornes 0-5, 6-10 et 91+ sont écrites ; les classes intermédiaires (11-15 … 86-90) sont déduites du « etc. ».",
+        "discounts": "Prime selon l'indemnité journalière, le délai d'attente et la durée des prestations choisis. Rabais de famille non confirmé pour ce produit."
+      },
+      "conditionsDoc": {
+        "title": "Conditions supplémentaires d'assurance (CSA) – Assurance indemnités journalières SALARIA",
+        "edition": "01.01.2024",
+        "url": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/salaria-lca.pdf"
+      },
+      "sourceUrls": [
+        "https://www.helsana.ch/fr/prives/assurances/assurances-complementaires/autres/salaria.html",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/salaria-lca.pdf",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/assurances-maladie-complementaires.pdf",
+        "https://www.helsana.ch/docs/cahier-de-produits.pdf",
+        "https://www.helsana.ch/content/dam/helsana/fr/pdf/prives/brochures/apercu-prestations.pdf"
+      ],
+      "tags": [
+        "daily_allowance"
+      ],
+      "benefitCount": 1
+    },
+    {
+      "insurer": "helsana",
+      "key": "helsana-advocare-plus",
+      "name": "Helsana Advocare PLUS",
+      "category": "legal_protection",
+      "audience": "all",
+      "summary": "Assurance de protection juridique privée et de circulation en Europe, incluant la protection juridique en matière de santé et à l'étranger ; assureur : Helsana Protection juridique SA (HERAG), Helsana Assurances complémentaires SA agissant comme intermédiaire.",
+      "variants": [],
+      "prerequisites": "Domicile officiel en Suisse. La page produit annonce que l'assurance peut être conclue seule depuis le 01.01.2025 mais sa FAQ exige encore TOP, COMPLETA ou OMNIA : condition à confirmer. Les prestations ne se cumulent pas avec la protection juridique incluse dans TOP/COMPLETA.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Tarif par catégorie : enfants jusqu'à 18 ans, jeunes de 19 à 25 ans, adultes dès 26 ans (rabais publiés) ; autres critères tarifaires non publiés.",
+        "discounts": "Enfants jusqu'à 18 ans : 100 % de rabais avec TOP, COMPLETA ou OMNIA, 75 % sans ; jeunes de 19 à 25 ans : 50 % ; adultes dès 26 ans : 25 % de rabais de partenaire dès 2 adultes du même ménage dans le même contrat. Tarif préférentiel en combinaison avec TOP, COMPLETA ou OMNIA."
+      },
+      "conditionsDoc": {
+        "title": "Conditions générales d'assurance (CGA) – Helsana Advocare PLUS",
+        "edition": "01.01.2025",
+        "url": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/helsana-advocare-plus.pdf"
+      },
+      "sourceUrls": [
+        "https://www.helsana.ch/fr/prives/assurances/assurances-complementaires/protection-juridique/advocare-plus.html",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/helsana-advocare-plus.pdf",
+        "https://www.helsana.ch/docs/cahier-de-produits.pdf",
+        "https://www.helsana.ch/content/dam/helsana/fr/pdf/prives/brochures/apercu-prestations.pdf",
+        "https://www.helsana.ch/fr/prives/services/finances/economies-de-primes.html"
+      ],
+      "tags": [
+        "legal_protection",
+        "other:victim_assistance"
+      ],
+      "benefitCount": 5
+    },
+    {
+      "insurer": "helsana",
+      "key": "helsana-advocare-extra",
+      "name": "Helsana Advocare EXTRA",
+      "category": "legal_protection",
+      "audience": "all",
+      "summary": "Assurance de protection juridique privée, de circulation et sur Internet valable dans le monde entier, incluant la protection juridique en matière de santé et à l'étranger ; assureur : Helsana Protection juridique SA (HERAG).",
+      "variants": [],
+      "prerequisites": "Domicile officiel en Suisse. La page produit annonce que l'assurance peut être conclue seule depuis le 01.01.2025 mais sa FAQ exige encore TOP, COMPLETA ou OMNIA : condition à confirmer. Les prestations ne se cumulent pas avec la protection juridique incluse dans TOP/COMPLETA.",
+      "pricing": {
+        "factors": [
+          "age"
+        ],
+        "ageBands": "Tarif par catégorie : enfants jusqu'à 18 ans, jeunes de 19 à 25 ans, adultes dès 26 ans (rabais publiés) ; autres critères tarifaires non publiés.",
+        "discounts": "Enfants jusqu'à 18 ans : 100 % de rabais avec TOP, COMPLETA ou OMNIA, 75 % sans ; jeunes de 19 à 25 ans : 50 % ; adultes dès 26 ans : 25 % de rabais de partenaire dès 2 adultes du même ménage dans le même contrat. Tarif préférentiel en combinaison avec TOP, COMPLETA ou OMNIA."
+      },
+      "conditionsDoc": {
+        "title": "Conditions générales d'assurance (CGA) – Helsana Advocare EXTRA",
+        "edition": "01.01.2025",
+        "url": "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/helsana-advocare-extra.pdf"
+      },
+      "sourceUrls": [
+        "https://www.helsana.ch/fr/prives/assurances/assurances-complementaires/protection-juridique/advocare-extra.html",
+        "https://www.helsana.ch/dam/fr/pdf/prives/conditions-assurance/helsana-advocare-extra.pdf",
+        "https://www.helsana.ch/docs/cahier-de-produits.pdf",
+        "https://www.helsana.ch/content/dam/helsana/fr/pdf/prives/brochures/apercu-prestations.pdf",
+        "https://www.helsana.ch/fr/prives/services/finances/economies-de-primes.html"
+      ],
+      "tags": [
+        "legal_protection",
+        "other:victim_assistance"
+      ],
+      "benefitCount": 6
     },
     {
       "insurer": "kpt",
@@ -2479,7 +4516,7 @@
         "factors": [
           "age"
         ],
-        "ageBands": "La prime dépend de l'âge du preneur d’assurance (CS) ; la page produit distingue adultes (plus de 18 ans) et enfants. Tranches détaillées non publiées.",
+        "ageBands": "La prime dépend de l'âge du preneur d'assurance (CS) ; la page produit distingue adultes (plus de 18 ans) et enfants. Tranches détaillées non publiées.",
         "discounts": null
       },
       "conditionsDoc": {
@@ -2886,7 +4923,7 @@
         "travel_expenses_treatment",
         "vaccination"
       ],
-      "benefitCount": 51
+      "benefitCount": 49
     },
     {
       "insurer": "visana",
@@ -2954,7 +4991,7 @@
         "travel_expenses_treatment",
         "vaccination"
       ],
-      "benefitCount": 37
+      "benefitCount": 35
     },
     {
       "insurer": "visana",
@@ -2967,42 +5004,42 @@
         {
           "key": "classe-3",
           "name": "Soins dentaires classe 3",
-          "description": "50 % des frais' max. CHF 600.– par année civile"
+          "description": "50 % des frais, max. CHF 600.– par année civile"
         },
         {
           "key": "classe-4",
           "name": "Soins dentaires classe 4",
-          "description": "75 % des frais' max. CHF 600.– par année civile"
+          "description": "75 % des frais, max. CHF 600.– par année civile"
         },
         {
           "key": "classe-5",
           "name": "Soins dentaires classe 5",
-          "description": "50 % des frais' max. CHF 1'200.– par année civile"
+          "description": "50 % des frais, max. CHF 1'200.– par année civile"
         },
         {
           "key": "classe-6",
           "name": "Soins dentaires classe 6",
-          "description": "75 % des frais' max. CHF 1'200.– par année civile"
+          "description": "75 % des frais, max. CHF 1'200.– par année civile"
         },
         {
           "key": "classe-7",
           "name": "Soins dentaires classe 7",
-          "description": "75 % des frais' max. CHF 1'500.– par année civile"
+          "description": "75 % des frais, max. CHF 1'500.– par année civile"
         },
         {
           "key": "classe-8",
           "name": "Soins dentaires classe 8",
-          "description": "75 % des frais' max. CHF 1'800.– par année civile"
+          "description": "75 % des frais, max. CHF 1'800.– par année civile"
         },
         {
           "key": "classe-9",
           "name": "Soins dentaires classe 9",
-          "description": "75 % des frais' max. CHF 3'000.– par année civile"
+          "description": "75 % des frais, max. CHF 3'000.– par année civile"
         },
         {
           "key": "classe-10",
           "name": "Soins dentaires classe 10",
-          "description": "75 % des frais' max. CHF 5'000.– par année civile"
+          "description": "75 % des frais, max. CHF 5'000.– par année civile"
         }
       ],
       "prerequisites": "Denture assainie et aucun traitement prévu à la signature de la proposition ; pas d'examen de santé si l'enfant est assuré avant son 4e anniversaire ; conclusion possible jusqu'à 70 ans révolus ; classes 1 et 2 = catégorie close",
@@ -3332,11 +5369,10 @@
       "prerequisites": "Conclusion possible dès 15 ans révolus jusqu'à 64 ans révolus (aperçu 2027) ; personnes exerçant une activité lucrative ; proposition avec questions de santé",
       "pricing": {
         "factors": [
-          "age",
-          "sex"
+          "age"
         ],
-        "ageBands": null,
-        "discounts": "Contrat pluriannuel : 2 % (3 ans) ou 3 % (5 ans) (assurance d'indemnités journalières d'hospitalisation ; non confirmé pour ce produit)"
+        "ageBands": "Primes selon l'âge réel, par groupes d'âge (CGA ch. 6) ; détail des groupes et autres facteurs non relevés",
+        "discounts": null
       },
       "conditionsDoc": {
         "title": "CGA Assurance individuelle d'indemnités journalières en cas de maladie (V-1020) + CS V-1025EB",
