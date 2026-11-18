@@ -39,7 +39,7 @@
       "benefits": 237,
       "verification:read": 237,
       "prices": 1,
-      "calculatorPrices": 6228
+      "calculatorPrices": 37368
     },
     "helsana": {
       "products": 18,
@@ -82,24 +82,8 @@
   },
   "issues": [
     "premiums/axa.csv: produit sans clé 'CAPITAL' (780 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé 'Acrobat' (72 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé 'ActiVita' (82 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé \"Assurance complémentaire d'hospitalisation\" (432 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé 'Assurance Dentaire plus' (354 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé 'CyberProtect' (248 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé 'Global smart' (600 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé 'H-Bonus' (118 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé 'H-Capital' (960 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé 'Hôpital senior' (104 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé 'Indemnité journalière BH' (118 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé 'Legis' (960 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé 'Legissana+' (160 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé 'Mundo' (320 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé 'Optimum' (196 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé 'Premium' (154 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé 'PrimaCapital' (944 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé 'ProVista' (246 lignes)",
-    "premiums/groupe-mutuel.csv: produit sans clé 'Start' (160 lignes)",
+    "premiums/groupe-mutuel.csv: produit sans clé 'CyberProtect' (1488 lignes)",
+    "premiums/groupe-mutuel.csv: produit sans clé 'Legis' (5760 lignes)",
     "premiums/visana.csv: produit sans clé 'Protection juridique' (960 lignes)"
   ]
 }

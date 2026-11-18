@@ -45,10 +45,34 @@ const LOCALITIES = {
   2800: 'Delémont',
 };
 
+// Ordre du brief (les clés numériques d'un objet JS sont triées, d'où cette liste explicite).
+const LOCALITY_ORDER = ['1003', '1204', '1950', '2000', '1700', '2800'];
+
 const HEADER = [
   'insurer', 'product_key', 'product_name', 'variant', 'option', 'year', 'birth_year', 'age', 'sex',
   'postal_code', 'locality', 'accident', 'monthly_chf', 'source_type', 'source_url', 'retrieved_at', 'notes',
 ];
+
+// Code produit du calculateur -> clé du produit dans ../insurers/groupe-mutuel.json (correspondances évidentes
+// seulement ; Legis LJGA15 et CyberProtect CYGA01 n'y figurent pas et restent sans clé).
+const PRODUCT_KEYS = {
+  GOGA03: 'groupe-mutuel-global-smart',
+  STGA01: 'groupe-mutuel-start',
+  SOGA01: 'groupe-mutuel-optimum',
+  SDGA02: 'groupe-mutuel-premium',
+  HCGA02: 'groupe-mutuel-hc',
+  HBGA01: 'groupe-mutuel-h-bonus',
+  HSGA01: 'groupe-mutuel-hopital-senior',
+  KHGA02: 'groupe-mutuel-h-capital',
+  BHGA01: 'groupe-mutuel-bh',
+  MUGA01: 'groupe-mutuel-mundo',
+  DPGA03: 'groupe-mutuel-dentaire-plus',
+  ABGA02: 'groupe-mutuel-acrobat',
+  AJGA01: 'groupe-mutuel-activita',
+  IDGA02: 'groupe-mutuel-provista',
+  LSGA01: 'groupe-mutuel-legis-sana-plus',
+  ICGM03: 'groupe-mutuel-primacapital',
+};
 
 // Variantes qui ne sont pas des niveaux de prestations mais des rabais : la variante
 // « sans rabais » est le défaut (option vide), l'autre est rangée dans `option`.
@@ -73,7 +97,7 @@ const CRITERIA_NOTES = {
 
 function parseArgs(argv) {
   const a = {
-    localities: Object.keys(LOCALITIES),
+    localities: [...LOCALITY_ORDER],
     years: [1947, 2026],
     sexes: ['f', 'm'],
     bh: [100],
@@ -253,7 +277,7 @@ function rowsForRecord(rec, labels) {
   const age = YEAR - rec.birthYear;
   const base = (codeProduit) => ({
     insurer: INSURER,
-    product_key: '',
+    product_key: PRODUCT_KEYS[codeProduit] ?? '',
     product_name: stripHtml(produits[codeProduit]?.name) || codeProduit,
     year: YEAR,
     birth_year: rec.birthYear,
