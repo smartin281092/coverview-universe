@@ -118,8 +118,7 @@
         },
         {
           "tags": [
-            "medical_aids",
-            "other:produits_medicaux"
+            "medical_aids"
           ],
           "label": "Produits médicaux",
           "variant": "premium",
@@ -3056,7 +3055,6 @@
         },
         {
           "tags": [
-            "hospital_general_ch",
             "other:parts_cantonales"
           ],
           "label": "Autres frais d'hospitalisation (parts cantonales selon la LAMal)",

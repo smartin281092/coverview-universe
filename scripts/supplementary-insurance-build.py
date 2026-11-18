@@ -170,6 +170,8 @@ def main() -> int:
                 except (TypeError, ValueError):
                     issues.append(f"premiums/{path.name}: prime illisible {row['monthly_chf']!r}")
                     continue
+                # Le fichier porte le nom de la clé assureur ; elle fait foi.
+                row["insurer"] = path.stem
                 if row["product_key"] and (row["insurer"], row["product_key"]) not in known_products:
                     unmatched[row["product_key"]] += 1
                 premium_rows.append({c: row[c] for c in PREMIUM_COLUMNS})
