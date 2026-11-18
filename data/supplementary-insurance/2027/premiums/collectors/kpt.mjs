@@ -11,6 +11,7 @@
 //   node kpt.mjs                                   # 6 localités, 1947-2026, f + m
 //   node kpt.mjs --localities=1003 --years=1990-1992
 //   node kpt.mjs --build-only                      # reconstruit le CSV depuis le cache
+//   node kpt.mjs --verify=1003:1990:f,1204:1962:m  # compare le CSV aux prix affichés à l'écran
 // Options : --raw-dir=<dossier du cache>  --out=<csv>  --delay-ms=1300  --sexes=f,m
 
 import { createRequire } from 'node:module';
@@ -60,7 +61,7 @@ const wantedPostalCodes = args.localities ? String(args.localities).split(',') :
 const localities = LOCALITIES.filter((l) => wantedPostalCodes.includes(l.postalCode));
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const norm = (s) => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+const norm = (s) => String(s || '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().trim();
 const clean = (s) => String(s ?? '').replace(/\s+/g, ' ').trim();
 
 function profiles() {
@@ -392,5 +393,150 @@ function build() {
   }
 }
 
-if (!args['build-only']) await collect();
-build();
+// ---------------------------------------------------------------------------------------------
+// Vérification à l'écran : parcourt le formulaire comme un visiteur et compare chaque prix affiché
+// à l'étape « Assurance complémentaire » avec la ligne correspondante du CSV.
+
+function parseCsv(text) {
+  const rows = [];
+  let row = [];
+  let cell = '';
+  let quoted = false;
+  for (let i = 0; i < text.length; i += 1) {
+    const ch = text[i];
+    if (quoted) {
+      if (ch === '"' && text[i + 1] === '"') { cell += '"'; i += 1; } else if (ch === '"') quoted = false; else cell += ch;
+    } else if (ch === '"') quoted = true;
+    else if (ch === ',') { row.push(cell); cell = ''; } else if (ch === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; } else if (ch !== '\r') cell += ch;
+  }
+  if (cell || row.length) { row.push(cell); rows.push(row); }
+  const head = rows.shift();
+  return rows.map((r) => Object.fromEntries(head.map((h, i) => [h, r[i]])));
+}
+
+const THREE_YEAR_LABEL = /contrat de 3 ans/i;
+const ACCIDENT_LABEL = /assurance-accidents/i;
+const FRANCHISE_LABEL = /^franchise/i;
+
+async function verify(specs) {
+  const index = new Map();
+  for (const r of parseCsv(fs.readFileSync(outCsv, 'utf8'))) {
+    index.set([r.postal_code, r.birth_year, r.sex, r.product_name, r.variant, r.option, r.accident].join('|'), r);
+  }
+  const { chromium } = require('playwright');
+  const browser = await chromium.launch();
+  const report = [];
+  try {
+    for (const spec of specs) {
+      const [postalCode, birthYear, sex] = spec.split(':');
+      const context = await browser.newContext({ locale: 'fr-CH', viewport: { width: 1280, height: 1400 } });
+      const page = await context.newPage();
+      await page.goto(CALCULATOR_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+      await page.waitForSelector('#input-birthDate', { timeout: 60000 });
+      await page.locator(`label[for="radio-genderCode-${sex === 'f' ? 'female' : 'male'}"]`).click();
+      await page.fill('#input-firstName', 'Test');
+      await page.fill('#input-birthDate', `${birthYear}-06-15`);
+      await page.locator('#input-zip').pressSequentially(postalCode, { delay: 150 });
+      const wanted = LOCALITIES.find((l) => l.postalCode === postalCode)?.city;
+      const cityOption = page.locator('.citySelect__list li').filter({ hasText: new RegExp(`^${postalCode} ${wanted}$`) }).first();
+      await cityOption.click({ timeout: 20000 });
+      const locality = wanted;
+      await page.locator('#button-to-products').click();
+      // Étape « Assurance de base » : on passe sans rien choisir.
+      await page.waitForSelector('#button-to-additional-products', { timeout: 90000 });
+      await page.waitForSelector('.product--okp', { timeout: 90000 });
+      await page.locator('#button-to-additional-products').click();
+      await page.waitForSelector('.product--vvg', { timeout: 60000 });
+      const startDate = await page.locator('#select-startDate').inputValue();
+
+      const codes = await page.$$eval('.product--vvg', (els) => els.map((e) => e.id.replace('product-', '')));
+      const result = { spec, locality, startDate, shown: 0, matched: 0, mismatches: [], notInCsv: [] };
+      const seen = new Set();
+
+      const readCard = (code) => page.evaluate((c) => {
+        const el = document.getElementById(`product-${c}`);
+        const txt = (n) => (n?.textContent || '').replace(/\s+/g, ' ').trim();
+        return {
+          title: txt(el.querySelector('.product__title')),
+          price: txt(el.querySelector('.product__price-number')),
+          selects: [...el.querySelectorAll('.product__adjustments select')].map((s) => ({
+            id: s.id,
+            label: txt(el.querySelector(`label[for="${s.id}"]`)),
+            disabled: s.disabled,
+            value: s.value,
+            text: txt(s.selectedOptions[0]),
+            options: [...s.options].map((o) => o.value),
+          })),
+          checks: [...el.querySelectorAll('.product__adjustments input[type=checkbox]')].map((i) => ({
+            id: i.id,
+            label: txt(el.querySelector(`label[for="${i.id}"] .form__label-text`)),
+            checked: i.checked,
+          })),
+        };
+      }, code);
+      const setCheck = async (id, value) => {
+        await page.evaluate(({ id, value }) => { const i = document.getElementById(id); if (i.checked !== value) i.click(); }, { id, value });
+        await page.waitForTimeout(80);
+      };
+
+      const compare = async (code) => {
+        let card = await readCard(code);
+        for (const c of card.checks.filter((x) => THREE_YEAR_LABEL.test(x.label))) await setCheck(c.id, false);
+        const accidentChecks = card.checks.filter((x) => ACCIDENT_LABEL.test(x.label));
+        for (const accidentOn of accidentChecks.length ? [true, false] : [null]) {
+          for (const c of accidentChecks) await setCheck(c.id, accidentOn);
+          card = await readCard(code);
+          if (card.checks.some((x) => THREE_YEAR_LABEL.test(x.label) && x.checked)) throw new Error(`${code}: case « contrat de 3 ans » encore cochée`);
+          const models = card.selects.filter((s) => !FRANCHISE_LABEL.test(s.label));
+          const variant = models.length > 1 ? models.map((s) => `${s.label}: ${s.text}`).join(' | ') : models.map((s) => s.text).join('');
+          const option = card.selects
+            .filter((s) => FRANCHISE_LABEL.test(s.label) && s.value !== s.options[0])
+            .map((s) => `${s.label}: ${s.text}`).join('; ');
+          const accident = accidentOn === null ? '' : String(accidentOn);
+          const key = [postalCode, birthYear, sex, card.title, variant, option, accident].join('|');
+          if (seen.has(key)) continue;
+          seen.add(key);
+          result.shown += 1;
+          const row = index.get(key);
+          if (!row) result.notInCsv.push(`${key} = ${card.price}`);
+          else if (Number(row.monthly_chf) === Number(card.price)) result.matched += 1;
+          else result.mismatches.push(`${key} : écran ${card.price} / CSV ${row.monthly_chf}`);
+        }
+      };
+
+      // Toutes les combinaisons de listes déroulantes de chaque produit (calcul local, aucun appel réseau).
+      const walk = async (code, depth) => {
+        const card = await readCard(code);
+        const sel = card.selects[depth];
+        if (!sel) return compare(code);
+        if (sel.disabled) return walk(code, depth + 1);
+        for (const value of sel.options) {
+          await page.locator(`[id="${sel.id}"]`).selectOption(value, { force: true });
+          await page.waitForTimeout(80);
+          await walk(code, depth + 1);
+        }
+        return null;
+      };
+      for (const code of codes) await walk(code, 0);
+
+      const csvRows = [...index.keys()].filter((k) => k.startsWith(`${postalCode}|${birthYear}|${sex}|`));
+      result.csvRows = csvRows.length;
+      result.csvRowsNotShown = csvRows.filter((k) => !seen.has(k));
+      report.push(result);
+      console.log(`${spec} ${locality} · début ${startDate} · ${result.shown} prix affichés, ${result.matched} identiques au CSV, ${result.mismatches.length} écarts, ${result.notInCsv.length} absents du CSV, ${result.csvRowsNotShown.length}/${result.csvRows} lignes du CSV non affichées`);
+      for (const m of [...result.mismatches, ...result.notInCsv.map((x) => `absent du CSV : ${x}`), ...result.csvRowsNotShown.map((x) => `non affiché : ${x}`)]) console.log(`   ${m}`);
+      await context.close();
+      await sleep(delayMs);
+    }
+  } finally {
+    await browser.close();
+  }
+  return report;
+}
+
+if (args.verify) {
+  await verify(String(args.verify).split(','));
+} else {
+  if (!args['build-only']) await collect();
+  build();
+}
