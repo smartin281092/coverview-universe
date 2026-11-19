@@ -9,7 +9,8 @@
     "./insurance-requests": "./src/insurance-requests.ts",
     "./pension-searches": "./src/pension-searches.ts",
     "./health-recommendation": "./src/health-recommendation.ts",
-    "./partner": "./src/partner.ts"
+    "./partner": "./src/partner.ts",
+    "./supplementary-insurance": "./src/supplementary-insurance.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
