@@ -343,6 +343,6 @@ export const supplementaryCopy = {
     level: "Gold",
     details: "Pourquoi ce badge",
     disclosure:
-      "Assura et Groupe Mutuel sont partenaires de CoverView : leurs produits portent ce badge.",
+      "Les douze compagnies de ce comparateur sont partenaires de CoverView : leurs produits portent ce badge.",
   },
 } as const;

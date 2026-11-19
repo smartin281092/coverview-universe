@@ -133,7 +133,7 @@ export function ProductTable({
                       <span>
                         <span className="hi-sr-only">{insurer?.name} </span>
                         {product.name}
-                        {insurer?.partner && <ScPartnerTag />}
+                        {insurer?.partner && index.partnerTags && <ScPartnerTag />}
                       </span>
                       <small>{categoryLabel(index, product.category)}</small>
                     </span>

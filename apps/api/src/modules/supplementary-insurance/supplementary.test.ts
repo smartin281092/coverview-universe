@@ -371,7 +371,7 @@ describe("import", () => {
     const { catalog } = data;
     expect(catalog.insurers.map((item) => [item.key, item.partner, item.bagInsurerId])).toEqual([
       ["assura", true, 1542],
-      ["axa", false, null],
+      ["axa", true, null],
     ]);
     const one = catalog.products.find((item) => item.key === "assura-one")!;
     expect(one).toMatchObject({ priced: true, families: ["vision", "dental", "other"] });

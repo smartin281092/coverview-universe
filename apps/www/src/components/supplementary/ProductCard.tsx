@@ -60,7 +60,7 @@ export function ProductCard({
       <div className="sc-card-brand">
         <ScInsurerLogo insurer={insurer} />
         <span className="hi-sr-only">{insurer?.name}</span>
-        {insurer?.partner && <ScPartnerTag />}
+        {insurer?.partner && index.partnerTags && <ScPartnerTag />}
       </div>
       <h3 className="sc-card-title">
         <button

@@ -268,7 +268,7 @@ export function ComparisonView({
                             <span className="sc-matrix-insurer">
                               {categoryLabel(index, product.category)}
                             </span>
-                            {insurer?.partner && <ScPartnerTag />}
+                            {insurer?.partner && index.partnerTags && <ScPartnerTag />}
                             <button
                               type="button"
                               className="hi-icon-button sc-matrix-remove"

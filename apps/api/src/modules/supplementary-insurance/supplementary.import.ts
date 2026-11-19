@@ -17,8 +17,22 @@ import { publicNote } from "./supplementary.notes.js";
 // scripts/supplementary-insurance-build.py attaches them. Idempotent: the catalogue id is a
 // fingerprint of the whole content, so an identical import changes nothing.
 
-// Agreements with CoverView (health.partner.1).
-const partners = new Set(["assura", "groupe-mutuel"]);
+// Agreements with CoverView (supplementary.partner.1, user decision of 19 November 2026): every
+// insurer of the survey is a partner through the convention with the Mendes agency.
+const partners = new Set([
+  "assura",
+  "atupri",
+  "axa",
+  "concordia",
+  "css",
+  "groupe-mutuel",
+  "helsana",
+  "kpt",
+  "sanitas",
+  "swica",
+  "sympany",
+  "visana",
+]);
 // Basic-insurance company (BAG id) whose logo the site shows; Groupe Mutuel = Avenir (343).
 const bagInsurerIds: Record<string, number | null> = {
   css: 8,

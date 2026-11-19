@@ -78,6 +78,9 @@ export type CatalogIndex = {
   // Families of the common benefits; the catalogue's « other » family groups benefits without
   // an equivalent elsewhere, kept for the detail but out of filters and comparison lines.
   taxonomyFamilies: Set<string>;
+  // The lists' « Partenaire » tag tells partners from the others: with every insurer a partner
+  // (19 November 2026) it says nothing there, and only the panel's badge remains.
+  partnerTags: boolean;
 };
 export function indexCatalog(catalog: SupplementaryCatalog): CatalogIndex {
   const order = <T extends { key: string }>(items: T[]) =>
@@ -95,6 +98,7 @@ export function indexCatalog(catalog: SupplementaryCatalog): CatalogIndex {
     taxonomyFamilies: new Set(
       catalog.tags.filter((tag) => isTaxonomyTag(tag.key)).map((tag) => tag.family),
     ),
+    partnerTags: !catalog.insurers.every((insurer) => insurer.partner),
   };
 }
 export const tagLabel = (index: CatalogIndex, tag: string) =>

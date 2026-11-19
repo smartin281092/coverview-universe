@@ -31,7 +31,7 @@ export const supplementaryInsurerSchema = z
   .object({
     key,
     name: text(120),
-    // Insurers with a CoverView agreement (health.partner.1): Assura and Groupe Mutuel.
+    // Insurers with a CoverView agreement: since 19 November 2026, all twelve of the survey.
     partner: z.boolean(),
     website: url.nullable(),
     calculatorUrl: url.nullable(),
