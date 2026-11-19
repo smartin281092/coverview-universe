@@ -1,7 +1,6 @@
-import { useId, useMemo, type ReactNode } from "react";
+import { useId, useMemo, useState, type ReactNode } from "react";
 import type { SupplementaryProduct } from "@coverview/api-client/supplementary-insurance";
 import { supplementaryCopy as copy } from "../../content/fr/supplementary";
-import { ScInsurerLogo } from "./ScIdentity";
 import {
   categoryLabel,
   facetCounts,
@@ -40,6 +39,38 @@ function Check({
       <span className="sc-check-label">{label}</span>
       <span className="sc-check-count">{count}</span>
     </label>
+  );
+}
+
+// A long list shows its first items and the checked ones; the rest opens on demand.
+function Collapsible<T extends { key: string }>({
+  items,
+  limit,
+  checked,
+  render,
+}: {
+  items: T[];
+  limit: number;
+  checked: (item: T) => boolean;
+  render: (item: T) => ReactNode;
+}) {
+  const [open, setOpen] = useState(false);
+  const hidden = items.length - limit;
+  const shown = open || hidden <= 1 ? items : items.filter((item, i) => i < limit || checked(item));
+  return (
+    <>
+      {shown.map(render)}
+      {hidden > 1 && (
+        <button
+          type="button"
+          className="sc-filter-more"
+          aria-expanded={open}
+          onClick={() => setOpen(!open)}
+        >
+          {open ? text.showLess : interpolate(text.showMore, { count: hidden })}
+        </button>
+      )}
+    </>
   );
 }
 
@@ -85,9 +116,13 @@ export function ProductFilters({
     <div className="sc-filters">
       <fieldset className="sc-filter-section">
         <legend>{text.categories}</legend>
-        {index.catalog.categories
-          .filter((category) => products.some((product) => product.category === category.key))
-          .map((category) => (
+        <Collapsible
+          items={index.catalog.categories.filter((category) =>
+            products.some((product) => product.category === category.key),
+          )}
+          limit={6}
+          checked={(category) => filters.categories.includes(category.key)}
+          render={(category) => (
             <Check
               key={category.key}
               checked={filters.categories.includes(category.key)}
@@ -98,45 +133,8 @@ export function ProductFilters({
               title={category.label}
               count={categories.get(category.key) ?? 0}
             />
-          ))}
-      </fieldset>
-      <fieldset className="sc-filter-section">
-        <legend>{text.benefits}</legend>
-        <p className="sc-filter-hint">{text.benefitsHint}</p>
-        <p className="sc-filter-hint" id={`${id}-mode`}>
-          {text.modeLabel}
-        </p>
-        <div className="sc-segmented" role="radiogroup" aria-labelledby={`${id}-mode`}>
-          {(["all", "any"] as const).map((mode) => (
-            <label key={mode}>
-              <input
-                type="radio"
-                name={`${id}-mode`}
-                checked={filters.tagMode === mode}
-                onChange={() => onChange({ ...filters, tagMode: mode })}
-              />
-              <span>{mode === "all" ? text.modeAll : text.modeAny}</span>
-            </label>
-          ))}
-        </div>
-        {families.map(
-          ({ family, tags: items }) =>
-            items.length > 0 && (
-              <div className="sc-filter-family" key={family.key}>
-                <p>{family.label}</p>
-                {items.map((tag) => (
-                  <Check
-                    key={tag.key}
-                    checked={filters.tags.includes(tag.key)}
-                    onChange={() => onChange({ ...filters, tags: toggle(filters.tags, tag.key) })}
-                    label={shortLabel(tag.label)}
-                    title={tag.label}
-                    count={tags.get(tag.key) ?? 0}
-                  />
-                ))}
-              </div>
-            ),
-        )}
+          )}
+        />
       </fieldset>
       <fieldset className="sc-filter-section">
         <legend>{text.insurers}</legend>
@@ -151,9 +149,7 @@ export function ProductFilters({
               }
               label={insurer.name}
               count={insurers.get(insurer.key) ?? 0}
-            >
-              <ScInsurerLogo insurer={insurer} />
-            </Check>
+            />
           ))}
       </fieldset>
       <fieldset className="sc-filter-section">
@@ -183,6 +179,45 @@ export function ProductFilters({
           </output>
         </div>
         {filters.maxMonthly !== null && <p className="sc-filter-hint">{text.maxPriceHint}</p>}
+      </fieldset>
+      <fieldset className="sc-filter-section">
+        <legend>{text.benefits}</legend>
+        <div className="sc-segmented" role="radiogroup" aria-label={text.modeLabel}>
+          {(["all", "any"] as const).map((mode) => (
+            <label key={mode}>
+              <input
+                type="radio"
+                name={`${id}-mode`}
+                checked={filters.tagMode === mode}
+                onChange={() => onChange({ ...filters, tagMode: mode })}
+              />
+              <span>{mode === "all" ? text.modeAll : text.modeAny}</span>
+            </label>
+          ))}
+        </div>
+        {families.map(
+          ({ family, tags: items }) =>
+            items.length > 0 && (
+              <div className="sc-filter-family" key={family.key}>
+                <p>{family.label}</p>
+                <Collapsible
+                  items={items}
+                  limit={4}
+                  checked={(tag) => filters.tags.includes(tag.key)}
+                  render={(tag) => (
+                    <Check
+                      key={tag.key}
+                      checked={filters.tags.includes(tag.key)}
+                      onChange={() => onChange({ ...filters, tags: toggle(filters.tags, tag.key) })}
+                      label={shortLabel(tag.label)}
+                      title={tag.label}
+                      count={tags.get(tag.key) ?? 0}
+                    />
+                  )}
+                />
+              </div>
+            ),
+        )}
       </fieldset>
     </div>
   );

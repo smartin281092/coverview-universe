@@ -103,6 +103,8 @@ export const categoryLabel = (index: CatalogIndex, key: string) =>
   shortLabel(index.categories.get(key)?.label ?? key);
 export const familyLabel = (index: CatalogIndex, key: string) =>
   index.families.get(key)?.label ?? key;
+export const familyShortLabel = (index: CatalogIndex, key: string) =>
+  copy.card.families[key] ?? familyLabel(index, key);
 export const insurerName = (index: CatalogIndex, key: string) =>
   index.insurers.get(key)?.name ?? key;
 
@@ -166,11 +168,45 @@ export function groupBenefits(
 }
 
 // The card's main benefits: the chosen tags first, then quantified ones, one per main tag.
-export function mainBenefits(product: SupplementaryProduct, chosen: string[], count: number) {
-  const seen = new Set<string>();
+// Benefit families a category is bought for: a card shows those first (an ambulatory product's
+// glasses before its hospital ward). Presentation only, the catalogue is unchanged.
+const categoryFamilies: Record<string, string[]> = {
+  ambulatory_bundle: ["ambulatory", "alternative", "vision", "dental", "prevention"],
+  alternative_medicine: ["alternative"],
+  prevention_wellbeing: ["prevention"],
+  hospital: ["hospital"],
+  hospital_daily_cash: ["hospital", "capital_income"],
+  dental: ["dental"],
+  travel_abroad: ["abroad", "transport"],
+  combined: ["ambulatory", "alternative", "vision", "hospital"],
+  capital_accident: ["capital_income"],
+  capital_illness: ["capital_income"],
+  daily_allowance: ["capital_income"],
+  long_term_care: ["care_support"],
+  legal_protection: ["services"],
+  family_maternity: ["maternity_family"],
+};
+
+/**
+ * The benefits a card shows: the visitor's filtered benefits first, then those of the families
+ * the category is bought for, figures before wording, one per benefit type and, while possible,
+ * one per family.
+ */
+export function mainBenefits(
+  index: CatalogIndex,
+  product: SupplementaryProduct,
+  chosen: string[],
+  count: number,
+) {
+  const core = categoryFamilies[product.category] ?? [];
+  const family = (benefit: SupplementaryBenefit) =>
+    index.tags.get(benefit.tags[0] ?? "")?.family ?? "other";
   const rank = (benefit: SupplementaryBenefit) =>
-    (benefit.tags.some((tag) => chosen.includes(tag)) ? 0 : 2) + (structured(benefit) ? 0 : 1);
-  return [...product.benefits]
+    (benefit.tags.some((tag) => chosen.includes(tag)) ? 0 : 4) +
+    (core.includes(family(benefit)) ? 0 : 2) +
+    (structured(benefit) ? 0 : 1);
+  const seen = new Set<string>();
+  const ordered = [...product.benefits]
     .map((benefit, position) => ({ benefit, position }))
     .sort((a, b) => rank(a.benefit) - rank(b.benefit) || a.position - b.position)
     .map((item) => item.benefit)
@@ -179,8 +215,26 @@ export function mainBenefits(product: SupplementaryProduct, chosen: string[], co
       if (seen.has(tag)) return false;
       seen.add(tag);
       return true;
-    })
-    .slice(0, count);
+    });
+  const families = new Set<string>();
+  const varied = ordered.filter((benefit) => {
+    if (families.has(family(benefit))) return false;
+    families.add(family(benefit));
+    return true;
+  });
+  return [...varied, ...ordered.filter((benefit) => !varied.includes(benefit))].slice(0, count);
+}
+
+// Chips that fit one line of a card (about 270 px): a 12 px label, its padding and the gap.
+export function fittingChips(labels: string[], budget = 270) {
+  let used = 0;
+  let shown = 0;
+  for (const label of labels) {
+    used += label.length * 5.6 + 22;
+    if (used > budget) break;
+    shown += 1;
+  }
+  return Math.max(1, shown);
 }
 
 // Prices for the profile: default option, accident included when the option exists.
@@ -328,8 +382,12 @@ export function sortProducts(
           chosenTags.filter((tag) => product.tags.includes(tag)).length;
         return matched(b) - matched(a) || price(a) - price(b) || byName(a, b);
       }
+      // By category, then the products with a price for the profile before those « on request ».
+      const unpriced = (product: SupplementaryProduct) =>
+        price(product) === Number.POSITIVE_INFINITY ? 1 : 0;
       return (
         (index.categoryOrder.get(a.category) ?? 99) - (index.categoryOrder.get(b.category) ?? 99) ||
+        unpriced(a) - unpriced(b) ||
         byName(a, b)
       );
     },

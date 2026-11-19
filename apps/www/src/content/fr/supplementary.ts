@@ -9,7 +9,7 @@ export const supplementaryCopy = {
     description:
       "Comparez les assurances complémentaires santé (LCA) 2027 de douze assureurs : filtres par prestation, catégorie et compagnie, prestations alignées et prix indicatifs.",
     heading: "Comparer les assurances complémentaires 2027",
-    lead: "Les complémentaires santé de douze assureurs actifs en Suisse romande, leurs prestations rangées sous des prestations types communes et leurs primes 2027 relevées aux calculateurs officiels.",
+    lead: "Douze assureurs de Suisse romande, leurs prestations alignées sur des types communs et leurs primes 2027 relevées aux calculateurs officiels.",
   },
   comparison: {
     title: "Comparaison de complémentaires santé 2027 | CoverView",
@@ -51,18 +51,18 @@ export const supplementaryCopy = {
 
   assistant: {
     label: "Décrivez ce que vous cherchez",
-    placeholder: "Décrivez votre besoin : dentaire, lunettes, hôpital…",
+    placeholder: "Décrivez votre besoin…",
     send: "Rechercher",
     sending: "Recherche…",
     examplesLabel: "Exemples",
     examples: [
       "Orthodontie pour mon enfant",
       "Lunettes et médecines douces",
-      "Hôpital demi-privé, max. 60 CHF",
-      "Voyages hors d’Europe",
+      "Demi-privé jusqu’à 60 CHF",
+      "Voyage hors d’Europe",
     ],
     privacy:
-      "Votre texte sert uniquement à cette recherche et peut être analysé par un service d’IA : n’y indiquez pas de données personnelles.",
+      "Votre texte peut être analysé par un service d’IA pour cette seule recherche : n’y mettez pas de données personnelles.",
     title: "Recherche de l’assistant",
     clear: "Effacer la recherche",
     assumptions: "Hypothèses retenues",
@@ -110,10 +110,11 @@ export const supplementaryCopy = {
     apply: { one: "Voir {{count}} résultat", other: "Voir les {{count}} résultats" },
     categories: "Catégories",
     benefits: "Prestations",
-    benefitsHint: "Les produits qui couvrent ces prestations, quel que soit leur niveau.",
-    modeAll: "Toutes",
+    modeAll: "Toutes cochées",
     modeAny: "Au moins une",
-    modeLabel: "Le produit couvre les prestations choisies :",
+    modeLabel: "Le produit couvre les prestations cochées : toutes ou au moins une",
+    showMore: "Afficher {{count}} de plus",
+    showLess: "Afficher moins",
     insurers: "Compagnies",
     maxPrice: "Prix maximum pour votre profil",
     maxPriceValue: "{{amount}} CHF / mois",
@@ -165,6 +166,21 @@ export const supplementaryCopy = {
     compare: "Comparer",
     benefitsTitle: "Prestations de {{name}}",
     partner: "Partenaire",
+    // Short names of the benefit families for the cards' chips; the full name stays in the title.
+    families: {
+      ambulatory: "Ambulatoire",
+      alternative: "Médecines douces",
+      prevention: "Prévention",
+      vision: "Vue",
+      dental: "Dentaire",
+      hospital: "Hôpital",
+      maternity_family: "Famille",
+      care_support: "Aide et cures",
+      transport: "Transport",
+      abroad: "Étranger",
+      capital_income: "Capitaux",
+      services: "Services",
+    } as Record<string, string>,
   },
 
   table: {
@@ -176,6 +192,13 @@ export const supplementaryCopy = {
     price: "Prix CHF / mois",
     benefits: "Prestations",
     sortBy: "Trier par {{column}}",
+    // Coverages shown before any benefit filter: the needs asked most often in a comparison.
+    defaultColumns: {
+      glasses_lenses: "Lunettes",
+      alt_medicine_therapies: "Médecines douces",
+      dental_treatment: "Soins dentaires",
+      hospital_semi_private: "Demi-privée",
+    } as Record<string, string>,
   },
 
   coverage: {

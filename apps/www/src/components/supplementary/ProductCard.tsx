@@ -8,6 +8,8 @@ import {
   categoryLabel,
   coverageShort,
   familyLabel,
+  familyShortLabel,
+  fittingChips,
   mainBenefits,
   plural,
   structured,
@@ -16,7 +18,6 @@ import {
 } from "./supplementary-model";
 
 const shownBenefits = 4;
-const shownFamilies = 3;
 
 /**
  * One product as an e-commerce card: identity, category, price for the profile, benefit families,
@@ -47,14 +48,18 @@ export function ProductCard({
   onCompare: () => void;
 }) {
   const insurer = index.insurers.get(product.insurer);
-  const main = mainBenefits(product, chosenTags, shownBenefits);
+  const main = mainBenefits(index, product, chosenTags, shownBenefits);
   const more = product.benefits.length - main.length;
   const families = product.families.filter((family) => index.taxonomyFamilies.has(family));
+  // As many chips as one line holds, room kept for « +N » when some stay hidden.
+  const chipLabels = families.slice(0, 3).map((family) => familyShortLabel(index, family));
+  const allFit = families.length <= 3 && fittingChips(chipLabels) === chipLabels.length;
+  const shownFamilies = allFit ? chipLabels.length : fittingChips(chipLabels, 236);
   return (
     <article className="sc-card" aria-labelledby={`sc-card-${product.key}`}>
       <div className="sc-card-brand">
         <ScInsurerLogo insurer={insurer} />
-        <span className="sc-card-insurer">{insurer?.name}</span>
+        <span className="hi-sr-only">{insurer?.name}</span>
         {insurer?.partner && <ScPartnerTag />}
       </div>
       <h3 className="sc-card-title">
@@ -72,7 +77,9 @@ export function ProductCard({
       {families.length > 0 && (
         <ul className="sc-chips" aria-label={copy.filters.benefits}>
           {families.slice(0, shownFamilies).map((family) => (
-            <li key={family}>{familyLabel(index, family)}</li>
+            <li key={family} title={familyLabel(index, family)}>
+              {familyShortLabel(index, family)}
+            </li>
           ))}
           {families.length > shownFamilies && <li>+{families.length - shownFamilies}</li>}
         </ul>

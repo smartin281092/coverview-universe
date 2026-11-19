@@ -14,19 +14,24 @@ import {
 } from "./supplementary-model";
 
 const text = copy.table;
-type Column = "product" | "insurer" | "category" | "price" | "benefits";
+type Column = "product" | "price";
+// A coverage breaks only after its rate: « 60 %, » then « max. 250 CHF / an » in one piece.
+const unbroken = (value: string) => {
+  const comma = value.lastIndexOf(", ");
+  return comma < 0
+    ? value.replaceAll(" ", "\u00a0")
+    : value.slice(0, comma + 2) + value.slice(comma + 2).replaceAll(" ", "\u00a0");
+};
 // Column sorts are the list's sorts, also offered in its sort menu.
 const sorts: Partial<Record<Column, { asc: Sort; desc?: Sort }>> = {
   product: { asc: "name" },
-  insurer: { asc: "insurer" },
-  category: { asc: "category" },
   price: { asc: "price-asc", desc: "price-desc" },
-  benefits: { asc: "benefits" },
 };
 
 /**
  * The table view: one row per product, its price for the profile, and one column per benefit the
- * visitor filtered on. Header and first column stay in view; the table scrolls inside its frame.
+ * visitor filtered on (before any filter, the coverages asked most often). Header and first
+ * column stay in view; the table scrolls inside its frame.
  */
 export function ProductTable({
   index,
@@ -51,16 +56,19 @@ export function ProductTable({
   onOpen: (product: SupplementaryProduct) => void;
   onCompare: (product: SupplementaryProduct) => void;
 }) {
+  const columns = tags.length
+    ? tags
+    : Object.keys(text.defaultColumns).filter((tag) => index.tags.has(tag));
   const header = (column: Column, label: string) => {
     const option = sorts[column];
     if (!option) return <th scope="col">{label}</th>;
     const active = sort === option.asc || sort === option.desc;
-    const descending = sort === option.desc || (column === "benefits" && active);
+    const descending = sort === option.desc;
     return (
       <th
         scope="col"
         aria-sort={active ? (descending ? "descending" : "ascending") : undefined}
-        className={column === "price" || column === "benefits" ? "is-number" : undefined}
+        className={column === "price" ? "is-number" : undefined}
       >
         <button
           type="button"
@@ -86,13 +94,12 @@ export function ProductTable({
               <span className="hi-sr-only">{text.compare}</span>
             </th>
             {header("product", text.product)}
-            {header("insurer", text.insurer)}
-            {header("category", text.category)}
             {header("price", text.price)}
-            {header("benefits", text.benefits)}
-            {tags.map((tag) => (
+            {columns.map((tag) => (
               <th scope="col" key={tag} className="sc-table-tag" title={index.tags.get(tag)?.label}>
-                {tagLabel(index, tag)}
+                {tags.length
+                  ? tagLabel(index, tag)
+                  : (text.defaultColumns[tag] ?? tagLabel(index, tag))}
               </th>
             ))}
           </tr>
@@ -122,25 +129,24 @@ export function ProductTable({
                     }}
                   >
                     <ScInsurerLogo insurer={insurer} />
-                    <span>{product.name}</span>
+                    <span className="sc-table-name">
+                      <span>
+                        <span className="hi-sr-only">{insurer?.name} </span>
+                        {product.name}
+                        {insurer?.partner && <ScPartnerTag />}
+                      </span>
+                      <small>{categoryLabel(index, product.category)}</small>
+                    </span>
                   </button>
                 </th>
-                <td>
-                  <span className="sc-table-insurer">
-                    {insurer?.name}
-                    {insurer?.partner && <ScPartnerTag />}
-                  </span>
-                </td>
-                <td className="sc-table-muted">{categoryLabel(index, product.category)}</td>
                 <td className="is-number">
                   <PriceTag price={prices.get(product.key) ?? { kind: "none" }} compact />
                 </td>
-                <td className="is-number">{product.benefits.length}</td>
-                {tags.map((tag) => {
+                {columns.map((tag) => {
                   const benefit = product.benefits.find((item) => item.tags.includes(tag));
                   return (
                     <td key={tag} className={benefit ? undefined : "sc-table-none"}>
-                      {benefit ? coverageShort(benefit) : copy.dash}
+                      {benefit ? unbroken(coverageShort(benefit)) : copy.dash}
                     </td>
                   );
                 })}

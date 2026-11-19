@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useMemo, useState, type CSSProperties } from "react";
 import type {
   SupplementaryBenefit,
   SupplementaryPrice,
@@ -84,11 +84,22 @@ export function ComparisonHeader({
         )}
       </div>
       {products.length > 0 && (
-        <div className="sc-vs-logos" aria-hidden="true">
+        <div
+          className="sc-vs-logos"
+          aria-hidden="true"
+          style={{ "--sc-count": products.length } as CSSProperties}
+        >
           {products.map((product, position) => (
             <Fragment key={product.key}>
               {position > 0 && <span className="sc-vs-badge">{text.vs}</span>}
-              <span className="sc-vs-tile">
+              <span
+                className="sc-vs-tile"
+                style={
+                  {
+                    "--sc-turn": `${((products.length - 1) / 2 - position) * 6}deg`,
+                  } as CSSProperties
+                }
+              >
                 <ScInsurerLogo insurer={index.insurers.get(product.insurer)} size="tile" />
               </span>
             </Fragment>
@@ -253,10 +264,11 @@ export function ComparisonView({
                             >
                               {product.name}
                             </button>
+                            <span className="hi-sr-only">{insurer?.name}</span>
                             <span className="sc-matrix-insurer">
-                              {insurer?.name}
-                              {insurer?.partner && <ScPartnerTag />}
+                              {categoryLabel(index, product.category)}
                             </span>
+                            {insurer?.partner && <ScPartnerTag />}
                             <button
                               type="button"
                               className="hi-icon-button sc-matrix-remove"
@@ -277,7 +289,6 @@ export function ComparisonView({
                     {products.map((product) => (
                       <td key={product.key}>
                         <PriceTag price={prices.get(product.key) ?? { kind: "none" }} compact />
-                        <small>{categoryLabel(index, product.category)}</small>
                         {product.variants.length > 1 && (
                           <select
                             className="sc-matrix-variant"
@@ -392,9 +403,11 @@ export function ComparisonView({
                     <button
                       type="button"
                       className="sc-ranking-order"
+                      aria-label={`${copy.panel.order} · ${product.name}`}
                       onClick={() => onOrder(product, cheapestRow(rows.get(product.key) ?? []))}
                     >
                       {copy.panel.order}
+                      <HealthIcon name="arrow" size={13} />
                     </button>
                   </li>
                 );

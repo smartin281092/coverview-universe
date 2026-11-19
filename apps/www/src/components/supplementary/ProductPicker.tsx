@@ -109,8 +109,9 @@ export function ProductPicker({
                 setFamily(item.key);
                 setTag("");
               }}
+              title={item.label}
             >
-              {item.label}
+              {copy.card.families[item.key] ?? item.label}
             </button>
           ))}
       </div>

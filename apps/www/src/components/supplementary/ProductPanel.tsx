@@ -92,7 +92,7 @@ export function ProductPanel({
     [product, variantFilter],
   );
   const counts: Record<Tab, number | null> = {
-    price: rows.length || null,
+    price: null,
     benefits: product.benefits.length,
     conditions: null,
   };
@@ -219,6 +219,7 @@ export function ProductPanel({
               localities={index.catalog.localities}
               tone="light"
               title={false}
+              layout="rows"
             />
             <h4 className="sc-panel-heading">{text.allPrices}</h4>
             {rows.length ? (
@@ -241,7 +242,8 @@ export function ProductPanel({
             ) : (
               <p className="hi-small">{text.noPrices}</p>
             )}
-            {product.publishedPrices.length > 0 && (
+            {/* The insurer's own figure, only where the survey has none for this profile. */}
+            {!rows.length && product.publishedPrices.length > 0 && (
               <>
                 <h4 className="sc-panel-heading">{copy.price.publishedFrom}</h4>
                 <ul className="sc-price-rows">

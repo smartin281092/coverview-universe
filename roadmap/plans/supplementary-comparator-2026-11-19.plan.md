@@ -61,3 +61,20 @@ Carte des zones par NPA (six localités de référence seulement) ; prix d'Atupr
   - enfant sans âge = 10 ans : première question de l’assistant ;
   - lien vers `/informations-demande-assurance` (art. 45 LSA) sous le formulaire de commande : un lien à changer dans `OrderDialog.tsx`.
 - **Limites** : commandes sans durée de conservation, ni export, ni effacement (à décider avant la mise en ligne) ; anciens catalogues non purgés (environ 130 Mo par relevé) ; six localités de référence ; Atupri sans prix.
+
+Revue de mise en page du 19 novembre 2026 (demande : « hyper attentif aux détails… challenge le rendu par rapport aux exemples et à Wallet »). Captures à 2x à 1440, 1024, 768 et 390 px de large ; chaque zone est comparée à efficient.app et aux motifs de Wallet (matrice, questions).
+- **Vérifié** :
+  - typecheck, eslint, prettier et build de www ; `check:www` passe, îlot de 65 092 octets gzip ;
+  - le parcours réel complet est rejoué, commande et assistant compris.
+- **Corrigé** :
+  - mots orphelins dans l'en-tête ; exemples sur deux lignes ; aucun produit visible sans défiler ;
+  - noms d'assureurs répétés à côté de leur logo ; logos allongés minuscules ;
+  - étiquettes empilées sur trois lignes ;
+  - cases et compteurs des filtres mal alignés sur les libellés de deux lignes ; listes interminables ;
+  - pilules du profil irrégulières dans le panneau et le formulaire ; prix publié affiché même quand un prix relevé existe ;
+  - tuiles de comparaison petites et à plat ; « VS » décalés sur mobile ; quatrième tuile coupée sur téléphone ;
+  - matrice dans un cadre à défilement interne ;
+  - logo Atupri illisible sur la barre sombre ; thème « Dentaire » caché hors champ dans le sélecteur ;
+  - marge verticale écrasée sous 1180 px.
+- **Supposé** :
+  - colonnes de couverture par défaut du tableau et familles mises en avant par catégorie sur les cartes. Ce sont des choix de présentation, sans effet sur les données ; un tableau de correspondance à modifier.

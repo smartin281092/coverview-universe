@@ -24,7 +24,8 @@ export function openProfileSetting(prefix: string, setting: ProfileSetting) {
 
 /**
  * The price profile as pills (native selects: keyboard, screen readers and phone pickers come
- * with them). Without a choice, the default is named as such.
+ * with them). Without a choice, the default is named as such. In a panel or a form, « rows »
+ * lays the same selects out as a settings list: label on the left, value on the right.
  */
 export function ProfilePills({
   prefix,
@@ -33,6 +34,7 @@ export function ProfilePills({
   localities,
   tone = "dark",
   title = true,
+  layout = "pills",
 }: {
   prefix: string;
   profile: Profile;
@@ -40,15 +42,23 @@ export function ProfilePills({
   localities: SupplementaryCatalog["localities"] | undefined;
   tone?: "dark" | "light";
   title?: boolean;
+  layout?: "pills" | "rows";
 }) {
+  const rows = layout === "rows";
   const locality = (canton: SupplementaryCanton) =>
     localities?.find((item) => item.canton === canton)?.locality ?? copy.profile.cantons[canton];
   return (
-    <div className={`sc-profile is-${tone}`} role="group" aria-label={copy.profile.title}>
+    <div
+      className={`sc-profile is-${tone}${rows ? " is-rows" : ""}`}
+      role="group"
+      aria-label={copy.profile.title}
+    >
       {title && <span className="sc-profile-title">{copy.profile.title}</span>}
       <div className="sc-profile-pills">
         <label className="sc-pill">
-          <span className="sc-pill-label">{copy.profile.birthYearShort}</span>
+          <span className="sc-pill-label">
+            {rows ? copy.profile.birthYear : copy.profile.birthYearShort}
+          </span>
           <select
             id={`${prefix}-birth`}
             aria-label={copy.profile.birthYear}

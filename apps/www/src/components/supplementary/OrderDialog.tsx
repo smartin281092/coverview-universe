@@ -261,6 +261,7 @@ export function OrderDialog({
               localities={index.catalog.localities}
               tone="light"
               title={false}
+              layout="rows"
             />
             <small className="sc-form-hint">{text.profileHint}</small>
           </fieldset>

@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { SupplementaryInsurer } from "@coverview/api-client/supplementary-insurance";
 import { supplementaryCopy as copy } from "../../content/fr/supplementary";
 import { HealthIcon } from "../health-insurance/HealthIcon";
@@ -12,6 +13,27 @@ const assets = import.meta.glob<string>("../../assets/health-insurers/*.{svg,png
 const logos = new Map(
   Object.entries(assets).map(([path, url]) => [Number(path.match(/\/(\d+)\./)?.[1]), url]),
 );
+// Width / height of each logo used here, read from its file (SVG viewBox or PNG pixels). Logos are
+// drawn at the same visual area, not the same height: a long wordmark (Groupe Mutuel, 6.5:1) would
+// otherwise look tiny next to a compact one (KPT, 2.3:1).
+const ratios = new Map([
+  [8, 2.34],
+  [290, 4.23],
+  [312, 2.8],
+  [343, 6.49],
+  [376, 2.25],
+  [509, 2.94],
+  [1384, 4.59],
+  [1509, 4.12],
+  [1542, 6.44],
+  [1555, 3.4],
+  [1562, 5.29],
+]);
+// Optical correction of light or condensed wordmarks, which look smaller at the same area.
+const weights = new Map([
+  [290, 1.15],
+  [343, 1.15],
+]);
 export function ScInsurerLogo({
   insurer,
   labelled = false,
@@ -23,9 +45,18 @@ export function ScInsurerLogo({
 }) {
   const name = insurer?.name ?? "";
   const logo = insurer?.bagInsurerId ? logos.get(insurer.bagInsurerId) : undefined;
+  const ratio = insurer?.bagInsurerId ? ratios.get(insurer.bagInsurerId) : undefined;
   return (
     <span
       className={`hi-insurer-logo sc-logo is-${size}${insurer?.bagInsurerId === 1386 ? " is-reversed" : ""}`}
+      style={
+        ratio
+          ? ({
+              "--sc-ar": ratio,
+              "--sc-logo-k": weights.get(insurer?.bagInsurerId ?? 0) ?? 1,
+            } as CSSProperties)
+          : undefined
+      }
       aria-hidden={!labelled}
       role={labelled ? "img" : undefined}
       aria-label={labelled ? name : undefined}
