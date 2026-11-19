@@ -13,11 +13,11 @@ Données : [jeu LCA 2027](../../data/supplementary-insurance/2027/README.md), co
 5. **Partenaires** : Assura et Groupe Mutuel (règle health.partner.1), badge « Partenaire » comme le comparateur de base.
 6. **Assistant** : interprétation du texte en tags, catégories, compagnies et budget par OpenAI quand la clé est configurée (sortie structurée limitée à la taxonomie), sinon par un dictionnaire de synonymes ; classement et questions déterministes côté serveur. Une question n'est posée que si ses réponses possibles changent les trois premiers résultats. Aucune donnée conservée, limite de débit par IP.
 7. **Comparaison** : 4 produits au plus, gardés dans l'URL et dans l'onglet (`sessionStorage`). Lignes = tags (prestations équivalentes) regroupés par famille ; cellule = couverture de la variante choisie, « — » si absente.
-8. **Panier** : deuxième étape du même plan (voir plus bas). Tant qu'elle n'est pas livrée, aucun CTA ne prétend ajouter au panier.
+8. **Commander** (instruction utilisateur du 19 novembre 2026 : « Pas de lien vers le site de l'assureur mais Commander qui m'envoie un email sur sebastien@coverview.ch avec le produit en question ») : CTA dégradé du panneau à la place du panier, formulaire prénom, nom, email, téléphone, profil prérempli ; `POST /supplementary-insurance/orders` enregistre la commande (idempotente par `requestId`) et un travail envoie l'avis à `SUPPLEMENTARY_NOTIFY_EMAIL` (défaut `sebastien@coverview.ch`), au moins une fois, comme l'avis horizon3. Disponible pour tous les produits (aucune restriction demandée). Aucun lien vers le site de l'assureur.
 
-## Étape 2 — panier
+## Étape ultérieure possible — panier
 
-Une complémentaire s'ajoute au panier existant (demande d'offre « Assurance maladie 2027 ») pour une personne, avec ou sans modèle de base : extension compatible du contrat des demandes (`supplementary` par personne, modèle de base facultatif si au moins une complémentaire), prix recalculé par le serveur, affichage dans Wallet, Admin et Partner. Demande possible pour les seules compagnies partenaires ; ailleurs, CTA grisé et produit partenaire suggéré, comme le comparateur de base.
+Remplacée pour l'instant par « Commander ». Si elle est demandée : une complémentaire s'ajoute au panier existant (demande d'offre « Assurance maladie 2027 ») pour une personne, avec ou sans modèle de base : extension compatible du contrat des demandes (`supplementary` par personne, modèle de base facultatif si au moins une complémentaire), prix recalculé par le serveur, affichage dans Wallet, Admin et Partner. Demande possible pour les seules compagnies partenaires ; ailleurs, CTA grisé et produit partenaire suggéré, comme le comparateur de base.
 
 ## Definition of Done — oracles
 

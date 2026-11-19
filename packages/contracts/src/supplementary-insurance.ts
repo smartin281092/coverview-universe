@@ -198,6 +198,33 @@ export const supplementaryAssistantResultSchema = z
   })
   .strict();
 
+// Order of a product (user request, 19 November 2026): the visitor leaves their contact details and
+// CoverView is notified by email with the product. Same requestId = same order, never twice.
+export const supplementaryOrderInputSchema = z
+  .object({
+    requestId: z.guid(),
+    productKey: key,
+    variant: z.string().max(200),
+    option: z.string().max(200),
+    firstName: text(80),
+    lastName: text(80),
+    email: z.email().max(254),
+    phone: z
+      .string()
+      .trim()
+      .regex(/^\+?[\d\s()./-]{6,40}$/u),
+    birthYear: z.number().int().min(1900).max(2026),
+    sex: supplementarySexSchema.nullable(),
+    canton: supplementaryCantonSchema,
+    message: z.string().trim().max(1000).nullable(),
+    // Honeypot field of the form, always empty for a person.
+    website: z.string().max(0).default(""),
+  })
+  .strict();
+export const supplementaryOrderReceiptSchema = z
+  .object({ success: z.literal(true), requestId: z.guid(), reference: z.string().min(1).max(40) })
+  .strict();
+
 export type SupplementaryCanton = z.infer<typeof supplementaryCantonSchema>;
 export type SupplementarySex = z.infer<typeof supplementarySexSchema>;
 export type SupplementaryTag = z.infer<typeof supplementaryTagSchema>;
@@ -211,3 +238,5 @@ export type SupplementaryQuote = z.infer<typeof supplementaryQuoteSchema>;
 export type SupplementaryAssistantInput = z.infer<typeof supplementaryAssistantInputSchema>;
 export type SupplementaryAssistantQuestion = z.infer<typeof supplementaryAssistantQuestionSchema>;
 export type SupplementaryAssistantResult = z.infer<typeof supplementaryAssistantResultSchema>;
+export type SupplementaryOrderInput = z.infer<typeof supplementaryOrderInputSchema>;
+export type SupplementaryOrderReceipt = z.infer<typeof supplementaryOrderReceiptSchema>;

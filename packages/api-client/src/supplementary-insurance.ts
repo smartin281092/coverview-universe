@@ -4,9 +4,12 @@ import {
   supplementaryAssistantInputSchema,
   supplementaryAssistantResultSchema,
   supplementaryCatalogSchema,
+  supplementaryOrderInputSchema,
+  supplementaryOrderReceiptSchema,
   supplementaryQuoteInputSchema,
   supplementaryQuoteSchema,
   type SupplementaryAssistantInput,
+  type SupplementaryOrderInput,
   type SupplementaryQuoteInput,
 } from "@coverview/contracts/supplementary-insurance";
 export type * from "@coverview/contracts/supplementary-insurance";
@@ -62,6 +65,13 @@ export function createSupplementaryClient(baseUrl: string) {
         supplementaryAssistantResultSchema,
         signal,
         supplementaryAssistantInputSchema.parse(input),
+      ),
+    order: (input: SupplementaryOrderInput, signal?: AbortSignal) =>
+      request(
+        "/orders",
+        supplementaryOrderReceiptSchema,
+        signal,
+        supplementaryOrderInputSchema.parse(input),
       ),
   };
 }
