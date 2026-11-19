@@ -16,8 +16,8 @@ export type Profile = {
   sex: SupplementarySex | null;
   canton: SupplementaryCanton | null;
 };
-export const defaultBirthYear = 1990;
-export const defaultCanton: SupplementaryCanton = "VD";
+const defaultBirthYear = 1990;
+const defaultCanton: SupplementaryCanton = "VD";
 export const maxCompared = 4;
 
 export const interpolate = (template: string, values: Record<string, string | number>) =>
@@ -51,7 +51,7 @@ const amountOnly = (format: Intl.NumberFormat, value: number) =>
     .join("")
     .trim();
 export const chf = (minor: number) => amountOnly(cents, minor / 100);
-export const chfRound = (minor: number) =>
+const chfRound = (minor: number) =>
   minor % 100 === 0 ? amountOnly(whole, minor / 100) : chf(minor);
 const percent = new Intl.NumberFormat("fr-CH", { style: "percent", maximumFractionDigits: 1 });
 
@@ -107,7 +107,7 @@ export const insurerName = (index: CatalogIndex, key: string) =>
   index.insurers.get(key)?.name ?? key;
 
 // The benefit's family: its main taxonomy tag's, or the first taxonomy tag found.
-export function benefitFamily(index: CatalogIndex, benefit: SupplementaryBenefit) {
+function benefitFamily(index: CatalogIndex, benefit: SupplementaryBenefit) {
   for (const tag of benefit.tags) {
     const family = index.tags.get(tag)?.family;
     if (family) return family;
@@ -370,7 +370,7 @@ export function writeSession(key: string, value: unknown) {
 }
 export const compareKey = "cv-supplementary-compare";
 export const profileKey = "cv-supplementary-profile";
-export const comparisonPath = "/comparateur-complementaires-2027/comparaison";
+const comparisonPath = "/comparateur-complementaires-2027/comparaison";
 export const listPath = "/comparateur-complementaires-2027";
 export const comparisonHref = (keys: string[]) =>
   keys.length

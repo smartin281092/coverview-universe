@@ -66,19 +66,27 @@ export function registerSupplementaryInsurance(server: FastifyInstance, config: 
   const budget = { day: "", calls: 0 };
 
   // The catalogue is validated by supplementaryCatalogSchema when it is loaded, then sent as the
-  // serialized string kept with it (2.5 MB: no second validation per request).
+  // serialized string kept with it (2.5 MB: no second validation per request), compressed when
+  // the browser accepts it. The weak ETag names the catalogue, whatever its encoding.
   server.get(
     "/supplementary-insurance/catalog",
     { config: { rateLimit: { max: 120, timeWindow: "1 minute" } } },
     async (request, reply) => {
-      const { catalog, json } = await repository.current();
-      const etag = `"${catalog.id}"`;
+      const loaded = await repository.current();
+      const etag = `W/"${loaded.catalog.id}"`;
       const match = String(request.headers["if-none-match"] ?? "")
         .split(",")
         .map((value) => value.trim().replace(/^W\//u, ""));
-      reply.header("etag", etag).header("cache-control", "public, max-age=300");
-      if (match.includes(etag) || match.includes("*")) return reply.code(304).send();
-      return reply.type("application/json; charset=utf-8").send(json);
+      reply
+        .header("etag", etag)
+        .header("cache-control", "public, max-age=300")
+        .header("vary", "Accept-Encoding");
+      if (match.includes(etag.slice(2)) || match.includes("*")) return reply.code(304).send();
+      const accepted = acceptedEncodings(request.headers["accept-encoding"]);
+      reply.type("application/json; charset=utf-8");
+      if (accepted.has("br")) return reply.header("content-encoding", "br").send(loaded.br);
+      if (accepted.has("gzip")) return reply.header("content-encoding", "gzip").send(loaded.gzip);
+      return reply.send(loaded.json);
     },
   );
 
@@ -190,5 +198,15 @@ export function registerSupplementaryInsurance(server: FastifyInstance, config: 
           : reply.type("text/html; charset=utf-8").send(message.html);
       },
     );
+}
+// Codings the client accepts, without the ones it refuses with q=0.
+function acceptedEncodings(header: string | string[] | undefined) {
+  const accepted = new Set<string>();
+  for (const part of String(header ?? "").split(",")) {
+    const [name, ...parameters] = part.trim().toLowerCase().split(";");
+    const quality = parameters.find((value) => value.trim().startsWith("q="));
+    if (name && !(quality && Number(quality.trim().slice(2)) === 0)) accepted.add(name);
+  }
+  return accepted;
 }
 export { SupplementaryError } from "./supplementary.repository.js";

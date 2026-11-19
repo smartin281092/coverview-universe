@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseEnv } from "node:util";
-import { gzipSync } from "node:zlib";
+import { brotliDecompressSync, gunzipSync, gzipSync } from "node:zlib";
 import { PostgreSqlContainer } from "@testcontainers/postgresql";
 import { migrate } from "drizzle-orm/node-postgres/migrator";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
@@ -571,7 +571,23 @@ describe("routes and orders", () => {
       expect(catalog.statusCode).toBe(200);
       expect(catalog.headers["cache-control"]).toBe("public, max-age=300");
       const body = supplementaryCatalogSchema.parse(catalog.json());
-      expect(catalog.headers.etag).toBe(`"${body.id}"`);
+      expect(catalog.headers.etag).toBe(`W/"${body.id}"`);
+      expect(catalog.headers["content-encoding"]).toBeUndefined();
+      // Compressed when accepted (no proxy compresses the API), same catalogue once decoded.
+      for (const [accept, coding, decode] of [
+        ["gzip, deflate, br", "br", brotliDecompressSync],
+        ["gzip, br;q=0", "gzip", gunzipSync],
+      ] as const) {
+        const compressed = await app.inject({
+          method: "GET",
+          url: "/supplementary-insurance/catalog",
+          headers: { "accept-encoding": accept },
+        });
+        expect(compressed.headers["content-encoding"]).toBe(coding);
+        expect(compressed.headers.vary).toContain("Accept-Encoding");
+        expect(JSON.parse(decode(compressed.rawPayload).toString("utf8"))).toEqual(body);
+        expect(compressed.rawPayload.length).toBeLessThan(catalog.rawPayload.length);
+      }
       const cached = await app.inject({
         method: "GET",
         url: "/supplementary-insurance/catalog",
@@ -786,7 +802,7 @@ describe("routes and orders", () => {
     });
     expect(notice.subject).toBe("Nouvelle commande de complémentaire : AXA-DENTAL (AXA)");
     expect(notice.text).toContain("Variante : Dentaire 1000");
-    expect(notice.text).toContain("Prix mensuel indicatif : CHF 25,00 par mois");
+    expect(notice.text).toContain("Prix mensuel indicatif : CHF 25.00 par mois");
     expect(notice.text).toContain("Localité de référence du prix : 1003 Lausanne (VD)");
     expect(notice.text).toContain("Client : Camille Exemple");
     expect(notice.text).toContain("homme, canton de Vaud");

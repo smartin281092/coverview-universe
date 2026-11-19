@@ -1,3 +1,5 @@
+import { promisify } from "node:util";
+import { brotliCompress, constants, gzip } from "node:zlib";
 import type { Pool } from "pg";
 import {
   supplementaryCatalogSchema,
@@ -19,7 +21,20 @@ export class SupplementaryError extends Error {
   }
 }
 
-type Loaded = { catalog: SupplementaryCatalog; json: string; index: CatalogIndex };
+// The serialized catalogue (2.5 MB) and its compressed forms, made once per catalogue off the
+// event loop: no proxy compresses the API's answers (PERF-02).
+type Encoded = { json: string; br: Buffer; gzip: Buffer };
+type Loaded = Encoded & { catalog: SupplementaryCatalog; index: CatalogIndex };
+const brotli = promisify(brotliCompress);
+const gzipped = promisify(gzip);
+async function encode(catalog: SupplementaryCatalog): Promise<Encoded> {
+  const json = JSON.stringify(catalog);
+  const [br, gz] = await Promise.all([
+    brotli(json, { params: { [constants.BROTLI_PARAM_QUALITY]: 9 } }),
+    gzipped(json, { level: 9 }),
+  ]);
+  return { json, br, gzip: gz };
+}
 // A new import is served within this delay; the catalogue itself is parsed once per id.
 const recheckMs = 30_000;
 
@@ -43,7 +58,7 @@ export function createSupplementaryRepository(pool: Pool) {
         ])
       ).rows[0];
       const catalog = supplementaryCatalogSchema.parse(row?.data);
-      cached = { catalog, json: JSON.stringify(catalog), index: buildCatalogIndex(catalog) };
+      cached = { catalog, ...(await encode(catalog)), index: buildCatalogIndex(catalog) };
     }
     checkedAt = Date.now();
     return cached;

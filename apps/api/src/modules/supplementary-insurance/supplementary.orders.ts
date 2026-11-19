@@ -8,6 +8,7 @@ import type {
   SupplementaryPrice,
 } from "@coverview/contracts/supplementary-insurance";
 import type { Mailer } from "../../platform/mailer.js";
+import { chf } from "./supplementary.format.js";
 import { quoteYear } from "./supplementary.interpret.js";
 import {
   supplementaryOrderMessage,
@@ -54,11 +55,6 @@ export type OrderSettings = { notifyEmail: string };
 // Same reference for the same request, whether it is stored or not (honeypot).
 const referenceOf = (requestId: string) =>
   `LCA-${createHash("sha256").update(requestId.toLowerCase()).digest("hex").slice(0, 10).toUpperCase()}`;
-const amount = new Intl.NumberFormat("fr-CH", {
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-});
-const chf = (minor: number) => `CHF ${amount.format(minor / 100)}`;
 function priceText(price: Stored["price"], sex: Stored["sex"]) {
   if (!price) return "Prix sur demande (aucun prix relevé pour ce profil)";
   const value =

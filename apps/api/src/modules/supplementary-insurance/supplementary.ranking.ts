@@ -4,6 +4,7 @@ import type {
   SupplementaryPrice,
   SupplementaryProduct,
 } from "@coverview/contracts/supplementary-insurance";
+import { chf } from "./supplementary.format.js";
 import type { Interpretation } from "./supplementary.interpret.js";
 import { createVariantMatcher, type VariantMatcher } from "./supplementary.variants.js";
 
@@ -49,7 +50,7 @@ const periods: Record<string, string> = {
   day: " par jour",
   lifetime: " à vie",
 };
-const francs = new Intl.NumberFormat("fr-CH", { maximumFractionDigits: 2 });
+const rate = new Intl.NumberFormat("fr-CH", { maximumFractionDigits: 1 });
 // A benefit whose wording limits it to accidents ("après un accident", "(accident)").
 const accidentOnly = (benefit: SupplementaryBenefit) => /\baccidents?\b/iu.test(benefit.label);
 const shortLabel = (label: string) => label.replace(/\s*\(.*$/u, "").trim() || label;
@@ -108,11 +109,11 @@ export function buildCatalogIndex(catalog: SupplementaryCatalog): CatalogIndex {
 
 function reason(label: string, benefit: SupplementaryBenefit) {
   const parts: string[] = [];
-  if (benefit.ratePercent !== null) parts.push(`${francs.format(benefit.ratePercent)} %`);
+  if (benefit.ratePercent !== null) parts.push(`${rate.format(benefit.ratePercent)} %`);
   if (benefit.unlimited) parts.push("sans plafond");
   else if (benefit.maxAmountMinor !== null)
     parts.push(
-      `max. CHF ${francs.format(benefit.maxAmountMinor / 100)}${periods[benefit.maxPeriod ?? ""] ?? ""}`,
+      `max. ${chf(benefit.maxAmountMinor, { round: true })}${periods[benefit.maxPeriod ?? ""] ?? ""}`,
     );
   const detail = parts.length ? parts.join(", ") : benefit.coverage || benefit.label;
   return `${label} : ${detail}`.slice(0, 300);

@@ -5,6 +5,7 @@ import type {
   SupplementaryCanton,
   SupplementarySex,
 } from "@coverview/contracts/supplementary-insurance";
+import { chf } from "./supplementary.format.js";
 import { fold, quoteYear, type Interpretation } from "./supplementary.interpret.js";
 import { quotePrices, type PremiumRecord } from "./supplementary.quote.js";
 import { rankProducts, type CatalogIndex, type RankedProduct } from "./supplementary.ranking.js";
@@ -53,11 +54,6 @@ const budgetOptions = [
   { value: "200", label: "Jusqu’à CHF 200" },
   { value: "none", label: "Pas de limite" },
 ];
-const price = new Intl.NumberFormat("fr-CH", {
-  minimumFractionDigits: 2,
-  maximumFractionDigits: 2,
-});
-const chf = (minor: number) => `CHF ${price.format(minor / 100)}`;
 
 function answerYear(value: string | undefined): number | null {
   if (!value) return null;
@@ -301,7 +297,12 @@ function summary(
   const first = ranked[0]!;
   const product = index.products.get(first.productKey)!;
   const variant = product.variants.find((item) => item.key === first.variant);
-  const name = `${product.name}${variant ? ` (${variant.name})` : ""}, ${index.insurerNames.get(product.insurer) ?? product.insurer}`;
+  // A variant named after its product ("Traitements ambulatoires II") stands alone.
+  const title =
+    variant && variant.name.toLowerCase().startsWith(product.name.toLowerCase())
+      ? variant.name
+      : `${product.name}${variant ? ` (${variant.name})` : ""}`;
+  const name = `${title}, ${index.insurerNames.get(product.insurer) ?? product.insurer}`;
   const cost =
     first.monthlyMinor === null
       ? "prix sur demande"
@@ -310,6 +311,6 @@ function summary(
   const subject = labels.length ? `pour ${labels.join(", ").toLowerCase()}` : "selon vos critères";
   const count = `${ranked.length} produit${ranked.length > 1 ? "s" : ""}`;
   if (need.maxMonthlyMinor !== null && ranked.every((item) => !item.withinBudget))
-    return `Aucun produit ne tient dans un budget de ${chf(need.maxMonthlyMinor)} par mois ${subject} ; parmi les ${count} trouvés, en tête : ${name}, ${cost}.`;
+    return `Aucun produit ne tient dans un budget de ${chf(need.maxMonthlyMinor, { round: true })} par mois ${subject} ; parmi les ${count} trouvés, en tête : ${name}, ${cost}.`;
   return `${count} ${subject} ; en tête : ${name}, ${cost}.`;
 }

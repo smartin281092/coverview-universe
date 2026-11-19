@@ -32,4 +32,32 @@ Carte des zones par NPA (six localités de référence seulement) ; prix d'Atupr
 
 ## Journal de vérification
 
-À compléter.
+19 novembre 2026, avant commit (session réelle : Opus 5.5, deux agents en parallèle sur `apps/api` et `apps/www`, puis reprise et vérification ici). Services locaux : PostgreSQL 16 (Docker absent, donc pas de Testcontainers), Redis, un faux Mailpit écrivant dans un fichier, API sur 127.0.0.1:4100, site de développement sur 4103.
+
+- **Vérifié** :
+  - V0/V1 : typecheck `api` et `www` (0 erreur) ; eslint et prettier sur les fichiers touchés ; `pnpm --filter api build` ; `pnpm --filter www build` (49 pages) ; knip, plus rien sur le module ni la page.
+  - Migration 0086 générée par `db:generate`, additive ; les 87 migrations appliquées sur une base vierge.
+  - Import réel : 12 assureurs, 190 produits dont 132 avec prix, 2 671 prestations, 363 760 primes. Le réimport ne crée rien (`created:false`).
+  - V2 : 26 tests (module, `llm-provider`) sur PostgreSQL 16 local par `SUPPLEMENTARY_TEST_DATABASE_URL`, restreint à une base `coverview_test` en boucle locale.
+  - Catalogue : ETag faible, réponse 304 ; brotli 230 kB et gzip 348 kB au lieu de 2,58 Mo ; `Vary: Accept-Encoding`.
+  - `check:www` passe : îlot de 64 066 octets gzip ; JavaScript initial hors îlots de 93,5 kB, sous le plafond de MKT-06.
+  - V3, parcours réel dans Chromium, ordinateur et iPhone 13 :
+    - filtres, tri par en-tête, cartes et tableau ;
+    - popup « +N prestations », avec retour du focus ;
+    - panneau et ses onglets au clavier ;
+    - commande : erreur réseau simulée, puis reprise avec le même `requestId` et référence `LCA-…` ;
+    - avis reçu par le faux Mailpit pour sebastien@coverview.ch, avec produit, variante, prix « CHF 90.30 à CHF 151.30 », localité, coordonnées et profil ;
+    - comparaison à 4, le 5e produit étant refusé ; « Seulement les différences » ; ajout par thème « Dentaire » (51 produits) ;
+    - assistant : question « Quel âge a l’enfant ? », puis profil mis à jour.
+- **Fait non vérifié** :
+  - appel OpenAI réel (seulement un `fetch` simulé, et le repli sur les règles) ;
+  - envoi par Mailpit ou par Resend ;
+  - Testcontainers avec PostgreSQL 18 ;
+  - lecteurs d’écran et iOS réels ;
+  - import en production.
+- **Supposé** (rayon d’impact) :
+  - une prestation dont le libellé dit « accident » compte à moitié dans le classement : poids à changer dans `supplementary.ranking.ts` ;
+  - rattachement des variantes du calculateur par mots communs ; une variante non rattachée reste sans prix : prix des variantes dans l’assistant et l’avis ;
+  - enfant sans âge = 10 ans : première question de l’assistant ;
+  - lien vers `/informations-demande-assurance` (art. 45 LSA) sous le formulaire de commande : un lien à changer dans `OrderDialog.tsx`.
+- **Limites** : commandes sans durée de conservation, ni export, ni effacement (à décider avant la mise en ligne) ; anciens catalogues non purgés (environ 130 Mo par relevé) ; six localités de référence ; Atupri sans prix.

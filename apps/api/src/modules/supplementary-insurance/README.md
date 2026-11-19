@@ -27,12 +27,12 @@ Comparateur public des assurances complémentaires (LCA) 2027 pour le site (`/co
 
 Routes publiques et anonymes, sans cookie ni session, sur l’origine de l’API ; CORS global (`CORS_ORIGINS`). Contrats Zod stricts de `@coverview/contracts/supplementary-insurance`, erreurs au format API-02 (`SUPPLEMENTARY_CATALOG_UNAVAILABLE` 503, `SUPPLEMENTARY_PRODUCT_UNKNOWN` / `SUPPLEMENTARY_VARIANT_UNKNOWN` / `SUPPLEMENTARY_IDEMPOTENCY_REUSED` 422).
 
-| Route                                     | Limite par IP | Corps | Cache                                                       |
-| ----------------------------------------- | ------------- | ----- | ----------------------------------------------------------- |
-| `GET /supplementary-insurance/catalog`    | 120/min       | —     | `public, max-age=300`, `ETag` = id, 304 sur `If-None-Match` |
-| `POST /supplementary-insurance/quote`     | 60/min        | 1 Ko  | `no-store`                                                  |
-| `POST /supplementary-insurance/assistant` | 20/min        | 8 Ko  | `no-store`                                                  |
-| `POST /supplementary-insurance/orders`    | 5/min         | 4 Ko  | `no-store`                                                  |
+| Route                                     | Limite par IP | Corps | Cache                                                                                                                                        |
+| ----------------------------------------- | ------------- | ----- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /supplementary-insurance/catalog`    | 120/min       | —     | `public, max-age=300`, `ETag` faible = id, 304 sur `If-None-Match` ; brotli ou gzip selon `Accept-Encoding` (aucun proxy ne compresse l’API) |
+| `POST /supplementary-insurance/quote`     | 60/min        | 1 Ko  | `no-store`                                                                                                                                   |
+| `POST /supplementary-insurance/assistant` | 20/min        | 8 Ko  | `no-store`                                                                                                                                   |
+| `POST /supplementary-insurance/orders`    | 5/min         | 4 Ko  | `no-store`                                                                                                                                   |
 
 Le message de l’assistant n’est ni conservé ni journalisé (longueur, moteur, repli, durée, jetons OpenAI seulement). Aucune coordonnée de commande dans les journaux (compteurs seulement). Import en CLI, garde `assertLocalDatabase`, aucune route d’écriture du catalogue.
 
