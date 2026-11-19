@@ -1,0 +1,18 @@
+---
+// Static method and price limits, readable without JavaScript, under both pages; each page
+// links to the other one (no orphan page, SEO-08).
+import { supplementaryCopy as copy } from '../../content/fr/supplementary';
+interface Props { link: 'list' | 'comparison' }
+const { link } = Astro.props;
+---
+<section class="sc-method" aria-labelledby="sc-method-title">
+  <div class="sc-shell">
+    <h2 id="sc-method-title">{copy.method.title}</h2>
+    <div class="sc-method-text">
+      {copy.method.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+    </div>
+    <a class="sc-method-link" href={link === 'comparison' ? '/comparateur-complementaires-2027/comparaison' : '/comparateur-complementaires-2027'}>
+      {link === 'comparison' ? copy.method.comparisonLink : copy.method.listLink} →
+    </a>
+  </div>
+</section>

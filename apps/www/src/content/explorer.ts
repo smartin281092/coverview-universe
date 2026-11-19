@@ -3,6 +3,7 @@ import { content } from "./fr/interface";
 import { readableEditorialPaths } from "./editorial";
 import { healthCopy } from "./fr/health-insurance";
 import { hyperionCopy } from "./fr/hyperion";
+import { supplementaryCopy } from "./fr/supplementary";
 
 const status = (slug: string) =>
   readableEditorialPaths.has(slug) && !["contact", "retire", "miles"].includes(slug)
@@ -38,6 +39,11 @@ export const explorerGroups = [
       {
         href: "/comparateur-assurance-maladie-2027",
         label: `${healthCopy.toolName} 2027`,
+        status: copy.freeTool,
+      },
+      {
+        href: "/comparateur-complementaires-2027",
+        label: supplementaryCopy.explorerLabel,
         status: copy.freeTool,
       },
       ...journeys.map((page) => ({ href: `/${page.slug}`, label: page.label, status: copy.guide })),

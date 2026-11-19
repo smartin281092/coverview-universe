@@ -1,0 +1,29 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SupplementaryComparator from '../../components/supplementary/SupplementaryComparator';
+import SupplementaryMethod from '../../components/supplementary/SupplementaryMethod.astro';
+import { supplementaryCopy as copy } from '../../content/fr/supplementary';
+import '../../styles/health-insurance.css';
+import '../../styles/supplementary.css';
+const apiUrl = import.meta.env.PUBLIC_API_URL ?? (import.meta.env.DEV ? 'http://127.0.0.1:4100' : Astro.site?.origin ?? Astro.url.origin);
+const url = new URL('/comparateur-complementaires-2027/comparaison', Astro.site).href;
+---
+<Layout title={copy.comparison.title} description={copy.comparison.description} structuredData={{'@context':'https://schema.org','@type':'WebPage',name:copy.comparison.heading,description:copy.comparison.description,url,inLanguage:'fr-CH',isPartOf:{'@type':'WebPage',url:new URL('/comparateur-complementaires-2027', Astro.site).href}}}>
+  <div class="sc-page is-comparison">
+    <section class="sc-band sc-hero">
+      <div class="sc-shell">
+        <nav class="sc-breadcrumb" aria-label={copy.breadcrumb.label}>
+          <ol>
+            <li><a href="/">{copy.breadcrumb.home}</a></li>
+            <li><a href="/comparateur-complementaires-2027">{copy.breadcrumb.list}</a></li>
+            <li aria-current="page">{copy.breadcrumb.comparison}</li>
+          </ol>
+        </nav>
+        <h1>{copy.comparison.heading}</h1>
+        <p class="sc-lead">{copy.comparison.lead}</p>
+      </div>
+    </section>
+    <SupplementaryComparator apiUrl={apiUrl} view="comparison" client:load />
+    <SupplementaryMethod link="list" />
+  </div>
+</Layout>

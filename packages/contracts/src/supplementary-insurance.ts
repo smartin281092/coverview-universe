@@ -7,8 +7,17 @@ import { z } from "zod";
 const key = z.string().regex(/^[a-z0-9][a-z0-9:_.-]{0,119}$/);
 const text = (max: number) => z.string().trim().min(1).max(max);
 const minor = z.number().int().min(0).max(100_000_000);
+// Insured sums (death or disability capital) reach several million francs.
+const insuredMinor = z.number().int().min(0).max(1_000_000_000);
 const url = z.string().url().max(600);
 
+// Error codes of the public routes (API-02).
+export const supplementaryErrorCodes = [
+  "SUPPLEMENTARY_CATALOG_UNAVAILABLE",
+  "SUPPLEMENTARY_PRODUCT_UNKNOWN",
+  "SUPPLEMENTARY_VARIANT_UNKNOWN",
+  "SUPPLEMENTARY_IDEMPOTENCY_REUSED",
+] as const;
 export const supplementaryCantons = ["VD", "GE", "FR", "VS", "NE", "JU"] as const;
 export const supplementaryCantonSchema = z.enum(supplementaryCantons);
 export const supplementarySexSchema = z.enum(["female", "male"]);
@@ -39,7 +48,7 @@ export const supplementaryBenefitSchema = z
     variant: z.string().max(120).nullable(),
     coverage: z.string().max(1200),
     ratePercent: z.number().min(0).max(100).nullable(),
-    maxAmountMinor: minor.nullable(),
+    maxAmountMinor: insuredMinor.nullable(),
     maxPeriod: z.string().max(40).nullable(),
     unlimited: z.boolean(),
     waitingPeriod: z.string().max(400).nullable(),
@@ -86,7 +95,11 @@ export const supplementaryProductSchema = z
   })
   .strict();
 export const supplementaryReferenceLocalitySchema = z
-  .object({ canton: supplementaryCantonSchema, postalCode: z.string().regex(/^\d{4}$/), locality: text(80) })
+  .object({
+    canton: supplementaryCantonSchema,
+    postalCode: z.string().regex(/^\d{4}$/),
+    locality: text(80),
+  })
   .strict();
 export const supplementaryCatalogSchema = z
   .object({
@@ -217,14 +230,16 @@ export const supplementaryOrderInputSchema = z
     sex: supplementarySexSchema.nullable(),
     canton: supplementaryCantonSchema,
     message: z.string().trim().max(1000).nullable(),
-    // Honeypot field of the form, always empty for a person.
-    website: z.string().max(0).default(""),
+    // Honeypot field of the form, always empty for a person. A filled one gets the same receipt
+    // without anything being stored or sent, so it is accepted here rather than refused.
+    website: z.string().max(200).default(""),
   })
   .strict();
 export const supplementaryOrderReceiptSchema = z
   .object({ success: z.literal(true), requestId: z.guid(), reference: z.string().min(1).max(40) })
   .strict();
 
+export type SupplementaryErrorCode = (typeof supplementaryErrorCodes)[number];
 export type SupplementaryCanton = z.infer<typeof supplementaryCantonSchema>;
 export type SupplementarySex = z.infer<typeof supplementarySexSchema>;
 export type SupplementaryTag = z.infer<typeof supplementaryTagSchema>;

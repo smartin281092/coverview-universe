@@ -81,6 +81,11 @@ export const navigation = {
           icon: "heart-pulse",
           label: "Assurance maladie",
         },
+        {
+          href: "/comparateur-complementaires-2027",
+          icon: "shield",
+          label: "Complémentaires santé",
+        },
         { href: "/comparer", icon: "compare", label: "Comparer mes options" },
         { href: "/benchmark", icon: "chart", label: "Critères du benchmark" },
         { href: "/articles/lire-un-benchmark", icon: "book", label: "Lire un benchmark" },

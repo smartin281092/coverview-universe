@@ -77,6 +77,26 @@ const pageScripts = new Map([
   ],
   // Indicateur de connexion et lien vers Wallet, module natif hors du contenu (README www).
   ["/account", { modules: ["account"] }],
+  // Comparateur des complémentaires 2027 (19 novembre 2026) : un même îlot pour la liste et la
+  // comparaison, sous l'en-tête commun ; son budget propre est mesuré par measureIslands.
+  [
+    "/comparateur-complementaires-2027",
+    { islands: ["SupplementaryComparator@load"], interactiveMain: true },
+  ],
+  [
+    "/comparateur-complementaires-2027/comparaison",
+    { islands: ["SupplementaryComparator@load"], interactiveMain: true },
+  ],
+]);
+// Îlots dont le JavaScript est borné à part (MKT-04, MKT-06 : JS initial < 100 kB hors îlots,
+// chaque îlot dans le budget de sa page). Leurs pages appellent l'API publique dès le chargement,
+// que ce build servi seul n'a pas : la mesure suit donc le graphe des imports statiques du build
+// (tout ce que l'îlot charge avant toute interaction, données reçues ou non), sans ses imports
+// dynamiques, rapportés à part. « Propre » = hors chrome commun déjà chargé par chaque page
+// (React, en-tête, consentement).
+const islandBudgets = new Map([
+  ["/comparateur-complementaires-2027", "SupplementaryComparator"],
+  ["/comparateur-complementaires-2027/comparaison", "SupplementaryComparator"],
 ]);
 // « Se connecter » mène à la connexion côté serveur de l'API (AUTH-01), route que le build
 // statique ne sert pas. Sans PUBLIC_API_URL au build, l'API prend l'origine du site (README www) ;
@@ -259,6 +279,60 @@ function checkStructured(html, route) {
 
 // Nom source d'un fichier émis : « /_astro/SiteHeader.CMT2yV2v.js » donne « SiteHeader ».
 const emittedName = (url) => new URL(url, "http://build").pathname.split("/").pop().split(".")[0];
+
+// Imports statiques d'un module émis, récursivement ; import("…") reste dehors.
+function staticGraph(files, entries) {
+  const seen = new Set();
+  const lazy = new Set();
+  const queue = entries.map((entry) => new URL(entry, "http://build").pathname);
+  for (const path of queue) {
+    if (seen.has(path) || !files.has(path)) continue;
+    seen.add(path);
+    const body = files.get(path).toString();
+    for (const match of body.matchAll(
+      /(?:^|[;}\s])(?:import|export)\s*(?:[^'"`;()]*?from\s*)?["']([^"']+\.m?js)["']/g,
+    ))
+      queue.push(new URL(match[1], `http://build${path}`).pathname);
+    for (const match of body.matchAll(/import\(\s*["'`]([^"'`]+\.m?js)["'`]\s*\)/g))
+      lazy.add(new URL(match[1], `http://build${path}`).pathname);
+  }
+  return { paths: seen, lazy: [...lazy].filter((path) => !seen.has(path)) };
+}
+function measureIslands(files, pages) {
+  const gzip = (paths) =>
+    [...paths].reduce((sum, path) => sum + gzipSync(files.get(path)).length, 0);
+  const results = [];
+  for (const [route, island] of islandBudgets) {
+    const html = pages.get(route);
+    assert(html, `${route} : page de l'îlot absente`);
+    const own = html.islands.find((item) => emittedName(item.component) === island);
+    assert(own, `${route} : îlot ${island} absent`);
+    const chrome = staticGraph(files, [
+      ...html.islands
+        .filter((item) => item !== own)
+        .flatMap((item) => [item.component, item.renderer]),
+      ...html.scripts.filter((script) => script.src).map((script) => script.src),
+    ]).paths;
+    const graph = staticGraph(files, [own.component, own.renderer]);
+    const ownPaths = [...graph.paths].filter((path) => !chrome.has(path));
+    const islandGzipBytes = gzip(ownPaths);
+    const inline = html.scripts
+      .filter((script) => !script.src)
+      .reduce((sum, script) => sum + gzipSync(script.body).length, 0);
+    assert(
+      islandGzipBytes < limits.javascriptGzipBytes,
+      `${route} : îlot ${island} ${islandGzipBytes} octets gzip`,
+    );
+    results.push({
+      route,
+      island,
+      islandGzipBytes,
+      pageEagerGzipBytes: gzip(new Set([...chrome, ...graph.paths])) + inline,
+      lazyChunks: graph.lazy.map((path) => [emittedName(path), gzipSync(files.get(path)).length]),
+    });
+  }
+  return results;
+}
 
 function checkScripts(html, route, files) {
   const expected = pageScripts.get(route) ?? {};
@@ -596,6 +670,7 @@ async function checkHtml(browser, files, origin) {
     assert.equal((await page.goto(`${origin}/page-absente-build-check`)).status(), 404);
     return {
       pages: routes.length,
+      islandBudgets: measureIslands(files, pages),
       siteChrome,
       landingExecutableScripts: pages.get("/").scripts.length,
       comparatorIslands: pages.get("/comparateur-assurance-maladie-2027")?.islands.length ?? 0,
