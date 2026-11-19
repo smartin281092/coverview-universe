@@ -83,3 +83,5 @@ Le remote est raccordé ; aucun push ni déploiement n'a été effectué pendant
 Extension du 30.09.2026 : [insurance-requests](apps/api/src/modules/insurance-requests/README.md), propriétaire des demandes d’offre familiales, du suivi invité/Wallet et du traitement Admin. [Vérifications et limites](roadmap/evidence/health-offers.md).
 
 Extension du 4 novembre 2026 : [pension-searches](apps/api/src/modules/pension-searches/README.md), recherches d’avoirs LPP commandées depuis `/retrouver-lpp` par un compte Wallet vérifié, suivies dans Wallet et traitées dans Admin. Recherche gratuite ; mandat versionné non validé juridiquement. [Plan et preuves](roadmap/plans/lpp-search-2026-11-04.plan.md).
+
+Extension du 19 novembre 2026 : [supplementary-insurance](apps/api/src/modules/supplementary-insurance/README.md), catalogue des complémentaires LCA 2027 importé de `data/supplementary-insurance/2027`, prix indicatifs par profil, assistant de recherche et commandes avisées par email, pour la page `/comparateur-complementaires-2027` de www. [Plan](roadmap/plans/supplementary-comparator-2026-11-19.plan.md).

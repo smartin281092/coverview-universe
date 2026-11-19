@@ -105,6 +105,65 @@ async function quotaExhausted(response: Response): Promise<boolean> {
     reader.releaseLock();
   }
 }
+// Reads a Responses API answer: provider failures mapped to safe codes, the single JSON output
+// parsed. Shared by the document and the text calls.
+async function readStructuredResponse(response: Response) {
+  if (!response.ok) {
+    // 429 also covers billing refusals. Keep provider messages and bodies private.
+    if (response.status === 429 && (await quotaExhausted(response)))
+      throw new LlmError("ai_quota_exhausted", false);
+    await response.body?.cancel();
+    throw new LlmError(
+      response.status === 401 || response.status === 403
+        ? "ai_not_configured"
+        : response.status === 429
+          ? "ai_rate_limited"
+          : "ai_unavailable",
+      response.status === 429 || response.status >= 500,
+    );
+  }
+  const raw = await response.text();
+  if (raw.length > 1000000)
+    throw new LlmError("ai_invalid_result", false, { diagnostic: "response_size" });
+  let parsed: z.infer<typeof responseSchema>;
+  try {
+    parsed = responseSchema.parse(JSON.parse(raw));
+  } catch (cause) {
+    throw new LlmError("ai_invalid_result", false, { cause, diagnostic: "response_schema" });
+  }
+  if (parsed.status !== "completed") {
+    const reason = parsed.incomplete_details?.reason;
+    throw new LlmError("ai_incomplete", false, {
+      ...(reason === "max_output_tokens"
+        ? { diagnostic: "output_limit" as const }
+        : reason === "content_filter"
+          ? { diagnostic: "content_filter" as const }
+          : {}),
+    });
+  }
+  const texts = parsed.output.flatMap((item) =>
+    item.type === "message"
+      ? (item.content ?? [])
+          .filter((content) => content.type === "output_text")
+          .map((content) => content.text ?? "")
+      : [],
+  );
+  if (texts.length !== 1) throw new LlmError("ai_refused", false);
+  let value: unknown;
+  try {
+    value = JSON.parse(texts[0] ?? "");
+  } catch (cause) {
+    throw new LlmError("ai_invalid_result", false, { cause, diagnostic: "response_json" });
+  }
+  return {
+    value,
+    model: parsed.model,
+    inputTokens: parsed.usage.input_tokens,
+    outputTokens: parsed.usage.output_tokens,
+    requestId: response.headers.get("x-request-id"),
+  };
+}
+
 export function createOpenAiProvider(config: {
   OPENAI_API_KEY?: string | undefined;
   OPENAI_DOCUMENT_MODEL: string;
@@ -174,60 +233,68 @@ export function createOpenAiProvider(config: {
       } catch (cause) {
         throw new LlmError("ai_unavailable", true, { cause });
       }
-      if (!response.ok) {
-        // 429 also covers billing refusals. Keep provider messages and bodies private.
-        if (response.status === 429 && (await quotaExhausted(response)))
-          throw new LlmError("ai_quota_exhausted", false);
-        await response.body?.cancel();
-        throw new LlmError(
-          response.status === 401 || response.status === 403
-            ? "ai_not_configured"
-            : response.status === 429
-              ? "ai_rate_limited"
-              : "ai_unavailable",
-          response.status === 429 || response.status >= 500,
-        );
-      }
-      const raw = await response.text();
-      if (raw.length > 1000000)
-        throw new LlmError("ai_invalid_result", false, { diagnostic: "response_size" });
-      let parsed: z.infer<typeof responseSchema>;
+      return readStructuredResponse(response);
+    },
+  };
+}
+
+// Text-only structured call (19 November 2026, supplementary insurance assistant): the user's text
+// goes as untrusted data next to the instructions, the answer follows a strict JSON schema.
+export type LlmTextProvider = {
+  available(): Promise<boolean>;
+  structuredText(input: {
+    instructions: string;
+    text: string;
+    schemaName: string;
+    schema: Record<string, unknown>;
+    maxOutputTokens: number;
+    timeoutMs: number;
+    signal?: AbortSignal;
+  }): Promise<Awaited<ReturnType<typeof readStructuredResponse>>>;
+};
+export function createOpenAiTextProvider(config: {
+  OPENAI_API_KEY?: string | undefined;
+  model: string;
+  local?: boolean;
+}): LlmTextProvider {
+  const key = async () =>
+    config.OPENAI_API_KEY ?? (config.local ? await localDocumentSecret("read-openai") : undefined);
+  return {
+    async available() {
+      return !!(await key());
+    },
+    async structuredText(input) {
+      const secret = await key();
+      if (!secret) throw new LlmError("ai_not_configured", false);
+      const timeout = AbortSignal.timeout(input.timeoutMs);
+      let response: Response;
       try {
-        parsed = responseSchema.parse(JSON.parse(raw));
-      } catch (cause) {
-        throw new LlmError("ai_invalid_result", false, { cause, diagnostic: "response_schema" });
-      }
-      if (parsed.status !== "completed") {
-        const reason = parsed.incomplete_details?.reason;
-        throw new LlmError("ai_incomplete", false, {
-          ...(reason === "max_output_tokens"
-            ? { diagnostic: "output_limit" as const }
-            : reason === "content_filter"
-              ? { diagnostic: "content_filter" as const }
-              : {}),
+        response = await fetch("https://api.openai.com/v1/responses", {
+          method: "POST",
+          redirect: "error",
+          signal: input.signal ? AbortSignal.any([input.signal, timeout]) : timeout,
+          headers: { Authorization: `Bearer ${secret}`, "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model: config.model,
+            store: false,
+            max_output_tokens: input.maxOutputTokens,
+            reasoning: { effort: "low" },
+            instructions: input.instructions,
+            input: [{ role: "user", content: [{ type: "input_text", text: input.text }] }],
+            text: {
+              format: {
+                type: "json_schema",
+                name: input.schemaName,
+                strict: true,
+                schema: input.schema,
+              },
+            },
+          }),
         });
-      }
-      const texts = parsed.output.flatMap((item) =>
-        item.type === "message"
-          ? (item.content ?? [])
-              .filter((content) => content.type === "output_text")
-              .map((content) => content.text ?? "")
-          : [],
-      );
-      if (texts.length !== 1) throw new LlmError("ai_refused", false);
-      let value: unknown;
-      try {
-        value = JSON.parse(texts[0] ?? "");
       } catch (cause) {
-        throw new LlmError("ai_invalid_result", false, { cause, diagnostic: "response_json" });
+        throw new LlmError("ai_unavailable", true, { cause });
       }
-      return {
-        value,
-        model: parsed.model,
-        inputTokens: parsed.usage.input_tokens,
-        outputTokens: parsed.usage.output_tokens,
-        requestId: response.headers.get("x-request-id"),
-      };
+      return readStructuredResponse(response);
     },
   };
 }

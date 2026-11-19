@@ -32,6 +32,10 @@ import {
 import { registerAuthorizations } from "../modules/authorizations/index.js";
 import { registerPensionSearches, PensionSearchError } from "../modules/pension-searches/index.js";
 import {
+  registerSupplementaryInsurance,
+  SupplementaryError,
+} from "../modules/supplementary-insurance/index.js";
+import {
   IdentityError,
   registerIdentity,
   type IdentityService,
@@ -118,6 +122,7 @@ export async function buildServer(
       error instanceof RecommendationError ||
       error instanceof InsuranceRequestError ||
       error instanceof PensionSearchError ||
+      error instanceof SupplementaryError ||
       error instanceof IdentityError ||
       error instanceof DocumentError ||
       error instanceof ManagedProfileError ||
@@ -134,6 +139,7 @@ export async function buildServer(
       error instanceof RecommendationError ||
       error instanceof InsuranceRequestError ||
       error instanceof PensionSearchError ||
+      error instanceof SupplementaryError ||
       error instanceof IdentityError ||
       error instanceof DocumentError ||
       error instanceof ManagedProfileError ||
@@ -198,6 +204,7 @@ export async function buildServer(
 
   const identity = await registerIdentity(app, config, identityService);
   registerHealthInsurance(app, config, identity);
+  registerSupplementaryInsurance(app, config);
   registerInsuranceRequests(app, config, identity);
   registerPensionSearches(app, config, identity);
   registerManagedProfiles(app, config, identity);

@@ -1,0 +1,63 @@
+# Module `supplementary-insurance`
+
+## Résumé
+
+Comparateur public des assurances complémentaires (LCA) 2027 pour le site (`/comparateur-complementaires-2027`, plan [supplementary-comparator-2026-11-19](../../../../../roadmap/plans/supplementary-comparator-2026-11-19.plan.md)). Le module importe le relevé de `data/supplementary-insurance/2027` (12 assureurs, 190 produits, 2 671 prestations, 363 760 primes retenues), sert le catalogue et des prix indicatifs par profil, classe les produits selon un besoin écrit librement et reçoit les commandes d’un produit, transmises par email à CoverView. Visiteurs anonymes ; aucune donnée de l’assistant n’est conservée.
+
+## Périmètre
+
+**Géré ici** : catalogue LCA versionné (`jsonb`), primes des calculateurs officiels, devis d’une personne, assistant (interprétation, classement, question), commandes et leur avis interne.
+
+**Hors périmètre** : assurance de base (`health-insurance`), panier et demandes d’offre (`insurance-requests`, étape 2 du plan), souscription, Lead Partner/Admin pour une commande (non demandé), page du site (`apps/www`, client `@coverview/api-client/supplementary-insurance`). Le site ne lit jamais `data/`.
+
+## Règles métier et invariants
+
+- **supplementary.catalogue.1** — Un catalogue par empreinte du contenu (`slc_<année>_<sha256>` sur le catalogue et toutes les primes) : réimport identique sans effet, nouveau relevé = nouveau catalogue ; le plus récent de l’année est servi (relu au plus toutes les 30 s). `benefits[].id` = empreinte stable du produit, de la variante, des tags, du libellé et de la couverture. Montants en centimes (DATA-11). `priced` = au moins une prime relevée. `families` = familles des tags du produit ; les tags `other:…` (sans équivalent dans la taxonomie) sont listés dans `tags` avec la famille `other` « Autres prestations » et le premier libellé d’assureur qui les porte. `partner` = Assura et Groupe Mutuel (health.partner.1) ; `bagInsurerId` = compagnie de base dont le site affiche le logo (Groupe Mutuel : Avenir 343). Prix publiés : 60 au plus par produit, les profils les plus proches de 37 ans.
+- **supplementary.premium.1** — Primes retenues : `source_type = official_calculator`, clé produit remplie ou trouvée dans `premiums/product-map.json`, hors tarifs famille de Groupe Mutuel (`api_only_not_displayed_single_person`). Exclues au relevé actuel : 8 028 lignes sans produit (CAPITAL d’AXA, Legis et CyberProtect de Groupe Mutuel) et 432 tarifs famille. Quand plusieurs produits du calculateur partagent une clé et une variante (DIMA décès / invalidité, divisions Hospita…), le nom du produit du calculateur précède la variante.
+- **supplementary.note.1** — `note` d’un prix = remarque courte en français pour les seuls motifs reconnus du relevé (première année gratuite et prix suivant, gratuité enfant, rabais en ligne, enfant, de combinaison ou variable déduits, bonus déduit, prix avec contrat de 3 ans, produit à conclure avec un autre, assurance de base exigée, couverture accident seule, produit masqué ou absent du calculateur public…), sinon `null` ; jamais d’identifiant technique ([supplementary.notes.ts](supplementary.notes.ts)).
+- **supplementary.quote.1** — Devis : localité de référence du canton (VD 1003 Lausanne, GE 1204 Genève, FR 1700 Fribourg, VS 1950 Sion, NE 2000 Neuchâtel, JU 2800 Delémont), lignes de l’année de naissance, `age` = 2027 − année de naissance. Sans sexe : `minMinor`/`maxMinor` = fourchette femme–homme ; avec sexe : min = max. Une clé (produit, variante, option) avec et sans accident garde seulement `accident = true` ; `null` quand le produit n’a pas l’option. Variantes et options telles que le calculateur les nomme ; option vide = défaut du calculateur. Hors des années relevées (1947–2026), aucun prix.
+- **supplementary.assistant.1** — Interprétation en tags du catalogue, catégories, compagnies, budget mensuel, âge ou année de naissance, sexe, canton et enfant : OpenAI si la clé est configurée (sortie JSON stricte au vocabulaire fermé, message délimité comme donnée, 6 s, 1 200 jetons, 2 000 appels par jour et par instance), sinon ou en échec un dictionnaire français ([supplementary.synonyms.fr.ts](supplementary.synonyms.fr.ts)), accents, casse et pluriel ignorés. `engine` dit lequel a servi.
+- **supplementary.assistant.2** — Profil = profil reçu, complété par les réponses puis par le message, puis par les défauts (né en 1990, sexe non précisé, Vaud ; enfant sans âge : 10 ans), chacun listé dans `assumptions`. Un enfant nommé dans le message (« mon fils ») est la personne à assurer : l’année de naissance d’adulte et le sexe du profil reçu sont ignorés.
+- **supplementary.assistant.3** — Classement déterministe ([supplementary.ranking.ts](supplementary.ranking.ts)) : score 0–100 = moyenne, sur les tags demandés, de la meilleure prestation de la variante (tag principal 1, secondaire 0,6, moitié pour une prestation que son libellé limite aux accidents ; × 0,85 + 0,15 × force du taux et du plafond, échelle logarithmique par tag). Variante retenue : la moins chère parmi celles qui couvrent le plus de tags en tag principal. Compagnies : filtre ; catégories : filtre sans tags, départage avec tags. Budget : les produits au-dessus passent après tous ceux qui le respectent. Sans prix : après les produits chiffrés à score égal. Produit chiffré sans prix pour le profil (âge, sexe) : non proposé, écarté ; produit non chiffré « enfants » ou « adultes » écarté hors de son public. Sans sexe, le prix comparé est le minimum de la fourchette. 8 résultats au plus, avec `reasons` = « libellé du tag : taux, max. CHF … période ». Variante du calculateur rattachée à la variante du catalogue par mots communs ([supplementary.variants.ts](supplementary.variants.ts)) ; un rattachement impossible laisse la variante sans prix.
+- **supplementary.assistant.4** — Question : candidates dans l’ordre âge (`birth_year`, ou `child_age` pour un enfant ou l’orthodontie), `sex`, `canton`, puis `budget` au-delà de 8 résultats. La première dont les réponses possibles donnent des ensembles différents des trois premiers résultats (réponse actuelle comprise) est posée, sinon `question: null`. Réponses : année ou âge pour l’âge (`allowCustom`), `female`/`male`, code canton, montant en francs ou `none` pour le budget.
+- **supplementary.order.1** — Commande (décision 8 du plan, demande du 19 novembre 2026) : produit vérifié contre le catalogue courant, variante/option du devis ou du catalogue (sinon 422), prix recalculé pour le profil et sa localité de référence. Une commande par `requestId` : même contenu → même reçu, autre contenu → 422 `SUPPLEMENTARY_IDEMPOTENCY_REUSED`. Référence `LCA-` + 10 caractères dérivés du `requestId`. Champ piège `website` rempli → même reçu, rien d’enregistré ni envoyé.
+- **supplementary.order.2** — Avis interne `supplementary-order-v1` (texte et HTML, MAIL-03) à `SUPPLEMENTARY_NOTIFY_EMAIL` (défaut `sebastien@coverview.ch`) : compagnie, produit, variante, prix mensuel indicatif et localité de référence, nom, email, téléphone, profil, message, référence et date. Coordonnées incluses à la demande explicite de l’utilisateur, au-delà de MAIL-06 : une seule adresse interne. La table `supplementary_orders` est l’outbox (`queued` → `sending` → `sent`, `failed` après 10 essais), comme les commandes horizon3 : tâche BullMQ chaque minute, nouvel essai après 5 minutes par essai fait, envoi interrompu depuis 10 minutes relancé (un avis peut arriver deux fois, jamais pas du tout), 60 avis par heure au plus (MAIL-07). Sans adaptateur email, l’avis attend sans consommer d’essai. Aperçu local : `/local/emails/supplementary-order`.
+
+## Permissions
+
+Routes publiques et anonymes, sans cookie ni session, sur l’origine de l’API ; CORS global (`CORS_ORIGINS`). Contrats Zod stricts de `@coverview/contracts/supplementary-insurance`, erreurs au format API-02 (`SUPPLEMENTARY_CATALOG_UNAVAILABLE` 503, `SUPPLEMENTARY_PRODUCT_UNKNOWN` / `SUPPLEMENTARY_VARIANT_UNKNOWN` / `SUPPLEMENTARY_IDEMPOTENCY_REUSED` 422).
+
+| Route                                     | Limite par IP | Corps | Cache                                                       |
+| ----------------------------------------- | ------------- | ----- | ----------------------------------------------------------- |
+| `GET /supplementary-insurance/catalog`    | 120/min       | —     | `public, max-age=300`, `ETag` = id, 304 sur `If-None-Match` |
+| `POST /supplementary-insurance/quote`     | 60/min        | 1 Ko  | `no-store`                                                  |
+| `POST /supplementary-insurance/assistant` | 20/min        | 8 Ko  | `no-store`                                                  |
+| `POST /supplementary-insurance/orders`    | 5/min         | 4 Ko  | `no-store`                                                  |
+
+Le message de l’assistant n’est ni conservé ni journalisé (longueur, moteur, repli, durée, jetons OpenAI seulement). Aucune coordonnée de commande dans les journaux (compteurs seulement). Import en CLI, garde `assertLocalDatabase`, aucune route d’écriture du catalogue.
+
+## Données et persistance
+
+Migration 0086 (additive) : `supplementary_catalogs` (id, année, `data` au format `supplementaryCatalogSchema`), `supplementary_premiums` (catalogue, assureur, produit, variante, option, année de naissance, sexe, NPA, accident, `monthly_minor`, remarque ; unicité `NULLS NOT DISTINCT`, index `(catalog_id, birth_year, postal_code)`), `supplementary_orders` (outbox). Les anciens catalogues et leurs primes restent (environ 130 Mo par relevé) ; aucune purge automatique.
+
+Données personnelles (DATA-14) : prénom, nom, email, téléphone (identifiantes), année de naissance, sexe, canton, message libre dans `supplementary_orders.data` et dans l’avis interne. Aucune durée de conservation, export ni effacement définis pour ces commandes : à traiter avec le panier (étape 2).
+
+## Import
+
+```bash
+pnpm --filter api db:migrate
+pnpm --filter api exec tsx src/modules/supplementary-insurance/supplementary.import.ts --validate   # sans base
+pnpm --filter api exec tsx src/modules/supplementary-insurance/supplementary.import.ts              # base locale
+```
+
+Transaction unique sous verrou consultatif, insertion des primes par lots de 4 000, environ 15 s. Toute incohérence (produit, tag, catégorie inconnus, ligne invalide, prime en conflit) annule l’import. Un relevé modifié se reconsolide d’abord avec `python3 scripts/supplementary-insurance-build.py 2027`. Variables : `OPENAI_API_KEY` et `OPENAI_DOCUMENT_MODEL` (configuration de document-intelligence), `SUPPLEMENTARY_NOTIFY_EMAIL`.
+
+## État réel
+
+Fonctionnel localement (19 novembre 2026) : import du relevé complet, migration appliquée sur base vierge, catalogue, devis, assistant par règles et commandes avec avis envoyé par l’adaptateur local ; tests du module sur PostgreSQL réel. Interprétation OpenAI vérifiée seulement avec une réponse simulée (aucune clé dans l’environnement de recette). Pas d’import en production ni de déploiement.
+
+Limites : six localités de référence (pas de zones par NPA) ; prix d’Atupri absents (pare-feu) ; rattachement des variantes du calculateur par mots, imparfait quand le calculateur décrit un autre axe (sommes assurées) — ces prix valent alors pour toutes les variantes ; prestations limitées aux accidents repérées par leur libellé seulement ; plafond d’appels OpenAI par instance, pas global.
+
+## Tests
+
+`pnpm --filter api test src/modules/supplementary-insurance` : règles pures (interprétation, remarques, devis, rattachement des variantes) et intégration sur PostgreSQL réel (import et réimport, exclusions, devis, assistant et question, routes, ETag, limite des commandes, idempotence, piège, avis). Testcontainers par défaut ; sans Docker, `SUPPLEMENTARY_TEST_DATABASE_URL` peut désigner une base jetable `coverview_test` en boucle locale (chaque exécution importe un jeu au contenu unique, rien n’est supprimé).
